@@ -94,9 +94,9 @@ namespace v1 {
         bool mInitialised;
         String mOrigin;
         /** Internal lazy update method. */
-        void updateTransform(void) const;
+        void updateTransform() const;
         /** Internal method for initialising an overlay */
-        void initialise(void);
+        void initialise();
 
     public:
         /// Constructor: do not call direct, use OverlayManager::create
@@ -105,7 +105,7 @@ namespace v1 {
         virtual ~Overlay();
 
         /** Returns the type name of this object. */
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
 
         OverlayContainer* getChild(const String& name);
         
@@ -116,16 +116,16 @@ namespace v1 {
         */
         void setZOrder( uint16 zorder );
         /** Gets the Z-order of this overlay. */
-        uint16 getZOrder(void) const;
+        uint16 getZOrder() const;
 
         /** Gets whether the overlay is initialised or not. */
-        bool isInitialised(void) const { return mInitialised; }
+        bool isInitialised() const { return mInitialised; }
 
         /** Shows the overlay if it was hidden. */
-        void show(void);
+        void show();
 
         /** Hides the overlay if it was visible. */
-        void hide(void);
+        void hide();
 
         /** Adds a 2D 'container' to the overlay.
         @remarks
@@ -161,10 +161,10 @@ namespace v1 {
         void setScroll(Real x, Real y);
 
         /** Gets the current X scroll value */
-        Real getScrollX(void) const;
+        Real getScrollX() const;
 
         /** Gets the current Y scroll value */
-        Real getScrollY(void) const;
+        Real getScrollY() const;
 
         /** Scrolls the overlay by the offsets provided.
         @remarks
@@ -178,7 +178,7 @@ namespace v1 {
         void setRotate(const Radian& angle);
 
         /** Gets the rotation applied to this overlay, in degrees.*/
-        const Radian &getRotate(void) const { return mRotate; }
+        const Radian &getRotate() const { return mRotate; }
 
         /** Adds the passed in angle to the rotation applied to this overlay. */
         void rotate(const Radian& angle);
@@ -193,10 +193,10 @@ namespace v1 {
         void setScale(Real x, Real y);
 
         /** Gets the current X scale value */
-        Real getScaleX(void) const;
+        Real getScaleX() const;
 
         /** Gets the current Y scale value */
-        Real getScaleY(void) const;
+        Real getScaleY() const;
 
         /** Used to transform the overlay when scrolling, scaling etc. */
         void _getWorldTransforms(Matrix4* xform) const;
@@ -222,7 +222,7 @@ namespace v1 {
             this overlay chose to populate it. Script loaders are advised
             to populate it.
         */
-        const String& getOrigin(void) const { return mOrigin; }
+        const String& getOrigin() const { return mOrigin; }
         /// Notify this overlay of it's origin
         void _notifyOrigin(const String& origin) { mOrigin = origin; }
 

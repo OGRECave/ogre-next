@@ -75,7 +75,7 @@ namespace Ogre
         MaterialManager::getSingleton().remove( matName );
     }
     //-----------------------------------------------------------------------------------
-    void VoxelVisualizer::createBuffers(void)
+    void VoxelVisualizer::createBuffers()
     {
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -147,12 +147,12 @@ namespace Ogre
         mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
     }
     //-----------------------------------------------------------------------------------
-    const String& VoxelVisualizer::getMovableType(void) const
+    const String& VoxelVisualizer::getMovableType() const
     {
         return BLANKSTRING;
     }
     //-----------------------------------------------------------------------------------
-    const LightList& VoxelVisualizer::getLights(void) const
+    const LightList& VoxelVisualizer::getLights() const
     {
         return this->queryLights(); //Return the data from our MovableObject base class.
     }
@@ -177,7 +177,7 @@ namespace Ogre
                         "VoxelVisualizer::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool VoxelVisualizer::getCastsShadows(void) const
+    bool VoxelVisualizer::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                         "VoxelVisualizer do not implement getCastsShadows."

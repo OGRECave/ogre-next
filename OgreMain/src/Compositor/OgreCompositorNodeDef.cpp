@@ -53,7 +53,7 @@ namespace Ogre
         return &mTargetPasses.back();
     }
     //-----------------------------------------------------------------------------------
-    size_t CompositorNodeDef::calculateNumPasses( void ) const
+    size_t CompositorNodeDef::calculateNumPasses() const
     {
         size_t numPasses = 0u;
         CompositorTargetDefVec::const_iterator itor = mTargetPasses.begin();

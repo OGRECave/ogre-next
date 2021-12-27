@@ -202,7 +202,7 @@ namespace Ogre
                                               size_t startLight );
 
         /// @See mCastersBox
-        const AxisAlignedBox& getCastersBox(void) const     { return mCastersBox; }
+        const AxisAlignedBox& getCastersBox() const     { return mCastersBox; }
 
         bool isShadowMapIdxInValidRange( uint32 shadowMapIdx ) const;
 
@@ -271,13 +271,13 @@ namespace Ogre
             changes to or from a value lower than the supported shadow casting lights by the
             definition.
         */
-        size_t getNumActiveShadowCastingLights(void) const
+        size_t getNumActiveShadowCastingLights() const
                                                             { return mNumActiveShadowMapCastingLights; }
-        const LightClosestArray& getShadowCastingLights(void) const { return mShadowMapCastingLights; }
+        const LightClosestArray& getShadowCastingLights() const { return mShadowMapCastingLights; }
 
-        const LightsBitSet& getAffectedLightsBitSet(void) const     { return mAffectedLights; }
+        const LightsBitSet& getAffectedLightsBitSet() const     { return mAffectedLights; }
 
-        const TextureGpuVec& getContiguousShadowMapTex(void) const  { return mContiguousShadowMapTex; }
+        const TextureGpuVec& getContiguousShadowMapTex() const  { return mContiguousShadowMapTex; }
         uint32 getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const;
 
         float getNormalOffsetBias( const size_t shadowMapIdx ) const;
@@ -351,7 +351,7 @@ namespace Ogre
             Resolution();
             Resolution( uint32 x, uint32 y );
 
-            uint64 asUint64(void) const;
+            uint64 asUint64() const;
         };
 
         struct _OgreExport ShadowParam

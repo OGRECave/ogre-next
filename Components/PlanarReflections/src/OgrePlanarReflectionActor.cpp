@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void PlanarReflectionActor::updateArrayActorPlane(void)
+	void PlanarReflectionActor::updateArrayActorPlane()
     {
         mActorPlane->planeNormals.setFromQuaternion( mOrientation, mIndex );
 
@@ -64,37 +64,37 @@ namespace Ogre
         updateArrayActorPlane();
     }
     //-----------------------------------------------------------------------------------
-    const Vector3& PlanarReflectionActor::getCenter(void) const
+    const Vector3& PlanarReflectionActor::getCenter() const
     {
         return mCenter;
     }
     //-----------------------------------------------------------------------------------
-    const Vector2& PlanarReflectionActor::getHalfSize(void) const
+    const Vector2& PlanarReflectionActor::getHalfSize() const
     {
         return mHalfSize;
     }
     //-----------------------------------------------------------------------------------
-    const Quaternion& PlanarReflectionActor::getOrientation(void) const
+    const Quaternion& PlanarReflectionActor::getOrientation() const
     {
         return mOrientation;
     }
     //-----------------------------------------------------------------------------------
-    const Vector3& PlanarReflectionActor::getNormal(void) const
+    const Vector3& PlanarReflectionActor::getNormal() const
     {
         return mPlane.normal;
     }
     //-----------------------------------------------------------------------------------
-    const Plane& PlanarReflectionActor::getPlane(void) const
+    const Plane& PlanarReflectionActor::getPlane() const
     {
         return mPlane;
     }
     //-----------------------------------------------------------------------------------
-    bool PlanarReflectionActor::hasReservation(void) const
+    bool PlanarReflectionActor::hasReservation() const
     {
         return mHasReservation;
     }
     //-----------------------------------------------------------------------------------
-    uint8 PlanarReflectionActor::getCurrentBoundSlot(void) const
+    uint8 PlanarReflectionActor::getCurrentBoundSlot() const
     {
         return mCurrentBoundSlot;
     }

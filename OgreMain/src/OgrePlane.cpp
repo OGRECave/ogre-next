@@ -77,7 +77,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    Real Plane::normalise(void)
+    Real Plane::normalise()
     {
         Real fLength = normal.length();
 

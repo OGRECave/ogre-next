@@ -81,7 +81,7 @@ namespace v1 {
         mPosition.z = z;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Billboard::getPosition(void) const
+    const Vector3& Billboard::getPosition() const
     {
         return mPosition;
     }
@@ -94,7 +94,7 @@ namespace v1 {
         mParentSet->_notifyBillboardResized();
     }
     //-----------------------------------------------------------------------
-    bool Billboard::hasOwnDimensions(void) const
+    bool Billboard::hasOwnDimensions() const
     {
         return mOwnDimensions;
     }
@@ -109,17 +109,17 @@ namespace v1 {
         mColour = colour;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& Billboard::getColour(void) const
+    const ColourValue& Billboard::getColour() const
     {
         return mColour;
     }
     //-----------------------------------------------------------------------
-    Real Billboard::getOwnWidth(void) const
+    Real Billboard::getOwnWidth() const
     {
         return mWidth;
     }
     //-----------------------------------------------------------------------
-    Real Billboard::getOwnHeight(void) const
+    Real Billboard::getOwnHeight() const
     {
         return mHeight;
     }

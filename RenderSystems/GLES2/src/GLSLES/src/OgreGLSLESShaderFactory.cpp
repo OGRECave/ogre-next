@@ -38,7 +38,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String GLSLESShaderFactory::sLanguageName = "glsles";
     //-----------------------------------------------------------------------
-    GLSLESShaderFactory::GLSLESShaderFactory(void)
+    GLSLESShaderFactory::GLSLESShaderFactory()
     {
         if (mLinkProgramManager == NULL)
         {
@@ -54,7 +54,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    GLSLESShaderFactory::~GLSLESShaderFactory(void)
+    GLSLESShaderFactory::~GLSLESShaderFactory()
     {
         if (mLinkProgramManager)
         {
@@ -72,7 +72,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const String& GLSLESShaderFactory::getLanguage(void) const
+    const String& GLSLESShaderFactory::getLanguage() const
     {
         return sLanguageName;
     }

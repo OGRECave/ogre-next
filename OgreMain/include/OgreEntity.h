@@ -146,10 +146,10 @@ namespace v1 {
         /** Internal method to clone vertex data definitions but to remove blend buffers. */
         VertexData* cloneVertexDataRemoveBlendInfo(const VertexData* source);
         /** Internal method for preparing this Entity for use in animation. */
-        void prepareTempBlendBuffers(void);
+        void prepareTempBlendBuffers();
         /** Mark all vertex data as so far unanimated.
         */
-        void markBuffersUnusedForAnimation(void);
+        void markBuffersUnusedForAnimation();
         /** Internal method to restore original vertex data where we didn't
             perform any vertex animation this frame.
         */
@@ -185,7 +185,7 @@ namespace v1 {
         unsigned long mFrameAnimationLastUpdated;
 
         /// Perform all the updates required for an animated entity.
-        void updateAnimation(void);
+        void updateAnimation();
 
         /// Records the last frame in which the bones was updated.
         /// It's a pointer because it can be shared between different entities with
@@ -202,7 +202,7 @@ namespace v1 {
         @return
             True if the bone matrices cache has been updated. False if note.
         */
-        bool cacheBoneMatrices(void);
+        bool cacheBoneMatrices();
 
         /// Flag determines whether or not to display skeleton.
         bool mDisplaySkeleton;
@@ -251,7 +251,7 @@ namespace v1 {
         void buildSubEntityList(MeshPtr& mesh, SubEntityList* sublist, vector<String>::type* materialsList = 0);
 
         /// Ensures reevaluation of the vertex processing usage.
-        void reevaluateVertexProcessing(void);
+        void reevaluateVertexProcessing();
 
         /** Calculates the kind of vertex processing in use.
         @remarks
@@ -259,14 +259,14 @@ namespace v1 {
             active scheme. This is due to the fact that RTSS schemes may be different
             in their handling of hardware animation.
         */
-        bool calcVertexProcessing(void);
+        bool calcVertexProcessing();
     
         /// Apply vertex animation.
         void applyVertexAnimation(bool hardwareAnimation);
         /// Initialise the hardware animation elements for given vertex data.
         ushort initHardwareAnimationElements(VertexData* vdata, ushort numberOfElements, bool animateNormals);
         /// Are software vertex animation temp buffers bound?
-        bool tempVertexAnimBuffersBound(void) const;
+        bool tempVertexAnimBuffersBound() const;
         /// Are software skeleton animation temp buffers bound?
         bool tempSkelAnimBuffersBound(bool requestNormals) const;
 
@@ -277,7 +277,7 @@ namespace v1 {
 
         /** Gets the Mesh that this Entity is based on.
         */
-        const MeshPtr& getMesh(void) const;
+        const MeshPtr& getMesh() const;
 
         /** Gets a pointer to a SubEntity, ie a part of an Entity.
         */
@@ -293,7 +293,7 @@ namespace v1 {
 
         /** Retrieves the number of SubEntity objects making up this entity.
         */
-        size_t getNumSubEntities(void) const;
+        size_t getNumSubEntities() const;
 
         /// Sets the given HLMS datablock to all SubEntities
         void setDatablock( HlmsDatablock *datablock );
@@ -310,7 +310,7 @@ namespace v1 {
         @param newName
             Name for the new entity.
         */
-        Entity* clone(void) const;
+        Entity* clone() const;
 
         /** Sets the material to use for the whole of this Item.
         @remarks
@@ -362,7 +362,7 @@ namespace v1 {
         void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
         /** For entities based on animated meshes, gets the AnimationState object for a single animation.
         @remarks
@@ -382,7 +382,7 @@ namespace v1 {
             current state of each animation available to the entity. The AnimationState objects are
             initialised from the Mesh object.
         */
-        AnimationStateSet* getAllAnimationStates(void) const;
+        AnimationStateSet* getAllAnimationStates() const;
 
         /** Tells the Entity whether or not it should display it's skeleton, if it has one.
         */
@@ -390,7 +390,7 @@ namespace v1 {
 
         /** Returns whether or not the entity is currently displaying its skeleton.
         */
-        bool getDisplaySkeleton(void) const;
+        bool getDisplaySkeleton() const;
 
         /** Gets a pointer to the entity representing the numbered manual level of detail.
         @remarks
@@ -404,7 +404,7 @@ namespace v1 {
             This number never includes the original entity, it is difference
             with Mesh::getNumLodLevels.
         */
-        size_t getNumManualLodLevels(void) const;
+        size_t getNumManualLodLevels() const;
 
         /** Sets whether the polygon mode of this entire entity may be
             overridden by the camera detail settings.
@@ -412,18 +412,18 @@ namespace v1 {
         void setPolygonModeOverrideable(bool PolygonModeOverrideable);
 
         /** @copydoc ShadowCaster::getEdgeList. */
-        EdgeData* getEdgeList(void);
+        EdgeData* getEdgeList();
         /** @copydoc ShadowCaster::hasEdgeList. */
-        bool hasEdgeList(void);
+        bool hasEdgeList();
 
         /** Internal method for retrieving bone matrix information. */
-        const Matrix4* _getBoneMatrices(void) const { return mBoneMatrices;}
+        const Matrix4* _getBoneMatrices() const { return mBoneMatrices;}
         /** Internal method for retrieving bone matrix information. */
-        unsigned short _getNumBoneMatrices(void) const { return mNumBoneMatrices; }
+        unsigned short _getNumBoneMatrices() const { return mNumBoneMatrices; }
         /** Returns whether or not this entity is skeletally animated. */
-        bool hasSkeleton(void) const { return mSkeletonInstance != 0; }
+        bool hasSkeleton() const { return mSkeletonInstance != 0; }
         /** Get this Entity's personal skeleton instance. */
-        OldSkeletonInstance* getSkeleton(void) const { return mSkeletonInstance; }
+        OldSkeletonInstance* getSkeleton() const { return mSkeletonInstance; }
         /** Returns whether or not hardware animation is enabled.
         @remarks
             Because fixed-function indexed vertex blending is rarely supported
@@ -439,7 +439,7 @@ namespace v1 {
             scheme. This is due to the fact that RTSS schemes may be different in their
             handling of hardware animation.
         */
-        bool isHardwareAnimationEnabled(void);
+        bool isHardwareAnimationEnabled();
 
         /** @copydoc MovableObject::_notifyAttached */
         void _notifyAttached( Node* parent );
@@ -450,7 +450,7 @@ namespace v1 {
             internal optimise for eliminate software animation. Requests for software
             animation are made by calling the addSoftwareAnimationRequest() method.
         */
-        int getSoftwareAnimationRequests(void) const { return mSoftwareAnimationRequests; }
+        int getSoftwareAnimationRequests() const { return mSoftwareAnimationRequests; }
         /** Returns the number of requests that have been made for software animation of normals
         @remarks
             If non-zero, and getSoftwareAnimationRequests() also returns non-zero,
@@ -462,7 +462,7 @@ namespace v1 {
             Requests for software animation of normals are made by calling the
             addSoftwareAnimationRequest() method with 'true' as the parameter.
         */
-        int getSoftwareAnimationNormalsRequests(void) const { return mSoftwareAnimationNormalsRequests; }
+        int getSoftwareAnimationNormalsRequests() const { return mSoftwareAnimationNormalsRequests; }
         /** Add a request for software animation
         @remarks
             Tells the entity to perform animation calculations for skeletal/vertex
@@ -497,7 +497,7 @@ namespace v1 {
 
         /** Returns whether or not this entity is either morph or pose animated.
         */
-        bool hasVertexAnimation(void) const;
+        bool hasVertexAnimation() const;
 
 
         /** Stops sharing the OldSkeletonInstance with other entities.
@@ -524,7 +524,7 @@ namespace v1 {
             If you have called getAnimationState prior to calling this method,
             the pointers will still remain valid.
         */
-        void refreshAvailableAnimationState(void);
+        void refreshAvailableAnimationState();
 
         /** Advanced method to perform all the updates required for an animated entity.
         @remarks
@@ -533,18 +533,18 @@ namespace v1 {
             time. Animation will not be updated more than once a frame no matter
             how many times you call this method.
         */
-        void _updateAnimation(void);
+        void _updateAnimation();
 
         /** Tests if any animation applied to this entity.
         @remarks
             An entity is animated if any animation state is enabled, or any manual bone
             applied to the skeleton.
         */
-        bool _isAnimated(void) const;
+        bool _isAnimated() const;
 
         /** Tests if skeleton was animated.
         */
-        bool _isSkeletonAnimated(void) const;
+        bool _isSkeletonAnimated() const;
 
         /** Advanced method to get the temporarily blended skeletal vertex information
             for entities which are software skinned.
@@ -555,7 +555,7 @@ namespace v1 {
         @note
             The positions/normals of the returned vertex data is in object space.
         */
-        VertexData* _getSkelAnimVertexData(void) const;
+        VertexData* _getSkelAnimVertexData() const;
         /** Advanced method to get the temporarily blended software vertex animation information
         @remarks
             Internal engine will eliminate software animation if possible, this
@@ -564,22 +564,22 @@ namespace v1 {
         @note
             The positions/normals of the returned vertex data is in object space.
         */
-        VertexData* _getSoftwareVertexAnimVertexData(void) const;
+        VertexData* _getSoftwareVertexAnimVertexData() const;
         /** Advanced method to get the hardware morph vertex information
         @note
             The positions/normals of the returned vertex data is in object space.
         */
-        VertexData* _getHardwareVertexAnimVertexData(void) const;
+        VertexData* _getHardwareVertexAnimVertexData() const;
         /** Advanced method to get the temp buffer information for software
             skeletal animation.
         */
-        TempBlendedBufferInfo* _getSkelAnimTempBufferInfo(void);
+        TempBlendedBufferInfo* _getSkelAnimTempBufferInfo();
         /** Advanced method to get the temp buffer information for software
             morph animation.
         */
-        TempBlendedBufferInfo* _getVertexAnimTempBufferInfo(void);
+        TempBlendedBufferInfo* _getVertexAnimTempBufferInfo();
         /// Override to return specific type flag.
-        uint32 getTypeFlags(void) const;
+        uint32 getTypeFlags() const;
         /// Retrieve the VertexData which should be used for GPU binding.
         VertexData* getVertexDataForBinding( bool casterPass );
 
@@ -595,10 +595,10 @@ namespace v1 {
         VertexDataBindChoice chooseVertexDataForBinding(bool hasVertexAnim);
 
         /** Are buffers already marked as vertex animated? */
-        bool _getBuffersMarkedForAnimation(void) const { return mVertexAnimationAppliedThisFrame; }
+        bool _getBuffersMarkedForAnimation() const { return mVertexAnimationAppliedThisFrame; }
         /** Mark just this vertex data as animated.
         */
-        void _markBuffersUsedForAnimation(void);
+        void _markBuffersUsedForAnimation();
 
         /** Has this Entity been initialised yet?
         @remarks
@@ -608,7 +608,7 @@ namespace v1 {
             Entity won't render until it has been successfully initialised, nor
             will many of the manipulation methods function.
         */
-        bool isInitialised(void) const { return mInitialised; }
+        bool isInitialised() const { return mInitialised; }
 
         /** Try to initialise the Entity from the underlying resources.
         @remarks
@@ -623,7 +623,7 @@ namespace v1 {
         */
         void _initialise(bool forceReinitialise = false);
         /** Tear down the internal structures of this Entity, rendering it uninitialised. */
-        void _deinitialise(void);
+        void _deinitialise();
 
         /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
         void loadingComplete(Resource* res);
@@ -692,7 +692,7 @@ namespace v1 {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);
 
     };

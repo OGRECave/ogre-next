@@ -18,7 +18,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void StereoRenderingGameState::createScene01(void)
+    void StereoRenderingGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

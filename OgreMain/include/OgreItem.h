@@ -124,7 +124,7 @@ namespace Ogre {
 
         /** Gets the Mesh that this Item is based on.
         */
-        const MeshPtr& getMesh(void) const;
+        const MeshPtr& getMesh() const;
 
         /** Gets a pointer to a SubItem, ie a part of an Item.
         */
@@ -133,7 +133,7 @@ namespace Ogre {
 
         /** Retrieves the number of SubItem objects making up this Item.
         */
-        size_t getNumSubItems(void) const;
+        size_t getNumSubItems() const;
 
         /// Sets the given HLMS databloock to all SubEntities
         void setDatablock( HlmsDatablock *datablock );
@@ -184,10 +184,10 @@ namespace Ogre {
         void setMaterial(const MaterialPtr& material);
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
         /** Returns whether or not this Item is skeletally animated. */
-        bool hasSkeleton(void) const                    { return mSkeletonInstance != 0; }
+        bool hasSkeleton() const                    { return mSkeletonInstance != 0; }
 
         /** Starts using the SkeletonInstance from 'master' instead of using our own.
             Useful when multiple Items can use exactly the same skeleton (e.g. on
@@ -221,7 +221,7 @@ namespace Ogre {
 
         /** Returns whether or not this Item is either morph or pose animated.
         */
-        //bool hasVertexAnimation(void) const;
+        //bool hasVertexAnimation() const;
 
         /** Returns a pointer to the set of entities which share a OldSkeletonInstance.
             If this instance does not share it's OldSkeletonInstance with other instances @c NULL will be returned
@@ -236,7 +236,7 @@ namespace Ogre {
             Item won't render until it has been successfully initialised, nor
             will many of the manipulation methods function.
         */
-        bool isInitialised(void) const { return mInitialised; }
+        bool isInitialised() const { return mInitialised; }
 
         /** Try to initialise the Item from the underlying resources.
         @remarks
@@ -251,12 +251,12 @@ namespace Ogre {
         */
         void _initialise(bool forceReinitialise = false);
         /** Tear down the internal structures of this Item, rendering it uninitialised. */
-        void _deinitialise(void);
+        void _deinitialise();
 
         /** Resource::Listener hook to notify Entity that a Mesh is (re)loaded. */
         void loadingComplete(Resource* res);
 
-        virtual void _notifyParentNodeMemoryChanged(void);
+        virtual void _notifyParentNodeMemoryChanged();
     };
 
     /** FItemy object for creating Item instances */
@@ -272,7 +272,7 @@ namespace Ogre {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);
 
     };

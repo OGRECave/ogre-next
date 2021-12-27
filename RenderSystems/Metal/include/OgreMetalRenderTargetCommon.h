@@ -44,12 +44,12 @@ namespace Ogre
         ~MetalRenderTargetCommon();
 
         void init( id<MTLTexture> texture, id<MTLTexture> resolveTexture );
-        void destroy(void);
+        void destroy();
 
         /// Returns true on success. False on failure.
-        virtual bool nextDrawable(void) { return true; }
+        virtual bool nextDrawable() { return true; }
 
-        MetalDevice* getOwnerDevice(void) const     { return mOwnerDevice; }
+        MetalDevice* getOwnerDevice() const     { return mOwnerDevice; }
     };
 }
 

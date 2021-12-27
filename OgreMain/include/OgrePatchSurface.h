@@ -114,27 +114,27 @@ namespace v1 {
             @remarks This is useful when you wish to build the patch into external vertex / index buffers.
 
         */
-        size_t getRequiredVertexCount(void) const;
+        size_t getRequiredVertexCount() const;
         /** Based on a previous call to defineSurface, establishes the number of indexes required
             to hold this patch at the maximum detail level. 
             @remarks This is useful when you wish to build the patch into external vertex / index buffers.
 
         */
-        size_t getRequiredIndexCount(void) const;
+        size_t getRequiredIndexCount() const;
 
         /** Gets the current index count based on the current subdivision level. */
-        size_t getCurrentIndexCount(void) const;
+        size_t getCurrentIndexCount() const;
         /// Returns the index offset used by this buffer to write data into the buffer
-        size_t getIndexOffset(void) const { return mIndexOffset; }
+        size_t getIndexOffset() const { return mIndexOffset; }
         /// Returns the vertex offset used by this buffer to write data into the buffer
-        size_t getVertexOffset(void) const { return mVertexOffset; }
+        size_t getVertexOffset() const { return mVertexOffset; }
 
 
         /** Gets the bounds of this patch, only valid after calling defineSurface. */
-        const AxisAlignedBox& getBounds(void) const;
+        const AxisAlignedBox& getBounds() const;
         /** Gets the radius of the bounding sphere for this patch, only valid after defineSurface 
         has been called. */
-        Real getBoundingSphereRadius(void) const;
+        Real getBoundingSphereRadius() const;
         /** Tells the system to build the mesh relating to the surface into externally created
             buffers.
             @remarks
@@ -164,15 +164,15 @@ namespace v1 {
         void setSubdivisionFactor(Real factor);
 
         /** Gets the current level of subdivision. */
-        Real getSubdivisionFactor(void) const;
+        Real getSubdivisionFactor() const;
 
-        void* getControlPointBuffer(void) const
+        void* getControlPointBuffer() const
         {
             return mControlPointBuffer;
         }
         /** Convenience method for telling the patch that the control points have been 
             deleted, since once the patch has been built they are not required. */
-        void notifyControlPointBufferDeallocated(void) { 
+        void notifyControlPointBufferDeallocated() {
             mControlPointBuffer = 0;
         }
     protected:
@@ -213,7 +213,7 @@ namespace v1 {
         void distributeControlPoints(void* lockedBuffer);
         void subdivideCurve(void* lockedBuffer, size_t startIdx, size_t stepSize, size_t numSteps, size_t iterations);
         void interpolateVertexData(void* lockedBuffer, size_t leftIndex, size_t rightIndex, size_t destIndex);
-        void makeTriangles(void);
+        void makeTriangles();
 
         size_t getAutoULevel(bool forMax = false);
         size_t getAutoVLevel(bool forMax = false);

@@ -31,22 +31,22 @@ namespace Demo
 
         void switchTextureResidency( int targetResidency );
 
-        void enableHeavyRamMode(void);
-        void disableHeavyRamMode(void);
-        bool isInHeavyRamMode(void) const;
+        void enableHeavyRamMode();
+        void disableHeavyRamMode();
+        bool isInHeavyRamMode() const;
 
-        void testSequence(void);
-        void testRandom(void);
-        void testRamStress(void);
+        void testSequence();
+        void testRandom();
+        void testRamStress();
 
-        void showTexturesOnScreen(void);
-        void hideTexturesFromScreen(void);
-        bool isShowingTextureOnScreen(void) const;
+        void showTexturesOnScreen();
+        void hideTexturesFromScreen();
+        bool isShowingTextureOnScreen() const;
 
     public:
         TextureResidencyGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

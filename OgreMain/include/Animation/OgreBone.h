@@ -89,14 +89,14 @@ namespace Ogre {
         BoneMemoryManager *mBoneMemoryManager;
 
         /// @copydoc Node::_updateFromParent
-        void _updateFromParent(void);
+        void _updateFromParent();
 
         /// @copydoc Node::updateFromParentImpl.
-        void updateFromParentImpl(void);
+        void updateFromParentImpl();
 
-        void setCachedTransformOutOfDate(void) const;
+        void setCachedTransformOutOfDate() const;
 
-        void resetParentTransformPtr(void);
+        void resetParentTransformPtr();
 
         /** For debug use ONLY. Bones don't support dynamically changing their hierarchy structure.
             It can mess with the memory layout of neighbouring SkeletonInstances
@@ -128,7 +128,7 @@ namespace Ogre {
         BoneTransform& _getTransform()                              { return mTransform; }
 
         /// Internal use. Called from BoneMemoryManager's rebases (i.e. cleanups, grows)
-        void _memoryRebased(void);
+        void _memoryRebased();
 
         void _setReverseBindPtr( const ArrayMatrixAf4x3 *ptr )      { mReverseBind = ptr; }
 
@@ -136,13 +136,13 @@ namespace Ogre {
         void setName( const String &name )                          { mName = name; }
 
         /// Returns the name of the node.
-        const String& getName(void) const                           { return mName; }
+        const String& getName() const                           { return mName; }
 
         /// Gets this Bones's parent (NULL if this is the root).
-        Bone* getParent(void) const                                 { return mParent; }
+        Bone* getParent() const                                 { return mParent; }
 
         /// Reports the number of child nodes under this one.
-        size_t getNumChildren(void) const                           { return mChildren.size(); }
+        size_t getNumChildren() const                           { return mChildren.size(); }
 
         /// Gets a pointer to a child node.
         Bone* getChild(size_t index)                                { return mChildren[index]; }
@@ -153,7 +153,7 @@ namespace Ogre {
             Using this is faster than repeatedly calling getChild if you want to go through
             all (or most of) the children of this bone.
         */
-        const BoneVec& getChildren(void)                            { return mChildren; }
+        const BoneVec& getChildren()                            { return mChildren; }
 
         /// Makes the TagPoint child of this Bone.
         void addTagPoint( TagPoint *tagPoint );
@@ -161,7 +161,7 @@ namespace Ogre {
         void removeTagPoint( TagPoint *tagPoint );
 
         /// Reports the number of tag points under this one.
-        size_t getNumTagPoints(void) const                          { return mTagPointChildren.size(); }
+        size_t getNumTagPoints() const                          { return mTagPointChildren.size(); }
 
         /// Gets a pointer to a child tag point.
         TagPoint* getTagPoint(size_t index)                         { return mTagPointChildren[index]; }
@@ -172,7 +172,7 @@ namespace Ogre {
             Using this is faster than repeatedly calling getTagPoint if you want to go through
             all (or most of) the tag points of this bone.
         */
-        const TagPointVec& getTagPoints(void)                       { return mTagPointChildren; }
+        const TagPointVec& getTagPoints()                       { return mTagPointChildren; }
 
         /** Sets a regular Node to be parent of this Bone.
             DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want
@@ -211,7 +211,7 @@ namespace Ogre {
         @remarks
             Don't call this function too often, as we need to convert from SoA
         */
-        inline Vector3 getPosition(void) const;
+        inline Vector3 getPosition() const;
 
         /** Sets the scale of the node relative to its parent.
         @remarks
@@ -223,7 +223,7 @@ namespace Ogre {
         @remarks
             Don't call this function too often, as we need to convert from SoA
         */
-        inline Vector3 getScale(void) const;
+        inline Vector3 getScale() const;
 
         /** Tells the Bone whether it should inherit orientation from it's parent node.
         @remarks
@@ -245,7 +245,7 @@ namespace Ogre {
         @remarks
             @See setInheritOrientation for more info.
         */
-        bool getInheritOrientation(void) const;
+        bool getInheritOrientation() const;
 
         /** Tells the node whether it should inherit scaling factors from it's parent node.
         @remarks
@@ -259,7 +259,7 @@ namespace Ogre {
         @remarks
             @See setInheritOrientation for more info.
         */
-        bool getInheritScale(void) const;
+        bool getInheritScale() const;
 
         /** Gets the derived transform in world space
         @remarks
@@ -268,7 +268,7 @@ namespace Ogre {
             which doesn't translate well to a scale/orientation paradigm (not a problem
             if the bones don't use scaling, or if scale is not inherited).
         */
-        Matrix4 _getDerivedTransform(void) const;
+        Matrix4 _getDerivedTransform() const;
 
         /** Gets the transformation matrix for this bone in local space (i.e. as if the
             skeleton wasn't attached to a SceneNode).
@@ -279,7 +279,7 @@ namespace Ogre {
         @par
             Assumes the caches are already updated.
         */
-        FORCEINLINE const SimpleMatrixAf4x3& _getLocalSpaceTransform(void) const
+        FORCEINLINE const SimpleMatrixAf4x3& _getLocalSpaceTransform() const
         {
 #if OGRE_DEBUG_MODE
           assert( !mCachedTransformOutOfDate );
@@ -299,7 +299,7 @@ namespace Ogre {
             _setNodeParent( nullptr ) in which case the transform will be in
             local bone space.
         */
-        FORCEINLINE const SimpleMatrixAf4x3& _getFullTransform(void) const
+        FORCEINLINE const SimpleMatrixAf4x3& _getFullTransform() const
         {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             assert( !mCachedTransformOutOfDate &&
@@ -309,7 +309,7 @@ namespace Ogre {
         }
 
         /** @See _getDerivedScaleUpdated remarks. @See _getFullTransform */
-        const SimpleMatrixAf4x3& _getFullTransformUpdated(void);
+        const SimpleMatrixAf4x3& _getFullTransformUpdated();
 
         /** TODO
         */
@@ -324,8 +324,8 @@ namespace Ogre {
                                          size_t numBinds );
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        virtual void _setCachedTransformOutOfDate(void);
-        bool isCachedTransformOutOfDate(void) const             { return mCachedTransformOutOfDate; }
+        virtual void _setCachedTransformOutOfDate();
+        bool isCachedTransformOutOfDate() const             { return mCachedTransformOutOfDate; }
 #endif
     };
     /** @} */

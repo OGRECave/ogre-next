@@ -31,7 +31,7 @@ namespace Demo
         */
         void createAreaMask( float radius, Ogre::Image2 &outImage );
         /// Creates the Mesh for the billboards
-        void createAreaPlaneMesh(void);
+        void createAreaPlaneMesh();
         /// Setups a datablock (material) for the billboard showing where the light is
         /// emitting so that it can use the same texture the light is using.
         ///
@@ -49,8 +49,8 @@ namespace Demo
     public:
         UpdatingDecalsAndAreaLightTexGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

@@ -183,7 +183,7 @@ namespace Ogre
 
         virtual void cloneImpl( HlmsDatablock *datablock ) const;
 
-        void scheduleConstBufferUpdate(void);
+        void scheduleConstBufferUpdate();
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
 
     public:
@@ -195,7 +195,7 @@ namespace Ogre
 
         /// Sets overall diffuse colour. The colour will be divided by PI for energy conservation.
         void setDiffuse( const Vector3 &diffuseColour );
-        Vector3 getDiffuse(void) const;
+        Vector3 getDiffuse() const;
 
         /// Sets the roughness
         void setRoughness( uint8 detailMapIdx, float roughness );
@@ -236,7 +236,7 @@ namespace Ogre
         /// Changes the BRDF in use. Calling this function may trigger an
         /// HlmsDatablock::flushRenderables
         void setBrdf( TerraBrdf::TerraBrdf brdf );
-        uint32 getBrdf(void) const;
+        uint32 getBrdf() const;
 
         /** Suggests the TextureMapType (aka texture category) for each type of texture
             (i.e. normals should load from TEXTURE_TYPE_NORMALS).

@@ -50,7 +50,7 @@ namespace Demo
         Mq::MessageQueueSystem  *mGraphicsSystem;
         LogicSystem             *mLogicSystem;
 
-        Ogre::uint32 getScheduledForRemovalAvailableSlot(void);
+        Ogre::uint32 getScheduledForRemovalAvailableSlot();
         void destroyAllGameEntitiesIn( GameEntityVec &container );
 
         void aquireTransformSlot( size_t &outSlot, size_t &outBufferIdx );
@@ -95,7 +95,7 @@ namespace Demo
         void _notifyGameEntitiesRemoved( size_t slot );
 
         /// Must be called every frame from the LOGIC THREAD.
-        void finishFrameParallel(void);
+        void finishFrameParallel();
     };
 }
 

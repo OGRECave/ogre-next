@@ -99,7 +99,7 @@ namespace Ogre
                      "CommandBuffer::execute_setInvalidCommand" );
     }
     //-----------------------------------------------------------------------------------
-    void CommandBuffer::execute(void)
+    void CommandBuffer::execute()
     {
         unsigned char const * RESTRICT_ALIAS cmdBase = mCommandBuffer.begin();
 
@@ -114,7 +114,7 @@ namespace Ogre
         mCommandBuffer.clear();
     }
     //-----------------------------------------------------------------------------------
-    CbBase* CommandBuffer::getLastCommand(void)
+    CbBase* CommandBuffer::getLastCommand()
     {
         return reinterpret_cast<CbBase*>( mCommandBuffer.end() - COMMAND_FIXED_SIZE );
     }

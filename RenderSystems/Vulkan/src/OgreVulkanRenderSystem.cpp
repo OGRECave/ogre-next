@@ -240,7 +240,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::shutdown( void )
+    void VulkanRenderSystem::shutdown()
     {
         if( !mDevice )
             return;
@@ -328,20 +328,20 @@ namespace Ogre
         vkDestroyDevice( vkDevice, 0 );
     }
     //-------------------------------------------------------------------------
-    const String &VulkanRenderSystem::getName( void ) const
+    const String &VulkanRenderSystem::getName() const
     {
         static String strName( "Vulkan Rendering Subsystem" );
         return strName;
     }
     //-------------------------------------------------------------------------
-    const String &VulkanRenderSystem::getFriendlyName( void ) const
+    const String &VulkanRenderSystem::getFriendlyName() const
     {
         static String strName( "Vulkan_RS" );
         return strName;
     }
-    void VulkanRenderSystem::initConfigOptions( void ) { mVulkanSupport->addConfig( this ); }
+    void VulkanRenderSystem::initConfigOptions() { mVulkanSupport->addConfig( this ); }
     //-------------------------------------------------------------------------
-    ConfigOptionMap &VulkanRenderSystem::getConfigOptions( void )
+    ConfigOptionMap &VulkanRenderSystem::getConfigOptions()
     {
         return mVulkanSupport->getConfigOptions( this );
     }
@@ -353,16 +353,16 @@ namespace Ogre
     //-------------------------------------------------------------------------
     const char *VulkanRenderSystem::getPriorityConfigOption( size_t ) const { return "Device"; }
     //-------------------------------------------------------------------------
-    size_t VulkanRenderSystem::getNumPriorityConfigOptions( void ) const { return 1u; }
+    size_t VulkanRenderSystem::getNumPriorityConfigOptions() const { return 1u; }
     //-------------------------------------------------------------------------
-    String VulkanRenderSystem::validateConfigOptions( void )
+    String VulkanRenderSystem::validateConfigOptions()
     {
         return mVulkanSupport->validateConfigOptions();
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::debugCallback( void ) { mValidationError = true; }
+    void VulkanRenderSystem::debugCallback() { mValidationError = true; }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::addInstanceDebugCallback( void )
+    void VulkanRenderSystem::addInstanceDebugCallback()
     {
         CreateDebugReportCallback = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(
             mVkInstance, "vkCreateDebugReportCallbackEXT" );
@@ -416,12 +416,12 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    HardwareOcclusionQuery *VulkanRenderSystem::createHardwareOcclusionQuery( void )
+    HardwareOcclusionQuery *VulkanRenderSystem::createHardwareOcclusionQuery()
     {
         return 0;  // TODO
     }
     //-------------------------------------------------------------------------
-    RenderSystemCapabilities *VulkanRenderSystem::createRenderSystemCapabilities( void ) const
+    RenderSystemCapabilities *VulkanRenderSystem::createRenderSystemCapabilities() const
     {
         RenderSystemCapabilities *rsc = new RenderSystemCapabilities();
         rsc->setRenderSystemName( getName() );
@@ -686,7 +686,7 @@ namespace Ogre
         return rsc;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::resetAllBindings( void )
+    void VulkanRenderSystem::resetAllBindings()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<VulkanConstBufferPacked *>( mDummyBuffer ) );
         VulkanConstBufferPacked *constBuffer = static_cast<VulkanConstBufferPacked *>( mDummyBuffer );
@@ -739,13 +739,13 @@ namespace Ogre
         mComputeTableDirty = true;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::reinitialise( void )
+    void VulkanRenderSystem::reinitialise()
     {
         this->shutdown();
         this->_initialise( true );
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::initializeVkInstance( void )
+    void VulkanRenderSystem::initializeVkInstance()
     {
         if( mVkInstance )
             return;
@@ -1153,7 +1153,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushUAVs( void )
+    void VulkanRenderSystem::flushUAVs()
     {
         if( mUavRenderingDirty )
         {
@@ -1524,7 +1524,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    RenderPassDescriptor *VulkanRenderSystem::createRenderPassDescriptor( void )
+    RenderPassDescriptor *VulkanRenderSystem::createRenderPassDescriptor()
     {
         VulkanRenderPassDescriptor *retVal =
             OGRE_NEW VulkanRenderPassDescriptor( &mActiveDevice->mGraphicsQueue, this );
@@ -1590,9 +1590,9 @@ namespace Ogre
         pso->rsData = 0;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_beginFrame( void ) {}
+    void VulkanRenderSystem::_beginFrame() {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_endFrame( void ) {}
+    void VulkanRenderSystem::_endFrame() {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_notifyActiveEncoderEnded( bool callEndRenderPassDesc )
     {
@@ -1610,14 +1610,14 @@ namespace Ogre
         mPso = 0;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_notifyActiveComputeEnded( void )
+    void VulkanRenderSystem::_notifyActiveComputeEnded()
     {
         mComputePso = 0;
         mComputeTable.setAllDirty();
         mComputeTableDirty = true;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_endFrameOnce( void )
+    void VulkanRenderSystem::_endFrameOnce()
     {
         RenderSystem::_endFrameOnce();
         endRenderPassDescriptor( false );
@@ -1711,7 +1711,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VertexElementType VulkanRenderSystem::getColourVertexElementType( void ) const
+    VertexElementType VulkanRenderSystem::getColourVertexElementType() const
     {
         return VET_COLOUR_ARGB;
     }
@@ -1763,7 +1763,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushRootLayout( void )
+    void VulkanRenderSystem::flushRootLayout()
     {
         if( !mTableDirty )
             return;
@@ -1775,7 +1775,7 @@ namespace Ogre
         mTableDirty = false;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushRootLayoutCS( void )
+    void VulkanRenderSystem::flushRootLayoutCS()
     {
         if( !mComputeTableDirty )
             return;
@@ -2074,13 +2074,13 @@ namespace Ogre
         executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------
-    Real VulkanRenderSystem::getHorizontalTexelOffset( void ) { return 0.0f; }
+    Real VulkanRenderSystem::getHorizontalTexelOffset() { return 0.0f; }
     //-------------------------------------------------------------------------
-    Real VulkanRenderSystem::getVerticalTexelOffset( void ) { return 0.0f; }
+    Real VulkanRenderSystem::getVerticalTexelOffset() { return 0.0f; }
     //-------------------------------------------------------------------------
-    Real VulkanRenderSystem::getMinimumDepthInputValue( void ) { return 0.0f; }
+    Real VulkanRenderSystem::getMinimumDepthInputValue() { return 0.0f; }
     //-------------------------------------------------------------------------
-    Real VulkanRenderSystem::getMaximumDepthInputValue( void ) { return 1.0f; }
+    Real VulkanRenderSystem::getMaximumDepthInputValue() { return 1.0f; }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::preExtraThreadsStarted() {}
     //-------------------------------------------------------------------------
@@ -2090,16 +2090,16 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::unregisterThread() {}
     //-------------------------------------------------------------------------
-    const PixelFormatToShaderType *VulkanRenderSystem::getPixelFormatToShaderType( void ) const
+    const PixelFormatToShaderType *VulkanRenderSystem::getPixelFormatToShaderType() const
     {
         return &mPixelFormatToShaderType;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::flushCommands( void ) {}
+    void VulkanRenderSystem::flushCommands() {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::beginProfileEvent( const String &eventName ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endProfileEvent( void ) {}
+    void VulkanRenderSystem::endProfileEvent() {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::markProfileEvent( const String &event ) {}
     //-------------------------------------------------------------------------
@@ -2116,7 +2116,7 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::debugAnnotationPop( void )
+    void VulkanRenderSystem::debugAnnotationPop()
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( !CmdEndDebugUtilsLabelEXT )
@@ -2126,9 +2126,9 @@ namespace Ogre
 #endif
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::initGPUProfiling( void ) {}
+    void VulkanRenderSystem::initGPUProfiling() {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::deinitGPUProfiling( void ) {}
+    void VulkanRenderSystem::deinitGPUProfiling() {}
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::beginGPUSampleProfile( const String &name, uint32 *hashCache ) {}
     //-------------------------------------------------------------------------
@@ -2248,7 +2248,7 @@ namespace Ogre
         mInterruptedRenderCommandEncoder = false;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::executeRenderPassDescriptorDelayedActions( void )
+    void VulkanRenderSystem::executeRenderPassDescriptorDelayedActions()
     {
         executeRenderPassDescriptorDelayedActions( true );
     }
@@ -2367,7 +2367,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endRenderPassDescriptor( void ) { endRenderPassDescriptor( false ); }
+    void VulkanRenderSystem::endRenderPassDescriptor() { endRenderPassDescriptor( false ); }
     //-------------------------------------------------------------------------
     TextureGpu *VulkanRenderSystem::createDepthBufferFor( TextureGpu *colourTexture,
                                                           bool preferDepthTexture,
@@ -2577,7 +2577,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::endCopyEncoder( void ) { mActiveDevice->mGraphicsQueue.endCopyEncoder(); }
+    void VulkanRenderSystem::endCopyEncoder() { mActiveDevice->mGraphicsQueue.endCopyEncoder(); }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::executeResourceTransition( const ResourceTransitionArray &rstCollection )
     {

@@ -91,7 +91,7 @@ namespace Ogre {
                     message, "FreeImageCodec2::save");
     }
     //---------------------------------------------------------------------
-    void FreeImageCodec2::startup(void)
+    void FreeImageCodec2::startup()
     {
         FreeImage_Initialise(false);
 
@@ -143,7 +143,7 @@ namespace Ogre {
         FreeImage_SetOutputMessage(FreeImageLoadErrorHandler2);
     }
     //---------------------------------------------------------------------
-    void FreeImageCodec2::shutdown(void)
+    void FreeImageCodec2::shutdown()
     {
         FreeImage_DeInitialise();
 

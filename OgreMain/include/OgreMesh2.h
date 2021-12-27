@@ -137,18 +137,18 @@ namespace Ogre {
             It also does not set up submeshes, etc.  You have to call load()
             to do that.
          */
-        void prepareImpl(void);
+        void prepareImpl();
         /** Destroys data cached by prepareImpl.
          */
-        void unprepareImpl(void);
+        void unprepareImpl();
         /// @copydoc Resource::loadImpl
-        void loadImpl(void);
+        void loadImpl();
         /// @copydoc Resource::postLoadImpl
-        void postLoadImpl(void);
+        void postLoadImpl();
         /// @copydoc Resource::unloadImpl
-        void unloadImpl(void);
+        void unloadImpl();
         /// @copydoc Resource::calculateSize
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
     public:
         /** Default constructor - used by MeshManager
@@ -177,7 +177,7 @@ namespace Ogre {
 
         /** Gets the number of sub meshes which comprise this mesh.
         */
-        unsigned getNumSubMeshes(void) const;
+        unsigned getNumSubMeshes() const;
 
         /** Gets a pointer to the submesh indicated by the index.
         */
@@ -192,7 +192,7 @@ namespace Ogre {
         void destroySubMesh(unsigned index);
 
         /// Gets an iterator over the available submeshes
-        const SubMeshVec& getSubMeshes(void) const      { return mSubMeshes; }
+        const SubMeshVec& getSubMeshes() const      { return mSubMeshes; }
 
         /// Gives a name to a SubMesh. Note, only first 65536 submeshes could be named.
         void nameSubMesh(const String& name, unsigned index);
@@ -201,7 +201,7 @@ namespace Ogre {
         void unnameSubMesh(const String& name);
 
         /// Gets a reference to the optional name assignments of the SubMeshes.
-        const SubMeshNameMap& getSubMeshNameMap(void) const { return mSubMeshNameMap; }
+        const SubMeshNameMap& getSubMeshNameMap() const { return mSubMeshNameMap; }
 
         /** Makes a copy of this mesh object and gives it a new name.
         @remarks
@@ -239,10 +239,10 @@ namespace Ogre {
 
         /** Get the axis-aligned bounding box for this mesh.
         */
-        const Aabb& getAabb(void) const;
+        const Aabb& getAabb() const;
 
         /** Gets the radius of the bounding sphere surrounding this mesh. */
-        Real getBoundingSphereRadius(void) const;
+        Real getBoundingSphereRadius() const;
 
         /** Manually set the bounding box for this Mesh.
         @remarks
@@ -293,16 +293,16 @@ namespace Ogre {
         void setSkeletonName(const String& skelName);
 
         /** Returns true if this Mesh has a linked Skeleton. */
-        bool hasSkeleton(void) const                                { return !mSkeletonName.empty(); }
+        bool hasSkeleton() const                                { return !mSkeletonName.empty(); }
         
         /** Gets a pointer to any linked Skeleton. 
         @return
             Weak reference to the skeleton - copy this if you want to hold a strong pointer.
         */
-        const SkeletonDefPtr& getSkeleton(void) const               { return mSkeleton; }
+        const SkeletonDefPtr& getSkeleton() const               { return mSkeleton; }
 
         /** Gets the name of any linked Skeleton */
-        const String& getSkeletonName(void) const;
+        const String& getSkeletonName() const;
 
         /** Assigns a vertex to a bone with a given weight, for skeletal animation. 
         @remarks    
@@ -323,7 +323,7 @@ namespace Ogre {
             This method is for modifying weights to the shared geometry of the Mesh. To assign
             weights to the per-SubMesh geometry, see the equivalent methods on SubMesh.
         */
-        void clearBoneAssignments(void);
+        void clearBoneAssignments();
 
         /** Internal notification, used to tell the Mesh which Skeleton to use without loading it. 
         @remarks
@@ -337,13 +337,13 @@ namespace Ogre {
         void setLodStrategyName( const String &name )               { mLodStrategyName = name; }
 
         /// Returns the name of the Lod strategy the user lod values have been calibrated for
-        const String& getLodStrategyName(void) const                { return mLodStrategyName; }
+        const String& getLodStrategyName() const                { return mLodStrategyName; }
 
         /** Returns the number of levels of detail that this mesh supports. 
         @remarks
             This number includes the original model.
         */
-        uint16 getNumLodLevels(void) const;
+        uint16 getNumLodLevels() const;
 
         /** Retrieves the level of detail index for the given LOD value. 
         @note
@@ -359,7 +359,7 @@ namespace Ogre {
         //void _setSubMeshLodFaceList(unsigned short subIdx, unsigned short level, IndexData* facedata);
 
         /** Removes all LOD data from this Mesh. */
-        void removeLodLevels(void);
+        void removeLodLevels();
 
         /// Explicitly set a hash for caches. See Mesh::getHashForCaches
         void _setHashForCaches( const uint64 hash[2] );
@@ -374,7 +374,7 @@ namespace Ogre {
         ///     getCacheHash()[i] != savedHash[i]
         ///
         /// they should treat as if the mesh has changed and the cache entry became stale
-        const uint64 *getHashForCaches( void ) const { return mHashForCaches; }
+        const uint64 *getHashForCaches() const { return mHashForCaches; }
 
         /** Sets the policy for the vertex buffers to be used when loading
             this Mesh.
@@ -407,15 +407,15 @@ namespace Ogre {
         void setIndexBufferPolicy( BufferType bufferType, bool shadowBuffer = false );
 
         /** Gets the usage setting for this meshes vertex buffers. */
-        BufferType getVertexBufferDefaultType(void) const       { return mVertexBufferDefaultType; }
+        BufferType getVertexBufferDefaultType() const       { return mVertexBufferDefaultType; }
         /** Gets the usage setting for this meshes index buffers. */
-        BufferType getIndexBufferDefaultType(void) const        { return mIndexBufferDefaultType; }
+        BufferType getIndexBufferDefaultType() const        { return mIndexBufferDefaultType; }
         /** Gets whether or not this meshes vertex buffers are shadowed. */
-        bool isVertexBufferShadowed(void) const { return mVertexBufferShadowBuffer; }
+        bool isVertexBufferShadowed() const { return mVertexBufferShadowBuffer; }
         /** Gets whether or not this meshes index buffers are shadowed. */
-        bool isIndexBufferShadowed(void) const { return mIndexBufferShadowBuffer; }
+        bool isIndexBufferShadowed() const { return mIndexBufferShadowBuffer; }
 
-        const LodValueArray* _getLodValueArray(void) const                      { return &mLodValues; }
+        const LodValueArray* _getLodValueArray() const                      { return &mLodValues; }
 
         /** Imports a v1 mesh to this mesh, with optional optimization conversions.
             This mesh must be in unloaded state. Resulting mesh would be non-reloadable, use
@@ -462,7 +462,7 @@ namespace Ogre {
         /// Reverts the effects from arrangeEfficient by converting all 16-bit half float back
         /// to 32-bit float; and QTangents to Normal, Tangent + Reflection representation,
         /// which are more compatible for doing certain operations vertex operations in the CPU.
-        void dearrangeToInefficient(void);
+        void dearrangeToInefficient();
 
         /// When this bool is false, prepareForShadowMapping will use the same Vaos for
         /// both regular and shadow mapping rendering. When it's true, it will
@@ -488,11 +488,11 @@ namespace Ogre {
 
         /// Returns true if the mesh is ready for rendering with valid shadow mapping Vaos
         /// Otherwise prepareForShadowMapping must be called on this mesh.
-        bool hasValidShadowMappingVaos(void) const;
+        bool hasValidShadowMappingVaos() const;
 
         /// Returns true if the shadow mapping buffers do not just reference the real buffers,
         /// but are rather their own separate set of optimized geometry.
-        bool hasIndependentShadowMappingVaos(void) const;
+        bool hasIndependentShadowMappingVaos() const;
 
         /// will manually set the vao manager the mesh will use when it loads.
         /// setting this when the mesh is already loaded will cause a crash on unload, use with caution!

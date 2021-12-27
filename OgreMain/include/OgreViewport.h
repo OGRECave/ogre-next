@@ -91,7 +91,7 @@ namespace Ogre {
             @note
                 Internal use by Ogre only.
         */
-        void _updateDimensions(void);
+        void _updateDimensions();
 
         /** Instructs the viewport to updates its contents.
         */
@@ -103,54 +103,54 @@ namespace Ogre {
         /** Gets one of the relative dimensions of the viewport,
             a value between 0.0 and 1.0.
         */
-        Real getLeft(void) const;
+        Real getLeft() const;
 
         /** Gets one of the relative dimensions of the viewport, a value
             between 0.0 and 1.0.
         */
-        Real getTop(void) const;
+        Real getTop() const;
 
         /** Gets one of the relative dimensions of the viewport, a value
             between 0.0 and 1.0.
         */
 
-        Real getWidth(void) const;
+        Real getWidth() const;
         /** Gets one of the relative dimensions of the viewport, a value
             between 0.0 and 1.0.
         */
 
-        Real getHeight(void) const;
+        Real getHeight() const;
         /** Gets one of the actual dimensions of the viewport, a value in
             pixels.
         */
 
-        int getActualLeft(void) const;
+        int getActualLeft() const;
         /** Gets one of the actual dimensions of the viewport, a value in
             pixels.
         */
 
-        int getActualTop(void) const;
+        int getActualTop() const;
         /** Gets one of the actual dimensions of the viewport, a value in
             pixels.
         */
-        int getActualWidth(void) const;
+        int getActualWidth() const;
         /** Gets one of the actual dimensions of the viewport, a value in
             pixels.
         */
-        int getActualHeight(void) const;
+        int getActualHeight() const;
 
-        Real getScissorLeft(void) const                 { return mScissorRelLeft; }
-        Real getScissorTop(void) const                  { return mScissorRelTop; }
-        Real getScissorWidth(void) const                { return mScissorRelWidth; }
-        Real getScissorHeight(void) const               { return mScissorRelHeight; }
+        Real getScissorLeft() const                 { return mScissorRelLeft; }
+        Real getScissorTop() const                  { return mScissorRelTop; }
+        Real getScissorWidth() const                { return mScissorRelWidth; }
+        Real getScissorHeight() const               { return mScissorRelHeight; }
 
-        int getScissorActualLeft(void) const            { return mScissorActLeft; }
-        int getScissorActualTop(void) const             { return mScissorActTop; }
-        int getScissorActualWidth(void) const           { return mScissorActWidth; }
-        int getScissorActualHeight(void) const          { return mScissorActHeight; }
+        int getScissorActualLeft() const            { return mScissorActLeft; }
+        int getScissorActualTop() const             { return mScissorActTop; }
+        int getScissorActualWidth() const           { return mScissorActWidth; }
+        int getScissorActualHeight() const          { return mScissorActHeight; }
 
-        bool coversEntireTarget(void) const;
-        bool scissorsMatchViewport(void) const;
+        bool coversEntireTarget() const;
+        bool scissorsMatchViewport() const;
 
         /** Sets the dimensions (after creation).
         @param left
@@ -171,7 +171,7 @@ namespace Ogre {
         void setDimensions( TextureGpu *newTarget, const Vector4 &relativeVp,
                             const Vector4 &scissors, uint8 mipLevel );
 
-        TextureGpu* getCurrentTarget(void) const        { return mCurrentTarget; }
+        TextureGpu* getCurrentTarget() const        { return mCurrentTarget; }
 
         /** Only sets the scissor regions. The scissor rectangle must be fully inside
             the viewport rectangle. @See setDimensions for param description
@@ -196,7 +196,7 @@ namespace Ogre {
         
         /** Get the material scheme which the viewport should use.
         */
-        const String& getMaterialScheme(void) const
+        const String& getMaterialScheme() const
         { return mMaterialSchemeName; }
 
         /** Access to actual dimensions (based on target size).
@@ -204,8 +204,8 @@ namespace Ogre {
         void getActualDimensions(
             int &left, int &top, int &width, int &height ) const;
 
-        bool _isUpdated(void) const;
-        void _clearUpdatedFlag(void);
+        bool _isUpdated() const;
+        void _clearUpdatedFlag();
 
         /** Tells this viewport whether it should display Overlay objects.
         @remarks
@@ -221,7 +221,7 @@ namespace Ogre {
 
         /** Returns whether or not Overlay objects (created in the SceneManager) are displayed in this
             viewport. */
-        bool getOverlaysEnabled(void) const;
+        bool getOverlaysEnabled() const;
 
         /** Sets a per-viewport visibility mask.
         @remarks
@@ -239,8 +239,8 @@ namespace Ogre {
         /** Gets a per-viewport visibility mask.
         @see Viewport::setVisibilityMask
         */
-        uint32 getVisibilityMask(void) const        { return mVisibilityMask; }
-        uint32 getLightVisibilityMask(void) const   { return mLightVisibilityMask; }
+        uint32 getVisibilityMask() const        { return mVisibilityMask; }
+        uint32 getLightVisibilityMask() const   { return mLightVisibilityMask; }
 
         /** Convert oriented input point coordinates to screen coordinates. */
         void pointOrientedToScreen(const Vector2 &v, int orientationMode, Vector2 &outv);

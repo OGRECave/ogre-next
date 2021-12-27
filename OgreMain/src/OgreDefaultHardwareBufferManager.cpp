@@ -57,7 +57,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareVertexBuffer::unlockImpl(void)
+    void DefaultHardwareVertexBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -68,7 +68,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareVertexBuffer::unlock(void)
+    void DefaultHardwareVertexBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -108,7 +108,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareIndexBuffer::unlockImpl(void)
+    void DefaultHardwareIndexBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -119,7 +119,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareIndexBuffer::unlock(void)
+    void DefaultHardwareIndexBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -158,7 +158,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareUniformBuffer::unlockImpl(void)
+    void DefaultHardwareUniformBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -176,7 +176,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareUniformBuffer::unlock(void)
+    void DefaultHardwareUniformBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -214,7 +214,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareCounterBuffer::unlockImpl(void)
+    void DefaultHardwareCounterBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -232,7 +232,7 @@ namespace v1 {
         return mData + offset;
     }
     //-----------------------------------------------------------------------
-    void DefaultHardwareCounterBuffer::unlock(void)
+    void DefaultHardwareCounterBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do

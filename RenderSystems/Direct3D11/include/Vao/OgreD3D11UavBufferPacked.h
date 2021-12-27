@@ -55,7 +55,7 @@ namespace Ogre
         uint8               mCurrentCacheCursor;
 
         virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void );
+        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl();
 
         ID3D11UnorderedAccessView* createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
 

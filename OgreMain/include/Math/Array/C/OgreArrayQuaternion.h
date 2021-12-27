@@ -142,26 +142,26 @@ namespace Ogre
         inline void operator *= ( const ArrayReal fScalar );
 
         /// @copydoc Quaternion::xAxis
-        inline ArrayVector3 xAxis( void ) const;
+        inline ArrayVector3 xAxis() const;
         /// @copydoc Quaternion::yAxis
-        inline ArrayVector3 yAxis( void ) const;
+        inline ArrayVector3 yAxis() const;
         /// @copydoc Quaternion::zAxis
-        inline ArrayVector3 zAxis( void ) const;
+        inline ArrayVector3 zAxis() const;
 
         /// @copydoc Quaternion::Dot
         inline ArrayReal Dot( const ArrayQuaternion& rkQ ) const;
 
         /// @copydoc Quaternion::Norm
-        inline ArrayReal Norm( void ) const; //Returns the squared length, doesn't modify
+        inline ArrayReal Norm() const; //Returns the squared length, doesn't modify
 
         /// Unlike Quaternion::normalise(), this function does not return the length of the vector
         /// because such value was not cached and was never available @see Quaternion::normalise()
-        inline void normalise( void );
+        inline void normalise();
 
-        inline ArrayQuaternion Inverse( void ) const;       // apply to non-zero quaternion
-        inline ArrayQuaternion UnitInverse( void ) const;   // apply to unit-length quaternion
-        inline ArrayQuaternion Exp( void ) const;
-        inline ArrayQuaternion Log( void ) const;
+        inline ArrayQuaternion Inverse() const;       // apply to non-zero quaternion
+        inline ArrayQuaternion UnitInverse() const;   // apply to unit-length quaternion
+        inline ArrayQuaternion Exp() const;
+        inline ArrayQuaternion Log() const;
 
         /// Rotation of a vector by a quaternion
         inline ArrayVector3 operator * ( const ArrayVector3 &v ) const;

@@ -264,13 +264,13 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
-        virtual void cleanupEmptyPools(void);
+        virtual void cleanupEmptyPools();
 
         /// Binds the Draw ID to the currently bound vertex array object.
-        void bindDrawId(void);
+        void bindDrawId();
 
-        bool supportsArbBufferStorage(void) const       { return mArbBufferStorage; }
-        GLint getMaxVertexAttribs(void) const           { return mMaxVertexAttribs; }
+        bool supportsArbBufferStorage() const       { return mArbBufferStorage; }
+        GLint getMaxVertexAttribs() const           { return mMaxVertexAttribs; }
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -293,10 +293,10 @@ namespace Ogre
         /// (i.e. no hazards).
         void destroyStagingTexture( GL3PlusStagingTexture *stagingTexture );
 
-        virtual void _update(void);
+        virtual void _update();
 
         /// See VaoManager::waitForTailFrameToFinish
-        virtual uint8 waitForTailFrameToFinish(void);
+        virtual uint8 waitForTailFrameToFinish();
 
         /// See VaoManager::waitForSpecificFrameToFinish
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );

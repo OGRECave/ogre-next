@@ -105,9 +105,9 @@ namespace Ogre
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
 
-        virtual void notifyPropertiesMergedPreGenerationStep( void );
+        virtual void notifyPropertiesMergedPreGenerationStep();
 
-        virtual void destroyAllBuffers(void);
+        virtual void destroyAllBuffers();
 
         FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
                                            const QueuedRenderable &queuedRenderable,
@@ -146,14 +146,14 @@ namespace Ogre
                                          bool casterPass, uint32 lastCacheHash,
                                          CommandBuffer *commandBuffer );
 
-        virtual void frameEnded(void);
+        virtual void frameEnded();
 
         void setShadowSettings( bool useExponentialShadowMaps );
-        bool getShadowFilter(void) const                    { return mUsingExponentialShadowMaps; }
+        bool getShadowFilter() const                    { return mUsingExponentialShadowMaps; }
 
         /// @copydoc HlmsPbs::setEsmK
         void setEsmK( uint16 K );
-        uint16 getEsmK(void) const                          { return mEsmK; }
+        uint16 getEsmK() const                          { return mEsmK; }
 
         /// @copydoc HlmsPbs::getDefaultPaths
         static void getDefaultPaths( String& outDataFolderPath, StringVector& outLibraryFoldersPaths );

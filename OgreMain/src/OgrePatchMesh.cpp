@@ -83,7 +83,7 @@ namespace v1 {
         sm->indexData[VpNormal]->indexCount = mSurface.getCurrentIndexCount();
     }
     //-----------------------------------------------------------------------
-    void PatchMesh::loadImpl(void)
+    void PatchMesh::loadImpl()
     {
         SubMesh* sm = this->createSubMesh();
         sm->vertexData[VpNormal] = OGRE_NEW VertexData(getHardwareBufferManager());

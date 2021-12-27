@@ -27,18 +27,18 @@ namespace Demo
         /// Pixel shader filter is faster for small kernels, also to use as a fallback
         /// on GPUs that don't support compute shaders, or where compute shaders are slow).
         /// For reference large kernels means kernelRadius > 2 (approx)
-        const char* chooseEsmShadowNode(void);
+        const char* chooseEsmShadowNode();
         void setupShadowNode( bool forEsm );
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void createShadowMapDebugOverlays(void);
-        void destroyShadowMapDebugOverlays(void);
+        void createShadowMapDebugOverlays();
+        void destroyShadowMapDebugOverlays();
 
     public:
         ShadowMapDebuggingGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

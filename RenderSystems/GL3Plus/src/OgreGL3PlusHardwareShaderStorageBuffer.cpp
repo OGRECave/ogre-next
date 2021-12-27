@@ -126,7 +126,7 @@ namespace v1 {
         return retPtr;
     }
 
-    void GL3PlusHardwareShaderStorageBuffer::unlockImpl(void)
+    void GL3PlusHardwareShaderStorageBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_SHADER_STORAGE_BUFFER, mBufferId));
 

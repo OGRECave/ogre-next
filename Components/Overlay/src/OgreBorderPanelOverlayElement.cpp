@@ -88,7 +88,7 @@ namespace v1 {
         OGRE_DELETE mBorderRenderable;
     }
     //---------------------------------------------------------------------
-    void BorderPanelOverlayElement::initialise(void)
+    void BorderPanelOverlayElement::initialise()
     {
         bool init = !mInitialised;
 
@@ -198,7 +198,7 @@ namespace v1 {
         PanelOverlayElement::_releaseManualHardwareResources();
     }
     //---------------------------------------------------------------------
-    void BorderPanelOverlayElement::addBaseParameters(void)
+    void BorderPanelOverlayElement::addBaseParameters()
     {
         PanelOverlayElement::addBaseParameters();
         ParamDictionary* dict = getParamDictionary();
@@ -306,7 +306,7 @@ namespace v1 {
         mGeomPositionsOutOfDate = true;
     }
     //---------------------------------------------------------------------
-    Real BorderPanelOverlayElement::getLeftBorderSize(void) const
+    Real BorderPanelOverlayElement::getLeftBorderSize() const
     {
         if (mMetricsMode == GMM_PIXELS)
         {
@@ -318,7 +318,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    Real BorderPanelOverlayElement::getRightBorderSize(void) const
+    Real BorderPanelOverlayElement::getRightBorderSize() const
     {
         if (mMetricsMode == GMM_PIXELS)
         {
@@ -330,7 +330,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    Real BorderPanelOverlayElement::getTopBorderSize(void) const
+    Real BorderPanelOverlayElement::getTopBorderSize() const
     {
         if (mMetricsMode == GMM_PIXELS)
         {
@@ -342,7 +342,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    Real BorderPanelOverlayElement::getBottomBorderSize(void) const
+    Real BorderPanelOverlayElement::getBottomBorderSize() const
     {
         if (mMetricsMode == GMM_PIXELS)
         {
@@ -522,12 +522,12 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    const String& BorderPanelOverlayElement::getBorderMaterialName(void) const
+    const String& BorderPanelOverlayElement::getBorderMaterialName() const
     {
         return mBorderMaterialName;
     }
     //---------------------------------------------------------------------
-    void BorderPanelOverlayElement::updatePositionGeometry(void)
+    void BorderPanelOverlayElement::updatePositionGeometry()
     {
         /*
         Grid is like this:
@@ -646,7 +646,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void BorderPanelOverlayElement::_update(void)
+    void BorderPanelOverlayElement::_update()
     {
         if (mMetricsMode != GMM_RELATIVE && 
             mGeomPositionsOutOfDate)
@@ -847,7 +847,7 @@ namespace v1 {
             );
     }
     //---------------------------------------------------------------------
-    const String& BorderPanelOverlayElement::getTypeName(void) const
+    const String& BorderPanelOverlayElement::getTypeName() const
     {
         return msTypeName;
     }

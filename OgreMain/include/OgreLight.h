@@ -70,8 +70,8 @@ namespace Ogre {
     */
     class _OgreExport Light : public MovableObject, public TextureGpuListener
     {
-		void resetAabb(void);
-		void updateLightBounds(void);
+		void resetAabb();
+		void updateLightBounds();
     public:
         /// Temp tag used for sorting
         Real tempSquareDist;
@@ -119,7 +119,7 @@ namespace Ogre {
 
         /** Returns the light type.
         */
-        LightTypes getType(void) const                              { return mLightType; }
+        LightTypes getType() const                              { return mLightType; }
 
         /** Sets the colour of the diffuse light given off by this source.
         @remarks
@@ -145,7 +145,7 @@ namespace Ogre {
 
         /** Returns the colour of the diffuse light given off by this light source (see setDiffuseColour for more info).
         */
-        const ColourValue& getDiffuseColour(void) const             { return mDiffuse; }
+        const ColourValue& getDiffuseColour() const             { return mDiffuse; }
 
         /** Sets the colour of the specular light given off by this source.
         @remarks
@@ -171,7 +171,7 @@ namespace Ogre {
 
         /** Returns the colour of specular light given off by this light source.
         */
-        const ColourValue& getSpecularColour(void) const            { return mSpecular; }
+        const ColourValue& getSpecularColour() const            { return mSpecular; }
 
         /** Sets the attenuation parameters (range, constant, linear & quadratic, @see setAttenuation)
             based on a given radius.
@@ -229,22 +229,22 @@ namespace Ogre {
 
         /** Returns the absolute upper range of the light.
         */
-        Real getAttenuationRange(void) const                        { return mRange; }
+        Real getAttenuationRange() const                        { return mRange; }
 
         /** Returns the constant factor in the attenuation formula.
         */
-        Real getAttenuationConstant(void) const                     { return mAttenuationConst; }
+        Real getAttenuationConstant() const                     { return mAttenuationConst; }
 
         /** Returns the linear factor in the attenuation formula.
         */
-        Real getAttenuationLinear(void) const                       { return mAttenuationLinear; }
+        Real getAttenuationLinear() const                       { return mAttenuationLinear; }
 
         /** Returns the quadric factor in the attenuation formula.
         */
-        Real getAttenuationQuadric(void) const                      { return mAttenuationQuad; }
+        Real getAttenuationQuadric() const                      { return mAttenuationQuad; }
 
         void _setLightProfileIdx( uint16 profileIdx )               { mLightProfileIdx = profileIdx; }
-        uint16 getLightProfileIdx(void) const                       { return mLightProfileIdx; }
+        uint16 getLightProfileIdx() const                       { return mLightProfileIdx; }
 
         /** Sets the direction in which a light points.
         @remarks
@@ -259,7 +259,7 @@ namespace Ogre {
             Applicable only to the spotlight and directional light types.
             Try to cache the value instead of calling it multiple times in the same scope
         */
-        Vector3 getDirection(void) const;
+        Vector3 getDirection() const;
 
 		/** A Light must always have a Node attached to it. The direction is taken from
 			the node's orientation, and thus setDirection modifies the attached node directly.
@@ -285,7 +285,7 @@ namespace Ogre {
 		*/
 		void setAffectParentNode( bool bAffect );
 
-		bool getAffectParentNode(void) const                        { return mAffectParentNode; }
+		bool getAffectParentNode() const                        { return mAffectParentNode; }
 
         /** For area lights and custom 2d shapes, specifies whether the light lits in both
             directions (positive & negative sides of the plane) or if only towards one.
@@ -293,7 +293,7 @@ namespace Ogre {
             True to enable. Default: false.
         */
         void setDoubleSided( bool bDoubleSided );
-        bool getDoubleSided(void) const                             { return mDoubleSided; }
+        bool getDoubleSided() const                             { return mDoubleSided; }
 
         /** Sets the range of a spotlight, i.e. the angle of the inner and outer cones
             and the rate of falloff between them.
@@ -311,17 +311,17 @@ namespace Ogre {
 
         /** Returns the angle covered by the spotlights inner cone.
         */
-        const Radian& getSpotlightInnerAngle(void) const            { return mSpotInner; }
+        const Radian& getSpotlightInnerAngle() const            { return mSpotInner; }
 
         /** Returns the angle covered by the spotlights outer cone.
         */
-        const Radian& getSpotlightOuterAngle(void) const            { return mSpotOuter; }
+        const Radian& getSpotlightOuterAngle() const            { return mSpotOuter; }
 
-        Real getSpotlightTanHalfAngle(void) const                   { return mTanHalfAngle; }
+        Real getSpotlightTanHalfAngle() const                   { return mTanHalfAngle; }
 
         /** Returns the falloff between the inner and outer cones of the spotlight.
         */
-        Real getSpotlightFalloff(void) const                        { return mSpotFalloff; }
+        Real getSpotlightFalloff() const                        { return mSpotFalloff; }
 
         /** Sets the angle covered by the spotlights inner cone.
         */
@@ -352,8 +352,8 @@ namespace Ogre {
         @param halfSize
         */
         void setRectSize( Vector2 rectSize );
-        const Vector2& getRectSize(void) const          { return mRectSize; }
-        Vector2 getDerivedRectSize(void) const;
+        const Vector2& getRectSize() const          { return mRectSize; }
+        Vector2 getDerivedRectSize() const;
         
         /** Set a scaling factor to indicate the relative power of a light.
         @remarks
@@ -368,17 +368,17 @@ namespace Ogre {
         /** Set the scaling factor which indicates the relative power of a 
             light.
         */
-        Real getPowerScale(void) const                              { return mPowerScale; }
+        Real getPowerScale() const                              { return mPowerScale; }
 
         /** @copydoc MovableObject::_updateRenderQueue */
         virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera) {}
 
         /** @copydoc MovableObject::getMovableType */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
         /** Retrieves the direction of the light including any transform from nodes it is attached to. */
-        Vector3 getDerivedDirection(void) const;
-        Vector3 getDerivedDirectionUpdated(void) const;
+        Vector3 getDerivedDirection() const;
+        Vector3 getDerivedDirectionUpdated() const;
 
         /** @copydoc MovableObject::setVisible.
         @remarks
@@ -395,10 +395,10 @@ namespace Ogre {
             and directional lights (w=0.0f) and be used in the same 
             calculations.
         */
-        Vector4 getAs4DVector(void) const;
+        Vector4 getAs4DVector() const;
 
         /// Override to return specific type flag
-        uint32 getTypeFlags(void) const;
+        uint32 getTypeFlags() const;
 
         /// @copydoc AnimableObject::createAnimableValue
         AnimableValuePtr createAnimableValue(const String& valueName);
@@ -419,16 +419,16 @@ namespace Ogre {
             and scene setup.
         */
         void setShadowFarDistance(Real distance);
-        bool _getOwnShadowFarDistance(void) const;
+        bool _getOwnShadowFarDistance() const;
         /** Tells the light to use the shadow far distance of the SceneManager
         */
-        void resetShadowFarDistance(void);
+        void resetShadowFarDistance();
 
         /** Gets the maximum distance away from the camera that shadows
             by this light will be visible.
         */
-        Real getShadowFarDistance(void) const;
-        Real getShadowFarDistanceSquared(void) const;
+        Real getShadowFarDistance() const;
+        Real getShadowFarDistanceSquared() const;
 
         /** Set the near clip plane distance to be used by the shadow camera, if
             this light casts texture shadows.
@@ -491,7 +491,7 @@ namespace Ogre {
             Null to disable.
         */
         void setObbRestraint( Node *node );
-        Node* getObbRestraint(void) const       { return mObbRestraint; }
+        Node* getObbRestraint() const       { return mObbRestraint; }
 
         /// Sets the distance in Ogre units (e.g. cm, meters, whatever your engine is using)
         /// to the OBB bounds at which the smooth fade kicks in.
@@ -501,9 +501,9 @@ namespace Ogre {
         ///
         /// Valid Range: [0; min( obbRestraintScale.x, obbRestraintScale.y, obbRestraintScale.z ))
         void setObbRestraintSmoothFadeDistance( float smoothFadeDistance );
-        float getObbRestraintSmoothFadeDistance(void) const	{ return mObbRestraintSmoothFadeDistance; }
+        float getObbRestraintSmoothFadeDistance() const	{ return mObbRestraintSmoothFadeDistance; }
 
-        Vector3 _getObbRestraintFadeFactor(void) const;
+        Vector3 _getObbRestraintFadeFactor() const;
 #endif
 
         /** Sets a custom parameter for this Light, which may be used to 
@@ -592,7 +592,7 @@ namespace Ogre {
         void setTexture( TextureGpu *texture );
         void setTextureRaw( TextureGpu *texture, uint32 sliceIdx );
 
-        TextureGpu* getTexture(void) const          { return mTexture; }
+        TextureGpu* getTexture() const          { return mTexture; }
 
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );
@@ -661,7 +661,7 @@ namespace Ogre {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance(MovableObject* obj);  
 
     };

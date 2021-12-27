@@ -391,7 +391,7 @@ namespace Ogre
             m[2][0] = mat3.m[2][0]; m[2][1] = mat3.m[2][1]; m[2][2] = mat3.m[2][2];
         }
 
-        inline Matrix4 transpose(void) const
+        inline Matrix4 transpose() const
         {
             return Matrix4(m[0][0], m[1][0], m[2][0], m[3][0],
                            m[0][1], m[1][1], m[2][1], m[3][1],
@@ -604,7 +604,7 @@ namespace Ogre
                 An affine matrix is a 4x4 matrix with row 3 equal to (0, 0, 0, 1),
                 e.g. no projective coefficients.
         */
-        inline bool isAffine(void) const
+        inline bool isAffine() const
         {
             return m[3][0] == 0 && m[3][1] == 0 && m[3][2] == 0 && m[3][3] == 1;
         }
@@ -613,7 +613,7 @@ namespace Ogre
             @note
                 The matrix must be an affine matrix. @see Matrix4::isAffine.
         */
-        Matrix4 inverseAffine(void) const;
+        Matrix4 inverseAffine() const;
 
         /** Concatenate two affine matrices.
             @note

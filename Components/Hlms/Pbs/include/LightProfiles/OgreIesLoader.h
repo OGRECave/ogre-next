@@ -77,15 +77,15 @@ namespace Ogre
 
         static void skipWhitespace( const char *text, size_t &offset );
 
-        void verifyDataIsSorted( void ) const;
+        void verifyDataIsSorted() const;
         void loadFromString( const char *iesTextData );
 
     public:
         IesLoader( const String &filename, const char *iesTextData );
 
-        const String &getName( void ) const { return mFilename; }
+        const String &getName() const { return mFilename; }
 
-        uint32 getSuggestedTexWidth( void ) const;
+        uint32 getSuggestedTexWidth() const;
 
         void convertToImage1D( Image2 &inOutImage, uint32 row );
     };

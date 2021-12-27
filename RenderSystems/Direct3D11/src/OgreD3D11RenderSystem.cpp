@@ -209,7 +209,7 @@ namespace Ogre
         return strName;
     }
     //---------------------------------------------------------------------
-    const String& D3D11RenderSystem::getFriendlyName(void) const
+    const String& D3D11RenderSystem::getFriendlyName() const
     {
         static String strName("Direct3D 11");
         return strName;
@@ -637,12 +637,12 @@ namespace Ogre
         return "Rendering Device";
     }
     //---------------------------------------------------------------------
-    size_t D3D11RenderSystem::getNumPriorityConfigOptions( void ) const
+    size_t D3D11RenderSystem::getNumPriorityConfigOptions() const
     {
         return 1u;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::refreshFSAAOptions(void)
+    void D3D11RenderSystem::refreshFSAAOptions()
     {
         ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
         ConfigOption* optFSAA = &it->second;
@@ -1485,12 +1485,12 @@ namespace Ogre
         rsc->setGeometryProgramNumOutputVertices(1024);
     }
     //-----------------------------------------------------------------------
-    bool D3D11RenderSystem::checkVertexTextureFormats(void)
+    bool D3D11RenderSystem::checkVertexTextureFormats()
     {
         return true;
     }
     //-----------------------------------------------------------------------------------
-    RenderPassDescriptor* D3D11RenderSystem::createRenderPassDescriptor(void)
+    RenderPassDescriptor* D3D11RenderSystem::createRenderPassDescriptor()
     {
         RenderPassDescriptor *retVal = OGRE_NEW D3D11RenderPassDescriptor( mDevice, this );
         mRenderPassDescs.insert( retVal );
@@ -1593,7 +1593,7 @@ namespace Ogre
                                          mUavStartingSlot, mUavRenderingDescSet );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderSystem::endRenderPassDescriptor(void)
+    void D3D11RenderSystem::endRenderPassDescriptor()
     {
         if( mCurrentRenderPassDescriptor )
         {
@@ -1643,7 +1643,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void D3D11RenderSystem::freeDevice(void)
+    void D3D11RenderSystem::freeDevice()
     {
         if (!mDevice.isNull() && mCurrentCapabilities)
         {
@@ -1652,7 +1652,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::createDevice( void )
+    void D3D11RenderSystem::createDevice()
     {
         mDevice.ReleaseAll();
 
@@ -1784,7 +1784,7 @@ namespace Ogre
         return true;
     }
     //---------------------------------------------------------------------
-    VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const
+    VertexElementType D3D11RenderSystem::getColourVertexElementType() const
     {
         return VET_COLOUR_ABGR;
     }
@@ -3551,32 +3551,32 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------
-    HardwareOcclusionQuery* D3D11RenderSystem::createHardwareOcclusionQuery(void)
+    HardwareOcclusionQuery* D3D11RenderSystem::createHardwareOcclusionQuery()
     {
         D3D11HardwareOcclusionQuery* ret = new D3D11HardwareOcclusionQuery (mDevice);
         mHwOcclusionQueries.push_back(ret);
         return ret;
     }
     //---------------------------------------------------------------------
-    Real D3D11RenderSystem::getHorizontalTexelOffset(void)
+    Real D3D11RenderSystem::getHorizontalTexelOffset()
     {
         // D3D11 is now like GL
         return 0.0f;
     }
     //---------------------------------------------------------------------
-    Real D3D11RenderSystem::getVerticalTexelOffset(void)
+    Real D3D11RenderSystem::getVerticalTexelOffset()
     {
         // D3D11 is now like GL
         return 0.0f;
     }
     //---------------------------------------------------------------------
-    Real D3D11RenderSystem::getMinimumDepthInputValue(void)
+    Real D3D11RenderSystem::getMinimumDepthInputValue()
     {
         // Range [0.0f, 1.0f]
         return 0.0f;
     }
     //---------------------------------------------------------------------
-    Real D3D11RenderSystem::getMaximumDepthInputValue(void)
+    Real D3D11RenderSystem::getMaximumDepthInputValue()
     {
         // Range [0.0f, 1.0f]
         // D3D inverts even identity view matrices, so maximum INPUT is -1.0
@@ -3802,7 +3802,7 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::endProfileEvent( void )
+    void D3D11RenderSystem::endProfileEvent()
     {
 #if OGRE_D3D11_PROFILING
         if(mDevice.GetProfiler())
@@ -3848,14 +3848,14 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::initGPUProfiling(void)
+    void D3D11RenderSystem::initGPUProfiling()
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
         _rmt_BindD3D11( (void*)mDevice.get(), (void*)mDevice.GetImmediateContext() );
 #endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::deinitGPUProfiling(void)
+    void D3D11RenderSystem::deinitGPUProfiling()
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
         _rmt_UnbindD3D11();
@@ -3876,12 +3876,12 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
-    const PixelFormatToShaderType* D3D11RenderSystem::getPixelFormatToShaderType(void) const
+    const PixelFormatToShaderType* D3D11RenderSystem::getPixelFormatToShaderType() const
     {
         return &mD3D11PixelFormatToShaderType;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_clearStateAndFlushCommandBuffer(void)
+    void D3D11RenderSystem::_clearStateAndFlushCommandBuffer()
     {
         OgreProfileExhaustive( "D3D11RenderSystem::_clearStateAndFlushCommandBuffer" );
 
@@ -3891,7 +3891,7 @@ namespace Ogre
         endRenderPassDescriptor();
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::flushCommands(void)
+    void D3D11RenderSystem::flushCommands()
     {
         OgreProfileExhaustive( "D3D11RenderSystem::flushCommands" );
         mDevice.GetImmediateContext()->Flush();

@@ -121,7 +121,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    OldNode* OldNode::getParent(void) const
+    OldNode* OldNode::getParent() const
     {
         return mParent;
     }
@@ -148,7 +148,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    const Matrix4& OldNode::_getFullTransform(void) const
+    const Matrix4& OldNode::_getFullTransform() const
     {
         if (mCachedTransformOutOfDate)
         {
@@ -204,7 +204,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void OldNode::_updateFromParent(void) const
+    void OldNode::_updateFromParent() const
     {
         updateFromParentImpl();
 
@@ -215,7 +215,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void OldNode::updateFromParentImpl(void) const
+    void OldNode::updateFromParentImpl() const
     {
         if (mParent)
         {
@@ -300,7 +300,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    unsigned short OldNode::numChildren(void) const
+    unsigned short OldNode::numChildren() const
     {
         return static_cast< unsigned short >( mChildren.size() );
     }
@@ -379,7 +379,7 @@ namespace v1 {
         setOrientation(Quaternion(w, x, y, z));
     }
     //-----------------------------------------------------------------------
-    void OldNode::resetOrientation(void)
+    void OldNode::resetOrientation()
     {
         mOrientation = Quaternion::IDENTITY;
         needUpdate();
@@ -402,12 +402,12 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    const Vector3 & OldNode::getPosition(void) const
+    const Vector3 & OldNode::getPosition() const
     {
         return mPosition;
     }
     //-----------------------------------------------------------------------
-    Matrix3 OldNode::getLocalAxes(void) const
+    Matrix3 OldNode::getLocalAxes() const
     {
         Vector3 axisX = Vector3::UNIT_X;
         Vector3 axisY = Vector3::UNIT_Y;
@@ -533,7 +533,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    const Quaternion & OldNode::_getDerivedOrientation(void) const
+    const Quaternion & OldNode::_getDerivedOrientation() const
     {
         if (mNeedParentUpdate)
         {
@@ -542,7 +542,7 @@ namespace v1 {
         return mDerivedOrientation;
     }
     //-----------------------------------------------------------------------
-    const Vector3 & OldNode::_getDerivedPosition(void) const
+    const Vector3 & OldNode::_getDerivedPosition() const
     {
         if (mNeedParentUpdate)
         {
@@ -551,7 +551,7 @@ namespace v1 {
         return mDerivedPosition;
     }
     //-----------------------------------------------------------------------
-    const Vector3 & OldNode::_getDerivedScale(void) const
+    const Vector3 & OldNode::_getDerivedScale() const
     {
         if (mNeedParentUpdate)
         {
@@ -597,7 +597,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    void OldNode::removeAllChildren(void)
+    void OldNode::removeAllChildren()
     {
         ChildOldNodeMap::iterator i, iend;
         iend = mChildren.end();
@@ -621,7 +621,7 @@ namespace v1 {
         setScale(Vector3(x, y, z));
     }
     //-----------------------------------------------------------------------
-    const Vector3 & OldNode::getScale(void) const
+    const Vector3 & OldNode::getScale() const
     {
         return mScale;
     }
@@ -632,7 +632,7 @@ namespace v1 {
         needUpdate();
     }
     //-----------------------------------------------------------------------
-    bool OldNode::getInheritOrientation(void) const
+    bool OldNode::getInheritOrientation() const
     {
         return mInheritOrientation;
     }
@@ -643,7 +643,7 @@ namespace v1 {
         needUpdate();
     }
     //-----------------------------------------------------------------------
-    bool OldNode::getInheritScale(void) const
+    bool OldNode::getInheritScale() const
     {
         return mInheritScale;
     }
@@ -664,19 +664,19 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    const String& OldNode::getName(void) const
+    const String& OldNode::getName() const
     {
         return mName;
     }
     //-----------------------------------------------------------------------
-    void OldNode::setInitialState(void)
+    void OldNode::setInitialState()
     {
         mInitialPosition = mPosition;
         mInitialOrientation = mOrientation;
         mInitialScale = mScale;
     }
     //-----------------------------------------------------------------------
-    void OldNode::resetToInitialState(void)
+    void OldNode::resetToInitialState()
     {
         mPosition = mInitialPosition;
         mOrientation = mInitialOrientation;
@@ -685,18 +685,18 @@ namespace v1 {
         needUpdate();
     }
     //-----------------------------------------------------------------------
-    const Vector3& OldNode::getInitialPosition(void) const
+    const Vector3& OldNode::getInitialPosition() const
     {
         return mInitialPosition;
     }
     //-----------------------------------------------------------------------
-    const Quaternion& OldNode::getInitialOrientation(void) const
+    const Quaternion& OldNode::getInitialOrientation() const
     {
         return mInitialOrientation;
 
     }
     //-----------------------------------------------------------------------
-    const Vector3& OldNode::getInitialScale(void) const
+    const Vector3& OldNode::getInitialScale() const
     {
         return mInitialScale;
     }
@@ -736,12 +736,12 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    OldNode::ChildOldNodeIterator OldNode::getChildIterator(void)
+    OldNode::ChildOldNodeIterator OldNode::getChildIterator()
     {
         return ChildOldNodeIterator(mChildren.begin(), mChildren.end());
     }
     //-----------------------------------------------------------------------
-    OldNode::ConstChildOldNodeIterator OldNode::getChildIterator(void) const
+    OldNode::ConstChildOldNodeIterator OldNode::getChildIterator() const
     {
         return ConstChildOldNodeIterator(mChildren.begin(), mChildren.end());
     }
@@ -812,7 +812,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void OldNode::processQueuedUpdates(void)
+    void OldNode::processQueuedUpdates()
     {
         for (QueuedUpdates::iterator i = msQueuedUpdates.begin();
             i != msQueuedUpdates.end(); ++i)

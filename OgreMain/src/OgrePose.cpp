@@ -90,7 +90,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Pose::clearVertices(void)
+    void Pose::clearVertices()
     {
         mVertexOffsetMap.clear();
         mNormalsMap.clear();
@@ -98,23 +98,23 @@ namespace v1 {
     }
     //---------------------------------------------------------------------
     Pose::ConstVertexOffsetIterator 
-        Pose::getVertexOffsetIterator(void) const
+        Pose::getVertexOffsetIterator() const
     {
         return ConstVertexOffsetIterator(mVertexOffsetMap.begin(), mVertexOffsetMap.end());
     }
     //---------------------------------------------------------------------
     Pose::VertexOffsetIterator 
-        Pose::getVertexOffsetIterator(void)
+        Pose::getVertexOffsetIterator()
     {
         return VertexOffsetIterator(mVertexOffsetMap.begin(), mVertexOffsetMap.end());
     }
     //---------------------------------------------------------------------
-    Pose::ConstNormalsIterator Pose::getNormalsIterator(void) const
+    Pose::ConstNormalsIterator Pose::getNormalsIterator() const
     {
         return ConstNormalsIterator(mNormalsMap.begin(), mNormalsMap.end());
     }
     //---------------------------------------------------------------------
-    Pose::NormalsIterator Pose::getNormalsIterator(void)
+    Pose::NormalsIterator Pose::getNormalsIterator()
     {
         return NormalsIterator(mNormalsMap.begin(), mNormalsMap.end());
     }
@@ -189,7 +189,7 @@ namespace v1 {
         return mBuffer;
     }
     //---------------------------------------------------------------------
-    Pose* Pose::clone(void) const
+    Pose* Pose::clone() const
     {
         Pose* newPose = OGRE_NEW Pose(mTarget, mName);
         newPose->mVertexOffsetMap = mVertexOffsetMap;

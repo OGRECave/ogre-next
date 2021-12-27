@@ -160,7 +160,7 @@ namespace Ogre {
         return mNativeDisplay;
     }
 
-    String X11EGLSupport::getDisplayName(void)
+    String X11EGLSupport::getDisplayName()
     {
         return String((const char*)XDisplayName(DisplayString(mNativeDisplay)));
     }

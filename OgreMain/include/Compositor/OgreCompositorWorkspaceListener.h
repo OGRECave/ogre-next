@@ -92,14 +92,14 @@ namespace Ogre
             the RenderSystem and SceneManager to call the adequate begin/end calls
             Warning: Don't add/remove listeners to CompositorManager2 inside this function.
         */
-        virtual void allWorkspacesBeforeBeginUpdate(void) {}
+        virtual void allWorkspacesBeforeBeginUpdate() {}
 
         /** Called from CompositorManager2 (not CompositorWorkspace) when we're
             about to update all the workspaces (it's safe to update your own workspaces
             without calling _beginUpdate and _endUpdate)
             Warning: Don't add/remove listeners to CompositorManager2 inside this function.
         */
-        virtual void allWorkspacesBeginUpdate(void) {}
+        virtual void allWorkspacesBeginUpdate() {}
     };
 
     /** @} */

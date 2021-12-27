@@ -40,11 +40,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    FocusedShadowCameraSetup::FocusedShadowCameraSetup(void) : mXYPadding( 1.5f )
+    FocusedShadowCameraSetup::FocusedShadowCameraSetup() : mXYPadding( 1.5f )
     {
     }
     //-----------------------------------------------------------------------
-    FocusedShadowCameraSetup::~FocusedShadowCameraSetup(void)
+    FocusedShadowCameraSetup::~FocusedShadowCameraSetup()
     {
     }
     /*void FocusedShadowCameraSetup::calculateShadowMappingMatrix(const SceneManager& sm,

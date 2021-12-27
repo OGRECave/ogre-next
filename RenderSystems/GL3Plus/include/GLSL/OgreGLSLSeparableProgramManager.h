@@ -66,14 +66,14 @@ namespace Ogre
     public:
 
         GLSLSeparableProgramManager(const GL3PlusSupport& support);
-        ~GLSLSeparableProgramManager(void);
+        ~GLSLSeparableProgramManager();
 
         /** Get the program pipeline that combines the current program
             objects.  If the program pipeline object was not already
             created a new one is created.  Note that this method does
             NOT link the program.
         */
-        GLSLSeparableProgram* getCurrentSeparableProgram(void);
+        GLSLSeparableProgram* getCurrentSeparableProgram();
 
         /** Set the active link programs for the next rendering state.
             The active program pipeline object will be cleared.
@@ -87,8 +87,8 @@ namespace Ogre
         void setActiveFragmentShader(GLSLShader* fragmentShader);
         void setActiveComputeShader(GLSLShader* computShader);
 
-        static GLSLSeparableProgramManager& getSingleton(void);
-        static GLSLSeparableProgramManager* getSingletonPtr(void);
+        static GLSLSeparableProgramManager& getSingleton();
+        static GLSLSeparableProgramManager* getSingletonPtr();
     };
 }
 

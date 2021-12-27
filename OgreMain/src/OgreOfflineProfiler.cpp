@@ -84,7 +84,7 @@ namespace Ogre
         sample->children.destroy();
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::createNewPool(void)
+    void OfflineProfiler::PerThreadData::createNewPool()
     {
         uint8 *newPool = reinterpret_cast<uint8*>(
                              OGRE_MALLOC( mBytesPerPool, MEMCATEGORY_GENERAL ) );
@@ -93,7 +93,7 @@ namespace Ogre
         mCurrMemoryPoolOffset = 0;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::destroyAllPools(void)
+    void OfflineProfiler::PerThreadData::destroyAllPools()
     {
         if( mCurrentSample )
         {
@@ -135,12 +135,12 @@ namespace Ogre
         mPauseRequest = bPause;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::requestReset(void)
+    void OfflineProfiler::PerThreadData::requestReset()
     {
         mResetRequest = true;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::reset(void)
+    void OfflineProfiler::PerThreadData::reset()
     {
         destroyAllPools();
         createNewPool();
@@ -189,7 +189,7 @@ namespace Ogre
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::profileEnd(void)
+    void OfflineProfiler::PerThreadData::profileEnd()
     {
         if( mPaused )
             return;
@@ -210,7 +210,7 @@ namespace Ogre
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    OfflineProfiler::PerThreadData* OfflineProfiler::allocatePerThreadData(void)
+    OfflineProfiler::PerThreadData* OfflineProfiler::allocatePerThreadData()
     {
         PerThreadData *perThreadData = new PerThreadData( mPaused, mBytesPerPool );
 
@@ -354,12 +354,12 @@ namespace Ogre
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    bool OfflineProfiler::isPaused(void) const
+    bool OfflineProfiler::isPaused() const
     {
         return mPaused;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::reset(void)
+    void OfflineProfiler::reset()
     {
         mMutex.lock();
 
@@ -385,7 +385,7 @@ namespace Ogre
         perThreadData->profileBegin( name, flags );
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::profileEnd(void)
+    void OfflineProfiler::profileEnd()
     {
         PerThreadData *perThreadData = reinterpret_cast<PerThreadData*>( Threads::GetTls( mTlsHandle ) );
 

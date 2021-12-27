@@ -125,7 +125,7 @@ namespace v1 {
         return retPtr;
     }
 
-    void GL3PlusHardwareUniformBuffer::unlockImpl(void)
+    void GL3PlusHardwareUniformBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_UNIFORM_BUFFER, mBufferId));
 

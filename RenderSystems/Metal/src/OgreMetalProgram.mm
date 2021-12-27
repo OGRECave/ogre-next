@@ -95,7 +95,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::loadFromSource(void)
+    void MetalProgram::loadFromSource()
     {
         compile( true );
     }
@@ -303,7 +303,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::analyzeComputeParameters(void)
+    void MetalProgram::analyzeComputeParameters()
     {
         MTLAutoreleasedComputePipelineReflection reflection = 0;
         NSError* error = 0;
@@ -338,7 +338,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::analyzeRenderParameters(void)
+    void MetalProgram::analyzeRenderParameters()
     {
         MTLRenderPipelineDescriptor *psd = [[MTLRenderPipelineDescriptor alloc] init];
         //[psd setSampleCount: 1];
@@ -574,7 +574,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::createLowLevelImpl(void)
+    void MetalProgram::createLowLevelImpl()
     {
         mAssemblerProgram = GpuProgramPtr(this, SPFM_NONE);
         if( !mCompiled )
@@ -591,7 +591,7 @@ namespace Ogre {
         unloadHighLevel();
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::unloadHighLevelImpl(void)
+    void MetalProgram::unloadHighLevelImpl()
     {
         // Release everything
         mLibrary = nil;
@@ -605,7 +605,7 @@ namespace Ogre {
         params->_setNamedConstants(mConstantDefs);
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::buildConstantDefinitions(void) const
+    void MetalProgram::buildConstantDefinitions() const
     {
         if( !mBuildParametersFromReflection )
             return;
@@ -644,7 +644,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    uint32 MetalProgram::getBufferRequiredSize(void) const
+    uint32 MetalProgram::getBufferRequiredSize() const
     {
         return mConstantsBytesToWrite;
     }
@@ -673,19 +673,19 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    inline bool MetalProgram::getPassSurfaceAndLightStates(void) const
+    inline bool MetalProgram::getPassSurfaceAndLightStates() const
     {
         // Scenemanager should pass on light & material state to the rendersystem
         return true;
     }
     //---------------------------------------------------------------------
-    inline bool MetalProgram::getPassTransformStates(void) const
+    inline bool MetalProgram::getPassTransformStates() const
     {
         // Scenemanager should pass on transform state to the rendersystem
         return true;
     }
     //---------------------------------------------------------------------
-    inline bool MetalProgram::getPassFogStates(void) const
+    inline bool MetalProgram::getPassFogStates() const
     {
         // Scenemanager should pass on fog state to the rendersystem
         return true;
@@ -720,14 +720,14 @@ namespace Ogre {
         static_cast<MetalProgram*>(target)->setShaderReflectionPairHint(val);
     }
     //-----------------------------------------------------------------------
-    const String& MetalProgram::getLanguage(void) const
+    const String& MetalProgram::getLanguage() const
     {
         static const String language = "metal";
 
         return language;
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr MetalProgram::createParameters( void )
+    GpuProgramParametersSharedPtr MetalProgram::createParameters()
     {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
         params->setTransposeMatrices(true);

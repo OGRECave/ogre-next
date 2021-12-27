@@ -141,14 +141,14 @@ namespace Ogre
         */
         SkeletonDef( const v1::Skeleton *originalSkeleton, Real frameRate );
 
-        const String& getNameStr(void) const                            { return mName; }
+        const String& getNameStr() const                            { return mName; }
 
-        const BoneDataVec& getBones(void) const                         { return mBones; }
-        const SkeletonAnimationDefVec& getAnimationDefs(void) const     { return mAnimationDefs; }
-        const DepthLevelInfoVec& getDepthLevelInfo(void) const          { return mDepthLevelInfoVec; }
-        const KfTransform * getBindPose(void) const                     { return mBindPose.get(); }
+        const BoneDataVec& getBones() const                         { return mBones; }
+        const SkeletonAnimationDefVec& getAnimationDefs() const     { return mAnimationDefs; }
+        const DepthLevelInfoVec& getDepthLevelInfo() const          { return mDepthLevelInfoVec; }
+        const KfTransform * getBindPose() const                     { return mBindPose.get(); }
         const RawSimdUniquePtr<ArrayMatrixAf4x3, MEMCATEGORY_ANIMATION>&
-                                getReverseBindPose(void) const          { return mReverseBindPose; }
+                                getReverseBindPose() const          { return mReverseBindPose; }
         void getBonesPerDepth( vector<size_t>::type &out ) const;
 
         /** Returns the total number of bone blocks to reach the given level. i.e On SSE2,
@@ -195,10 +195,10 @@ namespace Ogre
         }
 
         /// @see mSlotToBone
-        const IndexToIndexMap& getSlotToBone(void) const    { return mSlotToBone; }
+        const IndexToIndexMap& getSlotToBone() const    { return mSlotToBone; }
 
         /// @see mBoneToSlot
-        const BoneToSlotVec& getBoneToSlot(void) const      { return mBoneToSlot; }
+        const BoneToSlotVec& getBoneToSlot() const      { return mBoneToSlot; }
     };
 }
 

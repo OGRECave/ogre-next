@@ -51,9 +51,9 @@ namespace Ogre
         VulkanQueue *mQueue;
 
         virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl( void );
+        virtual void unmapImpl();
 
-        void waitForDownloadToFinish( void );
+        void waitForDownloadToFinish();
 
     public:
         VulkanAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
@@ -65,7 +65,7 @@ namespace Ogre
         virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
                                       TextureBox *srcBox );
 
-        virtual bool queryIsTransferDone( void );
+        virtual bool queryIsTransferDone();
     };
 }  // namespace Ogre
 

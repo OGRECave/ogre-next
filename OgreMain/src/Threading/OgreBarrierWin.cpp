@@ -59,7 +59,7 @@ namespace Ogre
             CloseHandle( mSemaphores[i] );
     }
     //-----------------------------------------------------------------------------------
-    void Barrier::sync(void)
+    void Barrier::sync()
     {
         //We need to be absolutely certain we read mIndex before incrementing mLockCount
         volatile size_t idx = mIndex;

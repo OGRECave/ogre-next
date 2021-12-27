@@ -131,12 +131,12 @@ namespace Ogre
             it may cause NaNs and Infs on those. Use @setToInverseDegeneratesAsIdentity
             if you want to deal with degenerate matrices.
         */
-        inline void setToInverse(void);
+        inline void setToInverse();
 
         /** Calculates the inverse of the matrix. If one (or more) of the matrices are
             degenerate (don't have an inverse), those are set to identity.
         */
-        inline void setToInverseDegeneratesAsIdentity(void);
+        inline void setToInverseDegeneratesAsIdentity();
 
         /** Strips orientation and/or scale components out of this matrix based on the input using
             branchless selection.

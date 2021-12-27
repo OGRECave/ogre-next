@@ -132,23 +132,23 @@ namespace Ogre
 
         ResourceTransitionArray mResourceTransitions;
 
-        void createComputeJobs( void );
-        void clearComputeJobResources( void );
+        void createComputeJobs();
+        void clearComputeJobResources();
 
     public:
         /// Swaps mAlbedoVox & mAlbedoVoxAlt (and co.) if needed back to their originals.
         /// This is needed during shutdown since VctLighting otherwise will try to remove
         /// itself as a listener from mAlbedoVoxAlt
-        void restoreSwappedVoxelTextures( void );
+        void restoreSwappedVoxelTextures();
 
     protected:
-        void createVoxelTextures( void );
-        void createAltVoxelTextures( void );
-        void setVoxelTexturesToJobs( void );
-        virtual void destroyVoxelTextures( void );
+        void createVoxelTextures();
+        void createAltVoxelTextures();
+        void setVoxelTexturesToJobs();
+        virtual void destroyVoxelTextures();
 
-        void createInstanceBuffers( void );
-        void destroyInstanceBuffers( void );
+        void createInstanceBuffers();
+        void destroyInstanceBuffers();
         void fillInstanceBuffers( SceneManager *sceneManager );
 
         void clearVoxels( const bool bPartialClear );
@@ -172,7 +172,7 @@ namespace Ogre
         void removeItem( Item *item );
 
         /// Removes all items added via VctImageVoxelizer::addItem
-        void removeAllItems( void );
+        void removeAllItems();
 
         /** Call this function before VctImageVoxelizer::autoCalculateRegion
         @param autoRegion
@@ -188,7 +188,7 @@ namespace Ogre
                                   const Aabb &maxRegion = Aabb::BOX_INFINITE );
 
         /// Does nothing if VctImageVoxelizer::setRegionToVoxelize( false, ... ) was called.
-        void autoCalculateRegion( void );
+        void autoCalculateRegion();
 
         void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );
 
@@ -224,7 +224,7 @@ namespace Ogre
                             const int32 diffZ, const uint32 numOctantsX, const uint32 numOctantsY,
                             const uint32 numOctantsZ );
 
-        void forceFullBuild( void ) { mFullBuildDone = false; }
+        void forceFullBuild() { mFullBuildDone = false; }
     };
 }  // namespace Ogre
 

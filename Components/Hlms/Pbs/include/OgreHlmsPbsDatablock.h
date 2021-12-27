@@ -250,9 +250,9 @@ namespace Ogre
         virtual void cloneImpl( HlmsDatablock *datablock ) const;
 
         virtual bool bakeTextures( bool hasSeparateSamplers );
-        void scheduleConstBufferUpdate(void);
+        void scheduleConstBufferUpdate();
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
-        virtual void notifyOptimizationStrategyChanged(void);
+        virtual void notifyOptimizationStrategyChanged();
 
     public:
         /** Valid parameters in params:
@@ -367,30 +367,30 @@ namespace Ogre
         /// Sets the diffuse background colour. When no diffuse texture is present, this
         /// solid colour replaces it, and can act as a background for the detail maps.
         void setBackgroundDiffuse( const ColourValue &bgDiffuse );
-        ColourValue getBackgroundDiffuse(void) const;
+        ColourValue getBackgroundDiffuse() const;
 
         /// Sets the diffuse colour (final multiplier). The colour will be divided by PI for energy conservation.
         void setDiffuse( const Vector3 &diffuseColour );
-        Vector3 getDiffuse(void) const;
+        Vector3 getDiffuse() const;
 
         /// Sets the specular colour.
         void setSpecular( const Vector3 &specularColour );
-        Vector3 getSpecular(void) const;
+        Vector3 getSpecular() const;
 
         /// Sets the roughness
         void setRoughness( float roughness );
-        float getRoughness(void) const;
+        float getRoughness() const;
 
         /// Sets emissive colour (e.g. a firefly). Emissive colour has no physical basis.
         /// Though in HDR, if you're working in lumens, this value should probably be in lumens too.
         /// To disable emissive, setEmissive( Vector3::ZERO ) and unset any texture
         /// in PBSM_EMISSIVE slot.
         void setEmissive( const Vector3 &emissiveColour );
-        Vector3 getEmissive(void) const;
+        Vector3 getEmissive() const;
         /// Returns true iif getEmissive is non-zero
-        bool hasEmissiveConstant(void) const;
+        bool hasEmissiveConstant() const;
         /// Returns true if getEmissive is non-zero or if there is an emissive texture set
-        bool _hasEmissive(void) const;
+        bool _hasEmissive() const;
 
         /** Sets whether to use a specular workflow, or a metallic workflow.
         @remarks
@@ -411,7 +411,7 @@ namespace Ogre
         @param bEnableMetallic
         */
         void setWorkflow( Workflows workflow );
-        Workflows getWorkflow(void) const;
+        Workflows getWorkflow() const;
 
         /** Sets the metalness in a metallic workflow.
         @remarks
@@ -421,7 +421,7 @@ namespace Ogre
             Value in range [0; 1]
         */
         void setMetalness( float metalness );
-        float getMetalness(void) const;
+        float getMetalness() const;
 
         /** Calculates fresnel (F0 in most books) based on the IOR.
             The formula used is ( (1 - idx) / (1 + idx) )²
@@ -454,10 +454,10 @@ namespace Ogre
         /// the Y and Z components still correspond to mFresnelG & mFresnelB just
         /// in case you want to preserve this data (i.e. toggling separate fresnel
         /// often (which is not a good idea though, in terms of performance)
-        Vector3 getFresnel(void) const;
+        Vector3 getFresnel() const;
 
         /// Whether the same fresnel term is used for RGB, or individual ones for each channel
-        bool hasSeparateFresnel(void) const;
+        bool hasSeparateFresnel() const;
 
         using HlmsPbsBaseTextureDatablock::setTexture;
         void setTexture( PbsTextureTypes texUnit, const String &name,
@@ -515,7 +515,7 @@ namespace Ogre
         void setNormalMapWeight( Real weight );
 
         /// Returns the detail normal maps' weight
-        Real getNormalMapWeight(void) const;
+        Real getNormalMapWeight() const;
 
         /** Sets the weight of detail map. Affects both diffuse and
             normal at the same time.
@@ -564,9 +564,9 @@ namespace Ogre
         */
         void setTwoSidedLighting( bool twoSided, bool changeMacroblock=true,
                                   CullingMode oneSidedShadowCast=CULL_ANTICLOCKWISE );
-        bool getTwoSidedLighting(void) const;
+        bool getTwoSidedLighting() const;
 
-        virtual bool hasCustomShadowMacroblock(void) const;
+        virtual bool hasCustomShadowMacroblock() const;
 
         virtual void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
                                    bool useAlphaFromTextures = true );
@@ -599,9 +599,9 @@ namespace Ogre
         void setTransparency( float transparency, TransparencyModes mode = Transparent,
                               bool useAlphaFromTextures = true, bool changeBlendblock = true );
 
-        float getTransparency(void) const                           { return mTransparencyValue; }
-        TransparencyModes getTransparencyMode(void) const           { return mTransparencyMode; }
-        bool getUseAlphaFromTextures(void) const                    { return mUseAlphaFromTextures; }
+        float getTransparency() const                           { return mTransparencyValue; }
+        TransparencyModes getTransparencyMode() const           { return mTransparencyMode; }
+        bool getUseAlphaFromTextures() const                    { return mUseAlphaFromTextures; }
 
         /** Sets the strength of the refraction, i.e. how much displacement in screen space.
 
@@ -614,7 +614,7 @@ namespace Ogre
             outside the screen)
         */
         void setRefractionStrength( float strength );
-        float getRefractionStrength( void ) const                   { return mRefractionStrength; }
+        float getRefractionStrength() const                   { return mRefractionStrength; }
 
         /** Sets the strength of the of the clear coat layer and its roughness.
         @param strength
@@ -624,8 +624,8 @@ namespace Ogre
         */
         void setClearCoat( float clearCoat );
         void setClearCoatRoughness( float roughness );
-        float getClearCoat( void ) const               { return mClearCoat; }
-        float getClearCoatRoughness( void ) const      { return mClearCoatRoughness; }
+        float getClearCoat() const               { return mClearCoat; }
+        float getClearCoatRoughness() const      { return mClearCoatRoughness; }
 
         /** When false, objects with this material will not receive shadows (independent of
             whether they case shadows or not)
@@ -637,7 +637,7 @@ namespace Ogre
             Whether to enable or disable receiving shadows.
         */
         void setReceiveShadows( bool receiveShadows );
-        bool getReceiveShadows(void) const;
+        bool getReceiveShadows() const;
 
         /** Sets the value of the userValue, this can be used in a custom piece
         @param userValueIdx
@@ -653,7 +653,7 @@ namespace Ogre
             thus set it to 1 to avoid surprises.
         */
         void setUseEmissiveAsLightmap( bool bUseEmissiveAsLightmap );
-        bool getUseEmissiveAsLightmap(void) const;
+        bool getUseEmissiveAsLightmap() const;
 
         /** When set, it treats the diffuse map as a grayscale map; which means it will
             spread red component to all rgb channels.
@@ -661,7 +661,7 @@ namespace Ogre
             With this option you can use PFG_R8_UNORM for diffuse map in the same way as old PF_L8 format
         */
         void setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale );
-        bool getUseDiffuseMapAsGrayscale( void ) const;
+        bool getUseDiffuseMapAsGrayscale() const;
 
         /** Manually set a probe to affect this particular material.
         @remarks
@@ -712,12 +712,12 @@ namespace Ogre
             Null pointer to disable manual mode and switch to auto.
         */
         void setCubemapProbe( CubemapProbe *probe );
-        CubemapProbe* getCubemapProbe(void) const;
+        CubemapProbe* getCubemapProbe() const;
 
         /// Changes the BRDF in use. Calling this function may trigger an
         /// HlmsDatablock::flushRenderables
         void setBrdf( PbsBrdf::PbsBrdf brdf );
-        uint32 getBrdf(void) const;
+        uint32 getBrdf() const;
 
         /** Helper function to import & convert values from Unity (specular workflow).
         @param changeBrdf
@@ -746,10 +746,10 @@ namespace Ogre
         bool suggestUsingSRGB( PbsTextureTypes type ) const;
         uint32 suggestFiltersForType( PbsTextureTypes type ) const;
 
-        virtual ColourValue getDiffuseColour(void) const;
-        virtual ColourValue getEmissiveColour(void) const;
-        virtual TextureGpu* getDiffuseTexture(void) const;
-        virtual TextureGpu* getEmissiveTexture(void) const;
+        virtual ColourValue getDiffuseColour() const;
+        virtual ColourValue getEmissiveColour() const;
+        virtual TextureGpu* getDiffuseTexture() const;
+        virtual TextureGpu* getEmissiveTexture() const;
 
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );

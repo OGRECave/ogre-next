@@ -104,7 +104,7 @@ namespace Ogre
             return this->strongMacroblockBits < other.strongMacroblockBits;
         }
 
-        bool hasStrongMacroblock(void) const    { return strongMacroblockBits != 0u; }
+        bool hasStrongMacroblock() const    { return strongMacroblockBits != 0u; }
 
         enum StrongMacroblockBits
         {

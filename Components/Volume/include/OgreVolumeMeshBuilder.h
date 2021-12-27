@@ -273,7 +273,7 @@ namespace Volume {
 
         /** Constructor.
         */
-        MeshBuilder(void);
+        MeshBuilder();
         
         /** Adds a triangle to the mesh with reusing already existent vertices via their index.
         @param v0
@@ -321,7 +321,7 @@ namespace Volume {
         @return
             The bounding box.
         */
-        AxisAlignedBox getBoundingBox(void);
+        AxisAlignedBox getBoundingBox();
 
         /** Executes a MeshBuilderCallback on this instance.
         @param callback

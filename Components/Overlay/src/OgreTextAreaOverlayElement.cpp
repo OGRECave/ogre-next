@@ -82,7 +82,7 @@ namespace v1 {
         }
     }
 
-    void TextAreaOverlayElement::initialise(void)
+    void TextAreaOverlayElement::initialise()
     {
         if (!mInitialised)
         {
@@ -442,12 +442,12 @@ namespace v1 {
         OGRE_DELETE mRenderOp.vertexData;
     }
     //---------------------------------------------------------------------
-    const String& TextAreaOverlayElement::getTypeName(void) const
+    const String& TextAreaOverlayElement::getTypeName() const
     {
         return msTypeName;
     }
     //---------------------------------------------------------------------
-    const MaterialPtr& TextAreaOverlayElement::getMaterial(void) const
+    const MaterialPtr& TextAreaOverlayElement::getMaterial() const
     {
         // On-demand load
         // Moved from setFontName to avoid issues with background parsing of scripts
@@ -470,7 +470,7 @@ namespace v1 {
         OverlayElement::setMaterialName(matName);
     }
     //---------------------------------------------------------------------
-    void TextAreaOverlayElement::addBaseParameters(void)
+    void TextAreaOverlayElement::addBaseParameters()
     {
         OverlayElement::addBaseParameters();
         ParamDictionary* dict = getParamDictionary();
@@ -517,7 +517,7 @@ namespace v1 {
         mColoursChanged = true;
     }
     //---------------------------------------------------------------------
-    const ColourValue& TextAreaOverlayElement::getColour(void) const
+    const ColourValue& TextAreaOverlayElement::getColour() const
     {
         // Either one
         return mColourTop;
@@ -529,7 +529,7 @@ namespace v1 {
         mColoursChanged = true;
     }
     //---------------------------------------------------------------------
-    const ColourValue& TextAreaOverlayElement::getColourBottom(void) const
+    const ColourValue& TextAreaOverlayElement::getColourBottom() const
     {
         return mColourBottom;
     }
@@ -540,12 +540,12 @@ namespace v1 {
         mColoursChanged = true;
     }
     //---------------------------------------------------------------------
-    const ColourValue& TextAreaOverlayElement::getColourTop(void) const
+    const ColourValue& TextAreaOverlayElement::getColourTop() const
     {
         return mColourTop;
     }
     //---------------------------------------------------------------------
-    void TextAreaOverlayElement::updateColours(void)
+    void TextAreaOverlayElement::updateColours()
     {
         // Convert to system-specific
         RGBA topColour, bottomColour;
@@ -600,7 +600,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void TextAreaOverlayElement::_update(void)
+    void TextAreaOverlayElement::_update()
     {
         Real vpWidth, vpHeight;
         vpWidth = (Real) (OverlayManager::getSingleton().getViewportWidth());

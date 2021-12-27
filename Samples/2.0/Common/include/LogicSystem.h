@@ -30,10 +30,10 @@ namespace Demo
         void _notifyGraphicsSystem( BaseSystem *graphicsSystem )    { mGraphicsSystem = graphicsSystem; }
         void _notifyGameEntityManager( GameEntityManager *mgr )     { mGameEntityManager = mgr; }
 
-        void finishFrameParallel(void);
+        void finishFrameParallel();
 
-        GameEntityManager* getGameEntityManager(void)               { return mGameEntityManager; }
-        Ogre::uint32 getCurrentTransformIdx(void) const             { return mCurrentTransformIdx; }
+        GameEntityManager* getGameEntityManager()               { return mGameEntityManager; }
+        Ogre::uint32 getCurrentTransformIdx() const             { return mCurrentTransformIdx; }
     };
 }
 

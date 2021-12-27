@@ -76,7 +76,7 @@ namespace Ogre
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
 
-        virtual void notifyPropertiesMergedPreGenerationStep(void);
+        virtual void notifyPropertiesMergedPreGenerationStep();
 
         FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
                                            const QueuedRenderable &queuedRenderable,
@@ -87,7 +87,7 @@ namespace Ogre
         HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders );
         virtual ~HlmsTerra();
 
-        const FastArray<Terra *> &getLinkedTerras( void ) const { return mLinkedTerras; }
+        const FastArray<Terra *> &getLinkedTerras() const { return mLinkedTerras; }
 
         void _linkTerra( Terra *terra );
         void _unlinkTerra( Terra *terra );

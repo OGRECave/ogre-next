@@ -331,7 +331,7 @@ namespace Ogre
             MathlibNEON::Abs4( vmulq_f32( mChunkBase[2], vec.mChunkBase[2] ) ) );//  abs( z * vec.z )
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector3::normalise( void )
+    inline void ArrayVector3::normalise()
     {
         ArrayReal sqLength = vaddq_f32( vaddq_f32(
             vmulq_f32( mChunkBase[0], mChunkBase[0] ),  //(x * x +
@@ -409,7 +409,7 @@ namespace Ogre
         mChunkBase[2] = vorrq_f32( MathlibNEON::ONE, vandq_f32( signMask, mChunkBase[2] ) );
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::perpendicular( void ) const
+    inline ArrayVector3 ArrayVector3::perpendicular() const
     {
         ArrayVector3 perp = this->crossProduct( ArrayVector3::UNIT_X );
 
@@ -430,7 +430,7 @@ namespace Ogre
         return perp;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::normalisedCopy( void ) const
+    inline ArrayVector3 ArrayVector3::normalisedCopy() const
     {
         ArrayReal sqLength = vaddq_f32( vaddq_f32(
             vmulq_f32( mChunkBase[0], mChunkBase[0] ),  //(x * x +
@@ -457,7 +457,7 @@ namespace Ogre
         return ( *this - ( vmulq_f32( twoPointZero, this->dotProduct( normal ) ) * normal ) );
     }
     //-----------------------------------------------------------------------------------
-    inline void ArrayVector3::inverseLeaveZeroes( void )
+    inline void ArrayVector3::inverseLeaveZeroes()
     {
         //Use InvNonZero, we're gonna nuke the NaNs anyway.
         mChunkBase[0] = MathlibNEON::CmovRobust( mChunkBase[0], MathlibNEON::InvNonZero4(mChunkBase[0]),
@@ -468,7 +468,7 @@ namespace Ogre
         vceqq_f32( mChunkBase[2], vdupq_n_f32(0.0f) ) );
     }
     //-----------------------------------------------------------------------------------
-    inline int ArrayVector3::isNaN( void ) const
+    inline int ArrayVector3::isNaN() const
     {
         ArrayMaskR mask = vandq_u32( vandq_u32(
             vceqq_f32( mChunkBase[0], mChunkBase[0] ),
@@ -478,7 +478,7 @@ namespace Ogre
         return vmovemaskq_u32( mask ) ^ 0x0000000f;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayVector3 ArrayVector3::primaryAxis( void ) const
+    inline ArrayVector3 ArrayVector3::primaryAxis() const
     {
         // We could've used some operators, i.e.
         // xVec = MathlibNEON::Cmov( ArrayVector3::UNIT_X, ArrayVector3::NEGATIVE_UNIT_X )
@@ -522,7 +522,7 @@ namespace Ogre
         return yVec;
     }
     //-----------------------------------------------------------------------------------
-    inline Vector3 ArrayVector3::collapseMin( void ) const
+    inline Vector3 ArrayVector3::collapseMin() const
     {
         OGRE_ALIGNED_DECL( Real, vals[4], OGRE_SIMD_ALIGNMENT );
 //      ArrayReal aosVec0, aosVec1, aosVec2, aosVec3;
@@ -563,7 +563,7 @@ namespace Ogre
         return Vector3( vals[0], vals[1], vals[2] );
     }
     //-----------------------------------------------------------------------------------
-    inline Vector3 ArrayVector3::collapseMax( void ) const
+    inline Vector3 ArrayVector3::collapseMax() const
     {
         OGRE_ALIGNED_DECL( Real, vals[4], OGRE_SIMD_ALIGNMENT );
 //      ArrayReal aosVec0, aosVec1, aosVec2, aosVec3;

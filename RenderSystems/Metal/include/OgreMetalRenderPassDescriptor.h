@@ -74,23 +74,23 @@ namespace Ogre
         size_t mNumCallstackEntries;
 #endif
 
-        void checkRenderWindowStatus(void);
-        void calculateSharedKey(void);
+        void checkRenderWindowStatus();
+        void calculateSharedKey();
 
         static MTLLoadAction get( LoadAction::LoadAction action );
         static MTLStoreAction get( StoreAction::StoreAction action );
 
         void sanitizeMsaaResolve( size_t colourIdx );
         void updateColourRtv( uint8 lastNumColourEntries );
-        void updateDepthRtv(void);
-        void updateStencilRtv(void);
+        void updateDepthRtv();
+        void updateStencilRtv();
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.
         /// If using MRT, each colour is evaluated independently (only the ones marked
         /// as clear will be cleared).
         uint32 checkForClearActions( MetalRenderPassDescriptor *other ) const;
-        bool cannotInterruptRendering(void) const;
+        bool cannotInterruptRendering() const;
 
     public:
         MetalRenderPassDescriptor( MetalDevice *device, MetalRenderSystem *renderSystem );

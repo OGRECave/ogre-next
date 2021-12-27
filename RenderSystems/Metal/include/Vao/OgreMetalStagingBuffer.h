@@ -101,7 +101,7 @@ namespace Ogre
         /// mMappingCount), and stalls if needed (synchronize); also book-keeps mFences and
         /// mUnfencedHazards.
         /// May modify mMappingStart.
-        void waitIfNeeded(void);
+        void waitIfNeeded();
 
         virtual void* mapImpl( size_t sizeBytes );
         virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
@@ -116,8 +116,8 @@ namespace Ogre
 
         virtual StagingStallType uploadWillStall( size_t sizeBytes );
 
-        void cleanUnfencedHazards(void);
-        void _notifyDeviceStalled(void);
+        void cleanUnfencedHazards();
+        void _notifyDeviceStalled();
 
         void _unmapToV1( v1::MetalHardwareBufferCommon *hwBuffer, size_t lockStart, size_t lockSize );
 
@@ -127,7 +127,7 @@ namespace Ogre
         virtual size_t _asyncDownloadV1( v1::MetalHardwareBufferCommon *source,
                                          size_t srcOffset, size_t srcLength );
 
-        id<MTLBuffer> getBufferName(void) const     { return mVboName; }
+        id<MTLBuffer> getBufferName() const     { return mVboName; }
     };
 }
 

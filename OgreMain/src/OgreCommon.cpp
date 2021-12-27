@@ -94,7 +94,7 @@ namespace Ogre
         mPattern = pattern;
     }
     //-----------------------------------------------------------------------------------
-    bool SampleDescription::isMsaa( void ) const
+    bool SampleDescription::isMsaa() const
     {
         return mCoverageSamples == 0u;
     }
@@ -144,14 +144,14 @@ namespace Ogre
             setMsaa( samples ); // "Nx MSAA", also "Nx", "N"
     }
     //-----------------------------------------------------------------------------------
-    bool SampleDescription::isCsaa( void ) const
+    bool SampleDescription::isCsaa() const
     {
         // {4,8} {8,8} {4,16} {8,16} 
         return ( mCoverageSamples == 8u || mCoverageSamples == 16u )
             && ( mColourSamples == 4u || mColourSamples == 8u );
     }
     //-----------------------------------------------------------------------------------
-    bool SampleDescription::isCsaaQuality( void ) const
+    bool SampleDescription::isCsaaQuality() const
     {
         // {8,8} {8,16}, but not the {4,8} {4,16} 
         return ( mCoverageSamples == 8u || mCoverageSamples == 16u )

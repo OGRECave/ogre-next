@@ -297,7 +297,7 @@ namespace Ogre {
         return *this;
     }
     //-----------------------------------------------------------------------------
-    size_t Pass::calculateSize(void) const
+    size_t Pass::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -342,7 +342,7 @@ namespace Ogre {
         mPointSpritesEnabled = enabled;
     }
     //-----------------------------------------------------------------------
-    bool Pass::getPointSpritesEnabled(void) const
+    bool Pass::getPointSpritesEnabled() const
     {
         return mPointSpritesEnabled;
     }
@@ -356,22 +356,22 @@ namespace Ogre {
         mPointAttenuationCoeffs[2] = quadratic;
     }
     //-----------------------------------------------------------------------
-    bool Pass::isPointAttenuationEnabled(void) const
+    bool Pass::isPointAttenuationEnabled() const
     {
         return mPointAttenuationEnabled;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getPointAttenuationConstant(void) const
+    Real Pass::getPointAttenuationConstant() const
     {
         return mPointAttenuationCoeffs[0];
     }
     //-----------------------------------------------------------------------
-    Real Pass::getPointAttenuationLinear(void) const
+    Real Pass::getPointAttenuationLinear() const
     {
         return mPointAttenuationCoeffs[1];
     }
     //-----------------------------------------------------------------------
-    Real Pass::getPointAttenuationQuadratic(void) const
+    Real Pass::getPointAttenuationQuadratic() const
     {
         return mPointAttenuationCoeffs[2];
     }
@@ -381,7 +381,7 @@ namespace Ogre {
         mPointMinSize = min;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getPointMinSize(void) const
+    Real Pass::getPointMinSize() const
     {
         return mPointMinSize;
     }
@@ -391,7 +391,7 @@ namespace Ogre {
         mPointMaxSize = max;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getPointMaxSize(void) const
+    Real Pass::getPointMaxSize() const
     {
         return mPointMaxSize;
     }
@@ -458,42 +458,42 @@ namespace Ogre {
         mTracking = tracking;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getPointSize(void) const
+    Real Pass::getPointSize() const
     {
         return mPointSize;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& Pass::getAmbient(void) const
+    const ColourValue& Pass::getAmbient() const
     {
         return mAmbient;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& Pass::getDiffuse(void) const
+    const ColourValue& Pass::getDiffuse() const
     {
         return mDiffuse;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& Pass::getSpecular(void) const
+    const ColourValue& Pass::getSpecular() const
     {
         return mSpecular;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& Pass::getSelfIllumination(void) const
+    const ColourValue& Pass::getSelfIllumination() const
     {
         return mEmissive;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getShininess(void) const
+    Real Pass::getShininess() const
     {
         return mShininess;
     }
     //-----------------------------------------------------------------------
-    TrackVertexColourType Pass::getVertexColourTracking(void) const
+    TrackVertexColourType Pass::getVertexColourTracking() const
     {
         return mTracking;
     }
     //-----------------------------------------------------------------------
-    TextureUnitState* Pass::createTextureUnitState(void)
+    TextureUnitState* Pass::createTextureUnitState()
     {
         TextureUnitState *t = OGRE_NEW TextureUnitState(this);
         addTextureUnitState(t);
@@ -636,13 +636,13 @@ namespace Ogre {
 
     //-----------------------------------------------------------------------
     Pass::TextureUnitStateIterator
-        Pass::getTextureUnitStateIterator(void)
+        Pass::getTextureUnitStateIterator()
     {
         return TextureUnitStateIterator(mTextureUnitStates.begin(), mTextureUnitStates.end());
     }
     //-----------------------------------------------------------------------
     Pass::ConstTextureUnitStateIterator
-        Pass::getTextureUnitStateIterator(void) const
+        Pass::getTextureUnitStateIterator() const
     {
         return ConstTextureUnitStateIterator(mTextureUnitStates.begin(), mTextureUnitStates.end());
     }
@@ -659,7 +659,7 @@ namespace Ogre {
         mTextureUnitStates.erase(i);
     }
     //-----------------------------------------------------------------------
-    void Pass::removeAllTextureUnitStates(void)
+    void Pass::removeAllTextureUnitStates()
     {
         OGRE_LOCK_MUTEX(mTexUnitChangeMutex);
         TextureUnitStates::iterator i, iend;
@@ -672,7 +672,7 @@ namespace Ogre {
         mShadowContentTypeLookup.clear();
     }
     //-----------------------------------------------------------------------
-    void Pass::recreateShadowContentTypeLookup(void)
+    void Pass::recreateShadowContentTypeLookup()
     {
         mShadowContentTypeLookup.clear();
         for (unsigned short i = 0; i < mTextureUnitStates.size(); ++i)
@@ -751,7 +751,7 @@ namespace Ogre {
         dest = SBF_ZERO;
     }
     //-----------------------------------------------------------------------
-    HlmsDatablock* Pass::_getDatablock(void) const
+    HlmsDatablock* Pass::_getDatablock() const
     {
         return mDatablock;
     }
@@ -761,7 +761,7 @@ namespace Ogre {
         mDatablock->setMacroblock( macroblock );
     }
     //-----------------------------------------------------------------------
-    const HlmsMacroblock* Pass::getMacroblock(void) const
+    const HlmsMacroblock* Pass::getMacroblock() const
     {
         return mDatablock->getMacroblock();
     }
@@ -771,12 +771,12 @@ namespace Ogre {
         mDatablock->setBlendblock( blendblock );
     }
     //-----------------------------------------------------------------------
-    const HlmsBlendblock* Pass::getBlendblock(void) const
+    const HlmsBlendblock* Pass::getBlendblock() const
     {
         return mDatablock->getBlendblock();
     }
     //-----------------------------------------------------------------------
-    bool Pass::isTransparent(void) const
+    bool Pass::isTransparent() const
     {
         return mDatablock->getBlendblock()->isAutoTransparent();
     }
@@ -791,7 +791,7 @@ namespace Ogre {
         mAlphaRejectVal = val;
     }
     //-----------------------------------------------------------------------
-    bool Pass::getColourWriteEnabled(void) const
+    bool Pass::getColourWriteEnabled() const
     {
         return mDatablock->getBlendblock()->mBlendChannelMask != 0;
     }
@@ -801,7 +801,7 @@ namespace Ogre {
         mMaxSimultaneousLights = maxLights;
     }
     //-----------------------------------------------------------------------
-    unsigned short Pass::getMaxSimultaneousLights(void) const
+    unsigned short Pass::getMaxSimultaneousLights() const
     {
         return mMaxSimultaneousLights;
     }
@@ -811,7 +811,7 @@ namespace Ogre {
         mStartLight = startLight;
     }
     //-----------------------------------------------------------------------
-    unsigned short Pass::getStartLight(void) const
+    unsigned short Pass::getStartLight() const
     {
         return mStartLight;
     }
@@ -831,7 +831,7 @@ namespace Ogre {
         mLightsPerIteration = c;
     }
     //-----------------------------------------------------------------------
-    unsigned short Pass::getLightCountPerIteration(void) const
+    unsigned short Pass::getLightCountPerIteration() const
     {
         return mLightsPerIteration;
     }
@@ -849,7 +849,7 @@ namespace Ogre {
         mShadeOptions = mode;
     }
     //-----------------------------------------------------------------------
-    ShadeOptions Pass::getShadingMode(void) const
+    ShadeOptions Pass::getShadingMode() const
     {
         return mShadeOptions;
     }
@@ -867,32 +867,32 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool Pass::getFogOverride(void) const
+    bool Pass::getFogOverride() const
     {
         return mFogOverride;
     }
     //-----------------------------------------------------------------------
-    FogMode Pass::getFogMode(void) const
+    FogMode Pass::getFogMode() const
     {
         return mFogMode;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& Pass::getFogColour(void) const
+    const ColourValue& Pass::getFogColour() const
     {
         return mFogColour;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getFogStart(void) const
+    Real Pass::getFogStart() const
     {
         return mFogStart;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getFogEnd(void) const
+    Real Pass::getFogEnd() const
     {
         return mFogEnd;
     }
     //-----------------------------------------------------------------------
-    Real Pass::getFogDensity(void) const
+    Real Pass::getFogDensity() const
     {
         return mFogDensity;
     }
@@ -905,7 +905,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Pass::_prepare(void)
+    void Pass::_prepare()
     {
         // We assume the Technique only calls this when the material is being
         // prepared
@@ -920,7 +920,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Pass::_unprepare(void)
+    void Pass::_unprepare()
     {
         // unprepare each TextureUnitState
         TextureUnitStates::iterator i, iend;
@@ -932,7 +932,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Pass::_load(void)
+    void Pass::_load()
     {
         // We assume the Technique only calls this when the material is being
         // loaded
@@ -993,7 +993,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Pass::_unload(void)
+    void Pass::_unload()
     {
         // Unload each TextureUnitState
         TextureUnitStates::iterator i, iend;
@@ -1256,7 +1256,7 @@ namespace Ogre {
         mComputeProgramUsage->setParameters(params);
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getVertexProgramName(void) const
+    const String& Pass::getVertexProgramName() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mVertexProgramUsage)
@@ -1265,7 +1265,7 @@ namespace Ogre {
             return mVertexProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getVertexProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getVertexProgramParameters() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mVertexProgramUsage)
@@ -1277,13 +1277,13 @@ namespace Ogre {
         return mVertexProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getVertexProgram(void) const
+    const GpuProgramPtr& Pass::getVertexProgram() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mVertexProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getFragmentProgramName(void) const
+    const String& Pass::getFragmentProgramName() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mFragmentProgramUsage)
@@ -1292,19 +1292,19 @@ namespace Ogre {
             return mFragmentProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getFragmentProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getFragmentProgramParameters() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mFragmentProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getFragmentProgram(void) const
+    const GpuProgramPtr& Pass::getFragmentProgram() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mFragmentProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getGeometryProgramName(void) const
+    const String& Pass::getGeometryProgramName() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mGeometryProgramUsage)
@@ -1313,19 +1313,19 @@ namespace Ogre {
             return mGeometryProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getGeometryProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getGeometryProgramParameters() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mGeometryProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getGeometryProgram(void) const
+    const GpuProgramPtr& Pass::getGeometryProgram() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mGeometryProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getTessellationHullProgramName(void) const
+    const String& Pass::getTessellationHullProgramName() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mTessellationHullProgramUsage)
@@ -1334,19 +1334,19 @@ namespace Ogre {
             return mTessellationHullProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getTessellationHullProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getTessellationHullProgramParameters() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mTessellationHullProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getTessellationHullProgram(void) const
+    const GpuProgramPtr& Pass::getTessellationHullProgram() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mTessellationHullProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getTessellationDomainProgramName(void) const
+    const String& Pass::getTessellationDomainProgramName() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mTessellationDomainProgramUsage)
@@ -1355,19 +1355,19 @@ namespace Ogre {
             return mTessellationDomainProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getTessellationDomainProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getTessellationDomainProgramParameters() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mTessellationDomainProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getTessellationDomainProgram(void) const
+    const GpuProgramPtr& Pass::getTessellationDomainProgram() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mTessellationDomainProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getComputeProgramName(void) const
+    const String& Pass::getComputeProgramName() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         if (!mComputeProgramUsage)
@@ -1376,19 +1376,19 @@ namespace Ogre {
             return mComputeProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getComputeProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getComputeProgramParameters() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mComputeProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getComputeProgram(void) const
+    const GpuProgramPtr& Pass::getComputeProgram() const
     {
             OGRE_LOCK_MUTEX(mGpuProgramChangeMutex);
         return mComputeProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    bool Pass::isLoaded(void) const
+    bool Pass::isLoaded() const
     {
         return mParent->isLoaded();
     }
@@ -1444,7 +1444,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool Pass::isAmbientOnly(void) const
+    bool Pass::isAmbientOnly() const
     {
         // treat as ambient if colour write is off,
         // or all non-ambient (& emissive) colours are black
@@ -1488,7 +1488,7 @@ namespace Ogre {
         mShadowCasterVertexProgramUsage->setParameters(params);
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getShadowCasterVertexProgramName(void) const
+    const String& Pass::getShadowCasterVertexProgramName() const
     {
         if (!mShadowCasterVertexProgramUsage)
             return BLANKSTRING;
@@ -1496,7 +1496,7 @@ namespace Ogre {
             return mShadowCasterVertexProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getShadowCasterVertexProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getShadowCasterVertexProgramParameters() const
     {
         if (!mShadowCasterVertexProgramUsage)
         {
@@ -1507,7 +1507,7 @@ namespace Ogre {
         return mShadowCasterVertexProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getShadowCasterVertexProgram(void) const
+    const GpuProgramPtr& Pass::getShadowCasterVertexProgram() const
     {
         return mShadowCasterVertexProgramUsage->getProgram();
     }
@@ -1546,7 +1546,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getShadowCasterFragmentProgramName(void) const
+    const String& Pass::getShadowCasterFragmentProgramName() const
     {
         if (!mShadowCasterFragmentProgramUsage)
             return BLANKSTRING;
@@ -1554,7 +1554,7 @@ namespace Ogre {
             return mShadowCasterFragmentProgramUsage->getProgramName();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr Pass::getShadowCasterFragmentProgramParameters(void) const
+    GpuProgramParametersSharedPtr Pass::getShadowCasterFragmentProgramParameters() const
     {
         if (Ogre::Root::getSingletonPtr()->getRenderSystem()->getName().find("OpenGL ES 2") != String::npos)
         {
@@ -1568,12 +1568,12 @@ namespace Ogre {
         return mShadowCasterFragmentProgramUsage->getParameters();
     }
     //-----------------------------------------------------------------------
-    const GpuProgramPtr& Pass::getShadowCasterFragmentProgram(void) const
+    const GpuProgramPtr& Pass::getShadowCasterFragmentProgram() const
     {
         return mShadowCasterFragmentProgramUsage->getProgram();
     }
     //-----------------------------------------------------------------------
-    const String& Pass::getResourceGroup(void) const
+    const String& Pass::getResourceGroup() const
     {
         return mParent->getResourceGroup();
     }

@@ -99,7 +99,7 @@ namespace Ogre {
 
     }
     //---------------------------------------------------------------------
-    void RotationalSpline::recalcTangents(void)
+    void RotationalSpline::recalcTangents()
     {
         // ShoeMake (1987) approach
         // Just like Catmull-Rom really, just more gnarly
@@ -188,12 +188,12 @@ namespace Ogre {
         return mPoints[index];
     }
     //---------------------------------------------------------------------
-    unsigned short RotationalSpline::getNumPoints(void) const
+    unsigned short RotationalSpline::getNumPoints() const
     {
         return (unsigned short)mPoints.size();
     }
     //---------------------------------------------------------------------
-    void RotationalSpline::clear(void)
+    void RotationalSpline::clear()
     {
         mPoints.clear();
         mTangents.clear();

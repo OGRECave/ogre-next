@@ -92,10 +92,10 @@ namespace v1 {
 
         virtual void getWorldTransforms( Matrix4* xform ) const;
         virtual void getRenderOperation( RenderOperation& op, bool casterPass );
-        virtual const LightList& getLights(void) const;
+        virtual const LightList& getLights() const;
 
         /** Returns the type name of this object. */
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
     };
 
     /** Factory object for creating Entity instances */
@@ -111,7 +111,7 @@ namespace v1 {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);
 
     };

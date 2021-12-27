@@ -76,7 +76,7 @@ namespace Volume {
         
         /** Destructor.
         */
-        ~TextureSource(void);
+        ~TextureSource();
 
     };
 

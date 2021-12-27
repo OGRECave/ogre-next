@@ -132,7 +132,7 @@ namespace Ogre {
 
         /** This event is fired when the resource has been prepared. 
         */
-        virtual void resourcePrepareEnded(void) {}
+        virtual void resourcePrepareEnded() {}
         /** This event is fired when a resource group finished preparing. */
         virtual void resourceGroupPrepareEnded(const String& groupName)
         { (void)groupName; }
@@ -149,7 +149,7 @@ namespace Ogre {
         virtual void resourceLoadStarted(const ResourcePtr& resource) = 0;
         /** This event is fired when the resource has been loaded. 
         */
-        virtual void resourceLoadEnded(void) = 0;
+        virtual void resourceLoadEnded() = 0;
         /** This event is fired when a resource group finished loading. */
         virtual void resourceGroupLoadEnded(const String& groupName) = 0;
         /** This event is fired when a resource was just created.
@@ -383,7 +383,7 @@ namespace Ogre {
         /// Internal event firing method
         void fireResourceLoadStarted(const ResourcePtr& resource);
         /// Internal event firing method
-        void fireResourceLoadEnded(void);
+        void fireResourceLoadEnded();
         /// Internal event firing method
         void fireResourceGroupLoadEnded(const String& groupName);
         /// Internal event firing method
@@ -391,7 +391,7 @@ namespace Ogre {
         /// Internal event firing method
         void fireResourcePrepareStarted(const ResourcePtr& resource);
         /// Internal event firing method
-        void fireResourcePrepareEnded(void);
+        void fireResourcePrepareEnded();
         /// Internal event firing method
         void fireResourceGroupPrepareEnded(const String& groupName);
         /// Internal event firing method
@@ -915,7 +915,7 @@ namespace Ogre {
         bool isResourceGroupInGlobalPool(const String& name);
 
         /** Shutdown all ResourceManagers, performed as part of clean-up. */
-        void shutdownAll(void);
+        void shutdownAll();
 
 
         /** Internal method for registering a ResourceManager (which should be
@@ -989,7 +989,7 @@ namespace Ogre {
             order to avoid any contention issues in multithreaded applications.
         @return A copy of list of currently defined groups.
         */
-        StringVector getResourceGroups(void);
+        StringVector getResourceGroups();
         /** Get the list of resource declarations for the specified group name. 
         @note This method intentionally returns a copy rather than a reference in
             order to avoid any contention issues in multithreaded applications.
@@ -1024,7 +1024,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ResourceGroupManager& getSingleton(void);
+        static ResourceGroupManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -1040,7 +1040,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ResourceGroupManager* getSingletonPtr(void);
+        static ResourceGroupManager* getSingletonPtr();
 
     };
     /** @} */

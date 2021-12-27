@@ -16,7 +16,7 @@ namespace Demo
     public:
         NearFarProjectionGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01( void );
+        virtual void createScene01();
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };

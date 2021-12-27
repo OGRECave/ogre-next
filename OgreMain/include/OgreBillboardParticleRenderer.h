@@ -122,12 +122,12 @@ namespace v1 {
         void setBillboardType(BillboardType bbt);
 
         /** Returns the billboard type in use. */
-        BillboardType getBillboardType(void) const;
+        BillboardType getBillboardType() const;
 
         /// @copydoc BillboardSet::setUseAccurateFacing
         void setUseAccurateFacing(bool acc);
         /// @copydoc BillboardSet::getUseAccurateFacing
-        bool getUseAccurateFacing(void) const;
+        bool getUseAccurateFacing() const;
 
         /** Sets the point which acts as the origin point for all billboards in this set.
         @remarks
@@ -146,7 +146,7 @@ namespace v1 {
         @return
             A member of the BillboardOrigin enum specifying the origin for all the billboards in this set.
         */
-        BillboardOrigin getBillboardOrigin(void) const { return mBillboardSet->getBillboardOrigin(); }
+        BillboardOrigin getBillboardOrigin() const { return mBillboardSet->getBillboardOrigin(); }
 
         /** Sets billboard rotation type.
         @remarks
@@ -163,7 +163,7 @@ namespace v1 {
         @return
             A member of the BillboardRotationType enum specifying the rotation type for all the billboards in this set.
         */
-        BillboardRotationType getBillboardRotationType(void) const;
+        BillboardRotationType getBillboardRotationType() const;
 
         /** Use this to specify the common direction given to billboards of type BBT_ORIENTED_COMMON.
         @remarks
@@ -175,7 +175,7 @@ namespace v1 {
         void setCommonDirection(const Vector3& vec);
 
         /** Gets the common direction for all billboards (BBT_ORIENTED_COMMON) */
-        const Vector3& getCommonDirection(void) const;
+        const Vector3& getCommonDirection() const;
 
         /** Use this to specify the common up-vector given to billboards of type BBT_PERPENDICULAR_SELF.
         @remarks
@@ -189,18 +189,18 @@ namespace v1 {
         void setCommonUpVector(const Vector3& vec);
 
         /** Gets the common up-vector for all billboards (BBT_PERPENDICULAR_SELF) */
-        const Vector3& getCommonUpVector(void) const;
+        const Vector3& getCommonUpVector() const;
 
         /// @copydoc BillboardSet::setPointRenderingEnabled
         void setPointRenderingEnabled(bool enabled);
 
         /// @copydoc BillboardSet::isPointRenderingEnabled
-        bool isPointRenderingEnabled(void) const;
+        bool isPointRenderingEnabled() const;
 
 
 
         /// @copydoc ParticleSystemRenderer::getType
-        const String& getType(void) const;
+        const String& getType() const;
         /// @copydoc ParticleSystemRenderer::_updateRenderQueue
         void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera,
             list<Particle*>::type& currentParticles, bool cullIndividually,
@@ -212,9 +212,9 @@ namespace v1 {
         /// @copydoc ParticleSystemRenderer::_notifyCurrentCamera
         void _notifyCurrentCamera( const Camera* camera, const Camera* lodCamera );
         /// @copydoc ParticleSystemRenderer::_notifyParticleRotated
-        void _notifyParticleRotated(void);
+        void _notifyParticleRotated();
         /// @copydoc ParticleSystemRenderer::_notifyParticleResized
-        void _notifyParticleResized(void);
+        void _notifyParticleResized();
         /// @copydoc ParticleSystemRenderer::_notifyParticleQuota
         void _notifyParticleQuota(size_t quota);
         /// @copydoc ParticleSystemRenderer::_notifyAttached
@@ -228,10 +228,10 @@ namespace v1 {
         /// @copydoc ParticleSystemRenderer::setKeepParticlesInLocalSpace
         void setKeepParticlesInLocalSpace(bool keepLocal);
         /// @copydoc ParticleSystemRenderer::_getSortMode
-        SortMode _getSortMode(void) const;
+        SortMode _getSortMode() const;
 
         /// Access BillboardSet in use
-        BillboardSet* getBillboardSet(void) const { return mBillboardSet; }
+        BillboardSet* getBillboardSet() const { return mBillboardSet; }
 
     protected:
         static CmdBillboardType msBillboardTypeCmd;

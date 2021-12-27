@@ -46,7 +46,7 @@ namespace Ogre
         void                    *mLastMappedPtr;
 
         virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);
+        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
 
         void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
                             uint8 mipLevel, GLenum format, GLenum type,
@@ -59,17 +59,17 @@ namespace Ogre
                                GL3PlusDynamicBuffer *dynamicBuffer );
         virtual ~GL3PlusStagingTexture();
 
-        void _unmapBuffer(void);
+        void _unmapBuffer();
 
-        virtual void startMapRegion(void);
-        virtual void stopMapRegion(void);
+        virtual void startMapRegion();
+        virtual void stopMapRegion();
 
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                              uint8 mipLevel, const TextureBox *cpuSrcBox=0,
                              const TextureBox *dstBox=0, bool skipSysRamCopy=false );
 
-        GL3PlusDynamicBuffer* _getDynamicBuffer(void)           { return mDynamicBuffer; }
-        void _resetDynamicBuffer(void)                          { mDynamicBuffer = 0; }
+        GL3PlusDynamicBuffer* _getDynamicBuffer()           { return mDynamicBuffer; }
+        void _resetDynamicBuffer()                          { mDynamicBuffer = 0; }
     };
 }
 

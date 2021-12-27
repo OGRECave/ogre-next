@@ -108,8 +108,8 @@ namespace Ogre
                 mCompositorManager( compositorManager ) {}
         virtual ~CompositorNodeDef() {}
 
-        IdString getName(void) const                        { return mName; }
-        String getNameStr(void) const                       { return mNameStr; }
+        IdString getName() const                        { return mName; }
+        String getNameStr() const                       { return mNameStr; }
 
         /// Whether the node should be start as enabled when instantiated
         void setStartEnabled( bool enabled )                { mStartEnabled = enabled; }
@@ -161,10 +161,10 @@ namespace Ogre
         CompositorTargetDef* getTargetPass( size_t passIndex )  { return &mTargetPasses[passIndex]; }
 
         /// Gets the number of target passes in this node.
-        size_t getNumTargetPasses(void) const                   { return mTargetPasses.size(); }
+        size_t getNumTargetPasses() const                   { return mTargetPasses.size(); }
 
         /// Calculates the total number of passes in this node.
-        size_t calculateNumPasses( void ) const;
+        size_t calculateNumPasses() const;
 
         /** Reserves enough memory for all output channel mappings (efficient allocation, better than
             using linked lists or other containers with two level of indirections)
@@ -176,7 +176,7 @@ namespace Ogre
         void setNumOutputChannels( size_t numOuts )         { mOutChannelMapping.reserve( numOuts ); }
 
         /// Returns the number of output channels
-        size_t getNumOutputChannels(void) const             { return mOutChannelMapping.size(); }
+        size_t getNumOutputChannels() const             { return mOutChannelMapping.size(); }
 
         /** Maps the output channel to the given texture name, which can be either a
             local texture or a reference to an input channel. Global textures can't
@@ -234,7 +234,7 @@ namespace Ogre
         */
         size_t getPassNumber( const CompositorPassDef *passDef ) const;
 
-        CompositorManager2* getCompositorManager(void) const { return mCompositorManager; }
+        CompositorManager2* getCompositorManager() const { return mCompositorManager; }
     };
 
     /** @} */

@@ -34,11 +34,11 @@ THE SOFTWARE.
 namespace Ogre {
     //-----------------------------------------------------------------------
     template<> ControllerManager* Singleton<ControllerManager>::msSingleton = 0;
-    ControllerManager* ControllerManager::getSingletonPtr(void)
+    ControllerManager* ControllerManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    ControllerManager& ControllerManager::getSingleton(void)
+    ControllerManager& ControllerManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -72,7 +72,7 @@ namespace Ogre {
         return createController(getFrameTimeSource(), dest, getPassthroughControllerFunction());
     }
     //-----------------------------------------------------------------------
-    void ControllerManager::updateAllControllers(void)
+    void ControllerManager::updateAllControllers()
     {
         // Only update once per frame
         unsigned long thisFrameNumber = Root::getSingleton().getNextFrameNumber();
@@ -87,7 +87,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ControllerManager::clearControllers(void)
+    void ControllerManager::clearControllers()
     {
         ControllerList::iterator ci;
         for (ci = mControllers.begin(); ci != mControllers.end(); ++ci)
@@ -97,12 +97,12 @@ namespace Ogre {
         mControllers.clear();
     }
     //-----------------------------------------------------------------------
-    const ControllerValueRealPtr& ControllerManager::getFrameTimeSource(void) const
+    const ControllerValueRealPtr& ControllerManager::getFrameTimeSource() const
     {
         return mFrameTimeController;
     }
     //-----------------------------------------------------------------------
-    const ControllerFunctionRealPtr& ControllerManager::getPassthroughControllerFunction(void) const
+    const ControllerFunctionRealPtr& ControllerManager::getPassthroughControllerFunction() const
     {
         return mPassthroughFunction;
     }
@@ -244,7 +244,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real ControllerManager::getTimeFactor(void) const {
+    Real ControllerManager::getTimeFactor() const {
         return static_cast<const FrameTimeControllerValue*>(mFrameTimeController.get())->getTimeFactor();
     }
     //-----------------------------------------------------------------------
@@ -252,7 +252,7 @@ namespace Ogre {
         static_cast<FrameTimeControllerValue*>(mFrameTimeController.getPointer())->setTimeFactor(tf);
     }
     //-----------------------------------------------------------------------
-    Real ControllerManager::getFrameDelay(void) const {
+    Real ControllerManager::getFrameDelay() const {
         return static_cast<const FrameTimeControllerValue*>(mFrameTimeController.get())->getFrameDelay();
     }
     //-----------------------------------------------------------------------
@@ -260,7 +260,7 @@ namespace Ogre {
         static_cast<FrameTimeControllerValue*>(mFrameTimeController.getPointer())->setFrameDelay(fd);
     }
     //-----------------------------------------------------------------------
-    Real ControllerManager::getElapsedTime(void) const
+    Real ControllerManager::getElapsedTime() const
     {
         return static_cast<const FrameTimeControllerValue*>(mFrameTimeController.get())->getElapsedTime();
     }

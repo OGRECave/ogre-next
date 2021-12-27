@@ -74,8 +74,8 @@ namespace Ogre
         vector<uint16>::type    availableSlots;
         TextureGpuVec           usedSlots;
 
-        bool hasFreeSlot(void) const;
-        bool empty(void) const;
+        bool hasFreeSlot() const;
+        bool empty() const;
     };
 
     typedef list<TexturePool>::type TexturePoolList;
@@ -393,12 +393,12 @@ namespace Ogre
 
 			QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
 						 FilterBaseArray &inOutFilters );
-            void destroy(void);
-            bool empty(void) const;
+            void destroy();
+            bool empty() const;
             bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
             void unqueueMipSlice( uint8 mipLevel, uint8 slice );
-            uint8 getMinMipLevel(void) const;
-            uint8 getMaxMipLevelPlusOne(void) const;
+            uint8 getMinMipLevel() const;
+            uint8 getMaxMipLevelPlusOne() const;
         };
 
         typedef vector<QueuedImage>::type QueuedImageVec;
@@ -608,11 +608,11 @@ namespace Ogre
         //image raises an exception in the worker thread
         uint8 mErrorFallbackTexData[2u*2u*6u*4u];
 
-        void destroyAll(void);
-        void abortAllRequests(void);
-        void destroyAllStagingBuffers(void);
-        void destroyAllTextures(void);
-        void destroyAllPools(void);
+        void destroyAll();
+        void abortAllRequests();
+        void destroyAllStagingBuffers();
+        void destroyAllTextures();
+        void destroyAllPools();
 
         virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags,
@@ -629,18 +629,18 @@ namespace Ogre
         /// Fills mTmpAvailableStagingTex with new StagingTextures that support formats &
         /// resolutions the worker thread couldn't upload because it lacked a compatible one.
         /// Assumes we're protected by mMutex! Called from main thread.
-        void fulfillUsageStats(void);
+        void fulfillUsageStats();
         /// Fills mTmpAvailableStagingTex with new StagingTextures if there's not enough
         /// in there to meet our minimum budget as set in mBudget.
         /// Assumes we're protected by mMutex! Called from main thread.
-        void fulfillMinimumBudget(void);
+        void fulfillMinimumBudget();
 
         /// See fulfillMinimumBudget and fulfillUsageStats
         /// Assumes we're protected by mMutex! Called from main thread.
-        void fullfillBudget(void);
+        void fullfillBudget();
 
         /// Must be called from worker thread.
-        void mergeUsageStatsIntoPrevStats(void);
+        void mergeUsageStatsIntoPrevStats();
 
         /** Finds a StagingTexture that can map the given region defined by the box & pixelFormat.
             Searches in both used & available textures.
@@ -689,7 +689,7 @@ namespace Ogre
         /// It's an async download.
         ///
         /// @see    TextureGpuManager::_queueDownloadToRam
-        void processDownloadToRamQueue(void);
+        void processDownloadToRamQueue();
 
     public:
         TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
@@ -707,10 +707,10 @@ namespace Ogre
         */
         void setDefaultMipmapGeneration( DefaultMipmapGen::DefaultMipmapGen defaultMipmapGen,
                                          DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenCubemaps );
-        DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGeneration(void) const;
-        DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGenerationCubemaps(void) const;
+        DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGeneration() const;
+        DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGenerationCubemaps() const;
 
-        const ResourceEntryMap& getEntries(void) const              { return mEntries; }
+        const ResourceEntryMap& getEntries() const              { return mEntries; }
 
         /// Must be called from main thread.
         void _reserveSlotForTexture( TextureGpu *texture );
@@ -728,7 +728,7 @@ namespace Ogre
         void processLoadRequest( ObjCmdBuffer *commandBuffer, ThreadData &workerData,
                                  const LoadRequest &loadRequest );
     public:
-        void _updateStreaming(void);
+        void _updateStreaming();
 
         /** Returns true if there is no more streaming work to be done yet
             (if false, calls to _update could be needed once again)
@@ -767,10 +767,10 @@ namespace Ogre
 
             If you need to wait until all textures are done, use waitForStreamingCompletion
         */
-        bool isDoneStreaming( void ) const;
+        bool isDoneStreaming() const;
 
         /// Blocks main thread until all pending textures are fully loaded.
-        void waitForStreamingCompletion(void);
+        void waitForStreamingCompletion();
 
         /** Calling waitForStreamingCompletion before Root::renderOneFrame should
             guarantee the render is perfect.
@@ -967,7 +967,7 @@ namespace Ogre
                                                       TextureTypes::TextureTypes textureType,
                                                       PixelFormatGpu pixelFormatFamily );
         void destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
-        void destroyAllAsyncTextureTicket(void);
+        void destroyAllAsyncTextureTicket();
 
         void saveTexture( TextureGpu *texture,
                           const String &folderPath, set<String>::type &savedTextures,
@@ -1008,7 +1008,7 @@ namespace Ogre
                              size_t &outUsedStagingTextureBytes,
                              size_t &outAvailableStagingTextureBytes );
 
-        void dumpStats(void) const;
+        void dumpStats() const;
         void dumpMemoryUsage( Log *log, Ogre::uint32 mask = ResidencyMask::All ) const;
 
         /// Sets a new listener. The old one will be destroyed with OGRE_DELETE
@@ -1054,7 +1054,7 @@ namespace Ogre
         */
         void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, size_t maxSplitResolution=0 );
 
-        const BudgetEntryVec& getBudget(void) const;
+        const BudgetEntryVec& getBudget() const;
 
         /** At a high level, texture loading works like this:
             1. Grab a free StagingTexture from "available" pool in main thread
@@ -1202,8 +1202,8 @@ namespace Ogre
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );
 
-        RenderSystem* getRenderSystem(void) const;
-        VaoManager* getVaoManager(void) const;
+        RenderSystem* getRenderSystem() const;
+        VaoManager* getVaoManager() const;
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage,

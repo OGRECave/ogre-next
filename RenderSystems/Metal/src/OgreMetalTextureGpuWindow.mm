@@ -60,16 +60,16 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::createInternalResourcesImpl(void)
+    void MetalTextureGpuWindow::createInternalResourcesImpl()
     {
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::destroyInternalResourcesImpl(void)
+    void MetalTextureGpuWindow::destroyInternalResourcesImpl()
     {
         _setBackbuffer( 0 );
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::notifyDataIsReady(void)
+    void MetalTextureGpuWindow::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
@@ -79,12 +79,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool MetalTextureGpuWindow::_isDataReadyImpl(void) const
+    bool MetalTextureGpuWindow::_isDataReadyImpl() const
     {
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::swapBuffers(void)
+    void MetalTextureGpuWindow::swapBuffers()
     {
         mWindow->swapBuffers();
         //Release strong references
@@ -98,7 +98,7 @@ namespace Ogre
             *static_cast<Window**>(pData) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::_setToDisplayDummyTexture(void)
+    void MetalTextureGpuWindow::_setToDisplayDummyTexture()
     {
     }
     //-----------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace Ogre
                      "MetalTextureGpuWindow::_notifyTextureSlotChanged" );
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::nextDrawable(void)
+    void MetalTextureGpuWindow::nextDrawable()
     {
         mWindow->nextDrawable();
     }

@@ -72,7 +72,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Importing V1 meshes into V2 objects (convert v1 objects to v2 format)";
     }

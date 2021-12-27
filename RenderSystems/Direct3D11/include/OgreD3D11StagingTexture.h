@@ -101,10 +101,10 @@ namespace Ogre
         virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                      PixelFormatGpu pixelFormat ) const;
         virtual bool isSmallerThan( const StagingTexture *other ) const;
-        virtual size_t _getSizeBytes(void);
+        virtual size_t _getSizeBytes();
 
-        virtual void startMapRegion(void);
-        virtual void stopMapRegion(void);
+        virtual void startMapRegion();
+        virtual void stopMapRegion();
 
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                              uint8 mipLevel, const TextureBox *cpuSrcBox=0,

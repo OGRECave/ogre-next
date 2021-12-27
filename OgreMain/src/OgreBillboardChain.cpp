@@ -110,7 +110,7 @@ namespace v1 {
         OGRE_DELETE mIndexData;
     }
     //-----------------------------------------------------------------------
-    void BillboardChain::setupChainContainers(void)
+    void BillboardChain::setupChainContainers()
     {
         // Allocate enough space for everything
         mChainElementList.resize(mChainCount * mMaxElementsPerChain);
@@ -129,7 +129,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    void BillboardChain::setupVertexDeclaration(void)
+    void BillboardChain::setupVertexDeclaration()
     {
         if (mVertexDeclDirty)
         {
@@ -167,7 +167,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void BillboardChain::setupBuffers(void)
+    void BillboardChain::setupBuffers()
     {
         setupVertexDeclaration();
         if (mBuffersNeedRecreating)
@@ -343,7 +343,7 @@ namespace v1 {
         mBoundsDirty = true;
     }
     //-----------------------------------------------------------------------
-    void BillboardChain::clearAllChains(void)
+    void BillboardChain::clearAllChains()
     {
         for (size_t i = 0; i < mChainCount; ++i)
         {
@@ -425,7 +425,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void BillboardChain::updateBoundingBox(void) const
+    void BillboardChain::updateBoundingBox() const
     {
         if (mBoundsDirty)
         {
@@ -629,7 +629,7 @@ namespace v1 {
         mVertexContentDirty = false;
     }
     //-----------------------------------------------------------------------
-    void BillboardChain::updateIndexBuffer(void)
+    void BillboardChain::updateIndexBuffer()
     {
 
         setupBuffers();
@@ -696,13 +696,13 @@ namespace v1 {
         return dist.squaredLength();
     }
     //-----------------------------------------------------------------------
-    const AxisAlignedBox& BillboardChain::getBoundingBox(void) const
+    const AxisAlignedBox& BillboardChain::getBoundingBox() const
     {
         updateBoundingBox();
         return mAABB;
     }
     //-----------------------------------------------------------------------
-    const String& BillboardChain::getMovableType(void) const
+    const String& BillboardChain::getMovableType() const
     {
         return BillboardChainFactory::FACTORY_TYPE_NAME;
     }
@@ -750,7 +750,7 @@ namespace v1 {
         *xform = _getParentNodeFullTransform();
     }
     //-----------------------------------------------------------------------
-    const LightList& BillboardChain::getLights(void) const
+    const LightList& BillboardChain::getLights() const
     {
         return queryLights();
     }
@@ -758,7 +758,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     String BillboardChainFactory::FACTORY_TYPE_NAME = "BillboardChain";
     //-----------------------------------------------------------------------
-    const String& BillboardChainFactory::getType(void) const
+    const String& BillboardChainFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

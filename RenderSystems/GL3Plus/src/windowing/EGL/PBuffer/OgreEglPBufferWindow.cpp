@@ -160,7 +160,7 @@ namespace Ogre
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
     }
     //-----------------------------------------------------------------------------------
-    void EglPBufferWindow::destroy( void )
+    void EglPBufferWindow::destroy()
     {
         if( mClosed )
             return;

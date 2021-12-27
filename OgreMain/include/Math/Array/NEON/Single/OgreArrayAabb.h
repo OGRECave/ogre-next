@@ -151,7 +151,7 @@ namespace Ogre
         inline ArrayAabb intersection( const ArrayAabb& b2 ) const;
 
         /// Calculate the volume of this box
-        inline ArrayReal volume(void) const;
+        inline ArrayReal volume() const;
 
         /// Tests whether another box contained by this box.
         inline ArrayMaskR contains( const ArrayAabb &other ) const;

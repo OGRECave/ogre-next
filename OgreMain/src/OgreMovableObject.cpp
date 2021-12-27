@@ -153,7 +153,7 @@ namespace Ogre {
             mSkeletonInstance->setParentNode( parent );
     }
     //---------------------------------------------------------------------
-    void MovableObject::detachFromParent(void)
+    void MovableObject::detachFromParent()
     {
         if (isAttached())
         {
@@ -190,7 +190,7 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    bool MovableObject::isVisible(void) const
+    bool MovableObject::isVisible() const
     {
         if( !getVisible() )
             return false;
@@ -283,7 +283,7 @@ namespace Ogre {
         mRenderQueueID = queueID;
     }
     //-----------------------------------------------------------------------
-    const Matrix4& MovableObject::_getParentNodeFullTransform(void) const
+    const Matrix4& MovableObject::_getParentNodeFullTransform() const
     {
         return mParentNode->_getFullTransform();
     }
@@ -312,7 +312,7 @@ namespace Ogre {
         return updateSingleWorldAabb();
     }
     //-----------------------------------------------------------------------
-    float MovableObject::getLocalRadius(void) const
+    float MovableObject::getLocalRadius() const
     {
         return mObjectData.mLocalRadius[mObjectData.mIndex];
     }

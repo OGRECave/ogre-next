@@ -178,54 +178,54 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void AsyncTextureTicket::unmap(void)
+    void AsyncTextureTicket::unmap()
     {
         assert( mStatus == Mapped );
         unmapImpl();
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getWidth(void) const
+    uint32 AsyncTextureTicket::getWidth() const
     {
         return mWidth;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getHeight(void) const
+    uint32 AsyncTextureTicket::getHeight() const
     {
         return mHeight;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getDepthOrSlices(void) const
+    uint32 AsyncTextureTicket::getDepthOrSlices() const
     {
         return mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getDepth(void) const
+    uint32 AsyncTextureTicket::getDepth() const
     {
         return (mTextureType != TextureTypes::Type3D) ? 1u : mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
-    uint32 AsyncTextureTicket::getNumSlices(void) const
+    uint32 AsyncTextureTicket::getNumSlices() const
     {
         return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu AsyncTextureTicket::getPixelFormatFamily(void) const
+    PixelFormatGpu AsyncTextureTicket::getPixelFormatFamily() const
     {
         return mPixelFormatFamily;
     }
     //-----------------------------------------------------------------------------------
-    size_t AsyncTextureTicket::getBytesPerRow(void) const
+    size_t AsyncTextureTicket::getBytesPerRow() const
     {
         return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
-    size_t AsyncTextureTicket::getBytesPerImage(void) const
+    size_t AsyncTextureTicket::getBytesPerImage() const
     {
         return PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, mPixelFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
-    bool AsyncTextureTicket::queryIsTransferDone(void)
+    bool AsyncTextureTicket::queryIsTransferDone()
     {
         return mDelayedDownload.textureSrc == 0;
     }

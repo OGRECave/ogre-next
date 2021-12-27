@@ -76,7 +76,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static FontManager& getSingleton(void);
+        static FontManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -92,7 +92,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static FontManager* getSingletonPtr(void);
+        static FontManager* getSingletonPtr();
 
     protected:
 

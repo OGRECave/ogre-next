@@ -52,7 +52,7 @@ namespace Ogre
         HlmsPbs *mHlmsPbs;
         TextureGpuManager *mTextureGpuManager;
 
-        void destroyTexture( void );
+        void destroyTexture();
 
     public:
         LightProfiles( HlmsPbs *hlmsPbs, TextureGpuManager *textureGpuManager );
@@ -73,7 +73,7 @@ namespace Ogre
 
             You can call LightProfiles::assignProfile before calling build
         */
-        void build( void );
+        void build();
 
         /** Assigns the given profile to the light.
             Use either:

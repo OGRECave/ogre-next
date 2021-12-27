@@ -48,7 +48,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "CustomRenderable. Render v2 objects without using Items.";
     }

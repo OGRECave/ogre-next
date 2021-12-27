@@ -70,7 +70,7 @@ namespace Mq
 
         /// Sends all the messages queued via see queueSendMessage();
         /// Must be called from the thread that owns 'this'
-        void flushQueuedMessages(void)
+        void flushQueuedMessages()
         {
             PendingMessageMap::iterator itMap = mPendingOutgoingMessages.begin();
             PendingMessageMap::iterator enMap = mPendingOutgoingMessages.end();
@@ -111,7 +111,7 @@ namespace Mq
     protected:
         /// Processes all incoming messages received from other threads.
         /// Should be called from the thread that owns 'this'
-        void processIncomingMessages(void)
+        void processIncomingMessages()
         {
             mMessageQueueMutex.lock();
             mIncomingMessages[0].swap( mIncomingMessages[1] );

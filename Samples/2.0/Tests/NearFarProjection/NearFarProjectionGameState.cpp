@@ -21,7 +21,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void NearFarProjectionGameState::createScene01( void )
+    void NearFarProjectionGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

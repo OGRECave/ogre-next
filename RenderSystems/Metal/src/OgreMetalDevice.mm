@@ -73,7 +73,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::endBlitEncoder(void)
+    void MetalDevice::endBlitEncoder()
     {
         if( mBlitEncoder )
         {
@@ -94,7 +94,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::endComputeEncoder(void)
+    void MetalDevice::endComputeEncoder()
     {
         if( mComputeEncoder )
         {
@@ -113,7 +113,7 @@ namespace Ogre
         endComputeEncoder();
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::commitAndNextCommandBuffer(void)
+    void MetalDevice::commitAndNextCommandBuffer()
     {
         endAllEncoders();
         //Push the command buffer to the GPU
@@ -129,7 +129,7 @@ namespace Ogre
         mRenderSystem->_notifyNewCommandBuffer();
     }
     //-------------------------------------------------------------------------
-    id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder(void)
+    id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder()
     {
         if( !mBlitEncoder )
         {
@@ -145,7 +145,7 @@ namespace Ogre
         return mBlitEncoder;
     }
     //-------------------------------------------------------------------------
-    id<MTLComputeCommandEncoder> MetalDevice::getComputeEncoder(void)
+    id<MTLComputeCommandEncoder> MetalDevice::getComputeEncoder()
     {
         if( !mComputeEncoder )
         {
@@ -158,7 +158,7 @@ namespace Ogre
         return mComputeEncoder;
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::stall(void)
+    void MetalDevice::stall()
     {
         __block dispatch_semaphore_t blockSemaphore = mStallSemaphore;
         [mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)

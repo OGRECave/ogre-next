@@ -31,7 +31,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_ReconstructPosFromDepthGameState::createScene01(void)
+    void Tutorial_ReconstructPosFromDepthGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

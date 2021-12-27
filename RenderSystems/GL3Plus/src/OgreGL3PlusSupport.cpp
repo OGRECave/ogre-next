@@ -49,7 +49,7 @@ namespace Ogre {
         }
     }
 
-    ConfigOptionMap& GL3PlusSupport::getConfigOptions(void)
+    ConfigOptionMap& GL3PlusSupport::getConfigOptions()
     {
         return mOptions;
     }
@@ -64,7 +64,7 @@ namespace Ogre {
         return 0u;
     }
 
-    void GL3PlusSupport::initialiseExtensions(void)
+    void GL3PlusSupport::initialiseExtensions()
     {
         // get driver version.
         // this is the recommended way for GL3 see: https://www.opengl.org/wiki/Get_Context_Info

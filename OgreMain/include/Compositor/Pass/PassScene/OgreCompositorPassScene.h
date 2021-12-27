@@ -76,8 +76,8 @@ namespace Ogre
 
         HlmsManager *mHlmsManager;
 
-        void notifyPassSceneAfterShadowMapsListeners(void);
-        void notifyPassSceneAfterFrustumCullingListeners(void);
+        void notifyPassSceneAfterShadowMapsListeners();
+        void notifyPassSceneAfterFrustumCullingListeners();
 
         virtual void analyzeBarriers( const bool bClearBarriers = true );
 
@@ -104,9 +104,9 @@ namespace Ogre
         void _setCustomCullCamera( Camera *camera )             { mCullCamera = camera; }
         void _setUpdateShadowNode( bool update )                { mUpdateShadowNode = update; }
 
-        bool getUpdateShadowNode(void) const                    { return mUpdateShadowNode; }
+        bool getUpdateShadowNode() const                    { return mUpdateShadowNode; }
 
-        virtual void notifyCleared(void);
+        virtual void notifyCleared();
 
         const CompositorPassSceneDef* getDefinition() const     { return mDefinition; }
     };

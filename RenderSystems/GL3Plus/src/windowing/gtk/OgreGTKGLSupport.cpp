@@ -38,11 +38,11 @@ THE SOFTWARE.
 using namespace Ogre;
 
 template<> GTKGLSupport* Singleton<GTKGLSupport>::ms_Singleton = 0;
-GTKGLSupport* GTKGLSupport::getSingletonPtr(void)
+GTKGLSupport* GTKGLSupport::getSingletonPtr()
 {
     return ms_Singleton;
 }
-GTKGLSupport& GTKGLSupport::getSingleton(void)
+GTKGLSupport& GTKGLSupport::getSingleton()
 {  
     assert( ms_Singleton );  return ( *ms_Singleton );  
 }
@@ -190,7 +190,7 @@ void GTKGLSupport::end_context()
         }
 }
  
-void GTKGLSupport::initialiseExtensions(void)
+void GTKGLSupport::initialiseExtensions()
 {
     // XXX anythign to actually do here?
 }

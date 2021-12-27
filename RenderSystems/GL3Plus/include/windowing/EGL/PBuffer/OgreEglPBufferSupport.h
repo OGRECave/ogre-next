@@ -64,7 +64,7 @@ namespace Ogre
         /**
          * Refresh config options to reflect dependencies
          */
-        void refreshConfig( void );
+        void refreshConfig();
 
         void initDevice( const size_t deviceIdx );
         void destroyDevice( const size_t deviceIdx );
@@ -74,16 +74,16 @@ namespace Ogre
         ~EglPBufferSupport();
 
         /// @copydoc see GL3PlusSupport::addConfig
-        void addConfig( void );
+        void addConfig();
 
         /// @copydoc see GL3PlusSupport::validateConfig
-        String validateConfig( void );
+        String validateConfig();
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
         virtual const char *getPriorityConfigOption( size_t idx ) const;
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        virtual size_t getNumPriorityConfigOptions() const;
 
         /// @copydoc see GL3PlusSupport::setConfigOption
         void setConfigOption( const String &name, const String &value );
@@ -105,13 +105,13 @@ namespace Ogre
         /// @copydoc see GL3PlusSupport::getProcAddress
         void *getProcAddress( const char *procname ) const;
 
-        const DeviceData *getCurrentDevice( void );
+        const DeviceData *getCurrentDevice();
 
         /// Get the Display connection used for rendering
         /// This function establishes the initial connection when necessary.
-        EGLDisplay getGLDisplay( void );
+        EGLDisplay getGLDisplay();
 
-        uint32 getSelectedDeviceIdx( void ) const;
+        uint32 getSelectedDeviceIdx() const;
     };
 }  // namespace Ogre
 

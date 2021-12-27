@@ -106,7 +106,7 @@ namespace Ogre {
 
     public:
         virtual ~ControllerValue() { }
-        virtual T getValue(void) const = 0;
+        virtual T getValue() const = 0;
         virtual void setValue(T value) = 0;
 
     };
@@ -170,7 +170,7 @@ namespace Ogre {
             mSource = src;
         }
         /// Gets the input controller value
-        const SharedPtr< ControllerValue<T> >& getSource(void) const
+        const SharedPtr< ControllerValue<T> >& getSource() const
         {
             return mSource;
         }
@@ -181,13 +181,13 @@ namespace Ogre {
         }
 
         /// Gets the output controller value
-        const SharedPtr< ControllerValue<T> >& getDestination(void) const
+        const SharedPtr< ControllerValue<T> >& getDestination() const
         {
             return mDest;
         }
 
         /// Returns true if this controller is currently enabled
-        bool getEnabled(void) const
+        bool getEnabled() const
         {
             return mEnabled;
         }
@@ -207,7 +207,7 @@ namespace Ogre {
 
         /** Returns a pointer to the function object used by this controller.
         */
-        const SharedPtr< ControllerFunction<T> >& getFunction(void) const
+        const SharedPtr< ControllerFunction<T> >& getFunction() const
         {
             return mFunc;
         }
@@ -217,7 +217,7 @@ namespace Ogre {
         @remarks
             This method is called automatically every frame by ControllerManager.
         */
-        void update(void)
+        void update()
         {
             if(mEnabled)
                 mDest->setValue(mFunc->calculate(mSource->getValue()));

@@ -212,7 +212,7 @@ namespace Ogre
         return sliceIdx;
     }
     //-------------------------------------------------------------------------
-    void VctMaterial::resizeTexturePool(void)
+    void VctMaterial::resizeTexturePool()
     {
         String texName = "VctMaterial" + StringConverter::toString( getId() ) + "/" +
                          StringConverter::toString( mNumUsedPoolSlices );
@@ -284,7 +284,7 @@ namespace Ogre
                     -1, 0, 0, Vector4::ZERO, 0x00, 0x02 );
     }
     //-------------------------------------------------------------------------
-    void VctMaterial::destroyTempResources(void)
+    void VctMaterial::destroyTempResources()
     {
         mTextureGpuManager->destroyTexture( mDownsampleTex );
         mDownsampleTex = 0;

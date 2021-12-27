@@ -27,7 +27,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void TutorialCompute02_UavBufferGameState::createScene01(void)
+    void TutorialCompute02_UavBufferGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -51,7 +51,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void TutorialCompute02_UavBufferGameState::destroyScene(void)
+    void TutorialCompute02_UavBufferGameState::destroyScene()
     {
         mDrawFromUavBufferMat.setNull();
     }

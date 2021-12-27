@@ -114,7 +114,7 @@ namespace Ogre
         @return
             Size in bytes of this staging texture.
         */
-        virtual size_t _getSizeBytes(void) = 0;
+        virtual size_t _getSizeBytes() = 0;
 
         /// Returns the format family it was requested. Note that in non-D3D11 RenderSystems,
         /// supportsFormat may return true despite a format not being from the same family.
@@ -122,10 +122,10 @@ namespace Ogre
         /// different APIs (e.g. on D3D11 two StagingTextures, one that supports RGB8,
         /// another for BC1 of 64 MB each; on OpenGL we need to request two textures of 64MB
         /// each, and not just one because the first one can fulfill every request)
-        PixelFormatGpu getFormatFamily(void) const                  { return mFormatFamily; }
+        PixelFormatGpu getFormatFamily() const                  { return mFormatFamily; }
 
         /// If it returns true, startMapRegion will stall.
-        bool uploadWillStall(void);
+        bool uploadWillStall();
 
         /** Must be called from main thread when the StagingBuffer is grabbed.
         @remarks
@@ -133,7 +133,7 @@ namespace Ogre
             Grab another StagingTexture to prevent stall.
             See uploadWillStall.
         */
-        virtual void startMapRegion(void);
+        virtual void startMapRegion();
 
         /** Can be called from worker thread, but not from multiple threads
             at the same time, also you can't call anything else either.
@@ -155,7 +155,7 @@ namespace Ogre
                               PixelFormatGpu pixelFormat );
 
         /// Must be called from main thread when the StagingBuffer is released.
-        virtual void stopMapRegion(void);
+        virtual void stopMapRegion();
 
         /** Uploads a region of data in srcBox (which must have been created with mapRegion)
             into dstTexture.
@@ -189,7 +189,7 @@ namespace Ogre
                              const TextureBox *dstBox=0,
                              bool skipSysRamCopy=false );
 
-        uint32 getLastFrameUsed(void) const             { return mLastFrameUsed; }
+        uint32 getLastFrameUsed() const             { return mLastFrameUsed; }
     };
 
     /** @} */

@@ -73,7 +73,7 @@ namespace Ogre
         ~MeshManager();
 
         /** Initialises the manager, only to be called by OGRE internally. */
-        void _initialise(void);
+        void _initialise();
         void _setVaoManager( VaoManager *vaoManager );
 
         /// Get a resource by name
@@ -238,7 +238,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MeshManager& getSingleton(void);
+        static MeshManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -254,12 +254,12 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MeshManager* getSingletonPtr(void);
+        static MeshManager* getSingletonPtr();
 
         /** Gets the factor by which the bounding box of an entity is padded.
             Default is 0.01
         */
-        Real getBoundsPaddingFactor(void);
+        Real getBoundsPaddingFactor();
     
         /** Sets the factor by which the bounding box of an entity is padded
         */

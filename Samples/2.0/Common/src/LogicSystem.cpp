@@ -41,7 +41,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void LogicSystem::finishFrameParallel(void)
+    void LogicSystem::finishFrameParallel()
     {
         if( mGameEntityManager )
             mGameEntityManager->finishFrameParallel();

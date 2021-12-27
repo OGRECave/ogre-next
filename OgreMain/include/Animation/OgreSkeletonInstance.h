@@ -111,12 +111,12 @@ namespace Ogre
         SkeletonInstance( const SkeletonDef *skeletonDef, BoneMemoryManager *boneMemoryManager );
         ~SkeletonInstance();
 
-        const SkeletonDef* getDefinition(void) const                { return mDefinition; }
+        const SkeletonDef* getDefinition() const                { return mDefinition; }
 
-        void update(void);
+        void update();
 
         /// Resets the transform of all bones to the binding pose. Manual bones are not reset
-        void resetToPose(void);
+        void resetToPose();
 
         /** Sets the given node to manual. Manual bones won't be reset to binding pose
             (see resetToPose) and thus are suitable for manual control. However if the
@@ -162,21 +162,21 @@ namespace Ogre
         Bone* getBone( size_t index );
 
         /// Gets the number of bones.
-        size_t getNumBones(void) const;
+        size_t getNumBones() const;
 
         bool hasAnimation( IdString name ) const;
         /// Returns the requested animations. Throws if not found. O(N) Linear search
         SkeletonAnimation* getAnimation( IdString name );
 
         /// Return all animations associated with this skeleton
-        const SkeletonAnimationVec &getAnimations( void ) const { return mAnimations; }
+        const SkeletonAnimationVec &getAnimations() const { return mAnimations; }
 
         /// Return all animations associated with this skeleton
         /// Be careful with this one! Do not insert/remove elements
-        SkeletonAnimationVec &getAnimationsNonConst( void ) { return mAnimations; }
+        SkeletonAnimationVec &getAnimationsNonConst() { return mAnimations; }
 
         /// Returns all animations that are currently active
-        const ActiveAnimationsVec &getActiveAnimations( void ) const { return mActiveAnimations; }
+        const ActiveAnimationsVec &getActiveAnimations() const { return mActiveAnimations; }
 
         /**    Add all animation clips found in skelName.
         @remarks
@@ -200,7 +200,7 @@ namespace Ogre
         void setParentNode( Node *parentNode );
 
         /// Returns our parent node. May be null.
-        Node* getParentNode(void) const                                     { return mParentNode; }
+        Node* getParentNode() const                                     { return mParentNode; }
 
         void getTransforms( SimpleMatrixAf4x3 * RESTRICT_ALIAS outTransform,
                             const FastArray<unsigned short> &usedBones ) const;
@@ -208,16 +208,16 @@ namespace Ogre
         /** Updates the contents of @mBoneStartTransforms. Needed when our
             memory manager performs a cleanup or similar memory change.
         */
-        void _updateBoneStartTransforms(void);
+        void _updateBoneStartTransforms();
 
         const TransformArray& _getTransformArray() const        { return mBoneStartTransforms; }
 
-        const void* _getMemoryBlock(void) const;
-        const void* _getMemoryUniqueOffset(void) const;
+        const void* _getMemoryBlock() const;
+        const void* _getMemoryUniqueOffset() const;
 
-        void _incrementRefCount(void);
-        void _decrementRefCount(void);
-        uint16 _getRefCount(void) const;
+        void _incrementRefCount();
+        void _decrementRefCount();
+        uint16 _getRefCount() const;
     };
 
     inline bool OrderSkeletonInstanceByMemory( const SkeletonInstance *_left,

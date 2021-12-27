@@ -86,7 +86,7 @@ namespace Ogre
         outIncludesTextures = false;
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::cleanupEmptyPools(void)
+    void NULLVaoManager::cleanupEmptyPools()
     {
     }
     //-----------------------------------------------------------------------------------
@@ -368,7 +368,7 @@ namespace Ogre
                                                             elementStart, elementCount ) );
     }
     //-----------------------------------------------------------------------------------
-    void NULLVaoManager::_update(void)
+    void NULLVaoManager::_update()
     {
         VaoManager::_update();
 
@@ -422,7 +422,7 @@ namespace Ogre
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    uint8 NULLVaoManager::waitForTailFrameToFinish(void)
+    uint8 NULLVaoManager::waitForTailFrameToFinish()
     {
         return mDynamicBufferCurrentFrame;
     }

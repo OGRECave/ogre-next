@@ -109,7 +109,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Node* Node::getParent(void) const
+    Node* Node::getParent() const
     {
         return mParent;
     }
@@ -119,7 +119,7 @@ namespace Ogre {
         mIndestructibleByClearScene = indestructible;
     }
     //-----------------------------------------------------------------------
-    bool Node::getIndestructibleByClearScene(void) const
+    bool Node::getIndestructibleByClearScene() const
     {
         return mIndestructibleByClearScene;
     }
@@ -210,7 +210,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Node::unsetParent(void)
+    void Node::unsetParent()
     {
         if( mParent )
         {
@@ -257,7 +257,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Node::parentDepthLevelChanged(void)
+    void Node::parentDepthLevelChanged()
     {
         if( mNodeMemoryManager != mParent->mNodeMemoryManager )
         {
@@ -285,13 +285,13 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    /*const Matrix4& Node::_getFullTransform(void) const
+    /*const Matrix4& Node::_getFullTransform() const
     {
         assert( !mCachedTransformOutOfDate );
         return mTransform.mDerivedTransform[mTransform.mIndex];
     }*/
     //-----------------------------------------------------------------------
-    const Matrix4& Node::_getFullTransformUpdated(void)
+    const Matrix4& Node::_getFullTransformUpdated()
     {
         _updateFromParent();
         return mTransform.mDerivedTransform[mTransform.mIndex];
@@ -318,7 +318,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Node::_updateFromParent(void)
+    void Node::_updateFromParent()
     {
         if( mParent )
             mParent->_updateFromParent();
@@ -332,7 +332,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Node::updateFromParentImpl(void)
+    void Node::updateFromParentImpl()
     {
 #if OGRE_NODE_INHERIT_TRANSFORM
         // determine our transform, without parent part
@@ -586,7 +586,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Node::_notifyStaticDirty(void) const
+    void Node::_notifyStaticDirty() const
     {
         NodeVec::const_iterator itor = mChildren.begin();
         NodeVec::const_iterator end  = mChildren.end();
@@ -616,7 +616,7 @@ namespace Ogre {
         setOrientation( Quaternion(w, x, y, z) );
     }
     //-----------------------------------------------------------------------
-    void Node::resetOrientation(void)
+    void Node::resetOrientation()
     {
         mTransform.mOrientation->setFromQuaternion( Quaternion::IDENTITY, mTransform.mIndex );
     }
@@ -634,12 +634,12 @@ namespace Ogre {
         setPosition( Vector3( x, y, z ) );
     }
     //-----------------------------------------------------------------------
-    Vector3 Node::getPosition(void) const
+    Vector3 Node::getPosition() const
     {
         return mTransform.mPosition->getAsVector3( mTransform.mIndex );
     }
     //-----------------------------------------------------------------------
-    Matrix3 Node::getLocalAxes(void) const
+    Matrix3 Node::getLocalAxes() const
     {
         Quaternion q;
         mTransform.mOrientation->getAsQuaternion( q, mTransform.mIndex );
@@ -793,37 +793,37 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Quaternion Node::_getDerivedOrientation(void) const
+    Quaternion Node::_getDerivedOrientation() const
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
         return mTransform.mDerivedOrientation->getAsQuaternion( mTransform.mIndex );
     }
     //-----------------------------------------------------------------------
-    Quaternion Node::_getDerivedOrientationUpdated(void)
+    Quaternion Node::_getDerivedOrientationUpdated()
     {
         _updateFromParent();
         return mTransform.mDerivedOrientation->getAsQuaternion( mTransform.mIndex );
     }
     //-----------------------------------------------------------------------
-    Vector3 Node::_getDerivedPosition(void) const
+    Vector3 Node::_getDerivedPosition() const
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
         return mTransform.mDerivedPosition->getAsVector3( mTransform.mIndex );
     }
     //-----------------------------------------------------------------------
-    Vector3 Node::_getDerivedPositionUpdated(void)
+    Vector3 Node::_getDerivedPositionUpdated()
     {
         _updateFromParent();
         return mTransform.mDerivedPosition->getAsVector3( mTransform.mIndex );
     }
     //-----------------------------------------------------------------------
-    Vector3 Node::_getDerivedScale(void) const
+    Vector3 Node::_getDerivedScale() const
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
         return mTransform.mDerivedScale->getAsVector3( mTransform.mIndex );
     }
     //-----------------------------------------------------------------------
-    Vector3 Node::_getDerivedScaleUpdated(void)
+    Vector3 Node::_getDerivedScaleUpdated()
     {
         _updateFromParent();
         return mTransform.mDerivedScale->getAsVector3( mTransform.mIndex );
@@ -881,7 +881,7 @@ namespace Ogre {
         return Node::_getDerivedOrientation() * localOrientation; // non virt call
     }
     //-----------------------------------------------------------------------
-    void Node::removeAllChildren(void)
+    void Node::removeAllChildren()
     {
         NodeVec::iterator itor = mChildren.begin();
         NodeVec::iterator end  = mChildren.end();
@@ -906,7 +906,7 @@ namespace Ogre {
         setScale(Vector3(x, y, z));
     }
     //-----------------------------------------------------------------------
-    Vector3 Node::getScale(void) const
+    Vector3 Node::getScale() const
     {
         return mTransform.mScale->getAsVector3( mTransform.mIndex );
     }
@@ -917,7 +917,7 @@ namespace Ogre {
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    bool Node::getInheritOrientation(void) const
+    bool Node::getInheritOrientation() const
     {
         return mTransform.mInheritOrientation[mTransform.mIndex];
     }
@@ -928,7 +928,7 @@ namespace Ogre {
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    bool Node::getInheritScale(void) const
+    bool Node::getInheritScale() const
     {
         return mTransform.mInheritScale[mTransform.mIndex];
     }
@@ -945,12 +945,12 @@ namespace Ogre {
         scale( Vector3( x, y, z ) );
 	}
     //-----------------------------------------------------------------------
-	Node::NodeVecIterator Node::getChildIterator(void)
+    Node::NodeVecIterator Node::getChildIterator()
     {
         return NodeVecIterator(mChildren.begin(), mChildren.end());
     }
     //-----------------------------------------------------------------------
-    Node::ConstNodeVecIterator Node::getChildIterator(void) const
+    Node::ConstNodeVecIterator Node::getChildIterator() const
     {
         return ConstNodeVecIterator(mChildren.begin(), mChildren.end());
     }
@@ -964,7 +964,7 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-    void Node::_setCachedTransformOutOfDate(void)
+    void Node::_setCachedTransformOutOfDate()
     {
         mCachedTransformOutOfDate = true;
 
@@ -1079,7 +1079,7 @@ namespace Ogre {
     {
     }
     //-----------------------------------------------------------------------
-    const MaterialPtr& Node::DebugRenderable::getMaterial(void) const
+    const MaterialPtr& Node::DebugRenderable::getMaterial() const
     {
         return mMat;
     }
@@ -1107,7 +1107,7 @@ namespace Ogre {
         return mParent->getSquaredViewDepth(cam);
     }
     //-----------------------------------------------------------------------
-    const LightList& Node::DebugRenderable::getLights(void) const
+    const LightList& Node::DebugRenderable::getLights() const
     {
         // Nodes should not be lit by the scene, this will not get called
         static LightList ll;

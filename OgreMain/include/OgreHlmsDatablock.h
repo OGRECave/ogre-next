@@ -219,8 +219,8 @@ namespace Ogre
         */
         void setForceTransparentRenderOrder( bool bForceTransparent );
 
-        bool isAutoTransparent( void ) const { return ( mIsTransparent & 0x01u ) != 0u; }
-        bool isForcedTransparent( void ) const { return ( mIsTransparent & 0x02u ) != 0u; }
+        bool isAutoTransparent() const { return ( mIsTransparent & 0x01u ) != 0u; }
+        bool isForcedTransparent() const { return ( mIsTransparent & 0x02u ) != 0u; }
 
         bool operator == ( const HlmsBlendblock &_r ) const
         {
@@ -348,8 +348,8 @@ namespace Ogre
         /// Calculates the hashes needed for sorting by the RenderQueue (i.e. mTextureHash)
         virtual void calculateHash() {}
 
-        IdString getName(void) const                { return mName; }
-        Hlms* getCreator(void) const                { return mCreator; }
+        IdString getName() const                { return mName; }
+        Hlms* getCreator() const                { return mCreator; }
 
         /** Sets a new macroblock that matches the same parameter as the input.
             Decreases the reference count of the previously set one.
@@ -426,19 +426,19 @@ namespace Ogre
         */
         virtual void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
                                    bool useAlphaFromTextures = true );
-        CompareFunction getAlphaTest(void) const;
-        bool            getAlphaTestShadowCasterOnly(void) const;
+        CompareFunction getAlphaTest() const;
+        bool            getAlphaTestShadowCasterOnly() const;
 
         /** Alpha test's threshold. @see setAlphaTest
         @param threshold
             Value typically in the range [0; 1)
         */
         virtual void setAlphaTestThreshold( float threshold );
-        float getAlphaTestThreshold(void) const                         { return mAlphaTestThreshold; }
+        float getAlphaTestThreshold() const                         { return mAlphaTestThreshold; }
 
         /// @see Hlms::getNameStr. This operations is NOT fast. Might return null
         /// (if the datablock was removed from the Hlms but somehow is still alive)
-        const String* getNameStr(void) const;
+        const String* getNameStr() const;
 
         /// @see Hlms::getFilenameAndResourceGroup. This operations is NOT fast. Might return
         /// null (if the datablock was removed from the Hlms but somehow is still alive)
@@ -456,29 +456,29 @@ namespace Ogre
         void _linkRenderable( Renderable *renderable );
         void _unlinkRenderable( Renderable *renderable );
 
-        const vector<Renderable*>::type& getLinkedRenderables(void) const { return mLinkedRenderables; }
+        const vector<Renderable*>::type& getLinkedRenderables() const { return mLinkedRenderables; }
 
-        virtual bool hasCustomShadowMacroblock(void) const;
+        virtual bool hasCustomShadowMacroblock() const;
 
         /// Returns the closest match for a diffuse colour,
         /// if applicable by the actual implementation.
         ///
         /// Note that Unlit implementation returns 0 as diffuse, since it's considered
         /// emissive instead due to being bright even in the absence lights.
-        virtual ColourValue getDiffuseColour(void) const;
+        virtual ColourValue getDiffuseColour() const;
         /// Returns the closest match for a emissive colour,
         /// if applicable by the actual implementation.
         /// See HlmsDatablock::getDiffuseColour
-        virtual ColourValue getEmissiveColour(void) const;
+        virtual ColourValue getEmissiveColour() const;
 
         /// Returns the closest match for a diffuse texture,
         /// if applicable by the actual implementation.
         /// See HlmsDatablock::getDiffuseColour
-        virtual TextureGpu* getDiffuseTexture(void) const;
+        virtual TextureGpu* getDiffuseTexture() const;
         /// Returns the closest match for a emissive texture,
         /// if applicable by the actual implementation.
         /// See HlmsDatablock::getDiffuseColour
-        virtual TextureGpu* getEmissiveTexture(void) const;
+        virtual TextureGpu* getEmissiveTexture() const;
 
         /**
         @remarks

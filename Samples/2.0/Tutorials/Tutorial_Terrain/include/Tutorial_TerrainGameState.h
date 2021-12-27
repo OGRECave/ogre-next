@@ -56,8 +56,8 @@ namespace Demo
     public:
         Tutorial_TerrainGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

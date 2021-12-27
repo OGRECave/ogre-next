@@ -242,22 +242,22 @@ namespace Ogre {
 
         /** Sets the default sort mode for all future Camera instances. */
         static void setDefaultSortMode( CameraSortMode sortMode ) { msDefaultSortMode = sortMode; }
-        static CameraSortMode getDefaultSortMode( void ) { return msDefaultSortMode; }
+        static CameraSortMode getDefaultSortMode() { return msDefaultSortMode; }
 
     protected:
         // Internal functions for calcs
-        bool isViewOutOfDate(void) const;
+        bool isViewOutOfDate() const;
         /// Signal to update frustum information.
-        void invalidateFrustum(void) const;
+        void invalidateFrustum() const;
         /// Signal to update view information.
-        void invalidateView(void) const;
+        void invalidateView() const;
 
 
         /** Do actual window setting, using parameters set in SetWindow call
         @remarks
             The method will called on demand.
         */
-        virtual void setWindowImpl(void) const;
+        virtual void setWindowImpl() const;
 
         /** Helper function for forwardIntersect that intersects rays with canonical plane */
         virtual vector<Vector4>::type getRayForwardIntersect(const Vector3& anchor, const Vector3 *dir, Real planeOffset) const;
@@ -278,7 +278,7 @@ namespace Ogre {
 
         /** Returns a pointer to the SceneManager this camera is rendering through.
         */
-        SceneManager* getSceneManager(void) const;
+        SceneManager* getSceneManager() const;
 
         /** Sets the camera's position.
         */
@@ -290,7 +290,7 @@ namespace Ogre {
 
         /** Retrieves the camera's position.
         */
-        const Vector3& getPosition(void) const;
+        const Vector3& getPosition() const;
 
         /** Moves the camera's position by the vector offset provided along world axes.
         */
@@ -313,15 +313,15 @@ namespace Ogre {
 
         /** Gets the camera's direction.
         */
-        Vector3 getDirection(void) const;
+        Vector3 getDirection() const;
 
         /** Gets the camera's up vector.
         */
-        Vector3 getUp(void) const;
+        Vector3 getUp() const;
 
         /** Gets the camera's right vector.
         */
-        Vector3 getRight(void) const;
+        Vector3 getRight() const;
 
         /** Points the camera at a location in worldspace.
         @remarks
@@ -390,7 +390,7 @@ namespace Ogre {
 
         /** Returns the camera's current orientation.
         */
-        const Quaternion& getOrientation(void) const;
+        const Quaternion& getOrientation() const;
 
         /** Sets the camera's orientation.
         */
@@ -437,62 +437,62 @@ namespace Ogre {
 
         /** Internal method to retrieve the number of visible faces, batches, etc in the last render.
         */
-        const RenderingMetrics& _getRenderingMetrics( void ) const;
+        const RenderingMetrics& _getRenderingMetrics() const;
 
         /** Internal method to retrieve the number of visible faces in the last render.
         * @deprecated use Camera::_getRenderingMetrics() instead.
         */
-        size_t _getNumRenderedFaces( void ) const;
+        size_t _getNumRenderedFaces() const;
 
         /** Internal method to retrieve the number of visible batches in the last render.
         * @deprecated use Camera::_getRenderingMetrics() instead.
          */
-        size_t _getNumRenderedBatches( void ) const;
+        size_t _getNumRenderedBatches() const;
 
         /** Gets the derived orientation of the camera, including any
             rotation inherited from a node attachment and reflection matrix. */
-        const Quaternion& getDerivedOrientation(void) const;
+        const Quaternion& getDerivedOrientation() const;
         /** Gets the derived position of the camera, including any
             translation inherited from a node attachment and reflection matrix. */
-        const Vector3& getDerivedPosition(void) const;
+        const Vector3& getDerivedPosition() const;
         /** Gets the derived direction vector of the camera, including any
             rotation inherited from a node attachment and reflection matrix. */
-        Vector3 getDerivedDirection(void) const;
+        Vector3 getDerivedDirection() const;
         /** Gets the derived up vector of the camera, including any
             rotation inherited from a node attachment and reflection matrix. */
-        Vector3 getDerivedUp(void) const;
+        Vector3 getDerivedUp() const;
         /** Gets the derived right vector of the camera, including any
             rotation inherited from a node attachment and reflection matrix. */
-        Vector3 getDerivedRight(void) const;
+        Vector3 getDerivedRight() const;
 
         /// Same as getDerivedPosition, but doesn't check if dirty.
-        const Vector3& _getCachedDerivedPosition(void) const            { return mDerivedPosition; }
-        const Quaternion& _getCachedDerivedOrientation(void) const      { return mDerivedOrientation; }
+        const Vector3& _getCachedDerivedPosition() const            { return mDerivedPosition; }
+        const Quaternion& _getCachedDerivedOrientation() const      { return mDerivedOrientation; }
 
         /** Gets the real world orientation of the camera, including any
             rotation inherited from a node attachment */
-        const Quaternion& getRealOrientation(void) const;
+        const Quaternion& getRealOrientation() const;
         /** Gets the real world position of the camera, including any
             translation inherited from a node attachment. */
-        const Vector3& getRealPosition(void) const;
+        const Vector3& getRealPosition() const;
         /** Gets the real world direction vector of the camera, including any
             rotation inherited from a node attachment. */
-        Vector3 getRealDirection(void) const;
+        Vector3 getRealDirection() const;
         /** Gets the real world up vector of the camera, including any
             rotation inherited from a node attachment. */
-        Vector3 getRealUp(void) const;
+        Vector3 getRealUp() const;
         /** Gets the real world right vector of the camera, including any
             rotation inherited from a node attachment. */
-        Vector3 getRealRight(void) const;
+        Vector3 getRealRight() const;
 
-        const Vector3& _getCachedRealPosition(void) const               { return mRealPosition; }
-        const Quaternion& _getCachedRealOrientation(void) const         { return mRealOrientation; }
+        const Vector3& _getCachedRealPosition() const               { return mRealPosition; }
+        const Quaternion& _getCachedRealOrientation() const         { return mRealOrientation; }
 
         /** Overridden from Frustum/Renderable */
         void getWorldTransforms(Matrix4* mat) const;
 
         /** Overridden from MovableObject */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
         /** Enables / disables automatic tracking of a SceneNode.
         @remarks
@@ -538,7 +538,7 @@ namespace Ogre {
         @remarks
             See Camera::setLodBias for more details.
         */
-        Real getLodBias(void) const;
+        Real getLodBias() const;
 
         /** Set a pointer to the camera which should be used to determine
             LOD settings. 
@@ -604,11 +604,11 @@ namespace Ogre {
             PlaneBoundedVolume* outVolume, bool includeFarPlane = false);
 
         /** Internal method for OGRE to use for LOD calculations. */
-        Real _getLodBiasInverse(void) const;
+        Real _getLodBiasInverse() const;
 
 
         /** Internal method used by OGRE to update auto-tracking cameras. */
-        void _autoTrack(void);
+        void _autoTrack();
 
 
         /** Sets the viewing window inside of viewport.
@@ -622,23 +622,23 @@ namespace Ogre {
         */
         virtual void setWindow (Real left, Real top, Real right, Real bottom);
         /// Cancel view window.
-        virtual void resetWindow (void);
+        virtual void resetWindow ();
         /// Returns if a viewport window is being used
-        virtual bool isWindowSet(void) const { return mWindowSet; }
+        virtual bool isWindowSet() const { return mWindowSet; }
         /// Gets the window clip planes, only applicable if isWindowSet == true
-        const PlaneList &getWindowPlanes( void ) const;
+        const PlaneList &getWindowPlanes() const;
 
         /** Get the auto tracking target for this camera, if any. */
-        SceneNode* getAutoTrackTarget(void) const { return mAutoTrackTarget; }
+        SceneNode* getAutoTrackTarget() const { return mAutoTrackTarget; }
         /** Get the auto tracking offset for this camera, if it is auto tracking. */
-        const Vector3& getAutoTrackOffset(void) const { return mAutoTrackOffset; }
+        const Vector3& getAutoTrackOffset() const { return mAutoTrackOffset; }
         
         /** Get the last viewport which was attached to this camera. 
         @note This is not guaranteed to be the only viewport which is
             using this camera, just the last once which was created referring
             to it.
         */
-        Viewport* getLastViewport(void) const {return mLastViewport;}
+        Viewport* getLastViewport() const {return mLastViewport;}
         /** Notifies this camera that a viewport is using it.*/
         void _notifyViewport(Viewport* viewport) {mLastViewport = viewport;}
 
@@ -653,7 +653,7 @@ namespace Ogre {
 
         /** Retrieves if AutoAspectRatio is currently set or not
         */
-        bool getAutoAspectRatio(void) const;
+        bool getAutoAspectRatio() const;
 
         /** Tells the camera to use a separate Frustum instance to perform culling.
         @remarks
@@ -668,7 +668,7 @@ namespace Ogre {
         */
         void setCullingFrustum(Frustum* frustum) { mCullFrustum = frustum; }
         /** Returns the custom culling frustum in use. */
-        Frustum* getCullingFrustum(void) const { return mCullFrustum; }
+        Frustum* getCullingFrustum() const { return mCullFrustum; }
 
         /** Sets VR data for calculating left & right eyes
             See OpenVR sample for more info
@@ -681,7 +681,7 @@ namespace Ogre {
             The internal data hold by VrData can be changed withohut having to call setVrData again
         */
         void setVrData( VrData *vrData );
-        const VrData* getVrData(void) const     { return mVrData; }
+        const VrData* getVrData() const     { return mVrData; }
 
         Matrix4 getVrViewMatrix( size_t eyeIdx ) const;
         Matrix4 getVrProjectionMatrix( size_t eyeIdx ) const;
@@ -699,18 +699,18 @@ namespace Ogre {
         /// @copydoc Frustum::isVisible(const Vector3&, FrustumPlane*) const
         bool isVisible(const Vector3& vert, FrustumPlane* culledBy = 0) const;
         /// @copydoc Frustum::getWorldSpaceCorners
-        const Vector3* getWorldSpaceCorners(void) const;
+        const Vector3* getWorldSpaceCorners() const;
         /// @copydoc Frustum::getFrustumPlane
         const Plane& getFrustumPlane( unsigned short plane ) const;
         /// @copydoc Frustum::projectSphere
         bool projectSphere(const Sphere& sphere, 
             Real* left, Real* top, Real* right, Real* bottom) const;
         /// @copydoc Frustum::getNearClipDistance
-        Real getNearClipDistance(void) const;
+        Real getNearClipDistance() const;
         /// @copydoc Frustum::getFarClipDistance
-        Real getFarClipDistance(void) const;
+        Real getFarClipDistance() const;
         /// @copydoc Frustum::getViewMatrix
-        const Matrix4& getViewMatrix(void) const;
+        const Matrix4& getViewMatrix() const;
         /** Specialised version of getViewMatrix allowing caller to differentiate
             whether the custom culling frustum should be allowed or not. 
         @remarks
@@ -729,7 +729,7 @@ namespace Ogre {
         /** Get whether this camera should use the 'rendering distance' on
             objects to exclude distant objects from the final image.
         */
-        virtual bool getUseRenderingDistance(void) const { return mUseRenderingDistance; }
+        virtual bool getUseRenderingDistance() const { return mUseRenderingDistance; }
 
         /** Synchronise core camera settings with another. 
         @remarks
@@ -740,9 +740,9 @@ namespace Ogre {
         virtual void synchroniseBaseSettingsWith(const Camera* cam);
 
         /** Get the derived position of this frustum. */
-        const Vector3& getPositionForViewUpdate(void) const;
+        const Vector3& getPositionForViewUpdate() const;
         /** Get the derived orientation of this frustum. */
-        const Quaternion& getOrientationForViewUpdate(void) const;
+        const Quaternion& getOrientationForViewUpdate() const;
 
         /** @brief Sets whether to use min display size calculations.
             When active, objects that derive from MovableObject whose size on the screen is less then a MovableObject::mMinPixelSize will not
@@ -755,7 +755,7 @@ namespace Ogre {
         bool getUseMinPixelSize() const { return mUseMinPixelSize; }
 
         void _setNeedsDepthClamp( bool bNeedsDepthClamp );
-        bool getNeedsDepthClamp( void ) const { return mNeedsDepthClamp; }
+        bool getNeedsDepthClamp() const { return mNeedsDepthClamp; }
 
         /** Returns an estimated ratio between a pixel and the display area it represents.
             For orthographic cameras this function returns the amount of meters covered by
@@ -770,7 +770,7 @@ namespace Ogre {
         Real getPixelDisplayRatio() const { return mPixelDisplayRatio; }
 
         void _setConstantBiasScale( const float bias ) { mConstantBiasScale = bias; }
-        float _getConstantBiasScale( void ) const { return mConstantBiasScale; }
+        float _getConstantBiasScale() const { return mConstantBiasScale; }
 
         /** Called at the beginning of each frame to know which RenderQueue IDs have been rendered
         @param numRqs

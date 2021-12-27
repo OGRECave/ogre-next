@@ -104,7 +104,7 @@ namespace Ogre
 
         // Same as doing voxelizer->getVoxelCellSize() but is much better on floating point
         // precision errors. This method is always consistent for all cascades
-        Vector3 getVoxelCellSize( void ) const;
+        Vector3 getVoxelCellSize() const;
     };
 
     /**
@@ -131,7 +131,7 @@ namespace Ogre
         bool mFirstBuild;
         bool mConsistentCascadeSteps;
 
-        bool isInitialized( void ) const;
+        bool isInitialized() const;
 
         bool needsRebuild( const VctCascadeSetting &cascade ) const;
 
@@ -153,7 +153,7 @@ namespace Ogre
         /// automatically
         void autoCalculateStepSizes( const Vector3 stepSize );
 
-        size_t getNumCascades( void ) const { return mCascadeSettings.size(); }
+        size_t getNumCascades() const { return mCascadeSettings.size(); }
         VctCascadeSetting &getCascade( size_t idx ) { return mCascadeSettings[idx]; }
 
         /** Selects how we determine when we need to (partially) rebuild the voxels
@@ -194,7 +194,7 @@ namespace Ogre
             then back false after taking the picture
         */
         void setConsistentCascadeSteps( bool bConsistentCascadeSteps );
-        bool getConsistentCascadeSteps( void ) const { return mConsistentCascadeSteps; }
+        bool getConsistentCascadeSteps() const { return mConsistentCascadeSteps; }
 
         /** Call this function after adding all cascades.
             You can no longer add cascades after this
@@ -217,10 +217,10 @@ namespace Ogre
 
         /// Returns number of bounces for cascade 0. The others are calculated automatically
         /// See VctCascadedVoxelizer::init
-        uint32 getNumBounces( void ) const { return mNumBounces; }
+        uint32 getNumBounces() const { return mNumBounces; }
 
         /// Returns if we're using anisotropic VCT
-        bool isAnisotropic( void ) const { return mAnisotropic; }
+        bool isAnisotropic() const { return mAnisotropic; }
 
         /// Removes all items from all cascades
         void removeAllItems();
@@ -259,13 +259,13 @@ namespace Ogre
 
         /// Returns the mesh cache (shared by all cascades) in case you want to add a mesh
         /// manually with custom settings
-        VoxelizedMeshCache *getMeshCache( void ) { return mMeshCache; }
+        VoxelizedMeshCache *getMeshCache() { return mMeshCache; }
 
         /// CompositorWorkspaceListener override
-        virtual void allWorkspacesBeforeBeginUpdate( void );
+        virtual void allWorkspacesBeforeBeginUpdate();
 
         void setCameraPosition( const Vector3 &cameraPosition );
-        const Vector3 &getCameraPosition( void ) const { return mCameraPosition; }
+        const Vector3 &getCameraPosition() const { return mCameraPosition; }
 
         VctLighting *getVctLighting( size_t idx ) { return mCascades[idx]; }
     };

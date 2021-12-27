@@ -36,18 +36,18 @@ namespace Demo
         void createRefractivePlaceholder( Ogre::Item *item, Ogre::SceneNode *sceneNode,
                                           Ogre::HlmsPbsDatablock *datablock );
 
-        void createRefractiveWall( void );
+        void createRefractiveWall();
         void createRefractiveSphere( const int x, const int z, const int numX, const int numZ,
                                      const float armsLength, const float startX, const float startZ );
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void setTransparencyToMaterials( void );
+        void setTransparencyToMaterials();
 
     public:
         RefractionsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01( void );
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

@@ -81,7 +81,7 @@ namespace Ogre
         bool dirtyBakedSamplers;
         bool dirtyBakedUavs;
 
-        void reset( void )
+        void reset()
         {
             dirtyParamsBuffer = false;
             minDirtySlotConst = 255u;
@@ -95,7 +95,7 @@ namespace Ogre
             dirtyBakedUavs = false;
         }
 
-        void setAllDirty( void )
+        void setAllDirty()
         {
             dirtyParamsBuffer = true;
             minDirtySlotConst = 0u;

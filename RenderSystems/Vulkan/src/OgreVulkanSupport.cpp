@@ -124,7 +124,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    String VulkanSupport::validateConfigOptions( void )
+    String VulkanSupport::validateConfigOptions()
     {
         ConfigOptionMap::iterator it;
 
@@ -142,7 +142,7 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
-    uint32 VulkanSupport::getSelectedDeviceIdx( void ) const
+    uint32 VulkanSupport::getSelectedDeviceIdx() const
     {
         uint32 deviceIdx = 0u;
 

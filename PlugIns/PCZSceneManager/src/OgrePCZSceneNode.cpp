@@ -164,7 +164,7 @@ namespace Ogre
      * 1) Remove references to the node from zones the node is visiting
      * 2) Clear the node's list of zones it is visiting
      */
-    void PCZSceneNode::clearNodeFromVisitedZones( void )
+    void PCZSceneNode::clearNodeFromVisitedZones()
     {
         if (mVisitingZones.size() > 0)
         {

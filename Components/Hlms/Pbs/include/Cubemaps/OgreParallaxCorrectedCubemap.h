@@ -110,18 +110,18 @@ namespace Ogre
         TempRttVec  mIblRtt;
 
         virtual void loadResource(Resource* resource);
-        void createProxyGeometry(void);
-        void destroyProxyGeometry(void);
-        void createCubemapBlendWorkspaceDefinition(void);
-        void createCubemapBlendWorkspace(void);
-        void destroyCubemapBlendWorkspace(void);
+        void createProxyGeometry();
+        void destroyProxyGeometry();
+        void createCubemapBlendWorkspaceDefinition();
+        void createCubemapBlendWorkspace();
+        void destroyCubemapBlendWorkspace();
 
-        void calculateBlendFactors(void);
+        void calculateBlendFactors();
         void setFinalProbeTo( size_t probeIdx );
 
-        void checkStagingBufferIsBigEnough(void);
-        void findClosestProbe(void);
-        void updateSceneGraph(void);
+        void checkStagingBufferIsBigEnough();
+        void findClosestProbe();
+        void updateSceneGraph();
         /// Probes with a large number of iterations will blow up our memory consumption
         /// because too many commands will be queued up before flushing the command buffer
         /// (e.g. a probe with 32 iterations 5 shadow maps per face will consume
@@ -131,10 +131,10 @@ namespace Ogre
         /// skyrocket. Furthermore this allows GPU & CPU to work in parallel.
         /// This function must NOT be called after the Compositor started updating workspaces.
         void updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold );
-        void updateRender(void);
+        void updateRender();
 
-        void transitionBlendResultToTexture( void );
-        void transitionCollectedProbesToTexture( void );
+        void transitionBlendResultToTexture();
+        void transitionCollectedProbesToTexture();
 
     public:
         ParallaxCorrectedCubemap( IdType id, Root *root, SceneManager *sceneManager,
@@ -145,14 +145,14 @@ namespace Ogre
         void _releaseManualHardwareResources();
         void _restoreManualHardwareResources();
 
-        virtual void destroyAllProbes(void);
+        virtual void destroyAllProbes();
 
-        void createProxyItems(void);
-        void destroyProxyItems(void);
+        void createProxyItems();
+        void destroyProxyItems();
 
         /// @copydoc ParallaxCorrectedCubemapBase::prepareForClearScene
-        virtual void prepareForClearScene(void);
-        virtual void restoreFromClearScene(void);
+        virtual void prepareForClearScene();
+        virtual void restoreFromClearScene();
 
         /** Will update both mTrackedPosition & mTrackedViewProjMatrix with appropiate settings
             every time it's called. Must be called every time the camera changes.
@@ -183,16 +183,16 @@ namespace Ogre
             PixelFormatGpu of the final blended/merged cubemap.
         */
         void setEnabled( bool bEnabled, uint32 maxWidth, uint32 maxHeight, PixelFormatGpu pixelFormat );
-        bool getEnabled(void) const;
+        bool getEnabled() const;
 
         /// By default the probes will be constructed when the user enters its vecinity.
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
-        void updateAllDirtyProbes(void);
+        void updateAllDirtyProbes();
 
         virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
-        virtual size_t getConstBufferSize(void);
-        static size_t getConstBufferSizeStatic(void);
+        virtual size_t getConstBufferSize();
+        static size_t getConstBufferSizeStatic();
         virtual void fillConstBufferData( const Matrix4 &viewMatrix,
                                           float * RESTRICT_ALIAS passBufferPtr ) const;
 
@@ -216,23 +216,23 @@ namespace Ogre
 
         /// Returns the RenderQueue ID you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.
-        uint8 getProxyReservedRenderQueueId(void) const     { return mReservedRqId; }
+        uint8 getProxyReservedRenderQueueId() const     { return mReservedRqId; }
         /// Returns the visibility mask you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.
-        uint32 getProxyReservedVisibilityMask(void) const   { return mProxyVisibilityMask; }
+        uint32 getProxyReservedVisibilityMask() const   { return mProxyVisibilityMask; }
         /// Returns the query mask you told us you reserved for storing our internal objects.
-        uint32 getProxyReservedQueryMask( void ) const      { return mProxyQueryMask; }
+        uint32 getProxyReservedQueryMask() const      { return mProxyQueryMask; }
 
-        Item * const * getProxyItems(void) const            { return mProxyItems; }
-        SceneNode * const * getProxySceneNodes(void) const  { return mProxyNodes; }
+        Item * const * getProxyItems() const            { return mProxyItems; }
+        SceneNode * const * getProxySceneNodes() const  { return mProxyNodes; }
 
         //Statistics
-        uint32 getNumCollectedProbes(void) const        { return mNumCollectedProbes; }
+        uint32 getNumCollectedProbes() const        { return mNumCollectedProbes; }
 
         //CompositorWorkspaceListener overloads
         virtual void passPreExecute( CompositorPass *pass );
-        virtual void allWorkspacesBeforeBeginUpdate(void);
-        virtual void allWorkspacesBeginUpdate(void);
+        virtual void allWorkspacesBeforeBeginUpdate();
+        virtual void allWorkspacesBeginUpdate();
 
         //FrameListener overloads
         virtual bool frameStarted( const FrameEvent& evt );

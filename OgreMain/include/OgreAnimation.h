@@ -63,7 +63,7 @@ namespace v1 {
         virtual ~AnimationContainer();
 
         /** Gets the number of animations in this container. */
-        virtual unsigned short getNumAnimations(void) const = 0;
+        virtual unsigned short getNumAnimations() const = 0;
         
         /** Retrieve an animation by index.  */
         virtual Animation* getAnimation(unsigned short index) const = 0;
@@ -124,10 +124,10 @@ namespace v1 {
         virtual ~Animation();
 
         /** Gets the name of this animation. */
-        const String& getName(void) const;
+        const String& getName() const;
 
         /** Gets the total length of the animation. */
-        Real getLength(void) const;
+        Real getLength() const;
 
         /** Sets the length of the animation. 
         @note Changing the length of an animation may invalidate existing AnimationState
@@ -139,7 +139,7 @@ namespace v1 {
         @param handle Handle to give the track, used for accessing the track later. 
             Must be unique within this Animation.
         */
-		NodeAnimationTrack* createNodeTrack(void);
+		NodeAnimationTrack* createNodeTrack();
 
 		/** Creates a OldNodeAnimationTrack for animating a OldOldNode.
 		@param handle Handle to give the track, used for accessing the track later.
@@ -200,13 +200,13 @@ namespace v1 {
             VertexData* data, VertexAnimationType animType);
 
         /** Gets the number of NodeAnimationTrack objects contained in this animation. */
-		size_t getNumNodeTracks(void) const;
+		size_t getNumNodeTracks() const;
 
 		/** Gets a node track by it's handle. */
 		NodeAnimationTrack* getNodeTrack( size_t handle ) const;
 
 		/** Gets the number of OldNodeAnimationTrack objects contained in this animation. */
-		size_t getNumOldNodeTracks(void) const;
+		size_t getNumOldNodeTracks() const;
 
         /** Gets a node track by it's handle. */
 		OldNodeAnimationTrack* getOldNodeTrack(unsigned short handle) const;
@@ -215,7 +215,7 @@ namespace v1 {
 		bool hasOldNodeTrack(unsigned short handle) const;
 
         /** Gets the number of NumericAnimationTrack objects contained in this animation. */
-        unsigned short getNumNumericTracks(void) const;
+        unsigned short getNumNumericTracks() const;
 
         /** Gets a numeric track by it's handle. */
         NumericAnimationTrack* getNumericTrack(unsigned short handle) const;
@@ -224,7 +224,7 @@ namespace v1 {
         bool hasNumericTrack(unsigned short handle) const;
 
         /** Gets the number of VertexAnimationTrack objects contained in this animation. */
-        unsigned short getNumVertexTracks(void) const;
+        unsigned short getNumVertexTracks() const;
 
         /** Gets a Vertex track by it's handle. */
         VertexAnimationTrack* getVertexTrack(unsigned short handle) const;
@@ -245,15 +245,15 @@ namespace v1 {
         void destroyVertexTrack(unsigned short handle);
 
         /** Removes and destroys all tracks making up this animation. */
-        void destroyAllTracks(void);
+        void destroyAllTracks();
 
         /** Removes and destroys all tracks making up this animation. */
-        void destroyAllNodeTracks(void);
-		void destroyAllOldNodeTracks(void);
+        void destroyAllNodeTracks();
+		void destroyAllOldNodeTracks();
         /** Removes and destroys all tracks making up this animation. */
-        void destroyAllNumericTracks(void);
+        void destroyAllNumericTracks();
         /** Removes and destroys all tracks making up this animation. */
-        void destroyAllVertexTracks(void);
+        void destroyAllVertexTracks();
 
         /** Applies an animation given a specific time point and weight.
         @remarks
@@ -355,7 +355,7 @@ namespace v1 {
         @remarks
             See setInterpolationMode for more info.
         */
-        InterpolationMode getInterpolationMode(void) const;
+        InterpolationMode getInterpolationMode() const;
         /** Tells the animation how to interpolate rotations.
         @remarks
             By default, animations interpolate linearly between rotations. This
@@ -372,7 +372,7 @@ namespace v1 {
         @remarks
             See setRotationInterpolationMode for more info.
         */
-        RotationInterpolationMode getRotationInterpolationMode(void) const;
+        RotationInterpolationMode getRotationInterpolationMode() const;
 
         // Methods for setting the defaults
         /** Sets the default animation interpolation mode. 
@@ -384,7 +384,7 @@ namespace v1 {
         static void setDefaultInterpolationMode(InterpolationMode im);
 
         /** Gets the default interpolation mode for all animations. */
-        static InterpolationMode getDefaultInterpolationMode(void);
+        static InterpolationMode getDefaultInterpolationMode();
 
         /** Sets the default rotation interpolation mode. 
         @remarks
@@ -395,7 +395,7 @@ namespace v1 {
         static void setDefaultRotationInterpolationMode(RotationInterpolationMode im);
 
         /** Gets the default rotation interpolation mode for all animations. */
-        static RotationInterpolationMode getDefaultRotationInterpolationMode(void);
+        static RotationInterpolationMode getDefaultRotationInterpolationMode();
 
 		typedef vector<NodeAnimationTrack*>::type NodeTrackList;
 		typedef ConstVectorIterator<NodeTrackList> NodeTrackIterator;
@@ -410,30 +410,30 @@ namespace v1 {
         typedef ConstMapIterator<VertexTrackList> VertexTrackIterator;
 
         /// Fast access to NON-UPDATEABLE node track list
-        const NodeTrackList& _getNodeTrackList(void) const;
+        const NodeTrackList& _getNodeTrackList() const;
 		/// Fast access to NON-UPDATEABLE OldNode track list
-		const OldNodeTrackList& _getOldNodeTrackList(void) const;
+		const OldNodeTrackList& _getOldNodeTrackList() const;
 
         /// Get non-updateable iterator over node tracks
-        NodeTrackIterator getNodeTrackIterator(void) const
+        NodeTrackIterator getNodeTrackIterator() const
         { return NodeTrackIterator(mNodeTrackList.begin(), mNodeTrackList.end()); }
 
 		/// Get non-updateable iterator over node tracks
-		OldNodeTrackIterator getOldNodeTrackIterator(void) const
+		OldNodeTrackIterator getOldNodeTrackIterator() const
 		{ return OldNodeTrackIterator(mOldNodeTrackList.begin(), mOldNodeTrackList.end()); }
         
         /// Fast access to NON-UPDATEABLE numeric track list
-        const NumericTrackList& _getNumericTrackList(void) const;
+        const NumericTrackList& _getNumericTrackList() const;
 
         /// Get non-updateable iterator over node tracks
-        NumericTrackIterator getNumericTrackIterator(void) const
+        NumericTrackIterator getNumericTrackIterator() const
         { return NumericTrackIterator(mNumericTrackList.begin(), mNumericTrackList.end()); }
 
         /// Fast access to NON-UPDATEABLE Vertex track list
-        const VertexTrackList& _getVertexTrackList(void) const;
+        const VertexTrackList& _getVertexTrackList() const;
 
         /// Get non-updateable iterator over node tracks
-        VertexTrackIterator getVertexTrackIterator(void) const
+        VertexTrackIterator getVertexTrackIterator() const
         { return VertexTrackIterator(mVertexTrackList.begin(), mVertexTrackList.end()); }
 
         /** Optimise an animation by removing unnecessary tracks and keyframes.
@@ -483,7 +483,7 @@ namespace v1 {
         
         /** Internal method used to tell the animation that keyframe list has been
             changed, which may cause it to rebuild some internal data */
-        void _keyFrameListChanged(void) { mKeyFrameTimesDirty = true; }
+        void _keyFrameListChanged() { mKeyFrameTimesDirty = true; }
 
         /** Internal method used to convert time position to time index object.
         @note
@@ -570,10 +570,10 @@ namespace v1 {
         AnimationContainer* mContainer;
 
 		void optimiseOldNodeTracks(bool discardIdentityTracks);
-        void optimiseVertexTracks(void);
+        void optimiseVertexTracks();
 
         /// Internal method to build global keyframe time list
-        void buildKeyFrameTimeList(void) const;
+        void buildKeyFrameTimeList() const;
     };
 
     /** @} */

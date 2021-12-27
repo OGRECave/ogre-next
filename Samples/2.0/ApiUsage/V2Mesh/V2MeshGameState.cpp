@@ -22,7 +22,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void V2MeshGameState::createScene01(void)
+    void V2MeshGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

@@ -71,7 +71,7 @@ namespace Ogre {
         ZipArchive(const String& name, const String& archType, zzip_plugin_io_handlers* pluginIo = NULL);
         ~ZipArchive();
         /// @copydoc Archive::isCaseSensitive
-        bool isCaseSensitive(void) const { return false; }
+        bool isCaseSensitive() const { return false; }
 
         /// @copydoc Archive::load
         void load();
@@ -114,7 +114,7 @@ namespace Ogre {
     public:
         virtual ~ZipArchiveFactory() {}
         /// @copydoc FactoryObj::getType
-        const String& getType(void) const;
+        const String& getType() const;
         /// @copydoc FactoryObj::createInstance
         Archive *createInstance( const String& name, bool readOnly ) 
         {
@@ -137,7 +137,7 @@ namespace Ogre {
         EmbeddedZipArchiveFactory();
         virtual ~EmbeddedZipArchiveFactory();
         /// @copydoc FactoryObj::getType
-        const String& getType(void) const;
+        const String& getType() const;
         /// @copydoc FactoryObj::createInstance
         Archive *createInstance( const String& name, bool readOnly ) 
         {
@@ -184,11 +184,11 @@ namespace Ogre {
         /// @copydoc DataStream::seek
         void seek( size_t pos );
         /// @copydoc DataStream::seek
-        size_t tell(void) const;
+        size_t tell() const;
         /// @copydoc DataStream::eof
-        bool eof(void) const;
+        bool eof() const;
         /// @copydoc DataStream::close
-        void close(void);
+        void close();
 
 
     };

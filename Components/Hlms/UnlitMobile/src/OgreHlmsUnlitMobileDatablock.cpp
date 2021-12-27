@@ -429,7 +429,7 @@ namespace Ogre
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------
-    uint8 HlmsUnlitMobileDatablock::getNumUvSets(void) const
+    uint8 HlmsUnlitMobileDatablock::getNumUvSets() const
     {
         uint8 retVal = 0;
 

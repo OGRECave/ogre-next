@@ -61,8 +61,8 @@ namespace Ogre
 
         bool mWarnedNoAutomipmapsAlready;
 
-        void setupComputeShaders( void );
-        void destroyComputeShaders( void );
+        void setupComputeShaders();
+        void destroyComputeShaders();
         void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,
                                       float gaussianDeviationFactor );
 

@@ -16,7 +16,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void CustomRenderableGameState::createScene01(void)
+    void CustomRenderableGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -41,7 +41,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void CustomRenderableGameState::destroyScene(void)
+    void CustomRenderableGameState::destroyScene()
     {
         OGRE_DELETE mMyCustomRenderable;
         mMyCustomRenderable = 0;

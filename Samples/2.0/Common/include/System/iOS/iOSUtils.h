@@ -35,6 +35,6 @@ namespace Demo
 	class iOSUtils
 	{
     public:
-        static Ogre::Vector2 getScreenResolutionInPoints(void);
+        static Ogre::Vector2 getScreenResolutionInPoints();
 	};
 }

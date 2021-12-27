@@ -64,7 +64,7 @@ namespace Ogre
         mFenceName = 0;
     }
     //-----------------------------------------------------------------------------------
-    const void* MetalAsyncTicket::mapImpl(void)
+    const void* MetalAsyncTicket::mapImpl()
     {
         if( mFenceName )
             mFenceName = MetalVaoManager::waitFor( mFenceName, mDevice );
@@ -73,7 +73,7 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool MetalAsyncTicket::queryIsTransferDone(void)
+    bool MetalAsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 

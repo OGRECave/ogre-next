@@ -42,7 +42,7 @@ namespace Ogre {
     {
     }
     //-----------------------------------------------------------------------
-    const String& D3D11HLSLProgramFactory::getLanguage(void) const
+    const String& D3D11HLSLProgramFactory::getLanguage() const
     {
         return sLanguageName;
     }

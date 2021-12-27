@@ -85,11 +85,11 @@ namespace Volume {
         @return
             The maximum absolute density value, 0.0 when deactivated.
         */
-        Real getMaxClampedAbsoluteDensity(void) const;
+        Real getMaxClampedAbsoluteDensity() const;
 
         /** Destructor.
         */
-        ~HalfFloatGridSource(void);
+        ~HalfFloatGridSource();
 
     };
 

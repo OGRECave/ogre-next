@@ -52,9 +52,9 @@ namespace Ogre
         NULLBufferInterface( size_t vboPoolIdx );
         ~NULLBufferInterface();
 
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
+        size_t getVboPoolIndex()                { return mVboPoolIdx; }
 
-        uint8* getNullDataPtr(void)                 { return mNullDataPtr; }
+        uint8* getNullDataPtr()                 { return mNullDataPtr; }
 
         /// will null the data ptr so it wont be freed on destruction
         void nullDataPtr() { mNullDataPtr = 0; }
@@ -67,8 +67,8 @@ namespace Ogre
                                                  bool advanceFrame = true );
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        virtual void advanceFrame();
+        virtual void regressFrame();
 
         virtual void _notifyBuffer( BufferPacked *buffer );
 

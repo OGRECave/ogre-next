@@ -198,8 +198,8 @@ namespace Ogre
     public:
         void checkWarnIfRtvWasFlushed( uint32 entriesToFlush );
     protected:
-        void checkRequiresTextureFlipping(void);
-        virtual void colourEntriesModified(void);
+        void checkRequiresTextureFlipping();
+        virtual void colourEntriesModified();
 
     public:
         RenderPassDescriptor();
@@ -230,10 +230,10 @@ namespace Ogre
 
         bool hasAttachment( const TextureGpu *texture ) const;
 
-        uint8 getNumColourEntries(void) const       { return mNumColourEntries; }
-        bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }
+        uint8 getNumColourEntries() const       { return mNumColourEntries; }
+        bool requiresTextureFlipping() const    { return mRequiresTextureFlipping; }
         /// Returns true if either Stencil is set, or if Depth is set with depth-stencil attachment.
-        bool hasStencilFormat(void) const;
+        bool hasStencilFormat() const;
 
         /// Finds the first non-null texture and outputs it
         /// May return nullptr if nothing is bound

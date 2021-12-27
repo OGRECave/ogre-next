@@ -107,16 +107,16 @@ namespace Ogre {
         /** Returns the operation type that this geometry program expects to
             receive as input
         */
-        virtual OperationType getInputOperationType(void) const
+        virtual OperationType getInputOperationType() const
         { return mInputOperationType; }
         /** Returns the operation type that this geometry program will emit
          */
-        virtual OperationType getOutputOperationType(void) const
+        virtual OperationType getOutputOperationType() const
         { return mOutputOperationType; }
         /** Returns the maximum number of vertices that this geometry program can
             output in a single run
         */
-        virtual int getMaxOutputVertices(void) const { return mMaxOutputVertices; }
+        virtual int getMaxOutputVertices() const { return mMaxOutputVertices; }
 
         /** Sets the operation type that this geometry program expects to receive
          */
@@ -154,9 +154,9 @@ namespace Ogre {
         String getShaderTypeLabel(GpuProgramType programType);
 
         /// Overridden
-        bool getPassTransformStates(void) const;
-        bool getPassSurfaceAndLightStates(void) const;
-        bool getPassFogStates(void) const;
+        bool getPassTransformStates() const;
+        bool getPassSurfaceAndLightStates() const;
+        bool getPassFogStates() const;
 
         /** Attach another GLSL Shader to this one. */
         void attachChildShader(const String& name);
@@ -164,29 +164,29 @@ namespace Ogre {
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines(const String& defines);
         /// Sets the preprocessor defines use to compile the program.
-        const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
+        const String& getPreprocessorDefines() const { return mPreprocessorDefines; }
 
         /// Overridden from GpuProgram
-        const String& getLanguage(void) const;
+        const String& getLanguage() const;
         /** Sets whether matrix packing in column-major order. */
         void setColumnMajorMatrices(bool columnMajor) { mColumnMajorMatrices = columnMajor; }
         /** Gets whether matrix packed in column-major order. */
-        bool getColumnMajorMatrices(void) const { return mColumnMajorMatrices; }
+        bool getColumnMajorMatrices() const { return mColumnMajorMatrices; }
 
         virtual void setReplaceVersionMacro( bool bReplace );
 
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters();
 
         /// Compile source into shader object
         bool compile( const bool checkErrors = false);
 
 
         /// Bind the shader in OpenGL.
-        void bind(void);
+        void bind();
         /// Unbind the shader in OpenGL.
-        void unbind(void);
-        static void unbindAll(void);
+        void unbind();
+        static void unbindAll();
         /// Execute the param binding functions for this shader.
         void bindParameters(GpuProgramParametersSharedPtr params, uint16 mask);
         /// Execute the pass iteration param binding functions for this shader.
@@ -198,7 +198,7 @@ namespace Ogre {
         /** Return the shader link status.
             Only used for separable programs.
         */
-        GLint isLinked(void) { return mLinked; }
+        GLint isLinked() { return mLinked; }
 
         /** Set the shader link status.
             Only used for separable programs.
@@ -206,13 +206,13 @@ namespace Ogre {
         void setLinked(GLint flag) { mLinked = flag; }
 
         /// @copydoc Resource::calculateSize
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         /// Get the OGRE assigned shader ID.
-        GLuint getShaderID(void) const { return mShaderID; }
+        GLuint getShaderID() const { return mShaderID; }
 
         /// Since GLSL has no assembly, use this shader for binding.
-        GpuProgram* _getBindingDelegate(void) { return this; }
+        GpuProgram* _getBindingDelegate() { return this; }
 
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
@@ -222,22 +222,22 @@ namespace Ogre {
         static CmdOutputOperationType msOutputOperationTypeCmd;
         static CmdMaxOutputVertices msMaxOutputVerticesCmd;
 
-        void replaceVersionMacros( void );
+        void replaceVersionMacros();
 
         /** Internal load implementation, must be implemented by subclasses.
          */
-        void loadFromSource(void);
+        void loadFromSource();
         /** Internal method for creating a dummy low-level program for
             this high-level program.  GLSL does not give access to the
             low level implementation of the shader so this method
             creates an object sub-classed from GL3PlusShader just to
             be compatible with GL3PlusRenderSystem.
         */
-        void createLowLevelImpl(void);
+        void createLowLevelImpl();
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl(void);
+        void unloadHighLevelImpl();
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl(void);
+        void unloadImpl();
 
         /// Populate the passed parameters with name->index map
         void populateParameterNames(GpuProgramParametersSharedPtr params);
@@ -256,7 +256,7 @@ namespace Ogre {
 
 
         // /// @copydoc Resource::loadImpl
-        // void loadImpl(void) {}
+        // void loadImpl() {}
 
         enum MonolithicCacheStatus
         {

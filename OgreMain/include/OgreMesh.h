@@ -198,18 +198,18 @@ namespace v1 {
             It also does not set up submeshes, etc.  You have to call load()
             to do that.
          */
-        void prepareImpl(void);
+        void prepareImpl();
         /** Destroys data cached by prepareImpl.
          */
-        void unprepareImpl(void);
+        void unprepareImpl();
         /// @copydoc Resource::loadImpl
-        void loadImpl(void);
+        void loadImpl();
         /// @copydoc Resource::postLoadImpl
-        void postLoadImpl(void);
+        void postLoadImpl();
         /// @copydoc Resource::unloadImpl
-        void unloadImpl(void);
+        void unloadImpl();
         /// @copydoc Resource::calculateSize
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         void mergeAdjacentTexcoords( unsigned short finalTexCoordSet,
                                      unsigned short texCoordSetToDestroy, VertexData *vertexData );
@@ -232,7 +232,7 @@ namespace v1 {
             Note - use with extreme caution - you must be sure that
             you have set up the geometry properly.
         */
-        SubMesh* createSubMesh(void);
+        SubMesh* createSubMesh();
 
         /** Creates a new SubMesh and gives it a name. Note, only first 65536 submeshes could be named.
         */
@@ -255,7 +255,7 @@ namespace v1 {
 
         /** Gets the number of sub meshes which comprise this mesh.
         */
-        unsigned getNumSubMeshes(void) const;
+        unsigned getNumSubMeshes() const;
 
         /** Gets a pointer to the submesh indicated by the index.
         */
@@ -283,7 +283,7 @@ namespace v1 {
         
         typedef VectorIterator<SubMeshList> SubMeshIterator;
         /// Gets an iterator over the available submeshes
-        SubMeshIterator getSubMeshIterator(void)
+        SubMeshIterator getSubMeshIterator()
         { return SubMeshIterator(mSubMeshList.begin(), mSubMeshList.end()); }
 
         /// Converts a v2 mesh back to v1.
@@ -320,7 +320,7 @@ namespace v1 {
         /// Reverts the effects from arrangeEfficient by converting all 16-bit half float back
         /// to 32-bit float; and QTangents to Normal, Tangent + Reflection representation,
         /// which are more compatible for doing certain operations vertex operations in the CPU.
-        void dearrangeToInefficient(void);
+        void dearrangeToInefficient();
       
         /** Shared vertex data.
         @remarks
@@ -372,10 +372,10 @@ namespace v1 {
 
         /** Get the axis-aligned bounding box for this mesh.
         */
-        const AxisAlignedBox& getBounds(void) const;
+        const AxisAlignedBox& getBounds() const;
 
         /** Gets the radius of the bounding sphere surrounding this mesh. */
-        Real getBoundingSphereRadius(void) const;
+        Real getBoundingSphereRadius() const;
 
         /** Gets the radius used to inflate the bounding box around the bones. */
         Real getBoneBoundingRadius() const;
@@ -442,21 +442,21 @@ namespace v1 {
         void setSkeletonName(const String& skelName);
 
         /** Returns true if this Mesh has a linked Skeleton. */
-        bool hasSkeleton(void) const;
+        bool hasSkeleton() const;
 
         /** Returns whether or not this mesh has some kind of vertex animation. 
         */
-        bool hasVertexAnimation(void) const;
+        bool hasVertexAnimation() const;
         
         /** Gets a pointer to any linked Skeleton. 
         @return
             Weak reference to the skeleton - copy this if you want to hold a strong pointer.
         */
-        const SkeletonPtr& getOldSkeleton(void) const;
-        const SkeletonDefPtr& getSkeleton(void) const                   { return mSkeleton; }
+        const SkeletonPtr& getOldSkeleton() const;
+        const SkeletonDefPtr& getSkeleton() const                   { return mSkeleton; }
 
         /** Gets the name of any linked Skeleton */
-        const String& getSkeletonName(void) const;
+        const String& getSkeletonName() const;
         /** Initialise an animation set suitable for use with this mesh. 
         @remarks
             Only recommended for use inside the engine, not by applications.
@@ -487,7 +487,7 @@ namespace v1 {
             This method is for modifying weights to the shared geometry of the Mesh. To assign
             weights to the per-SubMesh geometry, see the equivalent methods on SubMesh.
         */
-        void clearBoneAssignments(void);
+        void clearBoneAssignments();
 
         /** Internal notification, used to tell the Mesh which Skeleton to use without loading it. 
         @remarks
@@ -500,7 +500,7 @@ namespace v1 {
 
         /** Gets an iterator for access all bone assignments. 
         */
-        BoneAssignmentIterator getBoneAssignmentIterator(void);
+        BoneAssignmentIterator getBoneAssignmentIterator();
 
         /** Gets a const reference to the list of bone assignments
         */
@@ -509,13 +509,13 @@ namespace v1 {
         void setLodStrategyName( const String &name )               { mLodStrategyName = name; }
 
         /// Returns the name of the Lod strategy the user lod values have been calibrated for
-        const String& getLodStrategyName(void) const                { return mLodStrategyName; }
+        const String& getLodStrategyName() const                { return mLodStrategyName; }
 
         /** Returns the number of levels of detail that this mesh supports. 
         @remarks
             This number includes the original model.
         */
-        ushort getNumLodLevels(void) const;
+        ushort getNumLodLevels() const;
         /** Gets details of the numbered level of detail entry. */
         const MeshLodUsage& getLodLevel(ushort index) const;
 
@@ -532,7 +532,7 @@ namespace v1 {
             A mesh can either use automatically generated LOD, or it can use alternative
             meshes as provided by an artist.
         */
-        bool hasManualLodLevel(void) const { return mHasManualLodLevel; }
+        bool hasManualLodLevel() const { return mHasManualLodLevel; }
 
         /** Changes the alternate mesh to use as a manual LOD at the given index.
         @remarks
@@ -556,7 +556,7 @@ namespace v1 {
         bool _isManualLodLevel(unsigned short level) const;
 
         /** Removes all LOD data from this Mesh. */
-        void removeLodLevels(void);
+        void removeLodLevels();
 
         /// Returns an array of [2] containing a hash for use in caches.
         /// A value of { 0, 0 } should be treated as not initialized.
@@ -568,7 +568,7 @@ namespace v1 {
         ///     getCacheHash()[i] != savedHash[i]
         ///
         /// they should treat as if the mesh has changed and the cache entry became stale
-        const uint64 *getHashForCaches( void ) const { return mHashForCaches; }
+        const uint64 *getHashForCaches() const { return mHashForCaches; }
 
         /** Sets the manager for the vertex and index buffers to be used when loading
             this Mesh.
@@ -644,13 +644,13 @@ namespace v1 {
         */
         void setIndexBufferPolicy(HardwareBuffer::Usage usage, bool shadowBuffer = false);
         /** Gets the usage setting for this meshes vertex buffers. */
-        HardwareBuffer::Usage getVertexBufferUsage(void) const { return mVertexBufferUsage; }
+        HardwareBuffer::Usage getVertexBufferUsage() const { return mVertexBufferUsage; }
         /** Gets the usage setting for this meshes index buffers. */
-        HardwareBuffer::Usage getIndexBufferUsage(void) const { return mIndexBufferUsage; }
+        HardwareBuffer::Usage getIndexBufferUsage() const { return mIndexBufferUsage; }
         /** Gets whether or not this meshes vertex buffers are shadowed. */
-        bool isVertexBufferShadowed(void) const { return mVertexBufferShadowBuffer; }
+        bool isVertexBufferShadowed() const { return mVertexBufferShadowBuffer; }
         /** Gets whether or not this meshes index buffers are shadowed. */
-        bool isIndexBufferShadowed(void) const { return mIndexBufferShadowBuffer; }
+        bool isIndexBufferShadowed() const { return mIndexBufferShadowBuffer; }
        
 
         /** Rationalises the passed in bone assignment list.
@@ -678,14 +678,14 @@ namespace v1 {
             eliminates excessive bone assignments (max is OGRE_MAX_BLEND_WEIGHTS)
             and re-normalises the remaining assignments.
         */
-        void _compileBoneAssignments(void);
+        void _compileBoneAssignments();
 
         /** Internal method, be called once to update the compiled bone assignments.
         @remarks
             The OGRE engine calls this method automatically. It updates the compiled bone
             assignments if requested.
         */
-        void _updateCompiledBoneAssignments(void);
+        void _updateCompiledBoneAssignments();
 
         /** This method collapses two texcoords into one for all submeshes where this is possible.
         @remarks
@@ -708,15 +708,15 @@ namespace v1 {
         static bool msOptimizeForShadowMapping;
 
         void prepareForShadowMapping( bool forceSameBuffers );
-        void destroyShadowMappingGeom(void);
+        void destroyShadowMappingGeom();
 
         /// Returns true if the mesh is ready for rendering with valid shadow mapping buffers
         /// Otherwise prepareForShadowMapping must be called on this mesh.
-        bool hasValidShadowMappingBuffers(void) const;
+        bool hasValidShadowMappingBuffers() const;
 
         /// Returns true if the shadow mapping buffers do not just reference the real buffers,
         /// but are rather their own separate set of optimized geometry.
-        bool hasIndependentShadowMappingBuffers(void) const;
+        bool hasIndependentShadowMappingBuffers() const;
 
         /** This method builds a set of tangent vectors for a given mesh into a 3D texture coordinate buffer.
         @remarks
@@ -781,9 +781,9 @@ namespace v1 {
         /** Builds an edge list for this mesh, which can be used for generating a shadow volume
             among other things.
         */
-        void buildEdgeList(void);
+        void buildEdgeList();
         /** Destroys and frees the edge lists this mesh has built. */
-        void freeEdgeList(void);
+        void freeEdgeList();
 
         /** This method prepares the mesh for generating a renderable shadow volume. 
         @remarks
@@ -803,7 +803,7 @@ namespace v1 {
             index buffer space is allocated by this method, a shared index buffer allocated by the
             shadow rendering algorithm is used for addressing this extended vertex buffer.
         */
-        void prepareForShadowVolume(void);
+        void prepareForShadowVolume();
 
         /** Return the edge list for this mesh, building it if required. 
         @remarks
@@ -825,10 +825,10 @@ namespace v1 {
 
         /** Returns whether this mesh has already had it's geometry prepared for use in 
             rendering shadow volumes. */
-        bool isPreparedForShadowVolumes(void) const { return mPreparedForShadowVolumes; }
+        bool isPreparedForShadowVolumes() const { return mPreparedForShadowVolumes; }
 
         /** Returns whether this mesh has an attached edge list. */
-        bool isEdgeListBuilt(void) const { return mEdgeListsBuilt; }
+        bool isEdgeListBuilt() const { return mEdgeListsBuilt; }
 
         /** Prepare matrices for software indexed vertex blend.
         @remarks
@@ -920,7 +920,7 @@ namespace v1 {
             const map<size_t, Vector3>::type& normalsMap,
             VertexData* targetVertexData);
         /** Gets a reference to the optional name assignments of the SubMeshes. */
-        const SubMeshNameMap& getSubMeshNameMap(void) const { return mSubMeshNameMap; }
+        const SubMeshNameMap& getSubMeshNameMap() const { return mSubMeshNameMap; }
 
         /** Sets whether or not this Mesh should automatically build edge lists
             when asked for them, or whether it should never build them if
@@ -937,11 +937,11 @@ namespace v1 {
             when asked for them, or whether it should never build them if
             they are not already provided.
         */
-        bool getAutoBuildEdgeLists(void) const { return mAutoBuildEdgeLists; }
+        bool getAutoBuildEdgeLists() const { return mAutoBuildEdgeLists; }
 
         /** Gets the type of vertex animation the shared vertex data of this mesh supports.
         */
-        virtual VertexAnimationType getSharedVertexDataAnimationType(void) const;
+        virtual VertexAnimationType getSharedVertexDataAnimationType() const;
 
         /// Returns whether animation on shared vertex data includes normals.
         bool getSharedVertexDataAnimationIncludesNormals() const { return mSharedVertexDataAnimationIncludesNormals; }
@@ -974,14 +974,14 @@ namespace v1 {
         virtual void removeAnimation(const String& name);
 
         /** Gets the number of morph animations in this mesh. */
-        virtual unsigned short getNumAnimations(void) const;
+        virtual unsigned short getNumAnimations() const;
 
         /** Gets a single morph animation by index. 
         */
         virtual Animation* getAnimation(unsigned short index) const;
 
         /** Removes all morph Animations from this mesh. */
-        virtual void removeAllAnimations(void);
+        virtual void removeAllAnimations();
         /** Gets a pointer to a vertex data element based on a morph animation 
             track handle.
         @remarks
@@ -999,15 +999,15 @@ namespace v1 {
             This method is normally called by the protected method loadImpl when a 
             mesh if first loaded.
         */
-        void updateMaterialForAllSubMeshes(void);
+        void updateMaterialForAllSubMeshes();
 
         /** Internal method which, if animation types have not been determined,
             scans any vertex animations and determines the type for each set of
             vertex data (cannot have 2 different types).
         */
-        void _determineAnimationTypes(void) const;
+        void _determineAnimationTypes() const;
         /** Are the derived animation types out of date? */
-        bool _getAnimationTypesDirty(void) const { return mAnimationTypesDirty; }
+        bool _getAnimationTypesDirty() const { return mAnimationTypesDirty; }
 
         /** Create a new Pose for this mesh or one of its submeshes.
         @param target
@@ -1020,7 +1020,7 @@ namespace v1 {
         */
         Pose* createPose(ushort target, const String& name = BLANKSTRING);
         /** Get the number of poses.*/
-        size_t getPoseCount(void) const { return mPoseList.size(); }
+        size_t getPoseCount() const { return mPoseList.size(); }
         /** Retrieve an existing Pose by index.*/
         Pose* getPose(ushort index);
         /** Retrieve an existing Pose by name.*/
@@ -1036,21 +1036,21 @@ namespace v1 {
         */
         void removePose(const String& name);
         /** Destroy all poses. */
-        void removeAllPoses(void);
+        void removeAllPoses();
 
         typedef VectorIterator<PoseList> PoseIterator;
         typedef ConstVectorIterator<PoseList> ConstPoseIterator;
 
         /** Get an iterator over all the poses defined. */
-        PoseIterator getPoseIterator(void);
+        PoseIterator getPoseIterator();
         /** Get an iterator over all the poses defined. */
-        ConstPoseIterator getPoseIterator(void) const;
+        ConstPoseIterator getPoseIterator() const;
         /** Get pose list. */
-        const PoseList& getPoseList(void) const;
+        const PoseList& getPoseList() const;
 
-        const LodValueArray* _getLodValueArray(void) const                      { return &mLodValues; }
+        const LodValueArray* _getLodValueArray() const                      { return &mLodValues; }
 
-        void createAzdoBuffers(void);
+        void createAzdoBuffers();
 
     };
 

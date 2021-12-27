@@ -161,7 +161,7 @@ namespace Ogre
             d30, d31, d32, d33);
     }
     //-----------------------------------------------------------------------
-    Matrix4 Matrix4::inverseAffine(void) const
+    Matrix4 Matrix4::inverseAffine() const
     {
         assert(isAffine());
 

@@ -108,11 +108,11 @@ namespace Ogre {
         public:
             DebugRenderable(Node* parent);
             ~DebugRenderable();
-            const MaterialPtr& getMaterial(void) const;
+            const MaterialPtr& getMaterial() const;
             void getRenderOperation(RenderOperation& op);
             void getWorldTransforms(Matrix4* xform) const;
             Real getSquaredViewDepth(const Camera* cam) const;
-            const LightList& getLights(void) const;
+            const LightList& getLights() const;
             void setScaling(Real s) { mScaling = s; }
 
         };*/
@@ -136,10 +136,10 @@ namespace Ogre {
 
         /// Only available internally - notification of parent. Can't be null
         void setParent( Node* parent );
-        void unsetParent(void);
+        void unsetParent();
 
         /// Notification from parent that we need to migrate to a different depth level
-        void parentDepthLevelChanged(void);
+        void parentDepthLevelChanged();
 
         /** Triggers the node to update it's combined transforms.
         @par
@@ -147,7 +147,7 @@ namespace Ogre {
             to update it's complete transformation based on it's parents
             derived transform.
         */
-        void _updateFromParent(void);
+        void _updateFromParent();
 
         /** Class-specific implementation of _updateFromParent.
         @remarks
@@ -155,7 +155,7 @@ namespace Ogre {
             itself allows the detail to be overridden without disrupting the 
             general sequence of updateFromParent (e.g. raising events)
         */
-        virtual void updateFromParentImpl(void);
+        virtual void updateFromParentImpl();
 
         /** Internal method for creating a new child node - must be overridden per subclass. */
         virtual Node* createChildImpl( SceneMemoryMgrTypes sceneType ) = 0;
@@ -201,10 +201,10 @@ namespace Ogre {
         void setName( const String &name )                          { mName = name; }
 
         /** Returns the name of the node. */
-        const String& getName(void) const                           { return mName; }
+        const String& getName() const                           { return mName; }
 
         /** Gets this node's parent (NULL if this is the root). */
-        Node* getParent(void) const;
+        Node* getParent() const;
 
         /** Calling SceneManager::clearScene won't destroy this node nor detach its
             objects (but may still destroy parent and children nodes if they're not
@@ -217,7 +217,7 @@ namespace Ogre {
                    which could happen by accident; and would thus leak.
         */
         void setIndestructibleByClearScene( bool indestructible );
-        bool getIndestructibleByClearScene(void) const;
+        bool getIndestructibleByClearScene() const;
 
         /** Migrates the node and all of its children to the new memory manager,
             at the same depth level.
@@ -254,7 +254,7 @@ namespace Ogre {
 
         /// Called by SceneManager when it is telling we're a static node being dirty
         /// Don't call this directly. @see SceneManager::notifyStaticDirty
-        virtual void _notifyStaticDirty(void) const;
+        virtual void _notifyStaticDirty() const;
 
         /** Returns a quaternion representing the nodes orientation.
             @remarks
@@ -307,7 +307,7 @@ namespace Ogre {
         @par
             Note that rotations are oriented around the node's origin.
         */
-        virtual_l1 void resetOrientation(void);
+        virtual_l1 void resetOrientation();
 
         /** Sets the position of the node relative to it's parent.
         @remarks
@@ -325,7 +325,7 @@ namespace Ogre {
             @remarks
                 Don't call this function too often, as we need to convert from SoA
         */
-        virtual_l2 Vector3 getPosition(void) const;
+        virtual_l2 Vector3 getPosition() const;
 
         /** Sets the scaling factor applied to this node.
         @remarks
@@ -361,7 +361,7 @@ namespace Ogre {
             @remarks
                 Don't call this function too often, as we need to convert from SoA
         */
-        virtual_l2 Vector3 getScale(void) const;
+        virtual_l2 Vector3 getScale() const;
 
         /** Tells the node whether it should inherit orientation from it's parent node.
         @remarks
@@ -391,7 +391,7 @@ namespace Ogre {
         @remarks
             See setInheritOrientation for more info.
         */
-        virtual_l2 bool getInheritOrientation(void) const;
+        virtual_l2 bool getInheritOrientation() const;
 
         /** Tells the node whether it should inherit scaling factors from it's parent node.
         @remarks
@@ -411,7 +411,7 @@ namespace Ogre {
         @remarks
             See setInheritScale for more info.
         */
-        virtual_l2 bool getInheritScale(void) const;
+        virtual_l2 bool getInheritScale() const;
 
         /** Scales the node, combining it's current scale with the passed in scaling factor. 
         @remarks
@@ -526,7 +526,7 @@ namespace Ogre {
 
         /** Gets a matrix whose columns are the local axes based on
             the nodes orientation relative to it's parent. */
-        virtual_l2 Matrix3 getLocalAxes(void) const;
+        virtual_l2 Matrix3 getLocalAxes() const;
 
         /** Creates an unnamed new Node as a child of this node.
         @param translate
@@ -547,7 +547,7 @@ namespace Ogre {
 
         /** Reports the number of child nodes under this one.
         */
-        size_t numChildren(void) const                                      { return mChildren.size(); }
+        size_t numChildren() const                                      { return mChildren.size(); }
 
         /** Gets a pointer to a child node. */
         Node* getChild( size_t index )                                      { return mChildren[index]; }
@@ -563,7 +563,7 @@ namespace Ogre {
             store up changes for later. Note that calling methods on returned items in 
             the iterator IS allowed and does not invalidate the iterator.
         */
-        NodeVecIterator getChildIterator(void);
+        NodeVecIterator getChildIterator();
 
         /** Retrieves an iterator for efficiently looping through all children of this node.
         @remarks
@@ -575,7 +575,7 @@ namespace Ogre {
             store up changes for later. Note that calling methods on returned items in 
             the iterator IS allowed and does not invalidate the iterator.
         */
-        ConstNodeVecIterator getChildIterator(void) const;
+        ConstNodeVecIterator getChildIterator() const;
 
         /** Drops the specified child from this node. 
         @remarks
@@ -589,7 +589,7 @@ namespace Ogre {
         /** Removes all child Nodes attached to this node. Does not delete the nodes, just detaches them from
             this parent, potentially to be reattached elsewhere.
         */
-        virtual void removeAllChildren(void);
+        virtual void removeAllChildren();
         
         /** Sets the final world position of the node directly.
         @remarks 
@@ -611,7 +611,7 @@ namespace Ogre {
             @See _getDerivedOrientationUpdated if you need the update process
             to be guaranteed
         */
-        virtual_l2 Quaternion _getDerivedOrientation(void) const;
+        virtual_l2 Quaternion _getDerivedOrientation() const;
 
         /** Gets the orientation of the node as derived from all parents.
         @remarks
@@ -621,7 +621,7 @@ namespace Ogre {
             number of nodes. Refactor your queries so that they happen
             after SceneManager::UpdateAllTransforms() has been called
         */
-        virtual_l2 Quaternion _getDerivedOrientationUpdated(void);
+        virtual_l2 Quaternion _getDerivedOrientationUpdated();
 
         /** Gets the position of the node as derived from all parents.
         @remarks
@@ -630,7 +630,7 @@ namespace Ogre {
             @See _getDerivedPositionUpdated if you need the update process
             to be guaranteed
         */
-        virtual_l2 Vector3 _getDerivedPosition(void) const;
+        virtual_l2 Vector3 _getDerivedPosition() const;
 
         /** Gets the position of the node as derived from all parents.
         @remarks
@@ -640,7 +640,7 @@ namespace Ogre {
             number of nodes. Refactor your queries so that they happen
             after SceneManager::UpdateAllTransforms() has been called
         */
-        virtual_l2 Vector3 _getDerivedPositionUpdated(void);
+        virtual_l2 Vector3 _getDerivedPositionUpdated();
 
         /** Gets the scaling factor of the node as derived from all parents.
         @remarks
@@ -649,7 +649,7 @@ namespace Ogre {
             @See _getDerivedScaleUpdated if you need the update process
             to be guaranteed
         */
-        virtual_l2 Vector3 _getDerivedScale(void) const;
+        virtual_l2 Vector3 _getDerivedScale() const;
 
         /** Gets the scalling factor of the node as derived from all parents.
         @remarks
@@ -659,7 +659,7 @@ namespace Ogre {
             number of nodes. Refactor your queries so that they happen
             after SceneManager::UpdateAllTransforms() has been called
         */
-        virtual_l2 Vector3 _getDerivedScaleUpdated(void);
+        virtual_l2 Vector3 _getDerivedScaleUpdated();
 
         /** Gets the full transformation matrix for this node.
         @remarks
@@ -671,7 +671,7 @@ namespace Ogre {
             Applications using Ogre should just use the relative transforms.
             Assumes the caches are already updated
         */
-        virtual_l2 FORCEINLINE const Matrix4& _getFullTransform(void) const
+        virtual_l2 FORCEINLINE const Matrix4& _getFullTransform() const
         {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             assert( !mCachedTransformOutOfDate );
@@ -680,7 +680,7 @@ namespace Ogre {
         }
 
         /** @See _getDerivedScaleUpdated remarks. @See _getFullTransform */
-        virtual_l2 const Matrix4& _getFullTransformUpdated(void);
+        virtual_l2 const Matrix4& _getFullTransformUpdated();
 
         /** Helper method to update the Node and all children.
         @note
@@ -699,7 +699,7 @@ namespace Ogre {
         
         /** Gets the current listener for this Node.
         */
-        Listener* getListener(void) const                               { return mListener; }
+        Listener* getListener() const                               { return mListener; }
 
         /** @See SceneManager::updateAllTransforms()
         @remarks
@@ -773,7 +773,7 @@ namespace Ogre {
         /** @deprecated use UserObjectBindings::getUserAny via getUserObjectBindings() instead.
             Retrieves the custom user value associated with this object.
         */
-        OGRE_DEPRECATED virtual const Any& getUserAny(void) const { return getUserObjectBindings().getUserAny(); }
+        OGRE_DEPRECATED virtual const Any& getUserAny() const { return getUserObjectBindings().getUserAny(); }
 
         /** Return an instance of user objects binding associated with this class.
             You can use it to associate one or more custom objects with this class instance.
@@ -792,18 +792,18 @@ namespace Ogre {
             Node doesn't follow the rule of three. This function is useful when you make multiple
             hard copies but only the destructor must release the mTransform only slots once.
         */
-        void _setNullNodeMemoryManager(void)                    { mNodeMemoryManager = 0; }
+        void _setNullNodeMemoryManager()                    { mNodeMemoryManager = 0; }
 
         /** Internal use, notifies all attached objects that our memory pointers
             (i.e. Transform) may have changed (e.g. during cleanups, change of parent, etc)
         */
-        virtual void _callMemoryChangeListeners(void) = 0;
+        virtual void _callMemoryChangeListeners() = 0;
 
         virtual NodeMemoryManager* getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType ) = 0;
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        virtual void _setCachedTransformOutOfDate(void);
-        bool isCachedTransformOutOfDate(void) const             { return mCachedTransformOutOfDate; }
+        virtual void _setCachedTransformOutOfDate();
+        bool isCachedTransformOutOfDate() const             { return mCachedTransformOutOfDate; }
 #endif
     };
     /** @} */

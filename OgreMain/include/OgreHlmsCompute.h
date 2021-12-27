@@ -166,17 +166,17 @@ namespace Ogre
         void destroyComputeJob( IdString name );
 
         /// Destroys all jobs created via @see createComputeJob
-        void destroyAllComputeJobs(void);
+        void destroyAllComputeJobs();
 
         /// Destroys the shader cache from all jobs, causing us to reload shaders from file again
-        virtual void clearShaderCache(void);
+        virtual void clearShaderCache();
 
         /// Main function for dispatching a compute job.
         void dispatch( HlmsComputeJob *job, SceneManager *sceneManager, Camera *camera );
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
-        virtual HlmsDatablock* createDefaultDatablock(void);
+        virtual HlmsDatablock* createDefaultDatablock();
 
         virtual uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                        bool casterPass, uint32 lastCacheHash,

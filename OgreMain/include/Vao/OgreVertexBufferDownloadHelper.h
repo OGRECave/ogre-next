@@ -195,7 +195,7 @@ namespace  Ogre
             return retVal;
         }
 
-        const DownloadDataArray& getDownloadData(void) const        { return mDownloadData; }
+        const DownloadDataArray& getDownloadData() const        { return mDownloadData; }
     };
 
     /** @} */

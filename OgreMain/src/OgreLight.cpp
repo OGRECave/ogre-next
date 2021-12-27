@@ -126,7 +126,7 @@ namespace Ogre {
                                                               Vector3::NEGATIVE_UNIT_Z );
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::getDirection(void) const
+    Vector3 Light::getDirection() const
     {
         return -mParentNode->getOrientation().zAxis();
     }
@@ -184,7 +184,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Vector2 Light::getDerivedRectSize(void) const
+    Vector2 Light::getDerivedRectSize() const
     {
         Vector3 parentScale = mParentNode->_getDerivedScale();
         return mRectSize * Vector2( parentScale.x, parentScale.y );
@@ -258,7 +258,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Light::updateLightBounds(void)
+    void Light::updateLightBounds()
     {
         if( mLightType == LT_POINT || mLightType == LT_VPL )
         {
@@ -322,26 +322,26 @@ namespace Ogre {
         mPowerScale = power;
     }
     //-----------------------------------------------------------------------
-    const String& Light::getMovableType(void) const
+    const String& Light::getMovableType() const
     {
         return LightFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::getDerivedDirection(void) const
+    Vector3 Light::getDerivedDirection() const
     {
         return -mParentNode->_getDerivedOrientation().zAxis();
         // Same as:
         // return mParentNode->convertLocalToWorldDirection(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::getDerivedDirectionUpdated(void) const
+    Vector3 Light::getDerivedDirectionUpdated() const
     {
         return -mParentNode->_getDerivedOrientationUpdated().zAxis();
         // Same as:
         // return mParentNode->convertLocalToWorldDirectionUpdated(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
-    Vector4 Light::getAs4DVector(void) const
+    Vector4 Light::getAs4DVector() const
     {
         Vector4 ret;
         if (mLightType == Light::LT_DIRECTIONAL)
@@ -386,7 +386,7 @@ namespace Ogre {
         {
             setValue(mLight->getDiffuseColour() + val);
         }
-        void setCurrentStateAsBaseValue(void)
+        void setCurrentStateAsBaseValue()
         {
             setAsBaseValue(mLight->getDiffuseColour());
         }
@@ -408,7 +408,7 @@ namespace Ogre {
         {
             setValue(mLight->getSpecularColour() + val);
         }
-        void setCurrentStateAsBaseValue(void)
+        void setCurrentStateAsBaseValue()
         {
             setAsBaseValue(mLight->getSpecularColour());
         }
@@ -430,7 +430,7 @@ namespace Ogre {
         {
             setValue(mLight->getAs4DVector() + val);
         }
-        void setCurrentStateAsBaseValue(void)
+        void setCurrentStateAsBaseValue()
         {
             setAsBaseValue(mLight->getAs4DVector());
         }
@@ -452,7 +452,7 @@ namespace Ogre {
         {
             setValue(mLight->getSpotlightInnerAngle().valueRadians() + val);
         }
-        void setCurrentStateAsBaseValue(void)
+        void setCurrentStateAsBaseValue()
         {
             setAsBaseValue(mLight->getSpotlightInnerAngle().valueRadians());
         }
@@ -474,7 +474,7 @@ namespace Ogre {
         {
             setValue(mLight->getSpotlightOuterAngle().valueRadians() + val);
         }
-        void setCurrentStateAsBaseValue(void)
+        void setCurrentStateAsBaseValue()
         {
             setAsBaseValue(mLight->getSpotlightOuterAngle().valueRadians());
         }
@@ -496,7 +496,7 @@ namespace Ogre {
         {
             setValue(mLight->getSpotlightFalloff() + val);
         }
-        void setCurrentStateAsBaseValue(void)
+        void setCurrentStateAsBaseValue()
         {
             setAsBaseValue(mLight->getSpotlightFalloff());
         }
@@ -548,17 +548,17 @@ namespace Ogre {
         mShadowFarDistSquared = distance * distance;
     }
     //-----------------------------------------------------------------------
-    bool Light::_getOwnShadowFarDistance(void) const
+    bool Light::_getOwnShadowFarDistance() const
     {
         return mOwnShadowFarDist;
     }
     //-----------------------------------------------------------------------
-    void Light::resetShadowFarDistance(void)
+    void Light::resetShadowFarDistance()
     {
         mOwnShadowFarDist = false;
     }
     //-----------------------------------------------------------------------
-    Real Light::getShadowFarDistance(void) const
+    Real Light::getShadowFarDistance() const
     {
         if (mOwnShadowFarDist)
             return mShadowFarDist;
@@ -566,7 +566,7 @@ namespace Ogre {
             return mManager->getShadowFarDistance ();
     }
     //-----------------------------------------------------------------------
-    Real Light::getShadowFarDistanceSquared(void) const
+    Real Light::getShadowFarDistanceSquared() const
     {
         if (mOwnShadowFarDist)
             return mShadowFarDistSquared;
@@ -607,7 +607,7 @@ namespace Ogre {
         mObbRestraintSmoothFadeDistance = smoothFadeDistance;
     }
     //-----------------------------------------------------------------------
-    Vector3 Light::_getObbRestraintFadeFactor(void) const
+    Vector3 Light::_getObbRestraintFadeFactor() const
     {
         if( !mObbRestraint )
             return Vector3::UNIT_SCALE;
@@ -734,7 +734,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String LightFactory::FACTORY_TYPE_NAME = "Light";
     //-----------------------------------------------------------------------
-    const String& LightFactory::getType(void) const
+    const String& LightFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

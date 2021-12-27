@@ -134,7 +134,7 @@ namespace v1 {
         return dest;
     }
     //-----------------------------------------------------------------------
-    void VertexData::prepareForShadowVolume(void)
+    void VertexData::prepareForShadowVolume()
     {
         /* NOTE
         I would dearly, dearly love to just use a 4D position buffer in order to 
@@ -505,7 +505,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    void VertexData::closeGapsInBindings(void)
+    void VertexData::closeGapsInBindings()
     {
         if (!vertexBufferBinding->hasGaps())
             return;
@@ -547,7 +547,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void VertexData::removeUnusedBuffers(void)
+    void VertexData::removeUnusedBuffers()
     {
         set<ushort>::type usedBuffers;
 
@@ -875,7 +875,7 @@ namespace v1 {
     };
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    void IndexData::optimiseVertexCacheTriList(void)
+    void IndexData::optimiseVertexCacheTriList()
     {
         if (indexBuffer->isLocked()) return;
 

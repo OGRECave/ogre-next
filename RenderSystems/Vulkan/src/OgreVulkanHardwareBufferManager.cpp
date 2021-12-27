@@ -51,7 +51,7 @@ namespace v1
         mDiscardBufferManager = 0;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanHardwareBufferManagerBase::_notifyDeviceStalled( void )
+    void VulkanHardwareBufferManagerBase::_notifyDeviceStalled()
     {
         {
             OGRE_LOCK_MUTEX( mVertexBuffersMutex );

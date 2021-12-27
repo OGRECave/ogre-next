@@ -80,7 +80,7 @@ namespace Demo
         return matrixObj;
     }
     //-------------------------------------------------------------------------
-    void OpenVRCompositorListener::updateHmdTrackingPose(void)
+    void OpenVRCompositorListener::updateHmdTrackingPose()
     {
         mVrCompositor->WaitGetPoses( mTrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0 );
 
@@ -105,7 +105,7 @@ namespace Demo
         }
     }
     //-------------------------------------------------------------------------
-    void OpenVRCompositorListener::syncCullCamera(void)
+    void OpenVRCompositorListener::syncCullCamera()
     {
         const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
         Ogre::Vector3 camPos = mCamera->getDerivedPosition();
@@ -113,7 +113,7 @@ namespace Demo
         mVrCullCamera->setPosition( camPos + derivedRot * mCullCameraOffset );
     }
     //-------------------------------------------------------------------------
-    void OpenVRCompositorListener::syncCamera(void)
+    void OpenVRCompositorListener::syncCamera()
     {
         OGRE_ASSERT_MEDIUM( mTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid );
         mCamera->setPosition( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].getTrans() );
@@ -293,7 +293,7 @@ namespace Demo
         mFirstGlitchFreeMode = firstGlitchFreeMode;
     }
     //-------------------------------------------------------------------------
-    bool OpenVRCompositorListener::canSyncCameraTransformImmediately(void) const
+    bool OpenVRCompositorListener::canSyncCameraTransformImmediately() const
     {
         return mWaitingMode <= VrWaitingMode::BeforeSceneGraph ||
                mWaitingMode <= mFirstGlitchFreeMode;

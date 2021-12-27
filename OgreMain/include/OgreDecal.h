@@ -108,9 +108,9 @@ namespace Ogre
         void setNormalTextureRaw( TextureGpu *normalTex, uint32 sliceIdx );
         void setEmissiveTextureRaw( TextureGpu *emissiveTex, uint32 sliceIdx );
 
-        TextureGpu* getDiffuseTexture(void) const;
-        TextureGpu* getNormalTexture(void) const;
-        TextureGpu* getEmissiveTexture(void) const;
+        TextureGpu* getDiffuseTexture() const;
+        TextureGpu* getNormalTexture() const;
+        TextureGpu* getEmissiveTexture() const;
 
         /** When diffuse textures are used (globally), the alpha component of the diffuse texture
             will be used to mask all the other textures (e.g. normal & emissive maps).
@@ -121,15 +121,15 @@ namespace Ogre
             True to ignore the alpha on the other maps. False otherwise. Default: False
         */
         void setIgnoreAlphaDiffuse( bool bIgnore );
-        bool getIgnoreAlphaDiffuse(void) const;
+        bool getIgnoreAlphaDiffuse() const;
 
         /// Value for Metalness. Must be in range [0; 1]
         void setMetalness( float value );
-        float getMetalness(void) const              { return mMetalness; }
+        float getMetalness() const              { return mMetalness; }
 
         /// Value for Roughness. Valid range depends on the BRDF used.
         void setRoughness( float roughness );
-        float getRoughness(void) const              { return mRoughness; }
+        float getRoughness() const              { return mRoughness; }
 
         /** Helper function to set width, height and depth of the decal.
             This is a helper function because these parameters actually live in the parent scene node
@@ -150,7 +150,7 @@ namespace Ogre
         void setRectSize( Vector2 planeDimensions, Real depth );
 
         //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
 
         /// Decals only allow ForwardPlusBase::MinDecalRq <= queueID < ForwardPlusBase::MaxDecalRq
         virtual void setRenderQueueGroup(uint8 queueID);
@@ -170,7 +170,7 @@ namespace Ogre
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance(MovableObject* obj);
     };
 }

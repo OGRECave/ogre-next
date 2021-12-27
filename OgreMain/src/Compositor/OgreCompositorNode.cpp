@@ -110,7 +110,7 @@ namespace Ogre
         TextureDefinitionBase::destroyTextures( mLocalTextures, mRenderSystem );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::destroyAllPasses(void)
+    void CompositorNode::destroyAllPasses()
     {
         //Destroy all passes
         CompositorPassVec::const_iterator itor = mPasses.begin();
@@ -175,7 +175,7 @@ namespace Ogre
         mConnectedNodes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::populateGlobalBuffers(void)
+    void CompositorNode::populateGlobalBuffers()
     {
         //Makes global buffers visible to our passes.
         CompositorNamedBuffer cmp;
@@ -406,7 +406,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::_notifyCleared(void)
+    void CompositorNode::_notifyCleared()
     {
         //Clear our inputs
         CompositorChannelVec::iterator texIt = mInTextures.begin();
@@ -668,7 +668,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::createPasses(void)
+    void CompositorNode::createPasses()
     {
         populateGlobalBuffers();
 
@@ -849,7 +849,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::resetAllNumPassesLeft(void)
+    void CompositorNode::resetAllNumPassesLeft()
     {
         CompositorPassVec::const_iterator itor = mPasses.begin();
         CompositorPassVec::const_iterator end  = mPasses.end();

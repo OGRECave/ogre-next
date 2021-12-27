@@ -76,12 +76,12 @@ namespace v1
 
 
         /** Gets the numeric handle for this bone (unique within the skeleton). */
-        unsigned short getHandle(void) const;
+        unsigned short getHandle() const;
 
         /** Sets the current position / orientation to be the 'binding pose' ie the layout in which 
             bones were originally bound to a mesh.
         */
-        void setBindingPose(void);
+        void setBindingPose();
 
         /** Resets the position and orientation of this OldBone to the original binding position.
         @remarks
@@ -89,7 +89,7 @@ namespace v1
             position during animation. This method returns the bone to it's original position and
             orientation.
         */
-        void reset(void);
+        void reset();
 
         /** Sets whether or not this bone is manually controlled. 
         @remarks
@@ -116,11 +116,11 @@ namespace v1
         void _getOffsetTransform(Matrix4& m) const;
 
         /** Gets the inverted binding pose scale. */
-        const Vector3& _getBindingPoseInverseScale(void) const { return mBindDerivedInverseScale; }
+        const Vector3& _getBindingPoseInverseScale() const { return mBindDerivedInverseScale; }
         /** Gets the inverted binding pose position. */
-        const Vector3& _getBindingPoseInversePosition(void) const { return mBindDerivedInversePosition; }
+        const Vector3& _getBindingPoseInversePosition() const { return mBindDerivedInversePosition; }
         /** Gets the inverted binding pose orientation. */
-        const Quaternion& _getBindingPoseInverseOrientation(void) const { return mBindDerivedInverseOrientation; }
+        const Quaternion& _getBindingPoseInverseOrientation() const { return mBindDerivedInverseOrientation; }
 
         /// @see OldNode::needUpdate
         void needUpdate(bool forceParentUpdate = false);
@@ -134,7 +134,7 @@ namespace v1
         bool mManuallyControlled;
 
         /** See Node. */
-        OldNode* createChildImpl(void);
+        OldNode* createChildImpl();
         /** See Node. */
         OldNode* createChildImpl(const String& name);
 

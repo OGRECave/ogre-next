@@ -81,7 +81,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Global Illumination using Instant Radiosity";
     }

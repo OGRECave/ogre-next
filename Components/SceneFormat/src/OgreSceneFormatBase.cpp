@@ -65,7 +65,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    HlmsPbs* SceneFormatBase::getPbs(void) const
+    HlmsPbs* SceneFormatBase::getPbs() const
     {
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
         Hlms *hlms = hlmsManager->getHlms( "pbs" );

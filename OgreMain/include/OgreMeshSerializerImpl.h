@@ -119,7 +119,7 @@ namespace v1 {
         virtual size_t calcSubMeshSize(const SubMesh* pSub);
         virtual size_t calcGeometrySize(const VertexData* pGeom);
         virtual size_t calcSkeletonLinkSize(const String& skelName);
-        virtual size_t calcBoneAssignmentSize(void);
+        virtual size_t calcBoneAssignmentSize();
         virtual size_t calcSubMeshOperationSize(const SubMesh* pSub);
         virtual size_t calcSubMeshNameTableSize(const Mesh* pMesh);
         virtual size_t calcLodLevelSize(const Mesh* pMesh);
@@ -136,7 +136,7 @@ namespace v1 {
         virtual size_t calcAnimationTrackSize(const VertexAnimationTrack* track);
         virtual size_t calcMorphKeyframeSize(const VertexMorphKeyFrame* kf, size_t vertexCount);
         virtual size_t calcPoseKeyframeSize(const VertexPoseKeyFrame* kf);
-        virtual size_t calcPoseKeyframePoseRefSize(void);
+        virtual size_t calcPoseKeyframePoseRefSize();
         virtual size_t calcPoseVertexSize(const Pose* pose);
         virtual size_t calcSubMeshTextureAliasesSize(const SubMesh* pSub);
         virtual size_t calcBoundsInfoSize(const Mesh* pMesh);
@@ -254,7 +254,7 @@ namespace v1 {
         void readPose(DataStreamPtr& stream, Mesh* pMesh);
         size_t calcMorphKeyframeSize(const VertexMorphKeyFrame* kf, size_t vertexCount);
         size_t calcPoseSize(const Pose* pose);
-        size_t calcPoseVertexSize(void);
+        size_t calcPoseVertexSize();
     };
 
     /** Class for providing backwards-compatibility for loading version 1.4 of the .mesh format. 

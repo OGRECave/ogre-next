@@ -232,7 +232,7 @@ namespace Ogre
         mBones.clear();
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::update(void)
+    void SkeletonInstance::update()
     {
         if( !mActiveAnimations.empty() )
             resetToPose();
@@ -247,7 +247,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::resetToPose(void)
+    void SkeletonInstance::resetToPose()
     {
         KfTransform const * RESTRICT_ALIAS bindPose = mDefinition->getBindPose();
         ArrayReal const * RESTRICT_ALIAS manualBones = mManualBones.get();
@@ -379,7 +379,7 @@ namespace Ogre
         return &mBones[index];
     }
     //-----------------------------------------------------------------------------------
-    size_t SkeletonInstance::getNumBones(void) const
+    size_t SkeletonInstance::getNumBones() const
     {
         return mBones.size();
     }
@@ -498,7 +498,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::_updateBoneStartTransforms(void)
+    void SkeletonInstance::_updateBoneStartTransforms()
     {
         // mIndex has shifted so the following needs to be changed:
         //  - mBoneStartTransforms: It literally marks when our bones start in the SIMD group
@@ -561,28 +561,28 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const void* SkeletonInstance::_getMemoryBlock(void) const
+    const void* SkeletonInstance::_getMemoryBlock() const
     {
         return reinterpret_cast<const void*>( mBoneStartTransforms[0].mOwner );
     }
     //-----------------------------------------------------------------------------------
-    const void* SkeletonInstance::_getMemoryUniqueOffset(void) const
+    const void* SkeletonInstance::_getMemoryUniqueOffset() const
     {
         return reinterpret_cast<const void*>(
                         mBoneStartTransforms[0].mOwner + mBoneStartTransforms[0].mIndex );
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::_incrementRefCount(void) 
+    void SkeletonInstance::_incrementRefCount()
     {
         mRefCount++;
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonInstance::_decrementRefCount(void) 
+    void SkeletonInstance::_decrementRefCount()
     {
         mRefCount--;
     }
     //-----------------------------------------------------------------------------------
-    uint16 SkeletonInstance::_getRefCount(void) const 
+    uint16 SkeletonInstance::_getRefCount() const 
     {
         return mRefCount;
     }

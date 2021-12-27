@@ -411,7 +411,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::scheduleConstBufferUpdate(void)
+    void HlmsPbsDatablock::scheduleConstBufferUpdate()
     {
         static_cast<HlmsPbs*>(mCreator)->scheduleForUpdate( this );
     }
@@ -466,7 +466,7 @@ namespace Ogre
         mFresnelB = oldFresnelB;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::notifyOptimizationStrategyChanged(void)
+    void HlmsPbsDatablock::notifyOptimizationStrategyChanged()
     {
         calculateHash();
     }
@@ -480,7 +480,7 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsPbsDatablock::getBackgroundDiffuse(void) const
+    ColourValue HlmsPbsDatablock::getBackgroundDiffuse() const
     {
         ColourValue retVal( mBgDiffuse[0], mBgDiffuse[1], mBgDiffuse[2], mBgDiffuse[3] );
         return retVal;
@@ -495,7 +495,7 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsDatablock::getDiffuse(void) const
+    Vector3 HlmsPbsDatablock::getDiffuse() const
     {
         const Real pi = getBrdf() == PbsBrdf::BlinnPhongFullLegacy ? 1.0f : Math::PI;
         return Vector3( mkDr, mkDg, mkDb ) * pi;
@@ -511,7 +511,7 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsDatablock::getSpecular(void) const
+    Vector3 HlmsPbsDatablock::getSpecular() const
     {
         const Real pi = getBrdf() == PbsBrdf::BlinnPhongLegacyMath ? Math::PI : 1.0f;
         return Vector3( mkSr, mkSg, mkSb ) * pi;
@@ -542,7 +542,7 @@ namespace Ogre
             flushRenderables();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsDatablock::getEmissive(void) const
+    Vector3 HlmsPbsDatablock::getEmissive() const
     {
         return Vector3( mEmissive[0], mEmissive[1], mEmissive[2] );
     }
@@ -552,12 +552,12 @@ namespace Ogre
         return  mEmissive[0] != 0 || mEmissive[1] != 0 || mEmissive[2] != 0;
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::_hasEmissive(void) const
+    bool HlmsPbsDatablock::_hasEmissive() const
     {
         return hasEmissiveConstant() || mTextures[PBSM_EMISSIVE] != 0;
     }
     //-----------------------------------------------------------------------------------
-    float HlmsPbsDatablock::getRoughness(void) const
+    float HlmsPbsDatablock::getRoughness() const
     {
         return mRoughness;
     }
@@ -571,7 +571,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    HlmsPbsDatablock::Workflows HlmsPbsDatablock::getWorkflow(void) const
+    HlmsPbsDatablock::Workflows HlmsPbsDatablock::getWorkflow() const
     {
         return static_cast<Workflows>( mWorkflow );
     }
@@ -583,7 +583,7 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    float HlmsPbsDatablock::getMetalness(void) const
+    float HlmsPbsDatablock::getMetalness() const
     {
         return mFresnelR;
     }
@@ -620,12 +620,12 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsDatablock::getFresnel(void) const
+    Vector3 HlmsPbsDatablock::getFresnel() const
     {
         return Vector3( mFresnelR, mFresnelG, mFresnelB );
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::hasSeparateFresnel(void) const
+    bool HlmsPbsDatablock::hasSeparateFresnel() const
     {
         return mFresnelTypeSizeBytes != 4;
     }
@@ -732,7 +732,7 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Real HlmsPbsDatablock::getNormalMapWeight(void) const
+    Real HlmsPbsDatablock::getNormalMapWeight() const
     {
         return mNormalMapWeight;
     }
@@ -802,12 +802,12 @@ namespace Ogre
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getTwoSidedLighting(void) const
+    bool HlmsPbsDatablock::getTwoSidedLighting() const
     {
         return mTwoSided;
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::hasCustomShadowMacroblock(void) const
+    bool HlmsPbsDatablock::hasCustomShadowMacroblock() const
     {
         if( mTwoSided &&
             (mMacroblock[0]->mCullMode != CULL_NONE ||
@@ -961,7 +961,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getUseEmissiveAsLightmap(void) const
+    bool HlmsPbsDatablock::getUseEmissiveAsLightmap() const
     {
         return mUseEmissiveAsLightmap;
     }
@@ -975,12 +975,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getUseDiffuseMapAsGrayscale( void ) const
+    bool HlmsPbsDatablock::getUseDiffuseMapAsGrayscale() const
     {
         return mUseDiffuseMapAsGrayscale;
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getReceiveShadows(void) const
+    bool HlmsPbsDatablock::getReceiveShadows() const
     {
         return mReceiveShadows;
     }
@@ -1021,7 +1021,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    CubemapProbe* HlmsPbsDatablock::getCubemapProbe(void) const
+    CubemapProbe* HlmsPbsDatablock::getCubemapProbe() const
     {
         return mCubemapProbe;
     }
@@ -1050,7 +1050,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsPbsDatablock::getBrdf(void) const
+    uint32 HlmsPbsDatablock::getBrdf() const
     {
         return mBrdf;
     }
@@ -1139,26 +1139,26 @@ namespace Ogre
         return 0;
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsPbsDatablock::getDiffuseColour(void) const
+    ColourValue HlmsPbsDatablock::getDiffuseColour() const
     {
         Vector3 diffuse = getDiffuse();
         ColourValue retVal( diffuse.x, diffuse.y, diffuse.z, getTransparency() );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsPbsDatablock::getEmissiveColour(void) const
+    ColourValue HlmsPbsDatablock::getEmissiveColour() const
     {
         Vector3 emissive = getEmissive();
         ColourValue retVal( emissive.x, emissive.y, emissive.z, 0.0f );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsPbsDatablock::getDiffuseTexture(void) const
+    TextureGpu* HlmsPbsDatablock::getDiffuseTexture() const
     {
         return getTexture( PBSM_DIFFUSE );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsPbsDatablock::getEmissiveTexture(void) const
+    TextureGpu* HlmsPbsDatablock::getEmissiveTexture() const
     {
         return getTexture( PBSM_EMISSIVE );
     }

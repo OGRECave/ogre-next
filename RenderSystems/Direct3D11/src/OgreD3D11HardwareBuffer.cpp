@@ -211,7 +211,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void D3D11HardwareBuffer::unlockImpl(void)
+    void D3D11HardwareBuffer::unlockImpl()
     {
 
         if (mUseTempStagingBuffer)
@@ -287,7 +287,7 @@ namespace v1 {
 		}
 	}
 	//---------------------------------------------------------------------
-	void D3D11HardwareBuffer::_updateFromShadow(void)
+	void D3D11HardwareBuffer::_updateFromShadow()
 	{
 		if(mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate)
 		{

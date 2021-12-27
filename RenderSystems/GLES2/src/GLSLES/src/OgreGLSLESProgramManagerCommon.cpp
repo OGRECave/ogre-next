@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-    GLSLESProgramManagerCommon::GLSLESProgramManagerCommon(void) : mActiveVertexShader(NULL),
+    GLSLESProgramManagerCommon::GLSLESProgramManagerCommon() : mActiveVertexShader(NULL),
         mActiveFragmentShader(NULL)
     {
         // Fill in the relationship between type names and enums
@@ -93,7 +93,7 @@ namespace Ogre {
 #endif
     }
 
-    GLSLESProgramManagerCommon::~GLSLESProgramManagerCommon(void)
+    GLSLESProgramManagerCommon::~GLSLESProgramManagerCommon()
     {
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
         if(mGLSLOptimiserContext)

@@ -62,7 +62,7 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::createInternalResourcesImpl(void)
+    void MetalTextureGpu::createInternalResourcesImpl()
     {
         if( mPixelFormat == PFG_NULL )
             return; //Nothing to do
@@ -139,7 +139,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::destroyInternalResourcesImpl(void)
+    void MetalTextureGpu::destroyInternalResourcesImpl()
     {
         if( mFinalTextureName )
             mFinalTextureName = 0;
@@ -159,7 +159,7 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    MTLTextureType MetalTextureGpu::getMetalTextureType(void) const
+    MTLTextureType MetalTextureGpu::getMetalTextureType() const
     {
         switch( mTextureType )
         {
@@ -178,7 +178,7 @@ namespace Ogre
         };
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::notifyDataIsReady(void)
+    void MetalTextureGpu::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
@@ -193,12 +193,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool MetalTextureGpu::_isDataReadyImpl(void) const
+    bool MetalTextureGpu::_isDataReadyImpl() const
     {
         return mDisplayTextureName == mFinalTextureName && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpu::_setToDisplayDummyTexture(void)
+    void MetalTextureGpu::_setToDisplayDummyTexture()
     {
         if( !mTextureManager )
         {
@@ -445,17 +445,17 @@ namespace Ogre
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 MetalTextureGpuRenderTarget::getDepthBufferPoolId(void) const
+    uint16 MetalTextureGpuRenderTarget::getDepthBufferPoolId() const
     {
         return mDepthBufferPoolId;
     }
     //-----------------------------------------------------------------------------------
-    bool MetalTextureGpuRenderTarget::getPreferDepthTexture(void) const
+    bool MetalTextureGpuRenderTarget::getPreferDepthTexture() const
     {
         return mPreferDepthTexture;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu MetalTextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    PixelFormatGpu MetalTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }
@@ -468,7 +468,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode MetalTextureGpuRenderTarget::getOrientationMode( void ) const
+    OrientationMode MetalTextureGpuRenderTarget::getOrientationMode() const
     {
         return mOrientationMode;
     }

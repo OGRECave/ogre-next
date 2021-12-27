@@ -86,7 +86,7 @@ namespace Ogre {
         }
     }
 
-    GLenum GLES2Texture::getGLES2TextureTarget(void) const
+    GLenum GLES2Texture::getGLES2TextureTarget() const
     {
         switch(mTextureType)
         {
@@ -344,7 +344,7 @@ namespace Ogre {
     }
     
     // Creation / loading methods
-    void GLES2Texture::createInternalResourcesImpl(void)
+    void GLES2Texture::createInternalResourcesImpl()
     {
         _createGLTexResource();
         
@@ -354,7 +354,7 @@ namespace Ogre {
         mFormat = getBuffer(0,0)->getFormat();
     }
 
-    void GLES2Texture::createRenderTexture(void)
+    void GLES2Texture::createRenderTexture()
     {
         // Create the GL texture
         // This already does everything necessary
@@ -571,7 +571,7 @@ namespace Ogre {
         }
     }
 
-    void GLES2Texture::_autogenerateMipmaps(void)
+    void GLES2Texture::_autogenerateMipmaps()
     {
         const GLenum texTarget = getGLES2TextureTarget();
         OCGE( glBindTexture( texTarget, mTextureID ) );

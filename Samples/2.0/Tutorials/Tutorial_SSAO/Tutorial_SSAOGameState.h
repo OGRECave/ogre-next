@@ -30,7 +30,7 @@ namespace Demo
     public:
         Tutorial_SSAOGameState( const Ogre::String &helpDescription );
 
-		virtual void createScene01(void);
+		virtual void createScene01();
 
 		virtual void update(float timeSinceLast);
 

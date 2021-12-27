@@ -13,32 +13,32 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::initialize(void)
+    void BaseSystem::initialize()
     {
         mCurrentGameState->initialize();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::deinitialize(void)
+    void BaseSystem::deinitialize()
     {
         mCurrentGameState->deinitialize();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::createScene01(void)
+    void BaseSystem::createScene01()
     {
         mCurrentGameState->createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::createScene02(void)
+    void BaseSystem::createScene02()
     {
         mCurrentGameState->createScene02();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::destroyScene(void)
+    void BaseSystem::destroyScene()
     {
         mCurrentGameState->destroyScene();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::beginFrameParallel(void)
+    void BaseSystem::beginFrameParallel()
     {
         this->processIncomingMessages();
     }
@@ -48,14 +48,14 @@ namespace Demo
         mCurrentGameState->update( timeSinceLast );
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::finishFrameParallel(void)
+    void BaseSystem::finishFrameParallel()
     {
         mCurrentGameState->finishFrameParallel();
 
         this->flushQueuedMessages();
     }
     //-----------------------------------------------------------------------------------
-    void BaseSystem::finishFrame(void)
+    void BaseSystem::finishFrame()
     {
         mCurrentGameState->finishFrame();
     }

@@ -88,9 +88,9 @@ namespace Ogre {
         */
         void setInnerSizeY(Real y);
         /** Gets the x component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeX(void) const;
+        Real getInnerSizeX() const;
         /** Gets the y component of the area inside the ellipsoid which doesn't emit particles. */
-        Real getInnerSizeY(void) const;
+        Real getInnerSizeY() const;
 
     protected:
         /// @see ParticleEmitter

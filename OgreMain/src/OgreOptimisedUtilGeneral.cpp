@@ -394,7 +394,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    extern OptimisedUtil* _getOptimisedUtilGeneral(void)
+    extern OptimisedUtil* _getOptimisedUtilGeneral()
     {
         static OptimisedUtilGeneral msOptimisedUtilGeneral;
         return &msOptimisedUtilGeneral;

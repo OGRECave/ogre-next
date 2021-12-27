@@ -55,7 +55,7 @@ namespace v1
                                     VulkanDevice *device );
         virtual ~VulkanHardwareBufferCommon();
 
-        void _notifyDeviceStalled( void );
+        void _notifyDeviceStalled();
 
         /** Returns the actual API buffer, but first sets mLastFrameUsed as we
             assume you're calling this function to use the buffer in the GPU.
@@ -84,7 +84,7 @@ namespace v1
         void copyData( VulkanHardwareBufferCommon *srcBuffer, size_t srcOffset, size_t dstOffset,
                        size_t length, bool discardWholeBuffer = false );
 
-        size_t getSizeBytes( void ) const { return mBuffer.mSize; }
+        size_t getSizeBytes() const { return mBuffer.mSize; }
     };
 }
 }

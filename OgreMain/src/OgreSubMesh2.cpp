@@ -71,13 +71,13 @@ namespace Ogre {
         mBoneAssignmentsOutOfDate = true;
     }
     //-----------------------------------------------------------------------
-    void SubMesh::clearBoneAssignments(void)
+    void SubMesh::clearBoneAssignments()
     {
         mBoneAssignments.clear();
         mBoneAssignmentsOutOfDate = true;
     }
     //---------------------------------------------------------------------
-    uint8 SubMesh::rationaliseBoneAssignments(void)
+    uint8 SubMesh::rationaliseBoneAssignments()
     {
         // Iterate through, finding the largest # bones per vertex
         uint8 maxBonesPerVertex         = 0;
@@ -167,7 +167,7 @@ namespace Ogre {
         return maxBonesPerVertex;
     }
     //-----------------------------------------------------------------------
-    void SubMesh::_compileBoneAssignments(void)
+    void SubMesh::_compileBoneAssignments()
     {
         const uint8 maxBones = rationaliseBoneAssignments();
 
@@ -309,7 +309,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::_buildBoneIndexMap(void)
+    void SubMesh::_buildBoneIndexMap()
     {
         assert( !mBoneAssignmentsOutOfDate );
 
@@ -342,7 +342,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::_buildBoneAssignmentsFromVertexData(void)
+    void SubMesh::_buildBoneAssignmentsFromVertexData()
     {
         size_t indexSource = 0;
         size_t weightSource = 0;
@@ -1313,7 +1313,7 @@ namespace Ogre {
         return data;
     }
     //---------------------------------------------------------------------
-    void SubMesh::dearrangeToInefficient(void)
+    void SubMesh::dearrangeToInefficient()
     {
         const uint8 numVaoPasses = mParent->hasIndependentShadowMappingVaos() + 1;
 
@@ -1545,7 +1545,7 @@ namespace Ogre {
         vaos.clear();
     }
     //---------------------------------------------------------------------
-    void SubMesh::destroyShadowMappingVaos(void)
+    void SubMesh::destroyShadowMappingVaos()
     {
         if( mVao[VpNormal].empty() || mVao[VpShadow].empty() || mVao[VpNormal][0] == mVao[VpShadow][0] )
             mVao[VpShadow].clear(); //Using the same Vaos for both shadow mapping and regular rendering

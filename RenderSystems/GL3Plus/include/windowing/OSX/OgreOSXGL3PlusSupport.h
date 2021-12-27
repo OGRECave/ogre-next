@@ -43,10 +43,10 @@ public:
     virtual ~OSXGL3PlusSupport();
 
     /// @copydoc GL3PlusSupport::addConfig
-    void addConfig( void ) override;
+    void addConfig() override;
 
     /// @copydoc GL3PlusSupport::validateConfig
-    String validateConfig( void ) override;
+    String validateConfig() override;
 
     /// @copydoc GL3PlusSupport::createWindow
     Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle ) override;

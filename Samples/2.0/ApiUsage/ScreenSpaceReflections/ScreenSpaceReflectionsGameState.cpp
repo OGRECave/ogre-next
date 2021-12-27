@@ -43,7 +43,7 @@ namespace Demo
         memset( mMaterials, 0, sizeof(mMaterials) );
     }
     //-----------------------------------------------------------------------------------
-    void ScreenSpaceReflectionsGameState::createScene01(void)
+    void ScreenSpaceReflectionsGameState::createScene01()
     {
 //        Ogre::TexturePtr globalCubemap = Ogre::TextureManager::getSingleton().load(
 //                    "SaintPetersBasilica.dds", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
@@ -118,7 +118,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void ScreenSpaceReflectionsGameState::destroyScene(void)
+    void ScreenSpaceReflectionsGameState::destroyScene()
     {
         delete mScreenSpaceReflections;
         mScreenSpaceReflections = 0;

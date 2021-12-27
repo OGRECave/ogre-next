@@ -87,45 +87,45 @@ namespace Ogre
         virtual ~MetalProgram();
 
         /// Overridden
-        bool getPassTransformStates(void) const;
-        bool getPassSurfaceAndLightStates(void) const;
-        bool getPassFogStates(void) const;
+        bool getPassTransformStates() const;
+        bool getPassSurfaceAndLightStates() const;
+        bool getPassFogStates() const;
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
         /// Sets the preprocessor defines use to compile the program.
-        const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
+        const String& getPreprocessorDefines() const { return mPreprocessorDefines; }
 
         /** Sets the entry point for this program ie the first method called. */
         void setEntryPoint(const String& entryPoint) { mEntryPoint = entryPoint; }
         /** Gets the entry point defined for this program. */
-        const String& getEntryPoint(void) const { return mEntryPoint; }
+        const String& getEntryPoint() const { return mEntryPoint; }
 
         /// If this shader is a pixel shader, sets a vertex shader that can be paired with us
         /// for properly getting reflection data for GPU program parameters.
         void setShaderReflectionPairHint(const String& shaderName)
                                                     { mShaderReflectionPairHint = shaderName; }
         /// Gets the paired shader. See setShaderReflectionPairHint.
-        const String& getShaderReflectionPairHint(void) const       { return mShaderReflectionPairHint; }
+        const String& getShaderReflectionPairHint() const       { return mShaderReflectionPairHint; }
 
         /// Overridden from GpuProgram
-        const String& getLanguage(void) const;
+        const String& getLanguage() const;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters();
 
         /// Retrieve the Metal function object
-        id<MTLFunction> getMetalFunction(void) const    { return mFunction; }
+        id<MTLFunction> getMetalFunction() const    { return mFunction; }
 
         /// Compile source into shader object
         bool compile(const bool checkErrors = false);
-        void analyzeComputeParameters(void);
-        void analyzeRenderParameters(void);
+        void analyzeComputeParameters();
+        void analyzeRenderParameters();
         static void autoFillDummyVertexAttributesForShader( id<MTLFunction> inVertexFunction,
                                                             MTLRenderPipelineDescriptor *outPsd );
         void analyzeParameterBuffer( MTLArgument *arg );
 
         /// In bytes.
-        uint32 getBufferRequiredSize(void) const;
+        uint32 getBufferRequiredSize() const;
         /// dstData must be able to hold at least getBufferRequiredSize
         void updateBuffers( const GpuProgramParametersSharedPtr &params,
                             uint8 * RESTRICT_ALIAS dstData );
@@ -137,22 +137,22 @@ namespace Ogre
 
         /** Internal load implementation, must be implemented by subclasses.
         */
-        void loadFromSource(void);
+        void loadFromSource();
         /** Internal method for creating a dummy low-level program for this
         high-level program. Metal does not give access to the low level implementation of the
         shader so this method creates an object sub-classed from MetalGpuProgram just to be
         compatible with MetalRenderSystem.
         */
-        void createLowLevelImpl(void);
+        void createLowLevelImpl();
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl(void);
+        void unloadHighLevelImpl();
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl(void);
+        void unloadImpl();
 
         /// Populate the passed parameters with name->index map
         void populateParameterNames(GpuProgramParametersSharedPtr params);
         /// Populate the passed parameters with name->index map, must be overridden
-        void buildConstantDefinitions(void) const;
+        void buildConstantDefinitions() const;
 
         void parsePreprocessorDefinitions( NSMutableDictionary<NSString*, NSObject*> *inOutMacros );
 

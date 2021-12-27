@@ -169,7 +169,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::clear(void)
+    void RenderQueue::clear()
     {
         for( size_t i=0; i<256; ++i )
         {
@@ -189,7 +189,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::clearState(void)
+    void RenderQueue::clearState()
     {
         mLastWasCasterPass = false;
         mLastVaoName    = 0;
@@ -918,7 +918,7 @@ namespace Ogre
         --mRenderingStarted;
     }
     //-----------------------------------------------------------------------
-    void RenderQueue::frameEnded(void)
+    void RenderQueue::frameEnded()
     {
         OGRE_ASSERT_LOW(
             mRenderingStarted == 0u &&

@@ -1086,7 +1086,7 @@ namespace Ogre
             setProperty( PbsProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::notifyPropertiesMergedPreGenerationStep(void)
+    void HlmsPbs::notifyPropertiesMergedPreGenerationStep()
     {
         const int32 numVctProbes = getProperty( PbsProperty::VctNumProbes );
         const bool hasVct = numVctProbes > 0;
@@ -3524,7 +3524,7 @@ namespace Ogre
         return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 2) - 1;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::destroyAllBuffers(void)
+    void HlmsPbs::destroyAllBuffers()
     {
         HlmsBufferManager::destroyAllBuffers();
 
@@ -3606,7 +3606,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::frameEnded(void)
+    void HlmsPbs::frameEnded()
     {
         HlmsBufferManager::frameEnded();
         mCurrentPassBuffer  = 0;
@@ -3659,7 +3659,7 @@ namespace Ogre
             mMaxSpecIblMipmap = std::max<float>( numMipmaps, mMaxSpecIblMipmap );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::loadLtcMatrix(void)
+    void HlmsPbs::loadLtcMatrix()
     {
         const uint32 poolId = 992044u;
 
@@ -3740,7 +3740,7 @@ namespace Ogre
         mPerceptualRoughness = bPerceptualRoughness;
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbs::getPerceptualRoughness( void ) const { return mPerceptualRoughness; }
+    bool HlmsPbs::getPerceptualRoughness() const { return mPerceptualRoughness; }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setShadowSettings( ShadowFilter filter )
     {
@@ -3786,7 +3786,7 @@ namespace Ogre
             mHasPlanarReflections = false;
     }
     //-----------------------------------------------------------------------------------
-    PlanarReflections* HlmsPbs::getPlanarReflections(void) const
+    PlanarReflections* HlmsPbs::getPlanarReflections() const
     {
         return mPlanarReflections;
     }

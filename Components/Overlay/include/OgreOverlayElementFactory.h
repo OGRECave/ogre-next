@@ -65,7 +65,7 @@ namespace v1 {
         /** Destroys a OverlayElement which this factory created previously. */
         virtual void destroyOverlayElement(OverlayElement* pElement) { delete pElement; }
         /** Gets the string uniquely identifying the type of element this factory creates. */
-        virtual const String& getTypeName(void) const = 0;
+        virtual const String& getTypeName() const = 0;
     };
 
 
@@ -79,7 +79,7 @@ namespace v1 {
             return OGRE_NEW PanelOverlayElement(instanceName);
         }
         /** See OverlayElementFactory */
-        virtual const String& getTypeName(void) const;
+        virtual const String& getTypeName() const;
     };
 
     /** Factory for creating BorderPanelOverlayElement instances. */
@@ -92,7 +92,7 @@ namespace v1 {
             return OGRE_NEW BorderPanelOverlayElement(instanceName);
         }
         /** See OverlayElementFactory */
-        virtual const String& getTypeName(void) const;
+        virtual const String& getTypeName() const;
     };
 
     /** Factory for creating TextAreaOverlayElement instances. */
@@ -105,7 +105,7 @@ namespace v1 {
             return OGRE_NEW TextAreaOverlayElement(instanceName);
         }
         /** See OverlayElementFactory */
-        virtual const String& getTypeName(void) const;
+        virtual const String& getTypeName() const;
     };
     /** @} */
     /** @} */

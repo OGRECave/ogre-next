@@ -27,7 +27,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void TutorialSky_PostprocessGameState::createScene01(void)
+    void TutorialSky_PostprocessGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

@@ -606,7 +606,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsManager::getDefaultDatablock(void) const
+    HlmsDatablock* HlmsManager::getDefaultDatablock() const
     {
         return mRegisteredHlms[mDefaultHlmsType]->getDefaultDatablock();
     }
@@ -653,7 +653,7 @@ namespace Ogre
         mComputeHlms->_changeRenderSystem( mRenderSystem );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsManager::unregisterComputeHlms(void)
+    void HlmsManager::unregisterComputeHlms()
     {
         if( mComputeHlms )
         {
@@ -662,7 +662,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsManager::renderSystemDestroyAllBlocks(void)
+    void HlmsManager::renderSystemDestroyAllBlocks()
     {
         if( mRenderSystem )
         {
@@ -911,7 +911,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    Real HlmsManager::getLoadingOrder(void) const
+    Real HlmsManager::getLoadingOrder() const
     {
         return 100;
     }

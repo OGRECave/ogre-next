@@ -34,11 +34,11 @@
 namespace Ogre
 {
     template<> LodWorkQueueWorker* Singleton<LodWorkQueueWorker>::msSingleton = 0;
-    LodWorkQueueWorker* LodWorkQueueWorker::getSingletonPtr(void)
+    LodWorkQueueWorker* LodWorkQueueWorker::getSingletonPtr()
     {
         return msSingleton;
     }
-    LodWorkQueueWorker& LodWorkQueueWorker::getSingleton(void)
+    LodWorkQueueWorker& LodWorkQueueWorker::getSingleton()
     {
         assert( msSingleton );
         return ( *msSingleton );

@@ -69,7 +69,7 @@ namespace Ogre {
         class _OgreExport Listener
         {
         public:
-            Listener(void) {}
+            Listener() {}
             virtual ~Listener();
             /** MovableObject is being destroyed */
             virtual void objectDestroyed(MovableObject*) {}
@@ -163,7 +163,7 @@ namespace Ogre {
         /** Notify the object of it's manager (internal use only) */
         void _notifyManager(SceneManager* man) { mManager = man; }
         /** Get the manager of this object, if any (internal use only) */
-        SceneManager* _getManager(void) const { return mManager; }
+        SceneManager* _getManager() const { return mManager; }
 
         /** Notifies the movable object that hardware resources were lost
             @remarks
@@ -185,30 +185,30 @@ namespace Ogre {
         void setName( const String &name )                                  { mName = name; }
 
         /** Returns the name of this object. */
-        const String& getName(void) const                                   { return mName; }
+        const String& getName() const                                   { return mName; }
 
         /** Returns the type name of this object. */
-        virtual const String& getMovableType(void) const = 0;
+        virtual const String& getMovableType() const = 0;
 
         /// Returns the node to which this object is attached.
-        Node* getParentNode(void) const                                     { return mParentNode; }
+        Node* getParentNode() const                                     { return mParentNode; }
 
-        inline SceneNode* getParentSceneNode(void) const;
+        inline SceneNode* getParentSceneNode() const;
 
         /** Internal method called to notify the object that it has been attached to a node.
         */
         virtual void _notifyAttached( Node* parent );
 
         /** Returns true if this object is attached to a Node. */
-        bool isAttached(void) const                                         { return mParentNode != 0; }
+        bool isAttached() const                                         { return mParentNode != 0; }
 
         /** Detaches an object from a parent SceneNode if attached. */
-        void detachFromParent(void);
+        void detachFromParent();
 
         /// @See Node::_callMemoryChangeListeners
-        virtual void _notifyParentNodeMemoryChanged(void) {}
+        virtual void _notifyParentNodeMemoryChanged() {}
 
-        unsigned char getCurrentMeshLod(void) const                         { return mCurrentMeshLod; }
+        unsigned char getCurrentMeshLod() const                         { return mCurrentMeshLod; }
 
         /// Checks whether this MovableObject is static. @See setStatic
         bool isStatic() const;
@@ -233,7 +233,7 @@ namespace Ogre {
 
         /// Called by SceneManager when it is telling we're a static MovableObject being dirty
         /// Don't call this directly. @see SceneManager::notifyStaticDirty
-        virtual void _notifyStaticDirty(void) const {}
+        virtual void _notifyStaticDirty() const {}
 
         /** Internal method by which the movable object must add Renderable subclass instances to the rendering queue.
             @remarks
@@ -335,13 +335,13 @@ namespace Ogre {
         @remarks
             Returns the value set by MovableObject::setVisible only.
         */
-        inline bool getVisible(void) const;
+        inline bool getVisible() const;
 
         /** Returns whether or not this object is supposed to be visible or not. 
         @remarks
             Takes into account visibility flags and the setVisible, but not rendering distance.
         */
-        bool isVisible(void) const;
+        bool isVisible() const;
 
         /** Sets the distance at which the object is no longer rendered.
         @param
@@ -352,7 +352,7 @@ namespace Ogre {
         inline void setRenderingDistance(Real dist);
 
         /** Gets the distance at which batches are no longer rendered. */
-        inline Real getRenderingDistance(void) const;
+        inline Real getRenderingDistance() const;
 
         /** Sets the distance at which the object is no longer casting shadows.
         @param
@@ -365,7 +365,7 @@ namespace Ogre {
         inline void setShadowRenderingDistance(Real dist);
 
         /** Gets the distance at which batches are no longer casting shadows. */
-        inline Real getShadowRenderingDistance(void) const;
+        inline Real getShadowRenderingDistance() const;
 
         /** Sets the minimum pixel size an object needs to be in both screen axes in order to be rendered
         @note Camera::setUseMinPixelSize() needs to be called for this parameter to be used.
@@ -410,19 +410,19 @@ namespace Ogre {
         virtual void setRenderQueueGroup(uint8 queueID);
 
         /** Gets the queue group for this entity, see setRenderQueueGroup for full details. */
-        inline uint8 getRenderQueueGroup(void) const;
+        inline uint8 getRenderQueueGroup() const;
 
         /// Returns a direct access to the ObjectData state
         ObjectData& _getObjectData()                                        { return mObjectData; }
 
         /// Returns the full transformation of the parent sceneNode or the attachingPoint node
-        const Matrix4& _getParentNodeFullTransform(void) const;
+        const Matrix4& _getParentNodeFullTransform() const;
 
         /** Retrieves the local axis-aligned bounding box for this object.
             @remarks
                 This bounding box is in local coordinates.
         */
-        Aabb getLocalAabb(void) const;
+        Aabb getLocalAabb() const;
 
         /** Sets the local axis-aligned bounding box for this object.
          @remarks
@@ -448,7 +448,7 @@ namespace Ogre {
         Aabb getWorldAabbUpdated();
 
         /// See getLocalAabb and getWorldRadius
-        float getLocalRadius(void) const;
+        float getLocalRadius() const;
 
         /** Gets the bounding Radius scaled by max( scale.x, scale.y, scale.z ).
         @remarks
@@ -485,7 +485,7 @@ namespace Ogre {
         inline void removeQueryFlags(uint32 flags);
 
         /// Returns the query flags relevant for this object
-        inline uint32 getQueryFlags(void) const;
+        inline uint32 getQueryFlags() const;
 
         /** Set the default query flags for all future MovableObject instances.
         */
@@ -496,10 +496,10 @@ namespace Ogre {
         static uint32 getDefaultQueryFlags() { return msDefaultQueryFlags; }
 
         /// Returns the distance to camera as calculated in @cullFrustum
-        inline RealAsUint getCachedDistanceToCamera(void) const;
+        inline RealAsUint getCachedDistanceToCamera() const;
 
         /// Returns the distance to camera as calculated in @cullFrustum
-        inline Real getCachedDistanceToCameraAsReal(void) const;
+        inline Real getCachedDistanceToCameraAsReal() const;
 
         /** Sets the visibility flags for this object.
         @remarks
@@ -521,7 +521,7 @@ namespace Ogre {
         /** Returns the visibility flags relevant for this object. Reserved visibility flags are
             not returned.
         */
-        inline uint32 getVisibilityFlags(void) const;
+        inline uint32 getVisibilityFlags() const;
 
         /** Set the default visibility flags for all future MovableObject instances.
         */
@@ -540,14 +540,14 @@ namespace Ogre {
 
         /** Gets the current listener for this object.
         */
-        Listener* getListener(void) const { return mListener; }
+        Listener* getListener() const { return mListener; }
 
         /** Gets a list of lights, ordered relative to how close they are to this movable object.
         @remarks
             The lights are filled in @see buildLightList
         @return The list of lights use to lighting this object.
         */
-        const LightList& queryLights(void) const                                { return mLightList; }
+        const LightList& queryLights() const                                { return mLightList; }
 
         /** Get a bitwise mask which will filter the lights affecting this object
         @remarks
@@ -592,12 +592,12 @@ namespace Ogre {
         */
         inline void setCastShadows( bool enabled );
         /** Returns whether shadow casting is enabled for this object. */
-        inline bool getCastShadows(void) const;
+        inline bool getCastShadows() const;
 
-        SkeletonInstance* getSkeletonInstance(void) const   { return mSkeletonInstance; }
+        SkeletonInstance* getSkeletonInstance() const   { return mSkeletonInstance; }
 
 #if OGRE_DEBUG_MODE
-        void _setCachedAabbOutOfDate(void)                  { mCachedAabbOutOfDate = true; }
+        void _setCachedAabbOutOfDate()                  { mCachedAabbOutOfDate = true; }
         bool isCachedAabbOutOfDate() const                  { return mCachedAabbOutOfDate; }
 #endif
 
@@ -619,7 +619,7 @@ namespace Ogre {
         MovableObjectFactory() {}
         virtual ~MovableObjectFactory() {}
         /// Get the type of the object to be created
-        virtual const String& getType(void) const = 0;
+        virtual const String& getType() const = 0;
 
         /** Create a new instance of the object.
         @param manager The SceneManager instance that will be holding the
@@ -643,7 +643,7 @@ namespace Ogre {
 
         virtual ~NullEntity();
 
-        virtual const String& getMovableType(void) const
+        virtual const String& getMovableType() const
         {
             return msMovableType;
         }

@@ -74,7 +74,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderPassDescriptor::checkRenderWindowStatus(void)
+    void GL3PlusRenderPassDescriptor::checkRenderWindowStatus()
     {
         if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
             (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
@@ -108,7 +108,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderPassDescriptor::switchToRenderWindow(void)
+    void GL3PlusRenderPassDescriptor::switchToRenderWindow()
     {
         GL3PlusFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         if( mSharedFboItor != frameBufferDescMap.end() )
@@ -126,7 +126,7 @@ namespace Ogre
         mHasRenderWindow = true;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderPassDescriptor::switchToFBO(void)
+    void GL3PlusRenderPassDescriptor::switchToFBO()
     {
         FrameBufferDescKey key( *this );
         GL3PlusFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
@@ -169,7 +169,7 @@ namespace Ogre
         mHasRenderWindow = false;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderPassDescriptor::analyzeClearColour(void)
+    void GL3PlusRenderPassDescriptor::analyzeClearColour()
     {
         if( !mNumColourEntries )
         {
@@ -316,7 +316,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderPassDescriptor::updateDepthFbo(void)
+    void GL3PlusRenderPassDescriptor::updateDepthFbo()
     {
         if( mHasRenderWindow )
             return;
@@ -349,7 +349,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderPassDescriptor::updateStencilFbo(void)
+    void GL3PlusRenderPassDescriptor::updateStencilFbo()
     {
         if( mHasRenderWindow )
             return;

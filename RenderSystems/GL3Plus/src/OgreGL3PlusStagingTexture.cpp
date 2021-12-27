@@ -63,7 +63,7 @@ namespace Ogre
         assert( mUnmapTicket == std::numeric_limits<size_t>::max() );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::_unmapBuffer(void)
+    void GL3PlusStagingTexture::_unmapBuffer()
     {
         if( mUnmapTicket != std::numeric_limits<size_t>::max() )
         {
@@ -80,12 +80,12 @@ namespace Ogre
                box.data <= static_cast<uint8*>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImplRawPtr(void)
+    void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImplRawPtr()
     {
         return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::startMapRegion(void)
+    void GL3PlusStagingTexture::startMapRegion()
     {
         StagingTextureBufferImpl::startMapRegion();
 
@@ -100,7 +100,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusStagingTexture::stopMapRegion(void)
+    void GL3PlusStagingTexture::stopMapRegion()
     {
         const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
                 supportsArbBufferStorage();

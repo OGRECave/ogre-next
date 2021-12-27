@@ -41,7 +41,7 @@ namespace v1 {
         D3D11HardwareBuffer* mBufferImpl;
         // have to implement these, but do nothing as overridden lock/unlock
         void* lockImpl(size_t offset, size_t length, LockOptions options) {return 0;}
-        void unlockImpl(void) {}
+        void unlockImpl() {}
 
     public:
         D3D11HardwareIndexBuffer(HardwareBufferManagerBase* mgr, IndexType idxType, size_t numIndexes, 
@@ -50,17 +50,17 @@ namespace v1 {
 
         // override all data-gathering methods
         void* lock(size_t offset, size_t length, LockOptions options);
-        void unlock(void);
+        void unlock();
         void readData(size_t offset, size_t length, void* pDest);
         void writeData(size_t offset, size_t length, const void* pSource,
             bool discardWholeBuffer = false);
 
         void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
             size_t dstOffset, size_t length, bool discardWholeBuffer = false);
-        bool isLocked(void) const;
+        bool isLocked() const;
 
         /// Get the D3D-specific index buffer
-        ID3D11Buffer * getD3DIndexBuffer(void) const;
+        ID3D11Buffer * getD3DIndexBuffer() const;
     };
 
 }

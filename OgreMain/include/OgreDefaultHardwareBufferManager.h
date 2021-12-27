@@ -53,7 +53,7 @@ namespace v1 {
         /** See HardwareBuffer. */
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
-        void unlockImpl(void);
+        void unlockImpl();
     public:
         DefaultHardwareVertexBuffer(size_t vertexSize, size_t numVertices, HardwareBuffer::Usage usage);
         DefaultHardwareVertexBuffer(HardwareBufferManagerBase* mgr, size_t vertexSize, size_t numVertices, 
@@ -67,7 +67,7 @@ namespace v1 {
         /** Override HardwareBuffer to turn off all shadowing. */
         void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock(void);
+        void unlock();
 
 
     };
@@ -80,7 +80,7 @@ namespace v1 {
         /** See HardwareBuffer. */
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
-        void unlockImpl(void);
+        void unlockImpl();
     public:
         DefaultHardwareIndexBuffer(IndexType idxType, size_t numIndexes, HardwareBuffer::Usage usage);
         ~DefaultHardwareIndexBuffer();
@@ -92,7 +92,7 @@ namespace v1 {
         /** Override HardwareBuffer to turn off all shadowing. */
         void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock(void);
+        void unlock();
 
     };
 
@@ -104,7 +104,7 @@ namespace v1 {
         /** See HardwareBuffer. */
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
-        void unlockImpl(void);
+        void unlockImpl();
         /**  */
         //bool updateStructure(const Any& renderSystemInfo);
 
@@ -119,7 +119,7 @@ namespace v1 {
         /** Override HardwareBuffer to turn off all shadowing. */
         void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock(void);
+        void unlock();
     };
 
     /// Specialisation of HardwareCounterBuffer for emulation
@@ -130,7 +130,7 @@ namespace v1 {
         /** See HardwareBuffer. */
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
-        void unlockImpl(void);
+        void unlockImpl();
         /**  */
         //bool updateStructure(const Any& renderSystemInfo);
 
@@ -145,7 +145,7 @@ namespace v1 {
         /** Override HardwareBuffer to turn off all shadowing. */
         void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock(void);
+        void unlock();
     };
 
     /** Specialisation of HardwareBufferManagerBase to emulate hardware buffers.

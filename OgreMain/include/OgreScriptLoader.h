@@ -68,7 +68,7 @@ namespace Ogre {
         @return
             A list of file patterns, in the order they should be searched in.
         */
-        virtual const StringVector& getScriptPatterns(void) const = 0;
+        virtual const StringVector& getScriptPatterns() const = 0;
 
         /** Parse a script file.
         @param stream Weak reference to a data stream which is the source of the script
@@ -84,7 +84,7 @@ namespace Ogre {
         @return A value representing the relative loading order of these scripts
             compared to other script users, where higher values load later.
         */
-        virtual Real getLoadingOrder(void) const  = 0;
+        virtual Real getLoadingOrder() const  = 0;
 
     };
 

@@ -84,21 +84,21 @@ namespace Ogre {
         mutable bool mConstantDefsBuilt;
 
         /// Internal load high-level portion if not loaded
-        virtual void loadHighLevel(void);
+        virtual void loadHighLevel();
         /// Internal unload high-level portion if loaded
-        virtual void unloadHighLevel(void);
+        virtual void unloadHighLevel();
 
-        void dumpSourceIfHasIncludeEnabled(void);
+        void dumpSourceIfHasIncludeEnabled();
         void parseIncludeFile( String &inOutSourceFile );
         /** Internal load implementation, loads just the high-level portion, enough to 
             get parameters.
         */
-        virtual void loadHighLevelImpl(void);
+        virtual void loadHighLevelImpl();
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
-        virtual void createLowLevelImpl(void) = 0;
+        virtual void createLowLevelImpl() = 0;
         /// Internal unload implementation, must be implemented by subclasses
-        virtual void unloadHighLevelImpl(void) = 0;
+        virtual void unloadHighLevelImpl() = 0;
         /// Populate the passed parameters with name->index map
         virtual void populateParameterNames(GpuProgramParametersSharedPtr params);
         /** Build the constant definition map, must be overridden.
@@ -109,7 +109,7 @@ namespace Ogre {
         */
         virtual void buildConstantDefinitions() const = 0;
 
-        void setupBaseParamDictionary(void);
+        void setupBaseParamDictionary();
 
         /** @copydoc Resource::loadImpl */
         void loadImpl();
@@ -129,9 +129,9 @@ namespace Ogre {
             HighLevelGpuProgramManager. This method creates a new instance of a parameters
             object containing the definition of the parameters this program understands.
         */
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters();
         /** @copydoc GpuProgram::_getBindingDelegate */
-        GpuProgram* _getBindingDelegate(void) { return mAssemblerProgram.getPointer(); }
+        GpuProgram* _getBindingDelegate() { return mAssemblerProgram.getPointer(); }
 
         /** Whether we should parse the source code looking for include files and
             embedding the file. Disabled by default to avoid slowing down when
@@ -158,7 +158,7 @@ namespace Ogre {
             True to support #include. Must be toggled before loading the source file.
         */
         void setEnableIncludeHeader( bool bEnable );
-        bool getEnableIncludeHeader(void) const;
+        bool getEnableIncludeHeader() const;
 
         /** Get the full list of GpuConstantDefinition instances.
         @note
@@ -166,7 +166,7 @@ namespace Ogre {
         */
         const GpuNamedConstants& getConstantDefinitions() const;
 
-        virtual size_t calculateSize(void) const;
+        virtual size_t calculateSize() const;
 
 
 

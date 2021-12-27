@@ -99,7 +99,7 @@ namespace Ogre
         /// mMappingCount), and stalls if needed (synchronize); also book-keeps mFences and
         /// mUnfencedHazards.
         /// May modify mMappingStart.
-        void waitIfNeeded( void );
+        void waitIfNeeded();
 
         virtual void *mapImpl( size_t sizeBytes );
         virtual void unmapImpl( const Destination *destinations, size_t numDestinations );

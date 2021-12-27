@@ -36,7 +36,7 @@ namespace Demo
                                                     mCamera, "LocalCubemapsWorkspace", true );
         }
 
-        virtual void setupResources(void)
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -107,7 +107,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Automatically-placed Parallax Corrected Cubemap probes via PccPerPixelGridPlacement";
     }

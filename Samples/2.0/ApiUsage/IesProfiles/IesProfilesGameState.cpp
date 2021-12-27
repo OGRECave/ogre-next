@@ -32,7 +32,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void IesProfilesGameState::createScene01( void )
+    void IesProfilesGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -127,7 +127,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void IesProfilesGameState::destroyScene( void )
+    void IesProfilesGameState::destroyScene()
     {
         OGRE_DELETE mLightProfiles;
         mLightProfiles = 0;

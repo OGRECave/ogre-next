@@ -173,18 +173,18 @@ namespace Ogre
 
         ShaderParams::Param *addLocalBounceShaderParam( const char *name );
 
-        void restoreSwappedTextures( void );
+        void restoreSwappedTextures();
 
         float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                         const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
-        void createTextures(void);
-        void destroyTextures(void);
-        void checkTextures(void);
-        void setupBounceTextures(void);
-        void setupGlslTextureUnits( void );
+        void createTextures();
+        void destroyTextures();
+        void checkTextures();
+        void setupBounceTextures();
+        void setupGlslTextureUnits();
 
-        void generateAnisotropicMips(void);
+        void generateAnisotropicMips();
 
         void runBounce( uint32 bounceIteration );
 
@@ -218,7 +218,7 @@ namespace Ogre
             False to no longer allow multiple bounces, and release memory.
         */
         void setAllowMultipleBounces( bool bAllowMultipleBounces );
-        bool getAllowMultipleBounces(void) const;
+        bool getAllowMultipleBounces() const;
 
         /** Sets baking multiplier for HDR rendering.
 
@@ -251,12 +251,12 @@ namespace Ogre
             and autoMultiplier must be set to false
         */
         void setBakingMultiplier( float bakingMult );
-        float getBakingMultiplier(void) const               { return mBakingMultiplier; }
+        float getBakingMultiplier() const               { return mBakingMultiplier; }
 
         /// If you've set setBakingMultiplier but haven't yet called VctLighting::update
         /// with autoMultiplier = false, this function returns the baking multiplier that
         /// is currently in use (beware of floating point accuracy differences)
-        float getCurrentBakingMultiplier(void) const        { return 1.0f / mInvBakingMultiplier; }
+        float getCurrentBakingMultiplier() const        { return 1.0f / mInvBakingMultiplier; }
 
         /**
         @param sceneManager
@@ -296,21 +296,21 @@ namespace Ogre
         /// (albedo, normal, emissive) may be swapped for a copy.
         ///
         /// This function notifies us that buildRelative to update some of our references
-        void resetTexturesFromBuildRelative( void );
+        void resetTexturesFromBuildRelative();
 
         bool needsAmbientHemisphere() const;
 
-        size_t getNumCascades( void ) const { return mExtraCascades.size() + 1u; }
+        size_t getNumCascades() const { return mExtraCascades.size() + 1u; }
 
-        size_t getConstBufferSize(void) const;
+        size_t getConstBufferSize() const;
 
         void fillConstBufferData( const Matrix4 &viewMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
 
-        bool shouldEnableSpecularSdfQuality(void) const;
+        bool shouldEnableSpecularSdfQuality() const;
 
         void setDebugVisualization( bool bShow, SceneManager *sceneManager );
-        bool getDebugVisualizationMode(void) const;
+        bool getDebugVisualizationMode() const;
 
         /** Toggles anisotropic mips.
 
@@ -328,7 +328,7 @@ namespace Ogre
             *must* be called again to repopulate the light data.
         */
         void setAnisotropic( bool bAnisotropic );
-        bool isAnisotropic(void) const                      { return mAnisotropic; }
+        bool isAnisotropic() const                      { return mAnisotropic; }
 
         /** Extremely similar version of SceneManager::setAmbientLight
             In fact the hemisphereDir parameter is shared and set in SceneManager::setAmbientLight
@@ -345,13 +345,13 @@ namespace Ogre
         */
         void setAmbient( const ColourValue& upperHemisphere, const ColourValue& lowerHemisphere );
 
-        TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
+        TextureGpu** getLightVoxelTextures()            { return mLightVoxel; }
         TextureGpu **getLightVoxelTextures( const size_t cascadeIdx );
-        uint32 getNumVoxelTextures(void) const              { return mAnisotropic ? 4u : 1u; }
-        const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
+        uint32 getNumVoxelTextures() const              { return mAnisotropic ? 4u : 1u; }
+        const HlmsSamplerblock* getBindTrilinearSamplerblock()
                                                             { return mSamplerblockTrilinear; }
 
-        const VctVoxelizerSourceBase* getVoxelizer(void) const      { return mVoxelizer; }
+        const VctVoxelizerSourceBase* getVoxelizer() const      { return mVoxelizer; }
 
         //TextureGpuListener overloads
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,

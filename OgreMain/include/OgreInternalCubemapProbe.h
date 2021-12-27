@@ -53,7 +53,7 @@ namespace Ogre
         virtual ~InternalCubemapProbe();
 
         //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
 
         /// InternalCubemapProbes only allow
         /// ForwardPlusBase::MinCubemapProbeRq <= queueID < ForwardPlusBase::MaxCubemapProbeRq
@@ -72,7 +72,7 @@ namespace Ogre
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance(MovableObject* obj);
     };
 }

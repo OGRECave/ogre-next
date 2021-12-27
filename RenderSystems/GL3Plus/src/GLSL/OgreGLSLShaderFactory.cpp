@@ -57,7 +57,7 @@ namespace Ogre
     }
     
 
-    GLSLShaderFactory::~GLSLShaderFactory(void)
+    GLSLShaderFactory::~GLSLShaderFactory()
     {
         if (mMonolithicProgramManager)
         {
@@ -76,7 +76,7 @@ namespace Ogre
     }
     
 
-    const String& GLSLShaderFactory::getLanguage(void) const
+    const String& GLSLShaderFactory::getLanguage() const
     {
         return mLanguageName;
     }

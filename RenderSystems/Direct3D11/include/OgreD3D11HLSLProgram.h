@@ -100,9 +100,9 @@ namespace Ogre {
 
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
-        void createLowLevelImpl(void);
+        void createLowLevelImpl();
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl(void);
+        void unloadHighLevelImpl();
 
         // Recursive utility method for populateParameterNames
         void processParamElement(String prefix, LPCSTR pName, ID3D11ShaderReflectionType* varRefType);
@@ -290,8 +290,8 @@ namespace Ogre {
         InterfaceSlots mInterfaceSlots;
 
         void analizeMicrocode();
-        void getMicrocodeFromCache(void);
-        void compileMicrocode(void);
+        void getMicrocodeFromCache();
+        void compileMicrocode();
     public:
         D3D11HLSLProgram(ResourceManager* creator, const String& name, ResourceHandle handle,
             const String& group, bool isManual, ManualResourceLoader* loader, D3D11Device & device);
@@ -300,41 +300,41 @@ namespace Ogre {
         /** Sets the entry point for this program ie the first method called. */
         void setEntryPoint(const String& entryPoint) { mEntryPoint = entryPoint; }
         /** Gets the entry point defined for this program. */
-        const String& getEntryPoint(void) const { return mEntryPoint; }
+        const String& getEntryPoint() const { return mEntryPoint; }
         /** Sets the shader target to compile down to, e.g. 'vs_1_1'. */
         void setTarget(const String& target);
         /** Gets the shader target to compile down to, e.g. 'vs_1_1'. */
-        const String& getTarget(void) const { return mTarget; }
+        const String& getTarget() const { return mTarget; }
         /** Gets the shader target promoted to the first compatible, e.g. 'vs_4_0' or 'ps_4_0' if backward compatibility is enabled. */
-        const String& getCompatibleTarget(void) const;
+        const String& getCompatibleTarget() const;
 
         /** Sets the preprocessor defines use to compile the program. */
         void setPreprocessorDefines(const String& defines) { mPreprocessorDefines = defines; }
         /** Sets the preprocessor defines use to compile the program. */
-        const String& getPreprocessorDefines(void) const { return mPreprocessorDefines; }
+        const String& getPreprocessorDefines() const { return mPreprocessorDefines; }
         /** Sets whether matrix packing in column-major order. */ 
         void setColumnMajorMatrices(bool columnMajor) { mColumnMajorMatrices = columnMajor; }
         /** Gets whether matrix packed in column-major order. */
-        bool getColumnMajorMatrices(void) const { return mColumnMajorMatrices; }
+        bool getColumnMajorMatrices() const { return mColumnMajorMatrices; }
         /** Sets whether backwards compatibility is enabled. */ 
         void setEnableBackwardsCompatibility(bool enableBackwardsCompatibility) { mEnableBackwardsCompatibility = enableBackwardsCompatibility; }
         /** Gets whether backwards compatibility is enabled. */
-        bool getEnableBackwardsCompatibility(void) const { return mEnableBackwardsCompatibility; }
+        bool getEnableBackwardsCompatibility() const { return mEnableBackwardsCompatibility; }
         /// Overridden from GpuProgram
-        bool isSupported(void) const;
+        bool isSupported() const;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters(void);
+        GpuProgramParametersSharedPtr createParameters();
         /// Overridden from GpuProgram
-        const String& getLanguage(void) const;
+        const String& getLanguage() const;
 
         virtual void buildConstantDefinitions() const;
-        ID3D11VertexShader* getVertexShader(void) const;
-        ID3D11PixelShader* getPixelShader(void) const; 
-        ID3D11GeometryShader* getGeometryShader(void) const; 
-        ID3D11DomainShader* getDomainShader(void) const;
-        ID3D11HullShader* getHullShader(void) const;
-        ID3D11ComputeShader* getComputeShader(void) const;
-        const MicroCode &  getMicroCode(void) const;  
+        ID3D11VertexShader* getVertexShader() const;
+        ID3D11PixelShader* getPixelShader() const;
+        ID3D11GeometryShader* getGeometryShader() const;
+        ID3D11DomainShader* getDomainShader() const;
+        ID3D11HullShader* getHullShader() const;
+        ID3D11ComputeShader* getComputeShader() const;
+        const MicroCode &  getMicroCode() const;
 
         /// buffers must have a capacity of 2, i.e. ID3D11Buffer *buffers[2];
         void getConstantBuffers( ID3D11Buffer** buffers, UINT &outSlotStart, UINT &outNumBuffers,
@@ -354,13 +354,13 @@ namespace Ogre {
 
         /** Internal load implementation, must be implemented by subclasses.
         */
-        void loadFromSource(void);
+        void loadFromSource();
 
-        void reinterpretGSForStreamOut(void);
+        void reinterpretGSForStreamOut();
         bool mReinterpretingGS;
         
-        unsigned int getNumInputs(void)const;
-        unsigned int getNumOutputs(void)const;
+        unsigned int getNumInputs()const;
+        unsigned int getNumOutputs()const;
 
         String getNameForMicrocodeCache();
 

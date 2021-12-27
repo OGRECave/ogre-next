@@ -77,9 +77,9 @@ namespace Ogre {
         String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const;
 
         /// Static method to startup FreeImage and register the FreeImage codecs
-        static void startup(void);
+        static void startup();
         /// Static method to shutdown FreeImage and unregister the FreeImage codecs
-        static void shutdown(void);
+        static void shutdown();
     };
     /** @} */
     /** @} */

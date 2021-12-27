@@ -68,7 +68,7 @@ namespace Ogre {
 
         /** Retrieves the custom key less user object associated with this class.
         */
-        const Any& getUserAny(void) const;
+        const Any& getUserAny() const;
 
         /** Sets any kind of user object on this class instance.
         @remarks

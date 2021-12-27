@@ -39,7 +39,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
     
-    void ChunkHandler::init(void)
+    void ChunkHandler::init()
     {
         if (!mWQ)
         {
@@ -52,13 +52,13 @@ namespace Volume {
 
     //-----------------------------------------------------------------------
     
-    ChunkHandler::ChunkHandler(void) : mWQ(0), mWorkQueueChannel(0)
+    ChunkHandler::ChunkHandler() : mWQ(0), mWorkQueueChannel(0)
     {
     }
 
     //-----------------------------------------------------------------------
     
-    ChunkHandler::~ChunkHandler(void)
+    ChunkHandler::~ChunkHandler()
     {
         // Root might already be shutdown.
         if (mWQ && Root::getSingletonPtr())
@@ -78,7 +78,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
   
-    void ChunkHandler::processWorkQueue(void)
+    void ChunkHandler::processWorkQueue()
     {
         mWQ->processResponses();
     }

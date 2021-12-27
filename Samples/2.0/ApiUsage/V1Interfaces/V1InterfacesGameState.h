@@ -12,7 +12,7 @@ namespace Demo
     public:
         V1InterfacesGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
     };
 }
 

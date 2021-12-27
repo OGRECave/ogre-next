@@ -303,8 +303,8 @@ namespace Ogre {
     {
         friend class Profiler;
     public:
-        ProfileInstance(void);
-        virtual ~ProfileInstance(void);
+        ProfileInstance();
+        virtual ~ProfileInstance();
 
         typedef Ogre::map<String,ProfileInstance*>::type ProfileChildrenMap;
         typedef Ogre::vector<ProfileInstance*>::type ProfileChildrenVec;
@@ -313,8 +313,8 @@ namespace Ogre {
         void destroyAllChildren();
         void reset();
 
-        inline bool watchForMax(void) { return history.currentTimePercent == history.maxTimePercent; }
-        inline bool watchForMin(void) { return history.currentTimePercent == history.minTimePercent; }
+        inline bool watchForMax() { return history.currentTimePercent == history.maxTimePercent; }
+        inline bool watchForMin() { return history.currentTimePercent == history.minTimePercent; }
         inline bool watchForLimit(Real limit, bool greaterThan = true)
         {
             if (greaterThan)
@@ -493,7 +493,7 @@ namespace Ogre {
                 Relevant only when using Remotery.
             */
             void setUseStableMarkers( bool useStableMarkers );
-            bool getUseStableMarkers(void) const;
+            bool getUseStableMarkers() const;
 
             /** Enables a previously disabled profile 
             @remarks Can be safely called in the middle of the profile.
@@ -580,7 +580,7 @@ namespace Ogre {
             but the implementation stays in this single compilation unit,
             preventing link errors.
             */
-            static Profiler& getSingleton(void);
+            static Profiler& getSingleton();
             /** Override standard Singleton retrieval.
             @remarks
             Why do we do this? Well, it's because the Singleton
@@ -596,10 +596,10 @@ namespace Ogre {
             but the implementation stays in this single compilation unit,
             preventing link errors.
             */
-            static Profiler* getSingletonPtr(void);
+            static Profiler* getSingletonPtr();
 
 #if OGRE_PROFILING == OGRE_PROFILING_INTERNAL_OFFLINE
-            OfflineProfiler& getOfflineProfiler(void)       { return mOfflineProfiler; }
+            OfflineProfiler& getOfflineProfiler()       { return mOfflineProfiler; }
 #endif
 
         protected:
@@ -614,7 +614,7 @@ namespace Ogre {
             void displayResults();
 
             /** Processes frame stats for all of the mRoot's children */
-            void processFrameStats(void);
+            void processFrameStats();
             /** Processes specific ProfileInstance and it's children recursively.*/
             void processFrameStats(ProfileInstance* instance, Real& maxFrameTime);
 

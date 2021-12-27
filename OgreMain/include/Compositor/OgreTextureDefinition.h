@@ -132,7 +132,7 @@ namespace Ogre
 
             /// Do not call directly. @see TextureDefinition::renameTexture instead.
             void _setName( IdString newName )   { name = newName; }
-            IdString getName(void) const        { return name; }
+            IdString getName() const        { return name; }
 
             TextureDefinition( IdString _name ) : name(_name), textureType( TextureTypes::Type2D ),
                     width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
@@ -168,7 +168,7 @@ namespace Ogre
 
             /// Do not call directly. @see TextureDefinition::renameBuffer instead.
             void _setName( IdString newName )   { name = newName; }
-            IdString getName(void) const        { return name; }
+            IdString getName() const        { return name; }
 
             BufferDefinition( IdString _name, size_t _numElements,
                               uint32 _bytesPerElement, uint32 _bindFlags,
@@ -211,8 +211,8 @@ namespace Ogre
         TextureDefinitionBase( TextureSource defaultSource );
 
         /// This has O(N) complexity! (not cached, we look in mNameToChannelMap)
-        size_t getNumInputChannels(void) const;
-        size_t getNumInputBufferChannels(void) const;
+        size_t getNumInputChannels() const;
+        size_t getNumInputBufferChannels() const;
 
         /** Adds a texture name, whether a real one or an alias, and where to grab it from.
         @remarks
@@ -307,7 +307,7 @@ namespace Ogre
         */
         TextureDefinition* addTextureDefinition( const String &name );
 
-        const TextureDefinitionVec& getLocalTextureDefinitions(void) const  { return mLocalTextureDefs; }
+        const TextureDefinitionVec& getLocalTextureDefinitions() const  { return mLocalTextureDefs; }
 
         /** Returns the local texture definitions.
         @remarks
@@ -315,15 +315,15 @@ namespace Ogre
             as mNameToChannelMap needs to be kept in sync. @see addTextureDefinition,
             @see removeTexture and @see renameTexture to perform these actions
         */
-        TextureDefinitionVec& getLocalTextureDefinitionsNonConst(void)      { return mLocalTextureDefs; }
+        TextureDefinitionVec& getLocalTextureDefinitionsNonConst()      { return mLocalTextureDefs; }
 
-        const NameToChannelMap& getNameToChannelMap(void) const             { return mNameToChannelMap; }
+        const NameToChannelMap& getNameToChannelMap() const             { return mNameToChannelMap; }
 
         RenderTargetViewDef* addRenderTextureView( IdString name );
         const RenderTargetViewDef* getRenderTargetViewDef( IdString name ) const;
         RenderTargetViewDef* getRenderTargetViewDefNonConstNoThrow( IdString name );
         void removeRenderTextureView( IdString name );
-        void removeAllRenderTextureViews( void );
+        void removeAllRenderTextureViews();
 
         /** Utility function to create the textures based on a given set of
             texture definitions and put them in a container.
@@ -446,14 +446,14 @@ namespace Ogre
         */
         void setNumLocalBufferDefinitions( size_t numTDs )      { mLocalBufferDefs.reserve( numTDs ); }
 
-        const BufferDefinitionVec& getLocalBufferDefinitions(void) const    { return mLocalBufferDefs; }
+        const BufferDefinitionVec& getLocalBufferDefinitions() const    { return mLocalBufferDefs; }
 
         /** Returns the local buffer definitions.
         @remarks
             WARNING: Use with care. You should not add/remove elements or change the name
             @see addBufferDefinition, @see removeBuffer and @see renameBuffer to perform these actions
         */
-        BufferDefinitionVec& getLocalBufferDefinitionsNonConst(void)        { return mLocalBufferDefs; }
+        BufferDefinitionVec& getLocalBufferDefinitionsNonConst()        { return mLocalBufferDefs; }
 
         /** Utility function to create the buffers based on a given set of
             buffer definitions and put them in a container.
@@ -548,7 +548,7 @@ namespace Ogre
         @param texName
         */
         void setRuntimeAnalyzed( IdString texName );
-        bool isRuntimeAnalyzed(void) const                  { return bIsRuntimeAnalyzed; }
+        bool isRuntimeAnalyzed() const                  { return bIsRuntimeAnalyzed; }
 
         /** Convenience routine to setup an RTV that renders directly to a texture
             defined by the provided TextureDefinition; which is the most common case.

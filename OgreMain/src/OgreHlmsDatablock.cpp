@@ -384,12 +384,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    CompareFunction HlmsDatablock::getAlphaTest(void) const
+    CompareFunction HlmsDatablock::getAlphaTest() const
     {
         return static_cast<CompareFunction>( mAlphaTestCmp );
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsDatablock::getAlphaTestShadowCasterOnly(void) const
+    bool HlmsDatablock::getAlphaTestShadowCasterOnly() const
     {
         return mAlphaTestShadowCasterOnly;
     }
@@ -399,7 +399,7 @@ namespace Ogre
         mAlphaTestThreshold = threshold;
     }
     //-----------------------------------------------------------------------------------
-    const String* HlmsDatablock::getNameStr(void) const
+    const String* HlmsDatablock::getNameStr() const
     {
         return mCreator->getNameStr(mName);
     }
@@ -502,7 +502,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsDatablock::hasCustomShadowMacroblock(void) const
+    bool HlmsDatablock::hasCustomShadowMacroblock() const
     {
         const HlmsMacroblock *macroblock0 = mMacroblock[0];
         const HlmsMacroblock *macroblock1 = mMacroblock[1];
@@ -511,22 +511,22 @@ namespace Ogre
         return *macroblock0 != *macroblock1;
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsDatablock::getDiffuseColour(void) const
+    ColourValue HlmsDatablock::getDiffuseColour() const
     {
         return ColourValue::White;
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsDatablock::getEmissiveColour(void) const
+    ColourValue HlmsDatablock::getEmissiveColour() const
     {
         return ColourValue::Black;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsDatablock::getDiffuseTexture(void) const
+    TextureGpu* HlmsDatablock::getDiffuseTexture() const
     {
         return 0;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsDatablock::getEmissiveTexture(void) const
+    TextureGpu* HlmsDatablock::getEmissiveTexture() const
     {
         return 0;
     }

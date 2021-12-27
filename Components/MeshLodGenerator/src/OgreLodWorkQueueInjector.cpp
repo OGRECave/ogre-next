@@ -35,11 +35,11 @@
 namespace Ogre
 {
     template<> LodWorkQueueInjector* Singleton<LodWorkQueueInjector>::msSingleton = 0;
-    LodWorkQueueInjector* LodWorkQueueInjector::getSingletonPtr(void)
+    LodWorkQueueInjector* LodWorkQueueInjector::getSingletonPtr()
     {
         return msSingleton;
     }
-    LodWorkQueueInjector& LodWorkQueueInjector::getSingleton(void)
+    LodWorkQueueInjector& LodWorkQueueInjector::getSingleton()
     {
         assert( msSingleton );
         return ( *msSingleton );

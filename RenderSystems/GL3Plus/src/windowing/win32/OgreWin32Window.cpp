@@ -84,7 +84,7 @@ namespace Ogre
         destroy();
     }
     //-----------------------------------------------------------------------------------
-    void Win32Window::updateWindowRect(void)
+    void Win32Window::updateWindowRect()
     {
         RECT rc;
         BOOL result;
@@ -133,7 +133,7 @@ namespace Ogre
         return fullScreen ? mFullscreenWinStyle : mWindowedWinStyle;
     }
     //-----------------------------------------------------------------------------------
-    void Win32Window::notifyResolutionChanged(void)
+    void Win32Window::notifyResolutionChanged()
     {
         TODO_notify_listeners;
     }
@@ -692,7 +692,7 @@ namespace Ogre
         setHidden( mHidden );
     }
     //-----------------------------------------------------------------------------------
-    void Win32Window::destroy(void)
+    void Win32Window::destroy()
     {
         if( mTexture )
         {
@@ -993,7 +993,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool Win32Window::isHidden(void) const
+    bool Win32Window::isHidden() const
     {
         return mHidden;
     }

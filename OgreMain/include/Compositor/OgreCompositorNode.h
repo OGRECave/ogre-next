@@ -138,7 +138,7 @@ namespace Ogre
         /// Makes global buffers visible to our passes. Must be done last in case
         /// there's an input/local buffer with the same name as a global buffer
         /// (local scope prevails over global scope)
-        void populateGlobalBuffers(void);
+        void populateGlobalBuffers();
 
         /** Called right after we create a pass. Derived
             classes may want to do something with it
@@ -156,12 +156,12 @@ namespace Ogre
                         TextureGpu *finalTarget );
         virtual ~CompositorNode();
 
-        void destroyAllPasses(void);
+        void destroyAllPasses();
 
-        IdString getName(void) const                                { return mName; }
+        IdString getName() const                                { return mName; }
         const CompositorNodeDef* getDefinition() const              { return mDefinition; }
 
-        RenderSystem* getRenderSystem(void) const                   { return mRenderSystem; }
+        RenderSystem* getRenderSystem() const                   { return mRenderSystem; }
 
         /** Enables or disables all instances of this node
         @remarks
@@ -176,7 +176,7 @@ namespace Ogre
         void setEnabled( bool bEnabled );
 
         /// Returns if this instance is enabled. @See setEnabled
-        bool getEnabled(void) const                         { return mEnabled; }
+        bool getEnabled() const                         { return mEnabled; }
 
         /** Connects this node (let's call it node 'A') to node 'B', mapping the output
             channel from A into the input channel from B (buffer version)
@@ -257,7 +257,7 @@ namespace Ogre
             otherwise we may bind null pointer RTs to the passes (and then crash)
             @See connectTo and @see connectFinalRT
         */
-        void createPasses(void);
+        void createPasses();
 
         const CompositorPassVec& _getPasses() const                 { return mPasses; }
 
@@ -293,7 +293,7 @@ namespace Ogre
         @remarks
             Destroys all of our passes.
         */
-        void _notifyCleared(void);
+        void _notifyCleared();
 
         /** Called by CompositorManager2 when (i.e.) the RenderWindow was resized, thus our
             RTs that depend on their resolution need to be recreated.
@@ -313,16 +313,16 @@ namespace Ogre
         virtual void finalTargetResized02( const TextureGpu *finalTarget );
 
         /// @copydoc CompositorWorkspace::resetAllNumPassesLeft
-        void resetAllNumPassesLeft(void);
+        void resetAllNumPassesLeft();
 
         /// @copydoc CompositorPassDef::getPassNumber
         size_t getPassNumber( CompositorPass *pass ) const;
 
         /// Returns our parent workspace
-        CompositorWorkspace* getWorkspace(void)                     { return mWorkspace; }
+        CompositorWorkspace* getWorkspace()                     { return mWorkspace; }
 
         /// Returns our parent workspace
-        const CompositorWorkspace* getWorkspace(void) const         { return mWorkspace; }
+        const CompositorWorkspace* getWorkspace() const         { return mWorkspace; }
 
     private:
         CompositorNodeDef const *mDefinition;

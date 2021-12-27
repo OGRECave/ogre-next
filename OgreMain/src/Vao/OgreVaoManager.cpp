@@ -469,7 +469,7 @@ namespace Ogre
         mVertexArrayObjects.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::destroyAllVertexArrayObjects(void)
+    void VaoManager::destroyAllVertexArrayObjects()
     {
         VertexArrayObjectSet::const_iterator itor = mVertexArrayObjects.begin();
         VertexArrayObjectSet::const_iterator end  = mVertexArrayObjects.end();
@@ -483,7 +483,7 @@ namespace Ogre
         mVertexArrayObjects.clear();
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::deleteAllBuffers(void)
+    void VaoManager::deleteAllBuffers()
     {
         for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
         {
@@ -593,7 +593,7 @@ namespace Ogre
         mDelayedDestroyBuffers.erase( mDelayedDestroyBuffers.begin(), itor );
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::_destroyAllDelayedBuffers(void)
+    void VaoManager::_destroyAllDelayedBuffers()
     {
         DelayedBufferVec::iterator itor = mDelayedDestroyBuffers.begin();
         DelayedBufferVec::iterator end  = mDelayedDestroyBuffers.end();
@@ -673,7 +673,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VaoManager::_update(void)
+    void VaoManager::_update()
     {
         Root::getSingleton()._renderingFrameEnded();
         ++mFrameCount;

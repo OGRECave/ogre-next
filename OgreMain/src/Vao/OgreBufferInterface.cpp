@@ -68,7 +68,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void BufferInterface::_ensureDelayedImmutableBuffersAreReady(void)
+    void BufferInterface::_ensureDelayedImmutableBuffersAreReady()
     {
     }
     //-----------------------------------------------------------------------------------

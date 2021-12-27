@@ -139,7 +139,7 @@ namespace Ogre
             ///     uint32 myVal = param->getManualValue();
             ///     Vector4 myVector4 = param->getManualValue();
             template <typename T>
-            T getManualValue(void) const
+            T getManualValue() const
             {
                 T retVal;
                 getManualValue( retVal );
@@ -177,8 +177,8 @@ namespace Ogre
         void updateParameters( GpuProgramParametersSharedPtr params, bool bForce );
 
         /// Call this whenever you've updated a parameter in mParams
-        void setDirty(void)                         { ++mUpdateCounter; }
-        uint32 getUpdateCounter(void) const         { return mUpdateCounter; }
+        void setDirty()                         { ++mUpdateCounter; }
+        uint32 getUpdateCounter() const         { return mUpdateCounter; }
 
         /// Finds a parameter. Returns null if not found.
         /// This operation is O(N) as it makes a linear search.

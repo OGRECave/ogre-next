@@ -36,16 +36,16 @@ namespace Ogre
     static GL3PlusPlugin* plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreGL3PlusExport dllStartPlugin( void ) noexcept( false )
+    extern "C" void _OgreGL3PlusExport dllStartPlugin() noexcept( false )
 #    else
-    extern "C" void _OgreGL3PlusExport dllStartPlugin( void ) throw( Exception )
+    extern "C" void _OgreGL3PlusExport dllStartPlugin() throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW GL3PlusPlugin();
         Root::getSingleton().installPlugin(plugin);
     }
 
-    extern "C" void _OgreGL3PlusExport dllStopPlugin(void)
+    extern "C" void _OgreGL3PlusExport dllStopPlugin()
     {
         Root::getSingleton().uninstallPlugin(plugin);
         OGRE_DELETE plugin;

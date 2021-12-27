@@ -49,7 +49,7 @@ namespace Ogre {
         HighLevelGpuProgramFactory() {}
         virtual ~HighLevelGpuProgramFactory();
         /// Get the name of the language this factory creates programs for
-        virtual const String& getLanguage(void) const = 0;
+        virtual const String& getLanguage() const = 0;
         virtual HighLevelGpuProgram* create(ResourceManager* creator, 
             const String& name, ResourceHandle handle,
             const String& group, bool isManual, ManualResourceLoader* loader) = 0;
@@ -134,7 +134,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static HighLevelGpuProgramManager& getSingleton(void);
+        static HighLevelGpuProgramManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -150,7 +150,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static HighLevelGpuProgramManager* getSingletonPtr(void);
+        static HighLevelGpuProgramManager* getSingletonPtr();
 
 
     };

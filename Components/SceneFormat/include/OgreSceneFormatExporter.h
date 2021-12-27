@@ -145,7 +145,7 @@ namespace Ogre
             Default: true.
         */
         void setUseBinaryFloatingPoint( bool useBinaryFp );
-        bool getUseBinaryFloatingPoint(void);
+        bool getUseBinaryFloatingPoint();
 
         /**
         @param outJson

@@ -145,13 +145,13 @@ namespace Ogre
 
         /// If this returns false, the values of mR, mG, mB & mA will be ignored.
         /// @see setUseColour.
-        bool hasColour(void) const                      { return mHasColour; }
+        bool hasColour() const                      { return mHasColour; }
 
         /// Sets a new colour value. Asserts if mHasColour is false.
         void setColour( const ColourValue &diffuse );
 
         /// Gets the current colour. The returned value is meaningless if mHasColour is false
-        ColourValue getColour(void) const               { return ColourValue( mR, mG, mB, mA ); }
+        ColourValue getColour() const               { return ColourValue( mR, mG, mB, mA ); }
 
         using HlmsUnlitBaseTextureDatablock::setTexture;
 
@@ -226,9 +226,9 @@ namespace Ogre
         void setEnablePlanarReflection( uint8 textureUnit, bool bEnable );
         bool getEnablePlanarReflection( uint8 textureUnit ) const;
 
-        virtual ColourValue getDiffuseColour(void) const;
-        virtual ColourValue getEmissiveColour(void) const;
-        virtual TextureGpu* getEmissiveTexture(void) const;
+        virtual ColourValue getDiffuseColour() const;
+        virtual ColourValue getEmissiveColour() const;
+        virtual TextureGpu* getEmissiveTexture() const;
 
         virtual void calculateHash();
 

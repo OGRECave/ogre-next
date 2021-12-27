@@ -100,7 +100,7 @@ namespace Ogre {
     ETCCodec* ETCCodec::msPKMInstance = 0;
     ETCCodec* ETCCodec::msKTXInstance = 0;
     //---------------------------------------------------------------------
-    void ETCCodec::startup(void)
+    void ETCCodec::startup()
     {
         if (!msPKMInstance)
         {
@@ -118,7 +118,7 @@ namespace Ogre {
                                               "ETC codec registering");
     }
     //---------------------------------------------------------------------
-    void ETCCodec::shutdown(void)
+    void ETCCodec::shutdown()
     {
         if(msPKMInstance)
         {

@@ -49,13 +49,13 @@ namespace Ogre
             glslang::InitializeProcess();
     }
     //-----------------------------------------------------------------------
-    VulkanProgramFactory::~VulkanProgramFactory( void )
+    VulkanProgramFactory::~VulkanProgramFactory()
     {
         if( mGlslLangInitializer )
             glslang::FinalizeProcess();
     }
     //-----------------------------------------------------------------------
-    const String &VulkanProgramFactory::getLanguage( void ) const { return mLanguageName; }
+    const String &VulkanProgramFactory::getLanguage() const { return mLanguageName; }
     //-----------------------------------------------------------------------
     HighLevelGpuProgram *VulkanProgramFactory::create( ResourceManager *creator, const String &name,
                                                        ResourceHandle handle, const String &group,

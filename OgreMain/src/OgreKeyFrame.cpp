@@ -50,7 +50,7 @@ namespace v1
     {
     }
     //---------------------------------------------------------------------
-    const AnyNumeric& NumericKeyFrame::getValue(void) const
+    const AnyNumeric& NumericKeyFrame::getValue() const
     {
         return mValue;
     }
@@ -80,7 +80,7 @@ namespace v1
             mParentTrack->_keyFrameDataChanged();
     }
     //---------------------------------------------------------------------
-    const Vector3& TransformKeyFrame::getTranslate(void) const
+    const Vector3& TransformKeyFrame::getTranslate() const
     {
         return mTranslate;
     }
@@ -92,7 +92,7 @@ namespace v1
             mParentTrack->_keyFrameDataChanged();
     }
     //---------------------------------------------------------------------
-    const Vector3& TransformKeyFrame::getScale(void) const
+    const Vector3& TransformKeyFrame::getScale() const
     {
         return mScale;
     }
@@ -104,7 +104,7 @@ namespace v1
             mParentTrack->_keyFrameDataChanged();
     }
     //---------------------------------------------------------------------
-    const Quaternion& TransformKeyFrame::getRotation(void) const
+    const Quaternion& TransformKeyFrame::getRotation() const
     {
         return mRotate;
     }
@@ -129,7 +129,7 @@ namespace v1
     }
     //---------------------------------------------------------------------
     const HardwareVertexBufferSharedPtr& 
-    VertexMorphKeyFrame::getVertexBuffer(void) const
+    VertexMorphKeyFrame::getVertexBuffer() const
     {
         return mBuffer;
     }
@@ -178,25 +178,25 @@ namespace v1
         }
     }
     //---------------------------------------------------------------------
-    void VertexPoseKeyFrame::removeAllPoseReferences(void)
+    void VertexPoseKeyFrame::removeAllPoseReferences()
     {
         mPoseRefs.clear();
     }
     //---------------------------------------------------------------------
     const VertexPoseKeyFrame::PoseRefList& 
-    VertexPoseKeyFrame::getPoseReferences(void) const
+    VertexPoseKeyFrame::getPoseReferences() const
     {
         return mPoseRefs;
     }
     //---------------------------------------------------------------------
     VertexPoseKeyFrame::PoseRefIterator 
-    VertexPoseKeyFrame::getPoseReferenceIterator(void)
+    VertexPoseKeyFrame::getPoseReferenceIterator()
     {
         return PoseRefIterator(mPoseRefs.begin(), mPoseRefs.end());
     }
     //---------------------------------------------------------------------
     VertexPoseKeyFrame::ConstPoseRefIterator 
-    VertexPoseKeyFrame::getPoseReferenceIterator(void) const
+    VertexPoseKeyFrame::getPoseReferenceIterator() const
     {
         return ConstPoseRefIterator(mPoseRefs.begin(), mPoseRefs.end());
     }

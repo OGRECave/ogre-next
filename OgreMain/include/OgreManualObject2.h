@@ -60,7 +60,7 @@ namespace Ogre
             of clear() begin(). However if you do want to modify the structure 
             from time to time you can do so by clearing and re-specifying the data.
         */
-        virtual_l1 void clear(void);
+        virtual_l1 void clear();
         
         /** Estimate the number of vertices ahead of time.
         @remarks
@@ -222,7 +222,7 @@ namespace Ogre
         @note
             Will return a pointer to the finished section or NULL if the section was discarded (i.e. has zero vertices/indices).
         */
-        virtual_l1 ManualObjectSection* end(void);
+        virtual_l1 ManualObjectSection* end();
 
         /** Alter the material for a subsection of this object after it has been
             specified.
@@ -267,7 +267,7 @@ namespace Ogre
 
         /** Retrieves the number of ManualObjectSection objects making up this ManualObject.
         */
-        unsigned int getNumSections(void) const;
+        unsigned int getNumSections() const;
 
         /** Removes the section with given index.
          * @param idx Index of section to remove.
@@ -286,7 +286,7 @@ namespace Ogre
 
         // MovableObject overrides
         /** @copydoc MovableObject::getMovableType. */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
         /// Built, renderable section of geometry
         class _OgreExport ManualObjectSection : public Renderable, public MovableAlloc
@@ -316,9 +316,9 @@ namespace Ogre
             /** @copydoc Renderable::getWorldTransforms. */
             virtual void getWorldTransforms(Matrix4* xform) const OGRE_OVERRIDE;
             /** @copydoc Renderable::getLights. */
-            virtual const LightList &getLights(void) const OGRE_OVERRIDE;
+            virtual const LightList &getLights() const OGRE_OVERRIDE;
             /** @copydoc Renderable::getCastsShadows. */
-            virtual bool getCastsShadows(void) const OGRE_OVERRIDE;
+            virtual bool getCastsShadows() const OGRE_OVERRIDE;
 
             /** Sets an user defined name that can serve to identify this section.
              */
@@ -366,7 +366,7 @@ namespace Ogre
         size_t mDeclSize;
 
         /// Delete temp buffers and reset init counts
-        void resetBuffers(void);
+        void resetBuffers();
         /// Resize the temp vertex buffer?
         void resizeVertexBufferIfNeeded(size_t numVerts);
         /// Resize the temp index buffer?
@@ -387,7 +387,7 @@ namespace Ogre
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);  
 
     };

@@ -57,7 +57,7 @@ namespace v1 {
         return mBufferImpl->lock(offset, length, options);
     }
     //---------------------------------------------------------------------
-    void D3D11HardwareIndexBuffer::unlock(void)
+    void D3D11HardwareIndexBuffer::unlock()
     {
         mBufferImpl->unlock();
     }
@@ -91,12 +91,12 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    bool D3D11HardwareIndexBuffer::isLocked(void) const
+    bool D3D11HardwareIndexBuffer::isLocked() const
     {
         return mBufferImpl->isLocked();
     }
     //---------------------------------------------------------------------
-    ID3D11Buffer * D3D11HardwareIndexBuffer::getD3DIndexBuffer( void ) const
+    ID3D11Buffer * D3D11HardwareIndexBuffer::getD3DIndexBuffer() const
     {
         return mBufferImpl->getD3DBuffer();
     }

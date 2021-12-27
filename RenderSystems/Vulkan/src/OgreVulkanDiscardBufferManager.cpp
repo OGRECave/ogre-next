@@ -327,7 +327,7 @@ namespace Ogre
         return reinterpret_cast<uint8 *>( mOwner->getBuffer().map() ) + mBufferOffset;
     }
 
-    void VulkanDiscardBuffer::unmap( void ) { mOwner->getBuffer().unmap(); }
+    void VulkanDiscardBuffer::unmap() { mOwner->getBuffer().unmap(); }
 
     VkBuffer VulkanDiscardBuffer::getBufferName( size_t &outOffset )
     {

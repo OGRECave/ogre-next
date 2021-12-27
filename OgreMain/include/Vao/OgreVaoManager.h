@@ -148,11 +148,11 @@ namespace Ogre
         /// those pointers, they will become dangling. Don't call this if you
         /// are unsure; unless you're shutting down. It gets called automatically
         /// on shutdown though.
-        void destroyAllVertexArrayObjects(void);
+        void destroyAllVertexArrayObjects();
 
         /// Just deletes the pointers, but may not destroy/free the API constructs.
         /// Utility helper for derived classes. Also clears the containers.
-        void deleteAllBuffers(void);
+        void deleteAllBuffers();
 
         /** Removes all the buffers whose destruction was delayed until now.
         @remarks
@@ -160,7 +160,7 @@ namespace Ogre
             Caller is responsible for hazard checking.
         */
         void destroyDelayedBuffers( uint8 fromDynamicFrame );
-        void _destroyAllDelayedBuffers(void);
+        void _destroyAllDelayedBuffers();
 
         inline void callDestroyBufferImpl( BufferPacked *bufferPacked );
 
@@ -272,7 +272,7 @@ namespace Ogre
                                      bool &outIncludesTextures ) const = 0;
 
         /// Frees GPU memory if there are empty, unused pools
-        virtual void cleanupEmptyPools(void) = 0;
+        virtual void cleanupEmptyPools() = 0;
 
         /// Returns the size of a single vertex buffer source with the given declaration, in bytes
         static uint32 calculateVertexSize( const VertexElement2Vec &vertexElements );
@@ -492,19 +492,19 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount ) = 0;
 
-        virtual void _beginFrame(void) {}
-        virtual void _update(void);
+        virtual void _beginFrame() {}
+        virtual void _update();
 
         void _notifyStagingBufferEnteredZeroRef( StagingBuffer *stagingBuffer );
         void _notifyStagingBufferLeftZeroRef( StagingBuffer *stagingBuffer );
 
-        uint32 getConstBufferAlignment(void) const      { return mConstBufferAlignment; }
-        uint32 getTexBufferAlignment(void) const        { return mTexBufferAlignment; }
-        uint32 getUavBufferAlignment(void) const        { return mUavBufferAlignment; }
-        size_t getConstBufferMaxSize(void) const        { return mConstBufferMaxSize; }
-        size_t getTexBufferMaxSize(void) const          { return mTexBufferMaxSize; }
-        size_t getReadOnlyBufferMaxSize(void) const     { return mReadOnlyBufferMaxSize; }
-        size_t getUavBufferMaxSize(void) const          { return mUavBufferMaxSize; }
+        uint32 getConstBufferAlignment() const      { return mConstBufferAlignment; }
+        uint32 getTexBufferAlignment() const        { return mTexBufferAlignment; }
+        uint32 getUavBufferAlignment() const        { return mUavBufferAlignment; }
+        size_t getConstBufferMaxSize() const        { return mConstBufferMaxSize; }
+        size_t getTexBufferMaxSize() const          { return mTexBufferMaxSize; }
+        size_t getReadOnlyBufferMaxSize() const     { return mReadOnlyBufferMaxSize; }
+        size_t getUavBufferMaxSize() const          { return mUavBufferMaxSize; }
 
         /// When true, ReadOnlyBufferPacked behaves like TexBufferPacked, i.e. assigned
         /// to texture buffer slots.
@@ -513,17 +513,17 @@ namespace Ogre
         /// to UAV buffer slots.
         /// Except D3D11, which still uses texture buffer slots when false but chooses
         /// StructuredBuffer over Buffer
-        bool readOnlyIsTexBuffer(void) const			{ return mReadOnlyIsTexBuffer; }
-        bool supportsPersistentMapping(void) const      { return mSupportsPersistentMapping; }
+        bool readOnlyIsTexBuffer() const			{ return mReadOnlyIsTexBuffer; }
+        bool supportsPersistentMapping() const      { return mSupportsPersistentMapping; }
 
         /// When false, IndirectBufferPacked will emulate the mapping behavior,
         /// and we need to use the emulated calls in RenderSystem.
-        bool supportsIndirectBuffers(void) const        { return mSupportsIndirectBuffers; }
-        bool supportsBaseInstance(void) const           { return mSupportsBaseInstance; }
+        bool supportsIndirectBuffers() const        { return mSupportsIndirectBuffers; }
+        bool supportsBaseInstance() const           { return mSupportsBaseInstance; }
 
-        Timer* getTimer(void)               { return mTimer; }
+        Timer* getTimer()               { return mTimer; }
 
-        uint32 getFrameCount(void)          { return mFrameCount; }
+        uint32 getFrameCount()          { return mFrameCount; }
 
         /** Sets the default time for staging buffers. Staging buffers are recycled/reused.
             When their reference count reaches 0, this VaoManager will begin to track how
@@ -572,18 +572,18 @@ namespace Ogre
         */
         void setDefaultStagingBufferlifetime( uint32 lifetime, uint32 unfencedTime );
 
-        uint32 getDefaultStagingBufferUnfencedTime(void) const
+        uint32 getDefaultStagingBufferUnfencedTime() const
                                             { return mDefaultStagingBufferUnfencedTime; }
-        uint32 getDefaultStagingBufferLifetime(void) const
+        uint32 getDefaultStagingBufferLifetime() const
                                             { return mDefaultStagingBufferLifetime; }
 
-        uint8 _getDynamicBufferCurrentFrameNoWait(void) const   { return mDynamicBufferCurrentFrame; }
-        uint8 getDynamicBufferMultiplier(void) const            { return mDynamicBufferMultiplier; }
+        uint8 _getDynamicBufferCurrentFrameNoWait() const   { return mDynamicBufferCurrentFrame; }
+        uint8 getDynamicBufferMultiplier() const            { return mDynamicBufferMultiplier; }
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
-        virtual uint8 waitForTailFrameToFinish(void) = 0;
+        virtual uint8 waitForTailFrameToFinish() = 0;
 
         /** Waits for a specific frame to be ready.
             Calling waitForSpecificFrameToFinish( mFrameCount - mDynamicBufferMultiplier )

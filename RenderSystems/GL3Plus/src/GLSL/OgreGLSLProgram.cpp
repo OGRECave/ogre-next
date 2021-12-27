@@ -79,7 +79,7 @@ namespace Ogre {
     }
 
 
-    GLSLProgram::~GLSLProgram(void)
+    GLSLProgram::~GLSLProgram()
     {
         OGRE_CHECK_GL_ERROR(glDeleteProgram(mGLProgramHandle));
 
@@ -231,7 +231,7 @@ namespace Ogre {
     }
 
 
-    void GLSLProgram::getMicrocodeFromCache(void)
+    void GLSLProgram::getMicrocodeFromCache()
     {
         GpuProgramManager::Microcode cacheMicrocode =
             GpuProgramManager::getSingleton().getMicrocodeFromCache(getCombinedSource());
@@ -270,7 +270,7 @@ namespace Ogre {
     }
 
 
-    void GLSLProgram::extractLayoutQualifiers(void)
+    void GLSLProgram::extractLayoutQualifiers()
     {
         OgreProfileExhaustive( "GLSLProgram::extractLayoutQualifiers" );
 

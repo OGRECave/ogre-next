@@ -81,7 +81,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static OldSkeletonManager& getSingleton(void);
+        static OldSkeletonManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -97,7 +97,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static OldSkeletonManager* getSingletonPtr(void);
+        static OldSkeletonManager* getSingletonPtr();
     protected:
 
         /// @copydoc ResourceManager::createImpl

@@ -36,11 +36,11 @@ namespace Ogre
 {
     //---------------------------------------------------------------------
     template<> FontManager * Singleton< FontManager >::msSingleton = 0;
-    FontManager* FontManager::getSingletonPtr(void)
+    FontManager* FontManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    FontManager& FontManager::getSingleton(void)
+    FontManager& FontManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }

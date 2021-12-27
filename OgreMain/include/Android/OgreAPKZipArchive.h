@@ -44,7 +44,7 @@ namespace Ogre{
         virtual ~APKZipArchiveFactory() {}
 
         /// @copydoc FactoryObj::getType
-        const String& getType(void) const;
+        const String& getType() const;
 
         /// @copydoc FactoryObj::createInstance
         Archive *createInstance( const String& name, bool readOnly )

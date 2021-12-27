@@ -39,7 +39,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void PccPerPixelGridPlacementGameState::setupParallaxCorrectCubemaps( void )
+    void PccPerPixelGridPlacementGameState::setupParallaxCorrectCubemaps()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -79,7 +79,7 @@ namespace Demo
         hlmsPbs->setParallaxCorrectedCubemap( mParallaxCorrectedCubemap );
     }
     //-----------------------------------------------------------------------------------
-    void PccPerPixelGridPlacementGameState::forceUpdateAllProbes( void )
+    void PccPerPixelGridPlacementGameState::forceUpdateAllProbes()
     {
         const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
 
@@ -96,7 +96,7 @@ namespace Demo
             mParallaxCorrectedCubemap->updateAllDirtyProbes();
     }
     //-----------------------------------------------------------------------------------
-    void PccPerPixelGridPlacementGameState::createScene01( void )
+    void PccPerPixelGridPlacementGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -166,7 +166,7 @@ namespace Demo
         setupParallaxCorrectCubemaps();
     }
     //-----------------------------------------------------------------------------------
-    void PccPerPixelGridPlacementGameState::destroyScene( void )
+    void PccPerPixelGridPlacementGameState::destroyScene()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );

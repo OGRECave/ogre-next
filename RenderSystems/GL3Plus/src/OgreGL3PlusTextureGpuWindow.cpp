@@ -63,15 +63,15 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuWindow::createInternalResourcesImpl(void)
+    void GL3PlusTextureGpuWindow::createInternalResourcesImpl()
     {
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuWindow::destroyInternalResourcesImpl(void)
+    void GL3PlusTextureGpuWindow::destroyInternalResourcesImpl()
     {
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuWindow::notifyDataIsReady(void)
+    void GL3PlusTextureGpuWindow::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
@@ -81,12 +81,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusTextureGpuWindow::_isDataReadyImpl(void) const
+    bool GL3PlusTextureGpuWindow::_isDataReadyImpl() const
     {
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuWindow::swapBuffers(void)
+    void GL3PlusTextureGpuWindow::swapBuffers()
     {
         mWindow->swapBuffers();
     }
@@ -99,12 +99,12 @@ namespace Ogre
             *static_cast<Window**>(pData) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusTextureGpuWindow::isOpenGLRenderWindow(void) const
+    bool GL3PlusTextureGpuWindow::isOpenGLRenderWindow() const
     {
         return true;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuWindow::_setToDisplayDummyTexture(void)
+    void GL3PlusTextureGpuWindow::_setToDisplayDummyTexture()
     {
     }
     //-----------------------------------------------------------------------------------
@@ -158,7 +158,7 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuHeadlessWindow::swapBuffers( void ) { mWindow->swapBuffers(); }
+    void GL3PlusTextureGpuHeadlessWindow::swapBuffers() { mWindow->swapBuffers(); }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuHeadlessWindow::getCustomAttribute( IdString name, void *pData )
     {
@@ -168,7 +168,7 @@ namespace Ogre
             *static_cast<Window **>( pData ) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusTextureGpuHeadlessWindow::isOpenGLRenderWindow( void ) const
+    bool GL3PlusTextureGpuHeadlessWindow::isOpenGLRenderWindow() const
     {
         return false;  // We must lie. Internally it's an FBO. We don't expose the PBuffer
     }

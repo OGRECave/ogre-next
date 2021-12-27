@@ -113,7 +113,7 @@ namespace Ogre
         /// override this to ensure their specialised PCZSceneNode is used.
         virtual SceneNode* createSceneNodeImpl(const String& name);
         /** Creates a PCZSceneNode  */
-        virtual SceneNode * createSceneNode ( void );
+        virtual SceneNode * createSceneNode ();
         /** Creates a PCZSceneNode */
         virtual SceneNode * createSceneNode ( const String &name );
         /** Creates a specialized PCZCamera */
@@ -152,7 +152,7 @@ namespace Ogre
         * Useful for doing calculations only on nodes that will be drawn, prior
         * to drawing them...
         */
-        virtual void _alertVisibleObjects( void );
+        virtual void _alertVisibleObjects();
 
         /** Creates a light for use in the scene.
             @remarks

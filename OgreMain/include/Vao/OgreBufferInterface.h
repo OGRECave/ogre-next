@@ -52,16 +52,16 @@ namespace Ogre
                                                  bool advanceFrame = true ) = 0;
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 ) = 0;
-        virtual void advanceFrame(void) = 0;
-        virtual void regressFrame(void) = 0;
+        virtual void advanceFrame() = 0;
+        virtual void regressFrame() = 0;
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                              size_t srcOffsetBytes, size_t sizeBytes ) = 0;
 
         virtual void _notifyBuffer( BufferPacked *buffer )  { mBuffer = buffer; }
-        BufferPacked* getBufferPacked(void)                 { return mBuffer; }
+        BufferPacked* getBufferPacked()                 { return mBuffer; }
 
-        virtual void _ensureDelayedImmutableBuffersAreReady(void);
+        virtual void _ensureDelayedImmutableBuffersAreReady();
     };
 }
 

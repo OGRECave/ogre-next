@@ -261,14 +261,14 @@ namespace Ogre
             @par
             The subclass must have called it's own createParamDictionary before calling this method.
         */
-        void setupBaseParamDictionary( void );
+        void setupBaseParamDictionary();
 
         /** Internal method returns whether required capabilities for this program is supported.
          */
-        bool isRequiredCapabilitiesSupported( void ) const;
+        bool isRequiredCapabilitiesSupported() const;
 
         /// @copydoc Resource::loadImpl
-        void loadImpl( void );
+        void loadImpl();
 
         /// Create the internal params logical & named mapping structures
         void createParameterMappingStructures( bool recreateIfExists = true ) const;
@@ -306,19 +306,19 @@ namespace Ogre
         virtual void setSource( const String &source, const String &debugFilename );
 
         /** Gets the syntax code for this program e.g. arbvp1, fp20, vs_1_1 etc */
-        virtual const String &getSyntaxCode( void ) const { return mSyntaxCode; }
+        virtual const String &getSyntaxCode() const { return mSyntaxCode; }
 
         /** Sets the syntax code for this program e.g. arbvp1, fp20, vs_1_1 etc */
         virtual void setSyntaxCode( const String &syntax );
 
         /** Gets the name of the file used as source for this program. */
-        virtual const String &getSourceFile( void ) const { return mFilename; }
+        virtual const String &getSourceFile() const { return mFilename; }
         /** Gets the assembler source for this program. */
-        virtual const String &getSource( void ) const { return mSource; }
+        virtual const String &getSource() const { return mSource; }
         /// Set the program type (only valid before load)
         virtual void setType( GpuProgramType t );
         /// Get the program type
-        virtual GpuProgramType getType( void ) const { return mType; }
+        virtual GpuProgramType getType() const { return mType; }
 
         /// Sets a RootLayout programmatically, thus the shader source won't be parsed looking for one
         /// We will call validate()
@@ -328,7 +328,7 @@ namespace Ogre
         /// This setting will be cleared if the program gets unloaded
         virtual void setRootLayout( GpuProgramType t, const RootLayout &rootLayout );
 
-        virtual void unsetRootLayout( void );
+        virtual void unsetRootLayout();
 
         /** Set to true to reflects the shader looking for array bindings
             (e.g. uniform texture2D myTex[123]) to patch the Root Layout
@@ -375,10 +375,10 @@ namespace Ogre
             @remarks
             This method is simply to allow some subclasses of GpuProgram to delegate
             the program which is bound to the pipeline to a delegate, if required. */
-        virtual GpuProgram *_getBindingDelegate( void ) { return this; }
+        virtual GpuProgram *_getBindingDelegate() { return this; }
 
         /** Returns whether this program can be supported on the current renderer and hardware. */
-        virtual bool isSupported( void ) const;
+        virtual bool isSupported() const;
 
         /** Creates a new parameters object compatible with this program definition.
             @remarks
@@ -387,21 +387,21 @@ namespace Ogre
             populate any implementation-specific extras (like named parameters) where
             they are appropriate.
         */
-        virtual GpuProgramParametersSharedPtr createParameters( void );
+        virtual GpuProgramParametersSharedPtr createParameters();
 
         void setBuildParametersFromReflection( bool buildParams )
         {
             mBuildParametersFromReflection = buildParams;
         }
 
-        bool getBuildParametersFromReflection( void ) const { return mBuildParametersFromReflection; }
+        bool getBuildParametersFromReflection() const { return mBuildParametersFromReflection; }
 
         /// Sets the number of clip distances this shader uses.
         /// Only valid for vertex shaders. Default is 0
         void setNumClipDistances( const uint8 numClipDistances );
 
         /// Retrieves the number of clip distances. See GpuProgram::setNumClipDistances
-        uint8 getNumClipDistances( void ) const { return mNumClipDistances; }
+        uint8 getNumClipDistances() const { return mNumClipDistances; }
 
         /** Sets whether a vertex program includes the required instructions
             to perform skeletal animation.
@@ -417,7 +417,7 @@ namespace Ogre
             If this returns true, OGRE will not blend the geometry according to
             skeletal animation, it will expect the vertex program to do it.
         */
-        virtual bool isSkeletalAnimationIncluded( void ) const { return mSkeletalAnimation; }
+        virtual bool isSkeletalAnimationIncluded() const { return mSkeletalAnimation; }
 
         /** Sets whether a vertex program includes the required instructions
             to perform morph animation.
@@ -442,7 +442,7 @@ namespace Ogre
             If this returns true, OGRE will not blend the geometry according to
             morph animation, it will expect the vertex program to do it.
         */
-        virtual bool isMorphAnimationIncluded( void ) const { return mMorphAnimation; }
+        virtual bool isMorphAnimationIncluded() const { return mMorphAnimation; }
 
         /** Returns whether a vertex program includes the required instructions
             to perform pose animation.
@@ -450,11 +450,11 @@ namespace Ogre
             If this returns true, OGRE will not blend the geometry according to
             pose animation, it will expect the vertex program to do it.
         */
-        virtual bool isPoseAnimationIncluded( void ) const { return mPoseAnimation > 0; }
+        virtual bool isPoseAnimationIncluded() const { return mPoseAnimation > 0; }
         /** Returns the number of simultaneous poses the vertex program can
             blend, for use in pose animation.
         */
-        virtual ushort getNumberOfPosesIncluded( void ) const { return mPoseAnimation; }
+        virtual ushort getNumberOfPosesIncluded() const { return mPoseAnimation; }
         /** Sets whether this vertex program requires support for vertex
             texture fetch from the hardware.
         */
@@ -462,7 +462,7 @@ namespace Ogre
         /** Returns whether this vertex program requires support for vertex
             texture fetch from the hardware.
         */
-        virtual bool isVertexTextureFetchRequired( void ) const { return mVertexTextureFetch; }
+        virtual bool isVertexTextureFetchRequired() const { return mVertexTextureFetch; }
         /** Sets whether this program requires support for choosing
             viewport or render target index in any program or only geometry one.
         */
@@ -473,7 +473,7 @@ namespace Ogre
         /** Returns whether this program requires support for choosing
             viewport or render target index in any program or only geometry one.
         */
-        virtual bool isVpAndRtArrayIndexFromAnyShaderRequired( void ) const
+        virtual bool isVpAndRtArrayIndexFromAnyShaderRequired() const
         {
             return mVpAndRtArrayIndexFromAnyShader;
         }
@@ -485,7 +485,7 @@ namespace Ogre
         /** Returns whether this geometry program requires adjacency information
             from the input primitives.
         */
-        virtual bool isAdjacencyInfoRequired( void ) const { return mNeedsAdjacencyInfo; }
+        virtual bool isAdjacencyInfoRequired() const { return mNeedsAdjacencyInfo; }
         /** Sets the number of process groups dispatched by this compute
             program.
          */
@@ -496,7 +496,7 @@ namespace Ogre
         /** Returns the number of process groups dispatched by this compute
             program.
          */
-        virtual Vector3 getComputeGroupDimensions( void ) const { return mComputeGroupDimensions; }
+        virtual Vector3 getComputeGroupDimensions() const { return mComputeGroupDimensions; }
 
         /** Get a reference to the default parameters which are to be used for all
             uses of this program.
@@ -508,11 +508,11 @@ namespace Ogre
             the default parameters; thus users of the program need only change the parameters
             which are unique to their own usage of the program.
         */
-        virtual GpuProgramParametersSharedPtr getDefaultParameters( void );
+        virtual GpuProgramParametersSharedPtr getDefaultParameters();
 
         /** Returns true if default parameters have been set up.
          */
-        virtual bool hasDefaultParameters( void ) const { return !mDefaultParams.isNull(); }
+        virtual bool hasDefaultParameters() const { return !mDefaultParams.isNull(); }
 
         /** Returns whether a vertex program wants light and material states to be passed
             through fixed pipeline low level API rendering calls (default false, subclasses can override)
@@ -520,7 +520,7 @@ namespace Ogre
             Most vertex programs do not need this material information, however GLSL
             shaders can refer to this material and lighting state so enable this option
         */
-        virtual bool getPassSurfaceAndLightStates( void ) const { return false; }
+        virtual bool getPassSurfaceAndLightStates() const { return false; }
 
         /** Returns whether a fragment program wants fog state to be passed
             through fixed pipeline low level API rendering calls (default true, subclasses can override)
@@ -530,7 +530,7 @@ namespace Ogre
             pass if you want to perform fog in the shader). In OpenGL it is also
             common to be able to access the fixed-function fog state inside the shader.
         */
-        virtual bool getPassFogStates( void ) const { return true; }
+        virtual bool getPassFogStates() const { return true; }
 
         /** Returns whether a vertex program wants transform state to be passed
             through fixed pipeline low level API rendering calls
@@ -538,20 +538,20 @@ namespace Ogre
             Most vertex programs do not need fixed-function transform information, however GLSL
             shaders can refer to this state so enable this option
         */
-        virtual bool getPassTransformStates( void ) const { return false; }
+        virtual bool getPassTransformStates() const { return false; }
 
         /** Returns a string that specifies the language of the gpu programs as specified
             in a material script. ie: asm, cg, hlsl, glsl
         */
-        virtual const String &getLanguage( void ) const;
+        virtual const String &getLanguage() const;
 
         /** Did this program encounter a compile error when loading?
          */
-        virtual bool hasCompileError( void ) const { return mCompileError; }
+        virtual bool hasCompileError() const { return mCompileError; }
 
         /** Reset a compile error if it occurred, allowing the load to be retried
          */
-        virtual void resetCompileError( void ) { mCompileError = false; }
+        virtual void resetCompileError() { mCompileError = false; }
 
         /** Allows you to manually provide a set of named parameter mappings
             to a program which would not be able to derive named parameters itself.
@@ -591,11 +591,11 @@ namespace Ogre
         virtual void setUniformBlockBinding( const char *blockName, uint32 bindingSlot ) {}
 
         /// @copydoc Resource::calculateSize
-        virtual size_t calculateSize( void ) const;
+        virtual size_t calculateSize() const;
 
     protected:
         /// Virtual method which must be implemented by subclasses, load from mSource
-        virtual void loadFromSource( void ) = 0;
+        virtual void loadFromSource() = 0;
     };
     /** @} */
     /** @} */

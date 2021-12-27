@@ -306,12 +306,12 @@ namespace Ogre {
         }
 
         /// @deprecated use SharedPtr::operator unspecified_bool_type() instead
-        bool isNull(void) const { return pRep == 0; }
+        bool isNull() const { return pRep == 0; }
 
         /// @deprecated use reset() instead
         void setNull() { reset(); }
 
-        void reset(void) {
+        void reset() {
             release();
         }
 
@@ -321,7 +321,7 @@ namespace Ogre {
 
     protected:
 
-        inline void release(void)
+        inline void release()
         {
             if (pRep)
             {
@@ -338,7 +338,7 @@ namespace Ogre {
          BEFORE SHUTTING OGRE DOWN
          Use reset() before shutdown or make sure your pointer goes
          out of scope before OGRE shuts down to avoid this. */
-        inline void destroy(void)
+        inline void destroy()
         {
             assert(pRep && pInfo);
             OGRE_DELETE_T(pInfo, SharedPtrInfo, MEMCATEGORY_GENERAL);

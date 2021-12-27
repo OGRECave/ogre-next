@@ -91,12 +91,12 @@ namespace Ogre
         mSnapSidesDeviationErrorMax = snapSidesDeviationErrorMax;
     }
     //-------------------------------------------------------------------------
-    const Vector3 &PccPerPixelGridPlacement::getSnapSidesDeviationErrorMin( void ) const
+    const Vector3 &PccPerPixelGridPlacement::getSnapSidesDeviationErrorMin() const
     {
         return mSnapSidesDeviationErrorMin;
     }
     //-------------------------------------------------------------------------
-    const Vector3 &PccPerPixelGridPlacement::getSnapSidesDeviationErrorMax( void ) const
+    const Vector3 &PccPerPixelGridPlacement::getSnapSidesDeviationErrorMax() const
     {
         return mSnapSidesDeviationErrorMax;
     }
@@ -106,7 +106,7 @@ namespace Ogre
         return mNumProbes[0] * mNumProbes[1] * mNumProbes[2];
     }
     //-------------------------------------------------------------------------
-    void PccPerPixelGridPlacement::allocateImages( void )
+    void PccPerPixelGridPlacement::allocateImages()
     {
         deallocateImages();
         const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes(
@@ -115,7 +115,7 @@ namespace Ogre
             reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_GENERAL ) );
     }
     //-------------------------------------------------------------------------
-    void PccPerPixelGridPlacement::deallocateImages( void )
+    void PccPerPixelGridPlacement::deallocateImages()
     {
         if( mDownloadedImages )
         {
@@ -124,7 +124,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    TextureBox PccPerPixelGridPlacement::getImagesBox( void ) const
+    TextureBox PccPerPixelGridPlacement::getImagesBox() const
     {
         OGRE_ASSERT_LOW( mDownloadedImages );
         const PixelFormatGpu pixelFormat = mPcc->getBindTexture()->getPixelFormat();
@@ -284,7 +284,7 @@ namespace Ogre
         mPcc->setListener( 0 );
     }
     //-------------------------------------------------------------------------
-    void PccPerPixelGridPlacement::buildEnd( void )
+    void PccPerPixelGridPlacement::buildEnd()
     {
         OGRE_ASSERT_LOW( mPcc && "Call setParallaxCorrectedCubemapAuto first!" );
         OGRE_ASSERT_LOW( !mAsyncTicket.empty() && "Call buildStart first!" );

@@ -127,7 +127,7 @@ namespace Ogre {
             This will only be correct after the Technique has been compiled, which is
             usually done from Material::compile.
         */
-        bool isSupported(void) const;
+        bool isSupported() const;
         /** Internal compilation method; see Material::compile. 
         @return Any information explaining problems with the compile.
         */
@@ -136,7 +136,7 @@ namespace Ogre {
         bool checkGPURules(StringStream& errors);
         /// Internal method for checking hardware support
         bool checkHardwareSupport(bool autoManageTextureUnits, StringStream& compileErrors);
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         /** Creates a new Pass for this Technique.
         @remarks
@@ -148,7 +148,7 @@ namespace Ogre {
             that you create an alternative fallback Technique for if a card does not have 
             enough facilities for what you're asking for.
         */
-        Pass* createPass(void);
+        Pass* createPass();
         /** Retrieves the Pass with the given index. */
         Pass* getPass(unsigned short index);
         /** Retrieves the Pass matching name.
@@ -156,26 +156,26 @@ namespace Ogre {
         */
         Pass* getPass(const String& name);
         /** Retrieves the number of passes. */
-        unsigned short getNumPasses(void) const;
+        unsigned short getNumPasses() const;
         /** Removes the Pass with the given index. */
         void removePass(unsigned short index);
         /** Removes all Passes from this Technique. */
-        void removeAllPasses(void);
+        void removeAllPasses();
         /** Move a pass from source index to destination index.
             If successful then returns true.
         */
         bool movePass(const unsigned short sourceIndex, const unsigned short destinationIndex);
         typedef VectorIterator<Passes> PassIterator;
         /** Gets an iterator over the passes in this Technique. */
-        const PassIterator getPassIterator(void);
+        const PassIterator getPassIterator();
         /// Gets the parent Material
-        Material* getParent(void) const { return mParent; }
+        Material* getParent() const { return mParent; }
 
         /** Overloaded operator to copy on Technique to another. */
         Technique& operator=(const Technique& rhs);
 
         /// Gets the resource group of the ultimate parent Material
-        const String& getResourceGroup(void) const;
+        const String& getResourceGroup() const;
 
         /** Returns true if this Technique involves transparency. 
         @remarks
@@ -185,22 +185,22 @@ namespace Ogre {
             scene, may be used for blending, therefore we have to treat
             the whole Technique as transparent.
         */
-        bool isTransparent(void) const;
+        bool isTransparent() const;
 
         /** Internal prepare method, derived from call to Material::prepare. */
-        void _prepare(void);
+        void _prepare();
         /** Internal unprepare method, derived from call to Material::unprepare. */
-        void _unprepare(void);
+        void _unprepare();
         /** Internal load method, derived from call to Material::load. */
-        void _load(void);
+        void _load();
         /** Internal unload method, derived from call to Material::unload. */
-        void _unload(void);
+        void _unload();
 
         /// Is this loaded?
-        bool isLoaded(void) const;
+        bool isLoaded() const;
 
         /** Tells the technique that it needs recompilation. */
-        void _notifyNeedsRecompile(void);
+        void _notifyNeedsRecompile();
 
         /** return this material specific  shadow casting specific material
         */
@@ -389,7 +389,7 @@ namespace Ogre {
         */
         void setLodIndex(unsigned short index);
         /** Gets the level-of-detail index assigned to this Technique. */
-        unsigned short getLodIndex(void) const { return mLodIndex; }
+        unsigned short getLodIndex() const { return mLodIndex; }
 
         /** Set the 'scheme name' for this technique. 
         @remarks
@@ -412,19 +412,19 @@ namespace Ogre {
         /** Returns the scheme to which this technique is assigned.
             @see Technique::setSchemeName
         */
-        const String& getSchemeName(void) const;
+        const String& getSchemeName() const;
         
         /// Internal method for getting the scheme index
-        unsigned short _getSchemeIndex(void) const;
+        unsigned short _getSchemeIndex() const;
             
         /** Is depth writing going to occur on this technique? */
-        bool isDepthWriteEnabled(void) const;
+        bool isDepthWriteEnabled() const;
 
         /** Is depth checking going to occur on this technique? */
-        bool isDepthCheckEnabled(void) const;
+        bool isDepthCheckEnabled() const;
 
         /** Exists colour writing disabled pass on this technique? */
-        bool hasColourWriteDisabled(void) const;
+        bool hasColourWriteDisabled() const;
 
         /** Set the name of the technique.
         @remarks
@@ -433,7 +433,7 @@ namespace Ogre {
         */
         void setName(const String& name);
         /// Gets the name of the technique
-        const String& getName(void) const { return mName; }
+        const String& getName() const { return mName; }
 
         /** Applies texture names to Texture Unit State with matching texture name aliases.
             All passes, and Texture Unit States within the technique are checked.

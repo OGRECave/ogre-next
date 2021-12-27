@@ -43,7 +43,7 @@ namespace Demo
                                                     mCamera, compositorName, true );
         }
 
-        virtual void setupResources(void)
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -121,7 +121,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "High Dynamic Range (HDR) + SMAA Sample";
     }

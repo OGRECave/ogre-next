@@ -90,13 +90,13 @@ namespace Ogre
         void setKeyFrameTransform( Real frame, uint32 slot, const Vector3 &vPos,
                                     const Quaternion &qRot, const Vector3 vScale );
 
-        uint32 getBoneBlockIdx(void) const                      { return mBoneBlockIdx; }
-        size_t getUsedSlots(void) const                         { return mUsedSlots; }
+        uint32 getBoneBlockIdx() const                      { return mBoneBlockIdx; }
+        size_t getUsedSlots() const                         { return mUsedSlots; }
         void _setMaxUsedSlot( uint32 slot )
                                         { mUsedSlots = std::max( slot+1, mUsedSlots ); }
 
-        const KeyFrameRigVec& getKeyFrames(void) const          { return mKeyFrameRigs; }
-        KeyFrameRigVec& _getKeyFrames(void)                     { return mKeyFrameRigs; }
+        const KeyFrameRigVec& getKeyFrames() const          { return mKeyFrameRigs; }
+        KeyFrameRigVec& _getKeyFrames()                     { return mKeyFrameRigs; }
 
         inline void getKeyFrameRigAt( KeyFrameRigVec::const_iterator &inOutPrevFrame,
                                         KeyFrameRigVec::const_iterator &outNextFrame,
@@ -127,7 +127,7 @@ namespace Ogre
             based on the number of used slots. Only useful when
             mUsedSlots <= (ARRAY_PACKED_REALS >> 1). Otherwise it does nothing.
         */
-        void _bakeUnusedSlots(void);
+        void _bakeUnusedSlots();
     };
 
     typedef vector<SkeletonTrack>::type SkeletonTrackVec;

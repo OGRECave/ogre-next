@@ -116,7 +116,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     PVRTCCodec* PVRTCCodec::msInstance = 0;
     //---------------------------------------------------------------------
-    void PVRTCCodec::startup(void)
+    void PVRTCCodec::startup()
     {
         if (!msInstance)
         {
@@ -129,7 +129,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void PVRTCCodec::shutdown(void)
+    void PVRTCCodec::shutdown()
     {
         if(msInstance)
         {

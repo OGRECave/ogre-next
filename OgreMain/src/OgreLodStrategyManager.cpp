@@ -36,11 +36,11 @@ THE SOFTWARE.
 namespace Ogre {
     //-----------------------------------------------------------------------
     template<> LodStrategyManager* Singleton<LodStrategyManager>::msSingleton = 0;
-    LodStrategyManager* LodStrategyManager::getSingletonPtr(void)
+    LodStrategyManager* LodStrategyManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    LodStrategyManager& LodStrategyManager::getSingleton(void)
+    LodStrategyManager& LodStrategyManager::getSingleton()
     {
         assert( msSingleton );  return ( *msSingleton );
     }

@@ -183,7 +183,7 @@ namespace Ogre {
         return *this;
     }
     //-----------------------------------------------------------------------
-    const String& TextureUnitState::getTextureName(void) const
+    const String& TextureUnitState::getTextureName() const
     {
         // Return name of current frame
         if (mCurrentFrame < mFrames.size())
@@ -271,7 +271,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    TextureUnitState::BindingType TextureUnitState::getBindingType(void) const
+    TextureUnitState::BindingType TextureUnitState::getBindingType() const
     {
         return mBindingType;
     }
@@ -281,7 +281,7 @@ namespace Ogre {
         mAutomaticBatching = automaticBatching;
     }
     //-----------------------------------------------------------------------
-    bool TextureUnitState::getAutomaticBatching(void) const
+    bool TextureUnitState::getAutomaticBatching() const
     {
         return mAutomaticBatching;
     }
@@ -308,7 +308,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    TextureUnitState::ContentType TextureUnitState::getContentType(void) const
+    TextureUnitState::ContentType TextureUnitState::getContentType() const
     {
         return mContentType;
     }
@@ -388,17 +388,17 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool TextureUnitState::isCubic(void) const
+    bool TextureUnitState::isCubic() const
     {
         return mCubic;
     }
     //-----------------------------------------------------------------------
-    bool TextureUnitState::is3D(void) const
+    bool TextureUnitState::is3D() const
     {
         return mTextureType == TextureTypes::TypeCube;
     }
     //-----------------------------------------------------------------------
-    TextureTypes::TextureTypes TextureUnitState::getTextureType(void) const
+    TextureTypes::TextureTypes TextureUnitState::getTextureType() const
     {
         return mTextureType;
     }
@@ -550,12 +550,12 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    unsigned int TextureUnitState::getCurrentFrame(void) const
+    unsigned int TextureUnitState::getCurrentFrame() const
     {
         return mCurrentFrame;
     }
     //-----------------------------------------------------------------------
-    unsigned int TextureUnitState::getNumFrames(void) const
+    unsigned int TextureUnitState::getNumFrames() const
     {
         return (unsigned int)mFrames.size();
     }
@@ -576,7 +576,7 @@ namespace Ogre {
         mTextureSrcMipmaps = numMipmaps;
     }
     //-----------------------------------------------------------------------
-    int TextureUnitState::getNumMipmaps(void) const
+    int TextureUnitState::getNumMipmaps() const
     {
         return mTextureSrcMipmaps;
     }
@@ -586,7 +586,7 @@ namespace Ogre {
         mIsAlpha = isAlpha;
     }
     //-----------------------------------------------------------------------
-    bool TextureUnitState::getIsAlpha(void) const
+    bool TextureUnitState::getIsAlpha() const
     {
         return mIsAlpha;
     }
@@ -601,7 +601,7 @@ namespace Ogre {
         return mHwGamma;
     }
     //-----------------------------------------------------------------------
-    unsigned int TextureUnitState::getTextureCoordSet(void) const
+    unsigned int TextureUnitState::getTextureCoordSet() const
     {
         return mTextureCoordSetIndex;
     }
@@ -711,7 +711,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::removeAllEffects(void)
+    void TextureUnitState::removeAllEffects()
     {
         // Iterate over effects to remove controllers
         EffectMap::iterator i, iend;
@@ -728,7 +728,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    bool TextureUnitState::isBlank(void) const
+    bool TextureUnitState::isBlank() const
     {
         if (mFrames.empty())
             return true;
@@ -737,22 +737,22 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    SceneBlendFactor TextureUnitState::getColourBlendFallbackSrc(void) const
+    SceneBlendFactor TextureUnitState::getColourBlendFallbackSrc() const
     {
         return mColourBlendFallbackSrc;
     }
     //-----------------------------------------------------------------------
-    SceneBlendFactor TextureUnitState::getColourBlendFallbackDest(void) const
+    SceneBlendFactor TextureUnitState::getColourBlendFallbackDest() const
     {
         return mColourBlendFallbackDest;
     }
     //-----------------------------------------------------------------------
-    const LayerBlendModeEx& TextureUnitState::getColourBlendMode(void) const
+    const LayerBlendModeEx& TextureUnitState::getColourBlendMode() const
     {
         return mColourBlendMode;
     }
     //-----------------------------------------------------------------------
-    const LayerBlendModeEx& TextureUnitState::getAlphaBlendMode(void) const
+    const LayerBlendModeEx& TextureUnitState::getAlphaBlendMode() const
     {
         return mAlphaBlendMode;
     }
@@ -790,7 +790,7 @@ namespace Ogre {
         mEffects.erase( remPair.first, remPair.second );
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::setBlank(void)
+    void TextureUnitState::setBlank()
     {
         setTextureName(BLANKSTRING);
     }
@@ -995,7 +995,7 @@ namespace Ogre {
         addEffect(eff);
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::_prepare(void)
+    void TextureUnitState::_prepare()
     {
         // Unload first
         //_unload();
@@ -1007,7 +1007,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::_load(void)
+    void TextureUnitState::_load()
     {
 
         // Load textures
@@ -1028,7 +1028,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    TextureGpu* TextureUnitState::_getTexturePtr(void) const
+    TextureGpu* TextureUnitState::_getTexturePtr() const
     {
         return _getTexturePtr(mCurrentFrame);
     }
@@ -1205,7 +1205,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::createAnimController(void)
+    void TextureUnitState::createAnimController()
     {
         if (mAnimController)
         {
@@ -1249,37 +1249,37 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real TextureUnitState::getTextureUScroll(void) const
+    Real TextureUnitState::getTextureUScroll() const
     {
         return mUMod;
     }
 
     //-----------------------------------------------------------------------
-    Real TextureUnitState::getTextureVScroll(void) const
+    Real TextureUnitState::getTextureVScroll() const
     {
         return mVMod;
     }
 
     //-----------------------------------------------------------------------
-    Real TextureUnitState::getTextureUScale(void) const
+    Real TextureUnitState::getTextureUScale() const
     {
         return mUScale;
     }
 
     //-----------------------------------------------------------------------
-    Real TextureUnitState::getTextureVScale(void) const
+    Real TextureUnitState::getTextureVScale() const
     {
         return mVScale;
     }
 
     //-----------------------------------------------------------------------
-    const Radian& TextureUnitState::getTextureRotate(void) const
+    const Radian& TextureUnitState::getTextureRotate() const
     {
         return mRotate;
     }
     
     //-----------------------------------------------------------------------
-    Real TextureUnitState::getAnimationDuration(void) const
+    Real TextureUnitState::getAnimationDuration() const
     {
         return mAnimDuration;
     }
@@ -1305,22 +1305,22 @@ namespace Ogre {
             hlmsManager->destroySamplerblock( oldSamplerblock );
     }
     //-----------------------------------------------------------------------
-    const HlmsSamplerblock* TextureUnitState::getSamplerblock(void) const
+    const HlmsSamplerblock* TextureUnitState::getSamplerblock() const
     {
         return mSamplerblock;
     }
     //-----------------------------------------------------------------------
-    const TextureUnitState::EffectMap& TextureUnitState::getEffects(void) const
+    const TextureUnitState::EffectMap& TextureUnitState::getEffects() const
     {
         return mEffects;
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::_unprepare(void)
+    void TextureUnitState::_unprepare()
     {
         cleanFramePtrs();
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::_unload(void)
+    void TextureUnitState::_unload()
     {
         // Destroy animation controller
         if (mAnimController)
@@ -1342,12 +1342,12 @@ namespace Ogre {
         cleanFramePtrs();
     }
     //-----------------------------------------------------------------------------
-    bool TextureUnitState::isLoaded(void) const
+    bool TextureUnitState::isLoaded() const
     {
         return mParent->isLoaded();
     }
     //-----------------------------------------------------------------------
-    bool TextureUnitState::hasViewRelativeTextureCoordinateGeneration(void) const
+    bool TextureUnitState::hasViewRelativeTextureCoordinateGeneration() const
     {
         // Right now this only returns true for reflection maps
 
@@ -1453,7 +1453,7 @@ namespace Ogre {
         mCompositorRefTexName = textureName;
     }
     //-----------------------------------------------------------------------
-    size_t TextureUnitState::calculateSize(void) const
+    size_t TextureUnitState::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -1466,7 +1466,7 @@ namespace Ogre {
         return memSize;
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::cleanFramePtrs(void)
+    void TextureUnitState::cleanFramePtrs()
     {
         vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
         vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();

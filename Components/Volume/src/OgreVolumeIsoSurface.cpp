@@ -46,7 +46,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    IsoSurface::~IsoSurface(void)
+    IsoSurface::~IsoSurface()
     {
     }
 }

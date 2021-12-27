@@ -39,7 +39,7 @@ namespace Ogre
         mHiddenDriversCount = 0;
     }
     //-----------------------------------------------------------------------
-    D3D11DriverList::~D3D11DriverList(void)
+    D3D11DriverList::~D3D11DriverList()
     {
     }
     //-----------------------------------------------------------------------

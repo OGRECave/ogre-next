@@ -95,7 +95,7 @@ namespace Ogre
             return saturatedRand() * (max - min) + min;
         }
 
-        Vector3 getRandomDir(void)
+        Vector3 getRandomDir()
         {
             const Real theta= Real(2.0) * Math::PI * saturatedRand();
             const Real z    = boxRand();
@@ -116,7 +116,7 @@ namespace Ogre
         }
 
         /// Returns values in range [-1; 1] both XY, inside a circle of radius 1.
-        Vector2 getRandomPointInCircle(void)
+        Vector2 getRandomPointInCircle()
         {
             const Real theta= Real(2.0) * Math::PI * saturatedRand();
             const Real r    = saturatedRand();
@@ -515,7 +515,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::clusterAllVpls(void)
+    void InstantRadiosity::clusterAllVpls()
     {
         assert( mCellSize > 0 );
 
@@ -586,7 +586,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::autogenerateAreaOfInterest(void)
+    void InstantRadiosity::autogenerateAreaOfInterest()
     {
         AxisAlignedBox areaOfInterest;
         for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
@@ -1312,7 +1312,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::updateExistingVpls(void)
+    void InstantRadiosity::updateExistingVpls()
     {
         SceneNode *rootNode = mSceneManager->getRootSceneNode( SCENE_DYNAMIC );
 
@@ -1375,7 +1375,7 @@ namespace Ogre
             createDebugMarkers();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::clear(void)
+    void InstantRadiosity::clear()
     {
         VplVec::const_iterator itor = mVpls.begin();
         VplVec::const_iterator end  = mVpls.end();
@@ -1398,7 +1398,7 @@ namespace Ogre
         destroyDebugMarkers();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::build(void)
+    void InstantRadiosity::build()
     {
         clear();
 
@@ -1519,7 +1519,7 @@ namespace Ogre
             mAoI.clear();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::freeMemory(void)
+    void InstantRadiosity::freeMemory()
     {
         {
             MeshDataMapV2::iterator itor = mMeshDataMapV2.begin();
@@ -1580,7 +1580,7 @@ namespace Ogre
             inOutDirDiffuse[i] += std::max( lightDir.dotProduct( directions[i] ), Real( 0.0f ) ) * diffuse;
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::createDebugMarkers(void)
+    void InstantRadiosity::createDebugMarkers()
     {
         destroyDebugMarkers();
 
@@ -1631,7 +1631,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::destroyDebugMarkers(void)
+    void InstantRadiosity::destroyDebugMarkers()
     {
         Hlms *hlms = mHlmsManager->getHlms( HLMS_UNLIT );
 

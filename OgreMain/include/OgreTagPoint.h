@@ -64,8 +64,8 @@ namespace v1 {
         TagPoint(unsigned short handle, Skeleton* creator);
         virtual ~TagPoint();
 
-        Entity *getParentEntity(void) const;
-        MovableObject* getChildObject(void) const;
+        Entity *getParentEntity() const;
+        MovableObject* getChildObject() const;
         
         void setParentEntity(Entity *pEntity);
         void setChildObject(MovableObject *pObject);
@@ -78,7 +78,7 @@ namespace v1 {
 
         /** Returns true if this TagPoint is affected by orientation applied to the parent entity. 
         */
-        bool getInheritParentEntityOrientation(void) const;
+        bool getInheritParentEntityOrientation() const;
 
         /** Tells the TagPoint whether it should inherit scaling factors from it's parent entity.
         @param inherit If true, this TagPoint's scaling factors will be affected by
@@ -88,21 +88,21 @@ namespace v1 {
 
         /** Returns true if this TagPoint is affected by scaling factors applied to the parent entity. 
         */
-        bool getInheritParentEntityScale(void) const;
+        bool getInheritParentEntityScale() const;
 
         /** Gets the transform of parent entity. */
-        const Matrix4& getParentEntityTransform(void) const;
+        const Matrix4& getParentEntityTransform() const;
 
         /** Gets the transform of this node just for the skeleton (not entity) */
-        const Matrix4& _getFullLocalTransform(void) const;
+        const Matrix4& _getFullLocalTransform() const;
 
         /** @copydoc Node::needUpdate */
         void needUpdate(bool forceParentUpdate = false);
 
         /** Overridden from Node in order to include parent Entity transform. */
-        void updateFromParentImpl(void) const;
+        void updateFromParentImpl() const;
         /** @copydoc Renderable::getLights */
-        const LightList& getLights(void) const;
+        const LightList& getLights() const;
 
 
 

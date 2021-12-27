@@ -225,7 +225,7 @@ namespace v1 {
         return mSubMeshList[index];
     }
     //-----------------------------------------------------------------------
-    void Mesh::postLoadImpl(void)
+    void Mesh::postLoadImpl()
     {
         OgreProfileExhaustive( "v1::Mesh::postLoadImpl" );
 
@@ -447,7 +447,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void Mesh::dearrangeToInefficient(void)
+    void Mesh::dearrangeToInefficient()
     {
         if( sharedVertexData[VpNormal] )
         {
@@ -571,7 +571,7 @@ namespace v1 {
         return newMesh;
     }
     //-----------------------------------------------------------------------
-    const AxisAlignedBox& Mesh::getBounds(void) const
+    const AxisAlignedBox& Mesh::getBounds() const
     {
         return mAABB;
     }
@@ -711,12 +711,12 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    bool Mesh::hasSkeleton(void) const
+    bool Mesh::hasSkeleton() const
     {
         return !(mSkeletonName.empty());
     }
     //-----------------------------------------------------------------------
-    const SkeletonPtr& Mesh::getOldSkeleton(void) const
+    const SkeletonPtr& Mesh::getOldSkeleton() const
     {
         return mOldSkeleton;
     }
@@ -728,7 +728,7 @@ namespace v1 {
         mBoneAssignmentsOutOfDate = true;
     }
     //-----------------------------------------------------------------------
-    void Mesh::clearBoneAssignments(void)
+    void Mesh::clearBoneAssignments()
     {
         mBoneAssignments.clear();
         mBoneAssignmentsOutOfDate = true;
@@ -793,7 +793,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    void Mesh::_updateCompiledBoneAssignments(void)
+    void Mesh::_updateCompiledBoneAssignments()
     {
         if (mBoneAssignmentsOutOfDate)
             _compileBoneAssignments();
@@ -907,7 +907,7 @@ namespace v1 {
         return maxBones;
     }
     //-----------------------------------------------------------------------
-    void  Mesh::_compileBoneAssignments(void)
+    void  Mesh::_compileBoneAssignments()
     {
         if (sharedVertexData[VpNormal])
         {
@@ -1204,18 +1204,18 @@ namespace v1 {
         mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( mOldSkeleton.get() );
     }
     //---------------------------------------------------------------------
-    Mesh::BoneAssignmentIterator Mesh::getBoneAssignmentIterator(void)
+    Mesh::BoneAssignmentIterator Mesh::getBoneAssignmentIterator()
     {
         return BoneAssignmentIterator(mBoneAssignments.begin(),
             mBoneAssignments.end());
     }
     //---------------------------------------------------------------------
-    const String& Mesh::getSkeletonName(void) const
+    const String& Mesh::getSkeletonName() const
     {
         return mSkeletonName;
     }
     //---------------------------------------------------------------------
-    ushort Mesh::getNumLodLevels(void) const
+    ushort Mesh::getNumLodLevels() const
     {
         return mNumLods;
     }
@@ -1341,7 +1341,7 @@ namespace v1 {
         return i->second;
     }
     //--------------------------------------------------------------------
-    void Mesh::removeLodLevels(void)
+    void Mesh::removeLodLevels()
     {
 #if !OGRE_NO_MESHLOD
         // Remove data from SubMeshes
@@ -1368,12 +1368,12 @@ namespace v1 {
     }
 
     //---------------------------------------------------------------------
-    Real Mesh::getBoundingSphereRadius(void) const
+    Real Mesh::getBoundingSphereRadius() const
     {
         return mBoundRadius;
     }
     //---------------------------------------------------------------------
-    Real Mesh::getBoneBoundingRadius(void) const
+    Real Mesh::getBoneBoundingRadius() const
     {
         return mBoneBoundingRadius;
     }
@@ -1457,7 +1457,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Mesh::destroyShadowMappingGeom(void)
+    void Mesh::destroyShadowMappingGeom()
     {
         if( sharedVertexData[VpShadow] != sharedVertexData[VpNormal] )
             OGRE_DELETE sharedVertexData[VpShadow];
@@ -1576,7 +1576,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    bool Mesh::hasValidShadowMappingBuffers(void) const
+    bool Mesh::hasValidShadowMappingBuffers() const
     {
         bool retVal = true;
 
@@ -1601,7 +1601,7 @@ namespace v1 {
         return retVal;
     }
     //---------------------------------------------------------------------
-    bool Mesh::hasIndependentShadowMappingBuffers(void) const
+    bool Mesh::hasIndependentShadowMappingBuffers() const
     {
         if( !hasValidShadowMappingBuffers() )
             return false;
@@ -1949,7 +1949,7 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    void Mesh::buildEdgeList(void)
+    void Mesh::buildEdgeList()
     {
         if (mEdgeListsBuilt)
             return;
@@ -2100,7 +2100,7 @@ namespace v1 {
         mEdgeListsBuilt = true;
     }
     //---------------------------------------------------------------------
-    void Mesh::freeEdgeList(void)
+    void Mesh::freeEdgeList()
     {
         if (!mEdgeListsBuilt)
             return;
@@ -2128,7 +2128,7 @@ namespace v1 {
         mEdgeListsBuilt = false;
     }
     //---------------------------------------------------------------------
-    void Mesh::prepareForShadowVolume(void)
+    void Mesh::prepareForShadowVolume()
     {
         if (mPreparedForShadowVolumes)
             return;
@@ -2428,7 +2428,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    size_t Mesh::calculateSize(void) const
+    size_t Mesh::calculateSize() const
     {
         // calculate GPU size
         size_t ret = 0;
@@ -2494,12 +2494,12 @@ namespace v1 {
         return ret;
     }
     //-----------------------------------------------------------------------------
-    bool Mesh::hasVertexAnimation(void) const
+    bool Mesh::hasVertexAnimation() const
     {
         return !mAnimationsList.empty();
     }
     //---------------------------------------------------------------------
-    VertexAnimationType Mesh::getSharedVertexDataAnimationType(void) const
+    VertexAnimationType Mesh::getSharedVertexDataAnimationType() const
     {
         if (mAnimationTypesDirty)
         {
@@ -2509,7 +2509,7 @@ namespace v1 {
         return mSharedVertexDataAnimationType;
     }
     //---------------------------------------------------------------------
-    void Mesh::_determineAnimationTypes(void) const
+    void Mesh::_determineAnimationTypes() const
     {
         // Don't check flag here; since detail checks on track changes are not
         // done, allow caller to force if they need to
@@ -2643,7 +2643,7 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    unsigned short Mesh::getNumAnimations(void) const
+    unsigned short Mesh::getNumAnimations() const
     {
         return static_cast<unsigned short>(mAnimationsList.size());
     }
@@ -2684,7 +2684,7 @@ namespace v1 {
         mAnimationTypesDirty = true;
     }
     //---------------------------------------------------------------------
-    void Mesh::removeAllAnimations(void)
+    void Mesh::removeAllAnimations()
     {
         AnimationList::iterator i = mAnimationsList.begin();
         for (; i != mAnimationsList.end(); ++i)
@@ -2772,7 +2772,7 @@ namespace v1 {
             "Mesh::removePose");
     }
     //---------------------------------------------------------------------
-    void Mesh::removeAllPoses(void)
+    void Mesh::removeAllPoses()
     {
         for (PoseList::iterator i = mPoseList.begin(); i != mPoseList.end(); ++i)
         {
@@ -2781,22 +2781,22 @@ namespace v1 {
         mPoseList.clear();
     }
     //---------------------------------------------------------------------
-    Mesh::PoseIterator Mesh::getPoseIterator(void)
+    Mesh::PoseIterator Mesh::getPoseIterator()
     {
         return PoseIterator(mPoseList.begin(), mPoseList.end());
     }
     //---------------------------------------------------------------------
-    Mesh::ConstPoseIterator Mesh::getPoseIterator(void) const
+    Mesh::ConstPoseIterator Mesh::getPoseIterator() const
     {
         return ConstPoseIterator(mPoseList.begin(), mPoseList.end());
     }
     //-----------------------------------------------------------------------------
-    const PoseList& Mesh::getPoseList(void) const
+    const PoseList& Mesh::getPoseList() const
     {
         return mPoseList;
     }
     //---------------------------------------------------------------------
-    void Mesh::updateMaterialForAllSubMeshes(void)
+    void Mesh::updateMaterialForAllSubMeshes()
     {
         // iterate through each sub mesh and request the submesh to update its material
         vector<SubMesh*>::type::iterator subi;
@@ -2807,7 +2807,7 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    void Mesh::createAzdoBuffers(void)
+    void Mesh::createAzdoBuffers()
     {
         //mSubMeshList.begin();
     }

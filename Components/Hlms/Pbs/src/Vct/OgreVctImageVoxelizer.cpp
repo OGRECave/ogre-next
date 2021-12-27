@@ -88,7 +88,7 @@ namespace Ogre
         destroyVoxelTextures();
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::createComputeJobs( void )
+    void VctImageVoxelizer::createComputeJobs()
     {
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 #if OGRE_NO_JSON
@@ -230,14 +230,14 @@ namespace Ogre
         mFullBuildDone = false;
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::removeAllItems( void )
+    void VctImageVoxelizer::removeAllItems()
     {
         mItems.clear();
         mItemOrderDirty = false;
         mFullBuildDone = false;
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::restoreSwappedVoxelTextures( void )
+    void VctImageVoxelizer::restoreSwappedVoxelTextures()
     {
         if( mAlbedoVox && mAlbedoVoxAlt )
         {
@@ -252,7 +252,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::createVoxelTextures( void )
+    void VctImageVoxelizer::createVoxelTextures()
     {
         if( mAlbedoVox )
         {
@@ -313,7 +313,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::createAltVoxelTextures( void )
+    void VctImageVoxelizer::createAltVoxelTextures()
     {
         if( mAlbedoVoxAlt )
             return;
@@ -349,7 +349,7 @@ namespace Ogre
         mNormalVoxAlt->scheduleTransitionTo( GpuResidency::Resident );
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::setVoxelTexturesToJobs( void )
+    void VctImageVoxelizer::setVoxelTexturesToJobs()
     {
         if( mDebugVoxelVisualizer )
         {
@@ -392,7 +392,7 @@ namespace Ogre
         mImageVoxelizerJob->_setUavTexture( 3u, uavSlot );
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::destroyVoxelTextures( void )
+    void VctImageVoxelizer::destroyVoxelTextures()
     {
         if( mAlbedoVoxAlt )
         {
@@ -408,7 +408,7 @@ namespace Ogre
         VctVoxelizerSourceBase::destroyVoxelTextures();
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::createInstanceBuffers( void )
+    void VctImageVoxelizer::createInstanceBuffers()
     {
         const size_t structStride = sizeof( float ) * 4u * 5u;
         const size_t elementCount = mItems.size() * mOctants.size();
@@ -428,7 +428,7 @@ namespace Ogre
         mImageVoxelizerJob->setTexBuffer( 0u, bufferSlot );
     }
     //-------------------------------------------------------------------------
-    void VctImageVoxelizer::destroyInstanceBuffers( void )
+    void VctImageVoxelizer::destroyInstanceBuffers()
     {
         if( mInstanceBuffer )
         {

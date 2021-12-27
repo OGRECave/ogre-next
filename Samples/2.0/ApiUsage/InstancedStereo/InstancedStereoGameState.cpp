@@ -66,7 +66,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void InstancedStereoGameState::createScene01(void)
+    void InstancedStereoGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -221,7 +221,7 @@ namespace Demo
         forwardPlus->setDebugMode( wasInDebugMode );
     }
     //-----------------------------------------------------------------------------------
-    void InstancedStereoGameState::generateLights(void)
+    void InstancedStereoGameState::generateLights()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::LightArray::const_iterator itor = mGeneratedLights.begin();

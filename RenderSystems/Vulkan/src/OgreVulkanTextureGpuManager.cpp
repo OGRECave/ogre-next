@@ -326,7 +326,7 @@ namespace Ogre
                                                 TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer( void )
+    TextureGpu *VulkanTextureGpuManager::createWindowDepthBuffer()
     {
         return OGRE_NEW VulkanTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
                                                       "RenderWindow DepthBuffer",          //

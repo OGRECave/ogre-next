@@ -109,7 +109,7 @@ namespace Ogre
         inline Vector3 getMaximum() const;
 
         /// Gets the size of the box
-        inline Vector3 getSize(void) const;
+        inline Vector3 getSize() const;
 
         /** Merges the passed in box into the current box. The result is the
             box which encompasses both.
@@ -139,7 +139,7 @@ namespace Ogre
         inline Aabb intersection( const Aabb& b2 ) const;
 
         /// Calculate the volume of this box
-        inline Real volume(void) const;
+        inline Real volume() const;
 
         /// Tests whether another box contained by this box.
         inline bool contains( const Aabb &other ) const;

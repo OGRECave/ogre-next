@@ -232,7 +232,7 @@ void PortalBase::calcDirectionAndRadius(void) const
 }
 
 // Calculate the local bounding sphere of the portal from the corner points
-Real PortalBase::getRadius( void ) const
+Real PortalBase::getRadius() const
 {
     if (!mLocalsUpToDate)
     {

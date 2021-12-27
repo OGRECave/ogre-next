@@ -118,7 +118,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VkFence VulkanQueue::getFence( void )
+    VkFence VulkanQueue::getFence()
     {
         VkFence retVal;
         if( !mAvailableFences.empty() )
@@ -172,7 +172,7 @@ namespace Ogre
             vkResetFences( mDevice, numFencesToReset, &mAvailableFences[oldNumAvailableFences] );
     }
     //-------------------------------------------------------------------------
-    inline VkFence VulkanQueue::getCurrentFence( void )
+    inline VkFence VulkanQueue::getCurrentFence()
     {
         if( mCurrentFence == 0 )
         {
@@ -254,7 +254,7 @@ namespace Ogre
     void VulkanQueue::destroy() {}
 
     //-------------------------------------------------------------------------
-    void VulkanQueue::newCommandBuffer( void )
+    void VulkanQueue::newCommandBuffer()
     {
         const size_t currFrame = mVaoManager->waitForTailFrameToFinish();
         mCurrentCmdBuffer = getCmdBuffer( currFrame );
@@ -265,7 +265,7 @@ namespace Ogre
         vkBeginCommandBuffer( mCurrentCmdBuffer, &beginInfo );
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::endCommandBuffer( void )
+    void VulkanQueue::endCommandBuffer()
     {
         if( mCurrentCmdBuffer )
         {
@@ -279,7 +279,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::getGraphicsEncoder( void )
+    void VulkanQueue::getGraphicsEncoder()
     {
         if( mEncoderState != EncoderGraphicsOpen )
         {
@@ -290,7 +290,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::getComputeEncoder( void )
+    void VulkanQueue::getComputeEncoder()
     {
         if( mEncoderState != EncoderComputeOpen )
         {
@@ -894,7 +894,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::endCopyEncoder( void )
+    void VulkanQueue::endCopyEncoder()
     {
         if( mEncoderState != EncoderCopyOpen )
             return;
@@ -988,7 +988,7 @@ namespace Ogre
         mEncoderState = EncoderClosed;
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::endComputeEncoder( void )
+    void VulkanQueue::endComputeEncoder()
     {
         if( mEncoderState != EncoderComputeOpen )
             return;
@@ -1034,7 +1034,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VkFence VulkanQueue::acquireCurrentFence( void )
+    VkFence VulkanQueue::acquireCurrentFence()
     {
         VkFence retVal = getCurrentFence();
         ++mCurrentFenceRefCount;

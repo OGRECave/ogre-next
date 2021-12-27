@@ -152,7 +152,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11BufferInterfaceBase::_ensureDelayedImmutableBuffersAreReady(void)
+    void D3D11BufferInterfaceBase::_ensureDelayedImmutableBuffersAreReady()
     {
         if( !mVboName )
         {

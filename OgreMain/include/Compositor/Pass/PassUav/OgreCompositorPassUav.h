@@ -63,9 +63,9 @@ namespace Ogre
     protected:
         DescriptorSetUav const *mDescriptorSetUav;
 
-        uint32 calculateNumberUavSlots(void) const;
-        void setupDescriptorSetUav(void);
-        void destroyDescriptorSetUav(void);
+        uint32 calculateNumberUavSlots() const;
+        void setupDescriptorSetUav();
+        void destroyDescriptorSetUav();
 
     public:
         CompositorPassUav( const CompositorPassUavDef *definition, CompositorNode *parentNode,

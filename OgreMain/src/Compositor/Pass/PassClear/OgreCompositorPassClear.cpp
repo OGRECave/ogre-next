@@ -51,7 +51,7 @@ namespace Ogre
         initialize( rtv );
     }
     //-----------------------------------------------------------------------------------
-    bool CompositorPassClear::allowResolveStoreActionsWithoutResolveTexture(void) const
+    bool CompositorPassClear::allowResolveStoreActionsWithoutResolveTexture() const
     {
         return true;
     }

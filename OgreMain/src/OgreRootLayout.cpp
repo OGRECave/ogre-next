@@ -737,7 +737,7 @@ namespace Ogre
         flushLwString( jsonStr, outJson );
     }
     //-------------------------------------------------------------------------
-    size_t RootLayout::calculateNumUsedSets( void ) const
+    size_t RootLayout::calculateNumUsedSets() const
     {
         size_t numSets = 0u;
         for( size_t i = 0u; i < OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS; ++i )

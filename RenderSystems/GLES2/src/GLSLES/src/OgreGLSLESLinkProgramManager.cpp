@@ -37,24 +37,24 @@ namespace Ogre {
     template<> GLSLESLinkProgramManager* Singleton<GLSLESLinkProgramManager>::msSingleton = 0;
 
 
-    GLSLESLinkProgramManager* GLSLESLinkProgramManager::getSingletonPtr(void)
+    GLSLESLinkProgramManager* GLSLESLinkProgramManager::getSingletonPtr()
     {
         return msSingleton;
     }
 
-    GLSLESLinkProgramManager& GLSLESLinkProgramManager::getSingleton(void)
+    GLSLESLinkProgramManager& GLSLESLinkProgramManager::getSingleton()
     {  
         assert(msSingleton);
         return (*msSingleton);
     }
 
-    GLSLESLinkProgramManager::GLSLESLinkProgramManager(void)
+    GLSLESLinkProgramManager::GLSLESLinkProgramManager()
         : GLSLESProgramManagerCommon()
         , mActiveLinkProgram(NULL)
     {
     }
 
-    GLSLESLinkProgramManager::~GLSLESLinkProgramManager(void)
+    GLSLESLinkProgramManager::~GLSLESLinkProgramManager()
     {
         // iterate through map container and delete link programs
         for (LinkProgramIterator currentProgram = mLinkPrograms.begin();
@@ -64,7 +64,7 @@ namespace Ogre {
         }
     }
 
-    GLSLESLinkProgram* GLSLESLinkProgramManager::getActiveLinkProgram(void)
+    GLSLESLinkProgram* GLSLESLinkProgramManager::getActiveLinkProgram()
     {
         // If there is an active link program then return it.
         if (mActiveLinkProgram)

@@ -179,17 +179,17 @@ namespace v1 {
         return i->second;
     }
     //---------------------------------------------------------------------
-    OverlayContainer::ChildIterator OverlayContainer::getChildIterator(void)
+    OverlayContainer::ChildIterator OverlayContainer::getChildIterator()
     {
         return ChildIterator(mChildren.begin(), mChildren.end());
     }
     //---------------------------------------------------------------------
-    OverlayContainer::ChildContainerIterator OverlayContainer::getChildContainerIterator(void)
+    OverlayContainer::ChildContainerIterator OverlayContainer::getChildContainerIterator()
     {
         return ChildContainerIterator(mChildContainers.begin(), mChildContainers.end());
     }
     //---------------------------------------------------------------------
-    void OverlayContainer::initialise(void)
+    void OverlayContainer::initialise()
     {
         ChildContainerMap::iterator coni;
         for (coni =  mChildContainers.begin(); coni != mChildContainers.end(); ++coni)
@@ -203,7 +203,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void OverlayContainer::_positionsOutOfDate(void)
+    void OverlayContainer::_positionsOutOfDate()
     {
         OverlayElement::_positionsOutOfDate();
 
@@ -215,7 +215,7 @@ namespace v1 {
     }
 
     //---------------------------------------------------------------------
-    void OverlayContainer::_update(void)
+    void OverlayContainer::_update()
     {
         // call superclass
         OverlayElement::_update();

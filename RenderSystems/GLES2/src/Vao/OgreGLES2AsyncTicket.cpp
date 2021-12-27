@@ -55,7 +55,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const void* GLES2AsyncTicket::mapImpl(void)
+    const void* GLES2AsyncTicket::mapImpl()
     {
         if( mFenceName )
             mFenceName = GLES2VaoManager::waitFor( mFenceName );
@@ -64,7 +64,7 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool GLES2AsyncTicket::queryIsTransferDone(void)
+    bool GLES2AsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 

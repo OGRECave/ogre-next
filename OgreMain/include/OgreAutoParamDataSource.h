@@ -156,24 +156,24 @@ namespace Ogre {
          const Camera* getCurrentCamera() const;
 
 
-         const Matrix4& getWorldMatrix(void) const;
-         const Matrix4* getWorldMatrixArray(void) const;
-         size_t getWorldMatrixCount(void) const;
-         const Matrix4& getViewMatrix(void) const;
-         const Matrix4& getViewProjectionMatrix(void) const;
-         const Matrix4& getProjectionMatrix(void) const;
-         const Matrix4& getWorldViewProjMatrix(void) const;
-         const Matrix4& getWorldViewMatrix(void) const;
-         const Matrix4& getInverseWorldMatrix(void) const;
-         const Matrix4& getInverseWorldViewMatrix(void) const;
-         const Matrix4& getInverseViewMatrix(void) const;
-         const Matrix4& getInverseTransposeWorldMatrix(void) const;
-         const Matrix4& getInverseTransposeWorldViewMatrix(void) const;
-         const Vector4& getCameraPosition(void) const;
-         const Vector4& getCameraPositionObjectSpace(void) const;
-         const Vector4& getLodCameraPosition(void) const;
-         const Vector4& getLodCameraPositionObjectSpace(void) const;
-         const Vector2 getRSDepthRange(void) const;
+         const Matrix4& getWorldMatrix() const;
+         const Matrix4* getWorldMatrixArray() const;
+         size_t getWorldMatrixCount() const;
+         const Matrix4& getViewMatrix() const;
+         const Matrix4& getViewProjectionMatrix() const;
+         const Matrix4& getProjectionMatrix() const;
+         const Matrix4& getWorldViewProjMatrix() const;
+         const Matrix4& getWorldViewMatrix() const;
+         const Matrix4& getInverseWorldMatrix() const;
+         const Matrix4& getInverseWorldViewMatrix() const;
+         const Matrix4& getInverseViewMatrix() const;
+         const Matrix4& getInverseTransposeWorldMatrix() const;
+         const Matrix4& getInverseTransposeWorldViewMatrix() const;
+         const Vector4& getCameraPosition() const;
+         const Vector4& getCameraPositionObjectSpace() const;
+         const Vector4& getLodCameraPosition() const;
+         const Vector4& getLodCameraPositionObjectSpace() const;
+         const Vector2 getRSDepthRange() const;
          bool hasLightList() const { return mCurrentLightList != 0; }
          float getLightCount() const;
          float getLightCastsShadows(size_t index) const;
@@ -189,18 +189,18 @@ namespace Ogre {
          Vector4 getSpotlightParams(size_t index) const;
          void setAmbientLightColour( const ColourValue hemispheres[2],
                                      const Vector3 &hemisphereDir );
-         const ColourValue& getAmbientLightColour(void) const;
-         const ColourValue& getSurfaceAmbientColour(void) const;
-         const ColourValue& getSurfaceDiffuseColour(void) const;
-         const ColourValue& getSurfaceSpecularColour(void) const;
-         const ColourValue& getSurfaceEmissiveColour(void) const;
-         Real getSurfaceShininess(void) const;
-         Real getSurfaceAlphaRejectionValue(void) const;
-         ColourValue getDerivedAmbientLightColour(void) const;
-         ColourValue getDerivedSceneColour(void) const;
+         const ColourValue& getAmbientLightColour() const;
+         const ColourValue& getSurfaceAmbientColour() const;
+         const ColourValue& getSurfaceDiffuseColour() const;
+         const ColourValue& getSurfaceSpecularColour() const;
+         const ColourValue& getSurfaceEmissiveColour() const;
+         Real getSurfaceShininess() const;
+         Real getSurfaceAlphaRejectionValue() const;
+         ColourValue getDerivedAmbientLightColour() const;
+         ColourValue getDerivedSceneColour() const;
          void setFog(FogMode mode, const ColourValue& colour, Real expDensity, Real linearStart, Real linearEnd);
-         const ColourValue& getFogColour(void) const;
-         const Vector4& getFogParams(void) const;
+         const ColourValue& getFogColour() const;
+         const Vector4& getFogParams() const;
          const Matrix4& getTextureViewProjMatrix(size_t index) const;
          const Matrix4& getTextureWorldViewProjMatrix(size_t index) const;
          const Matrix4& getSpotlightViewProjMatrix(size_t index) const;
@@ -209,21 +209,21 @@ namespace Ogre {
          const vector<Real>::type& getPssmSplits( size_t shadowMapIdx ) const;
          const vector<Real>::type& getPssmBlends( size_t shadowMapIdx ) const;
          Real getPssmFade( size_t shadowMapIdx ) const;
-         const RenderPassDescriptor* getCurrentRenderPassDesc(void) const;
-         const Renderable* getCurrentRenderable(void) const;
-         const Pass* getCurrentPass(void) const;
-         const HlmsComputeJob* getCurrentJob(void) const;
+         const RenderPassDescriptor* getCurrentRenderPassDesc() const;
+         const Renderable* getCurrentRenderable() const;
+         const Pass* getCurrentPass() const;
+         const HlmsComputeJob* getCurrentJob() const;
          Vector4 getUavSize(size_t index) const;
          Vector4 getInverseUavSize(size_t index) const;
          Vector4 getPackedUavSize(size_t index) const;
          Vector4 getTextureSize(size_t index) const;
          Vector4 getInverseTextureSize(size_t index) const;
          Vector4 getPackedTextureSize(size_t index) const;
-         Real getShadowExtrusionDistance(void) const;
+         Real getShadowExtrusionDistance() const;
          const Vector4& getSceneDepthRange() const;
          const Vector4& getShadowSceneDepthRange(size_t index) const;
          const ColourValue& getShadowColour() const;
-         Matrix4 getInverseViewProjMatrix(void) const;
+         Matrix4 getInverseViewProjMatrix() const;
          Matrix4 getInverseTransposeViewProjMatrix() const;
          Matrix4 getTransposeViewProjMatrix() const;
          Matrix4 getTransposeViewMatrix() const;
@@ -236,7 +236,7 @@ namespace Ogre {
          Matrix4 getInverseTransposeWorldViewProjMatrix() const;
          Matrix4 getTransposeWorldViewMatrix() const;
          Matrix4 getTransposeWorldMatrix() const;
-         Real getTime(void) const;
+         Real getTime() const;
          Real getTime_0_X(Real x) const;
          Real getCosTime_0_X(Real x) const;
          Real getSinTime_0_X(Real x) const;
@@ -252,7 +252,7 @@ namespace Ogre {
          Real getSinTime_0_2Pi(Real x) const;
          Real getTanTime_0_2Pi(Real x) const;
          Vector4 getTime_0_2Pi_packed(Real x) const;
-         Real getFrameTime(void) const;
+         Real getFrameTime() const;
          Real getFPS() const;
          Real getViewportWidth() const;
          Real getViewportHeight() const;
@@ -264,13 +264,13 @@ namespace Ogre {
          Real getFOV() const;
          Real getNearClipDistance() const;
          Real getFarClipDistance() const;
-         int getPassNumber(void) const;
+         int getPassNumber() const;
          void setPassNumber(const int passNumber);
-         void incPassNumber(void);
+         void incPassNumber();
          void updateLightCustomGpuParameter( const GpuProgramParameters_AutoConstantEntry &constantEntry,
                                              GpuProgramParameters *params ) const;
 
-         const Light& _getBlankLight(void) const		{ return mBlankLight; }
+         const Light& _getBlankLight() const		{ return mBlankLight; }
     };
     /** @} */
     /** @} */

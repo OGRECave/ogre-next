@@ -253,7 +253,7 @@ namespace Ogre
                 piece_ds    - Domain Shader
             Case insensitive.
         */
-        void enumeratePieceFiles(void);
+        void enumeratePieceFiles();
         /// Populates pieceFiles, returns true if found at least one piece file.
         static bool enumeratePieceFiles( Archive *dataFolder, StringVector *pieceFiles );
 
@@ -286,7 +286,7 @@ namespace Ogre
 
             Expression() : result( false ), negated( false ), type( EXPR_VAR ) {}
 
-            bool isOperator(void) const
+            bool isOperator() const
                 { return type >= EXPR_OPERATOR_OR && type <= EXPR_OPERATOR_GREQ; }
             inline void swap( Expression &other );
         };
@@ -349,7 +349,7 @@ namespace Ogre
 
         const HlmsCache* addShaderCache( uint32 hash, const HlmsPso &pso );
         const HlmsCache* getShaderCache( uint32 hash ) const;
-        virtual void clearShaderCache(void);
+        virtual void clearShaderCache();
 
         void processPieces( Archive *archive, const StringVector &pieceFiles );
         void hashPieceFiles( Archive *archive, const StringVector &pieceFiles,
@@ -380,7 +380,7 @@ namespace Ogre
         */
         void compileShaderCode( ShaderCodeCache &codeCache );
 
-        const ShaderCodeCacheVec& getShaderCodeCache(void) const    { return mShaderCodeCache; }
+        const ShaderCodeCacheVec& getShaderCodeCache() const    { return mShaderCodeCache; }
 
     protected:
         /** Creates a shader based on input parameters. Caller is responsible for ensuring
@@ -410,15 +410,15 @@ namespace Ogre
         ///
         /// Warning: For the HlmsDiskCache to work properly, this function should not rely
         /// on member variables or other state. All state info should come from getProperty()
-        virtual void notifyPropertiesMergedPreGenerationStep(void);
+        virtual void notifyPropertiesMergedPreGenerationStep();
 
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,
                                                     const HlmsParamVec &paramVec ) = 0;
 
-        virtual HlmsDatablock* createDefaultDatablock(void);
-        void _destroyAllDatablocks(void);
+        virtual HlmsDatablock* createDefaultDatablock();
+        void _destroyAllDatablocks();
 
         inline void calculateHashForSemantic( VertexElementSemantic semantic, VertexElementType type,
                                               uint16 index, uint &inOutNumTexCoords );
@@ -462,13 +462,13 @@ namespace Ogre
               ArchiveVec *libraryFolders );
         virtual ~Hlms();
 
-        HlmsTypes getType(void) const                       { return mType; }
-        IdString getTypeName(void) const                    { return mTypeName; }
-        const String& getTypeNameStr(void) const            { return mTypeNameStr; }
+        HlmsTypes getType() const                       { return mType; }
+        IdString getTypeName() const                    { return mTypeName; }
+        const String& getTypeNameStr() const            { return mTypeNameStr; }
         void _notifyManager( HlmsManager *manager )         { mHlmsManager = manager; }
-        HlmsManager* getHlmsManager(void) const             { return mHlmsManager; }
-        const String& getShaderProfile(void) const          { return mShaderProfile; }
-        IdString getShaderSyntax(void) const                { return mShaderSyntax; }
+        HlmsManager* getHlmsManager() const             { return mHlmsManager; }
+        const String& getShaderProfile() const          { return mShaderProfile; }
+        IdString getShaderSyntax() const                { return mShaderSyntax; }
 
         void getTemplateChecksum( uint64 outHash[2] ) const;
 
@@ -487,7 +487,7 @@ namespace Ogre
             device, the recommended option is to have this off.
         */
         void setHighQuality( bool highQuality );
-        bool getHighQuality(void) const                     { return mHighQuality; }
+        bool getHighQuality() const                     { return mHighQuality; }
 
         /** Non-caster directional lights are hardcoded into shaders. This means that if you
             have 6 directional lights and then you add a 7th one, a whole new set of shaders
@@ -516,7 +516,7 @@ namespace Ogre
             (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass)
          */
         void setMaxNonCasterDirectionalLights( uint16 maxLights );
-        uint16 getMaxNonCasterDirectionalLights(void) const     { return mNumLightsLimit; }
+        uint16 getMaxNonCasterDirectionalLights() const     { return mNumLightsLimit; }
 
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit
@@ -534,8 +534,8 @@ namespace Ogre
             Same as areaLightsApproxLimit, but for LTC lights
         */
         void setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit );
-        uint16 getAreaLightsApproxLimit(void) const				{ return mNumAreaApproxLightsLimit; }
-        uint16 getAreaLightsLtcLimit(void) const				{ return mNumAreaLtcLightsLimit; }
+        uint16 getAreaLightsApproxLimit() const				{ return mNumAreaApproxLightsLimit; }
+        uint16 getAreaLightsLtcLimit() const				{ return mNumAreaLtcLightsLimit; }
 
 #if !OGRE_NO_JSON
         /** Loads datablock values from a JSON value. @see HlmsJson.
@@ -581,9 +581,9 @@ namespace Ogre
         */
         virtual void reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders=0 );
 
-        Archive* getDataFolder(void)                        { return mDataFolder; }
-        const LibraryVec& getPiecesLibrary(void) const      { return mLibrary; }
-        ArchiveVec getPiecesLibraryAsArchiveVec(void) const;
+        Archive* getDataFolder()                        { return mDataFolder; }
+        const LibraryVec& getPiecesLibrary() const      { return mLibrary; }
+        ArchiveVec getPiecesLibraryAsArchiveVec() const;
 
         /** Creates a unique datablock that can be shared by multiple renderables.
         @remarks
@@ -662,13 +662,13 @@ namespace Ogre
         /// Destroys all datablocks created with @createDatablock. Caller is responsible
         /// for ensuring those pointers aren't still in use (i.e. dangling pointers)
         /// The default datablock will be recreated.
-        void destroyAllDatablocks(void);
+        void destroyAllDatablocks();
 
         /// @copydoc HlmsManager::getDefaultDatablock
-        HlmsDatablock* getDefaultDatablock(void) const;
+        HlmsDatablock* getDefaultDatablock() const;
 
         /// Returns all datablocks owned by this Hlms, including the default one.
-        const HlmsDatablockMap& getDatablockMap(void) const { return mDatablocks; }
+        const HlmsDatablockMap& getDatablockMap() const { return mDatablocks; }
 
         /** Finds the parameter with key 'key' in the given 'paramVec'. If found, outputs
             the value to 'inOut', otherwise leaves 'inOut' as is.
@@ -763,7 +763,7 @@ namespace Ogre
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer ) {}
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
-        virtual void frameEnded(void) {}
+        virtual void frameEnded() {}
 
         /** Call to output the automatically generated shaders (which are usually made from templates)
             on the given folder for inspection, analyzing, debugging, etc.
@@ -802,7 +802,7 @@ namespace Ogre
         @remarks
             If the default listener is being used (that does nothing) then null is returned.
         */
-        HlmsListener* getListener(void) const;
+        HlmsListener* getListener() const;
 
         /// For debugging stuff. I.e. the Command line uses it for testing manually set properties
         void _setProperty( IdString key, int32 value )      { setProperty( key, value ); }
@@ -820,11 +820,11 @@ namespace Ogre
         static int32 getProperty( const HlmsPropertyVec &properties,
                                   IdString key, int32 defaultVal=0 );
 
-        void _clearShaderCache(void);
+        void _clearShaderCache();
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
-        RenderSystem* getRenderSystem(void) const           { return mRenderSystem; }
+        RenderSystem* getRenderSystem() const           { return mRenderSystem; }
     };
 
     /// These are "default" or "Base" properties common to many implementations and thus defined here.

@@ -97,19 +97,19 @@ namespace Ogre
                    float minDistance, float maxDistance, SceneManager *sceneManager );
         virtual ~Forward3D();
 
-        virtual ForwardPlusMethods getForwardPlusMethod(void) const     { return MethodForward3D; }
+        virtual ForwardPlusMethods getForwardPlusMethod() const     { return MethodForward3D; }
 
         virtual void collectLights( Camera *camera );
 
-        uint32 getWidth(void) const                                     { return mWidth; }
-        uint32 getHeight(void) const                                    { return mHeight; }
-        uint32 getNumSlices(void) const                                 { return mNumSlices; }
-        uint32 getLightsPerCell(void) const                             { return mLightsPerCell; }
-        float getMinDistance(void) const                                { return mMinDistance; }
-        float getMaxDistance(void) const                                { return mMaxDistance; }
+        uint32 getWidth() const                                     { return mWidth; }
+        uint32 getHeight() const                                    { return mHeight; }
+        uint32 getNumSlices() const                                 { return mNumSlices; }
+        uint32 getLightsPerCell() const                             { return mLightsPerCell; }
+        float getMinDistance() const                                { return mMinDistance; }
+        float getMaxDistance() const                                { return mMaxDistance; }
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
-        virtual size_t getConstBufferSize(void) const;
+        virtual size_t getConstBufferSize() const;
 
         /** Fills 'passBufferPtr' with the necessary data for Forward3D rendering.
             @see getConstBufferSize

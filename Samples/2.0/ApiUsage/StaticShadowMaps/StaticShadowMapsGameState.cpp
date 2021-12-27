@@ -51,7 +51,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void StaticShadowMapsGameState::createScene01(void)
+    void StaticShadowMapsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -150,7 +150,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void StaticShadowMapsGameState::createShadowMapDebugOverlays(void)
+    void StaticShadowMapsGameState::createShadowMapDebugOverlays()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::CompositorWorkspace *workspace = mGraphicsSystem->getCompositorWorkspace();

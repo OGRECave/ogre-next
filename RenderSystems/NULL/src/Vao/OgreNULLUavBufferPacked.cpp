@@ -63,7 +63,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *NULLUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    ReadOnlyBufferPacked *NULLUavBufferPacked::getAsReadOnlyBufferImpl()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<NULLBufferInterface *>( mBufferInterface ) );
 

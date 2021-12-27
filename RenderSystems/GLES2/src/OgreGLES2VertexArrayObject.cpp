@@ -63,7 +63,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void GLES2OldVertexArrayObject::bind(void)
+    void GLES2OldVertexArrayObject::bind()
     {
 #if OGRE_NO_GLES2_VAO_SUPPORT == 0
 #   if defined(GL_OES_vertex_array_object) || (OGRE_NO_GLES3_SUPPORT == 0)

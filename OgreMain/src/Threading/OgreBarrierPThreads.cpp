@@ -105,7 +105,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void Barrier::sync(void)
+    void Barrier::sync()
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
         pthread_barrier_wait( &mBarrier );

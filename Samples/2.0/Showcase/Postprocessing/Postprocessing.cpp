@@ -36,7 +36,7 @@ namespace Demo
             return static_cast<PostprocessingGameState*>(mCurrentGameState)->setupCompositor();
         }
 
-        virtual void setupResources(void)
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -127,7 +127,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Postprocessing Sample";
     }

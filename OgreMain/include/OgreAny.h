@@ -206,7 +206,7 @@ namespace Ogre
 
         /// @deprecated use Ogre::any_cast instead
         template <typename ValueType>
-        ValueType get(void) const
+        ValueType get() const
         {
             return any_cast<ValueType>(*this);
         }

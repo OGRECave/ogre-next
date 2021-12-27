@@ -124,7 +124,7 @@ namespace Ogre {
         mColourImageLoaded = false;
     }
     //-----------------------------------------------------------------------
-    void ColourImageAffector::_loadImage(void)
+    void ColourImageAffector::_loadImage()
     {
         mColourImage.load(mColourImageName, mParent->getResourceGroupName());
 
@@ -139,7 +139,7 @@ namespace Ogre {
         mColourImageLoaded = true;
     }
     //-----------------------------------------------------------------------
-    String ColourImageAffector::getImageAdjust(void) const
+    String ColourImageAffector::getImageAdjust() const
     {
         return mColourImageName;
     }

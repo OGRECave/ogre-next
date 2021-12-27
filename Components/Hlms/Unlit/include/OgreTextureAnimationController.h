@@ -46,7 +46,7 @@ namespace Ogre
         */
         TextureAnimationControllerValue(Ogre::HlmsDatablock *datablock, Ogre::uint8 textureUnit);
 
-        Ogre::Real getValue(void) const;
+        Ogre::Real getValue() const;
 
         void setValue(Ogre::Real value);
 

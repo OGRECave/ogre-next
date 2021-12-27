@@ -107,7 +107,7 @@ namespace Ogre
     struct _OgreExport GpuTrackedResource
     {
         virtual ~GpuTrackedResource();
-        virtual bool isTextureGpu( void ) const { return false; }
+        virtual bool isTextureGpu() const { return false; }
     };
 
     struct ResourceStatus
@@ -141,13 +141,13 @@ namespace Ogre
                                                    const ResourceLayout::Layout lastKnownLayout );
 
     public:
-        const ResourceStatusMap &getResourceStatus( void );
+        const ResourceStatusMap &getResourceStatus();
 
         /// Returns a temporary array variable that can be reused to avoid needless reallocations
         /// You're not forced to use it, but it will increase performance.
         ///
         /// Beware not to have it in use in two places at the same time! Use it as soon as possible
-        ResourceTransitionArray &getNewResourceTransitionsArrayTmp( void )
+        ResourceTransitionArray &getNewResourceTransitionsArrayTmp()
         {
             mTmpResourceTransitions.clear();
             return mTmpResourceTransitions;

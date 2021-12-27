@@ -36,11 +36,11 @@ namespace Ogre {
 
     //-----------------------------------------------------------------------
     template<> SceneManagerEnumerator* Singleton<SceneManagerEnumerator>::msSingleton = 0;
-    SceneManagerEnumerator* SceneManagerEnumerator::getSingletonPtr(void)
+    SceneManagerEnumerator* SceneManagerEnumerator::getSingletonPtr()
     {
         return msSingleton;
     }
-    SceneManagerEnumerator& SceneManagerEnumerator::getSingleton(void)
+    SceneManagerEnumerator& SceneManagerEnumerator::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -136,7 +136,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     SceneManagerEnumerator::MetaDataIterator 
-    SceneManagerEnumerator::getMetaDataIterator(void) const
+    SceneManagerEnumerator::getMetaDataIterator() const
     {
         return MetaDataIterator(mMetaDataList.begin(), mMetaDataList.end());
 
@@ -281,7 +281,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     SceneManagerEnumerator::SceneManagerIterator 
-    SceneManagerEnumerator::getSceneManagerIterator(void)
+    SceneManagerEnumerator::getSceneManagerIterator()
     {
         return SceneManagerIterator(mInstances.begin(), mInstances.end());
 
@@ -298,7 +298,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void SceneManagerEnumerator::shutdownAll(void)
+    void SceneManagerEnumerator::shutdownAll()
     {
         for (Instances::iterator i = mInstances.begin(); i != mInstances.end(); ++i)
         {
@@ -310,7 +310,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     const String DefaultSceneManagerFactory::FACTORY_TYPE_NAME = "DefaultSceneManager";
     //-----------------------------------------------------------------------
-    void DefaultSceneManagerFactory::initMetaData(void) const
+    void DefaultSceneManagerFactory::initMetaData() const
     {
         mMetaData.typeName = FACTORY_TYPE_NAME;
         mMetaData.description = "The default scene manager";
@@ -339,7 +339,7 @@ namespace Ogre {
     {
     }
     //-----------------------------------------------------------------------
-    const String& DefaultSceneManager::getTypeName(void) const
+    const String& DefaultSceneManager::getTypeName() const
     {
         return DefaultSceneManagerFactory::FACTORY_TYPE_NAME;
     }

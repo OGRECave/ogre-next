@@ -127,7 +127,7 @@ namespace v1 {
         virtual void setMaxChainElements(size_t maxElements);
         /** Get the maximum number of chain elements per chain 
         */
-        virtual size_t getMaxChainElements(void) const { return mMaxElementsPerChain; }
+        virtual size_t getMaxChainElements() const { return mMaxElementsPerChain; }
         /** Set the number of chain segments (this class can render multiple chains
             at once using the same material). 
         */
@@ -135,7 +135,7 @@ namespace v1 {
         /** Get the number of chain segments (this class can render multiple chains
         at once using the same material). 
         */
-        virtual size_t getNumberOfChains(void) const { return mChainCount; }
+        virtual size_t getNumberOfChains() const { return mChainCount; }
 
         /** Sets whether texture coordinate information should be included in the
             final buffers generated.
@@ -147,7 +147,7 @@ namespace v1 {
         /** Gets whether texture coordinate information should be included in the
             final buffers generated.
         */
-        virtual bool getUseTextureCoords(void) const { return mUseTexCoords; }
+        virtual bool getUseTextureCoords() const { return mUseTexCoords; }
 
         /** The direction in which texture coordinates from elements of the
             chain are used.
@@ -167,7 +167,7 @@ namespace v1 {
         /** Gets the direction in which texture coords specified on each element
             are deemed to run.
         */
-        virtual TexCoordDirection getTextureCoordDirection(void) { return mTexCoordDir; }
+        virtual TexCoordDirection getTextureCoordDirection() { return mTexCoordDir; }
 
         /** Set the range of the texture coordinates generated across the width of
             the chain elements.
@@ -178,7 +178,7 @@ namespace v1 {
         /** Get the range of the texture coordinates generated across the width of
             the chain elements.
         */
-        virtual const Real* getOtherTextureCoordRange(void) const { return mOtherTexCoordRange; }
+        virtual const Real* getOtherTextureCoordRange() const { return mOtherTexCoordRange; }
 
         /** Sets whether vertex colour information should be included in the
             final buffers generated.
@@ -190,7 +190,7 @@ namespace v1 {
         /** Gets whether vertex colour information should be included in the
             final buffers generated.
         */
-        virtual bool getUseVertexColours(void) const { return mUseVertexColour; }
+        virtual bool getUseVertexColours() const { return mUseVertexColour; }
 
         /** Sets whether or not the buffers created for this object are suitable
             for dynamic alteration.
@@ -200,7 +200,7 @@ namespace v1 {
         /** Gets whether or not the buffers created for this object are suitable
             for dynamic alteration.
         */
-        virtual bool getDynamic(void) const { return mDynamic; }
+        virtual bool getDynamic() const { return mDynamic; }
         
         /** Add an element to the 'head' of a chain.
         @remarks
@@ -237,7 +237,7 @@ namespace v1 {
         /** Remove all elements of a given chain (but leave the chain intact). */
         virtual void clearChain(size_t chainIndex);
         /** Remove all elements from all chains (but leave the chains themselves intact). */
-        virtual void clearAllChains(void);
+        virtual void clearAllChains();
 
         /** Sets whether the billboard should always be facing the camera or a custom direction
             set by each point element.
@@ -260,13 +260,13 @@ namespace v1 {
 
         // Overridden members follow
         Real getSquaredViewDepth(const Camera* cam) const;
-        const AxisAlignedBox& getBoundingBox(void) const;
-        const String& getMovableType(void) const;
+        const AxisAlignedBox& getBoundingBox() const;
+        const String& getMovableType() const;
         void _updateRenderQueue(RenderQueue *, Camera *camera, const Camera *lodCamera);
         void getRenderOperation(RenderOperation &, bool casterPass);
         virtual bool preRender(SceneManager* sm, RenderSystem* rsys);
         void getWorldTransforms(Matrix4 *) const;
-        const LightList& getLights(void) const;
+        const LightList& getLights() const;
 
     protected:
 
@@ -335,16 +335,16 @@ namespace v1 {
         ChainSegmentList mChainSegmentList;
 
         /// Setup the STL collections
-        virtual void setupChainContainers(void);
+        virtual void setupChainContainers();
         /// Setup vertex declaration
-        virtual void setupVertexDeclaration(void);
+        virtual void setupVertexDeclaration();
         /// Setup buffers
-        virtual void setupBuffers(void);
+        virtual void setupBuffers();
         /// Update the contents of the vertex buffer
         virtual void updateVertexBuffer(Camera* cam);
         /// Update the contents of the index buffer
-        virtual void updateIndexBuffer(void);
-        virtual void updateBoundingBox(void) const;
+        virtual void updateIndexBuffer();
+        virtual void updateBoundingBox() const;
 
         /// Chain segment has no elements
         static const size_t SEGMENT_EMPTY;
@@ -364,7 +364,7 @@ namespace v1 {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);  
 
     };

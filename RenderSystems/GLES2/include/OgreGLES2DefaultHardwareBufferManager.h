@@ -45,7 +45,7 @@ namespace v1 {
             /// @copydoc HardwareBuffer::lock
             void* lockImpl(size_t offset, size_t length, LockOptions options);
             /// @copydoc HardwareBuffer::unlock
-            void unlockImpl(void);
+            void unlockImpl();
 
         public:
             GLES2DefaultHardwareVertexBuffer(size_t vertexSize, size_t numVertices,
@@ -61,7 +61,7 @@ namespace v1 {
             /** Override HardwareBuffer to turn off all shadowing. */
             void* lock(size_t offset, size_t length, LockOptions options);
             /** Override HardwareBuffer to turn off all shadowing. */
-            void unlock(void);
+            void unlock();
 
             void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
@@ -74,7 +74,7 @@ namespace v1 {
             /// @copydoc HardwareBuffer::lock
             void* lockImpl(size_t offset, size_t length, LockOptions options);
             /// @copydoc HardwareBuffer::unlock
-            void unlockImpl(void);
+            void unlockImpl();
 
         public:
             GLES2DefaultHardwareIndexBuffer(IndexType idxType, size_t numIndexes, HardwareBuffer::Usage usage);
@@ -87,7 +87,7 @@ namespace v1 {
             /** Override HardwareBuffer to turn off all shadowing. */
             void* lock(size_t offset, size_t length, LockOptions options);
             /** Override HardwareBuffer to turn off all shadowing. */
-            void unlock(void);
+            void unlock();
 
             void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
@@ -100,7 +100,7 @@ namespace v1 {
         /// @copydoc HardwareBuffer::lock
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /// @copydoc HardwareBuffer::unlock
-        void unlockImpl(void);
+        void unlockImpl();
 
     public:
         GLES2DefaultHardwareUniformBuffer(size_t bufferSize, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name);
@@ -115,7 +115,7 @@ namespace v1 {
         /** Override HardwareBuffer to turn off all shadowing. */
         void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock(void);
+        void unlock();
 
         void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
@@ -141,7 +141,7 @@ namespace v1 {
                 createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes,
                     HardwareBuffer::Usage usage, bool useShadowBuffer = false);
             /// Create a render to vertex buffer
-            RenderToVertexBufferSharedPtr createRenderToVertexBuffer(void);
+            RenderToVertexBufferSharedPtr createRenderToVertexBuffer();
 
         HardwareUniformBufferSharedPtr
             createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,bool useShadowBuffer, const String& name = "");

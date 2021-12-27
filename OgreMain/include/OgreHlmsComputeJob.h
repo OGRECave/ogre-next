@@ -122,14 +122,14 @@ namespace Ogre
 
         map<IdString, ShaderParams>::type mShaderParams;
 
-        void discoverGeneralTextures( void );
+        void discoverGeneralTextures();
 
         template <typename T>
         void removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne );
 
-        void destroyDescriptorSamplers(void);
-        void destroyDescriptorTextures(void);
-        void destroyDescriptorUavs(void);
+        void destroyDescriptorSamplers();
+        void destroyDescriptorTextures();
+        void destroyDescriptorUavs();
 
         void setTextureProperties( const TextureGpu *texture,
                                    PixelFormatGpu pixelFormat, ResourceAccess::ResourceAccess access,
@@ -143,14 +143,14 @@ namespace Ogre
                         const StringVector &includedPieceFiles );
         virtual ~HlmsComputeJob();
 
-        Hlms* getCreator(void) const                { return mCreator; }
+        Hlms* getCreator() const                { return mCreator; }
 
-        IdString getName(void) const                { return mName; }
-        String getNameStr(void) const;
+        IdString getName() const                { return mName; }
+        String getNameStr() const;
 
         void setupRootLayout( RootLayout &rootLayout );
 
-        void _updateAutoProperties(void);
+        void _updateAutoProperties();
 
         /** The Hlms has the ability to pass data to the shader source
             code via its syntax system to add hardcoded values.
@@ -179,10 +179,10 @@ namespace Ogre
             dimension.
         */
         void setThreadsPerGroup( uint32 threadsPerGroupX, uint32 threadsPerGroupY, uint32 threadsPerGroupZ );
-        uint32 getThreadsPerGroupX(void) const          { return mThreadsPerGroup[0]; }
-        uint32 getThreadsPerGroupY(void) const          { return mThreadsPerGroup[1]; }
-        uint32 getThreadsPerGroupZ(void) const          { return mThreadsPerGroup[2]; }
-        const uint32* getThreadsPerGroup(void) const    { return mThreadsPerGroup; }
+        uint32 getThreadsPerGroupX() const          { return mThreadsPerGroup[0]; }
+        uint32 getThreadsPerGroupY() const          { return mThreadsPerGroup[1]; }
+        uint32 getThreadsPerGroupZ() const          { return mThreadsPerGroup[2]; }
+        const uint32* getThreadsPerGroup() const    { return mThreadsPerGroup; }
 
         /** Sets the number of groups of threads to dispatch. Note the actual value may be
             changed by the shader template using the @pset() function.
@@ -201,10 +201,10 @@ namespace Ogre
             dimension.
         */
         void setNumThreadGroups( uint32 numThreadGroupsX, uint32 numThreadGroupsY, uint32 numThreadGroupsZ );
-        uint32 getNumThreadGroupsX(void) const          { return mNumThreadGroups[0]; }
-        uint32 getNumThreadGroupsY(void) const          { return mNumThreadGroups[1]; }
-        uint32 getNumThreadGroupsZ(void) const          { return mNumThreadGroups[2]; }
-        const uint32* getNumThreadGroups(void) const    { return mNumThreadGroups; }
+        uint32 getNumThreadGroupsX() const          { return mNumThreadGroups[0]; }
+        uint32 getNumThreadGroupsY() const          { return mNumThreadGroups[1]; }
+        uint32 getNumThreadGroupsZ() const          { return mNumThreadGroups[2]; }
+        const uint32* getNumThreadGroups() const    { return mNumThreadGroups; }
 
         /** Instead of calling setNumThreadGroups, Ogre can automatically deduce
             them based on the Texture resolution and the threads per group.
@@ -295,7 +295,7 @@ namespace Ogre
         void setNumTexUnits( uint8 numSlots );
         /// Destroys a given texture unit, displacing all the higher tex units.
         void removeTexUnit( uint8 slotIdx );
-        size_t getNumTexUnits(void) const               { return mTexSlots.size(); }
+        size_t getNumTexUnits() const               { return mTexSlots.size(); }
 
         TextureGpu* getTexture( uint8 slotIdx ) const;
 
@@ -303,7 +303,7 @@ namespace Ogre
         void setNumUavUnits( uint8 numSlots );
         /// @copydoc removeTexUnit
         void removeUavUnit( uint8 slotIdx );
-        size_t getNumUavUnits(void) const               { return mUavSlots.size(); }
+        size_t getNumUavUnits() const               { return mUavSlots.size(); }
 
         TextureGpu *getUavTexture( uint8 slotIdx ) const;
         UavBufferPacked* getUavBuffer( uint8 slotIdx ) const;
@@ -318,7 +318,7 @@ namespace Ogre
         void setNumSamplerUnits( uint8 numSlots );
 
         /// See setNumSamplerUnits
-        size_t getNumSamplerUnits( void ) const { return mSamplerSlots.size(); }
+        size_t getNumSamplerUnits() const { return mSamplerSlots.size(); }
 
         /** By default HlmsComputeJob::setTexture and HlmsComputeJob::setTexBuffer are in range
             [0; getNumTexUnits)
@@ -332,9 +332,9 @@ namespace Ogre
         */
         void setGlTexSlotStart( uint8 texSlotStart );
 
-        uint8 getGlTexSlotStart( void ) const;
+        uint8 getGlTexSlotStart() const;
 
-        uint8 _getRawGlTexSlotStart( void ) const;
+        uint8 _getRawGlTexSlotStart() const;
 
         /** Sets a texture buffer at the given slot ID.
         @remarks
@@ -457,9 +457,9 @@ namespace Ogre
         void _setUavTexture( uint8 slotIdx, const DescriptorSetUav::TextureSlot &texSlot );
 
         /// Sets all texture buffers to nullptr
-        void clearTexBuffers(void);
+        void clearTexBuffers();
         /// Sets all UAV buffers to nullptr
-        void clearUavBuffers(void);
+        void clearUavBuffers();
 
         /** Checks every regular texture and every UAV (texture and buffers)
             bound and resolves transitions

@@ -92,18 +92,18 @@ namespace Ogre
                                       uint32 frequencyDenominator );
 
         /** @copydoc see RenderWindow::destroy */
-        virtual void destroy( void );
+        virtual void destroy();
 
         /** @copydoc see RenderWindow::isClosed */
-        virtual bool isClosed( void ) const;
+        virtual bool isClosed() const;
 
         /** @copydoc see RenderWindow::isVisible */
-        bool isVisible( void ) const;
+        bool isVisible() const;
 
         virtual void _setVisible( bool visible );
 
         /** @copydoc see RenderWindow::isHidden */
-        bool isHidden( void ) const { return mHidden; }
+        bool isHidden() const { return mHidden; }
 
         /** @copydoc see RenderWindow::setHidden */
         void setHidden( bool hidden );

@@ -53,8 +53,8 @@ namespace Ogre
         size_t mInternalBufferStart;
         size_t mVboPoolIdx;
 
-        void *map( void );
-        void unmap( void );
+        void *map();
+        void unmap();
     };
 
     class _OgreVulkanExport VulkanVaoManager : public VaoManager
@@ -252,7 +252,7 @@ namespace Ogre
         void addMemoryType( VboFlag vboFlag, const VkPhysicalDeviceMemoryProperties &memProperties,
                             const uint32 memoryTypeIdx );
         uint32 determineSupportedMemoryTypes( VkBufferUsageFlags usageFlags ) const;
-        void determineBestMemoryTypes( void );
+        void determineBestMemoryTypes();
 
         /** Asks for allocating buffer space in a memory pool.
             If the VBO doesn't exist, all VBOs are full or can't fit this request,
@@ -358,7 +358,7 @@ namespace Ogre
         /// Increases refCount before returning the iterator.
         VaoVec::iterator findVao( const VertexBufferPackedVec &vertexBuffers,
                                   IndexBufferPacked *indexBuffer, OperationType opType );
-        uint32 createVao( void );
+        uint32 createVao();
 
         static uint32 generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId );
 
@@ -394,10 +394,10 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
-        virtual void cleanupEmptyPools( void );
+        virtual void cleanupEmptyPools();
 
-        bool supportsCoherentMapping( void ) const;
-        bool supportsNonCoherentMapping( void ) const;
+        bool supportsCoherentMapping() const;
+        bool supportsNonCoherentMapping() const;
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -413,15 +413,15 @@ namespace Ogre
                                                  VkDescriptorSetLayout setLayout );
         void _schedulePoolAdvanceFrame( VulkanDescriptorPool *pool );
 
-        virtual void _update( void );
-        void _notifyNewCommandBuffer( void );
+        virtual void _update();
+        void _notifyNewCommandBuffer();
 
-        VulkanDevice *getDevice( void ) const { return mDevice; }
+        VulkanDevice *getDevice() const { return mDevice; }
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
         /// number of semaphores that are safe for use.
         void getAvailableSempaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
-        VkSemaphore getAvailableSempaphore( void );
+        VkSemaphore getAvailableSempaphore();
 
         /// Call this function after you've submitted to the GPU a VkSemaphore that will be waited on.
         /// i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores or part of
@@ -436,7 +436,7 @@ namespace Ogre
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
-        uint8 waitForTailFrameToFinish( void );
+        uint8 waitForTailFrameToFinish();
 
         /// See VaoManager::waitForSpecificFrameToFinish
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );

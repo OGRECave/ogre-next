@@ -97,7 +97,7 @@ namespace Ogre {
         virtual bool setStatic( bool bStatic );
 
         /// @copydoc Node::_notifyStaticDirty
-        virtual void _notifyStaticDirty(void) const;
+        virtual void _notifyStaticDirty() const;
 
         /** Adds an instance of a scene object to this node.
         @remarks
@@ -108,7 +108,7 @@ namespace Ogre {
 
         /** Reports the number of objects attached to this node.
         */
-        size_t numAttachedObjects(void) const                       { return mAttachments.size(); }
+        size_t numAttachedObjects() const                       { return mAttachments.size(); }
 
         /** Retrieves a pointer to an attached object.
         @remarks Retrieves by index, see alternate version to retrieve by name. The index
@@ -130,7 +130,7 @@ namespace Ogre {
 
         /** Detaches all objects attached to this node.
         */
-        virtual void detachAllObjects(void);
+        virtual void detachAllObjects();
 
         /// Attaches a bone to this SceneNode. Don't use directly.
         /// @see SkeletonInstance::setSceneNodeAsParentOfBone
@@ -145,10 +145,10 @@ namespace Ogre {
         virtual_l1 void _detachAllBones( SkeletonInstance *skeletonInstance );
 
         /// Detaches all bones from from this SceneNode. It is safe to use directly.
-        virtual void detachAllBones(void);
+        virtual void detachAllBones();
 
         /// @copydoc Node::_callMemoryChangeListeners
-        virtual void _callMemoryChangeListeners(void);
+        virtual void _callMemoryChangeListeners();
 
         /** Retrieves an iterator which can be used to efficiently step through the objects 
             attached to this node.
@@ -160,7 +160,7 @@ namespace Ogre {
             until the end, or retrieve a new iterator after making the change. Making changes to
             the object returned through the iterator is OK though.
         */
-        virtual ObjectIterator getAttachedObjectIterator(void);
+        virtual ObjectIterator getAttachedObjectIterator();
         /** Retrieves an iterator which can be used to efficiently step through the objects 
             attached to this node.
         @remarks
@@ -171,14 +171,14 @@ namespace Ogre {
             until the end, or retrieve a new iterator after making the change. Making changes to
             the object returned through the iterator is OK though.
         */
-        virtual ConstObjectIterator getAttachedObjectIterator(void) const;
+        virtual ConstObjectIterator getAttachedObjectIterator() const;
 
         /** Gets the creator of this scene node. 
         @remarks
             This method returns the SceneManager which created this node.
             This can be useful for destroying this node.
         */
-        SceneManager* getCreator(void) const { return mCreator; }
+        SceneManager* getCreator() const { return mCreator; }
 
         /** This method removes and destroys the child and all of its children.
         @remarks
@@ -200,7 +200,7 @@ namespace Ogre {
             them from the scene graph. Note that all objects attached to this
             node will be detached but will not be destroyed.
         */
-        virtual void removeAndDestroyAllChildren(void);
+        virtual void removeAndDestroyAllChildren();
 
         /** Creates an unnamed new SceneNode as a child of this node.
         @param
@@ -231,7 +231,7 @@ namespace Ogre {
         */
         void setFixedYawAxis( bool useFixed, const Vector3& fixedAxis = Vector3::UNIT_Y );
 
-        bool isYawFixed(void) const                                     { return mYawFixed; }
+        bool isYawFixed() const                                     { return mYawFixed; }
 
         /** Rotate the node around the Y-axis.
         */
@@ -293,7 +293,7 @@ namespace Ogre {
             const Vector3& offset = Vector3::ZERO);
 
         /** Gets the parent of this SceneNode. */
-        SceneNode* getParentSceneNode(void) const;
+        SceneNode* getParentSceneNode() const;
         /** Makes all objects attached to this node become visible / invisible.
         @remarks    
             This is a shortcut to calling setVisible() on the objects attached
@@ -318,7 +318,7 @@ namespace Ogre {
         virtual NodeMemoryManager* getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType );
 
 #if OGRE_DEBUG_MODE
-        virtual void _setCachedTransformOutOfDate(void);
+        virtual void _setCachedTransformOutOfDate();
 #endif
     };
     /** @} */

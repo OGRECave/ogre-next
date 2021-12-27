@@ -78,12 +78,12 @@ namespace Ogre
             If caller doesnt' delete it, it will leak.
         */
         TextureGpu* createTextureGpuWindow( bool fromFlipModeSwapchain, Window *window );
-        TextureGpu* createWindowDepthBuffer(void);
+        TextureGpu* createWindowDepthBuffer();
 
         ID3D11Resource* getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
         ID3D11ShaderResourceView* getBlankTextureSrv( TextureTypes::TextureTypes textureType ) const;
 
-        D3D11Device& getDevice(void)        { return mDevice; }
+        D3D11Device& getDevice()        { return mDevice; }
     };
 
     /** @} */

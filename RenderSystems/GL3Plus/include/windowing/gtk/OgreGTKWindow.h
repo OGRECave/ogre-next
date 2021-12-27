@@ -67,9 +67,9 @@ public:
                 void* miscParam, ...);
 
     void setFullscreen(bool fullScreen, unsigned int width, unsigned int height);
-    void destroy(void);
-    bool isActive(void) const;
-    bool isClosed(void) const;
+    void destroy();
+    bool isActive() const;
+    bool isClosed() const;
     void reposition(int left, int top);
     void resize(unsigned int width, unsigned int height);
     void swapBuffers();

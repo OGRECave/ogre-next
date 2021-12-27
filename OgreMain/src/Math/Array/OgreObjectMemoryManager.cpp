@@ -171,7 +171,7 @@ namespace Ogre
         inOutObjectData = tmp;
     }
     //-----------------------------------------------------------------------------------
-    void ObjectMemoryManager::defragment(void)
+    void ObjectMemoryManager::defragment()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
         ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
@@ -183,7 +183,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ObjectMemoryManager::shrinkToFit(void)
+    void ObjectMemoryManager::shrinkToFit()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
         ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();

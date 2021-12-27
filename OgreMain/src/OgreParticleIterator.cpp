@@ -39,12 +39,12 @@ namespace Ogre {
         mEnd = last;
     }
     //-----------------------------------------------------------------------
-    bool ParticleIterator::end(void)
+    bool ParticleIterator::end()
     {
         return (mPos == mEnd);
     }
     //-----------------------------------------------------------------------
-    Particle* ParticleIterator::getNext(void)
+    Particle* ParticleIterator::getNext()
     {
         return static_cast<Particle*>(*mPos++);
     }

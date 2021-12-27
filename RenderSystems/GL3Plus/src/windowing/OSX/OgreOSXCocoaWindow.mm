@@ -493,7 +493,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void CocoaWindow::destroy(void)
+    void CocoaWindow::destroy()
     {
         if(!isFullscreen())
         {
@@ -514,7 +514,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    bool CocoaWindow::isVisible(void) const
+    bool CocoaWindow::isVisible() const
     {
         return mVisible;
     }

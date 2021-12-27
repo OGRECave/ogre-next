@@ -24,10 +24,10 @@ namespace Demo
     public:
         GraphicsGameState( const Ogre::String &helpDescription );
 
-        Ogre::Vector3& _getLastPositionRef(void)        { return mLastPosition; }
-        Ogre::Vector3& _getCurrentPositionRef(void)      { return mCurrentPosition; }
+        Ogre::Vector3& _getLastPositionRef()        { return mLastPosition; }
+        Ogre::Vector3& _getCurrentPositionRef()      { return mCurrentPosition; }
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

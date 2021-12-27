@@ -54,7 +54,7 @@ namespace Ogre
         mParentSystem = owner;
     }
     //-----------------------------------------------------------------------
-    void Particle::resetDimensions(void)
+    void Particle::resetDimensions()
     {
         mOwnDimensions = false;
     }

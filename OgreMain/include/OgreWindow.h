@@ -84,10 +84,10 @@ namespace Ogre
         Window( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode );
         virtual ~Window();
 
-        virtual void destroy(void) = 0;
+        virtual void destroy() = 0;
 
         virtual void setTitle( const String &title );
-        const String& getTitle(void) const;
+        const String& getTitle() const;
 
         /** Many windowing systems that support HiDPI displays use special points to specify
             size of the windows and controls, so that windows and controls with hardcoded
@@ -160,15 +160,15 @@ namespace Ogre
             be used (which doesn't limit the framerate)
         */
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
-        bool getVSync(void) const;
-        uint32 getVSyncInterval(void) const;
+        bool getVSync() const;
+        uint32 getVSyncInterval() const;
 
         virtual void setBorderless( bool borderless );
-        bool getBorderless(void) const;
+        bool getBorderless() const;
 
-        uint32 getWidth(void) const;
-        uint32 getHeight(void) const;
-        PixelFormatGpu getPixelFormat(void) const;
+        uint32 getWidth() const;
+        uint32 getHeight() const;
+        PixelFormatGpu getPixelFormat() const;
 
         /** Set the FSAA mode to be used if hardware support it.
             This option will be ignored if the hardware does not support it 
@@ -176,35 +176,35 @@ namespace Ogre
             @param fsaa Requesed FSAA mode (@see Root::createRenderWindow)
         */
         virtual void setFsaa(const String& fsaa) {}
-        SampleDescription getSampleDescription(void) const;
-        bool isMultisample(void) const;
+        SampleDescription getSampleDescription() const;
+        bool isMultisample() const;
 
-        uint32 getFrequencyNumerator(void) const;
-        uint32 getFrequencyDenominator(void) const;
+        uint32 getFrequencyNumerator() const;
+        uint32 getFrequencyDenominator() const;
 
-        uint32 getRequestedWidthPt(void) const;
-        uint32 getRequestedHeightPt(void) const;
+        uint32 getRequestedWidthPt() const;
+        uint32 getRequestedHeightPt() const;
 
         /// Returns true if we are currently in fullscreen mode.
-        bool isFullscreen(void) const;
+        bool isFullscreen() const;
         /// Returns true if we are in windowed mode right now, but want to go fullscreen.
-        bool wantsToGoFullscreen(void) const;
+        bool wantsToGoFullscreen() const;
         /// Returns true if we are in fullscreen mode right now, but want to go windowed mode.
-        bool wantsToGoWindowed(void) const;
+        bool wantsToGoWindowed() const;
 
         /** Notify that the window has been resized
         @remarks
             You don't need to call this unless you created the window externally.
         */
-        virtual void windowMovedOrResized(void) {}
+        virtual void windowMovedOrResized() {}
 
         /// Indicates whether the window has been closed by the user.
-        virtual bool isClosed(void) const = 0;
+        virtual bool isClosed() const = 0;
 
         /// Internal method to notify the window it has been obscured or minimized
         virtual void _setVisible( bool visible ) = 0;
         ////Indicates whether the window is visible (not minimized or fully obscured)
-        virtual bool isVisible(void) const = 0;
+        virtual bool isVisible() const = 0;
 
         /** Hide (or show) the window. If called with hidden=true, this
             will make the window completely invisible to the user.
@@ -216,15 +216,15 @@ namespace Ogre
         */
         virtual void setHidden( bool hidden ) = 0;
         /// Indicates whether the window was set to hidden (not displayed)
-        virtual bool isHidden(void) const = 0;
+        virtual bool isHidden() const = 0;
 
         virtual void setFocused( bool focused );
-        bool isFocused(void) const;
+        bool isFocused() const;
 
         /// Indicates that this is the primary window.
         /// Only to be called by Ogre::Root
-        void _setPrimary(void);
-        bool isPrimary(void) const;
+        void _setPrimary();
+        bool isPrimary() const;
 
         virtual void _initialize( TextureGpuManager *textureGpuManager ) = 0;
 
@@ -234,13 +234,13 @@ namespace Ogre
 
         /// WARNING: Attempting to change the TextureGpu (e.g. setResolution, setPixelFormat)
         /// is undefined behavior
-        TextureGpu* getTexture(void) const;
-        TextureGpu* getDepthBuffer(void) const;
-        TextureGpu* getStencilBuffer(void) const;
+        TextureGpu* getTexture() const;
+        TextureGpu* getDepthBuffer() const;
+        TextureGpu* getStencilBuffer() const;
 
         virtual void getCustomAttribute( IdString name, void* pData ) {}
 
-        virtual void swapBuffers(void) = 0;
+        virtual void swapBuffers() = 0;
     };
 
     /** @} */

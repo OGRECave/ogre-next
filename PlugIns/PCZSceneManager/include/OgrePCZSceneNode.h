@@ -98,7 +98,7 @@ namespace Ogre
         bool        allowedToVisit(void) {return mAllowedToVisit;}
         void        addZoneToVisitingZonesMap(PCZone * zone);
         void        clearVisitingZonesMap(void);
-        void        clearNodeFromVisitedZones( void );
+        void        clearNodeFromVisitedZones();
         void        removeReferencesToZone(PCZone * zone);
         bool        isVisitingZone(PCZone * zone);
         void        _addToRenderQueue( Camera* cam, 

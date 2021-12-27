@@ -70,16 +70,16 @@ namespace Ogre
 
         GL3PlusRenderSystem *mRenderSystem;
 
-        void checkRenderWindowStatus(void);
-        void switchToRenderWindow(void);
-        void switchToFBO(void);
+        void checkRenderWindowStatus();
+        void switchToRenderWindow();
+        void switchToFBO();
         /// Sets mAllClearColoursSetAndIdentical & mAnyColourLoadActionsSetToClear
         /// which can be used for quickly taking fast paths during rendering.
-        void analyzeClearColour(void);
+        void analyzeClearColour();
 
         void updateColourFbo( uint8 lastNumColourEntries );
-        void updateDepthFbo(void);
-        void updateStencilFbo(void);
+        void updateDepthFbo();
+        void updateStencilFbo();
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.
@@ -91,7 +91,7 @@ namespace Ogre
         GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
         virtual ~GL3PlusRenderPassDescriptor();
 
-        GLuint getFboName(void) const       { return mFboName; }
+        GLuint getFboName() const       { return mFboName; }
 
         virtual void entriesModified( uint32 entryTypes );
 

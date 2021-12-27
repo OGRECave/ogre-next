@@ -76,7 +76,7 @@ namespace Ogre {
         void endOcclusionQuery();
         bool pullOcclusionQuery( unsigned int* NumOfFragments);
         unsigned int getLastQuerysPixelcount() { return mPixelCount; }
-        bool isStillOutstanding(void);
+        bool isStillOutstanding();
 
     
 

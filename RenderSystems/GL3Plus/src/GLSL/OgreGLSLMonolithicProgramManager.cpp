@@ -42,13 +42,13 @@ namespace Ogre {
     template<> GLSLMonolithicProgramManager* Singleton<GLSLMonolithicProgramManager>::msSingleton = 0;
 
 
-    GLSLMonolithicProgramManager* GLSLMonolithicProgramManager::getSingletonPtr(void)
+    GLSLMonolithicProgramManager* GLSLMonolithicProgramManager::getSingletonPtr()
     {
         return msSingleton;
     }
 
 
-    GLSLMonolithicProgramManager& GLSLMonolithicProgramManager::getSingleton(void)
+    GLSLMonolithicProgramManager& GLSLMonolithicProgramManager::getSingleton()
     {
         assert(msSingleton);  
         return (*msSingleton);
@@ -62,7 +62,7 @@ namespace Ogre {
     }
 
 
-    GLSLMonolithicProgramManager::~GLSLMonolithicProgramManager(void)
+    GLSLMonolithicProgramManager::~GLSLMonolithicProgramManager()
     {
         // iterate through map container and delete link programs
         for (MonolithicProgramIterator currentProgram = mMonolithicPrograms.begin();
@@ -73,7 +73,7 @@ namespace Ogre {
     }
 
 
-    GLSLMonolithicProgram* GLSLMonolithicProgramManager::getActiveMonolithicProgram(void)
+    GLSLMonolithicProgram* GLSLMonolithicProgramManager::getActiveMonolithicProgram()
     {
         // If there is an active link program then return it.
         if (mActiveMonolithicProgram)

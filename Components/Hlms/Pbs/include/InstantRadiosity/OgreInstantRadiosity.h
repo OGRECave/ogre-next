@@ -290,15 +290,15 @@ namespace Ogre
         /// Clusters the VPL from all lights (these VPLs may have been clustered with other
         /// VPLs from the same light, now we need to do this again with lights from different
         /// clusters)
-        void clusterAllVpls(void);
-        void autogenerateAreaOfInterest(void);
+        void clusterAllVpls();
+        void autogenerateAreaOfInterest();
 
         /// lightDir is normalized
         static void mergeDirectionalDiffuse( const Vector3 &diffuse, const Vector3 &lightDir,
                                              Vector3 *inOutDirDiffuse );
 
-        void createDebugMarkers(void);
-        void destroyDebugMarkers(void);
+        void createDebugMarkers();
+        void destroyDebugMarkers();
 
     public:
         InstantRadiosity( SceneManager *sceneManager, HlmsManager *hlmsManager );
@@ -307,21 +307,21 @@ namespace Ogre
         /// Does nothing if build hasn't been called yet.
         /// Updates VPLs with the latest changes made to all mVpl* variables.
         /// May create/remove VPL lights because of mVplThreshold
-        void updateExistingVpls(void);
+        void updateExistingVpls();
 
         /// Clears everything, removing our VPLs. Does not freeMemory.
         /// You will have to call build again to get VPLs again.
-        void clear(void);
+        void clear();
 
-        void build(void);
+        void build();
 
         /// "build" will download meshes for raycasting. We will not free
         /// them after build (in case you want to build again).
         /// If you wish to free that memory, call this function.
-        void freeMemory(void);
+        void freeMemory();
 
         void setEnableDebugMarkers( bool bEnable );
-        bool getEnableDebugMarkers(void) const      { return mEnableDebugMarkers; }
+        bool getEnableDebugMarkers() const      { return mEnableDebugMarkers; }
 
         /** Whether to evaluate diffuse & detail map textures.
             Disabling textures can speed up build() time and significantly reduce
@@ -333,14 +333,14 @@ namespace Ogre
             Whether to enable or disable using diffuse textures (and detail maps).
         */
         void setUseTextures( bool bUseTextures );
-        bool getUseTextures(void) const             { return mUseTextures; }
+        bool getUseTextures() const             { return mUseTextures; }
 
         /** Whether to use Irradiance Volume instead of VPLs.
         @param bUseIrradianceVolume
             Whether to use Irradiance Volume.
         */
         void setUseIrradianceVolume(bool bUseIrradianceVolume);
-        bool getUseIrradianceVolume(void) const             { return mUseIrradianceVolume; }
+        bool getUseIrradianceVolume() const             { return mUseIrradianceVolume; }
 
         /** Outputs suggested parameters for a volumetric texture that will encompass all
             VPLs. They are suggestions, you don't have to follow them.

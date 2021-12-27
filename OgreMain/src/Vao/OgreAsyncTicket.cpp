@@ -64,7 +64,7 @@ namespace Ogre
         mStagingBuffer = 0;
     }
     //-----------------------------------------------------------------------------------
-    const void* AsyncTicket::map(void)
+    const void* AsyncTicket::map()
     {
         assert( !mHasBeenMapped );
 
@@ -74,7 +74,7 @@ namespace Ogre
         return mapImpl();
     }
     //-----------------------------------------------------------------------------------
-    void AsyncTicket::unmap(void)
+    void AsyncTicket::unmap()
     {
         mStagingBuffer->unmap( 0, 0 );
     }

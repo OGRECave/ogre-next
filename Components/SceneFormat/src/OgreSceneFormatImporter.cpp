@@ -82,7 +82,7 @@ namespace Ogre
         destroyParallaxCorrectedCubemap();
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatImporter::destroyInstantRadiosity(void)
+    void SceneFormatImporter::destroyInstantRadiosity()
     {
         if( mIrradianceVolume )
         {
@@ -98,7 +98,7 @@ namespace Ogre
         mInstantRadiosity = 0;
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatImporter::destroyParallaxCorrectedCubemap(void)
+    void SceneFormatImporter::destroyParallaxCorrectedCubemap()
     {
         if( mParallaxCorrectedCubemap )
         {

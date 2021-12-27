@@ -31,7 +31,7 @@ namespace Demo
 {
     class ShadowMapFromCodeGraphicsSystem : public GraphicsSystem
     {
-        void createPcfShadowNode(void)
+        void createPcfShadowNode()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             Ogre::RenderSystem *renderSystem = mRoot->getRenderSystem();
@@ -85,7 +85,7 @@ namespace Demo
                                                                   shadowParams, false );
         }
 
-        void createEsmShadowNodes(void)
+        void createEsmShadowNodes()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             Ogre::RenderSystem *renderSystem = mRoot->getRenderSystem();
@@ -225,7 +225,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Shadow map from code";
     }

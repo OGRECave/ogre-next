@@ -102,7 +102,7 @@ namespace v1 {
             @remarks
                 This rotation is relative to the center of the billboard.
         */
-        const Radian& getRotation(void) const { return mRotation; }
+        const Radian& getRotation() const { return mRotation; }
 
         /** Set the rotation of the billboard.
             @remarks
@@ -129,7 +129,7 @@ namespace v1 {
                 This position is relative to a point on the quad which is the billboard. Depending on the BillboardSet,
                 this may be the center of the quad, the top-left etc. See BillboardSet::setBillboardOrigin for more info.
         */
-        const Vector3& getPosition(void) const;
+        const Vector3& getPosition() const;
 
         /** Sets the width and height for this billboard.
             @remarks
@@ -141,7 +141,7 @@ namespace v1 {
         void setDimensions(Real width, Real height);
 
         /** Resets this Billboard to use the parent BillboardSet's dimensions instead of it's own. */
-        void resetDimensions(void) { mOwnDimensions = false; }
+        void resetDimensions() { mOwnDimensions = false; }
         /** Sets the colour of this billboard.
             @remarks
                 Billboards can be tinted based on a base colour. This allows variations in colour irrespective of the
@@ -152,20 +152,20 @@ namespace v1 {
 
         /** Gets the colour of this billboard.
         */
-        const ColourValue& getColour(void) const;
+        const ColourValue& getColour() const;
 
         /** Returns true if this billboard deviates from the BillboardSet's default dimensions (i.e. if the
             Billboard::setDimensions method has been called for this instance).
             @see
                 Billboard::setDimensions
         */
-        bool hasOwnDimensions(void) const;
+        bool hasOwnDimensions() const;
 
         /** Retrieves the billboard's personal width, if hasOwnDimensions is true. */
-        Real getOwnWidth(void) const;
+        Real getOwnWidth() const;
 
         /** Retrieves the billboard's personal height, if hasOwnDimensions is true. */
-        Real getOwnHeight(void) const;
+        Real getOwnHeight() const;
 
         /** Internal method for notifying the billboard of it's owner.
         */
@@ -180,7 +180,7 @@ namespace v1 {
                 Billboard::setTexcoordIndex()
                 Billboard::setTexcoordRect()
         */
-        bool isUseTexcoordRect(void) const { return mUseTexcoordRect; }
+        bool isUseTexcoordRect() const { return mUseTexcoordRect; }
 
         /** setTexcoordIndex() sets which texture coordinate rect this billboard will use 
             when rendering. The parent billboard set may contain more than one, in which 
@@ -196,7 +196,7 @@ namespace v1 {
             @remarks
                 This value is useful only when isUseTexcoordRect return false.
           */
-        uint16 getTexcoordIndex(void) const { return mTexcoordIndex; }
+        uint16 getTexcoordIndex() const { return mTexcoordIndex; }
 
         /** setTexcoordRect() sets the individual texture coordinate rect of this billboard
             will use when rendering. The parent billboard set may contain more than one, in
@@ -216,7 +216,7 @@ namespace v1 {
             @remarks
                 This value is useful only when isUseTexcoordRect returns true.
         */
-        const FloatRect& getTexcoordRect(void) const { return mTexcoordRect; }
+        const FloatRect& getTexcoordRect() const { return mTexcoordRect; }
     };
 
     /** @} */

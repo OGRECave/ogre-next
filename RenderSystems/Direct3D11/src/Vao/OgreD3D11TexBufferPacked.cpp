@@ -73,7 +73,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11TexBufferPacked::isD3D11Structured(void) const
+    bool D3D11TexBufferPacked::isD3D11Structured() const
     {
         return mInternalFormat == DXGI_FORMAT_UNKNOWN;
     }

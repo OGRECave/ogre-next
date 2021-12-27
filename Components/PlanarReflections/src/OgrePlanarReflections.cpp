@@ -284,7 +284,7 @@ namespace Ogre
         efficientVectorRemove( mActors, itor );
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflections::destroyAllActors(void)
+	void PlanarReflections::destroyAllActors()
     {
         PlanarReflectionActorVec::iterator itor = mActors.begin();
         PlanarReflectionActorVec::iterator end  = mActors.end();
@@ -329,7 +329,7 @@ namespace Ogre
         actor->mCurrentBoundSlot    = 0xFF;
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflections::updateFlushedRenderables(void)
+	void PlanarReflections::updateFlushedRenderables()
     {
         mUpdatingRenderablesHlms = true;
 
@@ -417,7 +417,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflections::beginFrame(void)
+	void PlanarReflections::beginFrame()
     {
         mLastCamera = 0;
         mLastAspectRatio = 0;
@@ -856,7 +856,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    size_t PlanarReflections::getConstBufferSize(void) const
+    size_t PlanarReflections::getConstBufferSize() const
     {
         return (4u * mMaxActiveActors + 4u * 4u + 4u) * sizeof(float);
     }
@@ -919,7 +919,7 @@ namespace Ogre
                 mLastCameraRot == camera->getDerivedOrientation();
     }
     //-----------------------------------------------------------------------------------
-    bool PlanarReflections::_isUpdatingRenderablesHlms(void) const
+    bool PlanarReflections::_isUpdatingRenderablesHlms() const
     {
         return mUpdatingRenderablesHlms;
     }

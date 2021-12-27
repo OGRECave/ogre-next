@@ -135,9 +135,9 @@ namespace Ogre
         void addBaseParams();
 
         /** Returns the string name of this Plugin (as set by the Plugin)*/
-        const String& getPluginStringName( void ) const { return mPluginName; }
+        const String& getPluginStringName() const { return mPluginName; }
         /** Returns dictionary name */
-        const String& getDictionaryStringName( void ) const { return mDictionaryName; }
+        const String& getDictionaryStringName() const { return mDictionaryName; }
 
         //Pure virtual functions that plugins must Override
         /** Call this function from manager to init system */

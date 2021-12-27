@@ -64,7 +64,7 @@ public:
     void beginOcclusionQuery();
     void endOcclusionQuery();
     bool pullOcclusionQuery( unsigned int* NumOfFragments); 
-    bool isStillOutstanding(void);
+    bool isStillOutstanding();
 
 
 //----------------------------------------------------------------------

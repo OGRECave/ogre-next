@@ -50,7 +50,7 @@ namespace v1 {
         /** See HardwareBuffer. */
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
-        void unlockImpl(void);
+        void unlockImpl();
 
     public:
         GL3PlusHardwareVertexBuffer(HardwareBufferManagerBase* mgr, size_t vertexSize, size_t numVertices,
@@ -69,9 +69,9 @@ namespace v1 {
                       size_t dstOffset, size_t length, bool discardWholeBuffer = false);
 
         /** See HardwareBuffer. */
-        void _updateFromShadow(void);
+        void _updateFromShadow();
 
-        inline GLuint getGLBufferId(void) const { return mBufferId; }
+        inline GLuint getGLBufferId() const { return mBufferId; }
     };
 }
 }

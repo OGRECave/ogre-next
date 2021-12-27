@@ -49,7 +49,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
 	}
 	//-----------------------------------------------------------------------------------
-	void Tutorial_SSAOGameState::createScene01(void)
+	void Tutorial_SSAOGameState::createScene01()
 	{
 		Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

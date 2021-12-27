@@ -41,7 +41,7 @@ namespace Demo
         memset( mDynamicVertexBuffer, 0, sizeof( mDynamicVertexBuffer ) );
     }
     //-----------------------------------------------------------------------------------
-    Ogre::IndexBufferPacked* DynamicGeometryGameState::createIndexBuffer(void)
+    Ogre::IndexBufferPacked* DynamicGeometryGameState::createIndexBuffer()
     {
         Ogre::IndexBufferPacked *indexBuffer = 0;
 
@@ -199,7 +199,7 @@ namespace Demo
         return std::pair<Ogre::MeshPtr, Ogre::VertexBufferPacked*>( mesh, vertexBuffer );
     }
     //-----------------------------------------------------------------------------------
-    void DynamicGeometryGameState::createScene01(void)
+    void DynamicGeometryGameState::createScene01()
     {
         //Create all four types of meshes.
         mStaticMesh  = createStaticMesh( false );

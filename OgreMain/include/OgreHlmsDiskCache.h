@@ -185,7 +185,7 @@ namespace Ogre
         HlmsDiskCache( HlmsManager *hlmsManager );
         ~HlmsDiskCache();
 
-        void clearCache(void);
+        void clearCache();
 
         void copyFrom( Hlms *hlms );
         void applyTo( Hlms *hlms );

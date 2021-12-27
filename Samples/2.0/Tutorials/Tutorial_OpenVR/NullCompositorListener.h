@@ -29,7 +29,7 @@ namespace Demo
         Ogre::Real mLastCamFar;
         bool mMustSyncAtEndOfFrame;
 
-        void syncCullCamera( void );
+        void syncCullCamera();
         void syncCameraProjection( bool bForceUpdate );
 
     public:
@@ -55,7 +55,7 @@ namespace Demo
 
             See NullCompositorListener::setGlitchFree
         */
-        bool canSyncCameraTransformImmediately( void ) const;
+        bool canSyncCameraTransformImmediately() const;
     };
 }  // namespace Demo
 

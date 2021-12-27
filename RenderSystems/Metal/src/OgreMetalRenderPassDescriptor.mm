@@ -76,7 +76,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::checkRenderWindowStatus(void)
+    void MetalRenderPassDescriptor::checkRenderWindowStatus()
     {
         if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
             (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
@@ -103,7 +103,7 @@ namespace Ogre
         calculateSharedKey();
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::calculateSharedKey(void)
+    void MetalRenderPassDescriptor::calculateSharedKey()
     {
         FrameBufferDescKey key( *this );
         MetalFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
@@ -315,7 +315,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::updateDepthRtv(void)
+    void MetalRenderPassDescriptor::updateDepthRtv()
     {
         mDepthAttachment = 0;
 
@@ -362,7 +362,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::updateStencilRtv(void)
+    void MetalRenderPassDescriptor::updateStencilRtv()
     {
         mStencilAttachment = 0;
 
@@ -504,7 +504,7 @@ namespace Ogre
         return entriesToFlush;
     }
     //-----------------------------------------------------------------------------------
-    bool MetalRenderPassDescriptor::cannotInterruptRendering(void) const
+    bool MetalRenderPassDescriptor::cannotInterruptRendering() const
     {
         bool cannotInterrupt = false;
 

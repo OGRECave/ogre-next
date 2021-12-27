@@ -1046,22 +1046,22 @@ namespace Ogre {
             return this->mPattern < other.mPattern;
         }
 
-        bool isMultisample( void ) const { return mColourSamples > 1u; }
+        bool isMultisample() const { return mColourSamples > 1u; }
 
         /// For internal use
         void _set( uint8 colourSamples, uint8 coverageSamples, MsaaPatterns::MsaaPatterns pattern );
 
-        uint8 getColourSamples( void ) const { return mColourSamples; }
-        uint8 getCoverageSamples( void ) const { return mCoverageSamples; }
-        uint8 getMaxSamples( void ) const { return std::max( mCoverageSamples, mColourSamples ); }
-        MsaaPatterns::MsaaPatterns getMsaaPattern( void ) const
+        uint8 getColourSamples() const { return mColourSamples; }
+        uint8 getCoverageSamples() const { return mCoverageSamples; }
+        uint8 getMaxSamples() const { return std::max( mCoverageSamples, mColourSamples ); }
+        MsaaPatterns::MsaaPatterns getMsaaPattern() const
         {
             return static_cast<MsaaPatterns::MsaaPatterns>( mPattern );
         }
 
         void setMsaa( uint8 msaa, MsaaPatterns::MsaaPatterns pattern = MsaaPatterns::Undefined );
 
-        bool isMsaa( void ) const;
+        bool isMsaa() const;
 
         /** Set CSAA by NVIDIA's marketing names e.g.
                 8x CSAA call setCsaa( 8u, false )
@@ -1080,14 +1080,14 @@ namespace Ogre {
             There is some overlap between CSAA and EQAA modes, hence this
             function may return true even if setEqaa was called
         */
-        bool isCsaa( void ) const;
+        bool isCsaa() const;
 
         /** Returns true if this is CSAA in quality mode
         @remark
             There is some overlap between CSAA and EQAA modes, hence this
             function may return true even if setEqaa was called
         */
-        bool isCsaaQuality( void ) const;
+        bool isCsaaQuality() const;
 
         /** Set EQAA by its marketing number (which coincides with its technical spec) e.g.
                 2f4x EQAA call setEqaa( 2u, 4u )

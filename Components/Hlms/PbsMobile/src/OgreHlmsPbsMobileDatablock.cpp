@@ -280,7 +280,7 @@ namespace Ogre
         mTextureHash = hash.mHash;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsMobileDatablock::bakeVariableParameters(void)
+	void HlmsPbsMobileDatablock::bakeVariableParameters()
     {
         size_t param = 0;
         //float alpha_test_threshold
@@ -393,7 +393,7 @@ namespace Ogre
         mkDb = diffuseColour.z * invPI;
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsMobileDatablock::getDiffuse(void) const
+    Vector3 HlmsPbsMobileDatablock::getDiffuse() const
     {
         return Vector3( mkDr, mkDg, mkDb );
     }
@@ -405,7 +405,7 @@ namespace Ogre
         mkSb = specularColour.z;
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsMobileDatablock::getSpecular(void) const
+    Vector3 HlmsPbsMobileDatablock::getSpecular() const
     {
         return Vector3( mkSr, mkSg, mkSb );
     }
@@ -415,7 +415,7 @@ namespace Ogre
         mRoughness = roughness;
     }
     //-----------------------------------------------------------------------------------
-    float HlmsPbsMobileDatablock::getRoughness(void) const
+    float HlmsPbsMobileDatablock::getRoughness() const
     {
         return mRoughness;
     }
@@ -450,13 +450,13 @@ namespace Ogre
         bakeVariableParameters();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsMobileDatablock::getFresnel(void) const
+    Vector3 HlmsPbsMobileDatablock::getFresnel() const
     {
         return Vector3( mShaderCreationData->mFresnelR, mShaderCreationData->mFresnelG,
                         mShaderCreationData->mFresnelB );
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsMobileDatablock::hasSeparateFresnel(void) const
+    bool HlmsPbsMobileDatablock::hasSeparateFresnel() const
     {
         return mShaderCreationData->mFresnelTypeSizeBytes != 4;
     }
@@ -590,7 +590,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    Real HlmsPbsMobileDatablock::getNormalMapWeight(void) const
+    Real HlmsPbsMobileDatablock::getNormalMapWeight() const
     {
         return mShaderCreationData->mNormalMapWeight;
     }

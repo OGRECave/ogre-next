@@ -46,8 +46,8 @@ namespace Ogre {
         GLES2OldVertexArrayObject();
         ~GLES2OldVertexArrayObject();
         /// Bind a VAO
-        void bind(void);
-        bool isInitialised(void) { return mInitialised; }
+        void bind();
+        bool isInitialised() { return mInitialised; }
         void setInitialised(bool flag) { mInitialised = flag; }
     };
 }

@@ -58,9 +58,9 @@ namespace Ogre
         virtual void addConfig( VulkanRenderSystem *renderSystem );
         virtual void setConfigOption( const String &name, const String &value );
 
-        virtual String validateConfigOptions( void );
+        virtual String validateConfigOptions();
 
-        uint32 getSelectedDeviceIdx( void ) const;
+        uint32 getSelectedDeviceIdx() const;
 
         ConfigOptionMap &getConfigOptions( VulkanRenderSystem *renderSystem );
 

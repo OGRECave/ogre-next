@@ -125,7 +125,7 @@ namespace v1 {
         OGRE_DELETE  mBillboardSet;
     }
     //-----------------------------------------------------------------------
-    const String& BillboardParticleRenderer::getType(void) const
+    const String& BillboardParticleRenderer::getType() const
     {
         return rendererTypeName;
     }
@@ -194,12 +194,12 @@ namespace v1 {
         mBillboardSet->setUseAccurateFacing(acc);
     }
     //-----------------------------------------------------------------------
-    bool BillboardParticleRenderer::getUseAccurateFacing(void) const
+    bool BillboardParticleRenderer::getUseAccurateFacing() const
     {
         return mBillboardSet->getUseAccurateFacing();
     }
     //-----------------------------------------------------------------------
-    BillboardType BillboardParticleRenderer::getBillboardType(void) const
+    BillboardType BillboardParticleRenderer::getBillboardType() const
     {
         return mBillboardSet->getBillboardType();
     }
@@ -209,7 +209,7 @@ namespace v1 {
         mBillboardSet->setBillboardRotationType(rotationType);
     }
     //-----------------------------------------------------------------------
-    BillboardRotationType BillboardParticleRenderer::getBillboardRotationType(void) const
+    BillboardRotationType BillboardParticleRenderer::getBillboardRotationType() const
     {
         return mBillboardSet->getBillboardRotationType();
     }
@@ -219,7 +219,7 @@ namespace v1 {
         mBillboardSet->setCommonDirection(vec);
     }
     //-----------------------------------------------------------------------
-    const Vector3& BillboardParticleRenderer::getCommonDirection(void) const
+    const Vector3& BillboardParticleRenderer::getCommonDirection() const
     {
         return mBillboardSet->getCommonDirection();
     }
@@ -229,7 +229,7 @@ namespace v1 {
         mBillboardSet->setCommonUpVector(vec);
     }
     //-----------------------------------------------------------------------
-    const Vector3& BillboardParticleRenderer::getCommonUpVector(void) const
+    const Vector3& BillboardParticleRenderer::getCommonUpVector() const
     {
         return mBillboardSet->getCommonUpVector();
     }
@@ -239,7 +239,7 @@ namespace v1 {
         mBillboardSet->_notifyCurrentCamera(camera, lodCamera);
     }
     //-----------------------------------------------------------------------
-    void BillboardParticleRenderer::_notifyParticleRotated(void)
+    void BillboardParticleRenderer::_notifyParticleRotated()
     {
         mBillboardSet->_notifyBillboardRotated();
     }
@@ -249,7 +249,7 @@ namespace v1 {
         mBillboardSet->setDefaultDimensions(width, height);
     }
     //-----------------------------------------------------------------------
-    void BillboardParticleRenderer::_notifyParticleResized(void)
+    void BillboardParticleRenderer::_notifyParticleResized()
     {
         mBillboardSet->_notifyBillboardResized();
     }
@@ -279,7 +279,7 @@ namespace v1 {
         mBillboardSet->setBillboardsInWorldSpace(!keepLocal);
     }
     //-----------------------------------------------------------------------
-    SortMode BillboardParticleRenderer::_getSortMode(void) const
+    SortMode BillboardParticleRenderer::_getSortMode() const
     {
         return mBillboardSet->_getSortMode();
     }
@@ -289,7 +289,7 @@ namespace v1 {
         mBillboardSet->setPointRenderingEnabled(enabled);
     }
     //-----------------------------------------------------------------------
-    bool BillboardParticleRenderer::isPointRenderingEnabled(void) const
+    bool BillboardParticleRenderer::isPointRenderingEnabled() const
     {
         return mBillboardSet->isPointRenderingEnabled();
     }

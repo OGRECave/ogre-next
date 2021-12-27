@@ -76,7 +76,7 @@ namespace Ogre
             entriesModified( RenderPassDescriptor::All );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderPassDescriptor::checkRenderWindowStatus(void)
+    void D3D11RenderPassDescriptor::checkRenderWindowStatus()
     {
         if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
             (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
@@ -118,7 +118,7 @@ namespace Ogre
         calculateSharedKey();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderPassDescriptor::calculateSharedKey(void)
+    void D3D11RenderPassDescriptor::calculateSharedKey()
     {
         FrameBufferDescKey key( *this );
         D3D11FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
@@ -281,7 +281,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderPassDescriptor::updateDepthRtv(void)
+    void D3D11RenderPassDescriptor::updateDepthRtv()
     {
         mDepthStencilRtv.Reset();
         mHasStencilFormat = false;
@@ -564,7 +564,7 @@ namespace Ogre
         context->OMSetRenderTargets( 0, 0, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderPassDescriptor::clearFrameBuffer(void)
+    void D3D11RenderPassDescriptor::clearFrameBuffer()
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         const size_t numColourEntries = mNumColourEntries;

@@ -108,7 +108,7 @@ namespace v1 {
         ushort mHardwarePoseCount;
 
         /** Internal method for preparing this Entity for use in animation. */
-        void prepareTempBlendBuffers(void);
+        void prepareTempBlendBuffers();
 
     public:
         /** Sets a Material to be used.
@@ -125,14 +125,14 @@ namespace v1 {
         using Renderable::setDatablock;
 
         virtual void setDatablock( HlmsDatablock *datablock );
-        virtual void _setNullDatablock(void);
+        virtual void _setNullDatablock();
 
         /** Accessor method to read mesh data.
         */
-        SubMesh* getSubMesh(void) const;
+        SubMesh* getSubMesh() const;
 
         /** Accessor to get parent Entity */
-        Entity* getParent(void) const { return mParentEntity; }
+        Entity* getParent() const { return mParentEntity; }
 
         /** Overridden - see Renderable.
         */
@@ -168,13 +168,13 @@ namespace v1 {
         void getWorldTransforms(Matrix4* xform) const;
         /** Overridden - see Renderable.
         */
-        unsigned short getNumWorldTransforms(void) const;
+        unsigned short getNumWorldTransforms() const;
         /** Overridden, see Renderable */
         Real getSquaredViewDepth(const Camera* cam) const;
         /** @copydoc Renderable::getLights */
-        const LightList& getLights(void) const;
+        const LightList& getLights() const;
         /** @copydoc Renderable::getCastsShadows */
-        bool getCastsShadows(void) const;
+        bool getCastsShadows() const;
         /** Advanced method to get the temporarily blended vertex information
         for entities which are software skinned. 
         @remarks
@@ -184,7 +184,7 @@ namespace v1 {
         @note
             The positions/normals of the returned vertex data is in object space.
         */
-        VertexData* _getSkelAnimVertexData(void);
+        VertexData* _getSkelAnimVertexData();
         /** Advanced method to get the temporarily blended software morph vertex information
         @remarks
             Internal engine will eliminate software animation if possible, this
@@ -193,32 +193,32 @@ namespace v1 {
         @note
             The positions/normals of the returned vertex data is in object space.
         */
-        VertexData* _getSoftwareVertexAnimVertexData(void);
+        VertexData* _getSoftwareVertexAnimVertexData();
         /** Advanced method to get the hardware morph vertex information
         @note
             The positions/normals of the returned vertex data is in object space.
         */
-        VertexData* _getHardwareVertexAnimVertexData(void);
+        VertexData* _getHardwareVertexAnimVertexData();
         /** Advanced method to get the temp buffer information for software 
         skeletal animation.
         */
-        TempBlendedBufferInfo* _getSkelAnimTempBufferInfo(void);
+        TempBlendedBufferInfo* _getSkelAnimTempBufferInfo();
         /** Advanced method to get the temp buffer information for software 
         morph animation.
         */
-        TempBlendedBufferInfo* _getVertexAnimTempBufferInfo(void);
-        const TempBlendedBufferInfo* _getVertexAnimTempBufferInfo(void) const;
+        TempBlendedBufferInfo* _getVertexAnimTempBufferInfo();
+        const TempBlendedBufferInfo* _getVertexAnimTempBufferInfo() const;
         /// Retrieve the VertexData which should be used for GPU binding
         VertexData* getVertexDataForBinding( bool casterPass );
 
         /** Mark all vertex data as so far unanimated. 
         */
-        void _markBuffersUnusedForAnimation(void);
+        void _markBuffersUnusedForAnimation();
         /** Mark all vertex data as animated. 
         */
-        void _markBuffersUsedForAnimation(void);
+        void _markBuffersUsedForAnimation();
         /** Are buffers already marked as vertex animated? */
-        bool _getBuffersMarkedForAnimation(void) const { return mVertexAnimationAppliedThisFrame; }
+        bool _getBuffersMarkedForAnimation() const { return mVertexAnimationAppliedThisFrame; }
         /** Internal method to copy original vertex data to the morph structures
         should there be no active animation in use.
         */

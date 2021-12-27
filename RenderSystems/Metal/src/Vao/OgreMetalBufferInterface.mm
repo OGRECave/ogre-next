@@ -142,7 +142,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalBufferInterface::advanceFrame(void)
+    void MetalBufferInterface::advanceFrame()
     {
         advanceFrame( true );
     }
@@ -164,7 +164,7 @@ namespace Ogre
         return dynamicCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
-    void MetalBufferInterface::regressFrame(void)
+    void MetalBufferInterface::regressFrame()
     {
         MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;

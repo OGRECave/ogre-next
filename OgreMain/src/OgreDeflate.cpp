@@ -415,7 +415,7 @@ namespace Ogre
         }       
     }
     //---------------------------------------------------------------------
-    size_t DeflateStream::tell(void) const
+    size_t DeflateStream::tell() const
     {
         if (mStreamType == Invalid)
         {
@@ -432,7 +432,7 @@ namespace Ogre
 
     }
     //---------------------------------------------------------------------
-    bool DeflateStream::eof(void) const
+    bool DeflateStream::eof() const
     {
         if (getAccessMode() & WRITE)
             return mTmpWriteStream->eof();
@@ -445,7 +445,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void DeflateStream::close(void)
+    void DeflateStream::close()
     {
         if (getAccessMode() & WRITE)
             compressFinal();

@@ -124,7 +124,7 @@ namespace v1 {
         return retPtr;
     }
 
-    void GL3PlusHardwareVertexBuffer::unlockImpl(void)
+    void GL3PlusHardwareVertexBuffer::unlockImpl()
     {
         if (mLockedToScratch)
         {
@@ -241,7 +241,7 @@ namespace v1 {
         }
     }
 
-    void GL3PlusHardwareVertexBuffer::_updateFromShadow(void)
+    void GL3PlusHardwareVertexBuffer::_updateFromShadow()
     {
         if (mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate)
         {

@@ -269,7 +269,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11AsyncTextureTicket::unmapImpl(void)
+    void D3D11AsyncTextureTicket::unmapImpl()
     {
         const UINT subresourceIdx = D3D11CalcSubresource( 0, mMappedSlice, 1u );
 
@@ -278,12 +278,12 @@ namespace Ogre
         context->Unmap( mStagingTexture.Get(), subresourceIdx );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11AsyncTextureTicket::canMapMoreThanOneSlice(void) const
+    bool D3D11AsyncTextureTicket::canMapMoreThanOneSlice() const
     {
         return !mIsArray2DTexture;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11AsyncTextureTicket::waitForDownloadToFinish(void)
+    void D3D11AsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
             return; //We're done.
@@ -302,7 +302,7 @@ namespace Ogre
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11AsyncTextureTicket::queryIsTransferDone(void)
+    bool D3D11AsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {

@@ -1083,7 +1083,7 @@ namespace Ogre
     ShadowNodeHelper::Resolution::Resolution( uint32 _x, uint32 _y ) :
         x( _x ), y( _y ) {}
     //-----------------------------------------------------------------------------------
-    uint64 ShadowNodeHelper::Resolution::asUint64(void) const
+    uint64 ShadowNodeHelper::Resolution::asUint64() const
     {
         return ((uint64)x << (uint64)32ul) | ((uint64)y);
     }

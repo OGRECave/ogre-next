@@ -41,7 +41,7 @@ namespace Ogre
         ComPtr<ID3D11Query> mFenceName;
         D3D11Device &mDevice;
 
-        virtual const void* mapImpl(void);
+        virtual const void* mapImpl();
 
     public:
         D3D11AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
@@ -49,7 +49,7 @@ namespace Ogre
                           D3D11Device &device );
         virtual ~D3D11AsyncTicket();
 
-        virtual bool queryIsTransferDone(void);
+        virtual bool queryIsTransferDone();
     };
 }
 

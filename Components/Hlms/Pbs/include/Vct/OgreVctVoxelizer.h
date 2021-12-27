@@ -254,29 +254,29 @@ namespace Ogre
         */
         static bool adjustIndexOffsets16( uint32 &indexStart, uint32 &numIndices );
 
-        void createComputeJobs(void);
+        void createComputeJobs();
         void clearComputeJobResources( bool calculatorDataOnly );
 
         void countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh );
-        void prepareAabbCalculatorMeshData(void);
-        void destroyAabbCalculatorMeshData(void);
+        void prepareAabbCalculatorMeshData();
+        void destroyAabbCalculatorMeshData();
         void convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
                                       MappedBuffers &mappedBuffers );
 
         void freeBuffers( bool bForceFree );
 
-        void buildMeshBuffers(void);
-        void createVoxelTextures(void);
+        void buildMeshBuffers();
+        void createVoxelTextures();
 
-        void placeItemsInBuckets(void);
+        void placeItemsInBuckets();
         size_t countSubMeshPartitionsIn( Item *item ) const;
-        void createInstanceBuffers(void);
-        void destroyInstanceBuffers(void);
-        void fillInstanceBuffers(void);
+        void createInstanceBuffers();
+        void destroyInstanceBuffers();
+        void fillInstanceBuffers();
 
-        void computeMeshAabbs(void);
+        void computeMeshAabbs();
 
-        void clearVoxels(void);
+        void clearVoxels();
 
     public:
         VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
@@ -316,7 +316,7 @@ namespace Ogre
         void removeItem( Item *item );
 
         /// Removes all items added via VctVoxelizer::addItem
-        void removeAllItems(void);
+        void removeAllItems();
 
         /** Call this function before VctVoxelizer::autoCalculateRegion
         @param autoRegion
@@ -333,7 +333,7 @@ namespace Ogre
                                   const Aabb &maxRegion=Aabb::BOX_INFINITE );
 
         /// Does nothing if VctVoxelizer::setRegionToVoxelize( false, ... ) was called.
-        void autoCalculateRegion(void);
+        void autoCalculateRegion();
 
         void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );
 

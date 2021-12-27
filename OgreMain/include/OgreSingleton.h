@@ -75,7 +75,7 @@ namespace Ogre {
         static T* msSingleton;
 
     public:
-        Singleton( void )
+        Singleton()
         {
             assert( !msSingleton );
 #if defined( _MSC_VER ) && _MSC_VER < 1200   
@@ -85,11 +85,11 @@ namespace Ogre {
         msSingleton = static_cast< T* >( this );
 #endif
         }
-        ~Singleton( void )
+        ~Singleton()
             {  assert( msSingleton );  msSingleton = 0;  }
-        static T& getSingleton( void )
+        static T& getSingleton()
         {   assert( msSingleton );  return ( *msSingleton ); }
-        static T* getSingletonPtr( void )
+        static T* getSingletonPtr()
         { return msSingleton; }
     };
     /** @} */

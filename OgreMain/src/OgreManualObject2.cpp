@@ -66,7 +66,7 @@ namespace Ogre {
         clear();
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::clear(void)
+    void ManualObject::clear()
     {
         resetBuffers();
 
@@ -85,7 +85,7 @@ namespace Ogre {
         mCurrentSection = 0;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::resetBuffers(void)
+    void ManualObject::resetBuffers()
     {
         OGRE_FREE(mTempVertexBuffer, MEMCATEGORY_GEOMETRY);
         OGRE_FREE(mTempIndexBuffer, MEMCATEGORY_GEOMETRY);
@@ -612,7 +612,7 @@ namespace Ogre {
         return mIndices;
     }
     //-----------------------------------------------------------------------------
-    ManualObject::ManualObjectSection* ManualObject::end(void)
+    ManualObject::ManualObjectSection* ManualObject::end()
     {
         if (!mCurrentSection)
         {
@@ -835,7 +835,7 @@ namespace Ogre {
         return 0;
     }
     //-----------------------------------------------------------------------
-    unsigned int ManualObject::getNumSections(void) const
+    unsigned int ManualObject::getNumSections() const
     {
         return static_cast< unsigned int >( mSectionList.size() );
     }
@@ -884,7 +884,7 @@ namespace Ogre {
         return mVertices;
     }
     //-----------------------------------------------------------------------------
-    const String& ManualObject::getMovableType(void) const
+    const String& ManualObject::getMovableType() const
     {
         return ManualObjectFactory::FACTORY_TYPE_NAME;
     }
@@ -965,12 +965,12 @@ namespace Ogre {
                      "ManualObjectSection::getWorldTransforms" );
     }
     //-----------------------------------------------------------------------------
-    const LightList& ManualObject::ManualObjectSection::getLights(void) const
+    const LightList& ManualObject::ManualObjectSection::getLights() const
     {
         return mParent->queryLights();
     }
     //-----------------------------------------------------------------------------
-    bool ManualObject::ManualObjectSection::getCastsShadows(void) const
+    bool ManualObject::ManualObjectSection::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "ManualObject do not implement getCastsShadows.",
@@ -989,7 +989,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     String ManualObjectFactory::FACTORY_TYPE_NAME = "ManualObject2";
     //-----------------------------------------------------------------------------
-    const String& ManualObjectFactory::getType(void) const
+    const String& ManualObjectFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

@@ -113,7 +113,7 @@ namespace Ogre
         mDirty = true;
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::destroyWorkspace(void)
+    void CubemapProbe::destroyWorkspace()
     {
         if( mWorkspace )
         {
@@ -161,7 +161,7 @@ namespace Ogre
         releaseTextureAuto();
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::destroyTexture(void)
+    void CubemapProbe::destroyTexture()
     {
         assert( !mWorkspace );
         if( mTexture )
@@ -177,7 +177,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::acquireTextureAuto(void)
+    void CubemapProbe::acquireTextureAuto()
     {
         if( !mCreator->getAutomaticMode() )
             return;
@@ -197,7 +197,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::releaseTextureAuto(void)
+    void CubemapProbe::releaseTextureAuto()
     {
         if( !mCreator->getAutomaticMode() )
             return;
@@ -211,7 +211,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::createInternalProbe(void)
+    void CubemapProbe::createInternalProbe()
     {
         destroyInternalProbe();
         if( !mCreator->getAutomaticMode() )
@@ -229,7 +229,7 @@ namespace Ogre
         syncInternalProbe();
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::destroyInternalProbe(void)
+    void CubemapProbe::destroyInternalProbe()
     {
         if( !mInternalProbe )
             return;
@@ -240,7 +240,7 @@ namespace Ogre
         mInternalProbe = 0;
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::switchInternalProbeStaticValue(void)
+    void CubemapProbe::switchInternalProbeStaticValue()
     {
         if( mInternalProbe && mInternalProbe->isStatic() != mStatic )
         {
@@ -256,7 +256,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::syncInternalProbe(void)
+    void CubemapProbe::syncInternalProbe()
     {
         if( !mInternalProbe )
             return;
@@ -448,7 +448,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool CubemapProbe::isInitialized(void) const
+    bool CubemapProbe::isInitialized() const
     {
         return mWorkspace != 0;
     }
@@ -529,7 +529,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint16_t CubemapProbe::getPriority(void) const
+    uint16_t CubemapProbe::getPriority() const
     {
         return mPriority;
     }
@@ -551,7 +551,7 @@ namespace Ogre
         return std::max( std::max( ndf.x, ndf.y ), ndf.z );
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::_prepareForRendering(void)
+    void CubemapProbe::_prepareForRendering()
     {
         if( mCamera )
         {
@@ -562,7 +562,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::_clearCubemap(void)
+    void CubemapProbe::_clearCubemap()
     {
         if( !mClearWorkspace )
         {
@@ -588,7 +588,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::_updateRender(void)
+    void CubemapProbe::_updateRender()
     {
         assert( mDirty || !mStatic );
 
@@ -610,7 +610,7 @@ namespace Ogre
         mCreator->_copyRenderTargetToCubemap( mCubemapArrayIdx );
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::_addReference(void)
+    void CubemapProbe::_addReference()
     {
         OGRE_ASSERT_LOW( !mCreator->getAutomaticMode() );
 
@@ -627,7 +627,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::_removeReference(void)
+    void CubemapProbe::_removeReference()
     {
         OGRE_ASSERT_LOW( !mCreator->getAutomaticMode() );
 
@@ -646,7 +646,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const SceneNode* CubemapProbe::getInternalCubemapProbeSceneNode(void) const
+    const SceneNode* CubemapProbe::getInternalCubemapProbeSceneNode() const
     {
         SceneNode const *retVal = 0;
         if( mInternalProbe )

@@ -35,13 +35,13 @@ namespace Ogre
     template<> GLSLSeparableProgramManager* Singleton<GLSLSeparableProgramManager>::msSingleton = 0;
 
 
-    GLSLSeparableProgramManager* GLSLSeparableProgramManager::getSingletonPtr(void)
+    GLSLSeparableProgramManager* GLSLSeparableProgramManager::getSingletonPtr()
     {
         return msSingleton;
     }
 
 
-    GLSLSeparableProgramManager& GLSLSeparableProgramManager::getSingleton(void)
+    GLSLSeparableProgramManager& GLSLSeparableProgramManager::getSingleton()
     {
         assert( msSingleton );  return ( *msSingleton );
     }
@@ -51,7 +51,7 @@ namespace Ogre
         GLSLProgramManager(support), mActiveSeparableProgram(NULL) { }
 
 
-    GLSLSeparableProgramManager::~GLSLSeparableProgramManager(void)
+    GLSLSeparableProgramManager::~GLSLSeparableProgramManager()
     {
         // Iterate through map container and delete program pipelines.
         for (SeparableProgramIterator currentProgram = mSeparablePrograms.begin();
@@ -128,7 +128,7 @@ namespace Ogre
     }
 
 
-    GLSLSeparableProgram* GLSLSeparableProgramManager::getCurrentSeparableProgram(void)
+    GLSLSeparableProgram* GLSLSeparableProgramManager::getCurrentSeparableProgram()
     {
         // If there is an active link program then return it.
         if (mActiveSeparableProgram)

@@ -53,9 +53,9 @@ namespace Ogre
                 diffuseTexIdx( std::numeric_limits<uint16>::max() ),
                 emissiveTexIdx( std::numeric_limits<uint16>::max() ) {}
 
-            bool hasDiffuseTex(void) const
+            bool hasDiffuseTex() const
             { return diffuseTexIdx != std::numeric_limits<uint16>::max(); }
-            bool hasEmissiveTex(void) const
+            bool hasEmissiveTex() const
             { return emissiveTexIdx != std::numeric_limits<uint16>::max(); }
         };
 
@@ -93,7 +93,7 @@ namespace Ogre
                                                         MaterialBucket &bucket );
         uint16 getPoolSliceIdxForTexture( TextureGpu *texture );
 
-        void resizeTexturePool(void);
+        void resizeTexturePool();
 
         MaterialBucket* findFreeBucketFor( HlmsDatablock *datablock );
 
@@ -103,14 +103,14 @@ namespace Ogre
         ~VctMaterial();
 
         void initTempResources( SceneManager *sceneManager );
-        void destroyTempResources(void);
+        void destroyTempResources();
 
         /// Adds a datablock, if not already cached.
         /// If the datablock contains textures, then
         /// initTempResources must already have been called.
         DatablockConversionResult addDatablock( HlmsDatablock *datablock );
 
-        TextureGpu* getTexturePool(void) const      { return mTexturePool; }
+        TextureGpu* getTexturePool() const      { return mTexturePool; }
     };
 }
 

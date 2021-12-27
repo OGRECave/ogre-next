@@ -95,7 +95,7 @@ namespace Ogre
                 return false;
             }
 
-            static BufferSlot makeEmpty(void)
+            static BufferSlot makeEmpty()
             {
                 BufferSlot retVal;
                 memset( &retVal, 0, sizeof( retVal ) );
@@ -137,10 +137,10 @@ namespace Ogre
                 return false;
             }
 
-            bool formatNeedsReinterpret(void) const;
-            bool needsDifferentView(void) const;
+            bool formatNeedsReinterpret() const;
+            bool needsDifferentView() const;
 
-            static TextureSlot makeEmpty(void)
+            static TextureSlot makeEmpty()
             {
                 TextureSlot retVal;
                 memset( &retVal, 0, sizeof( retVal ) );
@@ -168,40 +168,40 @@ namespace Ogre
                 slotType = _slotType;
             }
 
-            bool empty(void) const
+            bool empty() const
             {
                 return buffer.buffer == 0 && texture.texture == 0;
             }
 
-            bool isBuffer(void) const
+            bool isBuffer() const
             {
                 return slotType == SlotTypeBuffer;
             }
 
-            BufferSlot& getBuffer(void)
+            BufferSlot& getBuffer()
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
             }
 
-            const BufferSlot& getBuffer(void) const
+            const BufferSlot& getBuffer() const
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
             }
 
-            bool isTexture(void) const
+            bool isTexture() const
             {
                 return slotType == SlotTypeTexture;
             }
 
-            TextureSlot& getTexture(void)
+            TextureSlot& getTexture()
             {
                 assert( slotType == SlotTypeTexture );
                 return texture;
             }
 
-            const TextureSlot& getTexture(void) const
+            const TextureSlot& getTexture() const
             {
                 assert( slotType == SlotTypeTexture );
                 return texture;
@@ -282,7 +282,7 @@ namespace Ogre
             return false;
         }
 
-        void checkValidity(void) const;
+        void checkValidity() const;
     };
 
     /** @} */

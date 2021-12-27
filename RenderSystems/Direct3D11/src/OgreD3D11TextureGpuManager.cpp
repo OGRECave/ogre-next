@@ -204,7 +204,7 @@ namespace Ogre
                                                TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* D3D11TextureGpuManager::createWindowDepthBuffer(void)
+    TextureGpu* D3D11TextureGpuManager::createWindowDepthBuffer()
     {
         return OGRE_NEW D3D11TextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
                                                      "RenderWindow DepthBuffer",

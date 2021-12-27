@@ -42,11 +42,11 @@ THE SOFTWARE.
 namespace Ogre {
     //-----------------------------------------------------------------------
     template<> GpuProgramManager* Singleton<GpuProgramManager>::msSingleton = 0;
-    GpuProgramManager* GpuProgramManager::getSingletonPtr(void)
+    GpuProgramManager* GpuProgramManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    GpuProgramManager& GpuProgramManager::getSingleton(void)
+    GpuProgramManager& GpuProgramManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -147,7 +147,7 @@ namespace Ogre {
         return prg;
     }
     //---------------------------------------------------------------------------
-    const GpuProgramManager::SyntaxCodes& GpuProgramManager::getSupportedSyntax(void) const
+    const GpuProgramManager::SyntaxCodes& GpuProgramManager::getSupportedSyntax() const
     {
         // Use the current render system
         RenderSystem* rs = Root::getSingleton().getRenderSystem();
@@ -178,7 +178,7 @@ namespace Ogre {
         return ResourceManager::getResourceByName(name);
     }
     //-----------------------------------------------------------------------------
-    GpuProgramParametersSharedPtr GpuProgramManager::createParameters(void)
+    GpuProgramParametersSharedPtr GpuProgramManager::createParameters()
     {
         return GpuProgramParametersSharedPtr(OGRE_NEW GpuProgramParameters());
     }
@@ -237,7 +237,7 @@ namespace Ogre {
             mSaveMicrocodesToCache = val;
     }
     //---------------------------------------------------------------------
-    bool GpuProgramManager::isCacheDirty( void ) const
+    bool GpuProgramManager::isCacheDirty() const
     {
         return mCacheDirty;     
     }
@@ -369,7 +369,7 @@ namespace Ogre {
         
     }
     //---------------------------------------------------------------------
-    void GpuProgramManager::clearMicrocodeCache(void)
+    void GpuProgramManager::clearMicrocodeCache()
     {
         mMicrocodeCache.clear();
         mCacheDirty = false;

@@ -136,9 +136,9 @@ namespace Ogre
                            ResourceAccess::ResourceAccess access, size_t offset=0,
                            size_t sizeBytes=0, bool allowWriteAfterWrite=false );
 
-        const TextureSources& getTextureSources(void) const     { return mTextureSources; }
-        const TextureSources& getUavSources(void) const         { return mUavSources; }
-        const BufferSourceVec& getBufferSources(void) const     { return mBufferSources; }
+        const TextureSources& getTextureSources() const     { return mTextureSources; }
+        const TextureSources& getUavSources() const         { return mUavSources; }
+        const BufferSourceVec& getBufferSources() const     { return mBufferSources; }
     };
 
     /** @} */

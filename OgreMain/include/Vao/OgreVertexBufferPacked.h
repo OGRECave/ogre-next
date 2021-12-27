@@ -119,22 +119,22 @@ namespace Ogre
         );
         ~VertexBufferPacked();
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_VERTEX; }
+        virtual BufferPackedTypes getBufferPackedType() const   { return BP_TYPE_VERTEX; }
 
-        const VertexElement2Vec& getVertexElements(void) const  { return mVertexElements; }
+        const VertexElement2Vec& getVertexElements() const  { return mVertexElements; }
 
 #ifdef _OGRE_MULTISOURCE_VBO
-        size_t getMultiSourceId(void)                           { return mMultiSourceId; }
+        size_t getMultiSourceId()                           { return mMultiSourceId; }
 
         /// Return value may be null
-        MultiSourceVertexBufferPool* getMultiSourcePool(void)   { return mMultiSourcePool; }
+        MultiSourceVertexBufferPool* getMultiSourcePool()   { return mMultiSourcePool; }
 
         /// Source index reference assigned by the MultiSourceVertexBufferPool.
         /// This value does not restrict the fact that you can actually assign this buffer to
         /// another index (as long as it's with another buffer with the same multisource ID
         /// and pool). This value is for internal use.
         /// Always 0 for non-multisource vertex buffers.
-        uint8 _getSourceIndex(void) const                       { return mSourceIdx; }
+        uint8 _getSourceIndex() const                       { return mSourceIdx; }
 #endif
     };
 

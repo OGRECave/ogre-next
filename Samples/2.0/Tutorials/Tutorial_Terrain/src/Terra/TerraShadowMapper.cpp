@@ -197,7 +197,7 @@ namespace Ogre
             setGaussianFilterParams( 8, 0.5f );
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapper::destroyShadowMap(void)
+    void ShadowMapper::destroyShadowMap()
     {
         m_heightMapTex = 0;
 

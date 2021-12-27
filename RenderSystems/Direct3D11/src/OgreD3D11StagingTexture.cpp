@@ -182,7 +182,7 @@ namespace Ogre
         return thisSize < otherSize;
     }
     //-----------------------------------------------------------------------------------
-    size_t D3D11StagingTexture::_getSizeBytes(void)
+    size_t D3D11StagingTexture::_getSizeBytes()
     {
         return PixelFormatGpuUtils::getSizeBytes( this->mWidth, this->mHeight,
                                                   this->mDepthOrSlices, 1u,
@@ -566,7 +566,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11StagingTexture::startMapRegion(void)
+    void D3D11StagingTexture::startMapRegion()
     {
         StagingTexture::startMapRegion();
 
@@ -597,7 +597,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11StagingTexture::stopMapRegion(void)
+    void D3D11StagingTexture::stopMapRegion()
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         const uint32 numSlices = mIsArray2DTexture ? mDepthOrSlices : 1u;

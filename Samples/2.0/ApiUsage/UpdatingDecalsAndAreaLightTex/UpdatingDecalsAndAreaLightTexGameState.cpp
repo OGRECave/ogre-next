@@ -171,7 +171,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void UpdatingDecalsAndAreaLightTexGameState::createAreaPlaneMesh(void)
+    void UpdatingDecalsAndAreaLightTexGameState::createAreaPlaneMesh()
     {
         Ogre::v1::MeshPtr lightPlaneMeshV1 =
                 Ogre::v1::MeshManager::getSingleton().createPlane( "LightPlane v1",
@@ -361,7 +361,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void UpdatingDecalsAndAreaLightTexGameState::createScene01(void)
+    void UpdatingDecalsAndAreaLightTexGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -430,7 +430,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void UpdatingDecalsAndAreaLightTexGameState::destroyScene(void)
+    void UpdatingDecalsAndAreaLightTexGameState::destroyScene()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();

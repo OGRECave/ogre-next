@@ -42,14 +42,14 @@ namespace Demo
 
         virtual Ogre::CompositorWorkspace* setupCompositor();
 
-        virtual void setupResources(void);
+        virtual void setupResources();
 
         static std::string GetTrackedDeviceString( vr::TrackedDeviceIndex_t unDevice,
                                                    vr::TrackedDeviceProperty prop,
                                                    vr::TrackedPropertyError *peError = NULL );
-        void initOpenVR(void);
-        void initCompositorVR(void);
-        void createHiddenAreaMeshVR(void);
+        void initOpenVR();
+        void initCompositorVR();
+        void createHiddenAreaMeshVR();
 
     public:
         Tutorial_OpenVRGraphicsSystem( GameState *gameState ) :
@@ -63,9 +63,9 @@ namespace Demo
             memset( mTrackedDevicePose, 0, sizeof (mTrackedDevicePose) );
         }
 
-        virtual void deinitialize(void);
+        virtual void deinitialize();
 
-        OpenVRCompositorListener* getOvrCompositorListener(void) { return mOvrCompositorListener; }
+        OpenVRCompositorListener* getOvrCompositorListener() { return mOvrCompositorListener; }
     };
 }
 

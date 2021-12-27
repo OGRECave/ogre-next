@@ -54,7 +54,7 @@ namespace Ogre
         static BOOL CALLBACK createMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
                                                          LPRECT lprcMonitor, LPARAM dwData );
 
-        void updateWindowRect(void);
+        void updateWindowRect();
         void adjustWindow( uint32 clientWidth, uint32 clientHeight,
                            uint32 *outDrawableWidth, uint32 *outDrawableHeight );
 
@@ -73,16 +73,16 @@ namespace Ogre
         virtual ~D3D11WindowHwnd();
 
         virtual void _initialize( TextureGpuManager *textureGpuManager );
-        virtual void destroy(void);
+        virtual void destroy();
 
         virtual void reposition( int32 left, int32 top );
         virtual void requestResolution( uint32 width, uint32 height );
         virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
                                               uint32 width, uint32 height,
                                               uint32 frequencyNumerator, uint32 frequencyDenominator );
-        virtual void windowMovedOrResized(void);
+        virtual void windowMovedOrResized();
 
-        virtual bool isVisible(void) const;
+        virtual bool isVisible() const;
         virtual void setHidden( bool hidden );
 
         virtual void getCustomAttribute( IdString name, void* pData );

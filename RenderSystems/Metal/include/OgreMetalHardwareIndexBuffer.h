@@ -41,7 +41,7 @@ namespace v1 {
 
     protected:
         virtual void* lockImpl( size_t offset, size_t length, LockOptions options );
-        virtual void unlockImpl(void);
+        virtual void unlockImpl();
 
     public:
         MetalHardwareIndexBuffer( MetalHardwareBufferManagerBase *mgr, IndexType idxType,
@@ -49,12 +49,12 @@ namespace v1 {
                                   bool useShadowBuffer );
         virtual ~MetalHardwareIndexBuffer();
 
-        void _notifyDeviceStalled(void);
+        void _notifyDeviceStalled();
 
         /// @copydoc MetalHardwareBufferCommon::getBufferName
         id<MTLBuffer> getBufferName( size_t &outOffset );
         /// @copydoc MetalHardwareBufferCommon::getBufferNameForGpuWrite
-        id<MTLBuffer> getBufferNameForGpuWrite(void);
+        id<MTLBuffer> getBufferNameForGpuWrite();
 
         virtual void readData( size_t offset, size_t length, void* pDest );
         virtual void writeData( size_t offset, size_t length,
@@ -62,9 +62,9 @@ namespace v1 {
         virtual void copyData( HardwareBuffer& srcBuffer, size_t srcOffset,
                                size_t dstOffset, size_t length, bool discardWholeBuffer = false );
 
-        virtual void _updateFromShadow(void);
+        virtual void _updateFromShadow();
 
-        virtual void* getRenderSystemData(void);
+        virtual void* getRenderSystemData();
     };
 }
 }

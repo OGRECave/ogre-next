@@ -98,7 +98,7 @@ namespace Ogre
         ~GpuProgramUsage();
 
         /** Gets the type of program we're trying to link to. */
-        GpuProgramType getType(void) const { return mType; }
+        GpuProgramType getType() const { return mType; }
 
         /** Sets the name of the program to use. 
         @param name The name of the program to use
@@ -121,7 +121,7 @@ namespace Ogre
         /** Gets the program being used. */
         const GpuProgramPtr& getProgram() const { return mProgram; }
         /** Gets the program being used. */
-        const String& getProgramName(void) const { return mProgram->getName(); }
+        const String& getProgramName() const { return mProgram->getName(); }
 
         /** Sets the program parameters that should be used; because parameters can be
             shared between multiple usages for efficiency, this method is here for you
@@ -131,14 +131,14 @@ namespace Ogre
         void setParameters(GpuProgramParametersSharedPtr params);
         /** Gets the parameters being used here. 
         */
-        GpuProgramParametersSharedPtr getParameters(void);
+        GpuProgramParametersSharedPtr getParameters();
 
         /// Load this usage (and ensure program is loaded)
-        void _load(void);
+        void _load();
         /// Unload this usage 
-        void _unload(void);
+        void _unload();
 
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         // Resource Listener
         void unloadingComplete(Resource* prog);

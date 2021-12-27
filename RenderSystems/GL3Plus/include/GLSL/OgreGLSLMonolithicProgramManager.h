@@ -70,13 +70,13 @@ namespace Ogre {
 
         GLSLMonolithicProgramManager(const GL3PlusSupport& support);
 
-        ~GLSLMonolithicProgramManager(void);
+        ~GLSLMonolithicProgramManager();
 
         /** Get the program object that links the two active shader
             objects together if a program object was not already
             created and linked a new one is created and linked
         */
-        GLSLMonolithicProgram* getActiveMonolithicProgram(void);
+        GLSLMonolithicProgram* getActiveMonolithicProgram();
 
         /** Set the active vertex shader for the next rendering state.
             The active program object will be cleared.  Normally
@@ -115,8 +115,8 @@ namespace Ogre {
         */
         void setActiveComputeShader(GLSLShader* computeGpuProgram);
 
-        static GLSLMonolithicProgramManager& getSingleton(void);
-        static GLSLMonolithicProgramManager* getSingletonPtr(void);
+        static GLSLMonolithicProgramManager& getSingleton();
+        static GLSLMonolithicProgramManager* getSingletonPtr();
     };
 
 }

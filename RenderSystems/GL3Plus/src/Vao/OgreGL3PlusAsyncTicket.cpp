@@ -55,7 +55,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const void* GL3PlusAsyncTicket::mapImpl(void)
+    const void* GL3PlusAsyncTicket::mapImpl()
     {
         if( mFenceName )
             mFenceName = GL3PlusVaoManager::waitFor( mFenceName );
@@ -64,7 +64,7 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusAsyncTicket::queryIsTransferDone(void)
+    bool GL3PlusAsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 

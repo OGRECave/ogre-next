@@ -63,7 +63,7 @@ namespace Ogre
         NULLTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
         virtual ~NULLTextureGpuManager();
 
-        TextureGpu* createTextureGpuWindow(void);
+        TextureGpu* createTextureGpuWindow();
     };
 
     /** @} */

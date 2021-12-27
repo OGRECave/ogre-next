@@ -21,7 +21,7 @@ namespace Ogre
     {
         MovableObject const *mTrackedObject;
 
-        void createBuffers(void);
+        void createBuffers();
 
     public:
         WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
@@ -42,20 +42,20 @@ namespace Ogre
         */
         void setToAabb( const Aabb &aabb );
 
-        const MovableObject* getTrackedObject(void) const       { return mTrackedObject; }
+        const MovableObject* getTrackedObject() const       { return mTrackedObject; }
 
         /// Called by the SceneManager every frame to
         /// update our data based on tracked target
-        void _updateTracking(void);
+        void _updateTracking();
 
         //Overrides from MovableObject
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
 
         //Overrides from Renderable
-        virtual const LightList& getLights(void) const;
+        virtual const LightList& getLights() const;
         virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
         virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows(void) const;
+        virtual bool getCastsShadows() const;
     };
 
     /** Factory object for creating WireAabb instances */
@@ -71,7 +71,7 @@ namespace Ogre
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);
     };
 }

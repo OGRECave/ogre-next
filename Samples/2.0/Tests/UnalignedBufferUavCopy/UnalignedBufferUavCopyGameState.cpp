@@ -50,7 +50,7 @@ namespace Demo
 		readTicket->unmap();
 	}
     //-----------------------------------------------------------------------------------
-	void UnalignedBufferUavCopyGameState::createScene01(void)
+	void UnalignedBufferUavCopyGameState::createScene01()
     {
 		Ogre::RenderSystem *renderSystem = mGraphicsSystem->getRoot()->getRenderSystem();
 
@@ -102,7 +102,7 @@ namespace Demo
 		mGraphicsSystem->setQuit();
     }
     //-----------------------------------------------------------------------------------
-	void UnalignedBufferUavCopyGameState::destroyScene(void)
+	void UnalignedBufferUavCopyGameState::destroyScene()
 	{
 	}
 }

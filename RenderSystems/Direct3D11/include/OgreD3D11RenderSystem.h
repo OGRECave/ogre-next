@@ -84,11 +84,11 @@ namespace Ogre
                                        ID3D11Device **outDevice );
 
         D3D11DriverList* getDirect3DDrivers(bool refreshList = false);
-        void refreshD3DSettings(void);
-        void refreshFSAAOptions(void);
+        void refreshD3DSettings();
+        void refreshFSAAOptions();
 
-        void freeDevice(void);
-        void createDevice( void );
+        void freeDevice();
+        void createDevice();
 
         v1::D3D11HardwareBufferManager* mHardwareBufferManager;
         D3D11GpuProgramManager* mGpuProgramManager;
@@ -106,7 +106,7 @@ namespace Ogre
         void convertDomainShaderCaps(RenderSystemCapabilities* rsc) const;
         void convertComputeShaderCaps(RenderSystemCapabilities* rsc) const;
 
-        bool checkVertexTextureFormats(void);
+        bool checkVertexTextureFormats();
 
         ID3D11Buffer    *mBoundIndirectBuffer;
         unsigned char   *mSwIndirectBufferPtr;
@@ -180,11 +180,11 @@ namespace Ogre
 		
         void initRenderSystem();
 
-        void initConfigOptions(void);
+        void initConfigOptions();
 
         // Overridden RenderSystem functions
-        ConfigOptionMap& getConfigOptions(void);
-        String validateConfigOptions(void);
+        ConfigOptionMap& getConfigOptions();
+        String validateConfigOptions();
         Window* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window"  );
         /// @copydoc RenderSystem::_createRenderWindow
         Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
@@ -197,8 +197,8 @@ namespace Ogre
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
 
-        virtual D3D11FrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual D3D11FrameBufferDescMap& _getFrameBufferDescMap()   { return mFrameBufferDescMap; }
+        virtual RenderPassDescriptor* createRenderPassDescriptor();
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
                                                 const Vector4 *viewportSizes,
@@ -206,27 +206,27 @@ namespace Ogre
                                                 uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
-        virtual void endRenderPassDescriptor(void);
+        virtual void endRenderPassDescriptor();
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                           PixelFormatGpu depthBufferFormat, uint16 poolId );
 
-        const String& getName(void) const;
+        const String& getName() const;
 		
-		const String& getFriendlyName(void) const;
+        const String& getFriendlyName() const;
 		
         void getCustomAttribute(const String& name, void* pData);
         // Low-level overridden members
         void setConfigOption( const String &name, const String &value );
         virtual const char* getPriorityConfigOption( size_t idx ) const;
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        virtual size_t getNumPriorityConfigOptions() const;
         void reinitialise();
         void shutdown();
         bool validateDevice(bool forceDeviceElection = false);
         void handleDeviceLost();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
-        VertexElementType getColourVertexElementType(void) const;
+        VertexElementType getColourVertexElementType() const;
         virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
         void setNormaliseNormals(bool normalise);
 
@@ -285,8 +285,8 @@ namespace Ogre
         virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
         virtual void _setComputePso( const HlmsComputePso *pso );
 
-        void _beginFrame(void);
-        void _endFrame(void);
+        void _beginFrame();
+        void _endFrame();
         void _setFog( FogMode mode = FOG_NONE, const ColourValue& colour = ColourValue::White, Real expDensity = 1.0, Real linearStart = 0.0, Real linearEnd = 1.0 );
         void _render(const v1::RenderOperation& op);
 
@@ -314,11 +314,11 @@ namespace Ogre
                                        TextureGpu *anyTarget, uint8 mipLevel );
         void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
         void enableClipPlane (ushort index, bool enable);
-        HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
-        Real getHorizontalTexelOffset(void);
-        Real getVerticalTexelOffset(void);
-        Real getMinimumDepthInputValue(void);
-        Real getMaximumDepthInputValue(void);
+        HardwareOcclusionQuery* createHardwareOcclusionQuery();
+        Real getHorizontalTexelOffset();
+        Real getVerticalTexelOffset();
+        Real getMinimumDepthInputValue();
+        Real getMaximumDepthInputValue();
         void registerThread();
         void unregisterThread();
         void preExtraThreadsStarted();
@@ -348,16 +348,16 @@ namespace Ogre
         virtual void beginProfileEvent( const String &eventName );
 
         /// @copydoc RenderSystem::endProfileEvent
-        virtual void endProfileEvent( void );
+        virtual void endProfileEvent();
 
         /// @copydoc RenderSystem::markProfileEvent
         virtual void markProfileEvent( const String &eventName );
 
         virtual void debugAnnotationPush( const String &event );
-        virtual void debugAnnotationPop( void );
+        virtual void debugAnnotationPop();
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
+        virtual void initGPUProfiling();
+        virtual void deinitGPUProfiling();
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
 		
@@ -365,10 +365,10 @@ namespace Ogre
 		virtual bool setDrawBuffer(ColourBufferType colourBuffer);
 
         /// @copydoc RenderSystem::getPixelFormatToShaderType
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const;
 
-        virtual void _clearStateAndFlushCommandBuffer(void);
-        virtual void flushCommands(void);
+        virtual void _clearStateAndFlushCommandBuffer();
+        virtual void flushCommands();
     };
 }
 #endif

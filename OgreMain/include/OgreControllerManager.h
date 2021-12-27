@@ -87,11 +87,11 @@ namespace Ogre {
 
         /** Destroys all the controllers in existence.
         */
-        void clearControllers(void);
+        void clearControllers();
 
         /** Updates all the registered controllers.
         */
-        void updateAllControllers(void);
+        void updateAllControllers();
 
 
         /** Returns a ControllerValue which provides the time since the last frame as a control value source.
@@ -103,10 +103,10 @@ namespace Ogre {
         @see
             RenderSystem::beginFrame
         */
-        const ControllerValueRealPtr& getFrameTimeSource(void) const;
+        const ControllerValueRealPtr& getFrameTimeSource() const;
 
         /** Retrieve a simple passthrough controller function. */
-        const ControllerFunctionRealPtr& getPassthroughControllerFunction(void) const;
+        const ControllerFunctionRealPtr& getPassthroughControllerFunction() const;
 
         /** Creates a texture layer animator controller.
         @remarks
@@ -212,7 +212,7 @@ namespace Ogre {
         @remarks
             See setTimeFactor for full information on the meaning of this value.
         */
-        Real getTimeFactor(void) const;
+        Real getTimeFactor() const;
 
         /** Set the relative speed to update frame time based controllers.
         @remarks
@@ -229,7 +229,7 @@ namespace Ogre {
         @remarks
             See setFrameDelay for full information on the meaning of this value.
         */
-        Real getFrameDelay(void) const;
+        Real getFrameDelay() const;
 
         /** Sets a constant frame rate.
         @remarks
@@ -249,7 +249,7 @@ namespace Ogre {
         @remarks
             See setElapsedTime for full information on the meaning of this value.
         */
-        Real getElapsedTime(void) const;
+        Real getElapsedTime() const;
 
         /** Set the elapsed time.
         @remarks
@@ -276,7 +276,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ControllerManager& getSingleton(void);
+        static ControllerManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -292,7 +292,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ControllerManager* getSingletonPtr(void);
+        static ControllerManager* getSingletonPtr();
     };
 
     /** @} */

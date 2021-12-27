@@ -35,12 +35,12 @@ namespace Ogre
 {
     //-----------------------------------------------------------------------
     template<> DynLibManager* Singleton<DynLibManager>::msSingleton = 0;
-    DynLibManager* DynLibManager::getSingletonPtr(void)
+    DynLibManager* DynLibManager::getSingletonPtr()
     {
         return msSingleton;
     }
     //-----------------------------------------------------------------------
-    DynLibManager& DynLibManager::getSingleton(void)
+    DynLibManager& DynLibManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }

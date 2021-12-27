@@ -13,7 +13,7 @@ namespace Demo
     public:
         Tutorial_ReconstructPosFromDepthGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
     };
 }
 

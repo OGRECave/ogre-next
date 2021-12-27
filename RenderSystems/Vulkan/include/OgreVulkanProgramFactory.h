@@ -46,9 +46,9 @@ namespace Ogre
 
     public:
         VulkanProgramFactory( VulkanDevice *device, const char *languageName, bool glslLangInitializer );
-        virtual ~VulkanProgramFactory( void );
+        virtual ~VulkanProgramFactory();
         /// Get the name of the language this factory creates programs for
-        const String &getLanguage( void ) const;
+        const String &getLanguage() const;
         /// Create an instance of VulkanProgram
         HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
                                      const String &group, bool isManual, ManualResourceLoader *loader );

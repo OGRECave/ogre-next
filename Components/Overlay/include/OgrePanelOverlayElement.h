@@ -64,7 +64,7 @@ namespace v1 {
         virtual ~PanelOverlayElement();
 
         /** Initialise */
-        virtual void initialise(void);
+        virtual void initialise();
 
         /** @copydoc OverlayElement::_releaseManualHardwareResources. */
         virtual void _releaseManualHardwareResources();
@@ -98,10 +98,10 @@ namespace v1 {
         void setTransparent(bool isTransparent);
 
         /** Returns whether this panel is transparent. */
-        bool isTransparent(void) const;
+        bool isTransparent() const;
 
         /** See OverlayElement. */
-        virtual const String& getTypeName(void) const;
+        virtual const String& getTypeName() const;
         /** See Renderable. */
         void getRenderOperation(v1::RenderOperation& op, bool casterPass);
         /** Overridden from OverlayElement */
@@ -143,13 +143,13 @@ namespace v1 {
         v1::RenderOperation mRenderOp;
 
         /// Internal method for setting up geometry, called by OverlayElement::update
-        virtual void updatePositionGeometry(void);
+        virtual void updatePositionGeometry();
 
         /// Called to update the texture coords when layers change
-        virtual void updateTextureGeometry(void);
+        virtual void updateTextureGeometry();
 
         /// Method for setting up base parameters for this class
-        void addBaseParameters(void);
+        void addBaseParameters();
 
         static String msTypeName;
 

@@ -201,7 +201,7 @@ namespace Ogre {
         ~RenderQueue();
 
         /// Empty the queue - should only be called by SceneManagers.
-        void clear(void);
+        void clear();
 
         /** The RenderQueue keeps track of API state to avoid redundant state change passes
             Calling this function forces the RenderQueue to re-set the Macro- & Blendblocks,
@@ -209,7 +209,7 @@ namespace Ogre {
         @remarks
             Calling this function inside render or renderES2 won't have any effect.
         */
-        void clearState(void);
+        void clearState();
 
         /// Add a renderable (Ogre v1.x) object to the queue. @see addRenderable
         void addRenderableV1( uint8 renderQueueId, bool casterPass, Renderable* pRend,
@@ -270,7 +270,7 @@ namespace Ogre {
                                  RenderSystem *rs, bool casterPass, bool dualParaboloid );
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
-        void frameEnded(void);
+        void frameEnded();
 		
         /** Sets the mode for the RenderQueue ID. @see RenderQueue::Modes
         @param rqId

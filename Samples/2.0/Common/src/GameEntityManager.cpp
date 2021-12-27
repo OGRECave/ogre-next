@@ -165,7 +165,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    Ogre::uint32 GameEntityManager::getScheduledForRemovalAvailableSlot(void)
+    Ogre::uint32 GameEntityManager::getScheduledForRemovalAvailableSlot()
     {
         if( mScheduledForRemovalCurrentSlot >= mScheduledForRemoval.size() )
         {
@@ -182,7 +182,7 @@ namespace Demo
         return mScheduledForRemovalCurrentSlot;
     }
     //-----------------------------------------------------------------------------------
-    void GameEntityManager::finishFrameParallel(void)
+    void GameEntityManager::finishFrameParallel()
     {
         if( mScheduledForRemovalCurrentSlot < mScheduledForRemoval.size() )
         {

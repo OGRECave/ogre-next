@@ -35,14 +35,14 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void createLight(void);
-        void updateIrradianceVolume(void);
+        void createLight();
+        void updateIrradianceVolume();
 
     public:
         InstantRadiosityGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

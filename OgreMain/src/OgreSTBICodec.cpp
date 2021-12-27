@@ -50,7 +50,7 @@ namespace Ogre {
 
     STBIImageCodec::RegisteredCodecList STBIImageCodec::msCodecList;
     //---------------------------------------------------------------------
-    void STBIImageCodec::startup(void)
+    void STBIImageCodec::startup()
     {
         stbi_convert_iphone_png_to_rgb(1);
         stbi_set_unpremultiply_on_load(1);
@@ -75,7 +75,7 @@ namespace Ogre {
             strExt.str());
     }
     //---------------------------------------------------------------------
-    void STBIImageCodec::shutdown(void)
+    void STBIImageCodec::shutdown()
     {
         for (RegisteredCodecList::iterator i = msCodecList.begin();
             i != msCodecList.end(); ++i)

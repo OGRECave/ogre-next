@@ -162,7 +162,7 @@ namespace Ogre
         inOutLastKnownKeyFrameRig = prevFrame;
     }
     //-----------------------------------------------------------------------------------
-    void SkeletonTrack::_bakeUnusedSlots(void)
+    void SkeletonTrack::_bakeUnusedSlots()
     {
         assert( mUsedSlots <= ARRAY_PACKED_REALS );
 

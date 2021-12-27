@@ -186,11 +186,11 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void MetalAsyncTextureTicket::unmapImpl(void)
+    void MetalAsyncTextureTicket::unmapImpl()
     {
     }
     //-----------------------------------------------------------------------------------
-    void MetalAsyncTextureTicket::waitForDownloadToFinish(void)
+    void MetalAsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
             return; //We're done.
@@ -208,7 +208,7 @@ namespace Ogre
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    bool MetalAsyncTextureTicket::queryIsTransferDone(void)
+    bool MetalAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {

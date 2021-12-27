@@ -89,8 +89,8 @@ namespace Ogre
         IrradianceFieldRaster( IrradianceField *creator );
         virtual ~IrradianceFieldRaster();
 
-        void createWorkspace( void );
-        void destroyWorkspace( void );
+        void createWorkspace();
+        void destroyWorkspace();
 
         void renderProbes( uint32 probesPerFrame );
     };

@@ -18,11 +18,11 @@ public:
     * Must have a "Full Screen" value that is a bool and a "Video Mode" value
     * that is a string in the form of wxh
     */
-    void addConfig(void);
+    void addConfig();
     /**
     * Make sure all the extra options are valid
     */
-    String validateConfig(void);
+    String validateConfig();
 
     virtual RenderWindow* createWindow(bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle);
 

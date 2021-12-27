@@ -38,7 +38,7 @@ namespace Ogre
         return b[0];
     }
     //--------------------------------------------------------------------------------------
-    inline ArrayMaskR BooleanMask4::getAllSetMask(void)
+    inline ArrayMaskR BooleanMask4::getAllSetMask()
     {
         return true;
     }

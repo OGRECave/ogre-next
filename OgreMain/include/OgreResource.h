@@ -192,41 +192,41 @@ namespace Ogre {
             Also, this call will occur even when using a ManualResourceLoader 
             (when loadImpl is not actually called)
         */
-        virtual void preLoadImpl(void) {}
+        virtual void preLoadImpl() {}
         /** Internal hook to perform actions after the load process, but
             before the resource has been marked as fully loaded.
         @note Mutex will have already been acquired by the loading thread.
             Also, this call will occur even when using a ManualResourceLoader 
             (when loadImpl is not actually called)
         */
-        virtual void postLoadImpl(void) {}
+        virtual void postLoadImpl() {}
 
         /** Internal hook to perform actions before the unload process.
         @note Mutex will have already been acquired by the unloading thread.
         */
-        virtual void preUnloadImpl(void) {}
+        virtual void preUnloadImpl() {}
         /** Internal hook to perform actions after the unload process, but
         before the resource has been marked as fully unloaded.
         @note Mutex will have already been acquired by the unloading thread.
         */
-        virtual void postUnloadImpl(void) {}
+        virtual void postUnloadImpl() {}
 
         /** Internal implementation of the meat of the 'prepare' action. 
         */
-        virtual void prepareImpl(void) {}
+        virtual void prepareImpl() {}
         /** Internal function for undoing the 'prepare' action.  Called when
             the load is completed, and when resources are unloaded when they
             are prepared but not yet loaded.
         */
-        virtual void unprepareImpl(void) {}
+        virtual void unprepareImpl() {}
         /** Internal implementation of the meat of the 'load' action, only called if this 
             resource is not being loaded from a ManualResourceLoader. 
         */
-        virtual void loadImpl(void) = 0;
+        virtual void loadImpl() = 0;
         /** Internal implementation of the 'unload' action; called regardless of
             whether this resource is being loaded from a ManualResourceLoader. 
         */
-        virtual void unloadImpl(void) = 0;
+        virtual void unloadImpl() = 0;
 
     public:
         /** Standard constructor.
@@ -290,14 +290,14 @@ namespace Ogre {
 
         /** Returns true if the Resource is reloadable, false otherwise.
         */
-        virtual bool isReloadable(void) const
+        virtual bool isReloadable() const
         {
             return !mIsManual || mLoader;
         }
 
         /** Is this resource manually loaded?
         */
-        virtual bool isManuallyLoaded(void) const
+        virtual bool isManuallyLoaded() const
         {
             return mIsManual;
         }
@@ -313,39 +313,39 @@ namespace Ogre {
         /** Unloads the resource; this is not permanent, the resource can be
             reloaded later if required.
         */
-        virtual void unload(void);
+        virtual void unload();
 
-        bool markForReload(void)
+        bool markForReload()
         {
             return mLoadingState.cas(LOADSTATE_UNLOADED, LOADSTATE_UNLOADED_MARKED_FOR_RELOAD);
         }
 
         /** Retrieves info about the size of the resource.
         */
-        virtual size_t getSize(void) const
+        virtual size_t getSize() const
         { 
             return mSize; 
         }
 
         /** 'Touches' the resource to indicate it has been used.
         */
-        virtual void touch(void);
+        virtual void touch();
 
         /** Gets resource name.
         */
-        virtual const String& getName(void) const 
+        virtual const String& getName() const 
         { 
             return mName; 
         }
 
-        virtual ResourceHandle getHandle(void) const
+        virtual ResourceHandle getHandle() const
         {
             return mHandle;
         }
 
         /** Returns true if the Resource has been prepared, false otherwise.
         */
-        virtual bool isPrepared(void) const 
+        virtual bool isPrepared() const 
         { 
             // No lock required to read this state since no modify
             return (mLoadingState.get() == LOADSTATE_PREPARED); 
@@ -353,7 +353,7 @@ namespace Ogre {
 
         /** Returns true if the Resource has been loaded, false otherwise.
         */
-        virtual bool isLoaded(void) const 
+        virtual bool isLoaded() const 
         { 
             // No lock required to read this state since no modify
             return (mLoadingState.get() == LOADSTATE_LOADED); 
@@ -361,7 +361,7 @@ namespace Ogre {
 
         /** Change the Resource loading state to loaded.
         */
-        virtual void setToLoaded(void) 
+        virtual void setToLoaded()
         { 
             // No lock required to read this state since no modify
             mLoadingState.set(LOADSTATE_LOADED); 
@@ -394,7 +394,7 @@ namespace Ogre {
             other users of this resource should check isLoaded(), and if that
             returns false, don't use the resource and come back later.
         */
-        virtual bool isBackgroundLoaded(void) const { return mIsBackgroundLoaded; }
+        virtual bool isBackgroundLoaded() const { return mIsBackgroundLoaded; }
 
         /** Tells the resource whether it is background loaded or not.
         @remarks
@@ -428,7 +428,7 @@ namespace Ogre {
         virtual void removeListener(Listener* lis);
 
         /// Gets the group which this resource is a member of
-        virtual const String& getGroup(void) const { return mGroup; }
+        virtual const String& getGroup() const { return mGroup; }
 
         /** Change the resource group ownership of a Resource.
         @remarks
@@ -440,14 +440,14 @@ namespace Ogre {
         virtual void changeGroupOwnership(const String& newGroup);
 
         /// Gets the manager which created this resource
-        virtual ResourceManager* getCreator(void) { return mCreator; }
+        virtual ResourceManager* getCreator() { return mCreator; }
         /** Get the origin of this resource, e.g. a script file name.
         @remarks
             This property will only contain something if the creator of
             this resource chose to populate it. Script loaders are advised
             to populate it.
         */
-        virtual const String& getOrigin(void) const { return mOrigin; }
+        virtual const String& getOrigin() const { return mOrigin; }
         /// Notify this resource of it's origin
         virtual void _notifyOrigin(const String& origin) { mOrigin = origin; }
 
@@ -495,10 +495,10 @@ namespace Ogre {
         If you use Ogre's built in frame loop you don't need to call this
         yourself.
         */
-        virtual void _fireUnloadingComplete(void);
+        virtual void _fireUnloadingComplete();
 
         /** Calculate the size of a resource; this will only be called after 'load' */
-        virtual size_t calculateSize(void) const;
+        virtual size_t calculateSize() const;
 
     };
 

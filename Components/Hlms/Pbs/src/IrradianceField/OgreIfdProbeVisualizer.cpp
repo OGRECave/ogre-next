@@ -73,7 +73,7 @@ namespace Ogre
         MaterialManager::getSingleton().remove( matName );
     }
     //-----------------------------------------------------------------------------------
-    void IfdProbeVisualizer::createBuffers( void )
+    void IfdProbeVisualizer::createBuffers()
     {
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -155,9 +155,9 @@ namespace Ogre
         mObjectData.mWorldRadius[mObjectData.mIndex] = aabb.getRadius();
     }
     //-----------------------------------------------------------------------------------
-    const String &IfdProbeVisualizer::getMovableType( void ) const { return BLANKSTRING; }
+    const String &IfdProbeVisualizer::getMovableType() const { return BLANKSTRING; }
     //-----------------------------------------------------------------------------------
-    const LightList &IfdProbeVisualizer::getLights( void ) const
+    const LightList &IfdProbeVisualizer::getLights() const
     {
         return this->queryLights();  // Return the data from our MovableObject base class.
     }
@@ -182,7 +182,7 @@ namespace Ogre
                      "IfdProbeVisualizer::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool IfdProbeVisualizer::getCastsShadows( void ) const
+    bool IfdProbeVisualizer::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "IfdProbeVisualizer do not implement getCastsShadows."

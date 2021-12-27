@@ -127,7 +127,7 @@ namespace Ogre {
         return true;
     }
     //------------------------------------------------------------------
-    bool D3D11HardwareOcclusionQuery::isStillOutstanding(void)
+    bool D3D11HardwareOcclusionQuery::isStillOutstanding()
     {       
         // in case you already asked for this query
         if (!mIsQueryResultStillOutstanding)

@@ -96,14 +96,14 @@ namespace Ogre {
     }
 
 
-    GLSLMonolithicProgram::~GLSLMonolithicProgram(void)
+    GLSLMonolithicProgram::~GLSLMonolithicProgram()
     {
         OGRE_CHECK_GL_ERROR(glDeleteProgram(mGLProgramHandle));
         mGLProgramHandle = 0;
     }
 
 
-    void GLSLMonolithicProgram::_useProgram(void)
+    void GLSLMonolithicProgram::_useProgram()
     {
         if (mLinked)
         {
@@ -112,7 +112,7 @@ namespace Ogre {
     }
 
 
-    void GLSLMonolithicProgram::activate(void)
+    void GLSLMonolithicProgram::activate()
     {
         OgreProfileExhaustiveAggr( "GLSLMonolithicProgram::activate" );
 
@@ -255,7 +255,7 @@ namespace Ogre {
     }
 
 
-    void GLSLMonolithicProgram::buildGLUniformReferences(void)
+    void GLSLMonolithicProgram::buildGLUniformReferences()
     {
         OgreProfileExhaustive( "GLSLMonolithicProgram::buildGLUniformReferences" );
 

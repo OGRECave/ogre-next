@@ -53,7 +53,7 @@ namespace Demo
         mFullpathToFile = filesystemLayer.getWritablePath( "scene_format_test_scene" );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::destroyInstantRadiosity(void)
+    void SceneFormatGameState::destroyInstantRadiosity()
     {
         if( mIrradianceVolume )
         {
@@ -77,7 +77,7 @@ namespace Demo
         mInstantRadiosity = 0;
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::destroyParallaxCorrectCubemaps(void)
+    void SceneFormatGameState::destroyParallaxCorrectCubemaps()
     {
         if( mParallaxCorrectedCubemap )
         {
@@ -95,7 +95,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::resetScene(void)
+    void SceneFormatGameState::resetScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         destroyInstantRadiosity();
@@ -113,7 +113,7 @@ namespace Demo
             texture->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::setupParallaxCorrectCubemaps(void)
+    void SceneFormatGameState::setupParallaxCorrectCubemaps()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -227,7 +227,7 @@ namespace Demo
         return rawTex;
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::generateScene(void)
+    void SceneFormatGameState::generateScene()
     {
         destroyInstantRadiosity();
         destroyParallaxCorrectCubemaps();
@@ -564,7 +564,7 @@ namespace Demo
         setupParallaxCorrectCubemaps();
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::exportScene(void)
+    void SceneFormatGameState::exportScene()
     {
         Ogre::SceneFormatExporter exporter( mGraphicsSystem->getRoot(),
                                             mGraphicsSystem->getSceneManager(),
@@ -573,7 +573,7 @@ namespace Demo
         exporter.exportSceneToFile( mFullpathToFile );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::importScene(void)
+    void SceneFormatGameState::importScene()
     {
         destroyInstantRadiosity();
         destroyParallaxCorrectCubemaps();
@@ -590,7 +590,7 @@ namespace Demo
 //        sceneManager->getForwardPlus()->setEnableVpls( true );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatGameState::createScene01(void)
+    void SceneFormatGameState::createScene01()
     {
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,

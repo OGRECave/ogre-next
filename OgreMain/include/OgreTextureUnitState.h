@@ -180,7 +180,7 @@ namespace Ogre {
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        const String& getTextureName(void) const;
+        const String& getTextureName() const;
 
         /** Sets this texture layer to use a single texture, given the
             name of the texture to use on this layer.
@@ -400,7 +400,7 @@ namespace Ogre {
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        unsigned int getCurrentFrame(void) const;
+        unsigned int getCurrentFrame() const;
 
         /** Gets the name of the texture associated with a frame number.
             Throws an exception if frameNumber exceeds the number of stored frames.
@@ -440,7 +440,7 @@ namespace Ogre {
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        unsigned int getNumFrames(void) const;
+        unsigned int getNumFrames() const;
 
 
         /** The type of unit to bind the texture settings to. */
@@ -484,7 +484,7 @@ namespace Ogre {
 
         /** Gets the type of unit these texture settings should be bound to.  
         */
-        BindingType getBindingType(void) const;
+        BindingType getBindingType() const;
 
         /** When a texture is used by both PBS datablocks and V1 materials it can lead to a few issues:
             1. V1 materials will often expect a Type2D texture to actually be Type2D.
@@ -501,7 +501,7 @@ namespace Ogre {
         @param automaticBatching
         */
         void setAutomaticBatching( bool automaticBatching );
-        bool getAutomaticBatching(void) const;
+        bool getAutomaticBatching() const;
 
         /** Set the type of content this TextureUnitState references.
         @remarks
@@ -510,7 +510,7 @@ namespace Ogre {
         */
         void setContentType(ContentType ct);
         /** Get the type of content this TextureUnitState references. */
-        ContentType getContentType(void) const;
+        ContentType getContentType() const;
 
         /** Returns true if this texture unit is either a series of 6 2D textures, each
             in it's own frame, or is a full 3D cube map. You can tell which by checking
@@ -518,19 +518,19 @@ namespace Ogre {
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        bool isCubic(void) const;
+        bool isCubic() const;
 
         /** Returns true if this texture layer uses a composite 3D cubic texture.
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        bool is3D(void) const;
+        bool is3D() const;
 
         /** Returns the type of this texture.
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        TextureTypes::TextureTypes getTextureType(void) const;
+        TextureTypes::TextureTypes getTextureType() const;
 
         /** Sets how many mipmaps have been requested for the texture.
         */
@@ -538,7 +538,7 @@ namespace Ogre {
 
         /** Gets how many mipmaps have been requested for the texture.
         */
-        int getNumMipmaps(void) const;
+        int getNumMipmaps() const;
 
         /** Sets whether this texture is requested to be loaded as alpha if single channel
         */
@@ -546,7 +546,7 @@ namespace Ogre {
 
         /** Gets whether this texture is requested to be loaded as alpha if single channel
         */
-        bool getIsAlpha(void) const;
+        bool getIsAlpha() const;
 
         /// @copydoc Texture::getGamma
         Real getGamma() const { return mGamma; }
@@ -562,7 +562,7 @@ namespace Ogre {
         @note
         Only applies to the fixed function pipeline and has no effect if a fragment program is used.
         */
-        unsigned int getTextureCoordSet(void) const;
+        unsigned int getTextureCoordSet() const;
 
         /** Sets the index of the set of texture co-ords this layer uses.
         @note
@@ -597,7 +597,7 @@ namespace Ogre {
         @note
             Has no effect in the programmable pipeline.
         */
-        const Matrix4& getTextureTransform(void) const;
+        const Matrix4& getTextureTransform() const;
 
         /** Sets the translation offset of the texture, ie scrolls the texture.
         @remarks
@@ -621,7 +621,7 @@ namespace Ogre {
         */
         void setTextureUScroll(Real value);
         /// Get texture uscroll value.
-        Real getTextureUScroll(void) const;
+        Real getTextureUScroll() const;
 
         /** As setTextureScroll, but sets only V value.
         @note
@@ -629,7 +629,7 @@ namespace Ogre {
         */
         void setTextureVScroll(Real value);
         /// Get texture vscroll value.
-        Real getTextureVScroll(void) const;
+        Real getTextureVScroll() const;
 
         /** As setTextureScale, but sets only U value.
         @note
@@ -637,7 +637,7 @@ namespace Ogre {
         */
         void setTextureUScale(Real value);
         /// Get texture uscale value.
-        Real getTextureUScale(void) const;
+        Real getTextureUScale() const;
 
         /** As setTextureScale, but sets only V value.
         @note
@@ -645,7 +645,7 @@ namespace Ogre {
         */
         void setTextureVScale(Real value);
         /// Get texture vscale value.
-        Real getTextureVScale(void) const;
+        Real getTextureVScale() const;
 
         /** Sets the scaling factor applied to texture coordinates.
         @remarks
@@ -673,7 +673,7 @@ namespace Ogre {
         */
         void setTextureRotate(const Radian& angle);
         /// Get texture rotation effects angle value.
-        const Radian& getTextureRotate(void) const;
+        const Radian& getTextureRotate() const;
 
         /** Setting advanced blending options.
         @remarks
@@ -792,19 +792,19 @@ namespace Ogre {
 
         /** Get multitexturing colour blending mode.
         */
-        const LayerBlendModeEx& getColourBlendMode(void) const;
+        const LayerBlendModeEx& getColourBlendMode() const;
 
         /** Get multitexturing alpha blending mode.
         */
-        const LayerBlendModeEx& getAlphaBlendMode(void) const;
+        const LayerBlendModeEx& getAlphaBlendMode() const;
 
         /** Get the multipass fallback for colour blending operation source factor.
         */
-        SceneBlendFactor getColourBlendFallbackSrc(void) const;
+        SceneBlendFactor getColourBlendFallbackSrc() const;
 
         /** Get the multipass fallback for colour blending operation destination factor.
         */
-        SceneBlendFactor getColourBlendFallbackDest(void) const;
+        SceneBlendFactor getColourBlendFallbackDest() const;
 
         /** Sets the alpha operation to be applied to this texture.
         @remarks
@@ -948,7 +948,7 @@ namespace Ogre {
 
         /** Removes all effects applied to this texture layer.
         */
-        void removeAllEffects(void);
+        void removeAllEffects();
 
         /** Removes a single effect applied to this texture layer.
         @note
@@ -962,11 +962,11 @@ namespace Ogre {
             This can happen if a texture fails to load or some other non-fatal error. Worth checking after
             setting texture name.
         */
-        bool isBlank(void) const;
+        bool isBlank() const;
 
         /** Sets this texture layer to be blank.
         */
-        void setBlank(void);
+        void setBlank();
 
         /** Tests if the texture associated with this unit has failed to load.
         */
@@ -987,12 +987,12 @@ namespace Ogre {
         /** Retrieves current samplerblock. Don't const_cast the return value to modify it.
             @See HlmsDatablock remarks.
         */
-        const HlmsSamplerblock* getSamplerblock(void) const;
+        const HlmsSamplerblock* getSamplerblock() const;
 
         /// Get texture effects in a multimap paired array.
-        const EffectMap& getEffects(void) const;
+        const EffectMap& getEffects() const;
         /// Get the animated-texture animation duration.
-        Real getAnimationDuration(void) const;
+        Real getAnimationDuration() const;
 
         /** Set the compositor reference for this texture unit state.
         @remarks 
@@ -1006,21 +1006,21 @@ namespace Ogre {
         IdString getReferencedTextureName() const { return mCompositorRefTexName; }
     
         /// Gets the parent Pass object.
-        Pass* getParent(void) const { return mParent; }
+        Pass* getParent() const { return mParent; }
 
         /** Internal method for preparing this object for load, as part of Material::prepare. */
-        void _prepare(void);
+        void _prepare();
         /** Internal method for undoing the preparation this object as part of Material::unprepare. */
-        void _unprepare(void);
+        void _unprepare();
         /** Internal method for loading this object as part of Material::load. */
-        void _load(void);
+        void _load();
         /** Internal method for unloading this object as part of Material::unload. */
-        void _unload(void);
+        void _unload();
         /// Returns whether this unit has texture coordinate generation that depends on the camera.
-        bool hasViewRelativeTextureCoordinateGeneration(void) const;
+        bool hasViewRelativeTextureCoordinateGeneration() const;
 
         /// Is this loaded?
-        bool isLoaded(void) const;
+        bool isLoaded() const;
 
         /** Set the name of the Texture Unit State.
         @remarks
@@ -1029,7 +1029,7 @@ namespace Ogre {
         */
         void setName(const String& name);
         /// Get the name of the Texture Unit State.
-        const String& getName(void) const { return mName; }
+        const String& getName() const { return mName; }
 
         /** Set the alias name used for texture frame names.
         @param name
@@ -1038,7 +1038,7 @@ namespace Ogre {
         void setTextureNameAlias(const String& name);
         /** Gets the Texture Name Alias of the Texture Unit.
         */
-        const String& getTextureNameAlias(void) const { return mTextureNameAlias;}
+        const String& getTextureNameAlias() const { return mTextureNameAlias;}
 
         /** Applies texture names to Texture Unit State with matching texture name aliases.
             If no matching aliases are found then the TUS state does not change.
@@ -1060,7 +1060,7 @@ namespace Ogre {
         void _notifyParent(Pass* parent);
 
         /** Get the texture pointer for the current frame. */
-        TextureGpu* _getTexturePtr(void) const;
+        TextureGpu* _getTexturePtr() const;
         /** Get the texture pointer for a given frame. */
         TextureGpu* _getTexturePtr(size_t frame) const;
     
@@ -1069,7 +1069,7 @@ namespace Ogre {
         /** Set the texture pointer for a given frame (internal use only!). */
         void _setTexturePtr(TextureGpu *texptr, size_t frame);
 
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         /** Gets the animation controller (as created because of setAnimatedTexture)
             if it exists.
@@ -1136,11 +1136,11 @@ protected:
 
         /** Internal method for calculating texture matrix.
         */
-        void recalcTextureMatrix(void) const;
+        void recalcTextureMatrix() const;
 
         /** Internal method for creating animation controller.
         */
-        void createAnimController(void);
+        void createAnimController();
 
         /** Internal method for creating texture effect controller.
         */
@@ -1151,7 +1151,7 @@ protected:
         /** Internal method for ensuring the texture for a given frame is loaded. */
         void ensureLoaded(size_t frame) const;
 
-        void cleanFramePtrs(void);
+        void cleanFramePtrs();
 
         /// TextureGpuListener overload
         virtual void notifyTextureChanged( TextureGpu *texture,

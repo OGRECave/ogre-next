@@ -78,7 +78,7 @@ bool GL3PlusHardwareOcclusionQuery::pullOcclusionQuery( unsigned int* NumOfFragm
     return true;
 }
 //------------------------------------------------------------------
-bool GL3PlusHardwareOcclusionQuery::isStillOutstanding(void)
+bool GL3PlusHardwareOcclusionQuery::isStillOutstanding()
 {    
     GLuint available = GL_FALSE;
 

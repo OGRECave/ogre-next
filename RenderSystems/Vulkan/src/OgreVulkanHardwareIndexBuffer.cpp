@@ -51,12 +51,12 @@ namespace v1
         return mVulkanHardwareBufferCommon.lockImpl( offset, length, options, mIsLocked );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanHardwareIndexBuffer::unlockImpl( void )
+    void VulkanHardwareIndexBuffer::unlockImpl()
     {
         mVulkanHardwareBufferCommon.unlockImpl( mLockStart, mLockSize );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanHardwareIndexBuffer::_notifyDeviceStalled( void )
+    void VulkanHardwareIndexBuffer::_notifyDeviceStalled()
     {
         mVulkanHardwareBufferCommon._notifyDeviceStalled();
     }
@@ -120,7 +120,7 @@ namespace v1
         }
     }
     //-----------------------------------------------------------------------------------
-    void VulkanHardwareIndexBuffer::_updateFromShadow( void )
+    void VulkanHardwareIndexBuffer::_updateFromShadow()
     {
         if( mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate )
         {
@@ -134,7 +134,7 @@ namespace v1
         }
     }
     //-----------------------------------------------------------------------------------
-    void *VulkanHardwareIndexBuffer::getRenderSystemData( void )
+    void *VulkanHardwareIndexBuffer::getRenderSystemData()
     {
         return &mVulkanHardwareBufferCommon;
     }

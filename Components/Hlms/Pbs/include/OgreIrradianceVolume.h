@@ -100,29 +100,29 @@ namespace Ogre
         IrradianceVolume( HlmsManager *hlmsManager );
         ~IrradianceVolume();
 
-        float getIrradianceMaxPower(void) const             { return mIrradianceMaxPower; }
+        float getIrradianceMaxPower() const             { return mIrradianceMaxPower; }
         /// Not really used. It's only use is keeping track of creation parameters.
         void setIrradianceMaxPower(float power)             { mIrradianceMaxPower = power; }
 
-        const Vector3& getIrradianceOrigin(void) const      { return mIrradianceOrigin; }
+        const Vector3& getIrradianceOrigin() const      { return mIrradianceOrigin; }
         void setIrradianceOrigin(const Vector3& origin)     { mIrradianceOrigin = origin; }
 
-        const Vector3& getIrradianceCellSize(void) const    { return mIrradianceCellSize; }
+        const Vector3& getIrradianceCellSize() const    { return mIrradianceCellSize; }
         void setIrradianceCellSize(const Vector3& cellSize) { mIrradianceCellSize = cellSize; }
 
         /// Not really used. It's only use is keeping track of creation parameters.
         void setFadeAttenuationOverDistace( bool fade )     { mFadeAttenuationOverDistace = fade; }
-        bool getFadeAttenuationOverDistace(void) const      { return mFadeAttenuationOverDistace; }
+        bool getFadeAttenuationOverDistace() const      { return mFadeAttenuationOverDistace; }
 
-        float getPowerScale(void) const  { return mPowerScale; }
+        float getPowerScale() const  { return mPowerScale; }
         void setPowerScale(float power)  { mPowerScale = power; }
 
-        uint32 getNumBlocksX(void) const { return mNumBlocksX; }
-        uint32 getNumBlocksY(void) const { return mNumBlocksY; }
-        uint32 getNumBlocksZ(void) const { return mNumBlocksZ; }
+        uint32 getNumBlocksX() const { return mNumBlocksX; }
+        uint32 getNumBlocksY() const { return mNumBlocksY; }
+        uint32 getNumBlocksZ() const { return mNumBlocksZ; }
 
-        TextureGpu* getIrradianceVolumeTexture(void) const          { return mIrradianceVolume; }
-        const HlmsSamplerblock* getIrradSamplerblock(void) const    { return mIrradianceSamplerblock; }
+        TextureGpu* getIrradianceVolumeTexture() const          { return mIrradianceVolume; }
+        const HlmsSamplerblock* getIrradSamplerblock() const    { return mIrradianceSamplerblock; }
 
 
     };

@@ -37,7 +37,7 @@ namespace Ogre {
 
     ParamCommand::~ParamCommand() {}
 
-    const ParameterList& StringInterface::getParameters(void) const
+    const ParameterList& StringInterface::getParameters() const
     {
         static ParameterList emptyList;
 

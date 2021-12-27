@@ -87,7 +87,7 @@ namespace v1 {
         bool bindNormals;
 
     public:
-        ~TempBlendedBufferInfo(void);
+        ~TempBlendedBufferInfo();
         /// Utility method, extract info from the given VertexData.
         void extractFrom(const VertexData* sourceData);
         /// Utility method, checks out temporary copies of src into dest.
@@ -145,17 +145,17 @@ namespace v1 {
         OGRE_MUTEX(mVertexBufferBindingsMutex);
 
         /// Internal method for destroys all vertex declarations.
-        virtual void destroyAllDeclarations(void);
+        virtual void destroyAllDeclarations();
         /// Internal method for destroys all vertex buffer bindings.
-        virtual void destroyAllBindings(void);
+        virtual void destroyAllBindings();
 
         /// Internal method for creates a new vertex declaration, may be overridden by certain rendering APIs.
-        virtual VertexDeclaration* createVertexDeclarationImpl(void);
+        virtual VertexDeclaration* createVertexDeclarationImpl();
         /// Internal method for destroys a vertex declaration, may be overridden by certain rendering APIs.
         virtual void destroyVertexDeclarationImpl(VertexDeclaration* decl);
 
         /// Internal method for creates a new VertexBufferBinding, may be overridden by certain rendering APIs.
-        virtual VertexBufferBinding* createVertexBufferBindingImpl(void);
+        virtual VertexBufferBinding* createVertexBufferBindingImpl();
         /// Internal method for destroys a VertexBufferBinding, may be overridden by certain rendering APIs.
         virtual void destroyVertexBufferBindingImpl(VertexBufferBinding* binding);
 
@@ -297,12 +297,12 @@ namespace v1 {
                                                                    bool useShadowBuffer = false, const String& name = "") = 0;
 
         /** Creates a new vertex declaration. */
-        virtual VertexDeclaration* createVertexDeclaration(void);
+        virtual VertexDeclaration* createVertexDeclaration();
         /** Destroys a vertex declaration. */
         virtual void destroyVertexDeclaration(VertexDeclaration* decl);
 
         /** Creates a new VertexBufferBinding. */
-        virtual VertexBufferBinding* createVertexBufferBinding(void);
+        virtual VertexBufferBinding* createVertexBufferBinding();
         /** Destroys a VertexBufferBinding. */
         virtual void destroyVertexBufferBinding(VertexBufferBinding* binding);
 
@@ -375,7 +375,7 @@ namespace v1 {
             to save hardware memory (e.g. application was runs in a long time, you
             might free temporary buffers periodically to avoid memory overload).
         */
-        virtual void _freeUnusedBufferCopies(void);
+        virtual void _freeUnusedBufferCopies();
 
         /** Internal method for releasing all temporary buffers which have been 
            allocated using BLT_AUTOMATIC_RELEASE; is called by OGRE.
@@ -462,7 +462,7 @@ namespace v1 {
         }
 
         /** @copydoc HardwareBufferManagerInterface::createVertexDeclaration */
-        virtual VertexDeclaration* createVertexDeclaration(void)
+        virtual VertexDeclaration* createVertexDeclaration()
         {
             return mImpl->createVertexDeclaration();
         }
@@ -473,7 +473,7 @@ namespace v1 {
         }
 
         /** @copydoc HardwareBufferManagerBase::createVertexBufferBinding */
-        virtual VertexBufferBinding* createVertexBufferBinding(void)
+        virtual VertexBufferBinding* createVertexBufferBinding()
         {
             return mImpl->createVertexBufferBinding();
         }
@@ -513,7 +513,7 @@ namespace v1 {
         }
 
         /** @copydoc HardwareBufferManagerBase::_freeUnusedBufferCopies */
-        virtual void _freeUnusedBufferCopies(void)
+        virtual void _freeUnusedBufferCopies()
         {
             mImpl->_freeUnusedBufferCopies();
         }
@@ -569,7 +569,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static HardwareBufferManager& getSingleton(void);
+        static HardwareBufferManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -585,7 +585,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static HardwareBufferManager* getSingletonPtr(void);
+        static HardwareBufferManager* getSingletonPtr();
 
     };
 

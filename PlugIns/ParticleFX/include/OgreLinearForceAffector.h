@@ -85,7 +85,7 @@ namespace Ogre {
         void setForceVector(const Vector3& force);
 
         /** Gets the force vector to apply to the particles in a system. */
-        Vector3 getForceVector(void) const;
+        Vector3 getForceVector() const;
 
         /** Sets how the force vector is applied to a particle. 
         @remarks
@@ -97,7 +97,7 @@ namespace Ogre {
         /** Retrieves how the force vector is applied to a particle. 
         @return A member of the ForceApplication enum.
         */
-        ForceApplication getForceApplication(void) const;
+        ForceApplication getForceApplication() const;
 
         /// Command objects
         static CmdForceVector msForceVectorCmd;

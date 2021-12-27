@@ -599,7 +599,7 @@ namespace Ogre
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //-----------------------------------------------------------------------------------
-    void GLXWindow::destroy(void)
+    void GLXWindow::destroy()
     {
         if( mClosed )
             return;

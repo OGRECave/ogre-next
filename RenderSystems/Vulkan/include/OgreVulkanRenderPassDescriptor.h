@@ -122,9 +122,9 @@ namespace Ogre
         size_t mNumCallstackEntries;
 #endif
 
-        void checkRenderWindowStatus( void );
-        void calculateSharedKey( void );
-        void calculateSharedFlushOnlyKey( void );
+        void checkRenderWindowStatus();
+        void calculateSharedKey();
+        void calculateSharedFlushOnlyKey();
 
         static VkAttachmentLoadOp get( LoadAction::LoadAction action );
         static VkAttachmentStoreOp get( StoreAction::StoreAction action, bool bResolveTarget );
@@ -140,7 +140,7 @@ namespace Ogre
         VkImageView setupDepthAttachment( VkAttachmentDescription &attachment );
 
         void setupFbo( VulkanFrameBufferDescValue &fboDesc );
-        void releaseFbo( void );
+        void releaseFbo();
         static void destroyFbo( VulkanQueue *queue, VulkanFrameBufferDescValue &fboDesc );
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
@@ -148,7 +148,7 @@ namespace Ogre
         /// If using MRT, each colour is evaluated independently (only the ones marked
         /// as clear will be cleared).
         uint32 checkForClearActions( VulkanRenderPassDescriptor *other ) const;
-        bool cannotInterruptRendering( void ) const;
+        bool cannotInterruptRendering() const;
 
     public:
         VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue, VulkanRenderSystem *renderSystem );

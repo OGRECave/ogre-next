@@ -79,7 +79,7 @@ namespace Demo
         mNumGenTextures += numTextures;
     }
     //-------------------------------------------------------------------------
-    Ogre::StringVector TestUtils::getSourceTexList(void) const
+    Ogre::StringVector TestUtils::getSourceTexList() const
     {
         Ogre::StringVector retVal;
         retVal.push_back( "1d_debug.png" );

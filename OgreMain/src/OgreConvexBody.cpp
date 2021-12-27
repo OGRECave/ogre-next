@@ -531,7 +531,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void ConvexBody::reset( void )
+    void ConvexBody::reset()
     {
         for (PolygonList::iterator it = mPolygons.begin(); 
             it != mPolygons.end(); ++it)
@@ -541,7 +541,7 @@ namespace Ogre
         mPolygons.clear();
     }
     //-----------------------------------------------------------------------
-    size_t ConvexBody::getPolygonCount( void ) const
+    size_t ConvexBody::getPolygonCount() const
     {
         return mPolygons.size();
     }
@@ -553,7 +553,7 @@ namespace Ogre
         return mPolygons[ poly ]->getVertexCount();
     }
     //-----------------------------------------------------------------------
-    bool ConvexBody::hasClosedHull( void ) const
+    bool ConvexBody::hasClosedHull() const
     {
         // if this map is returned empty, the body is closed
         Polygon::EdgeMap edgeMap = getSingleEdges();
@@ -561,7 +561,7 @@ namespace Ogre
         return edgeMap.empty();
     }
     //-----------------------------------------------------------------------
-    void ConvexBody::mergePolygons( void )
+    void ConvexBody::mergePolygons()
     {
         // Merge all polygons that lay in the same plane as one big polygon.
         // A convex body does not have two separate regions (separated by polygons
@@ -703,7 +703,7 @@ namespace Ogre
         return mPolygons[ poly ]->getNormal();
     }
     //-----------------------------------------------------------------------
-    AxisAlignedBox ConvexBody::getAABB( void ) const
+    AxisAlignedBox ConvexBody::getAABB() const
     {
         AxisAlignedBox aab;
 
@@ -1280,7 +1280,7 @@ namespace Ogre
         return false; // not found!
     }
     //-----------------------------------------------------------------------
-    void ConvexBody::logInfo( void ) const
+    void ConvexBody::logInfo() const
     {
         StringStream ssOut( std::stringstream::out );
         ssOut << *this;

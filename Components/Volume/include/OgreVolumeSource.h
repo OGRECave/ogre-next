@@ -75,7 +75,7 @@ namespace Volume {
         
         /** Destructor.
         */
-        virtual ~Source(void);
+        virtual ~Source();
 
         /** Gets the density value and gradient at a specific position.
         @param position
@@ -148,7 +148,7 @@ namespace Volume {
         @return
             The factor, 1.0 in the default implementation.
         */
-        Real getVolumeSpaceToWorldSpaceFactor(void) const;
+        Real getVolumeSpaceToWorldSpaceFactor() const;
     };
 
 }

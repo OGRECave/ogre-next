@@ -60,7 +60,7 @@ namespace Ogre
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanStagingTexture::_unmapBuffer( void )
+    void VulkanStagingTexture::_unmapBuffer()
     {
         if( mUnmapTicket != std::numeric_limits<size_t>::max() )
         {
@@ -92,7 +92,7 @@ namespace Ogre
                box.data <= static_cast<uint8 *>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void *RESTRICT_ALIAS_RETURN VulkanStagingTexture::mapRegionImplRawPtr( void )
+    void *RESTRICT_ALIAS_RETURN VulkanStagingTexture::mapRegionImplRawPtr()
     {
         return static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }

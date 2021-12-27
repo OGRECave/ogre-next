@@ -64,7 +64,7 @@ namespace Ogre
         destroyVoxelTextures();
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizerSourceBase::setTextureToDebugVisualizer( void )
+    void VctVoxelizerSourceBase::setTextureToDebugVisualizer()
     {
         TextureGpu *trackedTex = mAlbedoVox;
         switch( mDebugVisualizationMode )
@@ -96,7 +96,7 @@ namespace Ogre
                                                  mDebugVisualizationMode == DebugVisualizationEmissive );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizerSourceBase::destroyVoxelTextures( void )
+    void VctVoxelizerSourceBase::destroyVoxelTextures()
     {
         if( mAlbedoVox )
         {
@@ -151,29 +151,29 @@ namespace Ogre
         return mDebugVisualizationMode;
     }
     //-------------------------------------------------------------------------
-    Vector3 VctVoxelizerSourceBase::getVoxelOrigin( void ) const
+    Vector3 VctVoxelizerSourceBase::getVoxelOrigin() const
     {
         return mRegionToVoxelize.getMinimum();
     }
     //-------------------------------------------------------------------------
-    Vector3 VctVoxelizerSourceBase::getVoxelCellSize( void ) const
+    Vector3 VctVoxelizerSourceBase::getVoxelCellSize() const
     {
         return mRegionToVoxelize.getSize() / getVoxelResolution();
     }
     //-------------------------------------------------------------------------
-    Vector3 VctVoxelizerSourceBase::getVoxelSize( void ) const { return mRegionToVoxelize.getSize(); }
+    Vector3 VctVoxelizerSourceBase::getVoxelSize() const { return mRegionToVoxelize.getSize(); }
     //-------------------------------------------------------------------------
-    Vector3 VctVoxelizerSourceBase::getVoxelResolution( void ) const
+    Vector3 VctVoxelizerSourceBase::getVoxelResolution() const
     {
         return Vector3( mWidth, mHeight, mDepth );
     }
     //-------------------------------------------------------------------------
-    TextureGpuManager *VctVoxelizerSourceBase::getTextureGpuManager( void )
+    TextureGpuManager *VctVoxelizerSourceBase::getTextureGpuManager()
     {
         return mTextureGpuManager;
     }
     //-------------------------------------------------------------------------
-    RenderSystem *VctVoxelizerSourceBase::getRenderSystem( void ) { return mRenderSystem; }
+    RenderSystem *VctVoxelizerSourceBase::getRenderSystem() { return mRenderSystem; }
     //-------------------------------------------------------------------------
-    HlmsManager *VctVoxelizerSourceBase::getHlmsManager( void ) { return mHlmsManager; }
+    HlmsManager *VctVoxelizerSourceBase::getHlmsManager() { return mHlmsManager; }
 }  // namespace Ogre

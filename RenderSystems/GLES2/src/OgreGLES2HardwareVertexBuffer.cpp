@@ -155,7 +155,7 @@ namespace v1 {
         return retPtr;
     }
 
-    void GLES2HardwareVertexBuffer::unlockImpl(void)
+    void GLES2HardwareVertexBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ARRAY_BUFFER, mBufferId));
 
@@ -278,7 +278,7 @@ namespace v1 {
         }
     }
 #endif
-    void GLES2HardwareVertexBuffer::_updateFromShadow(void)
+    void GLES2HardwareVertexBuffer::_updateFromShadow()
     {
         if (mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate)
         {

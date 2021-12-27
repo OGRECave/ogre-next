@@ -36,10 +36,10 @@ namespace Demo
     public:
         DynamicCubemapGameState( const Ogre::String &helpDescription );
 
-        Ogre::CompositorWorkspace* setupCompositor(void);
+        Ogre::CompositorWorkspace* setupCompositor();
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

@@ -38,7 +38,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------------------
-    bool DescriptorSetUav::TextureSlot::formatNeedsReinterpret(void) const
+    bool DescriptorSetUav::TextureSlot::formatNeedsReinterpret() const
     {
         PixelFormatGpu format = pixelFormat;
         if( format == PFG_UNKNOWN )
@@ -47,12 +47,12 @@ namespace Ogre
         return format != texture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
-    bool DescriptorSetUav::TextureSlot::needsDifferentView(void) const
+    bool DescriptorSetUav::TextureSlot::needsDifferentView() const
     {
         return formatNeedsReinterpret() || mipmapLevel != 0 || textureArrayIndex != 0;
     }
     //-----------------------------------------------------------------------------------
-    void DescriptorSetUav::checkValidity(void) const
+    void DescriptorSetUav::checkValidity() const
     {
         assert( !mUavs.empty() &&
                 "This DescriptorSetUav doesn't use any texture/buffer! Perhaps incorrectly setup?" );

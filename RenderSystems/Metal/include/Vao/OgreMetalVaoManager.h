@@ -155,7 +155,7 @@ namespace Ogre
         static const uint32 VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        void createUnalignedCopyShader(void);
+        void createUnalignedCopyShader();
 #endif
 
         /** Asks for allocating buffer space in a VBO (Vertex Buffer Object).
@@ -277,10 +277,10 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
-        virtual void cleanupEmptyPools(void);
+        virtual void cleanupEmptyPools();
 
         /// Binds the Draw ID to the current RenderEncoder. (Assumed to be active!)
-        void bindDrawId(void);
+        void bindDrawId();
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -292,7 +292,7 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
-        MetalDevice* getDevice(void)        { return mDevice; }
+        MetalDevice* getDevice()        { return mDevice; }
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         /// In macOS before Catalina (i.e. <= Mojave), MTLBlitCommandEncoder copyFromBuffer
@@ -302,12 +302,12 @@ namespace Ogre
                             id<MTLBuffer> srcBuffer, size_t srcOffsetBytes, size_t sizeBytes );
 #endif
 
-        virtual void _update(void);
-        void _notifyNewCommandBuffer(void);
-        void _notifyDeviceStalled(void);
+        virtual void _update();
+        void _notifyNewCommandBuffer();
+        void _notifyDeviceStalled();
 
         /// @see VaoManager::waitForTailFrameToFinish
-        virtual uint8 waitForTailFrameToFinish(void);
+        virtual uint8 waitForTailFrameToFinish();
 
         /// See VaoManager::waitForSpecificFrameToFinish
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );

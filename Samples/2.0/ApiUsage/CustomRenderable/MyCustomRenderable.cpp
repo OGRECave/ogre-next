@@ -99,7 +99,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MyCustomRenderable::createBuffers(void)
+    void MyCustomRenderable::createBuffers()
     {
         //Create the indices.
         const Ogre::uint16 c_indexData[3 * 2 * 6] =
@@ -183,12 +183,12 @@ namespace Ogre
         mVaoPerLod[1].push_back( vao );
     }
     //-----------------------------------------------------------------------------------
-    const String& MyCustomRenderable::getMovableType(void) const
+    const String& MyCustomRenderable::getMovableType() const
     {
         return BLANKSTRING;
     }
     //-----------------------------------------------------------------------------------
-    const LightList& MyCustomRenderable::getLights(void) const
+    const LightList& MyCustomRenderable::getLights() const
     {
         return this->queryLights(); //Return the data from our MovableObject base class.
     }
@@ -213,7 +213,7 @@ namespace Ogre
                         "MyCustomRenderable::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool MyCustomRenderable::getCastsShadows(void) const
+    bool MyCustomRenderable::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                         "MyCustomRenderable do not implement getCastsShadows."

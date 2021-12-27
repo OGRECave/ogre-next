@@ -72,7 +72,7 @@ namespace Demo
                 mTransform[i] = 0;
         }
 
-        Ogre::uint32 getId(void) const          { return mId; }
+        Ogre::uint32 getId() const          { return mId; }
 
         bool operator < ( const GameEntity *_r ) const
         {

@@ -66,7 +66,7 @@ namespace Demo
         //Ogre::v1::MeshManager::getSingleton().remove( meshName );
     }
     //-----------------------------------------------------------------------------------
-    void PostprocessingGameState::createCustomTextures(void)
+    void PostprocessingGameState::createCustomTextures()
     {
         TextureGpuManager *textureManager =
                 mGraphicsSystem->getRoot()->getRenderSystem()->getTextureGpuManager();
@@ -338,7 +338,7 @@ namespace Demo
         workspace->reconnectAllNodes();
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspace* PostprocessingGameState::setupCompositor(void)
+    CompositorWorkspace* PostprocessingGameState::setupCompositor()
     {
         mCompositorNames.clear();
 
@@ -393,7 +393,7 @@ namespace Demo
         return workspace;
     }
     //-----------------------------------------------------------------------------------
-    void PostprocessingGameState::createExtraEffectsFromCode(void)
+    void PostprocessingGameState::createExtraEffectsFromCode()
     {
         Root *root = mGraphicsSystem->getRoot();
         CompositorManager2 *compositorManager = root->getCompositorManager2();
@@ -586,7 +586,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void PostprocessingGameState::createScene01(void)
+    void PostprocessingGameState::createScene01()
     {
         SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

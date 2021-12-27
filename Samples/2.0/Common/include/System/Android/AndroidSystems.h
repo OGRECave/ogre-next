@@ -48,7 +48,7 @@ namespace Demo
         static void setAndroidApp( android_app *androidApp );
 
         static void setNativeWindow( ANativeWindow *nativeWindow );
-        static ANativeWindow *getNativeWindow( void );
+        static ANativeWindow *getNativeWindow();
 
         /**
         On Android platforms:
@@ -65,7 +65,7 @@ namespace Demo
 
         static bool isAndroid();
 
-        static void registerArchiveFactories( void );
+        static void registerArchiveFactories();
     };
 }  // namespace Demo
 

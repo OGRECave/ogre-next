@@ -52,13 +52,13 @@ namespace Ogre
         @remarks
             Temporary frustum and camera set up here.
         */
-        ConcentricShadowCamera( void );
+        ConcentricShadowCamera();
 
         /** Default destructor.
         @remarks
             Temporary frustum and camera destroyed here.
         */
-        virtual ~ConcentricShadowCamera( void );
+        virtual ~ConcentricShadowCamera();
 
         /** Returns a uniform shadow camera with a focused view.
          */

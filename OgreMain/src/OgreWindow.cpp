@@ -76,7 +76,7 @@ namespace Ogre
         mTitle = title;
     }
     //-----------------------------------------------------------------------------------
-    const String& Window::getTitle(void) const
+    const String& Window::getTitle() const
     {
         return mTitle;
     }
@@ -105,12 +105,12 @@ namespace Ogre
         mVSyncInterval = vSyncInterval & 0x7FFFFFFF;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::getVSync(void) const
+    bool Window::getVSync() const
     {
         return mVSync;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getVSyncInterval(void) const
+    uint32 Window::getVSyncInterval() const
     {
         return mVSyncInterval;
     }
@@ -120,67 +120,67 @@ namespace Ogre
         mBorderless = borderless;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::getBorderless(void) const
+    bool Window::getBorderless() const
     {
         return mBorderless;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getWidth(void) const
+    uint32 Window::getWidth() const
     {
         return mTexture->getWidth();
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getHeight(void) const
+    uint32 Window::getHeight() const
     {
         return mTexture->getHeight();
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu Window::getPixelFormat(void) const
+    PixelFormatGpu Window::getPixelFormat() const
     {
         return mTexture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
-    SampleDescription Window::getSampleDescription(void) const
+    SampleDescription Window::getSampleDescription() const
     {
         return mTexture->getSampleDescription();
     }
     //-----------------------------------------------------------------------------------
-    bool Window::isMultisample(void) const
+    bool Window::isMultisample() const
     {
         return mTexture->isMultisample();
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getFrequencyNumerator(void) const
+    uint32 Window::getFrequencyNumerator() const
     {
         return mFrequencyNumerator;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getFrequencyDenominator(void) const
+    uint32 Window::getFrequencyDenominator() const
     {
         return mFrequencyDenominator;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getRequestedWidthPt(void) const
+    uint32 Window::getRequestedWidthPt() const
     {
         return mRequestedWidth;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getRequestedHeightPt(void) const
+    uint32 Window::getRequestedHeightPt() const
     {
         return mRequestedHeight;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::isFullscreen(void) const
+    bool Window::isFullscreen() const
     {
         return mFullscreenMode;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::wantsToGoFullscreen(void) const
+    bool Window::wantsToGoFullscreen() const
     {
         return mRequestedFullscreenMode && mRequestedFullscreenMode != mFullscreenMode;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::wantsToGoWindowed(void) const
+    bool Window::wantsToGoWindowed() const
     {
         return !mRequestedFullscreenMode && mRequestedFullscreenMode != mFullscreenMode;
     }
@@ -190,17 +190,17 @@ namespace Ogre
         mFocused = focused;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::isFocused(void) const
+    bool Window::isFocused() const
     {
         return mFocused;
     }
     //-----------------------------------------------------------------------------------
-    void Window::_setPrimary(void)
+    void Window::_setPrimary()
     {
         mIsPrimary = true;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::isPrimary(void) const
+    bool Window::isPrimary() const
     {
         return mIsPrimary;
     }
@@ -222,17 +222,17 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Window::getTexture(void) const
+    TextureGpu* Window::getTexture() const
     {
         return mTexture;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Window::getDepthBuffer(void) const
+    TextureGpu* Window::getDepthBuffer() const
     {
         return mDepthBuffer;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Window::getStencilBuffer(void) const
+    TextureGpu* Window::getStencilBuffer() const
     {
         return mStencilBuffer;
     }

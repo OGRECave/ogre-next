@@ -133,7 +133,7 @@ namespace Ogre {
 #endif
     }
     //-----------------------------------------------------------------------
-    void Bone::setCachedTransformOutOfDate(void) const
+    void Bone::setCachedTransformOutOfDate() const
     {
 #if OGRE_DEBUG_MODE
         mCachedTransformOutOfDate = true;
@@ -154,7 +154,7 @@ namespace Ogre {
 #endif
     }
     //-----------------------------------------------------------------------
-    void Bone::resetParentTransformPtr(void)
+    void Bone::resetParentTransformPtr()
     {
         if( mParent )
         {
@@ -166,7 +166,7 @@ namespace Ogre {
         _memoryRebased();
     }
     //-----------------------------------------------------------------------
-    void Bone::_memoryRebased(void)
+    void Bone::_memoryRebased()
     {
         BoneVec::iterator itor = mChildren.begin();
         BoneVec::iterator end  = mChildren.end();
@@ -233,7 +233,7 @@ namespace Ogre {
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    bool Bone::getInheritOrientation(void) const
+    bool Bone::getInheritOrientation() const
     {
         return mTransform.mInheritOrientation[mTransform.mIndex];
     }
@@ -244,12 +244,12 @@ namespace Ogre {
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    bool Bone::getInheritScale(void) const
+    bool Bone::getInheritScale() const
     {
         return mTransform.mInheritScale[mTransform.mIndex];
     }
     //-----------------------------------------------------------------------
-    Matrix4 Bone::_getDerivedTransform(void) const
+    Matrix4 Bone::_getDerivedTransform() const
     {
 #if OGRE_DEBUG_MODE
         assert( !mCachedTransformOutOfDate );
@@ -265,13 +265,13 @@ namespace Ogre {
         return parentNodeTransform;
     }
     //-----------------------------------------------------------------------
-    const SimpleMatrixAf4x3& Bone::_getFullTransformUpdated(void)
+    const SimpleMatrixAf4x3& Bone::_getFullTransformUpdated()
     {
         _updateFromParent();
         return mTransform.mDerivedTransform[mTransform.mIndex];
     }
     //-----------------------------------------------------------------------
-    void Bone::_updateFromParent(void)
+    void Bone::_updateFromParent()
     {
         if( mParent )
             mParent->_updateFromParent();
@@ -279,7 +279,7 @@ namespace Ogre {
         updateFromParentImpl();
     }
     //-----------------------------------------------------------------------
-    void Bone::updateFromParentImpl(void)
+    void Bone::updateFromParentImpl()
     {
         //Retrieve from parents. Unfortunately we need to do AoS -> SoA -> AoS conversion
         /*ArrayMatrixAf4x3 nodeMat;
@@ -404,7 +404,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
 #if OGRE_DEBUG_MODE
-    void Bone::_setCachedTransformOutOfDate(void)
+    void Bone::_setCachedTransformOutOfDate()
     {
         mCachedTransformOutOfDate = true;
     }

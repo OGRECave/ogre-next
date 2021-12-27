@@ -90,7 +90,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::create1DTexture(void)
+    void D3D11TextureGpu::create1DTexture()
     {
         D3D11_TEXTURE1D_DESC desc;
         memset( &desc, 0, sizeof( desc ) );
@@ -253,7 +253,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::create3DTexture(void)
+    void D3D11TextureGpu::create3DTexture()
     {
         D3D11_TEXTURE3D_DESC desc;
         memset( &desc, 0, sizeof( desc ) );
@@ -313,7 +313,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::createInternalResourcesImpl(void)
+    void D3D11TextureGpu::createInternalResourcesImpl()
     {
         if( mPixelFormat == PFG_NULL )
             return; //Nothing to do
@@ -347,7 +347,7 @@ namespace Ogre
                                            static_cast<UINT>( texName.size() ), texName.c_str() );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::destroyInternalResourcesImpl(void)
+    void D3D11TextureGpu::destroyInternalResourcesImpl()
     {
         mDefaultDisplaySrv.Reset();
 
@@ -363,7 +363,7 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::notifyDataIsReady(void)
+    void D3D11TextureGpu::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
@@ -386,12 +386,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11TextureGpu::_isDataReadyImpl(void) const
+    bool D3D11TextureGpu::_isDataReadyImpl() const
     {
         return mDisplayTextureName == mFinalTextureName.Get() && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::_setToDisplayDummyTexture(void)
+    void D3D11TextureGpu::_setToDisplayDummyTexture()
     {
         mDefaultDisplaySrv.Reset();
 
@@ -629,7 +629,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ComPtr<ID3D11ShaderResourceView> D3D11TextureGpu::createSrv(void) const
+    ComPtr<ID3D11ShaderResourceView> D3D11TextureGpu::createSrv() const
     {
         assert( isTexture() &&
                 "This texture is marked as 'TextureFlags::NotTexture', which "
@@ -833,17 +833,17 @@ namespace Ogre
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 D3D11TextureGpuRenderTarget::getDepthBufferPoolId(void) const
+    uint16 D3D11TextureGpuRenderTarget::getDepthBufferPoolId() const
     {
         return mDepthBufferPoolId;
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11TextureGpuRenderTarget::getPreferDepthTexture(void) const
+    bool D3D11TextureGpuRenderTarget::getPreferDepthTexture() const
     {
         return mPreferDepthTexture;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu D3D11TextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    PixelFormatGpu D3D11TextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }
@@ -856,7 +856,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode D3D11TextureGpuRenderTarget::getOrientationMode( void ) const
+    OrientationMode D3D11TextureGpuRenderTarget::getOrientationMode() const
     {
         return mOrientationMode;
     }

@@ -297,7 +297,7 @@ namespace Ogre
     }
 
 
-    bool ConfigDialog::display(void)
+    bool ConfigDialog::display()
     {
         // Display dialog
         // Don't return to caller until dialog dismissed

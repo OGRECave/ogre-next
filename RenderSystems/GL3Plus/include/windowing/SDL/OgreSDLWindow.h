@@ -42,7 +42,7 @@ namespace Ogre {
         bool mVSync;
 
         // Process pending events
-        void processEvents(void);
+        void processEvents();
 
         int (*glXGetVideoSyncSGI) (unsigned int *);
         int (*glXWaitVideoSyncSGI) (int, int, unsigned int *);
@@ -54,11 +54,11 @@ namespace Ogre {
         void create(const String& name, unsigned int width, unsigned int height,
                 bool fullScreen, const NameValuePairList *miscParams);
         /** Overridden - see RenderWindow */
-        void destroy(void);
+        void destroy();
         /** Overridden - see RenderWindow */
-        bool isActive(void) const;
+        bool isActive() const;
         /** Overridden - see RenderWindow */
-        bool isClosed(void) const;
+        bool isClosed() const;
         /** Overridden - see RenderWindow */
         void reposition(int left, int top);
         /** Overridden - see RenderWindow */
@@ -83,7 +83,7 @@ namespace Ogre {
 
         bool requiresTextureFlipping() const { return false; }
 
-        bool isFullScreen(void) const
+        bool isFullScreen() const
         {
             return ( mScreen->flags & SDL_FULLSCREEN ) == SDL_FULLSCREEN;
         }

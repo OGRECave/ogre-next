@@ -64,8 +64,8 @@ namespace Ogre
                                 GL3PlusDynamicBuffer *dynamicBuffer );
         ~GL3PlusBufferInterface();
 
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        GLuint getVboName(void) const               { return mVboName; }
+        size_t getVboPoolIndex()                { return mVboPoolIdx; }
+        GLuint getVboName() const               { return mVboName; }
 
         void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }
 
@@ -77,8 +77,8 @@ namespace Ogre
                                                  bool advanceFrame = true );
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        virtual void advanceFrame();
+        virtual void regressFrame();
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                              size_t srcOffsetBytes, size_t sizeBytes );

@@ -77,7 +77,7 @@ namespace Ogre
         /// Internal function that initializes a lot of structures that can't be done in the
         /// constructor due to how SkeletonInstance is created/pushed in a vector.
         /// If you're not an Ogre dev, don't call this directly.
-        void _initialize(void);
+        void _initialize();
 
         /** Shifts the values of mBoneWeights to new locations because the bones' mIndex
             may have changed.
@@ -113,18 +113,18 @@ namespace Ogre
         void setFrame( Real frame );
 
         /// Gets the current animation time, in seconds. Prefer using getCurrentFrame
-        Real getCurrentTime(void) const                      { return mCurrentFrame / mFrameRate; }
+        Real getCurrentTime() const                      { return mCurrentFrame / mFrameRate; }
 
         /// Gets the current animation frame, in frames.
-        Real getCurrentFrame(void) const                     { return mCurrentFrame; }
+        Real getCurrentFrame() const                     { return mCurrentFrame; }
 
         /// Gets the frame count.
-        Real getNumFrames(void) const;
+        Real getNumFrames() const;
 
         /// Gets animation length, in seconds.
-        Real getDuration(void) const;
+        Real getDuration() const;
 
-        IdString getName(void) const                                { return mName; }
+        IdString getName() const                                { return mName; }
 
         /** Loop setting. Looped animations will wrap back to zero when reaching the animation length
             or go back to the animation length if playing backwards.
@@ -135,7 +135,7 @@ namespace Ogre
 
         /** Returns current loop setting. @See setLoop.
         */
-        bool getLoop(void) const                                    { return mLoop; }
+        bool getLoop() const                                    { return mLoop; }
 
         /** Sets the per-bone weight to a particular bone. Useful for fine control
             over animation strength on a set of nodes (i.e. an arm)
@@ -259,14 +259,14 @@ namespace Ogre
 
         /// Enables or disables this animation. A disabled animation won't be processed at all.
         void setEnabled( bool bEnable );
-        bool getEnabled(void) const                                 { return mEnabled; }
+        bool getEnabled() const                                 { return mEnabled; }
 
         void _applyAnimation( const TransformArray &boneTransforms );
 
         void _swapBoneWeightsUniquePtr( RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION>
                                         &inOutBoneWeights );
 
-        const SkeletonAnimationDef* getDefinition(void) const       { return mDefinition; }
+        const SkeletonAnimationDef* getDefinition() const       { return mDefinition; }
     };
 
     /** @} */

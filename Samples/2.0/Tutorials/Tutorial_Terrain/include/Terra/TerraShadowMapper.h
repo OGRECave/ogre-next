@@ -160,12 +160,12 @@ namespace Ogre
             This consumes a lot less BW and memory, which can be critical in older mobile
         */
         void createShadowMap( IdType id, TextureGpu *heightMapTex, bool bLowResShadow );
-        void destroyShadowMap(void);
+        void destroyShadowMap();
         void updateShadowMap( const Vector3 &lightDir, const Vector2 &xzDimensions, float heightScale );
 
         void fillUavDataForCompositorChannel( TextureGpu **outChannel ) const;
 
-        Ogre::TextureGpu* getShadowMapTex(void) const           { return m_shadowMapTex; }
+        Ogre::TextureGpu* getShadowMapTex() const           { return m_shadowMapTex; }
     };
 }
 

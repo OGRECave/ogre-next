@@ -49,7 +49,7 @@ namespace Demo
         memset( mMaterials, 0, sizeof(mMaterials) );
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsGameState::setupParallaxCorrectCubemaps(void)
+    void LocalCubemapsGameState::setupParallaxCorrectCubemaps()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -146,7 +146,7 @@ namespace Demo
         hlmsPbs->setParallaxCorrectedCubemap( mParallaxCorrectedCubemap );
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsGameState::forceUpdateAllProbes(void)
+    void LocalCubemapsGameState::forceUpdateAllProbes()
     {
         const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
 
@@ -166,7 +166,7 @@ namespace Demo
         mRoughnessDirty = false;
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsGameState::createScene01(void)
+    void LocalCubemapsGameState::createScene01()
     {
         setupParallaxCorrectCubemaps();
 
@@ -300,7 +300,7 @@ namespace Demo
             mParallaxCorrectedCubemapOrig->updateAllDirtyProbes();
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsGameState::destroyScene(void)
+    void LocalCubemapsGameState::destroyScene()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );

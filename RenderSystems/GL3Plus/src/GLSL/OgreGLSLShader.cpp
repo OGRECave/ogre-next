@@ -137,7 +137,7 @@ namespace Ogre {
     @brief GLSLShader::replaceVersionMacros
         Finds the first occurrence of "ogre_glsl_ver_xxx" and only leaves it with "xxx"
     */
-    void GLSLShader::replaceVersionMacros( void )
+    void GLSLShader::replaceVersionMacros()
     {
         const String matchStr = "ogre_glsl_ver_";
         const size_t pos = mSource.find( matchStr );
@@ -145,7 +145,7 @@ namespace Ogre {
             mSource.erase( pos, matchStr.size() );
     }
 
-    void GLSLShader::loadFromSource(void)
+    void GLSLShader::loadFromSource()
     {
         if( mMonolithicCacheStatus == MCS_INVALIDATE )
         {
@@ -368,7 +368,7 @@ namespace Ogre {
     }
 
 
-    void GLSLShader::createLowLevelImpl(void)
+    void GLSLShader::createLowLevelImpl()
     {
         // mAssemblerProgram = GpuProgramPtr(OGRE_NEW GLSLShader(this));
         // // Shader params need to be forwarded to low level implementation
@@ -388,7 +388,7 @@ namespace Ogre {
     }
 
 
-    void GLSLShader::unloadHighLevelImpl(void)
+    void GLSLShader::unloadHighLevelImpl()
     {
         OGRE_CHECK_GL_ERROR(glDeleteShader(mGLShaderHandle));
 
@@ -447,19 +447,19 @@ namespace Ogre {
     }
 
 
-    inline bool GLSLShader::getPassSurfaceAndLightStates(void) const
+    inline bool GLSLShader::getPassSurfaceAndLightStates() const
     {
         // Scenemanager should pass on light & material state to the rendersystem.
         return true;
     }
 
-    inline bool GLSLShader::getPassTransformStates(void) const
+    inline bool GLSLShader::getPassTransformStates() const
     {
         // Scenemanager should pass on transform state to the rendersystem.
         return true;
     }
 
-    inline bool GLSLShader::getPassFogStates(void) const
+    inline bool GLSLShader::getPassFogStates() const
     {
         // Scenemanager should pass on fog state to the rendersystem.
         return true;
@@ -606,7 +606,7 @@ namespace Ogre {
         }
     }
 
-    const String& GLSLShader::getLanguage(void) const
+    const String& GLSLShader::getLanguage() const
     {
         static const String language = "glsl";
 
@@ -615,7 +615,7 @@ namespace Ogre {
 
     void GLSLShader::setReplaceVersionMacro( bool bReplace ) { mReplaceVersionMacro = bReplace; }
 
-    Ogre::GpuProgramParametersSharedPtr GLSLShader::createParameters(void)
+    Ogre::GpuProgramParametersSharedPtr GLSLShader::createParameters()
     {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
         return params;
@@ -826,7 +826,7 @@ namespace Ogre {
     }
 
 
-    void GLSLShader::bind(void)
+    void GLSLShader::bind()
     {
         if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
@@ -882,7 +882,7 @@ namespace Ogre {
         }
     }
 
-    void GLSLShader::unbind(void)
+    void GLSLShader::unbind()
     {
         if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
@@ -942,7 +942,7 @@ namespace Ogre {
         }
     }
 
-    void GLSLShader::unbindAll(void)
+    void GLSLShader::unbindAll()
     {
         if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
@@ -1038,7 +1038,7 @@ namespace Ogre {
     }
 
 
-    size_t GLSLShader::calculateSize(void) const
+    size_t GLSLShader::calculateSize() const
     {
         size_t memSize = 0;
 

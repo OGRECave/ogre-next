@@ -128,7 +128,7 @@ namespace Ogre
         */
         void addQuadTextureSource( size_t texUnitIdx, const String &textureName );
 
-        const TextureSources& getTextureSources(void) const     { return mTextureSources; }
+        const TextureSources& getTextureSources() const     { return mTextureSources; }
     };
 
     /** @} */

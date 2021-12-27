@@ -253,7 +253,7 @@ namespace Ogre
         ser.importNamedConstants(stream, this);
     }
     //-----------------------------------------------------------------------------
-    size_t GpuNamedConstants::calculateSize(void) const
+    size_t GpuNamedConstants::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -388,7 +388,7 @@ namespace Ogre
 
     }
     //-----------------------------------------------------------------------------
-    size_t GpuSharedParameters::calculateSize(void) const
+    size_t GpuSharedParameters::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -549,7 +549,7 @@ namespace Ogre
         // mBoolConstants.clear();
     }
     //---------------------------------------------------------------------
-    GpuConstantDefinitionIterator GpuSharedParameters::getConstantDefinitionIterator(void) const
+    GpuConstantDefinitionIterator GpuSharedParameters::getConstantDefinitionIterator() const
     {
         return GpuConstantDefinitionIterator(mNamedConstants.map.begin(), mNamedConstants.map.end());
     }
@@ -983,7 +983,7 @@ namespace Ogre
 
     }
     //-----------------------------------------------------------------------------
-    size_t GpuProgramParameters::calculateSize(void) const
+    size_t GpuProgramParameters::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -2161,7 +2161,7 @@ namespace Ogre
 
     }
     //-----------------------------------------------------------------------------
-    GpuConstantDefinitionIterator GpuProgramParameters::getConstantDefinitionIterator(void) const
+    GpuConstantDefinitionIterator GpuProgramParameters::getConstantDefinitionIterator() const
     {
         if (mNamedConstants.isNull())
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
@@ -2375,13 +2375,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------
-    void GpuProgramParameters::clearAutoConstants(void)
+    void GpuProgramParameters::clearAutoConstants()
     {
         mAutoConstants.clear();
         mCombinedVariability = GPV_GLOBAL;
     }
     //-----------------------------------------------------------------------------
-    GpuProgramParameters::AutoConstantIterator GpuProgramParameters::getAutoConstantIterator(void) const
+    GpuProgramParameters::AutoConstantIterator GpuProgramParameters::getAutoConstantIterator() const
     {
         return AutoConstantIterator(mAutoConstants.begin(), mAutoConstants.end());
     }
@@ -3631,13 +3631,13 @@ namespace Ogre
             return 0;
     }
     //-----------------------------------------------------------------------
-    size_t GpuProgramParameters::getNumAutoConstantDefinitions(void)
+    size_t GpuProgramParameters::getNumAutoConstantDefinitions()
     {
         return sizeof(AutoConstantDictionary)/sizeof(AutoConstantDefinition);
     }
 
     //-----------------------------------------------------------------------
-    void GpuProgramParameters::incPassIterationNumber(void)
+    void GpuProgramParameters::incPassIterationNumber()
     {
         if (mActivePassIterationIndex != std::numeric_limits<size_t>::max())
         {

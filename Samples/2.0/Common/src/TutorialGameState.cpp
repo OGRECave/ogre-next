@@ -43,12 +43,12 @@ namespace Demo
         mGraphicsSystem = graphicsSystem;
     }
     //-----------------------------------------------------------------------------------
-    void TutorialGameState::createScene01(void)
+    void TutorialGameState::createScene01()
     {
         createDebugTextOverlay();
     }
     //-----------------------------------------------------------------------------------
-    void TutorialGameState::createDebugTextOverlay(void)
+    void TutorialGameState::createDebugTextOverlay()
     {
         Ogre::v1::OverlayManager &overlayManager = Ogre::v1::OverlayManager::getSingleton();
         Ogre::v1::Overlay *overlay = overlayManager.create( "DebugText" );

@@ -144,11 +144,11 @@ namespace v1 {
 
         /// Sets the name of the Material which this SubMesh will use
         void setMaterialName(const String& matName, const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
-        const String& getMaterialName(void) const;
+        const String& getMaterialName() const;
 
         /** Returns true if a material has been assigned to the submesh, otherwise returns false.
         */
-        bool isMatInitialised(void) const;
+        bool isMatInitialised() const;
 
         /** Returns a RenderOperation structure required to render this mesh.
             @param 
@@ -177,7 +177,7 @@ namespace v1 {
             This method is for assigning weights to the dedicated geometry of the SubMesh. To assign
             weights to the shared Mesh geometry, see the equivalent methods on Mesh.
         */
-        void clearBoneAssignments(void);
+        void clearBoneAssignments();
 
         /// Multimap of verex bone assignments (orders by vertex index)
         typedef multimap<size_t, VertexBoneAssignment>::type VertexBoneAssignmentList;
@@ -187,7 +187,7 @@ namespace v1 {
         @remarks
             Only valid if this SubMesh has dedicated geometry.
         */
-        BoneAssignmentIterator getBoneAssignmentIterator(void);
+        BoneAssignmentIterator getBoneAssignmentIterator();
 
         /** Gets a const reference to the list of bone assignments
         */
@@ -195,13 +195,13 @@ namespace v1 {
 
 
         /** Must be called once to compile bone assignments into geometry buffer. */
-        void _compileBoneAssignments(void);
+        void _compileBoneAssignments();
 
         typedef ConstMapIterator<AliasTextureNamePairList> AliasTextureIterator;
         /** Gets an constant iterator to access all texture alias names assigned to this submesh. 
 
         */
-        AliasTextureIterator getAliasTextureIterator(void) const;
+        AliasTextureIterator getAliasTextureIterator() const;
         /** Adds the alias or replaces an existing one and associates the texture name to it.
         @remarks
           The submesh uses the texture alias to replace textures used in the material applied
@@ -221,13 +221,13 @@ namespace v1 {
         void removeTextureAlias(const String& aliasName);
         /** removes all texture aliases from the sub mesh
         */
-        void removeAllTextureAliases(void);
+        void removeAllTextureAliases();
         /** returns true if the sub mesh has texture aliases
         */
-        bool hasTextureAliases(void) const { return !mTextureAliases.empty(); }
+        bool hasTextureAliases() const { return !mTextureAliases.empty(); }
         /** Gets the number of texture aliases assigned to the sub mesh.
         */
-        size_t getTextureAliasCount(void) const { return mTextureAliases.size(); }
+        size_t getTextureAliasCount() const { return mTextureAliases.size(); }
 
         /**  The current material used by the submesh is copied into a new material
             and the submesh's texture aliases are applied if the current texture alias
@@ -239,11 +239,11 @@ namespace v1 {
         @return 
             True if texture aliases were applied and a new material was created.
         */
-        bool updateMaterialUsingTextureAliases(void);
+        bool updateMaterialUsingTextureAliases();
 
         /** Get the type of any vertex animation used by dedicated geometry.
         */
-        VertexAnimationType getVertexAnimationType(void) const;
+        VertexAnimationType getVertexAnimationType() const;
         
         /// Returns whether animation on dedicated vertex data includes normals
         bool getVertexAnimationIncludesNormals() const { return mVertexAnimationIncludesNormals; }
@@ -257,7 +257,7 @@ namespace v1 {
 
         /** Returns true(by default) if the submesh should be included in the mesh EdgeList, otherwise returns false.
         */      
-        bool isBuildEdgesEnabled(void) const { return mBuildEdgesEnabled; }
+        bool isBuildEdgesEnabled() const { return mBuildEdgesEnabled; }
         void setBuildEdgesEnabled(bool b);
         /** Makes a copy of this submesh object and gives it a new name.
          @param newName
@@ -273,7 +273,7 @@ namespace v1 {
 
         void arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents );
 
-        void dearrangeToInefficient(void);
+        void dearrangeToInefficient();
 
     protected:
         /// @See v1::Mesh::arrangeEfficient
@@ -305,7 +305,7 @@ namespace v1 {
         bool mBuildEdgesEnabled;
 
         /// Internal method for removing LOD data
-        void removeLodLevels(void);
+        void removeLodLevels();
 
         static void removeLodLevel( LODFaceList &lodList );
 

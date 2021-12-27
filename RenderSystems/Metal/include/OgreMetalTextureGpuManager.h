@@ -74,14 +74,14 @@ namespace Ogre
             If caller doesnt' delete it, it will leak.
         */
         TextureGpu* createTextureGpuWindow( MetalWindow *window );
-        TextureGpu* createWindowDepthBuffer(void);
+        TextureGpu* createWindowDepthBuffer();
 
         id<MTLTexture> getBlankTextureMetalName( TextureTypes::TextureTypes textureType ) const;
 
         virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
                                    uint32 textureFlags ) const;
 
-        MetalDevice* getDevice(void) const          { return mDevice; }
+        MetalDevice* getDevice() const          { return mDevice; }
     };
 
     /** @} */

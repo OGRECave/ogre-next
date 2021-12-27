@@ -176,7 +176,7 @@ namespace Ogre {
         virtual void genEmissionVelocity(Vector3& destVector);
 
         /** Internal utility method for generating a time-to-live for a particle. */
-        virtual Real genEmissionTTL(void);
+        virtual Real genEmissionTTL();
 
         /** Internal utility method for generating a colour for a particle. */
         virtual void genEmissionColour(ColourValue& destColour);
@@ -192,10 +192,10 @@ namespace Ogre {
         @par
             The subclass must have called it's own createParamDictionary before calling this method.
         */
-        void addBaseParameters(void);
+        void addBaseParameters();
 
         /** Internal method for initialising the duration & repeat of an emitter. */
-        void initDurationRepeat(void);
+        void initDurationRepeat();
 
 
     public:
@@ -207,7 +207,7 @@ namespace Ogre {
         virtual void setPosition(const Vector3& pos);
 
         /** Returns the position of this emitter relative to the center of the particle system. */
-        virtual const Vector3& getPosition(void) const;
+        virtual const Vector3& getPosition() const;
 
         /** Sets the direction of the emitter.
         @remarks
@@ -223,7 +223,7 @@ namespace Ogre {
         virtual void setDirection(const Vector3& direction);
 
         /** Returns the base direction of the emitter. */
-        virtual const Vector3& getDirection(void) const;
+        virtual const Vector3& getDirection() const;
 
         /** Sets the notional up vector of the emitter
         @remarks
@@ -236,7 +236,7 @@ namespace Ogre {
         virtual void setUp(const Vector3& up);
 
         /** Returns the up vector of the emitter. */
-        virtual const Vector3& getUp(void) const;
+        virtual const Vector3& getUp() const;
 
         /** Sets the direction of the emitter.
             Some particle effects need to emit particles in many random directions, but still
@@ -272,7 +272,7 @@ namespace Ogre {
         virtual void setAngle(const Radian& angle);
 
         /** Returns the maximum angle which the initial particle direction can deviate from the emitters base direction. */
-        virtual const Radian& getAngle(void) const;
+        virtual const Radian& getAngle() const;
 
         /** Sets the initial velocity of particles emitted.
         @remarks
@@ -300,13 +300,13 @@ namespace Ogre {
         virtual void setMaxParticleVelocity(Real max);
 
         /** Returns the initial velocity of particles emitted. */
-        virtual Real getParticleVelocity(void) const;
+        virtual Real getParticleVelocity() const;
 
         /** Returns the minimum particle velocity. */
-        virtual Real getMinParticleVelocity(void) const;
+        virtual Real getMinParticleVelocity() const;
 
         /** Returns the maximum particle velocity. */
-        virtual Real getMaxParticleVelocity(void) const;
+        virtual Real getMaxParticleVelocity() const;
 
         /** Sets the emission rate for this emitter.
         @remarks
@@ -323,7 +323,7 @@ namespace Ogre {
         virtual void setEmissionRate(Real particlesPerSecond);
 
         /** Returns the emission rate set for this emitter. */
-        virtual Real getEmissionRate(void) const;
+        virtual Real getEmissionRate() const;
 
         /** Sets the lifetime of all particles emitted.
         @remarks
@@ -357,12 +357,12 @@ namespace Ogre {
         virtual void setMaxTimeToLive(Real max);
         
         /** Gets the time each particle will live for. */
-        virtual Real getTimeToLive(void) const;
+        virtual Real getTimeToLive() const;
 
         /** Gets the minimum time each particle will live for. */
-        virtual Real getMinTimeToLive(void) const;
+        virtual Real getMinTimeToLive() const;
         /** Gets the maximum time each particle will live for. */
-        virtual Real getMaxTimeToLive(void) const;
+        virtual Real getMaxTimeToLive() const;
 
         /** Sets the initial colour of particles emitted.
         @remarks
@@ -387,11 +387,11 @@ namespace Ogre {
         /** Sets the maximum colour of particles to be emitted. */
         virtual void setColourRangeEnd(const ColourValue& colour);
         /** Gets the colour of particles to be emitted. */
-        virtual const ColourValue& getColour(void) const;
+        virtual const ColourValue& getColour() const;
         /** Gets the minimum colour of particles to be emitted. */
-        virtual const ColourValue& getColourRangeStart(void) const;
+        virtual const ColourValue& getColourRangeStart() const;
         /** Gets the maximum colour of particles to be emitted. */
-        virtual const ColourValue& getColourRangeEnd(void) const;
+        virtual const ColourValue& getColourRangeEnd() const;
 
         /** Gets the number of particles which this emitter would like to emit based on the time elapsed.
         @remarks
@@ -427,7 +427,7 @@ namespace Ogre {
             This property is useful for determining the type of emitter procedurally so another
             can be created.
         */
-        const String &getType(void) const { return mType; }
+        const String &getType() const { return mType; }
 
         /** Sets whether or not the emitter is enabled.
         @remarks
@@ -436,7 +436,7 @@ namespace Ogre {
         virtual void setEnabled(bool enabled);
 
         /** Gets the flag indicating if this emitter is enabled or not. */
-        virtual bool getEnabled(void) const;
+        virtual bool getEnabled() const;
 
         /** Sets the 'start time' of this emitter.
         @remarks
@@ -447,7 +447,7 @@ namespace Ogre {
         */
         virtual void setStartTime(Real startTime);
         /** Gets the start time of the emitter. */
-        virtual Real getStartTime(void) const;
+        virtual Real getStartTime() const;
 
         /** Sets the duration of the emitter.
         @remarks
@@ -463,7 +463,7 @@ namespace Ogre {
         virtual void setDuration(Real duration);
 
         /** Gets the duration of the emitter from when it is created or re-enabled. */
-        virtual Real getDuration(void) const;
+        virtual Real getDuration() const;
 
         /** Sets the range of random duration for this emitter. 
         @remarks
@@ -482,9 +482,9 @@ namespace Ogre {
         /** Sets the maximum duration of this emitter in seconds (see setDuration for more details) */
         virtual void setMaxDuration(Real max);
         /** Gets the minimum duration of this emitter in seconds (see setDuration for more details) */
-        virtual Real getMinDuration(void) const;
+        virtual Real getMinDuration() const;
         /** Gets the maximum duration of this emitter in seconds (see setDuration for more details) */
-        virtual Real getMaxDuration(void) const;
+        virtual Real getMaxDuration() const;
 
         /** Sets the time between repeats of the emitter.
         @remarks
@@ -498,7 +498,7 @@ namespace Ogre {
         virtual void setRepeatDelay(Real duration);
 
         /** Gets the duration of the emitter from when it is created or re-enabled. */
-        virtual Real getRepeatDelay(void) const;
+        virtual Real getRepeatDelay() const;
 
         /** Sets the range of random duration for this emitter. 
         @remarks
@@ -517,24 +517,24 @@ namespace Ogre {
         /** Sets the maximum duration of this emitter in seconds (see setRepeatDelay for more details) */
         virtual void setMaxRepeatDelay(Real max);
         /** Gets the minimum duration of this emitter in seconds (see setRepeatDelay for more details) */
-        virtual Real getMinRepeatDelay(void) const;
+        virtual Real getMinRepeatDelay() const;
         /** Gets the maximum duration of this emitter in seconds (see setRepeatDelay for more details) */
-        virtual Real getMaxRepeatDelay(void) const;
+        virtual Real getMaxRepeatDelay() const;
 
         /** Returns the name of the emitter */
-        const String &getName(void) const;
+        const String &getName() const;
 
         /** Sets the name of the emitter */
         virtual void setName(const String& newName);
 
         /** Returns the name of the emitter to be emitted */
-        const String &getEmittedEmitter(void) const;
+        const String &getEmittedEmitter() const;
 
         /** Sets the name of the emitter to be emitted*/
         virtual void setEmittedEmitter(const String& emittedEmitter);
 
         /** Return true if the emitter is emitted by another emitter */
-        virtual bool isEmitted(void) const;
+        virtual bool isEmitted() const;
 
         /** Set the indication (true/false) to indicate that the emitter is emitted by another emitter */
         virtual void setEmitted(bool emitted);

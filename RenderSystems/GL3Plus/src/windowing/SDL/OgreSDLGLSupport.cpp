@@ -18,7 +18,7 @@ SDLGLSupport::~SDLGLSupport()
 {
 }
 
-void SDLGLSupport::addConfig(void)
+void SDLGLSupport::addConfig()
 {
     mVideoModes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_OPENGL);
     
@@ -86,7 +86,7 @@ void SDLGLSupport::addConfig(void)
 
 }
 
-String SDLGLSupport::validateConfig(void)
+String SDLGLSupport::validateConfig()
 {
     return String("");
 }

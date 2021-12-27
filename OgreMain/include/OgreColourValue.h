@@ -77,18 +77,18 @@ namespace Ogre {
 
         /** Retrieves colour as RGBA.
         */
-        RGBA getAsRGBA(void) const;
+        RGBA getAsRGBA() const;
 
         /** Retrieves colour as ARGB.
         */
-        ARGB getAsARGB(void) const;
+        ARGB getAsARGB() const;
 
         /** Retrieves colour as BGRA.
         */
-        BGRA getAsBGRA(void) const;
+        BGRA getAsBGRA() const;
 
         /** Retrieves colours as ABGR */
-        ABGR getAsABGR(void) const;
+        ABGR getAsABGR() const;
 
         /** Sets colour as RGBA.
         */
@@ -108,7 +108,7 @@ namespace Ogre {
 
         /** Clamps colour value to the range [0, 1].
         */
-        void saturate(void)
+        void saturate()
         {
             if (r < 0)
                 r = 0;
@@ -133,7 +133,7 @@ namespace Ogre {
 
         /** As saturate, except that this colour value is unaffected and
             the saturated colour value is returned as a copy. */
-        ColourValue saturateCopy(void) const
+        ColourValue saturateCopy() const
         {
             ColourValue ret = *this;
             ret.saturate();

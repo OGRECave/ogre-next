@@ -42,11 +42,11 @@ namespace Ogre {
 
     //-----------------------------------------------------------------------
     template<> ResourceGroupManager* Singleton<ResourceGroupManager>::msSingleton = 0;
-    ResourceGroupManager* ResourceGroupManager::getSingletonPtr(void)
+    ResourceGroupManager* ResourceGroupManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    ResourceGroupManager& ResourceGroupManager::getSingleton(void)
+    ResourceGroupManager& ResourceGroupManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -1504,7 +1504,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::fireResourceLoadEnded(void)
+    void ResourceGroupManager::fireResourceLoadEnded()
     {
         OGRE_LOCK_AUTO_MUTEX;
             for (ResourceGroupListenerList::iterator l = mResourceGroupListenerList.begin();
@@ -1544,7 +1544,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::fireResourcePrepareEnded(void)
+    void ResourceGroupManager::fireResourcePrepareEnded()
     {
         OGRE_LOCK_AUTO_MUTEX;
             for (ResourceGroupListenerList::iterator l = mResourceGroupListenerList.begin();
@@ -1584,7 +1584,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::shutdownAll(void)
+    void ResourceGroupManager::shutdownAll()
     {
         OGRE_LOCK_AUTO_MUTEX;
 
@@ -1949,7 +1949,7 @@ namespace Ogre {
         return grp->inGlobalPool;
     }
     //-----------------------------------------------------------------------
-    StringVector ResourceGroupManager::getResourceGroups(void)
+    StringVector ResourceGroupManager::getResourceGroups()
     {
             OGRE_LOCK_AUTO_MUTEX;
         StringVector vec;

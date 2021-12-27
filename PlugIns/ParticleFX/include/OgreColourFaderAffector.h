@@ -99,7 +99,7 @@ namespace Ogre {
         void setRedAdjust(float red);
 
         /** Gets the red adjustment to be made per second to particles. */
-        float getRedAdjust(void) const;
+        float getRedAdjust() const;
 
         /** Sets the green adjustment to be made per second to particles. 
         @param green
@@ -109,7 +109,7 @@ namespace Ogre {
         */
         void setGreenAdjust(float green);
         /** Gets the green adjustment to be made per second to particles. */
-        float getGreenAdjust(void) const;
+        float getGreenAdjust() const;
         /** Sets the blue adjustment to be made per second to particles. 
         @param blue
             The adjustment to be made to the colour component per second. This
@@ -118,7 +118,7 @@ namespace Ogre {
         */
         void setBlueAdjust(float blue);
         /** Gets the blue adjustment to be made per second to particles. */
-        float getBlueAdjust(void) const;
+        float getBlueAdjust() const;
 
         /** Sets the alpha adjustment to be made per second to particles. 
         @param alpha
@@ -128,7 +128,7 @@ namespace Ogre {
         */
         void setAlphaAdjust(float alpha);
         /** Gets the alpha adjustment to be made per second to particles. */
-        float getAlphaAdjust(void) const;
+        float getAlphaAdjust() const;
 
         static CmdRedAdjust msRedCmd;
         static CmdGreenAdjust msGreenCmd;

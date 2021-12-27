@@ -39,8 +39,8 @@ namespace Ogre
     {
         MetalWindow *mWindow;
 
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        virtual void createInternalResourcesImpl();
+        virtual void destroyInternalResourcesImpl();
 
     public:
         MetalTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -50,21 +50,21 @@ namespace Ogre
                                MetalWindow *window );
         virtual ~MetalTextureGpuWindow();
 
-        void nextDrawable(void);
+        void nextDrawable();
 
         void _setBackbuffer( id<MTLTexture> backbuffer );
         void _setMsaaBackbuffer( id<MTLTexture> msaaTex );
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
-        virtual void notifyDataIsReady(void);
-        virtual bool _isDataReadyImpl(void) const;
+        virtual void notifyDataIsReady();
+        virtual bool _isDataReadyImpl() const;
 
-        virtual void swapBuffers(void);
+        virtual void swapBuffers();
 
         virtual void getCustomAttribute( IdString name, void *pData );
 
-        virtual void _setToDisplayDummyTexture(void);
+        virtual void _setToDisplayDummyTexture();
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
     };
 }

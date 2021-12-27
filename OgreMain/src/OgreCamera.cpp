@@ -96,7 +96,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    SceneManager* Camera::getSceneManager(void) const
+    SceneManager* Camera::getSceneManager() const
     {
         return mSceneMgr;
     }
@@ -116,7 +116,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getPosition(void) const
+    const Vector3& Camera::getPosition() const
     {
         return mPosition;
     }
@@ -205,20 +205,20 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    Vector3 Camera::getDirection(void) const
+    Vector3 Camera::getDirection() const
     {
         // Direction points down -Z by default
         return mOrientation * -Vector3::UNIT_Z;
     }
 
     //-----------------------------------------------------------------------
-    Vector3 Camera::getUp(void) const
+    Vector3 Camera::getUp() const
     {
         return mOrientation * Vector3::UNIT_Y;
     }
 
     //-----------------------------------------------------------------------
-    Vector3 Camera::getRight(void) const
+    Vector3 Camera::getRight() const
     {
         return mOrientation * Vector3::UNIT_X;
     }
@@ -302,7 +302,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    bool Camera::isViewOutOfDate(void) const
+    bool Camera::isViewOutOfDate() const
     {
         const Quaternion derivedOrient( mParentNode->_getDerivedOrientationUpdated() );
         const Vector3 derivedPos( mParentNode->_getDerivedPosition() );
@@ -364,7 +364,7 @@ namespace Ogre {
         Frustum::invalidateView();
     }
     // -------------------------------------------------------------------
-    void Camera::invalidateFrustum(void) const
+    void Camera::invalidateFrustum() const
     {
         mRecalcWindow = true;
         Frustum::invalidateFrustum();
@@ -461,13 +461,13 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Camera::_notifyRenderingMetrics( const RenderingMetrics& metrics ) { mLastRenderingMetrics = metrics; }
     //-----------------------------------------------------------------------
-    const RenderingMetrics& Camera::_getRenderingMetrics( void ) const { return mLastRenderingMetrics; }
+    const RenderingMetrics& Camera::_getRenderingMetrics() const { return mLastRenderingMetrics; }
     //-----------------------------------------------------------------------
-    size_t Camera::_getNumRenderedFaces( void ) const { return mLastRenderingMetrics.mFaceCount; }
+    size_t Camera::_getNumRenderedFaces() const { return mLastRenderingMetrics.mFaceCount; }
     //-----------------------------------------------------------------------
-    size_t Camera::_getNumRenderedBatches( void ) const { return mLastRenderingMetrics.mBatchCount; }
+    size_t Camera::_getNumRenderedBatches() const { return mLastRenderingMetrics.mBatchCount; }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getOrientation(void) const
+    const Quaternion& Camera::getOrientation() const
     {
         return mOrientation;
     }
@@ -479,63 +479,63 @@ namespace Ogre {
         invalidateView();
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getDerivedOrientation(void) const
+    const Quaternion& Camera::getDerivedOrientation() const
     {
         updateView();
         return mDerivedOrientation;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getDerivedPosition(void) const
+    const Vector3& Camera::getDerivedPosition() const
     {
         updateView();
         return mDerivedPosition;
     }
     //-----------------------------------------------------------------------
-    Vector3 Camera::getDerivedDirection(void) const
+    Vector3 Camera::getDerivedDirection() const
     {
         // Direction points down -Z
         updateView();
         return mDerivedOrientation * Vector3::NEGATIVE_UNIT_Z;
     }
     //-----------------------------------------------------------------------
-    Vector3 Camera::getDerivedUp(void) const
+    Vector3 Camera::getDerivedUp() const
     {
         updateView();
         return mDerivedOrientation * Vector3::UNIT_Y;
     }
     //-----------------------------------------------------------------------
-    Vector3 Camera::getDerivedRight(void) const
+    Vector3 Camera::getDerivedRight() const
     {
         updateView();
         return mDerivedOrientation * Vector3::UNIT_X;
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getRealOrientation(void) const
+    const Quaternion& Camera::getRealOrientation() const
     {
         updateView();
         return mRealOrientation;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getRealPosition(void) const
+    const Vector3& Camera::getRealPosition() const
     {
         updateView();
         return mRealPosition;
     }
     //-----------------------------------------------------------------------
-    Vector3 Camera::getRealDirection(void) const
+    Vector3 Camera::getRealDirection() const
     {
         // Direction points down -Z
         updateView();
         return mRealOrientation * Vector3::NEGATIVE_UNIT_Z;
     }
     //-----------------------------------------------------------------------
-    Vector3 Camera::getRealUp(void) const
+    Vector3 Camera::getRealUp() const
     {
         updateView();
         return mRealOrientation * Vector3::UNIT_Y;
     }
     //-----------------------------------------------------------------------
-    Vector3 Camera::getRealRight(void) const
+    Vector3 Camera::getRealRight() const
     {
         updateView();
         return mRealOrientation * Vector3::UNIT_X;
@@ -551,7 +551,7 @@ namespace Ogre {
                 mDerivedOrientation);
     }
     //-----------------------------------------------------------------------
-    const String& Camera::getMovableType(void) const
+    const String& Camera::getMovableType() const
     {
         return msMovableType;
     }
@@ -571,7 +571,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Camera::_autoTrack(void)
+    void Camera::_autoTrack()
     {
         // NB assumes that all scene nodes have been updated
         if (mAutoTrackTarget)
@@ -587,12 +587,12 @@ namespace Ogre {
         mSceneLodFactorInv = 1.0f / factor;
     }
     //-----------------------------------------------------------------------
-    Real Camera::getLodBias(void) const
+    Real Camera::getLodBias() const
     {
         return mSceneLodFactor;
     }
     //-----------------------------------------------------------------------
-    Real Camera::_getLodBiasInverse(void) const
+    Real Camera::_getLodBiasInverse() const
     {
         return mSceneLodFactorInv;
     }
@@ -797,20 +797,20 @@ namespace Ogre {
 
     }
     // -------------------------------------------------------------------
-    const PlaneList& Camera::getWindowPlanes(void) const
+    const PlaneList& Camera::getWindowPlanes() const
     {
         updateView();
         setWindowImpl();
         return mWindowClipPlanes;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getPositionForViewUpdate(void) const
+    const Vector3& Camera::getPositionForViewUpdate() const
     {
         // Note no update, because we're calling this from the update!
         return mRealPosition;
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getOrientationForViewUpdate(void) const
+    const Quaternion& Camera::getOrientationForViewUpdate() const
     {
         return mRealOrientation;
     }
@@ -836,7 +836,7 @@ namespace Ogre {
             return getProjectionMatrixWithRSDepth();
     }
     //-----------------------------------------------------------------------
-    bool Camera::getAutoAspectRatio(void) const
+    bool Camera::getAutoAspectRatio() const
     {
         return mAutoAspectRatio;
     }
@@ -882,7 +882,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const Vector3* Camera::getWorldSpaceCorners(void) const
+    const Vector3* Camera::getWorldSpaceCorners() const
     {
         if (mCullFrustum)
         {
@@ -919,7 +919,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real Camera::getNearClipDistance(void) const
+    Real Camera::getNearClipDistance() const
     {
         if (mCullFrustum)
         {
@@ -931,7 +931,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real Camera::getFarClipDistance(void) const
+    Real Camera::getFarClipDistance() const
     {
         if (mCullFrustum)
         {
@@ -943,7 +943,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const Matrix4& Camera::getViewMatrix(void) const
+    const Matrix4& Camera::getViewMatrix() const
     {
         if (mCullFrustum)
         {

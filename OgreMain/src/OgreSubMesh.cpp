@@ -87,7 +87,7 @@ namespace v1 {
         return mMaterialName;
     }
     //-----------------------------------------------------------------------
-    bool SubMesh::isMatInitialised(void) const
+    bool SubMesh::isMatInitialised() const
     {
         return mMatInitialised;
 
@@ -124,14 +124,14 @@ namespace v1 {
         mBoneAssignmentsOutOfDate = true;
     }
     //-----------------------------------------------------------------------
-    void SubMesh::clearBoneAssignments(void)
+    void SubMesh::clearBoneAssignments()
     {
         mBoneAssignments.clear();
         mBoneAssignmentsOutOfDate = true;
     }
 
     //-----------------------------------------------------------------------
-    void SubMesh::_compileBoneAssignments(void)
+    void SubMesh::_compileBoneAssignments()
     {
         unsigned short maxBones =
             parent->_rationaliseBoneAssignments(vertexData[VpNormal]->vertexCount, mBoneAssignments);
@@ -145,13 +145,13 @@ namespace v1 {
         mBoneAssignmentsOutOfDate = false;
     }
     //---------------------------------------------------------------------
-    SubMesh::BoneAssignmentIterator SubMesh::getBoneAssignmentIterator(void)
+    SubMesh::BoneAssignmentIterator SubMesh::getBoneAssignmentIterator()
     {
         return BoneAssignmentIterator(mBoneAssignments.begin(),
             mBoneAssignments.end());
     }
     //---------------------------------------------------------------------
-    SubMesh::AliasTextureIterator SubMesh::getAliasTextureIterator(void) const
+    SubMesh::AliasTextureIterator SubMesh::getAliasTextureIterator() const
     {
         return AliasTextureIterator(mTextureAliases.begin(),
             mTextureAliases.end());
@@ -167,12 +167,12 @@ namespace v1 {
         mTextureAliases.erase(aliasName);
     }
     //---------------------------------------------------------------------
-    void SubMesh::removeAllTextureAliases(void)
+    void SubMesh::removeAllTextureAliases()
     {
         mTextureAliases.clear();
     }
     //---------------------------------------------------------------------
-    bool SubMesh::updateMaterialUsingTextureAliases(void)
+    bool SubMesh::updateMaterialUsingTextureAliases()
     {
         bool newMaterialCreated = false;
         // if submesh has texture aliases
@@ -229,7 +229,7 @@ namespace v1 {
         return newMaterialCreated;
     }
     //---------------------------------------------------------------------
-    void SubMesh::removeLodLevels(void)
+    void SubMesh::removeLodLevels()
     {
         if( !parent->hasIndependentShadowMappingBuffers() )
             mLodFaceList[VpShadow].clear();
@@ -249,7 +249,7 @@ namespace v1 {
         lodList.clear();
     }
     //---------------------------------------------------------------------
-    VertexAnimationType SubMesh::getVertexAnimationType(void) const
+    VertexAnimationType SubMesh::getVertexAnimationType() const
     {
         if(parent->_getAnimationTypesDirty())
         {
@@ -687,7 +687,7 @@ namespace v1 {
         OGRE_FREE_SIMD( data, MEMCATEGORY_GEOMETRY );
     }
     //---------------------------------------------------------------------
-    void SubMesh::dearrangeToInefficient(void)
+    void SubMesh::dearrangeToInefficient()
     {
         assert( !useSharedVertices );
 

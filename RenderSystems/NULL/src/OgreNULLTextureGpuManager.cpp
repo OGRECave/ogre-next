@@ -50,7 +50,7 @@ namespace Ogre
         destroyAll();
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* NULLTextureGpuManager::createTextureGpuWindow(void)
+    TextureGpu* NULLTextureGpuManager::createTextureGpuWindow()
     {
         return OGRE_NEW NULLTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
                                                     "RenderWindow",

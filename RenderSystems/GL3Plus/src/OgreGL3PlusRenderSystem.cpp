@@ -229,24 +229,24 @@ namespace Ogre {
             OGRE_DELETE mGLSupport;
     }
 
-    const String& GL3PlusRenderSystem::getName(void) const
+    const String& GL3PlusRenderSystem::getName() const
     {
         static String strName("OpenGL 3+ Rendering Subsystem");
         return strName;
     }
 
-    const String& GL3PlusRenderSystem::getFriendlyName(void) const
+    const String& GL3PlusRenderSystem::getFriendlyName() const
     {
         static String strName("OpenGL 3+");
         return strName;
     }
 
-    void GL3PlusRenderSystem::initConfigOptions(void)
+    void GL3PlusRenderSystem::initConfigOptions()
     {
         mGLSupport->addConfig();
     }
 
-    ConfigOptionMap& GL3PlusRenderSystem::getConfigOptions(void)
+    ConfigOptionMap& GL3PlusRenderSystem::getConfigOptions()
     {
         return mGLSupport->getConfigOptions();
     }
@@ -262,12 +262,12 @@ namespace Ogre {
         return mGLSupport->getPriorityConfigOption( idx );
     }
     //-----------------------------------------------------------------------
-    size_t GL3PlusRenderSystem::getNumPriorityConfigOptions( void ) const
+    size_t GL3PlusRenderSystem::getNumPriorityConfigOptions() const
     {
         return mGLSupport->getNumPriorityConfigOptions();
     }
 
-    String GL3PlusRenderSystem::validateConfigOptions(void)
+    String GL3PlusRenderSystem::validateConfigOptions()
     {
         // XXX Return an error string if something is invalid
         return mGLSupport->validateConfig();
@@ -699,13 +699,13 @@ namespace Ogre {
         mGLInitialised = true;
     }
 
-    void GL3PlusRenderSystem::reinitialise(void)
+    void GL3PlusRenderSystem::reinitialise()
     {
         this->shutdown();
         this->_initialise(true);
     }
 
-    void GL3PlusRenderSystem::shutdown(void)
+    void GL3PlusRenderSystem::shutdown()
     {
         RenderSystem::shutdown();
 
@@ -918,7 +918,7 @@ namespace Ogre {
             _switchContext( newContext );
     }
     //-----------------------------------------------------------------------------------
-    RenderPassDescriptor* GL3PlusRenderSystem::createRenderPassDescriptor(void)
+    RenderPassDescriptor* GL3PlusRenderSystem::createRenderPassDescriptor()
     {
         RenderPassDescriptor *retVal = OGRE_NEW GL3PlusRenderPassDescriptor( this );
         mRenderPassDescs.insert( retVal );
@@ -1031,7 +1031,7 @@ namespace Ogre {
         }*/
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderSystem::endRenderPassDescriptor(void)
+    void GL3PlusRenderSystem::endRenderPassDescriptor()
     {
         if( mCurrentRenderPassDescriptor )
         {
@@ -1065,7 +1065,7 @@ namespace Ogre {
         return BLANKSTRING;
     }
 
-    VertexElementType GL3PlusRenderSystem::getColourVertexElementType(void) const
+    VertexElementType GL3PlusRenderSystem::getColourVertexElementType() const
     {
         return VET_COLOUR_ABGR;
     }
@@ -1402,7 +1402,7 @@ namespace Ogre {
         _setTexture(unit, tex, false);
     }
 
-    void GL3PlusRenderSystem::flushUAVs(void)
+    void GL3PlusRenderSystem::flushUAVs()
     {
         if( mUavRenderingDirty )
         {
@@ -2419,11 +2419,11 @@ namespace Ogre {
         newPso->rsData = 0;
     }
 
-    void GL3PlusRenderSystem::_beginFrame(void)
+    void GL3PlusRenderSystem::_beginFrame()
     {
     }
 
-    void GL3PlusRenderSystem::_endFrame(void)
+    void GL3PlusRenderSystem::_endFrame()
     {
         OGRE_CHECK_GL_ERROR(glDisable(GL_DEPTH_CLAMP));
 
@@ -2501,25 +2501,25 @@ namespace Ogre {
         }
     }
 
-    Real GL3PlusRenderSystem::getRSDepthRange(void) const
+    Real GL3PlusRenderSystem::getRSDepthRange() const
     {
         return mReverseDepth ? 1.0f : 2.0f;
     }
 
-    HardwareOcclusionQuery* GL3PlusRenderSystem::createHardwareOcclusionQuery(void)
+    HardwareOcclusionQuery* GL3PlusRenderSystem::createHardwareOcclusionQuery()
     {
         GL3PlusHardwareOcclusionQuery* ret = new GL3PlusHardwareOcclusionQuery();
         mHwOcclusionQueries.push_back(ret);
         return ret;
     }
 
-    Real GL3PlusRenderSystem::getMinimumDepthInputValue(void)
+    Real GL3PlusRenderSystem::getMinimumDepthInputValue()
     {
         // Range [-1.0f, 1.0f] or range [0.0f; 1.0f]
         return mReverseDepth ? 0.0f : -1.0f;
     }
 
-    Real GL3PlusRenderSystem::getMaximumDepthInputValue(void)
+    Real GL3PlusRenderSystem::getMaximumDepthInputValue()
     {
         // Range [-1.0f, 1.0f]
         return 1.0f;
@@ -2560,7 +2560,7 @@ namespace Ogre {
         }
     }
 
-    GLint GL3PlusRenderSystem::getCombinedMinMipFilter(void) const
+    GLint GL3PlusRenderSystem::getCombinedMinMipFilter() const
     {
         switch(mMinFilter)
         {
@@ -3018,7 +3018,7 @@ namespace Ogre {
         }
     }
 
-    void GL3PlusRenderSystem::_startLegacyV1Rendering(void)
+    void GL3PlusRenderSystem::_startLegacyV1Rendering()
     {
         glBindVertexArray( mGlobalVao );
     }
@@ -3664,7 +3664,7 @@ namespace Ogre {
     }
 
 
-    void GL3PlusRenderSystem::endProfileEvent( void )
+    void GL3PlusRenderSystem::endProfileEvent()
     {
         markProfileEvent("End Event");
         if( mHasGL43 || mGLSupport->checkExtension("ARB_debug_group") )
@@ -3699,7 +3699,7 @@ namespace Ogre {
 #endif
     }
 
-    void GL3PlusRenderSystem::debugAnnotationPop( void )
+    void GL3PlusRenderSystem::debugAnnotationPop()
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         if( mHasGL43 || mGLSupport->checkExtension("GL_KHR_debug") )
@@ -3707,14 +3707,14 @@ namespace Ogre {
 #endif
     }
 
-    void GL3PlusRenderSystem::initGPUProfiling(void)
+    void GL3PlusRenderSystem::initGPUProfiling()
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
         _rmt_BindOpenGL();
 #endif
     }
 
-    void GL3PlusRenderSystem::deinitGPUProfiling(void)
+    void GL3PlusRenderSystem::deinitGPUProfiling()
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
         _rmt_UnbindOpenGL();
@@ -3893,18 +3893,18 @@ namespace Ogre {
         return mGLSupport->checkExtension( ext );
     }
 
-    const PixelFormatToShaderType* GL3PlusRenderSystem::getPixelFormatToShaderType(void) const
+    const PixelFormatToShaderType* GL3PlusRenderSystem::getPixelFormatToShaderType() const
     {
         return &mPixelFormatToShaderType;
     }
     //---------------------------------------------------------------------
-    void GL3PlusRenderSystem::_clearStateAndFlushCommandBuffer(void)
+    void GL3PlusRenderSystem::_clearStateAndFlushCommandBuffer()
     {
         OgreProfileExhaustive( "GL3PlusRenderSystem::_clearStateAndFlushCommandBuffer" );
         OCGE( glFlush() );
     }
     //---------------------------------------------------------------------
-    void GL3PlusRenderSystem::flushCommands(void)
+    void GL3PlusRenderSystem::flushCommands()
     {
         OgreProfileExhaustive( "GL3PlusRenderSystem::flushCommands" );
         OCGE( glFlush() );

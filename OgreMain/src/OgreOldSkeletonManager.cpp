@@ -36,11 +36,11 @@ namespace Ogre
     template<> v1::OldSkeletonManager* Singleton<v1::OldSkeletonManager>::msSingleton = 0;
 namespace v1
 {
-    OldSkeletonManager* OldSkeletonManager::getSingletonPtr(void)
+    OldSkeletonManager* OldSkeletonManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    OldSkeletonManager& OldSkeletonManager::getSingleton(void)
+    OldSkeletonManager& OldSkeletonManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }

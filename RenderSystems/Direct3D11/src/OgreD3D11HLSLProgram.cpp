@@ -258,7 +258,7 @@ namespace Ogre {
         defines.push_back(macro);
     }       
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::loadFromSource(void)
+    void D3D11HLSLProgram::loadFromSource()
     {
         if ( GpuProgramManager::getSingleton().isMicrocodeAvailableInCache(getNameForMicrocodeCache()) )
         {
@@ -270,7 +270,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::getMicrocodeFromCache(void)
+    void D3D11HLSLProgram::getMicrocodeFromCache()
     {
         GpuProgramManager::Microcode cacheMicrocode = 
             GpuProgramManager::getSingleton().getMicrocodeFromCache(getNameForMicrocodeCache());
@@ -442,7 +442,7 @@ namespace Ogre {
         analizeMicrocode();
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::compileMicrocode(void)
+    void D3D11HLSLProgram::compileMicrocode()
     {
         OgreProfileExhaustive( "D3D11HLSLProgram::compileMicrocode" );
 
@@ -1255,13 +1255,13 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::createLowLevelImpl(void)
+    void D3D11HLSLProgram::createLowLevelImpl()
     {
         // Create a low-level program, give it the same name as us
         mAssemblerProgram = GpuProgramPtr(dynamic_cast<GpuProgram*>(this), SPFM_NONE);
     }
     //-----------------------------------------------------------------------
-    void D3D11HLSLProgram::unloadHighLevelImpl(void)
+    void D3D11HLSLProgram::unloadHighLevelImpl()
     {
         mSlotMap.clear();
         for( size_t i=0; i<NumDefaultBufferTypes; ++i )
@@ -1560,7 +1560,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool D3D11HLSLProgram::isSupported(void) const
+    bool D3D11HLSLProgram::isSupported() const
     {
         // Use the current render system
         RenderSystem* rs = Root::getSingleton().getRenderSystem();
@@ -1569,7 +1569,7 @@ namespace Ogre {
         return rs->getCapabilities()->isShaderProfileSupported(getCompatibleTarget()) && GpuProgram::isSupported();
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr D3D11HLSLProgram::createParameters(void)
+    GpuProgramParametersSharedPtr D3D11HLSLProgram::createParameters()
     {
         // Call superclass
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
@@ -1603,7 +1603,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    const String& D3D11HLSLProgram::getCompatibleTarget(void) const
+    const String& D3D11HLSLProgram::getCompatibleTarget() const
     {
         static const String
             vs_4_0           = "vs_4_0",
@@ -1631,7 +1631,7 @@ namespace Ogre {
         return mTarget;
     }
     //-----------------------------------------------------------------------
-    const String& D3D11HLSLProgram::getLanguage(void) const
+    const String& D3D11HLSLProgram::getLanguage() const
     {
         static const String language = "hlsl";
 
@@ -1741,7 +1741,7 @@ namespace Ogre {
         }
     }
 
-    void D3D11HLSLProgram::reinterpretGSForStreamOut(void)
+    void D3D11HLSLProgram::reinterpretGSForStreamOut()
     {
         assert(mGeometryShader);
         unloadHighLevel();
@@ -2149,60 +2149,60 @@ namespace Ogre {
 //        }
     }
     //-----------------------------------------------------------------------------
-    ID3D11VertexShader* D3D11HLSLProgram::getVertexShader(void) const 
+    ID3D11VertexShader* D3D11HLSLProgram::getVertexShader() const 
     { 
         assert(mType == GPT_VERTEX_PROGRAM);
         assert(mVertexShader);
         return mVertexShader.Get(); 
     }
     //-----------------------------------------------------------------------------
-    ID3D11PixelShader* D3D11HLSLProgram::getPixelShader(void) const 
+    ID3D11PixelShader* D3D11HLSLProgram::getPixelShader() const 
     { 
         assert(mType == GPT_FRAGMENT_PROGRAM);
         assert(mPixelShader);
         return mPixelShader.Get(); 
     }
     //-----------------------------------------------------------------------------
-    ID3D11GeometryShader* D3D11HLSLProgram::getGeometryShader(void) const 
+    ID3D11GeometryShader* D3D11HLSLProgram::getGeometryShader() const 
     { 
         assert(mType == GPT_GEOMETRY_PROGRAM);
         assert(mGeometryShader);
         return mGeometryShader.Get(); 
     }
     //-----------------------------------------------------------------------------
-    ID3D11DomainShader* D3D11HLSLProgram::getDomainShader(void) const 
+    ID3D11DomainShader* D3D11HLSLProgram::getDomainShader() const 
     { 
         assert(mType == GPT_DOMAIN_PROGRAM);
         assert(mDomainShader);
         return mDomainShader.Get(); 
     }
     //-----------------------------------------------------------------------------
-    ID3D11HullShader* D3D11HLSLProgram::getHullShader(void) const 
+    ID3D11HullShader* D3D11HLSLProgram::getHullShader() const 
     { 
         assert(mType == GPT_HULL_PROGRAM);
         assert(mHullShader);
         return mHullShader.Get(); 
     }
     //-----------------------------------------------------------------------------
-    ID3D11ComputeShader* D3D11HLSLProgram::getComputeShader(void) const 
+    ID3D11ComputeShader* D3D11HLSLProgram::getComputeShader() const 
     { 
         assert(mType == GPT_COMPUTE_PROGRAM);
         assert(mComputeShader);
         return mComputeShader.Get(); 
     }
     //-----------------------------------------------------------------------------
-    const MicroCode & D3D11HLSLProgram::getMicroCode(void) const 
+    const MicroCode & D3D11HLSLProgram::getMicroCode() const 
     { 
         assert(mMicroCode.size() > 0);
         return mMicroCode; 
     }
     //-----------------------------------------------------------------------------
-    unsigned int D3D11HLSLProgram::getNumInputs( void ) const
+    unsigned int D3D11HLSLProgram::getNumInputs() const
     {
         return mD3d11ShaderInputParameters.size();
     }
     //-----------------------------------------------------------------------------
-    unsigned int D3D11HLSLProgram::getNumOutputs( void ) const
+    unsigned int D3D11HLSLProgram::getNumOutputs() const
     {
         return mD3d11ShaderOutputParameters.size();
     }

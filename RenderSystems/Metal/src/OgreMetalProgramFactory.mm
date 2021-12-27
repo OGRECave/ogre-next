@@ -41,11 +41,11 @@ namespace Ogre {
     {
     }
     //-----------------------------------------------------------------------
-    MetalProgramFactory::~MetalProgramFactory(void)
+    MetalProgramFactory::~MetalProgramFactory()
     {
     }
     //-----------------------------------------------------------------------
-    const String& MetalProgramFactory::getLanguage(void) const
+    const String& MetalProgramFactory::getLanguage() const
     {
         return sLanguageName;
     }

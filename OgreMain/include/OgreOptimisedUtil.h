@@ -58,11 +58,11 @@ namespace Ogre {
         static OptimisedUtil* msImplementation;
 
         /// Detect best implementation based on run-time environment
-        static OptimisedUtil* _detectImplementation(void);
+        static OptimisedUtil* _detectImplementation();
 
     public:
         // Default constructor
-        OptimisedUtil(void) {}
+        OptimisedUtil() {}
         // Destructor
         virtual ~OptimisedUtil() {}
 
@@ -71,7 +71,7 @@ namespace Ogre {
             Don't cache the pointer returned by this function, it'll change due
             run-time environment detection to pick up the best implementation.
         */
-        static OptimisedUtil* getImplementation(void) { return msImplementation; }
+        static OptimisedUtil* getImplementation() { return msImplementation; }
 
         /** Performs software vertex skinning.
         @param srcPosPtr Pointer to source position buffer.

@@ -893,7 +893,7 @@ namespace Ogre
         deleteOldGridBuffers();
     }
     //-----------------------------------------------------------------------------------
-    size_t ForwardClustered::getConstBufferSize(void) const
+    size_t ForwardClustered::getConstBufferSize() const
     {
         // (4 (vec4) + vec4 fwdScreenToGrid) * 4 bytes = 16
         return (4 + 4) * 4;
@@ -1018,7 +1018,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool ForwardClustered::getDebugFrustum(void) const
+    bool ForwardClustered::getDebugFrustum() const
     {
         return !mDebugWireAabb.empty();
     }
@@ -1028,7 +1028,7 @@ namespace Ogre
         mDebugWireAabbFrozen = freezeDebugFrustum;
     }
     //-----------------------------------------------------------------------------------
-    bool ForwardClustered::getFreezeDebugFrustum(void) const
+    bool ForwardClustered::getFreezeDebugFrustum() const
     {
         return mDebugWireAabbFrozen;
     }

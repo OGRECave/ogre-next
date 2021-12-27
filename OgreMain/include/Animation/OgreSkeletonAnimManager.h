@@ -66,10 +66,10 @@ namespace Ogre
 
         BySkeletonDef( const SkeletonDef *skeletonDef, size_t threadCount );
 
-        void initializeMemoryManager(void);
+        void initializeMemoryManager();
 
-        void updateThreadStarts(void);
-        void _updateBoneStartTransforms(void);
+        void updateThreadStarts();
+        void _updateBoneStartTransforms();
 
         bool operator == ( IdString name ) const { return skeletonDefName == name; }
     };

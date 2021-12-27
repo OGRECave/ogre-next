@@ -159,7 +159,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     CompositorPassIblSpecular::~CompositorPassIblSpecular() { destroyComputeShaders(); }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::destroyComputeShaders( void )
+    void CompositorPassIblSpecular::destroyComputeShaders()
     {
         if( !mJobs.empty() )
         {
@@ -180,7 +180,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::setupComputeShaders( void )
+    void CompositorPassIblSpecular::setupComputeShaders()
     {
         destroyComputeShaders();
 
@@ -457,7 +457,7 @@ namespace Ogre
         return usedByUs;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassIblSpecular::resetNumPassesLeft( void )
+    void CompositorPassIblSpecular::resetNumPassesLeft()
     {
         vector<HlmsComputeJob *>::const_iterator itor = mJobs.begin();
         vector<HlmsComputeJob *>::const_iterator endt = mJobs.end();

@@ -69,8 +69,8 @@ namespace Ogre
         /// Compute
         vector<HlmsComputeJob *>::type mJobs;
 
-        void setupComputeShaders( void );
-        void destroyComputeShaders( void );
+        void setupComputeShaders();
+        void destroyComputeShaders();
 
         virtual void analyzeBarriers( const bool bClearBarriers = true );
 
@@ -83,7 +83,7 @@ namespace Ogre
 
         virtual bool notifyRecreated( const TextureGpu *channel );
 
-        virtual void resetNumPassesLeft(void);
+        virtual void resetNumPassesLeft();
 
     private:
         CompositorPassIblSpecularDef const *mDefinition;

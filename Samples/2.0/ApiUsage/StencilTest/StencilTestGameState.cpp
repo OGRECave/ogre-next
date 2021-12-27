@@ -22,7 +22,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void StencilTestGameState::createScene01(void)
+    void StencilTestGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

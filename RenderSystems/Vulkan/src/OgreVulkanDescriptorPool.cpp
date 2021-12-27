@@ -199,13 +199,13 @@ namespace Ogre
         mCurrentPoolIdx = 0u;
     }
     //-------------------------------------------------------------------------
-    void VulkanDescriptorPool::_advanceFrame( void )
+    void VulkanDescriptorPool::_advanceFrame()
     {
         mLastFrameUsed = mVaoManager->getFrameCount();
         mAdvanceFrameScheduled = false;
     }
     //-------------------------------------------------------------------------
-    bool VulkanDescriptorPool::isAvailableInCurrentFrame( void ) const
+    bool VulkanDescriptorPool::isAvailableInCurrentFrame() const
     {
         return mVaoManager->isFrameFinished( mLastFrameUsed );
     }

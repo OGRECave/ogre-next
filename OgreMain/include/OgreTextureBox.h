@@ -71,28 +71,28 @@ namespace Ogre
         {
         }
 
-        uint32 getMaxX(void) const      { return x + width; }
-        uint32 getMaxY(void) const      { return y + height; }
-        uint32 getMaxZ(void) const      { return z + depth; }
-        uint32 getMaxSlice(void) const  { return sliceStart + numSlices; }
-        uint32 getDepthOrSlices(void) const { return std::max( depth, numSlices ); }
-        uint32 getZOrSlice(void) const  { return std::max( z, sliceStart ); }
+        uint32 getMaxX() const      { return x + width; }
+        uint32 getMaxY() const      { return y + height; }
+        uint32 getMaxZ() const      { return z + depth; }
+        uint32 getMaxSlice() const  { return sliceStart + numSlices; }
+        uint32 getDepthOrSlices() const { return std::max( depth, numSlices ); }
+        uint32 getZOrSlice() const  { return std::max( z, sliceStart ); }
 
-        size_t getSizeBytes(void) const { return bytesPerImage * std::max( depth, numSlices ); }
+        size_t getSizeBytes() const { return bytesPerImage * std::max( depth, numSlices ); }
 
         void setCompressedPixelFormat( PixelFormatGpu pixelFormat )
         {
             assert( PixelFormatGpuUtils::isCompressed( pixelFormat ) );
             bytesPerPixel = 0xF0000000 + pixelFormat;
         }
-        PixelFormatGpu getCompressedPixelFormat(void) const
+        PixelFormatGpu getCompressedPixelFormat() const
         {
             if( bytesPerPixel < 0xF0000000 )
                 return PFG_UNKNOWN;
             return static_cast<PixelFormatGpu>( bytesPerPixel - 0xF0000000 );
         }
 
-        bool isCompressed(void) const
+        bool isCompressed() const
         {
             return bytesPerPixel >= 0xF0000000;
         }
@@ -160,7 +160,7 @@ namespace Ogre
 
         /// Returns true if this TextureBox does not represent a contiguous region of a
         /// single slice of full texture, and is instead a 2D subregion of a larger texture.
-        bool isSubtextureRegion(void) const
+        bool isSubtextureRegion() const
         {
             if( x != 0u || y != 0u )
                 return true;

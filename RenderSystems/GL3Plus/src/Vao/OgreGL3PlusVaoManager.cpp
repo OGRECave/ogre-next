@@ -375,7 +375,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusVaoManager::cleanupEmptyPools(void)
+    void GL3PlusVaoManager::cleanupEmptyPools()
     {
         FastArray<GLuint> bufferNames;
 
@@ -1179,7 +1179,7 @@ namespace Ogre
         return vaoName;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusVaoManager::bindDrawId(void)
+    void GL3PlusVaoManager::bindDrawId()
     {
         GL3PlusBufferInterface *drawIdBufferInterface = static_cast<GL3PlusBufferInterface*>(
                                                                 mDrawId->getBufferInterface() );
@@ -1440,7 +1440,7 @@ namespace Ogre
         stagingTexture->_resetDynamicBuffer();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusVaoManager::_update(void)
+    void GL3PlusVaoManager::_update()
     {
         uint64 currentTimeMs = mTimer->getMilliseconds();
 
@@ -1512,7 +1512,7 @@ namespace Ogre
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    uint8 GL3PlusVaoManager::waitForTailFrameToFinish(void)
+    uint8 GL3PlusVaoManager::waitForTailFrameToFinish()
     {
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {

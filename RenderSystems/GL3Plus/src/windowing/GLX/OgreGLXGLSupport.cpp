@@ -163,7 +163,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    void GLXGLSupport::addConfig(void)
+    void GLXGLSupport::addConfig()
     {
         ConfigOption optFullScreen;
         ConfigOption optVideoMode;
@@ -270,7 +270,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    void GLXGLSupport::refreshConfig(void)
+    void GLXGLSupport::refreshConfig()
     {
         ConfigOptionMap::iterator optVideoMode = mOptions.find("Video Mode");
         ConfigOptionMap::iterator optDisplayFrequency = mOptions.find("Display Frequency");
@@ -350,7 +350,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    String GLXGLSupport::validateConfig(void)
+    String GLXGLSupport::validateConfig()
     {
         //TODO
         return BLANKSTRING;
@@ -443,7 +443,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    void GLXGLSupport::initialiseExtensions(void)
+    void GLXGLSupport::initialiseExtensions()
     {
         assert (mGLDisplay);
 
@@ -788,7 +788,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    Display* GLXGLSupport::getGLDisplay(void)
+    Display* GLXGLSupport::getGLDisplay()
     {
         if (! mGLDisplay)
         {
@@ -813,7 +813,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    Display* GLXGLSupport::getXDisplay(void)
+    Display* GLXGLSupport::getXDisplay()
     {
         if (! mXDisplay)
         {
@@ -835,7 +835,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    String GLXGLSupport::getDisplayName(void)
+    String GLXGLSupport::getDisplayName()
     {
         return String((const char*)XDisplayName(DisplayString(mGLDisplay)));
     }
@@ -984,7 +984,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    void GLXGLSupport::switchMode(void)
+    void GLXGLSupport::switchMode()
     {
         return switchMode(mOriginalMode.first.first, mOriginalMode.first.second, mOriginalMode.second);
     }

@@ -86,8 +86,8 @@ namespace Ogre {
 
     public:
 
-        GLSLESProgramManagerCommon(void);
-        ~GLSLESProgramManagerCommon(void);
+        GLSLESProgramManagerCommon();
+        ~GLSLESProgramManagerCommon();
 
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
         /**

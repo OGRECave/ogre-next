@@ -47,8 +47,8 @@ namespace Ogre {
     public:
       D3D11StereoDriverBridge(StereoModeType stereoMode);
       virtual ~D3D11StereoDriverBridge();
-      static D3D11StereoDriverBridge& getSingleton(void);
-      static D3D11StereoDriverBridge* getSingletonPtr(void);
+      static D3D11StereoDriverBridge& getSingleton();
+      static D3D11StereoDriverBridge* getSingletonPtr();
       StereoModeType getStereoMode() const;
 	  bool addRenderWindow(D3D11RenderWindowBase* renderWindow) const;
       bool removeRenderWindow(const String& renderWindowName) const;

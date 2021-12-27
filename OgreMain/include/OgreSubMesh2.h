@@ -107,7 +107,7 @@ namespace Ogre {
 
         /// Limits mBoneAssignments to OGRE_MAX_BLEND_WEIGHTS and
         /// if we need to strip, normalizes all weights to sum 1.
-        uint8 rationaliseBoneAssignments(void);
+        uint8 rationaliseBoneAssignments();
         
         uint16 mNumPoses;
         bool mPoseHalfPrecision;
@@ -138,7 +138,7 @@ namespace Ogre {
             This method is for assigning weights to the dedicated geometry of the SubMesh. To assign
             weights to the shared Mesh geometry, see the equivalent methods on Mesh.
         */
-        void clearBoneAssignments(void);
+        void clearBoneAssignments();
 
         /** Gets a const reference to the list of bone assignments
         */
@@ -147,15 +147,15 @@ namespace Ogre {
         /// Call this function if you've manually called addBoneAssignment to setup
         /// bones for vertices.
         /// WARNING: Will destroy LODs.
-        void _compileBoneAssignments(void);
+        void _compileBoneAssignments();
 
         /// Builds mBlendIndexToBoneIndexMap based on mBoneAssignments.
         /// mBlendIndexToBoneIndexMap is necessary for enabling skeletal animation.
-        void _buildBoneIndexMap(void);
+        void _buildBoneIndexMap();
 
         /// Populates mBoneAssignments by reading the vertex data.
         /// See the other overload.
-        void _buildBoneAssignmentsFromVertexData(void);
+        void _buildBoneAssignmentsFromVertexData();
 
         /** Populates mBoneAssignments by reading the vertex data.
             This version accepts an external buffer in case you already have
@@ -185,7 +185,7 @@ namespace Ogre {
         SubMesh* clone( Mesh *parentMesh = 0, int vertexBufferType = -1, int indexBufferType = -1 );
 
         void setMaterialName( const String &name )          { mMaterialName = name; }
-        String getMaterialName(void) const                  { return mMaterialName; }
+        String getMaterialName() const                  { return mMaterialName; }
 
         /// Imports a v1 SubMesh @See Mesh::importV1. Automatically performs what arrangeEfficient does.
         void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose );
@@ -198,7 +198,7 @@ namespace Ogre {
         /// Reverts the effects from arrangeEfficient by converting all 16-bit half float back
         /// to 32-bit float; and QTangents to Normal, Tangent + Reflection representation,
         /// which are more compatible for doing certain operations vertex operations in the CPU.
-        void dearrangeToInefficient(void);
+        void dearrangeToInefficient();
 
         void _prepareForShadowMapping( bool forceSameBuffers );
         
@@ -358,7 +358,7 @@ namespace Ogre {
                                  bool destroyIndexBuffer = true );
 
     protected:
-        void destroyShadowMappingVaos(void);
+        void destroyShadowMappingVaos();
     };
     /** @} */
     /** @} */

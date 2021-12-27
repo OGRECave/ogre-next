@@ -29,7 +29,7 @@ namespace Demo
 	{
     }
     //-----------------------------------------------------------------------------------
-	void EmptyProjectGameState::createScene01(void)
+	void EmptyProjectGameState::createScene01()
     {
         mCameraController = new CameraController( mGraphicsSystem, false );
 

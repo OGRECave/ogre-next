@@ -111,7 +111,7 @@ namespace Ogre
         shutdown();
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::shutdown(void)
+    void MetalRenderSystem::shutdown()
     {
         if( mActiveDevice )
             mActiveDevice->endAllEncoders();
@@ -145,13 +145,13 @@ namespace Ogre
         mShaderManager = 0;
     }
     //-------------------------------------------------------------------------
-    const String& MetalRenderSystem::getName(void) const
+    const String& MetalRenderSystem::getName() const
     {
         static String strName("Metal Rendering Subsystem");
         return strName;
     }
     //-------------------------------------------------------------------------
-    const String& MetalRenderSystem::getFriendlyName(void) const
+    const String& MetalRenderSystem::getFriendlyName() const
     {
         static String strName("Metal_RS");
         return strName;
@@ -218,7 +218,7 @@ namespace Ogre
             refreshFSAAOptions();
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::refreshFSAAOptions(void)
+    void MetalRenderSystem::refreshFSAAOptions()
     {
         ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
         ConfigOption* optFSAA = &it->second;
@@ -263,12 +263,12 @@ namespace Ogre
         return SampleDescription( samples, sampleDesc.getMsaaPattern() );
     }
     //-------------------------------------------------------------------------
-    HardwareOcclusionQuery* MetalRenderSystem::createHardwareOcclusionQuery(void)
+    HardwareOcclusionQuery* MetalRenderSystem::createHardwareOcclusionQuery()
     {
         return 0; //TODO
     }
     //-------------------------------------------------------------------------
-    RenderSystemCapabilities* MetalRenderSystem::createRenderSystemCapabilities(void) const
+    RenderSystemCapabilities* MetalRenderSystem::createRenderSystemCapabilities() const
     {
         RenderSystemCapabilities* rsc = new RenderSystemCapabilities();
         rsc->setRenderSystemName(getName());
@@ -501,7 +501,7 @@ namespace Ogre
         return rsc;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::reinitialise(void)
+    void MetalRenderSystem::reinitialise()
     {
         this->shutdown();
         this->_initialise(true);
@@ -589,7 +589,7 @@ namespace Ogre
         return BLANKSTRING;
     }
     //-------------------------------------------------------------------------
-    bool MetalRenderSystem::hasStoreAndMultisampleResolve(void) const
+    bool MetalRenderSystem::hasStoreAndMultisampleResolve() const
     {
         return mCurrentCapabilities->hasCapability( RSC_STORE_AND_MULTISAMPLE_RESOLVE );
     }
@@ -626,7 +626,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::flushUAVs(void)
+    void MetalRenderSystem::flushUAVs()
     {
         if( mUavRenderingDirty && mActiveRenderEncoder )
         {
@@ -992,7 +992,7 @@ namespace Ogre
         //mDevice
     }
     //-------------------------------------------------------------------------
-    RenderPassDescriptor* MetalRenderSystem::createRenderPassDescriptor(void)
+    RenderPassDescriptor* MetalRenderSystem::createRenderPassDescriptor()
     {
         RenderPassDescriptor *retVal = OGRE_NEW MetalRenderPassDescriptor( mActiveDevice, this );
         mRenderPassDescs.insert( retVal );
@@ -1188,7 +1188,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::executeRenderPassDescriptorDelayedActions(void)
+    void MetalRenderSystem::executeRenderPassDescriptorDelayedActions()
     {
         executeRenderPassDescriptorDelayedActions( true );
     }
@@ -1213,7 +1213,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::endRenderPassDescriptor(void)
+    void MetalRenderSystem::endRenderPassDescriptor()
     {
         endRenderPassDescriptor( false );
     }
@@ -1267,7 +1267,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_waitForTailFrameToFinish(void)
+    void MetalRenderSystem::_waitForTailFrameToFinish()
     {
         if( !mMainSemaphoreAlreadyWaited )
         {
@@ -1277,7 +1277,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_beginFrameOnce(void)
+    void MetalRenderSystem::_beginFrameOnce()
     {
         assert( !mBeginFrameOnceStarted &&
                 "Calling MetalRenderSystem::_beginFrameOnce more than once "
@@ -1292,7 +1292,7 @@ namespace Ogre
         mBeginFrameOnceStarted = true;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_endFrameOnce(void)
+    void MetalRenderSystem::_endFrameOnce()
     {
         @autoreleasepool
         {
@@ -1318,7 +1318,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::cleanAutoParamsBuffers(void)
+    void MetalRenderSystem::cleanAutoParamsBuffers()
     {
         const size_t numUsedBuffers = mAutoParamsBufferIdx;
         size_t usedBytes = 0;
@@ -1411,11 +1411,11 @@ namespace Ogre
         pso->rsData = 0;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_beginFrame(void)
+    void MetalRenderSystem::_beginFrame()
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_endFrame(void)
+    void MetalRenderSystem::_endFrame()
     {
     }
     //-------------------------------------------------------------------------
@@ -1443,18 +1443,18 @@ namespace Ogre
         mPso = 0;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_notifyActiveComputeEnded(void)
+    void MetalRenderSystem::_notifyActiveComputeEnded()
     {
         mComputePso = 0;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_notifyNewCommandBuffer(void)
+    void MetalRenderSystem::_notifyNewCommandBuffer()
     {
         MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mVaoManager );
         vaoManager->_notifyNewCommandBuffer();
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_notifyDeviceStalled(void)
+    void MetalRenderSystem::_notifyDeviceStalled()
     {
         v1::MetalHardwareBufferManager *hwBufferMgr = static_cast<v1::MetalHardwareBufferManager*>(
                     mHardwareBufferManager );
@@ -2135,7 +2135,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VertexElementType MetalRenderSystem::getColourVertexElementType(void) const
+    VertexElementType MetalRenderSystem::getColourVertexElementType() const
     {
         return VET_COLOUR_ABGR; // MTLVertexFormatUChar4Normalized
     }
@@ -2662,22 +2662,22 @@ namespace Ogre
         executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------
-    Real MetalRenderSystem::getHorizontalTexelOffset(void)
+    Real MetalRenderSystem::getHorizontalTexelOffset()
     {
         return 0.0f;
     }
     //-------------------------------------------------------------------------
-    Real MetalRenderSystem::getVerticalTexelOffset(void)
+    Real MetalRenderSystem::getVerticalTexelOffset()
     {
         return 0.0f;
     }
     //-------------------------------------------------------------------------
-    Real MetalRenderSystem::getMinimumDepthInputValue(void)
+    Real MetalRenderSystem::getMinimumDepthInputValue()
     {
         return 0.0f;
     }
     //-------------------------------------------------------------------------
-    Real MetalRenderSystem::getMaximumDepthInputValue(void)
+    Real MetalRenderSystem::getMaximumDepthInputValue()
     {
         return 1.0f;
     }
@@ -2698,20 +2698,20 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    const PixelFormatToShaderType* MetalRenderSystem::getPixelFormatToShaderType(void) const
+    const PixelFormatToShaderType* MetalRenderSystem::getPixelFormatToShaderType() const
     {
         return &mPixelFormatToShaderType;
     }
 
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::initGPUProfiling(void)
+    void MetalRenderSystem::initGPUProfiling()
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
 //        _rmt_BindMetal( mActiveDevice->mCurrentCommandBuffer );
 #endif
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::deinitGPUProfiling(void)
+    void MetalRenderSystem::deinitGPUProfiling()
     {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
         _rmt_UnbindMetal();
@@ -2736,7 +2736,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::endProfileEvent( void )
+    void MetalRenderSystem::endProfileEvent()
     {
     }
     //-------------------------------------------------------------------------
@@ -2794,7 +2794,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::flushCommands(void)
+    void MetalRenderSystem::flushCommands()
     {
         endRenderPassDescriptor( false );
         mActiveDevice->commitAndNextCommandBuffer();

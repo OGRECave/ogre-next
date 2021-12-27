@@ -137,7 +137,7 @@ namespace Ogre {
         mInitialised = true;
     }
     //-----------------------------------------------------------------------
-    void Item::_deinitialise(void)
+    void Item::_deinitialise()
     {
         if (!mInitialised)
             return;
@@ -167,7 +167,7 @@ namespace Ogre {
         mMesh->removeListener(this);
     }
     //-----------------------------------------------------------------------
-    const MeshPtr& Item::getMesh(void) const
+    const MeshPtr& Item::getMesh() const
     {
         return mMesh;
     }
@@ -190,7 +190,7 @@ namespace Ogre {
         return &mSubItems[index];
     }
     //-----------------------------------------------------------------------
-    size_t Item::getNumSubItems(void) const
+    size_t Item::getNumSubItems() const
     {
         return mSubItems.size();
     }
@@ -269,7 +269,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const String& Item::getMovableType(void) const
+    const String& Item::getMovableType() const
     {
         return ItemFactory::FACTORY_TYPE_NAME;
     }
@@ -331,7 +331,7 @@ namespace Ogre {
         return mSkeletonInstance && mSkeletonInstance->_getRefCount() > 1u;
     }
     //-----------------------------------------------------------------------
-    void Item::_notifyParentNodeMemoryChanged(void)
+    void Item::_notifyParentNodeMemoryChanged()
     {
         if( mSkeletonInstance /*&& !mSharedTransformEntity*/ )
         {
@@ -343,7 +343,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     String ItemFactory::FACTORY_TYPE_NAME = "Item";
     //-----------------------------------------------------------------------
-    const String& ItemFactory::getType(void) const
+    const String& ItemFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

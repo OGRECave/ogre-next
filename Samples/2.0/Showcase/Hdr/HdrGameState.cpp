@@ -42,7 +42,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void HdrGameState::createScene01(void)
+    void HdrGameState::createScene01()
     {
         HdrUtils::init( mGraphicsSystem->getRenderWindow()->getSampleDescription().getColourSamples() );
 

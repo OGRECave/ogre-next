@@ -55,14 +55,14 @@ namespace Ogre
 
         void init( const MetalDeviceItem *device );
 
-        void endBlitEncoder(void);
+        void endBlitEncoder();
         void endRenderEncoder( bool endRenderPassDesc=true );
-        void endComputeEncoder(void);
+        void endComputeEncoder();
 
         void endAllEncoders( bool endRenderPassDesc=true );
 
         //Ends all encoders, calls commit and grabs a new mMainCommandBuffer
-        void commitAndNextCommandBuffer(void);
+        void commitAndNextCommandBuffer();
 
         /** Gets current blit encoder. If none is current, ends all other
             encoders and creates a new blit encoder.
@@ -72,13 +72,13 @@ namespace Ogre
             i.e.
             __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
         */
-        id<MTLBlitCommandEncoder> getBlitEncoder(void);
+        id<MTLBlitCommandEncoder> getBlitEncoder();
 
         /// See getBlitEncoder.
-        id<MTLComputeCommandEncoder> getComputeEncoder(void);
+        id<MTLComputeCommandEncoder> getComputeEncoder();
 
         /// Waits for the GPU to finish all pending commands.
-        void stall(void);
+        void stall();
     };
 
 

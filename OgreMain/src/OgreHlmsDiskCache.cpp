@@ -53,7 +53,7 @@ namespace Ogre
         clearCache();
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDiskCache::clearCache(void)
+    void HlmsDiskCache::clearCache()
     {
         mTemplatesOutOfDate = false;
         memset( mCache.templateHash, 0, sizeof( mCache.templateHash ) );

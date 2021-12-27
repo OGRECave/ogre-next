@@ -43,7 +43,7 @@ namespace Ogre
         threadStarts.resize( threadCount + 1, 0 );
     }
     //-----------------------------------------------------------------------
-    void BySkeletonDef::initializeMemoryManager(void)
+    void BySkeletonDef::initializeMemoryManager()
     {
         vector<size_t>::type bonesPerDepth;
         skeletonDef->getBonesPerDepth( bonesPerDepth );
@@ -51,7 +51,7 @@ namespace Ogre
         boneMemoryManager.setBoneRebaseListener( this );
     }
     //-----------------------------------------------------------------------
-    void BySkeletonDef::updateThreadStarts(void)
+    void BySkeletonDef::updateThreadStarts()
     {
         size_t lastStart = 0;
         size_t increments = std::max<size_t>( ARRAY_PACKED_REALS,
@@ -74,7 +74,7 @@ namespace Ogre
         threadStarts.back() = skeletons.size();
     }
     //-----------------------------------------------------------------------
-    void BySkeletonDef::_updateBoneStartTransforms(void)
+    void BySkeletonDef::_updateBoneStartTransforms()
     {
         FastArray<SkeletonInstance*>::iterator itor = skeletons.begin();
         FastArray<SkeletonInstance*>::iterator end  = skeletons.end();

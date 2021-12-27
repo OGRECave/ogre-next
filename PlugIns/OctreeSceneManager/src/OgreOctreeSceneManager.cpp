@@ -531,7 +531,7 @@ void OctreeSceneManager::_addOctreeNode( OctreeNode * n, Octree *octant, int dep
 }
 
 
-SceneNode * OctreeSceneManager::createSceneNodeImpl( void )
+SceneNode * OctreeSceneManager::createSceneNodeImpl()
 {
     return OGRE_NEW OctreeNode( this );
 }
@@ -546,7 +546,7 @@ void OctreeSceneManager::_updateSceneGraph( Camera * cam )
     SceneManager::_updateSceneGraph( cam );
 }
 
-void OctreeSceneManager::_alertVisibleObjects( void )
+void OctreeSceneManager::_alertVisibleObjects()
 {
     OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
         "Function doesn't do as advertised",

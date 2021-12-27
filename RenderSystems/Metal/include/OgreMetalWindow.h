@@ -54,8 +54,8 @@ namespace Ogre
 #endif
         MetalDevice         *mDevice;
 
-        inline void checkLayerSizeChanges(void);
-        void setResolutionFromView(void);
+        inline void checkLayerSizeChanges();
+        void setResolutionFromView();
     public:
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                      const NameValuePairList *miscParams, MetalDevice *ownerDevice );
@@ -63,24 +63,24 @@ namespace Ogre
 
         virtual float getViewPointToPixelScale() const;
 
-        virtual void swapBuffers(void);
-        virtual void windowMovedOrResized(void);
+        virtual void swapBuffers();
+        virtual void windowMovedOrResized();
 
-        virtual bool nextDrawable(void);
+        virtual bool nextDrawable();
 
         virtual void create( bool fullScreen, const NameValuePairList *miscParams );
-        virtual void destroy(void);
+        virtual void destroy();
 
         void _initialize( TextureGpuManager *textureGpuManager );
 
         virtual void reposition( int32 left, int32 top );
         virtual void requestResolution( uint32 width, uint32 height );
 
-        virtual bool isClosed(void) const;
+        virtual bool isClosed() const;
         virtual void _setVisible( bool visible );
-        virtual bool isVisible(void) const;
+        virtual bool isVisible() const;
         virtual void setHidden( bool hidden );
-        virtual bool isHidden(void) const;
+        virtual bool isHidden() const;
 
         virtual void getCustomAttribute( IdString name, void* pData );
     };

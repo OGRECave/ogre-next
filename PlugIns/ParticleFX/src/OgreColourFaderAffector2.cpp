@@ -166,12 +166,12 @@ namespace Ogre {
         mRedAdj2 = red;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getRedAdjust1(void) const
+    float ColourFaderAffector2::getRedAdjust1() const
     {
         return mRedAdj1;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getRedAdjust2(void) const
+    float ColourFaderAffector2::getRedAdjust2() const
     {
         return mRedAdj2;
     }
@@ -186,12 +186,12 @@ namespace Ogre {
         mGreenAdj2 = green;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getGreenAdjust1(void) const
+    float ColourFaderAffector2::getGreenAdjust1() const
     {
         return mGreenAdj1;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getGreenAdjust2(void) const
+    float ColourFaderAffector2::getGreenAdjust2() const
     {
         return mGreenAdj2;
     }
@@ -206,12 +206,12 @@ namespace Ogre {
         mBlueAdj2 = blue;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getBlueAdjust1(void) const
+    float ColourFaderAffector2::getBlueAdjust1() const
     {
         return mBlueAdj1;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getBlueAdjust2(void) const
+    float ColourFaderAffector2::getBlueAdjust2() const
     {
         return mBlueAdj2;
     }
@@ -226,12 +226,12 @@ namespace Ogre {
         mAlphaAdj2 = alpha;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getAlphaAdjust1(void) const
+    float ColourFaderAffector2::getAlphaAdjust1() const
     {
         return mAlphaAdj1;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector2::getAlphaAdjust2(void) const
+    float ColourFaderAffector2::getAlphaAdjust2() const
     {
         return mAlphaAdj2;
     }
@@ -241,7 +241,7 @@ namespace Ogre {
         StateChangeVal = NewValue;
     }
     //-----------------------------------------------------------------------
-    Real ColourFaderAffector2::getStateChange(void) const
+    Real ColourFaderAffector2::getStateChange() const
     {
         return StateChangeVal;
     }

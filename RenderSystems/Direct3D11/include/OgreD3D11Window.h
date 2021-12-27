@@ -100,14 +100,14 @@ namespace Ogre
     protected:
         DXGI_FORMAT _getSwapChainFormat();
         DXGI_SWAP_CHAIN_FLAG _getSwapChainFlags();
-        uint8 _getSwapChainBufferCount(void) const;
+        uint8 _getSwapChainBufferCount() const;
         void _createSwapChain();
         virtual HRESULT _createSwapChainImpl() = 0;
         virtual void _destroySwapChain();
         void _createSizeDependedD3DResources();
         void _destroySizeDependedD3DResources();
         void resizeSwapChainBuffers( uint32 width, uint32 height );
-        void notifyResolutionChanged(void);
+        void notifyResolutionChanged();
         void notifyDeviceLost(D3D11Device* device);
         void notifyDeviceRestored(D3D11Device* device, unsigned pass);
 
@@ -124,7 +124,7 @@ namespace Ogre
         /// @copydoc Window::setFsaa
         virtual void setFsaa(const String& fsaa);
 
-        virtual void swapBuffers(void);
+        virtual void swapBuffers();
     };
 }
 

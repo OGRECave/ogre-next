@@ -116,7 +116,7 @@ namespace Volume {
         
     //-----------------------------------------------------------------------
 
-    TextureSource::~TextureSource(void)
+    TextureSource::~TextureSource()
     {
         OGRE_FREE(mData, MEMCATEGORY_GENERAL);
     }

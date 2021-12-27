@@ -77,13 +77,13 @@ namespace Ogre
 	}
 	//---------------------------------------------------------------------
 	template<> D3D11StereoDriverBridge* Ogre::Singleton<D3D11StereoDriverBridge>::msSingleton = 0;
-	D3D11StereoDriverBridge& D3D11StereoDriverBridge::getSingleton(void)
+	D3D11StereoDriverBridge& D3D11StereoDriverBridge::getSingleton()
 	{
 		assert(msSingleton);
 		return (*msSingleton);
 	}
 	//---------------------------------------------------------------------
-	D3D11StereoDriverBridge* D3D11StereoDriverBridge::getSingletonPtr(void)
+	D3D11StereoDriverBridge* D3D11StereoDriverBridge::getSingletonPtr()
 	{
 		return msSingleton;
 	}

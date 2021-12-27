@@ -123,7 +123,7 @@ bool GLES2HardwareOcclusionQuery::pullOcclusionQuery( unsigned int* NumOfFragmen
         return false;
 }
 //------------------------------------------------------------------
-bool GLES2HardwareOcclusionQuery::isStillOutstanding(void)
+bool GLES2HardwareOcclusionQuery::isStillOutstanding()
 {    
     GLuint available = GL_FALSE;
 

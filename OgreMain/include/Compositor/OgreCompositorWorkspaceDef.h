@@ -128,8 +128,8 @@ namespace Ogre
         CompositorWorkspaceDef( const String& name, CompositorManager2 *compositorManager );
         virtual ~CompositorWorkspaceDef() {}
 
-        IdString getName(void) const                                { return mName; }
-        String getNameStr(void) const                               { return mNameStr; }
+        IdString getName() const                                { return mName; }
+        String getNameStr() const                               { return mNameStr; }
 
         /** Connects outNode's output channel to inNode's input channel.
         @remarks
@@ -186,7 +186,7 @@ namespace Ogre
             4. It is safe to call this function while there are still workspaces, but you must call
                @Workspace::reconnectAllNodes after you're done setting the new node connections
         */
-        void clearAllInterNodeConnections(void);
+        void clearAllInterNodeConnections();
 
         /** Clears the connection from the "final output RenderTarget" (i.e. usually the RenderWindow)
             that goes to the input channel of one of our nodes. @See connectOutput.
@@ -199,7 +199,7 @@ namespace Ogre
             4. It is safe to call this function while there are still workspaces, but you must call
                @Workspace::reconnectAllNodes after you're done setting the new node connections
         */
-        void clearOutputConnections(void);
+        void clearOutputConnections();
 
         /** Clears everything: All node aliases, and their connections (including output connection).
         @remarks
@@ -207,7 +207,7 @@ namespace Ogre
             It is safe to call this function while there are still workspaces, but you must call
             @Workspace::recreateAllNodes after you're done setting the new node connections.
         */
-        void clearAll(void);
+        void clearAll();
 
         /** An alias is explicitly used when the user wants to use multiple, independent
             instances of the same node. Each alias equals one instance.
@@ -234,7 +234,7 @@ namespace Ogre
             Useful to know which nodes are in use by this compositor.
             Use @addNodeAlias @removeNodeAlias and @connect to safely modify the map.
         */
-        const NodeAliasMap& getNodeAliasMap(void)                   { return mAliasedNodes; }
+        const NodeAliasMap& getNodeAliasMap()                   { return mAliasedNodes; }
 
         /** Gets direct access to the channel route (aka the interconnections between all of our nodes).
             Useful for advanced C++ users who want fine control of the connections.
@@ -247,9 +247,9 @@ namespace Ogre
                 3. A node that doesn't have all of its input channels connected is incomplete
                    and should be disabled for the Workspace instance to be valid.
         */
-        ChannelRouteList& _getChannelRoutes(void)                   { return mChannelRoutes; }
+        ChannelRouteList& _getChannelRoutes()                   { return mChannelRoutes; }
 
-        CompositorManager2* getCompositorManager(void) const        { return mCompositorManager; }
+        CompositorManager2* getCompositorManager() const        { return mCompositorManager; }
     };
 
     /** @} */

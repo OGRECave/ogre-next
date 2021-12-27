@@ -62,7 +62,7 @@ namespace v1 {
         destroyAllTracks();
     }
     //---------------------------------------------------------------------
-    Real Animation::getLength(void) const
+    Real Animation::getLength() const
     {
         return mLength;
     }
@@ -88,7 +88,7 @@ namespace v1 {
         return ret;
     }
 	//---------------------------------------------------------------------
-	NodeAnimationTrack* Animation::createNodeTrack(void)
+    NodeAnimationTrack* Animation::createNodeTrack()
 	{
 		NodeAnimationTrack* ret = OGRE_NEW NodeAnimationTrack(this, mNodeTrackList.size());
 
@@ -114,7 +114,7 @@ namespace v1 {
         return ret;
     }
     //---------------------------------------------------------------------
-	size_t Animation::getNumNodeTracks(void) const
+	size_t Animation::getNumNodeTracks() const
     {
 		return mNodeTrackList.size();
 	}
@@ -125,7 +125,7 @@ namespace v1 {
 		return mNodeTrackList[handle];
 	}
 	//---------------------------------------------------------------------
-	size_t Animation::getNumOldNodeTracks(void) const
+	size_t Animation::getNumOldNodeTracks() const
 	{
 		return mOldNodeTrackList.size();
 	}
@@ -168,7 +168,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Animation::destroyAllNodeTracks(void)
+    void Animation::destroyAllNodeTracks()
     {
         NodeTrackList::iterator i;
         for (i = mNodeTrackList.begin(); i != mNodeTrackList.end(); ++i)
@@ -191,7 +191,7 @@ namespace v1 {
 		}
 	}
 	//---------------------------------------------------------------------
-	void Animation::destroyAllOldNodeTracks(void)
+    void Animation::destroyAllOldNodeTracks()
 	{
 		OldNodeTrackList::iterator i;
 		for (i = mOldNodeTrackList.begin(); i != mOldNodeTrackList.end(); ++i)
@@ -228,7 +228,7 @@ namespace v1 {
         return ret;
     }
     //---------------------------------------------------------------------
-    unsigned short Animation::getNumNumericTracks(void) const
+    unsigned short Animation::getNumNumericTracks() const
     {
         return (unsigned short)mNumericTrackList.size();
     }
@@ -266,7 +266,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Animation::destroyAllNumericTracks(void)
+    void Animation::destroyAllNumericTracks()
     {
         NumericTrackList::iterator i;
         for (i = mNumericTrackList.begin(); i != mNumericTrackList.end(); ++i)
@@ -305,7 +305,7 @@ namespace v1 {
         return ret;
     }
     //---------------------------------------------------------------------
-    unsigned short Animation::getNumVertexTracks(void) const
+    unsigned short Animation::getNumVertexTracks() const
     {
         return (unsigned short)mVertexTrackList.size();
     }
@@ -343,7 +343,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Animation::destroyAllVertexTracks(void)
+    void Animation::destroyAllVertexTracks()
     {
         VertexTrackList::iterator i;
         for (i = mVertexTrackList.begin(); i != mVertexTrackList.end(); ++i)
@@ -354,7 +354,7 @@ namespace v1 {
         _keyFrameListChanged();
     }
     //---------------------------------------------------------------------
-    void Animation::destroyAllTracks(void)
+    void Animation::destroyAllTracks()
     {
         destroyAllNodeTracks();
 		destroyAllOldNodeTracks();
@@ -362,7 +362,7 @@ namespace v1 {
         destroyAllVertexTracks();
     }
     //---------------------------------------------------------------------
-    const String& Animation::getName(void) const
+    const String& Animation::getName() const
     {
         return mName;
     }
@@ -530,7 +530,7 @@ namespace v1 {
         mInterpolationMode = im;
     }
     //---------------------------------------------------------------------
-    Animation::InterpolationMode Animation::getInterpolationMode(void) const
+    Animation::InterpolationMode Animation::getInterpolationMode() const
     {
         return mInterpolationMode;
     }
@@ -540,27 +540,27 @@ namespace v1 {
         msDefaultInterpolationMode = im;
     }
     //---------------------------------------------------------------------
-    Animation::InterpolationMode Animation::getDefaultInterpolationMode(void)
+    Animation::InterpolationMode Animation::getDefaultInterpolationMode()
     {
         return msDefaultInterpolationMode;
     }
     //---------------------------------------------------------------------
-    const Animation::NodeTrackList& Animation::_getNodeTrackList(void) const
+    const Animation::NodeTrackList& Animation::_getNodeTrackList() const
     {
 		return mNodeTrackList;
     }
 	//---------------------------------------------------------------------
-	const Animation::OldNodeTrackList& Animation::_getOldNodeTrackList(void) const
+	const Animation::OldNodeTrackList& Animation::_getOldNodeTrackList() const
 	{
 		return mOldNodeTrackList;
 	}
     //---------------------------------------------------------------------
-    const Animation::NumericTrackList& Animation::_getNumericTrackList(void) const
+    const Animation::NumericTrackList& Animation::_getNumericTrackList() const
     {
         return mNumericTrackList;
     }
     //---------------------------------------------------------------------
-    const Animation::VertexTrackList& Animation::_getVertexTrackList(void) const
+    const Animation::VertexTrackList& Animation::_getVertexTrackList() const
     {
         return mVertexTrackList;
     }
@@ -570,7 +570,7 @@ namespace v1 {
         mRotationInterpolationMode = im;
     }
     //---------------------------------------------------------------------
-    Animation::RotationInterpolationMode Animation::getRotationInterpolationMode(void) const
+    Animation::RotationInterpolationMode Animation::getRotationInterpolationMode() const
     {
         return mRotationInterpolationMode;
     }
@@ -580,7 +580,7 @@ namespace v1 {
         msDefaultRotationInterpolationMode = im;
     }
     //---------------------------------------------------------------------
-    Animation::RotationInterpolationMode Animation::getDefaultRotationInterpolationMode(void)
+    Animation::RotationInterpolationMode Animation::getDefaultRotationInterpolationMode()
     {
         return msDefaultRotationInterpolationMode;
     }
@@ -643,7 +643,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void Animation::optimiseVertexTracks(void)
+    void Animation::optimiseVertexTracks()
     {
         // Iterate over the node tracks and identify those with no useful keyframes
         list<unsigned short>::type tracksToDestroy;
@@ -729,7 +729,7 @@ namespace v1 {
         return TimeIndex(timePos, static_cast<uint>(std::distance(mKeyFrameTimes.begin(), it)));
     }
     //-----------------------------------------------------------------------
-    void Animation::buildKeyFrameTimeList(void) const
+    void Animation::buildKeyFrameTimeList() const
     {
 		OldNodeTrackList::const_iterator i;
         NumericTrackList::const_iterator j;

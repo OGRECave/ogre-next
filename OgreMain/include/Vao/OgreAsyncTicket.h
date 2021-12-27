@@ -58,7 +58,7 @@ namespace Ogre
         size_t mElementStart;
         size_t mElementCount;
 
-        virtual const void* mapImpl(void) = 0;
+        virtual const void* mapImpl() = 0;
 
     public:
         AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
@@ -73,12 +73,12 @@ namespace Ogre
         @return
             The pointer with the data read from the GPU. Read only.
         */
-        const void* map(void);
+        const void* map();
 
         /// Unmaps the pointer mapped with map().
-        void unmap(void);
+        void unmap();
 
-        virtual bool queryIsTransferDone(void)              { return true; }
+        virtual bool queryIsTransferDone()              { return true; }
     };
 }
 

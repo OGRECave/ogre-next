@@ -135,7 +135,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void NULLBufferInterface::advanceFrame(void)
+    void NULLBufferInterface::advanceFrame()
     {
         advanceFrame( true );
     }
@@ -157,7 +157,7 @@ namespace Ogre
         return dynamicCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
-    void NULLBufferInterface::regressFrame(void)
+    void NULLBufferInterface::regressFrame()
     {
         NULLVaoManager *vaoManager = static_cast<NULLVaoManager*>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;

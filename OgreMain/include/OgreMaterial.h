@@ -96,7 +96,7 @@ namespace Ogre {
 
         /** Internal method which sets the material up from the default settings.
         */
-        void applyDefaults(void);
+        void applyDefaults();
 
         typedef vector<Technique*>::type Techniques;
         /// All techniques, supported and unsupported
@@ -125,27 +125,27 @@ namespace Ogre {
 
         /** Clear the best technique list.
         */
-        void clearBestTechniqueList(void);
+        void clearBestTechniqueList();
 
         /** Overridden from Resource.
         */
-        void prepareImpl(void);
+        void prepareImpl();
 
         /** Overridden from Resource.
         */
-        void unprepareImpl(void);
+        void unprepareImpl();
 
         /** Overridden from Resource.
         */
-        void loadImpl(void);
+        void loadImpl();
 
         /** Unloads the material, frees resources etc.
         @see
         Resource
         */
-        void unloadImpl(void);
+        void unloadImpl();
         /// @copydoc Resource::calculateSize
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
     public:
 
         /** Constructor - use resource manager's create method rather than this.
@@ -161,7 +161,7 @@ namespace Ogre {
         /** Determines if the material has any transparency with the rest of the scene (derived from 
             whether any Techniques say they involve transparency).
         */
-        bool isTransparent(void) const;
+        bool isTransparent() const;
 
         /** Sets whether objects using this material will receive shadows.
         @remarks
@@ -178,7 +178,7 @@ namespace Ogre {
         */
         void setReceiveShadows(bool enabled) { mReceiveShadows = enabled; }
         /** Returns whether or not objects using this material will receive shadows. */
-        bool getReceiveShadows(void) const { return mReceiveShadows; }
+        bool getReceiveShadows() const { return mReceiveShadows; }
 
         /** Sets whether objects using this material be classified as opaque to the shadow caster system.
         @remarks
@@ -190,7 +190,7 @@ namespace Ogre {
         */
         void setTransparencyCastsShadows(bool enabled) { mTransparencyCastsShadows = enabled; }
         /** Returns whether or not objects using this material be classified as opaque to the shadow caster system. */
-        bool getTransparencyCastsShadows(void) const { return mTransparencyCastsShadows; }
+        bool getTransparencyCastsShadows() const { return mTransparencyCastsShadows; }
 
         /** Creates a new Technique for this Material.
         @remarks
@@ -206,7 +206,7 @@ namespace Ogre {
             to higher-indexed Techniques, ie when asked for the 'best' technique it will
             return the first one in the technique list which is supported by the hardware.
         */
-        Technique* createTechnique(void);
+        Technique* createTechnique();
         /** Gets the indexed technique. */
         Technique* getTechnique(unsigned short index);
         /** searches for the named technique.
@@ -214,26 +214,26 @@ namespace Ogre {
         */
         Technique* getTechnique(const String& name);
         /** Retrieves the number of techniques. */
-        unsigned short getNumTechniques(void) const;
+        unsigned short getNumTechniques() const;
         /** Removes the technique at the given index. */        
         void removeTechnique(unsigned short index);     
         /** Removes all the techniques in this Material. */
-        void removeAllTechniques(void);
+        void removeAllTechniques();
         typedef VectorIterator<Techniques> TechniqueIterator;
         /** Get an iterator over the Techniques in this Material. */
-        TechniqueIterator getTechniqueIterator(void);
+        TechniqueIterator getTechniqueIterator();
         /** Gets an iterator over all the Techniques which are supported by the current card. 
         @remarks
             The supported technique list is only available after this material has been compiled,
             which typically happens on loading the material. Therefore, if this method returns
             an empty list, try calling Material::load.
         */
-        TechniqueIterator getSupportedTechniqueIterator(void);
+        TechniqueIterator getSupportedTechniqueIterator();
         
         /** Gets the indexed supported technique. */
         Technique* getSupportedTechnique(unsigned short index);
         /** Retrieves the number of supported techniques. */
-        unsigned short getNumSupportedTechniques(void) const;
+        unsigned short getNumSupportedTechniques() const;
         /** Gets a string explaining why any techniques are not supported. */
         const String& getUnsupportedTechniquesExplanation() const { return mUnsupportedReasons; }
 
@@ -484,7 +484,7 @@ namespace Ogre {
         void setBlendblock( const HlmsBlendblock &blendblock );
 
         /** Tells the material that it needs recompilation. */
-        void _notifyNeedsRecompile(void);
+        void _notifyNeedsRecompile();
 
         /** Sets the distance at which level-of-detail (LOD) levels come into effect.
         @remarks
@@ -502,7 +502,7 @@ namespace Ogre {
         */
         void setLodLevels(const LodValueArray& lodValues);
 
-        const LodValueArray* _getLodValues(void) const                      { return &mLodValues; }
+        const LodValueArray* _getLodValues() const                      { return &mLodValues; }
 
         /** Gets an iterator over the list of values transformed by the LodStrategy at which each LOD comes into effect. 
         @remarks
@@ -511,7 +511,7 @@ namespace Ogre {
             entry at the start (since the highest LOD starts at value 0). Also, the
             values returned are after being transformed by LodStrategy::transformUserValue.
         */
-        LodValueIterator getLodValueIterator(void) const;
+        LodValueIterator getLodValueIterator() const;
 
         /** Gets an iterator over the user-defined list of values which are internally transfomed by the LodStrategy. 
         @remarks
@@ -520,11 +520,11 @@ namespace Ogre {
             entry at the start (since the highest LOD starts at value 0). Also, the
             values returned are after being transformed by LodStrategy::transformUserValue.
         */
-        LodValueIterator getUserLodValueIterator(void) const;
+        LodValueIterator getUserLodValueIterator() const;
 
         /** @copydoc Resource::touch
         */
-        void touch(void) 
+        void touch()
         { 
             if (mCompilationRequired) 
                 compile();

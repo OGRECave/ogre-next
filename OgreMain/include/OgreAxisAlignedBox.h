@@ -146,7 +146,7 @@ namespace Ogre {
 
         /** Gets the minimum corner of the box.
         */
-        inline const Vector3& getMinimum(void) const
+        inline const Vector3& getMinimum() const
         { 
             return mMinimum; 
         }
@@ -154,14 +154,14 @@ namespace Ogre {
         /** Gets a modifiable version of the minimum
         corner of the box.
         */
-        inline Vector3& getMinimum(void)
+        inline Vector3& getMinimum()
         { 
             return mMinimum; 
         }
 
         /** Gets the maximum corner of the box.
         */
-        inline const Vector3& getMaximum(void) const
+        inline const Vector3& getMaximum() const
         { 
             return mMaximum;
         }
@@ -169,7 +169,7 @@ namespace Ogre {
         /** Gets a modifiable version of the maximum
         corner of the box.
         */
-        inline Vector3& getMaximum(void)
+        inline Vector3& getMaximum()
         { 
             return mMaximum;
         }
@@ -297,7 +297,7 @@ namespace Ogre {
         6-------7
         </pre>
         */
-        inline const Vector3* getAllCorners(void) const
+        inline const Vector3* getAllCorners() const
         {
             assert( (mExtent == EXTENT_FINITE) && "Can't get corners of a null or infinite AAB" );
 
@@ -512,14 +512,14 @@ namespace Ogre {
 
         /** Returns true if the box is null i.e. empty.
         */
-        inline bool isNull(void) const
+        inline bool isNull() const
         {
             return (mExtent == EXTENT_NULL);
         }
 
         /** Returns true if the box is finite.
         */
-        bool isFinite(void) const
+        bool isFinite() const
         {
             return (mExtent == EXTENT_FINITE);
         }
@@ -533,7 +533,7 @@ namespace Ogre {
 
         /** Returns true if the box is infinite.
         */
-        bool isInfinite(void) const
+        bool isInfinite() const
         {
             return (mExtent == EXTENT_INFINITE);
         }
@@ -603,7 +603,7 @@ namespace Ogre {
         }
 
         /// Calculate the volume of this box
-        Real volume(void) const
+        Real volume() const
         {
             switch (mExtent)
             {
@@ -670,7 +670,7 @@ namespace Ogre {
             }
         }
         /// Gets the centre of the box
-        Vector3 getCenter(void) const
+        Vector3 getCenter() const
         {
             assert( (mExtent == EXTENT_FINITE) && "Can't get center of a null or infinite AAB" );
 
@@ -680,7 +680,7 @@ namespace Ogre {
                 (mMaximum.z + mMinimum.z) * 0.5f);
         }
         /// Gets the size of the box
-        Vector3 getSize(void) const
+        Vector3 getSize() const
         {
             switch (mExtent)
             {
@@ -702,7 +702,7 @@ namespace Ogre {
             }
         }
         /// Gets the half-size of the box
-        Vector3 getHalfSize(void) const
+        Vector3 getHalfSize() const
         {
             switch (mExtent)
             {

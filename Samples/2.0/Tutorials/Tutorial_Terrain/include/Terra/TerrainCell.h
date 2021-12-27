@@ -57,9 +57,9 @@ namespace Ogre
         TerrainCell( Terra *parentTerra );
         virtual ~TerrainCell();
 
-        bool getUseSkirts(void) const                   { return m_useSkirts; }
+        bool getUseSkirts() const                   { return m_useSkirts; }
 
-        bool isZUp( void ) const;
+        bool isZUp() const;
 
         void initialize( VaoManager *vaoManager, bool useSkirts );
 
@@ -83,13 +83,13 @@ namespace Ogre
 
         void uploadToGpu( uint32 * RESTRICT_ALIAS gpuPtr ) const;
 
-        Terra *getParentTerra( void ) const { return m_parentTerra; }
+        Terra *getParentTerra() const { return m_parentTerra; }
 
         //Renderable overloads
-        virtual const LightList& getLights(void) const;
+        virtual const LightList& getLights() const;
         virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
         virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows(void) const;
+        virtual bool getCastsShadows() const;
     };
 }
 

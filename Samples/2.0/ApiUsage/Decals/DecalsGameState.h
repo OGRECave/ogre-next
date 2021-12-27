@@ -30,16 +30,16 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void createDecalDebugData(void);
+        void createDecalDebugData();
         DebugDecalVisual* attachDecalDebugHelper( Ogre::SceneNode *decalNode );
         void destroyDecalDebugHelper( DebugDecalVisual *decalDebugVisual );
-        void setTransparencyToMaterials(void);
+        void setTransparencyToMaterials();
 
     public:
         DecalsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

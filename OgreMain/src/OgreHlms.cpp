@@ -400,7 +400,7 @@ namespace Ogre
         memcpy( outHash, fileContents.begin(), sizeof(uint64) * 2u );
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::setCommonProperties(void)
+    void Hlms::setCommonProperties()
     {
         uint16 numWorldTransforms = 2;
         //bool castShadows          = true;
@@ -433,7 +433,7 @@ namespace Ogre
         setProperty( HlmsBaseProp::PoseNormals, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::enumeratePieceFiles(void)
+    void Hlms::enumeratePieceFiles()
     {
         if( !mDataFolder )
             return; //Some Hlms implementations may not use template files at all
@@ -1675,7 +1675,7 @@ namespace Ogre
         return mRenderableCache[(hash >> HlmsBits::RenderableShift) & HlmsBits::RenderableMask];
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* Hlms::createDefaultDatablock(void)
+    HlmsDatablock* Hlms::createDefaultDatablock()
     {
         return createDatablock( IdString(), "[Default]",
                                 HlmsMacroblock(), HlmsBlendblock(), HlmsParamVec(), false );
@@ -1753,7 +1753,7 @@ namespace Ogre
         enumeratePieceFiles();
     }
     //-----------------------------------------------------------------------------------
-    ArchiveVec Hlms::getPiecesLibraryAsArchiveVec(void) const
+    ArchiveVec Hlms::getPiecesLibraryAsArchiveVec() const
     {
         ArchiveVec retVal;
         LibraryVec::const_iterator itor = mLibrary.begin();
@@ -1848,7 +1848,7 @@ namespace Ogre
         mDatablocks.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::_destroyAllDatablocks(void)
+    void Hlms::_destroyAllDatablocks()
     {
         HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
         HlmsDatablockMap::const_iterator end  = mDatablocks.end();
@@ -1866,13 +1866,13 @@ namespace Ogre
         mDefaultDatablock = 0;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::destroyAllDatablocks(void)
+    void Hlms::destroyAllDatablocks()
     {
         _destroyAllDatablocks();
         mDefaultDatablock = createDefaultDatablock();
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* Hlms::getDefaultDatablock(void) const
+    HlmsDatablock* Hlms::getDefaultDatablock() const
     {
         return mDefaultDatablock;
     }
@@ -1919,7 +1919,7 @@ namespace Ogre
         return 0;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::clearShaderCache(void)
+    void Hlms::clearShaderCache()
     {
         mPassCache.clear();
 
@@ -3309,12 +3309,12 @@ namespace Ogre
             mListener = listener;
     }
     //-----------------------------------------------------------------------------------
-    HlmsListener* Hlms::getListener(void) const
+    HlmsListener* Hlms::getListener() const
     {
         return mListener == &c_defaultListener ? 0 : mListener;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::_clearShaderCache(void)
+    void Hlms::_clearShaderCache()
     {
         clearShaderCache();
     }

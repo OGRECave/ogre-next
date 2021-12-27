@@ -88,7 +88,7 @@ namespace Ogre
         bool registerProgramFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
         bool unregisterProgramFactory( const String &syntaxCode );
 
-        VulkanDevice *getDevice( void ) const { return mDevice; }
+        VulkanDevice *getDevice() const { return mDevice; }
 
         VkDescriptorSetLayout getCachedSet( const VulkanSingleSetLayoutDesc &set );
 

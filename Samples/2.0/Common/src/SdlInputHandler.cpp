@@ -205,7 +205,7 @@ namespace Demo
         updateMouseSettings();
     }
     //-----------------------------------------------------------------------------------
-    void SdlInputHandler::updateMouseSettings(void)
+    void SdlInputHandler::updateMouseSettings()
     {
         mGrabPointer = mWantMouseGrab && mMouseInWindow && mWindowHasFocus;
         SDL_SetWindowGrab( mSdlWindow, mGrabPointer ? SDL_TRUE : SDL_FALSE );
@@ -292,8 +292,8 @@ namespace Demo
         mMouseListener = listener;
     }
     //-----------------------------------------------------------------------------------
-    KeyboardListener *SdlInputHandler::getKeyboardListener( void ) { return mKeyboardListener; }
+    KeyboardListener *SdlInputHandler::getKeyboardListener() { return mKeyboardListener; }
     //-----------------------------------------------------------------------------------
-    MouseListener *SdlInputHandler::getMouseListener( void ) { return mMouseListener; }
+    MouseListener *SdlInputHandler::getMouseListener() { return mMouseListener; }
 }
 #endif

@@ -411,7 +411,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    size_t ZipDataStream::tell(void) const
+    size_t ZipDataStream::tell() const
     {
         zzip_off_t pos = zzip_tell(mZzipFile);
         if (pos<0)
@@ -419,12 +419,12 @@ namespace Ogre {
         return static_cast<size_t>(pos) - mCache.avail();
     }
     //-----------------------------------------------------------------------
-    bool ZipDataStream::eof(void) const
+    bool ZipDataStream::eof() const
     {
         return (tell() >= mSize);
     }
     //-----------------------------------------------------------------------
-    void ZipDataStream::close(void)
+    void ZipDataStream::close()
     {
         mAccess = 0;
         if (mZzipFile != 0)
@@ -439,7 +439,7 @@ namespace Ogre {
     //  ZipArchiveFactory
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    const String& ZipArchiveFactory::getType(void) const
+    const String& ZipArchiveFactory::getType() const
     {
         static String name = "Zip";
         return name;
@@ -652,7 +652,7 @@ namespace Ogre {
     {
     }    
     //-----------------------------------------------------------------------
-    const String& EmbeddedZipArchiveFactory::getType(void) const
+    const String& EmbeddedZipArchiveFactory::getType() const
     {
         static String name = "EmbeddedZip";
         return name;

@@ -109,7 +109,7 @@ namespace Ogre {
     }
 #endif
 
-    void GLSLESShader::loadFromSource(void)
+    void GLSLESShader::loadFromSource()
     {
         // Preprocess the GLSL ES shader in order to get a clean source
         CPreprocessor cpp;
@@ -310,7 +310,7 @@ namespace Ogre {
     }
 #endif
 
-    void GLSLESShader::createLowLevelImpl(void)
+    void GLSLESShader::createLowLevelImpl()
     {
         // mAssemblerProgram = GpuProgramPtr(OGRE_NEW GLSLESShader( this ));
     }
@@ -325,7 +325,7 @@ namespace Ogre {
         unloadHighLevel();
     }
 
-    void GLSLESShader::unloadHighLevelImpl(void)
+    void GLSLESShader::unloadHighLevelImpl()
     {
         if (isSupported())
         {
@@ -366,19 +366,19 @@ namespace Ogre {
         }
     }
 
-    inline bool GLSLESShader::getPassSurfaceAndLightStates(void) const
+    inline bool GLSLESShader::getPassSurfaceAndLightStates() const
     {
         // Scenemanager should pass on light & material state to the rendersystem.
         return true;
     }
 
-    inline bool GLSLESShader::getPassTransformStates(void) const
+    inline bool GLSLESShader::getPassTransformStates() const
     {
         // Scenemanager should pass on transform state to the rendersystem.
         return true;
     }
 
-    inline bool GLSLESShader::getPassFogStates(void) const
+    inline bool GLSLESShader::getPassFogStates() const
     {
         // Scenemanager should pass on fog state to the rendersystem.
         return true;
@@ -414,14 +414,14 @@ namespace Ogre {
         OGRE_CHECK_GL_ERROR(glDetachShader(programObject, mGLShaderHandle));
     }
 
-    const String& GLSLESShader::getLanguage(void) const
+    const String& GLSLESShader::getLanguage() const
     {
         static const String language = "glsles";
 
         return language;
     }
 
-    Ogre::GpuProgramParametersSharedPtr GLSLESShader::createParameters( void )
+    Ogre::GpuProgramParametersSharedPtr GLSLESShader::createParameters()
     {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
         return params;
@@ -579,7 +579,7 @@ namespace Ogre {
         return mGLProgramHandle;
     }
 
-    void GLSLESShader::bind(void)
+    void GLSLESShader::bind()
     {
         if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
@@ -621,7 +621,7 @@ namespace Ogre {
         }
     }
 
-    void GLSLESShader::unbind(void)
+    void GLSLESShader::unbind()
     {
         if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
@@ -649,7 +649,7 @@ namespace Ogre {
         }
     }
 
-    void GLSLESShader::unbindAll(void)
+    void GLSLESShader::unbindAll()
     {
         if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {

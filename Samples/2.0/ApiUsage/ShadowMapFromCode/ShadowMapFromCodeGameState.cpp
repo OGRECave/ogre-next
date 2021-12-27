@@ -56,7 +56,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapFromCodeGameState::createScene01(void)
+    void ShadowMapFromCodeGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -177,7 +177,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    const char* ShadowMapFromCodeGameState::chooseEsmShadowNode(void)
+    const char* ShadowMapFromCodeGameState::chooseEsmShadowNode()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::RenderSystem *renderSystem = root->getRenderSystem();
@@ -238,7 +238,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapFromCodeGameState::createShadowMapDebugOverlays(void)
+    void ShadowMapFromCodeGameState::createShadowMapDebugOverlays()
     {
         destroyShadowMapDebugOverlays();
 
@@ -329,7 +329,7 @@ namespace Demo
         mDebugOverlaySpotlights->show();
     }
     //-----------------------------------------------------------------------------------
-    void ShadowMapFromCodeGameState::destroyShadowMapDebugOverlays(void)
+    void ShadowMapFromCodeGameState::destroyShadowMapDebugOverlays()
     {
         Ogre::v1::OverlayManager &overlayManager = Ogre::v1::OverlayManager::getSingleton();
 

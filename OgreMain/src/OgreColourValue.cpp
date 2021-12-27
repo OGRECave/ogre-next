@@ -40,9 +40,9 @@ namespace Ogre {
 
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-    ABGR ColourValue::getAsABGR(void) const
+    ABGR ColourValue::getAsABGR() const
 #else
-    RGBA ColourValue::getAsRGBA(void) const
+    RGBA ColourValue::getAsRGBA() const
 #endif
     {
         uint8 val8;
@@ -71,9 +71,9 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-    BGRA ColourValue::getAsBGRA(void) const
+    BGRA ColourValue::getAsBGRA() const
 #else
-    ARGB ColourValue::getAsARGB(void) const
+    ARGB ColourValue::getAsARGB() const
 #endif
     {
         uint8 val8;
@@ -103,9 +103,9 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-    ARGB ColourValue::getAsARGB(void) const
+    ARGB ColourValue::getAsARGB() const
 #else
-    BGRA ColourValue::getAsBGRA(void) const
+    BGRA ColourValue::getAsBGRA() const
 #endif
     {
         uint8 val8;
@@ -135,9 +135,9 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-    RGBA ColourValue::getAsRGBA(void) const
+    RGBA ColourValue::getAsRGBA() const
 #else
-    ABGR ColourValue::getAsABGR(void) const
+    ABGR ColourValue::getAsABGR() const
 #endif
     {
         uint8 val8;

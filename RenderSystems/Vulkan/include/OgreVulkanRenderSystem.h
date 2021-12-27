@@ -142,44 +142,44 @@ namespace Ogre
         /// Declared here to avoid constant reallocations
         FastArray<VkImageMemoryBarrier> mImageBarriers;
 
-        void addInstanceDebugCallback( void );
+        void addInstanceDebugCallback();
 
         /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
 
         void bindDescriptorSet() const;
 
-        void flushRootLayout( void );
-        void flushRootLayoutCS( void );
+        void flushRootLayout();
+        void flushRootLayoutCS();
 
     public:
         VulkanRenderSystem();
         ~VulkanRenderSystem();
 
-        virtual void shutdown( void );
+        virtual void shutdown();
 
-        virtual const String &getName( void ) const;
-        virtual const String &getFriendlyName( void ) const;
+        virtual const String &getName() const;
+        virtual const String &getFriendlyName() const;
         void refreshConfig();
         void initConfigOptions();
-        virtual ConfigOptionMap &getConfigOptions( void );
+        virtual ConfigOptionMap &getConfigOptions();
         virtual void setConfigOption( const String &name, const String &value );
         virtual const char *getPriorityConfigOption( size_t idx ) const;
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        virtual size_t getNumPriorityConfigOptions() const;
 
-        virtual HardwareOcclusionQuery *createHardwareOcclusionQuery( void );
+        virtual HardwareOcclusionQuery *createHardwareOcclusionQuery();
 
-        virtual String validateConfigOptions( void );
+        virtual String validateConfigOptions();
 
-        virtual RenderSystemCapabilities *createRenderSystemCapabilities( void ) const;
+        virtual RenderSystemCapabilities *createRenderSystemCapabilities() const;
 
-        void resetAllBindings( void );
+        void resetAllBindings();
 
-        virtual void reinitialise( void );
+        virtual void reinitialise();
 
-        void initializeVkInstance( void );
+        void initializeVkInstance();
 
-        VkInstance getVkInstance( void ) const { return mVkInstance; }
+        VkInstance getVkInstance() const { return mVkInstance; }
 
         virtual Window *_initialise( bool autoCreateWindow,
                                      const String &windowTitle = "OGRE Render Window" );
@@ -201,7 +201,7 @@ namespace Ogre
         virtual void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
                                           Real quadratic, Real minSize, Real maxSize );
 
-        void flushUAVs( void );
+        void flushUAVs();
 
         void _setParamBuffer( GpuProgramType shaderStage, const VkDescriptorBufferInfo &bufferInfo );
         void _setConstBuffer( size_t slot, const VkDescriptorBufferInfo &bufferInfo );
@@ -228,24 +228,24 @@ namespace Ogre
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
 
-        virtual VulkanFrameBufferDescMap &_getFrameBufferDescMap( void ) { return mFrameBufferDescMap; }
-        virtual VulkanFlushOnlyDescMap &_getFlushOnlyDescMap( void ) { return mFlushOnlyDescMap; }
-        virtual RenderPassDescriptor *createRenderPassDescriptor( void );
+        virtual VulkanFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        virtual VulkanFlushOnlyDescMap &_getFlushOnlyDescMap() { return mFlushOnlyDescMap; }
+        virtual RenderPassDescriptor *createRenderPassDescriptor();
 
         virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
         virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *newPso );
 
         virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
 
-        virtual void _beginFrame( void );
-        virtual void _endFrame( void );
-        virtual void _endFrameOnce( void );
+        virtual void _beginFrame();
+        virtual void _endFrame();
+        virtual void _endFrameOnce();
 
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock );
         virtual void _setPipelineStateObject( const HlmsPso *pso );
         virtual void _setComputePso( const HlmsComputePso *pso );
 
-        virtual VertexElementType getColourVertexElementType( void ) const;
+        virtual VertexElementType getColourVertexElementType() const;
 
         virtual void _dispatch( const HlmsComputePso &pso );
 
@@ -275,10 +275,10 @@ namespace Ogre
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
                                        uint8 mipLevel );
 
-        virtual Real getHorizontalTexelOffset( void );
-        virtual Real getVerticalTexelOffset( void );
-        virtual Real getMinimumDepthInputValue( void );
-        virtual Real getMaximumDepthInputValue( void );
+        virtual Real getHorizontalTexelOffset();
+        virtual Real getVerticalTexelOffset();
+        virtual Real getMinimumDepthInputValue();
+        virtual Real getMaximumDepthInputValue();
 
         virtual void preExtraThreadsStarted();
         virtual void postExtraThreadsStarted();
@@ -286,19 +286,19 @@ namespace Ogre
         virtual void unregisterThread();
         virtual unsigned int getDisplayMonitorCount() const { return 1; }
 
-        virtual const PixelFormatToShaderType *getPixelFormatToShaderType( void ) const;
+        virtual const PixelFormatToShaderType *getPixelFormatToShaderType() const;
 
-        virtual void flushCommands( void );
+        virtual void flushCommands();
 
         virtual void beginProfileEvent( const String &eventName );
-        virtual void endProfileEvent( void );
+        virtual void endProfileEvent();
         virtual void markProfileEvent( const String &event );
 
         virtual void debugAnnotationPush( const String &event );
-        virtual void debugAnnotationPop( void );
+        virtual void debugAnnotationPop();
 
-        virtual void initGPUProfiling( void );
-        virtual void deinitGPUProfiling( void );
+        virtual void initGPUProfiling();
+        virtual void deinitGPUProfiling();
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
 
@@ -313,9 +313,9 @@ namespace Ogre
                                                 const Vector4 *scissors, uint32 numViewports,
                                                 bool overlaysEnabled, bool warnIfRtvWasFlushed );
         void executeRenderPassDescriptorDelayedActions( bool officialCall );
-        virtual void executeRenderPassDescriptorDelayedActions( void );
+        virtual void executeRenderPassDescriptorDelayedActions();
         inline void endRenderPassDescriptor( bool isInterruptingRender );
-        virtual void endRenderPassDescriptor( void );
+        virtual void endRenderPassDescriptor();
 
         TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                           PixelFormatGpu depthBufferFormat, uint16 poolId );
@@ -325,7 +325,7 @@ namespace Ogre
 
         void notifyRenderTextureNonResident( VulkanTextureGpu *texture );
 
-        virtual void endCopyEncoder( void );
+        virtual void endCopyEncoder();
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
@@ -351,9 +351,9 @@ namespace Ogre
         void _notifyDeviceStalled();
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
-        void _notifyActiveComputeEnded( void );
+        void _notifyActiveComputeEnded();
 
-        void debugCallback( void );
+        void debugCallback();
 
         virtual bool isSameLayout( ResourceLayout::Layout a, ResourceLayout::Layout b,
                                    const TextureGpu *texture, bool bIsDebugCheck ) const;

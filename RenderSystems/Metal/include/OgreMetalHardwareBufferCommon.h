@@ -61,7 +61,7 @@ namespace v1
                                    MetalDevice *device );
         virtual ~MetalHardwareBufferCommon();
 
-        void _notifyDeviceStalled(void);
+        void _notifyDeviceStalled();
 
         /** Returns the actual API buffer, but first sets mLastFrameUsed as we
             assume you're calling this function to use the buffer in the GPU.
@@ -72,7 +72,7 @@ namespace v1
             The MTLBuffer in question.
         */
         id<MTLBuffer> getBufferName( size_t &outOffset );
-        id<MTLBuffer> getBufferNameForGpuWrite(void);
+        id<MTLBuffer> getBufferNameForGpuWrite();
 
         /// @see HardwareBuffer.
         void* lockImpl( size_t offset, size_t length,
@@ -90,7 +90,7 @@ namespace v1
         void copyData( MetalHardwareBufferCommon *srcBuffer, size_t srcOffset,
                        size_t dstOffset, size_t length, bool discardWholeBuffer = false );
 
-        size_t getSizeBytes(void) const         { return mSizeBytes; }
+        size_t getSizeBytes() const         { return mSizeBytes; }
     };
 }
 }

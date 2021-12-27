@@ -87,7 +87,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflectionsGameState::createReflectiveSurfaces(void)
+    void PlanarReflectionsGameState::createReflectiveSurfaces()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -195,7 +195,7 @@ namespace Demo
         mPlanarReflections->addRenderable( trackedRenderable );
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflectionsGameState::createScene01(void)
+    void PlanarReflectionsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -293,7 +293,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflectionsGameState::destroyScene(void)
+    void PlanarReflectionsGameState::destroyScene()
     {
         Ogre::CompositorWorkspace *workspace = mGraphicsSystem->getCompositorWorkspace();
         workspace->removeListener( mWorkspaceListener );

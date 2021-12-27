@@ -56,11 +56,11 @@ namespace Ogre
         uint16      pixelFormat;    /// See PixelFormatGpu
         uint8       version;
 
-        uint32 getDepth(void) const
+        uint32 getDepth() const
         {
             return (textureType != TextureTypes::Type3D) ? 1u : depthOrSlices;
         }
-        uint32 getNumSlices(void) const
+        uint32 getNumSlices() const
         {
             return (textureType != TextureTypes::Type3D) ? depthOrSlices : 1u;
         }
@@ -81,7 +81,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     OITDCodec* OITDCodec::msInstance = 0;
     //---------------------------------------------------------------------
-    void OITDCodec::startup(void)
+    void OITDCodec::startup()
     {
         if (!msInstance)
         {
@@ -92,7 +92,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void OITDCodec::shutdown(void)
+    void OITDCodec::shutdown()
     {
         if( msInstance )
         {

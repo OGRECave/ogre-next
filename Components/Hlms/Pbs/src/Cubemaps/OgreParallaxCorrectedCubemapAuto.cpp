@@ -338,7 +338,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool ParallaxCorrectedCubemapAuto::getEnabled(void) const
+    bool ParallaxCorrectedCubemapAuto::getEnabled() const
     {
         return mRenderTarget != 0;
     }
@@ -353,7 +353,7 @@ namespace Ogre
             mUseDpm2DArray = true;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::updateSceneGraph(void)
+    void ParallaxCorrectedCubemapAuto::updateSceneGraph()
     {
         mDirtyProbes.clear();
 
@@ -441,7 +441,7 @@ namespace Ogre
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::updateRender(void)
+    void ParallaxCorrectedCubemapAuto::updateRender()
     {
         const uint32 oldVisibilityMask = mSceneManager->getVisibilityMask();
         mSceneManager->setVisibilityMask( 0xffffffff );
@@ -462,7 +462,7 @@ namespace Ogre
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::updateAllDirtyProbes(void)
+    void ParallaxCorrectedCubemapAuto::updateAllDirtyProbes()
     {
         mSceneManager->updateSceneGraph();
 
@@ -500,13 +500,13 @@ namespace Ogre
         return true;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::allWorkspacesBeforeBeginUpdate(void)
+    void ParallaxCorrectedCubemapAuto::allWorkspacesBeforeBeginUpdate()
     {
         if( !mPaused )
             this->updateExpensiveCollectedDirtyProbes( 1 );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::allWorkspacesBeginUpdate(void)
+    void ParallaxCorrectedCubemapAuto::allWorkspacesBeginUpdate()
     {
         if( !mPaused )
             this->updateRender();

@@ -683,7 +683,7 @@ namespace Ogre {
             bool lightScissoringClipping, bool doLightIteration);
 
         /** Internal method for creating the AutoParamDataSource instance. */
-        virtual AutoParamDataSource* createAutoParamDataSource(void) const
+        virtual AutoParamDataSource* createAutoParamDataSource() const
         {
             return OGRE_NEW AutoParamDataSource();
         }
@@ -750,7 +750,7 @@ namespace Ogre {
         
     public:
 
-        AutoParamDataSource *_getAutoParamDataSource(void) const    { return mAutoParamDataSource; }
+        AutoParamDataSource *_getAutoParamDataSource() const    { return mAutoParamDataSource; }
 
         //A render context, used to store internal data for pausing/resuming rendering
         struct RenderContext
@@ -985,7 +985,7 @@ namespace Ogre {
         OGRE_MUTEX(sceneGraphMutex);
 
         /** Return the instance name of this SceneManager. */
-        const String& getName(void) const { return mName; }
+        const String& getName() const { return mName; }
 
         /** Retrieve the type name of this scene manager.
         @remarks
@@ -993,7 +993,7 @@ namespace Ogre {
             return the type name of this SceneManager which agrees with 
             the type name of the SceneManagerFactory which created it.
         */
-        virtual const String& getTypeName(void) const = 0;
+        virtual const String& getTypeName() const = 0;
 
         size_t getNumWorkerThreads() const                          { return mNumWorkerThreads; }
 
@@ -1050,7 +1050,7 @@ namespace Ogre {
                 or compositor nodes. They aren't supposed to be destroyed outside.
                 So, while you are using texture shadow, don't call this method.
         */
-        virtual void destroyAllCameras(void);
+        virtual void destroyAllCameras();
 
         /// See Camera::setLightCullingVisibility
         void _setLightCullingVisibility( Camera *camera, bool collectLights, bool isCubemap );
@@ -1065,9 +1065,9 @@ namespace Ogre {
         virtual Light* createLight();
 
         /// Clears temporary buffers and other data that needs to live every frame.
-        void clearFrameData(void);
+        void clearFrameData();
 
-        const LightListInfo& getGlobalLightList(void) const { return mGlobalLightList; }
+        const LightListInfo& getGlobalLightList() const { return mGlobalLightList; }
 
         /// Allocates required memory in mGlobalLightList
         void reserveSlotsInGlobalLightList(size_t addSlotsToCapacity = 0);
@@ -1087,14 +1087,14 @@ namespace Ogre {
         virtual void destroyLight(Light* light);
         /** Removes and destroys all lights in the scene.
         */
-        virtual void destroyAllLights(void);
+        virtual void destroyAllLights();
 
         /// Don't call this function directly. @see TagPoint::createChildTagPoint
         virtual TagPoint* _createTagPoint( SceneNode *parent, NodeMemoryManager *nodeMemoryManager );
 
         /// Creates a TagPoint that can be used like a SceneNode, or be used to be
         /// attached to a Bone. @see Bone::addTagPoint
-        virtual TagPoint* createTagPoint(void);
+        virtual TagPoint* createTagPoint();
 
         /** @see createSceneNode. This functions exists to satisfy @see SceneNode::createChildImpl
             Don't call this function directly
@@ -1152,10 +1152,10 @@ namespace Ogre {
         void setSky( bool bEnabled, SkyMethod skyMethod, const String &texName,
                      const String &resourceGroup );
 
-        Rectangle2D* getSky(void)                       { return mSky; }
-        bool isSkyEnabled(void) const                   { return mSky != 0; }
-        SkyMethod getSkyMethod(void) const              { return mSkyMethod; }
-        MaterialPtr getSkyMaterial(void)                { return mSkyMaterial; }
+        Rectangle2D* getSky()                       { return mSky; }
+        bool isSkyEnabled() const                   { return mSky != 0; }
+        SkyMethod getSkyMethod() const              { return mSkyMethod; }
+        MaterialPtr getSkyMaterial()                { return mSkyMaterial; }
 
         /** Draws a Radial Density Mask to lower the quality around the edges in VR
         @remarks
@@ -1176,7 +1176,7 @@ namespace Ogre {
                 All pixels beyond radius[2] are masked at 1/16th rate
         */
         void setRadialDensityMask( bool bEnabled, const float radius[3] );
-        RadialDensityMask* getRadialDensityMask(void) const     { return mRadialDensityMask; }
+        RadialDensityMask* getRadialDensityMask() const     { return mRadialDensityMask; }
 
         /** Gets the SceneNode at the root of the scene hierarchy.
             @remarks
@@ -1201,7 +1201,7 @@ namespace Ogre {
         /// Unlike mNodeMemoryManager->_getDummyNode(), this dummy node is fully allocated,
         /// which makes it possible to actually attach objects to this dummy, while
         /// we guarantee the dummy won't change its transform.
-        SceneNode* getDummySceneNode(void) const        { return mSceneDummy; }
+        SceneNode* getDummySceneNode() const        { return mSceneDummy; }
 
         /** Retrieves a SceneNode based on it's ID from the scene graph.
         @remarks
@@ -1225,7 +1225,7 @@ namespace Ogre {
         virtual void unregisterSceneNodeListener( SceneNode *sceneNode );
 
         /// Returns the RenderQueue.
-        RenderQueue* getRenderQueue(void) const             { return mRenderQueue; }
+        RenderQueue* getRenderQueue() const             { return mRenderQueue; }
 
         /** Enables or disables the Forward3D implementation for using many non-shadowed
             lights in the scene.
@@ -1270,8 +1270,8 @@ namespace Ogre {
         */
         void setBuildLegacyLightList( bool bEnable );
 
-        ForwardPlusBase* getForwardPlus(void)                       { return mForwardPlusSystem; }
-        ForwardPlusBase* _getActivePassForwardPlus(void)            { return mForwardPlusImpl; }
+        ForwardPlusBase* getForwardPlus()                       { return mForwardPlusSystem; }
+        ForwardPlusBase* _getActivePassForwardPlus()            { return mForwardPlusImpl; }
 
         /** Sets the decal texture for diffuse. Should be a RGBA8 or similar colour format.
         @remarks
@@ -1296,10 +1296,10 @@ namespace Ogre {
         /// incurs in a performance optimization.
         void setDecalsEmissive( TextureGpu *tex );
 
-        TextureGpu* getDecalsDiffuse(void) const                    { return mDecalsDiffuseTex; }
-        TextureGpu* getDecalsNormals(void) const                    { return mDecalsNormalsTex; }
-        TextureGpu* getDecalsEmissive(void) const                   { return mDecalsEmissiveTex; }
-        bool isDecalsDiffuseEmissiveMerged(void) const;
+        TextureGpu* getDecalsDiffuse() const                    { return mDecalsDiffuseTex; }
+        TextureGpu* getDecalsNormals() const                    { return mDecalsNormalsTex; }
+        TextureGpu* getDecalsEmissive() const                   { return mDecalsEmissiveTex; }
+        bool isDecalsDiffuseEmissiveMerged() const;
 
         /// For internal use.
         /// @see CompositorPassSceneDef::mEnableForwardPlus
@@ -1310,18 +1310,18 @@ namespace Ogre {
         void _setPrePassMode( PrePassMode mode, const TextureGpuVec &prepassTextures,
                               TextureGpu *prepassDepthTexture, TextureGpu *ssrTexture );
         void _setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture );
-        PrePassMode getCurrentPrePassMode(void) const               { return mPrePassMode; }
-        const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
-        TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }
-        TextureGpu* getCurrentSsrTexture(void) const                { return mSsrTexture; }
-        TextureGpu* getCurrentPassDepthTextureNoMsaa(void) const	{ return mPassDepthTextureNoMsaa; }
-        TextureGpu* getCurrentRefractionsTexture(void) const        { return mRefractionsTexture; }
+        PrePassMode getCurrentPrePassMode() const               { return mPrePassMode; }
+        const TextureGpuVec& getCurrentPrePassTextures() const  { return mPrePassTextures; }
+        TextureGpu* getCurrentPrePassDepthTexture() const       { return mPrePassDepthTexture; }
+        TextureGpu* getCurrentSsrTexture() const                { return mSsrTexture; }
+        TextureGpu* getCurrentPassDepthTextureNoMsaa() const	{ return mPassDepthTextureNoMsaa; }
+        TextureGpu* getCurrentRefractionsTexture() const        { return mRefractionsTexture; }
 
 
 
         NodeMemoryManager& _getNodeMemoryManager(SceneMemoryMgrTypes sceneType)
-                                                                { return mNodeMemoryManager[sceneType]; }
-        NodeMemoryManager& _getTagPointNodeMemoryManager(void)  { return mTagPointNodeMemoryManager; }
+                                                            { return mNodeMemoryManager[sceneType]; }
+        NodeMemoryManager& _getTagPointNodeMemoryManager()  { return mTagPointNodeMemoryManager; }
 
         /** Retrieves the main entity memory manager.
         @remarks
@@ -1331,14 +1331,14 @@ namespace Ogre {
         */
         ObjectMemoryManager& _getEntityMemoryManager(SceneMemoryMgrTypes sceneType)
                                                             { return mEntityMemoryManager[sceneType]; }
-        ObjectMemoryManager& _getLightMemoryManager(void)
+        ObjectMemoryManager& _getLightMemoryManager()
                                                             { return mLightMemoryManager; }
 
         /// @copydoc ArrayMemoryManager::defragment
-        void defragmentMemoryPools(void);
+        void defragmentMemoryPools();
 
         /// @copydoc ArrayMemoryManager::shrinkToFit
-        void shrinkToFitMemoryPools(void);
+        void shrinkToFitMemoryPools();
 
         /** Create an Item (instance of a discrete mesh).
             @param
@@ -1360,16 +1360,16 @@ namespace Ogre {
         virtual void destroyItem( Item *item );
 
         /// Removes & destroys all Items.
-        virtual void destroyAllItems(void);
+        virtual void destroyAllItems();
 
         /// Create an WireAabb
-        virtual WireAabb* createWireAabb(void);
+        virtual WireAabb* createWireAabb();
 
         /// Removes & destroys an WireAabb from the SceneManager.
         virtual void destroyWireAabb( WireAabb *wireAabb );
 
         /// Removes & destroys all WireAabbs.
-        virtual void destroyAllWireAabbs(void);
+        virtual void destroyAllWireAabbs();
 
         void _addWireAabb( WireAabb *wireAabb );
         void _removeWireAabb( WireAabb *wireAabb );
@@ -1427,15 +1427,15 @@ namespace Ogre {
             @see
                 SceneManager::clearScene
         */
-        virtual void destroyAllEntities(void);
+        virtual void destroyAllEntities();
 
         virtual Decal* createDecal( SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
         virtual void destroyDecal( Decal *decal );
-        virtual void destroyAllDecals(void);
+        virtual void destroyAllDecals();
 
         virtual InternalCubemapProbe* _createCubemapProbe( SceneMemoryMgrTypes sceneType );
         virtual void _destroyCubemapProbe( InternalCubemapProbe *probe );
-        virtual void _destroyAllCubemapProbes(void);
+        virtual void _destroyAllCubemapProbes();
 
         /** Creates a 2D rectangle that can be displayed for screen space effects or
             showing a basic GUI.
@@ -1475,7 +1475,7 @@ namespace Ogre {
             @see
                 SceneManager::clearScene
         */
-        virtual void destroyAllRectangle2D(void);
+        virtual void destroyAllRectangle2D();
 
         /** Used by Compositor, tells of which compositor textures active,
             so Materials can access them. If MRT, there could be more than one
@@ -1489,10 +1489,10 @@ namespace Ogre {
 
         /// @see CompositorPassDef::mExposedTextures for the textures that are available
         /// in the current compositor pass. The compositor script keyword is "expose".
-        const CompositorTextureVec& getCompositorTextures(void) const   { return mCompositorTextures; }
+        const CompositorTextureVec& getCompositorTextures() const   { return mCompositorTextures; }
 
         /// Gets the number of currently active compositor textures
-        size_t getNumCompositorTextures(void) const         { return mCompositorTextures.size(); }
+        size_t getNumCompositorTextures() const         { return mCompositorTextures.size(); }
 
         /// Removes all compositor textures from 'from' to end.
         void _removeCompositorTextures( size_t from );
@@ -1513,7 +1513,7 @@ namespace Ogre {
         virtual void destroyManualObject(ManualObject* obj);
         /** Removes & destroys all ManualObjects from the SceneManager.
         */
-        virtual void destroyAllManualObjects(void);
+        virtual void destroyAllManualObjects();
         /** Create a BillboardChain, an object which you can use to render
             a linked chain of billboards.
         */
@@ -1523,7 +1523,7 @@ namespace Ogre {
         virtual void destroyBillboardChain(v1::BillboardChain* obj);
         /** Removes & destroys all BillboardChains from the SceneManager.
         */
-        virtual void destroyAllBillboardChains(void);       
+        virtual void destroyAllBillboardChains();
         /** Create a RibbonTrail, an object which you can use to render
             a linked chain of billboards which follows one or more nodes.
         */
@@ -1533,7 +1533,7 @@ namespace Ogre {
         virtual void destroyRibbonTrail(v1::RibbonTrail* obj);
         /** Removes & destroys all RibbonTrails from the SceneManager.
         */
-        virtual void destroyAllRibbonTrails(void);      
+        virtual void destroyAllRibbonTrails();
 
         /** Creates a particle system based on a template.
         @remarks
@@ -1579,7 +1579,7 @@ namespace Ogre {
         virtual void destroyParticleSystem(ParticleSystem* obj);
         /** Removes & destroys all ParticleSystems from the SceneManager.
         */
-        virtual void destroyAllParticleSystems(void);       
+        virtual void destroyAllParticleSystems();
 
         /** Empties the entire scene, inluding all SceneNodes, Entities, Lights, 
             BillboardSets etc. Cameras are not deleted at this stage since
@@ -1648,11 +1648,11 @@ namespace Ogre {
 
         /** Returns the ambient light level to be used for the scene.
         */
-        const ColourValue& getAmbientLightUpperHemisphere(void) const   { return mAmbientLight[0]; }
-        const ColourValue& getAmbientLightLowerHemisphere(void) const   { return mAmbientLight[1]; }
-        const Vector3& getAmbientLightHemisphereDir(void) const { return mAmbientLightHemisphereDir; }
-        uint32 getEnvFeatures(void) const                       { return mEnvFeatures; }
-        const float* getSphericalHarmonics(void) const          { return mAmbientSphericalHarmonics; }
+        const ColourValue& getAmbientLightUpperHemisphere() const   { return mAmbientLight[0]; }
+        const ColourValue& getAmbientLightLowerHemisphere() const   { return mAmbientLight[1]; }
+        const Vector3& getAmbientLightHemisphereDir() const { return mAmbientLightHemisphereDir; }
+        uint32 getEnvFeatures() const                       { return mEnvFeatures; }
+        const float* getSphericalHarmonics() const          { return mAmbientSphericalHarmonics; }
 
         /** Asks the SceneManager to provide a suggested viewpoint from which the scene should be viewed.
             @remarks
@@ -1787,7 +1787,7 @@ namespace Ogre {
         @remarks
             mTagPointNodeMemoryManagerUpdateList must be set. @see updateAllTransforms remarks
         */
-        void updateAllTagPoints(void);
+        void updateAllTagPoints();
 
         /** Updates the world aabbs from all entities in the scene. Ought to be called right after
             updateAllTransforms. @See updateAllTransforms
@@ -1811,7 +1811,7 @@ namespace Ogre {
         @remarks
             Uses the internally stored AnimationState objects to apply animation to SceneNodes.
         */
-        virtual void _applySceneAnimations(void);
+        virtual void _applySceneAnimations();
 
         /// Returns true if collection code was run. When false, you cannot
         /// trust the contents of _getTmpVisibleObjectsList to be empty
@@ -1854,7 +1854,7 @@ namespace Ogre {
                          Light::LightTypes endType, LightArray &outLights );
 
         /// Called when the frame has fully ended (ALL passes have been executed to all RTTs)
-        void _frameEnded(void);
+        void _frameEnded();
 
         /** Notifies the scene manager of its destination render system
             @remarks
@@ -1916,23 +1916,23 @@ namespace Ogre {
 
         /** Returns the fog mode for the scene.
         */
-        virtual FogMode getFogMode(void) const;
+        virtual FogMode getFogMode() const;
 
         /** Returns the fog colour for the scene.
         */
-        virtual const ColourValue& getFogColour(void) const;
+        virtual const ColourValue& getFogColour() const;
 
         /** Returns the fog start distance for the scene.
         */
-        virtual Real getFogStart(void) const;
+        virtual Real getFogStart() const;
 
         /** Returns the fog end distance for the scene.
         */
-        virtual Real getFogEnd(void) const;
+        virtual Real getFogEnd() const;
 
         /** Returns the fog density for the scene.
         */
-        virtual Real getFogDensity(void) const;
+        virtual Real getFogDensity() const;
 
 
         /** Creates a new BillboardSet for use with this scene manager.
@@ -1970,7 +1970,7 @@ namespace Ogre {
         @see
         SceneManager::clearScene
         */
-        virtual void destroyAllBillboardSets(void);
+        virtual void destroyAllBillboardSets();
 
         /** Tells the SceneManager whether it should render the SceneNodes which 
             make up the scene as well as the objects in the scene.
@@ -1981,7 +1981,7 @@ namespace Ogre {
         */
         virtual void setDisplaySceneNodes(bool display);
         /** Returns true if all scene nodes axis are to be displayed */
-        virtual bool getDisplaySceneNodes(void) const {return mDisplayNodes;}
+        virtual bool getDisplaySceneNodes() const {return mDisplayNodes;}
 
         /** Creates an animation which can be used to animate scene nodes.
         @remarks
@@ -2021,7 +2021,7 @@ namespace Ogre {
         virtual void destroyAnimation(const String& name);
 
         /** Removes all animations created using this SceneManager. */
-        virtual void destroyAllAnimations(void);
+        virtual void destroyAllAnimations();
 
         /** Create an AnimationState object for managing application of animations.
         @remarks
@@ -2068,7 +2068,7 @@ namespace Ogre {
         virtual void destroyAnimationState(const String& name);
 
         /** Removes all animation states created using this SceneManager. */
-        virtual void destroyAllAnimationStates(void);
+        virtual void destroyAllAnimationStates();
 
         /** Registers a new RenderQueueListener which will be notified when render queues
             are processed.
@@ -2175,21 +2175,21 @@ namespace Ogre {
 
         /** Returns a specialised MapIterator over all cameras in the scene. 
         */
-        CameraIterator getCameraIterator(void) {
+        CameraIterator getCameraIterator() {
             return CameraIterator(mCameras.begin(), mCameras.end());
         }
         /** Returns a const version of the camera list. 
         */
         const CameraList& getCameras() const { return mCameras; }
         /** Returns a specialised MapIterator over all animations in the scene. */
-        AnimationIterator getAnimationIterator(void) {
+        AnimationIterator getAnimationIterator() {
             return AnimationIterator(mAnimationsList.begin(), mAnimationsList.end());
         }
         /** Returns a const version of the animation list. 
         */
         const AnimationList& getAnimations() const { return mAnimationsList; }
         /** Returns a specialised MapIterator over all animation states in the scene. */
-        v1::AnimationStateIterator getAnimationStateIterator(void) {
+        v1::AnimationStateIterator getAnimationStateIterator() {
             return mAnimationStates.getAnimationStateIterator();
         }
 
@@ -2206,7 +2206,7 @@ namespace Ogre {
         This colour provided is used as a modulative value to darken the
         areas.
         */
-        virtual const ColourValue& getShadowColour(void) const;
+        virtual const ColourValue& getShadowColour() const;
         /** Sets the distance a shadow volume is extruded for a directional light.
         @remarks
             Although directional lights are essentially infinite, there are many
@@ -2221,7 +2221,7 @@ namespace Ogre {
         virtual void setShadowDirectionalLightExtrusionDistance(Real dist); 
         /** Gets the distance a shadow volume is extruded for a directional light.
         */
-        virtual Real getShadowDirectionalLightExtrusionDistance(void) const;
+        virtual Real getShadowDirectionalLightExtrusionDistance() const;
         /** Sets the default maximum distance away from the camera that shadows
         will be visible. You have to call this function before you create lights
         or the default distance of zero will be used.
@@ -2242,9 +2242,9 @@ namespace Ogre {
         /** Gets the default maximum distance away from the camera that shadows
         will be visible.
         */
-        virtual Real getShadowFarDistance(void) const
+        virtual Real getShadowFarDistance() const
         { return mDefaultShadowFarDist; }
-        virtual Real getShadowFarDistanceSquared(void) const
+        virtual Real getShadowFarDistanceSquared() const
         { return mDefaultShadowFarDistSquared; }
 
         /** Sets the proportional distance which a texture shadow which is generated from a
@@ -2265,7 +2265,7 @@ namespace Ogre {
         /** Gets the proportional distance which a texture shadow which is generated from a
         directional light will be offset into the camera view to make best use of texture space.
         */
-        virtual Real getShadowDirLightTextureOffset(void)  const { return mShadowTextureOffset; }
+        virtual Real getShadowDirLightTextureOffset()  const { return mShadowTextureOffset; }
         /** Sets the proportional distance at which texture shadows begin to fade out.
         @remarks
             To hide the edges where texture shadows end (in directional lights)
@@ -2309,13 +2309,13 @@ namespace Ogre {
 
         void _setCurrentCompositorPass( CompositorPass *pass );
         /// Note: May be null.
-        const CompositorPass* getCurrentCompositorPass(void) const      { return mCurrentPass; }
+        const CompositorPass* getCurrentCompositorPass() const      { return mCurrentPass; }
 
         void _setCurrentShadowNode( CompositorShadowNode *shadowNode, bool isReused );
-        const CompositorShadowNode* getCurrentShadowNode(void) const    { return mCurrentShadowNode; }
-        bool isCurrentShadowNodeReused(void) const                      { return mShadowNodeIsReused; }
+        const CompositorShadowNode* getCurrentShadowNode() const    { return mCurrentShadowNode; }
+        bool isCurrentShadowNodeReused() const                      { return mShadowNodeIsReused; }
 
-        bool isUsingInstancedStereo(void) const;
+        bool isUsingInstancedStereo() const;
 
         /** Sets whether to use late material resolving or not. If set, materials will be resolved
             from the materials at the pass-setting stage and not at the render queue building stage.
@@ -2367,7 +2367,7 @@ namespace Ogre {
         /** Destroy all MovableObjects of a given type. */
         virtual void destroyAllMovableObjectsByType(const String& typeName);
         /** Destroy all MovableObjects. */
-        virtual void destroyAllMovableObjects(void);
+        virtual void destroyAllMovableObjects();
         typedef VectorIterator<MovableObjectVec> MovableObjectIterator;
         /** Get an iterator over all MovableObect instances of a given type. 
         @note
@@ -2414,12 +2414,12 @@ namespace Ogre {
         /** Gets a mask which is bitwise 'and'ed with objects own visibility masks
             to determine if the object is visible.
         */
-        virtual_l2 uint32 getVisibilityMask(void) const { return mVisibilityMask; }
+        virtual_l2 uint32 getVisibilityMask() const { return mVisibilityMask; }
 
         /** Internal method for getting the combination between the global visibility
             mask and the per-viewport visibility mask.
         */
-        uint32 _getCombinedVisibilityMask(void) const;
+        uint32 _getCombinedVisibilityMask() const;
 
         /** Sets a mask which is bitwise 'and'ed with lights' own light masks
             to determine if the light should be casting light.
@@ -2435,7 +2435,7 @@ namespace Ogre {
         /** Gets a mask which is bitwise 'and'ed with lights' own light masks
             to determine if the light should be casting light.
         */
-        virtual_l2 uint32 getLightMask(void) const  { return mLightMask; }
+        virtual_l2 uint32 getLightMask() const  { return mLightMask; }
 
         /** Sets whether the SceneManager should search for visible objects, or
             whether they are being manually handled.
@@ -2448,7 +2448,7 @@ namespace Ogre {
         /** Gets whether the SceneManager should search for visible objects, or
             whether they are being manually handled.
         */
-        virtual bool getFindVisibleObjects(void) { return mFindVisibleObjects; }
+        virtual bool getFindVisibleObjects() { return mFindVisibleObjects; }
 
         /** Set whether to automatically flip the culling mode on objects whenever they
             are negatively scaled.
@@ -2491,7 +2491,7 @@ namespace Ogre {
         /** Are render state changes suppressed? 
         @see _suppressRenderStateChanges
         */
-        virtual bool _areRenderStateChangesSuppressed(void) const
+        virtual bool _areRenderStateChangesSuppressed() const
         { return mSuppressRenderStateChanges; }
         
         /** Method to allow you to mark gpu parameters as dirty, causing them to 
@@ -2510,11 +2510,11 @@ namespace Ogre {
 
         /** Gets the current viewport being rendered (advanced use only, only 
             valid during viewport update. */
-        Viewport* getCurrentViewport0(void) const { return mCurrentViewport0; }
+        Viewport* getCurrentViewport0() const { return mCurrentViewport0; }
 
         /** Gets the current camera being rendered (advanced use only, only 
             valid during viewport update. */
-        CamerasInProgress getCamerasInProgress(void) const     { return mCamerasInProgress; }
+        CamerasInProgress getCamerasInProgress() const     { return mCamerasInProgress; }
 
         AxisAlignedBox _calculateCurrentCastersBox( uint32 viewportVisibilityMask,
                                                     uint8 firstRq, uint8 lastRq ) const;
@@ -2523,7 +2523,7 @@ namespace Ogre {
         @remarks
             Returns a null box if no active shadow node.
         */
-        const AxisAlignedBox& getCurrentCastersBox(void) const;
+        const AxisAlignedBox& getCurrentCastersBox() const;
 
         /** @See CompositorShadowNode::getMinMaxDepthRange
         @remarks
@@ -2566,7 +2566,7 @@ namespace Ogre {
         virtual void setRelativeOrigin( const Vector3 &relativeOrigin, bool bPermanent );
 
         /// Returns the current relative origin. (Only when non-permanent)
-        Vector3 getRelativeOrigin(void) const;
+        Vector3 getRelativeOrigin() const;
 
         /** Add a level of detail listener. */
         void addLodListener(LodListener *listener);
@@ -2595,7 +2595,7 @@ namespace Ogre {
 
     protected:
 
-        void fireWorkerThreadsAndWait(void);
+        void fireWorkerThreadsAndWait();
 
         /** Launches cullFrustum on all worker threads with the requested parameters
         @remarks
@@ -2754,12 +2754,12 @@ namespace Ogre {
         mutable SceneManagerMetaData mMetaData;
         mutable bool mMetaDataInit;
         /// Internal method to initialise the metadata, must be implemented
-        virtual void initMetaData(void) const = 0;
+        virtual void initMetaData() const = 0;
     public:
         SceneManagerFactory() : mMetaDataInit(true) {}
         virtual ~SceneManagerFactory();
         /** Get information about the SceneManager type created by this factory. */
-        virtual const SceneManagerMetaData& getMetaData(void) const 
+        virtual const SceneManagerMetaData& getMetaData() const
         {
             if (mMetaDataInit)
             {

@@ -67,11 +67,11 @@ namespace v1 {
             /// Return the manager of this buffer, if any
             HardwareBufferManagerBase* getManager() const { return mMgr; }
             /// Get the type of indexes used in this buffer
-            IndexType getType(void) const { return mIndexType; }
+            IndexType getType() const { return mIndexType; }
             /// Get the number of indexes in this buffer
-            size_t getNumIndexes(void) const { return mNumIndexes; }
+            size_t getNumIndexes() const { return mNumIndexes; }
             /// Get the size in bytes of each index
-            size_t getIndexSize(void) const { return mIndexSize; }
+            size_t getIndexSize() const { return mIndexSize; }
 
             // NB subclasses should override lock, unlock, readData, writeData
     };

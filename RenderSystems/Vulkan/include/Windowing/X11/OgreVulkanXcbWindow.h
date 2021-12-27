@@ -60,7 +60,7 @@ namespace Ogre
         bool mIsTopLevel;
         bool mIsExternal;
 
-        void initConnection( void );
+        void initConnection();
 
         void createWindow( const String &windowName, uint32 width, uint32 height,
                            const NameValuePairList *miscParams );
@@ -73,9 +73,9 @@ namespace Ogre
         VulkanXcbWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         ~VulkanXcbWindow();
 
-        static const char *getRequiredExtensionName( void );
+        static const char *getRequiredExtensionName();
 
-        virtual void destroy( void );
+        virtual void destroy();
         virtual void _initialize( TextureGpuManager *textureGpuManager,
                                   const NameValuePairList *miscParams );
 
@@ -84,12 +84,12 @@ namespace Ogre
                                               uint32 width, uint32 height, uint32 frequencyNumerator,
                                               uint32 frequencyDenominator );
         virtual void requestResolution( uint32 width, uint32 height );
-        virtual void windowMovedOrResized( void );
+        virtual void windowMovedOrResized();
 
         virtual void _setVisible( bool visible );
-        virtual bool isVisible( void ) const;
+        virtual bool isVisible() const;
         virtual void setHidden( bool hidden );
-        virtual bool isHidden( void ) const;
+        virtual bool isHidden() const;
 
         virtual void getCustomAttribute( IdString name, void *pData );
     };

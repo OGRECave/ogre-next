@@ -49,9 +49,9 @@ namespace Ogre
         MetalDevice             *mDevice;
 
         virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl(void);
+        virtual void unmapImpl();
 
-        void waitForDownloadToFinish(void);
+        void waitForDownloadToFinish();
 
         virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
                                       bool accurateTracking, TextureBox *srcBox=0 );
@@ -64,7 +64,7 @@ namespace Ogre
                                  MetalDevice *device );
         virtual ~MetalAsyncTextureTicket();
 
-        virtual bool queryIsTransferDone(void);
+        virtual bool queryIsTransferDone();
     };
 }
 

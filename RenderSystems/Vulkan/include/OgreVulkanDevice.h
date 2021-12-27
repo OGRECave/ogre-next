@@ -107,13 +107,13 @@ namespace Ogre
 
         bool hasDeviceExtension( const IdString extension ) const;
 
-        void initQueues( void );
+        void initQueues();
 
         void commitAndNextCommandBuffer(
             SubmissionType::SubmissionType submissionType = SubmissionType::FlushOnly );
 
         /// Waits for the GPU to finish all pending commands.
-        void stall( void );
+        void stall();
     };
 
     // Mask away read flags from srcAccessMask

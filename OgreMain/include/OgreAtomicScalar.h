@@ -73,7 +73,7 @@ namespace Ogre {
             mField = cousin.mField;
         }
 
-        T get (void) const
+        T get () const
         {
             return mField;
         }
@@ -241,7 +241,7 @@ namespace Ogre {
             mField = cousin.mField;
         }
 
-        T get (void) const
+        T get () const
         {
             return mField;
         }
@@ -419,7 +419,7 @@ namespace Ogre {
             mField = cousin.mField;
         }
 
-        T get (void) const
+        T get () const
         {
             // no lock required here
             // since get will not interfere with set or cas

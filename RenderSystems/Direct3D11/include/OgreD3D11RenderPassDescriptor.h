@@ -76,11 +76,11 @@ namespace Ogre
         void notifyDeviceLost( D3D11Device *device );
         void notifyDeviceRestored( D3D11Device *device, unsigned pass );
 
-        void checkRenderWindowStatus(void);
-        void calculateSharedKey(void);
+        void checkRenderWindowStatus();
+        void calculateSharedKey();
 
         void updateColourRtv( uint8 lastNumColourEntries );
-        void updateDepthRtv(void);
+        void updateDepthRtv();
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.
@@ -103,7 +103,7 @@ namespace Ogre
                                  uint32 uavStartingSlot, const DescriptorSetUav *descSetUav );
         void performStoreActions( uint32 entriesToFlush );
 
-        void clearFrameBuffer(void);
+        void clearFrameBuffer();
 
         virtual void getCustomAttribute( IdString name, void *pData, uint32 extraParam );
 

@@ -26,7 +26,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void V2ManualObjectGameState::createScene01(void)
+    void V2ManualObjectGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

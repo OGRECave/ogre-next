@@ -52,7 +52,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    bool StagingTexture::uploadWillStall(void)
+    bool StagingTexture::uploadWillStall()
     {
 #if OGRE_DEBUG_MODE
         mUserQueriedIfUploadWillStall = true;
@@ -60,7 +60,7 @@ namespace Ogre
         return !mVaoManager->isFrameFinished( mLastFrameUsed );
     }
     //-----------------------------------------------------------------------------------
-    void StagingTexture::startMapRegion(void)
+    void StagingTexture::startMapRegion()
     {
         assert( !mMapRegionStarted && "startMapRegion already called!" );
         mMapRegionStarted = true;
@@ -104,7 +104,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void StagingTexture::stopMapRegion(void)
+    void StagingTexture::stopMapRegion()
     {
         assert( mMapRegionStarted && "You didn't call startMapRegion first!" );
         mMapRegionStarted = false;

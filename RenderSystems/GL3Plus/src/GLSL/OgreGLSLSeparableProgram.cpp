@@ -239,7 +239,7 @@ namespace Ogre
         }
     }
 
-    // void GLSLSeparableProgram::_useProgram(void)
+    // void GLSLSeparableProgram::_useProgram()
     // {
     //     if (mLinked)
     //     { 
@@ -280,7 +280,7 @@ namespace Ogre
     }
 
 
-    void GLSLSeparableProgram::activate(void)
+    void GLSLSeparableProgram::activate()
     {
         if (!mLinked && !mTriedToLinkAndFailed)
         {
@@ -301,7 +301,7 @@ namespace Ogre
     }
 
 
-    void GLSLSeparableProgram::buildGLUniformReferences(void)
+    void GLSLSeparableProgram::buildGLUniformReferences()
     {
         if (!mUniformRefsBuilt)
         {

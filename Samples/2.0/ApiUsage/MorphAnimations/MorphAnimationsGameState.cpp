@@ -30,7 +30,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void MorphAnimationsGameState::createScene01(void)
+    void MorphAnimationsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         

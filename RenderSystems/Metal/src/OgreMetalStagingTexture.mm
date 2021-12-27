@@ -67,12 +67,12 @@ namespace Ogre
                box.data <= static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN MetalStagingTexture::mapRegionImplRawPtr(void)
+    void* RESTRICT_ALIAS_RETURN MetalStagingTexture::mapRegionImplRawPtr()
     {
         return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void MetalStagingTexture::stopMapRegion(void)
+    void MetalStagingTexture::stopMapRegion()
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
 //        NSRange range = NSMakeRange( 0, mCurrentOffset );

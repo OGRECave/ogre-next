@@ -58,10 +58,10 @@ namespace Ogre {
 
     public:
         /// Returns true when at the end of the particle list
-        bool end(void);
+        bool end();
 
         /** Returns a pointer to the next particle, and moves the iterator on by 1 element. */
-        Particle* getNext(void);
+        Particle* getNext();
     };
     /** @} */
     /** @} */

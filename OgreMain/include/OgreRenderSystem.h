@@ -131,11 +131,11 @@ namespace Ogre
 
         /** Returns the name of the rendering system.
         */
-        virtual const String& getName(void) const = 0;
+        virtual const String& getName() const = 0;
 		
 		/** Returns the friendly name of the render system
 		*/
-		virtual const String& getFriendlyName(void) const = 0;
+		virtual const String& getFriendlyName() const = 0;
 		
         /** Returns the details of this API's configuration options
         @remarks
@@ -158,7 +158,7 @@ namespace Ogre
         A 'map' of options, i.e. a list of options which is also
         indexed by option name.
         */
-        virtual ConfigOptionMap& getConfigOptions(void) = 0;
+        virtual ConfigOptionMap& getConfigOptions() = 0;
 
         /** Sets an option for this API
         @remarks
@@ -211,11 +211,11 @@ namespace Ogre
                     rs->setConfigOption( rs->getPriorityConfigOption( i ), value );
             @endcode
         */
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        virtual size_t getNumPriorityConfigOptions() const;
 
         /** Create an object for performing hardware occlusion queries. 
         */
-        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void) = 0;
+        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery() = 0;
 
         /** Destroy a hardware occlusion query object. 
         */
@@ -225,7 +225,7 @@ namespace Ogre
         @note
         If the returned string is empty, there are no problems.
         */
-        virtual String validateConfigOptions(void) = 0;
+        virtual String validateConfigOptions() = 0;
 
         /** Start up the renderer using the settings selected (Or the defaults if none have been selected).
         @remarks
@@ -273,11 +273,11 @@ namespace Ogre
 
         /** Restart the renderer (normally following a change in settings).
         */
-        virtual void reinitialise(void) = 0;
+        virtual void reinitialise() = 0;
 
         /** Shutdown the renderer and cleanup resources.
         */
-        virtual void shutdown(void);
+        virtual void shutdown();
 
         /** Some render systems have moments when GPU device is temporarily unavailable,
             for example when D3D11 device is lost, or when iOS app is in background, etc.
@@ -294,7 +294,7 @@ namespace Ogre
 
         /** Returns true if the renderer will try to use W-buffers when available.
         */
-        bool getWBufferEnabled(void) const;
+        bool getWBufferEnabled() const;
 
         /** Returns supported sample description for requested FSAA mode, with graceful downgrading.
         */
@@ -733,13 +733,13 @@ namespace Ogre
         */
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) = 0;
 
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void) = 0;
+        virtual RenderPassDescriptor* createRenderPassDescriptor() = 0;
         void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
 
-        RenderPassDescriptor* getCurrentPassDescriptor(void)    { return mCurrentRenderPassDescriptor; }
-        Viewport& _getCurrentRenderViewport(void)               { return mCurrentRenderViewport[0]; }
-        Viewport* getCurrentRenderViewports(void)				{ return mCurrentRenderViewport; }
-        uint32 getMaxBoundViewports(void)						{ return mMaxBoundViewports; }
+        RenderPassDescriptor* getCurrentPassDescriptor()    { return mCurrentRenderPassDescriptor; }
+        Viewport& _getCurrentRenderViewport()               { return mCurrentRenderViewport[0]; }
+        Viewport* getCurrentRenderViewports()				{ return mCurrentRenderViewport; }
+        uint32 getMaxBoundViewports()						{ return mMaxBoundViewports; }
 
         /** When the descriptor is set to Load clear, two possible things may happen:
                 1. The region is cleared.
@@ -784,8 +784,8 @@ namespace Ogre
         /// Therefore it's easier to split the process done in beginRenderPassDescriptor
         /// in two steps (beginRenderPassDescriptor and executeRenderPassDescriptorDelayedActions)
         /// for Metal.
-        virtual void executeRenderPassDescriptorDelayedActions(void);
-        virtual void endRenderPassDescriptor(void);
+        virtual void executeRenderPassDescriptorDelayedActions();
+        virtual void endRenderPassDescriptor();
 
     protected:
         /// Reads DepthBuffer::AvailableDepthFormats and alters DepthBuffer::DefaultDepthBufferFormat
@@ -798,7 +798,7 @@ namespace Ogre
         void destroySharedDepthBuffer( TextureGpu *depthTexture );
         void referenceSharedDepthBuffer( TextureGpu *depthBuffer );
     public:
-        void _cleanupDepthBuffers( void );
+        void _cleanupDepthBuffers();
         /// Releases the reference count on a shared depth buffer.
         /// Does nothing if input is not a shared depth buffer.
         void _dereferenceSharedDepthBuffer( TextureGpu *depthBuffer );
@@ -933,16 +933,16 @@ namespace Ogre
 
         /// Signifies the beginning of the main frame. i.e. will only be called once per frame,
         /// not per viewport
-        virtual void _beginFrameOnce(void);
+        virtual void _beginFrameOnce();
         /// Called once per frame, regardless of how many active workspaces there are.
         /// Gets called AFTER all RenderWindows have been swapped.
-        virtual void _endFrameOnce(void);
+        virtual void _endFrameOnce();
 
         /**
         * Signifies the beginning of a frame, i.e. the start of rendering on a single viewport. Will occur
         * several times per complete frame if multiple viewports exist.
         */
-        virtual void _beginFrame(void) = 0;
+        virtual void _beginFrame() = 0;
         
         //Dummy structure for render system contexts - implementing RenderSystems can extend
         //as needed
@@ -952,7 +952,7 @@ namespace Ogre
         * Will usually be called by the SceneManager, don't use this manually unless you know what
         * you are doing.
         */
-        virtual RenderSystemContext* _pauseFrame(void);
+        virtual RenderSystemContext* _pauseFrame();
         /**
         * Resume rendering for a frame. This has to be called after a _pauseFrame call
         * Will usually be called by the SceneManager, don't use this manually unless you know what
@@ -964,10 +964,10 @@ namespace Ogre
         /**
         * Ends rendering of a frame to the current viewport.
         */
-        virtual void _endFrame(void) = 0;
+        virtual void _endFrame() = 0;
 
         /// Called once per frame, regardless of how many active workspaces there are
-        void _update(void);
+        void _update();
 
         /// This gives the renderer a chance to perform the compositor update in a special way.
         /// When the render system is ready to perform the actual update it should just
@@ -1013,7 +1013,7 @@ namespace Ogre
         /** Get the native VertexElementType for a compact 32-bit colour value
         for this rendersystem.
         */
-        virtual VertexElementType getColourVertexElementType(void) const = 0;
+        virtual VertexElementType getColourVertexElementType() const = 0;
 
         /** Reverts the compare order e.g. greater_equal becomes less_equal
             Used by reverse depth
@@ -1057,7 +1057,7 @@ namespace Ogre
         ///
         /// Note OpenGL may behave like D3D11, and thus we'll return 1.0f too.
         /// This is decided at runtime, not at compile time.
-        virtual Real getRSDepthRange(void) const { return 1.0f; }
+        virtual Real getRSDepthRange() const { return 1.0f; }
 
         /** This method allows you to set all the stencil buffer parameters in one call.
         @remarks
@@ -1085,7 +1085,7 @@ namespace Ogre
         */
         virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
 
-        const StencilParams& getStencilBufferParams(void) const         { return mStencilParams; }
+        const StencilParams& getStencilBufferParams() const         { return mStencilParams; }
 
         /**
         Render something to the active viewport.
@@ -1120,7 +1120,7 @@ namespace Ogre
         virtual void _renderEmulatedNoBaseInstance( const CbDrawCallStrip *cmd ) {}
 
         /// May override the current VertexArrayObject!
-        virtual void _startLegacyV1Rendering(void) {}
+        virtual void _startLegacyV1Rendering() {}
         virtual void _setRenderOperation( const v1::CbRenderOp *cmd ) = 0;
         /// Renders a V1 RenderOperation. Assumes _setRenderOperation has already been called.
         virtual void _render( const v1::CbDrawCallIndexed *cmd ) = 0;
@@ -1129,12 +1129,12 @@ namespace Ogre
         virtual void _renderNoBaseInstance( const v1::CbDrawCallStrip *cmd ) {}
 
         /** Gets the capabilities of the render system. */
-        const RenderSystemCapabilities* getCapabilities(void) const { return mCurrentCapabilities; }
+        const RenderSystemCapabilities* getCapabilities() const { return mCurrentCapabilities; }
 
 
         /** Returns the driver version.
         */
-        virtual const DriverVersion& getDriverVersion(void) const { return mDriverVersion; }
+        virtual const DriverVersion& getDriverVersion() const { return mDriverVersion; }
 
         /** Returns the default material scheme used by the render system.
             Systems that use the RTSS to emulate a fixed function pipeline 
@@ -1145,7 +1145,7 @@ namespace Ogre
             viewports.  It is a necessary step on these render systems for
             render textures to be rendered into properly.
         */
-        virtual const String& _getDefaultViewportMaterialScheme(void) const;
+        virtual const String& _getDefaultViewportMaterialScheme() const;
 
         /** Bind Gpu program parameters.
         @param gptype The type of program to bind the parameters to
@@ -1162,9 +1162,9 @@ namespace Ogre
         /** Returns whether or not a Gpu program of the given type is currently bound. */
         virtual bool isGpuProgramBound(GpuProgramType gptype);
 
-        VaoManager* getVaoManager(void) const           { return mVaoManager; }
+        VaoManager* getVaoManager() const           { return mVaoManager; }
 
-        TextureGpuManager* getTextureGpuManager(void) const { return mTextureGpuManager; }
+        TextureGpuManager* getTextureGpuManager() const { return mTextureGpuManager; }
 
         /**
          * Gets the native shading language version for this render system.
@@ -1193,7 +1193,7 @@ namespace Ogre
         /** Indicates whether or not the vertex windings set will be inverted for the current render (e.g. reflections)
         @see RenderSystem::setInvertVertexWinding
         */
-        virtual bool getInvertVertexWinding(void) const;
+        virtual bool getInvertVertexWinding() const;
 
         /** Immediately clears the whole frame buffer on the selected RenderPassDescriptor.
             Prefer clearing using the LoadAction semantics in the RenderPassDescriptor.
@@ -1218,7 +1218,7 @@ namespace Ogre
         required to map the origin of a texel to the origin of a pixel in
         the horizontal direction.
         */
-        virtual Real getHorizontalTexelOffset(void) = 0;
+        virtual Real getHorizontalTexelOffset() = 0;
         /** Returns the vertical texel offset value required for mapping 
         texel origins to pixel origins in this rendersystem.
         @remarks
@@ -1228,7 +1228,7 @@ namespace Ogre
         required to map the origin of a texel to the origin of a pixel in
         the vertical direction.
         */
-        virtual Real getVerticalTexelOffset(void) = 0;
+        virtual Real getVerticalTexelOffset() = 0;
 
         /** Gets the minimum (closest) depth value to be used when rendering
         using identity transforms.
@@ -1238,7 +1238,7 @@ namespace Ogre
         rendersystem. This method lets you retrieve the correct value.
         @see Renderable::getUseIdentityView, Renderable::getUseIdentityProjection
         */
-        virtual Real getMinimumDepthInputValue(void) = 0;
+        virtual Real getMinimumDepthInputValue() = 0;
         /** Gets the maximum (farthest) depth value to be used when rendering
         using identity transforms.
         @remarks
@@ -1247,7 +1247,7 @@ namespace Ogre
         rendersystem. This method lets you retrieve the correct value.
         @see Renderable::getUseIdentityView, Renderable::getUseIdentityProjection
         */
-        virtual Real getMaximumDepthInputValue(void) = 0;
+        virtual Real getMaximumDepthInputValue() = 0;
         /** set the current multi pass count value.  This must be set prior to 
         calling _render() if multiple renderings of the same pass state are 
         required.
@@ -1326,7 +1326,7 @@ namespace Ogre
         can raise.
         @see RenderSystem::addListener
         */
-        virtual const StringVector& getRenderSystemEvents(void) const { return mEventNames; }
+        virtual const StringVector& getRenderSystemEvents() const { return mEventNames; }
 
         /** Tell the rendersystem to perform any prep tasks it needs to directly
         before other threads which might access the rendering API are registered.
@@ -1385,7 +1385,7 @@ namespace Ogre
         /**
         * Ends the currently active GPU profiling event.
         */
-        virtual void endProfileEvent( void ) = 0;
+        virtual void endProfileEvent() = 0;
 
         /**
         * Marks an instantaneous event for graphics profilers.  
@@ -1401,10 +1401,10 @@ namespace Ogre
         /// Note: For security & performance reasons this feature is only enabled when
         /// OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         virtual void debugAnnotationPush( const String &event ) {}
-        virtual void debugAnnotationPop( void ) {}
+        virtual void debugAnnotationPop() {}
 
-        virtual void initGPUProfiling(void) = 0;
-        virtual void deinitGPUProfiling(void) = 0;
+        virtual void initGPUProfiling() = 0;
+        virtual void deinitGPUProfiling() = 0;
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache ) = 0;
         virtual void endGPUSampleProfile( const String &name ) = 0;
 
@@ -1437,7 +1437,7 @@ namespace Ogre
         /// Explicitly loads RenderDoc. It is not necessary to call this function
         /// unless you want to use RenderSystem::getRenderDocApi before we
         /// are required to load RenderDoc.
-        bool loadRenderDocApi( void );
+        bool loadRenderDocApi();
 
         /// Returns the RenderDoc API handle in case you want to do more advanced functionality
         /// than what we expose.
@@ -1446,7 +1446,7 @@ namespace Ogre
         ///
         /// Call RenderSystem::loadRenderDocApi first if you wish the returned ptr
         /// to not be null (it may still be null if we fail to load RenderDoc)
-        RENDERDOC_API_1_4_1 *getRenderDocApi( void ) { return mRenderDocApi; }
+        RENDERDOC_API_1_4_1 *getRenderDocApi() { return mRenderDocApi; }
 
         /** Determines if the system has anisotropic mip map filter support
         */
@@ -1485,12 +1485,12 @@ namespace Ogre
             compiled with a different setting.
         */
         void setDebugShaders( bool bDebugShaders );
-        bool getDebugShaders(void) const                        { return mDebugShaders; }
+        bool getDebugShaders() const                        { return mDebugShaders; }
 
-        bool isReverseDepth(void) const                         { return mReverseDepth; }
+        bool isReverseDepth() const                         { return mReverseDepth; }
 
         /// +Y is downwards in NDC (Normalized Device Coordinates). Only Vulkan has this problem.
-        bool getInvertedClipSpaceY( void ) const { return mInvertedClipSpaceY; }
+        bool getInvertedClipSpaceY() const { return mInvertedClipSpaceY; }
 
         /** Returns true if 'a' and 'b' internally map to the same layout and should be
             considered equivalent for a given texture
@@ -1508,17 +1508,17 @@ namespace Ogre
         ///
         /// Do not call this function while inside rendering internals, as it will clear
         /// the device state, thus leaving it inconsistent with what we think it is set to.
-        virtual void _clearStateAndFlushCommandBuffer(void);
+        virtual void _clearStateAndFlushCommandBuffer();
 
-        virtual void flushCommands(void) = 0;
+        virtual void flushCommands() = 0;
 
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
+        virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const = 0;
 
-        BarrierSolver &getBarrierSolver( void ) { return mBarrierSolver; }
+        BarrierSolver &getBarrierSolver() { return mBarrierSolver; }
    
     protected:
 
-        void destroyAllRenderPassDescriptors(void);
+        void destroyAllRenderPassDescriptors();
 
         BarrierSolver mBarrierSolver;
 
@@ -1585,7 +1585,7 @@ namespace Ogre
         pass iteration auto constant entry
         @return True if more iterations are required
         */
-        bool updatePassIterationRenderState(void);
+        bool updatePassIterationRenderState();
 
         RENDERDOC_API_1_4_1 *mRenderDocApi;
 

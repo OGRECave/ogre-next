@@ -487,7 +487,7 @@ namespace Ogre
         return false;
     }
     //-----------------------------------------------------------------------------------
-    void ForwardPlusBase::deleteOldGridBuffers(void)
+    void ForwardPlusBase::deleteOldGridBuffers()
     {
         //Check if some of the caches are really old and delete them
         CachedGridVec::iterator itor = mCachedGrid.begin();

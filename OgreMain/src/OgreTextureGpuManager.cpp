@@ -184,7 +184,7 @@ namespace Ogre
         mTextureGpuManagerListener = 0;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::shutdown(void)
+    void TextureGpuManager::shutdown()
     {
         if( !mShuttingDown )
         {
@@ -196,7 +196,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAll(void)
+    void TextureGpuManager::destroyAll()
     {
         mMutex.lock();
         abortAllRequests();
@@ -207,7 +207,7 @@ namespace Ogre
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::abortAllRequests( void )
+    void TextureGpuManager::abortAllRequests()
     {
         ThreadData &workerData = mThreadData[c_workerThread];
         ThreadData &mainData = mThreadData[c_mainThread];
@@ -244,7 +244,7 @@ namespace Ogre
         mScheduledTasks.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllStagingBuffers(void)
+    void TextureGpuManager::destroyAllStagingBuffers()
     {
         StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
         StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
@@ -282,7 +282,7 @@ namespace Ogre
         mUsedStagingTextures.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllTextures(void)
+    void TextureGpuManager::destroyAllTextures()
     {
         ResourceEntryMap::const_iterator itor = mEntries.begin();
         ResourceEntryMap::const_iterator end  = mEntries.end();
@@ -297,7 +297,7 @@ namespace Ogre
         mEntries.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllPools(void)
+    void TextureGpuManager::destroyAllPools()
     {
         TexturePoolList::const_iterator itor = mTexturePool.begin();
         TexturePoolList::const_iterator end  = mTexturePool.end();
@@ -759,7 +759,7 @@ namespace Ogre
         efficientVectorRemove( mAsyncTextureTickets, itor );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyAllAsyncTextureTicket(void)
+    void TextureGpuManager::destroyAllAsyncTextureTicket()
     {
         AsyncTextureTicketVec::const_iterator itor = mAsyncTextureTickets.begin();
         AsyncTextureTicketVec::const_iterator end  = mAsyncTextureTickets.end();
@@ -1176,7 +1176,7 @@ namespace Ogre
         outTextureBytesGpu = textureBytesGpu;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::dumpStats(void) const
+    void TextureGpuManager::dumpStats() const
     {
         char tmpBuffer[512];
         LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -1385,7 +1385,7 @@ namespace Ogre
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
     }
     //-----------------------------------------------------------------------------------
-    const TextureGpuManager::BudgetEntryVec& TextureGpuManager::getBudget(void) const
+    const TextureGpuManager::BudgetEntryVec& TextureGpuManager::getBudget() const
     {
         return mBudget;
     }
@@ -1629,12 +1629,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    RenderSystem* TextureGpuManager::getRenderSystem(void) const
+    RenderSystem* TextureGpuManager::getRenderSystem() const
     {
         return mRenderSystem;
     }
     //-----------------------------------------------------------------------------------
-    VaoManager* TextureGpuManager::getVaoManager(void) const
+    VaoManager* TextureGpuManager::getVaoManager() const
     {
         return mVaoManager;
     }
@@ -1984,12 +1984,12 @@ namespace Ogre
         mDefaultMipmapGenCubemaps = defaultMipmapGenCubemaps;
     }
     //-----------------------------------------------------------------------------------
-    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGeneration(void) const
+    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGeneration() const
     {
         return mDefaultMipmapGen;
     }
     //-----------------------------------------------------------------------------------
-    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGenerationCubemaps(void) const
+    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGenerationCubemaps() const
     {
         return mDefaultMipmapGenCubemaps;
     }
@@ -2095,7 +2095,7 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fulfillUsageStats(void)
+    void TextureGpuManager::fulfillUsageStats()
     {
         UsageStatsVec::iterator itStats = mStreamingData.prevStats.begin();
         UsageStatsVec::iterator enStats = mStreamingData.prevStats.end();
@@ -2160,7 +2160,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fulfillMinimumBudget(void)
+    void TextureGpuManager::fulfillMinimumBudget()
     {
         BudgetEntryVec::const_iterator itBudget = mBudget.begin();
         BudgetEntryVec::const_iterator enBudget = mBudget.end();
@@ -2230,7 +2230,7 @@ namespace Ogre
     {
         return _l->isSmallerThan( _r );
     }
-    void TextureGpuManager::fullfillBudget(void)
+    void TextureGpuManager::fullfillBudget()
     {
         OgreProfileExhaustive( "TextureGpuManager::fullfillBudget" );
 
@@ -2264,7 +2264,7 @@ namespace Ogre
         mStreamingData.bytesPreloaded = 0;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::mergeUsageStatsIntoPrevStats(void)
+    void TextureGpuManager::mergeUsageStatsIntoPrevStats()
     {
         //The sole purpose of this function is to perform a moving average
         //(https://en.wikipedia.org/wiki/Moving_average) between past records
@@ -2923,7 +2923,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_updateStreaming(void)
+    void TextureGpuManager::_updateStreaming()
     {
         OgreProfileExhaustive( "TextureGpuManager::_updateStreaming" );
 
@@ -3132,7 +3132,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::processDownloadToRamQueue(void)
+    void TextureGpuManager::processDownloadToRamQueue()
     {
         DownloadToRamEntryVec readyTextures;
 
@@ -3348,13 +3348,13 @@ namespace Ogre
         return isDone;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::isDoneStreaming( void ) const
+    bool TextureGpuManager::isDoneStreaming() const
     {
         return mLastUpdateIsStreamingDone && !mAddedNewLoadRequests && mDownloadToRamQueue.empty() &&
                mScheduledTasks.empty();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::waitForStreamingCompletion(void)
+    void TextureGpuManager::waitForStreamingCompletion()
     {
         OgreProfileExhaustive( "TextureGpuManager::waitForStreamingCompletion" );
 
@@ -3439,12 +3439,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    bool TexturePool::hasFreeSlot(void) const
+    bool TexturePool::hasFreeSlot() const
     {
         return !availableSlots.empty() || usedMemory < masterTexture->getNumSlices();
     }
     //-----------------------------------------------------------------------------------
-    bool TexturePool::empty(void) const
+    bool TexturePool::empty() const
     {
         const size_t numSlices = masterTexture->getNumSlices();
         return (availableSlots.size() + (numSlices - usedMemory)) == numSlices;
@@ -3503,7 +3503,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::QueuedImage::destroy(void)
+    void TextureGpuManager::QueuedImage::destroy()
     {
         if( autoDeleteImage &&
             dstTexture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
@@ -3518,7 +3518,7 @@ namespace Ogre
                 "These filters will leak" );
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::QueuedImage::empty( void ) const { return mipLevelBitSet.empty(); }
+    bool TextureGpuManager::QueuedImage::empty() const { return mipLevelBitSet.empty(); }
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::QueuedImage::isMipSliceQueued( uint8 mipLevel, uint8 slice ) const
     {
@@ -3532,12 +3532,12 @@ namespace Ogre
         return mipLevelBitSet.unset( mipSlice );
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpuManager::QueuedImage::getMinMipLevel( void ) const
+    uint8 TextureGpuManager::QueuedImage::getMinMipLevel() const
     {
         return static_cast<uint8>( mipLevelBitSet.findFirstBitSet() / image.getDepthOrSlices() );
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne( void ) const
+    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne() const
     {
         return static_cast<uint8>(
             ( mipLevelBitSet.findLastBitSetPlusOne() + image.getDepthOrSlices() - 1u ) /

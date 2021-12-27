@@ -14,7 +14,7 @@ namespace Demo
     public:
 		EmptyProjectGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

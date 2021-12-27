@@ -41,7 +41,7 @@ namespace Ogre
     {
     protected:
         virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void );
+        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl();
 
     public:
         NULLUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,

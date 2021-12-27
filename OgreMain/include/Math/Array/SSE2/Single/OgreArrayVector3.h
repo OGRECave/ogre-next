@@ -199,7 +199,7 @@ namespace Ogre
 
         /// Unlike Vector3::normalise(), this function does not return the length of the vector
         /// because such value was not cached and was never available @see Vector3::normalise()
-        inline void normalise( void );
+        inline void normalise();
 
         /// @copydoc Vector3::crossProduct()
         inline ArrayVector3 crossProduct( const ArrayVector3& rkVector ) const;
@@ -230,10 +230,10 @@ namespace Ogre
         inline void setToSign();
 
         /// @copydoc Vector3::perpendicular()
-        inline ArrayVector3 perpendicular( void ) const;
+        inline ArrayVector3 perpendicular() const;
 
         /// @copydoc Vector3::normalisedCopy()
-        inline ArrayVector3 normalisedCopy( void ) const;
+        inline ArrayVector3 normalisedCopy() const;
 
         /// @copydoc Vector3::reflect()
         inline ArrayVector3 reflect( const ArrayVector3& normal ) const;
@@ -246,17 +246,17 @@ namespace Ogre
             After inverseLeaveZero
                 x = 0; y = 0.5; z = 0.3333;
         */
-        inline void inverseLeaveZeroes( void );
+        inline void inverseLeaveZeroes();
 
         /// @see Vector3::isNaN()
         /// @return
         ///     Return value differs from Vector3's counterpart. We return an int
         ///     bits 0-4 are set for each NaN of each vector inside.
         ///     if the int is non-zero, there is a NaN.
-        inline int isNaN( void ) const;
+        inline int isNaN() const;
 
         /// @copydoc Vector3::primaryAxis()
-        inline ArrayVector3 primaryAxis( void ) const;
+        inline ArrayVector3 primaryAxis() const;
 
         /** Takes each Vector and returns one returns a single vector
         @remarks
@@ -267,7 +267,7 @@ namespace Ogre
             Vector.y = min( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
             Vector.z = min( vector[0].z, vector[1].z, vector[2].z, vector[3].z )
         */
-        inline Vector3 collapseMin( void ) const;
+        inline Vector3 collapseMin() const;
 
         /** Takes each Vector and returns one returns a single vector
         @remarks
@@ -278,7 +278,7 @@ namespace Ogre
             Vector.y = max( vector[0].y, vector[1].y, vector[2].y, vector[3].y )
             Vector.z = max( vector[0].z, vector[1].z, vector[2].z, vector[3].z )
         */
-        inline Vector3 collapseMax( void ) const;
+        inline Vector3 collapseMax() const;
 
         /** Conditional move update. @See MathlibSSE2::Cmov4
             Changes each of the four vectors contained in 'this' with

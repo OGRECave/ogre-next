@@ -79,7 +79,7 @@ namespace Ogre
         HlmsLowLevel();
         ~HlmsLowLevel();
 
-        AutoParamDataSource* _getAutoParamDataSource(void) const    { return mAutoParamDataSource; }
+        AutoParamDataSource* _getAutoParamDataSource() const    { return mAutoParamDataSource; }
 
         virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
 

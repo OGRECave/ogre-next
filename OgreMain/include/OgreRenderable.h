@@ -80,7 +80,7 @@ namespace Ogre {
         /** Retrieves the material this renderable object uses. It may be null if it's using
             the HLMS. @See getDatablock
         */
-        MaterialPtr getMaterial(void) const;
+        MaterialPtr getMaterial() const;
 
         /** Gets the render operation required to send this object to the frame buffer.
         */
@@ -140,11 +140,11 @@ namespace Ogre {
             If a renderable does not use vertex blending this method returns 1, which is the default for 
             simplicity.
         */
-        virtual unsigned short getNumWorldTransforms(void) const { return 1; }
+        virtual unsigned short getNumWorldTransforms() const { return 1; }
 
-        bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
+        bool hasSkeletonAnimation() const               { return mHasSkeletonAnimation; }
 
-        unsigned short getNumPoses(void) const;
+        unsigned short getNumPoses() const;
         bool getPoseHalfPrecision() const;
         bool getPoseNormals() const;
         float* getPoseWeights() const;
@@ -152,7 +152,7 @@ namespace Ogre {
         void setPoseWeight(size_t index, float w);
         void addPoseWeight(size_t index, float w);
 
-        TexBufferPacked *getPoseTexBuffer( void ) const;
+        TexBufferPacked *getPoseTexBuffer() const;
 
         /** Returns whether the world matrix is an identity matrix.
         @remarks
@@ -163,7 +163,7 @@ namespace Ogre {
             and this function will be called at creation time to use a different shader;
             not during rendering time per Renderable.
         */
-        virtual bool getUseIdentityWorldMatrix(void) const          { return false; }
+        virtual bool getUseIdentityWorldMatrix() const          { return false; }
 
         /** Returns whether the Hlms implementation should evaluate getUseIdentityProjection
             per object at runtime, or if it can assume the Renderable will remain with
@@ -174,7 +174,7 @@ namespace Ogre {
             For example currently Unlit supports them all, but will assume this returns
             always true if getUseIdentityWorldMatrix returns false.
         */
-        virtual bool getUseIdentityViewProjMatrixIsDynamic(void) const  { return false; }
+        virtual bool getUseIdentityViewProjMatrixIsDynamic() const  { return false; }
 
         /** Sets whether or not to use an 'identity' projection.
         @remarks
@@ -199,7 +199,7 @@ namespace Ogre {
             need not change this.
         @see Renderable::setUseIdentityProjection
         */
-        bool getUseIdentityProjection(void) const { return mUseIdentityProjection; }
+        bool getUseIdentityProjection() const { return mUseIdentityProjection; }
 
         /** Sets whether or not to use an 'identity' view.
         @remarks
@@ -224,13 +224,13 @@ namespace Ogre {
             Normal renderables need not change this.
         @see Renderable::setUseIdentityView
         */
-        bool getUseIdentityView(void) const { return mUseIdentityView; }
+        bool getUseIdentityView() const { return mUseIdentityView; }
 
         /** Gets a list of lights, ordered relative to how close they are to this renderable.
         @remarks
             Directional lights, which have no position, will always be first on this list.
         */
-        virtual const LightList& getLights(void) const = 0;
+        virtual const LightList& getLights() const = 0;
 
         /** Method which reports whether this renderable would normally cast a
             shadow. 
@@ -238,7 +238,7 @@ namespace Ogre {
             Subclasses should override this if they could have been used to 
             generate a shadow.
         */
-        virtual bool getCastsShadows(void) const { return false; }
+        virtual bool getCastsShadows() const { return false; }
 
         /** Sets a custom parameter for this Renderable, which may be used to 
             drive calculations for this specific Renderable, like GPU program parameters.
@@ -298,7 +298,7 @@ namespace Ogre {
         }
 
         typedef map<size_t, Vector4>::type CustomParameterMap;
-        const CustomParameterMap& getCustomParameters(void) const   { return mCustomParameters; }
+        const CustomParameterMap& getCustomParameters() const   { return mCustomParameters; }
 
         /** Update a custom GpuProgramParameters constant which is derived from 
             information only this Renderable knows.
@@ -341,7 +341,7 @@ namespace Ogre {
         /** Gets whether this renderable's chosen detail level can be
             overridden (downgraded) by the camera setting. 
         */
-        virtual bool getPolygonModeOverrideable(void) const
+        virtual bool getPolygonModeOverrideable() const
         {
             return mPolygonModeOverrideable;
         }
@@ -358,7 +358,7 @@ namespace Ogre {
         /** @deprecated use UserObjectBindings::getUserAny via getUserObjectBindings() instead.
             Retrieves the custom user value associated with this object.
         */
-        OGRE_DEPRECATED virtual const Any& getUserAny(void) const { return getUserObjectBindings().getUserAny(); }
+        OGRE_DEPRECATED virtual const Any& getUserAny() const { return getUserObjectBindings().getUserAny(); }
 
         /** Return an instance of user objects binding associated with this class.
             You can use it to associate one or more custom objects with this class instance.
@@ -375,9 +375,9 @@ namespace Ogre {
         const VertexArrayObjectArray& getVaos( VertexPass vertexPass ) const
                                                 { return mVaoPerLod[vertexPass]; }
 
-        uint32 getHlmsHash(void) const          { return mHlmsHash; }
-        uint32 getHlmsCasterHash(void) const    { return mHlmsCasterHash; }
-        HlmsDatablock* getDatablock(void) const { return mHlmsDatablock; }
+        uint32 getHlmsHash() const          { return mHlmsHash; }
+        uint32 getHlmsCasterHash() const    { return mHlmsCasterHash; }
+        HlmsDatablock* getDatablock() const { return mHlmsDatablock; }
 
         const String& getDatablockOrMaterialName() const;
 
@@ -405,12 +405,12 @@ namespace Ogre {
             Use at your own risk, hence the _underscore.
             See http://ogre3d.org/forums/viewtopic.php?f=25&t=91791&p=534476#p534476
         */
-        virtual void _setNullDatablock(void);
+        virtual void _setNullDatablock();
 
         /// Manually sets the hlms hashes. Don't call this directly
         virtual void _setHlmsHashes( uint32 hash, uint32 casterHash );
 
-        uint8 getCurrentMaterialLod(void) const { return mCurrentMaterialLod; }
+        uint8 getCurrentMaterialLod() const { return mCurrentMaterialLod; }
 
         friend void LodStrategy::lodSet( ObjectData &t, Real lodValues[ARRAY_PACKED_REALS] );
 
@@ -429,7 +429,7 @@ namespace Ogre {
             @See RenderQueue
         */
         void setRenderQueueSubGroup( uint8 subGroup )   { mRenderQueueSubGroup = subGroup; }
-        uint8 getRenderQueueSubGroup(void) const        { return mRenderQueueSubGroup; }
+        uint8 getRenderQueueSubGroup() const        { return mRenderQueueSubGroup; }
 
         /** Sets the default render queue sub group for all future Renderable instances.
         */
@@ -506,7 +506,7 @@ namespace Ogre {
     public:
         RenderableAnimated();
 
-        const IndexMap* getBlendIndexToBoneIndexMap(void) const { return mBlendIndexToBoneIndexMap; }
+        const IndexMap* getBlendIndexToBoneIndexMap() const { return mBlendIndexToBoneIndexMap; }
     };
 
     /** @} */

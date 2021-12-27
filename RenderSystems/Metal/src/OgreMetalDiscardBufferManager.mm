@@ -157,7 +157,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDiscardBufferManager::updateUnsafeBlocks(void)
+    void MetalDiscardBufferManager::updateUnsafeBlocks()
     {
         const uint32 currentFrame       = mVaoManager->getFrameCount();
         const uint32 bufferMultiplier   = mVaoManager->getDynamicBufferMultiplier();
@@ -176,7 +176,7 @@ namespace Ogre
         mUnsafeBlocks.erase( mUnsafeBlocks.begin(), itor );
     }
     //-------------------------------------------------------------------------
-    void MetalDiscardBufferManager::_notifyDeviceStalled(void)
+    void MetalDiscardBufferManager::_notifyDeviceStalled()
     {
         {
             UnsafeBlockVec::iterator itor = mUnsafeBlocks.begin();
@@ -355,7 +355,7 @@ namespace Ogre
         return reinterpret_cast<uint8*>( [mBuffer contents] ) + mBufferOffset;
     }
     //-------------------------------------------------------------------------
-    void MetalDiscardBuffer::unmap(void)
+    void MetalDiscardBuffer::unmap()
     {
 //#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
 //        NSRange range = NSMakeRange( mBufferOffset, mBufferSize );

@@ -63,7 +63,7 @@ namespace v1 {
         ~MeshManager();
 
         /** Initialises the manager, only to be called by OGRE internally. */
-        void _initialise(void);
+        void _initialise();
 
         /// Get a resource by name
         /// @see ResourceManager::getResourceByName
@@ -388,7 +388,7 @@ namespace v1 {
         */
         void setPrepareAllMeshesForShadowVolumes(bool enable);
         /** Retrieves whether all Meshes should prepare themselves for shadow volumes. */
-        bool getPrepareAllMeshesForShadowVolumes(void);
+        bool getPrepareAllMeshesForShadowVolumes();
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -405,7 +405,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MeshManager& getSingleton(void);
+        static MeshManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -421,12 +421,12 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MeshManager* getSingletonPtr(void);
+        static MeshManager* getSingletonPtr();
 
         /** Gets the factor by which the bounding box of an entity is padded.
             Default is 0.01
         */
-        Real getBoundsPaddingFactor(void);
+        Real getBoundsPaddingFactor();
 
         /** Sets the factor by which the bounding box of an entity is padded
         */
@@ -461,9 +461,9 @@ namespace v1 {
             HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
             bool indexSysMem = false);
 
-        void createPrefabPlane(void);
-        void createPrefabCube(void);
-        void createPrefabSphere(void);
+        void createPrefabPlane();
+        void createPrefabCube();
+        void createPrefabSphere();
 
         /** Enum identifying the types of manual mesh built by this manager */
         enum MeshBuildType

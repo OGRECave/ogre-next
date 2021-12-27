@@ -132,34 +132,34 @@ namespace Ogre
         bool                    mInterruptedRenderCommandEncoder;
 
         MetalDeviceList* getDeviceList( bool refreshList = false );
-        void refreshFSAAOptions(void);
+        void refreshFSAAOptions();
 
         void setActiveDevice( MetalDevice *device );
 
         id<MTLDepthStencilState> getDepthStencilState( HlmsPso *pso );
         void removeDepthStencilState( HlmsPso *pso );
 
-        void cleanAutoParamsBuffers(void);
+        void cleanAutoParamsBuffers();
 
     public:
         MetalRenderSystem();
         virtual ~MetalRenderSystem();
 
-        virtual void shutdown(void);
+        virtual void shutdown();
 
-        virtual const String& getName(void) const;
-        virtual const String& getFriendlyName(void) const;
+        virtual const String& getName() const;
+        virtual const String& getFriendlyName() const;
         void initConfigOptions();
-        virtual ConfigOptionMap& getConfigOptions(void) { return mOptions; }
+        virtual ConfigOptionMap& getConfigOptions() { return mOptions; }
         virtual void setConfigOption(const String &name, const String &value);
 
-        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
+        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery();
 
-        virtual String validateConfigOptions(void)  { return BLANKSTRING; }
+        virtual String validateConfigOptions()  { return BLANKSTRING; }
 
-        virtual RenderSystemCapabilities* createRenderSystemCapabilities(void) const;
+        virtual RenderSystemCapabilities* createRenderSystemCapabilities() const;
 
-        virtual void reinitialise(void);
+        virtual void reinitialise();
 
         virtual Window* _initialise( bool autoCreateWindow,
                                      const String& windowTitle = "OGRE Render Window" );
@@ -169,7 +169,7 @@ namespace Ogre
 
         virtual String getErrorDescription(long errorNumber) const;
 
-        bool hasStoreAndMultisampleResolve(void) const;
+        bool hasStoreAndMultisampleResolve() const;
 
         virtual void _useLights(const LightList& lights, unsigned short limit);
         virtual void _setWorldMatrix(const Matrix4 &m);
@@ -184,7 +184,7 @@ namespace Ogre
         virtual void _setPointParameters(Real size, bool attenuationEnabled,
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
 
-        void flushUAVs( void );
+        void flushUAVs();
 
         virtual void _setTexture( size_t unit, TextureGpu *texPtr, bool bDepthReadOnly );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
@@ -197,8 +197,8 @@ namespace Ogre
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual MetalFrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual MetalFrameBufferDescMap& _getFrameBufferDescMap()   { return mFrameBufferDescMap; }
+        virtual RenderPassDescriptor* createRenderPassDescriptor();
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
                                                 const Vector4 *viewportSizes,
@@ -207,9 +207,9 @@ namespace Ogre
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
         void executeRenderPassDescriptorDelayedActions( bool officialCall );
-        virtual void executeRenderPassDescriptorDelayedActions(void);
+        virtual void executeRenderPassDescriptorDelayedActions();
         inline void endRenderPassDescriptor( bool isInterruptingRender );
-        virtual void endRenderPassDescriptor(void);
+        virtual void endRenderPassDescriptor();
     protected:
         virtual TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                                   PixelFormatGpu depthBufferFormat, uint16 poolId );
@@ -228,13 +228,13 @@ namespace Ogre
         virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
 
         /// See VaoManager::waitForTailFrameToFinish
-        virtual void _waitForTailFrameToFinish(void);
+        virtual void _waitForTailFrameToFinish();
 
-        virtual void _beginFrameOnce(void);
-        virtual void _endFrameOnce(void);
+        virtual void _beginFrameOnce();
+        virtual void _endFrameOnce();
 
-        virtual void _beginFrame(void);
-        virtual void _endFrame(void);
+        virtual void _beginFrame();
+        virtual void _endFrame();
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
@@ -259,7 +259,7 @@ namespace Ogre
         virtual void _setPipelineStateObject( const HlmsPso *pso );
         virtual void _setComputePso( const HlmsComputePso *pso );
 
-        virtual VertexElementType getColourVertexElementType(void) const;
+        virtual VertexElementType getColourVertexElementType() const;
 
         virtual void _dispatch( const HlmsComputePso &pso );
 
@@ -282,10 +282,10 @@ namespace Ogre
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
                                        uint8 mipLevel );
 
-        virtual Real getHorizontalTexelOffset(void);
-        virtual Real getVerticalTexelOffset(void);
-        virtual Real getMinimumDepthInputValue(void);
-        virtual Real getMaximumDepthInputValue(void);
+        virtual Real getHorizontalTexelOffset();
+        virtual Real getVerticalTexelOffset();
+        virtual Real getMinimumDepthInputValue();
+        virtual Real getMaximumDepthInputValue();
 
         virtual void preExtraThreadsStarted();
         virtual void postExtraThreadsStarted();
@@ -296,14 +296,14 @@ namespace Ogre
         virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
                                                              PixelFormatGpu format );
 
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const;
 
         virtual void beginProfileEvent( const String &eventName );
-        virtual void endProfileEvent( void );
+        virtual void endProfileEvent();
         virtual void markProfileEvent( const String &event );
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
+        virtual void initGPUProfiling();
+        virtual void deinitGPUProfiling();
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
 
@@ -318,15 +318,15 @@ namespace Ogre
         virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
         virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
 
-        virtual void flushCommands(void);
+        virtual void flushCommands();
 
-        MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
-        MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }
+        MetalDevice* getActiveDevice()                      { return mActiveDevice; }
+        MetalProgramFactory* getMetalProgramFactory()       { return mMetalProgramFactory; }
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
-        void _notifyActiveComputeEnded(void);
-        void _notifyNewCommandBuffer(void);
-        void _notifyDeviceStalled(void);
+        void _notifyActiveComputeEnded();
+        void _notifyNewCommandBuffer();
+        void _notifyDeviceStalled();
 
 
     };

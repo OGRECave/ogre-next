@@ -201,7 +201,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     DDSCodec2* DDSCodec2::msInstance = 0;
     //---------------------------------------------------------------------
-    void DDSCodec2::startup(void)
+    void DDSCodec2::startup()
     {
         if (!msInstance)
         {
@@ -212,7 +212,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void DDSCodec2::shutdown(void)
+    void DDSCodec2::shutdown()
     {
         if( msInstance )
         {

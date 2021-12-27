@@ -173,7 +173,7 @@ namespace Ogre {
         return total;
     }
     //-----------------------------------------------------------------------
-    String DataStream::getAsString(void)
+    String DataStream::getAsString()
     {
         // Read the entire buffer - ideally in one read, but if the size of
         // the buffer is unknown, do multiple fixed size reads.
@@ -451,18 +451,18 @@ namespace Ogre {
         mPos = mData + pos;
     }
     //-----------------------------------------------------------------------
-    size_t MemoryDataStream::tell(void) const
+    size_t MemoryDataStream::tell() const
     {
         //mData is start, mPos is current location
         return mPos - mData;
     }
     //-----------------------------------------------------------------------
-    bool MemoryDataStream::eof(void) const
+    bool MemoryDataStream::eof() const
     {
         return mPos >= mEnd;
     }
     //-----------------------------------------------------------------------
-    void MemoryDataStream::close(void)    
+    void MemoryDataStream::close()
     {
         mAccess = 0;
         if (mFreeOnClose && mData)
@@ -660,18 +660,18 @@ namespace Ogre {
         mInStream->seekg(static_cast<std::streamoff>(pos), std::ios::beg);
     }
     //-----------------------------------------------------------------------
-    size_t FileStreamDataStream::tell(void) const
+    size_t FileStreamDataStream::tell() const
     {
         mInStream->clear(); //Clear fail status in case eof was set
         return (size_t)mInStream->tellg();
     }
     //-----------------------------------------------------------------------
-    bool FileStreamDataStream::eof(void) const
+    bool FileStreamDataStream::eof() const
     {
         return mInStream->eof();
     }
     //-----------------------------------------------------------------------
-    void FileStreamDataStream::close(void)
+    void FileStreamDataStream::close()
     {
         mAccess = 0;
         if (mInStream)
@@ -746,17 +746,17 @@ namespace Ogre {
         fseek(mFileHandle, static_cast<long>(pos), SEEK_SET);
     }
     //-----------------------------------------------------------------------
-    size_t FileHandleDataStream::tell(void) const
+    size_t FileHandleDataStream::tell() const
     {
         return ftell( mFileHandle );
     }
     //-----------------------------------------------------------------------
-    bool FileHandleDataStream::eof(void) const
+    bool FileHandleDataStream::eof() const
     {
         return feof(mFileHandle) != 0;
     }
     //-----------------------------------------------------------------------
-    void FileHandleDataStream::close(void)
+    void FileHandleDataStream::close()
     {
         mAccess = 0;
         if (mFileHandle != 0)

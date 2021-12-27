@@ -149,15 +149,15 @@ namespace Ogre
         
         /** @copydoc DataStream::tell
          */
-        size_t tell(void) const;
+        size_t tell() const;
         
         /** @copydoc DataStream::eof
          */
-        bool eof(void) const;
+        bool eof() const;
         
         /** @copydoc DataStream::close
          */
-        void close(void);
+        void close();
         
     };
 }

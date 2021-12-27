@@ -187,7 +187,7 @@ namespace Ogre
         }
     }
 
-    // void GLSLESProgramPipeline::_useProgram(void)
+    // void GLSLESProgramPipeline::_useProgram()
     // {
     //     if (mLinked)
     //     {
@@ -228,7 +228,7 @@ namespace Ogre
         return res;
     }
 
-    void GLSLESProgramPipeline::activate(void)
+    void GLSLESProgramPipeline::activate()
     {
         if (!mLinked && !mTriedToLinkAndFailed)
         {
@@ -269,7 +269,7 @@ namespace Ogre
 #endif
     }
 
-    void GLSLESProgramPipeline::buildGLUniformReferences(void)
+    void GLSLESProgramPipeline::buildGLUniformReferences()
     {
         if (!mUniformRefsBuilt)
         {

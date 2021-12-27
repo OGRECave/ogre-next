@@ -128,7 +128,7 @@ namespace Ogre
         /// and get a new one. We will at least have to get a new one on every pass.
         /// This is affordable since common Const buffer limits are of 64kb.
         /// At the next frame we restart mCurrentConstBuffer to 0.
-        void unmapConstBuffer(void);
+        void unmapConstBuffer();
 
         /// Warning: Calling this function affects BOTH mCurrentConstBuffer and mCurrentTexBuffer
         uint32* RESTRICT_ALIAS_RETURN mapNextConstBuffer( CommandBuffer *commandBuffer );
@@ -164,7 +164,7 @@ namespace Ogre
         void rebindTexBuffer( CommandBuffer *commandBuffer, bool resetOffset = false,
                               size_t minimumSizeBytes = 1 );
 
-        virtual void destroyAllBuffers(void);
+        virtual void destroyAllBuffers();
 
     public:
         HlmsBufferManager( HlmsTypes type, const String &typeName, Archive *dataFolder,
@@ -180,7 +180,7 @@ namespace Ogre
         virtual void preCommandBufferExecution( CommandBuffer *commandBuffer );
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
 
-        virtual void frameEnded(void);
+        virtual void frameEnded();
 
         /// Changes the default suggested size for the texture buffer.
         /// Actual size may be lower if the GPU can't honour the request.

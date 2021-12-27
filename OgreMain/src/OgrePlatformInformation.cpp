@@ -83,7 +83,7 @@ namespace Ogre {
 
     //---------------------------------------------------------------------
     // Detect whether CPU supports CPUID instruction, returns non-zero if supported.
-    static int _isSupportCpuid(void)
+    static int _isSupportCpuid()
     {
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
         // Visual Studio 2005 & 64-bit compilers always supports __cpuid intrinsic
@@ -219,7 +219,7 @@ namespace Ogre {
     }
     #endif
 #endif
-    static bool _checkOperatingSystemSupportSSE(void)
+    static bool _checkOperatingSystemSupportSSE()
     {
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
         /*
@@ -283,7 +283,7 @@ namespace Ogre {
     // Compiler-independent routines
     //---------------------------------------------------------------------
 
-    static uint queryCpuFeatures(void)
+    static uint queryCpuFeatures()
     {
 #define CPUID_STD_FPU               (1<<0)
 #define CPUID_STD_TSC               (1<<4)
@@ -390,7 +390,7 @@ namespace Ogre {
         return features;
     }
     //---------------------------------------------------------------------
-    static uint _detectCpuFeatures(void)
+    static uint _detectCpuFeatures()
     {
         uint features = queryCpuFeatures();
 
@@ -404,7 +404,7 @@ namespace Ogre {
         return features;
     }
     //---------------------------------------------------------------------
-    static String _detectCpuIdentifier(void)
+    static String _detectCpuIdentifier()
     {
         // Supports CPUID instruction ?
         if (_isSupportCpuid())
@@ -479,7 +479,7 @@ namespace Ogre {
 #elif OGRE_CPU == OGRE_CPU_ARM  // OGRE_CPU == OGRE_CPU_ARM
 
     //---------------------------------------------------------------------
-    static uint _detectCpuFeatures(void)
+    static uint _detectCpuFeatures()
     {
         // Use preprocessor definitions to determine architecture and CPU features
         uint features = 0;
@@ -504,7 +504,7 @@ namespace Ogre {
         return features;
     }
     //---------------------------------------------------------------------
-    static String _detectCpuIdentifier(void)
+    static String _detectCpuIdentifier()
     {
         String cpuID;
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -570,7 +570,7 @@ namespace Ogre {
 #elif OGRE_CPU == OGRE_CPU_MIPS  // OGRE_CPU == OGRE_CPU_ARM
 
     //---------------------------------------------------------------------
-    static uint _detectCpuFeatures(void)
+    static uint _detectCpuFeatures()
     {
         // Use preprocessor definitions to determine architecture and CPU features
         uint features = 0;
@@ -580,7 +580,7 @@ namespace Ogre {
         return features;
     }
     //---------------------------------------------------------------------
-    static String _detectCpuIdentifier(void)
+    static String _detectCpuIdentifier()
     {
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
         String cpuID = "MIPS64";
@@ -594,7 +594,7 @@ namespace Ogre {
 #elif OGRE_CPU == OGRE_CPU_X86 && defined(__e2k__)  // MCST e2k (Elbrus 2000)
 
     //---------------------------------------------------------------------
-    static uint _detectCpuFeatures(void)
+    static uint _detectCpuFeatures()
     {
         // Use preprocessor definitions to determine architecture and CPU features
         uint features = 0;
@@ -626,7 +626,7 @@ namespace Ogre {
         return features;
     }
     //---------------------------------------------------------------------
-    static String _detectCpuIdentifier(void)
+    static String _detectCpuIdentifier()
     {
         String cpuID = __builtin_cpu_name();
 
@@ -634,7 +634,7 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     // Added for compatibility with x86 architecture in void PlatformInformation::log(Log* pLog) section
-    static int _isSupportCpuid(void)
+    static int _isSupportCpuid()
     {
         return true;
     }
@@ -642,12 +642,12 @@ namespace Ogre {
 #else  // OGRE_CPU == OGRE_CPU_UNKNOWN
 
     //---------------------------------------------------------------------
-    static uint _detectCpuFeatures(void)
+    static uint _detectCpuFeatures()
     {
         return 0;
     }
     //---------------------------------------------------------------------
-    static String _detectCpuIdentifier(void)
+    static String _detectCpuIdentifier()
     {
         return "Unknown";
     }
@@ -655,7 +655,7 @@ namespace Ogre {
 #endif  // OGRE_CPU
 
     //---------------------------------------------------------------------
-    static uint32 _detectNumLogicalCores(void)
+    static uint32 _detectNumLogicalCores()
     {
         uint32 numLogicalCores = 0;
 
@@ -680,13 +680,13 @@ namespace Ogre {
     // Platform-independent routines, but the returns value are platform-dependent
     //---------------------------------------------------------------------
 
-    const String& PlatformInformation::getCpuIdentifier(void)
+    const String& PlatformInformation::getCpuIdentifier()
     {
         static const String sIdentifier = _detectCpuIdentifier();
         return sIdentifier;
     }
     //---------------------------------------------------------------------
-    uint PlatformInformation::getCpuFeatures(void)
+    uint PlatformInformation::getCpuFeatures()
     {
         static const uint sFeatures = _detectCpuFeatures();
         return sFeatures;
@@ -697,7 +697,7 @@ namespace Ogre {
         return (getCpuFeatures() & feature) != 0;
     }
     //---------------------------------------------------------------------
-    uint32 PlatformInformation::getNumLogicalCores(void)
+    uint32 PlatformInformation::getNumLogicalCores()
     {
         static const uint32 sNumCores = _detectNumLogicalCores();
         return sNumCores;

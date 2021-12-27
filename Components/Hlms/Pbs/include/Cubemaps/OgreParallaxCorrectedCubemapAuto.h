@@ -78,7 +78,7 @@ namespace Ogre
 
         ParallaxCorrectedCubemapAutoListener *mListener;
 
-        void updateSceneGraph(void);
+        void updateSceneGraph();
         /// Probes with a large number of iterations will blow up our memory consumption
         /// because too many commands will be queued up before flushing the command buffer
         /// (e.g. a probe with 32 iterations 5 shadow maps per face will consume
@@ -88,7 +88,7 @@ namespace Ogre
         /// skyrocket. Furthermore this allows GPU & CPU to work in parallel.
         /// This function must NOT be called after the Compositor started updating workspaces.
         void updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold );
-        void updateRender(void);
+        void updateRender();
 
     public:
         ParallaxCorrectedCubemapAuto( IdType id, Root *root, SceneManager *sceneManager,
@@ -98,7 +98,7 @@ namespace Ogre
         virtual void destroyProbe( CubemapProbe *probe );
 
         void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
-        ParallaxCorrectedCubemapAutoListener *getListener( void ) const { return mListener; }
+        ParallaxCorrectedCubemapAutoListener *getListener() const { return mListener; }
 
         virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
         virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
@@ -143,7 +143,7 @@ namespace Ogre
         */
         void setEnabled( bool bEnabled, uint32 width, uint32 height, uint32 maxNumProbes,
                          PixelFormatGpu pixelFormat );
-        bool getEnabled(void) const;
+        bool getEnabled() const;
 
         /** Whether we should use Dual Paraboloid Mapping with 2D Array instead of Cubemap Arrays
         @remarks
@@ -167,11 +167,11 @@ namespace Ogre
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
         /// This function also uses a memory-friendly way of updating the probes.
-        void updateAllDirtyProbes(void);
+        void updateAllDirtyProbes();
 
         //CompositorWorkspaceListener overloads
-        virtual void allWorkspacesBeforeBeginUpdate(void);
-        virtual void allWorkspacesBeginUpdate(void);
+        virtual void allWorkspacesBeforeBeginUpdate();
+        virtual void allWorkspacesBeginUpdate();
 
         virtual void passPreExecute( CompositorPass *pass );
 

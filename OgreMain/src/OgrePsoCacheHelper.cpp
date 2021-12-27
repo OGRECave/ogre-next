@@ -65,7 +65,7 @@ namespace Ogre
         mPsoCache.clear();
     }
     //-----------------------------------------------------------------------------------
-    void PsoCacheHelper::clearState(void)
+    void PsoCacheHelper::clearState()
     {
         mCurrentPassHash = std::numeric_limits<uint32>::max();
         mLastFinalHash = std::numeric_limits<uint32>::max();
@@ -73,7 +73,7 @@ namespace Ogre
         mCurrentState.initialize();
     }
     //-----------------------------------------------------------------------------------
-    uint32 PsoCacheHelper::getPassHash(void)
+    uint32 PsoCacheHelper::getPassHash()
     {
         PassCacheEntry entry;
         entry.passKey = mCurrentState.pass;
@@ -91,7 +91,7 @@ namespace Ogre
         return itor->hashToMainCache;
     }
     //-----------------------------------------------------------------------------------
-    uint32 PsoCacheHelper::getRenderableHash(void)
+    uint32 PsoCacheHelper::getRenderableHash()
     {
         RenderableCacheEntry entry;
         entry.psoRenderableKey = mCurrentState;
@@ -258,7 +258,7 @@ namespace Ogre
         return mLastPso;
     }
     //-----------------------------------------------------------------------------------
-    HlmsPso* PsoCacheHelper::getPso(void)
+    HlmsPso* PsoCacheHelper::getPso()
     {
         if( !mLastPso )
         {

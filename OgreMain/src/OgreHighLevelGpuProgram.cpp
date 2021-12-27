@@ -48,7 +48,7 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgram::setupBaseParamDictionary(void)
+    void HighLevelGpuProgram::setupBaseParamDictionary()
     {
         GpuProgram::setupBaseParamDictionary();
 
@@ -116,7 +116,7 @@ namespace Ogre
         // superclasses will trigger unload
     }
     //---------------------------------------------------------------------------
-    GpuProgramParametersSharedPtr HighLevelGpuProgram::createParameters(void)
+    GpuProgramParametersSharedPtr HighLevelGpuProgram::createParameters()
     {
         // Lock mutex before allowing this since this is a top-level method
         // called outside of the load()
@@ -139,7 +139,7 @@ namespace Ogre
             params->copyConstantsFrom(*(mDefaultParams.get()));
         return params;
     }
-    size_t HighLevelGpuProgram::calculateSize(void) const
+    size_t HighLevelGpuProgram::calculateSize() const
     {
         size_t memSize = 0;
         memSize += sizeof(bool);
@@ -152,7 +152,7 @@ namespace Ogre
     }
 
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgram::loadHighLevel(void)
+    void HighLevelGpuProgram::loadHighLevel()
     {
         if (!mHighLevelLoaded)
         {
@@ -194,7 +194,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgram::unloadHighLevel(void)
+    void HighLevelGpuProgram::unloadHighLevel()
     {
         if (mHighLevelLoaded)
         {
@@ -207,7 +207,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgram::dumpSourceIfHasIncludeEnabled(void)
+    void HighLevelGpuProgram::dumpSourceIfHasIncludeEnabled()
     {
         if( mEnableIncludeHeader && mCompileError )
         {
@@ -277,7 +277,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgram::loadHighLevelImpl(void)
+    void HighLevelGpuProgram::loadHighLevelImpl()
     {
         OgreProfileExhaustive( "HighLevelGpuProgram::loadHighLevelImpl" );
 
@@ -312,7 +312,7 @@ namespace Ogre
         mEnableIncludeHeader = bEnable;
     }
     //---------------------------------------------------------------------
-    bool HighLevelGpuProgram::getEnableIncludeHeader(void) const
+    bool HighLevelGpuProgram::getEnableIncludeHeader() const
     {
         return mEnableIncludeHeader;
     }

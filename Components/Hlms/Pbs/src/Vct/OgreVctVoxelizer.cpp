@@ -160,7 +160,7 @@ namespace Ogre
         return adjustedIndexStart;
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::createComputeJobs(void)
+    void VctVoxelizer::createComputeJobs()
     {
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
@@ -383,7 +383,7 @@ namespace Ogre
         mNumIndices32 += totalNumIndices32;
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::prepareAabbCalculatorMeshData(void)
+    void VctVoxelizer::prepareAabbCalculatorMeshData()
     {
         OgreProfile( "VctVoxelizer::prepareAabbCalculatorMeshData" );
 
@@ -482,7 +482,7 @@ namespace Ogre
                                                                  false );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::destroyAabbCalculatorMeshData(void)
+    void VctVoxelizer::destroyAabbCalculatorMeshData()
     {
         //if( mGpuMeshDataDirty )
         if( mGpuPartitionedSubMeshes )
@@ -684,7 +684,7 @@ namespace Ogre
         efficientVectorRemove( mItems, itor );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::removeAllItems(void)
+    void VctVoxelizer::removeAllItems()
     {
         mItems.clear();
         mMeshesV2.clear();
@@ -725,7 +725,7 @@ namespace Ogre
         clearComputeJobResources( false );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::buildMeshBuffers(void)
+    void VctVoxelizer::buildMeshBuffers()
     {
         OgreProfile( "VctVoxelizer::buildMeshBuffers" );
 
@@ -808,7 +808,7 @@ namespace Ogre
         prepareAabbCalculatorMeshData();
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::createVoxelTextures(void)
+    void VctVoxelizer::createVoxelTextures()
     {
         if( mAlbedoVox &&
             mAlbedoVox->getWidth() == mWidth &&
@@ -1019,7 +1019,7 @@ namespace Ogre
         return numSubMeshPartitions;
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::createInstanceBuffers(void)
+    void VctVoxelizer::createInstanceBuffers()
     {
         size_t instanceCount = 0;
         ItemArray::const_iterator itor = mItems.begin();
@@ -1046,7 +1046,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::destroyInstanceBuffers(void)
+    void VctVoxelizer::destroyInstanceBuffers()
     {
         if( mInstanceBuffer )
         {
@@ -1061,7 +1061,7 @@ namespace Ogre
         clearComputeJobResources( false );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::fillInstanceBuffers(void)
+    void VctVoxelizer::fillInstanceBuffers()
     {
         OgreProfile( "VctVoxelizer::fillInstanceBuffers" );
 
@@ -1156,7 +1156,7 @@ namespace Ogre
         mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::computeMeshAabbs(void)
+    void VctVoxelizer::computeMeshAabbs()
     {
         OgreProfile( "VctVoxelizer::computeMeshAabbs" );
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
@@ -1277,7 +1277,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::clearVoxels(void)
+    void VctVoxelizer::clearVoxels()
     {
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];

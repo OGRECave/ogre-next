@@ -106,7 +106,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Decal::getDiffuseTexture(void) const
+    TextureGpu* Decal::getDiffuseTexture() const
     {
         return mDiffuseTexture;
     }
@@ -132,7 +132,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Decal::getNormalTexture(void) const
+    TextureGpu* Decal::getNormalTexture() const
     {
         return mNormalTexture;
     }
@@ -191,7 +191,7 @@ namespace Ogre
         mEmissiveIdx = sliceIdx;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Decal::getEmissiveTexture(void) const
+    TextureGpu* Decal::getEmissiveTexture() const
     {
         return mEmissiveTexture;
     }
@@ -201,7 +201,7 @@ namespace Ogre
         mIgnoreDiffuseAlpha = bIgnore ? 1u : 0u;
     }
     //-----------------------------------------------------------------------------------
-    bool Decal::getIgnoreAlphaDiffuse(void) const
+    bool Decal::getIgnoreAlphaDiffuse() const
     {
         return mIgnoreDiffuseAlpha != 0u;
     }
@@ -222,7 +222,7 @@ namespace Ogre
             mParentNode->setScale( planeDimensions.x, depth, planeDimensions.y );
     }
     //-----------------------------------------------------------------------------------
-    const String& Decal::getMovableType(void) const
+    const String& Decal::getMovableType() const
     {
         return DecalFactory::FACTORY_TYPE_NAME;
     }
@@ -273,7 +273,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     String DecalFactory::FACTORY_TYPE_NAME = "Decal";
     //-----------------------------------------------------------------------
-    const String& DecalFactory::getType(void) const
+    const String& DecalFactory::getType() const
     {
      return FACTORY_TYPE_NAME;
     }

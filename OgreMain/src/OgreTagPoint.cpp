@@ -49,12 +49,12 @@ namespace v1 {
     {
     }
     //-----------------------------------------------------------------------------
-    Entity *TagPoint::getParentEntity(void) const
+    Entity *TagPoint::getParentEntity() const
     {
         return mParentEntity;
     }
     //-----------------------------------------------------------------------------
-    MovableObject* TagPoint::getChildObject(void) const
+    MovableObject* TagPoint::getChildObject() const
     {
         return mChildObject;
     }
@@ -75,7 +75,7 @@ namespace v1 {
         needUpdate();
     }
     //-----------------------------------------------------------------------------
-    bool TagPoint::getInheritParentEntityOrientation(void) const
+    bool TagPoint::getInheritParentEntityOrientation() const
     {
         return mInheritParentEntityOrientation;
     }
@@ -86,17 +86,17 @@ namespace v1 {
         needUpdate();
     }
     //-----------------------------------------------------------------------------
-    bool TagPoint::getInheritParentEntityScale(void) const
+    bool TagPoint::getInheritParentEntityScale() const
     {
         return mInheritParentEntityScale;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& TagPoint::_getFullLocalTransform(void) const
+    const Matrix4& TagPoint::_getFullLocalTransform() const
     {
         return mFullLocalTransform;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& TagPoint::getParentEntityTransform(void) const
+    const Matrix4& TagPoint::getParentEntityTransform() const
     {
 
         return mParentEntity->_getParentNodeFullTransform();
@@ -107,7 +107,7 @@ namespace v1 {
         OldBone::needUpdate(forceParentUpdate);
     }
     //-----------------------------------------------------------------------------
-    void TagPoint::updateFromParentImpl(void) const
+    void TagPoint::updateFromParentImpl() const
     {
         // Call superclass
         OldBone::updateFromParentImpl();
@@ -150,7 +150,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------
-    const LightList& TagPoint::getLights(void) const
+    const LightList& TagPoint::getLights() const
     {
         return mParentEntity->queryLights();
     }

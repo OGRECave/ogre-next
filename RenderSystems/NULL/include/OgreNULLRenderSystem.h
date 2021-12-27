@@ -63,22 +63,22 @@ namespace Ogre
 
     public:
         NULLRenderSystem();
-        virtual ~NULLRenderSystem(void);
+        virtual ~NULLRenderSystem();
 
-        virtual void shutdown(void);
+        virtual void shutdown();
 
-        virtual const String& getName(void) const;
-        virtual const String& getFriendlyName(void) const;
-        virtual ConfigOptionMap& getConfigOptions(void) { return mOptions; }
+        virtual const String& getName() const;
+        virtual const String& getFriendlyName() const;
+        virtual ConfigOptionMap& getConfigOptions() { return mOptions; }
         virtual void setConfigOption(const String &name, const String &value) {}
 
-        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
+        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery();
 
-        virtual String validateConfigOptions(void)  { return BLANKSTRING; }
+        virtual String validateConfigOptions()  { return BLANKSTRING; }
 
-        virtual RenderSystemCapabilities* createRenderSystemCapabilities(void) const;
+        virtual RenderSystemCapabilities* createRenderSystemCapabilities() const;
 
-        virtual void reinitialise(void);
+        virtual void reinitialise();
 
         virtual Window* _initialise( bool autoCreateWindow,
                                      const String& windowTitle = "OGRE Render Window" );
@@ -121,16 +121,16 @@ namespace Ogre
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
 
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual RenderPassDescriptor* createRenderPassDescriptor();
 
-        virtual void _beginFrame(void);
-        virtual void _endFrame(void);
+        virtual void _beginFrame();
+        virtual void _endFrame();
 
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock );
         virtual void _setPipelineStateObject( const HlmsPso *pso );
         virtual void _setComputePso( const HlmsComputePso *pso );
 
-        virtual VertexElementType getColourVertexElementType(void) const;
+        virtual VertexElementType getColourVertexElementType() const;
         virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest) {}
 
         virtual void _dispatch( const HlmsComputePso &pso );
@@ -153,10 +153,10 @@ namespace Ogre
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                        TextureGpu *anyTarget, uint8 mipLevel );
 
-        virtual Real getHorizontalTexelOffset(void);
-        virtual Real getVerticalTexelOffset(void);
-        virtual Real getMinimumDepthInputValue(void);
-        virtual Real getMaximumDepthInputValue(void);
+        virtual Real getHorizontalTexelOffset();
+        virtual Real getVerticalTexelOffset();
+        virtual Real getMinimumDepthInputValue();
+        virtual Real getMaximumDepthInputValue();
 
         virtual void preExtraThreadsStarted();
         virtual void postExtraThreadsStarted();
@@ -164,16 +164,16 @@ namespace Ogre
         virtual void unregisterThread();
         virtual unsigned int getDisplayMonitorCount() const     { return 1; }
 
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const;
 
-        virtual void flushCommands(void);
+        virtual void flushCommands();
 
         virtual void beginProfileEvent( const String &eventName );
-        virtual void endProfileEvent( void );
+        virtual void endProfileEvent();
         virtual void markProfileEvent( const String &event );
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
+        virtual void initGPUProfiling();
+        virtual void deinitGPUProfiling();
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
 

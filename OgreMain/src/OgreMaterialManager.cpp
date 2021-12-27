@@ -38,11 +38,11 @@ namespace Ogre {
 
     //-----------------------------------------------------------------------
     template<> MaterialManager* Singleton<MaterialManager>::msSingleton = 0;
-    MaterialManager* MaterialManager::getSingletonPtr(void)
+    MaterialManager* MaterialManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    MaterialManager& MaterialManager::getSingleton(void)
+    MaterialManager& MaterialManager::getSingleton()
     {
         assert( msSingleton );  return ( *msSingleton );
     }
@@ -103,7 +103,7 @@ namespace Ogre {
         return getResourceByName(name, groupName).staticCast<Material>();
     }
     //-----------------------------------------------------------------------
-    void MaterialManager::initialise(void)
+    void MaterialManager::initialise()
     {
         // Set up default material - don't use name constructor as we want to avoid applying defaults
         mDefaultSettings = create("DefaultSettings", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME);
@@ -150,12 +150,12 @@ namespace Ogre {
         return DEFAULT_SCHEME_NAME;
     }
     //-----------------------------------------------------------------------
-    unsigned short MaterialManager::_getActiveSchemeIndex(void) const
+    unsigned short MaterialManager::_getActiveSchemeIndex() const
     {
         return mActiveSchemeIndex;
     }
     //-----------------------------------------------------------------------
-    const String& MaterialManager::getActiveScheme(void) const
+    const String& MaterialManager::getActiveScheme() const
     {
         return mActiveSchemeName;
     }

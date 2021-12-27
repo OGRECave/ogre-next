@@ -58,7 +58,7 @@ namespace Ogre
                box.data <= static_cast<uint8*>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN NULLStagingTexture::mapRegionImplRawPtr(void)
+    void* RESTRICT_ALIAS_RETURN NULLStagingTexture::mapRegionImplRawPtr()
     {
         return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }

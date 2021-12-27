@@ -51,7 +51,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void AreaApproxLightsGameState::createAreaMask(void)
+    void AreaApproxLightsGameState::createAreaMask()
     {
         //Please note the texture CAN be coloured. The sample uses a monochrome texture,
         //but you coloured textures are supported too. However they will burn a little
@@ -145,7 +145,7 @@ namespace Demo
         pbs->setAreaLightForwardSettings( 2u, 2u );
     }
     //-----------------------------------------------------------------------------------
-    void AreaApproxLightsGameState::createAreaPlaneMesh(void)
+    void AreaApproxLightsGameState::createAreaPlaneMesh()
     {
         Ogre::v1::MeshPtr lightPlaneMeshV1 =
                 Ogre::v1::MeshManager::getSingleton().createPlane( "LightPlane v1",
@@ -221,7 +221,7 @@ namespace Demo
         return datablock;
     }
     //-----------------------------------------------------------------------------------
-    void AreaApproxLightsGameState::createScene01(void)
+    void AreaApproxLightsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -432,7 +432,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void AreaApproxLightsGameState::destroyScene(void)
+    void AreaApproxLightsGameState::destroyScene()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();

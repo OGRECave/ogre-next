@@ -63,14 +63,14 @@ namespace v1 {
         BorderPanelOverlayElement(const String& name);
         virtual ~BorderPanelOverlayElement();
 
-        virtual void initialise(void);
+        virtual void initialise();
 
         /** @copydoc OverlayElement::_releaseManualHardwareResources. */
         virtual void _releaseManualHardwareResources();
         /** @copydoc OverlayElement::_restoreManualHardwareResources. */
         virtual void _restoreManualHardwareResources();
 
-        const String& getTypeName(void) const;
+        const String& getTypeName() const;
         /** Sets the size of the border.
         @remarks
             This method sets a constant size for all borders. There are also alternative
@@ -113,13 +113,13 @@ namespace v1 {
         void setBorderSize(Real left, Real right, Real top, Real bottom);
 
         /** Gets the size of the left border. */
-        Real getLeftBorderSize(void) const;
+        Real getLeftBorderSize() const;
         /** Gets the size of the right border. */
-        Real getRightBorderSize(void) const;
+        Real getRightBorderSize() const;
         /** Gets the size of the top border. */
-        Real getTopBorderSize(void) const;
+        Real getTopBorderSize() const;
         /** Gets the size of the bottom border. */
-        Real getBottomBorderSize(void) const;
+        Real getBottomBorderSize() const;
 
         /** Sets the texture coordinates for the left edge of the border.
         @remarks
@@ -176,7 +176,7 @@ namespace v1 {
         /** Sets the name of the material to use for the borders. */
         void setBorderMaterialName(const String& name);
         /** Gets the name of the material to use for the borders. */
-        const String& getBorderMaterialName(void) const;
+        const String& getBorderMaterialName() const;
 
         /** @copydoc OverlayContainer::_updateRenderQueue */
         void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
@@ -185,7 +185,7 @@ namespace v1 {
         void setMetricsMode(GuiMetricsMode gmm);
 
         /** @copydoc OverlayElement::_update */
-        void _update(void);
+        void _update();
 
 
         /** Command object for specifying border sizes (see ParamCommand).*/
@@ -282,11 +282,11 @@ namespace v1 {
         static String msTypeName;
 
         /// Internal method for setting up geometry, called by OverlayElement::update
-        void updatePositionGeometry(void);
+        void updatePositionGeometry();
         /// Internal method for setting up geometry, called by OverlayElement::update
-        void updateTextureGeometry(void);
+        void updateTextureGeometry();
         /// Internal method for setting up parameters
-        void addBaseParameters(void);
+        void addBaseParameters();
 
         enum BorderCellIndex {
             BCELL_TOP_LEFT = 0,
@@ -333,14 +333,14 @@ namespace v1 {
         }
         void getRenderOperation(v1::RenderOperation& op, bool casterPass) { op = mParent->mRenderOp2; }
         void getWorldTransforms(Matrix4* xform) const { mParent->getWorldTransforms(xform); }
-        unsigned short getNumWorldTransforms(void) const { return 1; }
-        const LightList& getLights(void) const
+        unsigned short getNumWorldTransforms() const { return 1; }
+        const LightList& getLights() const
         {
             // N/A, panels are not lit
             static LightList ll;
             return ll;
         }
-        bool getPolygonModeOverrideable(void) const
+        bool getPolygonModeOverrideable() const
         {
             return mParent->getPolygonModeOverrideable();
         }

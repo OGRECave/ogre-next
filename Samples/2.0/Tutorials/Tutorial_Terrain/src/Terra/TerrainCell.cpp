@@ -59,7 +59,7 @@ namespace Ogre
         mVaoPerLod[VpShadow].clear();
     }
     //-----------------------------------------------------------------------------------
-    bool TerrainCell::isZUp( void ) const { return m_parentTerra->m_zUp; }
+    bool TerrainCell::isZUp() const { return m_parentTerra->m_zUp; }
     //-----------------------------------------------------------------------------------
     void TerrainCell::initialize( VaoManager *vaoManager, bool useSkirts )
     {
@@ -181,7 +181,7 @@ namespace Ogre
         ((float*RESTRICT_ALIAS)gpuPtr)[15] = m_parentTerra->m_invDepth;
     }
     //-----------------------------------------------------------------------
-    const LightList& TerrainCell::getLights(void) const
+    const LightList& TerrainCell::getLights() const
     {
         return m_parentTerra->queryLights();
     }
@@ -204,7 +204,7 @@ namespace Ogre
                      "TerrainCell::getWorldTransforms" );
     }
     //-----------------------------------------------------------------------------
-    bool TerrainCell::getCastsShadows(void) const
+    bool TerrainCell::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Items do not implement getCastsShadows. You've put an Item in "

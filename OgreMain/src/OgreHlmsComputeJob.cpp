@@ -116,7 +116,7 @@ namespace Ogre
         If a texture is bound as both Tex and Uav, we should only transition to Uav,
         and tell the descriptor that this texture will be bound using the GENERAL layout
     */
-    void HlmsComputeJob::discoverGeneralTextures( void )
+    void HlmsComputeJob::discoverGeneralTextures()
     {
         TextureGpuSet uavTexs;
 
@@ -168,7 +168,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::destroyDescriptorSamplers(void)
+    void HlmsComputeJob::destroyDescriptorSamplers()
     {
         if( mSamplersDescSet )
         {
@@ -178,7 +178,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::destroyDescriptorTextures(void)
+    void HlmsComputeJob::destroyDescriptorTextures()
     {
         if( mTexturesDescSet )
         {
@@ -188,7 +188,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::destroyDescriptorUavs(void)
+    void HlmsComputeJob::destroyDescriptorUavs()
     {
         if( mUavsDescSet )
         {
@@ -349,7 +349,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    String HlmsComputeJob::getNameStr(void) const
+    String HlmsComputeJob::getNameStr() const
     {
         String retVal;
         HlmsCompute *compute = static_cast<HlmsCompute*>( mCreator );
@@ -509,7 +509,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::_updateAutoProperties(void)
+    void HlmsComputeJob::_updateAutoProperties()
     {
         setProperty( ComputeProperty::ThreadsPerGroupX, mThreadsPerGroup[0] );
         setProperty( ComputeProperty::ThreadsPerGroupY, mThreadsPerGroup[1] );
@@ -1019,14 +1019,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setGlTexSlotStart( uint8 texSlotStart ) { mGlTexSlotStart = texSlotStart; }
     //-----------------------------------------------------------------------------------
-    uint8 HlmsComputeJob::getGlTexSlotStart( void ) const
+    uint8 HlmsComputeJob::getGlTexSlotStart() const
     {
         if( mCreator->getShaderSyntax() == HlmsBaseProp::Glsl )
             return mGlTexSlotStart;
         return 0u;
     }
     //-----------------------------------------------------------------------------------
-    uint8 HlmsComputeJob::_getRawGlTexSlotStart( void ) const { return mGlTexSlotStart; }
+    uint8 HlmsComputeJob::_getRawGlTexSlotStart() const { return mGlTexSlotStart; }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot )
     {
@@ -1197,7 +1197,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::clearTexBuffers(void)
+    void HlmsComputeJob::clearTexBuffers()
     {
         bool bChanged = false;
         DescriptorSetTexture2::BufferSlot emptySlot = DescriptorSetTexture2::BufferSlot::makeEmpty();
@@ -1218,7 +1218,7 @@ namespace Ogre
             destroyDescriptorTextures();
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::clearUavBuffers(void)
+    void HlmsComputeJob::clearUavBuffers()
     {
         bool bChanged = false;
         DescriptorSetUav::BufferSlot emptySlot = DescriptorSetUav::BufferSlot::makeEmpty();

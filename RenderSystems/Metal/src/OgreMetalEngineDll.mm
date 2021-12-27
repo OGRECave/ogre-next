@@ -37,16 +37,16 @@ namespace Ogre
 	static MetalPlugin* plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreMetalExport dllStartPlugin( void ) noexcept( false )
+    extern "C" void _OgreMetalExport dllStartPlugin() noexcept( false )
 #    else
-    extern "C" void _OgreMetalExport dllStartPlugin( void ) throw( Exception )
+    extern "C" void _OgreMetalExport dllStartPlugin() throw( Exception )
 #    endif
     {
 		plugin = OGRE_NEW MetalPlugin();
         Root::getSingleton().installPlugin(plugin);
     }
 
-	extern "C" void _OgreMetalExport dllStopPlugin(void)
+    extern "C" void _OgreMetalExport dllStopPlugin()
     {
         Root::getSingleton().uninstallPlugin(plugin);
         OGRE_DELETE plugin;

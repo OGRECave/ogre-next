@@ -95,7 +95,7 @@ namespace v1 {
         /** Remove tracking on a given node. */
         virtual void removeNode(Node* n);
         /** Get an iterator over the nodes which are being tracked. */
-        virtual NodeIterator getNodeIterator(void) const;
+        virtual NodeIterator getNodeIterator() const;
         /** Get the chain index for a given Node being tracked. */
         virtual size_t getChainIndexForNode(const Node* n);
 
@@ -107,7 +107,7 @@ namespace v1 {
         */
         virtual void setTrailLength(Real len);
         /** Get the length of the trail. */
-        virtual Real getTrailLength(void) const { return mTrailLength; }
+        virtual Real getTrailLength() const { return mTrailLength; }
 
         /** @copydoc BillboardChain::setMaxChainElements */
         void setMaxChainElements(size_t maxElements);
@@ -173,7 +173,7 @@ namespace v1 {
         virtual void _timeUpdate(Real time);
 
         /** Overridden from MovableObject */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
     protected:
         /// List of nodes being trailed
@@ -212,13 +212,13 @@ namespace v1 {
         ControllerValueRealPtr mTimeControllerValue;
 
         /// Manage updates to the time controller
-        virtual void manageController(void);
+        virtual void manageController();
         /// Node has changed position, update
         virtual void updateTrail(size_t index, const Node* node);
         /// Reset the tracked chain to initial state
         virtual void resetTrail(size_t index, Node* node);
         /// Reset all tracked chains to initial state
-        virtual void resetAllTrails(void);
+        virtual void resetAllTrails();
 
     };
 
@@ -236,7 +236,7 @@ namespace v1 {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);  
 
     };

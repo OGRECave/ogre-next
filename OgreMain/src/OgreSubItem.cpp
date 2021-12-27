@@ -67,7 +67,7 @@ namespace Ogre {
     {
     }
     //-----------------------------------------------------------------------
-    SubMesh* SubItem::getSubMesh(void) const
+    SubMesh* SubItem::getSubMesh() const
     {
         return mSubMesh;
     }
@@ -94,7 +94,7 @@ namespace Ogre {
         Renderable::_setHlmsHashes( hash, casterHash );
     }
     //-----------------------------------------------------------------------
-    const LightList& SubItem::getLights(void) const
+    const LightList& SubItem::getLights() const
     {
         return mParentItem->queryLights();
     }
@@ -117,7 +117,7 @@ namespace Ogre {
                      "SubItem::getWorldTransforms" );
     }
     //-----------------------------------------------------------------------------
-    bool SubItem::getCastsShadows(void) const
+    bool SubItem::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Items do not implement getCastsShadows. You've put an Item in "

@@ -78,7 +78,7 @@ namespace Ogre
         /** When calling this function, it will block until all N threads reach this point; where
             N is the thread count passed to the Barrier's constructor.
         */
-        void sync(void);
+        void sync();
     };
 }
 

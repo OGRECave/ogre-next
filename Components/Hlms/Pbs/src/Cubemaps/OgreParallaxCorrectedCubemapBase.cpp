@@ -146,7 +146,7 @@ namespace Ogre
         return numMipmaps;
     }
     //-----------------------------------------------------------------------------------
-    CubemapProbe* ParallaxCorrectedCubemapBase::createProbe(void)
+    CubemapProbe* ParallaxCorrectedCubemapBase::createProbe()
     {
         CubemapProbe *probe = OGRE_NEW CubemapProbe( this );
         mProbes.push_back( probe );
@@ -167,7 +167,7 @@ namespace Ogre
         efficientVectorRemove( mProbes, itor );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapBase::destroyAllProbes(void)
+    void ParallaxCorrectedCubemapBase::destroyAllProbes()
     {
         CubemapProbeVec::iterator itor = mProbes.begin();
         CubemapProbeVec::iterator end  = mProbes.end();
@@ -181,11 +181,11 @@ namespace Ogre
         mProbes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapBase::prepareForClearScene(void)
+    void ParallaxCorrectedCubemapBase::prepareForClearScene()
     {
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapBase::restoreFromClearScene(void)
+    void ParallaxCorrectedCubemapBase::restoreFromClearScene()
     {
         SceneNode *rootNode = mSceneManager->getRootSceneNode();
         CubemapProbeVec::iterator itor = mProbes.begin();
@@ -201,7 +201,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    size_t ParallaxCorrectedCubemapBase::getConstBufferSize(void)
+    size_t ParallaxCorrectedCubemapBase::getConstBufferSize()
     {
         return 0;
     }
@@ -308,12 +308,12 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
     }
     //-----------------------------------------------------------------------------------
-    SceneManager* ParallaxCorrectedCubemapBase::getSceneManager(void) const
+    SceneManager* ParallaxCorrectedCubemapBase::getSceneManager() const
     {
         return mSceneManager;
     }
     //-----------------------------------------------------------------------------------
-    const CompositorWorkspaceDef* ParallaxCorrectedCubemapBase::getDefaultWorkspaceDef(void) const
+    const CompositorWorkspaceDef* ParallaxCorrectedCubemapBase::getDefaultWorkspaceDef() const
     {
         return mDefaultWorkspaceDef;
     }

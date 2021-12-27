@@ -124,7 +124,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::scheduleConstBufferUpdate(void)
+    void HlmsTerraDatablock::scheduleConstBufferUpdate()
     {
         static_cast<HlmsTerra*>(mCreator)->scheduleForUpdate( this );
     }
@@ -167,7 +167,7 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsTerraDatablock::getDiffuse(void) const
+    Vector3 HlmsTerraDatablock::getDiffuse() const
     {
         return Vector3( mkDr, mkDg, mkDb ) * Ogre::Math::PI;
     }
@@ -246,7 +246,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsTerraDatablock::getBrdf(void) const
+    uint32 HlmsTerraDatablock::getBrdf() const
     {
         return mBrdf;
     }

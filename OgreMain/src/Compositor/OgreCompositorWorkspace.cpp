@@ -114,7 +114,7 @@ namespace Ogre
         TextureDefinitionBase::destroyTextures( mGlobalTextures, mRenderSys );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::createAllNodes(void)
+    void CompositorWorkspace::createAllNodes()
     {
         destroyAllNodes();
 
@@ -136,7 +136,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::destroyAllNodes(void)
+    void CompositorWorkspace::destroyAllNodes()
     {
         mValid = false;
         {
@@ -172,7 +172,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::connectAllNodes(void)
+    void CompositorWorkspace::connectAllNodes()
     {
         {
             //First connect the external dependencies, otherwise
@@ -357,7 +357,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::clearAllConnections(void)
+    void CompositorWorkspace::clearAllConnections()
     {
         {
             CompositorNodeVec::iterator itor = mNodeSequence.begin();
@@ -387,7 +387,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::setupPassesShadowNodes(void)
+    void CompositorWorkspace::setupPassesShadowNodes()
     {
         CompositorShadowNodeVec::iterator itShadowNode = mShadowNodes.begin();
         CompositorShadowNodeVec::iterator enShadowNode = mShadowNodes.end();
@@ -497,7 +497,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    CompositorNode* CompositorWorkspace::getLastEnabledNode(void)
+    CompositorNode* CompositorWorkspace::getLastEnabledNode()
     {
         CompositorNode *retVal = 0;
 
@@ -566,7 +566,7 @@ namespace Ogre
                      "CompositorWorkspace::setListener" );
     }
     //-----------------------------------------------------------------------------------
-    CompositorWorkspaceListener* CompositorWorkspace::getListener(void) const
+    CompositorWorkspaceListener* CompositorWorkspace::getListener() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "This method has been superseded by CompositorWorkspace::getListeners.",
@@ -636,19 +636,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::recreateAllNodes(void)
+    void CompositorWorkspace::recreateAllNodes()
     {
         createAllNodes();
         connectAllNodes();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::reconnectAllNodes(void)
+    void CompositorWorkspace::reconnectAllNodes()
     {
         clearAllConnections();
         connectAllNodes();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::resetAllNumPassesLeft(void)
+    void CompositorWorkspace::resetAllNumPassesLeft()
     {
         CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
         CompositorNodeVec::const_iterator end  = mNodeSequence.end();
@@ -665,7 +665,7 @@ namespace Ogre
         return mSceneManager->findCamera( cameraName );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* CompositorWorkspace::getFinalTarget(void) const
+    TextureGpu* CompositorWorkspace::getFinalTarget() const
     {
         TextureGpu *finalTarget = 0;
         if( !mExternalRenderTargets.empty() )
@@ -674,7 +674,7 @@ namespace Ogre
         return finalTarget;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::_notifyBarriersDirty( void )
+    void CompositorWorkspace::_notifyBarriersDirty()
     {
         getCompositorManager()->_notifyBarriersDirty();
     }
@@ -689,7 +689,7 @@ namespace Ogre
         return mDefinition->mCompositorManager;
     }
     //-----------------------------------------------------------------------------------
-    size_t CompositorWorkspace::getFrameCount(void) const
+    size_t CompositorWorkspace::getFrameCount() const
     {
         return mDefinition->mCompositorManager->getFrameCount();
     }
@@ -882,7 +882,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::_validateFinalTarget(void)
+    void CompositorWorkspace::_validateFinalTarget()
     {
         TextureGpu *finalTarget = getFinalTarget();
         if( finalTarget )

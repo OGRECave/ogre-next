@@ -40,7 +40,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::createCleanupScene(void)
+    void MemoryGameState::createCleanupScene()
     {
         destroyCleanupScene();
 
@@ -52,7 +52,7 @@ namespace Demo
         mSceneGenerator->generateScene();
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::destroyCleanupScene(void)
+    void MemoryGameState::destroyCleanupScene()
     {
         if( mSceneGenerator )
             mSceneGenerator->resetScene();
@@ -65,7 +65,7 @@ namespace Demo
             mesh->unload();
     }
     //-----------------------------------------------------------------------------------
-    bool MemoryGameState::isSceneLoaded(void) const
+    bool MemoryGameState::isSceneLoaded() const
     {
         return true;
     }
@@ -94,7 +94,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::unloadTexturesFromUnusedMaterials(void)
+    void MemoryGameState::unloadTexturesFromUnusedMaterials()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
@@ -149,7 +149,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::unloadUnusedTextures(void)
+    void MemoryGameState::unloadUnusedTextures()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::RenderSystem *renderSystem = root->getRenderSystem();
@@ -206,7 +206,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::minimizeMemory(void)
+    void MemoryGameState::minimizeMemory()
     {
         setTightMemoryBudget();
         unloadTexturesFromUnusedMaterials();
@@ -238,7 +238,7 @@ namespace Demo
         mTightMemoryBudget = true;
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::setRelaxedMemoryBudget(void)
+    void MemoryGameState::setRelaxedMemoryBudget()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::RenderSystem *renderSystem = root->getRenderSystem();
@@ -269,7 +269,7 @@ namespace Demo
             return Ogre::DefaultTextureGpuManagerListener::getNumSlicesFor( texture, textureManager );
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::createScene01(void)
+    void MemoryGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::RenderSystem *renderSystem = root->getRenderSystem();
@@ -297,7 +297,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::destroyScene(void)
+    void MemoryGameState::destroyScene()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::RenderSystem *renderSystem = root->getRenderSystem();

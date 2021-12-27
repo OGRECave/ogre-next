@@ -57,7 +57,7 @@ namespace v1
         TextAreaOverlayElement(const String& name);
         virtual ~TextAreaOverlayElement();
 
-        virtual void initialise(void);
+        virtual void initialise();
 
         /** @copydoc OverlayElement::_releaseManualHardwareResources. */
         virtual void _releaseManualHardwareResources();
@@ -76,9 +76,9 @@ namespace v1
         const String& getFontName() const;
 
         /** See OverlayElement. */
-        virtual const String& getTypeName(void) const;
+        virtual const String& getTypeName() const;
         /** See Renderable. */
-        const MaterialPtr& getMaterial(void) const;
+        const MaterialPtr& getMaterial() const;
         /** See Renderable. */
         void getRenderOperation(v1::RenderOperation& op, bool casterPass);
         /** Overridden from OverlayElement */
@@ -93,7 +93,7 @@ namespace v1
         void setColour(const ColourValue& col);
 
         /** Gets the colour of the text. */
-        const ColourValue& getColour(void) const;
+        const ColourValue& getColour() const;
         /** Sets the colour of the bottom of the letters.
         @remarks
             By setting a separate top and bottom colour, you
@@ -102,7 +102,7 @@ namespace v1
         */
         void setColourBottom(const ColourValue& col);
         /** Gets the colour of the bottom of the letters. */
-        const ColourValue& getColourBottom(void) const;
+        const ColourValue& getColourBottom() const;
         /** Sets the colour of the top of the letters.
         @remarks
             By setting a separate top and bottom colour, you
@@ -111,7 +111,7 @@ namespace v1
         */
         void setColourTop(const ColourValue& col);
         /** Gets the colour of the top of the letters. */
-        const ColourValue& getColourTop(void) const;
+        const ColourValue& getColourTop() const;
 
         inline void setAlignment( Alignment a )
         {
@@ -127,7 +127,7 @@ namespace v1
         void setMetricsMode(GuiMetricsMode gmm);
 
         /** Overridden from OverlayElement */
-        void _update(void);
+        void _update();
 
         //-----------------------------------------------------------------------------------------
         /** Command object for setting the caption.
@@ -221,7 +221,7 @@ namespace v1
         v1::RenderOperation mRenderOp;
 
         /// Method for setting up base parameters for this class
-        void addBaseParameters(void);
+        void addBaseParameters();
 
         static String msTypeName;
 
@@ -257,7 +257,7 @@ namespace v1
         /// Inherited function
         virtual void updateTextureGeometry();
         /// Updates vertex colours
-        virtual void updateColours(void);
+        virtual void updateColours();
     };
     /** @} */
     /** @} */

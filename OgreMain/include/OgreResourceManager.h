@@ -180,10 +180,10 @@ namespace Ogre {
 
         /** Get the limit on the amount of memory this resource handler may use.
         */
-        virtual size_t getMemoryBudget(void) const;
+        virtual size_t getMemoryBudget() const;
 
         /** Gets the current memory usage, in bytes. */
-        virtual size_t getMemoryUsage(void) const { return mMemoryUsage.get(); }
+        virtual size_t getMemoryUsage() const { return mMemoryUsage.get(); }
 
         /** Unloads a single resource by name.
         @remarks
@@ -355,7 +355,7 @@ namespace Ogre {
             destruction of resources, try making sure you release all your
             shared pointers before you shutdown OGRE.
         */
-        virtual void removeAll(void);
+        virtual void removeAll();
 
         /** Remove all resources which are not referenced by any other object.
         @remarks
@@ -461,7 +461,7 @@ namespace Ogre {
             A list of file patterns, in the order they should be searched in.
         @see isScriptingSupported, parseScript
         */
-        virtual const StringVector& getScriptPatterns(void) const { return mScriptPatterns; }
+        virtual const StringVector& getScriptPatterns() const { return mScriptPatterns; }
 
         /** Parse the definition of a set of resources from a script file.
         @remarks
@@ -485,16 +485,16 @@ namespace Ogre {
             order, and this value enumerates that. Higher values load later during
             bulk loading tasks.
         */
-        virtual Real getLoadingOrder(void) const { return mLoadOrder; }
+        virtual Real getLoadingOrder() const { return mLoadOrder; }
 
         /** Gets a string identifying the type of resource this manager handles. */
-        const String& getResourceType(void) const { return mResourceType; }
+        const String& getResourceType() const { return mResourceType; }
 
         /** Sets whether this manager and its resources habitually produce log output */
         virtual void setVerbose(bool v) { mVerbose = v; }
 
         /** Gets whether this manager and its resources habitually produce log output */
-        virtual bool getVerbose(void) { return mVerbose; }
+        virtual bool getVerbose() { return mVerbose; }
 
         /** Definition of a pool of resources, which users can use to reuse similar
             resources many times without destroying and recreating them.
@@ -529,7 +529,7 @@ namespace Ogre {
     protected:
 
         /** Allocates the next handle. */
-        ResourceHandle getNextHandle(void);
+        ResourceHandle getNextHandle();
 
         /** Create a new resource instance compatible with this manager (no custom 
             parameters are populated at this point). 
@@ -561,7 +561,7 @@ namespace Ogre {
         virtual void removeImpl(const ResourcePtr& res );
         /** Checks memory usage and pages out if required. This is automatically done after a new resource is loaded.
         */
-        virtual void checkUsage(void);
+        virtual void checkUsage();
 
 
     public:
@@ -593,7 +593,7 @@ namespace Ogre {
         @note
             Use of this iterator is NOT thread safe!
         */
-        ResourceMapIterator getResourceIterator(void) 
+        ResourceMapIterator getResourceIterator()
         {
             return ResourceMapIterator(mResourcesByHandle.begin(), mResourcesByHandle.end());
         }

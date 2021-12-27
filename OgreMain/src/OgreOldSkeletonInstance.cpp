@@ -50,7 +50,7 @@ namespace v1 {
         unload();
     }
     //-------------------------------------------------------------------------
-    unsigned short OldSkeletonInstance::getNumAnimations(void) const
+    unsigned short OldSkeletonInstance::getNumAnimations() const
     {
         return mSkeleton->getNumAnimations();
     }
@@ -88,13 +88,13 @@ namespace v1 {
         mSkeleton->addLinkedSkeletonAnimationSource(skelName, scale);
     }
     //-------------------------------------------------------------------------
-    void OldSkeletonInstance::removeAllLinkedSkeletonAnimationSources(void)
+    void OldSkeletonInstance::removeAllLinkedSkeletonAnimationSources()
     {
         mSkeleton->removeAllLinkedSkeletonAnimationSources();
     }
     //-------------------------------------------------------------------------
     Skeleton::LinkedSkeletonAnimSourceIterator 
-    OldSkeletonInstance::getLinkedSkeletonAnimationSourceIterator(void) const
+    OldSkeletonInstance::getLinkedSkeletonAnimationSourceIterator() const
     {
         return mSkeleton->getLinkedSkeletonAnimationSourceIterator();
     }
@@ -140,7 +140,7 @@ namespace v1 {
         }
     }
     //-------------------------------------------------------------------------
-    void OldSkeletonInstance::loadImpl(void)
+    void OldSkeletonInstance::loadImpl()
     {
         mNextAutoHandle = mSkeleton->mNextAutoHandle;
         mNextTagPointAutoHandle = 0;
@@ -157,7 +157,7 @@ namespace v1 {
         setBindingPose();
     }
     //-------------------------------------------------------------------------
-    void OldSkeletonInstance::unloadImpl(void)
+    void OldSkeletonInstance::unloadImpl()
     {
         Skeleton::unloadImpl();
 
@@ -225,19 +225,19 @@ namespace v1 {
         }
     }
     //-------------------------------------------------------------------------
-    const String& OldSkeletonInstance::getName(void) const
+    const String& OldSkeletonInstance::getName() const
     {
         // delegate
         return mSkeleton->getName();
     }
     //-------------------------------------------------------------------------
-    ResourceHandle OldSkeletonInstance::getHandle(void) const
+    ResourceHandle OldSkeletonInstance::getHandle() const
     {
         // delegate
         return mSkeleton->getHandle();
     }
     //-------------------------------------------------------------------------
-    const String& OldSkeletonInstance::getGroup(void) const
+    const String& OldSkeletonInstance::getGroup() const
     {
         // delegate
         return mSkeleton->getGroup();

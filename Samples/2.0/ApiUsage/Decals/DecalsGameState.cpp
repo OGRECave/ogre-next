@@ -42,7 +42,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void DecalsGameState::createDecalDebugData(void)
+    void DecalsGameState::createDecalDebugData()
     {
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "DebugDecalPlane",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
@@ -109,7 +109,7 @@ namespace Demo
         delete decalDebugVisual;
     }
     //-----------------------------------------------------------------------------------
-    void DecalsGameState::createScene01(void)
+    void DecalsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -359,7 +359,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void DecalsGameState::destroyScene(void)
+    void DecalsGameState::destroyScene()
     {
         if( mDecalDebugVisual )
         {
@@ -400,7 +400,7 @@ namespace Demo
         outText += mDecalDebugVisual->cube->isVisible() ? "[On]" : "[Off]";
     }
     //-----------------------------------------------------------------------------------
-    void DecalsGameState::setTransparencyToMaterials(void)
+    void DecalsGameState::setTransparencyToMaterials()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 

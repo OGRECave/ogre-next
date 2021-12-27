@@ -121,18 +121,18 @@ namespace Ogre {
         @see
         particle::setDimensions
         */
-        bool hasOwnDimensions(void) const { return mOwnDimensions; }
+        bool hasOwnDimensions() const { return mOwnDimensions; }
 
         /** Retrieves the particle's personal width, if hasOwnDimensions is true. */
-        Real getOwnWidth(void) const { return mWidth; }
+        Real getOwnWidth() const { return mWidth; }
 
         /** Retrieves the particle's personal width, if hasOwnDimensions is true. */
-        Real getOwnHeight(void) const { return mHeight; }
+        Real getOwnHeight() const { return mHeight; }
         
         /** Sets the current rotation */
         void setRotation(const Radian& rad);
 
-        const Radian& getRotation(void) const { return mRotation; }
+        const Radian& getRotation() const { return mRotation; }
 
         /** Internal method for notifying the particle of it's owner.
         */
@@ -143,10 +143,10 @@ namespace Ogre {
         void _notifyVisualData(ParticleVisualData* vis) { mVisual = vis; }
 
         /// Get the optional visual data associated with the class
-        ParticleVisualData* getVisualData(void) const { return mVisual; }
+        ParticleVisualData* getVisualData() const { return mVisual; }
 
         /// Utility method to reset this particle
-        void resetDimensions(void);
+        void resetDimensions();
     };
     /** @} */
     /** @} */

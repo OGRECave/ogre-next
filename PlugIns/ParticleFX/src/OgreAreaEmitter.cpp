@@ -110,7 +110,7 @@ namespace Ogre {
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    Real AreaEmitter::getWidth(void) const
+    Real AreaEmitter::getWidth() const
     {
         return mSize.x;
     }
@@ -121,7 +121,7 @@ namespace Ogre {
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    Real AreaEmitter::getHeight(void) const
+    Real AreaEmitter::getHeight() const
     {
         return mSize.y;
     }
@@ -132,12 +132,12 @@ namespace Ogre {
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    Real AreaEmitter::getDepth(void) const
+    Real AreaEmitter::getDepth() const
     {
         return mSize.z;
     }
     //-----------------------------------------------------------------------
-    void AreaEmitter::genAreaAxes(void)
+    void AreaEmitter::genAreaAxes()
     {
         Vector3 mLeft = mUp.crossProduct(mDirection);
 

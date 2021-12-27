@@ -229,7 +229,7 @@ namespace v1 {
         mInitialised = true;
     }
     //-----------------------------------------------------------------------
-    void Entity::_deinitialise(void)
+    void Entity::_deinitialise()
     {
         if (!mInitialised)
             return;
@@ -299,12 +299,12 @@ namespace v1 {
         mMesh->removeListener(this);
     }
     //-----------------------------------------------------------------------
-    bool Entity::hasVertexAnimation(void) const
+    bool Entity::hasVertexAnimation() const
     {
         return mMesh->hasVertexAnimation();
     }
     //-----------------------------------------------------------------------
-    const MeshPtr& Entity::getMesh(void) const
+    const MeshPtr& Entity::getMesh() const
     {
         return mMesh;
     }
@@ -339,7 +339,7 @@ namespace v1 {
         return getSubEntity(index);
     }
     //-----------------------------------------------------------------------
-    size_t Entity::getNumSubEntities(void) const
+    size_t Entity::getNumSubEntities() const
     {
         return mSubEntityList.size();
     }
@@ -364,7 +364,7 @@ namespace v1 {
         setDatablock( datablock );
     }
     //-----------------------------------------------------------------------
-    Entity* Entity::clone(void) const
+    Entity* Entity::clone() const
     {
         if (!mManager)
         {
@@ -563,17 +563,17 @@ namespace v1 {
         return mAnimationState && mAnimationState->hasAnimationState(name);
     }
     //-----------------------------------------------------------------------
-    AnimationStateSet* Entity::getAllAnimationStates(void) const
+    AnimationStateSet* Entity::getAllAnimationStates() const
     {
         return mAnimationState;
     }
     //-----------------------------------------------------------------------
-    const String& Entity::getMovableType(void) const
+    const String& Entity::getMovableType() const
     {
         return EntityFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------
-    bool Entity::tempVertexAnimBuffersBound(void) const
+    bool Entity::tempVertexAnimBuffersBound() const
     {
         // Do we still have temp buffers for software vertex animation bound?
         bool ret = true;
@@ -616,7 +616,7 @@ namespace v1 {
         return true;
     }
     //-----------------------------------------------------------------------
-    void Entity::updateAnimation(void)
+    void Entity::updateAnimation()
     {
         // Do nothing if not initialised yet
         if (!mInitialised)
@@ -950,7 +950,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------------
-    void Entity::markBuffersUnusedForAnimation(void)
+    void Entity::markBuffersUnusedForAnimation()
     {
         mVertexAnimationAppliedThisFrame = false;
         for (SubEntityList::iterator i = mSubEntityList.begin();
@@ -960,7 +960,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------
-    void Entity::_markBuffersUsedForAnimation(void)
+    void Entity::_markBuffersUsedForAnimation()
     {
         mVertexAnimationAppliedThisFrame = true;
         // no cascade
@@ -1136,7 +1136,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void Entity::_updateAnimation(void)
+    void Entity::_updateAnimation()
     {
         // Externally visible method
         if (hasSkeleton() || hasVertexAnimation())
@@ -1145,47 +1145,47 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    bool Entity::_isAnimated(void) const
+    bool Entity::_isAnimated() const
     {
         return (mAnimationState && mAnimationState->hasEnabledAnimationState()) ||
                (getSkeleton() && getSkeleton()->hasManualBones());
     }
     //-----------------------------------------------------------------------
-    bool Entity::_isSkeletonAnimated(void) const
+    bool Entity::_isSkeletonAnimated() const
     {
         return getSkeleton() &&
             (mAnimationState->hasEnabledAnimationState() || getSkeleton()->hasManualBones());
     }
     //-----------------------------------------------------------------------
-    VertexData* Entity::_getSkelAnimVertexData(void) const
+    VertexData* Entity::_getSkelAnimVertexData() const
     {
         assert (mSkelAnimVertexData && "Not software skinned or has no shared vertex data!");
         return mSkelAnimVertexData;
     }
     //-----------------------------------------------------------------------
-    VertexData* Entity::_getSoftwareVertexAnimVertexData(void) const
+    VertexData* Entity::_getSoftwareVertexAnimVertexData() const
     {
         assert (mSoftwareVertexAnimVertexData && "Not vertex animated or has no shared vertex data!");
         return mSoftwareVertexAnimVertexData;
     }
     //-----------------------------------------------------------------------
-    VertexData* Entity::_getHardwareVertexAnimVertexData(void) const
+    VertexData* Entity::_getHardwareVertexAnimVertexData() const
     {
         assert (mHardwareVertexAnimVertexData && "Not vertex animated or has no shared vertex data!");
         return mHardwareVertexAnimVertexData;
     }
     //-----------------------------------------------------------------------
-    TempBlendedBufferInfo* Entity::_getSkelAnimTempBufferInfo(void)
+    TempBlendedBufferInfo* Entity::_getSkelAnimTempBufferInfo()
     {
         return &mTempSkelAnimInfo;
     }
     //-----------------------------------------------------------------------
-    TempBlendedBufferInfo* Entity::_getVertexAnimTempBufferInfo(void)
+    TempBlendedBufferInfo* Entity::_getVertexAnimTempBufferInfo()
     {
         return &mTempVertexAnimInfo;
     }
     //-----------------------------------------------------------------------
-    bool Entity::cacheBoneMatrices(void)
+    bool Entity::cacheBoneMatrices()
     {
         Root& root = Root::getSingleton();
         unsigned long currentFrameNumber = root.getNextFrameNumber();
@@ -1207,7 +1207,7 @@ namespace v1 {
         mDisplaySkeleton = display;
     }
     //-----------------------------------------------------------------------
-    bool Entity::getDisplaySkeleton(void) const
+    bool Entity::getDisplaySkeleton() const
     {
         return mDisplaySkeleton;
     }
@@ -1224,7 +1224,7 @@ namespace v1 {
 #endif
     }
     //-----------------------------------------------------------------------
-    size_t Entity::getNumManualLodLevels(void) const
+    size_t Entity::getNumManualLodLevels() const
     {
         return mLodEntityList.size();
     }
@@ -1259,7 +1259,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void Entity::prepareTempBlendBuffers(void)
+    void Entity::prepareTempBlendBuffers()
     {
         if (mSkelAnimVertexData)
         {
@@ -1375,7 +1375,7 @@ namespace v1 {
         return ret;
     }
     //-----------------------------------------------------------------------
-    EdgeData* Entity::getEdgeList(void)
+    EdgeData* Entity::getEdgeList()
     {
 #if OGRE_NO_MESHLOD
         unsigned short mMeshLodIndex = 0;
@@ -1384,7 +1384,7 @@ namespace v1 {
         return mMesh->getEdgeList(mCurrentMeshLod);
     }
     //-----------------------------------------------------------------------
-    bool Entity::hasEdgeList(void)
+    bool Entity::hasEdgeList()
     {
 #if OGRE_NO_MESHLOD
         unsigned short mMeshLodIndex = 0;
@@ -1394,7 +1394,7 @@ namespace v1 {
         return (mMesh->getEdgeList(mCurrentMeshLod) != NULL);
     }
     //-----------------------------------------------------------------------
-    bool Entity::isHardwareAnimationEnabled(void)
+    bool Entity::isHardwareAnimationEnabled()
     {
         //find whether the entity has hardware animation for the current active sceme
         unsigned short schemeIndex = MaterialManager::getSingleton()._getActiveSchemeIndex();
@@ -1410,13 +1410,13 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    void Entity::reevaluateVertexProcessing(void)
+    void Entity::reevaluateVertexProcessing()
     {
         //clear the cache so that the values will be reevaluated
         mSchemeHardwareAnim.clear();
     }
     //-----------------------------------------------------------------------
-    bool Entity::calcVertexProcessing(void)
+    bool Entity::calcVertexProcessing()
     {
         // init
         bool hasHardwareAnimation = false;
@@ -1739,7 +1739,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void Entity::refreshAvailableAnimationState(void)
+    void Entity::refreshAvailableAnimationState()
     {
         mMesh->_refreshAnimationState(mAnimationState);
     }
@@ -1810,7 +1810,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     String EntityFactory::FACTORY_TYPE_NAME = "Entity";
     //-----------------------------------------------------------------------
-    const String& EntityFactory::getType(void) const
+    const String& EntityFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

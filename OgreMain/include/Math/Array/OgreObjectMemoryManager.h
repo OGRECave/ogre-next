@@ -133,10 +133,10 @@ namespace Ogre
                         ObjectMemoryManager *dstObjectMemoryManager );
 
         /// @copydoc ArrayMemoryManager::defragment
-        void defragment(void);
+        void defragment();
 
         /// @copydoc ArrayMemoryManager::shrinkToFit
-        void shrinkToFit(void);
+        void shrinkToFit();
 
         /** Retrieves the number of render queues that have been created.
         @remarks

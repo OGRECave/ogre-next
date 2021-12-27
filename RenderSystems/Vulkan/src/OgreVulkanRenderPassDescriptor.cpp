@@ -66,7 +66,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanRenderPassDescriptor::~VulkanRenderPassDescriptor() { releaseFbo(); }
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::checkRenderWindowStatus( void )
+    void VulkanRenderPassDescriptor::checkRenderWindowStatus()
     {
         if( ( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() ) ||
             ( mDepth.texture && mDepth.texture->isRenderWindowSpecific() ) ||
@@ -93,7 +93,7 @@ namespace Ogre
         calculateSharedKey();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::calculateSharedKey( void )
+    void VulkanRenderPassDescriptor::calculateSharedKey()
     {
         VulkanFrameBufferDescKey key( *this );
         VulkanFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
@@ -115,7 +115,7 @@ namespace Ogre
         calculateSharedFlushOnlyKey();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::calculateSharedFlushOnlyKey( void )
+    void VulkanRenderPassDescriptor::calculateSharedFlushOnlyKey()
     {
         FrameBufferDescKey key( *this );
         VulkanFlushOnlyDescMap &frameBufferDescMap = mRenderSystem->_getFlushOnlyDescMap();
@@ -577,7 +577,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VulkanRenderPassDescriptor::releaseFbo( void )
+    void VulkanRenderPassDescriptor::releaseFbo()
     {
         {
             VulkanFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
@@ -820,7 +820,7 @@ namespace Ogre
         return entriesToFlush;
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanRenderPassDescriptor::cannotInterruptRendering( void ) const
+    bool VulkanRenderPassDescriptor::cannotInterruptRendering() const
     {
         bool cannotInterrupt = false;
 

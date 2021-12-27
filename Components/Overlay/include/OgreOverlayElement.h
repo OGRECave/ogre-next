@@ -175,12 +175,12 @@ namespace v1 {
         meaning the element should be rebuilding it's mesh positions. Abstract since
         subclasses must implement this.
         */
-        virtual void updatePositionGeometry(void) = 0;
+        virtual void updatePositionGeometry() = 0;
         /** Internal method which is triggered when the UVs of the element get updated,
         meaning the element should be rebuilding it's mesh UVs. Abstract since
         subclasses must implement this.
         */
-        virtual void updateTextureGeometry(void) = 0;
+        virtual void updateTextureGeometry() = 0;
 
         /** Internal method for setting up the basic parameter definitions for a subclass. 
         @remarks
@@ -190,7 +190,7 @@ namespace v1 {
         @par
         The subclass must have called it's own createParamDictionary before calling this method.
         */
-        virtual void addBaseParameters(void);
+        virtual void addBaseParameters();
 
     public:
         /// Constructor: do not call direct, use OverlayManager::createElement
@@ -198,7 +198,7 @@ namespace v1 {
         virtual ~OverlayElement();
 
         /** Initialise gui element */
-        virtual void initialise(void) = 0;
+        virtual void initialise() = 0;
 
         /** Notifies that hardware resources were lost */
         virtual void _releaseManualHardwareResources() {}
@@ -206,17 +206,17 @@ namespace v1 {
         virtual void _restoreManualHardwareResources() {}
 
         /** Gets the name of this overlay. */
-        const String& getName(void) const;
+        const String& getName() const;
 
 
         /** Shows this element if it was hidden. */
-        virtual void show(void);
+        virtual void show();
 
         /** Hides this element if it was visible. */
-        virtual void hide(void);
+        virtual void hide();
 
         /** Returns whether or not the element is visible. */
-        bool isVisible(void) const;
+        bool isVisible() const;
 
         bool isEnabled() const;
         virtual void setEnabled(bool b);
@@ -232,31 +232,31 @@ namespace v1 {
         /** Sets the width of this element in relation to the screen (where 1.0 = screen width) */
         void setWidth(Real width);
         /** Gets the width of this element in relation to the screen (where 1.0 = screen width) */
-        Real getWidth(void) const;
+        Real getWidth() const;
 
         /** Sets the height of this element in relation to the screen (where 1.0 = screen height) */
         void setHeight(Real height);
         /** Gets the height of this element in relation to the screen (where 1.0 = screen height) */
-        Real getHeight(void) const;
+        Real getHeight() const;
 
         /** Sets the left of this element in relation to the screen (where 0 = far left, 1.0 = far right) */
         void setLeft(Real left);
         /** Gets the left of this element in relation to the screen (where 0 = far left, 1.0 = far right)  */
-        Real getLeft(void) const;
+        Real getLeft() const;
 
         /** Sets the top of this element in relation to the screen (where 0 = top, 1.0 = bottom) */
         void setTop(Real Top);
         /** Gets the top of this element in relation to the screen (where 0 = top, 1.0 = bottom)  */
-        Real getTop(void) const;
+        Real getTop() const;
 
         /** Gets the left of this element in relation to the screen (where 0 = far left, 1.0 = far right)  */
-        Real _getLeft(void) const { return mLeft; }
+        Real _getLeft() const { return mLeft; }
         /** Gets the top of this element in relation to the screen (where 0 = far left, 1.0 = far right)  */
-        Real _getTop(void) const { return mTop; }
+        Real _getTop() const { return mTop; }
         /** Gets the width of this element in relation to the screen (where 1.0 = screen width)  */
-        Real _getWidth(void) const { return mWidth; }
+        Real _getWidth() const { return mWidth; }
         /** Gets the height of this element in relation to the screen (where 1.0 = screen height)  */
-        Real _getHeight(void) const { return mHeight; }
+        Real _getHeight() const { return mHeight; }
         /** Sets the left of this element in relation to the screen (where 1.0 = screen width) */
         void _setLeft(Real left);
         /** Sets the top of this element in relation to the screen (where 1.0 = screen width) */
@@ -271,7 +271,7 @@ namespace v1 {
         void _setDimensions(Real width, Real height);
 
         /** Gets the name of the material this element uses. */
-        virtual const String& getMaterialName(void) const;
+        virtual const String& getMaterialName() const;
 
         /** Sets the name of the material this element will use. 
         @remarks
@@ -288,7 +288,7 @@ namespace v1 {
 
         // --- Renderable Overrides ---
         /** See Renderable */
-        const MaterialPtr& getMaterial(void) const;
+        const MaterialPtr& getMaterial() const;
 
         // NB getRenderOperation not implemented, still abstract here
 
@@ -296,27 +296,27 @@ namespace v1 {
         void getWorldTransforms(Matrix4* xform) const;
 
         /** Tell the object to recalculate */
-        virtual void _positionsOutOfDate(void);
+        virtual void _positionsOutOfDate();
 
         /** Internal method to update the element based on transforms applied. */
-        virtual void _update(void);
+        virtual void _update();
 
         /** Updates this elements transform based on it's parent. */
-        virtual void _updateFromParent(void);
+        virtual void _updateFromParent();
 
         /** Internal method for notifying the GUI element of it's parent and ultimate overlay. */
         virtual void _notifyParent(OverlayContainer* parent, Overlay* overlay);
 
         /** Gets the 'left' position as derived from own left and that of parents. */
-        virtual Real _getDerivedLeft(void);
+        virtual Real _getDerivedLeft();
 
         /** Gets the 'top' position as derived from own left and that of parents. */
-        virtual Real _getDerivedTop(void);
+        virtual Real _getDerivedTop();
 
         /** Gets the 'width' as derived from own width and metrics mode. */
-        virtual Real _getRelativeWidth(void);
+        virtual Real _getRelativeWidth();
         /** Gets the 'height' as derived from own height and metrics mode. */
-        virtual Real _getRelativeHeight(void);
+        virtual Real _getRelativeHeight();
 
 
         /** Gets the clipping region of the element */
@@ -331,7 +331,7 @@ namespace v1 {
         virtual void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
 
         /** Gets the type name of the element. All concrete subclasses must implement this. */
-        virtual const String& getTypeName(void) const = 0;
+        virtual const String& getTypeName() const = 0;
 
         /** Sets the caption on elements that support it. 
         @remarks
@@ -341,7 +341,7 @@ namespace v1 {
         */
         virtual void setCaption(const DisplayString& text);
         /** Gets the caption for this element. */
-        virtual const DisplayString& getCaption(void) const;
+        virtual const DisplayString& getCaption() const;
         /** Sets the colour on elements that support it. 
         @remarks
         This property doesn't do something on all elements, just those that support it.
@@ -351,7 +351,7 @@ namespace v1 {
         virtual void setColour(const ColourValue& col);
 
         /** Gets the colour for this element. */
-        virtual const ColourValue& getColour(void) const;
+        virtual const ColourValue& getColour() const;
 
         /** Tells this element how to interpret the position and dimension values it is given.
         @remarks
@@ -365,7 +365,7 @@ namespace v1 {
         */
         virtual void setMetricsMode(GuiMetricsMode gmm);
         /** Retrieves the current settings of how the element metrics are interpreted. */
-        virtual GuiMetricsMode getMetricsMode(void) const;
+        virtual GuiMetricsMode getMetricsMode() const;
         /** Sets the horizontal origin for this element.
         @remarks
         By default, the horizontal origin for a OverlayElement is the left edge of the parent container
@@ -383,7 +383,7 @@ namespace v1 {
         */
         virtual void setHorizontalAlignment(GuiHorizontalAlignment gha);
         /** Gets the horizontal alignment for this element. */
-        virtual GuiHorizontalAlignment getHorizontalAlignment(void) const;
+        virtual GuiHorizontalAlignment getHorizontalAlignment() const;
         /** Sets the vertical origin for this element. 
         @remarks
         By default, the vertical origin for a OverlayElement is the top edge of the parent container
@@ -401,7 +401,7 @@ namespace v1 {
         */
         virtual void setVerticalAlignment(GuiVerticalAlignment gva);
         /** Gets the vertical alignment for this element. */
-        virtual GuiVerticalAlignment getVerticalAlignment(void) const;
+        virtual GuiVerticalAlignment getVerticalAlignment() const;
 
 
 
@@ -434,7 +434,7 @@ namespace v1 {
         void _setParent(OverlayContainer* parent) { mParent = parent; }
 
         /** @copydoc Renderable::getLights */
-        const LightList& getLights(void) const
+        const LightList& getLights() const
         {
             // Overlayelements should not be lit by the scene, this will not get called
             static LightList ll;

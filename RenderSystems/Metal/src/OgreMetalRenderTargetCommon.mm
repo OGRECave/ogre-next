@@ -52,7 +52,7 @@ namespace Ogre
         mColourAttachmentDesc.resolveTexture = resolveTexture;
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderTargetCommon::destroy(void)
+    void MetalRenderTargetCommon::destroy()
     {
         mColourAttachmentDesc = 0;
     }

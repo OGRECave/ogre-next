@@ -43,14 +43,14 @@ namespace Ogre
         dispatch_semaphore_t    mFenceName;
         MetalDevice             *mDevice;
 
-        virtual const void* mapImpl(void);
+        virtual const void* mapImpl();
 
     public:
         MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                           size_t elementStart, size_t elementCount, MetalDevice *device );
         virtual ~MetalAsyncTicket();
 
-        virtual bool queryIsTransferDone(void);
+        virtual bool queryIsTransferDone();
     };
 }
 

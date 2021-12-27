@@ -257,8 +257,8 @@ namespace Ogre
         void setAllStoreActions( StoreAction::StoreAction storeAction );
 
         CompositorPassType getType() const              { return mPassType; }
-        uint32 getRtIndex(void) const;
-        const CompositorTargetDef* getParentTargetDef(void) const;
+        uint32 getRtIndex() const;
+        const CompositorTargetDef* getParentTargetDef() const;
     };
 
     typedef vector<CompositorPassDef*>::type CompositorPassDefVec;
@@ -295,13 +295,13 @@ namespace Ogre
         IdString getRenderTargetName() const            { return mRenderTargetName; }
         String getRenderTargetNameStr() const           { return mRenderTargetNameStr; }
 
-        uint32 getRtIndex(void) const                   { return mRtIndex; }
+        uint32 getRtIndex() const                   { return mRtIndex; }
 
         void setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }
-        uint8 getShadowMapSupportedLightTypes(void) const   { return mShadowMapSupportedLightTypes; }
+        uint8 getShadowMapSupportedLightTypes() const   { return mShadowMapSupportedLightTypes; }
 
         void setTargetLevelBarrier( bool bBarrier );
-        bool getTargetLevelBarrier( void ) const { return mTargetLevelBarrier != 0; }
+        bool getTargetLevelBarrier() const { return mTargetLevelBarrier != 0; }
 
         /** Reserves enough memory for all passes (efficient allocation)
         @remarks
@@ -313,7 +313,7 @@ namespace Ogre
 
         CompositorPassDef* addPass( CompositorPassType passType, IdString customId = IdString() );
 
-        const CompositorPassTargetBarrierDef *getTargetLevelBarrierDef( void ) const
+        const CompositorPassTargetBarrierDef *getTargetLevelBarrierDef() const
         {
             return mTargetLevelBarrier;
         }
@@ -323,7 +323,7 @@ namespace Ogre
         /// @copydoc CompositorManager2::getNodeDefinitionNonConst
         CompositorPassDefVec& getCompositorPassesNonConst()     { return mCompositorPasses; }
 
-        const CompositorNodeDef* getParentNodeDef(void) const   { return mParentNodeDef; }
+        const CompositorNodeDef* getParentNodeDef() const   { return mParentNodeDef; }
     };
 
     /** @} */

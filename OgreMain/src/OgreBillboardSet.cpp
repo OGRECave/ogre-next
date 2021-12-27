@@ -159,7 +159,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    int BillboardSet::getNumBillboards(void) const
+    int BillboardSet::getNumBillboards() const
     {
         return static_cast< int >( mActiveBillboards.size() );
     }
@@ -242,7 +242,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    BillboardOrigin BillboardSet::getBillboardOrigin(void) const
+    BillboardOrigin BillboardSet::getBillboardOrigin() const
     {
         return mOriginType;
     }
@@ -253,7 +253,7 @@ namespace v1 {
         mRotationType = rotationType;
     }
     //-----------------------------------------------------------------------
-    BillboardRotationType BillboardSet::getBillboardRotationType(void) const
+    BillboardRotationType BillboardSet::getBillboardRotationType() const
     {
         return mRotationType;
     }
@@ -269,7 +269,7 @@ namespace v1 {
         mDefaultWidth = width;
     }
     //-----------------------------------------------------------------------
-    Real BillboardSet::getDefaultWidth(void) const
+    Real BillboardSet::getDefaultWidth() const
     {
         return mDefaultWidth;
     }
@@ -279,12 +279,12 @@ namespace v1 {
         mDefaultHeight = height;
     }
     //-----------------------------------------------------------------------
-    Real BillboardSet::getDefaultHeight(void) const
+    Real BillboardSet::getDefaultHeight() const
     {
         return mDefaultHeight;
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::_sortBillboards(void)
+    void BillboardSet::_sortBillboards()
     {
         switch (_getSortMode())
         {
@@ -314,7 +314,7 @@ namespace v1 {
         return - (sortPos - bill->getPosition()).squaredLength();
     }
     //-----------------------------------------------------------------------
-    SortMode BillboardSet::_getSortMode(void) const
+    SortMode BillboardSet::_getSortMode() const
     {
         // Need to sort by distance if we're using accurate facing, or perpendicular billboard type.
         if (mAccurateFacing ||
@@ -329,7 +329,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    bool BillboardSet::getUseIdentityWorldMatrix(void) const
+    bool BillboardSet::getUseIdentityWorldMatrix() const
     {
         return mWorldSpace;
     }
@@ -511,7 +511,7 @@ namespace v1 {
         mNumVisibleBillboards++;
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::endBillboards(void)
+    void BillboardSet::endBillboards()
     {
         mMainBuf->unlock();
     }
@@ -522,7 +522,7 @@ namespace v1 {
         mObjectData.mLocalRadius[mObjectData.mIndex] = radius;
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::_updateBounds(void)
+    void BillboardSet::_updateBounds()
     {
         if (mActiveBillboards.empty())
         {
@@ -646,7 +646,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    bool BillboardSet::getAutoextend(void) const
+    bool BillboardSet::getAutoextend() const
     {
         return mAutoExtendPool;
     }
@@ -658,7 +658,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------
-    bool BillboardSet::getSortingEnabled(void) const
+    bool BillboardSet::getSortingEnabled() const
     {
         return mSortingEnabled;
     }
@@ -724,7 +724,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::_createBuffers(void)
+    void BillboardSet::_createBuffers()
     {
         mVaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -862,7 +862,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::_destroyBuffers(void)
+    void BillboardSet::_destroyBuffers()
     {
         if (mVertexData)
         {
@@ -923,26 +923,26 @@ namespace v1 {
             Renderable::setDatablock( datablock );
     }
     //-----------------------------------------------------------------------
-    void BillboardSet::_setNullDatablock(void)
+    void BillboardSet::_setNullDatablock()
     {
         mMaterialName.clear();
         mMaterialGroup.clear();
         Renderable::_setNullDatablock();
     }
     //-----------------------------------------------------------------------
-    unsigned int BillboardSet::getPoolSize(void) const
+    unsigned int BillboardSet::getPoolSize() const
     {
         return static_cast< unsigned int >( mBillboardPool.size() );
     }
 
     //-----------------------------------------------------------------------
-    void BillboardSet::_notifyBillboardResized(void)
+    void BillboardSet::_notifyBillboardResized()
     {
         mAllDefaultSize = false;
     }
 
     //-----------------------------------------------------------------------
-    void BillboardSet::_notifyBillboardRotated(void)
+    void BillboardSet::_notifyBillboardRotated()
     {
         mAllDefaultRotation = false;
     }
@@ -1018,7 +1018,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    bool BillboardSet::getCullIndividually(void) const
+    bool BillboardSet::getCullIndividually() const
     {
         return mCullIndividual;
     }
@@ -1142,7 +1142,7 @@ namespace v1 {
         mBillboardType = bbt;
     }
     //-----------------------------------------------------------------------
-    BillboardType BillboardSet::getBillboardType(void) const
+    BillboardType BillboardSet::getBillboardType() const
     {
         return mBillboardType;
     }
@@ -1152,7 +1152,7 @@ namespace v1 {
         mCommonDirection = vec;
     }
     //-----------------------------------------------------------------------
-    const Vector3& BillboardSet::getCommonDirection(void) const
+    const Vector3& BillboardSet::getCommonDirection() const
     {
         return mCommonDirection;
     }
@@ -1162,7 +1162,7 @@ namespace v1 {
         mCommonUpVector = vec;
     }
     //-----------------------------------------------------------------------
-    const Vector3& BillboardSet::getCommonUpVector(void) const
+    const Vector3& BillboardSet::getCommonUpVector() const
     {
         return mCommonUpVector;
     }
@@ -1430,7 +1430,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------
-    const String& BillboardSet::getMovableType(void) const
+    const String& BillboardSet::getMovableType() const
     {
         return BillboardSetFactory::FACTORY_TYPE_NAME;
     }
@@ -1441,7 +1441,7 @@ namespace v1 {
         return mParentNode->getSquaredViewDepth(cam);
     }
     //-----------------------------------------------------------------------
-    const LightList& BillboardSet::getLights(void) const
+    const LightList& BillboardSet::getLights() const
     {
         // It's actually quite unlikely that this will be called,
         // because most billboards are unlit, but here we go anyway
@@ -1529,7 +1529,7 @@ namespace v1 {
     //-----------------------------------------------------------------------
     String BillboardSetFactory::FACTORY_TYPE_NAME = "BillboardSet";
     //-----------------------------------------------------------------------
-    const String& BillboardSetFactory::getType(void) const
+    const String& BillboardSetFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

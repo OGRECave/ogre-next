@@ -191,19 +191,19 @@ namespace Ogre
                                                               inChannel, inNode ) );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::clearAllInterNodeConnections(void)
+    void CompositorWorkspaceDef::clearAllInterNodeConnections()
     {
         mChannelRoutes.clear();
         mBufferChannelRoutes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::clearOutputConnections(void)
+    void CompositorWorkspaceDef::clearOutputConnections()
     {
         mExternalChannelRoutes.clear();
         mExternalBufferChannelRoutes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::clearAll(void)
+    void CompositorWorkspaceDef::clearAll()
     {
         clearAllInterNodeConnections();
         clearOutputConnections();

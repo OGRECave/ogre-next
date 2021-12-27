@@ -54,7 +54,7 @@ namespace Ogre
         CachedResourceView  mCachedResourceViews[16];
         uint8               mCurrentCacheCursor;
 
-        bool isD3D11Structured(void) const;
+        bool isD3D11Structured() const;
 
         ID3D11ShaderResourceView* createResourceView( int cacheIdx, uint32 offset, uint32 sizeBytes );
         ID3D11ShaderResourceView* bindBufferCommon( size_t offset, size_t sizeBytes );

@@ -55,9 +55,9 @@ namespace Ogre
                               MetalDynamicBuffer *dynamicBuffer );
         virtual ~MetalBufferInterface();
 
-        size_t getVboPoolIndex(void)                                { return mVboPoolIdx; }
+        size_t getVboPoolIndex()                                { return mVboPoolIdx; }
         /// Use __unsafe_unretained when possible to avoid unnecessary ARC overhead.
-        id<MTLBuffer> getVboName(void) const                        { return mVboName; }
+        id<MTLBuffer> getVboName() const                        { return mVboName; }
 
         void _setVboPoolIndex( size_t newVboPool )                  { mVboPoolIdx = newVboPool; }
 
@@ -69,8 +69,8 @@ namespace Ogre
                                                  bool advanceFrame = true );
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        virtual void advanceFrame();
+        virtual void regressFrame();
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                              size_t srcOffsetBytes, size_t sizeBytes );

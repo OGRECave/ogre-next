@@ -86,25 +86,25 @@ namespace Ogre
         virtual ~VulkanProgram();
 
         /// Overridden
-        bool getPassTransformStates( void ) const;
-        bool getPassSurfaceAndLightStates( void ) const;
-        bool getPassFogStates( void ) const;
+        bool getPassTransformStates() const;
+        bool getPassSurfaceAndLightStates() const;
+        bool getPassFogStates() const;
 
         virtual void setRootLayout( GpuProgramType type, const RootLayout &rootLayout );
-        virtual void unsetRootLayout( void );
+        virtual void unsetRootLayout();
         virtual void setAutoReflectArrayBindingsInRootLayout( bool bReflectArrayRootLayouts );
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
         /// Sets the preprocessor defines use to compile the program.
-        const String &getPreprocessorDefines( void ) const { return mPreprocessorDefines; }
+        const String &getPreprocessorDefines() const { return mPreprocessorDefines; }
 
         virtual void setReplaceVersionMacro( bool bReplace );
 
         /// Overridden from GpuProgram
-        const String &getLanguage( void ) const;
+        const String &getLanguage() const;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters( void );
+        GpuProgramParametersSharedPtr createParameters();
 
         void debugDump( String &outString );
 
@@ -114,11 +114,11 @@ namespace Ogre
         void fillPipelineShaderStageCi( VkPipelineShaderStageCreateInfo &pssCi );
 
         /// In bytes.
-        uint32 getBufferRequiredSize( void ) const;
+        uint32 getBufferRequiredSize() const;
         /// dstData must be able to hold at least getBufferRequiredSize
         void updateBuffers( const GpuProgramParametersSharedPtr &params, uint8 *RESTRICT_ALIAS dstData );
 
-        const std::vector<uint32> &getSpirv( void ) const { return mSpirv; }
+        const std::vector<uint32> &getSpirv() const { return mSpirv; }
 
         const map<uint32, VulkanConstantDefinitionBindingParam>::type &getConstantDefsBindingParams()
             const
@@ -126,7 +126,7 @@ namespace Ogre
             return mConstantDefsBindingParams;
         }
 
-        VulkanRootLayout *getRootLayout( void ) { return mRootLayout; }
+        VulkanRootLayout *getRootLayout() { return mRootLayout; }
 
         void getLayoutForPso( const VertexElement2VecVec &vertexElements,
                               FastArray<VkVertexInputBindingDescription> &outBufferBindingDescs,
@@ -137,18 +137,18 @@ namespace Ogre
     protected:
         static CmdPreprocessorDefines msCmdPreprocessorDefines;
 
-        uint32 getEshLanguage( void ) const;
+        uint32 getEshLanguage() const;
 
         /// Returns true if successfully extracted Root Layout from source
-        bool extractRootLayoutFromSource( void );
+        bool extractRootLayoutFromSource();
 
         static void initGlslResources( TBuiltInResource &resources );
 
         /** Internal load implementation, must be implemented by subclasses.
          */
-        void loadFromSource( void );
+        void loadFromSource();
 
-        void replaceVersionMacros( void );
+        void replaceVersionMacros();
         void getPreamble( String &preamble ) const;
         void addVertexSemanticsToPreamble( String &inOutPreamble ) const;
         void addPreprocessorToPreamble( String &inOutPreamble ) const;
@@ -158,16 +158,16 @@ namespace Ogre
         shader so this method creates an object sub-classed from VulkanGpuProgram just to be
         compatible with VulkanRenderSystem.
         */
-        void createLowLevelImpl( void );
+        void createLowLevelImpl();
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl( void );
+        void unloadHighLevelImpl();
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl( void );
+        void unloadImpl();
 
         /// Populate the passed parameters with name->index map
         void populateParameterNames( GpuProgramParametersSharedPtr params );
         /// Populate the passed parameters with name->index map, must be overridden
-        void buildConstantDefinitions( void ) const;
+        void buildConstantDefinitions() const;
 
         static const SpvReflectDescriptorBinding *findBinding(
             const FastArray<SpvReflectDescriptorSet *> &sets, size_t setIdx, size_t bindingIdx );

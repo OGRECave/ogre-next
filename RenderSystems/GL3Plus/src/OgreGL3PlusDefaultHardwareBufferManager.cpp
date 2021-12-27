@@ -59,7 +59,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareVertexBuffer::unlockImpl(void)
+    void GL3PlusDefaultHardwareVertexBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -72,7 +72,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareVertexBuffer::unlock(void)
+    void GL3PlusDefaultHardwareVertexBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -116,7 +116,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareIndexBuffer::unlockImpl(void)
+    void GL3PlusDefaultHardwareIndexBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -127,7 +127,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareIndexBuffer::unlock(void)
+    void GL3PlusDefaultHardwareIndexBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -176,7 +176,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareUniformBuffer::unlockImpl(void)
+    void GL3PlusDefaultHardwareUniformBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -189,7 +189,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareUniformBuffer::unlock(void)
+    void GL3PlusDefaultHardwareUniformBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do
@@ -238,7 +238,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareCounterBuffer::unlockImpl(void)
+    void GL3PlusDefaultHardwareCounterBuffer::unlockImpl()
     {
         // Nothing to do
     }
@@ -251,7 +251,7 @@ namespace v1 {
         return mData + offset;
     }
 
-    void GL3PlusDefaultHardwareCounterBuffer::unlock(void)
+    void GL3PlusDefaultHardwareCounterBuffer::unlock()
     {
         mIsLocked = false;
         // Nothing to do

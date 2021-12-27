@@ -39,11 +39,11 @@ namespace Ogre {
 
     //-----------------------------------------------------------------------
     template<> RenderSystemCapabilitiesManager* Singleton<RenderSystemCapabilitiesManager>::msSingleton = 0;
-    RenderSystemCapabilitiesManager* RenderSystemCapabilitiesManager::getSingletonPtr(void)
+    RenderSystemCapabilitiesManager* RenderSystemCapabilitiesManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    RenderSystemCapabilitiesManager& RenderSystemCapabilitiesManager::getSingleton(void)
+    RenderSystemCapabilitiesManager& RenderSystemCapabilitiesManager::getSingleton()
     {
         assert( msSingleton );  return ( *msSingleton );
     }

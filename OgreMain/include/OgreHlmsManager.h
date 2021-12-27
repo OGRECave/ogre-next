@@ -130,7 +130,7 @@ namespace Ogre
     protected:
 #endif
 
-        void renderSystemDestroyAllBlocks(void);
+        void renderSystemDestroyAllBlocks();
         uint16 getFreeBasicBlock( uint8 type, BasicBlock *basicBlock );
         void destroyBasicBlock( BasicBlock *block );
 
@@ -157,7 +157,7 @@ namespace Ogre
         /// Returns a registered HLMS based on name. May be null.
         Hlms* getHlms( IdString name );
 
-        HlmsCompute* getComputeHlms(void)               { return mComputeHlms; }
+        HlmsCompute* getComputeHlms()               { return mComputeHlms; }
 
         /** Creates a macroblock that matches the same parameter as the input.
             If it already exists, returns the existing one.
@@ -289,7 +289,7 @@ namespace Ogre
 
         /// Returns all registered datablocks. @see getDatablock,
         /// @see _datablockAdded, @see _datablockDestroyed
-        const HlmsDatablockMap& getDatablocks(void) const   { return mRegisteredDatablocks; }
+        const HlmsDatablockMap& getDatablocks() const   { return mRegisteredDatablocks; }
 
         /// Alias function. @See getDatablock, as many beginners will probably think of the word
         /// "Material" first. Datablock is a more technical (and accurate) name of what it does
@@ -299,7 +299,7 @@ namespace Ogre
         void useDefaultDatablockFrom( HlmsTypes type )      { mDefaultHlmsType = type; }
 
         /// Datablock to use when another datablock failed or none was specified.
-        HlmsDatablock* getDefaultDatablock(void) const;
+        HlmsDatablock* getDefaultDatablock() const;
 
         /** Registers an HLMS provider. The type is retrieved from the provider. Two providers of
             the same type cannot be registered at the same time (@see HlmsTypes) and will throw
@@ -318,11 +318,11 @@ namespace Ogre
         void unregisterHlms( HlmsTypes type );
 
         void registerComputeHlms( HlmsCompute *provider );
-        void unregisterComputeHlms(void);
+        void unregisterComputeHlms();
 
         void _changeRenderSystem( RenderSystem *newRs );
 
-        RenderSystem* getRenderSystem(void) const           { return mRenderSystem; }
+        RenderSystem* getRenderSystem() const           { return mRenderSystem; }
 
 #if !OGRE_NO_JSON
         /** Opens a file containing a JSON string to load all Hlms materials from.
@@ -362,8 +362,8 @@ namespace Ogre
 
         //ScriptLoader overloads
         virtual void parseScript(DataStreamPtr& stream, const String& groupName);
-        virtual const StringVector& getScriptPatterns(void) const       { return mScriptPatterns; }
-        virtual Real getLoadingOrder(void) const;
+        virtual const StringVector& getScriptPatterns() const       { return mScriptPatterns; }
+        virtual Real getLoadingOrder() const;
 #endif
 
         /// Gets the indices of active blocks

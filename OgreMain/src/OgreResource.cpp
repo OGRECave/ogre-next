@@ -276,7 +276,7 @@ namespace Ogre
 
     }
     //---------------------------------------------------------------------
-    size_t Resource::calculateSize(void) const
+    size_t Resource::calculateSize() const
     {
         size_t memSize = 0;
         memSize += sizeof(ResourceManager);
@@ -311,7 +311,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void Resource::unload(void) 
+    void Resource::unload()
     { 
         // Early-out without lock (mitigate perf cost of ensuring unloaded)
         LoadingState old = mLoadingState.get();
@@ -360,7 +360,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void Resource::touch(void) 
+    void Resource::touch()
     {
         // make sure loaded
         load();
@@ -404,7 +404,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void Resource::_fireUnloadingComplete(void)
+    void Resource::_fireUnloadingComplete()
     {
         // Lock the listener list
             OGRE_LOCK_MUTEX(mListenerListMutex);

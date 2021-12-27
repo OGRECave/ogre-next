@@ -49,7 +49,7 @@ namespace v1 {
         mDiscardBufferManager = 0;
     }
     //-----------------------------------------------------------------------------------
-    void MetalHardwareBufferManagerBase::_notifyDeviceStalled(void)
+    void MetalHardwareBufferManagerBase::_notifyDeviceStalled()
     {
         {
             OGRE_LOCK_MUTEX(mVertexBuffersMutex);

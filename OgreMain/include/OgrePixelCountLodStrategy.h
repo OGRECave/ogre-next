@@ -105,7 +105,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static AbsolutePixelCountLodStrategy& getSingleton(void);
+        static AbsolutePixelCountLodStrategy& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -121,7 +121,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static AbsolutePixelCountLodStrategy* getSingletonPtr(void);
+        static AbsolutePixelCountLodStrategy* getSingletonPtr();
     };
     /** @} */
     /** @} */
@@ -165,7 +165,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScreenRatioPixelCountLodStrategy& getSingleton(void);
+        static ScreenRatioPixelCountLodStrategy& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -181,7 +181,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScreenRatioPixelCountLodStrategy* getSingletonPtr(void);
+        static ScreenRatioPixelCountLodStrategy* getSingletonPtr();
     };
     /** @} */
     /** @} */

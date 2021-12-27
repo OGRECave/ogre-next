@@ -144,7 +144,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::notifyPassSceneAfterShadowMapsListeners(void)
+    void CompositorPassScene::notifyPassSceneAfterShadowMapsListeners()
     {
         const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
 
@@ -158,7 +158,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::notifyPassSceneAfterFrustumCullingListeners(void)
+    void CompositorPassScene::notifyPassSceneAfterFrustumCullingListeners()
     {
         const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
 
@@ -417,7 +417,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassScene::notifyCleared(void)
+    void CompositorPassScene::notifyCleared()
     {
         mShadowNode = 0; //Allow changes to our shadow nodes too.
         CompositorPass::notifyCleared();

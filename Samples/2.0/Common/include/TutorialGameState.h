@@ -34,7 +34,7 @@ namespace Demo
         Ogre::v1::TextAreaOverlayElement *mDebugText;
         Ogre::v1::TextAreaOverlayElement *mDebugTextShadow;
 
-        virtual void createDebugTextOverlay(void);
+        virtual void createDebugTextOverlay();
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
@@ -43,7 +43,7 @@ namespace Demo
 
         void _notifyGraphicsSystem( GraphicsSystem *graphicsSystem );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

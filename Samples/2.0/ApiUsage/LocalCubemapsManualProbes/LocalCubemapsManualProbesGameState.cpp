@@ -51,7 +51,7 @@ namespace Demo
         memset( mMaterials, 0, sizeof(mMaterials) );
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsManualProbesGameState::setupParallaxCorrectCubemaps(void)
+    void LocalCubemapsManualProbesGameState::setupParallaxCorrectCubemaps()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -168,7 +168,7 @@ namespace Demo
 //        tu->setTexture( mParallaxCorrectedCubemap->getBlendCubemap() );
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsManualProbesGameState::createScene01(void)
+    void LocalCubemapsManualProbesGameState::createScene01()
     {
         setupParallaxCorrectCubemaps();
 
@@ -307,7 +307,7 @@ namespace Demo
             mMaterials[i]->setCubemapProbe( probes[i%4] );
     }
     //-----------------------------------------------------------------------------------
-    void LocalCubemapsManualProbesGameState::destroyScene(void)
+    void LocalCubemapsManualProbesGameState::destroyScene()
     {
         for( int i=0; i<4*4; ++i )
             mMaterials[i]->setCubemapProbe( 0 );

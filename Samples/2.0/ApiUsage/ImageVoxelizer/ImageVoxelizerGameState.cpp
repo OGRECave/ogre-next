@@ -117,7 +117,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::toggletVctQuality( void )
+    void ImageVoxelizerGameState::toggletVctQuality()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -125,7 +125,7 @@ namespace Demo
         hlmsPbs->setVctFullConeCount( !hlmsPbs->getVctFullConeCount() );
     }
     //-----------------------------------------------------------------------------------
-    ImageVoxelizerGameState::GiMode ImageVoxelizerGameState::getGiMode( void ) const
+    ImageVoxelizerGameState::GiMode ImageVoxelizerGameState::getGiMode() const
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -197,7 +197,7 @@ namespace Demo
         mCascadedVoxelizer->addAllItems( mGraphicsSystem->getSceneManager(), 0xffffffff, false );
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::destroyCurrentScene( void )
+    void ImageVoxelizerGameState::destroyCurrentScene()
     {
         mCascadedVoxelizer->removeAllItems();
         mThinWallCounter = 1.0f;
@@ -217,7 +217,7 @@ namespace Demo
         mItems.clear();
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::createCornellScene( void )
+    void ImageVoxelizerGameState::createCornellScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -269,7 +269,7 @@ namespace Demo
         mThinWallCounter = 2.0f;
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::createSibenikScene( void )
+    void ImageVoxelizerGameState::createSibenikScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -297,7 +297,7 @@ namespace Demo
         meshCache->setCacheResolution( 64u, 64u, 64u, 64u, 64u, 64u, Ogre::Vector3( 2.0f ) );
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::createStressScene( void )
+    void ImageVoxelizerGameState::createStressScene()
     {
         createCornellScene();
 
@@ -345,7 +345,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::createScene01( void )
+    void ImageVoxelizerGameState::createScene01()
     {
         // We need this so the cache works fine. Actually we can avoid this if we saved
         // the meshes again (as v2). But oh well...
@@ -440,7 +440,7 @@ namespace Demo
         hlmsPbs->setVctLighting( mCascadedVoxelizer->getVctLighting( 0u ) );
     }
     //-----------------------------------------------------------------------------------
-    void ImageVoxelizerGameState::destroyScene( void )
+    void ImageVoxelizerGameState::destroyScene()
     {
         delete mCascadedVoxelizer;
         mCascadedVoxelizer = 0;

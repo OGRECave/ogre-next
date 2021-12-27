@@ -120,7 +120,7 @@ namespace v1 {
     {
     }
     //-----------------------------------------------------------------------------
-    size_t VertexElement::getSize(void) const
+    size_t VertexElement::getSize() const
     {
         return getTypeSize(mType);
     }
@@ -314,7 +314,7 @@ namespace v1 {
             "VertexElement::multiplyTypeCount");
     }
     //--------------------------------------------------------------------------
-    VertexElementType VertexElement::getBestColourVertexElementType(void)
+    VertexElementType VertexElement::getBestColourVertexElementType()
     {
         // Use the current render system to determine if possible
         if (Root::getSingletonPtr() && Root::getSingletonPtr()->getRenderSystem())
@@ -437,7 +437,7 @@ namespace v1 {
     {
     }
     //-----------------------------------------------------------------------------
-    void VertexDeclaration::vertexLayoutDirty(void)
+    void VertexDeclaration::vertexLayoutDirty()
     {
         if( !mInputLayoutDirty )
             mInputLayoutDirty = true;
@@ -456,7 +456,7 @@ namespace v1 {
         return mBaseInputLayoutId | (static_cast<uint16>( opType ) << 10u);
     }
     //-----------------------------------------------------------------------------
-    const VertexDeclaration::VertexElementList& VertexDeclaration::getElements(void) const
+    const VertexDeclaration::VertexElementList& VertexDeclaration::getElements() const
     {
         return mElementList;
     }
@@ -536,7 +536,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------
-    void VertexDeclaration::removeAllElements(void)
+    void VertexDeclaration::removeAllElements()
     {
         vertexLayoutDirty();
         mElementList.clear();
@@ -620,7 +620,7 @@ namespace v1 {
         return ret;
     }
     //-----------------------------------------------------------------------------------
-    bool VertexDeclaration::isSortedForV2(void) const
+    bool VertexDeclaration::isSortedForV2() const
     {
         bool retVal = true;
 
@@ -645,7 +645,7 @@ namespace v1 {
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    VertexElement2VecVec VertexDeclaration::convertToV2(void)
+    VertexElement2VecVec VertexDeclaration::convertToV2()
     {
         VertexElement2VecVec retVal;
         retVal.resize( getMaxSource() + 1 );
@@ -741,7 +741,7 @@ namespace v1 {
         }
         return false;
     }
-    void VertexDeclaration::sort(void)
+    void VertexDeclaration::sort()
     {
         vertexLayoutDirty();
         mElementList.sort(VertexDeclaration::vertexElementLess);
@@ -756,13 +756,13 @@ namespace v1 {
         else
             return e1.getOffset() < e2.getOffset();
     }
-    void VertexDeclaration::sortForV2(void)
+    void VertexDeclaration::sortForV2()
     {
         vertexLayoutDirty();
         mElementList.sort(VertexDeclaration::vertexElementLessForV2);
     }
     //-----------------------------------------------------------------------------
-    void VertexDeclaration::closeGapsInSource(void)
+    void VertexDeclaration::closeGapsInSource()
     {
         if (mElementList.empty())
             return;
@@ -877,7 +877,7 @@ namespace v1 {
         return newDecl;
     }
     //-----------------------------------------------------------------------------
-    unsigned short VertexDeclaration::getMaxSource(void) const
+    unsigned short VertexDeclaration::getMaxSource() const
     {
         VertexElementList::const_iterator i, iend;
         iend = mElementList.end();
@@ -937,14 +937,14 @@ namespace v1 {
         mBindingMap.erase(i);
     }
     //-----------------------------------------------------------------------------
-    void VertexBufferBinding::unsetAllBindings(void)
+    void VertexBufferBinding::unsetAllBindings()
     {
         mBindingMap.clear();
         mHighIndex = 0;
     }
     //-----------------------------------------------------------------------------
     const VertexBufferBinding::VertexBufferBindingMap& 
-    VertexBufferBinding::getBindings(void) const
+    VertexBufferBinding::getBindings() const
     {
         return mBindingMap;
     }
@@ -965,12 +965,12 @@ namespace v1 {
         return mBindingMap.find(index) != mBindingMap.end();
     }
     //-----------------------------------------------------------------------------
-    unsigned short VertexBufferBinding::getLastBoundIndex(void) const
+    unsigned short VertexBufferBinding::getLastBoundIndex() const
     {
         return mBindingMap.empty() ? 0 : mBindingMap.rbegin()->first + 1;
     }
     //-----------------------------------------------------------------------------
-    bool VertexBufferBinding::hasGaps(void) const
+    bool VertexBufferBinding::hasGaps() const
     {
         if (mBindingMap.empty())
             return false;

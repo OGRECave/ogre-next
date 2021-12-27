@@ -84,7 +84,7 @@ namespace Ogre {
         mParent = mCreator->getDummySceneNode();
     }
     //-----------------------------------------------------------------------
-    void TagPoint::_unsetParentBone(void)
+    void TagPoint::_unsetParentBone()
     {
         if( mParentBone )
         {
@@ -93,7 +93,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Matrix3 TagPoint::_getDerivedOrientationMatrix(void) const
+    Matrix3 TagPoint::_getDerivedOrientationMatrix() const
     {
 #if OGRE_DEBUG_MODE
         assert( !mCachedTransformOutOfDate );
@@ -103,7 +103,7 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void TagPoint::updateFromParentImpl(void)
+    void TagPoint::updateFromParentImpl()
     {
         assert( false && "Not implemented" );
         //I'm lazy, but before you implement it, remember that the skeleton needs to be updated as well.

@@ -130,7 +130,7 @@ namespace v1 {
         return retPtr;
     }
     
-    void GLES2HardwareUniformBuffer::unlockImpl(void)
+    void GLES2HardwareUniformBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_UNIFORM_BUFFER, mBufferId));
         

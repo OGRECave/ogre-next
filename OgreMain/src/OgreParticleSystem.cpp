@@ -71,7 +71,7 @@ namespace Ogre {
     public:
         ParticleSystemUpdateValue(ParticleSystem* target) : mTarget(target) {}
 
-        Real getValue(void) const { return 0; } // N/A
+        Real getValue() const { return 0; } // N/A
 
         void setValue(Real value) { mTarget->_update(value); }
 
@@ -163,7 +163,7 @@ namespace Ogre {
         return mEmitters[index];
     }
     //-----------------------------------------------------------------------
-    unsigned short ParticleSystem::getNumEmitters(void) const
+    unsigned short ParticleSystem::getNumEmitters() const
     {
         return static_cast< unsigned short >( mEmitters.size() );
     }
@@ -187,7 +187,7 @@ namespace Ogre {
         mEmitters.erase(ei);
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::removeAllEmitters(void)
+    void ParticleSystem::removeAllEmitters()
     {
         // DON'T delete directly, we don't know what heap these have been created on
         ParticleEmitterList::iterator ei;
@@ -212,7 +212,7 @@ namespace Ogre {
         return mAffectors[index];
     }
     //-----------------------------------------------------------------------
-    unsigned short ParticleSystem::getNumAffectors(void) const
+    unsigned short ParticleSystem::getNumAffectors() const
     {
         return static_cast< unsigned short >( mAffectors.size() );
     }
@@ -225,7 +225,7 @@ namespace Ogre {
         mAffectors.erase(ai);
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::removeAllAffectors(void)
+    void ParticleSystem::removeAllAffectors()
     {
         // DON'T delete directly, we don't know what heap these have been created on
         ParticleAffectorList::iterator ai;
@@ -281,12 +281,12 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    size_t ParticleSystem::getNumParticles(void) const
+    size_t ParticleSystem::getNumParticles() const
     {
         return mActiveParticles.size();
     }
     //-----------------------------------------------------------------------
-    size_t ParticleSystem::getParticleQuota(void) const
+    size_t ParticleSystem::getParticleQuota() const
     {
         return mPoolSize;
     }
@@ -304,7 +304,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    size_t ParticleSystem::getEmittedEmitterQuota(void) const
+    size_t ParticleSystem::getEmittedEmitterQuota() const
     {
         return mEmittedEmitterPoolSize;
     }
@@ -658,7 +658,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    ParticleIterator ParticleSystem::_getIterator(void)
+    ParticleIterator ParticleSystem::_getIterator()
     {
         return ParticleIterator(mActiveParticles.begin(), mActiveParticles.end());
     }
@@ -671,7 +671,7 @@ namespace Ogre {
         return *i;
     }
     //-----------------------------------------------------------------------
-    Particle* ParticleSystem::createParticle(void)
+    Particle* ParticleSystem::createParticle()
     {
         Particle* p = 0;
         if (!mFreeParticles.empty())
@@ -728,7 +728,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void ParticleSystem::initParameters(void)
+    void ParticleSystem::initParameters()
     {
         if (createParamDictionary("ParticleSystem"))
         {
@@ -869,12 +869,12 @@ namespace Ogre {
         return mIsEmitting;
     }
     //-----------------------------------------------------------------------
-    const String& ParticleSystem::getMovableType(void) const
+    const String& ParticleSystem::getMovableType() const
     {
         return ParticleSystemFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::_notifyParticleResized(void)
+    void ParticleSystem::_notifyParticleResized()
     {
         if (mRenderer)
         {
@@ -882,7 +882,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::_notifyParticleRotated(void)
+    void ParticleSystem::_notifyParticleRotated()
     {
         if (mRenderer)
         {
@@ -911,7 +911,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real ParticleSystem::getDefaultWidth(void) const
+    Real ParticleSystem::getDefaultWidth() const
     {
         return mDefaultWidth;
     }
@@ -926,7 +926,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real ParticleSystem::getDefaultHeight(void) const
+    Real ParticleSystem::getDefaultHeight() const
     {
         return mDefaultHeight;
     }
@@ -977,7 +977,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const String& ParticleSystem::getMaterialName(void) const
+    const String& ParticleSystem::getMaterialName() const
     {
         return mMaterialName;
     }
@@ -1020,7 +1020,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::configureRenderer(void)
+    void ParticleSystem::configureRenderer()
     {
         // Actual allocate particles
         size_t currSize = mParticlePool.size();
@@ -1067,12 +1067,12 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    ParticleSystemRenderer* ParticleSystem::getRenderer(void) const
+    ParticleSystemRenderer* ParticleSystem::getRenderer() const
     {
         return mRenderer;
     }
     //-----------------------------------------------------------------------
-    const String& ParticleSystem::getRendererName(void) const
+    const String& ParticleSystem::getRendererName() const
     {
         if (mRenderer)
         {
@@ -1084,7 +1084,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool ParticleSystem::getCullIndividually(void) const
+    bool ParticleSystem::getCullIndividually() const
     {
         return mCullIndividual;
     }
@@ -1197,7 +1197,7 @@ namespace Ogre {
         return - (sortPos - p->mPosition).squaredLength();
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::initialiseEmittedEmitters(void)
+    void ParticleSystem::initialiseEmittedEmitters()
     {
         // Initialise the pool if needed
         size_t currSize = 0;
@@ -1234,7 +1234,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void ParticleSystem::initialiseEmittedEmitterPool(void)
+    void ParticleSystem::initialiseEmittedEmitterPool()
     {
         if (mEmittedEmitterPoolInitialised)
             return;
@@ -1326,7 +1326,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::addFreeEmittedEmitters(void)
+    void ParticleSystem::addFreeEmittedEmitters()
     {
         // Don't proceed if the EmittedEmitterPool is empty
         if (mEmittedEmitterPool.empty())
@@ -1366,7 +1366,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::removeAllEmittedEmitters(void)
+    void ParticleSystem::removeAllEmittedEmitters()
     {
         EmittedEmitterPool::iterator emittedEmitterPoolIterator;
         EmittedEmitterList::iterator emittedEmitterListIterator;
@@ -1414,7 +1414,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::addActiveEmittedEmittersToFreeList (void)
+    void ParticleSystem::addActiveEmittedEmittersToFreeList ()
     {
         ActiveEmittedEmitterList::iterator itActiveEmit;
         for (itActiveEmit = mActiveEmittedEmitters.begin(); itActiveEmit != mActiveEmittedEmitters.end(); ++itActiveEmit)
@@ -1425,7 +1425,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ParticleSystem::_notifyReorganiseEmittedEmitterData (void)
+    void ParticleSystem::_notifyReorganiseEmittedEmitterData ()
     {
         removeAllEmittedEmitters();
         mEmittedEmitterPoolInitialised = false; // Don't rearrange immediately; it will be performed in the regular flow

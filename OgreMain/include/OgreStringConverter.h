@@ -293,7 +293,7 @@ namespace Ogre {
             msLocale = std::locale(msDefaultStringLocale.c_str());
         }
         //-----------------------------------------------------------------------
-        static String getDefaultStringLocale(void) { return msDefaultStringLocale; }
+        static String getDefaultStringLocale() { return msDefaultStringLocale; }
         //-----------------------------------------------------------------------
         static void setUseLocale(bool useLocale) { msUseLocale = useLocale; }
         //-----------------------------------------------------------------------

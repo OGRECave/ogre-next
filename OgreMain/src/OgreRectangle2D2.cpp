@@ -92,23 +92,23 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isQuad( void ) const { return ( mGeometryFlags & GeometryFlagQuad ) != 0u; }
+    bool Rectangle2D::isQuad() const { return ( mGeometryFlags & GeometryFlagQuad ) != 0u; }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isStereo( void ) const { return ( mGeometryFlags & GeometryFlagStereo ) != 0u; }
+    bool Rectangle2D::isStereo() const { return ( mGeometryFlags & GeometryFlagStereo ) != 0u; }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::hasNormals( void ) const { return ( mGeometryFlags & GeometryFlagNormals ) != 0u; }
+    bool Rectangle2D::hasNormals() const { return ( mGeometryFlags & GeometryFlagNormals ) != 0u; }
     //-----------------------------------------------------------------------------------
-    BufferType Rectangle2D::getBufferType( void ) const
+    BufferType Rectangle2D::getBufferType() const
     {
         return static_cast<BufferType>( ( mGeometryFlags & GeometryFlagReserved0 ) >> 3u );
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isHollowFullscreenRect( void ) const
+    bool Rectangle2D::isHollowFullscreenRect() const
     {
         return ( mGeometryFlags & GeometryFlagHollowFsRect ) != 0u;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Rectangle2D::calculateNumVertices( void ) const
+    uint32 Rectangle2D::calculateNumVertices() const
     {
         uint32 numVertices = isQuad() ? 4u : 3u;
         if( isHollowFullscreenRect() )
@@ -118,7 +118,7 @@ namespace Ogre
         return numVertices;
     }
     //-----------------------------------------------------------------------------------
-    void Rectangle2D::createBuffers( void )
+    void Rectangle2D::createBuffers()
     {
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
@@ -322,7 +322,7 @@ namespace Ogre
         mChanged = false;
     }
     //-----------------------------------------------------------------------------------
-    void Rectangle2D::update( void )
+    void Rectangle2D::update()
     {
         if( !mChanged )
             return;
@@ -363,12 +363,12 @@ namespace Ogre
         mChanged = false;
     }
     //-----------------------------------------------------------------------------------
-    const String &Rectangle2D::getMovableType( void ) const
+    const String &Rectangle2D::getMovableType() const
     {
         return Rectangle2DFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------------------
-    const LightList &Rectangle2D::getLights( void ) const
+    const LightList &Rectangle2D::getLights() const
     {
         return this->queryLights();  // Return the data from our MovableObject base class.
     }
@@ -393,7 +393,7 @@ namespace Ogre
                      "Rectangle2D::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::getCastsShadows( void ) const
+    bool Rectangle2D::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Rectangle2D do not implement getCastsShadows."
@@ -406,7 +406,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     String Rectangle2DFactory::FACTORY_TYPE_NAME = "Rectangle2Dv2";
     //-----------------------------------------------------------------------------------
-    const String &Rectangle2DFactory::getType( void ) const { return FACTORY_TYPE_NAME; }
+    const String &Rectangle2DFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------------
     MovableObject *Rectangle2DFactory::createInstanceImpl( IdType id,
                                                            ObjectMemoryManager *objectMemoryManager,

@@ -45,7 +45,7 @@ namespace Demo
 		memset(mSceneNode, 0, sizeof(mSceneNode));
 	}
 	//-----------------------------------------------------------------------------------
-	void DistortionGameState::createScene01(void)
+	void DistortionGameState::createScene01()
 	{
 		/*
 		Lets create a scene to look at.
@@ -377,7 +377,7 @@ namespace Demo
 
 	}
 	//-----------------------------------------------------------------------------------
-	void DistortionGameState::setTransparencyToMaterials(void)
+	void DistortionGameState::setTransparencyToMaterials()
 	{
 		Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 

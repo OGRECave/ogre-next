@@ -73,7 +73,7 @@ namespace v1
         return mAnimationName;
     }
     //---------------------------------------------------------------------
-    Real AnimationState::getTimePosition(void) const
+    Real AnimationState::getTimePosition() const
     {
         return mTimePos;
     }
@@ -115,7 +115,7 @@ namespace v1
         mLength = len;
     }
     //---------------------------------------------------------------------
-    Real AnimationState::getWeight(void) const
+    Real AnimationState::getWeight() const
     {
         return mWeight;
     }
@@ -133,12 +133,12 @@ namespace v1
         setTimePosition(mTimePos + offset);
     }
     //---------------------------------------------------------------------
-    bool AnimationState::hasEnded(void) const
+    bool AnimationState::hasEnded() const
     {
         return (mTimePos >= mLength && !mLoop);
     }
     //---------------------------------------------------------------------
-    bool AnimationState::getEnabled(void) const
+    bool AnimationState::getEnabled() const
     {
         return mEnabled;
     }
@@ -285,7 +285,7 @@ namespace v1
         }
     }
     //---------------------------------------------------------------------
-    void AnimationStateSet::removeAllAnimationStates(void)
+    void AnimationStateSet::removeAllAnimationStates()
     {
             OGRE_LOCK_AUTO_MUTEX;
 
@@ -341,7 +341,7 @@ namespace v1
         return mAnimationStates.find(name) != mAnimationStates.end();
     }
     //---------------------------------------------------------------------
-    AnimationStateIterator AnimationStateSet::getAnimationStateIterator(void)
+    AnimationStateIterator AnimationStateSet::getAnimationStateIterator()
     {
             OGRE_LOCK_AUTO_MUTEX;
         // returned iterator not threadsafe, noted in header
@@ -349,7 +349,7 @@ namespace v1
             mAnimationStates.begin(), mAnimationStates.end());
     }
     //---------------------------------------------------------------------
-    ConstAnimationStateIterator AnimationStateSet::getAnimationStateIterator(void) const
+    ConstAnimationStateIterator AnimationStateSet::getAnimationStateIterator() const
     {
             OGRE_LOCK_AUTO_MUTEX;
         // returned iterator not threadsafe, noted in header
@@ -394,7 +394,7 @@ namespace v1
         target->mDirtyFrameNumber = mDirtyFrameNumber;
     }
     //---------------------------------------------------------------------
-    void AnimationStateSet::_notifyDirty(void)
+    void AnimationStateSet::_notifyDirty()
     {
         OGRE_LOCK_AUTO_MUTEX;
         ++mDirtyFrameNumber;
@@ -416,7 +416,7 @@ namespace v1
         _notifyDirty();
     }
     //---------------------------------------------------------------------
-    ConstEnabledAnimationStateIterator AnimationStateSet::getEnabledAnimationStateIterator(void) const
+    ConstEnabledAnimationStateIterator AnimationStateSet::getEnabledAnimationStateIterator() const
     {
         OGRE_LOCK_AUTO_MUTEX;
         // returned iterator not threadsafe, noted in header
@@ -425,7 +425,7 @@ namespace v1
     }
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    Real AnimationStateControllerValue::getValue(void) const
+    Real AnimationStateControllerValue::getValue() const
     {
         return mTargetAnimationState->getTimePosition() / mTargetAnimationState->getLength();
     }

@@ -69,7 +69,7 @@ namespace Demo
         memset( mAreaLights, 0, sizeof( mAreaLights ) );
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TextureBakingGameState::createAreaPlaneMesh(void)
+    void Tutorial_TextureBakingGameState::createAreaPlaneMesh()
     {
         Ogre::v1::MeshPtr lightPlaneMeshV1 =
                 Ogre::v1::MeshManager::getSingleton().createPlane( "LightPlane v1",
@@ -212,7 +212,7 @@ namespace Demo
         textureMgr->waitForStreamingCompletion();
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TextureBakingGameState::createBakingTexture(void)
+    void Tutorial_TextureBakingGameState::createBakingTexture()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -257,7 +257,7 @@ namespace Demo
                                                                   "ShowBakingTextureWorkspace", false );
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TextureBakingGameState::updateBakingTexture(void)
+    void Tutorial_TextureBakingGameState::updateBakingTexture()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -301,7 +301,7 @@ namespace Demo
         sceneManager->setAmbientLight( upperHemi, lowerHemi, hemiDir, envmapScale, envFeatures );
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TextureBakingGameState::createScene01(void)
+    void Tutorial_TextureBakingGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -397,7 +397,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TextureBakingGameState::destroyScene(void)
+    void Tutorial_TextureBakingGameState::destroyScene()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -423,7 +423,7 @@ namespace Demo
         TutorialGameState::update( timeSinceLast );
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TextureBakingGameState::updateRenderingMode(void)
+    void Tutorial_TextureBakingGameState::updateRenderingMode()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

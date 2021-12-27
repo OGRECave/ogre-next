@@ -135,9 +135,9 @@ namespace Ogre
 
         void setStart( size_t newStart )            { mStart = std::min( newStart, mOriginal->size() ); }
         void setEnd( size_t newEnd )                { mEnd = std::min( newEnd, mOriginal->size() ); }
-        size_t getStart(void) const                 { return mStart; }
-        size_t getEnd(void) const                   { return mEnd; }
-        size_t getSize(void) const                  { return mEnd - mStart; }
+        size_t getStart() const                 { return mStart; }
+        size_t getEnd() const                   { return mEnd; }
+        size_t getSize() const                  { return mEnd - mStart; }
         String::const_iterator begin() const        { return mOriginal->begin() + mStart; }
         String::const_iterator end() const          { return mOriginal->begin() + mEnd; }
         const String& getOriginalBuffer() const     { return *mOriginal; }

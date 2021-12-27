@@ -90,7 +90,7 @@ namespace Ogre {
         return *this;
     }
 
-    const String& Exception::getFullDescription(void) const
+    const String& Exception::getFullDescription() const
     {
         if (fullDesc.empty())
         {
@@ -112,7 +112,7 @@ namespace Ogre {
         return fullDesc;
     }
 
-    int Exception::getNumber(void) const throw()
+    int Exception::getNumber() const throw()
     {
         return number;
     }

@@ -44,11 +44,11 @@ namespace Ogre {
     v1::BillboardParticleRendererFactory* mBillboardRendererFactory = 0;
     //-----------------------------------------------------------------------
     template<> ParticleSystemManager* Singleton<ParticleSystemManager>::msSingleton = 0;
-    ParticleSystemManager* ParticleSystemManager::getSingletonPtr(void)
+    ParticleSystemManager* ParticleSystemManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    ParticleSystemManager& ParticleSystemManager::getSingleton(void)
+    ParticleSystemManager& ParticleSystemManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -89,12 +89,12 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    const StringVector& ParticleSystemManager::getScriptPatterns(void) const
+    const StringVector& ParticleSystemManager::getScriptPatterns() const
     {
         return mScriptPatterns;
     }
     //-----------------------------------------------------------------------
-    Real ParticleSystemManager::getLoadingOrder(void) const
+    Real ParticleSystemManager::getLoadingOrder() const
     {
         /// Load late
         return 1000.0f;
@@ -369,7 +369,7 @@ namespace Ogre {
         pFact->second->destroyInstance(renderer);
     }
     //-----------------------------------------------------------------------
-    void ParticleSystemManager::_initialise(void)
+    void ParticleSystemManager::_initialise()
     {
         OGRE_LOCK_AUTO_MUTEX;
         // Create Billboard renderer factory
@@ -513,21 +513,21 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     ParticleSystemManager::ParticleAffectorFactoryIterator 
-    ParticleSystemManager::getAffectorFactoryIterator(void)
+    ParticleSystemManager::getAffectorFactoryIterator()
     {
         return ParticleAffectorFactoryIterator(
             mAffectorFactories.begin(), mAffectorFactories.end());
     }
     //-----------------------------------------------------------------------
     ParticleSystemManager::ParticleEmitterFactoryIterator 
-    ParticleSystemManager::getEmitterFactoryIterator(void)
+    ParticleSystemManager::getEmitterFactoryIterator()
     {
         return ParticleEmitterFactoryIterator(
             mEmitterFactories.begin(), mEmitterFactories.end());
     }
     //-----------------------------------------------------------------------
     ParticleSystemManager::ParticleRendererFactoryIterator 
-    ParticleSystemManager::getRendererFactoryIterator(void)
+    ParticleSystemManager::getRendererFactoryIterator()
     {
         return ParticleRendererFactoryIterator(
             mRendererFactories.begin(), mRendererFactories.end());
@@ -576,7 +576,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    const String& ParticleSystemFactory::getType(void) const
+    const String& ParticleSystemFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

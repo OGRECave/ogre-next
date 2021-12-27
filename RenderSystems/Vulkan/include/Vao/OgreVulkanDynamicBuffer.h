@@ -90,8 +90,8 @@ namespace Ogre
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
 
-        bool isCoherentMemory( void ) const { return mCoherentMemory; }
-        VkDeviceMemory getDeviceMemory( void ) { return mDeviceMemory; }
+        bool isCoherentMemory() const { return mCoherentMemory; }
+        VkDeviceMemory getDeviceMemory() { return mDeviceMemory; }
     };
 }  // namespace Ogre
 

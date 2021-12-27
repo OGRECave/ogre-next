@@ -33,19 +33,19 @@ namespace Ogre
 namespace v1
 {
     //-----------------------------------------------------------------------
-    const String& PanelOverlayElementFactory::getTypeName(void) const
+    const String& PanelOverlayElementFactory::getTypeName() const
     {
         static String name = "Panel";
         return name;
     }
     //-----------------------------------------------------------------------
-    const String& BorderPanelOverlayElementFactory::getTypeName(void) const
+    const String& BorderPanelOverlayElementFactory::getTypeName() const
     {
         static String name = "BorderPanel";
         return name;
     }
     //-----------------------------------------------------------------------
-    const String& TextAreaOverlayElementFactory::getTypeName(void) const
+    const String& TextAreaOverlayElementFactory::getTypeName() const
     {
         static String name = "TextArea";
         return name;

@@ -45,9 +45,9 @@ namespace v1
         VulkanHardwareBufferManagerBase( VulkanDevice *device, VaoManager *vaoManager );
         virtual ~VulkanHardwareBufferManagerBase();
 
-        void _notifyDeviceStalled( void );
+        void _notifyDeviceStalled();
 
-        VulkanDiscardBufferManager *_getDiscardBufferManager( void ) { return mDiscardBufferManager; }
+        VulkanDiscardBufferManager *_getDiscardBufferManager() { return mDiscardBufferManager; }
 
 
         virtual HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
@@ -73,7 +73,7 @@ namespace v1
             OGRE_DELETE mImpl;
         }
 
-        void _notifyDeviceStalled( void )
+        void _notifyDeviceStalled()
         {
             static_cast<VulkanHardwareBufferManagerBase *>( mImpl )->_notifyDeviceStalled();
         }

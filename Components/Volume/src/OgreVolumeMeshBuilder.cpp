@@ -59,7 +59,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    MeshBuilder::MeshBuilder(void) : mBoxInit(false)
+    MeshBuilder::MeshBuilder() : mBoxInit(false)
     {
     }
     
@@ -161,7 +161,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    AxisAlignedBox MeshBuilder::getBoundingBox(void)
+    AxisAlignedBox MeshBuilder::getBoundingBox()
     {
         return mBox;
     }

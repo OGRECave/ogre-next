@@ -49,11 +49,11 @@ namespace Ogre
         bool            mIsArray2DTexture;
 
         virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl(void);
+        virtual void unmapImpl();
 
-        virtual bool canMapMoreThanOneSlice(void) const;
+        virtual bool canMapMoreThanOneSlice() const;
 
-        void waitForDownloadToFinish(void);
+        void waitForDownloadToFinish();
 
         virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
                                       bool accurateTracking, TextureBox *srcBox=0 );
@@ -65,7 +65,7 @@ namespace Ogre
                                  D3D11VaoManager *vaoManager );
         virtual ~D3D11AsyncTextureTicket();
 
-        virtual bool queryIsTransferDone(void);
+        virtual bool queryIsTransferDone();
     };
 }
 

@@ -76,7 +76,7 @@ namespace Ogre
         PbsMobileShaderCreationData *mShaderCreationData;
 
 
-        void bakeVariableParameters(void);
+        void bakeVariableParameters();
         void setTexture( const String &name, HlmsTextureManager::TextureMapType textureMapType,
                          PbsMobileTextureTypes textureType );
 
@@ -172,15 +172,15 @@ namespace Ogre
 
         /// Sets the diffuse colour. The colour will be divided by PI for energy conservation.
         void setDiffuse( const Vector3 &diffuseColour );
-        Vector3 getDiffuse(void) const;
+        Vector3 getDiffuse() const;
 
         /// Sets the specular colour.
         void setSpecular( const Vector3 &specularColour );
-        Vector3 getSpecular(void) const;
+        Vector3 getSpecular() const;
 
         /// Sets the roughness
         void setRoughness( float roughness );
-        float getRoughness(void) const;
+        float getRoughness() const;
 
         /** Calculates fresnel (F0 in most books) based on the IOR.
             The formula used is ( (1 - idx) / 1 + idx )²
@@ -213,10 +213,10 @@ namespace Ogre
         /// the Y and Z components still correspond to mFresnelG & mFresnelB just
         /// in case you want to preserve this data (i.e. toggling separate fresnel
         /// often (which is not a good idea though, in terms of performance)
-        Vector3 getFresnel(void) const;
+        Vector3 getFresnel() const;
 
         /// Whether the same fresnel term is used for RGB, or individual ones for each channel
-        bool hasSeparateFresnel(void) const;
+        bool hasSeparateFresnel() const;
 
         /** Sets a new texture for rendering
         @param UvAtlasParams
@@ -290,7 +290,7 @@ namespace Ogre
         void setNormalMapWeight( Real weight );
 
         /// Returns the detail normal maps' weight
-        Real getNormalMapWeight(void) const;
+        Real getNormalMapWeight() const;
 
         /** Sets the weight of detail map. Affects both diffuse and
             normal at the same time.

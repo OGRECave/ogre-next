@@ -188,7 +188,7 @@ namespace Ogre
         @return
             VkPipelineLayout handle for building the PSO.
         */
-        VkPipelineLayout createVulkanHandles( void );
+        VkPipelineLayout createVulkanHandles();
 
         /** Takes an emulated D3D11/Metal-style table and binds it according to this layout's rules
 

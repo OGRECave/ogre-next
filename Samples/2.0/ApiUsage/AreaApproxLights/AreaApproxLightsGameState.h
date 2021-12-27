@@ -22,8 +22,8 @@ namespace Demo
 
         Ogre::TextureGpu    *mAreaMaskTex;
 
-        void createAreaMask(void);
-        void createAreaPlaneMesh(void);
+        void createAreaMask();
+        void createAreaPlaneMesh();
         Ogre::HlmsUnlitDatablock* createPlaneForAreaLight( Ogre::Light *light );
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
@@ -31,8 +31,8 @@ namespace Demo
     public:
         AreaApproxLightsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

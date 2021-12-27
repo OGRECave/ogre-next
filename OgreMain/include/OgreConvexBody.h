@@ -108,11 +108,11 @@ namespace Ogre
 
         /** Resets the object.
         */
-        void reset( void );
+        void reset();
 
         /** Returns the current number of polygons.
         */
-        size_t getPolygonCount( void ) const;
+        size_t getPolygonCount() const;
 
         /** Returns the number of vertices for a polygon
         */
@@ -132,16 +132,16 @@ namespace Ogre
 
         /** Returns an AABB representation.
         */
-        AxisAlignedBox getAABB( void ) const;
+        AxisAlignedBox getAABB() const;
 
         /** Checks if the body has a closed hull.
         */
-        bool hasClosedHull( void ) const;
+        bool hasClosedHull() const;
 
         /** Merges all neighboring polygons into one single polygon if they are
             lay in the same plane.
         */
-        void mergePolygons( void );
+        void mergePolygons();
 
         /** Determines if the current object is equal to the compared one.
         */

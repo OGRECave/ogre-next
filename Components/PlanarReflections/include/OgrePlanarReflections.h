@@ -140,7 +140,7 @@ namespace Ogre
 
         PlanarReflectionActor   mDummyActor;
 
-        void updateFlushedRenderables(void);
+        void updateFlushedRenderables();
 
     public:
         /**
@@ -208,7 +208,7 @@ namespace Ogre
         */
         PlanarReflectionActor* addActor( const PlanarReflectionActor &actor );
         void destroyActor( PlanarReflectionActor *actor );
-        void destroyAllActors(void);
+        void destroyAllActors();
 
         /** Reserves a particular slot (i.e. texture) to be used only with a specifc actor.
             A slot can only be reserved by one actor at a time.
@@ -244,13 +244,13 @@ namespace Ogre
         void removeRenderable( Renderable *renderable );
         void _notifyRenderableFlushedHlmsDatablock( Renderable *renderable );
 
-        void beginFrame(void);
+        void beginFrame();
         void update( Camera *camera, Real aspectRatio );
 
-        uint8 getMaxActiveActors(void) const            { return mMaxActiveActors; }
+        uint8 getMaxActiveActors() const            { return mMaxActiveActors; }
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
-        size_t getConstBufferSize(void) const;
+        size_t getConstBufferSize() const;
 
         /** Fills 'passBufferPtr' with the necessary data for PlanarReflections.
             @see getConstBufferSize
@@ -266,7 +266,7 @@ namespace Ogre
         /// match with the reflection we have in cache.
         bool cameraMatches( const Camera *camera );
 
-        bool _isUpdatingRenderablesHlms(void) const;
+        bool _isUpdatingRenderablesHlms() const;
 
         bool hasPlanarReflections( const Renderable *renderable ) const;
         bool hasFlushPending( const Renderable *renderable ) const;

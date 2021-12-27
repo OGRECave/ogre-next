@@ -79,7 +79,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     IrradianceFieldRaster::~IrradianceFieldRaster() { destroyWorkspace(); }
     //-------------------------------------------------------------------------
-    void IrradianceFieldRaster::createWorkspace( void )
+    void IrradianceFieldRaster::createWorkspace()
     {
         destroyWorkspace();
 
@@ -163,7 +163,7 @@ namespace Ogre
         mNumProbesParam = mShaderParamsConvertToIfd->findParameter( "numProbes" );
     }
     //-------------------------------------------------------------------------
-    void IrradianceFieldRaster::destroyWorkspace( void )
+    void IrradianceFieldRaster::destroyWorkspace()
     {
         if( !mRenderWorkspace )
             return;

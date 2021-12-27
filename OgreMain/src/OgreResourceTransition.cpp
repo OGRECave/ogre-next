@@ -55,7 +55,7 @@ namespace Ogre
 
     GpuTrackedResource::~GpuTrackedResource() {}
     //-------------------------------------------------------------------------
-    const ResourceStatusMap &BarrierSolver::getResourceStatus( void ) { return mResourceStatus; }
+    const ResourceStatusMap &BarrierSolver::getResourceStatus() { return mResourceStatus; }
     //-------------------------------------------------------------------------
     void BarrierSolver::reset() { mResourceStatus.clear(); }
     //-------------------------------------------------------------------------

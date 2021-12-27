@@ -92,9 +92,9 @@ namespace Ogre {
         /** Sets the maximum rotation speed of particles to be emitted. */
         void setRotationSpeedRangeEnd(const Radian& angle);
         /** Gets the minimum rotation speed of particles to be emitted. */
-        const Radian& getRotationSpeedRangeStart(void) const;
+        const Radian& getRotationSpeedRangeStart() const;
         /** Gets the maximum rotation speed of particles to be emitted. */
-        const Radian& getRotationSpeedRangeEnd(void) const;
+        const Radian& getRotationSpeedRangeEnd() const;
 
         
         /** Sets the minimum rotation angle of particles to be emitted. */
@@ -102,9 +102,9 @@ namespace Ogre {
         /** Sets the maximum rotation angle of particles to be emitted. */
         void setRotationRangeEnd(const Radian& angle);
         /** Gets the minimum rotation of particles to be emitted. */
-        const Radian& getRotationRangeStart(void) const;
+        const Radian& getRotationRangeStart() const;
         /** Gets the maximum rotation of particles to be emitted. */
-        const Radian& getRotationRangeEnd(void) const;
+        const Radian& getRotationRangeEnd() const;
 
         static CmdRotationSpeedRangeStart   msRotationSpeedRangeStartCmd;
         static CmdRotationSpeedRangeEnd     msRotationSpeedRangeEndCmd;

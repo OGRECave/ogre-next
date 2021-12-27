@@ -126,7 +126,7 @@ namespace Ogre {
             const String& syntaxCode);
 
         /** Returns the syntaxes that this manager supports. */
-        virtual const SyntaxCodes& getSupportedSyntax(void) const;
+        virtual const SyntaxCodes& getSupportedSyntax() const;
          
 
         /** Returns whether a given syntax code (e.g. "ps_1_3", "fp20", "arbvp1") is supported. */
@@ -137,7 +137,7 @@ namespace Ogre {
         @remarks
             Program parameters can be shared between multiple programs if you wish.
         */
-        virtual GpuProgramParametersSharedPtr createParameters(void);
+        virtual GpuProgramParametersSharedPtr createParameters();
         
         /** Create a new, unloaded GpuProgram from a file of assembly. 
         @remarks    
@@ -223,7 +223,7 @@ namespace Ogre {
 
         /** Returns true if the microcodecache changed during the run.
         */
-        bool isCacheDirty(void) const;
+        bool isCacheDirty() const;
 
         bool canGetCompiledShaderBuffer();
         /** Check if a microcode is available for a program in the microcode cache.
@@ -260,7 +260,7 @@ namespace Ogre {
         virtual void loadMicrocodeCache( DataStreamPtr stream );
 
         /// Deletes all microcodes. Useful when hot reloading.
-        virtual void clearMicrocodeCache(void);
+        virtual void clearMicrocodeCache();
         
 
 
@@ -279,7 +279,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static GpuProgramManager& getSingleton(void);
+        static GpuProgramManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -295,7 +295,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static GpuProgramManager* getSingletonPtr(void);
+        static GpuProgramManager* getSingletonPtr();
     
 
 

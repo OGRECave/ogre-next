@@ -37,9 +37,9 @@ namespace Ogre {
     //-----------------------------------------------------------------------
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreParticleFXExport dllStartPlugin( void ) noexcept( false )
+    extern "C" void _OgreParticleFXExport dllStartPlugin() noexcept( false )
 #    else
-    extern "C" void _OgreParticleFXExport dllStartPlugin( void ) throw( Exception )
+    extern "C" void _OgreParticleFXExport dllStartPlugin() throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW ParticleFXPlugin();
@@ -47,7 +47,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    extern "C" void _OgreParticleFXExport dllStopPlugin(void)
+    extern "C" void _OgreParticleFXExport dllStopPlugin()
     {
         Root::getSingleton().uninstallPlugin(plugin);
         OGRE_DELETE plugin;

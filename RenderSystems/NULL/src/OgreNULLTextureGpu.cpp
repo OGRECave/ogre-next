@@ -46,11 +46,11 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::createInternalResourcesImpl(void)
+    void NULLTextureGpu::createInternalResourcesImpl()
     {
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::destroyInternalResourcesImpl(void)
+    void NULLTextureGpu::destroyInternalResourcesImpl()
     {
     }
     //-----------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace Ogre
             locations.push_back( Vector2( 0, 0 ) );
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::notifyDataIsReady(void)
+    void NULLTextureGpu::notifyDataIsReady()
     {
         OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
                          "Calling notifyDataIsReady too often! Remove this call"
@@ -74,11 +74,11 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void NULLTextureGpu::_setToDisplayDummyTexture(void)
+    void NULLTextureGpu::_setToDisplayDummyTexture()
     {
     }
     //-----------------------------------------------------------------------------------
-    bool NULLTextureGpu::_isDataReadyImpl(void) const
+    bool NULLTextureGpu::_isDataReadyImpl() const
     {
         return true && mDataPreparationsPending == 0u;
     }
@@ -107,17 +107,17 @@ namespace Ogre
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 NULLTextureGpuRenderTarget::getDepthBufferPoolId(void) const
+    uint16 NULLTextureGpuRenderTarget::getDepthBufferPoolId() const
     {
         return mDepthBufferPoolId;
     }
     //-----------------------------------------------------------------------------------
-    bool NULLTextureGpuRenderTarget::getPreferDepthTexture(void) const
+    bool NULLTextureGpuRenderTarget::getPreferDepthTexture() const
     {
         return mPreferDepthTexture;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu NULLTextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    PixelFormatGpu NULLTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }

@@ -42,7 +42,7 @@ namespace Ogre
             uint32 numerator;
             uint32 denominator;
 
-            double toFreq( void ) const
+            double toFreq() const
             {
                 if( !denominator )
                     return 0;
@@ -68,7 +68,7 @@ namespace Ogre
         typedef map<Resolution, FastArray<Frequency> >::type VideoModesMap;
         VideoModesMap mVideoModes;
 
-        void refreshConfig( void );
+        void refreshConfig();
 
     public:
         VulkanAndroidSupport();

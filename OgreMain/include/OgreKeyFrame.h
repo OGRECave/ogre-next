@@ -65,7 +65,7 @@ namespace v1
         virtual ~KeyFrame() {}
 
         /** Gets the time of this keyframe in the animation sequence. */
-        Real getTime(void) const { return mTime; }
+        Real getTime() const { return mTime; }
 
         /** Clone a keyframe (internal use only) */
         virtual KeyFrame* _clone(AnimationTrack* newParent) const;
@@ -87,7 +87,7 @@ namespace v1
         ~NumericKeyFrame() {}
 
         /** Get the value at this keyframe. */
-        virtual const AnyNumeric& getValue(void) const;
+        virtual const AnyNumeric& getValue() const;
         /** Set the value at this keyframe.
         @remarks
             All keyframe values must have a consistent type. 
@@ -117,7 +117,7 @@ namespace v1
         virtual void setTranslate(const Vector3& trans);
 
         /** Gets the translation applied by this keyframe. */
-        const Vector3& getTranslate(void) const;
+        const Vector3& getTranslate() const;
 
         /** Sets the scaling factor applied by this keyframe to the animable
         object at it's time index.
@@ -127,7 +127,7 @@ namespace v1
         virtual void setScale(const Vector3& scale);
 
         /** Gets the scaling factor applied by this keyframe. */
-        virtual const Vector3& getScale(void) const;
+        virtual const Vector3& getScale() const;
 
         /** Sets the rotation applied by this keyframe.
         @param rot The rotation applied; use Quaternion methods to convert from angle/axis or Matrix3 if
@@ -136,7 +136,7 @@ namespace v1
         virtual void setRotation(const Quaternion& rot);
 
         /** Gets the rotation applied by this keyframe. */
-        virtual const Quaternion& getRotation(void) const;
+        virtual const Quaternion& getRotation() const;
 
         /** Clone a keyframe (internal use only) */
         KeyFrame* _clone(AnimationTrack* newParent) const;
@@ -169,7 +169,7 @@ namespace v1
         void setVertexBuffer(const HardwareVertexBufferSharedPtr& buf);
 
         /** Gets the vertex buffer containing positions for this keyframe. */
-        const HardwareVertexBufferSharedPtr& getVertexBuffer(void) const;
+        const HardwareVertexBufferSharedPtr& getVertexBuffer() const;
 
         /** Clone a keyframe (internal use only) */
         KeyFrame* _clone(AnimationTrack* newParent) const;      
@@ -226,20 +226,20 @@ namespace v1
         */
         void removePoseReference(ushort poseIndex);
         /** Remove all pose references. */
-        void removeAllPoseReferences(void);
+        void removeAllPoseReferences();
 
 
         /** Get a const reference to the list of pose references. */
-        const PoseRefList& getPoseReferences(void) const;
+        const PoseRefList& getPoseReferences() const;
 
         typedef VectorIterator<PoseRefList> PoseRefIterator;
         typedef ConstVectorIterator<PoseRefList> ConstPoseRefIterator;
 
         /** Get an iterator over the pose references. */
-        PoseRefIterator getPoseReferenceIterator(void);
+        PoseRefIterator getPoseReferenceIterator();
 
         /** Get a const iterator over the pose references. */
-        ConstPoseRefIterator getPoseReferenceIterator(void) const;
+        ConstPoseRefIterator getPoseReferenceIterator() const;
 
         /** Clone a keyframe (internal use only) */
         KeyFrame* _clone(AnimationTrack* newParent) const;

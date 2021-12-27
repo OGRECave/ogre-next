@@ -46,9 +46,9 @@ namespace Ogre
 
     public:
         MetalProgramFactory( MetalDevice *device );
-        virtual ~MetalProgramFactory(void);
+        virtual ~MetalProgramFactory();
         /// Get the name of the language this factory creates programs for
-        const String& getLanguage(void) const;
+        const String& getLanguage() const;
         /// Create an instance of MetalProgram
         HighLevelGpuProgram* create(ResourceManager* creator, 
             const String& name, ResourceHandle handle,

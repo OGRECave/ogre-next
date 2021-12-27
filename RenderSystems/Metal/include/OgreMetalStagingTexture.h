@@ -45,14 +45,14 @@ namespace Ogre
         MetalDevice     *mDevice;
 
         virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);
+        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
 
     public:
         MetalStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
                              size_t sizeBytes, MetalDevice *device );
         virtual ~MetalStagingTexture();
 
-        virtual void stopMapRegion(void);
+        virtual void stopMapRegion();
 
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                              uint8 mipLevel, const TextureBox *cpuSrcBox=0,

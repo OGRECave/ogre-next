@@ -156,17 +156,17 @@ namespace Ogre {
         /** Returns the X orthonormal axis defining the quaternion. Same as doing
             xAxis = Vector3::UNIT_X * this. Also called the local X-axis
         */
-        Vector3 xAxis(void) const;
+        Vector3 xAxis() const;
 
         /** Returns the Y orthonormal axis defining the quaternion. Same as doing
             yAxis = Vector3::UNIT_Y * this. Also called the local Y-axis
         */
-        Vector3 yAxis(void) const;
+        Vector3 yAxis() const;
 
         /** Returns the Z orthonormal axis defining the quaternion. Same as doing
             zAxis = Vector3::UNIT_Z * this. Also called the local Z-axis
         */
-        Vector3 zAxis(void) const;
+        Vector3 zAxis() const;
 
         Quaternion operator+ (const Quaternion& rkQ) const;
         Quaternion operator- (const Quaternion& rkQ) const;
@@ -192,7 +192,7 @@ namespace Ogre {
         */
         Real Norm () const;
         /// Normalises this quaternion, and returns the previous length
-        Real normalise(void); 
+        Real normalise(); 
         Quaternion Inverse () const;  /// Apply to non-zero quaternion
         Quaternion UnitInverse () const;  /// Apply to unit-length quaternion
         Quaternion Exp () const;

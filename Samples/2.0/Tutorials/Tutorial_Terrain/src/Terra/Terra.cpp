@@ -146,7 +146,7 @@ namespace Ogre
         return value;
     }
     //-----------------------------------------------------------------------------------
-    void Terra::destroyHeightmapTexture(void)
+    void Terra::destroyHeightmapTexture()
     {
         if( m_heightMapTex )
         {
@@ -280,7 +280,7 @@ namespace Ogre
         calculateOptimumSkirtSize();
     }
     //-----------------------------------------------------------------------------------
-    void Terra::createNormalTexture(void)
+    void Terra::createNormalTexture()
     {
         destroyNormalTexture();
 
@@ -352,7 +352,7 @@ namespace Ogre
         TerraSharedResources::destroyTempTexture( m_sharedResources, tmpRtt );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::destroyNormalTexture(void)
+    void Terra::destroyNormalTexture()
     {
         if( m_normalMapTex )
         {
@@ -363,7 +363,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Terra::calculateOptimumSkirtSize(void)
+    void Terra::calculateOptimumSkirtSize()
     {
         m_skirtSize = std::numeric_limits<float>::max();
 
@@ -484,7 +484,7 @@ namespace Ogre
         m_collectedCells[0].push_back( cell );
     }
     //-----------------------------------------------------------------------------------
-    void Terra::optimizeCellsAndAdd(void)
+    void Terra::optimizeCellsAndAdd()
     {
         //Keep iterating until m_collectedCells[0] stops shrinking
         size_t numCollectedCells = std::numeric_limits<size_t>::max();
@@ -813,26 +813,26 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    Ogre::TextureGpu* Terra::_getShadowMapTex(void) const
+    Ogre::TextureGpu* Terra::_getShadowMapTex() const
     {
         return m_shadowMapper->getShadowMapTex();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 Terra::getTerrainOrigin( void ) const { return fromYUpSignPreserving( m_terrainOrigin ); }
+    Vector3 Terra::getTerrainOrigin() const { return fromYUpSignPreserving( m_terrainOrigin ); }
     //-----------------------------------------------------------------------------------
-    Vector2 Terra::getTerrainXZCenter(void) const
+    Vector2 Terra::getTerrainXZCenter() const
     {
         return Vector2( m_terrainOrigin.x + m_xzDimensions.x * 0.5f,
                         m_terrainOrigin.z + m_xzDimensions.y * 0.5f );
     }
     //-----------------------------------------------------------------------------------
-    const String& Terra::getMovableType(void) const
+    const String& Terra::getMovableType() const
     {
         static const String movType = "Terra";
         return movType;
     }
     //-----------------------------------------------------------------------------------
-    void Terra::_swapSavedState( void )
+    void Terra::_swapSavedState()
     {
         m_terrainCells[0].swap( m_terrainCells[1] );
         m_savedState.m_renderables.swap( mRenderables );

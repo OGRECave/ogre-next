@@ -37,7 +37,7 @@ namespace Ogre {
     Codec::~Codec() {
     }
 
-    StringVector Codec::getExtensions(void)
+    StringVector Codec::getExtensions()
     {
         StringVector result;
         result.reserve(msMapCodecs.size());

@@ -157,7 +157,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Renderable::_setNullDatablock(void)
+    void Renderable::_setNullDatablock()
     {
         if( mHlmsDatablock )
             mHlmsDatablock->_unlinkRenderable( this );
@@ -215,12 +215,12 @@ namespace Ogre
         mLodMaterial = material->_getLodValues();
     }
     //-----------------------------------------------------------------------------------
-    MaterialPtr Renderable::getMaterial(void) const
+    MaterialPtr Renderable::getMaterial() const
     {
         return mMaterial;
     }
     //-----------------------------------------------------------------------------------
-    unsigned short Renderable::getNumPoses(void) const
+    unsigned short Renderable::getNumPoses() const
     {
         return mPoseData ? mPoseData->numPoses : 0;
     }
@@ -235,7 +235,7 @@ namespace Ogre
       return mPoseData ? mPoseData->hasNormals : false;
     }
     //-----------------------------------------------------------------------------------
-    float* Renderable::getPoseWeights(void) const
+    float* Renderable::getPoseWeights() const
     { 
         return mPoseData ? mPoseData->weights : 0;
     }
@@ -266,7 +266,7 @@ namespace Ogre
         mPoseData->weights[index] += w;
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked *Renderable::getPoseTexBuffer( void ) const
+    TexBufferPacked *Renderable::getPoseTexBuffer() const
     {
         return mPoseData ? mPoseData->buffer : 0;
     }

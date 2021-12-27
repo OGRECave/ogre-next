@@ -164,12 +164,12 @@ namespace Ogre {
         /** Initialise the background queue system. 
         @note Called automatically by Root::initialise.
         */
-        virtual void initialise(void);
+        virtual void initialise();
 
         /** Shut down the background queue system. 
         @note Called automatically by Root::shutdown.
         */
-        virtual void shutdown(void);
+        virtual void shutdown();
 
         /** Initialise a resource group in the background.
         @see ResourceGroupManager::initialiseResourceGroup
@@ -331,7 +331,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ResourceBackgroundQueue& getSingleton(void);
+        static ResourceBackgroundQueue& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -347,7 +347,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ResourceBackgroundQueue* getSingletonPtr(void);
+        static ResourceBackgroundQueue* getSingletonPtr();
 
     };
 

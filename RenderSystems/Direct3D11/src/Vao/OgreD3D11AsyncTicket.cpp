@@ -54,7 +54,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    const void* D3D11AsyncTicket::mapImpl(void)
+    const void* D3D11AsyncTicket::mapImpl()
     {
         if( mFenceName )
             *mFenceName.GetAddressOf() = D3D11VaoManager::waitFor( mFenceName.Get(), mDevice.GetImmediateContext() );
@@ -63,7 +63,7 @@ namespace Ogre
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11AsyncTicket::queryIsTransferDone(void)
+    bool D3D11AsyncTicket::queryIsTransferDone()
     {
         bool retVal = false;
 

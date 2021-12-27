@@ -778,7 +778,7 @@ static const String glsles_prefix = "precision highp float;\
 		program->load();
 	}
 
-	void ShadowVolumeExtrudeProgram::initialiseModulationPassPrograms(void)
+    void ShadowVolumeExtrudeProgram::initialiseModulationPassPrograms()
 	{
 		bool vs_4_0 = GpuProgramManager::getSingleton().isSyntaxSupported("vs_4_0");
 		bool ps_4_0 = GpuProgramManager::getSingleton().isSyntaxSupported("ps_4_0");
@@ -840,7 +840,7 @@ static const String glsles_prefix = "precision highp float;\
 		AddInternalProgram(fsProgramName, fsProgram, language, fsEntryPoint, fsTarget, GPT_FRAGMENT_PROGRAM);
 	}
 
-    void ShadowVolumeExtrudeProgram::initialise(void)
+    void ShadowVolumeExtrudeProgram::initialise()
     {
 		if (!mInitialised)
 		{
@@ -995,7 +995,7 @@ static const String glsles_prefix = "precision highp float;\
         }
     }
     //---------------------------------------------------------------------
-    void ShadowVolumeExtrudeProgram::shutdown(void)
+    void ShadowVolumeExtrudeProgram::shutdown()
     {
         if (mInitialised)
         {

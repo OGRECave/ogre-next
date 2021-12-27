@@ -58,7 +58,7 @@ namespace v1 {
         return retBone;
     }
     //---------------------------------------------------------------------
-    OldNode* OldBone::createChildImpl(void)
+    OldNode* OldBone::createChildImpl()
     {
         return mCreator->createBone();
     }
@@ -68,7 +68,7 @@ namespace v1 {
         return mCreator->createBone(name);
     }
     //---------------------------------------------------------------------
-    void OldBone::setBindingPose(void)
+    void OldBone::setBindingPose()
     {
         setInitialState();
 
@@ -78,7 +78,7 @@ namespace v1 {
         mBindDerivedInverseOrientation = _getDerivedOrientation().Inverse();
     }
     //---------------------------------------------------------------------
-    void OldBone::reset(void)
+    void OldBone::reset()
     {
         resetToInitialState();
     }
@@ -112,7 +112,7 @@ namespace v1 {
         m.makeTransform(locTranslate, locScale, locRotate);
     }
     //---------------------------------------------------------------------
-    unsigned short OldBone::getHandle(void) const
+    unsigned short OldBone::getHandle() const
     {
         return mHandle;
     }

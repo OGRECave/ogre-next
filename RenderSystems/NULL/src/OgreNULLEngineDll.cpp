@@ -36,16 +36,16 @@ namespace Ogre
     static NULLPlugin* plugin;
 
 #    if __cplusplus >= 201103L
-    extern "C" void _OgreNULLExport dllStartPlugin( void ) noexcept( false )
+    extern "C" void _OgreNULLExport dllStartPlugin() noexcept( false )
 #    else
-    extern "C" void _OgreNULLExport dllStartPlugin( void ) throw( Exception )
+    extern "C" void _OgreNULLExport dllStartPlugin() throw( Exception )
 #    endif
     {
         plugin = OGRE_NEW NULLPlugin();
         Root::getSingleton().installPlugin(plugin);
     }
 
-    extern "C" void _OgreNULLExport dllStopPlugin(void)
+    extern "C" void _OgreNULLExport dllStopPlugin()
     {
         Root::getSingleton().uninstallPlugin(plugin);
         OGRE_DELETE plugin;

@@ -98,7 +98,7 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void SceneNode::_notifyStaticDirty(void) const
+    void SceneNode::_notifyStaticDirty() const
     {
         if( mCreator )
         {
@@ -208,7 +208,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void SceneNode::detachAllObjects(void)
+    void SceneNode::detachAllObjects()
     {
         ObjectVec::iterator itr;
         for ( itr = mAttachments.begin(); itr != mAttachments.end(); ++itr )
@@ -239,7 +239,7 @@ namespace Ogre {
             mBoneChildren.erase( itor );
     }
     //-----------------------------------------------------------------------
-    void SceneNode::detachAllBones(void)
+    void SceneNode::detachAllBones()
     {
         BonesPerSkeletonInstance::const_iterator itSkeletons = mBoneChildren.begin();
         BonesPerSkeletonInstance::const_iterator enSkeletons = mBoneChildren.end();
@@ -261,7 +261,7 @@ namespace Ogre {
         mBoneChildren.clear();
     }
     //-----------------------------------------------------------------------
-    void SceneNode::_callMemoryChangeListeners(void)
+    void SceneNode::_callMemoryChangeListeners()
     {
         ObjectVec::iterator itor = mAttachments.begin();
         ObjectVec::iterator end  = mAttachments.end();
@@ -309,12 +309,12 @@ namespace Ogre {
         return mCreator->_createSceneNode( this, nodeMemoryManager );
     }
     //-----------------------------------------------------------------------
-    SceneNode::ObjectIterator SceneNode::getAttachedObjectIterator(void)
+    SceneNode::ObjectIterator SceneNode::getAttachedObjectIterator()
     {
         return ObjectIterator( mAttachments.begin(), mAttachments.end() );
     }
     //-----------------------------------------------------------------------
-    SceneNode::ConstObjectIterator SceneNode::getAttachedObjectIterator(void) const
+    SceneNode::ConstObjectIterator SceneNode::getAttachedObjectIterator() const
     {
         return ConstObjectIterator( mAttachments.begin(), mAttachments.end() );
     }
@@ -328,7 +328,7 @@ namespace Ogre {
         sceneNode->getCreator()->destroySceneNode( sceneNode );
     }
     //-----------------------------------------------------------------------
-    void SceneNode::removeAndDestroyAllChildren(void)
+    void SceneNode::removeAndDestroyAllChildren()
     {
         NodeVec::iterator itor = mChildren.begin();
         NodeVec::iterator end  = mChildren.end();
@@ -514,7 +514,7 @@ namespace Ogre {
         setDirection( targetPoint - origin, relativeTo, localDirectionVector );
 	}
     //-----------------------------------------------------------------------
-    SceneNode* SceneNode::getParentSceneNode(void) const
+    SceneNode* SceneNode::getParentSceneNode() const
     {
         return static_cast<SceneNode*>(getParent());
     }
@@ -571,7 +571,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
 #if OGRE_DEBUG_MODE
-    void SceneNode::_setCachedTransformOutOfDate(void)
+    void SceneNode::_setCachedTransformOutOfDate()
     {
         Node::_setCachedTransformOutOfDate();
 

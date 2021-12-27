@@ -195,9 +195,9 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanAsyncTextureTicket::unmapImpl( void ) { mVboName.unmap(); }
+    void VulkanAsyncTextureTicket::unmapImpl() { mVboName.unmap(); }
     //-----------------------------------------------------------------------------------
-    void VulkanAsyncTextureTicket::waitForDownloadToFinish( void )
+    void VulkanAsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
             return;  // We're done.
@@ -215,7 +215,7 @@ namespace Ogre
         mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanAsyncTextureTicket::queryIsTransferDone( void )
+    bool VulkanAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {

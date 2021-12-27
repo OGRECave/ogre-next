@@ -550,7 +550,7 @@ namespace Ogre
             setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep( void )
+    void HlmsUnlit::notifyPropertiesMergedPreGenerationStep()
     {
         const int32 samplerStateStart = getProperty( UnlitProperty::SamplerStateStart );
         int32 texUnit = samplerStateStart;
@@ -1077,7 +1077,7 @@ namespace Ogre
         return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 2) - 1;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::destroyAllBuffers(void)
+    void HlmsUnlit::destroyAllBuffers()
     {
         HlmsBufferManager::destroyAllBuffers();
 
@@ -1099,7 +1099,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlit::frameEnded(void)
+    void HlmsUnlit::frameEnded()
     {
         HlmsBufferManager::frameEnded();
         mCurrentPassBuffer  = 0;

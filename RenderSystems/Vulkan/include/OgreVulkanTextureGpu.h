@@ -100,11 +100,11 @@ namespace Ogre
         VkImageLayout mNextLayout;
 
     protected:
-        virtual void createInternalResourcesImpl( void );
-        virtual void destroyInternalResourcesImpl( void );
+        virtual void createInternalResourcesImpl();
+        virtual void destroyInternalResourcesImpl();
 
-        virtual void createMsaaSurface( void );
-        virtual void destroyMsaaSurface( void );
+        virtual void createMsaaSurface();
+        virtual void destroyMsaaSurface();
 
     public:
         VulkanTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
@@ -116,7 +116,7 @@ namespace Ogre
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
-        virtual ResourceLayout::Layout getCurrentLayout( void ) const;
+        virtual ResourceLayout::Layout getCurrentLayout() const;
 
         virtual void copyTo(
             TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
@@ -132,17 +132,17 @@ namespace Ogre
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
-        virtual void notifyDataIsReady( void );
-        virtual bool _isDataReadyImpl( void ) const;
+        virtual void notifyDataIsReady();
+        virtual bool _isDataReadyImpl() const;
 
-        virtual void _setToDisplayDummyTexture( void );
+        virtual void _setToDisplayDummyTexture();
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
-        VkImageSubresourceRange getFullSubresourceRange( void ) const;
+        VkImageSubresourceRange getFullSubresourceRange() const;
 
-        VkImageType getVulkanTextureType( void ) const;
+        VkImageType getVulkanTextureType() const;
 
-        VkImageViewType getInternalVulkanTextureViewType( void ) const;
+        VkImageViewType getInternalVulkanTextureViewType() const;
 
         VkImageView _createView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
                                  uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav,
@@ -151,8 +151,8 @@ namespace Ogre
         VkImageView createView( const DescriptorSetTexture2::TextureSlot &texSlot,
                                 bool bUseCache = true ) const;
         VkImageView createView( DescriptorSetUav::TextureSlot texSlot, bool bUseCache = true );
-        VkImageView createView( void ) const;
-        VkImageView getDefaultDisplaySrv( void ) const { return mDefaultDisplaySrv; }
+        VkImageView createView() const;
+        VkImageView getDefaultDisplaySrv() const { return mDefaultDisplaySrv; }
 
         void destroyView( VkImageView imageView );
         void destroyView( DescriptorSetTexture2::TextureSlot texSlot, VkImageView imageView );
@@ -160,11 +160,11 @@ namespace Ogre
 
         /// Returns a fresh VkImageMemoryBarrier filled with common data.
         /// srcAccessMask, dstAccessMask, oldLayout and newLayout must be filled by caller
-        VkImageMemoryBarrier getImageMemoryBarrier( void ) const;
+        VkImageMemoryBarrier getImageMemoryBarrier() const;
 
-        VkImage getDisplayTextureName( void ) const { return mDisplayTextureName; }
-        VkImage getFinalTextureName( void ) const { return mFinalTextureName; }
-        VkImage getMsaaFramebufferName( void ) const { return mMsaaFramebufferName; }
+        VkImage getDisplayTextureName() const { return mDisplayTextureName; }
+        VkImage getFinalTextureName() const { return mFinalTextureName; }
+        VkImage getMsaaFramebufferName() const { return mMsaaFramebufferName; }
     };
 
     class _OgreVulkanExport VulkanTextureGpuRenderTarget : public VulkanTextureGpu
@@ -180,8 +180,8 @@ namespace Ogre
         OrientationMode mOrientationMode;
 #endif
 
-        virtual void createMsaaSurface( void );
-        virtual void destroyMsaaSurface( void );
+        virtual void createMsaaSurface();
+        virtual void destroyMsaaSurface();
 
     public:
         VulkanTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -192,13 +192,13 @@ namespace Ogre
 
         virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
                                               PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId( void ) const;
-        virtual bool getPreferDepthTexture( void ) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat( void ) const;
+        virtual uint16 getDepthBufferPoolId() const;
+        virtual bool getPreferDepthTexture() const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
 
         virtual void setOrientationMode( OrientationMode orientationMode );
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode( void ) const;
+        virtual OrientationMode getOrientationMode() const;
 #endif
     };
 

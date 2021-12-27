@@ -551,7 +551,7 @@ namespace Ogre
             mNumMultiRenderTargets = num;
         }
 
-        ushort getNumWorldMatrices(void) const
+        ushort getNumWorldMatrices() const
         { 
             return mNumWorldMatrices;
         }
@@ -568,7 +568,7 @@ namespace Ogre
         to the fixed-function pipeline, the number available to the 
         programmable pipeline depends on the shader model in use.
         */
-        ushort getNumTextureUnits(void) const
+        ushort getNumTextureUnits() const
         {
             return mNumTextureUnits;
         }
@@ -579,20 +579,20 @@ namespace Ogre
         If hardware stencilling is not supported, the software will
         provide an 8-bit software stencil.
         */
-        ushort getStencilBufferBitDepth(void) const
+        ushort getStencilBufferBitDepth() const
         {
             return mStencilBufferBitDepth;
         }
 
         /** Returns the number of matrices available to hardware vertex 
         blending for this rendering system. */
-        ushort getNumVertexBlendMatrices(void) const
+        ushort getNumVertexBlendMatrices() const
         {
             return mNumVertexBlendMatrices;
         }
 
         /// The number of simultaneous render targets supported
-        ushort getNumMultiRenderTargets(void) const
+        ushort getNumMultiRenderTargets() const
         {
             return mNumMultiRenderTargets;
         }
@@ -694,47 +694,47 @@ namespace Ogre
 
 
         /// The number of floating-point constants vertex programs support
-        ushort getVertexProgramConstantFloatCount(void) const
+        ushort getVertexProgramConstantFloatCount() const
         {
             return mVertexProgramConstantFloatCount;           
         }
         /// The number of integer constants vertex programs support
-        ushort getVertexProgramConstantIntCount(void) const
+        ushort getVertexProgramConstantIntCount() const
         {
             return mVertexProgramConstantIntCount;           
         }
         /// The number of boolean constants vertex programs support
-        ushort getVertexProgramConstantBoolCount(void) const
+        ushort getVertexProgramConstantBoolCount() const
         {
             return mVertexProgramConstantBoolCount;           
         }
         /// The number of floating-point constants geometry programs support
-        ushort getGeometryProgramConstantFloatCount(void) const
+        ushort getGeometryProgramConstantFloatCount() const
         {
             return mGeometryProgramConstantFloatCount;           
         }
         /// The number of integer constants geometry programs support
-        ushort getGeometryProgramConstantIntCount(void) const
+        ushort getGeometryProgramConstantIntCount() const
         {
             return mGeometryProgramConstantIntCount;           
         }
         /// The number of boolean constants geometry programs support
-        ushort getGeometryProgramConstantBoolCount(void) const
+        ushort getGeometryProgramConstantBoolCount() const
         {
             return mGeometryProgramConstantBoolCount;           
         }
         /// The number of floating-point constants fragment programs support
-        ushort getFragmentProgramConstantFloatCount(void) const
+        ushort getFragmentProgramConstantFloatCount() const
         {
             return mFragmentProgramConstantFloatCount;           
         }
         /// The number of integer constants fragment programs support
-        ushort getFragmentProgramConstantIntCount(void) const
+        ushort getFragmentProgramConstantIntCount() const
         {
             return mFragmentProgramConstantIntCount;           
         }
         /// The number of boolean constants fragment programs support
-        ushort getFragmentProgramConstantBoolCount(void) const
+        ushort getFragmentProgramConstantBoolCount() const
         {
             return mFragmentProgramConstantBoolCount;           
         }
@@ -804,17 +804,17 @@ namespace Ogre
             mMaxTextureResolutionCubemap = resCube;
         }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolution2D(void) const
+        ushort getMaximumResolution2D() const
         {
             return mMaxTextureResolution2D;
         }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolution3D(void) const
+        ushort getMaximumResolution3D() const
         {
             return mMaxTextureResolution3D;
         }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolutionCubemap(void) const
+        ushort getMaximumResolutionCubemap() const
         {
             return mMaxTextureResolutionCubemap;
         }
@@ -824,7 +824,7 @@ namespace Ogre
             mMaxPointSize = s;
         }
         /// Maximum point screen size in pixels
-        Real getMaxPointSize(void) const
+        Real getMaxPointSize() const
         {
             return mMaxPointSize;
         }
@@ -841,7 +841,7 @@ namespace Ogre
         <li>You don't use DXT texture compression</li>
         <li>You use clamp texture addressing</li></ul>
         */
-        bool getNonPOW2TexturesLimited(void) const
+        bool getNonPOW2TexturesLimited() const
         {
             return mNonPOW2TexturesLimited;
         }
@@ -862,7 +862,7 @@ namespace Ogre
             mNumVertexTextureUnits = n;
         }
         /// Get the number of vertex texture units supported
-        ushort getNumVertexTextureUnits(void) const
+        ushort getNumVertexTextureUnits() const
         {
             return mNumVertexTextureUnits;
         }
@@ -872,7 +872,7 @@ namespace Ogre
             mVertexTextureUnitsShared = shared;
         }
         /// Get whether the vertex texture units are shared with the fragment processor
-        bool getVertexTextureUnitsShared(void) const
+        bool getVertexTextureUnitsShared() const
         {
             return mVertexTextureUnitsShared;
         }
@@ -883,13 +883,13 @@ namespace Ogre
             mGeometryProgramNumOutputVertices = numOutputVertices;
         }
         /// Get the number of vertices a single geometry program run can emit
-        int getGeometryProgramNumOutputVertices(void) const
+        int getGeometryProgramNumOutputVertices() const
         {
             return mGeometryProgramNumOutputVertices;
         }
 
         /// Get the identifier of the rendersystem from which these capabilities were generated
-        String getRenderSystemName(void) const
+        String getRenderSystemName() const
         {
             return mRenderSystemName;
         }
@@ -933,17 +933,17 @@ namespace Ogre
             mTessellationHullProgramConstantBoolCount = c;           
         }
         /// The number of floating-point constants fragment programs support
-        ushort getTessellationHullProgramConstantFloatCount(void) const
+        ushort getTessellationHullProgramConstantFloatCount() const
         {
             return mTessellationHullProgramConstantFloatCount;           
         }
         /// The number of integer constants fragment programs support
-        ushort getTessellationHullProgramConstantIntCount(void) const
+        ushort getTessellationHullProgramConstantIntCount() const
         {
             return mTessellationHullProgramConstantIntCount;           
         }
         /// The number of boolean constants fragment programs support
-        ushort getTessellationHullProgramConstantBoolCount(void) const
+        ushort getTessellationHullProgramConstantBoolCount() const
         {
             return mTessellationHullProgramConstantBoolCount;           
         }
@@ -964,17 +964,17 @@ namespace Ogre
             mTessellationDomainProgramConstantBoolCount = c;           
         }
         /// The number of floating-point constants fragment programs support
-        ushort getTessellationDomainProgramConstantFloatCount(void) const
+        ushort getTessellationDomainProgramConstantFloatCount() const
         {
             return mTessellationDomainProgramConstantFloatCount;           
         }
         /// The number of integer constants fragment programs support
-        ushort getTessellationDomainProgramConstantIntCount(void) const
+        ushort getTessellationDomainProgramConstantIntCount() const
         {
             return mTessellationDomainProgramConstantIntCount;           
         }
         /// The number of boolean constants fragment programs support
-        ushort getTessellationDomainProgramConstantBoolCount(void) const
+        ushort getTessellationDomainProgramConstantBoolCount() const
         {
             return mTessellationDomainProgramConstantBoolCount;           
         }
@@ -995,17 +995,17 @@ namespace Ogre
             mComputeProgramConstantBoolCount = c;           
         }
         /// The number of floating-point constants fragment programs support
-        ushort getComputeProgramConstantFloatCount(void) const
+        ushort getComputeProgramConstantFloatCount() const
         {
             return mComputeProgramConstantFloatCount;           
         }
         /// The number of integer constants fragment programs support
-        ushort getComputeProgramConstantIntCount(void) const
+        ushort getComputeProgramConstantIntCount() const
         {
             return mComputeProgramConstantIntCount;           
         }
         /// The number of boolean constants fragment programs support
-        ushort getComputeProgramConstantBoolCount(void) const
+        ushort getComputeProgramConstantBoolCount() const
         {
             return mComputeProgramConstantBoolCount;           
         }
@@ -1022,12 +1022,12 @@ namespace Ogre
             mMaxThreadsPerThreadgroup = value;
         }
 
-        const uint32* getMaxThreadsPerThreadgroupAxis(void) const
+        const uint32* getMaxThreadsPerThreadgroupAxis() const
         {
             return mMaxThreadsPerThreadgroupAxis;
         }
 
-        uint32 getMaxThreadsPerThreadgroup(void) const
+        uint32 getMaxThreadsPerThreadgroup() const
         {
             return mMaxThreadsPerThreadgroup;
         }

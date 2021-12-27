@@ -56,7 +56,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void GL3PlusOldVertexArrayObject::bind(void)
+    void GL3PlusOldVertexArrayObject::bind()
     {
         if (mVAO)
         {

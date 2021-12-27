@@ -83,10 +83,10 @@ namespace Ogre
         /// We store everything (mip N of all probes) contiguously in mDownloadedImages
         uint8 *mDownloadedImages;
 
-        void allocateImages( void );
-        void deallocateImages( void );
+        void allocateImages();
+        void deallocateImages();
 
-        TextureBox getImagesBox( void ) const;
+        TextureBox getImagesBox() const;
 
         /** Snaps the new bounds of the new probe to match mFullRegion if the relative
             difference between the two is smaller than mSnapDeviationError.
@@ -131,7 +131,7 @@ namespace Ogre
         @param numProbes
         */
         void setNumProbes( uint32 numProbes[3] );
-        const uint32 *getNumProbes( void ) const { return mNumProbes; }
+        const uint32 *getNumProbes() const { return mNumProbes; }
 
         /** PccPerPixelGridPlacement needs, as guidance, the maximum region it will be occupying.
 
@@ -141,7 +141,7 @@ namespace Ogre
         @param fullRegion
         */
         void setFullRegion( const Aabb &fullRegion );
-        const Aabb &getFullRegion( void ) const { return mFullRegion; }
+        const Aabb &getFullRegion() const { return mFullRegion; }
 
         /** PccPerPixelGridPlacement will subdivide in mNumProbes[i] probes along each axis,
             creating a 3D grid.
@@ -162,7 +162,7 @@ namespace Ogre
             Default: 1.5
         */
         void setOverlap( const Vector3 &overlap );
-        const Vector3 &getOverlap( void ) const { return mOverlap; }
+        const Vector3 &getOverlap() const { return mOverlap; }
 
         /** When the probes have a different size than what they should have, but they're almost
             the same as mFullRegion (they can be different due to precision issues, small objects
@@ -180,7 +180,7 @@ namespace Ogre
             0 to disable snapping in this axis
         */
         void setSnapDeviationError( const Vector3 &relativeError );
-        const Vector3 &getSnapDeviationError( void ) const { return mSnapDeviationError; }
+        const Vector3 &getSnapDeviationError() const { return mSnapDeviationError; }
 
         /** Very similar to PccPerPixelGridPlacement::setSnapDeviationError but more specific; thus
             allowing for much bigger error margins to fix glitches without causing major distortions
@@ -252,8 +252,8 @@ namespace Ogre
          */
         void setSnapSides( const Vector3 &snapSidesDeviationErrorMin,
                            const Vector3 &snapSidesDeviationErrorMax );
-        const Vector3 &getSnapSidesDeviationErrorMin( void ) const;
-        const Vector3 &getSnapSidesDeviationErrorMax( void ) const;
+        const Vector3 &getSnapSidesDeviationErrorMin() const;
+        const Vector3 &getSnapSidesDeviationErrorMax() const;
 
         /// Returns numProbes[0] * numProbes[1] * numProbes[2]
         uint32 getMaxNumProbes() const;
@@ -282,7 +282,7 @@ namespace Ogre
 
             See PccPerPixelGridPlacement::buildStart
          */
-        void buildEnd( void );
+        void buildEnd();
 
         /// ParallaxCorrectedCubemapAutoListener overloads
         virtual void preCopyRenderTargetToCubemap( TextureGpu *renderTarget, uint32 cubemapArrayIdx );

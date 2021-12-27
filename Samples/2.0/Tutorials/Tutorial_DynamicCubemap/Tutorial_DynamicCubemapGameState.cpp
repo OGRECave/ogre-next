@@ -169,7 +169,7 @@ namespace Demo
                                                 "Tutorial_DynamicCubemapWorkspace", true );
     }
     //-----------------------------------------------------------------------------------
-    void DynamicCubemapGameState::createScene01(void)
+    void DynamicCubemapGameState::createScene01()
     {
         //Setup a scene similar to that of PBS sample, except
         //we apply the cubemap to everything via C++ code
@@ -359,7 +359,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void DynamicCubemapGameState::destroyScene(void)
+    void DynamicCubemapGameState::destroyScene()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();

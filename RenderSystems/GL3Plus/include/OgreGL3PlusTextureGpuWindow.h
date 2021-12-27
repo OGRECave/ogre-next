@@ -40,8 +40,8 @@ namespace Ogre
         GL3PlusContext  *mContext;
         Window          *mWindow;
 
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        virtual void createInternalResourcesImpl();
+        virtual void destroyInternalResourcesImpl();
 
     public:
         GL3PlusTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -55,16 +55,16 @@ namespace Ogre
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
-        virtual void notifyDataIsReady(void);
-        virtual bool _isDataReadyImpl(void) const;
+        virtual void notifyDataIsReady();
+        virtual bool _isDataReadyImpl() const;
 
-        virtual void swapBuffers(void);
+        virtual void swapBuffers();
 
         virtual void getCustomAttribute( IdString name, void *pData );
 
-        virtual bool isOpenGLRenderWindow(void) const;
+        virtual bool isOpenGLRenderWindow() const;
 
-        virtual void _setToDisplayDummyTexture(void);
+        virtual void _setToDisplayDummyTexture();
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
     };
 
@@ -83,11 +83,11 @@ namespace Ogre
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
-        virtual void swapBuffers( void );
+        virtual void swapBuffers();
 
         virtual void getCustomAttribute( IdString name, void *pData );
 
-        virtual bool isOpenGLRenderWindow( void ) const;
+        virtual bool isOpenGLRenderWindow() const;
 
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
     };

@@ -88,11 +88,11 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void NULLAsyncTextureTicket::unmapImpl(void)
+    void NULLAsyncTextureTicket::unmapImpl()
     {
     }
     //-----------------------------------------------------------------------------------
-    bool NULLAsyncTextureTicket::queryIsTransferDone(void)
+    bool NULLAsyncTextureTicket::queryIsTransferDone()
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {

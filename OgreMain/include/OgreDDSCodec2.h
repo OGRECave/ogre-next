@@ -86,12 +86,12 @@ namespace Ogre
         /// @copydoc Codec::magicNumberToFileExt
         String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const;
         
-        virtual String getType(void) const;
+        virtual String getType() const;
 
         /// Static method to startup and register the DDS codec
-        static void startup(void);
+        static void startup();
         /// Static method to shutdown and unregister the DDS codec
-        static void shutdown(void);
+        static void shutdown();
     };
     /** @} */
     /** @} */

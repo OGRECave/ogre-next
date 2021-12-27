@@ -201,7 +201,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassCompute::setResourcesToJob( void )
+    void CompositorPassCompute::setResourcesToJob()
     {
         {
             const CompositorPassComputeDef::TextureSources &textureSources =

@@ -140,14 +140,14 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool DynLib::isLoaded( void ) const { return mInst != NULL; }
+    bool DynLib::isLoaded() const { return mInst != NULL; }
     //-----------------------------------------------------------------------
     void* DynLib::getSymbol( const String& strName ) const throw()
     {
         return (void*)DYNLIB_GETSYM( mInst, strName.c_str() );
     }
     //-----------------------------------------------------------------------
-    String DynLib::dynlibError( void ) 
+    String DynLib::dynlibError()
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         LPTSTR lpMsgBuf; 

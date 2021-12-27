@@ -245,7 +245,7 @@ namespace Ogre
     {
         return _a->mId < _b->mId;
     }
-    bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers(void)
+    bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeSamplers()
     {
         assert( mCreator->getRenderSystem()->getCapabilities()->
                 hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
@@ -487,7 +487,7 @@ namespace Ogre
         return !mLinkedRenderables.empty();
     }
     //-----------------------------------------------------------------------------------
-    void OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures(void)
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures()
     {
         if( !mAllowTextureResidencyChange )
             return;

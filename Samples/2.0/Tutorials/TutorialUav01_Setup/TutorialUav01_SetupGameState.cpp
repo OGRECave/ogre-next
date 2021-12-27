@@ -27,7 +27,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void TutorialUav01_SetupGameState::createScene01(void)
+    void TutorialUav01_SetupGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

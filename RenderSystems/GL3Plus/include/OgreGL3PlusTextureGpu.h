@@ -65,10 +65,10 @@ namespace Ogre
         /// This value is always an FBO.
         GLuint  mMsaaFramebufferName;
 
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        virtual void createInternalResourcesImpl();
+        virtual void destroyInternalResourcesImpl();
 
-        bool isRenderbuffer(void) const;
+        bool isRenderbuffer() const;
 
         void bindTextureToFrameBuffer( GLenum target, uint8 mipLevel, uint32 depthOrSlice );
         void bindTextureToFrameBuffer( GLenum target, GLuint textureName, uint8 mipLevel,
@@ -99,10 +99,10 @@ namespace Ogre
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
-        virtual void notifyDataIsReady(void);
-        virtual bool _isDataReadyImpl(void) const;
+        virtual void notifyDataIsReady();
+        virtual bool _isDataReadyImpl() const;
 
-        virtual void _setToDisplayDummyTexture(void);
+        virtual void _setToDisplayDummyTexture();
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
         /// Returns the GLuid of the texture that is being displayed. While the texture is
@@ -110,7 +110,7 @@ namespace Ogre
         /// Once notifyDataIsReady, getDisplayTextureName should be the same as
         /// getFinalTextureName. In other words, getDisplayTextureName may change its
         /// returned value based on the texture's status
-        GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
+        GLuint getDisplayTextureName() const    { return mDisplayTextureName; }
 
         /// Always returns the internal handle that belongs to this texture.
         /// Note that for TextureFlags::AutomaticBatching textures, this will be the
@@ -121,17 +121,17 @@ namespace Ogre
         ///
         /// If TextureFlags::MsaaExplicitResolve is set, it returns the handle
         /// to the MSAA texture, since there is no resolve texture.
-        GLuint getFinalTextureName(void) const      { return mFinalTextureName; }
+        GLuint getFinalTextureName() const      { return mFinalTextureName; }
 
         /// If MSAA > 1u and TextureFlags::MsaaExplicitResolve is not set, this
         /// returns the handle to the temporary MSAA renderbuffer used for rendering,
         /// which will later be resolved into the resolve texture.
         ///
         /// Otherwise it returns null.
-        GLuint getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
+        GLuint getMsaaFramebufferName() const   { return mMsaaFramebufferName; }
 
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
-        GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }
+        GLenum getGlTextureTarget() const       { return mGlTextureTarget; }
 
         void getCustomAttribute( IdString name, void *pData );
     };
@@ -145,8 +145,8 @@ namespace Ogre
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         OrientationMode mOrientationMode;
 #endif
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        virtual void createInternalResourcesImpl();
+        virtual void destroyInternalResourcesImpl();
 
     public:
         GL3PlusTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -157,13 +157,13 @@ namespace Ogre
 
         virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
                                               PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId(void) const;
-        virtual bool getPreferDepthTexture(void) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+        virtual uint16 getDepthBufferPoolId() const;
+        virtual bool getPreferDepthTexture() const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
 
         virtual void setOrientationMode( OrientationMode orientationMode );
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode( void ) const;
+        virtual OrientationMode getOrientationMode() const;
 #endif
     };
 }

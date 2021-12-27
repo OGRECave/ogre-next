@@ -42,7 +42,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_OpenVRGameState::createScene01(void)
+    void Tutorial_OpenVRGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -308,7 +308,7 @@ namespace Demo
             outText += "[Unavailable]";
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_OpenVRGameState::setTransparencyToMaterials(void)
+    void Tutorial_OpenVRGameState::setTransparencyToMaterials()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 

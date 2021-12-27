@@ -329,7 +329,7 @@ namespace Ogre
         return OGRE_NEW PCZSceneNode(this, name);
     }
 
-    SceneNode * PCZSceneManager::createSceneNode( void )
+    SceneNode * PCZSceneManager::createSceneNode()
     {
         SceneNode * on = createSceneNodeImpl();
         mSceneNodes[ on->getName() ] = on;
@@ -924,7 +924,7 @@ namespace Ogre
     }
 
     // (optional) post processing for any scene node found visible for the frame
-    void PCZSceneManager::_alertVisibleObjects( void )
+    void PCZSceneManager::_alertVisibleObjects()
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
             "Function doesn't do as advertised",

@@ -120,7 +120,7 @@ namespace Ogre
         passDef->mProfilingId = "Shadow Node " + passDef->mProfilingId;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNodeDef::_validateAndFinish(void)
+    void CompositorShadowNodeDef::_validateAndFinish()
     {
         mLightTypesMask.resize( mNumLights, 0u );
 

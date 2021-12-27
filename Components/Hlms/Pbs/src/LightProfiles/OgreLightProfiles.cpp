@@ -56,7 +56,7 @@ namespace Ogre
             delete *itor++;
     }
     //-------------------------------------------------------------------------
-    void LightProfiles::destroyTexture( void )
+    void LightProfiles::destroyTexture()
     {
         if( !mLightProfilesTexture )
             return;
@@ -92,7 +92,7 @@ namespace Ogre
         mIesData.push_back( iesLoader );
     }
     //-------------------------------------------------------------------------
-    void LightProfiles::build( void )
+    void LightProfiles::build()
     {
         uint32 suggestedWidth = 0u;
 

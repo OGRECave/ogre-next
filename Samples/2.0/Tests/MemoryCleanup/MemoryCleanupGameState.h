@@ -27,17 +27,17 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void testSequence(void);
+        void testSequence();
 
-        void createCleanupScene(void);
-        void destroyCleanupScene(void);
-        bool isSceneLoaded(void) const;
+        void createCleanupScene();
+        void destroyCleanupScene();
+        bool isSceneLoaded() const;
 
     public:
         MemoryCleanupGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

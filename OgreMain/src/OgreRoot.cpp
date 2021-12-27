@@ -119,17 +119,17 @@ THE SOFTWARE.
 namespace Ogre {
     //-----------------------------------------------------------------------
     template<> Root* Singleton<Root>::msSingleton = 0;
-    Root* Root::getSingletonPtr(void)
+    Root* Root::getSingletonPtr()
     {
         return msSingleton;
     }
-    Root& Root::getSingleton(void)
+    Root& Root::getSingleton()
     {
         assert( msSingleton );  return ( *msSingleton );
     }
 
-    typedef void (*DLL_START_PLUGIN)(void);
-    typedef void (*DLL_STOP_PLUGIN)(void);
+    typedef void (*DLL_START_PLUGIN)();
+    typedef void (*DLL_STOP_PLUGIN)();
 
     //-----------------------------------------------------------------------
     Root::Root( const String &pluginFileName, const String &configFileName, const String &logFileName,
@@ -439,7 +439,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Root::saveConfig(void)
+    void Root::saveConfig()
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, "saveConfig is not supported on Emscripten",
@@ -490,7 +490,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    bool Root::restoreConfig(void)
+    bool Root::restoreConfig()
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, "restoreConfig is not supported on Emscripten",
@@ -651,7 +651,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const RenderSystemList& Root::getAvailableRenderers(void)
+    const RenderSystemList& Root::getAvailableRenderers()
     {
         // Returns a vector of renders
 
@@ -712,7 +712,7 @@ namespace Ogre {
         mRenderers.push_back(newRend);
     }
     //-----------------------------------------------------------------------
-    SceneManager* Root::_getCurrentSceneManager(void) const
+    SceneManager* Root::_getCurrentSceneManager() const
     {
         if (mSceneManagerStack.empty())
             return 0;
@@ -732,7 +732,7 @@ namespace Ogre {
         mSceneManagerStack.pop_back();
     }
     //-----------------------------------------------------------------------
-    RenderSystem* Root::getRenderSystem(void)
+    RenderSystem* Root::getRenderSystem()
     {
         // Gets the currently active renderer
         return mActiveRenderer;
@@ -851,7 +851,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     SceneManagerEnumerator::MetaDataIterator
-    Root::getSceneManagerMetaDataIterator(void) const
+    Root::getSceneManagerMetaDataIterator() const
     {
         return mSceneManagerEnum->getMetaDataIterator();
 
@@ -884,12 +884,12 @@ namespace Ogre {
         return mSceneManagerEnum->hasSceneManager(instanceName);
     }
     //-----------------------------------------------------------------------
-    SceneManagerEnumerator::SceneManagerIterator Root::getSceneManagerIterator(void)
+    SceneManagerEnumerator::SceneManagerIterator Root::getSceneManagerIterator()
     {
         return mSceneManagerEnum->getSceneManagerIterator();
     }
     //-----------------------------------------------------------------------
-    v1::MeshManager* Root::getMeshManagerV1(void)
+    v1::MeshManager* Root::getMeshManagerV1()
     {
         return &v1::MeshManager::getSingleton();
     }
@@ -1085,12 +1085,12 @@ namespace Ogre {
         mQueuedEnd = state;
     }
     //-----------------------------------------------------------------------
-    bool Root::endRenderingQueued(void)
+    bool Root::endRenderingQueued()
     {
         return mQueuedEnd;
     }
     //-----------------------------------------------------------------------
-    void Root::startRendering(void)
+    void Root::startRendering()
     {
         assert(mActiveRenderer != 0);
 
@@ -1111,7 +1111,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool Root::renderOneFrame(void)
+    bool Root::renderOneFrame()
     {
         if(!_fireFrameStarted())
             return false;
@@ -1174,7 +1174,7 @@ namespace Ogre {
         return _fireFrameEnded(evt);
     }
     //-----------------------------------------------------------------------
-    void Root::shutdown(void)
+    void Root::shutdown()
     {
         // Since background thread might be access resources,
         // ensure shutdown before destroying resource manager.
@@ -1243,7 +1243,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Root::shutdownPlugins(void)
+    void Root::shutdownPlugins()
     {
         // NB Shutdown plugins in reverse order to enforce dependencies
         for (PluginInstanceList::reverse_iterator i = mPlugins.rbegin(); i != mPlugins.rend(); ++i)
@@ -1252,7 +1252,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Root::initialisePlugins(void)
+    void Root::initialisePlugins()
     {
         for (PluginInstanceList::iterator i = mPlugins.begin(); i != mPlugins.end(); ++i)
         {
@@ -1260,7 +1260,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Root::unloadPlugins(void)
+    void Root::unloadPlugins()
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
         // unload dynamic libs first
@@ -1377,7 +1377,7 @@ namespace Ogre {
         mActiveRenderer->convertColourValue(colour, pDest);
     }
     //-----------------------------------------------------------------------
-    Window* Root::getAutoCreatedWindow(void)
+    Window* Root::getAutoCreatedWindow()
     {
         return mAutoWindow;
     }
@@ -1548,12 +1548,12 @@ namespace Ogre {
 #endif
     }
     //-----------------------------------------------------------------------
-    Timer* Root::getTimer(void)
+    Timer* Root::getTimer()
     {
         return mTimer;
     }
     //-----------------------------------------------------------------------
-    void Root::oneTimePostWindowInit(void)
+    void Root::oneTimePostWindowInit()
     {
         if (!mFirstTimePostWindowInit)
         {
@@ -1583,7 +1583,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    bool Root::_updateAllRenderTargets(void)
+    bool Root::_updateAllRenderTargets()
     {
         // update all targets but don't swap buffers
         //mActiveRenderer->_updateAllRenderTargets(false);
@@ -1627,7 +1627,7 @@ namespace Ogre {
         return ret;
     }
     //-----------------------------------------------------------------------
-    void Root::_renderingFrameEnded( void )
+    void Root::_renderingFrameEnded()
     {
         if( !mFrameStarted )
             return;
@@ -1653,12 +1653,12 @@ namespace Ogre {
         mFrameStarted = false;
     }
     //-----------------------------------------------------------------------
-    void Root::_notifyRenderingFrameStarted( void )
+    void Root::_notifyRenderingFrameStarted()
     {
         mFrameStarted = true;
     }
     //-----------------------------------------------------------------------
-    void Root::clearEventTimes(void)
+    void Root::clearEventTimes()
     {
         // Clear event times
         for(int i=0; i<FETT_COUNT; ++i)
@@ -1715,7 +1715,7 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     Root::MovableObjectFactoryIterator
-    Root::getMovableObjectFactoryIterator(void) const
+    Root::getMovableObjectFactoryIterator() const
     {
         return MovableObjectFactoryIterator(mMovableObjectFactoryMap.begin(),
             mMovableObjectFactoryMap.end());

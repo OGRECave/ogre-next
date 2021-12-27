@@ -118,7 +118,7 @@ namespace Ogre {
 
 
     //-----------------------------------------------------------------------
-    void Material::prepareImpl(void)
+    void Material::prepareImpl()
     {
         // compile if required
         if (mCompilationRequired)
@@ -133,7 +133,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Material::unprepareImpl(void)
+    void Material::unprepareImpl()
     {
         // Load all supported techniques
         Techniques::iterator i, iend;
@@ -144,7 +144,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Material::loadImpl(void)
+    void Material::loadImpl()
     {
 
         // Load all supported techniques
@@ -157,7 +157,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Material::unloadImpl(void)
+    void Material::unloadImpl()
     {
         // Unload all supported techniques
         Techniques::iterator i, iend;
@@ -168,7 +168,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    size_t Material::calculateSize(void) const
+    size_t Material::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -242,7 +242,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Material::applyDefaults(void)
+    void Material::applyDefaults()
     {
         MaterialPtr defaults = MaterialManager::getSingleton().getDefaultSettings();
 
@@ -266,7 +266,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    Technique* Material::createTechnique(void)
+    Technique* Material::createTechnique()
     {
         Technique *t = OGRE_NEW Technique(this);
         mTechniques.push_back(t);
@@ -300,7 +300,7 @@ namespace Ogre {
         return foundTechnique;
     }
     //-----------------------------------------------------------------------   
-    unsigned short Material::getNumTechniques(void) const
+    unsigned short Material::getNumTechniques() const
     {
         return static_cast<unsigned short>(mTechniques.size());
     }
@@ -311,7 +311,7 @@ namespace Ogre {
         return mSupportedTechniques[index];
     }
     //-----------------------------------------------------------------------   
-    unsigned short Material::getNumSupportedTechniques(void) const
+    unsigned short Material::getNumSupportedTechniques() const
     {
         return static_cast<unsigned short>(mSupportedTechniques.size());
     }
@@ -437,7 +437,7 @@ namespace Ogre {
         mCompilationRequired = true;
     }
     //-----------------------------------------------------------------------
-    void Material::removeAllTechniques(void)
+    void Material::removeAllTechniques()
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
@@ -451,17 +451,17 @@ namespace Ogre {
         mCompilationRequired = true;
     }
     //-----------------------------------------------------------------------
-    Material::TechniqueIterator Material::getTechniqueIterator(void) 
+    Material::TechniqueIterator Material::getTechniqueIterator()
     {
         return TechniqueIterator(mTechniques.begin(), mTechniques.end());
     }
     //-----------------------------------------------------------------------
-    Material::TechniqueIterator Material::getSupportedTechniqueIterator(void)
+    Material::TechniqueIterator Material::getSupportedTechniqueIterator()
     {
         return TechniqueIterator(mSupportedTechniques.begin(), mSupportedTechniques.end());
     }
     //-----------------------------------------------------------------------
-    bool Material::isTransparent(void) const
+    bool Material::isTransparent() const
     {
         // Check each technique
         Techniques::const_iterator i, iend;
@@ -518,7 +518,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Material::clearBestTechniqueList(void)
+    void Material::clearBestTechniqueList()
     {
         for (BestTechniquesBySchemeList::iterator i = mBestTechniquesBySchemeList.begin();
             i != mBestTechniquesBySchemeList.end(); ++i)
@@ -660,7 +660,7 @@ namespace Ogre {
         }
     }
     // --------------------------------------------------------------------
-    void Material::_notifyNeedsRecompile(void)
+    void Material::_notifyNeedsRecompile()
     {
         mCompilationRequired = true;
         // Also need to unload to ensure we loaded any new items
@@ -688,12 +688,12 @@ namespace Ogre {
         
     }
     // --------------------------------------------------------------------
-    Material::LodValueIterator Material::getLodValueIterator(void) const
+    Material::LodValueIterator Material::getLodValueIterator() const
     {
         return LodValueIterator(mLodValues.begin(), mLodValues.end());
     }
     // --------------------------------------------------------------------
-    Material::LodValueIterator Material::getUserLodValueIterator(void) const
+    Material::LodValueIterator Material::getUserLodValueIterator() const
     {
         return LodValueIterator(mUserLodValues.begin(), mUserLodValues.end());
     }

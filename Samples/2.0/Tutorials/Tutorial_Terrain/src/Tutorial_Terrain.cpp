@@ -60,7 +60,7 @@ namespace Demo
     {
         Ogre::TerraWorkspaceListener *mTerraWorkspaceListener;
 
-        virtual void stopCompositor( void )
+        virtual void stopCompositor()
         {
             if( mWorkspace )
                 mWorkspace->removeListener( mTerraWorkspaceListener );
@@ -88,7 +88,7 @@ namespace Demo
             return workspace;
         }
 
-        virtual void setupResources(void)
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -118,7 +118,7 @@ namespace Demo
             }
         }
 
-        virtual void registerHlms(void)
+        virtual void registerHlms()
         {
             GraphicsSystem::registerHlms();
 
@@ -244,7 +244,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Tutorial: Terrain";
     }

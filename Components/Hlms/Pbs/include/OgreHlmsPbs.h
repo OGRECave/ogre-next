@@ -235,11 +235,11 @@ namespace Ogre
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
 
-        virtual void notifyPropertiesMergedPreGenerationStep(void);
+        virtual void notifyPropertiesMergedPreGenerationStep();
 
         static bool requiredPropertyByAlphaTest( IdString propertyName );
 
-        virtual void destroyAllBuffers(void);
+        virtual void destroyAllBuffers();
 
         FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
                                            const QueuedRenderable &queuedRenderable,
@@ -274,7 +274,7 @@ namespace Ogre
                                          CommandBuffer *commandBuffer );
 
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
-        virtual void frameEnded(void);
+        virtual void frameEnded();
 
         /** By default we see the reflection textures' mipmaps and store the largest one we found.
             By calling resetIblSpecMipmap; you can reset this process thus if a reflection texture
@@ -287,7 +287,7 @@ namespace Ogre
 
         void _notifyIblSpecMipmap( uint8 numMipmaps );
 
-        void loadLtcMatrix(void);
+        void loadLtcMatrix();
 
         /** Fill the provided string and string vector with all the sub-folder needed to instantiate
             an HlmsPbs object with the default distribution of the HlmsResources.
@@ -313,7 +313,7 @@ namespace Ogre
         /// for control over Forward+ lights.
         void setFineLightMaskGranularity( bool useFineGranularity )
                                                     { mFineLightMaskGranularity = useFineGranularity; }
-        bool getFineLightMaskGranularity(void) const{ return mFineLightMaskGranularity; }
+        bool getFineLightMaskGranularity() const{ return mFineLightMaskGranularity; }
 #endif
 
         /** Toggles whether light-space position is calculated in vertex or pixel shader.
@@ -334,10 +334,10 @@ namespace Ogre
             bInPixelShader = false is more likely to win.
         */
         void setShadowReceiversInPixelShader( bool bInPixelShader );
-        bool getShadowReceiversInPixelShader( void ) const { return mShadowReceiversInPixelShader; }
+        bool getShadowReceiversInPixelShader() const { return mShadowReceiversInPixelShader; }
 
         void setDebugPssmSplits( bool bDebug );
-        bool getDebugPssmSplits(void) const                 { return mDebugPssmSplits; }
+        bool getDebugPssmSplits() const                 { return mDebugPssmSplits; }
 
         /** Toggle whether the roughness value (set via material parameters and via roughness textures)
             is perceptual or raw.
@@ -354,10 +354,10 @@ namespace Ogre
             False to use raw roughess (Ogre 2.1's behavior)
         */
         void setPerceptualRoughness( bool bPerceptualRoughness );
-        bool getPerceptualRoughness( void ) const;
+        bool getPerceptualRoughness() const;
 
         void setShadowSettings( ShadowFilter filter );
-        ShadowFilter getShadowFilter(void) const            { return mShadowFilter; }
+        ShadowFilter getShadowFilter() const            { return mShadowFilter; }
 
         /** Sets the 'K' parameter of ESM filter. Defaults to 600.
             Small values will give weak shadows, and light bleeding (specially if the
@@ -375,10 +375,10 @@ namespace Ogre
             In range (0; infinite).
         */
         void setEsmK( uint16 K );
-        uint16 getEsmK(void) const                          { return mEsmK; }
+        uint16 getEsmK() const                          { return mEsmK; }
 
         void setAmbientLightMode( AmbientLightMode mode );
-        AmbientLightMode getAmbientLightMode(void) const    { return mAmbientLightMode; }
+        AmbientLightMode getAmbientLightMode() const    { return mAmbientLightMode; }
 
         /** Sets PCC
         @remarks
@@ -416,19 +416,19 @@ namespace Ogre
         void setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc,
                                           float pccVctMinDistance = 1.0f,
                                           float pccVctMaxDistance = 2.0f );
-        ParallaxCorrectedCubemapBase* getParallaxCorrectedCubemap(void) const
+        ParallaxCorrectedCubemapBase* getParallaxCorrectedCubemap() const
                                                             { return mParallaxCorrectedCubemap; }
 
         void setIrradianceVolume( IrradianceVolume *irradianceVolume )
                                                     { mIrradianceVolume = irradianceVolume; }
-        IrradianceVolume* getIrradianceVolume(void) const  { return mIrradianceVolume; }
+        IrradianceVolume* getIrradianceVolume() const  { return mIrradianceVolume; }
 
         void setVctLighting( VctLighting *vctLighting )     { mVctLighting = vctLighting; }
-        VctLighting* getVctLighting(void)                   { return mVctLighting; }
+        VctLighting* getVctLighting()                       { return mVctLighting; }
 
         void setIrradianceField( IrradianceField *irradianceField )
                                                     { mIrradianceField = irradianceField; }
-        IrradianceField *getIrradianceField( void ) { return mIrradianceField; }
+        IrradianceField *getIrradianceField() { return mIrradianceField; }
 
         /** When false, we will use 4 cones for diffuse VCT.
             When true, we will use 6 cones instead. This is higher quality but consumes more
@@ -438,23 +438,23 @@ namespace Ogre
         @param vctFullConeCount
         */
         void setVctFullConeCount( bool vctFullConeCount )   { mVctFullConeCount = vctFullConeCount; }
-        bool getVctFullConeCount(void) const                { return mVctFullConeCount; }
+        bool getVctFullConeCount() const                { return mVctFullConeCount; }
 
         void setAreaLightMasks( TextureGpu *areaLightMask );
-        TextureGpu* getAreaLightMasks(void) const           { return mAreaLightMasks; }
+        TextureGpu* getAreaLightMasks() const           { return mAreaLightMasks; }
 
         void setLightProfilesTexture( TextureGpu *lightProfilesTex );
-        TextureGpu *getLightProfilesTexture( void ) const   { return mLightProfilesTexture; }
+        TextureGpu *getLightProfilesTexture() const   { return mLightProfilesTexture; }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         void setPlanarReflections( PlanarReflections *planarReflections );
-        PlanarReflections* getPlanarReflections(void) const;
+        PlanarReflections* getPlanarReflections() const;
 #endif
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
         void setUseObbRestraints( bool areaApprox, bool areaLtc );
-        bool getUseObbRestraintsAreaApprox(void) const      { return mUseObbRestraintAreaApprox; }
-        bool getUseObbRestraintsAreaLtc(void) const         { return mUseObbRestraintAreaLtc; }
+        bool getUseObbRestraintsAreaApprox() const      { return mUseObbRestraintAreaApprox; }
+        bool getUseObbRestraintsAreaLtc() const         { return mUseObbRestraintAreaLtc; }
 #endif
 
         void setUseLightBuffers(bool b);

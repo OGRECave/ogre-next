@@ -306,10 +306,10 @@ namespace v1 {
 
         /** Internal method creates vertex and index buffers.
         */
-        void _createBuffers(void);
+        void _createBuffers();
         /** Internal method destroys vertex and index buffers.
         */
-        void _destroyBuffers(void);
+        void _destroyBuffers();
 
     public:
 
@@ -386,7 +386,7 @@ namespace v1 {
 
         /** Returns the number of active billboards which currently make up this set.
         */
-        virtual int getNumBillboards(void) const;
+        virtual int getNumBillboards() const;
 
         /** Tells the set whether to allow automatic extension of the pool of billboards.
         @remarks
@@ -409,7 +409,7 @@ namespace v1 {
         @see
             BillboardSet::setAutoextend
         */
-        virtual bool getAutoextend(void) const;
+        virtual bool getAutoextend() const;
 
         /** Enables sorting for this BillboardSet. (default: off)
         @param sortenable true to sort the billboards according to their distance to the camera
@@ -420,7 +420,7 @@ namespace v1 {
         @see
             BillboardSet::setSortingEnabled
         */
-        virtual bool getSortingEnabled(void) const;
+        virtual bool getSortingEnabled() const;
 
         /** Adjusts the size of the pool of billboards available in this set.
         @remarks
@@ -440,7 +440,7 @@ namespace v1 {
         @see
             BillboardSet::setAutoextend
         */
-        virtual unsigned int getPoolSize(void) const;
+        virtual unsigned int getPoolSize() const;
 
 
         /** Empties this set of all billboards.
@@ -489,7 +489,7 @@ namespace v1 {
         @return
             A member of the BillboardOrigin enum specifying the origin for all the billboards in this set.
         */
-        virtual BillboardOrigin getBillboardOrigin(void) const;
+        virtual BillboardOrigin getBillboardOrigin() const;
 
         /** Sets billboard rotation type.
         @remarks
@@ -506,7 +506,7 @@ namespace v1 {
         @return
             A member of the BillboardRotationType enum specifying the rotation type for all the billboards in this set.
         */
-        virtual BillboardRotationType getBillboardRotationType(void) const;
+        virtual BillboardRotationType getBillboardRotationType() const;
 
         /** Sets the default dimensions of the billboards in this set.
         @remarks
@@ -523,14 +523,14 @@ namespace v1 {
         /** See setDefaultDimensions - this sets 1 component individually. */
         virtual void setDefaultWidth(Real width);
         /** See setDefaultDimensions - this gets 1 component individually. */
-        virtual Real getDefaultWidth(void) const;
+        virtual Real getDefaultWidth() const;
         /** See setDefaultDimensions - this sets 1 component individually. */
         virtual void setDefaultHeight(Real height);
         /** See setDefaultDimensions - this gets 1 component individually. */
-        virtual Real getDefaultHeight(void) const;
+        virtual Real getDefaultHeight() const;
 
         /// Overriden from Renderable
-        virtual bool getUseIdentityWorldMatrix(void) const;
+        virtual bool getUseIdentityWorldMatrix() const;
 
         /** Overridden from MovableObject
         @see
@@ -547,7 +547,7 @@ namespace v1 {
         /** Define a billboard. */
         void injectBillboard(const Billboard& bb, const Camera *camera);
         /** Finish defining billboards. */
-        void endBillboards(void);
+        void endBillboards();
         /** Set the bounds of the BillboardSet.
         @remarks
             You may need to call this if you're injecting billboards manually, 
@@ -578,14 +578,14 @@ namespace v1 {
 
         /** Internal callback used by Billboards to notify their parent that they have been resized.
         */
-        virtual void _notifyBillboardResized(void);
+        virtual void _notifyBillboardResized();
 
         /** Internal callback used by Billboards to notify their parent that they have been rotated.
         */
-        virtual void _notifyBillboardRotated(void);
+        virtual void _notifyBillboardRotated();
 
         /** Returns whether or not billboards in this are tested individually for culling. */
-        virtual bool getCullIndividually(void) const;
+        virtual bool getCullIndividually() const;
         /** Sets whether culling tests billboards in this individually as well as in a group.
         @remarks
             Billboard sets are always culled as a whole group, based on a bounding box which 
@@ -631,7 +631,7 @@ namespace v1 {
         virtual void setBillboardType(BillboardType bbt);
 
         /** Returns the billboard type in use. */
-        virtual BillboardType getBillboardType(void) const;
+        virtual BillboardType getBillboardType() const;
 
         /** Use this to specify the common direction given to billboards of type BBT_ORIENTED_COMMON or BBT_PERPENDICULAR_COMMON.
         @remarks
@@ -650,7 +650,7 @@ namespace v1 {
         virtual void setCommonDirection(const Vector3& vec);
 
         /** Gets the common direction for all billboards (BBT_ORIENTED_COMMON) */
-        virtual const Vector3& getCommonDirection(void) const;
+        virtual const Vector3& getCommonDirection() const;
 
         /** Use this to specify the common up-vector given to billboards of type BBT_PERPENDICULAR_SELF or BBT_PERPENDICULAR_COMMON.
         @remarks
@@ -669,7 +669,7 @@ namespace v1 {
         virtual void setCommonUpVector(const Vector3& vec);
 
         /** Gets the common up-vector for all billboards (BBT_PERPENDICULAR_SELF and BBT_PERPENDICULAR_COMMON) */
-        virtual const Vector3& getCommonUpVector(void) const;
+        virtual const Vector3& getCommonUpVector() const;
         
         /** Sets whether or not billboards should use an 'accurate' facing model
             based on the vector from each billboard to the camera, rather than 
@@ -689,24 +689,24 @@ namespace v1 {
             based on the vector from each billboard to the camera, rather than 
             an optimised version using just the camera direction.
         */
-        virtual bool getUseAccurateFacing(void) const { return mAccurateFacing; }
+        virtual bool getUseAccurateFacing() const { return mAccurateFacing; }
 
         /** Overridden from MovableObject */
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
 
         /** Overridden, see Renderable */
         Real getSquaredViewDepth(const Camera* cam) const;
 
         /** Update the bounds of the billboardset */
-        virtual void _updateBounds(void);
+        virtual void _updateBounds();
         /** @copydoc Renderable::getLights */
-        const LightList& getLights(void) const;
+        const LightList& getLights() const;
 
         /** Sort the billboard set. Only called when enabled via setSortingEnabled */
-        virtual void _sortBillboards(void);
+        virtual void _sortBillboards();
 
         /** Gets the sort mode of this billboard set */
-        virtual SortMode _getSortMode(void) const;
+        virtual SortMode _getSortMode() const;
 
         /** Sets whether billboards should be treated as being in world space. 
         @remarks
@@ -802,7 +802,7 @@ namespace v1 {
         virtual void setPointRenderingEnabled(bool enabled);
 
         /** Returns whether point rendering is enabled. */
-        virtual bool isPointRenderingEnabled(void) const
+        virtual bool isPointRenderingEnabled() const
         { return mPointRendering; }
 
         /** Set the auto update state of this billboard set.
@@ -817,20 +817,20 @@ namespace v1 {
         void setAutoUpdate(bool autoUpdate);
 
         /** Return the auto update state of this billboard set.*/
-        bool getAutoUpdate(void) const { return mAutoUpdate; }
+        bool getAutoUpdate() const { return mAutoUpdate; }
 
         /** When billboard set is not auto updating its GPU buffer, the user is responsible to inform it
             about any billboard changes in order to reflect them at the rendering stage.
             Calling this method will cause GPU buffers update in the next render queue update.
         */
-        void notifyBillboardDataChanged(void) { mBillboardDataChanged = true; }
+        void notifyBillboardDataChanged() { mBillboardDataChanged = true; }
 
         /** @copydoc MovableObject::_releaseManualHardwareResources. */
         void _releaseManualHardwareResources() { _destroyBuffers(); }
 
         virtual void setMaterial( const MaterialPtr& material );
         virtual void setDatablock( HlmsDatablock *datablock );
-        virtual void _setNullDatablock(void);
+        virtual void _setNullDatablock();
 
     };
 
@@ -847,7 +847,7 @@ namespace v1 {
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);  
 
     };

@@ -44,9 +44,9 @@ namespace v1 {
         MetalHardwareBufferManagerBase( MetalDevice *device, VaoManager *vaoManager );
         virtual ~MetalHardwareBufferManagerBase();
 
-        void _notifyDeviceStalled(void);
+        void _notifyDeviceStalled();
 
-        MetalDiscardBufferManager* _getDiscardBufferManager(void)   { return mDiscardBufferManager; }
+        MetalDiscardBufferManager* _getDiscardBufferManager()   { return mDiscardBufferManager; }
 
         /// Creates a vertex buffer
         virtual HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
@@ -82,7 +82,7 @@ namespace v1 {
             OGRE_DELETE mImpl;
         }
 
-        void _notifyDeviceStalled(void)
+        void _notifyDeviceStalled()
                     { static_cast<MetalHardwareBufferManagerBase*>(mImpl)->_notifyDeviceStalled(); }
     };
 }

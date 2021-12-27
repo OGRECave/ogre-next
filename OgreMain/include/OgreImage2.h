@@ -100,7 +100,7 @@ namespace Ogre {
                 originalimg
                 </pre>
         */
-        void flipAroundY(void);
+        void flipAroundY();
 
         /** Flips (mirrors) the image around the X-axis.
         @remarks
@@ -116,7 +116,7 @@ namespace Ogre {
             00000000000|00000000000
             </pre>
         */
-        void flipAroundX(void);
+        void flipAroundX();
 
         /** Stores a pointer to raw data in memory. The pixel format has to be specified.
         @remarks
@@ -304,27 +304,27 @@ namespace Ogre {
         */
         void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z, uint8 mipLevel=0 );
 
-        void* getRawBuffer(void)    { return mBuffer; }
+        void* getRawBuffer()    { return mBuffer; }
 
         /// Returns a pointer to the internal image buffer.
         TextureBox getData( uint8 mipLevel ) const;
 
-        uint32 getWidth(void) const;
-        uint32 getHeight(void) const;
-        uint32 getDepthOrSlices(void) const;
+        uint32 getWidth() const;
+        uint32 getHeight() const;
+        uint32 getDepthOrSlices() const;
         /// For TypeCube & TypeCubeArray, this value returns 1.
-        uint32 getDepth(void) const;
+        uint32 getDepth() const;
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
-        uint32 getNumSlices(void) const;
-        uint8 getNumMipmaps(void) const;
-        TextureTypes::TextureTypes getTextureType(void) const;
-        PixelFormatGpu getPixelFormat(void) const;
+        uint32 getNumSlices() const;
+        uint8 getNumMipmaps() const;
+        TextureTypes::TextureTypes getTextureType() const;
+        PixelFormatGpu getPixelFormat() const;
 
         size_t getBytesPerRow( uint8 mipLevel ) const;
         size_t getBytesPerImage( uint8 mipLevel ) const;
         /// Returns total size in bytes used in GPU by this texture including mipmaps.
-        size_t getSizeBytes(void) const;
+        size_t getSizeBytes() const;
 
         /// Delete all the memory held by this image, if owned by this image (not dynamic)
         void freeMemory();
@@ -412,7 +412,7 @@ namespace Ogre {
         static String getFileExtFromMagic( DataStreamPtr &stream );
 
         void _setAutoDelete( bool autoDelete );
-        bool getAutoDelete(void) const;
+        bool getAutoDelete() const;
     };
 
     /** @} */

@@ -35,7 +35,7 @@ namespace Demo
                                                     "Tests/ArrayTexturesWorkspace", true );
         }
 
-        virtual void setupResources( void )
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -86,5 +86,5 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char *MainEntryPoints::getWindowTitle( void ) { return "Test texture of Arrays"; }
+    const char *MainEntryPoints::getWindowTitle() { return "Test texture of Arrays"; }
 }  // namespace Demo

@@ -443,7 +443,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::cleanupEmptyPools( void )
+    void VulkanVaoManager::cleanupEmptyPools()
     {
         // And StagingBuffers, StagingTextures, TextureGpu, and anything that
         // calls either allocateVbo or allocateRawBuffer (e.g. AsyncTextureTicket,
@@ -627,7 +627,7 @@ namespace Ogre
         return memRequirements.memoryTypeBits;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::determineBestMemoryTypes( void )
+    void VulkanVaoManager::determineBestMemoryTypes()
     {
         for( size_t i = 0u; i < MAX_VBO_FLAG; ++i )
             mBestVkMemoryTypeIndex[i].clear();
@@ -1634,7 +1634,7 @@ namespace Ogre
         return itor;
     }
     //-----------------------------------------------------------------------------------
-    uint32 VulkanVaoManager::createVao( void ) { return mVaoNames++; }
+    uint32 VulkanVaoManager::createVao() { return mVaoNames++; }
     //-----------------------------------------------------------------------------------
     uint32 VulkanVaoManager::generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId )
     {
@@ -1767,7 +1767,7 @@ namespace Ogre
         mUsedDescriptorPools.push_back( pool );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::_update( void )
+    void VulkanVaoManager::_update()
     {
         {
             FastArray<VulkanDescriptorPool *>::const_iterator itor = mUsedDescriptorPools.begin();
@@ -1921,7 +1921,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VkSemaphore VulkanVaoManager::getAvailableSempaphore( void )
+    VkSemaphore VulkanVaoManager::getAvailableSempaphore()
     {
         VkSemaphore retVal;
         if( mAvailableSemaphores.empty() )
@@ -1963,7 +1963,7 @@ namespace Ogre
         vkDestroySemaphore( mDevice->mDevice, semaphore, 0 );
     }
     //-----------------------------------------------------------------------------------
-    uint8 VulkanVaoManager::waitForTailFrameToFinish( void )
+    uint8 VulkanVaoManager::waitForTailFrameToFinish()
     {
         mDevice->mGraphicsQueue._waitOnFrame( mDynamicBufferCurrentFrame );
         return mDynamicBufferCurrentFrame;
@@ -2138,7 +2138,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    void *VulkanRawBuffer::map( void )
+    void *VulkanRawBuffer::map()
     {
         OGRE_ASSERT_LOW( mDynamicBuffer && "CPU_INACCESSIBLE buffers cannot be mapped!" );
         OGRE_ASSERT_LOW( mUnmapTicket == std::numeric_limits<size_t>::max() &&
@@ -2146,7 +2146,7 @@ namespace Ogre
         return mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanRawBuffer::unmap( void )
+    void VulkanRawBuffer::unmap()
     {
         mDynamicBuffer->unmap( mUnmapTicket );
         mUnmapTicket = std::numeric_limits<size_t>::max();

@@ -101,7 +101,7 @@ namespace v1 {
     }
 #endif
     
-    void GLES2HardwareIndexBuffer::unlockImpl(void)
+    void GLES2HardwareIndexBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
 
@@ -285,7 +285,7 @@ namespace v1 {
     }
 #endif
 
-    void GLES2HardwareIndexBuffer::_updateFromShadow(void)
+    void GLES2HardwareIndexBuffer::_updateFromShadow()
     {
         if (mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate)
         {

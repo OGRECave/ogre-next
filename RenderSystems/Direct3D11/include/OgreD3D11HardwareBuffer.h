@@ -62,7 +62,7 @@ namespace v1 {
         /** See HardwareBuffer. */
         void* lockImpl(size_t offset, size_t length, LockOptions options);
         /** See HardwareBuffer. */
-        void unlockImpl(void);
+        void unlockImpl();
 
         void notifyDeviceLost( D3D11Device *device );
         void notifyDeviceRestored( D3D11Device *device, unsigned pass );
@@ -82,10 +82,10 @@ namespace v1 {
 		void copyDataImpl(HardwareBuffer& srcBuffer, size_t srcOffset,
 			size_t dstOffset, size_t length, bool discardWholeBuffer = false);
 		/// Updates the real buffer from the shadow buffer, if required
-		virtual void _updateFromShadow(void);
+        virtual void _updateFromShadow();
 
         /// Get the D3D-specific buffer
-        ID3D11Buffer* getD3DBuffer(void) { return mlpD3DBuffer.Get(); }
+        ID3D11Buffer* getD3DBuffer() { return mlpD3DBuffer.Get(); }
     };
 
 }

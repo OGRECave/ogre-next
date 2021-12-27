@@ -46,7 +46,7 @@ namespace Ogre
         vector<TexBufferPacked*>::type  mTexBufferViews;
 
         virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl( void ) = 0;
+        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() = 0;
 
     public:
         UavBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
@@ -54,9 +54,9 @@ namespace Ogre
                          VaoManager *vaoManager, BufferInterface *bufferInterface );
         virtual ~UavBufferPacked();
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_UAV; }
+        virtual BufferPackedTypes getBufferPackedType() const   { return BP_TYPE_UAV; }
 
-        //ConstBufferPacked* getAsConstBuffer(void);
+        //ConstBufferPacked* getAsConstBuffer();
 
         /** Returns a TexBufferPacked for binding to the GPU as a texture w/ read-only access.
             Buffer must've been created with BB_FLAG_TEX.
@@ -95,15 +95,15 @@ namespace Ogre
             this buffer via VaoManager::destroyReadOnlyBuffer.
             See UavBufferPacked::destroyReadOnlyBufferView
         */
-        ReadOnlyBufferPacked *getAsReadOnlyBufferView( void );
+        ReadOnlyBufferPacked *getAsReadOnlyBufferView();
 
         /// Frees memory from the view created by getAsReadOnlyBufferView
         /// Does nothing if the view wasn't created
-        void destroyReadOnlyBufferView( void );
+        void destroyReadOnlyBufferView();
 
         /// See destroyTexBufferView and getAsReadOnlyBufferView,
         /// this one does it on all the creates views.
-        void destroyAllBufferViews( void );
+        void destroyAllBufferViews();
 
         /** Binds the texture buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader

@@ -91,11 +91,11 @@ namespace Ogre {
                         bool fullScreen, const NameValuePairList *miscParams);
 
             virtual void setFullscreen(bool fullscreen, uint widthPt, uint heightPt);
-            void destroy(void);
-            bool isClosed(void) const { return mClosed; }
-            bool isVisible(void) const { return mVisible; }
+            void destroy();
+            bool isClosed() const { return mClosed; }
+            bool isVisible() const { return mVisible; }
             void setVisible(bool visible) { mVisible = visible; }
-            bool isHidden(void) const { return mHidden; }
+            bool isHidden() const { return mHidden; }
             void setHidden(bool hidden);
             void setClosed(bool closed) { mClosed = closed; }
             void swapBuffers();

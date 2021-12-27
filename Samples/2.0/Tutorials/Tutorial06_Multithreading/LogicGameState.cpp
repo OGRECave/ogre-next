@@ -24,7 +24,7 @@ namespace Demo
         mCubeMoDef = 0;
     }
     //-----------------------------------------------------------------------------------
-    void LogicGameState::createScene01(void)
+    void LogicGameState::createScene01()
     {
         const Ogre::Vector3 origin( -5.0f, 0.0f, 0.0f );
 

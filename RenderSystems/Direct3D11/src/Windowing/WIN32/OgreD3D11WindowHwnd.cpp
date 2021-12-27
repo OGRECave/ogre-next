@@ -90,7 +90,7 @@ namespace Ogre
         return TRUE;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::updateWindowRect(void)
+    void D3D11WindowHwnd::updateWindowRect()
     {
         RECT rc;
         BOOL result;
@@ -158,7 +158,7 @@ namespace Ogre
             IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
     }
     //-----------------------------------------------------------------------------------
-    HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
+    HRESULT D3D11WindowHwnd::_createSwapChainImpl()
     {
         mSampleDescription =
             mRenderSystem->validateSampleDescription( mRequestedSampleDescription, _getRenderFormat() );
@@ -481,7 +481,7 @@ namespace Ogre
         setHidden( mHidden );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::destroy(void)
+    void D3D11WindowHwnd::destroy()
     {
         D3D11WindowSwapChainBased::destroy();
 
@@ -587,7 +587,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::windowMovedOrResized(void)
+    void D3D11WindowHwnd::windowMovedOrResized()
     {
         if( !mHwnd || IsIconic(mHwnd) || !mSwapChain )
             return;
@@ -596,7 +596,7 @@ namespace Ogre
         notifyResolutionChanged();
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11WindowHwnd::isVisible(void) const
+    bool D3D11WindowHwnd::isVisible() const
     {
         bool visible = mVisible && !mHidden;
 

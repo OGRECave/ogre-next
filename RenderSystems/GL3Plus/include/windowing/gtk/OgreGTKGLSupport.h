@@ -61,7 +61,7 @@ public:
     void stop();
     void begin_context(RenderTarget *_target = 0);
     void end_context();
-    void initialiseExtensions(void);
+    void initialiseExtensions();
     bool checkMinGLVersion(const String& v) const;
     bool checkExtension(const String& ext) const;
     void* getProcAddress(const char* procname) const;
@@ -83,7 +83,7 @@ public:
     but the implementation stays in this single compilation unit,
     preventing link errors.
     */
-    static GTKGLSupport& getSingleton(void);
+    static GTKGLSupport& getSingleton();
     /** Override standard Singleton retrieval.
     @remarks
     Why do we do this? Well, it's because the Singleton
@@ -99,7 +99,7 @@ public:
     but the implementation stays in this single compilation unit,
     preventing link errors.
     */
-    static GTKGLSupport* getSingletonPtr(void);
+    static GTKGLSupport* getSingletonPtr();
 private:
     int _context_ref;
     Gtk::Main _kit;

@@ -455,11 +455,11 @@ namespace Ogre
         /// Adds a script extension that can be handled (e.g. *.material, *.pu, etc.)
         void addScriptPattern(const String &pattern);
         /// @copydoc ScriptLoader::getScriptPatterns
-        const StringVector& getScriptPatterns(void) const;
+        const StringVector& getScriptPatterns() const;
         /// @copydoc ScriptLoader::parseScript
         void parseScript(DataStreamPtr& stream, const String& groupName);
         /// @copydoc ScriptLoader::getLoadingOrder
-        Real getLoadingOrder(void) const;
+        Real getLoadingOrder() const;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -476,7 +476,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScriptCompilerManager& getSingleton(void);
+        static ScriptCompilerManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -492,7 +492,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ScriptCompilerManager* getSingletonPtr(void);
+        static ScriptCompilerManager* getSingletonPtr();
     };
 
     // Standard event types

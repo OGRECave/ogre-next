@@ -138,7 +138,7 @@ namespace v1
             of clear() begin(). However if you do want to modify the structure 
             from time to time you can do so by clearing and re-specifying the data.
         */
-        virtual void clear(void);
+        virtual void clear();
         
         /** Estimate the number of vertices ahead of time.
         @remarks
@@ -301,7 +301,7 @@ namespace v1
         @note
             Will return a pointer to the finished section or NULL if the section was discarded (i.e. has zero vertices/indices).
         */
-        virtual ManualObjectSection* end(void);
+        virtual ManualObjectSection* end();
 
         /** Alter the material for a subsection of this object after it has been
             specified.
@@ -352,7 +352,7 @@ namespace v1
             need to change this.
         @see ManualObject::setUseIdentityProjection
         */
-        bool getUseIdentityProjection(void) const { return mUseIdentityProjection; }
+        bool getUseIdentityProjection() const { return mUseIdentityProjection; }
 
         /** Sets whether or not to use an 'identity' view.
         @remarks
@@ -374,7 +374,7 @@ namespace v1
             Normally you don't need to change this.
         @see ManualObject::setUseIdentityView
         */
-        bool getUseIdentityView(void) const { return mUseIdentityView; }
+        bool getUseIdentityView() const { return mUseIdentityView; }
 
         /** Gets a pointer to a ManualObjectSection, i.e. a part of a ManualObject.
         */
@@ -382,7 +382,7 @@ namespace v1
 
         /** Retrieves the number of ManualObjectSection objects making up this ManualObject.
         */
-        unsigned int getNumSections(void) const;
+        unsigned int getNumSections() const;
         /** Sets whether or not to keep the original declaration order when 
             queuing the renderables.
         @remarks
@@ -402,13 +402,13 @@ namespace v1
         // MovableObject overrides
 
         /** @copydoc MovableObject::getMovableType. */
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
         /** @copydoc MovableObject::_updateRenderQueue. */
         void _updateRenderQueue(RenderQueue* queue, Camera *camera, const Camera *lodCamera);
         /** Implement this method to enable stencil shadows. */
-        EdgeData* getEdgeList(void);
+        EdgeData* getEdgeList();
         /** Overridden member from ShadowCaster. */
-        bool hasEdgeList(void);
+        bool hasEdgeList();
 
         /// Built, renderable section of geometry
         class _OgreExport ManualObjectSection : public Renderable, public MovableAlloc
@@ -428,11 +428,11 @@ namespace v1
             virtual ~ManualObjectSection();
             
             /// Retrieve render operation for manipulation
-            RenderOperation* getRenderOperation(void);
+            RenderOperation* getRenderOperation();
             /// Retrieve the material name in use
-            const String& getMaterialName(void) const { return mMaterialName; }
+            const String& getMaterialName() const { return mMaterialName; }
             /// Retrieve the material group in use
-            const String& getMaterialGroup(void) const { return mGroupName; }
+            const String& getMaterialGroup() const { return mGroupName; }
             /// update the material name in use
             void setMaterialName(const String& name, const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             /// Set whether we need 32-bit indices
@@ -442,7 +442,7 @@ namespace v1
             
             // Renderable overrides
             /** @copydoc Renderable::getMaterial. */
-            const MaterialPtr& getMaterial(void) const;
+            const MaterialPtr& getMaterial() const;
             /** @copydoc Renderable::getRenderOperation. */
             void getRenderOperation(RenderOperation& op, bool casterPass);
             /** @copydoc Renderable::getWorldTransforms. */
@@ -450,7 +450,7 @@ namespace v1
             /** @copydoc Renderable::getSquaredViewDepth. */
             Real getSquaredViewDepth(const Ogre::Camera *) const;
             /** @copydoc Renderable::getLights. */
-            const LightList &getLights(void) const;
+            const LightList &getLights() const;
 
 
                     
@@ -514,14 +514,14 @@ namespace v1
 
 
         /// Delete temp buffers and reset init counts
-        virtual void resetTempAreas(void);
+        virtual void resetTempAreas();
         /// Resize the temp vertex buffer?
         virtual void resizeTempVertexBufferIfNeeded(size_t numVerts);
         /// Resize the temp index buffer?
         virtual void resizeTempIndexBufferIfNeeded(size_t numInds);
 
         /// Copy current temp vertex into buffer
-        virtual void copyTempVertexToBuffer(void);
+        virtual void copyTempVertexToBuffer();
 
     };
 
@@ -539,7 +539,7 @@ namespace v1
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);  
 
     };

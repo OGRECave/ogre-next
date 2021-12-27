@@ -2034,7 +2034,7 @@ static FORCEINLINE bool _isAlignedForDirectXMath(const void *p)
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    extern OptimisedUtil* _getOptimisedUtilDirectXMath(void)
+    extern OptimisedUtil* _getOptimisedUtilDirectXMath()
     {
         static OptimisedUtilDirectXMath msOptimisedUtilDirectXMath;
         return &msOptimisedUtilDirectXMath;

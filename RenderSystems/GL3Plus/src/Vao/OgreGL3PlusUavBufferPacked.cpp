@@ -66,7 +66,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *GL3PlusUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    ReadOnlyBufferPacked *GL3PlusUavBufferPacked::getAsReadOnlyBufferImpl()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
 

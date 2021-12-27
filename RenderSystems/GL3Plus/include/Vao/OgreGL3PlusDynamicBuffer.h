@@ -78,7 +78,7 @@ namespace Ogre
                               BufferType persistentMethod );
         ~GL3PlusDynamicBuffer();
 
-        GLuint getVboName(void) const               { return mVboName; }
+        GLuint getVboName() const               { return mVboName; }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );

@@ -157,9 +157,9 @@ namespace Ogre
 
         bool mRenderWindowsPresentBarrierDirty;
 
-        void addQueuedWorkspaces(void);
+        void addQueuedWorkspaces();
 
-        void prepareRenderWindowsForPresent( void );
+        void prepareRenderWindowsForPresent();
 
     public:
         CompositorManager2( RenderSystem *renderSystem );
@@ -186,7 +186,7 @@ namespace Ogre
         CompositorNodeDef* getNodeDefinitionNonConst( IdString nodeDefName ) const;
 
         /// Returns a const iterator to all existing definitions
-        const CompositorNodeDefMap& getNodeDefinitions(void) const  { return mNodeDefinitions; }
+        const CompositorNodeDefMap& getNodeDefinitions() const  { return mNodeDefinitions; }
 
         /// Returns a new node definition. The name must be unique, throws otherwise.
         CompositorNodeDef* addNodeDefinition( const String &name );
@@ -230,7 +230,7 @@ namespace Ogre
         void removeWorkspaceDefinition( IdString name );
 
         /// Returns how many times _update has been called.
-        size_t getFrameCount(void) const                    { return mFrameCount; }
+        size_t getFrameCount() const                    { return mFrameCount; }
 
         /** Get an appropriately defined 'null' texture, i.e. one which will always
             result in no shadows.
@@ -241,9 +241,9 @@ namespace Ogre
         @remarks
             Pointer is valid throughout the lifetime of this CompositorManager2
         */
-        v1::Rectangle2D* getSharedFullscreenTriangle(void) const    { return mSharedTriangleFS; }
+        v1::Rectangle2D* getSharedFullscreenTriangle() const    { return mSharedTriangleFS; }
         /// @copydoc getSharedFullscreenTriangle
-        v1::Rectangle2D* getSharedFullscreenQuad(void) const        { return mSharedQuadFS; }
+        v1::Rectangle2D* getSharedFullscreenQuad() const        { return mSharedQuadFS; }
 
         /** Main function to start rendering. Creates a workspace instance based on a
             workspace definition.
@@ -368,37 +368,37 @@ namespace Ogre
         void removeWorkspace( CompositorWorkspace *workspace );
 
         /// Removes all workspaces. Make sure you don't hold any reference to a CompositorWorkpace!
-        void removeAllWorkspaces(void);
-        void removeAllWorkspaceDefinitions(void);
+        void removeAllWorkspaces();
+        void removeAllWorkspaceDefinitions();
 
-        size_t getNumWorkspaces(void) const                         { return mWorkspaces.size(); }
+        size_t getNumWorkspaces() const                         { return mWorkspaces.size(); }
 
         /** Removes all shadow nodes defs. Make sure there are no active nodes using the definition!
         @remarks
             Call removeAllWorkspaceDefinitions first
         */
-        void removeAllShadowNodeDefinitions(void);
+        void removeAllShadowNodeDefinitions();
 
         /** Removes all node defs. Make sure there are no active nodes using the definition!
         @remarks
             Call removeAllWorkspaceDefinitions first
         */
-        void removeAllNodeDefinitions(void);
+        void removeAllNodeDefinitions();
 
         /// Calls @see CompositorNode::_validateAndFinish on all objects who aren't yet validated
         void validateAllNodes();
 
-        BarrierSolver &getBarrierSolver( void ) { return mBarrierSolver; }
+        BarrierSolver &getBarrierSolver() { return mBarrierSolver; }
 
         /// Will call the renderSystem which in turns calls _updateImplementation
-        void _update( void );
+        void _update();
         
         /// This should be called by the render system to
         /// perform the actual compositor manager update.
         /// DO NOT CALL THIS DIRECTLY.
-        void _updateImplementation( void );
+        void _updateImplementation();
 
-        void _swapAllFinalTargets(void);
+        void _swapAllFinalTargets();
 
         /** Utility helper to create a basic workspace to get you out of the rush. Advanced users will
             probably prefer to create the workspace definition using scripts or manipulating functions
@@ -418,14 +418,14 @@ namespace Ogre
         /// Sets a custom pass provider in order to implement custom passes in
         /// your nodes. @see CompositorPassProvider
         void setCompositorPassProvider( CompositorPassProvider *passProvider );
-        CompositorPassProvider* getCompositorPassProvider(void) const;
+        CompositorPassProvider* getCompositorPassProvider() const;
 
         void addListener( CompositorWorkspaceListener *listener );
         void removeListener( CompositorWorkspaceListener *listener );
 
-        void _notifyBarriersDirty( void );
+        void _notifyBarriersDirty();
 
-        RenderSystem* getRenderSystem(void) const;
+        RenderSystem* getRenderSystem() const;
     };
 
     /** @} */

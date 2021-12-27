@@ -138,10 +138,10 @@ namespace Demo
 
         static Ogre::Matrix4 convertSteamVRMatrixToMatrix4( vr::HmdMatrix34_t matPose );
         static Ogre::Matrix4 convertSteamVRMatrixToMatrix4( vr::HmdMatrix44_t matPose );
-        void updateHmdTrackingPose(void);
+        void updateHmdTrackingPose();
 
-        void syncCullCamera(void);
-        void syncCamera(void);
+        void syncCullCamera();
+        void syncCamera();
         void syncCameraProjection( bool bForceUpdate );
     public:
         OpenVRCompositorListener( vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
@@ -162,7 +162,7 @@ namespace Demo
 
         /// See VrWaitingMode::VrWaitingMode
         void setWaitingMode( VrWaitingMode::VrWaitingMode waitingMode );
-        VrWaitingMode::VrWaitingMode getWaitingMode(void)   { return mWaitingMode; }
+        VrWaitingMode::VrWaitingMode getWaitingMode()   { return mWaitingMode; }
 
         /** When operating in VrWaitingMode::AfterSceneGraph or later, there's a chance
             graphical artifacts appear if the camera transform is immediately changed after
@@ -193,7 +193,7 @@ namespace Demo
 
             See OpenVRCompositorListener::setGlitchFree
         */
-        bool canSyncCameraTransformImmediately(void) const;
+        bool canSyncCameraTransformImmediately() const;
     };
 }
 

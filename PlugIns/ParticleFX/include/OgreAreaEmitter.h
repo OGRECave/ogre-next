@@ -100,15 +100,15 @@ namespace Ogre {
         /** Sets the width (local x size) of the emitter. */
         void setWidth(Real width);
         /** Gets the width (local x size) of the emitter. */
-        Real getWidth(void) const;
+        Real getWidth() const;
         /** Sets the height (local y size) of the emitter. */
         void setHeight(Real Height);
         /** Gets the height (local y size) of the emitter. */
-        Real getHeight(void) const;
+        Real getHeight() const;
         /** Sets the depth (local y size) of the emitter. */
         void setDepth(Real Depth);
         /** Gets the depth (local y size) of the emitter. */
-        Real getDepth(void) const;
+        Real getDepth() const;
 
     protected:
         /// Size of the area
@@ -118,7 +118,7 @@ namespace Ogre {
         Vector3 mXRange, mYRange, mZRange;
 
         /// Internal method for generating the area axes
-        void genAreaAxes(void);
+        void genAreaAxes();
         /** Internal for initializing some defaults and parameters
         @return True if custom parameters need initialising
         */

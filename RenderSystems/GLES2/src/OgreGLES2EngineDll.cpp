@@ -32,13 +32,13 @@ THE SOFTWARE.
 namespace Ogre {
     static GLES2Plugin* plugin;
 
-    extern "C" void _OgreGLES2Export dllStartPlugin(void) throw()
+    extern "C" void _OgreGLES2Export dllStartPlugin() throw()
     {
         plugin = OGRE_NEW GLES2Plugin();
         Root::getSingleton().installPlugin(plugin);
     }
 
-    extern "C" void _OgreGLES2Export dllStopPlugin(void)
+    extern "C" void _OgreGLES2Export dllStopPlugin()
     {
         Root::getSingleton().uninstallPlugin(plugin);
         OGRE_DELETE plugin;

@@ -23,12 +23,12 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void setTransparencyToMaterials(void);
+        void setTransparencyToMaterials();
 
     public:
         Tutorial_OpenVRGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

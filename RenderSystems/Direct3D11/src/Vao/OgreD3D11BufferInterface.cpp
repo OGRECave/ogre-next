@@ -107,7 +107,7 @@ namespace Ogre
         return mMappedPtr;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11BufferInterface::_deleteInitialData(void)
+    void D3D11BufferInterface::_deleteInitialData()
     {
         if( mInitialData )
         {
@@ -140,7 +140,7 @@ namespace Ogre
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11BufferInterface::advanceFrame(void)
+    void D3D11BufferInterface::advanceFrame()
     {
         advanceFrame( true );
     }
@@ -162,7 +162,7 @@ namespace Ogre
         return dynamicCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11BufferInterface::regressFrame(void)
+    void D3D11BufferInterface::regressFrame()
     {
         D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;

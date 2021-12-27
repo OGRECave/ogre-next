@@ -26,7 +26,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void AnimationTagPointGameState::createScene01(void)
+    void AnimationTagPointGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

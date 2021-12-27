@@ -74,7 +74,7 @@ namespace Ogre
         /// mMappingCount), and stalls if needed (synchronize); also book-keeps mFences and
         /// mUnfencedHazards.
         /// May modify mMappingStart.
-        void waitIfNeeded(void);
+        void waitIfNeeded();
 
         virtual void* mapImpl( size_t sizeBytes );
         virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
@@ -93,7 +93,7 @@ namespace Ogre
 
         virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
 
-        ID3D11Buffer* getBufferName(void) const     { return mVboName.Get(); }
+        ID3D11Buffer* getBufferName() const     { return mVboName.Get(); }
     };
 }
 

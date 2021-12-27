@@ -129,7 +129,7 @@ namespace v1 {
             counting will keep them intact. However, if you have made any assumptions about the 
             structure of the vertex data in the buffers of this object, you may have to rethink them.
         */
-        void prepareForShadowVolume(void);
+        void prepareForShadowVolume();
 
         /** Additional shadow volume vertex buffer storage. 
         @remarks
@@ -196,7 +196,7 @@ namespace v1 {
             This will cause binding index of the elements in the vertex declaration
             to be altered to new binding index.
         */
-        void closeGapsInBindings(void);
+        void closeGapsInBindings();
 
         /** Remove all vertex buffers that never used by the vertex declaration.
         @remarks
@@ -206,7 +206,7 @@ namespace v1 {
         @note
             This also remove any gaps in the vertex buffer bindings.
         */
-        void removeUnusedBuffers(void);
+        void removeUnusedBuffers();
 
         /** Convert all packed colour values (VET_COLOUR_*) in buffers used to
             another type.
@@ -280,7 +280,7 @@ namespace v1 {
         void unlockMultipleElements( ReadRequestsArray &requests );
 
 
-        HardwareBufferManagerBase* _getHardwareBufferManager(void) const    { return mMgr; }
+        HardwareBufferManagerBase* _getHardwareBufferManager() const    { return mMgr; }
 
     };
 
@@ -319,7 +319,7 @@ namespace v1 {
             It would in fact be pointless to use it on triangle strips or fans
             in any case.
         */
-        void optimiseVertexCacheTriList(void);
+        void optimiseVertexCacheTriList();
     };
 
     /** Vertex cache profiler.

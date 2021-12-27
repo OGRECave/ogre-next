@@ -103,7 +103,7 @@ namespace Ogre {
         mRedAdj = red;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getRedAdjust(void) const
+    float ColourFaderAffector::getRedAdjust() const
     {
         return mRedAdj;
     }
@@ -113,7 +113,7 @@ namespace Ogre {
         mGreenAdj = green;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getGreenAdjust(void) const
+    float ColourFaderAffector::getGreenAdjust() const
     {
         return mGreenAdj;
     }
@@ -123,7 +123,7 @@ namespace Ogre {
         mBlueAdj = blue;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getBlueAdjust(void) const
+    float ColourFaderAffector::getBlueAdjust() const
     {
         return mBlueAdj;
     }
@@ -133,7 +133,7 @@ namespace Ogre {
         mAlphaAdj = alpha;
     }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getAlphaAdjust(void) const
+    float ColourFaderAffector::getAlphaAdjust() const
     {
         return mAlphaAdj;
     }

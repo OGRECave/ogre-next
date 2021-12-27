@@ -176,33 +176,33 @@ namespace Ogre {
         Pass& operator=(const Pass& oth);
         virtual ~Pass();
 
-        uint32 getId(void) const            { return mId; }
+        uint32 getId() const            { return mId; }
 
         /// Returns true if this pass is programmable i.e. includes either a vertex or fragment program.
-        bool isProgrammable(void) const { return mVertexProgramUsage || mFragmentProgramUsage || mGeometryProgramUsage ||
+        bool isProgrammable() const { return mVertexProgramUsage || mFragmentProgramUsage || mGeometryProgramUsage ||
                                                  mTessellationHullProgramUsage || mTessellationDomainProgramUsage || mComputeProgramUsage; }
 
         /// Returns true if this pass uses a programmable vertex pipeline
-        bool hasVertexProgram(void) const { return mVertexProgramUsage != NULL; }
+        bool hasVertexProgram() const { return mVertexProgramUsage != NULL; }
         /// Returns true if this pass uses a programmable fragment pipeline
-        bool hasFragmentProgram(void) const { return mFragmentProgramUsage != NULL; }
+        bool hasFragmentProgram() const { return mFragmentProgramUsage != NULL; }
         /// Returns true if this pass uses a programmable geometry pipeline
-        bool hasGeometryProgram(void) const { return mGeometryProgramUsage != NULL; }
+        bool hasGeometryProgram() const { return mGeometryProgramUsage != NULL; }
         /// Returns true if this pass uses a programmable tessellation control pipeline
-        bool hasTessellationHullProgram(void) const { return mTessellationHullProgramUsage != NULL; }
+        bool hasTessellationHullProgram() const { return mTessellationHullProgramUsage != NULL; }
         /// Returns true if this pass uses a programmable tessellation control pipeline
-        bool hasTessellationDomainProgram(void) const { return mTessellationDomainProgramUsage != NULL; }
+        bool hasTessellationDomainProgram() const { return mTessellationDomainProgramUsage != NULL; }
         /// Returns true if this pass uses a programmable compute pipeline
-        bool hasComputeProgram(void) const { return mComputeProgramUsage != NULL; }
+        bool hasComputeProgram() const { return mComputeProgramUsage != NULL; }
         /// Returns true if this pass uses a shadow caster vertex program
-        bool hasShadowCasterVertexProgram(void) const { return mShadowCasterVertexProgramUsage != NULL; }
+        bool hasShadowCasterVertexProgram() const { return mShadowCasterVertexProgramUsage != NULL; }
         /// Returns true if this pass uses a shadow caster fragment program
-        bool hasShadowCasterFragmentProgram(void) const { return mShadowCasterFragmentProgramUsage != NULL; }
+        bool hasShadowCasterFragmentProgram() const { return mShadowCasterFragmentProgramUsage != NULL; }
 
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         /// Gets the index of this Pass in the parent Technique
-        unsigned short getIndex(void) const { return mIndex; }
+        unsigned short getIndex() const { return mIndex; }
         /* Set the name of the pass
            @remarks
            The name of the pass is optional.  Its useful in material scripts where a material could inherit
@@ -210,7 +210,7 @@ namespace Ogre {
         */
         void setName(const String& name);
         /// Get the name of the pass
-        const String& getName(void) const { return mName; }
+        const String& getName() const { return mName; }
 
         /** Sets the ambient colour reflectance properties of this pass.
             @remarks
@@ -347,7 +347,7 @@ namespace Ogre {
             This property determines what point size is used to render a point
             list.
         */
-        Real getPointSize(void) const;
+        Real getPointSize() const;
 
         /** Sets the point size of this pass.
         @remarks
@@ -376,7 +376,7 @@ namespace Ogre {
         /** Returns whether point sprites are enabled when rendering a
             point list.
         */
-        bool getPointSpritesEnabled(void) const;
+        bool getPointSpritesEnabled() const;
 
         /** Sets how points are attenuated with distance.
         @remarks
@@ -398,19 +398,19 @@ namespace Ogre {
             Real constant = 0.0f, Real linear = 1.0f, Real quadratic = 0.0f);
 
         /** Returns whether points are attenuated with distance. */
-        bool isPointAttenuationEnabled(void) const;
+        bool isPointAttenuationEnabled() const;
 
         /** Returns the constant coefficient of point attenuation. */
-        Real getPointAttenuationConstant(void) const;
+        Real getPointAttenuationConstant() const;
         /** Returns the linear coefficient of point attenuation. */
-        Real getPointAttenuationLinear(void) const;
+        Real getPointAttenuationLinear() const;
         /** Returns the quadratic coefficient of point attenuation. */
-        Real getPointAttenuationQuadratic(void) const;
+        Real getPointAttenuationQuadratic() const;
 
         /** Set the minimum point size, when point attenuation is in use. */
         void setPointMinSize(Real min);
         /** Get the minimum point size, when point attenuation is in use. */
-        Real getPointMinSize(void) const;
+        Real getPointMinSize() const;
         /** Set the maximum point size, when point attenuation is in use.
         @remarks Setting this to 0 indicates the max size supported by the card.
         */
@@ -418,46 +418,46 @@ namespace Ogre {
         /** Get the maximum point size, when point attenuation is in use.
         @remarks 0 indicates the max size supported by the card.
         */
-        Real getPointMaxSize(void) const;
+        Real getPointMaxSize() const;
 
         /** Gets the ambient colour reflectance of the pass.
         */
-        const ColourValue& getAmbient(void) const;
+        const ColourValue& getAmbient() const;
 
         /** Gets the diffuse colour reflectance of the pass.
          */
-        const ColourValue& getDiffuse(void) const;
+        const ColourValue& getDiffuse() const;
 
         /** Gets the specular colour reflectance of the pass.
          */
-        const ColourValue& getSpecular(void) const;
+        const ColourValue& getSpecular() const;
 
         /** Gets the self illumination colour of the pass.
          */
-        const ColourValue& getSelfIllumination(void) const;
+        const ColourValue& getSelfIllumination() const;
 
         /** Gets the self illumination colour of the pass.
             @see
             getSelfIllumination
         */
-        const ColourValue& getEmissive(void) const
+        const ColourValue& getEmissive() const
         {
             return getSelfIllumination();
         }
 
         /** Gets the 'shininess' property of the pass (affects specular highlights).
          */
-        Real getShininess(void) const;
+        Real getShininess() const;
 
         /** Gets which material properties follow the vertex colour
          */
-        TrackVertexColourType getVertexColourTracking(void) const;
+        TrackVertexColourType getVertexColourTracking() const;
 
         /** Inserts a new TextureUnitState object into the Pass.
             @remarks
             This unit is is added on top of all previous units.
         */
-        TextureUnitState* createTextureUnitState(void);
+        TextureUnitState* createTextureUnitState();
         /** Inserts a new TextureUnitState object into the Pass.
             @remarks
             This unit is is added on top of all previous units.
@@ -500,11 +500,11 @@ namespace Ogre {
 
         typedef VectorIterator<TextureUnitStates> TextureUnitStateIterator;
         /** Get an iterator over the TextureUnitStates contained in this Pass. */
-        TextureUnitStateIterator getTextureUnitStateIterator(void);
+        TextureUnitStateIterator getTextureUnitStateIterator();
 
         typedef ConstVectorIterator<TextureUnitStates> ConstTextureUnitStateIterator;
         /** Get an iterator over the TextureUnitStates contained in this Pass. */
-        ConstTextureUnitStateIterator getTextureUnitStateIterator(void) const;
+        ConstTextureUnitStateIterator getTextureUnitStateIterator() const;
 
         /** Removes the indexed texture unit state from this pass.
         @remarks
@@ -514,19 +514,19 @@ namespace Ogre {
 
         /** Removes all texture unit settings.
          */
-        void removeAllTextureUnitStates(void);
+        void removeAllTextureUnitStates();
 
         /** Returns the number of texture unit settings.
          */
-        unsigned short getNumTextureUnitStates(void) const
+        unsigned short getNumTextureUnitStates() const
         {
             return static_cast<unsigned short>(mTextureUnitStates.size());
         }
 
-        size_t getNumShadowContentTextures(void) const      { return mShadowContentTypeLookup.size(); }
+        size_t getNumShadowContentTextures() const      { return mShadowContentTypeLookup.size(); }
 
         /// Recreates the contents of mShadowContentTypeLookup from scratch
-        void recreateShadowContentTypeLookup(void);
+        void recreateShadowContentTypeLookup();
 
         /** Call this function when a texture unit changed to type CONTENT_SHADOW
         @param textureUnitIndex
@@ -540,10 +540,10 @@ namespace Ogre {
         void removeShadowContentTypeLookup( size_t textureUnitIndex );
 
         /** Returns true if this pass has some element of transparency. */
-        bool isTransparent(void) const;
+        bool isTransparent() const;
 
         /** Determines if colour buffer writing is enabled for this pass. */
-        bool getColourWriteEnabled(void) const;
+        bool getColourWriteEnabled() const;
 
         /** Sets the maximum number of lights to be used by this pass.
             @remarks
@@ -555,7 +555,7 @@ namespace Ogre {
         */
         void setMaxSimultaneousLights(unsigned short maxLights);
         /** Gets the maximum number of lights to be used by this pass. */
-        unsigned short getMaxSimultaneousLights(void) const;
+        unsigned short getMaxSimultaneousLights() const;
 
         /** Sets the light index that this pass will start at in the light list.
         @remarks
@@ -569,7 +569,7 @@ namespace Ogre {
         */
         void setStartLight(unsigned short startLight);
         /** Gets the light index that this pass will start at in the light list. */
-        unsigned short getStartLight(void) const;
+        unsigned short getStartLight() const;
 
         /** Sets the light mask which can be matched to specific light flags to be handled by this pass */
         void setLightMask(uint32 mask);
@@ -584,7 +584,7 @@ namespace Ogre {
 
         /** Returns the type of light shading to be used.
          */
-        ShadeOptions getShadingMode(void) const;
+        ShadeOptions getShadingMode() const;
 
         /** Sets whether this pass's chosen detail level can be
             overridden (downgraded) by the camera setting. 
@@ -599,7 +599,7 @@ namespace Ogre {
         /** Gets whether this renderable's chosen detail level can be
             overridden (downgraded) by the camera setting.
         */
-        virtual bool getPolygonModeOverrideable(void) const
+        virtual bool getPolygonModeOverrideable() const
         {
             return mPolygonModeOverrideable;
         }
@@ -640,38 +640,38 @@ namespace Ogre {
 
         /** Returns true if this pass is to override the scene fog settings.
          */
-        bool getFogOverride(void) const;
+        bool getFogOverride() const;
 
         /** Returns the fog mode for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        FogMode getFogMode(void) const;
+        FogMode getFogMode() const;
 
         /** Returns the fog colour for the scene.
          */
-        const ColourValue& getFogColour(void) const;
+        const ColourValue& getFogColour() const;
 
         /** Returns the fog start distance for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        Real getFogStart(void) const;
+        Real getFogStart() const;
 
         /** Returns the fog end distance for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        Real getFogEnd(void) const;
+        Real getFogEnd() const;
 
         /** Returns the fog density for this pass.
             @note
             Only valid if getFogOverride is true.
         */
-        Real getFogDensity(void) const;
+        Real getFogDensity() const;
 
         /// Gets the internal datablock that acts as proxy for us
-        HlmsDatablock* _getDatablock(void) const;
+        HlmsDatablock* _getDatablock() const;
 
         /// Changes the current macroblock for a new one. Pointer can't be null
         void setMacroblock( const HlmsMacroblock &macroblock );
@@ -679,7 +679,7 @@ namespace Ogre {
         /** Retrieves current macroblock. Don't const_cast the return value to modify it.
             @See HlmsDatablock remarks.
         */
-        const HlmsMacroblock* getMacroblock(void) const;
+        const HlmsMacroblock* getMacroblock() const;
 
         /// Changes the current blendblock for a new one. Pointer can't be null
         void setBlendblock( const HlmsBlendblock &blendblock );
@@ -687,7 +687,7 @@ namespace Ogre {
         /** Retrieves current blendblock. Don't const_cast the return value to modify it.
             @See HlmsDatablock remarks.
         */
-        const HlmsBlendblock* getBlendblock(void) const;
+        const HlmsBlendblock* getBlendblock() const;
 
         /** Sets the alpha reject function. See setAlphaRejectSettings for more information.
         */
@@ -699,11 +699,11 @@ namespace Ogre {
 
         /** Gets the alpha reject function. See setAlphaRejectSettings for more information.
         */
-        CompareFunction getAlphaRejectFunction(void) const { return mAlphaRejectFunc; }
+        CompareFunction getAlphaRejectFunction() const { return mAlphaRejectFunc; }
 
         /** Gets the alpha reject value. See setAlphaRejectSettings for more information.
         */
-        unsigned char getAlphaRejectValue(void) const { return mAlphaRejectVal; }
+        unsigned char getAlphaRejectValue() const { return mAlphaRejectVal; }
 
         /** Sets whether or not this pass should iterate per light or number of
             lights which can affect the object being rendered.
@@ -751,9 +751,9 @@ namespace Ogre {
                                 bool onlyForOneLightType = true, Light::LightTypes lightType = Light::LT_POINT);
 
         /** Does this pass run once for every light in range? */
-        bool getIteratePerLight(void) const { return mIteratePerLight; }
+        bool getIteratePerLight() const { return mIteratePerLight; }
         /** Does this pass run only for a single light type (if getIteratePerLight is true). */
-        bool getRunOnlyForOneLightType(void) const { return mRunOnlyForOneLightType; }
+        bool getRunOnlyForOneLightType() const { return mRunOnlyForOneLightType; }
         /** Gets the single light type this pass runs for if  getIteratePerLight and
             getRunOnlyForOneLightType are both true. */
         Light::LightTypes getOnlyLightType() const { return mOnlyLightType; }
@@ -771,13 +771,13 @@ namespace Ogre {
         /** If light iteration is enabled, determine the number of lights per
         iteration.
         */
-        unsigned short getLightCountPerIteration(void) const;
+        unsigned short getLightCountPerIteration() const;
         
         /// Gets the parent Technique
-        Technique* getParent(void) const { return mParent; }
+        Technique* getParent() const { return mParent; }
 
         /// Gets the resource group of the ultimate parent Material
-        const String& getResourceGroup(void) const;
+        const String& getResourceGroup() const;
 
         /** Sets the details of the vertex program to use.
         @remarks
@@ -804,11 +804,11 @@ namespace Ogre {
         */
         void setVertexProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the vertex program used by this pass. */
-        const String& getVertexProgramName(void) const;
+        const String& getVertexProgramName() const;
         /** Gets the vertex program parameters used by this pass. */
-        GpuProgramParametersSharedPtr getVertexProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getVertexProgramParameters() const;
         /** Gets the vertex program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getVertexProgram(void) const;
+        const GpuProgramPtr& getVertexProgram() const;
 
 
         /** Sets the details of the vertex program to use when rendering as a
@@ -849,12 +849,12 @@ namespace Ogre {
         */
         void setShadowCasterVertexProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the vertex program used by this pass when rendering shadow casters. */
-        const String& getShadowCasterVertexProgramName(void) const;
+        const String& getShadowCasterVertexProgramName() const;
         /** Gets the vertex program parameters used by this pass when rendering shadow casters. */
-        GpuProgramParametersSharedPtr getShadowCasterVertexProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getShadowCasterVertexProgramParameters() const;
         /** Gets the vertex program used by this pass when rendering shadow casters,
             only available after _load(). */
-        const GpuProgramPtr& getShadowCasterVertexProgram(void) const;
+        const GpuProgramPtr& getShadowCasterVertexProgram() const;
 
         /** Sets the details of the fragment program to use when rendering as a
             shadow caster.
@@ -894,12 +894,12 @@ namespace Ogre {
         */
         void setShadowCasterFragmentProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the fragment program used by this pass when rendering shadow casters. */
-        const String& getShadowCasterFragmentProgramName(void) const;
+        const String& getShadowCasterFragmentProgramName() const;
         /** Gets the fragment program parameters used by this pass when rendering shadow casters. */
-        GpuProgramParametersSharedPtr getShadowCasterFragmentProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getShadowCasterFragmentProgramParameters() const;
         /** Gets the fragment program used by this pass when rendering shadow casters,
             only available after _load(). */
-        const GpuProgramPtr& getShadowCasterFragmentProgram(void) const;
+        const GpuProgramPtr& getShadowCasterFragmentProgram() const;
 
         /** Sets the details of the fragment program to use.
         @remarks
@@ -924,11 +924,11 @@ namespace Ogre {
         */
         void setFragmentProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the fragment program used by this pass. */
-        const String& getFragmentProgramName(void) const;
+        const String& getFragmentProgramName() const;
         /** Gets the fragment program parameters used by this pass. */
-        GpuProgramParametersSharedPtr getFragmentProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getFragmentProgramParameters() const;
         /** Gets the fragment program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getFragmentProgram(void) const;
+        const GpuProgramPtr& getFragmentProgram() const;
 
         /** Sets the details of the geometry program to use.
         @remarks
@@ -953,25 +953,25 @@ namespace Ogre {
         */
         void setGeometryProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the geometry program used by this pass. */
-        const String& getGeometryProgramName(void) const;
+        const String& getGeometryProgramName() const;
         /** Gets the geometry program parameters used by this pass. */
-        GpuProgramParametersSharedPtr getGeometryProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getGeometryProgramParameters() const;
         /** Gets the geometry program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getGeometryProgram(void) const;
+        const GpuProgramPtr& getGeometryProgram() const;
 
         /** Internal method to adjust pass index. */
         void _notifyIndex(unsigned short index);
 
         /** Internal method for preparing to load this pass. */
-        void _prepare(void);
+        void _prepare();
         /** Internal method for undoing the load preparartion for this pass. */
-        void _unprepare(void);
+        void _unprepare();
         /** Internal method for loading this pass. */
-        void _load(void);
+        void _load();
         /** Internal method for unloading this pass. */
-        void _unload(void);
+        void _unload();
         /// Is this loaded?
-        bool isLoaded(void) const;
+        bool isLoaded() const;
 
         /** Update automatic parameters.
         @param source The source of the parameters
@@ -1000,7 +1000,7 @@ namespace Ogre {
 
         /** Returns whether this pass is ambient only.
          */
-        bool isAmbientOnly(void) const;
+        bool isAmbientOnly() const;
 
         /** set the number of iterations that this pass
             should perform when doing fast multi pass operation.
@@ -1019,7 +1019,7 @@ namespace Ogre {
 
         /** Gets the pass iteration count value.
          */
-        size_t getPassIterationCount(void) const { return mPassIterationCount; }
+        size_t getPassIterationCount() const { return mPassIterationCount; }
 
         /** Applies texture names to Texture Unit State with matching texture name aliases.
             All Texture Unit States within the pass are checked.
@@ -1125,11 +1125,11 @@ namespace Ogre {
         */
         void setTessellationHullProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the Tessellation Hull program used by this pass. */
-        const String& getTessellationHullProgramName(void) const;
+        const String& getTessellationHullProgramName() const;
         /** Gets the Tessellation Hull program parameters used by this pass. */
-        GpuProgramParametersSharedPtr getTessellationHullProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getTessellationHullProgramParameters() const;
         /** Gets the Tessellation Hull program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getTessellationHullProgram(void) const;
+        const GpuProgramPtr& getTessellationHullProgram() const;
 
         /** Sets the details of the Tessellation domain program to use.
         @remarks
@@ -1154,11 +1154,11 @@ namespace Ogre {
         */
         void setTessellationDomainProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the Domain Evaluation program used by this pass. */
-        const String& getTessellationDomainProgramName(void) const;
+        const String& getTessellationDomainProgramName() const;
         /** Gets the Tessellation Domain program parameters used by this pass. */
-        GpuProgramParametersSharedPtr getTessellationDomainProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getTessellationDomainProgramParameters() const;
         /** Gets the Tessellation Domain program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getTessellationDomainProgram(void) const;
+        const GpuProgramPtr& getTessellationDomainProgram() const;
 
         /** Sets the details of the compute program to use.
         @remarks
@@ -1183,11 +1183,11 @@ namespace Ogre {
         */
         void setComputeProgramParameters(GpuProgramParametersSharedPtr params);
         /** Gets the name of the Tessellation Hull program used by this pass. */
-        const String& getComputeProgramName(void) const;
+        const String& getComputeProgramName() const;
         /** Gets the Tessellation Hull program parameters used by this pass. */
-        GpuProgramParametersSharedPtr getComputeProgramParameters(void) const;
+        GpuProgramParametersSharedPtr getComputeProgramParameters() const;
         /** Gets the Tessellation EHull program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getComputeProgram(void) const;
+        const GpuProgramPtr& getComputeProgram() const;
     };
 
     /** @} */

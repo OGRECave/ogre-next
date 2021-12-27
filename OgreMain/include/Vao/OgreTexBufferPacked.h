@@ -52,7 +52,7 @@ namespace Ogre
         {
         }
 
-        virtual BufferPackedTypes getBufferPackedType(void) const   { return BP_TYPE_TEX; }
+        virtual BufferPackedTypes getBufferPackedType() const   { return BP_TYPE_TEX; }
 
         /** Binds the texture buffer to the given slot in the
             Vertex/Pixel/Geometry/Hull/Domain/Compute Shader
@@ -83,7 +83,7 @@ namespace Ogre
         /// assumes the current GL_TEXTURE slot is already set.
         virtual void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) {}
 
-        PixelFormatGpu getPixelFormat(void) const       { return mPixelFormat; }
+        PixelFormatGpu getPixelFormat() const       { return mPixelFormat; }
     };
 }
 

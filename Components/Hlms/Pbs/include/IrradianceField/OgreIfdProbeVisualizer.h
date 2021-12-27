@@ -15,7 +15,7 @@ namespace Ogre
 
     class _OgreHlmsPbsExport IfdProbeVisualizer : public MovableObject, public Renderable
     {
-        void createBuffers( void );
+        void createBuffers();
 
     public:
         IfdProbeVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
@@ -47,13 +47,13 @@ namespace Ogre
                              uint8_t tessellation );
 
         // Overrides from MovableObject
-        virtual const String &getMovableType( void ) const;
+        virtual const String &getMovableType() const;
 
         // Overrides from Renderable
-        virtual const LightList &getLights( void ) const;
+        virtual const LightList &getLights() const;
         virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
         virtual void getWorldTransforms( Matrix4 *xform ) const;
-        virtual bool getCastsShadows( void ) const;
+        virtual bool getCastsShadows() const;
     };
 }  // namespace Ogre
 

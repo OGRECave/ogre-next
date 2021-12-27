@@ -58,7 +58,7 @@ namespace Ogre
     protected:
         SceneManager    *mSceneManager;
 
-        virtual bool allowResolveStoreActionsWithoutResolveTexture(void) const;
+        virtual bool allowResolveStoreActionsWithoutResolveTexture() const;
         virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc );
 
         virtual void analyzeBarriers( const bool bClearBarriers = true );

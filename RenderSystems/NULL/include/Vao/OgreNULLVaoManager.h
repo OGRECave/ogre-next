@@ -194,9 +194,9 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
-        virtual void cleanupEmptyPools(void);
+        virtual void cleanupEmptyPools();
 
-        bool supportsArbBufferStorage(void) const       { return false; }
+        bool supportsArbBufferStorage() const       { return false; }
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -208,12 +208,12 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
-        virtual void _update(void);
+        virtual void _update();
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
-        uint8 waitForTailFrameToFinish(void);
+        uint8 waitForTailFrameToFinish();
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );
         virtual bool isFrameFinished( uint32 frameCount );
     };

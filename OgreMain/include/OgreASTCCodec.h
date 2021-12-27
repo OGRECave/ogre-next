@@ -70,9 +70,9 @@ namespace Ogre {
         virtual String getType() const;        
 
 		/// Static method to startup and register the ASTC codec
-		static void startup(void);
+		static void startup();
 		/// Static method to shutdown and unregister the ASTC codec
-		static void shutdown(void);
+		static void shutdown();
         static size_t getMemorySize( uint32 width, uint32 height, uint32 depth,
                                      int32 xdim, int32 ydim, PixelFormatGpu fmt );
 

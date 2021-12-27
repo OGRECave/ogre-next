@@ -146,11 +146,11 @@ namespace Ogre {
                 the place in which OGRE found the problem, and a text
                 description from the 3D rendering library, if available.
         */
-        virtual const String& getFullDescription(void) const;
+        virtual const String& getFullDescription() const;
 
         /** Gets the error code.
         */
-        virtual int getNumber(void) const throw();
+        virtual int getNumber() const throw();
 
         /** Gets the source function.
         */
@@ -168,7 +168,7 @@ namespace Ogre {
             getFullDescriptionto get a full description of the error including line number,
             error number and what function threw the exception.
         */
-        virtual const String &getDescription(void) const { return description; }
+        virtual const String &getDescription() const { return description; }
 
         /// Override std::exception::what
         const char* what() const throw() { return getFullDescription().c_str(); }

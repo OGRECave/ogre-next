@@ -64,8 +64,8 @@ namespace Ogre
                                 GLES2DynamicBuffer *dynamicBuffer );
         ~GLES2BufferInterface();
 
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        GLuint getVboName(void) const               { return mVboName; }
+        size_t getVboPoolIndex()                { return mVboPoolIdx; }
+        GLuint getVboName() const               { return mVboName; }
 
         /// Only use this function for the first upload
         void _firstUpload( void *data, size_t elementStart, size_t elementCount );
@@ -75,8 +75,8 @@ namespace Ogre
                                                  bool advanceFrame = true );
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        virtual void advanceFrame();
+        virtual void regressFrame();
     };
 }
 

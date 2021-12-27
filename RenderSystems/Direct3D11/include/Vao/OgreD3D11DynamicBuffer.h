@@ -83,7 +83,7 @@ namespace Ogre
         D3D11DynamicBuffer( ID3D11Buffer *vboName, size_t vboSize, D3D11Device &device );
         ~D3D11DynamicBuffer();
 
-        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
+        ID3D11Buffer* getVboName() const        { return mVboName.Get(); }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );

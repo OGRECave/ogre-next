@@ -137,7 +137,7 @@ namespace Ogre {
         glXWaitVideoSyncSGI = (int (*)(int, int, unsigned int *))SDL_GL_GetProcAddress("glXWaitVideoSyncSGI");
     }
 
-    void SDLWindow::destroy(void)
+    void SDLWindow::destroy()
     {
         // according to http://www.libsdl.org/cgi/docwiki.cgi/SDL_5fSetVideoMode
         // never free the surface returned from SDL_SetVideoMode

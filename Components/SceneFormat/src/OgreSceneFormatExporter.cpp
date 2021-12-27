@@ -110,7 +110,7 @@ namespace Ogre
         mUseBinaryFloatingPoint = useBinaryFp;
     }
     //-----------------------------------------------------------------------------------
-    bool SceneFormatExporter::getUseBinaryFloatingPoint(void)
+    bool SceneFormatExporter::getUseBinaryFloatingPoint()
     {
         return mUseBinaryFloatingPoint;
     }

@@ -61,19 +61,19 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::createInternalResourcesImpl(void)
+    void D3D11TextureGpuWindow::createInternalResourcesImpl()
     {
         assert( mFinalTextureName );
         create2DTexture( true );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::destroyInternalResourcesImpl(void)
+    void D3D11TextureGpuWindow::destroyInternalResourcesImpl()
     {
         _setBackbuffer( 0 );
         D3D11TextureGpuRenderTarget::destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::notifyDataIsReady(void)
+    void D3D11TextureGpuWindow::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         OGRE_ASSERT_LOW( mDataPreparationsPending > 0u &&
@@ -83,12 +83,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11TextureGpuWindow::_isDataReadyImpl(void) const
+    bool D3D11TextureGpuWindow::_isDataReadyImpl() const
     {
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::swapBuffers(void)
+    void D3D11TextureGpuWindow::swapBuffers()
     {
         mWindow->swapBuffers();
     }
@@ -105,7 +105,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::_setToDisplayDummyTexture(void)
+    void D3D11TextureGpuWindow::_setToDisplayDummyTexture()
     {
     }
     //-----------------------------------------------------------------------------------

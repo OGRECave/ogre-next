@@ -159,7 +159,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    VertexElement2VecVec VertexArrayObject::getVertexDeclaration(void) const
+    VertexElement2VecVec VertexArrayObject::getVertexDeclaration() const
     {
         VertexElement2VecVec retVal;
         retVal.reserve( mVertexBuffers.size() );

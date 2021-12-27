@@ -121,7 +121,7 @@ namespace Ogre
                 return !( fence.end <= this->start || fence.start >= this->end );
             }
 
-            size_t length(void) const { return end - start; }
+            size_t length() const { return end - start; }
         };
 
         typedef vector<Fence>::type FenceVec;
@@ -182,9 +182,9 @@ namespace Ogre
 
         /// When true, this buffer can only be used for uploading to GPU.
         /// When false, can only be used for downloading from GPU
-        bool getUploadOnly(void) const                  { return mUploadOnly; }
+        bool getUploadOnly() const                  { return mUploadOnly; }
 
-        MappingState getMappingState(void) const        { return mMappingState; }
+        MappingState getMappingState() const        { return mMappingState; }
 
         /** Returns true if our next call to @map() with the same parameters will stall.
             @See StagingStallType
@@ -266,10 +266,10 @@ namespace Ogre
         void unmap( const DestinationVec &destinations )
                                 { unmap( &destinations.front(), destinations.size() ); }
 
-        size_t getMaxSize(void)                     { return mSizeBytes; }
+        size_t getMaxSize()                     { return mSizeBytes; }
 
         /// Adds a reference count to the StagingBuffer. @See removeReferenceCount
-        void addReferenceCount(void);
+        void addReferenceCount();
 
         /** Decreases the reference count by one. StagingBuffers are manually reference counted.
             The first reason is performance. The second main reason is that the pointer doesn't
@@ -290,20 +290,20 @@ namespace Ogre
             as the memory is owned by the VaoManager: if the VaoManager is shutdown, this
             StagingBuffer will be freed.
         */
-        void removeReferenceCount(void);
+        void removeReferenceCount();
 
-        int16 getReferenceCount(void) const         { return mRefCount; }
+        int16 getReferenceCount() const         { return mRefCount; }
 
         /// Returns the time in milliseconds in which a StagingBuffer should
         /// hazards unfenced while with a reference count of 0. @see getLifetimeThreshold
-        uint32 getUnfencedTimeThreshold(void) const { return mUnfenceTimeThreshold; }
+        uint32 getUnfencedTimeThreshold() const { return mUnfenceTimeThreshold; }
 
         /// Returns the time in milliseconds in which a StagingBuffer should
         /// live with a reference count of 0 before being deleted.
-        uint32 getLifetimeThreshold(void) const     { return mLifetimeThreshold; }
+        uint32 getLifetimeThreshold() const     { return mLifetimeThreshold; }
 
         /// Returns the time in millisecond when the ref. count became 0.
-        uint64 getLastUsedTimestamp(void) const     { return mLastUsedTimestamp; }
+        uint64 getLastUsedTimestamp() const     { return mLastUsedTimestamp; }
     };
 }
 

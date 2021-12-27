@@ -36,7 +36,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void PbsMaterialsGameState::createScene01(void)
+    void PbsMaterialsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -250,7 +250,7 @@ namespace Demo
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
     }
     //-----------------------------------------------------------------------------------
-    void PbsMaterialsGameState::setTransparencyToMaterials(void)
+    void PbsMaterialsGameState::setTransparencyToMaterials()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 

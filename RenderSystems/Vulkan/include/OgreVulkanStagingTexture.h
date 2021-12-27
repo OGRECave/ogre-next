@@ -47,7 +47,7 @@ namespace Ogre
         void *mLastMappedPtr;
 
         virtual bool belongsToUs( const TextureBox &box );
-        virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr( void );
+        virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
 
     public:
         VulkanStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size,
@@ -55,22 +55,22 @@ namespace Ogre
                               VulkanDynamicBuffer *dynamicBuffer );
         virtual ~VulkanStagingTexture();
 
-        void _unmapBuffer( void );
+        void _unmapBuffer();
 
         bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                              PixelFormatGpu pixelFormat ) const;
 
-        virtual void startMapRegion( void );
-        virtual void stopMapRegion( void );
+        virtual void startMapRegion();
+        virtual void stopMapRegion();
 
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
                              const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
                              bool skipSysRamCopy = false );
 
-        VkBuffer _getVboName( void ) const { return mVboName; }
+        VkBuffer _getVboName() const { return mVboName; }
 
-        VulkanDynamicBuffer *_getDynamicBuffer( void ) { return mDynamicBuffer; }
-        void _resetDynamicBuffer( void ) { mDynamicBuffer = 0; }
+        VulkanDynamicBuffer *_getDynamicBuffer() { return mDynamicBuffer; }
+        void _resetDynamicBuffer() { mDynamicBuffer = 0; }
     };
 }  // namespace Ogre
 

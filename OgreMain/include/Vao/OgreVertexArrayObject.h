@@ -99,18 +99,18 @@ namespace Ogre
                            IndexBufferPacked *indexBuffer,
                            OperationType operationType );
 
-        uint32 getRenderQueueId(void) const                             { return mRenderQueueId; }
-        uint32 getVaoName(void) const                                   { return mVaoName; }
-        uint16 getInputLayoutId(void) const                             { return mInputLayoutId; }
+        uint32 getRenderQueueId() const                             { return mRenderQueueId; }
+        uint32 getVaoName() const                                   { return mVaoName; }
+        uint16 getInputLayoutId() const                             { return mInputLayoutId; }
 
-        const VertexBufferPackedVec& getVertexBuffers(void) const       { return mVertexBuffers; }
-        IndexBufferPacked* getIndexBuffer(void) const                   { return mIndexBuffer; }
-        VertexBufferPacked* getBaseVertexBuffer(void) const             { return mBaseVertexBuffer; }
+        const VertexBufferPackedVec& getVertexBuffers() const       { return mVertexBuffers; }
+        IndexBufferPacked* getIndexBuffer() const                   { return mIndexBuffer; }
+        VertexBufferPacked* getBaseVertexBuffer() const             { return mBaseVertexBuffer; }
 
-        OperationType getOperationType(void) const { return mOperationType; }
+        OperationType getOperationType() const { return mOperationType; }
 
-        uint32 getPrimitiveStart(void) const                            { return mPrimStart; }
-        uint32 getPrimitiveCount(void) const                            { return mPrimCount; }
+        uint32 getPrimitiveStart() const                            { return mPrimStart; }
+        uint32 getPrimitiveCount() const                            { return mPrimCount; }
 
         /** Limits the range of triangle primitives that is rendered.
             For VAOs with index buffers, this controls the index start & count,
@@ -154,7 +154,7 @@ namespace Ogre
         /// Gets the combined vertex declaration of all the vertex buffers. Note that we
         /// iterate through all of them and allocate the vector. You should cache
         /// the result rather than calling this function frequently.
-        VertexElement2VecVec getVertexDeclaration(void) const;
+        VertexElement2VecVec getVertexDeclaration() const;
 
         static VertexElement2VecVec getVertexDeclaration( const VertexBufferPackedVec &vertexBuffers );
 

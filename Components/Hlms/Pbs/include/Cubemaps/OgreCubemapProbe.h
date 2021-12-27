@@ -100,16 +100,16 @@ namespace Ogre
         /// Defaults to 0xffffffff
         uint32  mMask;
 
-        void destroyWorkspace(void);
+        void destroyWorkspace();
     protected:
-        void destroyTexture(void);
+        void destroyTexture();
 
-        void acquireTextureAuto(void);
-        void releaseTextureAuto(void);
-        void createInternalProbe(void);
-        void destroyInternalProbe(void);
-        void switchInternalProbeStaticValue(void);
-        void syncInternalProbe(void);
+        void acquireTextureAuto();
+        void releaseTextureAuto();
+        void createInternalProbe();
+        void destroyInternalProbe();
+        void switchInternalProbeStaticValue();
+        void syncInternalProbe();
 
         void restoreFromClearScene( SceneNode *rootNode );
 
@@ -162,7 +162,7 @@ namespace Ogre
                             IdString workspaceDefOverride = IdString(),
                             const CompositorChannelVec &additionalChannels = CompositorChannelVec(),
                             uint8 executionMask = 0xFF );
-        bool isInitialized(void) const;
+        bool isInitialized() const;
 
         /** Sets cubemap probe's parameters.
         @param cameraPos
@@ -193,7 +193,7 @@ namespace Ogre
             This call is not cheap.
         */
         void setStatic( bool isStatic );
-        bool getStatic(void) const          { return mStatic; }
+        bool getStatic() const          { return mStatic; }
 
         /** When two probes overlap, you may want one probe to have particularly more influence
             than the others. Use this value to decrease/increase the weight when blending the probes.
@@ -204,9 +204,9 @@ namespace Ogre
             A higher value means the probe should have a stronger influence over the others.
         */
         void setPriority( uint16 priority );
-        uint16_t getPriority(void) const;
+        uint16_t getPriority() const;
 
-        Aabb getAreaLS(void) const          { return Aabb( Vector3::ZERO, mArea.mHalfSize ); }
+        Aabb getAreaLS() const          { return Aabb( Vector3::ZERO, mArea.mHalfSize ); }
 
         /** Gets the Normalized Distance Function.
         @param posLS
@@ -219,30 +219,30 @@ namespace Ogre
         */
         Real getNDF( const Vector3 &posLS ) const;
 
-        void _prepareForRendering(void);
-        void _clearCubemap(void);
-        void _updateRender(void);
+        void _prepareForRendering();
+        void _clearCubemap();
+        void _updateRender();
 
-        const Vector3& getProbeCameraPos(void) const        { return mProbeCameraPos; }
-        const Aabb& getArea(void) const                     { return mArea; }
-        const Vector3& getAreaInnerRegion(void) const       { return mAreaInnerRegion; }
-        const Matrix3& getOrientation(void) const           { return mOrientation; }
-        const Matrix3& getInvOrientation(void) const        { return mInvOrientation; }
-        const Aabb& getProbeShape(void) const               { return mProbeShape; }
+        const Vector3& getProbeCameraPos() const        { return mProbeCameraPos; }
+        const Aabb& getArea() const                     { return mArea; }
+        const Vector3& getAreaInnerRegion() const       { return mAreaInnerRegion; }
+        const Matrix3& getOrientation() const           { return mOrientation; }
+        const Matrix3& getInvOrientation() const        { return mInvOrientation; }
+        const Aabb& getProbeShape() const               { return mProbeShape; }
 
-        CompositorWorkspace *getWorkspace(void) const       { return mWorkspace; }
+        CompositorWorkspace *getWorkspace() const       { return mWorkspace; }
 
-        TextureGpu* getInternalTexture(void) const          { return mTexture; }
-        void _addReference(void);
-        void _removeReference(void);
+        TextureGpu* getInternalTexture() const          { return mTexture; }
+        void _addReference();
+        void _removeReference();
 
-        const SceneNode* getInternalCubemapProbeSceneNode(void) const;
+        const SceneNode* getInternalCubemapProbeSceneNode() const;
 
-        uint16 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
+        uint16 getInternalSliceToArrayTexture() const   { return mCubemapArrayIdx; }
 
-        ConstBufferPacked* getConstBufferForManualProbes(void)  { return mConstBufferForManualProbes; }
+        ConstBufferPacked* getConstBufferForManualProbes()  { return mConstBufferForManualProbes; }
 
-        ParallaxCorrectedCubemapBase* getCreator(void)      { return mCreator; }
+        ParallaxCorrectedCubemapBase* getCreator()      { return mCreator; }
     };
 }
 

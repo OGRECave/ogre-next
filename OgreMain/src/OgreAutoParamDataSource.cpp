@@ -285,7 +285,7 @@ namespace Ogre {
         mWorldMatrixDirty = false;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getWorldMatrix(void) const
+    const Matrix4& AutoParamDataSource::getWorldMatrix() const
     {
         if (mWorldMatrixDirty)
         {
@@ -297,21 +297,21 @@ namespace Ogre {
         return mWorldMatrixArray[0];
     }
     //-----------------------------------------------------------------------------
-    size_t AutoParamDataSource::getWorldMatrixCount(void) const
+    size_t AutoParamDataSource::getWorldMatrixCount() const
     {
         // trigger derivation
         getWorldMatrix();
         return mWorldMatrixCount;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4* AutoParamDataSource::getWorldMatrixArray(void) const
+    const Matrix4* AutoParamDataSource::getWorldMatrixArray() const
     {
         // trigger derivation
         getWorldMatrix();
         return mWorldMatrixArray;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getViewMatrix(void) const
+    const Matrix4& AutoParamDataSource::getViewMatrix() const
     {
         if (mViewMatrixDirty)
         {
@@ -326,7 +326,7 @@ namespace Ogre {
         return mViewMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getViewProjectionMatrix(void) const
+    const Matrix4& AutoParamDataSource::getViewProjectionMatrix() const
     {
         if (mViewProjMatrixDirty)
         {
@@ -336,7 +336,7 @@ namespace Ogre {
         return mViewProjMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getProjectionMatrix(void) const
+    const Matrix4& AutoParamDataSource::getProjectionMatrix() const
     {
         if (mProjMatrixDirty)
         {
@@ -371,7 +371,7 @@ namespace Ogre {
         return mProjectionMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getWorldViewMatrix(void) const
+    const Matrix4& AutoParamDataSource::getWorldViewMatrix() const
     {
         if (mWorldViewMatrixDirty)
         {
@@ -381,7 +381,7 @@ namespace Ogre {
         return mWorldViewMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getWorldViewProjMatrix(void) const
+    const Matrix4& AutoParamDataSource::getWorldViewProjMatrix() const
     {
         if (mWorldViewProjMatrixDirty)
         {
@@ -391,7 +391,7 @@ namespace Ogre {
         return mWorldViewProjMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getInverseWorldMatrix(void) const
+    const Matrix4& AutoParamDataSource::getInverseWorldMatrix() const
     {
         if (mInverseWorldMatrixDirty)
         {
@@ -401,7 +401,7 @@ namespace Ogre {
         return mInverseWorldMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getInverseWorldViewMatrix(void) const
+    const Matrix4& AutoParamDataSource::getInverseWorldViewMatrix() const
     {
         if (mInverseWorldViewMatrixDirty)
         {
@@ -411,7 +411,7 @@ namespace Ogre {
         return mInverseWorldViewMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getInverseViewMatrix(void) const
+    const Matrix4& AutoParamDataSource::getInverseViewMatrix() const
     {
         if (mInverseViewMatrixDirty)
         {
@@ -421,7 +421,7 @@ namespace Ogre {
         return mInverseViewMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getInverseTransposeWorldMatrix(void) const
+    const Matrix4& AutoParamDataSource::getInverseTransposeWorldMatrix() const
     {
         if (mInverseTransposeWorldMatrixDirty)
         {
@@ -431,7 +431,7 @@ namespace Ogre {
         return mInverseTransposeWorldMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Matrix4& AutoParamDataSource::getInverseTransposeWorldViewMatrix(void) const
+    const Matrix4& AutoParamDataSource::getInverseTransposeWorldViewMatrix() const
     {
         if (mInverseTransposeWorldViewMatrixDirty)
         {
@@ -441,7 +441,7 @@ namespace Ogre {
         return mInverseTransposeWorldViewMatrix;
     }
     //-----------------------------------------------------------------------------
-    const Vector4& AutoParamDataSource::getCameraPosition(void) const
+    const Vector4& AutoParamDataSource::getCameraPosition() const
     {
         if(mCameraPositionDirty)
         {
@@ -455,7 +455,7 @@ namespace Ogre {
         return mCameraPosition;
     }    
     //-----------------------------------------------------------------------------
-    const Vector4& AutoParamDataSource::getCameraPositionObjectSpace(void) const
+    const Vector4& AutoParamDataSource::getCameraPositionObjectSpace() const
     {
         if (mCameraPositionObjectSpaceDirty)
         {
@@ -466,7 +466,7 @@ namespace Ogre {
         return mCameraPositionObjectSpace;
     }
     //-----------------------------------------------------------------------------
-    const Vector4& AutoParamDataSource::getLodCameraPosition(void) const
+    const Vector4& AutoParamDataSource::getLodCameraPosition() const
     {
         if(mLodCameraPositionDirty)
         {
@@ -480,7 +480,7 @@ namespace Ogre {
         return mLodCameraPosition;
     }
     //-----------------------------------------------------------------------------
-    const Vector4& AutoParamDataSource::getLodCameraPositionObjectSpace(void) const
+    const Vector4& AutoParamDataSource::getLodCameraPositionObjectSpace() const
     {
         if (mLodCameraPositionObjectSpaceDirty)
         {
@@ -491,7 +491,7 @@ namespace Ogre {
         return mLodCameraPositionObjectSpace;
     }
     //-----------------------------------------------------------------------------
-    const Vector2 AutoParamDataSource::getRSDepthRange(void) const
+    const Vector2 AutoParamDataSource::getRSDepthRange() const
     {
         RenderSystem *rs = Root::getSingleton().getRenderSystem();
         if( rs->isReverseDepth() )
@@ -524,7 +524,7 @@ namespace Ogre {
         return getLight(index).getCastShadows() ? 1.0f : 0.0f;
     }
     //-----------------------------------------------------------------------------
-    const ColourValue& AutoParamDataSource::getAmbientLightColour(void) const
+    const ColourValue& AutoParamDataSource::getAmbientLightColour() const
     {
         return mAmbientLight[0];
         
@@ -541,7 +541,7 @@ namespace Ogre {
         setCurrentJob( 0 );
     }
     //-----------------------------------------------------------------------------
-    const Pass* AutoParamDataSource::getCurrentPass(void) const
+    const Pass* AutoParamDataSource::getCurrentPass() const
     {
         return mCurrentPass;
     }
@@ -551,7 +551,7 @@ namespace Ogre {
         mCurrentJob = job;
     }
     //-----------------------------------------------------------------------------
-    const HlmsComputeJob* AutoParamDataSource::getCurrentJob(void) const
+    const HlmsComputeJob* AutoParamDataSource::getCurrentJob() const
     {
         return mCurrentJob;
     }
@@ -633,42 +633,42 @@ namespace Ogre {
         return Vector4(size.x, size.y, 1 / size.x, 1 / size.y);
     }
     //-----------------------------------------------------------------------------
-    const ColourValue& AutoParamDataSource::getSurfaceAmbientColour(void) const
+    const ColourValue& AutoParamDataSource::getSurfaceAmbientColour() const
     {
         return mCurrentPass->getAmbient();
     }
     //-----------------------------------------------------------------------------
-    const ColourValue& AutoParamDataSource::getSurfaceDiffuseColour(void) const
+    const ColourValue& AutoParamDataSource::getSurfaceDiffuseColour() const
     {
         return mCurrentPass->getDiffuse();
     }
     //-----------------------------------------------------------------------------
-    const ColourValue& AutoParamDataSource::getSurfaceSpecularColour(void) const
+    const ColourValue& AutoParamDataSource::getSurfaceSpecularColour() const
     {
         return mCurrentPass->getSpecular();
     }
     //-----------------------------------------------------------------------------
-    const ColourValue& AutoParamDataSource::getSurfaceEmissiveColour(void) const
+    const ColourValue& AutoParamDataSource::getSurfaceEmissiveColour() const
     {
         return mCurrentPass->getSelfIllumination();
     }
     //-----------------------------------------------------------------------------
-    Real AutoParamDataSource::getSurfaceShininess(void) const
+    Real AutoParamDataSource::getSurfaceShininess() const
     {
         return mCurrentPass->getShininess();
     }
     //-----------------------------------------------------------------------------
-    Real AutoParamDataSource::getSurfaceAlphaRejectionValue(void) const
+    Real AutoParamDataSource::getSurfaceAlphaRejectionValue() const
     {
         return mCurrentPass->getAlphaRejectValue() * 0.003921569f; //1 / 255
     }
     //-----------------------------------------------------------------------------
-    ColourValue AutoParamDataSource::getDerivedAmbientLightColour(void) const
+    ColourValue AutoParamDataSource::getDerivedAmbientLightColour() const
     {
         return getAmbientLightColour() * getSurfaceAmbientColour();
     }
     //-----------------------------------------------------------------------------
-    ColourValue AutoParamDataSource::getDerivedSceneColour(void) const
+    ColourValue AutoParamDataSource::getDerivedSceneColour() const
     {
         ColourValue result = getDerivedAmbientLightColour() + getSurfaceEmissiveColour();
         result.a = getSurfaceDiffuseColour().a;
@@ -686,12 +686,12 @@ namespace Ogre {
         mFogParams.w = linearEnd != linearStart ? 1 / (linearEnd - linearStart) : 0;
     }
     //-----------------------------------------------------------------------------
-    const ColourValue& AutoParamDataSource::getFogColour(void) const
+    const ColourValue& AutoParamDataSource::getFogColour() const
     {
         return mFogColour;
     }
     //-----------------------------------------------------------------------------
-    const Vector4& AutoParamDataSource::getFogParams(void) const
+    const Vector4& AutoParamDataSource::getFogParams() const
     {
         return mFogParams;
     }
@@ -892,7 +892,7 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------------
-    const RenderPassDescriptor* AutoParamDataSource::getCurrentRenderPassDesc(void) const
+    const RenderPassDescriptor* AutoParamDataSource::getCurrentRenderPassDesc() const
     {
         return mCurrentRenderPassDesc;
     }
@@ -909,7 +909,7 @@ namespace Ogre {
         mDirLightExtrusionDistance = dist;
     }
     //-----------------------------------------------------------------------------
-    Real AutoParamDataSource::getShadowExtrusionDistance(void) const
+    Real AutoParamDataSource::getShadowExtrusionDistance() const
     {
         const Light& l = getLight(0); // only ever applies to one light at once
         if (l.getType() == Light::LT_DIRECTIONAL)
@@ -926,77 +926,77 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    const Renderable* AutoParamDataSource::getCurrentRenderable(void) const
+    const Renderable* AutoParamDataSource::getCurrentRenderable() const
     {
         return mCurrentRenderable;
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseViewProjMatrix(void) const
+    Matrix4 AutoParamDataSource::getInverseViewProjMatrix() const
     {
         return this->getViewProjectionMatrix().inverse();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseTransposeViewProjMatrix(void) const
+    Matrix4 AutoParamDataSource::getInverseTransposeViewProjMatrix() const
     {
         return this->getInverseViewProjMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getTransposeViewProjMatrix(void) const
+    Matrix4 AutoParamDataSource::getTransposeViewProjMatrix() const
     {
         return this->getViewProjectionMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getTransposeViewMatrix(void) const
+    Matrix4 AutoParamDataSource::getTransposeViewMatrix() const
     {
         return this->getViewMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseTransposeViewMatrix(void) const
+    Matrix4 AutoParamDataSource::getInverseTransposeViewMatrix() const
     {
         return this->getInverseViewMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getTransposeProjectionMatrix(void) const
+    Matrix4 AutoParamDataSource::getTransposeProjectionMatrix() const
     {
         return this->getProjectionMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseProjectionMatrix(void) const 
+    Matrix4 AutoParamDataSource::getInverseProjectionMatrix() const 
     {
         return this->getProjectionMatrix().inverse();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseTransposeProjectionMatrix(void) const
+    Matrix4 AutoParamDataSource::getInverseTransposeProjectionMatrix() const
     {
         return this->getInverseProjectionMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getTransposeWorldViewProjMatrix(void) const
+    Matrix4 AutoParamDataSource::getTransposeWorldViewProjMatrix() const
     {
         return this->getWorldViewProjMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseWorldViewProjMatrix(void) const
+    Matrix4 AutoParamDataSource::getInverseWorldViewProjMatrix() const
     {
         return this->getWorldViewProjMatrix().inverse();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getInverseTransposeWorldViewProjMatrix(void) const
+    Matrix4 AutoParamDataSource::getInverseTransposeWorldViewProjMatrix() const
     {
         return this->getInverseWorldViewProjMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getTransposeWorldViewMatrix(void) const
+    Matrix4 AutoParamDataSource::getTransposeWorldViewMatrix() const
     {
         return this->getWorldViewMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Matrix4 AutoParamDataSource::getTransposeWorldMatrix(void) const
+    Matrix4 AutoParamDataSource::getTransposeWorldMatrix() const
     {
         return this->getWorldMatrix().transpose();
     }
     //-----------------------------------------------------------------------------
-    Real AutoParamDataSource::getTime(void) const
+    Real AutoParamDataSource::getTime() const
     {
         return ControllerManager::getSingleton().getElapsedTime();
     }
@@ -1079,7 +1079,7 @@ namespace Ogre {
         return Vector4(t, std::sin(t), std::cos(t), std::tan(t));
     }
     //-----------------------------------------------------------------------------
-    Real AutoParamDataSource::getFrameTime(void) const
+    Real AutoParamDataSource::getFrameTime() const
     {
         return ControllerManager::getSingleton().getFrameTimeSource()->getValue();
     }
@@ -1139,7 +1139,7 @@ namespace Ogre {
         return mCurrentCamera->getFarClipDistance(); 
     }
     //-----------------------------------------------------------------------------
-    int AutoParamDataSource::getPassNumber(void) const
+    int AutoParamDataSource::getPassNumber() const
     {
         return mPassNumber;
     }
@@ -1149,7 +1149,7 @@ namespace Ogre {
         mPassNumber = passNumber;
     }
     //-----------------------------------------------------------------------------
-    void AutoParamDataSource::incPassNumber(void)
+    void AutoParamDataSource::incPassNumber()
     {
         ++mPassNumber;
     }

@@ -50,11 +50,11 @@ namespace Ogre {
     // PROFILE DEFINITIONS
     //-----------------------------------------------------------------------
     template<> Profiler* Singleton<Profiler>::msSingleton = 0;
-    Profiler* Profiler::getSingletonPtr(void)
+    Profiler* Profiler::getSingletonPtr()
     {
         return msSingleton;
     }
-    Profiler& Profiler::getSingleton(void)
+    Profiler& Profiler::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -100,7 +100,7 @@ namespace Ogre {
         mRoot.hierarchicalLvl = 0 - 1;
     }
     //-----------------------------------------------------------------------
-    ProfileInstance::ProfileInstance(void)
+    ProfileInstance::ProfileInstance()
         : parent(NULL)
         , frameNumber(0)
         , accum(0)
@@ -120,7 +120,7 @@ namespace Ogre {
         frame.frameTime = 0;
         frame.calls = 0;
     }
-    ProfileInstance::~ProfileInstance(void)
+    ProfileInstance::~ProfileInstance()
     {                                        
         destroyAllChildren();
     }
@@ -211,7 +211,7 @@ namespace Ogre {
         mUseStableMarkers = useStableMarkers;
     }
     //-----------------------------------------------------------------------
-    bool Profiler::getUseStableMarkers(void) const
+    bool Profiler::getUseStableMarkers() const
     {
         return mUseStableMarkers;
     }
@@ -497,7 +497,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Profiler::processFrameStats(void) 
+    void Profiler::processFrameStats()
     {
         Real maxFrameTime = 0;
 
@@ -652,7 +652,7 @@ namespace Ogre {
         childrenMap.clear();
     }
     //-----------------------------------------------------------------------
-    void ProfileInstance::reset(void)
+    void ProfileInstance::reset()
     {
         history.currentTimePercent = history.maxTimePercent = history.totalTimePercent = 0;
         history.currentTimeMillisecs = history.maxTimeMillisecs = history.totalTimeMillisecs = 0;

@@ -88,7 +88,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *D3D11UavBufferPacked::getAsReadOnlyBufferImpl( void )
+    ReadOnlyBufferPacked *D3D11UavBufferPacked::getAsReadOnlyBufferImpl()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 

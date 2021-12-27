@@ -75,7 +75,7 @@ namespace Ogre
         MetalDynamicBuffer( id<MTLBuffer> vboName, size_t vboSize );
         ~MetalDynamicBuffer();
 
-        id<MTLBuffer> getVboName(void) const        { return mVboName; }
+        id<MTLBuffer> getVboName() const        { return mVboName; }
 
         void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
 

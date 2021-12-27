@@ -113,7 +113,7 @@ namespace Ogre
         SceneFormatBase( Root *root, SceneManager *sceneManager );
         ~SceneFormatBase();
 
-        HlmsPbs* getPbs(void) const;
+        HlmsPbs* getPbs() const;
 
         /// Caller must delete the pointer. We won't do it for you.
         void setListener( SceneFormatListener *listener );

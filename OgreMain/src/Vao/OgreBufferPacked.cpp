@@ -112,7 +112,7 @@ namespace Ogre
         mBufferInterface = bufferInterface;
     }
     //-----------------------------------------------------------------------------------
-    BufferPacked *BufferPacked::getOriginalBufferType( void )
+    BufferPacked *BufferPacked::getOriginalBufferType()
     {
         return mBufferInterface->getBufferPacked();
     }
@@ -230,7 +230,7 @@ namespace Ogre
         mLastMappingCount = 0;
     }
     //-----------------------------------------------------------------------------------
-    void BufferPacked::advanceFrame(void)
+    void BufferPacked::advanceFrame()
     {
 #if OGRE_DEBUG_MODE
         if( mLastFrameMappedAndAdvanced == mVaoManager->getFrameCount() )
@@ -254,7 +254,7 @@ namespace Ogre
         return mBufferInterface->advanceFrame();
     }
     //-----------------------------------------------------------------------------------
-    void BufferPacked::regressFrame(void)
+    void BufferPacked::regressFrame()
     {
 #if OGRE_DEBUG_MODE
         if( mLastFrameMappedAndAdvanced != mVaoManager->getFrameCount() )
@@ -318,7 +318,7 @@ namespace Ogre
                                   srcNumElems * this->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool BufferPacked::isCurrentlyMapped(void) const
+    bool BufferPacked::isCurrentlyMapped() const
     {
         if( mMappingState == MS_UNMAPPED )
             return false;

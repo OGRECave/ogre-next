@@ -117,7 +117,7 @@ namespace Demo
 
         void parseCmdLine( int nargs, const char *const *argv );
 
-        const Params &getParams( void ) const { return mParams; }
+        const Params &getParams() const { return mParams; }
 
         void startRecording( Demo::GraphicsSystem *graphicsSystem );
         void notifyRecordingNewFrame( Demo::GraphicsSystem *graphicsSystem );

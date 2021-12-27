@@ -221,7 +221,7 @@ namespace Ogre
         macroStr.swap( inOutString );
     }
     //-------------------------------------------------------------------------
-    VkPipelineLayout VulkanRootLayout::createVulkanHandles( void )
+    VkPipelineLayout VulkanRootLayout::createVulkanHandles()
     {
         if( mRootLayout )
             return mRootLayout;

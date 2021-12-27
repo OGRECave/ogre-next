@@ -194,7 +194,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::restoreSwappedTextures( void )
+    void VctLighting::restoreSwappedTextures()
     {
         if( mLightVoxel[0] && mLightBounce )
         {
@@ -506,7 +506,7 @@ namespace Ogre
             mDebugVoxelVisualizer->setVisible( false );
     }
     //-------------------------------------------------------------------------
-    void VctLighting::checkTextures(void)
+    void VctLighting::checkTextures()
     {
         if( mVoxelizerTexturesChanged )
             createTextures();
@@ -519,7 +519,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctLighting::setupBounceTextures(void)
+    void VctLighting::setupBounceTextures()
     {
         const size_t numExtraCascades = mExtraCascades.size();
 
@@ -600,7 +600,7 @@ namespace Ogre
         mLightVctBounceInject->_setUavTexture( 0, uavSlot );
     }
     //-------------------------------------------------------------------------
-    void VctLighting::setupGlslTextureUnits( void )
+    void VctLighting::setupGlslTextureUnits()
     {
         const size_t numExtraCascades = mExtraCascades.size();
         size_t numNeededTexUnits;
@@ -875,7 +875,7 @@ namespace Ogre
             setupGlslTextureUnits();
     }
     //-------------------------------------------------------------------------
-    bool VctLighting::getAllowMultipleBounces(void) const
+    bool VctLighting::getAllowMultipleBounces() const
     {
         return mLightBounce != 0;
     }
@@ -1029,7 +1029,7 @@ namespace Ogre
         return memcmp( mUpperHemisphere, mLowerHemisphere, sizeof(mUpperHemisphere) ) != 0;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::resetTexturesFromBuildRelative( void )
+    void VctLighting::resetTexturesFromBuildRelative()
     {
         if( mDebugVoxelVisualizer )
         {
@@ -1060,7 +1060,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    size_t VctLighting::getConstBufferSize( void ) const
+    size_t VctLighting::getConstBufferSize() const
     {
         size_t retVal = 10u * 4u * sizeof( float );
         retVal += ( 4u + 4u * 2u ) * sizeof( float ) * mExtraCascades.size();
@@ -1231,7 +1231,7 @@ namespace Ogre
             *passBufferPtr++ = static_cast<float>( invXForm[0][i] );
     }
     //-------------------------------------------------------------------------
-    bool VctLighting::shouldEnableSpecularSdfQuality(void) const
+    bool VctLighting::shouldEnableSpecularSdfQuality() const
     {
         return mVoxelizer->getAlbedoVox()->getWidth() > 32u &&
                 mVoxelizer->getAlbedoVox()->getHeight() > 32u &&
@@ -1268,7 +1268,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    bool VctLighting::getDebugVisualizationMode(void) const
+    bool VctLighting::getDebugVisualizationMode() const
     {
         return mDebugVoxelVisualizer != 0;
     }

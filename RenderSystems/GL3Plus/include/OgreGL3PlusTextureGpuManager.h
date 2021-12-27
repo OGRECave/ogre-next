@@ -85,7 +85,7 @@ namespace Ogre
         /// fboIdx must be in range [0; 1]
         GLuint getTemporaryFbo( uint32 fboIdx ) const           { return mTmpFbo[fboIdx]; }
 
-        const GL3PlusSupport& getGlSupport(void) const          { return mSupport; }
+        const GL3PlusSupport& getGlSupport() const          { return mSupport; }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
         virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,

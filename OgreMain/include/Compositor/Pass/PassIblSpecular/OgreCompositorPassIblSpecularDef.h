@@ -84,8 +84,8 @@ namespace Ogre
         void setCubemapInput( const String &textureName );
         void setCubemapOutput( const String &textureName );
 
-        IdString getInputTextureName( void ) const { return mInputTextureName; }
-        IdString getOutputTextureName( void ) const { return mOutputTextureName; }
+        IdString getInputTextureName() const { return mInputTextureName; }
+        IdString getOutputTextureName() const { return mOutputTextureName; }
     };
 
     /** @} */

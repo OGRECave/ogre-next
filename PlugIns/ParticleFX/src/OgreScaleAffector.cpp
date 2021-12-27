@@ -90,7 +90,7 @@ namespace Ogre {
         mScaleAdj = rate;
     }
     //-----------------------------------------------------------------------
-    Real ScaleAffector::getAdjust(void) const
+    Real ScaleAffector::getAdjust() const
     {
         return mScaleAdj;
     }

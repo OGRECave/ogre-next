@@ -116,7 +116,7 @@ namespace Ogre
         /** Makes a program pipeline object active by making sure it
             is linked and then putting it in use.
         */
-        void activate(void);
+        void activate();
 
         /** Get the index of a non-standard attribute bound in the
             linked code.
@@ -128,14 +128,14 @@ namespace Ogre
         GLuint mGLProgramPipelineHandle;
 
         /// Compiles and links the separate programs.
-        void compileAndLink(void);
+        void compileAndLink();
         void loadIndividualProgram(GLSLShader *program);
         // /// Put a program pipeline in use.
-        // void _useProgram(void);
+        // void _useProgram();
         /// Build uniform references from active named uniforms.
-        void buildGLUniformReferences(void);
+        void buildGLUniformReferences();
 
-        void getMicrocodeFromCache(void);
+        void getMicrocodeFromCache();
         void getIndividualProgramMicrocodeFromCache(GLSLShader* program);
     };
 }

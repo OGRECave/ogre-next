@@ -89,7 +89,7 @@ namespace v1 {
         return mBuffer.getSubVolume(lockBox);
     }
 
-    void GLES2HardwarePixelBuffer::unlockImpl(void)
+    void GLES2HardwarePixelBuffer::unlockImpl()
     {
         if (mCurrentLockOptions != HardwareBuffer::HBL_READ_ONLY)
         {

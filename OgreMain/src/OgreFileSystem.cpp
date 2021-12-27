@@ -70,7 +70,7 @@ namespace Ogre {
         mReadOnly = readOnly;
     }
     //-----------------------------------------------------------------------
-    bool FileSystemArchive::isCaseSensitive(void) const
+    bool FileSystemArchive::isCaseSensitive() const
     {
         #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
             return false;
@@ -519,7 +519,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    const String& FileSystemArchiveFactory::getType(void) const
+    const String& FileSystemArchiveFactory::getType() const
     {
         static String name = "FileSystem";
         return name;

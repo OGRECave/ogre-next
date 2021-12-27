@@ -66,8 +66,8 @@ namespace Ogre
                                                  bool advanceFrame = true );
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        virtual void advanceFrame();
+        virtual void regressFrame();
     };
 }
 

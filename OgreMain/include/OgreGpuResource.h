@@ -147,7 +147,7 @@ namespace Ogre
 
         void _setNextResidencyStatus( GpuResidency::GpuResidency nextResidency );
 
-        GpuResidency::GpuResidency getResidencyStatus(void) const;
+        GpuResidency::GpuResidency getResidencyStatus() const;
         /** When getResidencyStatus() != getNextResidencyStatus(), residency changes happen
             in the main thread, while some preparation may be happening in the background.
 
@@ -179,8 +179,8 @@ namespace Ogre
             Then both getResidencyStatus & getNextResidencyStatus will return OnStorage.
             Use GpuResource::getPendingResidencyChanges to fix the ABA problem.
         */
-        GpuResidency::GpuResidency getNextResidencyStatus(void) const;
-        GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
+        GpuResidency::GpuResidency getNextResidencyStatus() const;
+        GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy() const;
 
         void _addPendingResidencyChanges( uint32 value );
 
@@ -190,12 +190,12 @@ namespace Ogre
 
             When this value is 0 it implies that mResidencyStatus == mNextResidencyStatus
         */
-        uint32 getPendingResidencyChanges(void) const;
+        uint32 getPendingResidencyChanges() const;
 
-        IdString getName(void) const;
+        IdString getName() const;
         /// Retrieves a user-friendly name. May involve a look up.
         /// NOT THREAD SAFE. ONLY CALL FROM MAIN THREAD.
-        virtual String getNameStr(void) const;
+        virtual String getNameStr() const;
     };
 }
 

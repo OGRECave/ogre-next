@@ -151,7 +151,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static LogManager& getSingleton(void);
+        static LogManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -167,7 +167,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static LogManager* getSingletonPtr(void);
+        static LogManager* getSingletonPtr();
 
     };
 

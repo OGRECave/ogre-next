@@ -121,7 +121,7 @@ protected:
     any children. If the node has changed its bounds, it is removed from its
     current octree, and reinserted into the tree.
     */
-    void _updateBounds( void );
+    void _updateBounds();
 
     void _removeNodeAndChildren( );
 

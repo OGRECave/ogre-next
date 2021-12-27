@@ -61,7 +61,7 @@ namespace Ogre
         void bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
                                       NSUInteger *offsets, size_t offset );
 
-        virtual BufferPackedTypes getBufferPackedType( void ) const { return BP_TYPE_TEX; }
+        virtual BufferPackedTypes getBufferPackedType() const { return BP_TYPE_TEX; }
     };
 
     class _OgreMetalExport MetalReadOnlyBufferPacked : public MetalTexBufferPacked
@@ -73,7 +73,7 @@ namespace Ogre
                                    VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
                                    PixelFormatGpu pf, MetalDevice *device );
 
-        virtual BufferPackedTypes getBufferPackedType( void ) const { return BP_TYPE_READONLY; }
+        virtual BufferPackedTypes getBufferPackedType() const { return BP_TYPE_READONLY; }
     };
 }
 

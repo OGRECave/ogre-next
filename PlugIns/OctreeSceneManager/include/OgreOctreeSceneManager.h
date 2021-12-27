@@ -83,7 +83,7 @@ public:
     void init( AxisAlignedBox &box, int d );
 
     /** Creates a specialized OctreeNode */
-    virtual SceneNode * createSceneNodeImpl ( void );
+    virtual SceneNode * createSceneNodeImpl ();
     /** Creates a specialized OctreeNode */
     virtual SceneNode * createSceneNodeImpl ( const String &name );
     /** Creates a specialized OctreeCamera */
@@ -104,7 +104,7 @@ public:
      * Useful for doing calculations only on nodes that will be drawn, prior
      * to drawing them...
      */
-    virtual void _alertVisibleObjects( void );
+    virtual void _alertVisibleObjects();
 
     /** Walks through the octree, adding any visible objects to the render queue.
     @remarks

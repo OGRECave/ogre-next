@@ -151,7 +151,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    uint32 VulkanProgram::getEshLanguage( void ) const
+    uint32 VulkanProgram::getEshLanguage() const
     {
         switch( mType )
         {
@@ -168,7 +168,7 @@ namespace Ogre
         return EShLangFragment;
     }
     //-----------------------------------------------------------------------
-    bool VulkanProgram::extractRootLayoutFromSource( void )
+    bool VulkanProgram::extractRootLayoutFromSource()
     {
         if( mRootLayout )
             return false;  // Programmatically specified
@@ -311,13 +311,13 @@ namespace Ogre
         resources.limits.generalConstantMatrixVectorIndexing = 1;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::loadFromSource( void ) { compile( true ); }
+    void VulkanProgram::loadFromSource() { compile( true ); }
     //-----------------------------------------------------------------------
     /**
     @brief VulkanProgram::replaceVersionMacros
         Finds the first occurrence of "ogre_glsl_ver_xxx" and replaces it with "450"
     */
-    void VulkanProgram::replaceVersionMacros( void )
+    void VulkanProgram::replaceVersionMacros()
     {
         const String matchStr = "ogre_glsl_ver_";
         const size_t pos = mSource.find( matchStr );
@@ -461,7 +461,7 @@ namespace Ogre
         mRootLayout = vulkanProgramManager->getRootLayout( rootLayout );
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::unsetRootLayout( void )
+    void VulkanProgram::unsetRootLayout()
     {
         mRootLayout = 0;
         mReflectArrayRootLayouts = false;
@@ -710,7 +710,7 @@ namespace Ogre
         return mCompiled;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::createLowLevelImpl( void )
+    void VulkanProgram::createLowLevelImpl()
     {
         mAssemblerProgram = GpuProgramPtr( this, SPFM_NONE );
         if( !mCompiled )
@@ -730,7 +730,7 @@ namespace Ogre
             mRootLayout = 0;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::unloadHighLevelImpl( void )
+    void VulkanProgram::unloadHighLevelImpl()
     {
         // Release everything
         mCompiled = false;
@@ -774,7 +774,7 @@ namespace Ogre
         return binding;
     }
     //-----------------------------------------------------------------------
-    void VulkanProgram::buildConstantDefinitions( void ) const
+    void VulkanProgram::buildConstantDefinitions() const
     {
         OgreProfileExhaustive( "VulkanProgram::buildConstantDefinitions" );
 
@@ -1295,7 +1295,7 @@ namespace Ogre
         pssCi.pName = "main";
     }
     //-----------------------------------------------------------------------
-    uint32 VulkanProgram::getBufferRequiredSize( void ) const { return mConstantsBytesToWrite; }
+    uint32 VulkanProgram::getBufferRequiredSize() const { return mConstantsBytesToWrite; }
     //-----------------------------------------------------------------------
     void VulkanProgram::updateBuffers( const GpuProgramParametersSharedPtr &params,
                                        uint8 *RESTRICT_ALIAS dstData )
@@ -1445,19 +1445,19 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    inline bool VulkanProgram::getPassSurfaceAndLightStates( void ) const
+    inline bool VulkanProgram::getPassSurfaceAndLightStates() const
     {
         // Scenemanager should pass on light & material state to the rendersystem
         return true;
     }
     //---------------------------------------------------------------------
-    inline bool VulkanProgram::getPassTransformStates( void ) const
+    inline bool VulkanProgram::getPassTransformStates() const
     {
         // Scenemanager should pass on transform state to the rendersystem
         return true;
     }
     //---------------------------------------------------------------------
-    inline bool VulkanProgram::getPassFogStates( void ) const
+    inline bool VulkanProgram::getPassFogStates() const
     {
         // Scenemanager should pass on fog state to the rendersystem
         return true;
@@ -1473,13 +1473,13 @@ namespace Ogre
         static_cast<VulkanProgram *>( target )->setPreprocessorDefines( val );
     }
     //-----------------------------------------------------------------------
-    const String &VulkanProgram::getLanguage( void ) const
+    const String &VulkanProgram::getLanguage() const
     {
         static const String language = "glsl";
         return language;
     }
     //-----------------------------------------------------------------------
-    GpuProgramParametersSharedPtr VulkanProgram::createParameters( void )
+    GpuProgramParametersSharedPtr VulkanProgram::createParameters()
     {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
         params->setTransposeMatrices( true );

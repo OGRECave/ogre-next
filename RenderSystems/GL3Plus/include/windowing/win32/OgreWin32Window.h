@@ -58,13 +58,13 @@ namespace Ogre {
 
         void create( PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams );
 
-        void updateWindowRect(void);
+        void updateWindowRect();
         void adjustWindow( uint32 clientWidth, uint32 clientHeight,
                            uint32 *outDrawableWidth, uint32 *outDrawableHeight );
         /// Return the target window style depending on the fullscreen parameter.
         DWORD getWindowStyle( bool fullScreen ) const;
 
-        void notifyResolutionChanged(void);
+        void notifyResolutionChanged();
 
     public:
         Win32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
@@ -73,7 +73,7 @@ namespace Ogre {
         virtual ~Win32Window();
 
         virtual void _initialize( TextureGpuManager *textureGpuManager );
-        virtual void destroy(void);
+        virtual void destroy();
 
         virtual void reposition( int32 left, int32 top );
         virtual void requestResolution( uint32 width, uint32 height );
@@ -81,15 +81,15 @@ namespace Ogre {
                                               uint32 width, uint32 height,
                                               uint32 frequencyNumerator, uint32 frequencyDenominator );
 
-        virtual void windowMovedOrResized(void);
+        virtual void windowMovedOrResized();
 
-        bool isClosed(void) const;
+        bool isClosed() const;
         virtual void _setVisible( bool visible );
-        virtual bool isVisible(void) const;
+        virtual bool isVisible() const;
         virtual void setHidden( bool hidden );
-        virtual bool isHidden(void) const;
+        virtual bool isHidden() const;
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
-        virtual void swapBuffers(void);
+        virtual void swapBuffers();
         virtual void setFocused( bool focused );
 
         HWND getWindowHandle() const        { return mHwnd; }

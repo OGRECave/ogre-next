@@ -81,7 +81,7 @@ namespace Ogre
         // Do nothing - value is set from frame listener
     }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getTimeFactor(void) const {
+    Real FrameTimeControllerValue::getTimeFactor() const {
         return mTimeFactor;
     }
     //-----------------------------------------------------------------------
@@ -93,7 +93,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getFrameDelay(void) const {
+    Real FrameTimeControllerValue::getFrameDelay() const {
         return mFrameDelay;
     }
     //-----------------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace Ogre
         mFrameDelay = fd;
     }
     //-----------------------------------------------------------------------
-    Real FrameTimeControllerValue::getElapsedTime(void) const
+    Real FrameTimeControllerValue::getElapsedTime() const
     {
         return mElapsedTime;
     }
@@ -119,7 +119,7 @@ namespace Ogre
         mTextureLayer = t;
     }
     //-----------------------------------------------------------------------
-    Real TextureFrameControllerValue::getValue(void) const
+    Real TextureFrameControllerValue::getValue() const
     {
         int numFrames = mTextureLayer->getNumFrames();
         return ((Real)mTextureLayer->getCurrentFrame() / (Real)numFrames);
@@ -198,7 +198,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------
-    Real FloatGpuParameterControllerValue::getValue(void) const
+    Real FloatGpuParameterControllerValue::getValue() const
     {
         // do nothing, reading from a set of params not supported
         return 0.0f;

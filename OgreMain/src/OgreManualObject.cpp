@@ -67,7 +67,7 @@ namespace v1 {
         clear();
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::clear(void)
+    void ManualObject::clear()
     {
         resetTempAreas();
         for (SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i)
@@ -84,7 +84,7 @@ namespace v1 {
         mAnyIndexed = false;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::resetTempAreas(void)
+    void ManualObject::resetTempAreas()
     {
         OGRE_FREE(mTempVertexBuffer, MEMCATEGORY_GEOMETRY);
         OGRE_FREE(mTempIndexBuffer, MEMCATEGORY_GEOMETRY);
@@ -555,7 +555,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::copyTempVertexToBuffer(void)
+    void ManualObject::copyTempVertexToBuffer()
     {
         mTempVertexPending = false;
         RenderOperation* rop = mCurrentSection->getRenderOperation();
@@ -652,7 +652,7 @@ namespace v1 {
 
     }
     //-----------------------------------------------------------------------------
-    ManualObject::ManualObjectSection* ManualObject::end(void)
+    ManualObject::ManualObjectSection* ManualObject::end()
     {
         if (!mCurrentSection)
         {
@@ -883,12 +883,12 @@ namespace v1 {
         return mSectionList[inIndex];
     }
     //-----------------------------------------------------------------------
-    unsigned int ManualObject::getNumSections(void) const
+    unsigned int ManualObject::getNumSections() const
     {
         return static_cast< unsigned int >( mSectionList.size() );
     }
     //-----------------------------------------------------------------------------
-    const String& ManualObject::getMovableType(void) const
+    const String& ManualObject::getMovableType() const
     {
         return ManualObjectFactory::FACTORY_TYPE_NAME;
     }
@@ -908,7 +908,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------
-    EdgeData* ManualObject::getEdgeList(void)
+    EdgeData* ManualObject::getEdgeList()
     {
         // Build on demand
         if (!mEdgeList && mAnyIndexed)
@@ -964,12 +964,12 @@ namespace v1 {
         OGRE_DELETE mRenderOperation.indexData; // ok to delete 0
     }
     //-----------------------------------------------------------------------------
-    RenderOperation* ManualObject::ManualObjectSection::getRenderOperation(void)
+    RenderOperation* ManualObject::ManualObjectSection::getRenderOperation()
     {
         return &mRenderOperation;
     }
     //-----------------------------------------------------------------------------
-    const MaterialPtr& ManualObject::ManualObjectSection::getMaterial(void) const
+    const MaterialPtr& ManualObject::ManualObjectSection::getMaterial() const
     {
         if (mMaterial.isNull())
         {
@@ -1008,14 +1008,14 @@ namespace v1 {
         return n->getSquaredViewDepth(cam);
     }
     //-----------------------------------------------------------------------------
-    const LightList& ManualObject::ManualObjectSection::getLights(void) const
+    const LightList& ManualObject::ManualObjectSection::getLights() const
     {
         return mParent->queryLights();
     }
     //-----------------------------------------------------------------------------
     String ManualObjectFactory::FACTORY_TYPE_NAME = "ManualObject";
     //-----------------------------------------------------------------------------
-    const String& ManualObjectFactory::getType(void) const
+    const String& ManualObjectFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

@@ -71,7 +71,7 @@ namespace v1 {
         unload(); 
     }
     //---------------------------------------------------------------------
-    void Skeleton::loadImpl(void)
+    void Skeleton::loadImpl()
     {
         SkeletonSerializer serializer;
         LogManager::getSingleton().logMessage( "Skeleton: Loading " + mName );
@@ -94,7 +94,7 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    void Skeleton::unloadImpl(void)
+    void Skeleton::unloadImpl()
     {
         // destroy bones
         BoneList::iterator i;
@@ -120,7 +120,7 @@ namespace v1 {
         mLinkedSkeletonAnimSourceList.clear();
     }
     //---------------------------------------------------------------------
-    OldBone* Skeleton::createBone(void)
+    OldBone* Skeleton::createBone()
     {
         // use autohandle
         return createBone(mNextAutoHandle++);
@@ -194,7 +194,7 @@ namespace v1 {
 
 
     //---------------------------------------------------------------------
-    OldBone* Skeleton::getRootBone(void) const
+    OldBone* Skeleton::getRootBone() const
     {
         if (mRootBones.empty())
         {
@@ -267,7 +267,7 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    void Skeleton::setBindingPose(void)
+    void Skeleton::setBindingPose()
     {
         // Update the derived transforms
         _updateTransforms();
@@ -444,7 +444,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void Skeleton::_notifyManualBonesDirty(void)
+    void Skeleton::_notifyManualBonesDirty()
     {
         mManualBonesDirty = true;
     }
@@ -457,7 +457,7 @@ namespace v1 {
             mManualBones.erase(bone);
     }
     //-----------------------------------------------------------------------
-    unsigned short Skeleton::getNumBones(void) const
+    unsigned short Skeleton::getNumBones() const
     {
         return (unsigned short)mBoneList.size();
     }
@@ -489,7 +489,7 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    unsigned short Skeleton::getNumAnimations(void) const
+    unsigned short Skeleton::getNumAnimations() const
     {
         return (unsigned short)mAnimationsList.size();
     }
@@ -531,7 +531,7 @@ namespace v1 {
         return mBoneListByName.find(name) != mBoneListByName.end();
     }
     //---------------------------------------------------------------------
-    void Skeleton::deriveRootBone(void) const
+    void Skeleton::deriveRootBone() const
     {
         // Start at the first bone and work up
         if (mBoneList.empty())
@@ -629,7 +629,7 @@ namespace v1 {
         mBlendState = state;
     }
     //---------------------------------------------------------------------
-    Skeleton::BoneIterator Skeleton::getRootBoneIterator(void)
+    Skeleton::BoneIterator Skeleton::getRootBoneIterator()
     {
         if (mRootBones.empty())
         {
@@ -638,17 +638,17 @@ namespace v1 {
         return BoneIterator(mRootBones.begin(), mRootBones.end());
     }
     //---------------------------------------------------------------------
-    Skeleton::BoneIterator Skeleton::getBoneIterator(void)
+    Skeleton::BoneIterator Skeleton::getBoneIterator()
     {
         return BoneIterator(mBoneList.begin(), mBoneList.end());
     }
     //---------------------------------------------------------------------
-    Skeleton::ConstBoneIterator Skeleton::getBoneIteratorConst(void) const
+    Skeleton::ConstBoneIterator Skeleton::getBoneIteratorConst() const
     {
         return ConstBoneIterator(mBoneList.begin(), mBoneList.end());
     }
     //---------------------------------------------------------------------
-    void Skeleton::_updateTransforms(void)
+    void Skeleton::_updateTransforms()
     {
         BoneList::iterator i, iend;
         iend = mRootBones.end();
@@ -725,13 +725,13 @@ namespace v1 {
 
     }
     //---------------------------------------------------------------------
-    void Skeleton::removeAllLinkedSkeletonAnimationSources(void)
+    void Skeleton::removeAllLinkedSkeletonAnimationSources()
     {
         mLinkedSkeletonAnimSourceList.clear();
     }
     //---------------------------------------------------------------------
     Skeleton::LinkedSkeletonAnimSourceIterator 
-    Skeleton::getLinkedSkeletonAnimationSourceIterator(void) const
+    Skeleton::getLinkedSkeletonAnimationSourceIterator() const
     {
         return LinkedSkeletonAnimSourceIterator(
             mLinkedSkeletonAnimSourceList.begin(), 
@@ -1032,7 +1032,7 @@ namespace v1 {
         }
     }
 
-    size_t Skeleton::calculateSize(void) const
+    size_t Skeleton::calculateSize() const
     {
         size_t memSize = 0;
         memSize += sizeof(SkeletonAnimationBlendMode);

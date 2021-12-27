@@ -30,7 +30,7 @@ namespace Demo
     {
         // No resources. They're not needed and a potential point of failure.
         // This is a very simple project
-        virtual void setupResources(void) {}
+        virtual void setupResources() {}
     public:
         MyGraphicsSystem( GameState *gameState ) :
             GraphicsSystem( gameState ) {}
@@ -60,7 +60,7 @@ namespace Demo
     }
 
 #    if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Tutorial 01: Initialization";
     }

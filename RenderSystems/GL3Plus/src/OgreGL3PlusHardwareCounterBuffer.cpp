@@ -128,7 +128,7 @@ namespace v1 {
         return retPtr;
     }
 
-    void GL3PlusHardwareCounterBuffer::unlockImpl(void)
+    void GL3PlusHardwareCounterBuffer::unlockImpl()
     {
         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, mBufferId));
 

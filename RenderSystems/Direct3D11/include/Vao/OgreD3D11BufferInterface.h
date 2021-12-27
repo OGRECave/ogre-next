@@ -55,16 +55,16 @@ namespace Ogre
                               D3D11DynamicBuffer *dynamicBuffer );
         virtual ~D3D11BufferInterface();
 
-        void _setNullDynamicBuffer( void ) { mDynamicBuffer = 0; }
-        D3D11DynamicBuffer* getDynamicBuffer(void) const    { return mDynamicBuffer; }
+        void _setNullDynamicBuffer() { mDynamicBuffer = 0; }
+        D3D11DynamicBuffer* getDynamicBuffer() const    { return mDynamicBuffer; }
 
         void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }
 
         /// Only use this function for the first upload
         void _firstUpload( void *data );
 
-        const void* _getInitialData(void) const     { return mInitialData; }
-        void _deleteInitialData(void);
+        const void* _getInitialData() const     { return mInitialData; }
+        void _deleteInitialData();
         void _setVboName( size_t vboPoolIdx, ID3D11Buffer *vboName, size_t internalBufferStartBytes );
 
         virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
@@ -72,8 +72,8 @@ namespace Ogre
                                                  bool advanceFrame = true );
         virtual void unmap( UnmapOptions unmapOption,
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        virtual void advanceFrame();
+        virtual void regressFrame();
     };
 }
 

@@ -85,7 +85,7 @@ namespace Ogre {
         /// Number of fixed-function texture units
         unsigned short mFixedFunctionTextureUnits;
 
-        void initConfigOptions(void);
+        void initConfigOptions();
 
         /// Store last colour write state
         uint8 mBlendChannelMask;
@@ -146,7 +146,7 @@ namespace Ogre {
         vector<GLuint>::type mRenderAttribsBound;
         vector<GLuint>::type mRenderInstanceAttribsBound;
 
-        GLint getCombinedMinMipFilter(void) const;
+        GLint getCombinedMinMipFilter() const;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		/// @copydoc RenderSystem::setDrawBuffer
 		virtual bool setDrawBuffer(ColourBufferType colourBuffer);
@@ -156,11 +156,11 @@ namespace Ogre {
         virtual bool checkExtension( const String &ext ) const;
 
         /// @copydoc RenderSystem::getPixelFormatToShaderType
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
+        virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const;
 
-        virtual void _clearStateAndFlushCommandBuffer(void);
+        virtual void _clearStateAndFlushCommandBuffer();
 
-        virtual void flushCommands(void);
+        virtual void flushCommands();
 
         unsigned char *mSwIndirectBufferPtr;
 
@@ -204,15 +204,15 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        const String& getName(void) const;
+        const String& getName() const;
         /** See
             RenderSystem
         */
-            const String& getFriendlyName(void) const;
+            const String& getFriendlyName() const;
         /** See
             RenderSystem
         */
-        ConfigOptionMap& getConfigOptions(void);
+        ConfigOptionMap& getConfigOptions();
         /** See
             RenderSystem
         */
@@ -220,12 +220,12 @@ namespace Ogre {
 
         virtual const char* getPriorityConfigOption( size_t idx ) const;
 
-        virtual size_t getNumPriorityConfigOptions( void ) const;
+        virtual size_t getNumPriorityConfigOptions() const;
 
         /** See
             RenderSystem
         */
-        String validateConfigOptions(void);
+        String validateConfigOptions();
         /** See
             RenderSystem
         */
@@ -241,11 +241,11 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void reinitialise(void); // Used if settings changed mid-rendering
+        void reinitialise(); // Used if settings changed mid-rendering
         /** See
             RenderSystem
         */
-        void shutdown(void);
+        void shutdown();
 
         /// @copydoc RenderSystem::_createRenderWindow
         Window *_createRenderWindow( const String &name, uint32 width, uint32 height,
@@ -256,8 +256,8 @@ namespace Ogre {
                                    WindowList &createdWindows );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual GL3PlusFrameBufferDescMap& _getFrameBufferDescMap(void) { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual GL3PlusFrameBufferDescMap& _getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        virtual RenderPassDescriptor* createRenderPassDescriptor();
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
                                                 const Vector4 *viewportSizes,
@@ -265,7 +265,7 @@ namespace Ogre {
                                                 uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
-        virtual void endRenderPassDescriptor(void);
+        virtual void endRenderPassDescriptor();
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                           PixelFormatGpu depthBufferFormat, uint16 poolId );
@@ -277,7 +277,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        VertexElementType getColourVertexElementType(void) const;
+        VertexElementType getColourVertexElementType() const;
 
         // -----------------------------
         // Low-level overridden members
@@ -366,7 +366,7 @@ namespace Ogre {
         */
         void _setTextureMatrix(size_t stage, const Matrix4& xform) { };   // Not supported
 
-        void flushUAVs( void );
+        void flushUAVs();
 
         virtual void executeResourceTransition( const ResourceTransitionArray &rstCollection );
 
@@ -395,11 +395,11 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _beginFrame(void);
+        void _beginFrame();
         /** See
             RenderSystem
         */
-        void _endFrame(void);
+        void _endFrame();
         /** See
             RenderSystem
         */
@@ -412,7 +412,7 @@ namespace Ogre {
         */
         virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
         virtual void _convertOpenVrProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
-        virtual Real getRSDepthRange(void) const;
+        virtual Real getRSDepthRange() const;
         /** See
             RenderSystem
         */
@@ -440,7 +440,7 @@ namespace Ogre {
         virtual void _renderEmulatedNoBaseInstance( const CbDrawCallIndexed *cmd );
         virtual void _renderEmulatedNoBaseInstance( const CbDrawCallStrip *cmd );
 
-        virtual void _startLegacyV1Rendering(void);
+        virtual void _startLegacyV1Rendering();
         virtual void _setRenderOperation( const v1::CbRenderOp *cmd );
         virtual void _render( const v1::CbDrawCallIndexed *cmd );
         virtual void _render( const v1::CbDrawCallStrip *cmd );
@@ -449,11 +449,11 @@ namespace Ogre {
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                        TextureGpu *anyTarget, uint8 mipLevel );
-        HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
-        Real getHorizontalTexelOffset(void) { return 0.0; }               // No offset in GL
-        Real getVerticalTexelOffset(void) { return 0.0; }                 // No offset in GL
-        Real getMinimumDepthInputValue(void);
-        Real getMaximumDepthInputValue(void);
+        HardwareOcclusionQuery* createHardwareOcclusionQuery();
+        Real getHorizontalTexelOffset() { return 0.0; }               // No offset in GL
+        Real getVerticalTexelOffset() { return 0.0; }                 // No offset in GL
+        Real getMinimumDepthInputValue();
+        Real getMaximumDepthInputValue();
         OGRE_MUTEX(mThreadInitMutex);
         void registerThread();
         void unregisterThread();
@@ -491,7 +491,7 @@ namespace Ogre {
             return mSupportsTargetIndependentRasterization;
         }
 
-        const GL3PlusSupport* getGLSupport(void) const { return mGLSupport; }
+        const GL3PlusSupport* getGLSupport() const { return mGLSupport; }
 
         void bindGpuProgramParameters(GpuProgramType gptype, GpuProgramParametersSharedPtr params, uint16 mask);
         void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
@@ -512,16 +512,16 @@ namespace Ogre {
         virtual void beginProfileEvent( const String &eventName );
 
         /// @copydoc RenderSystem::endProfileEvent
-        virtual void endProfileEvent( void );
+        virtual void endProfileEvent();
 
         /// @copydoc RenderSystem::markProfileEvent
         virtual void markProfileEvent( const String &eventName );
 
         virtual void debugAnnotationPush( const String &event );
-        virtual void debugAnnotationPop( void );
+        virtual void debugAnnotationPop();
 
-        virtual void initGPUProfiling(void);
-        virtual void deinitGPUProfiling(void);
+        virtual void initGPUProfiling();
+        virtual void deinitGPUProfiling();
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
     };

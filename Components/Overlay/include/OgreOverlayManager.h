@@ -113,11 +113,11 @@ namespace v1 {
         void _restoreManualHardwareResources();
 
         /// @copydoc ScriptLoader::getScriptPatterns
-        const StringVector& getScriptPatterns(void) const;
+        const StringVector& getScriptPatterns() const;
         /// @copydoc ScriptLoader::parseScript
         void parseScript(DataStreamPtr& stream, const String& groupName);
         /// @copydoc ScriptLoader::getLoadingOrder
-        Real getLoadingOrder(void) const;
+        Real getLoadingOrder() const;
 
         /** Create a new Overlay. */
         Overlay* create(const String& name);
@@ -130,19 +130,19 @@ namespace v1 {
         /** Destroys an existing overlay */
         void destroy(Overlay* overlay);
         /** Destroys all existing overlays */
-        void destroyAll(void);
+        void destroyAll();
         typedef MapIterator<OverlayMap> OverlayMapIterator;
-        OverlayMapIterator getOverlayIterator(void);
+        OverlayMapIterator getOverlayIterator();
 
         /** Internal method for queueing the visible overlays for rendering. */
         void _queueOverlaysForRendering( RenderQueue* pQueue, Viewport *vp );
 
         /** Gets the height of the destination viewport in pixels. */
-        int getViewportHeight(void) const;
+        int getViewportHeight() const;
         
         /** Gets the width of the destination viewport in pixels. */
-        int getViewportWidth(void) const;
-        Real getViewportAspectRatio(void) const;
+        int getViewportWidth() const;
+        Real getViewportAspectRatio() const;
 
         /** Creates a new OverlayElement of the type requested.
         @remarks
@@ -229,7 +229,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static OverlayManager& getSingleton(void);
+        static OverlayManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -245,7 +245,7 @@ namespace v1 {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static OverlayManager* getSingletonPtr(void);
+        static OverlayManager* getSingletonPtr();
     };
 
 

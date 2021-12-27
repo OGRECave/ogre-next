@@ -196,7 +196,7 @@ namespace Ogre
         ParallaxCorrectedCubemapBase::_restoreManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::destroyAllProbes(void)
+    void ParallaxCorrectedCubemap::destroyAllProbes()
     {
         {
             TextureGpuManager *textureGpuManager =
@@ -214,7 +214,7 @@ namespace Ogre
         ParallaxCorrectedCubemapBase::destroyAllProbes();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::createProxyItems(void)
+    void ParallaxCorrectedCubemap::createProxyItems()
     {
         destroyProxyItems();
 
@@ -240,7 +240,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::destroyProxyItems(void)
+    void ParallaxCorrectedCubemap::destroyProxyItems()
     {
         for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
         {
@@ -257,13 +257,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::prepareForClearScene(void)
+    void ParallaxCorrectedCubemap::prepareForClearScene()
     {
         destroyProxyItems();
         ParallaxCorrectedCubemapBase::prepareForClearScene();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::restoreFromClearScene(void)
+    void ParallaxCorrectedCubemap::restoreFromClearScene()
     {
         createProxyItems();
         SceneNode *rootNode = mSceneManager->getRootSceneNode();
@@ -323,7 +323,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool ParallaxCorrectedCubemap::getEnabled(void) const
+    bool ParallaxCorrectedCubemap::getEnabled() const
     {
         return mBlendWorkspace != 0;
     }
@@ -373,7 +373,7 @@ namespace Ogre
         mesh->_setBounds( Aabb( Vector3::ZERO, Vector3::UNIT_SCALE ) );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::createProxyGeometry(void)
+    void ParallaxCorrectedCubemap::createProxyGeometry()
     {
         mProxyMesh = MeshManager::getSingleton().createManual(
                     "AutoGen_ParallaxCorrectedCubemap_" + StringConverter::toString( getId() ) +
@@ -386,7 +386,7 @@ namespace Ogre
         createProxyItems();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::destroyProxyGeometry(void)
+    void ParallaxCorrectedCubemap::destroyProxyGeometry()
     {
         destroyProxyItems();
 
@@ -397,7 +397,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::createCubemapBlendWorkspaceDefinition(void)
+    void ParallaxCorrectedCubemap::createCubemapBlendWorkspaceDefinition()
     {
         String workspaceName = "AutoGen_ParallaxCorrectedCubemapBlending_Workspace";
         CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
@@ -508,7 +508,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::createCubemapBlendWorkspace(void)
+    void ParallaxCorrectedCubemap::createCubemapBlendWorkspace()
     {
         mBlendProxyCamera = mSceneManager->createCamera( "ParallaxCorrectedCubemap for blending " +
                                                          StringConverter::toString( getId() ),
@@ -540,7 +540,7 @@ namespace Ogre
         mCopyWorkspace->addListener( this );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::destroyCubemapBlendWorkspace(void)
+    void ParallaxCorrectedCubemap::destroyCubemapBlendWorkspace()
     {
         CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
 
@@ -556,7 +556,7 @@ namespace Ogre
         mBlendProxyCamera = 0;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::calculateBlendFactors(void)
+    void ParallaxCorrectedCubemap::calculateBlendFactors()
     {
         assert( mNumCollectedProbes < OGRE_MAX_CUBE_PROBES );
 
@@ -646,7 +646,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::checkStagingBufferIsBigEnough(void)
+    void ParallaxCorrectedCubemap::checkStagingBufferIsBigEnough()
     {
         //Check the staging buffer is big enough to avoid a stall
         VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
@@ -667,7 +667,7 @@ namespace Ogre
         mCachedLastViewMatrix = Matrix4::ZERO;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::findClosestProbe(void)
+    void ParallaxCorrectedCubemap::findClosestProbe()
     {
         //When we're not inside of any probe, select the 'closest' one.
         //We do that by projecting the AABBs into the camera and determining
@@ -740,7 +740,7 @@ namespace Ogre
             mProbeNDFs[0] = std::numeric_limits<Real>::max();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::updateSceneGraph(void)
+    void ParallaxCorrectedCubemap::updateSceneGraph()
     {
         const uint32 prevNumCollectedProbes = mNumCollectedProbes;
         const CubemapProbe *prevProbe = mCollectedProbes[0];
@@ -951,7 +951,7 @@ namespace Ogre
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::updateRender(void)
+    void ParallaxCorrectedCubemap::updateRender()
     {
         const uint32 oldVisibilityMask = mSceneManager->getVisibilityMask();
         mSceneManager->setVisibilityMask( 0xffffffff );
@@ -1023,7 +1023,7 @@ namespace Ogre
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::transitionBlendResultToTexture( void )
+    void ParallaxCorrectedCubemap::transitionBlendResultToTexture()
     {
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
         renderSystem->endCopyEncoder();
@@ -1036,7 +1036,7 @@ namespace Ogre
         renderSystem->executeResourceTransition( barrier );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::transitionCollectedProbesToTexture( void )
+    void ParallaxCorrectedCubemap::transitionCollectedProbesToTexture()
     {
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
         BarrierSolver &solver = renderSystem->getBarrierSolver();
@@ -1053,7 +1053,7 @@ namespace Ogre
         renderSystem->executeResourceTransition( barrier );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::updateAllDirtyProbes(void)
+    void ParallaxCorrectedCubemap::updateAllDirtyProbes()
     {
         mSceneManager->updateSceneGraph();
 
@@ -1121,12 +1121,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    size_t ParallaxCorrectedCubemap::getConstBufferSize(void)
+    size_t ParallaxCorrectedCubemap::getConstBufferSize()
     {
         return getConstBufferSizeStatic();
     }
     //-----------------------------------------------------------------------------------
-    size_t ParallaxCorrectedCubemap::getConstBufferSizeStatic(void)
+    size_t ParallaxCorrectedCubemap::getConstBufferSizeStatic()
     {
         return 6u * 4u * sizeof(float); //CubemapProbe localProbe;
     }
@@ -1286,13 +1286,13 @@ namespace Ogre
         return true;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::allWorkspacesBeforeBeginUpdate(void)
+    void ParallaxCorrectedCubemap::allWorkspacesBeforeBeginUpdate()
     {
         if( !mPaused )
             this->updateExpensiveCollectedDirtyProbes( 1 );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::allWorkspacesBeginUpdate(void)
+    void ParallaxCorrectedCubemap::allWorkspacesBeginUpdate()
     {
         if( !mPaused )
             this->updateRender();

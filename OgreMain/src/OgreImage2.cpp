@@ -190,7 +190,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------------
-    void Image2::flipAroundY(void)
+    void Image2::flipAroundY()
     {
         OgreProfileExhaustive( "Image2::flipAroundY" );
 
@@ -228,7 +228,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------------
-    void Image2::flipAroundX(void)
+    void Image2::flipAroundX()
     {
         OgreProfileExhaustive( "Image2::flipAroundX" );
 
@@ -793,42 +793,42 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Image2::getWidth(void) const
+    uint32 Image2::getWidth() const
     {
         return mWidth;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Image2::getHeight(void) const
+    uint32 Image2::getHeight() const
     {
         return mHeight;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Image2::getDepthOrSlices(void) const
+    uint32 Image2::getDepthOrSlices() const
     {
         return mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Image2::getDepth(void) const
+    uint32 Image2::getDepth() const
     {
         return (mTextureType != TextureTypes::Type3D) ? 1u : mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Image2::getNumSlices(void) const
+    uint32 Image2::getNumSlices() const
     {
         return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
     }
     //-----------------------------------------------------------------------------------
-    uint8 Image2::getNumMipmaps(void) const
+    uint8 Image2::getNumMipmaps() const
     {
         return mNumMipmaps;
     }
     //-----------------------------------------------------------------------------------
-    TextureTypes::TextureTypes Image2::getTextureType(void) const
+    TextureTypes::TextureTypes Image2::getTextureType() const
     {
         return mTextureType;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu Image2::getPixelFormat(void) const
+    PixelFormatGpu Image2::getPixelFormat() const
     {
         return mPixelFormat;
     }
@@ -848,7 +848,7 @@ namespace Ogre {
         return PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, mPixelFormat, 4u );
     }
     //-----------------------------------------------------------------------------------
-    size_t Image2::getSizeBytes(void) const
+    size_t Image2::getSizeBytes() const
     {
         return PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(), getNumSlices(),
                                                         mPixelFormat, mNumMipmaps, 4u );
@@ -1381,7 +1381,7 @@ namespace Ogre {
         mAutoDelete = autoDelete;
     }
     //-----------------------------------------------------------------------------------
-    bool Image2::getAutoDelete(void) const
+    bool Image2::getAutoDelete() const
     {
         return mAutoDelete;
     }

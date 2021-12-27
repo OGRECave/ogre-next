@@ -58,12 +58,12 @@ namespace Ogre {
         removeAllPasses();
     }
     //-----------------------------------------------------------------------------
-    bool Technique::isSupported(void) const
+    bool Technique::isSupported() const
     {
         return mIsSupported;
     }
     //-----------------------------------------------------------------------------
-    size_t Technique::calculateSize(void) const
+    size_t Technique::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -373,7 +373,7 @@ namespace Ogre {
         return true;
     }
     //-----------------------------------------------------------------------------
-    Pass* Technique::createPass(void)
+    Pass* Technique::createPass()
     {
         Pass* newPass = OGRE_NEW Pass(this, static_cast<unsigned short>(mPasses.size()));
         mPasses.push_back(newPass);
@@ -406,7 +406,7 @@ namespace Ogre {
         return foundPass;
     }
     //-----------------------------------------------------------------------------
-    unsigned short Technique::getNumPasses(void) const
+    unsigned short Technique::getNumPasses() const
     {
         return static_cast<unsigned short>(mPasses.size());
     }
@@ -424,7 +424,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    void Technique::removeAllPasses(void)
+    void Technique::removeAllPasses()
     {
         Passes::iterator i, iend;
         iend = mPasses.end();
@@ -478,7 +478,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------------
-    const Technique::PassIterator Technique::getPassIterator(void)
+    const Technique::PassIterator Technique::getPassIterator()
     {
         return PassIterator(mPasses.begin(), mPasses.end());
     }
@@ -506,7 +506,7 @@ namespace Ogre {
         return *this;
     }
     //-----------------------------------------------------------------------------
-    bool Technique::isTransparent(void) const
+    bool Technique::isTransparent() const
     {
         if (mPasses.empty())
         {
@@ -519,7 +519,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    bool Technique::isDepthWriteEnabled(void) const
+    bool Technique::isDepthWriteEnabled() const
     {
         if (mPasses.empty())
         {
@@ -532,7 +532,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    bool Technique::isDepthCheckEnabled(void) const
+    bool Technique::isDepthCheckEnabled() const
     {
         if (mPasses.empty())
         {
@@ -545,7 +545,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    bool Technique::hasColourWriteDisabled(void) const
+    bool Technique::hasColourWriteDisabled() const
     {
         if (mPasses.empty())
         {
@@ -558,7 +558,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    void Technique::_prepare(void)
+    void Technique::_prepare()
     {
         assert (mIsSupported && "This technique is not supported");
         // Load each pass
@@ -570,7 +570,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    void Technique::_unprepare(void)
+    void Technique::_unprepare()
     {
         // Unload each pass
         Passes::iterator i, iend;
@@ -581,7 +581,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    void Technique::_load(void)
+    void Technique::_load()
     {
         assert (mIsSupported && "This technique is not supported");
         // Load each pass
@@ -605,7 +605,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    void Technique::_unload(void)
+    void Technique::_unload()
     {
         // Unload each pass
         Passes::iterator i, iend;
@@ -616,7 +616,7 @@ namespace Ogre {
         }   
     }
     //-----------------------------------------------------------------------------
-    bool Technique::isLoaded(void) const
+    bool Technique::isLoaded() const
     {
         // Only supported technique will be loaded
         return mParent->isLoaded() && mIsSupported;
@@ -761,7 +761,7 @@ namespace Ogre {
         mName = name;
     }
     //-----------------------------------------------------------------------
-    void Technique::_notifyNeedsRecompile(void)
+    void Technique::_notifyNeedsRecompile()
     {
         mParent->_notifyNeedsRecompile();
     }
@@ -776,17 +776,17 @@ namespace Ogre {
         mSchemeIndex = MaterialManager::getSingleton()._getSchemeIndex(schemeName);
     }
     //-----------------------------------------------------------------------
-    const String& Technique::getSchemeName(void) const
+    const String& Technique::getSchemeName() const
     {
         return MaterialManager::getSingleton()._getSchemeName(mSchemeIndex);
     }
     //-----------------------------------------------------------------------
-    unsigned short Technique::_getSchemeIndex(void) const
+    unsigned short Technique::_getSchemeIndex() const
     {
         return mSchemeIndex;
     }
     //-----------------------------------------------------------------------
-    const String& Technique::getResourceGroup(void) const
+    const String& Technique::getResourceGroup() const
     {
         return mParent->getGroup();
     }

@@ -43,7 +43,7 @@ namespace Demo
         mRoot->removeFrameListener( this );
     }
     //-------------------------------------------------------------------------
-    void NullCompositorListener::syncCullCamera( void )
+    void NullCompositorListener::syncCullCamera()
     {
         const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
         Ogre::Vector3 camPos = mCamera->getDerivedPosition();
@@ -97,5 +97,5 @@ namespace Demo
     //-------------------------------------------------------------------------
     void NullCompositorListener::passSceneAfterFrustumCulling( Ogre::CompositorPassScene *pass ) {}
     //-------------------------------------------------------------------------
-    bool NullCompositorListener::canSyncCameraTransformImmediately( void ) const { return true; }
+    bool NullCompositorListener::canSyncCameraTransformImmediately() const { return true; }
 }  // namespace Demo

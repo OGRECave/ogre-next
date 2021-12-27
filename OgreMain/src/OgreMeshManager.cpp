@@ -45,11 +45,11 @@ namespace Ogre
 namespace v1
 {
     //-----------------------------------------------------------------------
-    MeshManager* MeshManager::getSingletonPtr(void)
+    MeshManager* MeshManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    MeshManager& MeshManager::getSingleton(void)
+    MeshManager& MeshManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -76,7 +76,7 @@ namespace v1
         return getResourceByName(name, groupName).staticCast<Mesh>();
     }
     //-----------------------------------------------------------------------
-    void MeshManager::_initialise(void)
+    void MeshManager::_initialise()
     {
         // Create prefab objects
         createPrefabPlane();
@@ -350,7 +350,7 @@ namespace v1
     }
 
     //-----------------------------------------------------------------------
-    void MeshManager::createPrefabPlane(void)
+    void MeshManager::createPrefabPlane()
     {
         MeshPtr msh = create(
             "Prefab_Plane", 
@@ -363,7 +363,7 @@ namespace v1
         msh->load();
     }
     //-----------------------------------------------------------------------
-    void MeshManager::createPrefabCube(void)
+    void MeshManager::createPrefabCube()
     {
         MeshPtr msh = create(
             "Prefab_Cube", 
@@ -375,7 +375,7 @@ namespace v1
         msh->load();
     }
     //-------------------------------------------------------------------------
-    void MeshManager::createPrefabSphere(void)
+    void MeshManager::createPrefabSphere()
     {
         MeshPtr msh = create(
             "Prefab_Sphere", 
@@ -970,12 +970,12 @@ namespace v1
         mPrepAllMeshesForShadowVolumes = enable;
     }
     //-----------------------------------------------------------------------
-    bool MeshManager::getPrepareAllMeshesForShadowVolumes(void)
+    bool MeshManager::getPrepareAllMeshesForShadowVolumes()
     {
         return mPrepAllMeshesForShadowVolumes;
     }
     //-----------------------------------------------------------------------
-    Real MeshManager::getBoundsPaddingFactor(void)
+    Real MeshManager::getBoundsPaddingFactor()
     {
         return mBoundsPaddingFactor;
     }

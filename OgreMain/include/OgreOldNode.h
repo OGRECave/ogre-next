@@ -177,7 +177,7 @@ namespace v1 {
             to update it's complete transformation based on it's parents
             derived transform.
         */
-        virtual void _updateFromParent(void) const;
+        virtual void _updateFromParent() const;
 
         /** Class-specific implementation of _updateFromParent.
         @remarks
@@ -185,11 +185,11 @@ namespace v1 {
             itself allows the detail to be overridden without disrupting the 
             general sequence of updateFromParent (e.g. raising events)
         */
-        virtual void updateFromParentImpl(void) const;
+        virtual void updateFromParentImpl() const;
 
 
         /** Internal method for creating a new child OldNode - must be overridden per subclass. */
-        virtual OldNode* createChildImpl(void) = 0;
+        virtual OldNode* createChildImpl() = 0;
 
         /** Internal method for creating a new child OldNode - must be overridden per subclass. */
         virtual OldNode* createChildImpl(const String& name) = 0;
@@ -229,11 +229,11 @@ namespace v1 {
         virtual ~OldNode();  
 
         /** Returns the name of the OldNode. */
-        const String& getName(void) const;
+        const String& getName() const;
 
         /** Gets this OldNode's parent (NULL if this is the root).
         */
-        virtual OldNode* getParent(void) const;
+        virtual OldNode* getParent() const;
 
         /** Returns a quaternion representing the OldNodes orientation.
         */
@@ -282,7 +282,7 @@ namespace v1 {
         @par
             Note that rotations are oriented around the OldNode's origin.
         */
-        virtual void resetOrientation(void);
+        virtual void resetOrientation();
 
         /** Sets the position of the OldNode relative to it's parent.
         */
@@ -294,7 +294,7 @@ namespace v1 {
 
         /** Gets the position of the OldNode relative to it's parent.
         */
-        virtual const Vector3 & getPosition(void) const;
+        virtual const Vector3 & getPosition() const;
 
         /** Sets the scaling factor applied to this OldNode.
         @remarks
@@ -326,7 +326,7 @@ namespace v1 {
 
         /** Gets the scaling factor of this OldNode.
         */
-        virtual const Vector3 & getScale(void) const;
+        virtual const Vector3 & getScale() const;
 
         /** Tells the OldNode whether it should inherit orientation from it's parent OldNode.
         @remarks
@@ -356,7 +356,7 @@ namespace v1 {
         @remarks
             See setInheritOrientation for more info.
         */
-        virtual bool getInheritOrientation(void) const;
+        virtual bool getInheritOrientation() const;
 
         /** Tells the OldNode whether it should inherit scaling factors from it's parent OldNode.
         @remarks
@@ -376,7 +376,7 @@ namespace v1 {
         @remarks
             See setInheritScale for more info.
         */
-        virtual bool getInheritScale(void) const;
+        virtual bool getInheritScale() const;
 
         /** Scales the OldNode, combining it's current scale with the passed in scaling factor. 
         @remarks
@@ -491,7 +491,7 @@ namespace v1 {
 
         /** Gets a matrix whose columns are the local axes based on
             the OldNodes orientation relative to it's parent. */
-        virtual Matrix3 getLocalAxes(void) const;
+        virtual Matrix3 getLocalAxes() const;
 
         /** Creates an unnamed new OldNode as a child of this OldNode.
         @param translate
@@ -522,7 +522,7 @@ namespace v1 {
 
         /** Reports the number of child OldNodes under this one.
         */
-        virtual unsigned short numChildren(void) const;
+        virtual unsigned short numChildren() const;
 
         /** Gets a pointer to a child OldNode.
         @remarks
@@ -544,7 +544,7 @@ namespace v1 {
             store up changes for later. Note that calling methods on returned items in 
             the iterator IS allowed and does not invalidate the iterator.
         */
-        virtual ChildOldNodeIterator getChildIterator(void);
+        virtual ChildOldNodeIterator getChildIterator();
 
         /** Retrieves an iterator for efficiently looping through all children of this OldNode.
         @remarks
@@ -556,7 +556,7 @@ namespace v1 {
             store up changes for later. Note that calling methods on returned items in 
             the iterator IS allowed and does not invalidate the iterator.
         */
-        virtual ConstChildOldNodeIterator getChildIterator(void) const;
+        virtual ConstChildOldNodeIterator getChildIterator() const;
 
         /** Drops the specified child from this OldNode. 
         @remarks
@@ -584,7 +584,7 @@ namespace v1 {
         /** Removes all child OldNodes attached to this OldNode. Does not delete the OldNodes, just detaches them from
             this parent, potentially to be reattached elsewhere.
         */
-        virtual void removeAllChildren(void);
+        virtual void removeAllChildren();
         
         /** Sets the final world position of the OldNode directly.
         @remarks 
@@ -601,15 +601,15 @@ namespace v1 {
 
         /** Gets the orientation of the OldNode as derived from all parents.
         */
-        virtual const Quaternion & _getDerivedOrientation(void) const;
+        virtual const Quaternion & _getDerivedOrientation() const;
 
         /** Gets the position of the OldNode as derived from all parents.
         */
-        virtual const Vector3 & _getDerivedPosition(void) const;
+        virtual const Vector3 & _getDerivedPosition() const;
 
         /** Gets the scaling factor of the OldNode as derived from all parents.
         */
-        virtual const Vector3 & _getDerivedScale(void) const;
+        virtual const Vector3 & _getDerivedScale() const;
 
         /** Gets the full transformation matrix for this OldNode.
         @remarks
@@ -620,7 +620,7 @@ namespace v1 {
             derived transforms have been updated before calling this method.
             Applications using Ogre should just use the relative transforms.
         */
-        virtual const Matrix4& _getFullTransform(void) const;
+        virtual const Matrix4& _getFullTransform() const;
 
         /** Internal method to update the OldNode.
         @note
@@ -645,7 +645,7 @@ namespace v1 {
         
         /** Gets the current listener for this OldNode.
         */
-        virtual Listener* getListener(void) const { return mListener; }
+        virtual Listener* getListener() const { return mListener; }
         
 
         /** Sets the current transform of this OldNode to be the 'initial state' ie that
@@ -658,16 +658,16 @@ namespace v1 {
         @par
             If you never call this method, the initial state is the identity transform, ie do nothing.
         */
-        virtual void setInitialState(void);
+        virtual void setInitialState();
 
         /** Resets the position / orientation / scale of this OldNode to it's initial state, see setInitialState for more info. */
-        virtual void resetToInitialState(void);
+        virtual void resetToInitialState();
 
         /** Gets the initial position of this OldNode, see setInitialState for more info. 
         @remarks
             Also resets the cumulative animation weight used for blending.
         */
-        virtual const Vector3& getInitialPosition(void) const;
+        virtual const Vector3& getInitialPosition() const;
         
         /** Gets the local position, relative to this OldNode, of the given world-space position */
         virtual Vector3 convertWorldToLocalPosition( const Vector3 &worldPos );
@@ -684,10 +684,10 @@ namespace v1 {
         virtual Quaternion convertLocalToWorldOrientation( const Quaternion &localOrientation );
 
         /** Gets the initial orientation of this OldNode, see setInitialState for more info. */
-        virtual const Quaternion& getInitialOrientation(void) const;
+        virtual const Quaternion& getInitialOrientation() const;
 
         /** Gets the initial position of this OldNode, see setInitialState for more info. */
-        virtual const Vector3& getInitialScale(void) const;
+        virtual const Vector3& getInitialScale() const;
 
         /** Helper function, get the squared view depth.  */
         virtual Real getSquaredViewDepth(const Camera* cam) const;
@@ -717,7 +717,7 @@ namespace v1 {
         */
         static void queueNeedUpdate(OldNode* n);
         /** Process queued 'needUpdate' calls. */
-        static void processQueuedUpdates(void);
+        static void processQueuedUpdates();
 
 
         /** @deprecated use UserObjectBindings::setUserAny via getUserObjectBindings() instead.
@@ -732,7 +732,7 @@ namespace v1 {
         /** @deprecated use UserObjectBindings::getUserAny via getUserObjectBindings() instead.
             Retrieves the custom user value associated with this object.
         */
-        virtual const Any& getUserAny(void) const { return getUserObjectBindings().getUserAny(); }
+        virtual const Any& getUserAny() const { return getUserObjectBindings().getUserAny(); }
 
         /** Return an instance of user objects binding associated with this class.
             You can use it to associate one or more custom objects with this class instance.

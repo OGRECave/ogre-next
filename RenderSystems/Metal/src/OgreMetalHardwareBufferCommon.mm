@@ -97,7 +97,7 @@ namespace v1
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalHardwareBufferCommon::_notifyDeviceStalled(void)
+    void MetalHardwareBufferCommon::_notifyDeviceStalled()
     {
         mLastFrameUsed      = mVaoManager->getFrameCount() - mVaoManager->getDynamicBufferMultiplier();
         mLastFrameGpuWrote  = mLastFrameUsed;
@@ -110,7 +110,7 @@ namespace v1
         return !mDiscardBuffer ? mBuffer : mDiscardBuffer->getBufferName( outOffset );
     }
     //-----------------------------------------------------------------------------------
-    id<MTLBuffer> MetalHardwareBufferCommon::getBufferNameForGpuWrite(void)
+    id<MTLBuffer> MetalHardwareBufferCommon::getBufferNameForGpuWrite()
     {
         assert( !mDiscardBuffer && "Discardable buffers can't be written from GPU!" );
         mLastFrameUsed      = mVaoManager->getFrameCount();

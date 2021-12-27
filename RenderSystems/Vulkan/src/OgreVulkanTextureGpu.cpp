@@ -79,7 +79,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::createInternalResourcesImpl( void )
+    void VulkanTextureGpu::createInternalResourcesImpl()
     {
         if( mPixelFormat == PFG_NULL )
             return;  // Nothing to do
@@ -216,7 +216,7 @@ namespace Ogre
             createMsaaSurface();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::destroyInternalResourcesImpl( void )
+    void VulkanTextureGpu::destroyInternalResourcesImpl()
     {
         // If 'this' is being destroyed: We must call notifyTextureDestroyed
         //
@@ -288,11 +288,11 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::createMsaaSurface( void ) {}
+    void VulkanTextureGpu::createMsaaSurface() {}
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::destroyMsaaSurface( void ) {}
+    void VulkanTextureGpu::destroyMsaaSurface() {}
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::notifyDataIsReady( void )
+    void VulkanTextureGpu::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
@@ -332,12 +332,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpu::_isDataReadyImpl( void ) const
+    bool VulkanTextureGpu::_isDataReadyImpl() const
     {
         return mDisplayTextureName == mFinalTextureName && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpu::_setToDisplayDummyTexture( void )
+    void VulkanTextureGpu::_setToDisplayDummyTexture()
     {
         if( !mTextureManager )
         {
@@ -396,7 +396,7 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::PoolTextureSlotChanged );
     }
     //-----------------------------------------------------------------------------------
-    ResourceLayout::Layout VulkanTextureGpu::getCurrentLayout( void ) const
+    ResourceLayout::Layout VulkanTextureGpu::getCurrentLayout() const
     {
         // These are usually counterpart of VulkanMappings::get.
         // Otherwise there could be asserts triggering in our validations
@@ -629,7 +629,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange( void ) const
+    VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange() const
     {
         VkImageSubresourceRange retVal;
         retVal.aspectMask = VulkanMappings::getImageAspect( getWorkaroundedPixelFormat( mPixelFormat ) );
@@ -648,7 +648,7 @@ namespace Ogre
             locations.push_back( Vector2( 0, 0 ) );
     }
     //-----------------------------------------------------------------------------------
-    VkImageType VulkanTextureGpu::getVulkanTextureType( void ) const
+    VkImageType VulkanTextureGpu::getVulkanTextureType() const
     {
         // clang-format off
         switch( mTextureType )
@@ -667,7 +667,7 @@ namespace Ogre
         return VK_IMAGE_TYPE_2D;
     }
     //-----------------------------------------------------------------------------------
-    VkImageViewType VulkanTextureGpu::getInternalVulkanTextureViewType( void ) const
+    VkImageViewType VulkanTextureGpu::getInternalVulkanTextureViewType() const
     {
         // clang-format off
         switch( getInternalTextureType() )
@@ -794,7 +794,7 @@ namespace Ogre
         textureManager->destroyView( texSlot, imageView );
     }
     //-----------------------------------------------------------------------------------
-    VkImageView VulkanTextureGpu::createView( void ) const
+    VkImageView VulkanTextureGpu::createView() const
     {
         OGRE_ASSERT_MEDIUM( isTexture() &&
                             "This texture is marked as 'TextureFlags::NotTexture', which "
@@ -836,7 +836,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VkImageMemoryBarrier VulkanTextureGpu::getImageMemoryBarrier( void ) const
+    VkImageMemoryBarrier VulkanTextureGpu::getImageMemoryBarrier() const
     {
         VkImageMemoryBarrier imageMemBarrier;
         makeVkStruct( imageMemBarrier, VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER );
@@ -881,22 +881,22 @@ namespace Ogre
         mDesiredDepthBufferFormat = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 VulkanTextureGpuRenderTarget::getDepthBufferPoolId( void ) const
+    uint16 VulkanTextureGpuRenderTarget::getDepthBufferPoolId() const
     {
         return mDepthBufferPoolId;
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuRenderTarget::getPreferDepthTexture( void ) const
+    bool VulkanTextureGpuRenderTarget::getPreferDepthTexture() const
     {
         return mPreferDepthTexture;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu VulkanTextureGpuRenderTarget::getDesiredDepthBufferFormat( void ) const
+    PixelFormatGpu VulkanTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuRenderTarget::createMsaaSurface( void )
+    void VulkanTextureGpuRenderTarget::createMsaaSurface()
     {
         const PixelFormatGpu finalPixelFormat = getWorkaroundedPixelFormat( mPixelFormat );
 
@@ -957,7 +957,7 @@ namespace Ogre
                               0, 0u, 0, 0u, 0, 1u, &imageBarrier );
     }
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuRenderTarget::destroyMsaaSurface( void )
+    void VulkanTextureGpuRenderTarget::destroyMsaaSurface()
     {
         if( mMsaaFramebufferName )
         {
@@ -988,7 +988,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode( void ) const
+    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode() const
     {
         return mOrientationMode;
     }

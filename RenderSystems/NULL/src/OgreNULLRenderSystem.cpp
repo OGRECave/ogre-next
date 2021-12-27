@@ -44,35 +44,35 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    NULLRenderSystem::~NULLRenderSystem(void)
+    NULLRenderSystem::~NULLRenderSystem()
     {
      shutdown();
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::shutdown(void)
+    void NULLRenderSystem::shutdown()
     {
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
     }
     //-------------------------------------------------------------------------
-    const String& NULLRenderSystem::getName(void) const
+    const String& NULLRenderSystem::getName() const
     {
         static String strName("NULL Rendering Subsystem");
         return strName;
     }
     //-------------------------------------------------------------------------
-    const String& NULLRenderSystem::getFriendlyName(void) const
+    const String& NULLRenderSystem::getFriendlyName() const
     {
         static String strName("NULL_RS");
         return strName;
     }
     //-------------------------------------------------------------------------
-    HardwareOcclusionQuery* NULLRenderSystem::createHardwareOcclusionQuery(void)
+    HardwareOcclusionQuery* NULLRenderSystem::createHardwareOcclusionQuery()
     {
         return 0; //TODO
     }
     //-------------------------------------------------------------------------
-    RenderSystemCapabilities* NULLRenderSystem::createRenderSystemCapabilities(void) const
+    RenderSystemCapabilities* NULLRenderSystem::createRenderSystemCapabilities() const
     {
         RenderSystemCapabilities* rsc = new RenderSystemCapabilities();
         rsc->setRenderSystemName(getName());
@@ -109,7 +109,7 @@ namespace Ogre
         return rsc;
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::reinitialise(void)
+    void NULLRenderSystem::reinitialise()
     {
         this->shutdown();
         this->_initialise(true);
@@ -248,18 +248,18 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    RenderPassDescriptor* NULLRenderSystem::createRenderPassDescriptor(void)
+    RenderPassDescriptor* NULLRenderSystem::createRenderPassDescriptor()
     {
         RenderPassDescriptor *retVal = OGRE_NEW RenderPassDescriptor();
         mRenderPassDescs.insert( retVal );
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_beginFrame(void)
+    void NULLRenderSystem::_beginFrame()
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_endFrame(void)
+    void NULLRenderSystem::_endFrame()
     {
     }
     //-------------------------------------------------------------------------
@@ -275,7 +275,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    VertexElementType NULLRenderSystem::getColourVertexElementType(void) const
+    VertexElementType NULLRenderSystem::getColourVertexElementType() const
     {
         return VET_COLOUR_ARGB;
     }
@@ -330,22 +330,22 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    Real NULLRenderSystem::getHorizontalTexelOffset(void)
+    Real NULLRenderSystem::getHorizontalTexelOffset()
     {
         return 0.0f;
     }
     //-------------------------------------------------------------------------
-    Real NULLRenderSystem::getVerticalTexelOffset(void)
+    Real NULLRenderSystem::getVerticalTexelOffset()
     {
         return 0.0f;
     }
     //-------------------------------------------------------------------------
-    Real NULLRenderSystem::getMinimumDepthInputValue(void)
+    Real NULLRenderSystem::getMinimumDepthInputValue()
     {
         return 0.0f;
     }
     //-------------------------------------------------------------------------
-    Real NULLRenderSystem::getMaximumDepthInputValue(void)
+    Real NULLRenderSystem::getMaximumDepthInputValue()
     {
         return 1.0f;
     }
@@ -366,12 +366,12 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    const PixelFormatToShaderType* NULLRenderSystem::getPixelFormatToShaderType(void) const
+    const PixelFormatToShaderType* NULLRenderSystem::getPixelFormatToShaderType() const
     {
         return &mPixelFormatToShaderType;
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::flushCommands(void)
+    void NULLRenderSystem::flushCommands()
     {
     }
     //-------------------------------------------------------------------------
@@ -379,7 +379,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::endProfileEvent( void )
+    void NULLRenderSystem::endProfileEvent()
     {
     }
     //-------------------------------------------------------------------------
@@ -387,11 +387,11 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::initGPUProfiling(void)
+    void NULLRenderSystem::initGPUProfiling()
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::deinitGPUProfiling(void)
+    void NULLRenderSystem::deinitGPUProfiling()
     {
     }
     //-------------------------------------------------------------------------

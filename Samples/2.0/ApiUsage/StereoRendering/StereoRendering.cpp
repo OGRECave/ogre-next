@@ -32,7 +32,7 @@ namespace Demo
         Ogre::CompositorWorkspace   *mEyeWorkspaces[2];
 
         //-------------------------------------------------------------------------------
-        virtual void createCamera(void)
+        virtual void createCamera()
         {
             //Use one node to control both cameras
             mCamerasNode = mSceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
@@ -147,7 +147,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Stereo Rendering Sample";
     }

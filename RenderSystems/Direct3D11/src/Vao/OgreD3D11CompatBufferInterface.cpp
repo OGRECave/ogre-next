@@ -104,11 +104,11 @@ namespace Ogre
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11CompatBufferInterface::advanceFrame(void)
+    void D3D11CompatBufferInterface::advanceFrame()
     {
     }
     //-----------------------------------------------------------------------------------
-    void D3D11CompatBufferInterface::regressFrame(void)
+    void D3D11CompatBufferInterface::regressFrame()
     {
     }
 }

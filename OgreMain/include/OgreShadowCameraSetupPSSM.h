@@ -130,7 +130,7 @@ namespace Ogre
         ///
         /// The default is numStableSplits = 0 which disables the feature
         void setNumStableSplits( uint32 numStableSplits ) { mNumStableSplits = numStableSplits; }
-        uint32 getNumStableSplits( void ) const { return mNumStableSplits; }
+        uint32 getNumStableSplits() const { return mNumStableSplits; }
 
         /// Returns a LiSPSM shadow camera with PSSM splits base on iteration.
         virtual void getShadowCamera( const Ogre::SceneManager *sm, const Ogre::Camera *cam,

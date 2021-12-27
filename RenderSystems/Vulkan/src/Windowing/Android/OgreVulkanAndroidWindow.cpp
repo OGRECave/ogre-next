@@ -83,12 +83,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const char *VulkanAndroidWindow::getRequiredExtensionName( void )
+    const char *VulkanAndroidWindow::getRequiredExtensionName()
     {
         return VK_KHR_ANDROID_SURFACE_EXTENSION_NAME;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanAndroidWindow::destroy( void )
+    void VulkanAndroidWindow::destroy()
     {
         VulkanWindow::destroy();
 
@@ -171,7 +171,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VulkanAndroidWindow::windowMovedOrResized( void )
+    void VulkanAndroidWindow::windowMovedOrResized()
     {
         if( mClosed || !mNativeWindow )
             return;
@@ -199,7 +199,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::_setVisible( bool visible ) { mVisible = visible; }
     //-------------------------------------------------------------------------
-    bool VulkanAndroidWindow::isVisible( void ) const { return mVisible; }
+    bool VulkanAndroidWindow::isVisible() const { return mVisible; }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setHidden( bool hidden )
     {
@@ -211,7 +211,7 @@ namespace Ogre
             return;
     }
     //-------------------------------------------------------------------------
-    bool VulkanAndroidWindow::isHidden( void ) const { return false; }
+    bool VulkanAndroidWindow::isHidden() const { return false; }
     //-------------------------------------------------------------------------
     void VulkanAndroidWindow::setNativeWindow( ANativeWindow *nativeWindow )
     {

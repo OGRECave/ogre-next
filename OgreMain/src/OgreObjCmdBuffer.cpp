@@ -83,7 +83,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::clear(void)
+    void ObjCmdBuffer::clear()
     {
         FastArray<Cmd*>::const_iterator itor = mCommandBuffer.begin();
         FastArray<Cmd*>::const_iterator end  = mCommandBuffer.end();
@@ -98,7 +98,7 @@ namespace Ogre
         mCommandAllocator.clear();
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::execute(void)
+    void ObjCmdBuffer::execute()
     {
         FastArray<Cmd*>::const_iterator itor = mCommandBuffer.begin();
         FastArray<Cmd*>::const_iterator end  = mCommandBuffer.end();
@@ -120,7 +120,7 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( targetResidency != GpuResidency::OnStorage );
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::TransitionToLoaded::execute(void)
+    void ObjCmdBuffer::TransitionToLoaded::execute()
     {
         texture->_transitionTo( targetResidency, reinterpret_cast<uint8*>( sysRamCopy ) );
         OGRE_ASSERT_MEDIUM( !texture->isManualTexture() );
@@ -141,7 +141,7 @@ namespace Ogre
         loadedImage._setAutoDelete( true );
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::OutOfDateCache::execute(void)
+    void ObjCmdBuffer::OutOfDateCache::execute()
     {
         OGRE_ASSERT_MEDIUM( texture->getResidencyStatus() == GpuResidency::Resident );
 
@@ -165,7 +165,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::ExceptionThrown::execute(void)
+    void ObjCmdBuffer::ExceptionThrown::execute()
     {
         texture->notifyAllListenersTextureChanged( TextureGpuListener::ExceptionThrown, &exception );
     }
@@ -182,7 +182,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::UploadFromStagingTex::execute(void)
+    void ObjCmdBuffer::UploadFromStagingTex::execute()
     {
         OgreProfileExhaustive( "ObjCmdBuffer::UploadFromStagingTex::execute" );
         stagingTexture->upload( box, dstTexture, mipLevel, &dstBox, &dstBox );
@@ -195,7 +195,7 @@ namespace Ogre
         filters.swap( inOutFilters );
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::NotifyDataIsReady::execute(void)
+    void ObjCmdBuffer::NotifyDataIsReady::execute()
     {
         OgreProfileExhaustive( "ObjCmdBuffer::NotifyDataIsReady::execute" );
 

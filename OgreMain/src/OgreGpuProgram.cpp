@@ -105,7 +105,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------
-    void GpuProgram::unsetRootLayout( void ) {}
+    void GpuProgram::unsetRootLayout() {}
     //-----------------------------------------------------------------------------
     void GpuProgram::setAutoReflectArrayBindingsInRootLayout( bool /*bReflectArrayRootLayouts*/ ) {}
     //-----------------------------------------------------------------------------
@@ -179,7 +179,7 @@ namespace Ogre
         mLoadFromFile = false;
         mCompileError = false;
     }
-    size_t GpuProgram::calculateSize(void) const
+    size_t GpuProgram::calculateSize() const
     {
         size_t memSize = 0;
         memSize += sizeof(bool) * 7;
@@ -207,7 +207,7 @@ namespace Ogre
         return memSize + paramsSize;
     }
     //-----------------------------------------------------------------------------
-    void GpuProgram::loadImpl(void)
+    void GpuProgram::loadImpl()
     {
         if (mLoadFromFile)
         {
@@ -251,7 +251,7 @@ namespace Ogre
 
     }
     //-----------------------------------------------------------------------------
-    bool GpuProgram::isRequiredCapabilitiesSupported(void) const
+    bool GpuProgram::isRequiredCapabilitiesSupported() const
     {
         const RenderSystemCapabilities* caps = 
             Root::getSingleton().getRenderSystem()->getCapabilities();
@@ -280,7 +280,7 @@ namespace Ogre
         return true;
     }
     //-----------------------------------------------------------------------------
-    bool GpuProgram::isSupported(void) const
+    bool GpuProgram::isSupported() const
     {
         if (mCompileError || !isRequiredCapabilitiesSupported())
             return false;
@@ -357,7 +357,7 @@ namespace Ogre
 
     }
     //-----------------------------------------------------------------------------
-    GpuProgramParametersSharedPtr GpuProgram::createParameters(void)
+    GpuProgramParametersSharedPtr GpuProgram::createParameters()
     {
         // Default implementation simply returns standard parameters.
         GpuProgramParametersSharedPtr ret = 
@@ -413,7 +413,7 @@ namespace Ogre
         mNumClipDistances = numClipDistances;
     }
     //-----------------------------------------------------------------------------
-    GpuProgramParametersSharedPtr GpuProgram::getDefaultParameters(void)
+    GpuProgramParametersSharedPtr GpuProgram::getDefaultParameters()
     {
         if (mDefaultParams.isNull())
         {
@@ -422,7 +422,7 @@ namespace Ogre
         return mDefaultParams;
     }
     //-----------------------------------------------------------------------------
-    void GpuProgram::setupBaseParamDictionary(void)
+    void GpuProgram::setupBaseParamDictionary()
     {
         ParamDictionary* dict = getParamDictionary();
 
@@ -484,7 +484,7 @@ namespace Ogre
     }
 
     //-----------------------------------------------------------------------
-    const String& GpuProgram::getLanguage(void) const
+    const String& GpuProgram::getLanguage() const
     {
         static const String language = "asm";
 

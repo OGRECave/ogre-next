@@ -71,7 +71,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TerrainGameState::createScene01(void)
+    void Tutorial_TerrainGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -154,7 +154,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void Tutorial_TerrainGameState::destroyScene(void)
+    void Tutorial_TerrainGameState::destroyScene()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::Hlms *hlmsPbs = root->getHlmsManager()->getHlms( Ogre::HLMS_PBS );

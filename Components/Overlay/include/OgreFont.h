@@ -173,7 +173,7 @@ namespace Ogre
         CodePointRangeList mCodePointRangeList;
 
         /// Internal method for loading from ttf
-        void createTextureFromFont(void);
+        void createTextureFromFont();
         void loadTextureFromFont( TextureGpuManager *textureManager );
 
         /// @copydoc Resource::loadImpl
@@ -181,7 +181,7 @@ namespace Ogre
         /// @copydoc Resource::unloadImpl
         virtual void unloadImpl();
         /// @copydoc Resource::calculateSize
-        size_t calculateSize(void) const { return 0; } // permanent resource is in the texture 
+        size_t calculateSize() const { return 0; } // permanent resource is in the texture 
     public:
 
         /** Constructor.
@@ -195,7 +195,7 @@ namespace Ogre
         void setType(FontType ftype);
 
         /** Gets the type of font. */
-        FontType getType(void) const;
+        FontType getType() const;
 
         /** Sets the source of the font.
         @remarks
@@ -216,7 +216,7 @@ namespace Ogre
 
         /** Gets the source this font (either an image or a truetype font).
         */
-        const String& getSource(void) const;
+        const String& getSource() const;
 
         /** Sets the spacing to allocate for font characters to overlap each other.
         @param charSpacer The size of the character spacer, in points.  Increasing it
@@ -230,7 +230,7 @@ namespace Ogre
             allows for more stretched-out fonts.  A low value reduces memory and processing
             time.  The default is "5".
         */
-        uint getCharacterSpacer(void) const;
+        uint getCharacterSpacer() const;
 
         /** Sets the size of a truetype font (only required for FT_TRUETYPE). 
         @param ttfSize The size of the font in points. Note that the
@@ -250,12 +250,12 @@ namespace Ogre
             Note that the size of the font does not affect how big it is on the screen, 
             just how large it is in the texture and thus how detailed it is.            
         */
-        Real getTrueTypeSize(void) const;
+        Real getTrueTypeSize() const;
         /** Gets the resolution (dpi) of the font used to generate the texture.
         @remarks
             Only applicable for FT_TRUETYPE Font objects.
         */
-        uint getTrueTypeResolution(void) const;
+        uint getTrueTypeResolution() const;
         /** Gets the maximum baseline distance of all glyphs used in the texture.
         @remarks
             Only applicable for FT_TRUETYPE Font objects.
@@ -402,7 +402,7 @@ namespace Ogre
         /** Gets whether or not the colour of this font is antialiased as it is generated
         from a true type font.
         */
-        inline bool getAntialiasColour(void) const
+        inline bool getAntialiasColour() const
         {
             return mAntialiasColour;
         }

@@ -84,7 +84,7 @@ namespace Demo
         sceneNode->attachObject( item );
     }
     //-----------------------------------------------------------------------------------
-    void RefractionsGameState::createRefractiveWall( void )
+    void RefractionsGameState::createRefractiveWall()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
@@ -193,7 +193,7 @@ namespace Demo
         ++mNumSpheres;
     }
     //-----------------------------------------------------------------------------------
-    void RefractionsGameState::createScene01( void )
+    void RefractionsGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -364,7 +364,7 @@ namespace Demo
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
     }
     //-----------------------------------------------------------------------------------
-    void RefractionsGameState::setTransparencyToMaterials( void )
+    void RefractionsGameState::setTransparencyToMaterials()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );

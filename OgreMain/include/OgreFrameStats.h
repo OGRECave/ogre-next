@@ -53,23 +53,23 @@ namespace Ogre
         size_t mFramesSampled;
 
     public:
-        FrameStats(void)
+        FrameStats()
         {
             reset( 0 );
         }
 
-        float getFps(void) const                { return 1000.0f / getLastTime(); }
-        float getAvgFps(void) const             { return 1000.0f / getAvgTime(); }
+        float getFps() const                { return 1000.0f / getLastTime(); }
+        float getAvgFps() const             { return 1000.0f / getAvgTime(); }
 
-        float getBestTime(void) const   { return mBestFrameTime * 0.001f; }
-        float getWorstTime(void) const  { return mWorstFrameTime * 0.001f; }
-        float getLastTime(void) const
+        float getBestTime() const   { return mBestFrameTime * 0.001f; }
+        float getWorstTime() const  { return mWorstFrameTime * 0.001f; }
+        float getLastTime() const
         {
             return mFrameTimes[(mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1) %
                                 OGRE_FRAME_STATS_SAMPLES] * 0.001f;
         }
 
-        float getAvgTime(void) const
+        float getAvgTime() const
         {
             if( !mFramesSampled )
                 return 0.0f;

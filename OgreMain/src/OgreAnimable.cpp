@@ -35,7 +35,7 @@ namespace Ogre {
     //--------------------------------------------------------------------------
     AnimableObject::AnimableDictionaryMap AnimableObject::msAnimableDictionary;
     //--------------------------------------------------------------------------
-    void AnimableValue::resetToBaseValue(void)
+    void AnimableValue::resetToBaseValue()
     {
         switch(mType)
         {

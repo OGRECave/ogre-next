@@ -105,10 +105,10 @@ namespace Ogre {
         virtual ~Archive() {}
 
         /// Get the name of this archive
-        const String& getName(void) const { return mName; }
+        const String& getName() const { return mName; }
 
         /// Returns whether this archive is case sensitive in the way it matches files
-        virtual bool isCaseSensitive(void) const = 0;
+        virtual bool isCaseSensitive() const = 0;
 
         /** Loads the archive.
         @remarks
@@ -216,7 +216,7 @@ namespace Ogre {
             bool recursive = true, bool dirs = false) = 0;
 
         /// Return the type code of this Archive
-        const String& getType(void) const { return mType; }
+        const String& getType() const { return mType; }
         
     };
 

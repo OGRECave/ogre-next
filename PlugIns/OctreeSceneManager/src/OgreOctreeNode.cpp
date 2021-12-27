@@ -105,7 +105,7 @@ Node * OctreeNode::removeChild( const String & name )
 }
 
 //same as SceneNode, only it doesn't care about children...
-void OctreeNode::_updateBounds( void )
+void OctreeNode::_updateBounds()
 {
     mWorldAABB.setNull();
     mLocalAABB.setNull();

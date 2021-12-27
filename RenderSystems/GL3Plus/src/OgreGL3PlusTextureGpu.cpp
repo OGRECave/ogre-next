@@ -66,7 +66,7 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::createInternalResourcesImpl(void)
+    void GL3PlusTextureGpu::createInternalResourcesImpl()
     {
         GLenum format = GL3PlusMappings::get( mPixelFormat );
 
@@ -202,7 +202,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::destroyInternalResourcesImpl(void)
+    void GL3PlusTextureGpu::destroyInternalResourcesImpl()
     {
         if( !hasAutomaticBatching() )
         {
@@ -236,7 +236,7 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::notifyDataIsReady(void)
+    void GL3PlusTextureGpu::notifyDataIsReady()
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName || mPixelFormat == PFG_NULL );
@@ -251,12 +251,12 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusTextureGpu::_isDataReadyImpl(void) const
+    bool GL3PlusTextureGpu::_isDataReadyImpl() const
     {
         return mDisplayTextureName == mFinalTextureName && mDataPreparationsPending == 0u;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)
+    void GL3PlusTextureGpu::_setToDisplayDummyTexture()
     {
         if( !mTextureManager )
         {
@@ -305,7 +305,7 @@ namespace Ogre
             _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusTextureGpu::isRenderbuffer(void) const
+    bool GL3PlusTextureGpu::isRenderbuffer() const
     {
         const bool isDepth = PixelFormatGpuUtils::isDepth( mPixelFormat );
 
@@ -765,7 +765,7 @@ namespace Ogre
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuRenderTarget::createInternalResourcesImpl(void)
+    void GL3PlusTextureGpuRenderTarget::createInternalResourcesImpl()
     {
         if( mPixelFormat == PFG_NULL )
             return; //Nothing to do
@@ -798,7 +798,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuRenderTarget::destroyInternalResourcesImpl(void)
+    void GL3PlusTextureGpuRenderTarget::destroyInternalResourcesImpl()
     {
         if( isTexture() || !PixelFormatGpuUtils::isDepth( mPixelFormat ) )
         {
@@ -825,17 +825,17 @@ namespace Ogre
         mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 GL3PlusTextureGpuRenderTarget::getDepthBufferPoolId(void) const
+    uint16 GL3PlusTextureGpuRenderTarget::getDepthBufferPoolId() const
     {
         return mDepthBufferPoolId;
     }
     //-----------------------------------------------------------------------------------
-    bool GL3PlusTextureGpuRenderTarget::getPreferDepthTexture(void) const
+    bool GL3PlusTextureGpuRenderTarget::getPreferDepthTexture() const
     {
         return mPreferDepthTexture;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu GL3PlusTextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    PixelFormatGpu GL3PlusTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
         return mDesiredDepthBufferFormat;
     }
@@ -849,7 +849,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode GL3PlusTextureGpuRenderTarget::getOrientationMode( void ) const
+    OrientationMode GL3PlusTextureGpuRenderTarget::getOrientationMode() const
     {
         return mOrientationMode;
     }

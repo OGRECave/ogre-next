@@ -182,13 +182,13 @@ namespace Ogre
 
         RenderSystem *mRenderSystem;
 
-        uint32 getPassHash(void);
+        uint32 getPassHash();
 
     public:
         PsoCacheHelper( RenderSystem *renderSystem );
         ~PsoCacheHelper();
 
-        void clearState(void);
+        void clearState();
 
         /** Returns a hash value you can cache into a Renderable (or whatever you're rendering).
             This hash will contain VertexFormat, Macroblock, Blendblock information and shaders
@@ -210,7 +210,7 @@ namespace Ogre
         @return
             The hash containing all the information.
         */
-        uint32 getRenderableHash(void);
+        uint32 getRenderableHash();
 
         /** You must call this function every frame, and every time the RenderTarget changes.
         @remarks
@@ -267,7 +267,7 @@ namespace Ogre
             The HlmsPso to use. Do NOT persistently store this pointer. It may
             be invalidated if the next getPso call needs to create a new PSO.
         */
-        HlmsPso* getPso(void);
+        HlmsPso* getPso();
     };
 
     /** @} */

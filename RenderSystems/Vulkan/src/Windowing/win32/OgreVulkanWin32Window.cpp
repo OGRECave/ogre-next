@@ -94,12 +94,12 @@ namespace Ogre
         mStencilBuffer = 0;
     }
     //-------------------------------------------------------------------------
-    const char *VulkanWin32Window::getRequiredExtensionName( void )
+    const char *VulkanWin32Window::getRequiredExtensionName()
     {
         return VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
     }
     //-------------------------------------------------------------------------
-    void VulkanWin32Window::updateWindowRect( void )
+    void VulkanWin32Window::updateWindowRect()
     {
         RECT rc;
         BOOL result;
@@ -722,7 +722,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanWin32Window::windowMovedOrResized( void )
+    void VulkanWin32Window::windowMovedOrResized()
     {
         if( !mHwnd || IsIconic( mHwnd ) )
             return;

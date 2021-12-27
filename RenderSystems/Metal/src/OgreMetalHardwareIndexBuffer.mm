@@ -52,12 +52,12 @@ namespace v1 {
         return mMetalHardwareBufferCommon.lockImpl( offset, length, options, mIsLocked );
     }
     //-----------------------------------------------------------------------------------
-    void MetalHardwareIndexBuffer::unlockImpl(void)
+    void MetalHardwareIndexBuffer::unlockImpl()
     {
         mMetalHardwareBufferCommon.unlockImpl( mLockStart, mLockSize );
     }
     //-----------------------------------------------------------------------------------
-    void MetalHardwareIndexBuffer::_notifyDeviceStalled(void)
+    void MetalHardwareIndexBuffer::_notifyDeviceStalled()
     {
         mMetalHardwareBufferCommon._notifyDeviceStalled();
     }
@@ -67,7 +67,7 @@ namespace v1 {
         return mMetalHardwareBufferCommon.getBufferName( outOffset );
     }
     //-----------------------------------------------------------------------------------
-    id<MTLBuffer> MetalHardwareIndexBuffer::getBufferNameForGpuWrite(void)
+    id<MTLBuffer> MetalHardwareIndexBuffer::getBufferNameForGpuWrite()
     {
         return mMetalHardwareBufferCommon.getBufferNameForGpuWrite();
     }
@@ -126,7 +126,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalHardwareIndexBuffer::_updateFromShadow(void)
+    void MetalHardwareIndexBuffer::_updateFromShadow()
     {
         if( mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate )
         {
@@ -140,7 +140,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------------
-    void* MetalHardwareIndexBuffer::getRenderSystemData(void)
+    void* MetalHardwareIndexBuffer::getRenderSystemData()
     {
         return &mMetalHardwareBufferCommon;
     }

@@ -73,29 +73,29 @@ namespace Demo
         TestUtils       *mTestUtils;
 
         void cycleVisualizationMode( bool bPrev );
-        void toggletVctQuality(void);
-        GiMode getGiMode(void) const;
+        void toggletVctQuality();
+        GiMode getGiMode() const;
         void cycleIfdProbeVisualizationMode( bool bPrev );
         void cycleIrradianceField( bool bPrev );
 
-        void voxelizeScene(void);
+        void voxelizeScene();
 
         void cycleScenes( bool bPrev );
-        void destroyCurrentScene(void);
+        void destroyCurrentScene();
 
-        void createCornellScene(void);
-        void createSibenikScene(void);
-        void createStressScene(void);
+        void createCornellScene();
+        void createSibenikScene();
+        void createStressScene();
 
-        bool needsVoxels(void) const;
+        bool needsVoxels() const;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
         VoxelizerGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
         virtual void update( float timeSinceLast );
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );

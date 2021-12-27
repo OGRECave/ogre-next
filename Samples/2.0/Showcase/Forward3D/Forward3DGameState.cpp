@@ -66,7 +66,7 @@ namespace Demo
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
-    void Forward3DGameState::createScene01(void)
+    void Forward3DGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -221,7 +221,7 @@ namespace Demo
         forwardPlus->setDebugMode( wasInDebugMode );
     }
     //-----------------------------------------------------------------------------------
-    void Forward3DGameState::generateLights(void)
+    void Forward3DGameState::generateLights()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::LightArray::const_iterator itor = mGeneratedLights.begin();

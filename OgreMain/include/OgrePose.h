@@ -63,9 +63,9 @@ namespace v1 {
         Pose(ushort target, const String& name = BLANKSTRING);
         virtual ~Pose();
         /// Return the name of the pose (may be blank)
-        const String& getName(void) const { return mName; }
+        const String& getName() const { return mName; }
         /// Return the target geometry index of the pose
-        ushort getTarget(void) const { return mTarget; }
+        ushort getTarget() const { return mTarget; }
         /// A collection of vertex offsets based on the vertex index
         typedef map<size_t, Vector3>::type VertexOffsetMap;
         /// An iterator over the vertex offsets
@@ -97,21 +97,21 @@ namespace v1 {
         void removeVertex(size_t index);
 
         /** Clear all vertices. */
-        void clearVertices(void);
+        void clearVertices();
 
         /** Gets an iterator over all the vertex offsets. */
-        ConstVertexOffsetIterator getVertexOffsetIterator(void) const;
+        ConstVertexOffsetIterator getVertexOffsetIterator() const;
         /** Gets an iterator over all the vertex offsets. */
-        VertexOffsetIterator getVertexOffsetIterator(void);
+        VertexOffsetIterator getVertexOffsetIterator();
         /** Gets a const reference to the vertex offsets. */
-        const VertexOffsetMap& getVertexOffsets(void) const { return mVertexOffsetMap; }
+        const VertexOffsetMap& getVertexOffsets() const { return mVertexOffsetMap; }
 
         /** Gets an iterator over all the vertex offsets. */
-        ConstNormalsIterator getNormalsIterator(void) const;
+        ConstNormalsIterator getNormalsIterator() const;
         /** Gets an iterator over all the vertex offsets. */
-        NormalsIterator getNormalsIterator(void);
+        NormalsIterator getNormalsIterator();
         /** Gets a const reference to the vertex offsets. */
-        const NormalsMap& getNormals(void) const { return mNormalsMap; }
+        const NormalsMap& getNormals() const { return mNormalsMap; }
 
         /** Get a hardware vertex buffer version of the vertex offsets. */
         const HardwareVertexBufferSharedPtr& _getHardwareVertexBuffer(const VertexData* origData) const;
@@ -119,7 +119,7 @@ namespace v1 {
         /** Clone this pose and create another one configured exactly the same
             way (only really useful for cloning holders of this class).
         */
-        Pose* clone(void) const;
+        Pose* clone() const;
     protected:
         /// Target geometry index
         ushort mTarget;

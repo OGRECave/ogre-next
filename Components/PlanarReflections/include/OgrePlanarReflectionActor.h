@@ -104,7 +104,7 @@ namespace Ogre
         uint8           mIndex;
         ArrayActorPlane *mActorPlane;
 
-        void updateArrayActorPlane(void);
+        void updateArrayActorPlane();
 
     public:
         PlanarReflectionActor() :
@@ -133,15 +133,15 @@ namespace Ogre
         */
         void setPlane( const Vector3 &center, const Vector2 &halfSize, const Quaternion &orientation );
 
-        const Vector3& getCenter(void) const;
-        const Vector2& getHalfSize(void) const;
-        const Quaternion& getOrientation(void) const;
-        const Vector3& getNormal(void) const;
-        const Plane& getPlane(void) const;
+        const Vector3& getCenter() const;
+        const Vector2& getHalfSize() const;
+        const Quaternion& getOrientation() const;
+        const Vector3& getNormal() const;
+        const Plane& getPlane() const;
         /// See PlanarReflections::reserve
-        bool hasReservation(void) const;
+        bool hasReservation() const;
         /// This value may have some meaning even if there is no reservation.
-        uint8 getCurrentBoundSlot(void) const;
+        uint8 getCurrentBoundSlot() const;
 
         Real getSquaredDistanceTo( const Vector3 &pos ) const;
     };

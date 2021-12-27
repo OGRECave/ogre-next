@@ -29,7 +29,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void MemoryCleanupGameState::testSequence(void)
+    void MemoryCleanupGameState::testSequence()
     {
         for( int j=0; j<100; ++j )
         {
@@ -38,7 +38,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void MemoryCleanupGameState::createCleanupScene(void)
+    void MemoryCleanupGameState::createCleanupScene()
     {
         destroyCleanupScene();
 
@@ -64,7 +64,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void MemoryCleanupGameState::destroyCleanupScene(void)
+    void MemoryCleanupGameState::destroyCleanupScene()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -105,18 +105,18 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    bool MemoryCleanupGameState::isSceneLoaded(void) const
+    bool MemoryCleanupGameState::isSceneLoaded() const
     {
         return !mVisibleItems.empty();
     }
     //-----------------------------------------------------------------------------------
-    void MemoryCleanupGameState::createScene01(void)
+    void MemoryCleanupGameState::createScene01()
     {
         createCleanupScene();
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void MemoryCleanupGameState::destroyScene(void)
+    void MemoryCleanupGameState::destroyScene()
     {
         destroyCleanupScene();
         TutorialGameState::destroyScene();

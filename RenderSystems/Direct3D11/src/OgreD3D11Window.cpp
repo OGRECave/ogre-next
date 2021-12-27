@@ -382,12 +382,12 @@ namespace Ogre
         mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::notifyResolutionChanged(void)
+    void D3D11WindowSwapChainBased::notifyResolutionChanged()
     {
         TODO_notify_listeners;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::swapBuffers(void)
+    void D3D11WindowSwapChainBased::swapBuffers()
     {
         mRenderSystem->fireDeviceEvent( &mDevice,"BeforeDevicePresent",this );
 

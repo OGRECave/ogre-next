@@ -20,14 +20,14 @@ namespace Demo
         void importV1Mesh( const Ogre::String &meshName );
 
         /// Creates textures needed by some of the postprocessing effects.
-        void createCustomTextures(void);
+        void createCustomTextures();
 
         /// Creates hard coded postfilter effects from code instead of scripts.
         /// Just to show how to do it. Needs to be called before or inside
         /// setupCompositor; since setupCompositor modifies the workspace
         /// definition to add all the postprocessing nodes beforehand, but
         /// disabled.
-        void createExtraEffectsFromCode(void);
+        void createExtraEffectsFromCode();
 
         /// Shows two of the many possible ways to toggle a postprocess FX
         /// on and off in real time.
@@ -38,7 +38,7 @@ namespace Demo
 
         Ogre::CompositorWorkspace* setupCompositor();
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

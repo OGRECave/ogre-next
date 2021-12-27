@@ -153,9 +153,9 @@ namespace Ogre {
 //              size_t width, size_t height);
 
             virtual void switchMode(uint& width, uint& height, short& frequency);
-            String getDisplayName(void);
+            String getDisplayName();
 
-            NativeDisplayType getNativeDisplay(void);
+            NativeDisplayType getNativeDisplay();
             XVisualInfo *getVisualFromFBConfig(::EGLConfig glConfig);
             Atom mAtomDeleteWindow;
             Atom mAtomFullScreen;

@@ -162,7 +162,7 @@ namespace Ogre {
                 will be no changes made to their components.
             @return The previous length of the plane's normal.
         */
-        Real normalise(void);
+        Real normalise();
 
         /// Get flipped plane, with same location but reverted orientation
         Plane operator - () const

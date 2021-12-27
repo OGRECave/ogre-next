@@ -74,7 +74,7 @@ namespace Ogre {
         mContext = 0;
     }
 
-    void EGLWindow::destroy(void)
+    void EGLWindow::destroy()
     {
         if (mClosed)
         {

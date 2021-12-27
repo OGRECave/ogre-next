@@ -119,7 +119,7 @@ namespace Volume {
 
         /** Destructor.
         */
-        virtual ~OctreeNode(void);
+        virtual ~OctreeNode();
 
         /** Factory method to create octree nodes.
         @param from
@@ -172,7 +172,7 @@ namespace Volume {
         @return
             True if so.
         */
-        inline bool isSubdivided(void) const 
+        inline bool isSubdivided() const 
         {
             return mChildren != 0;
         }
@@ -196,7 +196,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenter(void) const
+        inline const Vector3 getCenter() const
         {
             return (mFrom + mTo) / (Real)2.0;
         }
@@ -205,7 +205,7 @@ namespace Volume {
         @return
             The back lower left corner of the cell.
         */
-        inline const Vector3& getFrom(void) const
+        inline const Vector3& getFrom() const
         {
             return mFrom;
         }
@@ -214,7 +214,7 @@ namespace Volume {
         @return
             The front upper right corner of the cell.
         */
-        inline const Vector3& getTo(void) const
+        inline const Vector3& getTo() const
         {
             return mTo;
         }
@@ -289,7 +289,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterBack(void) const
+        inline const Vector3 getCenterBack() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mFrom.z);
         }
@@ -298,7 +298,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterFront(void) const
+        inline const Vector3 getCenterFront() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mTo.z);
         }
@@ -307,7 +307,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterLeft(void) const
+        inline const Vector3 getCenterLeft() const
         {
             return Vector3(mFrom.x, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -316,7 +316,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterRight(void) const
+        inline const Vector3 getCenterRight() const
         {
             return Vector3(mTo.x, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -325,7 +325,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterTop(void) const
+        inline const Vector3 getCenterTop() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mTo.y, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -334,7 +334,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterBottom(void) const
+        inline const Vector3 getCenterBottom() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mFrom.y, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -343,7 +343,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterBackTop(void) const
+        inline const Vector3 getCenterBackTop() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mTo.y, mFrom.z);
         }
@@ -352,7 +352,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterBackBottom(void) const
+        inline const Vector3 getCenterBackBottom() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mFrom.y, mFrom.z);
         }
@@ -361,7 +361,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterFrontTop(void) const
+        inline const Vector3 getCenterFrontTop() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mTo.y, mTo.z);
         }
@@ -370,7 +370,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterFrontBottom(void) const
+        inline const Vector3 getCenterFrontBottom() const
         {
             return Vector3(mFrom.x + (mTo.x - mFrom.x) / (Real)2.0, mFrom.y, mTo.z);
         }
@@ -379,7 +379,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterLeftTop(void) const
+        inline const Vector3 getCenterLeftTop() const
         {
             return Vector3(mFrom.x, mTo.y, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -388,7 +388,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterLeftBottom(void) const
+        inline const Vector3 getCenterLeftBottom() const
         {
             return Vector3(mFrom.x, mFrom.y, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -397,7 +397,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterRightTop(void) const
+        inline const Vector3 getCenterRightTop() const
         {
             return Vector3(mTo.x, mTo.y, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -406,7 +406,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterRightBottom(void) const
+        inline const Vector3 getCenterRightBottom() const
         {
             return Vector3(mTo.x, mFrom.y, mFrom.z + (mTo.z - mFrom.z) / (Real)2.0);
         }
@@ -415,7 +415,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterBackLeft(void) const
+        inline const Vector3 getCenterBackLeft() const
         {
             return Vector3(mFrom.x, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mFrom.z);
         }
@@ -424,7 +424,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterFrontLeft(void) const
+        inline const Vector3 getCenterFrontLeft() const
         {
             return Vector3(mFrom.x, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mTo.z);
         }
@@ -433,7 +433,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterBackRight(void) const
+        inline const Vector3 getCenterBackRight() const
         {
             return Vector3(mTo.x, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mFrom.z);
         }
@@ -442,7 +442,7 @@ namespace Volume {
         @return
             The center.
         */
-        inline const Vector3 getCenterFrontRight(void) const
+        inline const Vector3 getCenterFrontRight() const
         {
             return Vector3(mTo.x, mFrom.y + (mTo.y - mFrom.y) / (Real)2.0, mTo.z);
         }
@@ -451,7 +451,7 @@ namespace Volume {
         @return
             The corner.
         */
-        inline const Vector3 getCorner1(void) const
+        inline const Vector3 getCorner1() const
         {
             return Vector3(mTo.x, mFrom.y, mFrom.z);
         }
@@ -460,7 +460,7 @@ namespace Volume {
         @return
             The corner.
         */
-        inline const Vector3 getCorner2(void) const
+        inline const Vector3 getCorner2() const
         {
             return Vector3(mTo.x, mFrom.y, mTo.z);
         }
@@ -469,7 +469,7 @@ namespace Volume {
         @return
             The corner.
         */
-        inline const Vector3 getCorner3(void) const
+        inline const Vector3 getCorner3() const
         {
             return Vector3(mFrom.x, mFrom.y, mTo.z);
         }
@@ -478,7 +478,7 @@ namespace Volume {
         @return
             The corner.
         */
-        inline const Vector3 getCorner4(void) const
+        inline const Vector3 getCorner4() const
         {
             return Vector3(mFrom.x, mTo.y, mFrom.z);
         }
@@ -487,7 +487,7 @@ namespace Volume {
         @return
             The corner.
         */
-        inline const Vector3 getCorner5(void) const
+        inline const Vector3 getCorner5() const
         {
             return Vector3(mTo.x, mTo.y, mFrom.z);
         }
@@ -496,7 +496,7 @@ namespace Volume {
         @return
             The corner.
         */
-        inline const Vector3 getCorner7(void) const
+        inline const Vector3 getCorner7() const
         {
             return Vector3(mFrom.x, mTo.y, mTo.z);
         }
@@ -514,7 +514,7 @@ namespace Volume {
         @return
             The center value, one Vector4 consisting of gradient (x, y, z) and density (w).
         */
-        inline const Vector4 getCenterValue(void) const
+        inline const Vector4 getCenterValue() const
         {
             return mCenterValue;
         }
@@ -523,7 +523,7 @@ namespace Volume {
         @return
             true if somewhat near.
         */
-        inline bool isIsoSurfaceNear(void) const
+        inline bool isIsoSurfaceNear() const
         {
             if (mCenterValue.w == (Real)0.0)
             {

@@ -63,7 +63,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    const String& Overlay::getMovableType(void) const
+    const String& Overlay::getMovableType() const
     {
         return OVERLAY_NAME;
     }
@@ -74,13 +74,13 @@ namespace v1 {
                 (zorder ^ 0xffff) << (32u - RqBits::DepthBits);
     }
     //---------------------------------------------------------------------
-    uint16 Overlay::getZOrder(void) const
+    uint16 Overlay::getZOrder() const
     {
         return (uint16)(mObjectData.mDistanceToCamera[mObjectData.mIndex] >> (32u - RqBits::DepthBits))
                 ^ 0xffff;
     }
     //---------------------------------------------------------------------
-    void Overlay::show(void)
+    void Overlay::show()
     {
         setVisible( true );
         if (!mInitialised)
@@ -89,12 +89,12 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Overlay::hide(void)
+    void Overlay::hide()
     {
         setVisible( false );
     }
     //---------------------------------------------------------------------
-    void Overlay::initialise(void)
+    void Overlay::initialise()
     {
         OverlayContainerList::iterator i, iend;
         iend = m2DElements.end();
@@ -119,7 +119,7 @@ namespace v1 {
         cont->_notifyParent(0, 0);
     }
     //---------------------------------------------------------------------
-    void Overlay::clear(void)
+    void Overlay::clear()
     {
         m2DElements.clear();
         // Note no deallocation, memory handled by OverlayManager & SceneManager
@@ -132,12 +132,12 @@ namespace v1 {
         mTransformOutOfDate = true;
     }
     //---------------------------------------------------------------------
-    Real Overlay::getScrollX(void) const
+    Real Overlay::getScrollX() const
     {
         return mScrollX;
     }
     //---------------------------------------------------------------------
-    Real Overlay::getScrollY(void) const
+    Real Overlay::getScrollY() const
     {
         return mScrollY;
     }
@@ -183,12 +183,12 @@ namespace v1 {
         mTransformOutOfDate = true;
     }
     //---------------------------------------------------------------------
-    Real Overlay::getScaleX(void) const
+    Real Overlay::getScaleX() const
     {
         return mScaleX;
     }
     //---------------------------------------------------------------------
-    Real Overlay::getScaleY(void) const
+    Real Overlay::getScaleY() const
     {
         return mScaleY;
     }
@@ -238,7 +238,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void Overlay::updateTransform(void) const
+    void Overlay::updateTransform() const
     {
         // Ordering:
         //    1. Scale

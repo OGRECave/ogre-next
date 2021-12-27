@@ -156,7 +156,7 @@ namespace v1 {
             /// Internal implementation of lock()
             virtual void* lockImpl(size_t offset, size_t length, LockOptions options) = 0;
             /// Internal implementation of unlock()
-            virtual void unlockImpl(void) = 0;
+            virtual void unlockImpl() = 0;
 
     public:
             /// Constructor, to be called by HardwareBufferManager only
@@ -235,7 +235,7 @@ namespace v1 {
                 suffer from this problem, so if you want to be 100% sure your
                 data will not be lost, use the 'read' and 'write' forms instead.
             */
-            virtual void unlock(void)
+            virtual void unlock()
             {
                 assert(isLocked() && "Cannot unlock this buffer, it is not locked!");
 
@@ -304,7 +304,7 @@ namespace v1 {
             }
             
             /// Updates the real buffer from the shadow buffer, if required
-            virtual void _updateFromShadow(void)
+            virtual void _updateFromShadow()
             {
                 if (mUseShadowBuffer && mShadowUpdated && !mSuppressHardwareUpdate)
                 {
@@ -329,15 +329,15 @@ namespace v1 {
             }
 
             /// Returns the size of this buffer in bytes
-            size_t getSizeInBytes(void) const { return mSizeInBytes; }
+            size_t getSizeInBytes() const { return mSizeInBytes; }
             /// Returns the Usage flags with which this buffer was created
-            Usage getUsage(void) const { return mUsage; }
+            Usage getUsage() const { return mUsage; }
             /// Returns whether this buffer is held in system memory
-            bool isSystemMemory(void) const { return mSystemMemory; }
+            bool isSystemMemory() const { return mSystemMemory; }
             /// Returns whether this buffer has a system memory shadow for quicker reading
-            bool hasShadowBuffer(void) const { return mUseShadowBuffer; }
+            bool hasShadowBuffer() const { return mUseShadowBuffer; }
             /// Returns whether or not this buffer is currently locked.
-            bool isLocked(void) const { 
+            bool isLocked() const { 
                 return mIsLocked || (mUseShadowBuffer && mShadowBuffer->isLocked()); 
             }
             /// Pass true to suppress hardware upload of shadow buffer changes
@@ -348,7 +348,7 @@ namespace v1 {
             }
 
             /// An internal function that should be used only by a render system for internal use
-            virtual void* getRenderSystemData(void)     { return 0; }
+            virtual void* getRenderSystemData()     { return 0; }
     };
 
     /** Locking helper. Guaranteed unlocking even in case of exception. */

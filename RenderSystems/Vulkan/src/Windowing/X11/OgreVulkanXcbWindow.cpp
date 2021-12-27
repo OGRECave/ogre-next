@@ -120,12 +120,12 @@ namespace Ogre
         mConnection = 0;
     }
     //-----------------------------------------------------------------------------------
-    const char *VulkanXcbWindow::getRequiredExtensionName( void )
+    const char *VulkanXcbWindow::getRequiredExtensionName()
     {
         return VK_KHR_XCB_SURFACE_EXTENSION_NAME;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanXcbWindow::destroy( void )
+    void VulkanXcbWindow::destroy()
     {
         VulkanWindow::destroy();
 
@@ -260,7 +260,7 @@ namespace Ogre
         createSwapchain();
     }
     //-------------------------------------------------------------------------
-    void VulkanXcbWindow::initConnection( void )
+    void VulkanXcbWindow::initConnection()
     {
         int scr = 0;
 
@@ -506,7 +506,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VulkanXcbWindow::windowMovedOrResized( void )
+    void VulkanXcbWindow::windowMovedOrResized()
     {
         if( mClosed || !mXcbWindow )
             return;
@@ -539,7 +539,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::_setVisible( bool visible ) { mVisible = visible; }
     //-------------------------------------------------------------------------
-    bool VulkanXcbWindow::isVisible( void ) const { return mVisible; }
+    bool VulkanXcbWindow::isVisible() const { return mVisible; }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::setHidden( bool hidden )
     {
@@ -557,7 +557,7 @@ namespace Ogre
         xcb_flush( mConnection );
     }
     //-------------------------------------------------------------------------
-    bool VulkanXcbWindow::isHidden( void ) const { return mHidden; }
+    bool VulkanXcbWindow::isHidden() const { return mHidden; }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::getCustomAttribute( IdString name, void *pData )
     {

@@ -85,26 +85,26 @@ namespace v1 {
         virtual OverlayElement* getChild(const String& name);
 
         /** @copydoc OverlayElement::initialise */
-        void initialise(void);
+        void initialise();
 
         void _addChild(OverlayElement* elem);
         void _removeChild(OverlayElement* elem) { _removeChild(elem->getName()); }
         void _removeChild(const String& name);
 
         /** Gets an object for iterating over all the children of this object. */
-        virtual ChildIterator getChildIterator(void);
+        virtual ChildIterator getChildIterator();
 
         /** Gets an iterator for just the container children of this object.
         @remarks
             Good for cascading updates without having to use RTTI
         */
-        virtual ChildContainerIterator getChildContainerIterator(void);
+        virtual ChildContainerIterator getChildContainerIterator();
 
         /** Tell the object and its children to recalculate */
-        virtual void _positionsOutOfDate(void);
+        virtual void _positionsOutOfDate();
 
         /** Overridden from OverlayElement. */
-        virtual void _update(void);
+        virtual void _update();
 
         /** Overridden from OverlayElement. */
         virtual void _notifyViewport();

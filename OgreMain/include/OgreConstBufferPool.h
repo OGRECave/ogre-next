@@ -122,10 +122,10 @@ namespace Ogre
 
         OptimizationStrategy    mOptimizationStrategy;
 
-        void destroyAllPools(void);
+        void destroyAllPools();
 
-        void uploadDirtyDatablocks(void);
-        void uploadDirtyDatablocksImpl(void);
+        void uploadDirtyDatablocks();
+        void uploadDirtyDatablocksImpl();
 
     public:
         ConstBufferPool( uint32 bytesPerSlot, const ExtraBufferParams &extraBufferParams );
@@ -172,15 +172,15 @@ namespace Ogre
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags ) = 0;
         virtual void uploadToExtraBuffer( char *dstPtr ) {}
 
-        virtual void notifyOptimizationStrategyChanged(void) {}
+        virtual void notifyOptimizationStrategyChanged() {}
 
     public:
         ConstBufferPoolUser();
 
-        uint32 getAssignedSlot(void) const                              { return mAssignedSlot; }
-        const ConstBufferPool::BufferPool* getAssignedPool(void) const  { return mAssignedPool; }
+        uint32 getAssignedSlot() const                              { return mAssignedSlot; }
+        const ConstBufferPool::BufferPool* getAssignedPool() const  { return mAssignedPool; }
 
-        uint8 getDirtyFlags(void) const                                 { return mDirtyFlags; }
+        uint8 getDirtyFlags() const                                 { return mDirtyFlags; }
     };
 
     inline bool OrderConstBufferPoolUserByPoolThenSlot( const ConstBufferPoolUser *_l,

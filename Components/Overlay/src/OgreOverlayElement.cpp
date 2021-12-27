@@ -100,22 +100,22 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    const String& OverlayElement::getName(void) const
+    const String& OverlayElement::getName() const
     {
         return mName;
     }
     //---------------------------------------------------------------------
-    void OverlayElement::show(void)
+    void OverlayElement::show()
     {
         mVisible = true;
     }
     //---------------------------------------------------------------------
-    void OverlayElement::hide(void)
+    void OverlayElement::hide()
     {
         mVisible = false;
     }
     //---------------------------------------------------------------------
-    bool OverlayElement::isVisible(void) const
+    bool OverlayElement::isVisible() const
     {
         return mVisible;
     }
@@ -166,7 +166,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::getWidth(void) const
+    Real OverlayElement::getWidth() const
     {
         if (mMetricsMode != GMM_RELATIVE)
         {
@@ -192,7 +192,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::getHeight(void) const
+    Real OverlayElement::getHeight() const
     {
         if (mMetricsMode != GMM_RELATIVE)
         {
@@ -218,7 +218,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::getLeft(void) const
+    Real OverlayElement::getLeft() const
     {
         if (mMetricsMode != GMM_RELATIVE)
         {
@@ -245,7 +245,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::getTop(void) const
+    Real OverlayElement::getTop() const
     {
         if (mMetricsMode != GMM_RELATIVE)
         {
@@ -315,7 +315,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //---------------------------------------------------------------------
-    const String& OverlayElement::getMaterialName(void) const
+    const String& OverlayElement::getMaterialName() const
     {
         return mMaterialName;
     }
@@ -340,7 +340,7 @@ namespace v1 {
         }*/
     }
     //---------------------------------------------------------------------
-    const MaterialPtr& OverlayElement::getMaterial(void) const
+    const MaterialPtr& OverlayElement::getMaterial() const
     {
         return mMaterial;
     }
@@ -350,12 +350,12 @@ namespace v1 {
         mOverlay->_getWorldTransforms(xform);
     }
     //---------------------------------------------------------------------
-    void OverlayElement::_positionsOutOfDate(void)
+    void OverlayElement::_positionsOutOfDate()
     {
         mGeomPositionsOutOfDate = true;
     }
     //---------------------------------------------------------------------
-    void OverlayElement::_update(void)
+    void OverlayElement::_update()
     {
         Real vpWidth, vpHeight;
         OverlayManager& oMgr = OverlayManager::getSingleton();
@@ -434,7 +434,7 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
-    void OverlayElement::_updateFromParent(void)
+    void OverlayElement::_updateFromParent()
     {
         Real parentLeft = 0, parentTop = 0, parentBottom = 0, parentRight = 0;
 
@@ -533,7 +533,7 @@ namespace v1 {
         mDerivedOutOfDate = true;
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::_getDerivedLeft(void)
+    Real OverlayElement::_getDerivedLeft()
     {
         if (mDerivedOutOfDate)
         {
@@ -542,7 +542,7 @@ namespace v1 {
         return mDerivedLeft;
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::_getDerivedTop(void)
+    Real OverlayElement::_getDerivedTop()
     {
         if (mDerivedOutOfDate)
         {
@@ -551,12 +551,12 @@ namespace v1 {
         return mDerivedTop;
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::_getRelativeWidth(void)
+    Real OverlayElement::_getRelativeWidth()
     {
         return mWidth;
     }
     //---------------------------------------------------------------------
-    Real OverlayElement::_getRelativeHeight(void)
+    Real OverlayElement::_getRelativeHeight()
     {
         return mHeight;
     }
@@ -625,7 +625,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------
-    void OverlayElement::addBaseParameters(void)    
+    void OverlayElement::addBaseParameters()
     {
         ParamDictionary* dict = getParamDictionary();
 
@@ -687,7 +687,7 @@ namespace v1 {
         mColour = col;
     }
     //-----------------------------------------------------------------------
-    const ColourValue& OverlayElement::getColour(void) const
+    const ColourValue& OverlayElement::getColour() const
     {
         return mColour;
     }
@@ -761,7 +761,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //-----------------------------------------------------------------------
-    GuiMetricsMode OverlayElement::getMetricsMode(void) const
+    GuiMetricsMode OverlayElement::getMetricsMode() const
     {
         return mMetricsMode;
     }
@@ -772,7 +772,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //-----------------------------------------------------------------------
-    GuiHorizontalAlignment OverlayElement::getHorizontalAlignment(void) const
+    GuiHorizontalAlignment OverlayElement::getHorizontalAlignment() const
     {
         return mHorzAlign;
     }
@@ -783,7 +783,7 @@ namespace v1 {
         _positionsOutOfDate();
     }
     //-----------------------------------------------------------------------
-    GuiVerticalAlignment OverlayElement::getVerticalAlignment(void) const
+    GuiVerticalAlignment OverlayElement::getVerticalAlignment() const
     {
         return mVertAlign;
     }

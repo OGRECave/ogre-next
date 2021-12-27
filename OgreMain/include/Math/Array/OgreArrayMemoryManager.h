@@ -230,12 +230,12 @@ namespace Ogre
         ///
         /// ArrayMemoryManager::destroySlot already does this when the number
         /// of fragmented slots reaches mCleanupThreshold
-        void defragment(void);
+        void defragment();
 
         /// Defragments memory, then reallocates a smaller pool that tightly fits
         /// the current number of objects. Useful when you know you won't be creating
         /// more slots and you need to reclaim memory.
-        void shrinkToFit(void);
+        void shrinkToFit();
 
         /// Returns mUsedMemory. When ARRAY_PACKED_REALS = 4, and 4 objects have been
         /// created but the 2nd one has been deleted, getNumUsedSlotsIncludingFragmented

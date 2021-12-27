@@ -44,14 +44,14 @@ namespace v1
         VulkanHardwareBufferCommon mVulkanHardwareBufferCommon;
     protected:
         virtual void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
-        virtual void unlockImpl( void ) override;
+        virtual void unlockImpl() override;
     public:
         VulkanHardwareVertexBuffer( VulkanHardwareBufferManagerBase *mgr, size_t vertexSize,
                                     size_t numVertices,
                               HardwareBuffer::Usage usage, bool useShadowBuffer );
         virtual ~VulkanHardwareVertexBuffer();
 
-        void _notifyDeviceStalled( void );
+        void _notifyDeviceStalled();
 
         /// @copydoc VulkanHardwareBufferCommon::getBufferName
         VkBuffer getBufferName( size_t &outOffset );
@@ -65,9 +65,9 @@ namespace v1
         virtual void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
                                size_t length, bool discardWholeBuffer = false ) override;
 
-        virtual void _updateFromShadow( void ) override;
+        virtual void _updateFromShadow() override;
 
-        virtual void *getRenderSystemData( void ) override;
+        virtual void *getRenderSystemData() override;
     };
 }
 }

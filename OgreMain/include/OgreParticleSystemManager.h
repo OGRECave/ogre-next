@@ -321,36 +321,36 @@ namespace Ogre {
             Due to dependencies between various objects certain initialisation tasks cannot be done
             on construction. OGRE will call this method when the rendering subsystem is initialised.
         */
-        void _initialise(void);
+        void _initialise();
 
         /// @copydoc ScriptLoader::getScriptPatterns
-        const StringVector& getScriptPatterns(void) const;
+        const StringVector& getScriptPatterns() const;
         /// @copydoc ScriptLoader::parseScript
         void parseScript(DataStreamPtr& stream, const String& groupName);
         /// @copydoc ScriptLoader::getLoadingOrder
-        Real getLoadingOrder(void) const;
+        Real getLoadingOrder() const;
 
         typedef MapIterator<ParticleAffectorFactoryMap> ParticleAffectorFactoryIterator;
         typedef MapIterator<ParticleEmitterFactoryMap> ParticleEmitterFactoryIterator;
         typedef MapIterator<ParticleSystemRendererFactoryMap> ParticleRendererFactoryIterator;
         /** Return an iterator over the affector factories currently registered */
-        ParticleAffectorFactoryIterator getAffectorFactoryIterator(void);
+        ParticleAffectorFactoryIterator getAffectorFactoryIterator();
         /** Return an iterator over the emitter factories currently registered */
-        ParticleEmitterFactoryIterator getEmitterFactoryIterator(void);
+        ParticleEmitterFactoryIterator getEmitterFactoryIterator();
         /** Return an iterator over the renderer factories currently registered */
-        ParticleRendererFactoryIterator getRendererFactoryIterator(void);
+        ParticleRendererFactoryIterator getRendererFactoryIterator();
 
 
         typedef MapIterator<ParticleTemplateMap> ParticleSystemTemplateIterator;
         /** Gets an iterator over the list of particle system templates. */
-        ParticleSystemTemplateIterator getTemplateIterator(void)
+        ParticleSystemTemplateIterator getTemplateIterator()
         {
             return ParticleSystemTemplateIterator(
                 mSystemTemplates.begin(), mSystemTemplates.end());
         } 
 
         /** Get an instance of ParticleSystemFactory (internal use). */
-        ParticleSystemFactory* _getFactory(void) { return mFactory; }
+        ParticleSystemFactory* _getFactory() { return mFactory; }
         
         /** Override standard Singleton retrieval.
         @remarks
@@ -367,7 +367,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ParticleSystemManager& getSingleton(void);
+        static ParticleSystemManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -383,7 +383,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ParticleSystemManager* getSingletonPtr(void);
+        static ParticleSystemManager* getSingletonPtr();
 
     };
 
@@ -400,7 +400,7 @@ namespace Ogre {
         
         static String FACTORY_TYPE_NAME;
 
-        const String& getType(void) const;
+        const String& getType() const;
         void destroyInstance( MovableObject* obj);  
 
     };

@@ -80,9 +80,9 @@ namespace Ogre
         static uint8 getIblNumMipmaps( uint32 width, uint32 height );
 
         /// Adds a cubemap probe.
-        CubemapProbe* createProbe(void);
+        CubemapProbe* createProbe();
         virtual void destroyProbe( CubemapProbe *probe );
-        virtual void destroyAllProbes(void);
+        virtual void destroyAllProbes();
 
         /// Destroys the Proxy Items. Useful if you need to call sceneManager->clearScene();
         /// The you MUST call this function before. i.e.
@@ -91,25 +91,24 @@ namespace Ogre
         ///     pcc->restoreFromClearScene();
         /// Updating ParallaxCorrectedCubemap without calling prepareForClearScene/restoreFromClearScene
         /// will result in a crash.
-        virtual void prepareForClearScene(void);
-        virtual void restoreFromClearScene(void);
+        virtual void prepareForClearScene();
+        virtual void restoreFromClearScene();
 
-        const CubemapProbeVec& getProbes(void) const        { return mProbes; }
+        const CubemapProbeVec& getProbes() const        { return mProbes; }
 
-        bool getAutomaticMode(void) const               { return mAutomaticMode; }
-        bool getUseDpm2DArray(void) const               { return mUseDpm2DArray; }
+        bool getAutomaticMode() const               { return mAutomaticMode; }
+        bool getUseDpm2DArray() const               { return mUseDpm2DArray; }
 
-        TextureGpu* getBindTexture(void) const          { return mBindTexture; }
-        const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
-                                                        { return mSamplerblockTrilinear; }
+        TextureGpu* getBindTexture() const          { return mBindTexture; }
+        const HlmsSamplerblock* getBindTrilinearSamplerblock() { return mSamplerblockTrilinear; }
 
         /// By default the probes will be constructed when the user enters its vecinity.
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
-        virtual void updateAllDirtyProbes(void) = 0;
+        virtual void updateAllDirtyProbes() = 0;
 
         virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
-        virtual size_t getConstBufferSize(void);
+        virtual size_t getConstBufferSize();
         virtual void fillConstBufferData( const Matrix4 &viewMatrix,
                                           float * RESTRICT_ALIAS passBufferPtr ) const;
         static void fillConstBufferData( const CubemapProbe &probe,
@@ -143,12 +142,12 @@ namespace Ogre
         /// Inform whether we're currently updating a probe. Some Hlms / PCC combinations
         /// should not perform PCC while rendering, either because the RenderTarget is the same
         /// as the cubemap texture, or because other glitches may occur
-        bool isRendering(void) const                    { return mIsRendering; }
+        bool isRendering() const                    { return mIsRendering; }
 
         void _setProbeRenderInProgress( CubemapProbe *probe )   { mProbeRenderInProgress = probe; }
 
-        SceneManager* getSceneManager(void) const;
-        const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;
+        SceneManager* getSceneManager() const;
+        const CompositorWorkspaceDef* getDefaultWorkspaceDef() const;
 
         virtual void passPreExecute( CompositorPass *pass );
 

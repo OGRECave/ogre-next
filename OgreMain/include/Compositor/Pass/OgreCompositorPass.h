@@ -118,7 +118,7 @@ namespace Ogre
                                     bool preferDepthTexture = false,
                                     PixelFormatGpu depthBufferFormat = PFG_UNKNOWN );
 
-        virtual bool allowResolveStoreActionsWithoutResolveTexture(void) const { return false; }
+        virtual bool allowResolveStoreActionsWithoutResolveTexture() const { return false; }
         /// Called by setupRenderPassDesc right before calling renderPassDesc->entriesModified
         /// in case derived class wants to make some changes.
         virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc ) {}
@@ -133,15 +133,15 @@ namespace Ogre
         ///
         /// See https://forums.ogre3d.org/viewtopic.php?p=548046#p548046
         void setViewportSizeToViewport( size_t vpIdx, Viewport *outVp );
-        void setRenderPassDescToCurrent(void);
+        void setRenderPassDescToCurrent();
 
-        void populateTextureDependenciesFromExposedTextures(void);
+        void populateTextureDependenciesFromExposedTextures();
 
-        void executeResourceTransitions(void);
+        void executeResourceTransitions();
 
-        void notifyPassEarlyPreExecuteListeners(void);
-        void notifyPassPreExecuteListeners(void);
-        void notifyPassPosExecuteListeners(void);
+        void notifyPassEarlyPreExecuteListeners();
+        void notifyPassPreExecuteListeners();
+        void notifyPassPosExecuteListeners();
 
         /// @see BarrierSolver::resolveTransition
         void resolveTransition( TextureGpu *texture, ResourceLayout::Layout newLayout,
@@ -161,8 +161,8 @@ namespace Ogre
         */
         virtual void analyzeBarriers( const bool bClearBarriers = true );
 
-        void profilingBegin(void);
-        void profilingEnd(void);
+        void profilingBegin();
+        void profilingEnd();
 
         virtual void execute( const Camera *lodCameraconst ) = 0;
 
@@ -175,27 +175,27 @@ namespace Ogre
         virtual void notifyDestroyed( const UavBufferPacked *buffer );
 
         /// @See CompositorNode::_notifyCleared
-        virtual void notifyCleared(void);
+        virtual void notifyCleared();
 
-        virtual void resetNumPassesLeft(void);
+        virtual void resetNumPassesLeft();
 
-        Vector2 getActualDimensions(void) const;
+        Vector2 getActualDimensions() const;
 
         CompositorPassType getType() const  { return mDefinition->getType(); }
 
-        RenderPassDescriptor* getRenderPassDesc(void) const { return mRenderPassDesc; }
+        RenderPassDescriptor* getRenderPassDesc() const { return mRenderPassDesc; }
 
-        const CompositorPassDef* getDefinition(void) const  { return mDefinition; }
+        const CompositorPassDef* getDefinition() const  { return mDefinition; }
 
-		const CompositorNode* getParentNode(void) const		{ return mParentNode; }
+		const CompositorNode* getParentNode() const		{ return mParentNode; }
 
-        const ResourceTransitionArray &getResourceTransitions( void ) const
+        const ResourceTransitionArray &getResourceTransitions() const
         {
             return mResourceTransitions;
         }
-        ResourceTransitionArray &_getResourceTransitionsNonConst( void ) { return mResourceTransitions; }
+        ResourceTransitionArray &_getResourceTransitionsNonConst() { return mResourceTransitions; }
 
-        const CompositorTextureVec& getTextureDependencies(void) const  { return mTextureDependencies; }
+        const CompositorTextureVec& getTextureDependencies() const  { return mTextureDependencies; }
     };
 
     /** @} */

@@ -338,11 +338,11 @@ namespace Ogre
 
         vector<TextureGpuListener*>::type mListeners;
 
-        virtual void createInternalResourcesImpl(void) = 0;
-        virtual void destroyInternalResourcesImpl(void) = 0;
+        virtual void createInternalResourcesImpl() = 0;
+        virtual void destroyInternalResourcesImpl() = 0;
 
-        void checkValidSettings(void);
-        void transitionToResident(void);
+        void checkValidSettings();
+        void transitionToResident();
 
     public:
         TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -351,15 +351,15 @@ namespace Ogre
                     TextureGpuManager *textureManager );
         virtual ~TextureGpu();
 
-        void _resetTextureManager(void);
+        void _resetTextureManager();
 
         /// Note: This returns the alias name of the texture.
         /// See TextureGpuManager::createOrRetrieveTexture
-        virtual String getNameStr(void) const;
+        virtual String getNameStr() const;
         /// Returns the real name (e.g. disk in file) of the resource.
-        virtual String getRealResourceNameStr(void) const;
-        virtual String getResourceGroupStr(void) const;
-        String getSettingsDesc(void) const;
+        virtual String getRealResourceNameStr() const;
+        virtual String getResourceGroupStr() const;
+        String getSettingsDesc() const;
 
         /** Schedules an async transition in residency. If transitioning from
             OnStorage to Resident, it will read from file (ResourceGroup was set in createTexture)
@@ -432,33 +432,33 @@ namespace Ogre
 
         // See isMetadataReady for threadsafety on these functions.
         void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );
-        uint32 getWidth(void) const;
-        uint32 getHeight(void) const;
-        uint32 getDepthOrSlices(void) const;
+        uint32 getWidth() const;
+        uint32 getHeight() const;
+        uint32 getDepthOrSlices() const;
         /// For TypeCube & TypeCubeArray, this value returns 1.
-        uint32 getDepth(void) const;
+        uint32 getDepth() const;
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
-        uint32 getNumSlices(void) const;
+        uint32 getNumSlices() const;
         /// Real API width accounting for TextureGpu::getOrientationMode
         /// If orientation mode is 90° or 270° then getInternalWidth returns the height and
         /// getInternalHeight returns the width
-        uint32 getInternalWidth(void) const;
+        uint32 getInternalWidth() const;
         /// Real API height accounting for TextureGpu::getOrientationMode. See getInternalWidth
-        uint32 getInternalHeight(void) const;
+        uint32 getInternalHeight() const;
 
         void setNumMipmaps( uint8 numMipmaps );
-        uint8 getNumMipmaps(void) const;
+        uint8 getNumMipmaps() const;
 
-        uint32 getInternalSliceStart(void) const;
+        uint32 getInternalSliceStart() const;
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
-        TextureTypes::TextureTypes getTextureType(void) const;
-        TextureTypes::TextureTypes getInternalTextureType(void) const;
+        TextureTypes::TextureTypes getTextureType() const;
+        TextureTypes::TextureTypes getInternalTextureType() const;
 
         void _setSourceType( uint8 type );
         /// @copydoc TextureGpu::mSourceType
-        uint8 getSourceType( void ) const;
+        uint8 getSourceType() const;
 
         /** Sets the pixel format.
         @remarks
@@ -466,7 +466,7 @@ namespace Ogre
             (as we'll use the equivalent _SRGB variation).
         */
         void setPixelFormat( PixelFormatGpu pixelFormat );
-        PixelFormatGpu getPixelFormat(void) const;
+        PixelFormatGpu getPixelFormat() const;
 
         void setSampleDescription( SampleDescription desc );
         /// For internal use
@@ -474,10 +474,10 @@ namespace Ogre
 
         /// Returns effective sample description supported by the API.
         /// Note it's only useful after having transitioned to resident.
-        SampleDescription getSampleDescription( void ) const;
+        SampleDescription getSampleDescription() const;
         /// Returns original requested sample description, i.e. the raw input to setSampleDescription
-        SampleDescription getRequestedSampleDescription( void ) const;
-        bool isMultisample( void ) const;
+        SampleDescription getRequestedSampleDescription() const;
+        bool isMultisample() const;
 
         void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
@@ -523,11 +523,11 @@ namespace Ogre
                             bool autoDeleteSysRamCopy = true );
 
         /// Notifies it is safe to use the real data. Everything has been uploaded.
-        virtual void notifyDataIsReady(void) = 0;
+        virtual void notifyDataIsReady() = 0;
 
         /// Forces downloading data from GPU to CPU, usually because the data on GPU changed
         /// and we're in strategy AlwaysKeepSystemRamCopy. May stall.
-        void _syncGpuResidentToSystemRam(void);
+        void _syncGpuResidentToSystemRam();
 
     protected:
         /// Stalls until GPU -> CPU transfers (i.e. _syncGpuResidentToSystemRam) are done
@@ -593,9 +593,9 @@ namespace Ogre
         */
         virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
                                               PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId(void) const;
-        virtual bool getPreferDepthTexture(void) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+        virtual uint16 getDepthBufferPoolId() const;
+        virtual bool getPreferDepthTexture() const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
 
         /** Immediately resolves this texture to the resolveTexture argument.
             Source must be MSAA texture, destination must be non-MSAA.
@@ -619,30 +619,30 @@ namespace Ogre
                                                CopyEncTransitionMode::Auto ) = 0;
         /// Only valid for TextureGpu classes.
         /// TODO: This may be moved to a different class.
-        virtual void swapBuffers(void) {}
+        virtual void swapBuffers() {}
 
-        bool hasAutomaticBatching(void) const;
-        bool isTexture(void) const;
-        bool isRenderToTexture(void) const;
-        bool isUav(void) const;
-        bool allowsAutoMipmaps(void) const;
-        bool hasAutoMipmapAuto(void) const;
-        bool hasMsaaExplicitResolves(void) const;
-        bool isReinterpretable(void) const;
-        bool prefersLoadingFromFileAsSRGB(void) const;
-        bool isRenderWindowSpecific(void) const;
-        bool requiresTextureFlipping(void) const;
-        bool _isManualTextureFlagPresent(void) const;
-        bool isManualTexture(void) const;
-        bool isPoolOwner(void) const;
-        bool isDiscardableContent(void) const;
+        bool hasAutomaticBatching() const;
+        bool isTexture() const;
+        bool isRenderToTexture() const;
+        bool isUav() const;
+        bool allowsAutoMipmaps() const;
+        bool hasAutoMipmapAuto() const;
+        bool hasMsaaExplicitResolves() const;
+        bool isReinterpretable() const;
+        bool prefersLoadingFromFileAsSRGB() const;
+        bool isRenderWindowSpecific() const;
+        bool requiresTextureFlipping() const;
+        bool _isManualTextureFlagPresent() const;
+        bool isManualTexture() const;
+        bool isPoolOwner() const;
+        bool isDiscardableContent() const;
 
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.
         ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
         ///     * Headless windows return false since internally they're FBOs. However
         ///       isRenderWindowSpecific will return true
-        virtual bool isOpenGLRenderWindow( void ) const;
+        virtual bool isOpenGLRenderWindow() const;
 
         /// PUBLIC VARIABLE. This variable can be altered directly.
         ///
@@ -669,10 +669,10 @@ namespace Ogre
             with the other APIs if set to anything other than OR_DEGREE_0
         */
         virtual void setOrientationMode( OrientationMode orientationMode );
-        virtual OrientationMode getOrientationMode( void ) const;
+        virtual OrientationMode getOrientationMode() const;
 
         ResourceLayout::Layout getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
-        virtual ResourceLayout::Layout getCurrentLayout( void ) const;
+        virtual ResourceLayout::Layout getCurrentLayout() const;
 
         /// Sets the layout the texture should be transitioned to after the next copy operation
         /// (once the copy encoder gets closed)
@@ -680,7 +680,7 @@ namespace Ogre
         /// This is specific to Vulkan & D3D12
         virtual void _setNextLayout( ResourceLayout::Layout layout );
 
-        virtual void _setToDisplayDummyTexture(void) = 0;
+        virtual void _setToDisplayDummyTexture() = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
         /** 2D Texture with automatic batching will be merged with other textures into the
@@ -704,14 +704,14 @@ namespace Ogre
             Arbitrary value. Default value is 0.
         */
         void setTexturePoolId( uint32 poolId );
-        uint32 getTexturePoolId(void) const						{ return mPoolId; }
-        const TexturePool* getTexturePool(void) const           { return mTexturePool; }
+        uint32 getTexturePoolId() const						{ return mPoolId; }
+        const TexturePool* getTexturePool() const           { return mTexturePool; }
 
         void addListener( TextureGpuListener *listener );
         void removeListener( TextureGpuListener *listener );
         void notifyAllListenersTextureChanged( uint32 reason, void *extraData=0 );
 
-        const vector<TextureGpuListener*>::type& getListeners(void) const;
+        const vector<TextureGpuListener*>::type& getListeners() const;
 
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 
@@ -727,9 +727,9 @@ namespace Ogre
         static const IdString msMsaaTextureBuffer;
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
-        virtual bool isTextureGpu( void ) const;
+        virtual bool isTextureGpu() const;
 
-        TextureGpuManager* getTextureManager(void) const;
+        TextureGpuManager* getTextureManager() const;
 
         TextureBox getEmptyBox( uint8 mipLevel );
         TextureBox _getSysRamCopyAsBox( uint8 mipLevel );
@@ -741,7 +741,7 @@ namespace Ogre
 
         /// Returns total size in bytes used in GPU by this texture (not by its pool)
         /// including mipmaps.
-        size_t getSizeBytes(void) const;
+        size_t getSizeBytes() const;
 
         /** It is threadsafe to call this function from main thread.
             If this returns false, then the following functions are not threadsafe:
@@ -762,14 +762,14 @@ namespace Ogre
             the texture from file or a listener (i.e. isManualTexture returns false)
             otherwise you don't need to call these functions.
         */
-        bool isMetadataReady(void) const;
+        bool isMetadataReady() const;
 
         /// For internal use. Do not call directly.
         ///
         /// This function is the same isDataReady except it ignores pending residency changes,
         /// which is important when TextureGpuManager needs to know this information but the
         /// TextureGpu is transitioning (thus mPendingResidencyChanges is in an inconsistent state)
-        virtual bool _isDataReadyImpl(void) const = 0;
+        virtual bool _isDataReadyImpl() const = 0;
 
         /// True if this texture is fully ready to be used for displaying.
         ///
@@ -780,13 +780,13 @@ namespace Ogre
         ///
         /// If this is true, then isMetadataReady is also true.
         /// See isMetadataReady.
-        bool isDataReady( void ) const;
+        bool isDataReady() const;
 
         /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
         /// should return true. If it doesn't, then there was a problem loading
         /// the texture.
         /// See isMetadataReady remarks.
-        void waitForMetadata(void);
+        void waitForMetadata();
 
         /// Blocks main thread until data is ready. Afterwards isDataReady
         /// should return true. If it doesn't, then there was a problem loading
@@ -810,7 +810,7 @@ namespace Ogre
         ///        call TextureGpuManager::waitForStreamingCompletion (preferred) or
         ///        this function. Then proceed to load the rest of the textures.
         ///     2. If you can't do the above, call this function as late as possible
-        void waitForData(void);
+        void waitForData();
     };
 
     /** @} */

@@ -86,11 +86,11 @@ namespace Ogre {
         void setKeepVelocity(bool keepVelocity);
 
         /** Gets the randomness to apply to the particles in a system. */
-        Real getRandomness(void) const;
+        Real getRandomness() const;
         /** Gets the scope (percentage of particles which are randomised). */
-        Real getScope(void) const;
+        Real getScope() const;
         /** Gets flag which detemines whether particle speed is changed. */
-        bool getKeepVelocity(void) const;
+        bool getKeepVelocity() const;
 
         /// Command objects
         static CmdRandomness msRandomnessCmd;

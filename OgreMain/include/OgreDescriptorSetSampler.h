@@ -107,7 +107,7 @@ namespace Ogre
             return false;
         }
 
-        void checkValidity(void) const
+        void checkValidity() const
         {
 #if OGRE_DEBUG_MODE
             size_t totalSamplersUsed = 0u;

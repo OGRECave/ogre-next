@@ -46,9 +46,9 @@ namespace Ogre {
         }
 
     protected:
-        void loadImpl(void)         { throwException(); }
-        void loadFromSource(void)   { throwException(); }
-        void unloadImpl(void)       { }
+        void loadImpl()         { throwException(); }
+        void loadFromSource()   { throwException(); }
+        void unloadImpl()       { }
     };
 
 

@@ -38,7 +38,7 @@ namespace Demo
                                                     mCamera, "PbsMaterialsWorkspace", true );
         }
 
-        virtual void setupResources(void)
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -57,7 +57,7 @@ namespace Demo
             addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
         }
 
-        void reserveDecalTextures(void)
+        void reserveDecalTextures()
         {
             /*
             Decals support having up to 3 texture arrays, one for diffuse, normal and emissive maps.
@@ -162,7 +162,7 @@ namespace Demo
                         decalNormalId );
         }
 
-        virtual void loadResources(void)
+        virtual void loadResources()
         {
             registerHlms();
 
@@ -210,7 +210,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Screen Space Decals";
     }

@@ -42,7 +42,7 @@ namespace Ogre
 {
     OctreeZonePlugin* OZPlugin;
 
-    extern "C" void _OgreOctreeZonePluginExport dllStartPlugin( void )
+    extern "C" void _OgreOctreeZonePluginExport dllStartPlugin()
     {
         // Create new scene manager
         OZPlugin = OGRE_NEW OctreeZonePlugin();
@@ -51,7 +51,7 @@ namespace Ogre
         Root::getSingleton().installPlugin(OZPlugin);
 
     }
-    extern "C" void _OgreOctreeZonePluginExport dllStopPlugin( void )
+    extern "C" void _OgreOctreeZonePluginExport dllStopPlugin()
     {
         Root::getSingleton().uninstallPlugin(OZPlugin);
         OGRE_DELETE OZPlugin;

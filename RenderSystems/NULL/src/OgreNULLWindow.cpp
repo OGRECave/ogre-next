@@ -77,7 +77,7 @@ namespace Ogre
         mFullscreenMode = goFullscreen;
     }
     //-------------------------------------------------------------------------
-    bool NULLWindow::isClosed(void) const
+    bool NULLWindow::isClosed() const
     {
         return mClosed;
     }
@@ -86,7 +86,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    bool NULLWindow::isVisible(void) const
+    bool NULLWindow::isVisible() const
     {
         return true;
     }
@@ -95,7 +95,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    bool NULLWindow::isHidden(void) const
+    bool NULLWindow::isHidden() const
     {
         return false;
     }
@@ -121,7 +121,7 @@ namespace Ogre
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //-------------------------------------------------------------------------
-    void NULLWindow::swapBuffers(void)
+    void NULLWindow::swapBuffers()
     {
     }
 }

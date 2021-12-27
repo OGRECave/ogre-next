@@ -200,17 +200,17 @@ namespace Ogre
         virtual ~BufferPacked();
 
         /// Useful to query which one is the derived class.
-        virtual BufferPackedTypes getBufferPackedType(void) const = 0;
+        virtual BufferPackedTypes getBufferPackedType() const = 0;
 
         /// For internal use.
         void _setBufferInterface( BufferInterface *bufferInterface );
 
-        BufferType getBufferType(void) const                    { return mBufferType; }
-        BufferInterface* getBufferInterface(void) const         { return mBufferInterface; }
+        BufferType getBufferType() const                    { return mBufferType; }
+        BufferInterface* getBufferInterface() const         { return mBufferInterface; }
 
         /// If this buffer has been reinterpreted from an UavBufferPacked,
         /// returns the original version, otherwise returns 'this'
-        virtual BufferPacked *getOriginalBufferType( void );
+        virtual BufferPacked *getOriginalBufferType();
 
         /// Async data read request. A ticket will be returned. Once the async transfer finishes,
         /// you can use the ticket to read the data from CPU. @See AsyncTicket
@@ -271,12 +271,12 @@ namespace Ogre
 
         /// @see map. Do NOT call this function more than once per frame,
         /// or if you've called map( advanceFrame = true )
-        void advanceFrame(void);
+        void advanceFrame();
 
         /// Performs the opposite of @see advanceFrame. Only call this after having called
         /// advanceFrame. i.e. restore the buffer to the state it was before calling
         /// advanceFrame.
-        void regressFrame(void);
+        void regressFrame();
 
         /** Copies the contents of this buffer to another, using GPU -> GPU transfers.
 
@@ -307,24 +307,24 @@ namespace Ogre
         /// MS_PERSISTENT_COHERENT, then call unmap( UO_KEEP_PERSISTENT ); the returned value will
         /// still be MS_PERSISTENT_INCOHERENT/_COHERENT when persistent mapping is supported.
         /// This differs from isCurrentlyMapped
-        MappingState getMappingState(void) const                { return mMappingState; }
+        MappingState getMappingState() const                { return mMappingState; }
 
         /// Returns whether the buffer is currently mapped. If you've persistently mapped the buffer
         /// and then called unmap( UO_KEEP_PERSISTENT ); this function will return false; which
         /// differs from getMappingState's behavior.
-        bool isCurrentlyMapped(void) const;
+        bool isCurrentlyMapped() const;
 
-        size_t getNumElements(void) const       { return mNumElements; }
-        size_t getBytesPerElement(void) const   { return mBytesPerElement; }
-        size_t getTotalSizeBytes(void) const    { return mNumElements * mBytesPerElement; }
+        size_t getNumElements() const       { return mNumElements; }
+        size_t getBytesPerElement() const   { return mBytesPerElement; }
+        size_t getTotalSizeBytes() const    { return mNumElements * mBytesPerElement; }
 
-        size_t _getInternalBufferStart(void) const              { return mInternalBufferStart; }
-        size_t _getFinalBufferStart(void) const                 { return mFinalBufferStart; }
-        size_t _getInternalTotalSizeBytes(void) const   { return (mNumElements + mNumElementsPadding) *
+        size_t _getInternalBufferStart() const              { return mInternalBufferStart; }
+        size_t _getFinalBufferStart() const                 { return mFinalBufferStart; }
+        size_t _getInternalTotalSizeBytes() const   { return (mNumElements + mNumElementsPadding) *
                                                                  mBytesPerElement; }
-        size_t _getInternalNumElements(void) const      { return mNumElements + mNumElementsPadding; }
+        size_t _getInternalNumElements() const      { return mNumElements + mNumElementsPadding; }
 
-        const void* getShadowCopy(void) const   { return mShadowCopy; }
+        const void* getShadowCopy() const   { return mShadowCopy; }
 
         /// This will not delete the existing shadow copy so it can be used for other purposes
         /// if it is not needed call OGRE_FREE_SIMD( m->getShadowCopy(), MEMCATEGORY_GEOMETRY )

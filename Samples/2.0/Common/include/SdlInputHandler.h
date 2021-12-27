@@ -52,7 +52,7 @@ namespace Demo
         int         mWarpY;
         bool        mWarpCompensate;
 
-        void updateMouseSettings(void);
+        void updateMouseSettings();
 
         void handleWindowEvent( const SDL_Event& evt );
 
@@ -91,8 +91,8 @@ namespace Demo
 
         void _overrideKeyboardListener( KeyboardListener *listener );
         void _overrideMouseListener( MouseListener *listener );
-        KeyboardListener *getKeyboardListener( void );
-        MouseListener *getMouseListener( void );
+        KeyboardListener *getKeyboardListener();
+        MouseListener *getMouseListener();
     };
 }
 

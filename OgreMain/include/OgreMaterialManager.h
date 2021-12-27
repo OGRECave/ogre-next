@@ -166,7 +166,7 @@ namespace Ogre {
 
         /** Initialises the material manager, which also triggers it to 
          * parse all available .program and .material scripts. */
-        void initialise(void);
+        void initialise();
         
         /** @see ScriptLoader::parseScript
         */
@@ -202,7 +202,7 @@ namespace Ogre {
                 <li>Bilinear texture filtering</li>
                 </ul>
         */
-        virtual MaterialPtr getDefaultSettings(void) const { return mDefaultSettings; }
+        virtual MaterialPtr getDefaultSettings() const { return mDefaultSettings; }
 
         /** Internal method - returns index for a given material scheme name.
         @see Technique::setSchemeName
@@ -215,12 +215,12 @@ namespace Ogre {
         /** Internal method - returns the active scheme index.
         @see Technique::setSchemeName
         */
-        virtual unsigned short _getActiveSchemeIndex(void) const;
+        virtual unsigned short _getActiveSchemeIndex() const;
 
         /** Returns the name of the active material scheme. 
         @see Technique::setSchemeName
         */
-        virtual const String& getActiveScheme(void) const;
+        virtual const String& getActiveScheme() const;
         
         /** Sets the name of the active material scheme. 
         @see Technique::setSchemeName
@@ -265,7 +265,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MaterialManager& getSingleton(void);
+        static MaterialManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -281,7 +281,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MaterialManager* getSingletonPtr(void);
+        static MaterialManager* getSingletonPtr();
 
     };
     /** @} */

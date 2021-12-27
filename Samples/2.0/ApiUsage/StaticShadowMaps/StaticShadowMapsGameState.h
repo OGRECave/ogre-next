@@ -29,12 +29,12 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void createShadowMapDebugOverlays(void);
+        void createShadowMapDebugOverlays();
 
     public:
         StaticShadowMapsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
+        virtual void createScene01();
 
         virtual void update( float timeSinceLast );
 

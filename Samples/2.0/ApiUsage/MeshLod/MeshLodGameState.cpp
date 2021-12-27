@@ -39,7 +39,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void MeshLodGameState::createScene01(void)
+    void MeshLodGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

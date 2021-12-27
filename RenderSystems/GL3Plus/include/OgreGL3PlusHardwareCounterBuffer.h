@@ -45,7 +45,7 @@ namespace v1 {
             /** See HardwareBuffer. */
             void* lockImpl(size_t offset, size_t length, LockOptions options);
             /** See HardwareBuffer. */
-            void unlockImpl(void);
+            void unlockImpl();
 
         public:
             GL3PlusHardwareCounterBuffer(HardwareBufferManagerBase* mgr, const String& name);
@@ -62,9 +62,9 @@ namespace v1 {
             void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
                           size_t dstOffset, size_t length, bool discardWholeBuffer = false);
 
-            inline GLuint getGLBufferId(void) const { return mBufferId; }
+            inline GLuint getGLBufferId() const { return mBufferId; }
             void setGLBufferBinding(GLint binding);
-            inline GLint getGLBufferBinding(void) const { return mBinding; }
+            inline GLint getGLBufferBinding() const { return mBinding; }
     };
 }
 }

@@ -26,15 +26,15 @@ namespace Demo
         Ogre::PlanarReflections             *mPlanarReflections;
         PlanarReflectionsWorkspaceListener  *mWorkspaceListener;
 
-        void createReflectiveSurfaces(void);
+        void createReflectiveSurfaces();
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
         PlanarReflectionsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
 

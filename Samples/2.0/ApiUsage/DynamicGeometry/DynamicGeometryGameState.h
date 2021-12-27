@@ -32,7 +32,7 @@ namespace Demo
         float mRotationTime;
 
         /// Helper function to create an index buffer.
-        Ogre::IndexBufferPacked* createIndexBuffer(void);
+        Ogre::IndexBufferPacked* createIndexBuffer();
 
         /// Creates the MeshPtr needed by mStaticMesh & mPartialMesh
         Ogre::MeshPtr createStaticMesh( bool partialMesh );
@@ -46,8 +46,8 @@ namespace Demo
     public:
         DynamicGeometryGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void update( float timeSinceLast );
     };

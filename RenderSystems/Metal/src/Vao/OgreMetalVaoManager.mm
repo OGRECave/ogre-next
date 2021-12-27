@@ -234,7 +234,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-    void MetalVaoManager::createUnalignedCopyShader(void)
+    void MetalVaoManager::createUnalignedCopyShader()
     {
         NSError *error;
         id <MTLLibrary> library =
@@ -412,7 +412,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::cleanupEmptyPools(void)
+    void MetalVaoManager::cleanupEmptyPools()
     {
         for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
         {
@@ -1053,7 +1053,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::bindDrawId(void)
+    void MetalVaoManager::bindDrawId()
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
 
@@ -1302,7 +1302,7 @@ namespace Ogre
     }
 #endif
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::_update(void)
+    void MetalVaoManager::_update()
     {
         uint64 currentTimeMs = mTimer->getMilliseconds();
 
@@ -1378,12 +1378,12 @@ namespace Ogre
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::_notifyNewCommandBuffer(void)
+    void MetalVaoManager::_notifyNewCommandBuffer()
     {
         mSemaphoreFlushed = true;
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::_notifyDeviceStalled(void)
+    void MetalVaoManager::_notifyDeviceStalled()
     {
         mSemaphoreFlushed = true;
 
@@ -1415,7 +1415,7 @@ namespace Ogre
         mFrameCount += mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    uint8 MetalVaoManager::waitForTailFrameToFinish(void)
+    uint8 MetalVaoManager::waitForTailFrameToFinish()
     {
         //MetalRenderSystem::_beginFrameOnce does a global waiting for us, but if we're outside
         //the render loop (i.e. user is manually uploading data) we may have to call this earlier.

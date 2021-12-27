@@ -137,7 +137,7 @@ namespace Ogre
         outVp->setDimensions( mAnyTargetTexture, vpSize, scissors, mAnyMipLevel );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::setRenderPassDescToCurrent( void )
+    void CompositorPass::setRenderPassDescToCurrent()
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         if( mDefinition->mSkipLoadStoreSemantics )
@@ -461,7 +461,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::profilingBegin( void )
+    void CompositorPass::profilingBegin()
     {
 #if OGRE_PROFILING
         if( !mParentNode->getWorkspace()->getAmalgamatedProfiling() )
@@ -478,7 +478,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::profilingEnd( void )
+    void CompositorPass::profilingEnd()
     {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         {
@@ -500,7 +500,7 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::populateTextureDependenciesFromExposedTextures( void )
+    void CompositorPass::populateTextureDependenciesFromExposedTextures()
     {
         IdStringVec::const_iterator itor = mDefinition->mExposedTextures.begin();
         IdStringVec::const_iterator endt = mDefinition->mExposedTextures.end();
@@ -514,7 +514,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::executeResourceTransitions( void )
+    void CompositorPass::executeResourceTransitions()
     {
         OGRE_ASSERT_MEDIUM( mResourceTransitions.empty() ||
                             !mDefinition->mSkipLoadStoreSemantics &&
@@ -524,7 +524,7 @@ namespace Ogre
         renderSystem->executeResourceTransition( mResourceTransitions );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassEarlyPreExecuteListeners( void )
+    void CompositorPass::notifyPassEarlyPreExecuteListeners()
     {
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
@@ -538,7 +538,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassPreExecuteListeners( void )
+    void CompositorPass::notifyPassPreExecuteListeners()
     {
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
@@ -552,7 +552,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyPassPosExecuteListeners( void )
+    void CompositorPass::notifyPassPosExecuteListeners()
     {
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
@@ -795,7 +795,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::notifyDestroyed( const UavBufferPacked *buffer ) {}
     //-----------------------------------------------------------------------------------
-    void CompositorPass::notifyCleared( void )
+    void CompositorPass::notifyCleared()
     {
         if( mRenderPassDesc )
         {
@@ -805,9 +805,9 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPass::resetNumPassesLeft( void ) { mNumPassesLeft = mDefinition->mNumInitialPasses; }
+    void CompositorPass::resetNumPassesLeft() { mNumPassesLeft = mDefinition->mNumInitialPasses; }
     //-----------------------------------------------------------------------------------
-    Vector2 CompositorPass::getActualDimensions( void ) const
+    Vector2 CompositorPass::getActualDimensions() const
     {
         return Vector2( floorf( ( mAnyTargetTexture->getWidth() >> mAnyMipLevel ) *
                                 mDefinition->mVpRect[0].mVpWidth ),

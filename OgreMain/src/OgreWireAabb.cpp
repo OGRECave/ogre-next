@@ -108,7 +108,7 @@ namespace Ogre
         mParentNode->setScale( aabb.mHalfSize );
     }
     //-----------------------------------------------------------------------------------
-    void WireAabb::_updateTracking(void)
+    void WireAabb::_updateTracking()
     {
         if( !mTrackedObject->isAttached() )
         {
@@ -123,7 +123,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void WireAabb::createBuffers(void)
+    void WireAabb::createBuffers()
     {
         const float c_vertexData[8*3] =
         {
@@ -208,12 +208,12 @@ namespace Ogre
         mVaoPerLod[1].push_back( vao );
     }
     //-----------------------------------------------------------------------------------
-    const String& WireAabb::getMovableType(void) const
+    const String& WireAabb::getMovableType() const
     {
         return WireAabbFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------------------
-    const LightList& WireAabb::getLights(void) const
+    const LightList& WireAabb::getLights() const
     {
         return this->queryLights(); //Return the data from our MovableObject base class.
     }
@@ -238,7 +238,7 @@ namespace Ogre
                         "WireAabb::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------------
-    bool WireAabb::getCastsShadows(void) const
+    bool WireAabb::getCastsShadows() const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                         "WireAabb do not implement getCastsShadows."
@@ -252,7 +252,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     String WireAabbFactory::FACTORY_TYPE_NAME = "WireAabb";
     //-----------------------------------------------------------------------
-    const String& WireAabbFactory::getType(void) const
+    const String& WireAabbFactory::getType() const
     {
         return FACTORY_TYPE_NAME;
     }

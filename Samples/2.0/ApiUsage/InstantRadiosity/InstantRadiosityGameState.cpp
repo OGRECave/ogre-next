@@ -46,7 +46,7 @@ namespace Demo
         mNumDisplayHelpModes    = 3;
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::createLight(void)
+    void InstantRadiosityGameState::createLight()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
@@ -88,7 +88,7 @@ namespace Demo
         mInstantRadiosity->build();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::updateIrradianceVolume(void)
+    void InstantRadiosityGameState::updateIrradianceVolume()
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -109,7 +109,7 @@ namespace Demo
                                                  volumeOrigin, lightMaxPower, false );
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::createScene01(void)
+    void InstantRadiosityGameState::createScene01()
     {
         //Setup a scene similar to that of PBS sample, except
         //we apply the cubemap to everything via C++ code
@@ -202,7 +202,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosityGameState::destroyScene(void)
+    void InstantRadiosityGameState::destroyScene()
     {
 //        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 //        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );

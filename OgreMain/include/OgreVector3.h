@@ -564,7 +564,7 @@ namespace Ogre
                 method will guarantee to generate one of them. If you need more
                 control you should use the Quaternion class.
         */
-        inline Vector3 perpendicular(void) const
+        inline Vector3 perpendicular() const
         {
             static const Real fSquareZero = (Real)(1e-06 * 1e-06);
 
@@ -704,7 +704,7 @@ namespace Ogre
         }
 
         /** Returns true if this vector is zero length. */
-        inline bool isZeroLength(void) const
+        inline bool isZeroLength() const
         {
             Real sqlen = (x * x) + (y * y) + (z * z);
             return (sqlen < (1e-06 * 1e-06));
@@ -713,7 +713,7 @@ namespace Ogre
 
         /** As normalise, except that this vector is unaffected and the
             normalised vector is returned as a copy. */
-        inline Vector3 normalisedCopy(void) const
+        inline Vector3 normalisedCopy() const
         {
             Vector3 ret = *this;
             ret.normalise();

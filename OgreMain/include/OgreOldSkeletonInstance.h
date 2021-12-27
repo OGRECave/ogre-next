@@ -61,7 +61,7 @@ namespace v1 {
         ~OldSkeletonInstance();
 
         /** Gets the number of animations on this skeleton. */
-        unsigned short getNumAnimations(void) const;
+        unsigned short getNumAnimations() const;
 
         /** Gets a single animation by index. */
         Animation* getAnimation(unsigned short index) const;
@@ -100,10 +100,10 @@ namespace v1 {
         void addLinkedSkeletonAnimationSource(const String& skelName, 
             Real scale = 1.0f);
         /// @copydoc Skeleton::removeAllLinkedSkeletonAnimationSources
-        void removeAllLinkedSkeletonAnimationSources(void);
+        void removeAllLinkedSkeletonAnimationSources();
         /// @copydoc Skeleton::getLinkedSkeletonAnimationSourceIterator
         LinkedSkeletonAnimSourceIterator 
-            getLinkedSkeletonAnimationSourceIterator(void) const;
+            getLinkedSkeletonAnimationSourceIterator() const;
 
         /// @copydoc Skeleton::_initAnimationState
         void _initAnimationState(AnimationStateSet* animSet);
@@ -112,11 +112,11 @@ namespace v1 {
         void _refreshAnimationState(AnimationStateSet* animSet);
 
         /// @copydoc Resource::getName
-        const String& getName(void) const;
+        const String& getName() const;
         /// @copydoc Resource::getHandle
-        ResourceHandle getHandle(void) const;
+        ResourceHandle getHandle() const;
         /// @copydoc Resource::getGroup
-        const String& getGroup(void) const;
+        const String& getGroup() const;
 
     protected:
         /// Pointer back to master Skeleton
@@ -149,10 +149,10 @@ namespace v1 {
         void cloneBoneAndChildren(OldBone* source, OldBone* parent);
         /** Overridden from Skeleton
         */
-        void loadImpl(void);
+        void loadImpl();
         /** Overridden from Skeleton
         */
-        void unloadImpl(void);
+        void unloadImpl();
 
     };
     /** @} */

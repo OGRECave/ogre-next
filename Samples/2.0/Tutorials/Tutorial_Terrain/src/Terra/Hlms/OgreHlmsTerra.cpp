@@ -394,7 +394,7 @@ namespace Ogre
         setProperty( TerraProperty::ZUp, terrainCell->isZUp() );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::notifyPropertiesMergedPreGenerationStep(void)
+    void HlmsTerra::notifyPropertiesMergedPreGenerationStep()
     {
         HlmsPbs::notifyPropertiesMergedPreGenerationStep();
 

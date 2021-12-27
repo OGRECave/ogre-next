@@ -102,13 +102,13 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const Radian& Frustum::getFOVy(void) const
+    const Radian& Frustum::getFOVy() const
     {
         return mFOVy;
     }
 
     //-----------------------------------------------------------------------
-    Vector2 Frustum::getProjectionParamsAB(void) const
+    Vector2 Frustum::getProjectionParamsAB() const
     {
         Real nearPlane = getNearClipDistance();
         Real farPlane = getFarClipDistance();
@@ -137,7 +137,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    Real Frustum::getFarClipDistance(void) const
+    Real Frustum::getFarClipDistance() const
     {
         return mFarDist;
     }
@@ -153,7 +153,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    Real Frustum::getNearClipDistance(void) const
+    Real Frustum::getNearClipDistance() const
     {
         return mNearDist;
     }
@@ -193,7 +193,7 @@ namespace Ogre {
         return mFocalLength;
     }
     //-----------------------------------------------------------------------
-    const Matrix4& Frustum::getProjectionMatrix(void) const
+    const Matrix4& Frustum::getProjectionMatrix() const
     {
 
         updateFrustum();
@@ -201,7 +201,7 @@ namespace Ogre {
         return mProjMatrix;
     }
     //-----------------------------------------------------------------------
-    const Matrix4& Frustum::getProjectionMatrixWithRSDepth(void) const
+    const Matrix4& Frustum::getProjectionMatrixWithRSDepth() const
     {
 
         updateFrustum();
@@ -209,7 +209,7 @@ namespace Ogre {
         return mProjMatrixRSDepth;
     }
     //-----------------------------------------------------------------------
-    const Matrix4& Frustum::getViewMatrix(void) const
+    const Matrix4& Frustum::getViewMatrix() const
     {
         updateView();
 
@@ -218,7 +218,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const Plane* Frustum::getFrustumPlanes(void) const
+    const Plane* Frustum::getFrustumPlanes() const
     {
         // Make any pending updates to the calculated frustum planes
         updateFrustumPlanes();
@@ -407,7 +407,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Frustum::updateFrustumImpl(void) const
+    void Frustum::updateFrustumImpl() const
     {
         // Common calcs
         Real left, right, bottom, top;
@@ -612,7 +612,7 @@ namespace Ogre {
         mRecalcFrustumPlanes = true;
     }
     //-----------------------------------------------------------------------
-    void Frustum::updateFrustum(void) const
+    void Frustum::updateFrustum() const
     {
         if (isFrustumOutOfDate())
         {
@@ -621,7 +621,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Frustum::updateVertexData(void) const
+    void Frustum::updateVertexData() const
     {
         if (mRecalcVertexData)
         {
@@ -720,7 +720,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    bool Frustum::isViewOutOfDate(void) const
+    bool Frustum::isViewOutOfDate() const
     {
         // Attached to node?
         if( mParentNode )
@@ -743,7 +743,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    bool Frustum::isFrustumOutOfDate(void) const
+    bool Frustum::isFrustumOutOfDate() const
     {
         // Deriving custom near plane from linked plane?
         if (mObliqueDepthProjection)
@@ -767,7 +767,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Frustum::updateViewImpl(void) const
+    void Frustum::updateViewImpl() const
     {
         // ----------------------
         // Update the view matrix
@@ -806,7 +806,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void Frustum::updateView(void) const
+    void Frustum::updateView() const
     {
         if (isViewOutOfDate())
         {
@@ -815,7 +815,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Frustum::updateFrustumPlanesImpl(void) const
+    void Frustum::updateFrustumPlanesImpl() const
     {
         // -------------------------
         // Update the frustum planes
@@ -862,7 +862,7 @@ namespace Ogre {
         mRecalcFrustumPlanes = false;
     }
     //-----------------------------------------------------------------------
-    void Frustum::updateFrustumPlanes(void) const
+    void Frustum::updateFrustumPlanes() const
     {
         updateView();
         updateFrustum();
@@ -873,7 +873,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Frustum::updateWorldSpaceCornersImpl(void) const
+    void Frustum::updateWorldSpaceCornersImpl() const
     {
         Matrix4 eyeToWorld = mViewMatrix.inverseAffine();
 
@@ -910,7 +910,7 @@ namespace Ogre {
         mRecalcWorldSpaceCorners = false;
     }
     //-----------------------------------------------------------------------
-    void Frustum::updateWorldSpaceCorners(void) const
+    void Frustum::updateWorldSpaceCorners() const
     {
         updateView();
 
@@ -987,7 +987,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Real Frustum::getAspectRatio(void) const
+    Real Frustum::getAspectRatio() const
     {
         return mAspect;
     }
@@ -1000,12 +1000,12 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const AxisAlignedBox& Frustum::getBoundingBox(void) const
+    const AxisAlignedBox& Frustum::getBoundingBox() const
     {
         return mBoundingBox;
     }
     //-----------------------------------------------------------------------
-    const String& Frustum::getMovableType(void) const
+    const String& Frustum::getMovableType() const
     {
         return msMovableType;
     }
@@ -1030,7 +1030,7 @@ namespace Ogre {
         return (cam->getDerivedPosition() - mParentNode->_getDerivedPosition()).squaredLength();
     }
     //-----------------------------------------------------------------------
-    const LightList& Frustum::getLights(void) const 
+    const LightList& Frustum::getLights() const 
     {
         // N/A
         static LightList ll;
@@ -1052,7 +1052,7 @@ namespace Ogre {
         mRecalcWorldSpaceCorners = true;
     }
     // -------------------------------------------------------------------
-    const Vector3* Frustum::getWorldSpaceCorners(void) const
+    const Vector3* Frustum::getWorldSpaceCorners() const
     {
         updateWorldSpaceCorners();
 
@@ -1066,17 +1066,17 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    ProjectionType Frustum::getProjectionType(void) const
+    ProjectionType Frustum::getProjectionType() const
     {
         return mProjType;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Frustum::getPositionForViewUpdate(void) const
+    const Vector3& Frustum::getPositionForViewUpdate() const
     {
         return mLastParentPosition;
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Frustum::getOrientationForViewUpdate(void) const
+    const Quaternion& Frustum::getOrientationForViewUpdate() const
     {
         return mLastParentOrientation;
     }
@@ -1101,7 +1101,7 @@ namespace Ogre {
         invalidateView();
     }
     //-----------------------------------------------------------------------
-    void Frustum::disableReflection(void)
+    void Frustum::disableReflection()
     {
         mReflect = false;
         mLinkedReflectPlane = 0;
@@ -1293,7 +1293,7 @@ namespace Ogre {
         invalidateFrustum();
     }
     //---------------------------------------------------------------------
-    void Frustum::disableCustomNearClipPlane(void)
+    void Frustum::disableCustomNearClipPlane()
     {
         mObliqueDepthProjection = false;
         mLinkedObliqueProjPlane = 0;
@@ -1372,7 +1372,7 @@ namespace Ogre {
         invalidateFrustum();
     }
     //---------------------------------------------------------------------
-    bool Frustum::getFrustumExtentsManuallySet(void) const
+    bool Frustum::getFrustumExtentsManuallySet() const
     {
         return mFrustumExtentsManuallySet;
     }

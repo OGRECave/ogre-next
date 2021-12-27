@@ -123,7 +123,7 @@ namespace Ogre
         uint32 mHlmsTerraIndex;
 
     protected:
-        void destroyHeightmapTexture(void);
+        void destroyHeightmapTexture();
 
         /// Creates the Ogre texture based on the image data.
         /// Called by @see createHeightmap
@@ -133,8 +133,8 @@ namespace Ogre
         void createHeightmap( Image2 &image, const String &imageName, bool bMinimizeMemoryConsumption,
                               bool bLowResShadow );
 
-        void createNormalTexture(void);
-        void destroyNormalTexture(void);
+        void createNormalTexture();
+        void destroyNormalTexture();
 
         ///	Automatically calculates the optimum skirt size (no gaps with
         /// lowest overdraw possible).
@@ -142,7 +142,7 @@ namespace Ogre
         /// pixels in a 4x4 block.
         ///	This calculation may not be perfect, as the block search should
         /// get bigger for higher LODs.
-        void calculateOptimumSkirtSize(void);
+        void calculateOptimumSkirtSize();
 
         inline GridPoint worldToGrid( const Vector3 &vPos ) const;
         inline Vector2 gridToWorld( const GridPoint &gPos ) const;
@@ -151,7 +151,7 @@ namespace Ogre
 
         void addRenderable( const GridPoint &gridPos, const GridPoint &cellSize, uint32 lodLevel );
 
-        void optimizeCellsAndAdd(void);
+        void optimizeCellsAndAdd();
 
     public:
         Terra( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *sceneManager,
@@ -178,7 +178,7 @@ namespace Ogre
         /// A value of 0.0 will give you the biggest skirt and fix all skirt-related issues.
         /// Note however, this may have a *tremendous* GPU performance impact.
         void setCustomSkirtMinHeight( const float skirtMinHeight ) { m_skirtSize = skirtMinHeight; }
-        float getCustomSkirtMinHeight( void ) const { return m_skirtSize; }
+        float getCustomSkirtMinHeight() const { return m_skirtSize; }
 
         /** Must be called every frame so we can check the camera's position
             (passed in the constructor) and update our visible batches (and LODs)
@@ -232,33 +232,33 @@ namespace Ogre
         void setDatablock( HlmsDatablock *datablock );
 
         //MovableObject overloads
-        const String& getMovableType(void) const;
+        const String& getMovableType() const;
 
         /// Swaps current state with a saved one. Useful for rendering shadow maps
-        void _swapSavedState( void );
+        void _swapSavedState();
 
         const Camera* getCamera() const                 { return m_camera; }
         void setCamera( const Camera *camera )          { m_camera = camera; }
 
-        bool isZUp( void ) const { return m_zUp; }
+        bool isZUp() const { return m_zUp; }
 
-        const ShadowMapper* getShadowMapper(void) const { return m_shadowMapper; }
+        const ShadowMapper* getShadowMapper() const { return m_shadowMapper; }
 
-        Ogre::TextureGpu* getHeightMapTex(void) const   { return m_heightMapTex; }
-        Ogre::TextureGpu* getNormalMapTex(void) const   { return m_normalMapTex; }
-        TextureGpu* _getShadowMapTex(void) const;
+        Ogre::TextureGpu* getHeightMapTex() const   { return m_heightMapTex; }
+        Ogre::TextureGpu* getNormalMapTex() const   { return m_normalMapTex; }
+        TextureGpu* _getShadowMapTex() const;
 
         // These are always in Y-up space
-        const Vector2& getXZDimensions(void) const      { return m_xzDimensions; }
-        const Vector2& getXZInvDimensions(void) const   { return m_xzInvDimensions; }
-        float getHeight(void) const                     { return m_height; }
-        const Vector3& getTerrainOriginRaw( void ) const{ return m_terrainOrigin; }
+        const Vector2& getXZDimensions() const      { return m_xzDimensions; }
+        const Vector2& getXZInvDimensions() const   { return m_xzInvDimensions; }
+        float getHeight() const                     { return m_height; }
+        const Vector3& getTerrainOriginRaw() const{ return m_terrainOrigin; }
 
         /// Return value is in client-space (i.e. could be y- or z-up)
-        Vector3 getTerrainOrigin( void ) const;
+        Vector3 getTerrainOrigin() const;
 
         // Always in Y-up space
-        Vector2 getTerrainXZCenter(void) const;
+        Vector2 getTerrainXZCenter() const;
     };
 
 

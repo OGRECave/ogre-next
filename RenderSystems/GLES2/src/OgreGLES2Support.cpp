@@ -47,12 +47,12 @@ namespace Ogre {
         }
     }
 
-    ConfigOptionMap& GLES2Support::getConfigOptions(void)
+    ConfigOptionMap& GLES2Support::getConfigOptions()
     {
         return mOptions;
     }
 
-    void GLES2Support::initialiseExtensions(void)
+    void GLES2Support::initialiseExtensions()
     {
         String tmpStr;
 #if 1

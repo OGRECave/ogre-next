@@ -40,7 +40,7 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void setupResources(void)
+        virtual void setupResources()
         {
             GraphicsSystem::setupResources();
 
@@ -69,7 +69,7 @@ namespace Demo
             }
         }
 
-        virtual void loadResources(void)
+        virtual void loadResources()
         {
             GraphicsSystem::loadResources();
 
@@ -124,7 +124,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "Texture Baking";
     }

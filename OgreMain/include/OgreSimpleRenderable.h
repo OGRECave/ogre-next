@@ -68,7 +68,7 @@ namespace v1 {
 
         virtual void setMaterial( const String& matName );
         virtual void setMaterial(const MaterialPtr& mat);
-        virtual const MaterialPtr& getMaterial(void) const;
+        virtual const MaterialPtr& getMaterial() const;
 
         virtual void setRenderOperation( const RenderOperation& rend );
         virtual void getRenderOperation(RenderOperation& op, bool casterPass);
@@ -77,15 +77,15 @@ namespace v1 {
         virtual void getWorldTransforms( Matrix4* xform ) const;
 
         void setBoundingBox( const AxisAlignedBox& box );
-        virtual const AxisAlignedBox& getBoundingBox(void) const;
+        virtual const AxisAlignedBox& getBoundingBox() const;
 
         virtual ~SimpleRenderable();
 
         /** Overridden from MovableObject */
-        virtual const String& getMovableType(void) const;
+        virtual const String& getMovableType() const;
 
         /** @copydoc Renderable::getLights */
-        const LightList& getLights(void) const;
+        const LightList& getLights() const;
 
     };
     /** @} */

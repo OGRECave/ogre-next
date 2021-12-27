@@ -75,12 +75,12 @@ namespace Ogre
         /// Only used when hasMsaaExplicitResolves() == false.
         ComPtr<ID3D11Resource> mMsaaFramebufferName;
 
-        void create1DTexture(void);
+        void create1DTexture();
         void create2DTexture( bool msaaTextureOnly = false );
-        void create3DTexture(void);
+        void create3DTexture();
 
-        virtual void createInternalResourcesImpl(void);
-        virtual void destroyInternalResourcesImpl(void);
+        virtual void createInternalResourcesImpl();
+        virtual void destroyInternalResourcesImpl();
 
         void notifyDeviceLost(D3D11Device* device);
         void notifyDeviceRestored(D3D11Device* device, unsigned pass);
@@ -92,8 +92,8 @@ namespace Ogre
                          TextureGpuManager *textureManager );
         virtual ~D3D11TextureGpu();
 
-        virtual void notifyDataIsReady(void);
-        virtual bool _isDataReadyImpl(void) const;
+        virtual void notifyDataIsReady();
+        virtual bool _isDataReadyImpl() const;
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
@@ -104,7 +104,7 @@ namespace Ogre
             CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
                 CopyEncTransitionMode::Auto );
 
-        virtual void _setToDisplayDummyTexture(void);
+        virtual void _setToDisplayDummyTexture();
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
         virtual void _autogenerateMipmaps(
@@ -112,8 +112,8 @@ namespace Ogre
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
         ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
-        ComPtr<ID3D11ShaderResourceView> createSrv(void) const;
-        ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv.Get(); }
+        ComPtr<ID3D11ShaderResourceView> createSrv() const;
+        ID3D11ShaderResourceView* getDefaultDisplaySrv() const  { return mDefaultDisplaySrv.Get(); }
 
         ComPtr<ID3D11UnorderedAccessView> createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
 
@@ -122,9 +122,9 @@ namespace Ogre
 
         virtual void getCustomAttribute( IdString name, void *pData );
 
-        ID3D11Resource* getDisplayTextureName(void) const   { return mDisplayTextureName; }
-        ID3D11Resource* getFinalTextureName(void) const     { return mFinalTextureName.Get(); }
-        ID3D11Resource* getMsaaFramebufferName(void) const  { return mMsaaFramebufferName.Get(); }
+        ID3D11Resource* getDisplayTextureName() const   { return mDisplayTextureName; }
+        ID3D11Resource* getFinalTextureName() const     { return mFinalTextureName.Get(); }
+        ID3D11Resource* getMsaaFramebufferName() const  { return mMsaaFramebufferName.Get(); }
     };
 
     class _OgreD3D11Export D3D11TextureGpuRenderTarget : public D3D11TextureGpu
@@ -145,13 +145,13 @@ namespace Ogre
 
         virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
                                               PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId(void) const;
-        virtual bool getPreferDepthTexture(void) const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+        virtual uint16 getDepthBufferPoolId() const;
+        virtual bool getPreferDepthTexture() const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
 
         virtual void setOrientationMode( OrientationMode orientationMode );
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode( void ) const;
+        virtual OrientationMode getOrientationMode() const;
 #endif
     };
 }

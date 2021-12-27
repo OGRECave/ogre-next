@@ -104,7 +104,7 @@ namespace Demo
         static void destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
                                     GameState *logicGameState, LogicSystem *logicSystem );
 
-        static const char* getWindowTitle(void);
+        static const char* getWindowTitle();
 
         /// Time in seconds a frame should last in fixed timestep (e.g. to simulate
         /// physics at 60hz; set it to Frametime = 1 / 60.0). The default is 60hz

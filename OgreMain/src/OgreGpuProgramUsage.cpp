@@ -109,7 +109,7 @@ namespace Ogre
         mParameters = params;
     }
     //-----------------------------------------------------------------------------
-    GpuProgramParametersSharedPtr GpuProgramUsage::getParameters(void)
+    GpuProgramParametersSharedPtr GpuProgramUsage::getParameters()
     {
         if (mParameters.isNull())
         {
@@ -127,7 +127,7 @@ namespace Ogre
         mParameters = mProgram->createParameters();
     }
     //-----------------------------------------------------------------------------
-    size_t GpuProgramUsage::calculateSize(void) const
+    size_t GpuProgramUsage::calculateSize() const
     {
         size_t memSize = 0;
 
@@ -143,7 +143,7 @@ namespace Ogre
         return memSize;
     }
     //-----------------------------------------------------------------------------
-    void GpuProgramUsage::_load(void)
+    void GpuProgramUsage::_load()
     {
         if (!mProgram->isLoaded())
             mProgram->load();
@@ -203,7 +203,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------
-    void GpuProgramUsage::_unload(void)
+    void GpuProgramUsage::_unload()
     {
         // TODO?
     }

@@ -98,7 +98,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DynLibManager& getSingleton(void);
+        static DynLibManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -114,7 +114,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DynLibManager* getSingletonPtr(void);
+        static DynLibManager* getSingletonPtr();
     };
     /** @} */
     /** @} */

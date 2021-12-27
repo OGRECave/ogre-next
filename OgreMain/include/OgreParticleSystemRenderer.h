@@ -59,7 +59,7 @@ namespace Ogre {
         virtual ~ParticleSystemRenderer() {}
 
         /** Gets the type of this renderer - must be implemented by subclasses */
-        virtual const String& getType(void) const = 0;
+        virtual const String& getType() const = 0;
 
         /** Delegated to by ParticleSystem::_updateRenderQueue
         @remarks
@@ -79,9 +79,9 @@ namespace Ogre {
         /** Delegated to by ParticleSystem::_notifyAttached */
         virtual void _notifyAttached(Node* parent) = 0;
         /** Optional callback notified when particles are rotated */
-        virtual void _notifyParticleRotated(void) {}
+        virtual void _notifyParticleRotated() {}
         /** Optional callback notified when particles are resized individually */
-        virtual void _notifyParticleResized(void) {}
+        virtual void _notifyParticleResized() {}
         /** Tells the renderer that the particle quota has changed */
         virtual void _notifyParticleQuota(size_t quota) = 0;
         /** Tells the renderer that the particle default size has changed */
@@ -101,7 +101,7 @@ namespace Ogre {
             should be overridden to return a new instance of it. The default
             behaviour is to return null.
         */
-        virtual ParticleVisualData* _createVisualData(void) { return 0; }
+        virtual ParticleVisualData* _createVisualData() { return 0; }
         /** Destroy a ParticleVisualData instance.
         @remarks
             If this renderer needs additional data in each particle, then this should
@@ -123,7 +123,7 @@ namespace Ogre {
         virtual void setKeepParticlesInLocalSpace(bool keepLocal) = 0;
 
         /** Gets the desired particles sort mode of this renderer */
-        virtual SortMode _getSortMode(void) const = 0;
+        virtual SortMode _getSortMode() const = 0;
 
     };
 

@@ -121,12 +121,12 @@ namespace Ogre {
         mInnerSizey = y;
     }
     //-----------------------------------------------------------------------
-    Real RingEmitter::getInnerSizeX(void) const
+    Real RingEmitter::getInnerSizeX() const
     {
         return mInnerSizex;
     }
     //-----------------------------------------------------------------------
-    Real RingEmitter::getInnerSizeY(void) const
+    Real RingEmitter::getInnerSizeY() const
     {
         return mInnerSizey;
     }

@@ -91,7 +91,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static SkeletonManager& getSingleton(void);
+        static SkeletonManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -107,7 +107,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static SkeletonManager* getSingletonPtr(void);
+        static SkeletonManager* getSingletonPtr();
     };
 
     /** @} */

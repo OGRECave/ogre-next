@@ -875,7 +875,7 @@ namespace Ogre
         return vaoName;
     }
     //-----------------------------------------------------------------------------------
-    void GLES2VaoManager::bindDrawId(void)
+    void GLES2VaoManager::bindDrawId()
     {
         GLES2BufferInterface *drawIdBufferInterface = static_cast<GLES2BufferInterface*>(
                                                                 mDrawId->getBufferInterface() );
@@ -1070,7 +1070,7 @@ namespace Ogre
                                                             elementStart, elementCount ) );
     }
     //-----------------------------------------------------------------------------------
-    void GLES2VaoManager::_update(void)
+    void GLES2VaoManager::_update()
     {
         uint64 currentTimeMs = mTimer->getMilliseconds();
 
@@ -1140,7 +1140,7 @@ namespace Ogre
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    uint8 GLES2VaoManager::waitForTailFrameToFinish(void)
+    uint8 GLES2VaoManager::waitForTailFrameToFinish()
     {
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {

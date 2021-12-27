@@ -534,7 +534,7 @@ namespace Ogre {
         */
         void load(DataStreamPtr& stream);
 
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
     protected:
         /** Indicates whether all array entries will be generated and added to the definitions map
@@ -692,7 +692,7 @@ namespace Ogre {
         /** Calculate the expected size of the shared parameter buffer based
             on constant definition data types.
         */
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         /** True if this parameter set is dirty (values have been modified,
             but the render system has not updated them yet).
@@ -722,7 +722,7 @@ namespace Ogre {
         /** Gets an iterator over the named GpuConstantDefinition instances as defined
             by the user.
         */
-        GpuConstantDefinitionIterator getConstantDefinitionIterator(void) const;
+        GpuConstantDefinitionIterator getConstantDefinitionIterator() const;
 
         /** Get a specific GpuConstantDefinition for a named parameter.
          */
@@ -1793,7 +1793,7 @@ namespace Ogre {
             @note
             Only available if this parameters object has named parameters.
         */
-        GpuConstantDefinitionIterator getConstantDefinitionIterator(void) const;
+        GpuConstantDefinitionIterator getConstantDefinitionIterator() const;
 
         /** Get a specific GpuConstantDefinition for a named parameter.
             @note
@@ -1958,12 +1958,12 @@ namespace Ogre {
         void setConstantFromTime(size_t index, Real factor);
 
         /** Clears all the existing automatic constants. */
-        void clearAutoConstants(void);
+        void clearAutoConstants();
         typedef ConstVectorIterator<AutoConstantList> AutoConstantIterator;
         /** Gets an iterator over the automatic constant bindings currently in place. */
-        AutoConstantIterator getAutoConstantIterator(void) const;
+        AutoConstantIterator getAutoConstantIterator() const;
         /// Gets the number of int constants that have been set
-        size_t getAutoConstantCount(void) const { return mAutoConstants.size(); }
+        size_t getAutoConstantCount() const { return mAutoConstants.size(); }
         /** Gets a specific Auto Constant entry if index is in valid range
             otherwise returns a NULL
             @param index which entry is to be retrieved
@@ -1971,7 +1971,7 @@ namespace Ogre {
         GpuProgramParameters_AutoConstantEntry *getAutoConstantEntry(
             const size_t index );
         /** Returns true if this instance has any automatic constants. */
-        bool hasAutoConstants( void ) const { return !( mAutoConstants.empty() ); }
+        bool hasAutoConstants() const { return !( mAutoConstants.empty() ); }
         /** Finds an auto constant that's affecting a given logical parameter
             index for floating-point values.
             @note Only applicable for low-level programs.
@@ -2353,7 +2353,7 @@ namespace Ogre {
         */
         void setTransposeMatrices(bool val) { mTransposeMatrices = val; }
         /// Gets whether or not matrices are to be transposed when set
-        bool getTransposeMatrices(void) const { return mTransposeMatrices; }
+        bool getTransposeMatrices() const { return mTransposeMatrices; }
 
         /** Copies the values of all constants (including auto constants) from another
             GpuProgramParameters object.
@@ -2384,12 +2384,12 @@ namespace Ogre {
         static const AutoConstantDefinition* getAutoConstantDefinition(const size_t idx);
         /** Returns the number of auto constant definitions
          */
-        static size_t getNumAutoConstantDefinitions(void);
+        static size_t getNumAutoConstantDefinitions();
 
 
         /** increments the multipass number entry by 1 if it exists
          */
-        void incPassIterationNumber(void);
+        void incPassIterationNumber();
         /** Does this parameters object have a pass iteration number constant? */
         bool hasPassIterationNumber() const
         { return mActivePassIterationIndex != (std::numeric_limits<size_t>::max)(); }
@@ -2435,7 +2435,7 @@ namespace Ogre {
         */
         void _copySharedParams();
 
-        size_t calculateSize(void) const;
+        size_t calculateSize() const;
 
         /** Set subroutine name by slot name
          */

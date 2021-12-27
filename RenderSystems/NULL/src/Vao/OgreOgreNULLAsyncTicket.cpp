@@ -47,13 +47,13 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    const void* NULLAsyncTicket::mapImpl(void)
+    const void* NULLAsyncTicket::mapImpl()
     {
         return mStagingBuffer->_mapForRead( mStagingBufferMapOffset,
                                             mElementCount * mCreator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
-    bool NULLAsyncTicket::queryIsTransferDone(void)
+    bool NULLAsyncTicket::queryIsTransferDone()
     {
         return true;
     }

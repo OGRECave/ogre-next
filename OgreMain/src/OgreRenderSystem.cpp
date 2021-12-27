@@ -495,7 +495,7 @@ namespace Ogre {
         delete renderPassDesc;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::destroyAllRenderPassDescriptors(void)
+    void RenderSystem::destroyAllRenderPassDescriptors()
     {
         RenderPassDescriptorSet::const_iterator itor = mRenderPassDescs.begin();
         RenderPassDescriptorSet::const_iterator end  = mRenderPassDescs.end();
@@ -528,11 +528,11 @@ namespace Ogre {
         mMaxBoundViewports = numViewports;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::executeRenderPassDescriptorDelayedActions(void)
+    void RenderSystem::executeRenderPassDescriptorDelayedActions()
     {
     }
     //---------------------------------------------------------------------
-    void RenderSystem::endRenderPassDescriptor(void)
+    void RenderSystem::endRenderPassDescriptor()
     {
         mCurrentRenderPassDescriptor = 0;
         const size_t maxBoundViewports = mMaxBoundViewports;
@@ -556,7 +556,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void RenderSystem::_cleanupDepthBuffers( void )
+    void RenderSystem::_cleanupDepthBuffers()
     {
         TextureGpuSet::const_iterator itor = mSharedDepthBufferZeroRefCandidates.begin();
         TextureGpuSet::const_iterator endt = mSharedDepthBufferZeroRefCandidates.end();
@@ -765,17 +765,17 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_beginFrameOnce(void)
+    void RenderSystem::_beginFrameOnce()
     {
         mVaoManager->_beginFrame();
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_endFrameOnce(void)
+    void RenderSystem::_endFrameOnce()
     {
         queueBindUAVs( 0 );
     }
     //-----------------------------------------------------------------------
-    bool RenderSystem::getWBufferEnabled(void) const
+    bool RenderSystem::getWBufferEnabled() const
     {
         return mWBuffer;
     }
@@ -792,7 +792,7 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::shutdown(void)
+    void RenderSystem::shutdown()
     {
         // Remove occlusion queries
         for (HardwareOcclusionQueryList::iterator i = mHwOcclusionQueries.begin();
@@ -1118,7 +1118,7 @@ namespace Ogre {
         mInvertVertexWinding = invert;
     }
     //-----------------------------------------------------------------------
-    bool RenderSystem::getInvertVertexWinding(void) const
+    bool RenderSystem::getInvertVertexWinding() const
     {
         return mInvertVertexWinding;
     }
@@ -1152,7 +1152,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    bool RenderSystem::updatePassIterationRenderState(void)
+    bool RenderSystem::updatePassIterationRenderState()
     {
         if (mCurrentPassIterationCount <= 1)
             return false;
@@ -1238,7 +1238,7 @@ namespace Ogre {
                      "RenderSystem::getPriorityConfigOption" );
     }
     //-----------------------------------------------------------------------
-    size_t RenderSystem::getNumPriorityConfigOptions( void ) const { return 0u; }
+    size_t RenderSystem::getNumPriorityConfigOptions() const { return 0u; }
     //-----------------------------------------------------------------------
     void RenderSystem::destroyHardwareOcclusionQuery( HardwareOcclusionQuery *hq)
     {
@@ -1279,7 +1279,7 @@ namespace Ogre {
 
     }
     //---------------------------------------------------------------------
-    RenderSystem::RenderSystemContext* RenderSystem::_pauseFrame(void)
+    RenderSystem::RenderSystemContext* RenderSystem::_pauseFrame()
     {
         _endFrame();
         return new RenderSystem::RenderSystemContext;
@@ -1291,7 +1291,7 @@ namespace Ogre {
         delete context;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::_update(void)
+    void RenderSystem::_update()
     {
         OgreProfile( "RenderSystem::_update" );
 
@@ -1322,7 +1322,7 @@ namespace Ogre {
         workspace->_endUpdate( forceEndFrame, true );
     }
     //---------------------------------------------------------------------
-    const String& RenderSystem::_getDefaultViewportMaterialScheme( void ) const
+    const String& RenderSystem::_getDefaultViewportMaterialScheme() const
     {
 #ifdef RTSHADER_SYSTEM_BUILD_CORE_SHADERS   
         if ( !(getCapabilities()->hasCapability(Ogre::RSC_FIXED_FUNCTION)) )
@@ -1411,7 +1411,7 @@ namespace Ogre {
 #endif
     }
     //---------------------------------------------------------------------
-    bool RenderSystem::loadRenderDocApi( void )
+    bool RenderSystem::loadRenderDocApi()
     {
 #if OGRE_NO_RENDERDOC_INTEGRATION == 0
         if( mRenderDocApi )
@@ -1461,7 +1461,7 @@ namespace Ogre {
         return a == b;
     }
     //---------------------------------------------------------------------
-    void RenderSystem::_clearStateAndFlushCommandBuffer(void)
+    void RenderSystem::_clearStateAndFlushCommandBuffer()
     {
     }
     //---------------------------------------------------------------------

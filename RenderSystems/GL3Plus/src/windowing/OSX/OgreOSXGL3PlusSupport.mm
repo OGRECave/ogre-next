@@ -56,7 +56,7 @@ OSXGL3PlusSupport::~OSXGL3PlusSupport()
 }
 
 //-----------------------------------------------------------------------
-void OSXGL3PlusSupport::addConfig( void )
+void OSXGL3PlusSupport::addConfig()
 {
     ConfigOption optFullScreen;
 	ConfigOption optVideoMode;
@@ -241,7 +241,7 @@ void OSXGL3PlusSupport::addConfig( void )
 }
 
 //-----------------------------------------------------------------------
-String OSXGL3PlusSupport::validateConfig( void )
+String OSXGL3PlusSupport::validateConfig()
 {
 	return String( "" );
 }

@@ -78,7 +78,7 @@ namespace Ogre
         return maskX & maskY & maskZ;
     }
     //-----------------------------------------------------------------------------------
-    inline ArrayReal ArrayAabb::volume(void) const
+    inline ArrayReal ArrayAabb::volume() const
     {
         ArrayReal w = mHalfSize.mChunkBase[0] + mHalfSize.mChunkBase[0]; // x * 2
         ArrayReal h = mHalfSize.mChunkBase[1] + mHalfSize.mChunkBase[1]; // y * 2

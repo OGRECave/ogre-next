@@ -45,7 +45,7 @@ namespace Demo
         */
         void generateDuplicateTextures( Ogre::uint32 numTextures, const Ogre::StringVector &sourceTex );
 
-        Ogre::StringVector getSourceTexList(void) const;
+        Ogre::StringVector getSourceTexList() const;
 
         /** Generates N random datablocks of Unlit type with names like:
             'UnitTestUnlit/0' where 0 is in range [mNumGenTextures; mNumGenTextures + numDatablocks)

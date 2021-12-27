@@ -24,21 +24,21 @@ namespace Demo
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
-        void resetScene(void);
-        void setupParallaxCorrectCubemaps(void);
-        void destroyInstantRadiosity(void);
-        void destroyParallaxCorrectCubemaps(void);
+        void resetScene();
+        void setupParallaxCorrectCubemaps();
+        void destroyInstantRadiosity();
+        void destroyParallaxCorrectCubemaps();
 
         Ogre::TextureGpu* createRawDecalDiffuseTex();
-        void generateScene(void);
-        void exportScene(void);
-        void importScene(void);
+        void generateScene();
+        void exportScene();
+        void importScene();
 
     public:
         SceneFormatGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01(void);
-        virtual void destroyScene(void);
+        virtual void createScene01();
+        virtual void destroyScene();
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };

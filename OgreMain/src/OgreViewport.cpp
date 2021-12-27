@@ -110,17 +110,17 @@ namespace Ogre {
     {
     }
     //---------------------------------------------------------------------
-    bool Viewport::_isUpdated(void) const
+    bool Viewport::_isUpdated() const
     {
         return mUpdated;
     }
     //---------------------------------------------------------------------
-    void Viewport::_clearUpdatedFlag(void)
+    void Viewport::_clearUpdatedFlag()
     {
         mUpdated = false;
     }
     //---------------------------------------------------------------------
-    void Viewport::_updateDimensions(void)
+    void Viewport::_updateDimensions()
     {
         if( !mCurrentTarget )
         {
@@ -167,52 +167,52 @@ namespace Ogre {
         mUpdated = true;
     }
     //---------------------------------------------------------------------
-    Real Viewport::getLeft(void) const
+    Real Viewport::getLeft() const
     {
         return mRelLeft;
     }
     //---------------------------------------------------------------------
-    Real Viewport::getTop(void) const
+    Real Viewport::getTop() const
     {
         return mRelTop;
     }
     //---------------------------------------------------------------------
-    Real Viewport::getWidth(void) const
+    Real Viewport::getWidth() const
     {
         return mRelWidth;
     }
     //---------------------------------------------------------------------
-    Real Viewport::getHeight(void) const
+    Real Viewport::getHeight() const
     {
         return mRelHeight;
     }
     //---------------------------------------------------------------------
-    int Viewport::getActualLeft(void) const
+    int Viewport::getActualLeft() const
     {
         return mActLeft;
     }
     //---------------------------------------------------------------------
-    int Viewport::getActualTop(void) const
+    int Viewport::getActualTop() const
     {
         return mActTop;
     }
     //---------------------------------------------------------------------
-    int Viewport::getActualWidth(void) const
+    int Viewport::getActualWidth() const
     {
         return mActWidth;
     }
     //---------------------------------------------------------------------
-    int Viewport::getActualHeight(void) const
+    int Viewport::getActualHeight() const
     {
         return mActHeight;
     }
     //---------------------------------------------------------------------
-    bool Viewport::coversEntireTarget(void) const
+    bool Viewport::coversEntireTarget() const
     {
         return mCoversEntireTarget;
     }
     //---------------------------------------------------------------------
-    bool Viewport::scissorsMatchViewport(void) const
+    bool Viewport::scissorsMatchViewport() const
     {
         return mScissorsMatchViewport;
     }
@@ -285,7 +285,7 @@ namespace Ogre {
         mShowOverlays = enabled;
     }
     //---------------------------------------------------------------------
-    bool Viewport::getOverlaysEnabled(void) const
+    bool Viewport::getOverlaysEnabled() const
     {
         return mShowOverlays;
     }

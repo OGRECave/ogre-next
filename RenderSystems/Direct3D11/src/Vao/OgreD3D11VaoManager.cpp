@@ -392,7 +392,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::cleanupEmptyPools(void)
+    void D3D11VaoManager::cleanupEmptyPools()
     {
         for( uint32 idx0=0; idx0<NumInternalBufferTypes; ++idx0 )
         {
@@ -794,7 +794,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::_forceCreateDelayedImmutableBuffers(void)
+    void D3D11VaoManager::_forceCreateDelayedImmutableBuffers()
     {
         bool delayedBuffersPending = false;
         for( size_t i=0; i<NumInternalBufferTypes; ++i )
@@ -820,7 +820,7 @@ namespace Ogre
         createDelayedImmutableBuffers();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::createDelayedImmutableBuffers(void)
+    void D3D11VaoManager::createDelayedImmutableBuffers()
     {
         OgreProfileExhaustive( "D3D11VaoManager::createDelayedImmutableBuffers" );
 
@@ -932,7 +932,7 @@ namespace Ogre
             mDelayedBuffers[i].clear();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::reorganizeImmutableVaos(void)
+    void D3D11VaoManager::reorganizeImmutableVaos()
     {
         OgreProfileExhaustive( "D3D11VaoManager::reorganizeImmutableVaos" );
 
@@ -1838,7 +1838,7 @@ namespace Ogre
                                                           mDevice ) );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::_beginFrame(void)
+    void D3D11VaoManager::_beginFrame()
     {
         createDelayedImmutableBuffers();
 
@@ -1846,7 +1846,7 @@ namespace Ogre
         //destroy the buffers and create a unified immutable buffer.
     }
     //-----------------------------------------------------------------------------------
-    void D3D11VaoManager::_update(void)
+    void D3D11VaoManager::_update()
     {
         uint64 currentTimeMs = mTimer->getMilliseconds();
 
@@ -1901,7 +1901,7 @@ namespace Ogre
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    ID3D11Buffer* D3D11VaoManager::getSplicingHelperBuffer(void)
+    ID3D11Buffer* D3D11VaoManager::getSplicingHelperBuffer()
     {
         if( !mSplicingHelperBuffer )
         {
@@ -1949,12 +1949,12 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ComPtr<ID3D11Query> D3D11VaoManager::createFence(void)
+    ComPtr<ID3D11Query> D3D11VaoManager::createFence()
     {
         return D3D11VaoManager::createFence( mDevice );
     }
     //-----------------------------------------------------------------------------------
-    uint8 D3D11VaoManager::waitForTailFrameToFinish(void)
+    uint8 D3D11VaoManager::waitForTailFrameToFinish()
     {
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {

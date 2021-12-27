@@ -167,13 +167,13 @@ namespace Ogre
 
         /// If this returns false, the values of mR, mG, mB & mA will be ignored.
         /// @see setUseColour.
-        bool hasColour(void) const                      { return mHasColour; }
+        bool hasColour() const                      { return mHasColour; }
 
         /// Sets a new colour value. Asserts if mHasColour is false.
         void setColour( const ColourValue &diffuse );
 
         /// Gets the current colour. The returned value is meaningless if mHasColour is false
-        ColourValue getColour(void) const               { return ColourValue( mR, mG, mB, mA ); }
+        ColourValue getColour() const               { return ColourValue( mR, mG, mB, mA ); }
 
         /** Sets a new texture for rendering
         @param texUnit
@@ -211,10 +211,10 @@ namespace Ogre
         void setTextureUvSource( uint8 texUnit, uint8 uvSet );
 
         /// Returns the number of texture units that are actually used.
-        uint8 getNumTextureUnitsInUse(void) const           { return mNumTextureUnits; }
+        uint8 getNumTextureUnitsInUse() const           { return mNumTextureUnits; }
 
         /// Calculates the amount of UV sets used by the datablock
-        uint8 getNumUvSets(void) const;
+        uint8 getNumUvSets() const;
 
         static UvAtlasParams textureLocationToAtlasParams(
                                             const HlmsTextureManager::TextureLocation &texLocation );

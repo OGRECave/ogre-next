@@ -88,7 +88,7 @@ namespace Ogre
     public:
         IrradianceFieldSettings();
 
-        void testValidity( void )
+        void testValidity()
         {
             OGRE_ASSERT_LOW( mIrradianceResolution <= mDepthProbeResolution );
             OGRE_ASSERT_LOW( ( mDepthProbeResolution % mIrradianceResolution ) == 0u );
@@ -101,9 +101,9 @@ namespace Ogre
 
         bool isRaster() const;
 
-        void createSubsamples( void );
+        void createSubsamples();
 
-        uint32 getTotalNumProbes( void ) const;
+        uint32 getTotalNumProbes() const;
         void getDepthProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
         void getIrradProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
 
@@ -113,11 +113,11 @@ namespace Ogre
         uint8 getBorderedIrradResolution() const;
         uint8 getBorderedDepthResolution() const;
 
-        uint32 getNumRaysPerIrradiancePixel( void ) const;
+        uint32 getNumRaysPerIrradiancePixel() const;
 
-        Vector3 getNumProbes3f( void ) const;
+        Vector3 getNumProbes3f() const;
 
-        const vector<Vector2>::type &getSubsamples( void ) const { return mSubsamples; }
+        const vector<Vector2>::type &getSubsamples() const { return mSubsamples; }
     };
 
     /**
@@ -236,20 +236,20 @@ namespace Ogre
         */
         static void fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
                                             uint32 maxTapsPerPixel );
-        void setIrradianceFieldGenParams( void );
+        void setIrradianceFieldGenParams();
 
         void setupBorderMirrorParams( uint32 borderedRes, uint32 fullWidth,
                                       ConstBufferPacked *ifdBorderMirrorParamsBuffer,
                                       HlmsComputeJob *job );
 
-        void setTextureToDebugVisualizer( void );
+        void setTextureToDebugVisualizer();
 
     public:
         IrradianceField( Root *root, SceneManager *sceneManager );
         ~IrradianceField();
 
-        void createTextures( void );
-        void destroyTextures( void );
+        void createTextures();
+        void destroyTextures();
 
         /**
         @brief initialize
@@ -272,7 +272,7 @@ namespace Ogre
 
         void update( uint32 probesPerFrame = 200u );
 
-        size_t getConstBufferSize( void ) const;
+        size_t getConstBufferSize() const;
         void fillConstBufferData( const Matrix4 &viewMatrix, float *RESTRICT_ALIAS passBufferPtr ) const;
 
         /**
@@ -293,11 +293,11 @@ namespace Ogre
         */
         void setDebugVisualization( IrradianceField::DebugVisualizationMode mode,
                                     SceneManager *sceneManager, uint8 tessellation );
-        bool getDebugVisualizationMode( void ) const;
-        uint8 getDebugTessellation( void ) const;
+        bool getDebugVisualizationMode() const;
+        uint8 getDebugTessellation() const;
 
-        TextureGpu *getIrradianceTex( void ) const { return mIrradianceTex; }
-        TextureGpu *getDepthVarianceTex( void ) const { return mDepthVarianceTex; }
+        TextureGpu *getIrradianceTex() const { return mIrradianceTex; }
+        TextureGpu *getDepthVarianceTex() const { return mDepthVarianceTex; }
     };
 }  // namespace Ogre
 

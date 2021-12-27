@@ -73,7 +73,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool IrradianceFieldSettings::isRaster() const { return mRasterParams.mWorkspaceName != IdString(); }
     //-------------------------------------------------------------------------
-    void IrradianceFieldSettings::createSubsamples( void )
+    void IrradianceFieldSettings::createSubsamples()
     {
         if( isRaster() )
             return;
@@ -109,7 +109,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    uint32 IrradianceFieldSettings::getTotalNumProbes( void ) const
+    uint32 IrradianceFieldSettings::getTotalNumProbes() const
     {
         return mNumProbes[0] * mNumProbes[1] * mNumProbes[2];
     }
@@ -150,13 +150,13 @@ namespace Ogre
         return mDepthProbeResolution + 2u;
     }
     //-------------------------------------------------------------------------
-    uint32 IrradianceFieldSettings::getNumRaysPerIrradiancePixel( void ) const
+    uint32 IrradianceFieldSettings::getNumRaysPerIrradiancePixel() const
     {
         return mDepthProbeResolution * mDepthProbeResolution * mNumRaysPerPixel /
                ( mIrradianceResolution * mIrradianceResolution );
     }
     //-------------------------------------------------------------------------
-    Vector3 IrradianceFieldSettings::getNumProbes3f( void ) const
+    Vector3 IrradianceFieldSettings::getNumProbes3f() const
     {
         return Vector3( static_cast<Real>( mNumProbes[0] ), static_cast<Real>( mNumProbes[1] ),
                         static_cast<Real>( mNumProbes[2] ) );
@@ -558,7 +558,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void IrradianceField::createTextures( void )
+    void IrradianceField::createTextures()
     {
         destroyTextures();
 
@@ -648,7 +648,7 @@ namespace Ogre
                                                                 "IrradianceField/Gen/Workspace", false );
     }
     //-------------------------------------------------------------------------
-    void IrradianceField::destroyTextures( void )
+    void IrradianceField::destroyTextures()
     {
         if( mDebugIfdProbeVisualizer )
             mDebugIfdProbeVisualizer->setVisible( false );
@@ -760,7 +760,7 @@ namespace Ogre
         mNumProbesProcessed += probesPerFrame;
     }
     //-------------------------------------------------------------------------
-    size_t IrradianceField::getConstBufferSize( void ) const
+    size_t IrradianceField::getConstBufferSize() const
     {
         return sizeof( float ) * ( 4u * 3u + 4u + 4u );
     }
@@ -849,11 +849,11 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    bool IrradianceField::getDebugVisualizationMode( void ) const { return mDebugVisualizationMode; }
+    bool IrradianceField::getDebugVisualizationMode() const { return mDebugVisualizationMode; }
     //-------------------------------------------------------------------------
-    uint8 IrradianceField::getDebugTessellation( void ) const { return mDebugTessellation; }
+    uint8 IrradianceField::getDebugTessellation() const { return mDebugTessellation; }
     //-------------------------------------------------------------------------
-    void IrradianceField::setTextureToDebugVisualizer( void )
+    void IrradianceField::setTextureToDebugVisualizer()
     {
         TextureGpu *trackedTex =
             mDebugVisualizationMode == DebugVisualizationColour ? mIrradianceTex : mDepthVarianceTex;

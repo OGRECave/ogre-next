@@ -82,17 +82,17 @@ namespace Ogre
         void parseSharedParams( const NameValuePairList *miscParams );
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
-        void createSwapchain( void );
-        void destroySwapchain( void );
+        void createSwapchain();
+        void destroySwapchain();
 
     public:
-        void acquireNextSwapchain( void );
+        void acquireNextSwapchain();
 
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         virtual ~VulkanWindow();
 
-        virtual void destroy( void );
+        virtual void destroy();
 
         void _setDevice( VulkanDevice *device );
         virtual void _initialize( TextureGpuManager *textureGpuManager );
@@ -100,12 +100,12 @@ namespace Ogre
                                   const NameValuePairList *miscParams ) = 0;
 
         /// Returns null if getImageAcquiredSemaphore has already been called during this frame
-        VkSemaphore getImageAcquiredSemaphore( void );
+        VkSemaphore getImageAcquiredSemaphore();
 
-        size_t getNumSwapchains( void ) const { return mSwapchainImages.size(); }
+        size_t getNumSwapchains() const { return mSwapchainImages.size(); }
         VkImage getSwapchainImage( size_t idx ) const { return mSwapchainImages[idx]; }
 
-        virtual bool isClosed( void ) const;
+        virtual bool isClosed() const;
 
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
 
@@ -113,7 +113,7 @@ namespace Ogre
         /// Calling swapBuffers during the command buffer that is rendering to us is key for
         /// good performance; otherwise Ogre may split the commands that render to this window
         /// and the command that presents this window into two queue submissions.
-        virtual void swapBuffers( void );
+        virtual void swapBuffers();
 
         /** Actually performs present. Called by VulkanDevice::commitAndNextCommandBuffer
         @param queueFinishSemaphore

@@ -62,7 +62,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    Vector3 VctCascadeSetting::getVoxelCellSize( void ) const
+    Vector3 VctCascadeSetting::getVoxelCellSize() const
     {
         return 2.0f * this->areaHalfSize / Vector3( resolution[0], resolution[1], resolution[2] );
     }
@@ -271,7 +271,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctCascadedVoxelizer::allWorkspacesBeforeBeginUpdate( void ) { update( mSceneManager ); }
+    void VctCascadedVoxelizer::allWorkspacesBeforeBeginUpdate() { update( mSceneManager ); }
     //-------------------------------------------------------------------------
     void VctCascadedVoxelizer::removeAllItems()
     {

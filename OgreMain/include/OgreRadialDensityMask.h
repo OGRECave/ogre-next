@@ -113,9 +113,9 @@ namespace Ogre
             For best performance, do not change the value of mRadius[0]
         */
         void setNewRadius( const float radius[3] );
-        const float *getRadius( void ) const { return mRadius; }
+        const float *getRadius() const { return mRadius; }
 
-        Rectangle2D *getRectangle( void ) const { return mRectangle; }
+        Rectangle2D *getRectangle() const { return mRectangle; }
     };
 
     /** @} */

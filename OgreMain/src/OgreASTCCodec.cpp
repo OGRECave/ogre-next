@@ -181,7 +181,7 @@ namespace Ogre {
 	//---------------------------------------------------------------------
 	ASTCCodec* ASTCCodec::msInstance = 0;
 	//---------------------------------------------------------------------
-	void ASTCCodec::startup(void)
+    void ASTCCodec::startup()
 	{
 		if (!msInstance)
 		{
@@ -193,7 +193,7 @@ namespace Ogre {
                                               "ASTC codec registering");
 	}
 	//---------------------------------------------------------------------
-	void ASTCCodec::shutdown(void)
+    void ASTCCodec::shutdown()
 	{
 		if(msInstance)
 		{

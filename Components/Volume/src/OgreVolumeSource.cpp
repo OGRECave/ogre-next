@@ -55,7 +55,7 @@ namespace Volume {
 
     //-----------------------------------------------------------------------
 
-    Source::~Source(void)
+    Source::~Source()
     {
     }
 
@@ -187,7 +187,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    Real Source::getVolumeSpaceToWorldSpaceFactor(void) const
+    Real Source::getVolumeSpaceToWorldSpaceFactor() const
     {
         return (Real)1.0;
     }

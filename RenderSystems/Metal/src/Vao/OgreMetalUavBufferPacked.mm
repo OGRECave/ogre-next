@@ -72,7 +72,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked *MetalUavBufferPacked::getAsReadOnlyBufferImpl( void )
+    ReadOnlyBufferPacked *MetalUavBufferPacked::getAsReadOnlyBufferImpl()
     {
         OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface *>( mBufferInterface ) );
 

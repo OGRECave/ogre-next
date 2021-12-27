@@ -41,14 +41,14 @@ namespace Ogre
         VkFence mFenceName;
         VulkanQueue *mQueue;
 
-        virtual const void *mapImpl( void );
+        virtual const void *mapImpl();
 
     public:
         VulkanAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
                            size_t elementCount, VulkanQueue *queue );
         virtual ~VulkanAsyncTicket();
 
-        virtual bool queryIsTransferDone( void );
+        virtual bool queryIsTransferDone();
     };
 }  // namespace Ogre
 

@@ -129,7 +129,7 @@ namespace Ogre {
         return mSubMeshes[index];
     }
     //-----------------------------------------------------------------------
-    void Mesh::postLoadImpl(void)
+    void Mesh::postLoadImpl()
     {
 #if !OGRE_NO_MESHLOD
         // The loading process accesses LOD usages directly, so
@@ -284,7 +284,7 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    const Aabb& Mesh::getAabb(void) const
+    const Aabb& Mesh::getAabb() const
     {
         return mAabb;
     }
@@ -371,12 +371,12 @@ namespace Ogre {
         mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( pSkel.get() );
     }
     //---------------------------------------------------------------------
-    const String& Mesh::getSkeletonName(void) const
+    const String& Mesh::getSkeletonName() const
     {
         return mSkeletonName;
     }
     //---------------------------------------------------------------------
-    ushort Mesh::getNumLodLevels(void) const
+    ushort Mesh::getNumLodLevels() const
     {
         return static_cast<uint16>( mLodValues.size() );
     }
@@ -412,7 +412,7 @@ namespace Ogre {
         sm->mLodFaceList[level - 1] = facedata;
     }*/
     //--------------------------------------------------------------------
-    void Mesh::removeLodLevels(void)
+    void Mesh::removeLodLevels()
     {
 #if !OGRE_NO_MESHLOD
         // Remove data from SubMeshes
@@ -444,7 +444,7 @@ namespace Ogre {
         mHashForCaches[1] = hash[1];
     }
     //---------------------------------------------------------------------
-    Real Mesh::getBoundingSphereRadius(void) const
+    Real Mesh::getBoundingSphereRadius() const
     {
         return mBoundRadius;
     }
@@ -479,7 +479,7 @@ namespace Ogre {
             mSubMeshNameMap.erase(i);
     }
     //---------------------------------------------------------------------
-    size_t Mesh::calculateSize(void) const
+    size_t Mesh::calculateSize() const
     {
         // calculate GPU size
         size_t retVal = 0;
@@ -612,7 +612,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void Mesh::dearrangeToInefficient(void)
+    void Mesh::dearrangeToInefficient()
     {
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
         SubMeshVec::const_iterator end  = mSubMeshes.end();
@@ -638,7 +638,7 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    bool Mesh::hasValidShadowMappingVaos(void) const
+    bool Mesh::hasValidShadowMappingVaos() const
     {
         bool retVal = true;
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
@@ -653,7 +653,7 @@ namespace Ogre {
         return retVal;
     }
     //---------------------------------------------------------------------
-    bool Mesh::hasIndependentShadowMappingVaos(void) const
+    bool Mesh::hasIndependentShadowMappingVaos() const
     {
         if( !hasValidShadowMappingVaos() )
             return false;

@@ -50,7 +50,7 @@ namespace Ogre {
         mQueryMask = mask;
     }
     //-----------------------------------------------------------------------
-    uint32 SceneQuery::getQueryMask(void) const
+    uint32 SceneQuery::getQueryMask() const
     {
         return mQueryMask;
     }
@@ -67,7 +67,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------
     SceneQuery::WorldFragmentType 
-    SceneQuery::getWorldFragmentType(void) const
+    SceneQuery::getWorldFragmentType() const
     {
         return mWorldFragmentType;
     }
@@ -82,20 +82,20 @@ namespace Ogre {
         clearResults();
     }
     //-----------------------------------------------------------------------
-    SceneQueryResult& RegionSceneQuery::getLastResults(void) const
+    SceneQueryResult& RegionSceneQuery::getLastResults() const
     {
         assert(mLastResult);
         return *mLastResult;
     }
     //-----------------------------------------------------------------------
-    void RegionSceneQuery::clearResults(void)
+    void RegionSceneQuery::clearResults()
     {
         OGRE_DELETE mLastResult;
         mLastResult = NULL;
     }
     //---------------------------------------------------------------------
     SceneQueryResult&
-    RegionSceneQuery::execute(void)
+    RegionSceneQuery::execute()
     {
         clearResults();
         mLastResult = OGRE_NEW SceneQueryResult();
@@ -135,7 +135,7 @@ namespace Ogre {
         mAABB = box;
     }
     //-----------------------------------------------------------------------
-    const AxisAlignedBox& AxisAlignedBoxSceneQuery::getBox(void) const
+    const AxisAlignedBox& AxisAlignedBoxSceneQuery::getBox() const
     {
         return mAABB;
     }
@@ -195,7 +195,7 @@ namespace Ogre {
         mRay = ray;
     }
     //-----------------------------------------------------------------------
-    const Ray& RaySceneQuery::getRay(void) const
+    const Ray& RaySceneQuery::getRay() const
     {
         return mRay;
     }
@@ -206,17 +206,17 @@ namespace Ogre {
         mMaxResults = maxresults;
     }
     //-----------------------------------------------------------------------
-    bool RaySceneQuery::getSortByDistance(void) const
+    bool RaySceneQuery::getSortByDistance() const
     {
         return mSortByDistance;
     }
     //-----------------------------------------------------------------------
-    ushort RaySceneQuery::getMaxResults(void) const
+    ushort RaySceneQuery::getMaxResults() const
     {
         return mMaxResults;
     }
     //-----------------------------------------------------------------------
-    RaySceneQueryResult& RaySceneQuery::execute(void)
+    RaySceneQueryResult& RaySceneQuery::execute()
     {
         // Clear without freeing the vector buffer
         mResult.clear();
@@ -242,12 +242,12 @@ namespace Ogre {
         return mResult;
     }
     //-----------------------------------------------------------------------
-    RaySceneQueryResult& RaySceneQuery::getLastResults(void)
+    RaySceneQueryResult& RaySceneQuery::getLastResults()
     {
         return mResult;
     }
     //-----------------------------------------------------------------------
-    void RaySceneQuery::clearResults(void)
+    void RaySceneQuery::clearResults()
     {
         // C++ idiom to free vector buffer: swap with empty vector
         RaySceneQueryResult().swap(mResult);
@@ -297,20 +297,20 @@ namespace Ogre {
         clearResults();
     }
     //-----------------------------------------------------------------------
-    IntersectionSceneQueryResult& IntersectionSceneQuery::getLastResults(void) const
+    IntersectionSceneQueryResult& IntersectionSceneQuery::getLastResults() const
     {
         assert(mLastResult);
         return *mLastResult;
     }
     //-----------------------------------------------------------------------
-    void IntersectionSceneQuery::clearResults(void)
+    void IntersectionSceneQuery::clearResults()
     {
         OGRE_DELETE mLastResult;
         mLastResult = NULL;
     }
     //---------------------------------------------------------------------
     IntersectionSceneQueryResult&
-    IntersectionSceneQuery::execute(void)
+    IntersectionSceneQuery::execute()
     {
         clearResults();
         mLastResult = OGRE_NEW IntersectionSceneQueryResult();

@@ -54,7 +54,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ConfigFile::clear(void)
+    void ConfigFile::clear()
     {
         for (SettingsBySection::iterator seci = mSettings.begin(); 
             seci != mSettings.end(); ++seci)
@@ -219,7 +219,7 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    ConfigFile::SectionIterator ConfigFile::getSectionIterator(void)
+    ConfigFile::SectionIterator ConfigFile::getSectionIterator()
     {
         return SectionIterator(mSettings.begin(), mSettings.end());
     }

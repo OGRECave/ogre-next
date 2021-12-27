@@ -26,7 +26,7 @@ namespace Demo
     {
     }
     //-----------------------------------------------------------------------------------
-    void ImportAnimationsShareSkeletonInstanceGameState::createScene01(void)
+    void ImportAnimationsShareSkeletonInstanceGameState::createScene01()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();        
 

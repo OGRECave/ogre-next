@@ -58,7 +58,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    const String& InternalCubemapProbe::getMovableType(void) const
+    const String& InternalCubemapProbe::getMovableType() const
     {
         return InternalCubemapProbeFactory::FACTORY_TYPE_NAME;
     }
@@ -75,7 +75,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     String InternalCubemapProbeFactory::FACTORY_TYPE_NAME = "InternalCubemapProbe";
     //-----------------------------------------------------------------------
-    const String& InternalCubemapProbeFactory::getType(void) const
+    const String& InternalCubemapProbeFactory::getType() const
     {
      return FACTORY_TYPE_NAME;
     }

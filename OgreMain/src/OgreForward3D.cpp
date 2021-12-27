@@ -419,7 +419,7 @@ namespace Ogre
         deleteOldGridBuffers();
     }
     //-----------------------------------------------------------------------------------
-    size_t Forward3D::getConstBufferSize(void) const
+    size_t Forward3D::getConstBufferSize() const
     {
         // (2 + mNumSlices) vars * 4 (vec4) * 4 bytes = 12
         return (2 + mNumSlices) * 4 * 4;

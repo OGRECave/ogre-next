@@ -1224,7 +1224,7 @@ namespace Ogre {
         // Material definition section phased out of 1.1
     }
     //---------------------------------------------------------------------
-    size_t MeshSerializerImpl::calcHashForCachesSize( void )
+    size_t MeshSerializerImpl::calcHashForCachesSize()
     {
         size_t size = MSTREAM_OVERHEAD_SIZE;
         size += sizeof( uint64 ) * 2u;
@@ -1715,7 +1715,7 @@ namespace Ogre {
 
     }
     //---------------------------------------------------------------------
-    size_t MeshSerializerImpl::calcPoseKeyframePoseRefSize(void)
+    size_t MeshSerializerImpl::calcPoseKeyframePoseRefSize()
     {
         size_t size = MSTREAM_OVERHEAD_SIZE;
         // uint16 poseIndex

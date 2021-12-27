@@ -104,7 +104,7 @@ namespace Ogre {
         Bone    *mParentBone;
 
         /// @copydoc Node::updateFromParentImpl.
-        void updateFromParentImpl(void);
+        void updateFromParentImpl();
 
     public:
         TagPoint( IdType id, SceneManager* creator, NodeMemoryManager *nodeMemoryManager,
@@ -113,12 +113,12 @@ namespace Ogre {
 
         /// Don't call directly. @see Bone::addTagPoint
         void _setParentBone( Bone *bone );
-        void _unsetParentBone(void);
+        void _unsetParentBone();
 
         /// Gets this Bones's parent (NULL if no parent).
-        Bone* getParentBone(void) const                                 { return mParentBone; }
+        Bone* getParentBone() const                                 { return mParentBone; }
 
-        Matrix3 _getDerivedOrientationMatrix(void) const;
+        Matrix3 _getDerivedOrientationMatrix() const;
 
         /// @See Node::updateAllTransforms.
         /// This version grabs the parent Bone of a TagPoint, derives the final transform

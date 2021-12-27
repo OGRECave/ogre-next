@@ -64,7 +64,7 @@ namespace Ogre
         void setCurrentPlugIn( const String& sTexturePlugInType );
 
         /** Returns currently selected plugin, may be null if none selected */
-        ExternalTextureSource* getCurrentPlugIn( void ) const { return mCurrExternalTextureSource; }
+        ExternalTextureSource* getCurrentPlugIn() const { return mCurrExternalTextureSource; }
     
         /** Calls the destroy method of all registered plugins... 
         Only the owner plugin should perform the destroy action. */
@@ -93,7 +93,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ExternalTextureSourceManager& getSingleton(void);
+        static ExternalTextureSourceManager& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -109,7 +109,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static ExternalTextureSourceManager* getSingletonPtr(void);
+        static ExternalTextureSourceManager* getSingletonPtr();
     protected:
         /// The current texture controller selected
         ExternalTextureSource* mCurrExternalTextureSource;

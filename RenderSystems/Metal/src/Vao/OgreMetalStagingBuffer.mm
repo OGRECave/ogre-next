@@ -149,7 +149,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalStagingBuffer::waitIfNeeded(void)
+    void MetalStagingBuffer::waitIfNeeded()
     {
         assert( mUploadOnly );
 
@@ -306,13 +306,13 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void MetalStagingBuffer::cleanUnfencedHazards(void)
+    void MetalStagingBuffer::cleanUnfencedHazards()
     {
         if( !mUnfencedHazards.empty() )
             addFence( mUnfencedHazards.front().start, mUnfencedHazards.back().end, true );
     }
     //-----------------------------------------------------------------------------------
-    void MetalStagingBuffer::_notifyDeviceStalled(void)
+    void MetalStagingBuffer::_notifyDeviceStalled()
     {
         deleteFences( mFences.begin(), mFences.end() );
         mFences.clear();

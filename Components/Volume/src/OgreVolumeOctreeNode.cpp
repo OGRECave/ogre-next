@@ -82,7 +82,7 @@ namespace Volume {
     
     //-----------------------------------------------------------------------
 
-    OctreeNode::~OctreeNode(void)
+    OctreeNode::~OctreeNode()
     {
         if (mChildren)
         {

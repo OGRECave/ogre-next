@@ -55,7 +55,7 @@ namespace Demo
                                                 "Tutorial_OpenVRMirrorWindowWorkspace", true );
     }
 
-    void Tutorial_OpenVRGraphicsSystem::setupResources(void)
+    void Tutorial_OpenVRGraphicsSystem::setupResources()
     {
         GraphicsSystem::setupResources();
 
@@ -116,7 +116,7 @@ namespace Demo
         return sResult;
     }
 
-    void Tutorial_OpenVRGraphicsSystem::initOpenVR(void)
+    void Tutorial_OpenVRGraphicsSystem::initOpenVR()
     {
         const Ogre::IdString workspaceName =
             c_useRDM ? "Tutorial_OpenVRWorkspaceRDM" : "Tutorial_OpenVRWorkspaceNoRDM";
@@ -203,7 +203,7 @@ namespace Demo
 #endif
     }
 
-    void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)
+    void Tutorial_OpenVRGraphicsSystem::initCompositorVR()
     {
         if ( !vr::VRCompositor() )
         {
@@ -213,7 +213,7 @@ namespace Demo
         }
     }
 
-    void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR(void)
+    void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR()
     {
         try
         {
@@ -233,7 +233,7 @@ namespace Demo
         }
     }
 
-    void Tutorial_OpenVRGraphicsSystem::deinitialize(void)
+    void Tutorial_OpenVRGraphicsSystem::deinitialize()
     {
         delete mOvrCompositorListener;
         mOvrCompositorListener = 0;
@@ -288,7 +288,7 @@ namespace Demo
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle(void)
+    const char* MainEntryPoints::getWindowTitle()
     {
         return "OpenVR Sample";
     }

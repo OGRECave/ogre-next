@@ -177,13 +177,13 @@ namespace Ogre
         bool getCachedGridFor( const Camera *camera, const CachedGrid **outCachedGrid ) const;
 
         /// Check if some of the caches are really old and delete them
-        void deleteOldGridBuffers(void);
+        void deleteOldGridBuffers();
 
     public:
         ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled, bool cubemapProbesEnabled );
         virtual ~ForwardPlusBase();
 
-        virtual ForwardPlusMethods getForwardPlusMethod(void) const = 0;
+        virtual ForwardPlusMethods getForwardPlusMethod() const = 0;
 
         void _releaseManualHardwareResources();
 
@@ -199,7 +199,7 @@ namespace Ogre
         ReadOnlyBufferPacked *getGlobalLightListBuffer( const Camera *camera ) const;
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
-        virtual size_t getConstBufferSize(void) const = 0;
+        virtual size_t getConstBufferSize() const = 0;
 
         /** Fills 'passBufferPtr' with the necessary data for ForwardPlusBase rendering.
             @see getConstBufferSize
@@ -215,7 +215,7 @@ namespace Ogre
 
         /// Turns on visualization of light cell occupancy
         void setDebugMode( bool debugMode )                             { mDebugMode = debugMode; }
-        bool getDebugMode(void) const                                   { return mDebugMode; }
+        bool getDebugMode() const                                   { return mDebugMode; }
 
         /// Attenuates the light by the attenuation range, causing smooth endings when
         /// at the end of the light range instead of a sudden sharp termination. This
@@ -232,12 +232,12 @@ namespace Ogre
         /// In math:
         ///     atten *= max( (attenRange - fDistance) / attenRange, 0.0f );
         void setFadeAttenuationRange( bool fade )                       { mFadeAttenuationRange = fade; }
-        bool getFadeAttenuationRange(void) const                        { return mFadeAttenuationRange; }
+        bool getFadeAttenuationRange() const                        { return mFadeAttenuationRange; }
 
         void setEnableVpls( bool enable )                               { mEnableVpls = enable; }
-        bool getEnableVpls(void) const                                  { return mEnableVpls; }
+        bool getEnableVpls() const                                  { return mEnableVpls; }
 
-        bool getDecalsEnabled(void) const                               { return mDecalsEnabled; }
+        bool getDecalsEnabled() const                               { return mDecalsEnabled; }
 
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         /// Toggles whether light masks will be obeyed per object & per light by doing:
@@ -251,7 +251,7 @@ namespace Ogre
         /// (light_visibility_mask keyword in scripts).
         void setFineLightMaskGranularity( bool useFineGranularity )
                                                     { mFineLightMaskGranularity = useFineGranularity; }
-        bool getFineLightMaskGranularity(void) const{ return mFineLightMaskGranularity; }
+        bool getFineLightMaskGranularity() const{ return mFineLightMaskGranularity; }
 #endif
     };
 

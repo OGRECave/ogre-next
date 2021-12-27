@@ -58,13 +58,13 @@ namespace Ogre
         D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
         virtual ~D3D11BufferInterfaceBase();
 
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        ID3D11Buffer* getVboName(void) const        { return mVboName.Get(); }
+        size_t getVboPoolIndex()                { return mVboPoolIdx; }
+        ID3D11Buffer* getVboName() const        { return mVboName.Get(); }
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                              size_t srcOffsetBytes, size_t sizeBytes );
 
-        void _ensureDelayedImmutableBuffersAreReady(void);
+        void _ensureDelayedImmutableBuffersAreReady();
     };
 }
 

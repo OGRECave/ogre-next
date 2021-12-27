@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void DescriptorSetTexture::checkValidity(void) const
+    void DescriptorSetTexture::checkValidity() const
     {
 #if OGRE_DEBUG_MODE
             size_t totalTexturesUsed = 0u;
@@ -53,12 +53,12 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    bool DescriptorSetTexture2::TextureSlot::formatNeedsReinterpret(void) const
+    bool DescriptorSetTexture2::TextureSlot::formatNeedsReinterpret() const
     {
         return pixelFormat != PFG_UNKNOWN && pixelFormat != texture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
-    bool DescriptorSetTexture2::TextureSlot::needsDifferentView(void) const
+    bool DescriptorSetTexture2::TextureSlot::needsDifferentView() const
     {
         return formatNeedsReinterpret() ||
                 mipmapLevel != 0 || textureArrayIndex != 0 || numMipmaps != 0 ||
@@ -67,7 +67,7 @@ namespace Ogre
                   texture->getTextureType() == TextureTypes::TypeCubeArray));
     }
     //-----------------------------------------------------------------------------------
-    void DescriptorSetTexture2::checkValidity(void) const
+    void DescriptorSetTexture2::checkValidity() const
     {
         assert( !mTextures.empty() &&
                 "This DescriptorSetTexture2 doesn't use any texture/buffer! "

@@ -42,11 +42,11 @@ namespace Ogre
 {
     template<> MeshManager* Singleton<MeshManager>::msSingleton = 0;
     //-----------------------------------------------------------------------
-    MeshManager* MeshManager::getSingletonPtr(void)
+    MeshManager* MeshManager::getSingletonPtr()
     {
         return msSingleton;
     }
-    MeshManager& MeshManager::getSingleton(void)
+    MeshManager& MeshManager::getSingleton()
     {  
         assert( msSingleton );  return ( *msSingleton );  
     }
@@ -72,7 +72,7 @@ namespace Ogre
         return getResourceByName(name, groupName).staticCast<Mesh>();
     }
     //-----------------------------------------------------------------------
-    void MeshManager::_initialise(void)
+    void MeshManager::_initialise()
     {
     }
     //-----------------------------------------------------------------------
@@ -202,7 +202,7 @@ namespace Ogre
         return mListener;
     }*/
     //-----------------------------------------------------------------------
-    Real MeshManager::getBoundsPaddingFactor(void)
+    Real MeshManager::getBoundsPaddingFactor()
     {
         return mBoundsPaddingFactor;
     }

@@ -80,19 +80,19 @@ namespace Ogre {
         void setPlanePoint(const Vector3& pos);
 
         /** Gets the plane point of the deflector plane. */
-        Vector3 getPlanePoint(void) const;
+        Vector3 getPlanePoint() const;
 
         /** Sets the plane normal of the deflector plane. */
         void setPlaneNormal(const Vector3& normal);
 
         /** Gets the plane normal of the deflector plane. */
-        Vector3 getPlaneNormal(void) const;
+        Vector3 getPlaneNormal() const;
 
         /** Sets the bounce value of the deflection. */
         void setBounce(Real bounce);
 
         /** Gets the bounce value of the deflection. */
-        Real getBounce(void) const;
+        Real getBounce() const;
 
         /// Command objects
         static CmdPlanePoint msPlanePointCmd;

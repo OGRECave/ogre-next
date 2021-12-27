@@ -132,7 +132,7 @@ namespace Ogre {
         virtual size_t calcSubMeshLodSize( const VertexArrayObject *vao, bool skipVertexBuffer );
         virtual size_t calcGeometrySize(const VertexBufferPackedVec &vertexData );
         virtual size_t calcVertexDeclSize(const VertexBufferPackedVec &vertexData);
-        size_t calcHashForCachesSize( void );
+        size_t calcHashForCachesSize();
         virtual size_t calcSkeletonLinkSize(const String& skelName);
         virtual size_t calcSubMeshLodOperationSize(const VertexArrayObject *vao);
         virtual size_t calcSubMeshNameTableSize(const Mesh* pMesh);
@@ -146,7 +146,7 @@ namespace Ogre {
         virtual size_t calcAnimationTrackSize(const VertexAnimationTrack* track);
         virtual size_t calcMorphKeyframeSize(const VertexMorphKeyFrame* kf, size_t vertexCount);
         virtual size_t calcPoseKeyframeSize(const VertexPoseKeyFrame* kf);
-        virtual size_t calcPoseKeyframePoseRefSize(void);
+        virtual size_t calcPoseKeyframePoseRefSize();
         virtual size_t calcPoseVertexSize(const Pose* pose);*/
         virtual size_t calcLodLevelSize(const Mesh* pMesh);
         virtual size_t calcBoundsInfoSize(const Mesh* pMesh);

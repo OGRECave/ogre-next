@@ -71,9 +71,9 @@ namespace v1 {
             /// Return the manager of this buffer, if any
             HardwareBufferManagerBase* getManager() const { return mMgr; }
             /// Gets the size in bytes of a single vertex in this buffer
-            size_t getVertexSize(void) const { return mVertexSize; }
+            size_t getVertexSize() const { return mVertexSize; }
             /// Get the number of vertices in this buffer
-            size_t getNumVertices(void) const { return mNumVertices; }
+            size_t getNumVertices() const { return mNumVertices; }
             /// Get if this vertex buffer is an "instance data" buffer (per instance)
             bool getIsInstanceData() const { return mIsInstanceData; }
             /// Set if this vertex buffer is an "instance data" buffer (per instance)
@@ -132,17 +132,17 @@ namespace v1 {
         VertexElement(unsigned short source, size_t offset, VertexElementType theType,
             VertexElementSemantic semantic, unsigned short index = 0);
         /// Gets the vertex buffer index from where this element draws it's values
-        unsigned short getSource(void) const { return mSource; }
+        unsigned short getSource() const { return mSource; }
         /// Gets the offset into the buffer where this element starts
-        size_t getOffset(void) const { return mOffset; }
+        size_t getOffset() const { return mOffset; }
         /// Gets the data format of this element
-        VertexElementType getType(void) const { return mType; }
+        VertexElementType getType() const { return mType; }
         /// Gets the meaning of this element
-        VertexElementSemantic getSemantic(void) const { return mSemantic; }
+        VertexElementSemantic getSemantic() const { return mSemantic; }
         /// Gets the index of this element, only applicable for repeating elements
-        unsigned short getIndex(void) const { return mIndex; }
+        unsigned short getIndex() const { return mIndex; }
         /// Gets the size of this element in bytes
-        size_t getSize(void) const;
+        size_t getSize() const;
         /// Utility method for helping to calculate offsets
         static size_t getTypeSize(VertexElementType etype);
         /// Utility method which returns the count of values in a given type
@@ -176,7 +176,7 @@ namespace v1 {
             VertexElementType dst);
 
         /** Utility method to get the most appropriate packed colour vertex element format. */
-        static VertexElementType getBestColourVertexElementType(void);
+        static VertexElementType getBestColourVertexElementType();
 
         inline bool operator== (const VertexElement& rhs) const
         {
@@ -302,7 +302,7 @@ namespace v1 {
         uint16 mBaseInputLayoutId;
         bool mInputLayoutDirty;
 
-        void vertexLayoutDirty(void);
+        void vertexLayoutDirty();
     public:
         /// Standard constructor, not you should use HardwareBufferManager::createVertexDeclaration
         VertexDeclaration( HardwareBufferManagerBase *creator );
@@ -321,9 +321,9 @@ namespace v1 {
         uint16 _getInputLayoutId( HlmsManager *hlmsManager, OperationType opType );
 
         /** Get the number of elements in the declaration. */
-        size_t getElementCount(void) const { return mElementList.size(); }
+        size_t getElementCount() const { return mElementList.size(); }
         /** Gets read-only access to the list of vertex elements. */
-        const VertexElementList& getElements(void) const;
+        const VertexElementList& getElements() const;
         /** Get a single element. */
         const VertexElement* getElement(unsigned short index) const;
 
@@ -335,9 +335,9 @@ namespace v1 {
             as the ordering being important, where shared source buffers are used, the
             declaration must list all the elements for each source in turn.
         */
-        void sort(void);
+        void sort();
 
-        void sortForV2(void);
+        void sortForV2();
 
         /** Remove any gaps in the source buffer list used by this declaration.
         @remarks
@@ -349,7 +349,7 @@ namespace v1 {
         @note
             This will cause the vertex declaration to be re-sorted.
         */
-        void closeGapsInSource(void);
+        void closeGapsInSource();
 
         /** Generates a new VertexDeclaration for optimal usage based on the current
             vertex declaration, which can be used with VertexData::reorganiseBuffers later
@@ -366,7 +366,7 @@ namespace v1 {
             bool vertexAnimation, bool vertexAnimationNormals) const;
 
         /** Gets the index of the highest source value referenced by this declaration. */
-        unsigned short getMaxSource(void) const;
+        unsigned short getMaxSource() const;
 
 
 
@@ -414,7 +414,7 @@ namespace v1 {
         virtual void removeElement(VertexElementSemantic semantic, unsigned short index = 0);
 
         /** Remove all elements. */
-        virtual void removeAllElements(void);
+        virtual void removeAllElements();
 
         /** Modify an element in-place, params as addElement.
        @remarks
@@ -455,9 +455,9 @@ namespace v1 {
         */
         virtual VertexDeclaration* clone(HardwareBufferManagerBase* mgr = 0) const;
 
-        bool isSortedForV2(void) const;
+        bool isSortedForV2() const;
 
-        VertexElement2VecVec convertToV2(void);
+        VertexElement2VecVec convertToV2();
         void convertFromV2( const VertexElement2Vec &v2Decl );
         void convertFromV2( const VertexElement2VecVec &v2Decl );
 
@@ -523,34 +523,34 @@ namespace v1 {
         virtual void unsetBinding(unsigned short index);
 
         /** Removes all the bindings. */
-        virtual void unsetAllBindings(void);
+        virtual void unsetAllBindings();
 
         /// Gets a read-only version of the buffer bindings
-        virtual const VertexBufferBindingMap& getBindings(void) const;
+        virtual const VertexBufferBindingMap& getBindings() const;
 
         /// Gets the buffer bound to the given source index
         virtual const HardwareVertexBufferSharedPtr& getBuffer(unsigned short index) const;
         /// Gets whether a buffer is bound to the given source index
         virtual bool isBufferBound(unsigned short index) const;
 
-        virtual size_t getBufferCount(void) const { return mBindingMap.size(); }
+        virtual size_t getBufferCount() const { return mBindingMap.size(); }
 
         /** Gets the highest index which has already been set, plus 1.
         @remarks
             This is to assist in binding the vertex buffers such that there are
             not gaps in the list.
         */
-        virtual unsigned short getNextIndex(void) const { return mHighIndex++; }
+        virtual unsigned short getNextIndex() const { return mHighIndex++; }
 
         /** Gets the last bound index.
         */
-        virtual unsigned short getLastBoundIndex(void) const;
+        virtual unsigned short getLastBoundIndex() const;
 
         typedef map<ushort, ushort>::type BindingIndexMap;
 
         /** Check whether any gaps in the bindings.
         */
-        virtual bool hasGaps(void) const;
+        virtual bool hasGaps() const;
 
         /** Remove any gaps in the bindings.
         @remarks

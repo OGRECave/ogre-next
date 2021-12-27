@@ -92,19 +92,19 @@ namespace Ogre
         float getViewPointToPixelScale() const override;
 
         /** @copydoc see Window::destroy */
-        void destroy(void) override;
+        void destroy() override;
 
         /** @copydoc see Window::isVisible */
-        bool isVisible( void ) const override;
+        bool isVisible() const override;
 
         /** @copydoc see Window::_setVisible */
         void _setVisible( bool visible ) override;
 
         /** @copydoc see Window::isClosed */
-        bool isClosed(void) const override;
+        bool isClosed() const override;
 
         /** @copydoc see Window::isHidden */
-        bool isHidden(void) const override { return mHidden; }
+        bool isHidden() const override { return mHidden; }
 
         /** @copydoc see RenderWindow::setHidden */
         void setHidden(bool hidden) override;
@@ -116,7 +116,7 @@ namespace Ogre
         void swapBuffers() override;
 
         /** @copydoc see Window::windowMovedOrResized */
-        void windowMovedOrResized(void) override;
+        void windowMovedOrResized() override;
 
         /** @copydoc see Window::getCustomAttribute */
         /**

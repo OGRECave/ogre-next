@@ -60,7 +60,7 @@ namespace Ogre {
             set(cousin.get());
         }
 
-        T get (void) const
+        T get () const
         {
             OGRE_LOCK_AUTO_MUTEX;
             return mField;

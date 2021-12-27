@@ -67,7 +67,7 @@ namespace Ogre {
         void setAdjust( Real rate );
 
         /** Gets the scale adjustment to be made per second to particles. */
-        Real getAdjust(void) const;
+        Real getAdjust() const;
 
         static CmdScaleAdjust msScaleCmd;
 

@@ -43,7 +43,7 @@ namespace Ogre
         uint8           *mVboName;
 
         virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl(void);
+        virtual void unmapImpl();
 
     public:
         NULLAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
@@ -51,7 +51,7 @@ namespace Ogre
                                 PixelFormatGpu pixelFormatFamily );
         virtual ~NULLAsyncTextureTicket();
 
-        virtual bool queryIsTransferDone(void);
+        virtual bool queryIsTransferDone();
     };
 }
 

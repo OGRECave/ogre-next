@@ -146,7 +146,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodSphereStrategy& getSingleton(void);
+        static DistanceLodSphereStrategy& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -162,7 +162,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodSphereStrategy* getSingletonPtr(void);
+        static DistanceLodSphereStrategy* getSingletonPtr();
     };
     /** @} */
     /** @} */
@@ -208,7 +208,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodBoxStrategy& getSingleton(void);
+        static DistanceLodBoxStrategy& getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -224,7 +224,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodBoxStrategy* getSingletonPtr(void);
+        static DistanceLodBoxStrategy* getSingletonPtr();
     };
 
     /** @} */

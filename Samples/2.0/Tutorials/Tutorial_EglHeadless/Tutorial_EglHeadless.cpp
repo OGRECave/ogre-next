@@ -27,7 +27,7 @@
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 #    include "OSX/macUtils.h"
 #endif
-static void registerHlms( void )
+static void registerHlms()
 {
     using namespace Ogre;
 
@@ -138,7 +138,7 @@ public:
     MyWindowEventListener() : mQuit( false ) {}
     virtual void windowClosed( Ogre::Window *rw ) { mQuit = true; }
 
-    bool getQuit( void ) const { return mQuit; }
+    bool getQuit() const { return mQuit; }
 };
 
 int main( int argc, const char *argv[] )

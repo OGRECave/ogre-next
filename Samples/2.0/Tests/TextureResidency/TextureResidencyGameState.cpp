@@ -64,7 +64,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::enableHeavyRamMode(void)
+    void TextureResidencyGameState::enableHeavyRamMode()
     {
         const Ogre::String textureNames[] =
         {
@@ -101,7 +101,7 @@ namespace Demo
             showTexturesOnScreen();
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::disableHeavyRamMode(void)
+    void TextureResidencyGameState::disableHeavyRamMode()
     {
         //Ensure we don't try to show dangling pointers on screen
         const bool wasShowingTexturesOnScreen = isShowingTextureOnScreen();
@@ -121,12 +121,12 @@ namespace Demo
             showTexturesOnScreen();
     }
     //-----------------------------------------------------------------------------------
-    bool TextureResidencyGameState::isInHeavyRamMode(void) const
+    bool TextureResidencyGameState::isInHeavyRamMode() const
     {
         return mTextures.size() > mNumInitialTextures;
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::testSequence(void)
+    void TextureResidencyGameState::testSequence()
     {
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
@@ -149,7 +149,7 @@ namespace Demo
         mWaitForStreamingCompletion = oldSetting;
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::testRandom(void)
+    void TextureResidencyGameState::testRandom()
     {
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
@@ -170,7 +170,7 @@ namespace Demo
         mWaitForStreamingCompletion = oldSetting;
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::testRamStress(void)
+    void TextureResidencyGameState::testRamStress()
     {
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
@@ -193,7 +193,7 @@ namespace Demo
         mWaitForStreamingCompletion = oldSetting;
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::showTexturesOnScreen(void)
+    void TextureResidencyGameState::showTexturesOnScreen()
     {
         hideTexturesFromScreen();
 
@@ -237,7 +237,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::hideTexturesFromScreen(void)
+    void TextureResidencyGameState::hideTexturesFromScreen()
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -263,12 +263,12 @@ namespace Demo
         mVisibleItems.clear();
     }
     //-----------------------------------------------------------------------------------
-    bool TextureResidencyGameState::isShowingTextureOnScreen(void) const
+    bool TextureResidencyGameState::isShowingTextureOnScreen() const
     {
         return !mVisibleItems.empty();
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::createScene01(void)
+    void TextureResidencyGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();

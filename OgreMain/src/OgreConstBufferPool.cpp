@@ -58,7 +58,7 @@ namespace Ogre
         destroyAllPools();
     }
     //-----------------------------------------------------------------------------------
-    void ConstBufferPool::destroyAllPools(void)
+    void ConstBufferPool::destroyAllPools()
     {
         {
             BufferPoolVecMap::const_iterator itor = mPools.begin();
@@ -117,7 +117,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ConstBufferPool::uploadDirtyDatablocks(void)
+    void ConstBufferPool::uploadDirtyDatablocks()
     {
         while( !mDirtyUsers.empty() )
         {
@@ -129,7 +129,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void ConstBufferPool::uploadDirtyDatablocksImpl(void)
+    void ConstBufferPool::uploadDirtyDatablocksImpl()
     {
         assert( !mDirtyUsersTmp.empty() );
 

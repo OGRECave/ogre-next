@@ -50,11 +50,11 @@ namespace Ogre {
     {
     protected:
         /// Compiles and links the vertex and fragment programs
-        void compileAndLink(void);
+        void compileAndLink();
         /// Put a program in use
-        void _useProgram(void);
+        void _useProgram();
 
-        void buildGLUniformReferences(void);
+        void buildGLUniformReferences();
 
     public:
         /// Constructor should only be used by GLSLMonolithicProgramManager
@@ -64,12 +64,12 @@ namespace Ogre {
                               GLSLShader* geometryProgram,
                               GLSLShader* fragmentProgram,
                               GLSLShader* computeProgram);
-        ~GLSLMonolithicProgram(void);
+        ~GLSLMonolithicProgram();
 
         /** Makes a program object active by making sure it is linked
             and then putting it in use.
         */
-        void activate(void);
+        void activate();
 
         /** Updates program object uniforms using data from
             GpuProgramParameters.  normally called by

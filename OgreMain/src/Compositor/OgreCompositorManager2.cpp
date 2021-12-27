@@ -521,7 +521,7 @@ namespace Ogre
         return workspace;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::addQueuedWorkspaces(void)
+    void CompositorManager2::addQueuedWorkspaces()
     {
         QueuedWorkspaceVec::const_iterator itor = mQueuedWorkspaces.begin();
         QueuedWorkspaceVec::const_iterator end  = mQueuedWorkspaces.end();
@@ -575,24 +575,24 @@ namespace Ogre
         mRenderWindowsPresentBarrierDirty = true;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllWorkspaces(void)
+    void CompositorManager2::removeAllWorkspaces()
     {
         addQueuedWorkspaces();
         deleteAllClear( mWorkspaces );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllWorkspaceDefinitions(void)
+    void CompositorManager2::removeAllWorkspaceDefinitions()
     {
         deleteAllSecondClear( mWorkspaceDefs );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllShadowNodeDefinitions(void)
+    void CompositorManager2::removeAllShadowNodeDefinitions()
     {
         deleteAllClear( mUnfinishedShadowNodes );
         deleteAllSecondClear( mShadowNodeDefs );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::removeAllNodeDefinitions(void)
+    void CompositorManager2::removeAllNodeDefinitions()
     {
         deleteAllSecondClear( mNodeDefinitions );
     }
@@ -653,7 +653,7 @@ namespace Ogre
         mUnfinishedShadowNodes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::prepareRenderWindowsForPresent( void )
+    void CompositorManager2::prepareRenderWindowsForPresent()
     {
         if( !mRenderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
             return;
@@ -696,7 +696,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_update( void )
+    void CompositorManager2::_update()
     {
         //The Apple render systems need to run the update in a special way.
         //So we defer to the render system.
@@ -705,7 +705,7 @@ namespace Ogre
         mRenderSystem->updateCompositorManager( this );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_updateImplementation( void )
+    void CompositorManager2::_updateImplementation()
     {
         addQueuedWorkspaces();
 
@@ -801,7 +801,7 @@ namespace Ogre
         ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_swapAllFinalTargets(void)
+    void CompositorManager2::_swapAllFinalTargets()
     {
         WorkspaceVec::const_iterator itor = mWorkspaces.begin();
         WorkspaceVec::const_iterator end  = mWorkspaces.end();
@@ -857,7 +857,7 @@ namespace Ogre
         mCompositorPassProvider = passProvider;
     }
     //-----------------------------------------------------------------------------------
-    CompositorPassProvider* CompositorManager2::getCompositorPassProvider(void) const
+    CompositorPassProvider* CompositorManager2::getCompositorPassProvider() const
     {
         return mCompositorPassProvider;
     }
@@ -878,12 +878,12 @@ namespace Ogre
             mListeners.erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_notifyBarriersDirty( void )
+    void CompositorManager2::_notifyBarriersDirty()
     {
         mRenderWindowsPresentBarrierDirty = true;
     }
     //-----------------------------------------------------------------------------------
-    RenderSystem* CompositorManager2::getRenderSystem(void) const
+    RenderSystem* CompositorManager2::getRenderSystem() const
     {
         return mRenderSystem;
     }

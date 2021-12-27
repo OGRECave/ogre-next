@@ -81,7 +81,7 @@ namespace Ogre
         /// @See mMemoryManagerType
         void _setTwin( SceneMemoryMgrTypes memoryManagerType, NodeMemoryManager *twinMemoryManager );
 
-        SceneNode* _getDummyNode(void) const                        { return mDummyNode; }
+        SceneNode* _getDummyNode() const                        { return mDummyNode; }
 
         /// Note the return value can be null
         NodeMemoryManager* getTwin() const                          { return mTwinMemoryManager; }
@@ -189,10 +189,10 @@ namespace Ogre
                                  NodeMemoryManager *dstNodeMemoryManager );
 
         /// @copydoc ArrayMemoryManager::defragment
-        void defragment(void);
+        void defragment();
 
         /// @copydoc ArrayMemoryManager::shrinkToFit
-        void shrinkToFit(void);
+        void shrinkToFit();
 
         /** Retrieves the number of depth levels that have been created.
         @remarks

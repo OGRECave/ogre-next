@@ -204,10 +204,10 @@ namespace Ogre
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
 
     public:
-        void _forceCreateDelayedImmutableBuffers(void);
+        void _forceCreateDelayedImmutableBuffers();
     protected:
-        void createDelayedImmutableBuffers(void);
-        void reorganizeImmutableVaos(void);
+        void createDelayedImmutableBuffers();
+        void reorganizeImmutableVaos();
 
 #ifdef _OGRE_MULTISOURCE_VBO
         virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
@@ -288,10 +288,10 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
 
-        virtual void cleanupEmptyPools(void);
+        virtual void cleanupEmptyPools();
 
-        D3D11RenderSystem* getD3D11RenderSystem(void) const             { return mD3D11RenderSystem; }
-        D3D11Device& getDevice(void) const                              { return mDevice; }
+        D3D11RenderSystem* getD3D11RenderSystem() const             { return mD3D11RenderSystem; }
+        D3D11Device& getDevice() const                              { return mDevice; }
 
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId( uint32 bindSlotId );
@@ -306,17 +306,17 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
-        virtual void _beginFrame(void);
-        virtual void _update(void);
+        virtual void _beginFrame();
+        virtual void _update();
 
         /// When dealing with copy operations on structured buffers, D3D11 wants buffers
         /// to be of the same size as the structured buffer's stride. Because we allow
         /// more relaxed copies, we create a helper buffer of 2kb (max stride) to splice
         /// buffer copies and workaround this limitation
-        ID3D11Buffer* getSplicingHelperBuffer(void);
+        ID3D11Buffer* getSplicingHelperBuffer();
 
         /// @see VaoManager::waitForTailFrameToFinish
-        virtual uint8 waitForTailFrameToFinish(void);
+        virtual uint8 waitForTailFrameToFinish();
 
         /// See VaoManager::waitForSpecificFrameToFinish
         virtual void waitForSpecificFrameToFinish( uint32 frameCount );
@@ -325,7 +325,7 @@ namespace Ogre
         virtual bool isFrameFinished( uint32 frameCount );
 
         static ComPtr<ID3D11Query> createFence( D3D11Device &device );
-        ComPtr<ID3D11Query> createFence(void);
+        ComPtr<ID3D11Query> createFence();
 
         /** Will stall undefinitely until GPU finishes (signals the sync object).
         @param fenceName
