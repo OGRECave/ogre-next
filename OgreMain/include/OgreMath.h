@@ -335,7 +335,7 @@ namespace Ogre
         /// Stored value of log(2) for frequent use
         static const Real LOG2;
 
-        static inline Real Log2 (Real fValue) { return std::log(fValue)/LOG2; }
+        static inline Real Log2 (Real fValue) { return std::log2( fValue ); }
 
         static inline Real LogN (Real base, Real fValue) { return std::log(fValue)/std::log(base); }
 
