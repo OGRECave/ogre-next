@@ -48,8 +48,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusContext.h"
 #include "OgreGLSLShaderFactory.h"
 #include "OgreGL3PlusHardwareBufferManager.h"
-#include "OgreGLSLSeparableProgramManager.h"
-#include "OgreGLSLSeparableProgram.h"
 #include "OgreGLSLMonolithicProgramManager.h"
 #include "OgreGL3PlusVertexArrayObject.h"
 #include "OgreGL3PlusTextureGpuManager.h"
@@ -2325,19 +2323,7 @@ namespace Ogre {
             mFragmentProgramBound = true;
         }
 
-        GLSLSeparableProgramManager* separableProgramMgr =
-                GLSLSeparableProgramManager::getSingletonPtr();
-
-        if( separableProgramMgr )
-        {
-            GLSLSeparableProgram* separableProgram = separableProgramMgr->getCurrentSeparableProgram();
-            if (separableProgram)
-                separableProgram->activate();
-        }
-        else
-        {
-            GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
-        }
+        GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
     }
 
     void GL3PlusRenderSystem::_setComputePso( const HlmsComputePso *pso )
@@ -2369,19 +2355,7 @@ namespace Ogre {
         mActiveComputeGpuProgramParameters = pso->computeParams;
         mComputeProgramBound = true;
 
-        GLSLSeparableProgramManager* separableProgramMgr =
-                GLSLSeparableProgramManager::getSingletonPtr();
-
-        if( separableProgramMgr )
-        {
-            GLSLSeparableProgram* separableProgram = separableProgramMgr->getCurrentSeparableProgram();
-            if (separableProgram)
-                separableProgram->activate();
-        }
-        else
-        {
-            GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
-        }
+        GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
     }
 
     void GL3PlusRenderSystem::_setIndirectBuffer( IndirectBufferPacked *indirectBuffer )
@@ -2626,41 +2600,19 @@ namespace Ogre {
 
         // Bind VAO (set of per-vertex attributes: position, normal, etc.).
         bool updateVAO = true;
-        if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
+
+        GLSLMonolithicProgram *monolithicProgram =
+            GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
+        if( monolithicProgram )
         {
-            GLSLSeparableProgram* separableProgram =
-                GLSLSeparableProgramManager::getSingleton().getCurrentSeparableProgram();
-            if (separableProgram)
-            {
-                if (!op.renderToVertexBuffer)
-                {
-                    separableProgram->activate();
-                }
+            updateVAO = !monolithicProgram->getVertexArrayObject()->isInitialised();
 
-                updateVAO = !separableProgram->getVertexArrayObject()->isInitialised();
-
-                separableProgram->getVertexArrayObject()->bind();
-            }
-            else
-            {
-                Ogre::LogManager::getSingleton().logMessage(
-                    "ERROR: Failed to create separable program.", LML_CRITICAL);
-            }
+            monolithicProgram->getVertexArrayObject()->bind();
         }
         else
         {
-            GLSLMonolithicProgram* monolithicProgram = GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
-            if (monolithicProgram)
-            {
-                updateVAO = !monolithicProgram->getVertexArrayObject()->isInitialised();
-
-                monolithicProgram->getVertexArrayObject()->bind();
-            }
-            else
-            {
-                Ogre::LogManager::getSingleton().logMessage(
-                    "ERROR: Failed to create monolithic program.", LML_CRITICAL);
-            }
+            Ogre::LogManager::getSingleton().logMessage( "ERROR: Failed to create monolithic program.",
+                                                         LML_CRITICAL );
         }
 
         // Bind the appropriate VBOs to the active attributes of the VAO.
@@ -2847,22 +2799,11 @@ namespace Ogre {
         // Unbind VAO (if updated).
         if (updateVAO)
         {
-            if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
+            GLSLMonolithicProgram *monolithicProgram2 =
+                GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
+            if( monolithicProgram2 )
             {
-                GLSLSeparableProgram* separableProgram =
-                    GLSLSeparableProgramManager::getSingleton().getCurrentSeparableProgram();
-                if (separableProgram)
-                {
-                    separableProgram->getVertexArrayObject()->setInitialised(true);
-                }
-            }
-            else
-            {
-                GLSLMonolithicProgram* monolithicProgram = GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
-                if (monolithicProgram)
-                {
-                    monolithicProgram->getVertexArrayObject()->setInitialised(true);
-                }
+                monolithicProgram2->getVertexArrayObject()->setInitialised( true );
             }
 
             // Unbind the vertex array object.
@@ -3793,27 +3734,14 @@ namespace Ogre {
             GLuint attrib = 0;
             unsigned short elemIndex = elem.getIndex();
 
-            if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
+            GLSLMonolithicProgram *monolithicProgram =
+                GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
+            if( !monolithicProgram || !monolithicProgram->isAttributeValid( sem, elemIndex ) )
             {
-                GLSLSeparableProgram* separableProgram =
-                    GLSLSeparableProgramManager::getSingleton().getCurrentSeparableProgram();
-                if (!separableProgram || !separableProgram->isAttributeValid(sem, elemIndex))
-                {
-                    return;
-                }
-
-                attrib = (GLuint)separableProgram->getAttributeIndex(sem, elemIndex);
+                return;
             }
-            else
-            {
-                GLSLMonolithicProgram* monolithicProgram = GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
-                if (!monolithicProgram || !monolithicProgram->isAttributeValid(sem, elemIndex))
-                {
-                    return;
-                }
 
-                attrib = (GLuint)monolithicProgram->getAttributeIndex(sem, elemIndex);
-            }
+            attrib = (GLuint)monolithicProgram->getAttributeIndex( sem, elemIndex );
 
             if (mPso->vertexShader)
             {

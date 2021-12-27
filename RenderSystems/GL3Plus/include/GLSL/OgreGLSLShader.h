@@ -143,7 +143,6 @@ namespace Ogre {
         ~GLSLShader();
 
         GLuint getGLShaderHandle() const { return mGLShaderHandle; }
-        GLuint getGLProgramHandle();
         void attachToProgramObject(const GLuint programObject);
         void detachFromProgramObject(const GLuint programObject);
         String getAttachedShaderNames() const { return mAttachedShaderNames; }
@@ -276,10 +275,6 @@ namespace Ogre {
 
         /// GL handle for shader object.
         GLuint mGLShaderHandle;
-
-        /// GL handle for program object the shader is bound to.
-        GLuint mGLProgramHandle;
-
 
         /// Flag indicating if shader object successfully compiled.
         GLint mCompiled;

@@ -54,7 +54,6 @@ namespace Ogre
 
     private:
         static GLSLMonolithicProgramManager* mMonolithicProgramManager;
-        static GLSLSeparableProgramManager* mSeparableProgramManager;
     };
 }
 

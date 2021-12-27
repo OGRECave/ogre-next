@@ -357,9 +357,6 @@ namespace Ogre {
             pLog->logMessage(
                 " * Vertex Array Objects: "
                 + StringConverter::toString(hasCapability(RSC_VAO), true));
-            pLog->logMessage(
-                " * Separate shader objects: "
-                + StringConverter::toString(hasCapability(RSC_SEPARATE_SHADER_OBJECTS), true));
         }
 
         if (mCategoryRelevant[CAPS_CATEGORY_D3D9])

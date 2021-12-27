@@ -43,7 +43,6 @@ namespace Ogre
     class GLSLShader;
     class GLSLMonolithicProgram;
     class GLSLMonolithicProgramManager;
-    class GLSLSeparableProgramManager;
     class GLSLShaderFactory;
 
     /** If there is a message in GL info log then post it in the Ogre Log

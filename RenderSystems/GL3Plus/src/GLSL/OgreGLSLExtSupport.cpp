@@ -45,19 +45,11 @@ namespace Ogre {
         GLint infologLength = 0;
 
         GLboolean isShader = glIsShader(obj);
-        GLboolean isProgramPipeline = glIsProgramPipeline(obj);
         GLboolean isProgram = glIsProgram(obj);
 
         if (isShader)
         {
             OGRE_CHECK_GL_ERROR(glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
-        }
-        else if (isProgramPipeline &&
-                 Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
-        {
-            //FIXME Crashes on NVIDIA? See GL3+ GSoC forum
-            // posts around 2013-11-25.
-            OGRE_CHECK_GL_ERROR(glGetProgramPipelineiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
         }
         else if (isProgram)
         {
@@ -79,11 +71,6 @@ namespace Ogre {
         if (isShader)
         {
             OGRE_CHECK_GL_ERROR(glGetShaderInfoLog(obj, infologLength, &charsWritten, infoLog));
-        }
-        else if (isProgramPipeline &&
-                 Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
-        {
-            OGRE_CHECK_GL_ERROR(glGetProgramPipelineInfoLog(obj, infologLength, &charsWritten, infoLog));
         }
         else if (isProgram)
         {

@@ -28,7 +28,6 @@
 
 #include "OgreGLSLShaderFactory.h"
 #include "OgreGLSLMonolithicProgramManager.h"
-#include "OgreGLSLSeparableProgramManager.h"
 #include "OgreGLSLShader.h"
 #include "OgreRoot.h"
 
@@ -36,7 +35,6 @@ namespace Ogre
 {
 
     GLSLMonolithicProgramManager* GLSLShaderFactory::mMonolithicProgramManager = NULL;
-    GLSLSeparableProgramManager* GLSLShaderFactory::mSeparableProgramManager = NULL;
     
     String GLSLShaderFactory::mLanguageName = "glsl";
     
@@ -47,13 +45,6 @@ namespace Ogre
         {
             mMonolithicProgramManager = new GLSLMonolithicProgramManager(support);
         }
-        if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
-        {
-            if (mSeparableProgramManager == NULL)
-            {
-                mSeparableProgramManager = new GLSLSeparableProgramManager(support);
-            }
-        }
     }
     
 
@@ -63,15 +54,6 @@ namespace Ogre
         {
             delete mMonolithicProgramManager;
             mMonolithicProgramManager = NULL;
-        }
-
-        if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
-        {
-            if (mSeparableProgramManager)
-            {
-                delete mSeparableProgramManager;
-                mSeparableProgramManager = NULL;
-            }
         }
     }
     
