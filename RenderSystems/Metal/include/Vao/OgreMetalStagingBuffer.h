@@ -47,9 +47,9 @@ namespace Ogre
     class _OgreMetalExport MetalStagingBuffer : public StagingBuffer
     {
     protected:
-        id<MTLBuffer>   mVboName;
-        void            *mMappedPtr;
-        MetalDevice     *mDevice;
+        id<MTLBuffer> mVboName;
+        void *        mMappedPtr;
+        MetalDevice * mDevice;
 
         /** How many bytes between the last fence and our current offset do we need to let
             through before we place another fence?
@@ -57,28 +57,25 @@ namespace Ogre
             When the ring buffer wraps around, a fence is always put.
             A threshold of zero means to put a fence after every unmap operation.
         */
-        size_t  mFenceThreshold;
+        size_t mFenceThreshold;
 
         struct MetalFence : Fence
         {
-            dispatch_semaphore_t    fenceName;
+            dispatch_semaphore_t fenceName;
 
-            MetalFence( size_t _start, size_t _end ) :
-                Fence( _start , _end ), fenceName( 0 )
-            {
-            }
+            MetalFence( size_t _start, size_t _end ) : Fence( _start, _end ), fenceName( 0 ) {}
         };
 
         //------------------------------------
         // Begin used for uploads
         //------------------------------------
         typedef vector<MetalFence>::type MetalFenceVec;
-        MetalFenceVec mFences;
+        MetalFenceVec                    mFences;
 
         /// Regions of memory that were unmapped but haven't
         /// been fenced due to not passing the threshold yet.
         MetalFenceVec mUnfencedHazards;
-        size_t mUnfencedBytes;
+        size_t        mUnfencedBytes;
         //------------------------------------
         // End used for uploads
         //------------------------------------
@@ -92,7 +89,7 @@ namespace Ogre
         */
         void addFence( size_t from, size_t to, bool forceFence );
 
-        void deleteFences( MetalFenceVec::iterator itor, MetalFenceVec::iterator end );
+        void deleteFences( MetalFenceVec::iterator itor, MetalFenceVec::iterator endt );
 
         /// Waits undefinitely on the given GLSync object. Can throw if failed to wait.
         void wait( dispatch_semaphore_t syncObj );
@@ -103,15 +100,14 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        virtual void* mapImpl( size_t sizeBytes );
-        virtual void unmapImpl( const Destination *destinations, size_t numDestinations );
+        virtual void *mapImpl( size_t sizeBytes );
+        virtual void  unmapImpl( const Destination *destinations, size_t numDestinations );
 
-        virtual const void* _mapForReadImpl( size_t offset, size_t sizeBytes );
+        virtual const void *_mapForReadImpl( size_t offset, size_t sizeBytes );
 
     public:
-        MetalStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                            VaoManager *vaoManager, bool uploadOnly,
-                            id<MTLBuffer> vboName, MetalDevice *device );
+        MetalStagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
+                            bool uploadOnly, id<MTLBuffer> vboName, MetalDevice *device );
         virtual ~MetalStagingBuffer();
 
         virtual StagingStallType uploadWillStall( size_t sizeBytes );
@@ -121,14 +117,14 @@ namespace Ogre
 
         void _unmapToV1( v1::MetalHardwareBufferCommon *hwBuffer, size_t lockStart, size_t lockSize );
 
-        virtual bool canDownload( size_t length ) const;
+        virtual bool   canDownload( size_t length ) const;
         virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
-        virtual void _cancelDownload( size_t offset, size_t sizeBytes );
-        virtual size_t _asyncDownloadV1( v1::MetalHardwareBufferCommon *source,
-                                         size_t srcOffset, size_t srcLength );
+        virtual void   _cancelDownload( size_t offset, size_t sizeBytes );
+        virtual size_t _asyncDownloadV1( v1::MetalHardwareBufferCommon *source, size_t srcOffset,
+                                         size_t srcLength );
 
-        id<MTLBuffer> getBufferName() const     { return mVboName; }
+        id<MTLBuffer> getBufferName() const { return mVboName; }
     };
-}
+}  // namespace Ogre
 
 #endif

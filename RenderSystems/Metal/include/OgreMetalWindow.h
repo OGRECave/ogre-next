@@ -29,10 +29,10 @@ THE SOFTWARE.
 #define _OgreMetalWindow_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreWindow.h"
 
 #include "OgreMetalRenderTargetCommon.h"
-
 #include "OgreMetalView.h"
 
 #import <QuartzCore/CAMetalLayer.h>
@@ -41,21 +41,22 @@ namespace Ogre
 {
     class MetalWindow : public Window
     {
-        bool    mClosed;
-        bool    mHidden;
-        bool    mIsExternal;
-        bool    mHwGamma;
+        bool mClosed;
+        bool mHidden;
+        bool mIsExternal;
+        bool mHwGamma;
 
-        CAMetalLayer        *mMetalLayer;
+        CAMetalLayer *      mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
-        OgreMetalView       *mMetalView;
+        OgreMetalView *     mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSWindow            *mWindow;
+        NSWindow *mWindow;
 #endif
-        MetalDevice         *mDevice;
+        MetalDevice *mDevice;
 
         inline void checkLayerSizeChanges();
-        void setResolutionFromView();
+        void        setResolutionFromView();
+
     public:
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                      const NameValuePairList *miscParams, MetalDevice *ownerDevice );
@@ -82,9 +83,8 @@ namespace Ogre
         virtual void setHidden( bool hidden );
         virtual bool isHidden() const;
 
-        virtual void getCustomAttribute( IdString name, void* pData );
+        virtual void getCustomAttribute( IdString name, void *pData );
     };
-}
+}  // namespace Ogre
 
 #endif
-

@@ -45,8 +45,7 @@ namespace Ogre
     public:
         MetalTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                               TextureTypes::TextureTypes initialType,
-                               TextureGpuManager *textureManager,
+                               TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
                                MetalWindow *window );
         virtual ~MetalTextureGpuWindow();
 
@@ -67,7 +66,7 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture();
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

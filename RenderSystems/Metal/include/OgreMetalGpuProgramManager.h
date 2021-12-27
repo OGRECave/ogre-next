@@ -29,42 +29,44 @@ THE SOFTWARE.
 #ifndef __OgreMetalGpuProgramManager_H__
 #define __OgreMetalGpuProgramManager_H__
 
-#import "OgreGpuProgramManager.h"
 #import "OgreMetalPrerequisites.h"
 
-namespace Ogre {
+#import "OgreGpuProgramManager.h"
 
+namespace Ogre
+{
     class MetalProgram;
 
     class _OgreMetalExport MetalGpuProgramManager : public GpuProgramManager
     {
     public:
-        typedef GpuProgram* (*CreateGpuProgramCallback)(ResourceManager* creator,
-            const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            GpuProgramType gptype, const String& syntaxCode);
+        typedef GpuProgram *( *CreateGpuProgramCallback )( ResourceManager *creator, const String &name,
+                                                           ResourceHandle handle, const String &group,
+                                                           bool isManual, ManualResourceLoader *loader,
+                                                           GpuProgramType gptype,
+                                                           const String & syntaxCode );
 
     private:
         typedef map<String, CreateGpuProgramCallback>::type ProgramMap;
-        ProgramMap mProgramMap;
-        MetalDevice *mDevice;
+        ProgramMap                                          mProgramMap;
+        MetalDevice *                                       mDevice;
 
     protected:
         /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* createParams);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *createParams );
         /// Specialised create method with specific parameters
-        Resource* createImpl(const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            GpuProgramType gptype, const String& syntaxCode);
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
+                              const String &syntaxCode );
 
     public:
         MetalGpuProgramManager( MetalDevice *device );
         virtual ~MetalGpuProgramManager();
-        bool registerProgramFactory(const String& syntaxCode, CreateGpuProgramCallback createFn);
-        bool unregisterProgramFactory(const String& syntaxCode);
+        bool registerProgramFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
+        bool unregisterProgramFactory( const String &syntaxCode );
     };
-}
+}  // namespace Ogre
 
 #endif

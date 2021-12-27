@@ -45,21 +45,21 @@ namespace Ogre
 
     public:
         MetalTexBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                              uint32 numElementsPadding, BufferType bufferType,
-                              void *initialData, bool keepAsShadow,
-                              VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
-                              PixelFormatGpu pf, MetalDevice *device );
+                              uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                              bool keepAsShadow, VaoManager *vaoManager,
+                              MetalBufferInterface *bufferInterface, PixelFormatGpu pf,
+                              MetalDevice *device );
         virtual ~MetalTexBufferPacked();
 
-        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
+        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
 
-        void bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
-                                      NSUInteger *offsets, size_t offset );
+        void bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers, NSUInteger *offsets,
+                                      size_t offset );
 
         virtual BufferPackedTypes getBufferPackedType() const { return BP_TYPE_TEX; }
     };

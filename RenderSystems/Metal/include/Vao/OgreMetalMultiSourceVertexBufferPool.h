@@ -32,14 +32,14 @@ THE SOFTWARE.
 #include "OgreMetalPrerequisites.h"
 
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreMetalVaoManager.h"
+#    include "Vao/OgreMetalVaoManager.h"
+#    include "Vao/OgreMultiSourceVertexBufferPool.h"
 
 namespace Ogre
 {
     class _OgreMetalExport MetalMultiSourceVertexBufferPool : public MultiSourceVertexBufferPool
     {
-        size_t mVboPoolIndex;
+        size_t        mVboPoolIndex;
         id<MTLBuffer> mVboName;
 
         MetalVaoManager::BlockVec mFreeBlocks;
@@ -65,14 +65,13 @@ namespace Ogre
         MetalMultiSourceVertexBufferPool( size_t vboPoolIndex, id<MTLBuffer> vboName,
                                           const VertexElement2VecVec &vertexElementsBySource,
                                           size_t maxVertices, BufferType bufferType,
-                                          size_t internalBufferStart,
-                                          VaoManager *vaoManager );
+                                          size_t internalBufferStart, VaoManager *vaoManager );
         virtual ~MetalMultiSourceVertexBufferPool();
 
         void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
-                                  void * const *initialData, bool keepAsShadow );
+                                  void *const *initialData, bool keepAsShadow );
     };
-}
+}  // namespace Ogre
 
 #endif
 #endif

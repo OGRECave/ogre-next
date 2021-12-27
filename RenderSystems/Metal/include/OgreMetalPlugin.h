@@ -28,8 +28,9 @@ THE SOFTWARE.
 #ifndef _OgreMetalPlugin_H_
 #define _OgreMetalPlugin_H_
 
-#include "OgrePlugin.h"
 #include "OgreMetalPrerequisites.h"
+
+#include "OgrePlugin.h"
 
 namespace Ogre
 {
@@ -41,9 +42,8 @@ namespace Ogre
     public:
         MetalPlugin();
 
-
         /// @copydoc Plugin::getName
-        const String& getName() const;
+        const String &getName() const;
 
         /// @copydoc Plugin::install
         void install();
@@ -56,9 +56,10 @@ namespace Ogre
 
         /// @copydoc Plugin::uninstall
         void uninstall();
+
     protected:
-        MetalRenderSystem* mRenderSystem;
+        MetalRenderSystem *mRenderSystem;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreMetalStagingTexture_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreStagingTextureBufferImpl.h"
 
 #include "Vao/OgreMetalDynamicBuffer.h"
@@ -40,25 +41,25 @@ namespace Ogre
 {
     class _OgreMetalExport MetalStagingTexture : public StagingTextureBufferImpl
     {
-        id<MTLBuffer>   mVboName;
-        void            *mMappedPtr;
-        MetalDevice     *mDevice;
+        id<MTLBuffer> mVboName;
+        void *        mMappedPtr;
+        MetalDevice * mDevice;
 
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
+        virtual bool  belongsToUs( const TextureBox &box );
+        virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
 
     public:
-        MetalStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
-                             size_t sizeBytes, MetalDevice *device );
+        MetalStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t sizeBytes,
+                             MetalDevice *device );
         virtual ~MetalStagingTexture();
 
         virtual void stopMapRegion();
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
-                             const TextureBox *dstBox=0, bool skipSysRamCopy=false );
+        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                             const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                             bool skipSysRamCopy = false );
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -41,7 +41,7 @@ namespace Ogre
         MetalDevice *mDevice;
 
     protected:
-        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
+        virtual TexBufferPacked *     getAsTexBufferImpl( PixelFormatGpu pixelFormat );
         virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl();
 
     public:
@@ -51,16 +51,16 @@ namespace Ogre
                               MetalDevice *device );
         ~MetalUavBufferPacked();
 
-        void bindBufferAllRenderStages( uint16 slot, size_t offset=0 );
-        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
-//        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
+        void         bindBufferAllRenderStages( uint16 slot, size_t offset = 0 );
+        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        // virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
+        // virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
+        // virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
+        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
 
-        void bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
-                                      NSUInteger *offsets, size_t offset );
+        void bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers, NSUInteger *offsets,
+                                      size_t offset );
     };
 }
 

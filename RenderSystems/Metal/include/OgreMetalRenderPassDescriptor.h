@@ -30,7 +30,9 @@ THE SOFTWARE.
 #define _OgreMetalRenderPassDescriptor_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreRenderPassDescriptor.h"
+
 #include "OgreCommon.h"
 
 #import <Metal/MTLRenderPass.h>
@@ -40,11 +42,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     struct MetalFrameBufferDescValue
     {
@@ -57,27 +59,28 @@ namespace Ogre
     class _OgreMetalExport MetalRenderPassDescriptor : public RenderPassDescriptor
     {
     protected:
-        MTLRenderPassColorAttachmentDescriptor  *mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        MTLRenderPassDepthAttachmentDescriptor  *mDepthAttachment;
-        MTLRenderPassStencilAttachmentDescriptor*mStencilAttachment;
+        MTLRenderPassColorAttachmentDescriptor *  mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        MTLRenderPassDepthAttachmentDescriptor *  mDepthAttachment;
+        MTLRenderPassStencilAttachmentDescriptor *mStencilAttachment;
+
         /// Only used if we need to emulate StoreAndMultisampleResolve
-        MTLRenderPassColorAttachmentDescriptor  *mResolveColourAttachm[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        bool mRequiresManualResolve;
+        MTLRenderPassColorAttachmentDescriptor *mResolveColourAttachm[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        bool                                    mRequiresManualResolve;
 
         MetalFrameBufferDescMap::iterator mSharedFboItor;
 
-        MetalDevice         *mDevice;
-        MetalRenderSystem   *mRenderSystem;
+        MetalDevice *      mDevice;
+        MetalRenderSystem *mRenderSystem;
 
 #if OGRE_DEBUG_MODE
-        void *mCallstackBacktrace[32];
+        void * mCallstackBacktrace[32];
         size_t mNumCallstackEntries;
 #endif
 
         void checkRenderWindowStatus();
         void calculateSharedKey();
 
-        static MTLLoadAction get( LoadAction::LoadAction action );
+        static MTLLoadAction  get( LoadAction::LoadAction action );
         static MTLStoreAction get( StoreAction::StoreAction action );
 
         void sanitizeMsaaResolve( size_t colourIdx );
@@ -90,7 +93,7 @@ namespace Ogre
         /// If using MRT, each colour is evaluated independently (only the ones marked
         /// as clear will be cleared).
         uint32 checkForClearActions( MetalRenderPassDescriptor *other ) const;
-        bool cannotInterruptRendering() const;
+        bool   cannotInterruptRendering() const;
 
     public:
         MetalRenderPassDescriptor( MetalDevice *device, MetalRenderSystem *renderSystem );
@@ -110,7 +113,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

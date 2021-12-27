@@ -28,44 +28,48 @@ THE SOFTWARE.
 #ifndef _OgreMetalHardwareVertexBuffer_H_
 #define _OgreMetalHardwareVertexBuffer_H_
 
-#include "OgreMetalHardwareBufferCommon.h"
 #include "OgreHardwareVertexBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-    /// Specialisation of HardwareVertexBuffer for Metal
-    class _OgreMetalExport MetalHardwareVertexBuffer : public HardwareVertexBuffer
+#include "OgreMetalHardwareBufferCommon.h"
+#include "OgreMetalHardwareBufferManager.h"
+
+namespace Ogre
+{
+    namespace v1
     {
-    private:
-        MetalHardwareBufferCommon mMetalHardwareBufferCommon;
+        /// Specialisation of HardwareVertexBuffer for Metal
+        class _OgreMetalExport MetalHardwareVertexBuffer : public HardwareVertexBuffer
+        {
+        private:
+            MetalHardwareBufferCommon mMetalHardwareBufferCommon;
 
-    protected:
-        virtual void* lockImpl( size_t offset, size_t length, LockOptions options );
-        virtual void unlockImpl();
+        protected:
+            virtual void *lockImpl( size_t offset, size_t length, LockOptions options );
+            virtual void  unlockImpl();
 
-    public:
-        MetalHardwareVertexBuffer( MetalHardwareBufferManagerBase *mgr, size_t vertexSize,
-                                   size_t numVertices, HardwareBuffer::Usage usage,
-                                   bool useShadowBuffer );
-        virtual ~MetalHardwareVertexBuffer();
+        public:
+            MetalHardwareVertexBuffer( MetalHardwareBufferManagerBase *mgr, size_t vertexSize,
+                                       size_t numVertices, HardwareBuffer::Usage usage,
+                                       bool useShadowBuffer );
+            virtual ~MetalHardwareVertexBuffer();
 
-        void _notifyDeviceStalled();
+            void _notifyDeviceStalled();
 
-        /// @copydoc MetalHardwareBufferCommon::getBufferName
-        id<MTLBuffer> getBufferName( size_t &outOffset );
-        /// @copydoc MetalHardwareBufferCommon::getBufferNameForGpuWrite
-        id<MTLBuffer> getBufferNameForGpuWrite();
+            /// @copydoc MetalHardwareBufferCommon::getBufferName
+            id<MTLBuffer> getBufferName( size_t &outOffset );
+            /// @copydoc MetalHardwareBufferCommon::getBufferNameForGpuWrite
+            id<MTLBuffer> getBufferNameForGpuWrite();
 
-        virtual void readData( size_t offset, size_t length, void* pDest );
-        virtual void writeData( size_t offset, size_t length,
-                                const void* pSource, bool discardWholeBuffer = false );
-        virtual void copyData( HardwareBuffer& srcBuffer, size_t srcOffset,
-                               size_t dstOffset, size_t length, bool discardWholeBuffer = false );
+            virtual void readData( size_t offset, size_t length, void *pDest );
+            virtual void writeData( size_t offset, size_t length, const void *pSource,
+                                    bool discardWholeBuffer = false );
+            virtual void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
+                                   size_t length, bool discardWholeBuffer = false );
 
-        virtual void _updateFromShadow();
+            virtual void _updateFromShadow();
 
-        virtual void* getRenderSystemData();
-    };
-}
-}
-#endif // __MetalHARDWAREVERTEXBUFFER_H__
+            virtual void *getRenderSystemData();
+        };
+    }  // namespace v1
+}  // namespace Ogre
+#endif  // __MetalHARDWAREVERTEXBUFFER_H__

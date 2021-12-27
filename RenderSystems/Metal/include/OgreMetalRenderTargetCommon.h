@@ -36,6 +36,7 @@ namespace Ogre
     {
     protected:
         MetalDevice *mOwnerDevice;
+
     public:
         MTLRenderPassColorAttachmentDescriptor *mColourAttachmentDesc;
 
@@ -49,8 +50,8 @@ namespace Ogre
         /// Returns true on success. False on failure.
         virtual bool nextDrawable() { return true; }
 
-        MetalDevice* getOwnerDevice() const     { return mOwnerDevice; }
+        MetalDevice *getOwnerDevice() const { return mOwnerDevice; }
     };
-}
+}  // namespace Ogre
 
 #endif

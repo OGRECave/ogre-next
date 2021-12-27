@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreMetalTextureGpuManager_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreTextureGpuManager.h"
 
 #include "OgreTextureGpu.h"
@@ -39,27 +40,27 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     class _OgreMetalExport MetalTextureGpuManager : public TextureGpuManager
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
-        id<MTLTexture>  mBlankTexture[TextureTypes::Type3D + 1u];
+        id<MTLTexture> mBlankTexture[TextureTypes::Type3D + 1u];
 
         MetalDevice *mDevice;
 
-        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        virtual TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags,
                                                TextureTypes::TextureTypes initialType );
-        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+        virtual StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
                                                           uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        virtual void            destroyStagingTextureImpl( StagingTexture *stagingTexture );
 
-        virtual AsyncTextureTicket* createAsyncTextureTicketImpl (uint32 width, uint32 height,
+        virtual AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
                                                                   uint32 depthOrSlices,
                                                                   TextureTypes::TextureTypes textureType,
                                                                   PixelFormatGpu pixelFormatFamily );
@@ -73,20 +74,20 @@ namespace Ogre
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
             If caller doesnt' delete it, it will leak.
         */
-        TextureGpu* createTextureGpuWindow( MetalWindow *window );
-        TextureGpu* createWindowDepthBuffer();
+        TextureGpu *createTextureGpuWindow( MetalWindow *window );
+        TextureGpu *createWindowDepthBuffer();
 
         id<MTLTexture> getBlankTextureMetalName( TextureTypes::TextureTypes textureType ) const;
 
         virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
                                    uint32 textureFlags ) const;
 
-        MetalDevice* getDevice() const          { return mDevice; }
+        MetalDevice *getDevice() const { return mDevice; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

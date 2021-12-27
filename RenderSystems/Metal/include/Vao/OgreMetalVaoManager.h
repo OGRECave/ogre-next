@@ -65,23 +65,26 @@ namespace Ogre
 
             StrideChanger() : offsetAfterPadding( 0 ), paddedBytes( 0 ) {}
             StrideChanger( size_t _offsetAfterPadding, size_t _paddedBytes ) :
-                offsetAfterPadding( _offsetAfterPadding ), paddedBytes( _paddedBytes ) {}
+                offsetAfterPadding( _offsetAfterPadding ),
+                paddedBytes( _paddedBytes )
+            {
+            }
 
-            bool operator () ( const StrideChanger &left, size_t right ) const
+            bool operator()( const StrideChanger &left, size_t right ) const
             {
                 return left.offsetAfterPadding < right;
             }
-            bool operator () ( size_t left, const StrideChanger &right ) const
+            bool operator()( size_t left, const StrideChanger &right ) const
             {
                 return left < right.offsetAfterPadding;
             }
-            bool operator () ( const StrideChanger &left, const StrideChanger &right ) const
+            bool operator()( const StrideChanger &left, const StrideChanger &right ) const
             {
                 return left.offsetAfterPadding < right.offsetAfterPadding;
             }
         };
 
-        typedef vector<Block>::type BlockVec;
+        typedef vector<Block>::type         BlockVec;
         typedef vector<StrideChanger>::type StrideChangerVec;
 
     protected:
@@ -89,10 +92,10 @@ namespace Ogre
         {
             id<MTLBuffer>       vboName;
             size_t              sizeBytes;
-            MetalDynamicBuffer  *dynamicBuffer; //Null for CPU_INACCESSIBLE BOs.
+            MetalDynamicBuffer *dynamicBuffer;  // Null for CPU_INACCESSIBLE BOs.
 
-            BlockVec            freeBlocks;
-            StrideChangerVec    strideChangers;
+            BlockVec         freeBlocks;
+            StrideChangerVec strideChangers;
         };
 
         struct Vao
@@ -102,17 +105,17 @@ namespace Ogre
             struct VertexBinding
             {
                 __unsafe_unretained id<MTLBuffer> vertexBufferVbo;
-                VertexElement2Vec   vertexElements;
+                VertexElement2Vec                 vertexElements;
 
-                //OpenGL supports this parameter per attribute, but
-                //we're a bit more conservative and do it per buffer
-                uint32              instancingDivisor;
+                // OpenGL supports this parameter per attribute, but
+                // we're a bit more conservative and do it per buffer
+                uint32 instancingDivisor;
 
-                bool operator == ( const VertexBinding &_r ) const
+                bool operator==( const VertexBinding &_r ) const
                 {
-                    return  vertexBufferVbo == _r.vertexBufferVbo &&
-                            vertexElements == _r.vertexElements &&
-                            instancingDivisor == _r.instancingDivisor;
+                    return vertexBufferVbo == _r.vertexBufferVbo &&
+                           vertexElements == _r.vertexElements &&
+                           instancingDivisor == _r.instancingDivisor;
                 }
             };
 
@@ -120,34 +123,34 @@ namespace Ogre
 
             /// Not used anymore, however it's useful for sorting
             /// purposes in the RenderQueue (using the Vao's ID).
-            OperationType operationType;
+            OperationType       operationType;
             VertexBindingVec    vertexBuffers;
             __unsafe_unretained id<MTLBuffer> indexBufferVbo;
-            IndexBufferPacked::IndexType indexType;
-            uint32              refCount;
+            IndexBufferPacked::IndexType      indexType;
+            uint32                            refCount;
         };
 
-        typedef vector<Vbo>::type VboVec;
-        typedef vector<Vao>::type VaoVec;
+        typedef vector<Vbo>::type                  VboVec;
+        typedef vector<Vao>::type                  VaoVec;
         typedef vector<dispatch_semaphore_t>::type DispatchSemaphoreVec;
-        typedef vector<uint8>::type DispatchSemaphoreAlreadyWaitedVec;
+        typedef vector<uint8>::type                DispatchSemaphoreAlreadyWaitedVec;
 
-        VboVec  mVbos[MAX_VBO_FLAG];
-        size_t  mDefaultPoolSize[MAX_VBO_FLAG];
+        VboVec mVbos[MAX_VBO_FLAG];
+        size_t mDefaultPoolSize[MAX_VBO_FLAG];
 
-        VaoVec  mVaos;
-        uint32  mVaoNames;
+        VaoVec mVaos;
+        uint32 mVaoNames;
 
-        bool mSemaphoreFlushed;
+        bool                              mSemaphoreFlushed;
         DispatchSemaphoreAlreadyWaitedVec mAlreadyWaitedForSemaphore;
-        DispatchSemaphoreVec mFrameSyncVec;
+        DispatchSemaphoreVec              mFrameSyncVec;
 
         MetalDevice *mDevice;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        ConstBufferPacked   *mDrawId;
+        ConstBufferPacked *mDrawId;
 #else
-        VertexBufferPacked  *mDrawId;
+        VertexBufferPacked *mDrawId;
 
         id<MTLComputePipelineState> mUnalignedCopyPso;
 #endif
@@ -175,8 +178,8 @@ namespace Ogre
         @param outBufferOffset [out]
             The offset in bytes at which the buffer data should be placed.
         */
-        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
-                          size_t &outVboIdx, size_t &outBufferOffset );
+        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, size_t &outVboIdx,
+                          size_t &outBufferOffset );
 
         /** Deallocates a buffer allocated with @allocateVbo.
         @remarks
@@ -196,68 +199,62 @@ namespace Ogre
 
     public:
         /// @see StagingBuffer::mergeContiguousBlocks
-        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge,
-                                           BlockVec &blocks );
+        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
     protected:
-        virtual VertexBufferPacked* createVertexBufferImpl( size_t numElements,
-                                                            uint32 bytesPerElement,
-                                                            BufferType bufferType,
-                                                            void *initialData, bool keepAsShadow,
+        virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                            BufferType bufferType, void *initialData,
+                                                            bool                     keepAsShadow,
                                                             const VertexElement2Vec &vertexElements );
 
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
 
 #ifdef _OGRE_MULTISOURCE_VBO
-        virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
-                                            const VertexElement2VecVec &vertexElementsBySource,
-                                            size_t maxNumVertices, size_t totalBytesPerVertex,
-                                            BufferType bufferType );
+        virtual MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
+            const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
+            size_t totalBytesPerVertex, BufferType bufferType );
 #endif
 
-        virtual IndexBufferPacked* createIndexBufferImpl( size_t numElements,
-                                                          uint32 bytesPerElement,
-                                                          BufferType bufferType,
-                                                          void *initialData, bool keepAsShadow );
+        virtual IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                          BufferType bufferType, void *initialData,
+                                                          bool keepAsShadow );
 
         virtual void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer );
 
-        virtual ConstBufferPacked* createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+        virtual ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                           void *initialData, bool keepAsShadow );
-        virtual void destroyConstBufferImpl( ConstBufferPacked *constBuffer );
+        virtual void               destroyConstBufferImpl( ConstBufferPacked *constBuffer );
 
-        virtual TexBufferPacked* createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                      BufferType bufferType,
-                                                      void *initialData, bool keepAsShadow );
-        virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer );
+        virtual TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                      BufferType bufferType, void *initialData,
+                                                      bool keepAsShadow );
+        virtual void             destroyTexBufferImpl( TexBufferPacked *texBuffer );
 
         virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
                                                                 size_t sizeBytes, BufferType bufferType,
                                                                 void *initialData, bool keepAsShadow );
-        virtual void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer );
+        virtual void                  destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer );
 
-        virtual UavBufferPacked* createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                      uint32 bindFlags,
-                                                      void *initialData, bool keepAsShadow );
-        virtual void destroyUavBufferImpl( UavBufferPacked *uavBuffer );
+        virtual UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                      uint32 bindFlags, void *initialData,
+                                                      bool keepAsShadow );
+        virtual void             destroyUavBufferImpl( UavBufferPacked *uavBuffer );
 
-        virtual IndirectBufferPacked* createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
+        virtual IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                                 void *initialData, bool keepAsShadow );
-        virtual void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer );
+        virtual void                  destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer );
 
-        virtual VertexArrayObject* createVertexArrayObjectImpl(
-                                                        const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *indexBuffer,
-                                                        OperationType opType );
+        virtual VertexArrayObject *createVertexArrayObjectImpl(
+            const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
+            OperationType opType );
 
         virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
 
         /// Finds the Vao. Calls createVao automatically if not found.
         /// Increases refCount before returning the iterator.
         VaoVec::iterator findVao( const VertexBufferPackedVec &vertexBuffers,
-                                  IndexBufferPacked *indexBuffer,
-                                  OperationType opType );
-        uint32 createVao( const Vao &vaoRef );
+                                  IndexBufferPacked *indexBuffer, OperationType opType );
+        uint32           createVao( const Vao &vaoRef );
 
         static uint32 generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId );
 
@@ -287,24 +284,24 @@ namespace Ogre
             The returned buffer starts with a reference count of 1. You should decrease
             it when you're done using it.
         */
-        virtual StagingBuffer* createStagingBuffer( size_t sizeBytes, bool forUpload );
+        virtual StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload );
 
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
-        MetalDevice* getDevice()        { return mDevice; }
+        MetalDevice *getDevice() { return mDevice; }
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         /// In macOS before Catalina (i.e. <= Mojave), MTLBlitCommandEncoder copyFromBuffer
         /// must be aligned to 4 bytes. When that's not possible, we have to workaround
         /// this limitation with a compute shader
-        void unalignedCopy( id<MTLBuffer> dstBuffer, size_t dstOffsetBytes,
-                            id<MTLBuffer> srcBuffer, size_t srcOffsetBytes, size_t sizeBytes );
+        void unalignedCopy( id<MTLBuffer> dstBuffer, size_t dstOffsetBytes, id<MTLBuffer> srcBuffer,
+                            size_t srcOffsetBytes, size_t sizeBytes );
 #endif
 
         virtual void _update();
-        void _notifyNewCommandBuffer();
-        void _notifyDeviceStalled();
+        void         _notifyNewCommandBuffer();
+        void         _notifyDeviceStalled();
 
         /// @see VaoManager::waitForTailFrameToFinish
         virtual uint8 waitForTailFrameToFinish();

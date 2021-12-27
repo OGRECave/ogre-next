@@ -62,11 +62,11 @@ namespace Ogre
 
         typedef vector<MappedRange>::type MappedRangeVec;
 
-        id<MTLBuffer>   mVboName;
-        size_t          mVboSize;
-        void            *mMappedPtr;
+        id<MTLBuffer> mVboName;
+        size_t        mVboSize;
+        void *        mMappedPtr;
 
-        MappedRangeVec mMappedRanges;
+        MappedRangeVec       mMappedRanges;
         vector<size_t>::type mFreeRanges;
 
         size_t addMappedRange( size_t start, size_t count );
@@ -75,9 +75,9 @@ namespace Ogre
         MetalDynamicBuffer( id<MTLBuffer> vboName, size_t vboSize );
         ~MetalDynamicBuffer();
 
-        id<MTLBuffer> getVboName() const        { return mVboName; }
+        id<MTLBuffer> getVboName() const { return mVboName; }
 
-        void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
+        void *RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
 
         /// Flushes the region of the given ticket. start is 0-based.
         void flush( size_t ticket, size_t start, size_t count );
@@ -86,6 +86,6 @@ namespace Ogre
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
     };
-}
+}  // namespace Ogre
 
 #endif

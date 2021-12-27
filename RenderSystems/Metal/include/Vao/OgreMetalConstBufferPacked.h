@@ -40,10 +40,9 @@ namespace Ogre
 
     public:
         MetalConstBufferPacked( size_t internalBufferStartBytes, size_t numElements,
-                                uint32 bytesPerElement, uint32 numElementsPadding,
-                                BufferType bufferType, void *initialData, bool keepAsShadow,
-                                VaoManager *vaoManager, BufferInterface *bufferInterface,
-                                MetalDevice *device );
+                                uint32 bytesPerElement, uint32 numElementsPadding, BufferType bufferType,
+                                void *initialData, bool keepAsShadow, VaoManager *vaoManager,
+                                BufferInterface *bufferInterface, MetalDevice *device );
         virtual ~MetalConstBufferPacked();
 
         virtual void bindBufferVS( uint16 slot );
@@ -57,6 +56,6 @@ namespace Ogre
         void bindBufferPS( uint16 slot, uint32 offsetBytes );
         void bindBufferCS( uint16 slot, uint32 offsetBytes );
     };
-}
+}  // namespace Ogre
 
 #endif

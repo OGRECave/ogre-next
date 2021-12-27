@@ -29,32 +29,33 @@ THE SOFTWARE.
 #define _OgreMetalHlmsPso_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /// @See HlmsPso
     struct _OgreMetalExport MetalHlmsPso
     {
         id<MTLRenderPipelineState> pso;
-        id<MTLDepthStencilState> depthStencilState;
-        MTLCullMode cullMode;
+        id<MTLDepthStencilState>   depthStencilState;
+        MTLCullMode                cullMode;
 
-        MetalProgram    *vertexShader;
-        MetalProgram    *pixelShader;
+        MetalProgram *vertexShader;
+        MetalProgram *pixelShader;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

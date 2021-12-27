@@ -30,11 +30,12 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #define _OgreMetalRenderSystem_H_
 
 #include "OgreMetalPrerequisites.h"
-#include "OgreMetalPixelFormatToShaderType.h"
-#include "OgreMetalRenderPassDescriptor.h"
 
 #include "OgreRenderSystem.h"
+
 #include "OgreMetalDevice.h"
+#include "OgreMetalPixelFormatToShaderType.h"
+#include "OgreMetalRenderPassDescriptor.h"
 
 #import <Metal/MTLRenderCommandEncoder.h>
 #import <dispatch/dispatch.h>
@@ -53,16 +54,16 @@ namespace Ogre
     {
         struct CachedDepthStencilState
         {
-            uint16                      refCount;
-            bool                        depthWrite;
-            CompareFunction             depthFunc;
-            StencilParams               stencilParams;
+            uint16          refCount;
+            bool            depthWrite;
+            CompareFunction depthFunc;
+            StencilParams   stencilParams;
 
-            id<MTLDepthStencilState>    depthStencilState;
+            id<MTLDepthStencilState> depthStencilState;
 
             CachedDepthStencilState() : refCount( 0 ) {}
 
-            bool operator < ( const CachedDepthStencilState &other ) const
+            bool operator<( const CachedDepthStencilState &other ) const
             {
                 if( this->depthWrite != other.depthWrite )
                     return this->depthWrite < other.depthWrite;
@@ -72,10 +73,10 @@ namespace Ogre
                 return this->stencilParams < other.stencilParams;
             }
 
-            bool operator != ( const CachedDepthStencilState &other ) const
+            bool operator!=( const CachedDepthStencilState &other ) const
             {
-                return this->depthWrite != other.depthWrite ||
-                       this->depthFunc != other.depthFunc ||
+                return this->depthWrite != other.depthWrite ||  //
+                       this->depthFunc != other.depthFunc ||    //
                        this->stencilParams != other.stencilParams;
             }
         };
@@ -83,61 +84,64 @@ namespace Ogre
         typedef vector<CachedDepthStencilState>::type CachedDepthStencilStateVec;
 
     private:
-        String mDeviceName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
-        bool mInitialized;
-        v1::HardwareBufferManager   *mHardwareBufferManager;
-        MetalGpuProgramManager      *mShaderManager;
-        MetalProgramFactory         *mMetalProgramFactory;
+        String mDeviceName;  // it`s hint rather than hard requirement, could be ignored if empty or
+                             // device removed
+        bool                       mInitialized;
+        v1::HardwareBufferManager *mHardwareBufferManager;
+        MetalGpuProgramManager *   mShaderManager;
+        MetalProgramFactory *      mMetalProgramFactory;
 
         ConfigOptionMap mOptions;
 
         MetalPixelFormatToShaderType mPixelFormatToShaderType;
 
-        __unsafe_unretained id<MTLBuffer>   mIndirectBuffer;
-        unsigned char                       *mSwIndirectBufferPtr;
-        CachedDepthStencilStateVec          mDepthStencilStates;
-        MetalHlmsPso const                  *mPso;
-        HlmsComputePso const                *mComputePso;
-        
-        bool mStencilEnabled;
+        __unsafe_unretained id<MTLBuffer> mIndirectBuffer;
+        unsigned char *                   mSwIndirectBufferPtr;
+        CachedDepthStencilStateVec        mDepthStencilStates;
+        MetalHlmsPso const *              mPso;
+        HlmsComputePso const *            mComputePso;
+
+        bool     mStencilEnabled;
         uint32_t mStencilRefValue;
 
-        //For v1 rendering.
-        v1::IndexData       *mCurrentIndexBuffer;
-        v1::VertexData      *mCurrentVertexBuffer;
-        MTLPrimitiveType    mCurrentPrimType;
+        // For v1 rendering.
+        v1::IndexData *  mCurrentIndexBuffer;
+        v1::VertexData * mCurrentVertexBuffer;
+        MTLPrimitiveType mCurrentPrimType;
 
-        //TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
-        typedef vector<ConstBufferPacked*>::type ConstBufferPackedVec;
-        ConstBufferPackedVec    mAutoParamsBuffer;
-        size_t                  mAutoParamsBufferIdx;
-        uint8                   *mCurrentAutoParamsBufferPtr;
-        size_t                  mCurrentAutoParamsBufferSpaceLeft;
-        size_t                  mHistoricalAutoParamsSize[60];
+        // TODO: AutoParamsBuffer probably belongs to MetalDevice (because it's per device?)
+        typedef vector<ConstBufferPacked *>::type ConstBufferPackedVec;
 
-        uint8           mNumMRTs;
-        MetalRenderTargetCommon     *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        MetalDeviceList             mDeviceList;
-        MetalDevice                 *mActiveDevice;
+        ConstBufferPackedVec mAutoParamsBuffer;
+        size_t               mAutoParamsBufferIdx;
+        uint8 *              mCurrentAutoParamsBufferPtr;
+        size_t               mCurrentAutoParamsBufferSpaceLeft;
+        size_t               mHistoricalAutoParamsSize[60];
+
+        uint8                    mNumMRTs;
+        MetalRenderTargetCommon *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        MetalDeviceList          mDeviceList;
+        MetalDevice *            mActiveDevice;
         __unsafe_unretained id<MTLRenderCommandEncoder> mActiveRenderEncoder;
 
-        MetalDevice             mDevice;
-        dispatch_semaphore_t    mMainGpuSyncSemaphore;
-        bool                    mMainSemaphoreAlreadyWaited;
-        bool                    mBeginFrameOnceStarted;
+        MetalDevice          mDevice;
+        dispatch_semaphore_t mMainGpuSyncSemaphore;
+        bool                 mMainSemaphoreAlreadyWaited;
+        bool                 mBeginFrameOnceStarted;
 
         MetalFrameBufferDescMap mFrameBufferDescMap;
         uint32                  mEntriesToFlush;
         bool                    mVpChanged;
         bool                    mInterruptedRenderCommandEncoder;
 
-        MetalDeviceList* getDeviceList( bool refreshList = false );
+        MetalDeviceList *getDeviceList( bool refreshList = false );
+
         void refreshFSAAOptions();
 
         void setActiveDevice( MetalDevice *device );
 
         id<MTLDepthStencilState> getDepthStencilState( HlmsPso *pso );
-        void removeDepthStencilState( HlmsPso *pso );
+        void                     removeDepthStencilState( HlmsPso *pso );
 
         void cleanAutoParamsBuffers();
 
@@ -147,42 +151,42 @@ namespace Ogre
 
         virtual void shutdown();
 
-        virtual const String& getName() const;
-        virtual const String& getFriendlyName() const;
-        void initConfigOptions();
-        virtual ConfigOptionMap& getConfigOptions() { return mOptions; }
-        virtual void setConfigOption(const String &name, const String &value);
+        virtual const String &getName() const;
+        virtual const String &getFriendlyName() const;
 
-        virtual HardwareOcclusionQuery* createHardwareOcclusionQuery();
+        void                     initConfigOptions();
+        virtual ConfigOptionMap &getConfigOptions() { return mOptions; }
+        virtual void             setConfigOption( const String &name, const String &value );
 
-        virtual String validateConfigOptions()  { return BLANKSTRING; }
+        virtual HardwareOcclusionQuery *createHardwareOcclusionQuery();
 
-        virtual RenderSystemCapabilities* createRenderSystemCapabilities() const;
+        virtual String validateConfigOptions() { return BLANKSTRING; }
+
+        virtual RenderSystemCapabilities *createRenderSystemCapabilities() const;
 
         virtual void reinitialise();
 
-        virtual Window* _initialise( bool autoCreateWindow,
-                                     const String& windowTitle = "OGRE Render Window" );
+        virtual Window *_initialise( bool          autoCreateWindow,
+                                     const String &windowTitle = "OGRE Render Window" );
 
-        virtual Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
+        virtual Window *_createRenderWindow( const String &name, uint32 width, uint32 height,
                                              bool fullScreen, const NameValuePairList *miscParams = 0 );
 
-        virtual String getErrorDescription(long errorNumber) const;
+        virtual String getErrorDescription( long errorNumber ) const;
 
         bool hasStoreAndMultisampleResolve() const;
 
-        virtual void _useLights(const LightList& lights, unsigned short limit);
-        virtual void _setWorldMatrix(const Matrix4 &m);
-        virtual void _setViewMatrix(const Matrix4 &m);
-        virtual void _setProjectionMatrix(const Matrix4 &m);
+        virtual void _useLights( const LightList &lights, unsigned short limit );
+        virtual void _setWorldMatrix( const Matrix4 &m );
+        virtual void _setViewMatrix( const Matrix4 &m );
+        virtual void _setProjectionMatrix( const Matrix4 &m );
 
-        virtual void _setSurfaceParams( const ColourValue &ambient,
-                                const ColourValue &diffuse, const ColourValue &specular,
-                                const ColourValue &emissive, Real shininess,
-                                TrackVertexColourType tracking = TVC_NONE );
-        virtual void _setPointSpritesEnabled(bool enabled);
-        virtual void _setPointParameters(Real size, bool attenuationEnabled,
-            Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
+        virtual void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
+                                        const ColourValue &specular, const ColourValue &emissive,
+                                        Real shininess, TrackVertexColourType tracking = TVC_NONE );
+        virtual void _setPointSpritesEnabled( bool enabled );
+        virtual void _setPointParameters( Real size, bool attenuationEnabled, Real constant, Real linear,
+                                          Real quadratic, Real minSize, Real maxSize );
 
         void flushUAVs();
 
@@ -196,29 +200,27 @@ namespace Ogre
         virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
 
-        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual MetalFrameBufferDescMap& _getFrameBufferDescMap()   { return mFrameBufferDescMap; }
-        virtual RenderPassDescriptor* createRenderPassDescriptor();
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 *viewportSizes,
-                                                const Vector4 *scissors,
-                                                uint32 numViewports,
-                                                bool overlaysEnabled,
-                                                bool warnIfRtvWasFlushed );
-        void executeRenderPassDescriptorDelayedActions( bool officialCall );
+        virtual void                     _setCurrentDeviceFromTexture( TextureGpu *texture );
+        virtual MetalFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        virtual RenderPassDescriptor *   createRenderPassDescriptor();
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                                uint8 mipLevel, const Vector4 *viewportSizes,
+                                                const Vector4 *scissors, uint32 numViewports,
+                                                bool overlaysEnabled, bool warnIfRtvWasFlushed );
+        void         executeRenderPassDescriptorDelayedActions( bool officialCall );
         virtual void executeRenderPassDescriptorDelayedActions();
-        inline void endRenderPassDescriptor( bool isInterruptingRender );
+        inline void  endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor();
+
     protected:
         virtual TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                                   PixelFormatGpu depthBufferFormat, uint16 poolId );
 
     public:
-        virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
-                                                 const Frustum* frustum = 0);
-        virtual void _setTextureBlendMode(size_t unit, const LayerBlendModeEx& bm);
-        virtual void _setTextureMatrix(size_t unit, const Matrix4& xform);
+        virtual void _setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
+                                                  const Frustum *frustum = 0 );
+        virtual void _setTextureBlendMode( size_t unit, const LayerBlendModeEx &bm );
+        virtual void _setTextureMatrix( size_t unit, const Matrix4 &xform );
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
 
@@ -240,15 +242,14 @@ namespace Ogre
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
         virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
+
     protected:
-        template <typename TDescriptorSetTexture,
-                  typename TTexSlot,
-                  typename TBufferPacked,
-                  bool isUav>
-        void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
+        template <typename TDescriptorSetTexture, typename TTexSlot, typename TBufferPacked, bool isUav>
+        void _descriptorSetTextureCreated( TDescriptorSetTexture *    newSet,
                                            const FastArray<TTexSlot> &texContainer,
-                                           uint16 *shaderTypeTexCount );
+                                           uint16 *                   shaderTypeTexCount );
         void destroyMetalDescriptorSetTexture( MetalDescriptorSetTexture *metalSet );
+
     public:
         virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
         virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
@@ -275,9 +276,10 @@ namespace Ogre
         virtual void _render( const v1::CbDrawCallStrip *cmd );
         virtual void _render( const v1::RenderOperation &op );
 
-        virtual void bindGpuProgramParameters(GpuProgramType gptype,
-            GpuProgramParametersSharedPtr params, uint16 variabilityMask);
-        virtual void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
+        virtual void bindGpuProgramParameters( GpuProgramType                gptype,
+                                               GpuProgramParametersSharedPtr params,
+                                               uint16                        variabilityMask );
+        virtual void bindGpuProgramPassIterationParameters( GpuProgramType gptype );
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
                                        uint8 mipLevel );
@@ -291,12 +293,13 @@ namespace Ogre
         virtual void postExtraThreadsStarted();
         virtual void registerThread();
         virtual void unregisterThread();
-        virtual unsigned int getDisplayMonitorCount() const     { return 1; }
+
+        virtual unsigned int getDisplayMonitorCount() const { return 1; }
 
         virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
-                                                             PixelFormatGpu format );
+                                                             PixelFormatGpu           format );
 
-        virtual const PixelFormatToShaderType* getPixelFormatToShaderType() const;
+        virtual const PixelFormatToShaderType *getPixelFormatToShaderType() const;
 
         virtual void beginProfileEvent( const String &eventName );
         virtual void endProfileEvent();
@@ -307,29 +310,28 @@ namespace Ogre
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
 
-        virtual bool hasAnisotropicMipMapFilter() const         { return true; }
+        virtual bool hasAnisotropicMipMapFilter() const { return true; }
 
-        virtual void setClipPlanesImpl(const PlaneList& clipPlanes);
-        virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities* caps,
-                                                             Window *primary );
+        virtual void setClipPlanesImpl( const PlaneList &clipPlanes );
+        virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
+                                                             Window *                  primary );
         virtual void updateCompositorManager( CompositorManager2 *compositorManager );
         virtual void compositorWorkspaceBegin( CompositorWorkspace *workspace,
-                                               const bool forceBeginFrame );
+                                               const bool           forceBeginFrame );
         virtual void compositorWorkspaceUpdate( CompositorWorkspace *workspace );
         virtual void compositorWorkspaceEnd( CompositorWorkspace *workspace, const bool forceEndFrame );
 
         virtual void flushCommands();
 
-        MetalDevice* getActiveDevice()                      { return mActiveDevice; }
-        MetalProgramFactory* getMetalProgramFactory()       { return mMetalProgramFactory; }
+        MetalDevice *getActiveDevice() { return mActiveDevice; }
+
+        MetalProgramFactory *getMetalProgramFactory() { return mMetalProgramFactory; }
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
         void _notifyActiveComputeEnded();
         void _notifyNewCommandBuffer();
         void _notifyDeviceStalled();
-
-
     };
-}
+}  // namespace Ogre
 
 #endif

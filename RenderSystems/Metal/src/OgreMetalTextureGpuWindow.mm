@@ -27,27 +27,26 @@ THE SOFTWARE.
 */
 
 #include "OgreMetalTextureGpuWindow.h"
+
+#include "OgreException.h"
 #include "OgreMetalMappings.h"
 #include "OgreMetalTextureGpuManager.h"
 #include "OgreMetalWindow.h"
-
-#include "OgreTextureGpuListener.h"
 #include "OgreTextureBox.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreVector2.h"
-
 #include "Vao/OgreVaoManager.h"
-
-#include "OgreException.h"
 
 namespace Ogre
 {
-    MetalTextureGpuWindow::MetalTextureGpuWindow(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            VaoManager *vaoManager, IdString name, uint32 textureFlags,
-            TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager, MetalWindow *window ) :
-        MetalTextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
-                                     textureFlags, initialType, textureManager ),
+    MetalTextureGpuWindow::MetalTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                                  VaoManager *vaoManager, IdString name,
+                                                  uint32 textureFlags,
+                                                  TextureTypes::TextureTypes initialType,
+                                                  TextureGpuManager *textureManager,
+                                                  MetalWindow *window ) :
+        MetalTextureGpuRenderTarget( pageOutStrategy, vaoManager, name, textureFlags, initialType,
+                                     textureManager ),
         mWindow( window )
     {
         mTextureType = TextureTypes::Type2D;
@@ -55,19 +54,11 @@ namespace Ogre
         mDisplayTextureName = 0;
     }
     //-----------------------------------------------------------------------------------
-    MetalTextureGpuWindow::~MetalTextureGpuWindow()
-    {
-        destroyInternalResourcesImpl();
-    }
+    MetalTextureGpuWindow::~MetalTextureGpuWindow() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::createInternalResourcesImpl()
-    {
-    }
+    void MetalTextureGpuWindow::createInternalResourcesImpl() {}
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::destroyInternalResourcesImpl()
-    {
-        _setBackbuffer( 0 );
-    }
+    void MetalTextureGpuWindow::destroyInternalResourcesImpl() { _setBackbuffer( 0 ); }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpuWindow::notifyDataIsReady()
     {
@@ -87,7 +78,7 @@ namespace Ogre
     void MetalTextureGpuWindow::swapBuffers()
     {
         mWindow->swapBuffers();
-        //Release strong references
+        // Release strong references
         mFinalTextureName = 0;
         mDisplayTextureName = 0;
     }
@@ -95,12 +86,10 @@ namespace Ogre
     void MetalTextureGpuWindow::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "Window" )
-            *static_cast<Window**>(pData) = mWindow;
+            *static_cast<Window **>( pData ) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::_setToDisplayDummyTexture()
-    {
-    }
+    void MetalTextureGpuWindow::_setToDisplayDummyTexture() {}
     //-----------------------------------------------------------------------------------
     void MetalTextureGpuWindow::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
@@ -108,10 +97,7 @@ namespace Ogre
                      "MetalTextureGpuWindow::_notifyTextureSlotChanged" );
     }
     //-----------------------------------------------------------------------------------
-    void MetalTextureGpuWindow::nextDrawable()
-    {
-        mWindow->nextDrawable();
-    }
+    void MetalTextureGpuWindow::nextDrawable() { mWindow->nextDrawable(); }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpuWindow::_setBackbuffer( id<MTLTexture> backbuffer )
     {

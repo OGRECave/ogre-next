@@ -27,9 +27,9 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreMetalBufferInterface.h"
-#include "Vao/OgreMetalVaoManager.h"
-#include "Vao/OgreMetalStagingBuffer.h"
 #include "Vao/OgreMetalDynamicBuffer.h"
+#include "Vao/OgreMetalStagingBuffer.h"
+#include "Vao/OgreMetalVaoManager.h"
 
 #include "OgreMetalDevice.h"
 
@@ -47,15 +47,13 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    MetalBufferInterface::~MetalBufferInterface()
-    {
-    }
+    MetalBufferInterface::~MetalBufferInterface() {}
     //-----------------------------------------------------------------------------------
     void MetalBufferInterface::_firstUpload( const void *data, size_t elementStart, size_t elementCount )
     {
-        //In OpenGL; immutable buffers are a charade. They're mostly there to satisfy D3D11's needs.
-        //However we emulate the behavior and trying to upload to an immutable buffer will result
-        //in an exception or an assert, thus we temporarily change the type.
+        // In OpenGL; immutable buffers are a charade. They're mostly there to satisfy D3D11's needs.
+        // However we emulate the behavior and trying to upload to an immutable buffer will result
+        // in an exception or an assert, thus we temporarily change the type.
         BufferType originalBufferType = mBuffer->mBufferType;
         if( mBuffer->mBufferType == BT_IMMUTABLE )
             mBuffer->mBufferType = BT_DEFAULT;
@@ -65,48 +63,47 @@ namespace Ogre
         mBuffer->mBufferType = originalBufferType;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN MetalBufferInterface::map( size_t elementStart, size_t elementCount,
+    void *RESTRICT_ALIAS_RETURN MetalBufferInterface::map( size_t elementStart, size_t elementCount,
                                                            MappingState prevMappingState,
                                                            bool bAdvanceFrame )
     {
         size_t bytesPerElement = mBuffer->mBytesPerElement;
 
-        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mBuffer->mVaoManager );
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mBuffer->mVaoManager );
 
         size_t dynamicCurrentFrame = advanceFrame( bAdvanceFrame );
 
         if( prevMappingState == MS_UNMAPPED )
         {
-            //Non-persistent buffers just map the small region they'll need.
+            // Non-persistent buffers just map the small region they'll need.
             size_t offset = mBuffer->mInternalBufferStart + elementStart +
                             mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
             size_t length = elementCount;
 
             if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT )
             {
-                //Persistent buffers map the *whole* assigned buffer,
-                //we later care for the offsets and lengths
+                // Persistent buffers map the *whole* assigned buffer,
+                // we later care for the offsets and lengths
                 offset = mBuffer->mInternalBufferStart;
                 length = mBuffer->_getInternalNumElements() * vaoManager->getDynamicBufferMultiplier();
             }
 
-            mMappedPtr = mDynamicBuffer->map( offset * bytesPerElement,
-                                              length * bytesPerElement,
-                                              mUnmapTicket );
+            mMappedPtr =
+                mDynamicBuffer->map( offset * bytesPerElement, length * bytesPerElement, mUnmapTicket );
         }
 
-        //For regular maps, mLastMappingStart is 0. So that we can later flush correctly.
+        // For regular maps, mLastMappingStart is 0. So that we can later flush correctly.
         mBuffer->mLastMappingStart = 0;
         mBuffer->mLastMappingCount = elementCount;
 
-        char *retVal = (char*)mMappedPtr;
+        char *retVal = (char *)mMappedPtr;
 
         if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT )
         {
-            //For persistent maps, we've mapped the whole 3x size of the buffer. mLastMappingStart
-            //points to the right offset so that we can later flush correctly.
-            size_t lastMappingStart = elementStart +
-                    mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
+            // For persistent maps, we've mapped the whole 3x size of the buffer. mLastMappingStart
+            // points to the right offset so that we can later flush correctly.
+            size_t lastMappingStart =
+                elementStart + mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
             mBuffer->mLastMappingStart = lastMappingStart;
             retVal += lastMappingStart * bytesPerElement;
         }
@@ -114,27 +111,25 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void MetalBufferInterface::unmap( UnmapOptions unmapOption,
-                                        size_t flushStartElem, size_t flushSizeElem )
+    void MetalBufferInterface::unmap( UnmapOptions unmapOption, size_t flushStartElem,
+                                      size_t flushSizeElem )
     {
         assert( flushStartElem <= mBuffer->mLastMappingCount &&
                 "Flush starts after the end of the mapped region!" );
         assert( flushStartElem + flushSizeElem <= mBuffer->mLastMappingCount &&
                 "Flush region out of bounds!" );
 
-        if( mBuffer->mBufferType <= BT_DYNAMIC_PERSISTENT ||
-            unmapOption == UO_UNMAP_ALL )
+        if( mBuffer->mBufferType <= BT_DYNAMIC_PERSISTENT || unmapOption == UO_UNMAP_ALL )
         {
             if( !flushSizeElem )
                 flushSizeElem = mBuffer->mLastMappingCount - flushStartElem;
 
-            mDynamicBuffer->flush( mUnmapTicket,
-                                   (mBuffer->mLastMappingStart + flushStartElem) *
-                                   mBuffer->mBytesPerElement,
-                                   flushSizeElem * mBuffer->mBytesPerElement );
+            mDynamicBuffer->flush(
+                mUnmapTicket,
+                ( mBuffer->mLastMappingStart + flushStartElem ) * mBuffer->mBytesPerElement,
+                flushSizeElem * mBuffer->mBytesPerElement );
 
-            if( unmapOption == UO_UNMAP_ALL ||
-                mBuffer->mBufferType == BT_DYNAMIC_DEFAULT )
+            if( unmapOption == UO_UNMAP_ALL || mBuffer->mBufferType == BT_DYNAMIC_DEFAULT )
             {
                 mDynamicBuffer->unmap( mUnmapTicket );
                 mMappedPtr = 0;
@@ -142,23 +137,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalBufferInterface::advanceFrame()
-    {
-        advanceFrame( true );
-    }
+    void MetalBufferInterface::advanceFrame() { advanceFrame( true ); }
     //-----------------------------------------------------------------------------------
     size_t MetalBufferInterface::advanceFrame( bool bAdvanceFrame )
     {
-        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mBuffer->mVaoManager );
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->_getInternalNumElements();
 
-        dynamicCurrentFrame = (dynamicCurrentFrame + 1) % vaoManager->getDynamicBufferMultiplier();
+        dynamicCurrentFrame = ( dynamicCurrentFrame + 1 ) % vaoManager->getDynamicBufferMultiplier();
 
         if( bAdvanceFrame )
         {
-            mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
-                                            dynamicCurrentFrame * mBuffer->_getInternalNumElements();
+            mBuffer->mFinalBufferStart =
+                mBuffer->mInternalBufferStart + dynamicCurrentFrame * mBuffer->_getInternalNumElements();
         }
 
         return dynamicCurrentFrame;
@@ -166,32 +158,32 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalBufferInterface::regressFrame()
     {
-        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mBuffer->mVaoManager );
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->_getInternalNumElements();
 
-        dynamicCurrentFrame = (dynamicCurrentFrame + vaoManager->getDynamicBufferMultiplier() - 1) %
-                                vaoManager->getDynamicBufferMultiplier();
+        dynamicCurrentFrame = ( dynamicCurrentFrame + vaoManager->getDynamicBufferMultiplier() - 1 ) %
+                              vaoManager->getDynamicBufferMultiplier();
 
-        mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
-                                        dynamicCurrentFrame * mBuffer->_getInternalNumElements();
+        mBuffer->mFinalBufferStart =
+            mBuffer->mInternalBufferStart + dynamicCurrentFrame * mBuffer->_getInternalNumElements();
     }
     //-----------------------------------------------------------------------------------
     void MetalBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                                        size_t srcOffsetBytes, size_t sizeBytes )
     {
-        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mBuffer->mVaoManager );
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mBuffer->mVaoManager );
         MetalDevice *device = vaoManager->getDevice();
 
-        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface*>( dstBuffer ) );
-        MetalBufferInterface *dstBufferMetal = static_cast<MetalBufferInterface*>( dstBuffer );
+        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface *>( dstBuffer ) );
+        MetalBufferInterface *dstBufferMetal = static_cast<MetalBufferInterface *>( dstBuffer );
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         if( dstOffsetBytes % 4u || sizeBytes % 4u || srcOffsetBytes % 4u )
         {
-            //macOS Mojave and earlier
-            vaoManager->unalignedCopy( dstBufferMetal->getVboName(), dstOffsetBytes,
-                                       this->mVboName, srcOffsetBytes, sizeBytes );
+            // macOS Mojave and earlier
+            vaoManager->unalignedCopy( dstBufferMetal->getVboName(), dstOffsetBytes, this->mVboName,
+                                       srcOffsetBytes, sizeBytes );
         }
         else
 #endif

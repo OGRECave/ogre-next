@@ -26,51 +26,54 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreMetalProgram.h"
+
+#include "OgreGpuProgramManager.h"
 #include "OgreLogManager.h"
 #include "OgreMetalDevice.h"
 #include "OgreMetalMappings.h"
-#include "OgreGpuProgramManager.h"
 #include "Vao/OgreMetalVaoManager.h"
 
+#import <Metal/MTLComputePipeline.h>
 #import <Metal/MTLDevice.h>
 #import <Metal/MTLVertexDescriptor.h>
-#import <Metal/MTLComputePipeline.h>
 
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
     MetalProgram::CmdPreprocessorDefines MetalProgram::msCmdPreprocessorDefines;
     MetalProgram::CmdEntryPoint MetalProgram::msCmdEntryPoint;
     MetalProgram::CmdShaderReflectionPairHint MetalProgram::msCmdShaderReflectionPairHint;
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    MetalProgram::MetalProgram( ResourceManager* creator, const String& name,
-                                ResourceHandle handle, const String& group,
-                                bool isManual, ManualResourceLoader* loader,
+    MetalProgram::MetalProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                const String &group, bool isManual, ManualResourceLoader *loader,
                                 MetalDevice *device ) :
-        HighLevelGpuProgram(creator, name, handle, group, isManual, loader),
+        HighLevelGpuProgram( creator, name, handle, group, isManual, loader ),
         mLibrary( nil ),
         mFunction( nil ),
         mDevice( device ),
         mCompiled( false ),
         mConstantsBytesToWrite( 0 )
     {
-        if (createParamDictionary("MetalProgram"))
+        if( createParamDictionary( "MetalProgram" ) )
         {
             setupBaseParamDictionary();
-            ParamDictionary* dict = getParamDictionary();
+            ParamDictionary *dict = getParamDictionary();
 
-            dict->addParameter(ParameterDef("entry_point",
-                                            "The entry point for the Metal program.",
-                                            PT_STRING),&msCmdEntryPoint);
-            dict->addParameter(ParameterDef("preprocessor_defines",
-                                            "Preprocessor defines use to compile the program.",
-                                            PT_STRING),&msCmdPreprocessorDefines);
-            dict->addParameter(ParameterDef("shader_reflection_pair_hint",
-                                            "Metal requires Pixel Shaders to be paired with a valid "
-                                            "vertex shader to obtain reflection data (i.e. program "
-                                            "parameters). Pixel Shaders without parameters don't need "
-                                            "this. Pass the name of an already defined vertex shader.",
-                                            PT_STRING),&msCmdShaderReflectionPairHint);
+            dict->addParameter(
+                ParameterDef( "entry_point", "The entry point for the Metal program.", PT_STRING ),
+                &msCmdEntryPoint );
+            dict->addParameter(
+                ParameterDef( "preprocessor_defines", "Preprocessor defines use to compile the program.",
+                              PT_STRING ),
+                &msCmdPreprocessorDefines );
+            dict->addParameter( ParameterDef( "shader_reflection_pair_hint",
+                                              "Metal requires Pixel Shaders to be paired with a valid "
+                                              "vertex shader to obtain reflection data (i.e. program "
+                                              "parameters). Pixel Shaders without parameters don't need "
+                                              "this. Pass the name of an already defined vertex shader.",
+                                              PT_STRING ),
+                                &msCmdShaderReflectionPairHint );
         }
 
         // Manually assign language now since we use it immediately
@@ -85,7 +88,7 @@ namespace Ogre {
 
         // Have to call this here reather than in Resource destructor
         // since calling virtual methods in base destructors causes crash
-        if (isLoaded())
+        if( isLoaded() )
         {
             unload();
         }
@@ -95,13 +98,10 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::loadFromSource()
-    {
-        compile( true );
-    }
+    void MetalProgram::loadFromSource() { compile( true ); }
     //-----------------------------------------------------------------------
-    void MetalProgram::parsePreprocessorDefinitions( NSMutableDictionary<NSString*,
-                                                     NSObject*> *inOutMacros )
+    void MetalProgram::parsePreprocessorDefinitions(
+        NSMutableDictionary<NSString *, NSObject *> *inOutMacros )
     {
         if( mPreprocessorDefines.empty() )
             return;
@@ -124,16 +124,16 @@ namespace Ogre {
                     String::size_type macro_val_start = pos;
                     size_t macro_val_len;
 
-                    endPos = mPreprocessorDefines.find_first_of(";,", pos);
-                    if (endPos == String::npos)
+                    endPos = mPreprocessorDefines.find_first_of( ";,", pos );
+                    if( endPos == String::npos )
                     {
-                        macro_val_len = mPreprocessorDefines.size () - pos;
+                        macro_val_len = mPreprocessorDefines.size() - pos;
                         pos = endPos;
                     }
                     else
                     {
                         macro_val_len = endPos - pos;
-                        pos = endPos+1;
+                        pos = endPos + 1;
                     }
                     String tmpStr;
                     tmpStr = mPreprocessorDefines.substr( macro_name_start, macro_name_len );
@@ -159,56 +159,49 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    bool MetalProgram::compile(const bool checkErrors)
+    bool MetalProgram::compile( const bool checkErrors )
     {
-        mCompileError = true; //Set to true until we've confirmed otherwise.
+        mCompileError = true;  // Set to true until we've confirmed otherwise.
 
-        //Send fixed vertex attributes as macros/definitions.
+        // Send fixed vertex attributes as macros/definitions.
         MTLCompileOptions *options = [[MTLCompileOptions alloc] init];
         NSMutableDictionary<NSString *, NSObject *> *preprocessorMacros =
-                [NSMutableDictionary dictionary];
-        NSString *names[VES_COUNT] =
-        {
-            @"VES_POSITION",
-            @"VES_BLEND_WEIGHTS",
-            @"VES_BLEND_INDICES",
-            @"VES_NORMAL",
-            @"VES_DIFFUSE",
-            @"VES_SPECULAR",
-            @"VES_TEXTURE_COORDINATES",
-            @"VES_BINORMAL",
-            @"VES_TANGENT",
-            @"VES_BLEND_WEIGHTS2",
-            @"VES_BLEND_INDICES2"
+            [NSMutableDictionary dictionary];
+        NSString *names[VES_COUNT] = {
+            @"VES_POSITION", @"VES_BLEND_WEIGHTS",  @"VES_BLEND_INDICES",       @"VES_NORMAL",
+            @"VES_DIFFUSE",  @"VES_SPECULAR",       @"VES_TEXTURE_COORDINATES", @"VES_BINORMAL",
+            @"VES_TANGENT",  @"VES_BLEND_WEIGHTS2", @"VES_BLEND_INDICES2"
         };
-        for( size_t i=0; i<VES_COUNT; ++i )
+        for( size_t i = 0; i < VES_COUNT; ++i )
         {
             if( i + 1u != VES_BINORMAL )
             {
                 preprocessorMacros[names[i]] =
-                        [NSNumber numberWithUnsignedInt:MetalVaoManager::getAttributeIndexFor(
-                            static_cast<VertexElementSemantic>( i + 1u ) ) ];
+                    [NSNumber numberWithUnsignedInt:MetalVaoManager::getAttributeIndexFor(
+                                                        static_cast<VertexElementSemantic>( i + 1u ) )];
             }
         }
-        for( uint32 i=0; i<8u; ++i )
+        for( uint32 i = 0; i < 8u; ++i )
         {
             NSString *key = [NSString stringWithFormat:@"VES_TEXTURE_COORDINATES%d", i];
             preprocessorMacros[key] =
-                    [NSNumber numberWithUnsignedInt:MetalVaoManager::getAttributeIndexFor(
-                        static_cast<VertexElementSemantic>( VES_TEXTURE_COORDINATES ) ) + i];
+                [NSNumber numberWithUnsignedInt:MetalVaoManager::getAttributeIndexFor(
+                                                    static_cast<VertexElementSemantic>(
+                                                        VES_TEXTURE_COORDINATES ) ) +
+                                                i];
         }
-        preprocessorMacros[@"CONST_SLOT_START"] =
-                [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ?
-                    OGRE_METAL_CONST_SLOT_START : OGRE_METAL_CS_CONST_SLOT_START];
+        preprocessorMacros[@"CONST_SLOT_START"] = [NSNumber
+            numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ? OGRE_METAL_CONST_SLOT_START
+                                                               : OGRE_METAL_CS_CONST_SLOT_START];
         preprocessorMacros[@"TEX_SLOT_START"] =
-                [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ?
-                    OGRE_METAL_TEX_SLOT_START : OGRE_METAL_CS_TEX_SLOT_START];
+            [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ? OGRE_METAL_TEX_SLOT_START
+                                                                         : OGRE_METAL_CS_TEX_SLOT_START];
         preprocessorMacros[@"UAV_SLOT_START"] =
-                [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ?
-                    OGRE_METAL_UAV_SLOT_START : OGRE_METAL_CS_UAV_SLOT_START];
+            [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ? OGRE_METAL_UAV_SLOT_START
+                                                                         : OGRE_METAL_CS_UAV_SLOT_START];
         preprocessorMacros[@"PARAMETER_SLOT"] =
-                [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ?
-                    OGRE_METAL_PARAMETER_SLOT : OGRE_METAL_CS_PARAMETER_SLOT];
+            [NSNumber numberWithUnsignedInt:mType != GPT_COMPUTE_PROGRAM ? OGRE_METAL_PARAMETER_SLOT
+                                                                         : OGRE_METAL_CS_PARAMETER_SLOT];
 
         parsePreprocessorDefinitions( preprocessorMacros );
 
@@ -232,8 +225,8 @@ namespace Ogre {
             if( error )
                 errorDesc = [error localizedDescription].UTF8String;
 
-            LogManager::getSingleton().logMessage(
-                        "Metal SL Compiler Error in " + mName + ":\n" + errorDesc );
+            LogManager::getSingleton().logMessage( "Metal SL Compiler Error in " + mName + ":\n" +
+                                                   errorDesc );
         }
         else
         {
@@ -244,8 +237,8 @@ namespace Ogre {
                 String errorDesc;
                 if( error )
                     errorDesc = [error localizedDescription].UTF8String;
-                LogManager::getSingleton().logMessage(
-                            "Metal SL Compiler Warnings in " + mName + ":\n" + errorDesc );
+                LogManager::getSingleton().logMessage( "Metal SL Compiler Warnings in " + mName + ":\n" +
+                                                       errorDesc );
             }
         }
 
@@ -255,8 +248,8 @@ namespace Ogre {
         if( !mFunction )
         {
             mCompiled = false;
-            LogManager::getSingleton().logMessage(
-                        "Error retriving entry point '" + mEntryPoint + "' in shader " + mName );
+            LogManager::getSingleton().logMessage( "Error retriving entry point '" + mEntryPoint +
+                                                   "' in shader " + mName );
         }
 
         // Log a message that the shader compiled successfully.
@@ -268,8 +261,8 @@ namespace Ogre {
         if( !mCompiled )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         ((mType == GPT_VERTEX_PROGRAM) ? "Vertex Program " : "Fragment Program ") +
-                         mName + " failed to compile. See compile log above for details.",
+                         ( ( mType == GPT_VERTEX_PROGRAM ) ? "Vertex Program " : "Fragment Program " ) +
+                             mName + " failed to compile. See compile log above for details.",
                          "MetalProgram::compile" );
         }
 
@@ -289,7 +282,7 @@ namespace Ogre {
             {
                 const size_t elementIdx = vertexAttribute.attributeIndex;
                 vertexDescriptor.attributes[elementIdx].format =
-                        MetalMappings::dataTypeToVertexFormat( vertexAttribute.attributeType );
+                    MetalMappings::dataTypeToVertexFormat( vertexAttribute.attributeType );
                 vertexDescriptor.attributes[elementIdx].bufferIndex = 0;
                 vertexDescriptor.attributes[elementIdx].offset = elementIdx * 16u;
 
@@ -306,13 +299,13 @@ namespace Ogre {
     void MetalProgram::analyzeComputeParameters()
     {
         MTLAutoreleasedComputePipelineReflection reflection = 0;
-        NSError* error = 0;
+        NSError *error = 0;
         id<MTLFunction> metalFunction = this->getMetalFunction();
         id<MTLComputePipelineState> pso =
-                [mDevice->mDevice newComputePipelineStateWithFunction:metalFunction
-                                                              options:MTLPipelineOptionBufferTypeInfo
-                                                           reflection:&reflection
-                                                                error:&error];
+            [mDevice->mDevice newComputePipelineStateWithFunction:metalFunction
+                                                          options:MTLPipelineOptionBufferTypeInfo
+                                                       reflection:&reflection
+                                                            error:&error];
         if( !pso || error )
         {
             String errorDesc;
@@ -322,13 +315,13 @@ namespace Ogre {
             mCompileError = true;
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Failed to create pipeline state for reflection, error " +
-                         errorDesc, "MetalProgram::analyzeComputeParameters" );
+                         "Failed to create pipeline state for reflection, error " + errorDesc,
+                         "MetalProgram::analyzeComputeParameters" );
         }
         else
         {
             createParameterMappingStructures( true );
-            NSArray<MTLArgument*> *arguments = reflection.arguments;
+            NSArray<MTLArgument *> *arguments = reflection.arguments;
 
             for( MTLArgument *arg in arguments )
             {
@@ -354,14 +347,14 @@ namespace Ogre {
         }
         case GPT_FRAGMENT_PROGRAM:
         {
-            GpuProgramPtr shader = GpuProgramManager::getSingleton().
-                    getByName( mShaderReflectionPairHint );
+            GpuProgramPtr shader =
+                GpuProgramManager::getSingleton().getByName( mShaderReflectionPairHint );
             if( shader.isNull() )
             {
                 mCompileError = true;
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Shader reflection hint '" + mShaderReflectionPairHint +
-                             "' not found for pixel shader '" + mName + "'",
+                                 "' not found for pixel shader '" + mName + "'",
                              "MetalProgram::analyzeRenderParameters" );
             }
             if( shader->getType() != GPT_VERTEX_PROGRAM )
@@ -369,7 +362,7 @@ namespace Ogre {
                 mCompileError = true;
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Shader reflection hint '" + mShaderReflectionPairHint +
-                             "' for pixel shader '" + mName + "' must be a vertex shader.",
+                                 "' for pixel shader '" + mName + "' must be a vertex shader.",
                              "MetalProgram::analyzeRenderParameters" );
             }
 
@@ -384,8 +377,8 @@ namespace Ogre {
                              "MetalProgram::analyzeRenderParameters" );
             }
 
-            assert( dynamic_cast<MetalProgram*>( shader->_getBindingDelegate() ) );
-            MetalProgram *vertexShader = static_cast<MetalProgram*>( shader->_getBindingDelegate() );
+            assert( dynamic_cast<MetalProgram *>( shader->_getBindingDelegate() ) );
+            MetalProgram *vertexShader = static_cast<MetalProgram *>( shader->_getBindingDelegate() );
             autoFillDummyVertexAttributesForShader( vertexShader->getMetalFunction(), psd );
             [psd setVertexFunction:vertexShader->getMetalFunction()];
             [psd setFragmentFunction:this->getMetalFunction()];
@@ -398,10 +391,12 @@ namespace Ogre {
         psd.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
 
         MTLAutoreleasedRenderPipelineReflection reflection = 0;
-        NSError* error = 0;
-        id <MTLRenderPipelineState> pso =
-                [mDevice->mDevice newRenderPipelineStateWithDescriptor:psd
-                options:MTLPipelineOptionBufferTypeInfo reflection:&reflection error:&error];
+        NSError *error = 0;
+        id<MTLRenderPipelineState> pso =
+            [mDevice->mDevice newRenderPipelineStateWithDescriptor:psd
+                                                           options:MTLPipelineOptionBufferTypeInfo
+                                                        reflection:&reflection
+                                                             error:&error];
 
         if( !pso || error )
         {
@@ -412,15 +407,14 @@ namespace Ogre {
             mCompileError = true;
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Failed to create pipeline state for reflection, error " +
-                         errorDesc, "MetalProgram::analyzeRenderParameters" );
+                         "Failed to create pipeline state for reflection, error " + errorDesc,
+                         "MetalProgram::analyzeRenderParameters" );
         }
         else
         {
             createParameterMappingStructures( true );
-            NSArray<MTLArgument*> *arguments =
-                    mType == GPT_VERTEX_PROGRAM ? reflection.vertexArguments :
-                                                  reflection.fragmentArguments;
+            NSArray<MTLArgument *> *arguments =
+                mType == GPT_VERTEX_PROGRAM ? reflection.vertexArguments : reflection.fragmentArguments;
 
             for( MTLArgument *arg in arguments )
             {
@@ -436,7 +430,7 @@ namespace Ogre {
             return;
 
         {
-            //Check if not a struct (i.e. a pointer to a basic type, like a float4x4*)
+            // Check if not a struct (i.e. a pointer to a basic type, like a float4x4*)
             GpuConstantType ogreType = MetalMappings::get( arg.bufferDataType );
             if( ogreType != GCT_UNKNOWN )
             {
@@ -444,40 +438,40 @@ namespace Ogre {
                 def.constType = ogreType;
                 def.logicalIndex = 0;
                 def.physicalIndex = 0;
-                def.elementSize = GpuConstantDefinition::getElementSize(def.constType, false);
-                def.arraySize   = 1;
+                def.elementSize = GpuConstantDefinition::getElementSize( def.constType, false );
+                def.arraySize = 1;
                 def.variability = GPV_GLOBAL;
 
-                if (def.isFloat())
+                if( def.isFloat() )
                 {
                     def.physicalIndex = mFloatLogicalToPhysical->bufferSize;
-                    OGRE_LOCK_MUTEX(mFloatLogicalToPhysical->mutex);
-                        mFloatLogicalToPhysical->map.insert(
-                        GpuLogicalIndexUseMap::value_type(def.logicalIndex,
-                        GpuLogicalIndexUse(def.physicalIndex,
-                                           def.arraySize * def.elementSize, GPV_GLOBAL)));
+                    OGRE_LOCK_MUTEX( mFloatLogicalToPhysical->mutex );
+                    mFloatLogicalToPhysical->map.insert( GpuLogicalIndexUseMap::value_type(
+                        def.logicalIndex,
+                        GpuLogicalIndexUse( def.physicalIndex, def.arraySize * def.elementSize,
+                                            GPV_GLOBAL ) ) );
                     mFloatLogicalToPhysical->bufferSize += def.arraySize * def.elementSize;
                     mConstantDefs->floatBufferSize = mFloatLogicalToPhysical->bufferSize;
                 }
                 else if( def.isUnsignedInt() )
                 {
                     def.physicalIndex = mUIntLogicalToPhysical->bufferSize;
-                    OGRE_LOCK_MUTEX(mUIntLogicalToPhysical->mutex);
-                        mUIntLogicalToPhysical->map.insert(
-                        GpuLogicalIndexUseMap::value_type(def.logicalIndex,
-                        GpuLogicalIndexUse(def.physicalIndex,
-                                           def.arraySize * def.elementSize, GPV_GLOBAL)));
+                    OGRE_LOCK_MUTEX( mUIntLogicalToPhysical->mutex );
+                    mUIntLogicalToPhysical->map.insert( GpuLogicalIndexUseMap::value_type(
+                        def.logicalIndex,
+                        GpuLogicalIndexUse( def.physicalIndex, def.arraySize * def.elementSize,
+                                            GPV_GLOBAL ) ) );
                     mUIntLogicalToPhysical->bufferSize += def.arraySize * def.elementSize;
                     mConstantDefs->uintBufferSize = mUIntLogicalToPhysical->bufferSize;
                 }
                 else
                 {
                     def.physicalIndex = mIntLogicalToPhysical->bufferSize;
-                    OGRE_LOCK_MUTEX(mIntLogicalToPhysical->mutex);
-                        mIntLogicalToPhysical->map.insert(
-                        GpuLogicalIndexUseMap::value_type(def.logicalIndex,
-                        GpuLogicalIndexUse(def.physicalIndex,
-                                           def.arraySize * def.elementSize, GPV_GLOBAL)));
+                    OGRE_LOCK_MUTEX( mIntLogicalToPhysical->mutex );
+                    mIntLogicalToPhysical->map.insert( GpuLogicalIndexUseMap::value_type(
+                        def.logicalIndex,
+                        GpuLogicalIndexUse( def.physicalIndex, def.arraySize * def.elementSize,
+                                            GPV_GLOBAL ) ) );
                     mIntLogicalToPhysical->bufferSize += def.arraySize * def.elementSize;
                     mConstantDefs->intBufferSize = mIntLogicalToPhysical->bufferSize;
                 }
@@ -487,10 +481,9 @@ namespace Ogre {
                 mConstantDefs->map.insert( GpuConstantDefinitionMap::value_type( varName, def ) );
                 mConstantDefsSorted.push_back( def );
 
-                mConstantsBytesToWrite = std::max<uint32>( mConstantsBytesToWrite,
-                                                           def.logicalIndex +
-                                                           def.arraySize * def.elementSize *
-                                                           sizeof(float) );
+                mConstantsBytesToWrite = std::max<uint32>(
+                    mConstantsBytesToWrite,
+                    def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) );
             }
         }
 
@@ -511,46 +504,46 @@ namespace Ogre {
                 def.physicalIndex = member.offset;
                 if( member.dataType == MTLDataTypeArray )
                 {
-                    def.elementSize = member.arrayType.stride / sizeof(float);
-                    def.arraySize   = member.arrayType.arrayLength;
+                    def.elementSize = member.arrayType.stride / sizeof( float );
+                    def.arraySize = member.arrayType.arrayLength;
                 }
                 else
                 {
-                    def.elementSize = GpuConstantDefinition::getElementSize(def.constType, false);
-                    def.arraySize   = 1;
+                    def.elementSize = GpuConstantDefinition::getElementSize( def.constType, false );
+                    def.arraySize = 1;
                 }
                 def.variability = GPV_GLOBAL;
 
-                if (def.isFloat())
+                if( def.isFloat() )
                 {
                     def.physicalIndex = mFloatLogicalToPhysical->bufferSize;
-                    OGRE_LOCK_MUTEX(mFloatLogicalToPhysical->mutex);
-                        mFloatLogicalToPhysical->map.insert(
-                        GpuLogicalIndexUseMap::value_type(def.logicalIndex,
-                        GpuLogicalIndexUse(def.physicalIndex,
-                                           def.arraySize * def.elementSize, GPV_GLOBAL)));
+                    OGRE_LOCK_MUTEX( mFloatLogicalToPhysical->mutex );
+                    mFloatLogicalToPhysical->map.insert( GpuLogicalIndexUseMap::value_type(
+                        def.logicalIndex,
+                        GpuLogicalIndexUse( def.physicalIndex, def.arraySize * def.elementSize,
+                                            GPV_GLOBAL ) ) );
                     mFloatLogicalToPhysical->bufferSize += def.arraySize * def.elementSize;
                     mConstantDefs->floatBufferSize = mFloatLogicalToPhysical->bufferSize;
                 }
                 else if( def.isUnsignedInt() )
                 {
                     def.physicalIndex = mUIntLogicalToPhysical->bufferSize;
-                    OGRE_LOCK_MUTEX(mUIntLogicalToPhysical->mutex);
-                        mUIntLogicalToPhysical->map.insert(
-                        GpuLogicalIndexUseMap::value_type(def.logicalIndex,
-                        GpuLogicalIndexUse(def.physicalIndex,
-                                           def.arraySize * def.elementSize, GPV_GLOBAL)));
+                    OGRE_LOCK_MUTEX( mUIntLogicalToPhysical->mutex );
+                    mUIntLogicalToPhysical->map.insert( GpuLogicalIndexUseMap::value_type(
+                        def.logicalIndex,
+                        GpuLogicalIndexUse( def.physicalIndex, def.arraySize * def.elementSize,
+                                            GPV_GLOBAL ) ) );
                     mUIntLogicalToPhysical->bufferSize += def.arraySize * def.elementSize;
                     mConstantDefs->uintBufferSize = mUIntLogicalToPhysical->bufferSize;
                 }
                 else
                 {
                     def.physicalIndex = mIntLogicalToPhysical->bufferSize;
-                    OGRE_LOCK_MUTEX(mIntLogicalToPhysical->mutex);
-                        mIntLogicalToPhysical->map.insert(
-                        GpuLogicalIndexUseMap::value_type(def.logicalIndex,
-                        GpuLogicalIndexUse(def.physicalIndex,
-                                           def.arraySize * def.elementSize, GPV_GLOBAL)));
+                    OGRE_LOCK_MUTEX( mIntLogicalToPhysical->mutex );
+                    mIntLogicalToPhysical->map.insert( GpuLogicalIndexUseMap::value_type(
+                        def.logicalIndex,
+                        GpuLogicalIndexUse( def.physicalIndex, def.arraySize * def.elementSize,
+                                            GPV_GLOBAL ) ) );
                     mIntLogicalToPhysical->bufferSize += def.arraySize * def.elementSize;
                     mConstantDefs->intBufferSize = mIntLogicalToPhysical->bufferSize;
                 }
@@ -560,10 +553,9 @@ namespace Ogre {
                 mConstantDefs->map.insert( GpuConstantDefinitionMap::value_type( varName, def ) );
                 mConstantDefsSorted.push_back( def );
 
-                mConstantsBytesToWrite = std::max<uint32>( mConstantsBytesToWrite,
-                                                           def.logicalIndex +
-                                                           def.arraySize * def.elementSize *
-                                                           sizeof(float) );
+                mConstantsBytesToWrite = std::max<uint32>(
+                    mConstantsBytesToWrite,
+                    def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) );
 
                 if( member.dataType == MTLDataTypeArray )
                 {
@@ -576,9 +568,9 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void MetalProgram::createLowLevelImpl()
     {
-        mAssemblerProgram = GpuProgramPtr(this, SPFM_NONE);
+        mAssemblerProgram = GpuProgramPtr( this, SPFM_NONE );
         if( !mCompiled )
-            compile(true);
+            compile( true );
     }
     //---------------------------------------------------------------------------
     void MetalProgram::unloadImpl()
@@ -599,10 +591,10 @@ namespace Ogre {
         mCompiled = false;
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::populateParameterNames(GpuProgramParametersSharedPtr params)
+    void MetalProgram::populateParameterNames( GpuProgramParametersSharedPtr params )
     {
         getConstantDefinitions();
-        params->_setNamedConstants(mConstantDefs);
+        params->_setNamedConstants( mConstantDefs );
     }
     //-----------------------------------------------------------------------
     void MetalProgram::buildConstantDefinitions() const
@@ -613,9 +605,10 @@ namespace Ogre {
         if( mType == GPT_FRAGMENT_PROGRAM && mShaderReflectionPairHint.empty() )
         {
             LogManager::getSingleton().logMessage(
-                        "WARNING: Pixel Shader '" + mName + "' without shader_reflection_pair_hint. "
-                        "If this is intentional, use build_parameters_from_reflection false to hide "
-                        "this warning.");
+                "WARNING: Pixel Shader '" + mName +
+                "' without shader_reflection_pair_hint. "
+                "If this is intentional, use build_parameters_from_reflection false to hide "
+                "this warning." );
             return;
         }
 
@@ -629,13 +622,13 @@ namespace Ogre {
         {
             if( mType != GPT_COMPUTE_PROGRAM )
             {
-                //You think this is a code smell? How about making BUILDconstantDefinitions const???
-                //It's an oxymoron.
-                const_cast<MetalProgram*>(this)->analyzeRenderParameters();
+                // You think this is a code smell? How about making BUILDconstantDefinitions const???
+                // It's an oxymoron.
+                const_cast<MetalProgram *>( this )->analyzeRenderParameters();
             }
             else
             {
-                const_cast<MetalProgram*>(this)->analyzeComputeParameters();
+                const_cast<MetalProgram *>( this )->analyzeComputeParameters();
             }
         }
         catch( RenderingAPIException &e )
@@ -644,30 +637,27 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    uint32 MetalProgram::getBufferRequiredSize() const
-    {
-        return mConstantsBytesToWrite;
-    }
+    uint32 MetalProgram::getBufferRequiredSize() const { return mConstantsBytesToWrite; }
     //-----------------------------------------------------------------------
     void MetalProgram::updateBuffers( const GpuProgramParametersSharedPtr &params,
-                                      uint8 * RESTRICT_ALIAS dstData )
+                                      uint8 *RESTRICT_ALIAS dstData )
     {
         vector<GpuConstantDefinition>::type::const_iterator itor = mConstantDefsSorted.begin();
-        vector<GpuConstantDefinition>::type::const_iterator end  = mConstantDefsSorted.end();
+        vector<GpuConstantDefinition>::type::const_iterator endt = mConstantDefsSorted.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
-            const GpuConstantDefinition& def = *itor;
+            const GpuConstantDefinition &def = *itor;
 
-            void * RESTRICT_ALIAS src;
+            void *RESTRICT_ALIAS src;
             if( def.isFloat() )
-                src = (void *)&(*(params->getFloatConstantList().begin() + def.physicalIndex));
+                src = (void *)&( *( params->getFloatConstantList().begin() + def.physicalIndex ) );
             else if( def.isUnsignedInt() )
-                src = (void *)&(*(params->getUnsignedIntConstantList().begin() + def.physicalIndex));
+                src = (void *)&( *( params->getUnsignedIntConstantList().begin() + def.physicalIndex ) );
             else
-                src = (void *)&(*(params->getIntConstantList().begin() + def.physicalIndex));
+                src = (void *)&( *( params->getIntConstantList().begin() + def.physicalIndex ) );
 
-            memcpy( &dstData[def.logicalIndex], src, def.elementSize * def.arraySize * sizeof(float) );
+            memcpy( &dstData[def.logicalIndex], src, def.elementSize * def.arraySize * sizeof( float ) );
 
             ++itor;
         }
@@ -691,36 +681,36 @@ namespace Ogre {
         return true;
     }
     //-----------------------------------------------------------------------
-    String MetalProgram::CmdEntryPoint::doGet(const void *target) const
+    String MetalProgram::CmdEntryPoint::doGet( const void *target ) const
     {
-        return static_cast<const MetalProgram*>(target)->getEntryPoint();
+        return static_cast<const MetalProgram *>( target )->getEntryPoint();
     }
-    void MetalProgram::CmdEntryPoint::doSet(void *target, const String& val)
+    void MetalProgram::CmdEntryPoint::doSet( void *target, const String &val )
     {
-        static_cast<MetalProgram*>(target)->setEntryPoint(val);
-    }
-    //-----------------------------------------------------------------------
-    String MetalProgram::CmdPreprocessorDefines::doGet(const void *target) const
-    {
-        return static_cast<const MetalProgram*>(target)->getPreprocessorDefines();
+        static_cast<MetalProgram *>( target )->setEntryPoint( val );
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::CmdPreprocessorDefines::doSet(void *target, const String& val)
+    String MetalProgram::CmdPreprocessorDefines::doGet( const void *target ) const
     {
-        static_cast<MetalProgram*>(target)->setPreprocessorDefines(val);
+        return static_cast<const MetalProgram *>( target )->getPreprocessorDefines();
     }
     //-----------------------------------------------------------------------
-    String MetalProgram::CmdShaderReflectionPairHint::doGet(const void *target) const
+    void MetalProgram::CmdPreprocessorDefines::doSet( void *target, const String &val )
     {
-        return static_cast<const MetalProgram*>(target)->getShaderReflectionPairHint();
+        static_cast<MetalProgram *>( target )->setPreprocessorDefines( val );
     }
     //-----------------------------------------------------------------------
-    void MetalProgram::CmdShaderReflectionPairHint::doSet(void *target, const String& val)
+    String MetalProgram::CmdShaderReflectionPairHint::doGet( const void *target ) const
     {
-        static_cast<MetalProgram*>(target)->setShaderReflectionPairHint(val);
+        return static_cast<const MetalProgram *>( target )->getShaderReflectionPairHint();
     }
     //-----------------------------------------------------------------------
-    const String& MetalProgram::getLanguage() const
+    void MetalProgram::CmdShaderReflectionPairHint::doSet( void *target, const String &val )
+    {
+        static_cast<MetalProgram *>( target )->setShaderReflectionPairHint( val );
+    }
+    //-----------------------------------------------------------------------
+    const String &MetalProgram::getLanguage() const
     {
         static const String language = "metal";
 
@@ -730,7 +720,7 @@ namespace Ogre {
     GpuProgramParametersSharedPtr MetalProgram::createParameters()
     {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
-        params->setTransposeMatrices(true);
+        params->setTransposeMatrices( true );
         return params;
     }
     //-----------------------------------------------------------------------

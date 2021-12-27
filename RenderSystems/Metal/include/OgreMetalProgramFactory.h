@@ -26,11 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-
 #ifndef _OgreMetalProgramFactory_H_
 #define _OgreMetalProgramFactory_H_
 
 #import "OgreMetalPrerequisites.h"
+
 #import "OgreHighLevelGpuProgramManager.h"
 
 @protocol MTLFunction;
@@ -42,19 +42,21 @@ namespace Ogre
     {
     protected:
         static String sLanguageName;
-        MetalDevice *mDevice;
+        MetalDevice * mDevice;
 
     public:
         MetalProgramFactory( MetalDevice *device );
         virtual ~MetalProgramFactory();
+
         /// Get the name of the language this factory creates programs for
-        const String& getLanguage() const;
+        const String &getLanguage() const;
+
         /// Create an instance of MetalProgram
-        HighLevelGpuProgram* create(ResourceManager* creator, 
-            const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader);
-        void destroy(HighLevelGpuProgram* prog);
+        HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                     const String &group, bool isManual, ManualResourceLoader *loader );
+
+        void destroy( HighLevelGpuProgram *prog );
     };
 }
 
-#endif // __MetalProgramFactory_H__
+#endif  // __MetalProgramFactory_H__

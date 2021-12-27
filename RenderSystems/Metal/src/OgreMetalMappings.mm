@@ -27,14 +27,15 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 */
 
 #include "OgreMetalMappings.h"
-#include "OgrePixelFormatGpuUtils.h"
+
 #include "OgreHlmsDatablock.h"
 #include "OgreMetalDevice.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
     //-----------------------------------------------------------------------------------
-    void MetalMappings::getDepthStencilFormat( PixelFormatGpu pf, MetalDevice *device, 
+    void MetalMappings::getDepthStencilFormat( PixelFormatGpu pf, MetalDevice *device,
                                                MTLPixelFormat &outDepth, MTLPixelFormat &outStencil )
     {
         MTLPixelFormat depthFormat = MTLPixelFormatInvalid;
@@ -45,10 +46,10 @@ namespace Ogre
         case PFG_D24_UNORM_S8_UINT:
         case PFG_D24_UNORM:
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-//            depthFormat = MTLPixelFormatDepth32Float;
-//            stencilFormat = MTLPixelFormatStencil8;
-            depthFormat     = MTLPixelFormatDepth32Float_Stencil8;
-            stencilFormat   = MTLPixelFormatDepth32Float_Stencil8;
+            // depthFormat = MTLPixelFormatDepth32Float;
+            // stencilFormat = MTLPixelFormatStencil8;
+            depthFormat = MTLPixelFormatDepth32Float_Stencil8;
+            stencilFormat = MTLPixelFormatDepth32Float_Stencil8;
 #else
             if( device->mDevice.depth24Stencil8PixelFormatSupported )
             {
@@ -70,8 +71,8 @@ namespace Ogre
             break;
         case PFG_D32_FLOAT_S8X24_UINT:
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-//            depthFormat = MTLPixelFormatDepth32Float;
-//            stencilFormat = MTLPixelFormatStencil8;
+            // depthFormat = MTLPixelFormatDepth32Float;
+            // stencilFormat = MTLPixelFormatStencil8;
             depthFormat = MTLPixelFormatDepth32Float_Stencil8;
             stencilFormat = MTLPixelFormatDepth32Float_Stencil8;
 #else
@@ -79,13 +80,13 @@ namespace Ogre
             stencilFormat = MTLPixelFormatDepth32Float_Stencil8;
 #endif
             break;
-//        case PFG_X32_X24_S8_UINT:
-//            stencilFormat = MTLPixelFormatStencil8;
-//            break;
+        // case PFG_X32_X24_S8_UINT:
+        //  stencilFormat = MTLPixelFormatStencil8;
+        //  break;
         default:
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "PixelFormat '" + String( PixelFormatGpuUtils::toString( pf ) ) +
-                         "' is not a valid depth buffer format",
+                             "' is not a valid depth buffer format",
                          "MetalRenderSystem::_createDepthBufferFor" );
         }
 
@@ -97,6 +98,7 @@ namespace Ogre
     {
         switch( op )
         {
+            // clang-format off
         case SBF_ONE:                   return MTLBlendFactorOne;
         case SBF_ZERO:                  return MTLBlendFactorZero;
         case SBF_DEST_COLOUR:           return MTLBlendFactorDestinationColor;
@@ -107,6 +109,7 @@ namespace Ogre
         case SBF_SOURCE_ALPHA:          return MTLBlendFactorSourceAlpha;
         case SBF_ONE_MINUS_DEST_ALPHA:  return MTLBlendFactorOneMinusDestinationAlpha;
         case SBF_ONE_MINUS_SOURCE_ALPHA:return MTLBlendFactorOneMinusSourceAlpha;
+            // clang-format on
         }
     }
     //-----------------------------------------------------------------------------------
@@ -114,26 +117,29 @@ namespace Ogre
     {
         switch( op )
         {
+            // clang-format off
         case SBO_ADD:                   return MTLBlendOperationAdd;
         case SBO_SUBTRACT:              return MTLBlendOperationSubtract;
         case SBO_REVERSE_SUBTRACT:      return MTLBlendOperationReverseSubtract;
         case SBO_MIN:                   return MTLBlendOperationMin;
         case SBO_MAX:                   return MTLBlendOperationMax;
+            // clang-format on
         }
     }
     //-----------------------------------------------------------------------------------
     MTLColorWriteMask MetalMappings::get( uint8 mask )
     {
-        return ((mask & HlmsBlendblock::BlendChannelRed)   << (3u - 0u)) |
-               ((mask & HlmsBlendblock::BlendChannelGreen) << (2u - 1u)) |
-               ((mask & HlmsBlendblock::BlendChannelBlue)  >> (2u - 1u)) |
-               ((mask & HlmsBlendblock::BlendChannelAlpha) >> (3u - 0u));
+        return ( ( mask & HlmsBlendblock::BlendChannelRed ) << ( 3u - 0u ) ) |
+               ( ( mask & HlmsBlendblock::BlendChannelGreen ) << ( 2u - 1u ) ) |
+               ( ( mask & HlmsBlendblock::BlendChannelBlue ) >> ( 2u - 1u ) ) |
+               ( ( mask & HlmsBlendblock::BlendChannelAlpha ) >> ( 3u - 0u ) );
     }
     //-----------------------------------------------------------------------------------
     MTLStencilOperation MetalMappings::get( StencilOperation op )
     {
         switch( op )
         {
+            // clang-format off
         case SOP_KEEP:              return MTLStencilOperationKeep;
         case SOP_ZERO:              return MTLStencilOperationZero;
         case SOP_REPLACE:           return MTLStencilOperationReplace;
@@ -142,6 +148,7 @@ namespace Ogre
         case SOP_INCREMENT_WRAP:    return MTLStencilOperationIncrementWrap;
         case SOP_DECREMENT_WRAP:    return MTLStencilOperationDecrementWrap;
         case SOP_INVERT:            return MTLStencilOperationInvert;
+            // clang-format on
         }
     }
     //-----------------------------------------------------------------------------------
@@ -149,6 +156,7 @@ namespace Ogre
     {
         switch( cmp )
         {
+            // clang-format off
         case CMPF_ALWAYS_FAIL:          return MTLCompareFunctionNever;
         case CMPF_ALWAYS_PASS:          return MTLCompareFunctionAlways;
         case CMPF_LESS:                 return MTLCompareFunctionLess;
@@ -157,8 +165,9 @@ namespace Ogre
         case CMPF_NOT_EQUAL:            return MTLCompareFunctionNotEqual;
         case CMPF_GREATER_EQUAL:        return MTLCompareFunctionGreaterEqual;
         case CMPF_GREATER:              return MTLCompareFunctionGreater;
+            // clang-format on
         case NUM_COMPARE_FUNCTIONS:
-            assert( false ); //Should never hit.
+            assert( false );  // Should never hit.
             return MTLCompareFunctionAlways;
         }
     }
@@ -167,6 +176,7 @@ namespace Ogre
     {
         switch( vertexElemType )
         {
+            // clang-format off
         case VET_FLOAT1:                return MTLVertexFormatFloat;
         case VET_FLOAT2:                return MTLVertexFormatFloat2;
         case VET_FLOAT3:                return MTLVertexFormatFloat3;
@@ -193,9 +203,10 @@ namespace Ogre
         case VET_USHORT4_NORM:          return MTLVertexFormatUShort4Normalized;
         case VET_HALF2:                 return MTLVertexFormatHalf2;
         case VET_HALF4:                 return MTLVertexFormatHalf4;
+            // clang-format on
 
         case VET_COLOUR_ARGB:
-            if( @available(macos 10.13, ios 11.0, *) )
+            if( @available( macos 10.13, ios 11.0, * ) )
                 return MTLVertexFormatUChar4Normalized_BGRA;
         case VET_COLOUR:
         case VET_COLOUR_ABGR:
@@ -216,10 +227,12 @@ namespace Ogre
     {
         switch( filter )
         {
+            // clang-format off
         case FO_NONE:                   return MTLSamplerMinMagFilterNearest;
         case FO_POINT:                  return MTLSamplerMinMagFilterNearest;
         case FO_LINEAR:                 return MTLSamplerMinMagFilterLinear;
         case FO_ANISOTROPIC:            return MTLSamplerMinMagFilterLinear;
+            // clang-format on
         }
     }
     //-----------------------------------------------------------------------------------
@@ -227,10 +240,12 @@ namespace Ogre
     {
         switch( filter )
         {
+            // clang-format off
         case FO_NONE:                   return MTLSamplerMipFilterNotMipmapped;
         case FO_POINT:                  return MTLSamplerMipFilterNearest;
         case FO_LINEAR:                 return MTLSamplerMipFilterLinear;
         case FO_ANISOTROPIC:            return MTLSamplerMipFilterLinear;
+            // clang-format on
         }
     }
     //-----------------------------------------------------------------------------------
@@ -238,12 +253,15 @@ namespace Ogre
     {
         switch( mode )
         {
+            // clang-format off
         case TAM_WRAP:                  return MTLSamplerAddressModeRepeat;
         case TAM_MIRROR:                return MTLSamplerAddressModeMirrorRepeat;
         case TAM_CLAMP:                 return MTLSamplerAddressModeClampToEdge;
         //Not supported. Get the best next thing.
         case TAM_BORDER:                return MTLSamplerAddressModeClampToEdge;
-        default:                        return MTLSamplerAddressModeClampToEdge;
+            // clang-format on
+        default:
+            return MTLSamplerAddressModeClampToEdge;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -251,6 +269,7 @@ namespace Ogre
     {
         switch( dataType )
         {
+            // clang-format off
         case MTLDataTypeNone:           return MTLVertexFormatInvalid;
         case MTLDataTypeStruct:         return MTLVertexFormatInvalid;
         case MTLDataTypeArray:          return MTLVertexFormatInvalid;
@@ -323,6 +342,7 @@ namespace Ogre
         case MTLDataTypeBool2:          return MTLVertexFormatFloat2;
         case MTLDataTypeBool3:          return MTLVertexFormatFloat3;
         case MTLDataTypeBool4:          return MTLVertexFormatFloat4;
+            // clang-format on
         }
 
         return MTLVertexFormatInvalid;
@@ -332,6 +352,7 @@ namespace Ogre
     {
         switch( pf )
         {
+            // clang-format off
         case PFG_UNKNOWN:                       return MTLPixelFormatInvalid;
         case PFG_NULL:                          return MTLPixelFormatInvalid;
         case PFG_RGBA32_FLOAT:		            return MTLPixelFormatRGBA32Float;
@@ -366,15 +387,20 @@ namespace Ogre
         case PFG_R32_FLOAT:		                return MTLPixelFormatR32Float;
         case PFG_R32_UINT:		                return MTLPixelFormatR32Uint;
         case PFG_R32_SINT:		                return MTLPixelFormatR32Sint;
+// clang-format on
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         case PFG_D24_UNORM:
         case PFG_D24_UNORM_S8_UINT:
-            return device->mDevice.depth24Stencil8PixelFormatSupported ?
-                MTLPixelFormatDepth24Unorm_Stencil8 : MTLPixelFormatDepth32Float_Stencil8;
+            return device->mDevice.depth24Stencil8PixelFormatSupported
+                       ? MTLPixelFormatDepth24Unorm_Stencil8
+                       : MTLPixelFormatDepth32Float_Stencil8;
 #else
+            // clang-format off
         case PFG_D24_UNORM:		                return MTLPixelFormatDepth32Float;
         case PFG_D24_UNORM_S8_UINT:             return MTLPixelFormatDepth32Float_Stencil8;
+// clang-format on
 #endif
+            // clang-format off
         case PFG_RG8_UNORM:		                return MTLPixelFormatRG8Unorm;
         case PFG_RG8_UINT:		                return MTLPixelFormatRG8Uint;
         case PFG_RG8_SNORM:		                return MTLPixelFormatRG8Snorm;
@@ -481,6 +507,7 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_12X10_sRGB:    return MTLPixelFormatASTC_12x10_sRGB;
         case PFG_ASTC_RGBA_UNORM_12X12_sRGB:    return MTLPixelFormatASTC_12x12_sRGB;
 #endif
+            // clang-format on
         case PFG_RGB8_UNORM:
         case PFG_RGB8_UNORM_SRGB:
         case PFG_BGR8_UNORM:
@@ -514,6 +541,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     GpuConstantType MetalMappings::get( MTLDataType dataType )
     {
+        // clang-format off
         switch( dataType )
         {
         case MTLDataTypeNone:           return GCT_UNKNOWN;
@@ -589,6 +617,7 @@ namespace Ogre
         case MTLDataTypeBool3:          return GCT_BOOL3;
         case MTLDataTypeBool4:          return GCT_BOOL4;
         }
+        // clang-format on
 
         return GCT_UNKNOWN;
     }

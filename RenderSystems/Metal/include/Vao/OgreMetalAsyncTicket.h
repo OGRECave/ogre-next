@@ -40,18 +40,18 @@ namespace Ogre
     class _OgreMetalExport MetalAsyncTicket : public AsyncTicket
     {
     protected:
-        dispatch_semaphore_t    mFenceName;
-        MetalDevice             *mDevice;
+        dispatch_semaphore_t mFenceName;
+        MetalDevice *        mDevice;
 
-        virtual const void* mapImpl();
+        virtual const void *mapImpl();
 
     public:
-        MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                          size_t elementStart, size_t elementCount, MetalDevice *device );
+        MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                          size_t elementCount, MetalDevice *device );
         virtual ~MetalAsyncTicket();
 
         virtual bool queryIsTransferDone();
     };
-}
+}  // namespace Ogre
 
 #endif

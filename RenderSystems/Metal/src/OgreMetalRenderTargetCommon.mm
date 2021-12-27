@@ -38,10 +38,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    MetalRenderTargetCommon::~MetalRenderTargetCommon()
-    {
-        destroy();
-    }
+    MetalRenderTargetCommon::~MetalRenderTargetCommon() { destroy(); }
     //-----------------------------------------------------------------------------------
     void MetalRenderTargetCommon::init( id<MTLTexture> texture, id<MTLTexture> resolveTexture )
     {
@@ -52,8 +49,5 @@ namespace Ogre
         mColourAttachmentDesc.resolveTexture = resolveTexture;
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderTargetCommon::destroy()
-    {
-        mColourAttachmentDesc = 0;
-    }
+    void MetalRenderTargetCommon::destroy() { mColourAttachmentDesc = 0; }
 }

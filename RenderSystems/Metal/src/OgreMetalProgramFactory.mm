@@ -27,38 +27,29 @@ THE SOFTWARE.
 */
 
 #include "OgreMetalProgramFactory.h"
-#include "OgreMetalProgram.h"
-#include "OgreRoot.h"
+
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreMetalDevice.h"
+#include "OgreMetalProgram.h"
+#include "OgreRoot.h"
 
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
     String MetalProgramFactory::sLanguageName = "metal";
     //-----------------------------------------------------------------------
-    MetalProgramFactory::MetalProgramFactory( MetalDevice *device ) :
-        mDevice( device )
+    MetalProgramFactory::MetalProgramFactory( MetalDevice *device ) : mDevice( device ) {}
+    //-----------------------------------------------------------------------
+    MetalProgramFactory::~MetalProgramFactory() {}
+    //-----------------------------------------------------------------------
+    const String &MetalProgramFactory::getLanguage() const { return sLanguageName; }
+    //-----------------------------------------------------------------------
+    HighLevelGpuProgram *MetalProgramFactory::create( ResourceManager *creator, const String &name,
+                                                      ResourceHandle handle, const String &group,
+                                                      bool isManual, ManualResourceLoader *loader )
     {
+        return OGRE_NEW MetalProgram( creator, name, handle, group, isManual, loader, mDevice );
     }
     //-----------------------------------------------------------------------
-    MetalProgramFactory::~MetalProgramFactory()
-    {
-    }
-    //-----------------------------------------------------------------------
-    const String& MetalProgramFactory::getLanguage() const
-    {
-        return sLanguageName;
-    }
-    //-----------------------------------------------------------------------
-    HighLevelGpuProgram* MetalProgramFactory::create(ResourceManager* creator, 
-        const String& name, ResourceHandle handle,
-        const String& group, bool isManual, ManualResourceLoader* loader)
-    {
-        return OGRE_NEW MetalProgram(creator, name, handle, group, isManual, loader, mDevice);
-    }
-    //-----------------------------------------------------------------------
-    void MetalProgramFactory::destroy(HighLevelGpuProgram* prog)
-    {
-        OGRE_DELETE prog;
-    }
+    void MetalProgramFactory::destroy( HighLevelGpuProgram *prog ) { OGRE_DELETE prog; }
 }

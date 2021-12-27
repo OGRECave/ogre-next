@@ -27,40 +27,39 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreMetalVaoManager.h"
-#include "Vao/OgreMetalStagingBuffer.h"
-#include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreMetalBufferInterface.h"
 #include "Vao/OgreMetalConstBufferPacked.h"
+#include "Vao/OgreMetalStagingBuffer.h"
 #include "Vao/OgreMetalTexBufferPacked.h"
 #include "Vao/OgreMetalUavBufferPacked.h"
+#include "Vao/OgreVertexArrayObject.h"
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreMetalMultiSourceVertexBufferPool.h"
+#    include "Vao/OgreMetalMultiSourceVertexBufferPool.h"
 #endif
-#include "Vao/OgreMetalDynamicBuffer.h"
 #include "Vao/OgreMetalAsyncTicket.h"
+#include "Vao/OgreMetalDynamicBuffer.h"
 
 #include "Vao/OgreIndirectBufferPacked.h"
 
 #include "OgreMetalDevice.h"
 #include "OgreMetalRenderSystem.h"
 
+#include "OgreHlmsManager.h"
 #include "OgreRenderQueue.h"
 #include "OgreRoot.h"
-#include "OgreHlmsManager.h"
 
-#include "OgreTimer.h"
-#include "OgreStringConverter.h"
 #include "OgreLwString.h"
+#include "OgreStringConverter.h"
+#include "OgreTimer.h"
 
-#import <Metal/MTLDevice.h>
-#import <Metal/MTLRenderCommandEncoder.h>
 #import <Metal/MTLComputeCommandEncoder.h>
 #import <Metal/MTLComputePipeline.h>
+#import <Metal/MTLDevice.h>
+#import <Metal/MTLRenderCommandEncoder.h>
 
 namespace Ogre
 {
-    const uint32 MetalVaoManager::VERTEX_ATTRIBUTE_INDEX[VES_COUNT] =
-    {
+    const uint32 MetalVaoManager::VERTEX_ATTRIBUTE_INDEX[VES_COUNT] = {
         0,  // VES_POSITION - 1
         3,  // VES_BLEND_WEIGHTS - 1
         4,  // VES_BLEND_INDICES - 1
@@ -68,30 +67,29 @@ namespace Ogre
         5,  // VES_DIFFUSE - 1
         6,  // VES_SPECULAR - 1
         7,  // VES_TEXTURE_COORDINATES - 1
-        //There are up to 8 VES_TEXTURE_COORDINATES. Occupy range [7; 15)
-        //Range [13; 15) overlaps with VES_BLEND_WEIGHTS2 & VES_BLEND_INDICES2
-        //Index 15 is reserved for draw ID.
+        // There are up to 8 VES_TEXTURE_COORDINATES. Occupy range [7; 15)
+        // Range [13; 15) overlaps with VES_BLEND_WEIGHTS2 & VES_BLEND_INDICES2
+        // Index 15 is reserved for draw ID.
 
-        //VES_BINORMAL would use slot 16. Since Binormal is rarely used, we don't support it.
+        // VES_BINORMAL would use slot 16. Since Binormal is rarely used, we don't support it.
         //(slot 16 is where const buffers start)
-        ~0u,// VES_BINORMAL - 1
-        2,  // VES_TANGENT - 1
-        13, // VES_BLEND_WEIGHTS2 - 1
-        14, // VES_BLEND_INDICES2 - 1
+        ~0u,  // VES_BINORMAL - 1
+        2,    // VES_TANGENT - 1
+        13,   // VES_BLEND_WEIGHTS2 - 1
+        14,   // VES_BLEND_INDICES2 - 1
     };
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-    //On iOS 16 byte alignment makes it good to go for everything; but we need to satisfy
-    //both original alignment for baseVertex reasons. So find LCM between both.
+    // On iOS 16 byte alignment makes it good to go for everything; but we need to satisfy
+    // both original alignment for baseVertex reasons. So find LCM between both.
     const uint32 c_minimumAlignment = 16u;
 #else
-    //On OSX we have several alignments (just like GL & D3D11), but it can never be lower than 4.
+    // On OSX we have several alignments (just like GL & D3D11), but it can never be lower than 4.
     const uint32 c_minimumAlignment = 4u;
 #endif
     const uint32 c_indexBufferAlignment = 4u;
 
-    static const char *c_vboTypes[] =
-    {
+    static const char *c_vboTypes[] = {
         "CPU_INACCESSIBLE",
         "CPU_ACCESSIBLE_DEFAULT",
         "CPU_ACCESSIBLE_PERSISTENT",
@@ -100,32 +98,32 @@ namespace Ogre
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
     static const char c_gpuMemcpyComputeShader[] =
-            "#include <metal_stdlib>\n"
-            "using namespace metal;\n"
-            "\n"
-            "struct Params\n"
-            "{\n"
-            "	uint32_t dstOffset;\n"
-            "	uint32_t srcOffset;\n"
-            "	uint32_t sizeBytes;\n"
-            "};\n"
-            "\n"
-            "kernel void ogre_gpu_memcpy\n"
-            "(\n"
-            "	device uint8_t* dst			[[ buffer(0) ]],\n"
-            "	device uint8_t* src			[[ buffer(1) ]],\n"
-            "	constant Params &p			[[ buffer(2) ]],\n"
-            "	uint3 gl_GlobalInvocationID	[[thread_position_in_grid]]\n"
-            ")\n"
-            "{\n"
-            "//	for( uint32_t i=0u; i<p.sizeBytes; ++i )\n"
-            "//		dst[i + p.dstOffset] = src[i + p.srcOffset];\n"
-            "	uint32_t srcOffsetStart	= p.srcOffset + gl_GlobalInvocationID.x * 64u;\n"
-            "	uint32_t dstOffsetStart	= p.dstOffset + gl_GlobalInvocationID.x * 64u;\n"
-            "	uint32_t numBytesToCopy	= min( 64u, p.sizeBytes - gl_GlobalInvocationID.x * 64u );\n"
-            "	for( uint32_t i=0u; i<numBytesToCopy; ++i )\n"
-            "		dst[i + dstOffsetStart] = src[i + srcOffsetStart];\n"
-            "}";
+        "#include <metal_stdlib>\n"
+        "using namespace metal;\n"
+        "\n"
+        "struct Params\n"
+        "{\n"
+        "	uint32_t dstOffset;\n"
+        "	uint32_t srcOffset;\n"
+        "	uint32_t sizeBytes;\n"
+        "};\n"
+        "\n"
+        "kernel void ogre_gpu_memcpy\n"
+        "(\n"
+        "	device uint8_t* dst			[[ buffer(0) ]],\n"
+        "	device uint8_t* src			[[ buffer(1) ]],\n"
+        "	constant Params &p			[[ buffer(2) ]],\n"
+        "	uint3 gl_GlobalInvocationID	[[thread_position_in_grid]]\n"
+        ")\n"
+        "{\n"
+        "//	for( uint32_t i=0u; i<p.sizeBytes; ++i )\n"
+        "//		dst[i + p.dstOffset] = src[i + p.srcOffset];\n"
+        "	uint32_t srcOffsetStart	= p.srcOffset + gl_GlobalInvocationID.x * 64u;\n"
+        "	uint32_t dstOffsetStart	= p.dstOffset + gl_GlobalInvocationID.x * 64u;\n"
+        "	uint32_t numBytesToCopy	= min( 64u, p.sizeBytes - gl_GlobalInvocationID.x * 64u );\n"
+        "	for( uint32_t i=0u; i<numBytesToCopy; ++i )\n"
+        "		dst[i + dstOffsetStart] = src[i + srcOffsetStart];\n"
+        "}";
 #endif
 
     MetalVaoManager::MetalVaoManager( MetalDevice *device, const NameValuePairList *params ) :
@@ -136,76 +134,77 @@ namespace Ogre
         mDrawId( 0 )
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        //On iOS alignment must match "the maximum accessed object" type. e.g.
-        //if it's all float, then alignment = 4. if it's a float2, then alignment = 8.
-        //The max. object is float4, so alignment = 16
-        mConstBufferAlignment   = 16;
-        mTexBufferAlignment     = 16;
+        // On iOS alignment must match "the maximum accessed object" type. e.g.
+        // if it's all float, then alignment = 4. if it's a float2, then alignment = 8.
+        // The max. object is float4, so alignment = 16
+        mConstBufferAlignment = 16;
+        mTexBufferAlignment = 16;
 
-        //Keep pools of 16MB for static buffers
-        mDefaultPoolSize[CPU_INACCESSIBLE]  = 16 * 1024 * 1024;
+        // Keep pools of 16MB for static buffers
+        mDefaultPoolSize[CPU_INACCESSIBLE] = 16 * 1024 * 1024;
 
-        //Keep pools of 4MB each for dynamic buffers
-        for( size_t i=CPU_ACCESSIBLE_DEFAULT; i<=CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
+        // Keep pools of 4MB each for dynamic buffers
+        for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
 
-        //TODO: iOS v3 family does support indirect buffers.
-        mSupportsIndirectBuffers    = false;
+        // TODO: iOS v3 family does support indirect buffers.
+        mSupportsIndirectBuffers = false;
 #else
-        //OS X restrictions.
-        mConstBufferAlignment   = 256;
-        mTexBufferAlignment     = 256;
+        // OS X restrictions.
+        mConstBufferAlignment = 256;
+        mTexBufferAlignment = 256;
 
-        //Keep pools of 32MB for static buffers
-        mDefaultPoolSize[CPU_INACCESSIBLE]  = 32 * 1024 * 1024;
+        // Keep pools of 32MB for static buffers
+        mDefaultPoolSize[CPU_INACCESSIBLE] = 32 * 1024 * 1024;
 
-        //Keep pools of 4MB each for dynamic buffers
-        for( size_t i=CPU_ACCESSIBLE_DEFAULT; i<=CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
+        // Keep pools of 4MB each for dynamic buffers
+        for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
 
-        mSupportsIndirectBuffers    = false; // supported, but there are no performance benefits
+        mSupportsIndirectBuffers = false;  // supported, but there are no performance benefits
 #endif
         if( params )
         {
-            for( size_t i=0; i<MAX_VBO_FLAG; ++i )
+            for( size_t i = 0; i < MAX_VBO_FLAG; ++i )
             {
                 NameValuePairList::const_iterator itor =
-                        params->find( String( "VaoManager::" ) + c_vboTypes[i] );
+                    params->find( String( "VaoManager::" ) + c_vboTypes[i] );
                 if( itor != params->end() )
                 {
-                    mDefaultPoolSize[i] = StringConverter::parseUnsignedInt( itor->second,
-                                                                             mDefaultPoolSize[i] );
+                    mDefaultPoolSize[i] =
+                        StringConverter::parseUnsignedInt( itor->second, mDefaultPoolSize[i] );
                 }
             }
         }
 
         mAlreadyWaitedForSemaphore.resize( mDynamicBufferMultiplier, true );
         mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
-        for( size_t i=0; i<mDynamicBufferMultiplier; ++i )
+        for( size_t i = 0; i < mDynamicBufferMultiplier; ++i )
             mFrameSyncVec[i] = dispatch_semaphore_create( 0 );
 
-        mConstBufferMaxSize = 64 * 1024;        //64kb
-        mTexBufferMaxSize   = 128 * 1024 * 1024;//128MB
+        mConstBufferMaxSize = 64 * 1024;        // 64kb
+        mTexBufferMaxSize = 128 * 1024 * 1024;  // 128MB
         mReadOnlyIsTexBuffer = true;
         mReadOnlyBufferMaxSize = mTexBufferMaxSize;
 
-        mSupportsPersistentMapping  = true;
+        mSupportsPersistentMapping = true;
 
         const uint32 maxNumInstances = 4096u * 2u;
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
-                                                                    MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<maxNumInstances; ++i )
+        uint32 *drawIdPtr = static_cast<uint32 *>(
+            OGRE_MALLOC_SIMD( maxNumInstances * sizeof( uint32 ), MEMCATEGORY_GEOMETRY ) );
+        for( uint32 i = 0; i < maxNumInstances; ++i )
             drawIdPtr[i] = i;
-        mDrawId = createConstBuffer( maxNumInstances * sizeof(uint32), BT_IMMUTABLE, drawIdPtr, false );
+        mDrawId =
+            createConstBuffer( maxNumInstances * sizeof( uint32 ), BT_IMMUTABLE, drawIdPtr, false );
         OGRE_FREE_SIMD( drawIdPtr, MEMCATEGORY_GEOMETRY );
         drawIdPtr = 0;
 #else
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
-                                                                    MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<maxNumInstances; ++i )
+        uint32 *drawIdPtr = static_cast<uint32 *>(
+            OGRE_MALLOC_SIMD( maxNumInstances * sizeof( uint32 ), MEMCATEGORY_GEOMETRY ) );
+        for( uint32 i = 0; i < maxNumInstances; ++i )
             drawIdPtr[i] = i;
         mDrawId = createVertexBuffer( vertexElements, maxNumInstances, BT_IMMUTABLE, drawIdPtr, true );
 
@@ -218,12 +217,12 @@ namespace Ogre
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
 
-        for( size_t i=0; i<MAX_VBO_FLAG; ++i )
+        for( size_t i = 0; i < MAX_VBO_FLAG; ++i )
         {
             VboVec::iterator itor = mVbos[i].begin();
-            VboVec::iterator end  = mVbos[i].end();
+            VboVec::iterator endt = mVbos[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 itor->vboName = 0;
                 delete itor->dynamicBuffer;
@@ -237,11 +236,10 @@ namespace Ogre
     void MetalVaoManager::createUnalignedCopyShader()
     {
         NSError *error;
-        id <MTLLibrary> library =
-                [mDevice->mDevice newLibraryWithSource:
-                [NSString stringWithUTF8String:c_gpuMemcpyComputeShader]
-                                               options:nil
-                                                 error:&error];
+        id<MTLLibrary> library = [mDevice->mDevice
+            newLibraryWithSource:[NSString stringWithUTF8String:c_gpuMemcpyComputeShader]
+                         options:nil
+                           error:&error];
 
         if( !library )
         {
@@ -251,7 +249,7 @@ namespace Ogre
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Metal SL Compiler Error while compiling internal c_gpuMemcpyComputeShader:\n" +
-                         errorDesc,
+                             errorDesc,
                          "MetalVaoManager::MetalVaoManager" );
         }
         else
@@ -262,7 +260,7 @@ namespace Ogre
                 if( error )
                     errorDesc = [error localizedDescription].UTF8String;
                 LogManager::getSingleton().logMessage(
-                            "Metal SL Compiler Warnings in c_gpuMemcpyComputeShader:\n" + errorDesc );
+                    "Metal SL Compiler Warnings in c_gpuMemcpyComputeShader:\n" + errorDesc );
             }
         }
         library.label = @"c_gpuMemcpyComputeShader";
@@ -276,20 +274,20 @@ namespace Ogre
 
         MTLComputePipelineDescriptor *psd = [[MTLComputePipelineDescriptor alloc] init];
         psd.computeFunction = unalignedCopyFunc;
-        mUnalignedCopyPso =
-                [mDevice->mDevice newComputePipelineStateWithDescriptor:psd
-                                                                options:MTLPipelineOptionNone
-                                                             reflection:nil
-                                                                  error:&error];
+        mUnalignedCopyPso = [mDevice->mDevice newComputePipelineStateWithDescriptor:psd
+                                                                            options:MTLPipelineOptionNone
+                                                                         reflection:nil
+                                                                              error:&error];
         if( !mUnalignedCopyPso || error )
         {
             String errorDesc;
             if( error )
                 errorDesc = [error localizedDescription].UTF8String;
 
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Failed to create pipeline state for compute for mUnalignedCopyPso, error " +
-                         errorDesc, "MetalVaoManager::MetalVaoManager" );
+            OGRE_EXCEPT(
+                Exception::ERR_RENDERINGAPI_ERROR,
+                "Failed to create pipeline state for compute for mUnalignedCopyPso, error " + errorDesc,
+                "MetalVaoManager::MetalVaoManager" );
         }
     }
 #endif
@@ -321,18 +319,18 @@ namespace Ogre
         statsVec.swap( outStats );
 
         vector<char>::type tmpBuffer;
-        tmpBuffer.resize( 512 * 1024 ); //512kb per line should be way more than enough
+        tmpBuffer.resize( 512 * 1024 );  // 512kb per line should be way more than enough
         LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
 
         if( log )
             log->logMessage( "Pool Type;Offset;Size Bytes;Pool Idx;Pool Capacity", LML_CRITICAL );
 
-        for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::const_iterator itor = mVbos[vboIdx].begin();
-            VboVec::const_iterator end  = mVbos[vboIdx].end();
+            VboVec::const_iterator endt = mVbos[vboIdx].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const Vbo &vbo = *itor;
                 const size_t poolIdx = static_cast<size_t>( itor - mVbos[vboIdx].begin() );
@@ -343,7 +341,7 @@ namespace Ogre
                 BlockVec freeBlocks = vbo.freeBlocks;
                 while( !freeBlocks.empty() )
                 {
-                    //Find the free block that comes next
+                    // Find the free block that comes next
                     BlockVec::iterator nextBlock;
                     {
                         BlockVec::iterator itBlock = freeBlocks.begin();
@@ -362,7 +360,7 @@ namespace Ogre
                     freeBytes += nextBlock->size;
                     usedBlock.size = nextBlock->offset - usedBlock.offset;
 
-                    //usedBlock.size could be 0 if:
+                    // usedBlock.size could be 0 if:
                     //  1. All of memory is free
                     //  2. There's two contiguous free blocks, which should not happen
                     //     due to mergeContiguousBlocks
@@ -404,8 +402,8 @@ namespace Ogre
             VboFlag vboFlag = bufferTypeToVboFlag( buffer->getBufferType() );
             if( vboFlag == internalVboBufferType )
             {
-                MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                            buffer->getBufferInterface() );
+                MetalBufferInterface *bufferInterface =
+                    static_cast<MetalBufferInterface *>( buffer->getBufferInterface() );
                 if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
                     bufferInterface->_setVboPoolIndex( newPoolIdx );
             }
@@ -414,16 +412,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::cleanupEmptyPools()
     {
-        for( unsigned vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        for( unsigned vboIdx = 0; vboIdx < MAX_VBO_FLAG; ++vboIdx )
         {
             VboVec::iterator itor = mVbos[vboIdx].begin();
-            VboVec::iterator end  = mVbos[vboIdx].end();
+            VboVec::iterator endt = mVbos[vboIdx].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Vbo &vbo = *itor;
-                if( vbo.freeBlocks.size() == 1u &&
-                    vbo.sizeBytes == vbo.freeBlocks.back().size )
+                if( vbo.freeBlocks.size() == 1u && vbo.sizeBytes == vbo.freeBlocks.back().size )
                 {
 #ifdef OGRE_ASSERTS_ENABLED
                     VaoVec::iterator itVao = mVaos.begin();
@@ -454,13 +451,13 @@ namespace Ogre
                     delete vbo.dynamicBuffer;
                     vbo.dynamicBuffer = 0;
 
-                    //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
-                    //We need to update them so they don't crash deallocateVbo later.
-                    switchVboPoolIndex( vboIdx, (size_t)(mVbos[vboIdx].size() - 1u),
-                                        (size_t)(itor - mVbos[vboIdx].begin()) );
+                    // There's (unrelated) live buffers whose vboIdx will now point out of bounds.
+                    // We need to update them so they don't crash deallocateVbo later.
+                    switchVboPoolIndex( vboIdx, ( size_t )( mVbos[vboIdx].size() - 1u ),
+                                        ( size_t )( itor - mVbos[vboIdx].begin() ) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );
-                    end  = mVbos[vboIdx].end();
+                    endt = mVbos[vboIdx].end();
                 }
                 else
                 {
@@ -480,19 +477,19 @@ namespace Ogre
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
-            sizeBytes   *= mDynamicBufferMultiplier;
+            sizeBytes *= mDynamicBufferMultiplier;
 
         VboVec::const_iterator itor = mVbos[vboFlag].begin();
-        VboVec::const_iterator end  = mVbos[vboFlag].end();
+        VboVec::const_iterator endt = mVbos[vboFlag].end();
 
-        //Find a suitable VBO that can hold the requested size. We prefer those free
-        //blocks that have a matching stride (the current offset is a multiple of
-        //bytesPerElement) in order to minimize the amount of memory padding.
-        size_t bestVboIdx   = ~0;
+        // Find a suitable VBO that can hold the requested size. We prefer those free
+        // blocks that have a matching stride (the current offset is a multiple of
+        // bytesPerElement) in order to minimize the amount of memory padding.
+        size_t bestVboIdx = ~0;
         size_t bestBlockIdx = ~0;
         bool foundMatchingStride = false;
 
-        while( itor != end && !foundMatchingStride )
+        while( itor != endt && !foundMatchingStride )
         {
             BlockVec::const_iterator blockIt = itor->freeBlocks.begin();
             BlockVec::const_iterator blockEn = itor->freeBlocks.end();
@@ -500,16 +497,16 @@ namespace Ogre
             while( blockIt != blockEn && !foundMatchingStride )
             {
                 const Block &block = *blockIt;
-                assert((block.offset+block.size) <= itor->sizeBytes);
+                assert( ( block.offset + block.size ) <= itor->sizeBytes );
 
-                //Round to next multiple of alignment
-                size_t newOffset = ( (block.offset + alignment - 1) / alignment ) * alignment;
+                // Round to next multiple of alignment
+                size_t newOffset = ( ( block.offset + alignment - 1 ) / alignment ) * alignment;
                 size_t padding = newOffset - block.offset;
 
                 if( sizeBytes + padding <= block.size )
                 {
-                    bestVboIdx      = itor - mVbos[vboFlag].begin();
-                    bestBlockIdx    = blockIt - itor->freeBlocks.begin();
+                    bestVboIdx = itor - mVbos[vboFlag].begin();
+                    bestBlockIdx = blockIt - itor->freeBlocks.begin();
 
                     if( newOffset == block.offset )
                         foundMatchingStride = true;
@@ -523,18 +520,18 @@ namespace Ogre
 
         if( bestBlockIdx == (size_t)~0 )
         {
-            bestVboIdx      = mVbos[vboFlag].size();
-            bestBlockIdx    = 0;
+            bestVboIdx = mVbos[vboFlag].size();
+            bestBlockIdx = 0;
             foundMatchingStride = true;
 
             Vbo newVbo;
 
-            //Ensure pool size is multiple of 4 otherwise some StagingBuffer copies can fail.
+            // Ensure pool size is multiple of 4 otherwise some StagingBuffer copies can fail.
             //(when allocations happen very close to the end of the pool)
             size_t poolSize = std::max( mDefaultPoolSize[vboFlag], sizeBytes );
             poolSize = alignToNextMultiple( poolSize, 4u );
 
-            //No luck, allocate a new buffer.
+            // No luck, allocate a new buffer.
             MTLResourceOptions resourceOptions = 0;
 
             if( vboFlag == CPU_INACCESSIBLE )
@@ -548,7 +545,8 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                              "Out of GPU memory or driver refused.\n"
-                             "Requested: " + StringConverter::toString( poolSize ) + " bytes.",
+                             "Requested: " +
+                                 StringConverter::toString( poolSize ) + " bytes.",
                              "MetalVaoManager::allocateVbo" );
             }
 
@@ -558,34 +556,34 @@ namespace Ogre
 
             if( vboFlag != CPU_INACCESSIBLE )
             {
-                newVbo.dynamicBuffer = new MetalDynamicBuffer( newVbo.vboName, newVbo.sizeBytes  );
+                newVbo.dynamicBuffer = new MetalDynamicBuffer( newVbo.vboName, newVbo.sizeBytes );
             }
 
             mVbos[vboFlag].push_back( newVbo );
         }
 
-        Vbo &bestVbo        = mVbos[vboFlag][bestVboIdx];
-        Block &bestBlock    = bestVbo.freeBlocks[bestBlockIdx];
+        Vbo &bestVbo = mVbos[vboFlag][bestVboIdx];
+        Block &bestBlock = bestVbo.freeBlocks[bestBlockIdx];
 
-        size_t newOffset = ( (bestBlock.offset + alignment - 1) / alignment ) * alignment;
+        size_t newOffset = ( ( bestBlock.offset + alignment - 1 ) / alignment ) * alignment;
         size_t padding = newOffset - bestBlock.offset;
-        //Shrink our records about available data.
-        bestBlock.size   -= sizeBytes + padding;
+        // Shrink our records about available data.
+        bestBlock.size -= sizeBytes + padding;
         bestBlock.offset = newOffset + sizeBytes;
 
         if( !foundMatchingStride )
         {
-            //This is a stride changer, record as such.
-            StrideChangerVec::iterator itStride = std::lower_bound( bestVbo.strideChangers.begin(),
-                                                                    bestVbo.strideChangers.end(),
-                                                                    newOffset, StrideChanger() );
+            // This is a stride changer, record as such.
+            StrideChangerVec::iterator itStride =
+                std::lower_bound( bestVbo.strideChangers.begin(), bestVbo.strideChangers.end(),
+                                  newOffset, StrideChanger() );
             bestVbo.strideChangers.insert( itStride, StrideChanger( newOffset, padding ) );
         }
 
         if( bestBlock.size == 0 )
             bestVbo.freeBlocks.erase( bestVbo.freeBlocks.begin() + bestBlockIdx );
 
-        outVboIdx       = bestVboIdx;
+        outVboIdx = bestVboIdx;
         outBufferOffset = newOffset;
     }
     //-----------------------------------------------------------------------------------
@@ -598,39 +596,37 @@ namespace Ogre
             sizeBytes *= mDynamicBufferMultiplier;
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
-        StrideChangerVec::iterator itStride = std::lower_bound( vbo.strideChangers.begin(),
-                                                                vbo.strideChangers.end(),
-                                                                bufferOffset, StrideChanger() );
+        StrideChangerVec::iterator itStride = std::lower_bound(
+            vbo.strideChangers.begin(), vbo.strideChangers.end(), bufferOffset, StrideChanger() );
 
         if( itStride != vbo.strideChangers.end() && itStride->offsetAfterPadding == bufferOffset )
         {
-            bufferOffset    -= itStride->paddedBytes;
-            sizeBytes       += itStride->paddedBytes;
+            bufferOffset -= itStride->paddedBytes;
+            sizeBytes += itStride->paddedBytes;
 
             vbo.strideChangers.erase( itStride );
         }
 
-        //See if we're contiguous to a free block and make that block grow.
-        assert((bufferOffset+sizeBytes)<=vbo.sizeBytes);
+        // See if we're contiguous to a free block and make that block grow.
+        assert( ( bufferOffset + sizeBytes ) <= vbo.sizeBytes );
         vbo.freeBlocks.push_back( Block( bufferOffset, sizeBytes ) );
         mergeContiguousBlocks( vbo.freeBlocks.end() - 1, vbo.freeBlocks );
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge,
-                                                 BlockVec &blocks )
+    void MetalVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )
     {
         BlockVec::iterator itor = blocks.begin();
-        BlockVec::iterator end  = blocks.end();
+        BlockVec::iterator endt = blocks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->offset + itor->size == blockToMerge->offset )
             {
                 itor->size += blockToMerge->size;
                 size_t idx = itor - blocks.begin();
 
-                //When blockToMerge is the last one, its index won't be the same
-                //after removing the other iterator, they will swap.
+                // When blockToMerge is the last one, its index won't be the same
+                // after removing the other iterator, they will swap.
                 if( idx == blocks.size() - 1 )
                     idx = blockToMerge - blocks.begin();
 
@@ -638,15 +634,15 @@ namespace Ogre
 
                 blockToMerge = blocks.begin() + idx;
                 itor = blocks.begin();
-                end  = blocks.end();
+                endt = blocks.end();
             }
             else if( blockToMerge->offset + blockToMerge->size == itor->offset )
             {
                 blockToMerge->size += itor->size;
                 size_t idx = blockToMerge - blocks.begin();
 
-                //When blockToMerge is the last one, its index won't be the same
-                //after removing the other iterator, they will swap.
+                // When blockToMerge is the last one, its index won't be the same
+                // after removing the other iterator, they will swap.
                 if( idx == blocks.size() - 1 )
                     idx = itor - blocks.begin();
 
@@ -654,7 +650,7 @@ namespace Ogre
 
                 blockToMerge = blocks.begin() + idx;
                 itor = blocks.begin();
-                end  = blocks.end();
+                endt = blocks.end();
             }
             else
             {
@@ -663,11 +659,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    VertexBufferPacked* MetalVaoManager::createVertexBufferImpl( size_t numElements,
-                                                                   uint32 bytesPerElement,
-                                                                   BufferType bufferType,
-                                                                   void *initialData, bool keepAsShadow,
-                                                                   const VertexElement2Vec &vElements )
+    VertexBufferPacked *MetalVaoManager::createVertexBufferImpl( size_t numElements,
+                                                                 uint32 bytesPerElement,
+                                                                 BufferType bufferType,
+                                                                 void *initialData, bool keepAsShadow,
+                                                                 const VertexElement2Vec &vElements )
     {
         size_t vboIdx;
         size_t bufferOffset;
@@ -677,10 +673,10 @@ namespace Ogre
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
             const uint32 alignment = Math::lcm( bytesPerElement, c_minimumAlignment );
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
@@ -689,14 +685,12 @@ namespace Ogre
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
         Vbo &vbo = mVbos[vboFlag][vboIdx];
-        MetalBufferInterface *bufferInterface = new MetalBufferInterface( vboIdx, vbo.vboName,
-                                                                          vbo.dynamicBuffer );
+        MetalBufferInterface *bufferInterface =
+            new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
 
         VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
-                                                        bufferOffset, numElements, bytesPerElement,
-                                                        (sizeBytes - requestedSize) / bytesPerElement,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, vElements );
+            bufferOffset, numElements, bytesPerElement, ( sizeBytes - requestedSize ) / bytesPerElement,
+            bufferType, initialData, keepAsShadow, this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -706,42 +700,39 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer )
     {
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                        vertexBuffer->getBufferInterface() );
-
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( vertexBuffer->getBufferInterface() );
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        vertexBuffer->_getInternalBufferStart() * vertexBuffer->getBytesPerElement(),
-                       vertexBuffer->_getInternalTotalSizeBytes(),
-                       vertexBuffer->getBufferType() );
+                       vertexBuffer->_getInternalTotalSizeBytes(), vertexBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
 #ifdef _OGRE_MULTISOURCE_VBO
-    MultiSourceVertexBufferPool* MetalVaoManager::createMultiSourceVertexBufferPoolImpl(
-                                                const VertexElement2VecVec &vertexElementsBySource,
-                                                size_t maxNumVertices, size_t totalBytesPerVertex,
-                                                BufferType bufferType )
+    MultiSourceVertexBufferPool *MetalVaoManager::createMultiSourceVertexBufferPoolImpl(
+        const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
+        size_t totalBytesPerVertex, BufferType bufferType )
     {
         size_t vboIdx;
         size_t bufferOffset;
 
-        allocateVbo( maxNumVertices * totalBytesPerVertex, totalBytesPerVertex,
-                     bufferType, vboIdx, bufferOffset );
+        allocateVbo( maxNumVertices * totalBytesPerVertex, totalBytesPerVertex, bufferType, vboIdx,
+                     bufferOffset );
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         const Vbo &vbo = mVbos[vboFlag][vboIdx];
 
         return OGRE_NEW MetalMultiSourceVertexBufferPool( vboIdx, vbo.vboName, vertexElementsBySource,
-                                                          maxNumVertices, bufferType,
-                                                          bufferOffset, this );
+                                                          maxNumVertices, bufferType, bufferOffset,
+                                                          this );
     }
 #endif
     //-----------------------------------------------------------------------------------
-    IndexBufferPacked* MetalVaoManager::createIndexBufferImpl( size_t numElements,
-                                                                 uint32 bytesPerElement,
-                                                                 BufferType bufferType,
-                                                                 void *initialData, bool keepAsShadow )
+    IndexBufferPacked *MetalVaoManager::createIndexBufferImpl( size_t numElements,
+                                                               uint32 bytesPerElement,
+                                                               BufferType bufferType, void *initialData,
+                                                               bool keepAsShadow )
     {
         size_t vboIdx;
         size_t bufferOffset;
@@ -751,10 +742,10 @@ namespace Ogre
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
             const uint32 alignment = Math::lcm( bytesPerElement, c_indexBufferAlignment );
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
@@ -764,13 +755,11 @@ namespace Ogre
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
-        MetalBufferInterface *bufferInterface = new MetalBufferInterface( vboIdx, vbo.vboName,
-                                                                          vbo.dynamicBuffer );
+        MetalBufferInterface *bufferInterface =
+            new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         IndexBufferPacked *retVal = OGRE_NEW IndexBufferPacked(
-                                                        bufferOffset, numElements, bytesPerElement,
-                                                        (sizeBytes - requestedSize) / bytesPerElement,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface );
+            bufferOffset, numElements, bytesPerElement, ( sizeBytes - requestedSize ) / bytesPerElement,
+            bufferType, initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -780,18 +769,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::destroyIndexBufferImpl( IndexBufferPacked *indexBuffer )
     {
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                        indexBuffer->getBufferInterface() );
-
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( indexBuffer->getBufferInterface() );
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        indexBuffer->_getInternalBufferStart() * indexBuffer->getBytesPerElement(),
-                       indexBuffer->_getInternalTotalSizeBytes(),
-                       indexBuffer->getBufferType() );
+                       indexBuffer->_getInternalTotalSizeBytes(), indexBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
-    ConstBufferPacked* MetalVaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                                 void *initialData, bool keepAsShadow )
+    ConstBufferPacked *MetalVaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                               void *initialData, bool keepAsShadow )
     {
         size_t vboIdx;
         size_t bufferOffset;
@@ -804,24 +791,21 @@ namespace Ogre
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
         allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
-        MetalBufferInterface *bufferInterface = new MetalBufferInterface( vboIdx, vbo.vboName,
-                                                                              vbo.dynamicBuffer );
+        MetalBufferInterface *bufferInterface =
+            new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         ConstBufferPacked *retVal = OGRE_NEW MetalConstBufferPacked(
-                                                        bufferOffset, requestedSize, 1,
-                                                        (sizeBytes - requestedSize) / 1,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface,
-                                                        mDevice );
+            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
+            keepAsShadow, this, bufferInterface, mDevice );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );
@@ -831,19 +815,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::destroyConstBufferImpl( ConstBufferPacked *constBuffer )
     {
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                        constBuffer->getBufferInterface() );
-
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( constBuffer->getBufferInterface() );
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        constBuffer->_getInternalBufferStart() * constBuffer->getBytesPerElement(),
-                       constBuffer->_getInternalTotalSizeBytes(),
-                       constBuffer->getBufferType() );
+                       constBuffer->_getInternalTotalSizeBytes(), constBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* MetalVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                           BufferType bufferType,
-                                                           void *initialData, bool keepAsShadow )
+    TexBufferPacked *MetalVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                           BufferType bufferType, void *initialData,
+                                                           bool keepAsShadow )
     {
         size_t vboIdx;
         size_t bufferOffset;
@@ -856,10 +838,10 @@ namespace Ogre
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
             const uint32 alignment = Math::lcm( 1, c_minimumAlignment );
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
@@ -867,14 +849,11 @@ namespace Ogre
         allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
-        MetalBufferInterface *bufferInterface = new MetalBufferInterface( vboIdx, vbo.vboName,
-                                                                          vbo.dynamicBuffer );
+        MetalBufferInterface *bufferInterface =
+            new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         TexBufferPacked *retVal = OGRE_NEW MetalTexBufferPacked(
-                                                        bufferOffset, requestedSize, 1,
-                                                        (sizeBytes - requestedSize) / 1,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, pixelFormat,
-                                                        mDevice );
+            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
+            keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );
@@ -884,14 +863,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::destroyTexBufferImpl( TexBufferPacked *texBuffer )
     {
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                        texBuffer->getBufferInterface() );
-
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( texBuffer->getBufferInterface() );
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        texBuffer->_getInternalBufferStart() * texBuffer->getBytesPerElement(),
-                       texBuffer->_getInternalTotalSizeBytes(),
-                       texBuffer->getBufferType() );
+                       texBuffer->_getInternalTotalSizeBytes(), texBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
     ReadOnlyBufferPacked *MetalVaoManager::createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
@@ -944,28 +921,27 @@ namespace Ogre
                        readOnlyBuffer->_getInternalTotalSizeBytes(), readOnlyBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
-    UavBufferPacked* MetalVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                           uint32 bindFlags,
-                                                           void *initialData, bool keepAsShadow )
+    UavBufferPacked *MetalVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                           uint32 bindFlags, void *initialData,
+                                                           bool keepAsShadow )
     {
         size_t vboIdx;
         size_t bufferOffset;
 
         size_t alignment = Math::lcm( mUavBufferAlignment, bytesPerElement );
 
-        //UAV Buffers can't be dynamic.
+        // UAV Buffers can't be dynamic.
         const BufferType bufferType = BT_DEFAULT;
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         allocateVbo( numElements * bytesPerElement, alignment, bufferType, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
-        MetalBufferInterface *bufferInterface = new MetalBufferInterface( vboIdx, vbo.vboName,
-                                                                          vbo.dynamicBuffer );
-        UavBufferPacked *retVal = OGRE_NEW MetalUavBufferPacked(
-                                                        bufferOffset, numElements, bytesPerElement,
-                                                        bindFlags, initialData, keepAsShadow,
-                                                        this, bufferInterface, mDevice );
+        MetalBufferInterface *bufferInterface =
+            new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
+        UavBufferPacked *retVal =
+            OGRE_NEW MetalUavBufferPacked( bufferOffset, numElements, bytesPerElement, bindFlags,
+                                           initialData, keepAsShadow, this, bufferInterface, mDevice );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -975,17 +951,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::destroyUavBufferImpl( UavBufferPacked *uavBuffer )
     {
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                                                        uavBuffer->getBufferInterface() );
-
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( uavBuffer->getBufferInterface() );
 
         deallocateVbo( bufferInterface->getVboPoolIndex(),
                        uavBuffer->_getInternalBufferStart() * uavBuffer->getBytesPerElement(),
-                       uavBuffer->_getInternalTotalSizeBytes(),
-                       uavBuffer->getBufferType() );
+                       uavBuffer->_getInternalTotalSizeBytes(), uavBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
-    IndirectBufferPacked* MetalVaoManager::createIndirectBufferImpl( size_t sizeBytes,
+    IndirectBufferPacked *MetalVaoManager::createIndirectBufferImpl( size_t sizeBytes,
                                                                      BufferType bufferType,
                                                                      void *initialData,
                                                                      bool keepAsShadow )
@@ -997,10 +971,10 @@ namespace Ogre
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
-            //For dynamic buffers, the size will be 3x times larger
+            // For dynamic buffers, the size will be 3x times larger
             //(depending on mDynamicBufferMultiplier); we need the
-            //offset after each map to be aligned; and for that, we
-            //sizeBytes to be multiple of alignment.
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
@@ -1017,10 +991,8 @@ namespace Ogre
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-                                                        bufferOffset, requestedSize, 1,
-                                                        (sizeBytes - requestedSize) / 1,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface );
+            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
+            keepAsShadow, this, bufferInterface );
 
         if( initialData )
         {
@@ -1041,15 +1013,13 @@ namespace Ogre
     {
         if( mSupportsIndirectBuffers )
         {
-            MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                        indirectBuffer->getBufferInterface() );
+            MetalBufferInterface *bufferInterface =
+                static_cast<MetalBufferInterface *>( indirectBuffer->getBufferInterface() );
 
-
-            deallocateVbo( bufferInterface->getVboPoolIndex(),
-                           indirectBuffer->_getInternalBufferStart() *
-                                indirectBuffer->getBytesPerElement(),
-                           indirectBuffer->_getInternalTotalSizeBytes(),
-                           indirectBuffer->getBufferType() );
+            deallocateVbo(
+                bufferInterface->getVboPoolIndex(),
+                indirectBuffer->_getInternalBufferStart() * indirectBuffer->getBytesPerElement(),
+                indirectBuffer->_getInternalTotalSizeBytes(), indirectBuffer->getBufferType() );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -1057,8 +1027,8 @@ namespace Ogre
     {
         assert( mDevice->mRenderEncoder || mDevice->mFrameAborted );
 
-        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
-                    mDrawId->getBufferInterface() );
+        MetalBufferInterface *bufferInterface =
+            static_cast<MetalBufferInterface *>( mDrawId->getBufferInterface() );
 
         [mDevice->mRenderEncoder setVertexBuffer:bufferInterface->getVboName() offset:0 atIndex:15];
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -1066,10 +1036,9 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    VertexArrayObject* MetalVaoManager::createVertexArrayObjectImpl(
-                                                            const VertexBufferPackedVec &vertexBuffers,
-                                                            IndexBufferPacked *indexBuffer,
-                                                            OperationType opType )
+    VertexArrayObject *MetalVaoManager::createVertexArrayObjectImpl(
+        const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
+        OperationType opType )
     {
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         VertexElement2VecVec vertexElements = VertexArrayObject::getVertexDeclaration( vertexBuffers );
@@ -1079,12 +1048,8 @@ namespace Ogre
 
         const uint32 renderQueueId = generateRenderQueueId( itor->vaoName, mNumGeneratedVaos );
 
-        VertexArrayObject *retVal = OGRE_NEW VertexArrayObject( itor->vaoName,
-                                                                renderQueueId,
-                                                                inputLayout,
-                                                                vertexBuffers,
-                                                                indexBuffer,
-                                                                opType );
+        VertexArrayObject *retVal = OGRE_NEW VertexArrayObject(
+            itor->vaoName, renderQueueId, inputLayout, vertexBuffers, indexBuffer, opType );
 
         return retVal;
     }
@@ -1092,12 +1057,12 @@ namespace Ogre
     void MetalVaoManager::destroyVertexArrayObjectImpl( VertexArrayObject *vao )
     {
         VaoVec::iterator itor = mVaos.begin();
-        VaoVec::iterator end  = mVaos.end();
+        VaoVec::iterator endt = mVaos.end();
 
-        while( itor != end && itor->vaoName != vao->getVaoName() )
+        while( itor != endt && itor->vaoName != vao->getVaoName() )
             ++itor;
 
-        if( itor != end )
+        if( itor != endt )
         {
             --itor->refCount;
 
@@ -1105,14 +1070,13 @@ namespace Ogre
                 efficientVectorRemove( mVaos, itor );
         }
 
-        //We delete it here because this class has no virtual destructor on purpose
+        // We delete it here because this class has no virtual destructor on purpose
         OGRE_DELETE vao;
     }
     //-----------------------------------------------------------------------------------
     MetalVaoManager::VaoVec::iterator MetalVaoManager::findVao(
-                                                        const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *indexBuffer,
-                                                        OperationType opType )
+        const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
+        OperationType opType )
     {
         Vao vao;
 
@@ -1121,14 +1085,14 @@ namespace Ogre
 
         {
             VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
-            VertexBufferPackedVec::const_iterator end  = vertexBuffers.end();
+            VertexBufferPackedVec::const_iterator endt = vertexBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Vao::VertexBinding vertexBinding;
-                vertexBinding.vertexBufferVbo   = static_cast<MetalBufferInterface*>(
-                                                        (*itor)->getBufferInterface() )->getVboName();
-                vertexBinding.vertexElements    = (*itor)->getVertexElements();
+                vertexBinding.vertexBufferVbo =
+                    static_cast<MetalBufferInterface *>( ( *itor )->getBufferInterface() )->getVboName();
+                vertexBinding.vertexElements = ( *itor )->getVertexElements();
                 vertexBinding.instancingDivisor = 0;
 
 #ifdef _OGRE_MULTISOURCE_VBO
@@ -1150,26 +1114,24 @@ namespace Ogre
 
         if( indexBuffer )
         {
-            vao.indexBufferVbo  = static_cast<MetalBufferInterface*>(
-                                    indexBuffer->getBufferInterface() )->getVboName();
-            vao.indexType       = indexBuffer->getIndexType();
+            vao.indexBufferVbo =
+                static_cast<MetalBufferInterface *>( indexBuffer->getBufferInterface() )->getVboName();
+            vao.indexType = indexBuffer->getIndexType();
         }
         else
         {
-            vao.indexBufferVbo  = 0;
-            vao.indexType       = IndexBufferPacked::IT_16BIT;
+            vao.indexBufferVbo = 0;
+            vao.indexType = IndexBufferPacked::IT_16BIT;
         }
 
         bool bFound = false;
         VaoVec::iterator itor = mVaos.begin();
-        VaoVec::iterator end  = mVaos.end();
+        VaoVec::iterator endt = mVaos.end();
 
-        while( itor != end && !bFound )
+        while( itor != endt && !bFound )
         {
-            if( itor->operationType == vao.operationType &&
-                itor->indexBufferVbo == vao.indexBufferVbo &&
-                itor->indexType == vao.indexType &&
-                itor->vertexBuffers == vao.vertexBuffers )
+            if( itor->operationType == vao.operationType && itor->indexBufferVbo == vao.indexBufferVbo &&
+                itor->indexType == vao.indexType && itor->vertexBuffers == vao.vertexBuffers )
             {
                 bFound = true;
             }
@@ -1191,14 +1153,11 @@ namespace Ogre
         return itor;
     }
     //-----------------------------------------------------------------------------------
-    uint32 MetalVaoManager::createVao( const Vao &vaoRef )
-    {
-        return mVaoNames++;
-    }
+    uint32 MetalVaoManager::createVao( const Vao &vaoRef ) { return mVaoNames++; }
     //-----------------------------------------------------------------------------------
     uint32 MetalVaoManager::generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId )
     {
-        //Mix mNumGeneratedVaos with the D3D11 Vao for better sorting purposes:
+        // Mix mNumGeneratedVaos with the D3D11 Vao for better sorting purposes:
         //  If we only use the D3D11's vao, the RQ will sort Meshes with
         //  multiple submeshes mixed with other meshes.
         //  For cache locality, and assuming all of them have the same GL vao,
@@ -1215,20 +1174,18 @@ namespace Ogre
         //      4. Mesh B - SubMesh 0
         //      5. Mesh A - SubMesh 0
         //  Thus thrashing the cache unnecessarily.
-        const int bitsVaoGl  = 5;
-        const uint32 maskVaoGl  = OGRE_RQ_MAKE_MASK( bitsVaoGl );
-        const uint32 maskVao    = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsVaoGl );
+        const int bitsVaoGl = 5;
+        const uint32 maskVaoGl = OGRE_RQ_MAKE_MASK( bitsVaoGl );
+        const uint32 maskVao = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsVaoGl );
 
-        const uint32 shiftVaoGl     = RqBits::MeshBits - bitsVaoGl;
+        const uint32 shiftVaoGl = RqBits::MeshBits - bitsVaoGl;
 
-        uint32 renderQueueId =
-                ( (vaoName & maskVaoGl) << shiftVaoGl ) |
-                (uniqueVaoId & maskVao);
+        uint32 renderQueueId = ( ( vaoName & maskVaoGl ) << shiftVaoGl ) | ( uniqueVaoId & maskVao );
 
         return renderQueueId;
     }
     //-----------------------------------------------------------------------------------
-    StagingBuffer* MetalVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
+    StagingBuffer *MetalVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
     {
         sizeBytes = std::max<size_t>( sizeBytes, 4 * 1024 * 1024 );
         sizeBytes = alignToNextMultiple( sizeBytes, 4u );
@@ -1248,23 +1205,24 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Out of GPU memory or driver refused.\n"
-                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "Requested: " +
+                             StringConverter::toString( sizeBytes ) + " bytes.",
                          "MetalVaoManager::createStagingBuffer" );
         }
 
-        MetalStagingBuffer *stagingBuffer = OGRE_NEW MetalStagingBuffer( 0, sizeBytes, this, forUpload,
-                                                                         bufferName, mDevice );
+        MetalStagingBuffer *stagingBuffer =
+            OGRE_NEW MetalStagingBuffer( 0, sizeBytes, this, forUpload, bufferName, mDevice );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
         return stagingBuffer;
     }
     //-----------------------------------------------------------------------------------
     AsyncTicketPtr MetalVaoManager::createAsyncTicket( BufferPacked *creator,
-                                                         StagingBuffer *stagingBuffer,
-                                                         size_t elementStart, size_t elementCount )
+                                                       StagingBuffer *stagingBuffer, size_t elementStart,
+                                                       size_t elementCount )
     {
-        return AsyncTicketPtr( OGRE_NEW MetalAsyncTicket( creator, stagingBuffer,
-                                                          elementStart, elementCount, mDevice ) );
+        return AsyncTicketPtr(
+            OGRE_NEW MetalAsyncTicket( creator, stagingBuffer, elementStart, elementCount, mDevice ) );
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
@@ -1276,24 +1234,20 @@ namespace Ogre
 
         [computeEncoder setBuffer:dstBuffer offset:0 atIndex:0];
         [computeEncoder setBuffer:srcBuffer offset:0 atIndex:1];
-        uint32_t copyInfo[3] =
-        {
-            static_cast<uint32_t>( dstOffsetBytes ),
-            static_cast<uint32_t>( srcOffsetBytes ),
-            static_cast<uint32_t>( sizeBytes )
-        };
-        [computeEncoder setBytes:copyInfo length:sizeof(copyInfo) atIndex:2];
+        uint32_t copyInfo[3] = { static_cast<uint32_t>( dstOffsetBytes ),
+                                 static_cast<uint32_t>( srcOffsetBytes ),
+                                 static_cast<uint32_t>( sizeBytes ) };
+        [computeEncoder setBytes:copyInfo length:sizeof( copyInfo ) atIndex:2];
 
-        MTLSize threadsPerThreadgroup   = MTLSizeMake( 1024u, 1u, 1u );
-        MTLSize threadgroupsPerGrid     = MTLSizeMake( 1u, 1u, 1u );
+        MTLSize threadsPerThreadgroup = MTLSizeMake( 1024u, 1u, 1u );
+        MTLSize threadgroupsPerGrid = MTLSizeMake( 1u, 1u, 1u );
 
         const size_t threadsRequired = alignToNextMultiple( sizeBytes, 64u ) / 64u;
         threadsPerThreadgroup.width =
-                std::min<NSUInteger>( static_cast<NSUInteger>( threadsRequired ), 1024u );
-        threadgroupsPerGrid.width =
-                static_cast<NSUInteger>( alignToNextMultiple( threadsRequired,
-                                                              threadsPerThreadgroup.width ) /
-                                         threadsPerThreadgroup.width );
+            std::min<NSUInteger>( static_cast<NSUInteger>( threadsRequired ), 1024u );
+        threadgroupsPerGrid.width = static_cast<NSUInteger>(
+            alignToNextMultiple( threadsRequired, threadsPerThreadgroup.width ) /
+            threadsPerThreadgroup.width );
 
         [computeEncoder setComputePipelineState:mUnalignedCopyPso];
 
@@ -1308,21 +1262,20 @@ namespace Ogre
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)(~0);
+            mNextStagingBufferTimestampCheckpoint = (unsigned long)( ~0 );
 
-            for( size_t i=0; i<2; ++i )
+            for( size_t i = 0; i < 2; ++i )
             {
                 StagingBufferVec::iterator itor = mZeroRefStagingBuffers[i].begin();
-                StagingBufferVec::iterator end  = mZeroRefStagingBuffers[i].end();
+                StagingBufferVec::iterator endt = mZeroRefStagingBuffers[i].end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     StagingBuffer *stagingBuffer = *itor;
 
-                    mNextStagingBufferTimestampCheckpoint = std::min(
-                                                    mNextStagingBufferTimestampCheckpoint,
-                                                    stagingBuffer->getLastUsedTimestamp() +
-                                                    currentTimeMs );
+                    mNextStagingBufferTimestampCheckpoint =
+                        std::min( mNextStagingBufferTimestampCheckpoint,
+                                  stagingBuffer->getLastUsedTimestamp() + currentTimeMs );
 
                     /*if( stagingBuffer->getLastUsedTimestamp() - currentTimeMs >
                         stagingBuffer->getUnfencedTimeThreshold() )
@@ -1333,11 +1286,11 @@ namespace Ogre
                     if( stagingBuffer->getLastUsedTimestamp() - currentTimeMs >
                         stagingBuffer->getLifetimeThreshold() )
                     {
-                        //Time to delete this buffer.
+                        // Time to delete this buffer.
                         delete *itor;
 
                         itor = efficientVectorRemove( mZeroRefStagingBuffers[i], itor );
-                        end  = mZeroRefStagingBuffers[i].end();
+                        endt = mZeroRefStagingBuffers[i].end();
                     }
                     else
                     {
@@ -1349,9 +1302,9 @@ namespace Ogre
 
         if( !mSemaphoreFlushed )
         {
-            //We could only reach here if _update() was called
-            //twice in a row without completing a full frame.
-            //Without this, waitForTailFrameToFinish will deadlock.
+            // We could only reach here if _update() was called
+            // twice in a row without completing a full frame.
+            // Without this, waitForTailFrameToFinish will deadlock.
             mDevice->commitAndNextCommandBuffer();
         }
 
@@ -1362,7 +1315,7 @@ namespace Ogre
             destroyDelayedBuffers( mDynamicBufferCurrentFrame );
         }
 
-        //We must call this to raise the semaphore count in case we haven't already
+        // We must call this to raise the semaphore count in case we haven't already
         waitForTailFrameToFinish();
 
         VaoManager::_update();
@@ -1370,41 +1323,37 @@ namespace Ogre
         mSemaphoreFlushed = false;
         mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] = false;
         __block dispatch_semaphore_t blockSemaphore = mFrameSyncVec[mDynamicBufferCurrentFrame];
-        [mDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
-        {
-            dispatch_semaphore_signal( blockSemaphore );
+        [mDevice->mCurrentCommandBuffer addCompletedHandler:^( id<MTLCommandBuffer> buffer ) {
+          dispatch_semaphore_signal( blockSemaphore );
         }];
 
-        mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
+        mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
-    void MetalVaoManager::_notifyNewCommandBuffer()
-    {
-        mSemaphoreFlushed = true;
-    }
+    void MetalVaoManager::_notifyNewCommandBuffer() { mSemaphoreFlushed = true; }
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::_notifyDeviceStalled()
     {
         mSemaphoreFlushed = true;
 
-        for( size_t i=0; i<2u; ++i )
+        for( size_t i = 0; i < 2u; ++i )
         {
             StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
-            StagingBufferVec::const_iterator end  = mRefedStagingBuffers[i].end();
+            StagingBufferVec::const_iterator endt = mRefedStagingBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                MetalStagingBuffer *stagingBuffer = static_cast<MetalStagingBuffer*>( *itor );
+                MetalStagingBuffer *stagingBuffer = static_cast<MetalStagingBuffer *>( *itor );
                 stagingBuffer->_notifyDeviceStalled();
                 ++itor;
             }
 
             itor = mZeroRefStagingBuffers[i].begin();
-            end  = mZeroRefStagingBuffers[i].end();
+            endt = mZeroRefStagingBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
-                MetalStagingBuffer *stagingBuffer = static_cast<MetalStagingBuffer*>( *itor );
+                MetalStagingBuffer *stagingBuffer = static_cast<MetalStagingBuffer *>( *itor );
                 stagingBuffer->_notifyDeviceStalled();
                 ++itor;
             }
@@ -1417,15 +1366,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     uint8 MetalVaoManager::waitForTailFrameToFinish()
     {
-        //MetalRenderSystem::_beginFrameOnce does a global waiting for us, but if we're outside
-        //the render loop (i.e. user is manually uploading data) we may have to call this earlier.
+        // MetalRenderSystem::_beginFrameOnce does a global waiting for us, but if we're outside
+        // the render loop (i.e. user is manually uploading data) we may have to call this earlier.
         if( !mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] )
         {
             waitFor( mFrameSyncVec[mDynamicBufferCurrentFrame], mDevice );
-            //Semaphore was just grabbed, so ensure we don't grab it twice.
+            // Semaphore was just grabbed, so ensure we don't grab it twice.
             mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] = true;
         }
-        //mDevice->mRenderSystem->_waitForTailFrameToFinish();
+        // mDevice->mRenderSystem->_waitForTailFrameToFinish();
         return mDynamicBufferCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
@@ -1433,29 +1382,29 @@ namespace Ogre
     {
         if( frameCount == mFrameCount )
         {
-            //Full stall
+            // Full stall
             mDevice->stall();
             //"mFrameCount += mDynamicBufferMultiplier" is already handled in _notifyDeviceStalled;
         }
         if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {
-            //Let's wait on one of our existing fences...
-            //frameDiff has to be in range [1; mDynamicBufferMultiplier]
+            // Let's wait on one of our existing fences...
+            // frameDiff has to be in range [1; mDynamicBufferMultiplier]
             size_t frameDiff = mFrameCount - frameCount;
 
-            const size_t idx = (mDynamicBufferCurrentFrame +
-                                mDynamicBufferMultiplier - frameDiff) % mDynamicBufferMultiplier;
+            const size_t idx = ( mDynamicBufferCurrentFrame + mDynamicBufferMultiplier - frameDiff ) %
+                               mDynamicBufferMultiplier;
 
             if( !mAlreadyWaitedForSemaphore[idx] )
             {
                 waitFor( mFrameSyncVec[idx], mDevice );
-                //Semaphore was just grabbed, so ensure we don't grab it twice.
+                // Semaphore was just grabbed, so ensure we don't grab it twice.
                 mAlreadyWaitedForSemaphore[idx] = true;
             }
         }
         else
         {
-            //No stall
+            // No stall
         }
     }
     //-----------------------------------------------------------------------------------
@@ -1464,15 +1413,15 @@ namespace Ogre
         bool retVal = false;
         if( frameCount == mFrameCount )
         {
-            //Full stall
-            //retVal = false;
+            // Full stall
+            // retVal = false;
         }
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {
-            //frameDiff has to be in range [1; mDynamicBufferMultiplier]
+            // frameDiff has to be in range [1; mDynamicBufferMultiplier]
             size_t frameDiff = mFrameCount - frameCount;
-            const size_t idx = (mDynamicBufferCurrentFrame +
-                                mDynamicBufferMultiplier - frameDiff) % mDynamicBufferMultiplier;
+            const size_t idx = ( mDynamicBufferCurrentFrame + mDynamicBufferMultiplier - frameDiff ) %
+                               mDynamicBufferMultiplier;
 
             if( !mAlreadyWaitedForSemaphore[idx] )
             {
@@ -1480,14 +1429,14 @@ namespace Ogre
                 if( result == 0 )
                 {
                     retVal = true;
-                    //Semaphore was just grabbed, so ensure we don't grab it twice.
+                    // Semaphore was just grabbed, so ensure we don't grab it twice.
                     mAlreadyWaitedForSemaphore[idx] = true;
                 }
             }
         }
         else
         {
-            //No stall
+            // No stall
             retVal = true;
         }
 
@@ -1502,7 +1451,7 @@ namespace Ogre
             long result = dispatch_semaphore_wait( fenceName, timeout );
 
             if( result == 0 )
-                return 0; //Success waiting.
+                return 0;  // Success waiting.
 
             if( timeout == DISPATCH_TIME_NOW )
             {
@@ -1515,7 +1464,8 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                              "Failure while waiting for a MetalFence. Could be out of GPU memory. "
                              "Update your video card drivers. If that doesn't help, "
-                             "contact the developers. Error code: " + StringConverter::toString( result ),
+                             "contact the developers. Error code: " +
+                                 StringConverter::toString( result ),
                              "MetalStagingBuffer::wait" );
 
                 return fenceName;
@@ -1532,8 +1482,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     MetalVaoManager::VboFlag MetalVaoManager::bufferTypeToVboFlag( BufferType bufferType )
     {
-        return static_cast<VboFlag>( std::max( 0, (bufferType - BT_DYNAMIC_DEFAULT) +
-                                                    CPU_ACCESSIBLE_DEFAULT ) );
+        return static_cast<VboFlag>(
+            std::max( 0, ( bufferType - BT_DYNAMIC_DEFAULT ) + CPU_ACCESSIBLE_DEFAULT ) );
     }
 }
-

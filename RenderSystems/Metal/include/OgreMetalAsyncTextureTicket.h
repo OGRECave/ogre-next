@@ -30,42 +30,44 @@ THE SOFTWARE.
 #define _OgreMetalAsyncTextureTicket_H_
 
 #include "OgreMetalPrerequisites.h"
+
 #include "OgreAsyncTextureTicket.h"
+
 #include "OgreTextureBox.h"
+
 #include <dispatch/dispatch.h>
 
 namespace Ogre
 {
     /** See AsyncTextureTicket
-    */
+     */
     class _OgreMetalExport MetalAsyncTextureTicket : public AsyncTextureTicket
     {
     protected:
-        id<MTLBuffer>   mVboName;
+        id<MTLBuffer> mVboName;
 
-        uint32                  mDownloadFrame;
-        dispatch_semaphore_t    mAccurateFence;
-        MetalVaoManager         *mVaoManager;
-        MetalDevice             *mDevice;
+        uint32               mDownloadFrame;
+        dispatch_semaphore_t mAccurateFence;
+        MetalVaoManager *    mVaoManager;
+        MetalDevice *        mDevice;
 
         virtual TextureBox mapImpl( uint32 slice );
-        virtual void unmapImpl();
+        virtual void       unmapImpl();
 
         void waitForDownloadToFinish();
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
-                                      bool accurateTracking, TextureBox *srcBox=0 );
+        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                                      TextureBox *srcBox = 0 );
 
     public:
         MetalAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                  TextureTypes::TextureTypes textureType,
-                                 PixelFormatGpu pixelFormatFamily,
-                                 MetalVaoManager *vaoManager,
+                                 PixelFormatGpu pixelFormatFamily, MetalVaoManager *vaoManager,
                                  MetalDevice *device );
         virtual ~MetalAsyncTextureTicket();
 
         virtual bool queryIsTransferDone();
     };
-}
+}  // namespace Ogre
 
 #endif
