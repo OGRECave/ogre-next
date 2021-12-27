@@ -140,8 +140,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
     ${OGRE_BINARY_DIR}/inst/bin/debug/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/debug/resources_d.cfg
     ${OGRE_BINARY_DIR}/inst/bin/debug/plugins_d.cfg
-	${OGRE_BINARY_DIR}/inst/bin/debug/plugins_tools_d.cfg
-	${OGRE_BINARY_DIR}/inst/bin/debug/samples_d.cfg
+    ${OGRE_BINARY_DIR}/inst/bin/debug/plugins_tools_d.cfg
 	${OGRE_BINARY_DIR}/inst/bin/debug/tests_d.cfg
     DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_DEBUG_PATH}" CONFIGURATIONS Debug
   )
@@ -150,8 +149,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
     ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
-	${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
-	${OGRE_BINARY_DIR}/inst/bin/release/samples.cfg
+    ${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
 	${OGRE_BINARY_DIR}/inst/bin/release/tests.cfg
     DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_RELEASE_PATH}" CONFIGURATIONS Release None ""
   )
@@ -160,8 +158,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
     ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
-	${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
-	${OGRE_BINARY_DIR}/inst/bin/release/samples.cfg
+    ${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
 	${OGRE_BINARY_DIR}/inst/bin/release/tests.cfg
 	DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_RELWDBG_PATH}" CONFIGURATIONS RelWithDebInfo
   )
@@ -170,8 +167,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
     ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
-	${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
-	${OGRE_BINARY_DIR}/inst/bin/release/samples.cfg
+    ${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
 	${OGRE_BINARY_DIR}/inst/bin/release/tests.cfg
 	DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_MINSIZE_PATH}" CONFIGURATIONS MinSizeRel
   )
@@ -183,8 +179,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
       ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
       ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
       ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
-	  ${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
-      ${OGRE_BINARY_DIR}/inst/bin/release/samples.cfg
+      ${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg
       ${OGRE_BINARY_DIR}/inst/bin/release/tests.cfg
       DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_RELEASE_PATH}"
     )
