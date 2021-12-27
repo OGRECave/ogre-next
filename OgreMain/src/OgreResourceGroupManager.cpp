@@ -67,8 +67,6 @@ namespace Ogre {
         createResourceGroup(INTERNAL_RESOURCE_GROUP_NAME);
         // Create the 'Autodetect' group (only used for temp storage)
         createResourceGroup(AUTODETECT_RESOURCE_GROUP_NAME);
-        // default world group to the default group
-        mWorldGroupName = DEFAULT_RESOURCE_GROUP_NAME;
     }
     //-----------------------------------------------------------------------
     ResourceGroupManager::~ResourceGroupManager()
@@ -98,7 +96,6 @@ namespace Ogre {
         grp->groupStatus = ResourceGroup::UNINITIALSED;
         grp->name = name;
         grp->inGlobalPool = inGlobalPool;
-        grp->worldGeometrySceneManager = 0;
         mResourceGroupMap.insert(
             ResourceGroupMap::value_type(name, grp));
     }
@@ -192,15 +189,15 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::prepareResourceGroup(const String& name, 
-        bool prepareMainResources, bool prepareWorldGeom)
+    void ResourceGroupManager::prepareResourceGroup(const String& name,
+        bool prepareMainResources)
     {
         // Can only bulk-load one group at a time (reasonable limitation I think)
         OGRE_LOCK_AUTO_MUTEX;
 
         LogManager::getSingleton().stream()
             << "Preparing resource group '" << name << "' - Resources: "
-            << prepareMainResources << " World Geometry: " << prepareWorldGeom;
+            << prepareMainResources;
         // load all created resources
         ResourceGroup* grp = getResourceGroup(name);
         if (!grp)
@@ -223,13 +220,6 @@ namespace Ogre {
             {
                 resourceCount += oi->second->size();
             }
-        }
-        // Estimate world geometry size
-        if (grp->worldGeometrySceneManager && prepareWorldGeom)
-        {
-            resourceCount += 
-                grp->worldGeometrySceneManager->estimateWorldGeometry(
-                    grp->worldGeometry);
         }
 
         fireResourceGroupPrepareStarted(name, resourceCount);
@@ -275,12 +265,6 @@ namespace Ogre {
                 }
             }
         }
-        // Load World Geometry
-        if (grp->worldGeometrySceneManager && prepareWorldGeom)
-        {
-            grp->worldGeometrySceneManager->prepareWorldGeometry(
-                grp->worldGeometry);
-        }
         fireResourceGroupPrepareEnded(name);
 
         // reset current group
@@ -289,15 +273,15 @@ namespace Ogre {
         LogManager::getSingleton().logMessage("Finished preparing resource group " + name);
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::loadResourceGroup(const String& name, 
-        bool loadMainResources, bool loadWorldGeom)
+    void ResourceGroupManager::loadResourceGroup(const String& name,
+        bool loadMainResources)
     {
         // Can only bulk-load one group at a time (reasonable limitation I think)
         OGRE_LOCK_AUTO_MUTEX;
 
         LogManager::getSingleton().stream()
             << "Loading resource group '" << name << "' - Resources: "
-            << loadMainResources << " World Geometry: " << loadWorldGeom;
+            << loadMainResources;
         // load all created resources
         ResourceGroup* grp = getResourceGroup(name);
         if (!grp)
@@ -321,14 +305,6 @@ namespace Ogre {
                 resourceCount += oi->second->size();
             }
         }
-        // Estimate world geometry size
-        if (grp->worldGeometrySceneManager && loadWorldGeom)
-        {
-            resourceCount += 
-                grp->worldGeometrySceneManager->estimateWorldGeometry(
-                    grp->worldGeometry);
-        }
-
         fireResourceGroupLoadStarted(name, resourceCount);
 
         // Now load for real
@@ -371,12 +347,6 @@ namespace Ogre {
                     }
                 }
             }
-        }
-        // Load World Geometry
-        if (grp->worldGeometrySceneManager && loadWorldGeom)
-        {
-            grp->worldGeometrySceneManager->setWorldGeometry(
-                grp->worldGeometry);
         }
         fireResourceGroupLoadEnded(name);
 
@@ -1544,26 +1514,6 @@ namespace Ogre {
             }
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::_notifyWorldGeometryStageStarted(const String& desc)
-    {
-        OGRE_LOCK_AUTO_MUTEX;
-        for (ResourceGroupListenerList::iterator l = mResourceGroupListenerList.begin();
-            l != mResourceGroupListenerList.end(); ++l)
-        {
-            (*l)->worldGeometryStageStarted(desc);
-        }
-    }
-    //-----------------------------------------------------------------------
-    void ResourceGroupManager::_notifyWorldGeometryStageEnded(void)
-    {
-        OGRE_LOCK_AUTO_MUTEX;
-            for (ResourceGroupListenerList::iterator l = mResourceGroupListenerList.begin();
-                l != mResourceGroupListenerList.end(); ++l)
-            {
-                (*l)->worldGeometryStageEnded();
-            }
-    }
-    //-----------------------------------------------------------------------
     void ResourceGroupManager::fireResourceGroupLoadEnded(const String& groupName)
     {
             OGRE_LOCK_AUTO_MUTEX;
@@ -1983,40 +1933,6 @@ namespace Ogre {
         }
 
         return vec;
-    }
-    //-----------------------------------------------------------------------
-    void ResourceGroupManager::linkWorldGeometryToResourceGroup(const String& group, 
-        const String& worldGeometry, SceneManager* sceneManager)
-    {
-        OGRE_LOCK_AUTO_MUTEX;
-        ResourceGroup* grp = getResourceGroup(group);
-        if (!grp)
-        {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "Cannot locate a resource group called '" + group + "'", 
-                "ResourceGroupManager::linkWorldGeometryToResourceGroup");
-        }
-
-        OGRE_LOCK_MUTEX(grp->OGRE_AUTO_MUTEX_NAME); // lock group mutex
-
-        grp->worldGeometry = worldGeometry;
-        grp->worldGeometrySceneManager = sceneManager;
-    }
-    //-----------------------------------------------------------------------
-    void ResourceGroupManager::unlinkWorldGeometryFromResourceGroup(const String& group)
-    {
-        OGRE_LOCK_AUTO_MUTEX;
-        ResourceGroup* grp = getResourceGroup(group);
-        if (!grp)
-        {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "Cannot locate a resource group called '" + group + "'", 
-                "ResourceGroupManager::unlinkWorldGeometryFromResourceGroup");
-        }
-
-        OGRE_LOCK_MUTEX(grp->OGRE_AUTO_MUTEX_NAME); // lock group mutex
-        grp->worldGeometry = BLANKSTRING;
-        grp->worldGeometrySceneManager = 0;
     }
     //-----------------------------------------------------------------------
     bool ResourceGroupManager::isResourceGroupInGlobalPool(const String& name)

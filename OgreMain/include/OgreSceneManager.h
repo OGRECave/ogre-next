@@ -200,8 +200,8 @@ namespace Ogre {
         to be extended through subclassing in order to provide more specialised
         scene organisation structures for particular needs. The default 
         SceneManager culls based on a hierarchy of node bounding boxes, other
-        implementations can use an octree (@see OctreeSceneManager), a BSP
-        tree (@see BspSceneManager), and many other options. New SceneManager
+        implementations can use an octree (@see OctreeSceneManager),
+        and many other options. New SceneManager
         implementations can be added at runtime by plugins, see 
         SceneManagerEnumerator for the interfaces for adding new SceneManager
         types.
@@ -1656,106 +1656,6 @@ namespace Ogre {
         const Vector3& getAmbientLightHemisphereDir(void) const { return mAmbientLightHemisphereDir; }
         uint32 getEnvFeatures(void) const                       { return mEnvFeatures; }
         const float* getSphericalHarmonics(void) const          { return mAmbientSphericalHarmonics; }
-
-        /** Sets the source of the 'world' geometry, i.e. the large, mainly static geometry
-            making up the world e.g. rooms, landscape etc.
-            This function can be called before setWorldGeometry in a background thread, do to
-            some slow tasks (e.g. IO) that do not involve the backend render system.
-            @remarks
-                Depending on the type of SceneManager (subclasses will be specialised
-                for particular world geometry types) you have requested via the Root or
-                SceneManagerEnumerator classes, you can pass a filename to this method and it
-                will attempt to load the world-level geometry for use. If you try to load
-                an inappropriate type of world data an exception will be thrown. The default
-                SceneManager cannot handle any sort of world geometry and so will always
-                throw an exception. However subclasses like BspSceneManager can load
-                particular types of world geometry e.g. "q3dm1.bsp".
-
-        */
-        virtual void prepareWorldGeometry(const String& filename);
-
-        /** Sets the source of the 'world' geometry, i.e. the large, mainly 
-            static geometry making up the world e.g. rooms, landscape etc.
-            This function can be called before setWorldGeometry in a background thread, do to
-            some slow tasks (e.g. IO) that do not involve the backend render system.
-            @remarks
-                Depending on the type of SceneManager (subclasses will be 
-                specialised for particular world geometry types) you have 
-                requested via the Root or SceneManagerEnumerator classes, you 
-                can pass a stream to this method and it will attempt to load 
-                the world-level geometry for use. If the manager can only 
-                handle one input format the typeName parameter is not required.
-                The stream passed will be read (and it's state updated). 
-            @param stream Data stream containing data to load
-            @param typeName String identifying the type of world geometry
-                contained in the stream - not required if this manager only 
-                supports one type of world geometry.
-        */
-        virtual void prepareWorldGeometry(DataStreamPtr& stream, 
-            const String& typeName = BLANKSTRING);
-
-        /** Sets the source of the 'world' geometry, i.e. the large, mainly static geometry
-            making up the world e.g. rooms, landscape etc.
-            @remarks
-                Depending on the type of SceneManager (subclasses will be specialised
-                for particular world geometry types) you have requested via the Root or
-                SceneManagerEnumerator classes, you can pass a filename to this method and it
-                will attempt to load the world-level geometry for use. If you try to load
-                an inappropriate type of world data an exception will be thrown. The default
-                SceneManager cannot handle any sort of world geometry and so will always
-                throw an exception. However subclasses like BspSceneManager can load
-                particular types of world geometry e.g. "q3dm1.bsp".
-        */
-        virtual void setWorldGeometry(const String& filename);
-
-        /** Sets the source of the 'world' geometry, i.e. the large, mainly 
-            static geometry making up the world e.g. rooms, landscape etc.
-            @remarks
-                Depending on the type of SceneManager (subclasses will be 
-                specialised for particular world geometry types) you have 
-                requested via the Root or SceneManagerEnumerator classes, you 
-                can pass a stream to this method and it will attempt to load 
-                the world-level geometry for use. If the manager can only 
-                handle one input format the typeName parameter is not required.
-                The stream passed will be read (and it's state updated). 
-            @param stream Data stream containing data to load
-            @param typeName String identifying the type of world geometry
-                contained in the stream - not required if this manager only 
-                supports one type of world geometry.
-        */
-        virtual void setWorldGeometry(DataStreamPtr& stream, 
-            const String& typeName = BLANKSTRING);
-
-        /** Estimate the number of loading stages required to load the named
-            world geometry. 
-        @remarks
-            This method should be overridden by SceneManagers that provide
-            custom world geometry that can take some time to load. They should
-            return from this method a count of the number of stages of progress
-            they can report on whilst loading. During real loading (setWorldGeometry),
-            they should call ResourceGroupManager::_notifyWorldGeometryProgress exactly
-            that number of times when loading the geometry for real.
-        @note 
-            The default is to return 0, ie to not report progress. 
-        */
-        virtual size_t estimateWorldGeometry(const String& filename)
-        { (void)filename; return 0; }
-
-        /** Estimate the number of loading stages required to load the named
-            world geometry. 
-        @remarks
-            Operates just like the version of this method which takes a
-            filename, but operates on a stream instead. Note that since the
-            stream is updated, you'll need to reset the stream or reopen it
-            when it comes to loading it for real.
-        @param stream Data stream containing data to load
-        @param typeName String identifying the type of world geometry
-            contained in the stream - not required if this manager only 
-            supports one type of world geometry.
-        */      
-        virtual size_t estimateWorldGeometry(DataStreamPtr& stream, 
-            const String& typeName = BLANKSTRING)
-        { (void)stream; (void)typeName; return 0; }
 
         /** Asks the SceneManager to provide a suggested viewpoint from which the scene should be viewed.
             @remarks
