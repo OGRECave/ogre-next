@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::HlmsUnlitMobileDatablock Class Reference</title>
+<title>OGRE-Next: Ogre::HlmsUnlitMobileDatablock Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -245,7 +245,7 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a65e56c070fcbe6ef2274c2ccb3cd847a"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a65e56c070fcbe6ef2274c2ccb3cd847a">getCmpString</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction)</td></tr>
 <tr class="separator:a65e56c070fcbe6ef2274c2ccb3cd847a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab95204daeb4fc3373d3db2e4ef59ff43"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_ogre_1_1_hlms_unlit_mobile_datablock_1_1_uv_atlas_params.html">UvAtlasParams</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_unlit_mobile_datablock.html#ab95204daeb4fc3373d3db2e4ef59ff43">textureLocationToAtlasParams</a> (const <a class="el" href="struct_ogre_1_1_hlms_texture_manager_1_1_texture_location.html">HlmsTextureManager::TextureLocation</a> &amp;texLocation)</td></tr>
+<tr class="memitem:ab95204daeb4fc3373d3db2e4ef59ff43"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_ogre_1_1_hlms_unlit_mobile_datablock_1_1_uv_atlas_params.html">UvAtlasParams</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_unlit_mobile_datablock.html#ab95204daeb4fc3373d3db2e4ef59ff43">textureLocationToAtlasParams</a> (const HlmsTextureManager::TextureLocation &amp;texLocation)</td></tr>
 <tr class="separator:ab95204daeb4fc3373d3db2e4ef59ff43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -1876,7 +1876,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">texUnit</td><td>ID of the texture unit. Must be in range [0; 16) otherwise throws. </td></tr>
-    <tr><td class="paramname">newTexture</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> to change to. Can't be null, otherwise throws (use a blank texture). </td></tr>
+    <tr><td class="paramname">newTexture</td><td>Texture to change to. Can't be null, otherwise throws (use a blank texture). </td></tr>
     <tr><td class="paramname">atlasParams</td><td>The atlas offsets in case this texture is an atlas or an array texture </td></tr>
   </table>
   </dd>
@@ -1958,7 +1958,7 @@ HlmsDatablock::flushRenderables. </dd></dl>
         <tr>
           <td class="memname">static <a class="el" href="struct_ogre_1_1_hlms_unlit_mobile_datablock_1_1_uv_atlas_params.html">UvAtlasParams</a> Ogre::HlmsUnlitMobileDatablock::textureLocationToAtlasParams </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_texture_manager_1_1_texture_location.html">HlmsTextureManager::TextureLocation</a> &amp;&#160;</td>
+          <td class="paramtype">const HlmsTextureManager::TextureLocation &amp;&#160;</td>
           <td class="paramname"><em>texLocation</em></td><td>)</td>
           <td></td>
         </tr>

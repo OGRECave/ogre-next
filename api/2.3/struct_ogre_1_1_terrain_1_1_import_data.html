@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::Terrain::ImportData Struct Reference</title>
+<title>OGRE-Next: Ogre::Terrain::ImportData Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -127,7 +127,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aaab91a388f7bab0e1d00a858bbeb5902"><td class="memItemLeft" align="right" valign="top">float *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_terrain_1_1_import_data.html#aaab91a388f7bab0e1d00a858bbeb5902">inputFloat</a></td></tr>
 <tr class="memdesc:aaab91a388f7bab0e1d00a858bbeb5902"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional list of terrainSize * terrainSize floats defining the terrain.  <a href="struct_ogre_1_1_terrain_1_1_import_data.html#aaab91a388f7bab0e1d00a858bbeb5902">More...</a><br /></td></tr>
 <tr class="separator:aaab91a388f7bab0e1d00a858bbeb5902"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61b189d3b9768810d747f35f7d141e79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_image.html">Image</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_terrain_1_1_import_data.html#a61b189d3b9768810d747f35f7d141e79">inputImage</a></td></tr>
+<tr class="memitem:a61b189d3b9768810d747f35f7d141e79"><td class="memItemLeft" align="right" valign="top">Image *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_terrain_1_1_import_data.html#a61b189d3b9768810d747f35f7d141e79">inputImage</a></td></tr>
 <tr class="memdesc:a61b189d3b9768810d747f35f7d141e79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional heightmap providing the initial heights for the terrain.  <a href="struct_ogre_1_1_terrain_1_1_import_data.html#a61b189d3b9768810d747f35f7d141e79">More...</a><br /></td></tr>
 <tr class="separator:a61b189d3b9768810d747f35f7d141e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae97c725c89e0c789e5099fd387953020"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_terrain_1_1_import_data.html#ae97c725c89e0c789e5099fd387953020">inputScale</a></td></tr>
@@ -327,7 +327,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Whether this structure should 'own' the input data (inputImage and inputFloat), and therefore delete it on destruction. </p>
-<p>The default is false so you have to manage your own memory. If you set it to true, then you must have allocated the memory through OGRE_NEW (for <a class="el" href="class_ogre_1_1_image.html" title="Class representing an image file.">Image</a>) and OGRE_ALLOC_T (for inputFloat), the latter with the category MEMCATEGORY_GEOMETRY. </p>
+<p>The default is false so you have to manage your own memory. If you set it to true, then you must have allocated the memory through OGRE_NEW (for Image) and OGRE_ALLOC_T (for inputFloat), the latter with the category MEMCATEGORY_GEOMETRY. </p>
 
 <p class="reference">Referenced by <a class="el" href="struct_ogre_1_1_terrain_1_1_import_data.html#aabbbf63a35790a9b414acaa1e20baf93">operator=()</a>.</p>
 
@@ -377,7 +377,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_image.html">Image</a>* Ogre::Terrain::ImportData::inputImage</td>
+          <td class="memname">Image* Ogre::Terrain::ImportData::inputImage</td>
         </tr>
       </table>
 </div><div class="memdoc">

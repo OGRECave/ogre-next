@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: RenderSystem</title>
+<title>OGRE-Next: RenderSystem</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -100,17 +100,14 @@ $(document).ready(function(){initNavTree('group___render_system.html',''); initR
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_bound_uav.html">Ogre::BoundUav</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_depth_buffer.html">Ogre::DepthBuffer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An abstract class that contains a depth/stencil buffer.  <a href="class_ogre_1_1_depth_buffer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_depth_buffer.html">Ogre::DepthBuffer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An abstract class that contains a depth/stencil buffer.  <a href="struct_ogre_1_1_depth_buffer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_driver_version.html">Ogre::DriverVersion</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="struct_ogre_1_1_driver_version.html" title="DriverVersion is used by RenderSystemCapabilities and both GL and D3D9 to store the version of the cu...">DriverVersion</a> is used by <a class="el" href="class_ogre_1_1_render_system_capabilities.html" title="singleton class for storing the capabilities of the graphics card.">RenderSystemCapabilities</a> and both GL and D3D9 to store the version of the current GPU driver.  <a href="struct_ogre_1_1_driver_version.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hardware_occlusion_query.html">Ogre::HardwareOcclusionQuery</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a abstract class that that provides the interface for the query class for hardware occlusion.  <a href="class_ogre_1_1_hardware_occlusion_query.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_multi_render_target.html">Ogre::MultiRenderTarget</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class represents a render target that renders to multiple RenderTextures at once.  <a href="class_ogre_1_1_multi_render_target.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_queued_renderable.html">Ogre::QueuedRenderable</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,24 +128,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_system_capabilities_serializer.html">Ogre::RenderSystemCapabilitiesSerializer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for serializing <a class="el" href="class_ogre_1_1_render_system_capabilities.html" title="singleton class for storing the capabilities of the graphics card.">RenderSystemCapabilities</a> to / from a .rendercaps script.  <a href="class_ogre_1_1_render_system_capabilities_serializer.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_target.html">Ogre::RenderTarget</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A 'canvas' which can receive the results of a rendering operation.  <a href="class_ogre_1_1_render_target.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_target_event.html">Ogre::RenderTargetEvent</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct containing information about a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> event.  <a href="struct_ogre_1_1_render_target_event.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_target_listener.html">Ogre::RenderTargetListener</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A interface class defining a listener which can be used to receive notifications of <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> events.  <a href="class_ogre_1_1_render_target_listener.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_target_viewport_event.html">Ogre::RenderTargetViewportEvent</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct containing information about a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> Viewport-specific event.  <a href="struct_ogre_1_1_render_target_viewport_event.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_texture.html">Ogre::RenderTexture</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class represents a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> that renders to a <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a>.  <a href="class_ogre_1_1_render_texture.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_window.html">Ogre::RenderWindow</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the target rendering window.  <a href="class_ogre_1_1_render_window.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_render_window_description.html">Ogre::RenderWindowDescription</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Render window creation parameters.  <a href="struct_ogre_1_1_render_window_description.html#details">More...</a><br /></td></tr>
@@ -200,12 +179,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html">Ogre::v1::HardwareIndexBufferSharedPtr</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer implementation used to share index buffers.  <a href="class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_pixel_buffer.html">Ogre::v1::HardwarePixelBuffer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialisation of <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers.">HardwareBuffer</a> for a pixel buffer.  <a href="class_ogre_1_1v1_1_1_hardware_pixel_buffer.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_pixel_buffer_shared_ptr.html">Ogre::v1::HardwarePixelBufferSharedPtr</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared pointer implementation used to share pixel buffers.  <a href="class_ogre_1_1v1_1_1_hardware_pixel_buffer_shared_ptr.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_uniform_buffer.html">Ogre::v1::HardwareUniformBuffer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialisation of <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html" title="Abstract class defining common features of hardware buffers.">HardwareBuffer</a> for a uniform buffer.  <a href="class_ogre_1_1v1_1_1_hardware_uniform_buffer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,8 +196,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_render_operation.html">Ogre::v1::RenderOperation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">'New' rendering operation using vertex buffers.  <a href="class_ogre_1_1v1_1_1_render_operation.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_render_to_vertex_buffer.html">Ogre::v1::RenderToVertexBuffer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_temp_blended_buffer_info.html">Ogre::v1::TempBlendedBufferInfo</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure for recording the use of temporary blend buffers.  <a href="class_ogre_1_1v1_1_1_temp_blended_buffer_info.html#details">More...</a><br /></td></tr>
@@ -763,7 +734,7 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="gga3d2965b7f378ebdcfe8a4a6cf74c3de7aee2c79b850493fd5422cbdf94f1e03e2"></a>RSC_TEXTURE_GATHER&#160;</td><td class="fielddoc"><p>Hardware/API supports texture gather operation. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga3d2965b7f378ebdcfe8a4a6cf74c3de7a6565eb8e21bc01c73a39360b09f9ef8c"></a>RSC_UAV&#160;</td><td class="fielddoc"><p>Supports UAVs (OpenGL: SSBOs and <a class="el" href="class_ogre_1_1_image.html" title="Class representing an image file.">Image</a> texture. D3D11: UAVs &amp; structured buffers) </p>
+<tr><td class="fieldname"><a id="gga3d2965b7f378ebdcfe8a4a6cf74c3de7a6565eb8e21bc01c73a39360b09f9ef8c"></a>RSC_UAV&#160;</td><td class="fielddoc"><p>Supports UAVs (OpenGL: SSBOs and Image texture. D3D11: UAVs &amp; structured buffers) </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga3d2965b7f378ebdcfe8a4a6cf74c3de7aedc680ed5b99636dd91aeeab936829ec"></a>RSC_EXPLICIT_API&#160;</td><td class="fielddoc"><p>API requires <a class="el" href="struct_ogre_1_1_resource_transition.html">ResourceTransition</a> for everything (e.g. </p>
 <p>D3D12, Vulkan, Mantle). Not set for D3D11, and GL. Doesn't mean <a class="el" href="struct_ogre_1_1_resource_transition.html">ResourceTransition</a> aren't required (i.e. GL needs them for UAVs and Compute Shaders) </p>

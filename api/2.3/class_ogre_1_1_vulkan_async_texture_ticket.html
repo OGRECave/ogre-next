@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::VulkanAsyncTextureTicket Class Reference</title>
+<title>OGRE-Next: Ogre::VulkanAsyncTextureTicket Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -254,7 +254,7 @@ Public Member Functions</h2></td></tr>
 <p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
-<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture.">RenderTexture</a> and is now ready to be presented to the monitor. </p>
+<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
 </table>
@@ -454,10 +454,10 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Downloads textureSrc into this ticket. </p>
-<p>The size (resolution) of this ticket must match exactly of the region to download. </p><dl class="section remark"><dt>Remarks</dt><dd>The texture must either be Resident, or being streamed (i.e. scheduled to become Resident) If the texture isn't done streaming, the ticket will automatically schedule itself to perform the actual download once the streaming is done. If the <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> has a SystemRAM copy, it won't be used. You must access that directly, not via <a class="el" href="class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous.">AsyncTextureTicket</a>. </dd></dl>
+<p>The size (resolution) of this ticket must match exactly of the region to download. </p><dl class="section remark"><dt>Remarks</dt><dd>The texture must either be Resident, or being streamed (i.e. scheduled to become Resident) If the texture isn't done streaming, the ticket will automatically schedule itself to perform the actual download once the streaming is done. If the Texture has a SystemRAM copy, it won't be used. You must access that directly, not via <a class="el" href="class_ogre_1_1_async_texture_ticket.html" title="In Ogre 2.2 reading data from GPU back to CPU is asynchronous.">AsyncTextureTicket</a>. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textureSrc</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> to download from. Must be resident. </td></tr>
+    <tr><td class="paramname">textureSrc</td><td>Texture to download from. Must be resident. </td></tr>
     <tr><td class="paramname">mipLevel</td><td>Mip level to download. </td></tr>
     <tr><td class="paramname">accurateTracking</td><td>When false, you will be mapping this texture much further along (i.e. after 2-3 frames) Useful when constantly streaming GPU content to the CPU with 3 frames delay. When true, we will accurately track the status of this transfer, which has higher driver overhead. </td></tr>
     <tr><td class="paramname">srcBox</td><td>When nullptr, we'll download the whole texture (its selected mip level) When not nullptr, we'll download the region within the texture. This region must resolution must match exactly that of this ticket (e.g. bytesPerRow may be much bigger than you expect!) </td></tr>

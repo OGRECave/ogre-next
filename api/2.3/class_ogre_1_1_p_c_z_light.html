@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::PCZLight Class Reference</title>
+<title>OGRE-Next: Ogre::PCZLight Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -768,7 +768,7 @@ Static Public Attributes</h2></td></tr>
 <p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
-<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture.">RenderTexture</a> and is now ready to be presented to the monitor. </p>
+<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
 </table>
@@ -3852,8 +3852,8 @@ Getting details of a light as a 4D vector can be useful for doing general calcul
 <p>Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed: </p>
 <ol type="1">
 <li><a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> got called (texture is ready to be displayed)</li>
-<li><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> changed residency status.</li>
-<li><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> is being deleted. It won't be a valid pointer after this call. </li>
+<li>Texture changed residency status.</li>
+<li>Texture is being deleted. It won't be a valid pointer after this call. </li>
 </ol>
 
 <p>Implements <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#aad4e9062c9a92d1e2cc57d4bbe50eb95">Ogre::TextureGpuListener</a>.</p>
@@ -5701,7 +5701,7 @@ template&lt;class Alloc &gt; </div>
 <p>At the time of writing only LT_AREA_APPROX supports it. </p><dl class="section remark"><dt>Remarks</dt><dd>Note that <a class="el" href="class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys...">HlmsPbs</a> only supports one 2D Array texture active at a time. i.e. you must call hlmsPbs-&gt;setAreaLightMasks( texture ); and if that texture belongs to a different pool as the one you're inputting here, the wrong texture will be displayed! </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">texture</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a>. Can be monochrome or coloured. For Raw version must be a 2D Array texture. For non-Raw version, must be a 2D texture. </td></tr>
+    <tr><td class="paramname">texture</td><td>Texture. Can be monochrome or coloured. For Raw version must be a 2D Array texture. For non-Raw version, must be a 2D texture. </td></tr>
     <tr><td class="paramname">sliceIdx</td><td>Slice to the texture. </td></tr>
   </table>
   </dd>

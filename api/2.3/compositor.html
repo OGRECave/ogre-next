@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Compositor</title>
+<title>OGRE-Next: Compositor</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -206,7 +206,7 @@ Locally declared textures</h3>
 <p>The following script declares a local texture of resolution 800x600, clears it to violet, and puts it in the output channel #0 (so other compositor nodes can use it as input):</p>
 <div class="fragment"><div class="line">compositor_node MyNode</div>
 <div class="line">{</div>
-<div class="line">    texture rt0 800 600 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a></div>
+<div class="line">    texture rt0 800 600 PF_R8G8B8</div>
 <div class="line">    </div>
 <div class="line">    target Input_as_MyLocaName</div>
 <div class="line">    {</div>
@@ -219,7 +219,6 @@ Locally declared textures</h3>
 <div class="line"> </div>
 <div class="line">    out 0 rt0</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup___image_html_gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8"><div class="ttname"><a href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">Ogre::PF_R8G8B8</a></div><div class="ttdeci">@ PF_R8G8B8</div><div class="ttdoc">24-bit pixel format, 8 bits for red, green and blue.</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:71</div></div>
 </div><!-- fragment --><p>You may have noticed the syntax for declaring the RTT is <b>almost exactly the same</b> as it was in <a class="el" href="namespace_ogre.html">Ogre</a> 1.x</p>
 <p>Refer to <a class="el" href="namespace_ogre.html">Ogre</a>'s 1.9 documentation for more information about it.</p>
 <p>There are a couple of small changes:</p>
@@ -240,7 +239,7 @@ It comes from an input channel</h3>
 <div class="line">    in 0 myFirstInput</div>
 <div class="line">    in 1 mySecondInput</div>
 <div class="line">    </div>
-<div class="line">    texture rt0 target_width_scaled 0.25 target_height_scaled 0.25 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a></div>
+<div class="line">    texture rt0 target_width_scaled 0.25 target_height_scaled 0.25 PF_R8G8B8</div>
 <div class="line"> </div>
 <div class="line">    out 0 mySecondInput</div>
 <div class="line">    out 1 myFirstInput</div>
@@ -769,7 +768,7 @@ compute</h3>
 <div class="fragment"><div class="line">compositor_node MyNode</div>
 <div class="line">{</div>
 <div class="line">    in 0 rt_renderwindow</div>
-<div class="line">    texture myUavTexture target_width target_height <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca74ea3b1c0c5f4ae06b1a7136c5523eca">PF_R8G8B8A8</a> depth_pool 0 no_gamma uav</div>
+<div class="line">    texture myUavTexture target_width target_height PF_R8G8B8A8 depth_pool 0 no_gamma uav</div>
 <div class="line">    buffer myUavBuffer 1024 4</div>
 <div class="line">    </div>
 <div class="line">    target rt_renderwindow</div>
@@ -791,12 +790,11 @@ compute</h3>
 <div class="line">    out 0 myUavTexture</div>
 <div class="line">    out_buffer 0 myUavBuffer</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup___image_html_gga7e0353e7d36d4c2e8468641b7303d39ca74ea3b1c0c5f4ae06b1a7136c5523eca"><div class="ttname"><a href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca74ea3b1c0c5f4ae06b1a7136c5523eca">Ogre::PF_R8G8B8A8</a></div><div class="ttdeci">@ PF_R8G8B8A8</div><div class="ttdoc">32-bit pixel format, 8 bits for red, green, blue and alpha.</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:81</div></div>
 </div><!-- fragment --><p>Or to a null dummy render target, which occupies almost no memory:</p>
 <div class="fragment"><div class="line">compositor_node MyNode</div>
 <div class="line">{</div>
-<div class="line">    texture nullDummy target_width target_height <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca3e263e021355990e214529a767de2598">PF_NULL</a></div>
-<div class="line">    texture myUavTexture target_width target_height <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca74ea3b1c0c5f4ae06b1a7136c5523eca">PF_R8G8B8A8</a> depth_pool 0 no_gamma uav</div>
+<div class="line">    texture nullDummy target_width target_height PF_NULL</div>
+<div class="line">    texture myUavTexture target_width target_height PF_R8G8B8A8 depth_pool 0 no_gamma uav</div>
 <div class="line">    buffer myUavBuffer 1024 4</div>
 <div class="line">    </div>
 <div class="line">    target  nullDummy</div>
@@ -813,7 +811,6 @@ compute</h3>
 <div class="line">    out 0 myUavTexture</div>
 <div class="line">    out_buffer 0 myUavBuffer</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup___image_html_gga7e0353e7d36d4c2e8468641b7303d39ca3e263e021355990e214529a767de2598"><div class="ttname"><a href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca3e263e021355990e214529a767de2598">Ogre::PF_NULL</a></div><div class="ttdeci">@ PF_NULL</div><div class="ttdoc">Dummy, used for UAV-only rendering.</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:359</div></div>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>Attention #1!</p>
 <p>Do NOT set UAV buffers to the compute job directly (the class HlmsComputeJob). The Compositor needs to evaluate memory barriers and resource transitions. Leaving inconsistent memory barriers can result in hazards/race conditions in some APIs. If in doubt, change the CompositorPassComputeDef instead.</p>
@@ -915,8 +912,8 @@ Depth Textures</h3>
 <p>Depth Buffers can be tricky. Suppose the following example:</p>
 <div class="fragment"><div class="line">compositor_node Example</div>
 <div class="line">{</div>
-<div class="line">        texture myDepthTexture 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a></div>
-<div class="line">        texture finalSSAO 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a></div>
+<div class="line">        texture myDepthTexture 512 512 PF_D32_FLOAT</div>
+<div class="line">        texture finalSSAO 512 512 PF_R8G8B8</div>
 <div class="line">        <span class="comment">//Draw the depth</span></div>
 <div class="line">        target myDepthTexture</div>
 <div class="line">        {</div>
@@ -938,13 +935,12 @@ Depth Textures</h3>
 <div class="line">        </div>
 <div class="line">        out 0 finalSSAO</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup___image_html_gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae"><div class="ttname"><a href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">Ogre::PF_D32_FLOAT</a></div><div class="ttdeci">@ PF_D32_FLOAT</div><div class="ttdoc">Depth texture format. 32 bits for depth.</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:348</div></div>
 </div><!-- fragment --><p>Which simply does "Render a depth only pass to myDepthTexture; and read the depth buffer contents with a render quad, and store the results in a coloured RTT called 'finalSSAO' ".</p>
 <p>That one was easy. But what about this one?</p>
 <div class="fragment"><div class="line">compositor_node Example2</div>
 <div class="line">{</div>
-<div class="line">        texture firstPass 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a></div>
-<div class="line">        texture finalColour 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a></div>
+<div class="line">        texture firstPass 512 512 PF_R8G8B8</div>
+<div class="line">        texture finalColour 512 512 PF_R8G8B8</div>
 <div class="line">        <span class="comment">//Draw everything, colour and depth</span></div>
 <div class="line">        target firstPass</div>
 <div class="line">        {</div>
@@ -979,12 +975,12 @@ Depth Textures</h3>
 <div class="line">        <span class="comment">//Instruct we want to use a depth texture (32-bit float). The &quot;depth_texture&quot; keyword is necessary.</span></div>
 <div class="line">        <span class="comment">//Specifying The depth format is optional and so is the depth pool. However recommended to specify</span></div>
 <div class="line">        <span class="comment">//them to avoid surprises.</span></div>
-<div class="line">        texture firstPass 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a> depth_format <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a> depth_texture depth_pool 1</div>
+<div class="line">        texture firstPass 512 512 PF_R8G8B8 depth_format PF_D32_FLOAT depth_texture depth_pool 1</div>
 <div class="line">        <span class="comment">//Declare the depth texture view (which becomes so by using PF_D32_FLOAT as format).</span></div>
 <div class="line">        <span class="comment">//Settings MUST match (depth format, pools, resolution). Specifying the depth pool is necessary,</span></div>
 <div class="line">        <span class="comment">//otherwise the depth texture will get its own depth buffer, instead of becoming a view.</span></div>
-<div class="line">        texture firstPassDepthTexture 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a> depth_pool 1</div>
-<div class="line">        texture finalColour 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca32d32d3a5a8b68c1495d5c494575a6d8">PF_R8G8B8</a></div>
+<div class="line">        texture firstPassDepthTexture 512 512 PF_D32_FLOAT depth_pool 1</div>
+<div class="line">        texture finalColour 512 512 PF_R8G8B8</div>
 <div class="line">        <span class="comment">//Draw everything, colour and depth</span></div>
 <div class="line">        target firstPass</div>
 <div class="line">        {</div>
@@ -1092,7 +1088,7 @@ Example</h2>
 <div class="fragment"><div class="line">compositor_node_shadow myShadowNode</div>
 <div class="line">{</div>
 <div class="line">    technique focused</div>
-<div class="line">    texture focusedTex 2048 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a> no_fsaa</div>
+<div class="line">    texture focusedTex 2048 2048 PF_D32_FLOAT no_fsaa</div>
 <div class="line">    shadow_map 0 focusedTex light 0</div>
 <div class="line">    <span class="comment">//Render shadow map &quot;0&quot;</span></div>
 <div class="line">    shadow_map_target_type directional spot</div>
@@ -1114,9 +1110,9 @@ Example</h2>
 <div class="line">{</div>
 <div class="line">    <span class="comment">//Change to focused from now on</span></div>
 <div class="line">    technique focused</div>
-<div class="line">    shadow_map 3 1024 1024 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39cab63dbcddd53d1f766d742fd557c26be4">PF_FLOAT16_R</a> light 1</div>
-<div class="line">    shadow_map 4 1024 1024 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39cab63dbcddd53d1f766d742fd557c26be4">PF_FLOAT16_R</a> light 2</div>
-<div class="line">    shadow_map 5 512 512 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39cab63dbcddd53d1f766d742fd557c26be4">PF_FLOAT16_R</a> light 3</div>
+<div class="line">    shadow_map 3 1024 1024 PF_FLOAT16_R light 1</div>
+<div class="line">    shadow_map 4 1024 1024 PF_FLOAT16_R light 2</div>
+<div class="line">    shadow_map 5 512 512 PF_FLOAT16_R light 3</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">//Render shadow maps &quot;myStringName&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot; and &quot;5&quot;</span></div>
 <div class="line">    shadow_map myStringName 1 2 3 4 5</div>
@@ -1130,12 +1126,12 @@ Example</h2>
 <div class="line">    }</div>
 <div class="line">    technique pssm</div>
 <div class="line"> </div>
-<div class="line">    texture pssm0 2048 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a></div>
-<div class="line">    texture pssm1 1024 1024 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a></div>
-<div class="line">    texture pssm2 1024 1024 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a></div>
+<div class="line">    texture pssm0 2048 2048 PF_D32_FLOAT</div>
+<div class="line">    texture pssm1 1024 1024 PF_D32_FLOAT</div>
+<div class="line">    texture pssm2 1024 1024 PF_D32_FLOAT</div>
 <div class="line"> </div>
-<div class="line">    texture spot0 2048 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a></div>
-<div class="line">    texture spot1 2048 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a></div>
+<div class="line">    texture spot0 2048 2048 PF_D32_FLOAT</div>
+<div class="line">    texture spot1 2048 2048 PF_D32_FLOAT</div>
 <div class="line"> </div>
 <div class="line">    num_splits      3</div>
 <div class="line">    pssm_lambda     0.95</div>
@@ -1181,7 +1177,6 @@ Example</h2>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup___image_html_gga7e0353e7d36d4c2e8468641b7303d39cab63dbcddd53d1f766d742fd557c26be4"><div class="ttname"><a href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39cab63dbcddd53d1f766d742fd557c26be4">Ogre::PF_FLOAT16_R</a></div><div class="ttdeci">@ PF_FLOAT16_R</div><div class="ttdoc">16-bit pixel format, 16 bits (float) for red</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:122</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="CompositorShadowNodesAtlasAndPointLights"></a>
 Shadow map atlas &amp; Point Lights</h2>
 <p>Instead of rendering each PSSM split into a different texture, you can use an atlas:</p>
@@ -1189,7 +1184,7 @@ Shadow map atlas &amp; Point Lights</h2>
 <div class="line">{</div>
 <div class="line">    technique pssm</div>
 <div class="line"> </div>
-<div class="line">    texture atlas 3072 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a> no_fsaa</div>
+<div class="line">    texture atlas 3072 2048 PF_D32_FLOAT no_fsaa</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">//The splits are distributed in the atlas like this:</span></div>
 <div class="line">    <span class="comment">//  -------------</span></div>
@@ -1241,9 +1236,9 @@ Shadow map atlas &amp; Point Lights</h2>
 <div class="line">{</div>
 <div class="line">    technique pssm</div>
 <div class="line"> </div>
-<div class="line">    texture pointLightTex0 2048 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a> no_fsaa</div>
-<div class="line">    texture pointLightTex1 2048 2048 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39caaf48b935733a5000583fb73012c382ae">PF_D32_FLOAT</a> no_fsaa</div>
-<div class="line">    texture tmpCubemap 1024 1024 <a class="code" href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca2da3ec4fe727d552337e02069cd9efd9">PF_FLOAT32_R</a> cubemap no_fsaa</div>
+<div class="line">    texture pointLightTex0 2048 2048 PF_D32_FLOAT no_fsaa</div>
+<div class="line">    texture pointLightTex1 2048 2048 PF_D32_FLOAT no_fsaa</div>
+<div class="line">    texture tmpCubemap 1024 1024 PF_FLOAT32_R cubemap no_fsaa</div>
 <div class="line"> </div>
 <div class="line">    technique focused</div>
 <div class="line">    shadow_map 0 pointLightTex0 light 0</div>
@@ -1276,7 +1271,6 @@ Shadow map atlas &amp; Point Lights</h2>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup___image_html_gga7e0353e7d36d4c2e8468641b7303d39ca2da3ec4fe727d552337e02069cd9efd9"><div class="ttname"><a href="group___image.html#gga7e0353e7d36d4c2e8468641b7303d39ca2da3ec4fe727d552337e02069cd9efd9">Ogre::PF_FLOAT32_R</a></div><div class="ttdeci">@ PF_FLOAT32_R</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:128</div></div>
 <div class="ttc" id="anamespace_ogre_html"><div class="ttname"><a href="namespace_ogre.html">Ogre</a></div><div class="ttdef"><b>Definition:</b> OgreHlmsBufferManager.h:60</div></div>
 </div><!-- fragment --><p>See Samples/Media/2.0/scripts/Compositors/ShadowMapDebugging.compositor for an example of a full script that can support directional, spot &amp; point lights all in one, in a single atlas.</p>
 <h2><a class="anchor" id="CompositorShadowNodesReuseEtc"></a>

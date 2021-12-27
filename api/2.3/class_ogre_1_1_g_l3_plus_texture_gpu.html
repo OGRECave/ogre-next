@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::GL3PlusTextureGpu Class Reference</title>
+<title>OGRE-Next: Ogre::GL3PlusTextureGpu Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -364,7 +364,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2ee4d088c32b3e9efeb4d2fec5cad3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#aa2ee4d088c32b3e9efeb4d2fec5cad3e">setSampleDescription</a> (<a class="el" href="struct_ogre_1_1_sample_description.html">SampleDescription</a> desc)</td></tr>
 <tr class="separator:aa2ee4d088c32b3e9efeb4d2fec5cad3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78bd23c2116dc08afcaa8dc1b8d2384e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#a78bd23c2116dc08afcaa8dc1b8d2384e">setTexturePoolId</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> poolId)</td></tr>
-<tr class="memdesc:a78bd23c2116dc08afcaa8dc1b8d2384e"><td class="mdescLeft">&#160;</td><td class="mdescRight">2D <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> with automatic batching will be merged with other textures into the same pool as one big 2D Array texture behind the scenes.  <a href="class_ogre_1_1_texture_gpu.html#a78bd23c2116dc08afcaa8dc1b8d2384e">More...</a><br /></td></tr>
+<tr class="memdesc:a78bd23c2116dc08afcaa8dc1b8d2384e"><td class="mdescLeft">&#160;</td><td class="mdescRight">2D Texture with automatic batching will be merged with other textures into the same pool as one big 2D Array texture behind the scenes.  <a href="class_ogre_1_1_texture_gpu.html#a78bd23c2116dc08afcaa8dc1b8d2384e">More...</a><br /></td></tr>
 <tr class="separator:a78bd23c2116dc08afcaa8dc1b8d2384e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa307d3e0905e7de18587dcb30c0b65e2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu.html#aa307d3e0905e7de18587dcb30c0b65e2">setTextureType</a> (<a class="el" href="namespace_ogre_1_1_texture_types.html#aa364e348564060700791c9940d5ced82">TextureTypes::TextureTypes</a> textureType)</td></tr>
 <tr class="separator:aa307d3e0905e7de18587dcb30c0b65e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -883,7 +883,7 @@ Static Public Attributes</h2></td></tr>
 <p>Particularly required when passing the textures between nodes as input and output (since only the <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> pointer is passed, and thus this information is lost) </p><dl class="section remark"><dt>Remarks</dt><dd>Changing these settings won't take immediate effect because they're only used when creating the compositor. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">depthBufferPoolId</td><td>Sets the pool ID this <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> should query from. Default value is POOL_DEFAULT. Set to POOL_NO_DEPTH to avoid using a <a class="el" href="class_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer.">DepthBuffer</a> (or manually controlling it) </td></tr>
+    <tr><td class="paramname">depthBufferPoolId</td><td>Sets the pool ID this RenderTarget should query from. Default value is POOL_DEFAULT. Set to POOL_NO_DEPTH to avoid using a <a class="el" href="struct_ogre_1_1_depth_buffer.html" title="An abstract class that contains a depth/stencil buffer.">DepthBuffer</a> (or manually controlling it) </td></tr>
     <tr><td class="paramname">preferDepthTexture</td><td>Whether this RT should be attached to a depth texture, or a regular depth buffer. On older GPUs, preferring depth textures may result in certain depth precisions to not be available (or use integer precision instead of floating point, etc). True to use depth textures. False otherwise (default). </td></tr>
     <tr><td class="paramname">desiredDepthBufferFormat</td><td><a class="el" href="namespace_ogre.html">Ogre</a> will try to honour this request, but if it's not supported, you may get lower precision. All formats will try to fallback to PF_D24_UNORM_S8_UINT if not supported. Must be one of the following: PFG_D24_UNORM_S8_UINT PFG_D16_UNORM PFG_D32_FLOAT PFG_D32_FLOAT_X24_S8_UINT </td></tr>
   </table>
@@ -3710,7 +3710,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets the given orientation. </p>
-<p>'this' must be a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture.">RenderTexture</a> If <a class="el" href="namespace_ogre.html">Ogre</a> wasn't build with OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE, calls to this function will not stick (i.e. getOrientationMode always returns the same value)</p>
+<p>'this' must be a RenderTexture If <a class="el" href="namespace_ogre.html">Ogre</a> wasn't build with OGRE_CONFIG_ENABLE_VIEWPORT_ORIENTATIONMODE, calls to this function will not stick (i.e. getOrientationMode always returns the same value)</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_texture_gpu.html#a8ec57ce0ef0c682416c3a6b6d13a095a" title="PUBLIC VARIABLE.">TextureGpu::msDefaultOrientationMode</a> </dd>
 <dd>
 <a class="el" href="class_ogre_1_1_texture_gpu.html#a7bb35caa0639bfa59b095295a73ab6c0" title="Real API width accounting for TextureGpu::getOrientationMode If orientation mode is 90° or 270° then ...">TextureGpu::getInternalWidth</a> </dd>
@@ -3845,7 +3845,7 @@ template&lt;class Alloc &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>2D <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> with automatic batching will be merged with other textures into the same pool as one big 2D Array texture behind the scenes. </p>
+<p>2D Texture with automatic batching will be merged with other textures into the same pool as one big 2D Array texture behind the scenes. </p>
 <p>For two textures to be placed in the same pool (assuming it's not full) the following must match: Width, Height, PixelFormat, number of mipmaps, poolID</p>
 <p><a class="el" href="class_ogre_1_1_pool.html" title="Template class describing a simple pool of items.">Pool</a> ID is an arbitrary value with no actual meaning. This is ID allows you to prevent certain textures from being group together. For example, you may want all textures from Level 0 to be grouped together while Level 1 gets grouped together in a different pool</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespace_ogre_1_1_texture_flags.html#a59b71e36a14465bd82595d6d467e1434a2f298fbaec7db976ba6616430b1f52a3" title="When not present: The Texture is exactly the type requested (e.g.">TextureFlags::AutomaticBatching</a> </dd>

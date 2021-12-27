@@ -14,16 +14,16 @@
 <g id="a_node1"><a xlink:href="class_ogre_1_1cbitset_n.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 103,-30.5 103,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::cbitsetN&lt; _N,</text>
-<text text-anchor="middle" x="51.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00"> uint64, 6u, 0x3Fu &gt;</text>
+<text text-anchor="middle" x="51.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00"> uint32, 5u, 0x1Fu &gt;</text>
 </a>
 </g>
 </g>
 <!-- Node1 -->
 <g id="node2" class="node">
 <title>Node1</title>
-<g id="a_node2"><a xlink:href="class_ogre_1_1cbitset64.html" target="_top" xlink:title="This is similar to std::bitset, except waaay less bloat.">
+<g id="a_node2"><a xlink:href="class_ogre_1_1cbitset32.html" target="_top" xlink:title="This is similar to std::bitset, except waaay less bloat.">
 <polygon fill="none" stroke="black" points="139,-6 139,-25 250,-25 250,-6 139,-6"/>
-<text text-anchor="middle" x="194.5" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::cbitset64&lt; _N &gt;</text>
+<text text-anchor="middle" x="194.5" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::cbitset32&lt; _N &gt;</text>
 </a>
 </g>
 </g>

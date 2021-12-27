@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: HLMS: High Level Material System</title>
+<title>OGRE-Next: HLMS: High Level Material System</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -721,7 +721,7 @@ Automatic parameters</h3>
 <div class="line"><span class="keyword">typedef</span> vector&lt;Threshold&gt;::type ThresholdVec;</div>
 <div class="line"><span class="keyword">struct </span>DefaultTextureParameters</div>
 <div class="line">{</div>
-<div class="line">    <a class="code" href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">PixelFormat</a> pixelFormat;</div>
+<div class="line">    PixelFormat pixelFormat;</div>
 <div class="line">    <a class="code" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>      maxTexturesPerArray;</div>
 <div class="line">    <span class="keywordtype">bool</span>        mipmaps;</div>
 <div class="line">    <span class="keywordtype">bool</span>        hwGammaCorrection;</div>
@@ -731,7 +731,6 @@ Automatic parameters</h3>
 <div class="line">    <span class="keywordtype">float</span>       packMaxRatio;</div>
 <div class="line">    ThresholdVec    textureArraysTresholds;</div>
 <div class="line">};</div>
-<div class="ttc" id="agroup___image_html_ga7e0353e7d36d4c2e8468641b7303d39c"><div class="ttname"><a href="group___image.html#ga7e0353e7d36d4c2e8468641b7303d39c">Ogre::PixelFormat</a></div><div class="ttdeci">PixelFormat</div><div class="ttdoc">The pixel format used for images, textures, and render surfaces.</div><div class="ttdef"><b>Definition:</b> OgrePixelFormat.h:44</div></div>
 <div class="ttc" id="anamespace_ogre_html_a5a7c15d68e8c7d585c410bc5a93682f4"><div class="ttname"><a href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">Ogre::uint32</a></div><div class="ttdeci">::uint32_t uint32</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:542</div></div>
 </div><!-- fragment --><p>The comments and the code itself should be self-explanatory. The setting <code>pixelFormat</code> allows to force a conversion to a particular format. When left as <code>PF_UNKNOWN</code>, the texture's original format will be used (except for RGB/BGR/ARGB/BGRA/etc variations).</p>
 <p>The setting <code>maxTexturesPerArray</code> controls the maximum number of textures that can be packed together. Note the actual number may be lower either due to hardware limitations (i.e. you can't make an uv atlas with 16 512x512 textures on a GPU that has a maximum texture resolution of 1024x1024) or due to the <code>textureArraysTresholds</code> parameter (which only applies on Desktop).</p>

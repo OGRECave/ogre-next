@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::HlmsUnlitDatablock Class Reference</title>
+<title>OGRE-Next: Ogre::HlmsUnlitDatablock Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -644,7 +644,7 @@ Friends</h2></td></tr>
 <p>Enables the animation of the given texture unit. </p>
 <p>Calling this function triggers a HlmsDatablock::flushRenderables. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textureUnit</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
+    <tr><td class="paramname">textureUnit</td><td>Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
     <tr><td class="paramname">bEnable</td><td>Whether to enable or disable. Default is disabled. </td></tr>
   </table>
   </dd>
@@ -681,7 +681,7 @@ Friends</h2></td></tr>
 <p>Set to true if the texture at the given texture unit is a planar reflection texture. </p>
 <p>UVs will be ignored for that texture unit. Calling this function triggers a HlmsDatablock::flushRenderables. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textureUnit</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
+    <tr><td class="paramname">textureUnit</td><td>Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
     <tr><td class="paramname">bEnable</td><td>Whether to enable or disable. Default is disabled. </td></tr>
   </table>
   </dd>
@@ -771,7 +771,7 @@ Friends</h2></td></tr>
 <p>e.g. calling setTextureSwizzle( 0, R_MASK, G_MASK, R_MASK, G_MASK ); will generated the following pixel shader: vec4 texColour = texture( tex, uv ).xyxy;</p>
 <p>Calling this function triggers a HlmsDatablock::flushRenderables. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">texType</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
+    <tr><td class="paramname">texType</td><td>Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES) </td></tr>
     <tr><td class="paramname">r</td><td>Where to source the red channel from. Must be R_MASK, G_MASK, B_MASK or A_MASK. Default: R_MASK </td></tr>
     <tr><td class="paramname">g</td><td>Where to source the green channel from. Default: G_MASK </td></tr>
     <tr><td class="paramname">b</td><td>Where to source the blue channel from. Default: B_MASK </td></tr>

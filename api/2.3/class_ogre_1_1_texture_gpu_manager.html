@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::TextureGpuManager Class Reference</title>
+<title>OGRE-Next: Ogre::TextureGpuManager Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -348,7 +348,7 @@ Public Attributes</h2></td></tr>
 <p>The worker thread will now push an entry to mStreamingData.queuedImages for all the slices &amp; mips that are pending to copy from RAM to a <a class="el" href="class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU.">StagingTexture</a>. That includes slice 0 mip 0.</p>
 <p>It will also emit a command the main thread will eventually see to make the texture Resident (via ObjCmdBuffer::TransitionToResident)</p>
 <p>The worker thread will call TextureGpuManager::getStreaming to grab an available <a class="el" href="class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU.">StagingTexture</a> that has been pre-mapped in the main thread that can hold the data we want to upload.</p>
-<p>If no such <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> is available, we cannot upload the texture yet and this failure is recorded; and we do not remove the entry from mStreamingData.queuedImages Until mStreamingData.queuedImages[i].empty() returns true, the worker thread, with each new iteration, will try again to grab a <a class="el" href="class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU.">StagingTexture</a> to finish the jobs.</p>
+<p>If no such Texture is available, we cannot upload the texture yet and this failure is recorded; and we do not remove the entry from mStreamingData.queuedImages Until mStreamingData.queuedImages[i].empty() returns true, the worker thread, with each new iteration, will try again to grab a <a class="el" href="class_ogre_1_1_staging_texture.html" title="A StagingTexture is an intermediate texture that can be read and be written from both CPU &amp; GPU.">StagingTexture</a> to finish the jobs.</p>
 <p>From the main thread, with each <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#aa961b3aafc08805f7611d4edd283f804" title="Returns true if there is no more streaming work to be done yet (if false, calls to _update could be n...">TextureGpuManager::_update</a>; fullfillBudget will check the recorded failures in getStreaming from the worker thread and create &amp; map more StagingTextures to satisfy the worker thread.</p>
 <p>The main thread will also execute the transition to resident commands sent from the worker thread.</p>
 <p>This means that in worst case scenario, uploading a texture may require multiple ping pongs between the worker &amp; main thread, which is why <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#abcf4123dc9b7b5242acac4bc1d9eef1a" title="Blocks main thread until all pending textures are fully loaded.">TextureGpuManager::waitForStreamingCompletion</a> keeps calling _update in a loop until the texture is fully loaded.</p>
@@ -453,7 +453,7 @@ Public Attributes</h2></td></tr>
 <p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
-<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture.">RenderTexture</a> and is now ready to be presented to the monitor. </p>
+<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
 </table>

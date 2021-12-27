@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::GLES2DepthTexture Class Reference</title>
+<title>OGRE-Next: Ogre::GLES2DepthTexture Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -113,8 +113,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aeca7dc85bc305ad759c43fae6f135f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b4416977defb46ace26315592b857da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_texture.html#a7b4416977defb46ace26315592b857da">createRenderTexture</a> ()</td></tr>
 <tr class="separator:a7b4416977defb46ace26315592b857da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad23f44373585b55313fa080105044d9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_pixel_buffer_shared_ptr.html">v1::HardwarePixelBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_texture.html#ad23f44373585b55313fa080105044d9e">getBuffer</a> (size_t face, size_t mipmap)</td></tr>
-<tr class="memdesc:ad23f44373585b55313fa080105044d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return hardware pixel buffer for a surface.  <a href="class_ogre_1_1_g_l_e_s2_texture.html#ad23f44373585b55313fa080105044d9e">More...</a><br /></td></tr>
+<tr class="memitem:ad23f44373585b55313fa080105044d9e"><td class="memItemLeft" align="right" valign="top">v1::HardwarePixelBufferSharedPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_texture.html#ad23f44373585b55313fa080105044d9e">getBuffer</a> (size_t face, size_t mipmap)</td></tr>
 <tr class="separator:ad23f44373585b55313fa080105044d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7479cb1b8b069a2c409f654334dbdda0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_g_l_e_s2_texture.html#a7479cb1b8b069a2c409f654334dbdda0">getCustomAttribute</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, void *pData)</td></tr>
 <tr class="separator:a7479cb1b8b069a2c409f654334dbdda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,7 +268,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_hardware_pixel_buffer_shared_ptr.html">v1::HardwarePixelBufferSharedPtr</a> Ogre::GLES2Texture::getBuffer </td>
+          <td class="memname">v1::HardwarePixelBufferSharedPtr Ogre::GLES2Texture::getBuffer </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>face</em>, </td>
@@ -293,16 +292,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Return hardware pixel buffer for a surface. </p>
-<p>This buffer can then be used to copy data from and to a particular level of the texture. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">face</td><td>Face number, in case of a cubemap texture. Must be 0 for other types of textures. For cubemaps, this is one of +X (0), -X (1), +Y (2), -Y (3), +Z (4), -Z (5) </td></tr>
-    <tr><td class="paramname">mipmap</td><td>Mipmap level. This goes from 0 for the first, largest mipmap level to getNumMipmaps()-1 for the smallest. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A shared pointer to a hardware pixel buffer </dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>The buffer is invalidated when the resource is unloaded or destroyed. Do not use it after the lifetime of the containing texture. </dd></dl>
+<p></p>
 
 </div>
 </div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::CompositorNode Class Reference</title>
+<title>OGRE-Next: Ogre::CompositorNode Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -141,7 +141,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaa122e945a63c2edc0a0ca4b6de68641"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#aaa122e945a63c2edc0a0ca4b6de68641">destroyAllPasses</a> (void)</td></tr>
 <tr class="separator:aaa122e945a63c2edc0a0ca4b6de68641"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5c743a62e8a202dc5816f0bd01fe8b9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#ab5c743a62e8a202dc5816f0bd01fe8b9">finalTargetResized01</a> (const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget)</td></tr>
-<tr class="memdesc:ab5c743a62e8a202dc5816f0bd01fe8b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> when (i.e.) the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> was resized, thus our RTs that depend on their resolution need to be recreated.  <a href="class_ogre_1_1_compositor_node.html#ab5c743a62e8a202dc5816f0bd01fe8b9">More...</a><br /></td></tr>
+<tr class="memdesc:ab5c743a62e8a202dc5816f0bd01fe8b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> when (i.e.) the RenderWindow was resized, thus our RTs that depend on their resolution need to be recreated.  <a href="class_ogre_1_1_compositor_node.html#ab5c743a62e8a202dc5816f0bd01fe8b9">More...</a><br /></td></tr>
 <tr class="separator:ab5c743a62e8a202dc5816f0bd01fe8b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b44e15ffbff3bd7006aa45a6676d47f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a9b44e15ffbff3bd7006aa45a6676d47f">finalTargetResized02</a> (const <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *finalTarget)</td></tr>
 <tr class="separator:a9b44e15ffbff3bd7006aa45a6676d47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,7 +180,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6e9edc7379e9c8759de9abb0baaf2135"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a6e9edc7379e9c8759de9abb0baaf2135">notifyDestroyed</a> (const <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> *buffer)</td></tr>
 <tr class="separator:a6e9edc7379e9c8759de9abb0baaf2135"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae72f2d56524f23dc474d2634b06aeeeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb">notifyDestroyed</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *channel)</td></tr>
-<tr class="memdesc:ae72f2d56524f23dc474d2634b06aeeeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this function when caller has destroyed a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> in which the callee may have a reference to that pointer, so that we can clean it up.  <a href="class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb">More...</a><br /></td></tr>
+<tr class="memdesc:ae72f2d56524f23dc474d2634b06aeeeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this function when caller has destroyed a RenderTarget in which the callee may have a reference to that pointer, so that we can clean it up.  <a href="class_ogre_1_1_compositor_node.html#ae72f2d56524f23dc474d2634b06aeeeb">More...</a><br /></td></tr>
 <tr class="separator:ae72f2d56524f23dc474d2634b06aeeeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01e7c49813462a88761ff73f514d7ce8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_node.html#a01e7c49813462a88761ff73f514d7ce8">notifyRecreated</a> (const <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> *oldBuffer, <a class="el" href="class_ogre_1_1_uav_buffer_packed.html">UavBufferPacked</a> *newBuffer)</td></tr>
 <tr class="separator:a01e7c49813462a88761ff73f514d7ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -520,10 +520,10 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Connects (injects) an external RT into the given channel. </p>
-<p>Usually used for the "connect_output" / "connect_external" directive for the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Usually used for the "connect_output" / "connect_external" directive for the RenderWindow. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">rt</td><td>The <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a>. </td></tr>
-    <tr><td class="paramname">textures</td><td>The Textures associated with the RT. Can be empty (eg. <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>) but could cause crashes/exceptions if tried to use in PASS_QUAD passes. </td></tr>
+    <tr><td class="paramname">rt</td><td>The RenderTarget. </td></tr>
+    <tr><td class="paramname">textures</td><td>The Textures associated with the RT. Can be empty (eg. RenderWindow) but could cause crashes/exceptions if tried to use in PASS_QUAD passes. </td></tr>
     <tr><td class="paramname">inChannelA</td><td>In which channel number to inject to. </td></tr>
   </table>
   </dd>
@@ -638,12 +638,12 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Called by <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> when (i.e.) the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> was resized, thus our RTs that depend on their resolution need to be recreated. </p>
+<p>Called by <a class="el" href="class_ogre_1_1_compositor_manager2.html" title="Main system for managing Render Targets through the use of nodes.">CompositorManager2</a> when (i.e.) the RenderWindow was resized, thus our RTs that depend on their resolution need to be recreated. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>We inform all connected nodes and passes related to us of RenderTargets/Textures that may have been recreated (pointers could become danlging otherwise). </dd></dl>
 <dl class="section user"><dt></dt><dd>This is divided in two steps: recreateResizableTextures01 &amp; recreateResizableTextures02 since in some cases in <a class="el" href="class_ogre_1_1_render_pass_descriptor.html">RenderPassDescriptor</a>, setting up MRT and depth textures requires all textures to be up to date, otherwise validation errors would occur since we'll have partial data (e.g. MRT 0 is 1024x768 while MRT 1 is 800x600) </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">finalTarget</td><td>The Final Target (i.e. <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>) from which we'll base our local textures' resolution. </td></tr>
+    <tr><td class="paramname">finalTarget</td><td>The Final Target (i.e. RenderWindow) from which we'll base our local textures' resolution. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1044,7 +1044,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Call this function when caller has destroyed a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> in which the callee may have a reference to that pointer, so that we can clean it up. </p>
+<p>Call this function when caller has destroyed a RenderTarget in which the callee may have a reference to that pointer, so that we can clean it up. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">channel</td><td>Channel containing the pointer about to be destroyed (must still be valid) </td></tr>

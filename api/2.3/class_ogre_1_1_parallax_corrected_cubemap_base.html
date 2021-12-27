@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::ParallaxCorrectedCubemapBase Class Reference</title>
+<title>OGRE-Next: Ogre::ParallaxCorrectedCubemapBase Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -333,11 +333,11 @@ Public Attributes</h2></td></tr>
 <p>Acquires a texture with a given slot. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">outTexSlot</td><td>[out] <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> slot. Value is left untouched if return value is nullptr </td></tr>
+    <tr><td class="paramname">outTexSlot</td><td>[out] Texture slot. Value is left untouched if return value is nullptr </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a>. Can be nullptr if ran out of slots. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Texture. Can be nullptr if ran out of slots. </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_parallax_corrected_cubemap_auto.html#a8d97d3a6bc11b0aae7467ba4e5ef2d34">Ogre::ParallaxCorrectedCubemapAuto</a>.</p>
 
@@ -1228,7 +1228,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Inform whether we're currently updating a probe. </p>
-<p>Some <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> / PCC combinations should not perform PCC while rendering, either because the <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> is the same as the cubemap texture, or because other glitches may occur </p>
+<p>Some <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> / PCC combinations should not perform PCC while rendering, either because the RenderTarget is the same as the cubemap texture, or because other glitches may occur </p>
 
 </div>
 </div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::HlmsComputeJob Class Reference</title>
+<title>OGRE-Next: Ogre::HlmsComputeJob Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -269,7 +269,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a80c6b47d60cba7f70ba182d1fc8d9d62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the number of groups of threads to dispatch.  <a href="class_ogre_1_1_hlms_compute_job.html#a80c6b47d60cba7f70ba182d1fc8d9d62">More...</a><br /></td></tr>
 <tr class="separator:a80c6b47d60cba7f70ba182d1fc8d9d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ad8078ce6528c5604e2a61bb516c000"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a7ad8078ce6528c5604e2a61bb516c000">setNumThreadGroupsBasedOn</a> (<a class="el" href="class_ogre_1_1_hlms_compute_job.html#a297b925576b81843bd963d67ec561fbd">ThreadGroupsBasedOn</a> source, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texSlot, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> divisorX, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> divisorY, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> divisorZ)</td></tr>
-<tr class="memdesc:a7ad8078ce6528c5604e2a61bb516c000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instead of calling setNumThreadGroups, <a class="el" href="namespace_ogre.html">Ogre</a> can automatically deduce them based on the <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> resolution and the threads per group.  <a href="class_ogre_1_1_hlms_compute_job.html#a7ad8078ce6528c5604e2a61bb516c000">More...</a><br /></td></tr>
+<tr class="memdesc:a7ad8078ce6528c5604e2a61bb516c000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instead of calling setNumThreadGroups, <a class="el" href="namespace_ogre.html">Ogre</a> can automatically deduce them based on the Texture resolution and the threads per group.  <a href="class_ogre_1_1_hlms_compute_job.html#a7ad8078ce6528c5604e2a61bb516c000">More...</a><br /></td></tr>
 <tr class="separator:a7ad8078ce6528c5604e2a61bb516c000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8697f4897980adba72a42619fe6a463b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_compute_job.html#a8697f4897980adba72a42619fe6a463b">setNumUavUnits</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> numSlots)</td></tr>
 <tr class="memdesc:a8697f4897980adba72a42619fe6a463b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates 'numSlots' number of slots before they can be set.  <a href="class_ogre_1_1_hlms_compute_job.html#a8697f4897980adba72a42619fe6a463b">More...</a><br /></td></tr>
@@ -352,7 +352,7 @@ Friends</h2></td></tr>
 <p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
-<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a <a class="el" href="class_ogre_1_1_render_texture.html" title="This class represents a RenderTarget that renders to a Texture.">RenderTexture</a> and is now ready to be presented to the monitor. </p>
+<p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
 </table>
@@ -1302,8 +1302,8 @@ Friends</h2></td></tr>
 <p>Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed: </p>
 <ol type="1">
 <li><a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> got called (texture is ready to be displayed)</li>
-<li><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> changed residency status.</li>
-<li><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> is being deleted. It won't be a valid pointer after this call. </li>
+<li>Texture changed residency status.</li>
+<li>Texture is being deleted. It won't be a valid pointer after this call. </li>
 </ol>
 
 <p>Implements <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#aad4e9062c9a92d1e2cc57d4bbe50eb95">Ogre::TextureGpuListener</a>.</p>
@@ -1980,7 +1980,7 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Instead of calling setNumThreadGroups, <a class="el" href="namespace_ogre.html">Ogre</a> can automatically deduce them based on the <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> resolution and the threads per group. </p>
+<p>Instead of calling setNumThreadGroups, <a class="el" href="namespace_ogre.html">Ogre</a> can automatically deduce them based on the Texture resolution and the threads per group. </p>
 <p>It is calculated as follows: scaledWidth = (textureWidth + divisorX - 1u) / divisorX; numThreadGroupsX = (scaledWidth + threadsPerGroupX - 1u) / threadsPerGroupX; </p><dl class="section remark"><dt>Remarks</dt><dd>Unless disabled, this will overwrite your setNumThreadGroups based on the texture bound at the time the job is dispatched. </dd></dl>
 <dl class="section user"><dt></dt><dd>If no texture/uav is bound at the given slot (or no such slot exists), we will log a warning. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -2159,9 +2159,9 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets a texture buffer at the given slot ID. </p>
-<dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> buffer slots are shared with setTexture's. Calling this function will remove the settings from previous setTexture calls to the same slot index. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Texture buffer slots are shared with setTexture's. Calling this function will remove the settings from previous setTexture calls to the same slot index. </dd></dl>
 <dl class="section user"><dt></dt><dd>May trigger a recompilation if setInformHlmsOfTextureData is enabled. </dd></dl>
-<dl class="section user"><dt></dt><dd>Setting a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> that could be used for writing is dangerous in explicit APIs (DX12, Vulkan). Use the <a class="el" href="class_ogre_1_1_compositor_pass_compute_def.html">CompositorPassComputeDef</a> </dd></dl>
+<dl class="section user"><dt></dt><dd>Setting a RenderTarget that could be used for writing is dangerous in explicit APIs (DX12, Vulkan). Use the <a class="el" href="class_ogre_1_1_compositor_pass_compute_def.html">CompositorPassComputeDef</a> </dd></dl>
 <dl class="section user"><dt></dt><dd><a class="el" href="class_ogre_1_1_read_only_buffer_packed.html" title="Represents the best way to access read-only data.">ReadOnlyBufferPacked</a> can be bound using this function. But please note in certain APIs these type of buffers may end up being bound to UAV slots already taken by _setUav* functions.</dd></dl>
 <p>See HlmsComputeJob::setTexSlotStart to workaround that </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -2217,7 +2217,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Sets a texture buffer at the given slot ID. </p>
-<dl class="section remark"><dt>Remarks</dt><dd><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> slots are shared with setTexBuffer's. Calling this function will remove the settings from previous setTexBuffer calls to the same slot index. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Texture slots are shared with setTexBuffer's. Calling this function will remove the settings from previous setTexBuffer calls to the same slot index. </dd></dl>
 <dl class="section user"><dt></dt><dd>UAVs and Textures share the same slots in OpenGL, but don't in D3D11. For best compatibility, assume they're shared and put the UAVs in the first slots. </dd></dl>
 <dl class="section user"><dt></dt><dd>May trigger a recompilation if setInformHlmsOfTextureData is enabled. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>

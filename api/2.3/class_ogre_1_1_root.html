@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::Root Class Reference</title>
+<title>OGRE-Next: Ogre::Root Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -159,10 +159,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9de9a666d0bc69e85810db2b10ab8cba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a9de9a666d0bc69e85810db2b10ab8cba">_setLightProfilesInvHeight</a> (float invHeight)</td></tr>
 <tr class="separator:a9de9a666d0bc69e85810db2b10ab8cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba26bc9123d8725d971e458e48c2694f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#aba26bc9123d8725d971e458e48c2694f">_updateAllRenderTargets</a> (<a class="el" href="struct_ogre_1_1_frame_event.html">FrameEvent</a> &amp;evt)</td></tr>
-<tr class="memdesc:aba26bc9123d8725d971e458e48c2694f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method used for updating all <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> objects (windows, renderable textures etc) which are set to auto-update, with a custom time passed to the frameRenderingQueued events.  <a href="class_ogre_1_1_root.html#aba26bc9123d8725d971e458e48c2694f">More...</a><br /></td></tr>
+<tr class="memdesc:aba26bc9123d8725d971e458e48c2694f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method used for updating all RenderTarget objects (windows, renderable textures etc) which are set to auto-update, with a custom time passed to the frameRenderingQueued events.  <a href="class_ogre_1_1_root.html#aba26bc9123d8725d971e458e48c2694f">More...</a><br /></td></tr>
 <tr class="separator:aba26bc9123d8725d971e458e48c2694f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24559fa6a4f1772c7518fcb0911278f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#a24559fa6a4f1772c7518fcb0911278f4">_updateAllRenderTargets</a> (void)</td></tr>
-<tr class="memdesc:a24559fa6a4f1772c7518fcb0911278f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method used for updating all <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> objects (windows, renderable textures etc) which are set to auto-update.  <a href="class_ogre_1_1_root.html#a24559fa6a4f1772c7518fcb0911278f4">More...</a><br /></td></tr>
+<tr class="memdesc:a24559fa6a4f1772c7518fcb0911278f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method used for updating all RenderTarget objects (windows, renderable textures etc) which are set to auto-update.  <a href="class_ogre_1_1_root.html#a24559fa6a4f1772c7518fcb0911278f4">More...</a><br /></td></tr>
 <tr class="separator:a24559fa6a4f1772c7518fcb0911278f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed3244a81b1c1cec76c675f8e62d7f5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_root.html#aed3244a81b1c1cec76c675f8e62d7f5e">addFrameListener</a> (<a class="el" href="class_ogre_1_1_frame_listener.html">FrameListener</a> *newListener)</td></tr>
 <tr class="memdesc:aed3244a81b1c1cec76c675f8e62d7f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a <a class="el" href="class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events.">FrameListener</a> which will be called back every frame.  <a href="class_ogre_1_1_root.html#aed3244a81b1c1cec76c675f8e62d7f5e">More...</a><br /></td></tr>
@@ -810,8 +810,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Internal method used for updating all <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> objects (windows, renderable textures etc) which are set to auto-update, with a custom time passed to the frameRenderingQueued events. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>You don't need to use this method if you're using <a class="el" href="namespace_ogre.html">Ogre</a>'s own internal rendering loop (<a class="el" href="class_ogre_1_1_root.html#a8eda253befda1255cbfd3b298f62449e" title="Starts / restarts the automatic rendering cycle.">Root::startRendering</a>). If you're running your own loop you may wish to call it to update all the render targets which are set to auto update (RenderTarget::setAutoUpdated). You can also update individual <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> instances using their own update() method. </dd></dl>
+<p>Internal method used for updating all RenderTarget objects (windows, renderable textures etc) which are set to auto-update, with a custom time passed to the frameRenderingQueued events. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>You don't need to use this method if you're using <a class="el" href="namespace_ogre.html">Ogre</a>'s own internal rendering loop (<a class="el" href="class_ogre_1_1_root.html#a8eda253befda1255cbfd3b298f62449e" title="Starts / restarts the automatic rendering cycle.">Root::startRendering</a>). If you're running your own loop you may wish to call it to update all the render targets which are set to auto update (RenderTarget::setAutoUpdated). You can also update individual RenderTarget instances using their own update() method. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>false if a <a class="el" href="class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events.">FrameListener</a> indicated it wishes to exit the render loop </dd></dl>
 
 </div>
@@ -832,8 +832,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Internal method used for updating all <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> objects (windows, renderable textures etc) which are set to auto-update. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>You don't need to use this method if you're using <a class="el" href="namespace_ogre.html">Ogre</a>'s own internal rendering loop (<a class="el" href="class_ogre_1_1_root.html#a8eda253befda1255cbfd3b298f62449e" title="Starts / restarts the automatic rendering cycle.">Root::startRendering</a>). If you're running your own loop you may wish to call it to update all the render targets which are set to auto update (RenderTarget::setAutoUpdated). You can also update individual <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> instances using their own update() method. </dd></dl>
+<p>Internal method used for updating all RenderTarget objects (windows, renderable textures etc) which are set to auto-update. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>You don't need to use this method if you're using <a class="el" href="namespace_ogre.html">Ogre</a>'s own internal rendering loop (<a class="el" href="class_ogre_1_1_root.html#a8eda253befda1255cbfd3b298f62449e" title="Starts / restarts the automatic rendering cycle.">Root::startRendering</a>). If you're running your own loop you may wish to call it to update all the render targets which are set to auto update (RenderTarget::setAutoUpdated). You can also update individual RenderTarget instances using their own update() method. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>false if a <a class="el" href="class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events.">FrameListener</a> indicated it wishes to exit the render loop </dd></dl>
 
 </div>
@@ -1156,7 +1156,7 @@ This should usually be called from the dllStartPlugin() function of an extension
 </div><div class="memdoc">
 
 <p>Creates a new rendering window. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This method creates a new rendering window as specified by the paramteters. The rendering system could be responible for only a single window (e.g. in the case of a game), or could be in charge of multiple ones (in the case of a level editor). The option to create the window as a child of another is therefore given. This method will create an appropriate subclass of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> depending on the API and platform implementation. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This method creates a new rendering window as specified by the paramteters. The rendering system could be responible for only a single window (e.g. in the case of a game), or could be in charge of multiple ones (in the case of a level editor). The option to create the window as a child of another is therefore given. This method will create an appropriate subclass of RenderWindow depending on the API and platform implementation. </dd></dl>
 <dl class="section user"><dt></dt><dd>After creation, this window can be retrieved using getRenderTarget(). </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1168,7 +1168,7 @@ This should usually be called from the dllStartPlugin() function of an extension
 <tr>
 <td><b>Key</b> </td><td><b>Type/Values</b> </td><td><b>Default</b> </td><td><b>Description</b> </td><td><b>Notes</b>  </td></tr>
 <tr>
-<td>title </td><td><a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> string </td><td><a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> name </td><td>The title of the window that will appear in the title bar </td><td>&#160;  </td></tr>
+<td>title </td><td><a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> string </td><td>RenderTarget name </td><td>The title of the window that will appear in the title bar </td><td>&#160;  </td></tr>
 <tr>
 <td>colourDepth </td><td>16, 32 </td><td>Desktop depth </td><td>Colour depth of the resulting rendering window; only applies if fullScreen </td><td>Win32 Specific  </td></tr>
 <tr>
@@ -3321,7 +3321,7 @@ This method can only be called after <a class="el" href="class_ogre_1_1_root.htm
 </div><div class="memdoc">
 
 <p>Requests active <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> to use custom <a class="el" href="class_ogre_1_1_render_system_capabilities.html" title="singleton class for storing the capabilities of the graphics card.">RenderSystemCapabilities</a>. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This is useful for testing how the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> would behave on a machine with less advanced GPUs. This method MUST be called before creating the first <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This is useful for testing how the <a class="el" href="class_ogre_1_1_render_system.html" title="Defines the functionality of a 3D API.">RenderSystem</a> would behave on a machine with less advanced GPUs. This method MUST be called before creating the first RenderWindow </dd></dl>
 
 </div>
 </div>

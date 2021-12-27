@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::NULLRenderSystem Class Reference</title>
+<title>OGRE-Next: Ogre::NULLRenderSystem Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -995,7 +995,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a new rendering window. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This method creates a new rendering window as specified by the paramteters. The rendering system could be responible for only a single window (e.g. in the case of a game), or could be in charge of multiple ones (in the case of a level editor). The option to create the window as a child of another is therefore given. This method will create an appropriate subclass of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> depending on the API and platform implementation. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This method creates a new rendering window as specified by the paramteters. The rendering system could be responible for only a single window (e.g. in the case of a game), or could be in charge of multiple ones (in the case of a level editor). The option to create the window as a child of another is therefore given. This method will create an appropriate subclass of RenderWindow depending on the API and platform implementation. </dd></dl>
 <dl class="section user"><dt></dt><dd>After creation, this window can be retrieved using getRenderTarget(). </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1007,7 +1007,7 @@ Static Public Member Functions</h2></td></tr>
 <tr>
 <td><b>Key</b> </td><td><b>Type/Values</b> </td><td><b>Default</b> </td><td><b>Description</b> </td><td><b>Notes</b>  </td></tr>
 <tr>
-<td>title </td><td><a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> string </td><td><a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> name </td><td>The title of the window that will appear in the title bar </td><td>&#160;  </td></tr>
+<td>title </td><td><a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> string </td><td>RenderTarget name </td><td>The title of the window that will appear in the title bar </td><td>&#160;  </td></tr>
 <tr>
 <td>colourDepth </td><td>16, 32 </td><td>Desktop depth </td><td>Colour depth of the resulting rendering window; only applies if fullScreen </td><td>Win32 Specific  </td></tr>
 <tr>
@@ -3072,7 +3072,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Sets the texture blend modes from a <a class="el" href="class_ogre_1_1_texture_unit_state.html" title="Class representing the state of a single texture unit during a Pass of a Technique,...">TextureUnitState</a> record. </p>
 <p>Meant for use internally only - apps should use the <a class="el" href="class_ogre_1_1_material.html" title="Class encapsulates rendering properties of an object.">Material</a> and <a class="el" href="class_ogre_1_1_texture_unit_state.html" title="Class representing the state of a single texture unit during a Pass of a Technique,...">TextureUnitState</a> classes. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unit</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> unit as above </td></tr>
+    <tr><td class="paramname">unit</td><td>Texture unit as above </td></tr>
     <tr><td class="paramname">bm</td><td>Details of the blending mode </td></tr>
   </table>
   </dd>
@@ -3125,7 +3125,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Sets a method for automatically calculating texture coordinates for a stage. </p>
 <p>Should not be used by apps - for use by <a class="el" href="namespace_ogre.html">Ogre</a> only. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unit</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> unit as above </td></tr>
+    <tr><td class="paramname">unit</td><td>Texture unit as above </td></tr>
     <tr><td class="paramname">m</td><td>Calculation method to use </td></tr>
     <tr><td class="paramname">frustum</td><td>Optional <a class="el" href="class_ogre_1_1_frustum.html" title="A frustum represents a pyramid, capped at the near and far end which is used to represent either a vi...">Frustum</a> param, only used for projective effects </td></tr>
   </table>
@@ -3173,7 +3173,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Sets the texture coordinate transformation matrix for a texture unit. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unit</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> unit to affect </td></tr>
+    <tr><td class="paramname">unit</td><td>Texture unit to affect </td></tr>
     <tr><td class="paramname">xform</td><td>The 4x4 matrix </td></tr>
   </table>
   </dd>

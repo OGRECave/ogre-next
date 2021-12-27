@@ -350,14 +350,6 @@ var files_dup =
     [ "OgreD3D11ConstBufferPacked.h", "_ogre_d3_d11_const_buffer_packed_8h.html", [
       [ "D3D11ConstBufferPacked", "class_ogre_1_1_d3_d11_const_buffer_packed.html", "class_ogre_1_1_d3_d11_const_buffer_packed" ]
     ] ],
-    [ "OgreD3D11DepthBuffer.h", "_ogre_d3_d11_depth_buffer_8h.html", [
-      [ "D3D11DepthBuffer", "class_ogre_1_1_d3_d11_depth_buffer.html", "class_ogre_1_1_d3_d11_depth_buffer" ]
-    ] ],
-    [ "OgreD3D11DepthTexture.h", "_ogre_d3_d11_depth_texture_8h.html", [
-      [ "D3D11DepthTexture", "class_ogre_1_1_d3_d11_depth_texture.html", "class_ogre_1_1_d3_d11_depth_texture" ],
-      [ "D3D11DepthTextureTarget", "class_ogre_1_1_d3_d11_depth_texture_target.html", "class_ogre_1_1_d3_d11_depth_texture_target" ],
-      [ "D3D11DepthPixelBuffer", "class_ogre_1_1v1_1_1_d3_d11_depth_pixel_buffer.html", "class_ogre_1_1v1_1_1_d3_d11_depth_pixel_buffer" ]
-    ] ],
     [ "OgreD3D11Device.h", "_ogre_d3_d11_device_8h.html", [
       [ "D3D11Device", "class_ogre_1_1_d3_d11_device.html", "class_ogre_1_1_d3_d11_device" ]
     ] ],
@@ -390,9 +382,6 @@ var files_dup =
     [ "OgreD3D11HardwareOcclusionQuery.h", "_ogre_d3_d11_hardware_occlusion_query_8h.html", [
       [ "D3D11HardwareOcclusionQuery", "class_ogre_1_1_d3_d11_hardware_occlusion_query.html", "class_ogre_1_1_d3_d11_hardware_occlusion_query" ]
     ] ],
-    [ "OgreD3D11HardwarePixelBuffer.h", "_ogre_d3_d11_hardware_pixel_buffer_8h.html", [
-      [ "D3D11HardwarePixelBuffer", "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer.html", "class_ogre_1_1v1_1_1_d3_d11_hardware_pixel_buffer" ]
-    ] ],
     [ "OgreD3D11HardwareUniformBuffer.h", "_ogre_d3_d11_hardware_uniform_buffer_8h.html", [
       [ "D3D11HardwareUniformBuffer", "class_ogre_1_1v1_1_1_d3_d11_hardware_uniform_buffer.html", "class_ogre_1_1v1_1_1_d3_d11_hardware_uniform_buffer" ]
     ] ],
@@ -408,14 +397,6 @@ var files_dup =
     [ "OgreD3D11Mappings.h", "_ogre_d3_d11_mappings_8h.html", [
       [ "D3D11Mappings", "class_ogre_1_1_d3_d11_mappings.html", "class_ogre_1_1_d3_d11_mappings" ]
     ] ],
-    [ "OgreD3D11MultiRenderTarget.h", "_ogre_d3_d11_multi_render_target_8h.html", [
-      [ "D3D11MultiRenderTarget", "class_ogre_1_1_d3_d11_multi_render_target.html", "class_ogre_1_1_d3_d11_multi_render_target" ]
-    ] ],
-    [ "OgreD3D11NullTexture.h", "_ogre_d3_d11_null_texture_8h.html", [
-      [ "D3D11NullTexture", "class_ogre_1_1_d3_d11_null_texture.html", "class_ogre_1_1_d3_d11_null_texture" ],
-      [ "D3D11NullTextureTarget", "class_ogre_1_1_d3_d11_null_texture_target.html", "class_ogre_1_1_d3_d11_null_texture_target" ],
-      [ "D3D11NullPixelBuffer", "class_ogre_1_1v1_1_1_d3_d11_null_pixel_buffer.html", "class_ogre_1_1v1_1_1_d3_d11_null_pixel_buffer" ]
-    ] ],
     [ "OgreD3D11PixelFormatToShaderType.h", "_ogre_d3_d11_pixel_format_to_shader_type_8h.html", "_ogre_d3_d11_pixel_format_to_shader_type_8h" ],
     [ "OgreD3D11Plugin.h", "_ogre_d3_d11_plugin_8h.html", [
       [ "D3D11Plugin", "class_ogre_1_1_d3_d11_plugin.html", "class_ogre_1_1_d3_d11_plugin" ]
@@ -426,13 +407,6 @@ var files_dup =
     ] ],
     [ "OgreD3D11RenderPassDescriptor.h", "_ogre_d3_d11_render_pass_descriptor_8h.html", "_ogre_d3_d11_render_pass_descriptor_8h" ],
     [ "OgreD3D11RenderSystem.h", "_ogre_d3_d11_render_system_8h.html", "_ogre_d3_d11_render_system_8h" ],
-    [ "OgreD3D11RenderToVertexBuffer.h", "_ogre_d3_d11_render_to_vertex_buffer_8h.html", [
-      [ "D3D11RenderToVertexBuffer", "class_ogre_1_1v1_1_1_d3_d11_render_to_vertex_buffer.html", "class_ogre_1_1v1_1_1_d3_d11_render_to_vertex_buffer" ]
-    ] ],
-    [ "OgreD3D11RenderWindow.h", "_ogre_d3_d11_render_window_8h.html", [
-      [ "D3D11RenderWindowBase", "class_ogre_1_1_d3_d11_render_window_base.html", "class_ogre_1_1_d3_d11_render_window_base" ],
-      [ "D3D11RenderWindowSwapChainBased", "class_ogre_1_1_d3_d11_render_window_swap_chain_based.html", "class_ogre_1_1_d3_d11_render_window_swap_chain_based" ]
-    ] ],
     [ "OgreD3D11StagingBuffer.h", "_ogre_d3_d11_staging_buffer_8h.html", [
       [ "D3D11StagingBuffer", "class_ogre_1_1_d3_d11_staging_buffer.html", "class_ogre_1_1_d3_d11_staging_buffer" ]
     ] ],
@@ -454,10 +428,6 @@ var files_dup =
     [ "OgreD3D11TexBufferPacked.h", "_ogre_d3_d11_tex_buffer_packed_8h.html", [
       [ "D3D11TexBufferPacked", "class_ogre_1_1_d3_d11_tex_buffer_packed.html", "class_ogre_1_1_d3_d11_tex_buffer_packed" ]
     ] ],
-    [ "OgreD3D11Texture.h", "_ogre_d3_d11_texture_8h.html", [
-      [ "D3D11RenderTexture", "class_ogre_1_1_d3_d11_render_texture.html", "class_ogre_1_1_d3_d11_render_texture" ],
-      [ "D3D11Texture", "class_ogre_1_1_d3_d11_texture.html", "class_ogre_1_1_d3_d11_texture" ]
-    ] ],
     [ "OgreD3D11TextureGpu.h", "_ogre_d3_d11_texture_gpu_8h.html", [
       [ "D3D11TextureGpu", "class_ogre_1_1_d3_d11_texture_gpu.html", "class_ogre_1_1_d3_d11_texture_gpu" ],
       [ "D3D11TextureGpuRenderTarget", "class_ogre_1_1_d3_d11_texture_gpu_render_target.html", "class_ogre_1_1_d3_d11_texture_gpu_render_target" ]
@@ -465,9 +435,6 @@ var files_dup =
     [ "OgreD3D11TextureGpuManager.h", "_ogre_d3_d11_texture_gpu_manager_8h.html", null ],
     [ "OgreD3D11TextureGpuWindow.h", "_ogre_d3_d11_texture_gpu_window_8h.html", [
       [ "D3D11TextureGpuWindow", "class_ogre_1_1_d3_d11_texture_gpu_window.html", "class_ogre_1_1_d3_d11_texture_gpu_window" ]
-    ] ],
-    [ "OgreD3D11TextureManager.h", "_ogre_d3_d11_texture_manager_8h.html", [
-      [ "D3D11TextureManager", "class_ogre_1_1_d3_d11_texture_manager.html", "class_ogre_1_1_d3_d11_texture_manager" ]
     ] ],
     [ "OgreD3D11UavBufferPacked.h", "_ogre_d3_d11_uav_buffer_packed_8h.html", [
       [ "D3D11UavBufferPacked", "class_ogre_1_1_d3_d11_uav_buffer_packed.html", "class_ogre_1_1_d3_d11_uav_buffer_packed" ]
@@ -595,7 +562,6 @@ var files_dup =
       [ "D3D9VideoModeList", "class_ogre_1_1_d3_d9_video_mode_list.html", "class_ogre_1_1_d3_d9_video_mode_list" ]
     ] ],
     [ "OgreDataStream.h", "_ogre_data_stream_8h.html", "_ogre_data_stream_8h" ],
-    [ "OgreDDSCodec.h", "_ogre_d_d_s_codec_8h.html", null ],
     [ "OgreDDSCodec2.h", "_ogre_d_d_s_codec2_8h.html", null ],
     [ "OgreDecal.h", "_ogre_decal_8h.html", [
       [ "Decal", "class_ogre_1_1_decal.html", "class_ogre_1_1_decal" ],
@@ -622,7 +588,6 @@ var files_dup =
     [ "OgreDeflectorPlaneAffectorFactory.h", "_ogre_deflector_plane_affector_factory_8h.html", [
       [ "DeflectorPlaneAffectorFactory", "class_ogre_1_1_deflector_plane_affector_factory.html", "class_ogre_1_1_deflector_plane_affector_factory" ]
     ] ],
-    [ "Deprecated/OgreDepthBuffer.h", "_deprecated_2_ogre_depth_buffer_8h.html", null ],
     [ "OgreDepthBuffer.h", "_ogre_depth_buffer_8h.html", null ],
     [ "OgreDescriptorSetSampler.h", "_ogre_descriptor_set_sampler_8h.html", null ],
     [ "OgreDescriptorSetTexture.h", "_ogre_descriptor_set_texture_8h.html", [
@@ -726,7 +691,6 @@ var files_dup =
     [ "OgreForwardPlusBase.h", "_ogre_forward_plus_base_8h.html", "_ogre_forward_plus_base_8h" ],
     [ "OgreFrameListener.h", "_ogre_frame_listener_8h.html", null ],
     [ "OgreFrameStats.h", "_ogre_frame_stats_8h.html", "_ogre_frame_stats_8h" ],
-    [ "OgreFreeImageCodec.h", "_ogre_free_image_codec_8h.html", null ],
     [ "OgreFreeImageCodec2.h", "_ogre_free_image_codec2_8h.html", null ],
     [ "OgreFrustum.h", "_ogre_frustum_8h.html", "_ogre_frustum_8h" ],
     [ "OgreGL3PlusAsyncTextureTicket.h", "_ogre_g_l3_plus_async_texture_ticket_8h.html", [
@@ -752,28 +716,9 @@ var files_dup =
       [ "GL3PlusDefaultHardwareUniformBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_uniform_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_uniform_buffer" ],
       [ "GL3PlusDefaultHardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_default_hardware_vertex_buffer" ]
     ] ],
-    [ "OgreGL3PlusDepthBuffer.h", "_ogre_g_l3_plus_depth_buffer_8h.html", [
-      [ "GL3PlusDepthBuffer", "class_ogre_1_1_g_l3_plus_depth_buffer.html", "class_ogre_1_1_g_l3_plus_depth_buffer" ]
-    ] ],
-    [ "OgreGL3PlusDepthTexture.h", "_ogre_g_l3_plus_depth_texture_8h.html", [
-      [ "GL3PlusDepthTexture", "class_ogre_1_1_g_l3_plus_depth_texture.html", "class_ogre_1_1_g_l3_plus_depth_texture" ],
-      [ "GL3PlusDepthTextureTarget", "class_ogre_1_1_g_l3_plus_depth_texture_target.html", "class_ogre_1_1_g_l3_plus_depth_texture_target" ],
-      [ "GL3PlusDepthPixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_depth_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_depth_pixel_buffer" ]
-    ] ],
     [ "OgreGL3PlusDescriptorSetTexture.h", "_ogre_g_l3_plus_descriptor_set_texture_8h.html", null ],
     [ "OgreGL3PlusDynamicBuffer.h", "_ogre_g_l3_plus_dynamic_buffer_8h.html", [
       [ "GL3PlusDynamicBuffer", "class_ogre_1_1_g_l3_plus_dynamic_buffer.html", "class_ogre_1_1_g_l3_plus_dynamic_buffer" ]
-    ] ],
-    [ "OgreGL3PlusFBOMultiRenderTarget.h", "_ogre_g_l3_plus_f_b_o_multi_render_target_8h.html", [
-      [ "GL3PlusFBOMultiRenderTarget", "class_ogre_1_1_g_l3_plus_f_b_o_multi_render_target.html", "class_ogre_1_1_g_l3_plus_f_b_o_multi_render_target" ]
-    ] ],
-    [ "OgreGL3PlusFBORenderTexture.h", "_ogre_g_l3_plus_f_b_o_render_texture_8h.html", [
-      [ "GL3PlusFBOManager", "class_ogre_1_1_g_l3_plus_f_b_o_manager.html", "class_ogre_1_1_g_l3_plus_f_b_o_manager" ],
-      [ "Mode", "struct_ogre_1_1_g_l3_plus_f_b_o_manager_1_1_format_properties_1_1_mode.html", "struct_ogre_1_1_g_l3_plus_f_b_o_manager_1_1_format_properties_1_1_mode" ],
-      [ "GL3PlusFBORenderTexture", "class_ogre_1_1_g_l3_plus_f_b_o_render_texture.html", "class_ogre_1_1_g_l3_plus_f_b_o_render_texture" ]
-    ] ],
-    [ "OgreGL3PlusFrameBufferObject.h", "_ogre_g_l3_plus_frame_buffer_object_8h.html", [
-      [ "GL3PlusFrameBufferObject", "class_ogre_1_1_g_l3_plus_frame_buffer_object.html", "class_ogre_1_1_g_l3_plus_frame_buffer_object" ]
     ] ],
     [ "OgreGL3PlusHardwareBufferManager.h", "_ogre_g_l3_plus_hardware_buffer_manager_8h.html", "_ogre_g_l3_plus_hardware_buffer_manager_8h" ],
     [ "OgreGL3PlusHardwareCounterBuffer.h", "_ogre_g_l3_plus_hardware_counter_buffer_8h.html", [
@@ -784,10 +729,6 @@ var files_dup =
     ] ],
     [ "OgreGL3PlusHardwareOcclusionQuery.h", "_ogre_g_l3_plus_hardware_occlusion_query_8h.html", [
       [ "GL3PlusHardwareOcclusionQuery", "class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html", "class_ogre_1_1_g_l3_plus_hardware_occlusion_query" ]
-    ] ],
-    [ "OgreGL3PlusHardwarePixelBuffer.h", "_ogre_g_l3_plus_hardware_pixel_buffer_8h.html", [
-      [ "GL3PlusHardwarePixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_pixel_buffer" ],
-      [ "GL3PlusRenderBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_render_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_render_buffer" ]
     ] ],
     [ "OgreGL3PlusHardwareShaderStorageBuffer.h", "_ogre_g_l3_plus_hardware_shader_storage_buffer_8h.html", [
       [ "GL3PlusHardwareShaderStorageBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_hardware_shader_storage_buffer" ]
@@ -803,14 +744,6 @@ var files_dup =
       [ "GL3PlusMappings", "class_ogre_1_1_g_l3_plus_mappings.html", "class_ogre_1_1_g_l3_plus_mappings" ]
     ] ],
     [ "OgreGL3PlusMultiSourceVertexBufferPool.h", "_ogre_g_l3_plus_multi_source_vertex_buffer_pool_8h.html", null ],
-    [ "OgreGL3PlusNullTexture.h", "_ogre_g_l3_plus_null_texture_8h.html", [
-      [ "GL3PlusNullTexture", "class_ogre_1_1_g_l3_plus_null_texture.html", "class_ogre_1_1_g_l3_plus_null_texture" ],
-      [ "GL3PlusNullTextureTarget", "class_ogre_1_1_g_l3_plus_null_texture_target.html", "class_ogre_1_1_g_l3_plus_null_texture_target" ],
-      [ "GL3PlusNullPixelBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_null_pixel_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_null_pixel_buffer" ]
-    ] ],
-    [ "OgreGL3PlusPixelFormat.h", "_ogre_g_l3_plus_pixel_format_8h.html", [
-      [ "GL3PlusPixelUtil", "class_ogre_1_1_g_l3_plus_pixel_util.html", "class_ogre_1_1_g_l3_plus_pixel_util" ]
-    ] ],
     [ "OgreGL3PlusPixelFormatToShaderType.h", "_ogre_g_l3_plus_pixel_format_to_shader_type_8h.html", [
       [ "GL3PlusPixelFormatToShaderType", "class_ogre_1_1_g_l3_plus_pixel_format_to_shader_type.html", "class_ogre_1_1_g_l3_plus_pixel_format_to_shader_type" ]
     ] ],
@@ -827,14 +760,6 @@ var files_dup =
     [ "OgreGL3PlusRenderSystem.h", "_ogre_g_l3_plus_render_system_8h.html", [
       [ "GL3PlusRenderSystem", "class_ogre_1_1_g_l3_plus_render_system.html", "class_ogre_1_1_g_l3_plus_render_system" ]
     ] ],
-    [ "OgreGL3PlusRenderTexture.h", "_ogre_g_l3_plus_render_texture_8h.html", [
-      [ "GL3PlusRenderTexture", "class_ogre_1_1_g_l3_plus_render_texture.html", "class_ogre_1_1_g_l3_plus_render_texture" ],
-      [ "GL3PlusRTTManager", "class_ogre_1_1_g_l3_plus_r_t_t_manager.html", "class_ogre_1_1_g_l3_plus_r_t_t_manager" ],
-      [ "GL3PlusSurfaceDesc", "struct_ogre_1_1_g_l3_plus_surface_desc.html", "struct_ogre_1_1_g_l3_plus_surface_desc" ]
-    ] ],
-    [ "OgreGL3PlusRenderToVertexBuffer.h", "_ogre_g_l3_plus_render_to_vertex_buffer_8h.html", [
-      [ "GL3PlusRenderToVertexBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_render_to_vertex_buffer" ]
-    ] ],
     [ "OgreGL3PlusStagingBuffer.h", "_ogre_g_l3_plus_staging_buffer_8h.html", [
       [ "GL3PlusStagingBuffer", "class_ogre_1_1_g_l3_plus_staging_buffer.html", "class_ogre_1_1_g_l3_plus_staging_buffer" ]
     ] ],
@@ -850,12 +775,6 @@ var files_dup =
     [ "OgreGL3PlusTexBufferPacked.h", "_ogre_g_l3_plus_tex_buffer_packed_8h.html", [
       [ "GL3PlusTexBufferPacked", "class_ogre_1_1_g_l3_plus_tex_buffer_packed.html", "class_ogre_1_1_g_l3_plus_tex_buffer_packed" ]
     ] ],
-    [ "OgreGL3PlusTexture.h", "_ogre_g_l3_plus_texture_8h.html", [
-      [ "GL3PlusTexture", "class_ogre_1_1_g_l3_plus_texture.html", "class_ogre_1_1_g_l3_plus_texture" ]
-    ] ],
-    [ "OgreGL3PlusTextureBuffer.h", "_ogre_g_l3_plus_texture_buffer_8h.html", [
-      [ "GL3PlusTextureBuffer", "class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer.html", "class_ogre_1_1v1_1_1_g_l3_plus_texture_buffer" ]
-    ] ],
     [ "OgreGL3PlusTextureGpu.h", "_ogre_g_l3_plus_texture_gpu_8h.html", [
       [ "GL3PlusTextureGpu", "class_ogre_1_1_g_l3_plus_texture_gpu.html", "class_ogre_1_1_g_l3_plus_texture_gpu" ],
       [ "GL3PlusTextureGpuRenderTarget", "class_ogre_1_1_g_l3_plus_texture_gpu_render_target.html", "class_ogre_1_1_g_l3_plus_texture_gpu_render_target" ]
@@ -865,7 +784,6 @@ var files_dup =
       [ "GL3PlusTextureGpuHeadlessWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html", "class_ogre_1_1_g_l3_plus_texture_gpu_headless_window" ],
       [ "GL3PlusTextureGpuWindow", "class_ogre_1_1_g_l3_plus_texture_gpu_window.html", "class_ogre_1_1_g_l3_plus_texture_gpu_window" ]
     ] ],
-    [ "OgreGL3PlusTextureManager.h", "_ogre_g_l3_plus_texture_manager_8h.html", "_ogre_g_l3_plus_texture_manager_8h" ],
     [ "OgreGL3PlusUavBufferPacked.h", "_ogre_g_l3_plus_uav_buffer_packed_8h.html", [
       [ "GL3PlusUavBufferPacked", "class_ogre_1_1_g_l3_plus_uav_buffer_packed.html", "class_ogre_1_1_g_l3_plus_uav_buffer_packed" ]
     ] ],
@@ -1114,7 +1032,6 @@ var files_dup =
     [ "OgreHardwareCounterBuffer.h", "_ogre_hardware_counter_buffer_8h.html", null ],
     [ "OgreHardwareIndexBuffer.h", "_ogre_hardware_index_buffer_8h.html", "_ogre_hardware_index_buffer_8h" ],
     [ "OgreHardwareOcclusionQuery.h", "_ogre_hardware_occlusion_query_8h.html", null ],
-    [ "OgreHardwarePixelBuffer.h", "_ogre_hardware_pixel_buffer_8h.html", null ],
     [ "OgreHardwareUniformBuffer.h", "_ogre_hardware_uniform_buffer_8h.html", null ],
     [ "OgreHardwareVertexBuffer.h", "_ogre_hardware_vertex_buffer_8h.html", "_ogre_hardware_vertex_buffer_8h" ],
     [ "OgreHeaderPrefix.h", "_ogre_header_prefix_8h.html", null ],
@@ -1157,13 +1074,6 @@ var files_dup =
     [ "OgreHlmsPso.h", "_ogre_hlms_pso_8h.html", null ],
     [ "OgreHlmsSamplerblock.h", "_ogre_hlms_samplerblock_8h.html", "_ogre_hlms_samplerblock_8h" ],
     [ "OgreHlmsTextureBaseClass.h", "_ogre_hlms_texture_base_class_8h.html", null ],
-    [ "OgreHlmsTextureManager.h", "_ogre_hlms_texture_manager_8h.html", [
-      [ "DefaultTextureParameters", "struct_ogre_1_1_hlms_texture_manager_1_1_default_texture_parameters.html", "struct_ogre_1_1_hlms_texture_manager_1_1_default_texture_parameters" ],
-      [ "MetadataCacheEntry", "struct_ogre_1_1_hlms_texture_manager_1_1_metadata_cache_entry.html", "struct_ogre_1_1_hlms_texture_manager_1_1_metadata_cache_entry" ],
-      [ "NamePair", "struct_ogre_1_1_hlms_texture_manager_1_1_texture_array_1_1_name_pair.html", "struct_ogre_1_1_hlms_texture_manager_1_1_texture_array_1_1_name_pair" ],
-      [ "TextureLocation", "struct_ogre_1_1_hlms_texture_manager_1_1_texture_location.html", "struct_ogre_1_1_hlms_texture_manager_1_1_texture_location" ],
-      [ "Threshold", "struct_ogre_1_1_hlms_texture_manager_1_1_threshold.html", "struct_ogre_1_1_hlms_texture_manager_1_1_threshold" ]
-    ] ],
     [ "OgreHlmsTexturePack.h", "_ogre_hlms_texture_pack_8h.html", [
       [ "TextureEntry", "struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry.html", "struct_ogre_1_1_hlms_texture_pack_1_1_texture_entry" ]
     ] ],
@@ -1190,11 +1100,7 @@ var files_dup =
     [ "OgreIfdProbeVisualizer.h", "_ogre_ifd_probe_visualizer_8h.html", [
       [ "IfdProbeVisualizer", "class_ogre_1_1_ifd_probe_visualizer.html", "class_ogre_1_1_ifd_probe_visualizer" ]
     ] ],
-    [ "OgreImage.h", "_ogre_image_8h.html", "_ogre_image_8h" ],
     [ "OgreImage2.h", "_ogre_image2_8h.html", null ],
-    [ "OgreImageCodec.h", "_ogre_image_codec_8h.html", [
-      [ "ImageData", "class_ogre_1_1_image_codec_1_1_image_data.html", "class_ogre_1_1_image_codec_1_1_image_data" ]
-    ] ],
     [ "OgreImageCodec2.h", "_ogre_image_codec2_8h.html", [
       [ "ImageData2", "class_ogre_1_1_image_codec2_1_1_image_data2.html", "class_ogre_1_1_image_codec2_1_1_image_data2" ]
     ] ],
@@ -1397,14 +1303,6 @@ var files_dup =
     [ "OgreMetalConstBufferPacked.h", "_ogre_metal_const_buffer_packed_8h.html", [
       [ "MetalConstBufferPacked", "class_ogre_1_1_metal_const_buffer_packed.html", "class_ogre_1_1_metal_const_buffer_packed" ]
     ] ],
-    [ "OgreMetalDepthBuffer.h", "_ogre_metal_depth_buffer_8h.html", [
-      [ "MetalDepthBuffer", "class_ogre_1_1_metal_depth_buffer.html", "class_ogre_1_1_metal_depth_buffer" ]
-    ] ],
-    [ "OgreMetalDepthTexture.h", "_ogre_metal_depth_texture_8h.html", [
-      [ "MetalDepthTexture", "class_ogre_1_1_metal_depth_texture.html", "class_ogre_1_1_metal_depth_texture" ],
-      [ "MetalDepthTextureTarget", "class_ogre_1_1_metal_depth_texture_target.html", "class_ogre_1_1_metal_depth_texture_target" ],
-      [ "MetalDepthPixelBuffer", "class_ogre_1_1v1_1_1_metal_depth_pixel_buffer.html", "class_ogre_1_1v1_1_1_metal_depth_pixel_buffer" ]
-    ] ],
     [ "OgreMetalDescriptorSetTexture.h", "_ogre_metal_descriptor_set_texture_8h.html", null ],
     [ "OgreMetalDevice.h", "_ogre_metal_device_8h.html", [
       [ "MetalDevice", "struct_ogre_1_1_metal_device.html", "struct_ogre_1_1_metal_device" ],
@@ -1428,10 +1326,6 @@ var files_dup =
     [ "OgreMetalHardwareIndexBuffer.h", "_ogre_metal_hardware_index_buffer_8h.html", [
       [ "MetalHardwareIndexBuffer", "class_ogre_1_1v1_1_1_metal_hardware_index_buffer.html", "class_ogre_1_1v1_1_1_metal_hardware_index_buffer" ]
     ] ],
-    [ "OgreMetalHardwarePixelBuffer.h", "_ogre_metal_hardware_pixel_buffer_8h.html", [
-      [ "MetalHardwarePixelBuffer", "class_ogre_1_1v1_1_1_metal_hardware_pixel_buffer.html", "class_ogre_1_1v1_1_1_metal_hardware_pixel_buffer" ],
-      [ "MetalTextureBuffer", "class_ogre_1_1v1_1_1_metal_texture_buffer.html", "class_ogre_1_1v1_1_1_metal_texture_buffer" ]
-    ] ],
     [ "OgreMetalHardwareVertexBuffer.h", "_ogre_metal_hardware_vertex_buffer_8h.html", [
       [ "MetalHardwareVertexBuffer", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer.html", "class_ogre_1_1v1_1_1_metal_hardware_vertex_buffer" ]
     ] ],
@@ -1439,15 +1333,7 @@ var files_dup =
     [ "OgreMetalMappings.h", "_ogre_metal_mappings_8h.html", [
       [ "MetalMappings", "class_ogre_1_1_metal_mappings.html", "class_ogre_1_1_metal_mappings" ]
     ] ],
-    [ "OgreMetalMultiRenderTarget.h", "_ogre_metal_multi_render_target_8h.html", [
-      [ "MetalMultiRenderTarget", "class_ogre_1_1_metal_multi_render_target.html", "class_ogre_1_1_metal_multi_render_target" ]
-    ] ],
     [ "OgreMetalMultiSourceVertexBufferPool.h", "_ogre_metal_multi_source_vertex_buffer_pool_8h.html", null ],
-    [ "OgreMetalNullTexture.h", "_ogre_metal_null_texture_8h.html", [
-      [ "MetalNullTexture", "class_ogre_1_1_metal_null_texture.html", "class_ogre_1_1_metal_null_texture" ],
-      [ "MetalNullTextureTarget", "class_ogre_1_1_metal_null_texture_target.html", "class_ogre_1_1_metal_null_texture_target" ],
-      [ "MetalNullPixelBuffer", "class_ogre_1_1v1_1_1_metal_null_pixel_buffer.html", "class_ogre_1_1v1_1_1_metal_null_pixel_buffer" ]
-    ] ],
     [ "OgreMetalPixelFormatToShaderType.h", "_ogre_metal_pixel_format_to_shader_type_8h.html", "_ogre_metal_pixel_format_to_shader_type_8h" ],
     [ "OgreMetalPlugin.h", "_ogre_metal_plugin_8h.html", [
       [ "MetalPlugin", "class_ogre_1_1_metal_plugin.html", "class_ogre_1_1_metal_plugin" ]
@@ -1469,9 +1355,6 @@ var files_dup =
     [ "OgreMetalRenderTargetCommon.h", "_ogre_metal_render_target_common_8h.html", [
       [ "MetalRenderTargetCommon", "class_ogre_1_1_metal_render_target_common.html", "class_ogre_1_1_metal_render_target_common" ]
     ] ],
-    [ "OgreMetalRenderTexture.h", "_ogre_metal_render_texture_8h.html", [
-      [ "MetalRenderTexture", "class_ogre_1_1_metal_render_texture.html", "class_ogre_1_1_metal_render_texture" ]
-    ] ],
     [ "OgreMetalStagingBuffer.h", "_ogre_metal_staging_buffer_8h.html", [
       [ "MetalStagingBuffer", "class_ogre_1_1_metal_staging_buffer.html", "class_ogre_1_1_metal_staging_buffer" ]
     ] ],
@@ -1482,9 +1365,6 @@ var files_dup =
       [ "MetalReadOnlyBufferPacked", "class_ogre_1_1_metal_read_only_buffer_packed.html", "class_ogre_1_1_metal_read_only_buffer_packed" ],
       [ "MetalTexBufferPacked", "class_ogre_1_1_metal_tex_buffer_packed.html", "class_ogre_1_1_metal_tex_buffer_packed" ]
     ] ],
-    [ "OgreMetalTexture.h", "_ogre_metal_texture_8h.html", [
-      [ "MetalTexture", "class_ogre_1_1_metal_texture.html", "class_ogre_1_1_metal_texture" ]
-    ] ],
     [ "OgreMetalTextureGpu.h", "_ogre_metal_texture_gpu_8h.html", [
       [ "MetalTextureGpu", "class_ogre_1_1_metal_texture_gpu.html", "class_ogre_1_1_metal_texture_gpu" ],
       [ "MetalTextureGpuRenderTarget", "class_ogre_1_1_metal_texture_gpu_render_target.html", "class_ogre_1_1_metal_texture_gpu_render_target" ]
@@ -1492,9 +1372,6 @@ var files_dup =
     [ "OgreMetalTextureGpuManager.h", "_ogre_metal_texture_gpu_manager_8h.html", null ],
     [ "OgreMetalTextureGpuWindow.h", "_ogre_metal_texture_gpu_window_8h.html", [
       [ "MetalTextureGpuWindow", "class_ogre_1_1_metal_texture_gpu_window.html", "class_ogre_1_1_metal_texture_gpu_window" ]
-    ] ],
-    [ "OgreMetalTextureManager.h", "_ogre_metal_texture_manager_8h.html", [
-      [ "MetalTextureManager", "class_ogre_1_1_metal_texture_manager.html", "class_ogre_1_1_metal_texture_manager" ]
     ] ],
     [ "OgreMetalUavBufferPacked.h", "_ogre_metal_uav_buffer_packed_8h.html", [
       [ "MetalUavBufferPacked", "class_ogre_1_1_metal_uav_buffer_packed.html", "class_ogre_1_1_metal_uav_buffer_packed" ]
@@ -1549,9 +1426,6 @@ var files_dup =
     [ "OgreNULLDynamicBuffer.h", "_ogre_n_u_l_l_dynamic_buffer_8h.html", [
       [ "GL3PlusDynamicBuffer", "class_ogre_1_1_g_l3_plus_dynamic_buffer.html", "class_ogre_1_1_g_l3_plus_dynamic_buffer" ]
     ] ],
-    [ "OgreNULLHardwarePixelBuffer.h", "_ogre_n_u_l_l_hardware_pixel_buffer_8h.html", [
-      [ "NULLHardwarePixelBuffer", "class_ogre_1_1v1_1_1_n_u_l_l_hardware_pixel_buffer.html", "class_ogre_1_1v1_1_1_n_u_l_l_hardware_pixel_buffer" ]
-    ] ],
     [ "OgreNULLMultiSourceVertexBufferPool.h", "_ogre_n_u_l_l_multi_source_vertex_buffer_pool_8h.html", null ],
     [ "OgreNULLPlugin.h", "_ogre_n_u_l_l_plugin_8h.html", [
       [ "NULLPlugin", "class_ogre_1_1_n_u_l_l_plugin.html", "class_ogre_1_1_n_u_l_l_plugin" ]
@@ -1560,9 +1434,6 @@ var files_dup =
     [ "OgreNULLRenderSystem.h", "_ogre_n_u_l_l_render_system_8h.html", [
       [ "NULLPixelFormatToShaderType", "class_ogre_1_1_n_u_l_l_pixel_format_to_shader_type.html", "class_ogre_1_1_n_u_l_l_pixel_format_to_shader_type" ],
       [ "NULLRenderSystem", "class_ogre_1_1_n_u_l_l_render_system.html", "class_ogre_1_1_n_u_l_l_render_system" ]
-    ] ],
-    [ "OgreNULLRenderWindow.h", "_ogre_n_u_l_l_render_window_8h.html", [
-      [ "NULLRenderWindow", "class_ogre_1_1_n_u_l_l_render_window.html", "class_ogre_1_1_n_u_l_l_render_window" ]
     ] ],
     [ "OgreNULLStagingBuffer.h", "_ogre_n_u_l_l_staging_buffer_8h.html", [
       [ "NULLStagingBuffer", "class_ogre_1_1_n_u_l_l_staging_buffer.html", "class_ogre_1_1_n_u_l_l_staging_buffer" ]
@@ -1574,15 +1445,8 @@ var files_dup =
       [ "NULLReadOnlyBufferPacked", "class_ogre_1_1_n_u_l_l_read_only_buffer_packed.html", "class_ogre_1_1_n_u_l_l_read_only_buffer_packed" ],
       [ "NULLTexBufferPacked", "class_ogre_1_1_n_u_l_l_tex_buffer_packed.html", "class_ogre_1_1_n_u_l_l_tex_buffer_packed" ]
     ] ],
-    [ "OgreNULLTexture.h", "_ogre_n_u_l_l_texture_8h.html", [
-      [ "NULLRenderTexture", "class_ogre_1_1_n_u_l_l_render_texture.html", "class_ogre_1_1_n_u_l_l_render_texture" ],
-      [ "NULLTexture", "class_ogre_1_1_n_u_l_l_texture.html", "class_ogre_1_1_n_u_l_l_texture" ]
-    ] ],
     [ "OgreNULLTextureGpu.h", "_ogre_n_u_l_l_texture_gpu_8h.html", null ],
     [ "OgreNULLTextureGpuManager.h", "_ogre_n_u_l_l_texture_gpu_manager_8h.html", null ],
-    [ "OgreNULLTextureManager.h", "_ogre_n_u_l_l_texture_manager_8h.html", [
-      [ "NULLTextureManager", "class_ogre_1_1_n_u_l_l_texture_manager.html", "class_ogre_1_1_n_u_l_l_texture_manager" ]
-    ] ],
     [ "OgreNULLUavBufferPacked.h", "_ogre_n_u_l_l_uav_buffer_packed_8h.html", [
       [ "NULLUavBufferPacked", "class_ogre_1_1_n_u_l_l_uav_buffer_packed.html", "class_ogre_1_1_n_u_l_l_uav_buffer_packed" ]
     ] ],
@@ -1794,11 +1658,8 @@ var files_dup =
       [ "PCZRaySceneQuery", "class_ogre_1_1_p_c_z_ray_scene_query.html", "class_ogre_1_1_p_c_z_ray_scene_query" ],
       [ "PCZSphereSceneQuery", "class_ogre_1_1_p_c_z_sphere_scene_query.html", "class_ogre_1_1_p_c_z_sphere_scene_query" ]
     ] ],
-    [ "OgrePixelBox.h", "_ogre_pixel_box_8h.html", null ],
     [ "OgrePixelConversions.h", "_ogre_pixel_conversions_8h.html", null ],
     [ "OgrePixelCountLodStrategy.h", "_ogre_pixel_count_lod_strategy_8h.html", "_ogre_pixel_count_lod_strategy_8h" ],
-    [ "OgrePixelFormat.h", "_ogre_pixel_format_8h.html", "_ogre_pixel_format_8h" ],
-    [ "OgrePixelFormatDescriptions.h", "_ogre_pixel_format_descriptions_8h.html", "_ogre_pixel_format_descriptions_8h" ],
     [ "OgrePixelFormatGpu.h", "_ogre_pixel_format_gpu_8h.html", "_ogre_pixel_format_gpu_8h" ],
     [ "OgrePixelFormatGpuUtils.h", "_ogre_pixel_format_gpu_utils_8h.html", null ],
     [ "OgrePlanarReflectionActor.h", "_ogre_planar_reflection_actor_8h.html", null ],
@@ -1872,11 +1733,6 @@ var files_dup =
     [ "OgreRenderSystemCapabilities.h", "_ogre_render_system_capabilities_8h.html", "_ogre_render_system_capabilities_8h" ],
     [ "OgreRenderSystemCapabilitiesManager.h", "_ogre_render_system_capabilities_manager_8h.html", null ],
     [ "OgreRenderSystemCapabilitiesSerializer.h", "_ogre_render_system_capabilities_serializer_8h.html", null ],
-    [ "OgreRenderTarget.h", "_ogre_render_target_8h.html", "_ogre_render_target_8h" ],
-    [ "OgreRenderTargetListener.h", "_ogre_render_target_listener_8h.html", null ],
-    [ "OgreRenderTexture.h", "_ogre_render_texture_8h.html", null ],
-    [ "OgreRenderToVertexBuffer.h", "_ogre_render_to_vertex_buffer_8h.html", null ],
-    [ "OgreRenderWindow.h", "_ogre_render_window_8h.html", null ],
     [ "OgreResource.h", "_ogre_resource_8h.html", "_ogre_resource_8h" ],
     [ "OgreResourceBackgroundQueue.h", "_ogre_resource_background_queue_8h.html", "_ogre_resource_background_queue_8h" ],
     [ "OgreResourceGroupManager.h", "_ogre_resource_group_manager_8h.html", [
@@ -2117,7 +1973,6 @@ var files_dup =
       [ "CmdFontName", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_font_name.html", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_font_name" ],
       [ "CmdSpaceWidth", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_space_width.html", "class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_space_width" ]
     ] ],
-    [ "OgreTexture.h", "_ogre_texture_8h.html", "_ogre_texture_8h" ],
     [ "OgreTextureAnimationController.h", "_ogre_texture_animation_controller_8h.html", [
       [ "TextureAnimationControllerValue", "class_ogre_1_1_texture_animation_controller_value.html", "class_ogre_1_1_texture_animation_controller_value" ]
     ] ],
@@ -2130,7 +1985,6 @@ var files_dup =
     [ "OgreTextureGpuListener.h", "_ogre_texture_gpu_listener_8h.html", null ],
     [ "OgreTextureGpuManager.h", "_ogre_texture_gpu_manager_8h.html", "_ogre_texture_gpu_manager_8h" ],
     [ "OgreTextureGpuManagerListener.h", "_ogre_texture_gpu_manager_listener_8h.html", null ],
-    [ "OgreTextureManager.h", "_ogre_texture_manager_8h.html", null ],
     [ "OgreTextureUnitState.h", "_ogre_texture_unit_state_8h.html", [
       [ "TextureEffect", "struct_ogre_1_1_texture_unit_state_1_1_texture_effect.html", "struct_ogre_1_1_texture_unit_state_1_1_texture_effect" ]
     ] ],

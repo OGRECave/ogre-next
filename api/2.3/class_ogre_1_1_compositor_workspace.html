@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::CompositorWorkspace Class Reference</title>
+<title>OGRE-Next: Ogre::CompositorWorkspace Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_compositor_workspace.ht
 </div><!--header-->
 <div class="contents">
 
-<p>A compositor workspace is the main interface to render into an RT, be it a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> or an RTT (Render <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> Target).  
+<p>A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Render Texture Target).  
  <a href="class_ogre_1_1_compositor_workspace.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreCompositorWorkspace.h&gt;</code></p>
@@ -127,7 +127,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a253b829e8dfc2e0c906ef8d736c7f880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the workspace's nodes.  <a href="class_ogre_1_1_compositor_workspace.html#a253b829e8dfc2e0c906ef8d736c7f880">More...</a><br /></td></tr>
 <tr class="separator:a253b829e8dfc2e0c906ef8d736c7f880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74">_validateFinalTarget</a> (void)</td></tr>
-<tr class="memdesc:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">For compatibility with D3D9, forces a device lost check on the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>, so that BeginScene doesn't fail.  <a href="class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74">More...</a><br /></td></tr>
+<tr class="memdesc:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="mdescLeft">&#160;</td><td class="mdescRight">For compatibility with D3D9, forces a device lost check on the RenderWindow, so that BeginScene doesn't fail.  <a href="class_ogre_1_1_compositor_workspace.html#a1e8910b0bfda05b52cb3b4ac51f07e74">More...</a><br /></td></tr>
 <tr class="separator:a1e8910b0bfda05b52cb3b4ac51f07e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ea8f3823022091ed1ae79137ff8e38e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a8ea8f3823022091ed1ae79137ff8e38e">addListener</a> (<a class="el" href="class_ogre_1_1_compositor_workspace_listener.html">CompositorWorkspaceListener</a> *listener)</td></tr>
 <tr class="separator:a8ea8f3823022091ed1ae79137ff8e38e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,10 +166,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9313de607fe610e76c99c1b94d2c9767"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a9313de607fe610e76c99c1b94d2c9767">getExecutionMask</a> (void) const</td></tr>
 <tr class="separator:a9313de607fe610e76c99c1b94d2c9767"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3478b4a04f3643f58a8f4b12c26c72c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group___effects.html#ga1b4b8ae78da8288aeb191b819c0d72d3">CompositorChannelVec</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#ae3478b4a04f3643f58a8f4b12c26c72c">getExternalRenderTargets</a> (void) const</td></tr>
-<tr class="memdesc:ae3478b4a04f3643f58a8f4b12c26c72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Usually by convention the <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a>[0] is the one we're rendering to. May be empty.  <a href="class_ogre_1_1_compositor_workspace.html#ae3478b4a04f3643f58a8f4b12c26c72c">More...</a><br /></td></tr>
+<tr class="memdesc:ae3478b4a04f3643f58a8f4b12c26c72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Usually by convention the RenderTarget[0] is the one we're rendering to. May be empty.  <a href="class_ogre_1_1_compositor_workspace.html#ae3478b4a04f3643f58a8f4b12c26c72c">More...</a><br /></td></tr>
 <tr class="separator:ae3478b4a04f3643f58a8f4b12c26c72c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f67036c01136efa7775bf9bb3b52486"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#a6f67036c01136efa7775bf9bb3b52486">getFinalTarget</a> (void) const</td></tr>
-<tr class="memdesc:a6f67036c01136efa7775bf9bb3b52486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> we're rendering to.  <a href="class_ogre_1_1_compositor_workspace.html#a6f67036c01136efa7775bf9bb3b52486">More...</a><br /></td></tr>
+<tr class="memdesc:a6f67036c01136efa7775bf9bb3b52486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the RenderTarget we're rendering to.  <a href="class_ogre_1_1_compositor_workspace.html#a6f67036c01136efa7775bf9bb3b52486">More...</a><br /></td></tr>
 <tr class="separator:a6f67036c01136efa7775bf9bb3b52486"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd9ab1869aa2a4537ffa210f01599733"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_workspace.html#afd9ab1869aa2a4537ffa210f01599733">getFrameCount</a> (void) const</td></tr>
 <tr class="separator:afd9ab1869aa2a4537ffa210f01599733"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -246,7 +246,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a06a1289ec641a4e072975de491e236b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A compositor workspace is the main interface to render into an RT, be it a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> or an RTT (Render <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> Target). </p>
+<div class="textblock"><p>A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Render Texture Target). </p>
 <p>Whereas <a class="el" href="namespace_ogre.html">Ogre</a> 1.x needed you to set a <a class="el" href="class_ogre_1_1_viewport.html" title="An abstraction of a viewport, i.e.">Viewport</a> in order to render to an RTT or RW and then call renderTarget-&gt;update, now you need to set a workspace definition instead and call workspace-&gt;<a class="el" href="class_ogre_1_1_compositor_workspace.html#a253b829e8dfc2e0c906ef8d736c7f880" title="Updates the workspace&#39;s nodes.">_update()</a>. </p><dl class="section user"><dt></dt><dd><b>Compositors are not just a "fancy effects" system anymore, they tell <a class="el" href="namespace_ogre.html">Ogre</a> how you want to render the scene. You can't render to an RT without setting a compositor!</b> </dd></dl>
 <dl class="section user"><dt></dt><dd>A workspace may be instantiated multiple times for different RTs, or using different cameras (i.e. multiple monitors, stereo 3D, etc), while they all will share the same definition. A workspace definition (</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace_def.html" title="@See CompositorWorkspace.">CompositorWorkspaceDef</a>) contains all the information needed by this <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a> to instantiate and know which nodes to create and how to connect them. @See <a class="el" href="class_ogre_1_1_compositor_node_def.html" title="Compositor nodes are the core subject of compositing.">CompositorNodeDef</a> A workspace may define global textures that are visible to all of its <a class="el" href="class_ogre_1_1_node.html" title="Class representing a general-purpose node an articulated scene graph.">Node</a> instances. </dd></dl>
@@ -401,7 +401,7 @@ Public Member Functions</h2></td></tr>
 <p>Call before _update unless the final render target is not a render window. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">forceBeginFrame</td><td>Forces a beginFrame call to the D3D9 API, even if the final render target is not a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> (not recommended). To avoid forcing extra begin/end frame pairs, update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate (performance optimization) </td></tr>
+    <tr><td class="paramname">forceBeginFrame</td><td>Forces a beginFrame call to the D3D9 API, even if the final render target is not a RenderWindow (not recommended). To avoid forcing extra begin/end frame pairs, update your manual workspaces inside @CompositorWorkspaceListener::workspacePreUpdate (performance optimization) </td></tr>
     <tr><td class="paramname">bInsideAutoreleasePool</td><td>If manually updating the workspace, leave this to default.</td></tr>
   </table>
   </dd>
@@ -439,7 +439,7 @@ Public Member Functions</h2></td></tr>
 <p>Call after _update unless the final render target is not a render window. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">forceEndFrame</td><td>@See _beginUpdate !!!WARNING!!! Forcing an end frame can cause API issues w/ D3D9 if <a class="el" href="namespace_ogre.html">Ogre</a> had already issued a begin frame automatically (i.e. if you're calling from inside a <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> or <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a> listener). These API issues may not manifest on all HW/Driver combinations, making it hard to detect (if you're on D3D, use the Debug Runtimes) </td></tr>
+    <tr><td class="paramname">forceEndFrame</td><td>@See _beginUpdate !!!WARNING!!! Forcing an end frame can cause API issues w/ D3D9 if <a class="el" href="namespace_ogre.html">Ogre</a> had already issued a begin frame automatically (i.e. if you're calling from inside a RenderTarget or <a class="el" href="class_ogre_1_1_compositor_workspace.html" title="A compositor workspace is the main interface to render into an RT, be it a RenderWindow or an RTT (Re...">CompositorWorkspace</a> listener). These API issues may not manifest on all HW/Driver combinations, making it hard to detect (if you're on D3D, use the Debug Runtimes) </td></tr>
     <tr><td class="paramname">bInsideAutoreleasePool</td><td>If manually updating the workspace, leave this to default.</td></tr>
   </table>
   </dd>
@@ -531,7 +531,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>For compatibility with D3D9, forces a device lost check on the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>, so that BeginScene doesn't fail. </p>
+<p>For compatibility with D3D9, forces a device lost check on the RenderWindow, so that BeginScene doesn't fail. </p>
 
 </div>
 </div>
@@ -921,7 +921,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Usually by convention the <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a>[0] is the one we're rendering to. May be empty. </p>
+<p>Usually by convention the RenderTarget[0] is the one we're rendering to. May be empty. </p>
 
 </div>
 </div>
@@ -941,7 +941,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a> we're rendering to. </p>
+<p>Returns the RenderTarget we're rendering to. </p>
 <p>May be null. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_compositor_workspace.html#ae3478b4a04f3643f58a8f4b12c26c72c" title="Usually by convention the RenderTarget[0] is the one we&#39;re rendering to. May be empty.">getExternalRenderTargets</a> </dd></dl>
 
 </div>

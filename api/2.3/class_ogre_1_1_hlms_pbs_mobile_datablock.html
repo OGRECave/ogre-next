@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::HlmsPbsMobileDatablock Class Reference</title>
+<title>OGRE-Next: Ogre::HlmsPbsMobileDatablock Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -275,10 +275,10 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a65e56c070fcbe6ef2274c2ccb3cd847a"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a65e56c070fcbe6ef2274c2ccb3cd847a">getCmpString</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction)</td></tr>
 <tr class="separator:a65e56c070fcbe6ef2274c2ccb3cd847a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76e73bd203f2ca9d9bab8c18e6d67d83"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_hlms_texture_manager.html#a3601d97eacd07d182c26c73174fbc763">HlmsTextureManager::TextureMapType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#a76e73bd203f2ca9d9bab8c18e6d67d83">suggestMapTypeBasedOnTextureType</a> (<a class="el" href="namespace_ogre.html#a342a992a9d37255505fc5fbb7f0584d9">PbsMobileTextureTypes</a> type)</td></tr>
+<tr class="memitem:a76e73bd203f2ca9d9bab8c18e6d67d83"><td class="memItemLeft" align="right" valign="top">static HlmsTextureManager::TextureMapType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#a76e73bd203f2ca9d9bab8c18e6d67d83">suggestMapTypeBasedOnTextureType</a> (<a class="el" href="namespace_ogre.html#a342a992a9d37255505fc5fbb7f0584d9">PbsMobileTextureTypes</a> type)</td></tr>
 <tr class="memdesc:a76e73bd203f2ca9d9bab8c18e6d67d83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suggests the TextureMapType (aka texture category) for each type of texture (i.e.  <a href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#a76e73bd203f2ca9d9bab8c18e6d67d83">More...</a><br /></td></tr>
 <tr class="separator:a76e73bd203f2ca9d9bab8c18e6d67d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad196201f244a8d16df526e5cba122d4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_ogre_1_1_pbs_uv_atlas_params.html">PbsUvAtlasParams</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#aad196201f244a8d16df526e5cba122d4">textureLocationToAtlasParams</a> (const <a class="el" href="struct_ogre_1_1_hlms_texture_manager_1_1_texture_location.html">HlmsTextureManager::TextureLocation</a> &amp;texLocation)</td></tr>
+<tr class="memitem:aad196201f244a8d16df526e5cba122d4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="struct_ogre_1_1_pbs_uv_atlas_params.html">PbsUvAtlasParams</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_pbs_mobile_datablock.html#aad196201f244a8d16df526e5cba122d4">textureLocationToAtlasParams</a> (const HlmsTextureManager::TextureLocation &amp;texLocation)</td></tr>
 <tr class="separator:aad196201f244a8d16df526e5cba122d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -377,7 +377,7 @@ Friends</h2></td></tr>
 <p>specular_map &lt;texture name&gt; Name of the specular texture for the base image (optional).</p>
 <p>roughness_map &lt;texture name&gt; Name of the roughness texture for the base image (optional) Note: Only the Red channel will be used, and the texture will be converted to an efficient monochrome representation.</p>
 <p>normal_map &lt;texture name&gt; Name of the normal texture for the base image (optional) for normal mapping</p>
-<p>detail_weight_map &lt;texture name&gt; <a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> that when present, will be used as mask/weight for the 4 detail maps. The R channel is used for detail map #0; the G for detail map #1, B for #2, and Alpha for #3. This affects both the diffuse and normal-mapped detail maps.</p>
+<p>detail_weight_map &lt;texture name&gt; Texture that when present, will be used as mask/weight for the 4 detail maps. The R channel is used for detail map #0; the G for detail map #1, B for #2, and Alpha for #3. This affects both the diffuse and normal-mapped detail maps.</p>
 <p>detail_map0 &lt;texture name&gt; Similar: detail_map1, detail_map2, detail_map3 Name of the detail map to be used on top of the diffuse colour. There can be gaps (i.e. set detail maps 0 and 2 but not 1)</p>
 <p>detail_blend_mode0 &lt;blend_mode&gt; Similar: detail_blend_mode1, detail_blend_mode2, detail_blend_mode3 Blend mode to use for each detail map. Valid values are: "NormalNonPremul", "NormalPremul", "Add", "Subtract", "Multiply", "Multiply2x", "Screen", "Overlay", "Lighten", "Darken", "GrainExtract", "GrainMerge", "Difference"</p>
 <p>detail_offset_scale0 &lt;offset_u&gt; &lt;offset_v&gt; &lt;scale_u&gt; &lt;scale_v&gt; Similar: detail_offset_scale1, detail_offset_scale2, detail_offset_scale3 Sets the UV offset and scale of the detail maps.</p>
@@ -2319,7 +2319,7 @@ template&lt;class Alloc &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">UvAtlasParams</td><td>Type of the texture. </td></tr>
-    <tr><td class="paramname">newTexture</td><td><a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a> to change to. If it is null and previously wasn't (or viceversa), will trigger HlmsDatablock::flushRenderables. </td></tr>
+    <tr><td class="paramname">newTexture</td><td>Texture to change to. If it is null and previously wasn't (or viceversa), will trigger HlmsDatablock::flushRenderables. </td></tr>
     <tr><td class="paramname">atlasParams</td><td>The atlas offsets in case this texture is an atlas or an array texture Doesn't apply to certain texture types (i.e. PBSM_REFLECTION) </td></tr>
   </table>
   </dd>
@@ -2374,7 +2374,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="class_ogre_1_1_hlms_texture_manager.html#a3601d97eacd07d182c26c73174fbc763">HlmsTextureManager::TextureMapType</a> Ogre::HlmsPbsMobileDatablock::suggestMapTypeBasedOnTextureType </td>
+          <td class="memname">static HlmsTextureManager::TextureMapType Ogre::HlmsPbsMobileDatablock::suggestMapTypeBasedOnTextureType </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a342a992a9d37255505fc5fbb7f0584d9">PbsMobileTextureTypes</a>&#160;</td>
           <td class="paramname"><em>type</em></td><td>)</td>
@@ -2405,7 +2405,7 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">static <a class="el" href="struct_ogre_1_1_pbs_uv_atlas_params.html">PbsUvAtlasParams</a> Ogre::HlmsPbsMobileDatablock::textureLocationToAtlasParams </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_hlms_texture_manager_1_1_texture_location.html">HlmsTextureManager::TextureLocation</a> &amp;&#160;</td>
+          <td class="paramtype">const HlmsTextureManager::TextureLocation &amp;&#160;</td>
           <td class="paramname"><em>texLocation</em></td><td>)</td>
           <td></td>
         </tr>

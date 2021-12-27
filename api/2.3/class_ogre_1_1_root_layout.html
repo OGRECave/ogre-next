@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::RootLayout Class Reference</title>
+<title>OGRE-Next: Ogre::RootLayout Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -486,7 +486,7 @@ For best performance, &lt;b&gt;the last set index should be the one that changes
 </div><div class="memdoc">
 
 <p>Tells the <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> that the element at setIdx and bindingIdx is an array of size arraySize. </p>
-<p>The purpose of this function is that we can specify mDescBindingRanges[0][<a class="el" href="class_ogre_1_1_texture.html" title="Abstract class representing a Texture resource.">Texture</a>] = [4, 6] and have: </p><pre class="fragment">vulkan_layout( ogre_t4 ) uniform texture2D myTexA;
+<p>The purpose of this function is that we can specify mDescBindingRanges[0][Texture] = [4, 6] and have: </p><pre class="fragment">vulkan_layout( ogre_t4 ) uniform texture2D myTexA;
 vulkan_layout( ogre_t5 ) uniform texture2D myTexB;
 </pre><p> However if we wish to have: </p><pre class="fragment">vulkan_layout( ogre_t4 ) uniform texture2D myTexA[2];
 </pre><p> ogre_t5 is occupied </p><pre class="fragment">        Then we MUST call addArrayBinding( Texture, ArrayDesc( 4, 2 ) );

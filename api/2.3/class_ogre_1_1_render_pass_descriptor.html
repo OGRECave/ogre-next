@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::RenderPassDescriptor Class Reference</title>
+<title>OGRE-Next: Ogre::RenderPassDescriptor Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -197,7 +197,7 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a6925c5fc6c86b93e9fb7412324f25eed"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, beginRenderPassDescriptor &amp; endRenderPassDescriptor won't actually load/store this pass descriptor; but will still set the mCurrentRenderPassDescriptor so we have required information by some passes.  <a href="class_ogre_1_1_render_pass_descriptor.html#a6925c5fc6c86b93e9fb7412324f25eed">More...</a><br /></td></tr>
 <tr class="separator:a6925c5fc6c86b93e9fb7412324f25eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a0e243a1a7ee029deb2bfc0dba406e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_pass_descriptor.html#a6a0e243a1a7ee029deb2bfc0dba406e9">mReadyWindowForPresent</a></td></tr>
-<tr class="memdesc:a6a0e243a1a7ee029deb2bfc0dba406e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, if we have a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> among our colour entries, then this pass is the last one to render to it and should ready the surface for presentation/swapping.  <a href="class_ogre_1_1_render_pass_descriptor.html#a6a0e243a1a7ee029deb2bfc0dba406e9">More...</a><br /></td></tr>
+<tr class="memdesc:a6a0e243a1a7ee029deb2bfc0dba406e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, if we have a RenderWindow among our colour entries, then this pass is the last one to render to it and should ready the surface for presentation/swapping.  <a href="class_ogre_1_1_render_pass_descriptor.html#a6a0e243a1a7ee029deb2bfc0dba406e9">More...</a><br /></td></tr>
 <tr class="separator:a6a0e243a1a7ee029deb2bfc0dba406e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e1deb374021a878920d2a2fdef0b332"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_render_pass_stencil_target.html">RenderPassStencilTarget</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_render_pass_descriptor.html#a6e1deb374021a878920d2a2fdef0b332">mStencil</a></td></tr>
 <tr class="separator:a6e1deb374021a878920d2a2fdef0b332"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1107,9 +1107,9 @@ template&lt;class Alloc &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>When true, if we have a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> among our colour entries, then this pass is the last one to render to it and should ready the surface for presentation/swapping. </p>
+<p>When true, if we have a RenderWindow among our colour entries, then this pass is the last one to render to it and should ready the surface for presentation/swapping. </p>
 <p>After changing this flag you MUST call entriesModified( Colour );</p>
-<p>This value will be automatically reset to false if no entry is a <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> </p>
+<p>This value will be automatically reset to false if no entry is a RenderWindow </p>
 
 </div>
 </div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::VulkanAndroidWindow Class Reference</title>
+<title>OGRE-Next: Ogre::VulkanAndroidWindow Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -165,7 +165,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa7ce540be5f53ce49c45f59f32b72059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns null if getImageAcquiredSemaphore has already been called during this frame.  <a href="class_ogre_1_1_vulkan_window.html#aa7ce540be5f53ce49c45f59f32b72059">More...</a><br /></td></tr>
 <tr class="separator:aa7ce540be5f53ce49c45f59f32b72059"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a464e98db9c09042b866bdb95b210f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_window.html#a8a464e98db9c09042b866bdb95b210f4">getMetrics</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &amp;width, <a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> &amp;height, <a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a> &amp;left, <a class="el" href="namespace_ogre.html#ae76a40e75ec4ec1c5261cb7d2804ccd3">int32</a> &amp;top) const</td></tr>
-<tr class="memdesc:a8a464e98db9c09042b866bdb95b210f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloaded version of getMetrics from <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a>, including extra details specific to windowing systems.  <a href="class_ogre_1_1_window.html#a8a464e98db9c09042b866bdb95b210f4">More...</a><br /></td></tr>
+<tr class="memdesc:a8a464e98db9c09042b866bdb95b210f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloaded version of getMetrics from RenderTarget, including extra details specific to windowing systems.  <a href="class_ogre_1_1_window.html#a8a464e98db9c09042b866bdb95b210f4">More...</a><br /></td></tr>
 <tr class="separator:a8a464e98db9c09042b866bdb95b210f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae983053ef98809960b690f0b0c9b167c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_window.html#ae983053ef98809960b690f0b0c9b167c">getNumSwapchains</a> (void) const</td></tr>
 <tr class="separator:ae983053ef98809960b690f0b0c9b167c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -987,7 +987,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Overloaded version of getMetrics from <a class="el" href="class_ogre_1_1_render_target.html" title="A &#39;canvas&#39; which can receive the results of a rendering operation.">RenderTarget</a>, including extra details specific to windowing systems. </p>
+<p>Overloaded version of getMetrics from RenderTarget, including extra details specific to windowing systems. </p>
 <p>Result is in pixels. </p>
 
 </div>
@@ -1286,7 +1286,7 @@ Public Attributes</h2></td></tr>
 <p>Such points have constant density ~ 100 points per inch (probably 96 on Windows and 72 on Mac), that is independent of pixel density of real display, and are used through the all windowing system.</p>
 <p>Sometimes, such view points are choosen bigger for output devices that are viewed from larger distances, like 30" TV comparing to 30" monitor, therefore maintaining constant points angular density rather than constant linear density.</p>
 <p>In any case, all such windowing system provides the way to convert such view points to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX. We use pixels consistently through the <a class="el" href="namespace_ogre.html">Ogre</a>, but window/view management functions takes view points for convenience, as does the rest of windowing system. Such parameters are named using xxxxPt pattern, and should not be mixed with pixels without being converted using <a class="el" href="class_ogre_1_1_window.html#a12411d378aa0623e29287964eeb261c4" title="Many windowing systems that support HiDPI displays use special points to specify size of the windows ...">getViewPointToPixelScale()</a> function.</p>
-<p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. </p>
+<p>Sometimes such scale factor can change on-the-fly, for example if window is dragged to monitor with different DPI. In such situation, window size in view points is usually preserved by windowing system, and <a class="el" href="namespace_ogre.html">Ogre</a> should adjust pixel size of RenderWindow. </p>
 
 <p>Reimplemented in <a class="el" href="class_ogre_1_1_cocoa_window.html#a14bd7b06e27132d6685222698ea9e256">Ogre::CocoaWindow</a>, and <a class="el" href="class_ogre_1_1_metal_window.html#a70f59aa59b7dd09f587ab758001fbb5e">Ogre::MetalWindow</a>.</p>
 
@@ -2262,7 +2262,7 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Hide (or show) the window. </p>
-<p>If called with hidden=true, this will make the window completely invisible to the user. </p><dl class="section remark"><dt>Remarks</dt><dd>Setting a window to hidden is useful to create a dummy primary <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> hidden from the user so that you can create and recreate your actual RenderWindows without having to recreate all your resources. </dd></dl>
+<p>If called with hidden=true, this will make the window completely invisible to the user. </p><dl class="section remark"><dt>Remarks</dt><dd>Setting a window to hidden is useful to create a dummy primary RenderWindow hidden from the user so that you can create and recreate your actual RenderWindows without having to recreate all your resources. </dd></dl>
 
 <p>Implements <a class="el" href="class_ogre_1_1_window.html#a80738edbd5cf6649ca46331426137ccf">Ogre::Window</a>.</p>
 

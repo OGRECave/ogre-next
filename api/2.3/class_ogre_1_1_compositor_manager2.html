@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OGRE: Ogre::CompositorManager2 Class Reference</title>
+<title>OGRE-Next: Ogre::CompositorManager2 Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="ogre-logo-wetfloor.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">OGRE
+   <div id="projectname">OGRE-Next
    &#160;<span id="projectnumber">2.3</span>
    </div>
    <div id="projectbrief">Object-Oriented Graphics Rendering Engine</div>
@@ -151,7 +151,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9c47f4cac383181aea9e742c3be55627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a new workspace definition.  <a href="class_ogre_1_1_compositor_manager2.html#a9c47f4cac383181aea9e742c3be55627">More...</a><br /></td></tr>
 <tr class="separator:a9c47f4cac383181aea9e742c3be55627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2570335ea7df7e197a88334d65468c01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01">connectOutput</a> (<a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a> *finalNode, size_t inputChannel)</td></tr>
-<tr class="memdesc:a2570335ea7df7e197a88334d65468c01"><td class="mdescLeft">&#160;</td><td class="mdescRight">The final rendering is done by passing the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> to one of the input channels.  <a href="class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01">More...</a><br /></td></tr>
+<tr class="memdesc:a2570335ea7df7e197a88334d65468c01"><td class="mdescLeft">&#160;</td><td class="mdescRight">The final rendering is done by passing the RenderWindow to one of the input channels.  <a href="class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01">More...</a><br /></td></tr>
 <tr class="separator:a2570335ea7df7e197a88334d65468c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a261d69d7a799f9e4f3516c86f9859c90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90">createBasicWorkspaceDef</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;workspaceDefName, const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;backgroundColour, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> shadowNodeName=<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>())</td></tr>
 <tr class="memdesc:a261d69d7a799f9e4f3516c86f9859c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility helper to create a basic workspace to get you out of the rush.  <a href="class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90">More...</a><br /></td></tr>
@@ -674,7 +674,7 @@ for( int i=0; i&lt;4; ++i )
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sceneManager</td><td>The <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> this workspace will be associated with. You can have multiple scene managers, each with multiple workspaces. Those workspaces can be set to render to the same final render target, regardless of scene manager (or not). </td></tr>
-    <tr><td class="paramname">finalRenderTarget</td><td>The final RT where the workspace will be rendered to. Usually the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a>. We need this pointer in order to correctly create RTTs that depend on the final target's width, height, gamma &amp; fsaa settings. This pointer will be used for "connectOutput" channels (</td></tr>
+    <tr><td class="paramname">finalRenderTarget</td><td>The final RT where the workspace will be rendered to. Usually the RenderWindow. We need this pointer in order to correctly create RTTs that depend on the final target's width, height, gamma &amp; fsaa settings. This pointer will be used for "connectOutput" channels (</td></tr>
   </table>
   </dd>
 </dl>
@@ -684,7 +684,7 @@ for( int i=0; i&lt;4; ++i )
     <tr><td class="paramname">defaultCam</td><td>Default camera to use when a camera name wasn't specified explicitly in a pass definition (i.e. PASS_SCENE passes). This pointer can be null if you promise to use all explicit camera names in your passes (and those cameras have already been created) </td></tr>
     <tr><td class="paramname">definitionName</td><td>The unique name of the workspace definition </td></tr>
     <tr><td class="paramname">bEnabled</td><td>True if this workspace should start enabled, false otherwise. </td></tr>
-    <tr><td class="paramname">position</td><td>If there are multiple workspaces, specifies the order in which this compositor should be updated. i.e. "0" means this new workspace gets updated first. Note that subsequent calls will place other workspaces to be updated first. Typically you will want to update workspace that renders to the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> last (depending on what you do with RTs, some OSes, like OS X, may not like it). Defaults to -1; which means update last. </td></tr>
+    <tr><td class="paramname">position</td><td>If there are multiple workspaces, specifies the order in which this compositor should be updated. i.e. "0" means this new workspace gets updated first. Note that subsequent calls will place other workspaces to be updated first. Typically you will want to update workspace that renders to the RenderWindow last (depending on what you do with RTs, some OSes, like OS X, may not like it). Defaults to -1; which means update last. </td></tr>
     <tr><td class="paramname">uavBuffers</td><td>Array of UAV Buffers that will be exposed to compositors, via the 'connect_buffer_external' script keyword, or the call <a class="el" href="class_ogre_1_1_compositor_workspace_def.html#a5a3b0d78489e7957bc0d574b9a1121a7" title="Connects an external buffer to the given input channel.">CompositorWorkspaceDef::connectExternalBuffer</a> </td></tr>
     <tr><td class="paramname">vpOffsetScale</td><td>The viewport of every pass from every node will be offseted and scaled by the following formula: left += vpOffsetScale.x; top += vpOffsetScale.y; width *= vpOffsetScale.z; height *= vpOffsetScale.w; This affects both the viewport dimensions as well as the scissor rect. </td></tr>
     <tr><td class="paramname">vpModifierMask</td><td>An 8-bit mask that will be AND'ed with the viewport modifier mask of each pass from every node. When the result is zero, the previous parameter "viewportModifier" isn't applied to that pass.</td></tr>
@@ -748,7 +748,7 @@ for( int i=0; i&lt;4; ++i )
       </table>
 </div><div class="memdoc">
 
-<p>The final rendering is done by passing the <a class="el" href="class_ogre_1_1_render_window.html" title="Manages the target rendering window.">RenderWindow</a> to one of the input channels. </p>
+<p>The final rendering is done by passing the RenderWindow to one of the input channels. </p>
 <p>This functions does exactly that. </p>
 
 </div>

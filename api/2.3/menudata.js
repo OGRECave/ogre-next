@@ -70,7 +70,6 @@ var menudata={children:[
 {text:"t",url:"namespacemembers_func.html#index_t"},
 {text:"v",url:"namespacemembers_func.html#index_v"}]},
 {text:"Variables",url:"namespacemembers_vars.html",children:[
-{text:"_",url:"namespacemembers_vars.html#index__5F"},
 {text:"b",url:"namespacemembers_vars.html#index_b"},
 {text:"c",url:"namespacemembers_vars.html#index_c"},
 {text:"d",url:"namespacemembers_vars.html#index_d"},
