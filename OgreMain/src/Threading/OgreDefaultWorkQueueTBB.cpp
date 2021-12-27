@@ -110,11 +110,7 @@ namespace Ogre
         tbb::this_tbb_thread::yield();
     }
     //---------------------------------------------------------------------
-#ifdef __cplusplus >= 201103L
     DefaultWorkQueue::~DefaultWorkQueue() noexcept(true)
-#else
-    DefaultWorkQueue::~DefaultWorkQueue()
-#endif // __cplusplus
     {
         shutdown();
     }

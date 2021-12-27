@@ -4,55 +4,33 @@
 
 #include "OgreMemorySTLAllocator.h"
 
-#if( OGRE_COMPILER == OGRE_COMPILER_GNUC ) && !defined( STLPORT )
-#    if __cplusplus >= 201103L
-#        include <unordered_map>
-#    elif OGRE_COMP_VER >= 430
-#        include <tr1/unordered_map>
-#    else
-#        include <ext/hash_map>
-#    endif
-#elif( OGRE_COMPILER == OGRE_COMPILER_CLANG )
-#    if defined( _LIBCPP_VERSION ) || __cplusplus >= 201103L
-#        include <unordered_map>
-#    else
-#        include <tr1/unordered_map>
-#    endif
-#elif !defined( STLPORT )
-#    if( OGRE_COMPILER == OGRE_COMPILER_MSVC ) && _MSC_FULL_VER >= 150030729  // VC++ 9.0 SP1+
-#        include <unordered_map>
-#    elif OGRE_THREAD_PROVIDER == 1
-#        include <boost/unordered_map.hpp>
-#    else
-#        error "Your compiler doesn't support unordered_map. Try to compile Ogre with Boost or STLPort."
-#    endif
-#endif
+#include <unordered_map>
 
 namespace Ogre
 {
-    template <typename K, typename V, typename H = OGRE_HASH_NAMESPACE::hash<K>,
+    template <typename K, typename V, typename H = ::std::hash<K>,
               typename E = std::equal_to<K>,
               typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
     struct unordered_map
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMAP_NAME<K, V, H, E, A> type;
+        typedef typename ::std::unordered_map<K, V, H, E, A> type;
 #else
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMAP_NAME<K, V, H, E> type;
+        typedef typename ::std::unordered_map<K, V, H, E> type;
 #endif
         typedef typename type::iterator iterator;
         typedef typename type::const_iterator const_iterator;
     };
 
-    template <typename K, typename V, typename H = OGRE_HASH_NAMESPACE::hash<K>,
+    template <typename K, typename V, typename H = ::std::hash<K>,
               typename E = std::equal_to<K>,
               typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
     struct unordered_multimap
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMULTIMAP_NAME<K, V, H, E, A> type;
+        typedef typename ::std::unordered_multimap<K, V, H, E, A> type;
 #else
-        typedef typename OGRE_HASH_NAMESPACE::OGRE_HASHMULTIMAP_NAME<K, V, H, E> type;
+        typedef typename ::std::unordered_multimap<K, V, H, E> type;
 #endif
         typedef typename type::iterator iterator;
         typedef typename type::const_iterator const_iterator;

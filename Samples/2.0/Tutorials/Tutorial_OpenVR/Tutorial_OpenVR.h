@@ -4,20 +4,7 @@
 
 #include "GraphicsSystem.h"
 
-#if __cplusplus <= 199711L
-    #ifndef nullptr
-        #define OgreDemoNullptrDefined
-        #define nullptr (0)
-    #endif
-#endif
 #include "openvr.h"
-#if __cplusplus <= 199711L
-    #ifdef OgreDemoNullptrDefined
-        #undef OgreDemoNullptrDefined
-        #undef nullptr
-    #endif
-#endif
-
 
 namespace Demo
 {

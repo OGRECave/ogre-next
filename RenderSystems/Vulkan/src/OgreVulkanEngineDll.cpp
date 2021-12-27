@@ -35,11 +35,7 @@ namespace Ogre
 {
     static VulkanPlugin *plugin;
 
-#    if __cplusplus >= 201103L
     extern "C" void _OgreVulkanExport dllStartPlugin( void ) noexcept( false )
-#    else
-    extern "C" void _OgreVulkanExport dllStartPlugin( void ) throw( Exception )
-#    endif
     {
         plugin = OGRE_NEW VulkanPlugin();
         Root::getSingleton().installPlugin( plugin );

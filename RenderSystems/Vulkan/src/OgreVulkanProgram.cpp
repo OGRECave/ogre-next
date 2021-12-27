@@ -42,8 +42,8 @@ THE SOFTWARE.
 
 #include "OgreRenderSystemCapabilities.h"
 #include "OgreRoot.h"
-#include "OgreVulkanGlslangHeader.h"
 
+#include "glslang/Public/ShaderLang.h"
 #include "glslang/SPIRV/Logger.h"
 
 // Inclusion of SPIRV headers triggers lots of C++11 errors we don't care

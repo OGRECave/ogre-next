@@ -35,17 +35,11 @@ namespace Ogre
 {
     static ParticleFXPlugin *plugin;
     //-----------------------------------------------------------------------
-
-#    if __cplusplus >= 201103L
     extern "C" void _OgreParticleFXExport dllStartPlugin( void ) noexcept( false )
-#    else
-    extern "C" void _OgreParticleFXExport dllStartPlugin( void ) throw( Exception )
-#    endif
     {
         plugin = OGRE_NEW ParticleFXPlugin();
         Root::getSingleton().installPlugin( plugin );
     }
-
     //-----------------------------------------------------------------------
     extern "C" void _OgreParticleFXExport dllStopPlugin( void )
     {

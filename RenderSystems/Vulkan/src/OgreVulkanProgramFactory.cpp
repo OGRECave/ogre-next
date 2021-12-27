@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanProgram.h"
 
-#include "OgreVulkanGlslangHeader.h"
+#include "glslang/Public/ShaderLang.h"
 
 namespace Ogre
 {

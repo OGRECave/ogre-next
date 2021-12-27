@@ -46,21 +46,6 @@ THE SOFTWARE
 #   endif
 #endif
 
-// If:
-//  1. We detected Clang
-//  2. We're using C++98
-//  3. Not using libc++ (using libstdc++ instead; which is common in GCC)
-//
-// Then we're almost certain this is being parsed by QtCreator ClangCodeModel
-// and we need to include tr1/unordered_set for autocomplete to work
-//
-// Otherwise this is still harmless to include, it just makes build times slower
-#if OGRE_COMPILER == OGRE_COMPILER_CLANG
-#    if !defined(_LIBCPP_VERSION) && __cplusplus < 201103L
-#       include <tr1/unordered_set>
-#    endif
-#endif
-
 namespace Ogre {
     // Define ogre version
     #define OGRE_VERSION_MAJOR 2
@@ -85,56 +70,6 @@ namespace Ogre {
         */
         typedef float Real;
         typedef uint32 RealAsUint;
-    #endif
-
-    #if OGRE_COMPILER == OGRE_COMPILER_GNUC && OGRE_COMP_VER >= 310 && !defined(STLPORT)
-    #   if OGRE_COMP_VER >= 430
-    #       if __cplusplus >= 201103L
-    #           define OGRE_HASH_NAMESPACE ::std
-    #       else
-    #           define OGRE_HASH_NAMESPACE ::std::tr1
-    #       endif
-    #       define OGRE_HASHMAP_NAME unordered_map
-    #       define OGRE_HASHMULTIMAP_NAME unordered_multimap
-    #       define OGRE_HASHSET_NAME unordered_set
-    #       define OGRE_HASHMULTISET_NAME unordered_multiset
-    #    else
-    #       define OGRE_HASH_NAMESPACE ::__gnu_cxx
-    #       define OGRE_HASHMAP_NAME hash_map
-    #       define OGRE_HASHMULTIMAP_NAME hash_multimap
-    #       define OGRE_HASHSET_NAME hash_set
-    #       define OGRE_HASHMULTISET_NAME hash_multiset
-    #    endif
-    #elif OGRE_COMPILER == OGRE_COMPILER_CLANG
-    #       define OGRE_HASHMAP_NAME unordered_map
-    #       define OGRE_HASHMULTIMAP_NAME unordered_multimap
-    #       define OGRE_HASHSET_NAME unordered_set
-    #       define OGRE_HASHMULTISET_NAME unordered_multiset
-    #    if defined(_LIBCPP_VERSION) || __cplusplus >= 201103L
-    #       define OGRE_HASH_NAMESPACE ::std
-    #    else
-    #       define OGRE_HASH_NAMESPACE ::std::tr1
-    #    endif
-    #else
-    #   if OGRE_COMPILER == OGRE_COMPILER_MSVC && !defined(_STLP_MSVC)
-    #       define OGRE_HASHMAP_NAME unordered_map
-    #       define OGRE_HASHMULTIMAP_NAME unordered_multimap
-    #       define OGRE_HASHSET_NAME unordered_set
-    #       define OGRE_HASHMULTISET_NAME unordered_multiset
-    #       if _MSC_VER >= 1900 // VC++ 2015
-    #           define OGRE_HASH_NAMESPACE ::std
-    #       elif _MSC_FULL_VER >= 150030729 // VC++ 9.0/2008 SP1+
-    #           define OGRE_HASH_NAMESPACE ::std::tr1
-    #       elif OGRE_THREAD_PROVIDER == 1
-    #           define OGRE_HASH_NAMESPACE ::boost
-    #       endif
-    #   else
-    #       define OGRE_HASH_NAMESPACE ::std
-    #       define OGRE_HASHMAP_NAME unordered_map
-    #       define OGRE_HASHMULTIMAP_NAME unordered_multimap
-    #       define OGRE_HASHSET_NAME unordered_set
-    #       define OGRE_HASHMULTISET_NAME unordered_multiset
-    #   endif
     #endif
 
     /** In order to avoid finger-aches :)
@@ -597,10 +532,6 @@ namespace Ogre
 #if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 
 namespace std 
 {
-#if (OGRE_COMPILER == OGRE_COMPILER_GNUC && OGRE_COMP_VER >= 430) || OGRE_COMPILER == OGRE_COMPILER_CLANG && !defined(STLPORT) && __cplusplus < 201103L
-    namespace tr1
-    {
-#endif
     template <> struct hash<Ogre::String>
     {
     public :
@@ -616,9 +547,6 @@ namespace std
             return (_Val);
         }
     };
-#if (OGRE_COMPILER == OGRE_COMPILER_GNUC && OGRE_COMP_VER >= 430) || OGRE_COMPILER == OGRE_COMPILER_CLANG && !defined(STLPORT) && __cplusplus < 201103L
-    }
-#endif
 }
 #endif
 
@@ -643,8 +571,8 @@ namespace Ogre
     template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy> >
     class StdList;
 
-    template <typename K, typename H = OGRE_HASH_NAMESPACE::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<K, GeneralAllocPolicy> >
+    template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
+              typename A = STLAllocator<K, GeneralAllocPolicy>>
     class StdUnorderedSet;
 }
 

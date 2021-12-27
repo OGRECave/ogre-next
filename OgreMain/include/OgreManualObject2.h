@@ -308,17 +308,17 @@ namespace Ogre
             friend class ManualObject;
 
             ManualObjectSection(ManualObject* parent, const String& datablockName, OperationType opType);
-            virtual ~ManualObjectSection();
+            ~ManualObjectSection() override;
             
             // Renderable overrides
             /** @copydoc Renderable::getRenderOperation. */
-            virtual void getRenderOperation(v1::RenderOperation& op, bool casterPass) OGRE_OVERRIDE;
+            void getRenderOperation(v1::RenderOperation& op, bool casterPass) override;
             /** @copydoc Renderable::getWorldTransforms. */
-            virtual void getWorldTransforms(Matrix4* xform) const OGRE_OVERRIDE;
+            void getWorldTransforms(Matrix4* xform) const override;
             /** @copydoc Renderable::getLights. */
-            virtual const LightList &getLights() const OGRE_OVERRIDE;
+            const LightList &getLights() const override;
             /** @copydoc Renderable::getCastsShadows. */
-            virtual bool getCastsShadows() const OGRE_OVERRIDE;
+            bool getCastsShadows() const override;
 
             /** Sets an user defined name that can serve to identify this section.
              */

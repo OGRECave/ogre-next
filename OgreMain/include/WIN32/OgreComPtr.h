@@ -180,19 +180,10 @@ namespace Ogre
             other.m_ptr = temp;
         }
 
-#if __cplusplus >= 201103L || OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1800
         explicit operator bool() const ASSUME_NOEXCEPT
         {
             return 0 != m_ptr;
         }
-#else
-        struct SafeBoolHelper { int member; };
-        typedef int SafeBoolHelper::* SafeBoolType;
-        operator SafeBoolType() const ASSUME_NOEXCEPT
-        {
-            return 0 != m_ptr ? &SafeBoolHelper::member : 0;
-        }
-#endif
 
         T* Get() const ASSUME_NOEXCEPT
         {
