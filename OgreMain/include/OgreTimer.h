@@ -35,8 +35,6 @@ THE SOFTWARE.
 # include "WIN32/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 # include "GLX/OgreTimerImp.h"
-#elif OGRE_PLATFORM == OGRE_PLATFORM_NACL  
-# include "NaCl/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 # include "OSX/OgreTimerImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS

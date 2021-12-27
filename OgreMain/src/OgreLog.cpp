@@ -38,17 +38,8 @@ THE SOFTWARE.
 #   include <windows.h>
 #endif
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL
-#   include "ppapi/cpp/var.h"
-#   include "ppapi/cpp/instance.h"
-#endif
-
 namespace Ogre
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL
-    pp::Instance* Log::mInstance = NULL;    
-#endif
-    
     //-----------------------------------------------------------------------
     Log::Log( const String& name, bool debuggerOuput, bool suppressFile ) : 
         mLogLevel(LL_NORMAL), mDebugOut(debuggerOuput),
@@ -82,12 +73,6 @@ namespace Ogre
             
             if (!skipThisMessage)
             {
-#if OGRE_PLATFORM == OGRE_PLATFORM_NACL
-                if(mInstance != NULL)
-                {
-                    mInstance->PostMessage(message.c_str());
-                }
-#else
                 if (mDebugOut && !maskDebug)
                 {
 #    if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT) && OGRE_DEBUG_MODE
@@ -106,7 +91,6 @@ namespace Ogre
                     else
                         std::cout << message << std::endl;
                 }
-#endif
 
                 // Write time into log
                 if (!mSuppressFile)

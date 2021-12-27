@@ -116,15 +116,7 @@ endif ()
 
 
 # Add platform specific files
-if (OGRE_BUILD_PLATFORM_NACL)
-  include_directories("include/NaCl")
-  file(GLOB PLATFORM_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/NaCl/*.h")
-  file(GLOB PLATFORM_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/NaCl/*.cpp"
-    src/OgreSearchOps.cpp)
-
-  set(PLATFORM_LIBS nosys)
-  set(PLATFORM_HEADER_INSTALL "NaCl")
-elseif (EMSCRIPTEN)
+if (EMSCRIPTEN)
   include_directories(include/Emscripten)
 
   file(GLOB PLATFORM_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/Emscripten/*.h)
