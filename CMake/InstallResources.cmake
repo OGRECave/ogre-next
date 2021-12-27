@@ -105,17 +105,11 @@ endif ()
 if (NOT OGRE_BUILD_PLUGIN_PFX)
   set(OGRE_COMMENT_PLUGIN_PARTICLEFX "#")
 endif ()
-if (NOT OGRE_BUILD_COMPONENT_TERRAIN)
-  set(OGRE_COMMENT_COMPONENT_TERRAIN "#")
-endif ()
 if (NOT OGRE_BUILD_COMPONENT_RTSHADERSYSTEM)
   set(OGRE_COMMENT_COMPONENT_RTSHADERSYSTEM "#")
 endif ()
 if (NOT OGRE_BUILD_COMPONENT_VOLUME)
   set(OGRE_COMMENT_COMPONENT_VOLUME "#")
-endif ()
-if (NOT OGRE_BUILD_COMPONENT_TERRAIN OR NOT OGRE_BUILD_COMPONENT_PAGING)
-  set(OGRE_COMMENT_SAMPLE_ENDLESSWORLD "#")
 endif ()
 if( NOT OGRE_PROFILING_PROVIDER OR OGRE_PROFILING_PROVIDER STREQUAL "none" )
     set( OGRE_COMMENT_PROFILER_PATH "#" )
@@ -135,10 +129,7 @@ configure_file(${OGRE_TEMPLATES_DIR}/plugins.cfg.in ${OGRE_BINARY_DIR}/inst/bin/
 # create plugins_tools.cfg
 configure_file(${OGRE_TEMPLATES_DIR}/plugins_tools_d.cfg.in ${OGRE_BINARY_DIR}/inst/bin/debug/plugins_tools_d.cfg)
 configure_file(${OGRE_TEMPLATES_DIR}/plugins_tools.cfg.in ${OGRE_BINARY_DIR}/inst/bin/release/plugins_tools.cfg)
-# create samples.cfg
-configure_file(${OGRE_TEMPLATES_DIR}/samples_d.cfg.in ${OGRE_BINARY_DIR}/inst/bin/debug/samples_d.cfg)
-configure_file(${OGRE_TEMPLATES_DIR}/samples.cfg.in ${OGRE_BINARY_DIR}/inst/bin/release/samples.cfg)
-# create samples.cfg
+# create tests.cfg
 configure_file(${OGRE_TEMPLATES_DIR}/tests.cfg.in ${OGRE_BINARY_DIR}/inst/bin/release/tests.cfg)
 configure_file(${OGRE_TEMPLATES_DIR}/tests_d.cfg.in ${OGRE_BINARY_DIR}/inst/bin/debug/tests_d.cfg)
 # create HiddenAreaMeshVr.cfg
@@ -272,11 +263,6 @@ if (MSVC AND NOT NMAKE)
   configure_file(${OGRE_TEMPLATES_DIR}/plugins_tools.cfg.in ${OGRE_BINARY_DIR}/bin/release/plugins_tools.cfg)
   configure_file(${OGRE_TEMPLATES_DIR}/plugins_tools.cfg.in ${OGRE_BINARY_DIR}/bin/relwithdebinfo/plugins_tools.cfg)
   configure_file(${OGRE_TEMPLATES_DIR}/plugins_tools.cfg.in ${OGRE_BINARY_DIR}/bin/minsizerel/plugins_tools.cfg)
-  # create samples.cfg
-  configure_file(${OGRE_TEMPLATES_DIR}/samples_d.cfg.in ${OGRE_BINARY_DIR}/bin/debug/samples_d.cfg)
-  configure_file(${OGRE_TEMPLATES_DIR}/samples.cfg.in ${OGRE_BINARY_DIR}/bin/release/samples.cfg)
-  configure_file(${OGRE_TEMPLATES_DIR}/samples.cfg.in ${OGRE_BINARY_DIR}/bin/relwithdebinfo/samples.cfg)
-  configure_file(${OGRE_TEMPLATES_DIR}/samples.cfg.in ${OGRE_BINARY_DIR}/bin/minsizerel/samples.cfg)
   # create tests.cfg
   configure_file(${OGRE_TEMPLATES_DIR}/tests_d.cfg.in ${OGRE_BINARY_DIR}/bin/debug/tests_d.cfg)
   configure_file(${OGRE_TEMPLATES_DIR}/tests.cfg.in ${OGRE_BINARY_DIR}/bin/release/tests.cfg)
@@ -300,8 +286,6 @@ else() # other OS only need one cfg file
   configure_file(${OGRE_TEMPLATES_DIR}/plugins${OGRE_CFG_SUFFIX}.cfg.in ${OGRE_BINARY_DIR}/bin/plugins${OGRE_CFG_SUFFIX}.cfg)
   # create plugins_tools.cfg
   configure_file(${OGRE_TEMPLATES_DIR}/plugins_tools${OGRE_CFG_SUFFIX}.cfg.in ${OGRE_BINARY_DIR}/bin/plugins_tools${OGRE_CFG_SUFFIX}.cfg)
-  # create samples.cfg
-  configure_file(${OGRE_TEMPLATES_DIR}/samples${OGRE_CFG_SUFFIX}.cfg.in ${OGRE_BINARY_DIR}/bin/samples${OGRE_CFG_SUFFIX}.cfg)
   # create tests.cfg
   configure_file(${OGRE_TEMPLATES_DIR}/tests${OGRE_CFG_SUFFIX}.cfg.in ${OGRE_BINARY_DIR}/bin/tests${OGRE_CFG_SUFFIX}.cfg)
   # create HiddenAreaMeshVr.cfg
