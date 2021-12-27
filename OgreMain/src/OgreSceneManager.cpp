@@ -49,7 +49,6 @@ THE SOFTWARE.
 #include "OgreGpuProgramManager.h"
 #include "OgreGpuProgram.h"
 #include "OgreDataStream.h"
-#include "OgreStaticGeometry.h"
 #include "OgreManualObject.h"
 #include "OgreManualObject2.h"
 #include "OgreBillboardChain.h"
@@ -769,7 +768,6 @@ void SceneManager::destroyAllParticleSystems(void)
 //-----------------------------------------------------------------------
 void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCameras )
 {
-    destroyAllStaticGeometry();
     destroyAllMovableObjects();
 
     // Clear root node of all children
@@ -4026,65 +4024,6 @@ void SceneManager::_resumeRendering(SceneManager::RenderContext* context)
 
     setViewMatrix(mCachedViewMatrix);
     delete context;
-}
-//---------------------------------------------------------------------
-v1::StaticGeometry* SceneManager::createStaticGeometry(const String& name)
-{
-    // Check not existing
-    if (mStaticGeometryList.find(name) != mStaticGeometryList.end())
-    {
-        OGRE_EXCEPT(Exception::ERR_DUPLICATE_ITEM, 
-            "StaticGeometry with name '" + name + "' already exists!", 
-            "SceneManager::createStaticGeometry");
-    }
-    v1::StaticGeometry* ret = OGRE_NEW v1::StaticGeometry(this, name);
-    mStaticGeometryList[name] = ret;
-    return ret;
-}
-//---------------------------------------------------------------------
-v1::StaticGeometry* SceneManager::getStaticGeometry(const String& name) const
-{
-    StaticGeometryList::const_iterator i = mStaticGeometryList.find(name);
-    if (i == mStaticGeometryList.end())
-    {
-        OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-            "StaticGeometry with name '" + name + "' not found", 
-            "SceneManager::createStaticGeometry");
-    }
-    return i->second;
-}
-//-----------------------------------------------------------------------
-bool SceneManager::hasStaticGeometry(const String& name) const
-{
-    return (mStaticGeometryList.find(name) != mStaticGeometryList.end());
-}
-
-//---------------------------------------------------------------------
-void SceneManager::destroyStaticGeometry(v1::StaticGeometry* geom)
-{
-    destroyStaticGeometry(geom->getName());
-}
-//---------------------------------------------------------------------
-void SceneManager::destroyStaticGeometry(const String& name)
-{
-    StaticGeometryList::iterator i = mStaticGeometryList.find(name);
-    if (i != mStaticGeometryList.end())
-    {
-        OGRE_DELETE i->second;
-        mStaticGeometryList.erase(i);
-    }
-
-}
-//---------------------------------------------------------------------
-void SceneManager::destroyAllStaticGeometry(void)
-{
-    StaticGeometryList::iterator i, iend;
-    iend = mStaticGeometryList.end();
-    for (i = mStaticGeometryList.begin(); i != iend; ++i)
-    {
-        OGRE_DELETE i->second;
-    }
-    mStaticGeometryList.clear();
 }
 //---------------------------------------------------------------------
 AxisAlignedBoxSceneQuery* 

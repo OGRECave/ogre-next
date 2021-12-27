@@ -462,9 +462,6 @@ namespace Ogre {
         typedef vector<WireAabb*>::type WireAabbVec;
         WireAabbVec mTrackingWireAabbs;
 
-        typedef map<String, v1::StaticGeometry* >::type StaticGeometryList;
-        StaticGeometryList mStaticGeometryList;
-
         /** Central list of SceneNodes - for easy memory management.
             @note
                 Note that this list is used only for memory management; the structure of the scene
@@ -2337,29 +2334,6 @@ namespace Ogre {
         /** Remove a listener
         */
         virtual void removeListener(Listener* s);
-
-        /** Creates a StaticGeometry instance suitable for use with this
-            SceneManager.
-        @remarks
-            StaticGeometry is a way of batching up geometry into a more 
-            efficient form at the expense of being able to move it. Please 
-            read the StaticGeometry class documentation for full information.
-        @param name The name to give the new object
-        @return The new StaticGeometry instance
-        */
-        virtual v1::StaticGeometry* createStaticGeometry(const String& name);
-        /** Retrieve a previously created StaticGeometry instance. 
-        @note Throws an exception if the named instance does not exist
-        */
-        virtual v1::StaticGeometry* getStaticGeometry(const String& name) const;
-        /** Returns whether a static geometry instance with the given name exists. */
-        virtual bool hasStaticGeometry(const String& name) const;
-        /** Remove & destroy a StaticGeometry instance. */
-        virtual void destroyStaticGeometry(v1::StaticGeometry* geom);
-        /** Remove & destroy a StaticGeometry instance. */
-        virtual void destroyStaticGeometry(const String& name);
-        /** Remove & destroy all StaticGeometry instances. */
-        virtual void destroyAllStaticGeometry(void);
 
         /** Create a movable object of the type specified without a name.
         @remarks

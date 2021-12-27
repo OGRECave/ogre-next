@@ -438,7 +438,6 @@ namespace Ogre {
         class RibbonTrail;
         class SimpleRenderable;
         class Skeleton;
-        class StaticGeometry;
         class SubEntity;
         class SubMesh;
         class TagPoint;
