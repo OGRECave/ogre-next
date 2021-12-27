@@ -34,7 +34,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 namespace Ogre
 {
-    class VulkanWin32Window : public VulkanWindow
+    class VulkanWin32Window final : public VulkanWindow
     {
     private:
         HWND mHwnd;  // Win32 Window handle
@@ -61,26 +61,26 @@ namespace Ogre
 
     public:
         VulkanWin32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        virtual ~VulkanWin32Window();
+        ~VulkanWin32Window() override;
 
         static const char *getRequiredExtensionName();
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestResolution( uint32 width, uint32 height );
-        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 width, uint32 height, uint32 frequencyNumerator,
-                                              uint32 frequencyDenominator );
-        virtual void windowMovedOrResized();
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
+        void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                      uint32 width, uint32 height, uint32 frequencyNumerator,
+                                      uint32 frequencyDenominator ) override;
+        void windowMovedOrResized() override;
 
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible() const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden() const;
-        virtual void setFocused( bool focused );
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams );
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
+        void setFocused( bool focused ) override;
+        void _initialize( TextureGpuManager *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
 
-        virtual void destroy();
+        void destroy() override;
 
         void getCustomAttribute( IdString name, void *pData );
     };

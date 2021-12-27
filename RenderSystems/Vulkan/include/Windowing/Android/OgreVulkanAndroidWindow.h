@@ -41,7 +41,7 @@ struct ANativeWindow;
 
 namespace Ogre
 {
-    class _OgreVulkanExport VulkanAndroidWindow : public VulkanWindow
+    class _OgreVulkanExport VulkanAndroidWindow final : public VulkanWindow
     {
         ANativeWindow *mNativeWindow;
 
@@ -51,27 +51,27 @@ namespace Ogre
 
     public:
         VulkanAndroidWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        ~VulkanAndroidWindow();
+        ~VulkanAndroidWindow() override;
 
         static const char *getRequiredExtensionName();
 
-        virtual void destroy();
-        virtual void _initialize( TextureGpuManager *textureGpuManager,
-                                  const NameValuePairList *miscParams );
+        void destroy() override;
+        void _initialize( TextureGpuManager *textureGpuManager,
+                          const NameValuePairList *miscParams ) override;
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestResolution( uint32 width, uint32 height );
-        virtual void windowMovedOrResized();
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
+        void windowMovedOrResized() override;
 
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible() const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden() const;
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
 
         /// If the ANativeWindow changes, allows to set a new one.
         void setNativeWindow( ANativeWindow *nativeWindow );
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 
 }  // namespace Ogre

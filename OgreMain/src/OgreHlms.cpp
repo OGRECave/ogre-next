@@ -3206,7 +3206,7 @@ namespace Ogre
     void Hlms::setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit,
                               int32 numTexUnits )
     {
-        OGRE_ASSERT_MEDIUM( numTexUnits < 16u );
+        OGRE_ASSERT_MEDIUM( numTexUnits < 16 );
 
         const uint32 startIdx = static_cast<uint32>( mTextureNameStrings.size() );
         char const *copyName = texName;
