@@ -56,7 +56,7 @@ namespace Ogre
         not create a program object.  It's up to MetalGpuProgram class to request a program object
         to link the shader object to.
     */
-    class _OgreMetalExport MetalProgram : public HighLevelGpuProgram
+    class _OgreMetalExport MetalProgram final : public HighLevelGpuProgram
     {
     public:
         /// Command object for setting macro defines
@@ -86,12 +86,12 @@ namespace Ogre
         MetalProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
                       const String &group, bool isManual, ManualResourceLoader *loader,
                       MetalDevice *device );
-        virtual ~MetalProgram();
+        ~MetalProgram() override;
 
         /// Overridden
-        bool getPassTransformStates() const;
-        bool getPassSurfaceAndLightStates() const;
-        bool getPassFogStates() const;
+        bool getPassTransformStates() const override;
+        bool getPassSurfaceAndLightStates() const override;
+        bool getPassFogStates() const override;
 
         /// Sets the preprocessor defines use to compile the program.
         void setPreprocessorDefines( const String &defines ) { mPreprocessorDefines = defines; }
@@ -113,9 +113,9 @@ namespace Ogre
         const String &getShaderReflectionPairHint() const { return mShaderReflectionPairHint; }
 
         /// Overridden from GpuProgram
-        const String &getLanguage() const;
+        const String &getLanguage() const override;
         /// Overridden from GpuProgram
-        GpuProgramParametersSharedPtr createParameters();
+        GpuProgramParametersSharedPtr createParameters() override;
 
         /// Retrieve the Metal function object
         id<MTLFunction> getMetalFunction() const { return mFunction; }
@@ -140,22 +140,22 @@ namespace Ogre
 
         /** Internal load implementation, must be implemented by subclasses.
          */
-        void loadFromSource();
+        void loadFromSource() override;
         /** Internal method for creating a dummy low-level program for this
         high-level program. Metal does not give access to the low level implementation of the
         shader so this method creates an object sub-classed from MetalGpuProgram just to be
         compatible with MetalRenderSystem.
         */
-        void createLowLevelImpl();
+        void createLowLevelImpl() override;
         /// Internal unload implementation, must be implemented by subclasses
-        void unloadHighLevelImpl();
+        void unloadHighLevelImpl() override;
         /// Overridden from HighLevelGpuProgram
-        void unloadImpl();
+        void unloadImpl() override;
 
         /// Populate the passed parameters with name->index map
-        void populateParameterNames( GpuProgramParametersSharedPtr params );
+        void populateParameterNames( GpuProgramParametersSharedPtr params ) override;
         /// Populate the passed parameters with name->index map, must be overridden
-        void buildConstantDefinitions() const;
+        void buildConstantDefinitions() const override;
 
         void parsePreprocessorDefinitions( NSMutableDictionary<NSString *, NSObject *> *inOutMacros );
 

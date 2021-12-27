@@ -38,7 +38,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for Metal programs. */
-    class _OgreMetalExport MetalProgramFactory : public HighLevelGpuProgramFactory
+    class _OgreMetalExport MetalProgramFactory final : public HighLevelGpuProgramFactory
     {
     protected:
         static String sLanguageName;
@@ -46,16 +46,17 @@ namespace Ogre
 
     public:
         MetalProgramFactory( MetalDevice *device );
-        virtual ~MetalProgramFactory();
+        ~MetalProgramFactory() override;
 
         /// Get the name of the language this factory creates programs for
-        const String &getLanguage() const;
+        const String &getLanguage() const override;
 
         /// Create an instance of MetalProgram
         HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
-                                     const String &group, bool isManual, ManualResourceLoader *loader );
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override;
 
-        void destroy( HighLevelGpuProgram *prog );
+        void destroy( HighLevelGpuProgram *prog ) override;
     };
 }
 

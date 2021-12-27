@@ -43,7 +43,6 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #include "OgreMetalProgram.h"
 #include "OgreMetalProgramFactory.h"
 #include "OgreMetalRenderPassDescriptor.h"
-#include "OgreMetalRenderTargetCommon.h"
 #include "OgreMetalTextureGpu.h"
 #include "OgreMetalTextureGpuManager.h"
 #include "OgreMetalWindow.h"
@@ -82,7 +81,6 @@ namespace Ogre
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
-        mNumMRTs( 0 ),
         mActiveDevice( 0 ),
         mActiveRenderEncoder( 0 ),
         mDevice( this ),
@@ -94,8 +92,6 @@ namespace Ogre
         mInterruptedRenderCommandEncoder( false )
     {
         memset( mHistoricalAutoParamsSize, 0, sizeof( mHistoricalAutoParamsSize ) );
-        for( size_t i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
-            mCurrentColourRTs[i] = 0;
 
         // set config options defaults
         initConfigOptions();

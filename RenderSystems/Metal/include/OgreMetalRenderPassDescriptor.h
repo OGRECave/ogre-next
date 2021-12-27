@@ -56,7 +56,7 @@ namespace Ogre
 
     typedef map<FrameBufferDescKey, MetalFrameBufferDescValue>::type MetalFrameBufferDescMap;
 
-    class _OgreMetalExport MetalRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreMetalExport MetalRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
         MTLRenderPassColorAttachmentDescriptor *  mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
@@ -97,13 +97,13 @@ namespace Ogre
 
     public:
         MetalRenderPassDescriptor( MetalDevice *device, MetalRenderSystem *renderSystem );
-        virtual ~MetalRenderPassDescriptor();
+        ~MetalRenderPassDescriptor() override;
 
-        virtual void entriesModified( uint32 entryTypes );
+        void entriesModified( uint32 entryTypes ) override;
 
-        virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
-        virtual void setClearDepth( Real clearDepth );
-        virtual void setClearStencil( uint32 clearStencil );
+        void setClearColour( uint8 idx, const ColourValue &clearColour ) override;
+        void setClearDepth( Real clearDepth ) override;
+        void setClearStencil( uint32 clearStencil ) override;
 
         uint32 willSwitchTo( MetalRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 

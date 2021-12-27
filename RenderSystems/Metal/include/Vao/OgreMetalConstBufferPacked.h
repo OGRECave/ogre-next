@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalConstBufferPacked : public ConstBufferPacked
+    class _OgreMetalExport MetalConstBufferPacked final : public ConstBufferPacked
     {
         MetalDevice *mDevice;
 
@@ -43,14 +43,14 @@ namespace Ogre
                                 uint32 bytesPerElement, uint32 numElementsPadding, BufferType bufferType,
                                 void *initialData, bool keepAsShadow, VaoManager *vaoManager,
                                 BufferInterface *bufferInterface, MetalDevice *device );
-        virtual ~MetalConstBufferPacked();
+        ~MetalConstBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot );
-        virtual void bindBufferPS( uint16 slot );
-        virtual void bindBufferGS( uint16 slot ) {}
-        virtual void bindBufferHS( uint16 slot ) {}
-        virtual void bindBufferDS( uint16 slot ) {}
-        virtual void bindBufferCS( uint16 slot );
+        void bindBufferVS( uint16 slot ) override;
+        void bindBufferPS( uint16 slot ) override;
+        void bindBufferGS( uint16 ) override {}
+        void bindBufferHS( uint16 ) override {}
+        void bindBufferDS( uint16 ) override {}
+        void bindBufferCS( uint16 slot ) override;
 
         void bindBufferVS( uint16 slot, uint32 offsetBytes );
         void bindBufferPS( uint16 slot, uint32 offsetBytes );

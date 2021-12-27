@@ -37,7 +37,7 @@ namespace Ogre
 {
     class MetalProgram;
 
-    class _OgreMetalExport MetalGpuProgramManager : public GpuProgramManager
+    class _OgreMetalExport MetalGpuProgramManager final : public GpuProgramManager
     {
     public:
         typedef GpuProgram *( *CreateGpuProgramCallback )( ResourceManager *creator, const String &name,
@@ -48,22 +48,24 @@ namespace Ogre
 
     private:
         typedef map<String, CreateGpuProgramCallback>::type ProgramMap;
-        ProgramMap                                          mProgramMap;
-        MetalDevice *                                       mDevice;
+
+        ProgramMap   mProgramMap;
+        MetalDevice *mDevice;
 
     protected:
         /// @copydoc ResourceManager::createImpl
         Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
                               bool isManual, ManualResourceLoader *loader,
-                              const NameValuePairList *createParams );
+                              const NameValuePairList *createParams ) override;
         /// Specialised create method with specific parameters
         Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
                               bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
-                              const String &syntaxCode );
+                              const String &syntaxCode ) override;
 
     public:
         MetalGpuProgramManager( MetalDevice *device );
-        virtual ~MetalGpuProgramManager();
+        ~MetalGpuProgramManager() override;
+
         bool registerProgramFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
         bool unregisterProgramFactory( const String &syntaxCode );
     };

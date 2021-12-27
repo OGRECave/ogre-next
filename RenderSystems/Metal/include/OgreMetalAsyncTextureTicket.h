@@ -41,7 +41,7 @@ namespace Ogre
 {
     /** See AsyncTextureTicket
      */
-    class _OgreMetalExport MetalAsyncTextureTicket : public AsyncTextureTicket
+    class _OgreMetalExport MetalAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
         id<MTLBuffer> mVboName;
@@ -51,22 +51,22 @@ namespace Ogre
         MetalVaoManager *    mVaoManager;
         MetalDevice *        mDevice;
 
-        virtual TextureBox mapImpl( uint32 slice );
-        virtual void       unmapImpl();
+        TextureBox mapImpl( uint32 slice ) override;
+        void       unmapImpl() override;
 
         void waitForDownloadToFinish();
 
-        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
-                                      TextureBox *srcBox = 0 );
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                              TextureBox *srcBox = 0 ) override;
 
     public:
         MetalAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                  TextureTypes::TextureTypes textureType,
                                  PixelFormatGpu pixelFormatFamily, MetalVaoManager *vaoManager,
                                  MetalDevice *device );
-        virtual ~MetalAsyncTextureTicket();
+        ~MetalAsyncTextureTicket() override;
 
-        virtual bool queryIsTransferDone();
+        bool queryIsTransferDone() override;
     };
 }  // namespace Ogre
 

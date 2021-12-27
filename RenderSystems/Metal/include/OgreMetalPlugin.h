@@ -37,25 +37,25 @@ namespace Ogre
     class MetalRenderSystem;
 
     /** Plugin instance for Metal Manager */
-    class _OgreMetalExport MetalPlugin : public Plugin
+    class _OgreMetalExport MetalPlugin final : public Plugin
     {
     public:
         MetalPlugin();
 
         /// @copydoc Plugin::getName
-        const String &getName() const;
+        const String &getName() const override;
 
         /// @copydoc Plugin::install
-        void install();
+        void install() override;
 
         /// @copydoc Plugin::initialise
-        void initialise();
+        void initialise() override;
 
         /// @copydoc Plugin::shutdown
-        void shutdown();
+        void shutdown() override;
 
         /// @copydoc Plugin::uninstall
-        void uninstall();
+        void uninstall() override;
 
     protected:
         MetalRenderSystem *mRenderSystem;

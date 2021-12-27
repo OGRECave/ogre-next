@@ -44,7 +44,7 @@ namespace Ogre
         In other words, a staging buffer is an intermediate buffer to transfer data between
         CPU & GPU
     */
-    class _OgreMetalExport MetalStagingBuffer : public StagingBuffer
+    class _OgreMetalExport MetalStagingBuffer final : public StagingBuffer
     {
     protected:
         id<MTLBuffer> mVboName;
@@ -100,28 +100,28 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        virtual void *mapImpl( size_t sizeBytes );
-        virtual void  unmapImpl( const Destination *destinations, size_t numDestinations );
+        void *mapImpl( size_t sizeBytes ) override;
+        void  unmapImpl( const Destination *destinations, size_t numDestinations ) override;
 
-        virtual const void *_mapForReadImpl( size_t offset, size_t sizeBytes );
+        const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
     public:
         MetalStagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
                             bool uploadOnly, id<MTLBuffer> vboName, MetalDevice *device );
-        virtual ~MetalStagingBuffer();
+        ~MetalStagingBuffer() override;
 
-        virtual StagingStallType uploadWillStall( size_t sizeBytes );
+        StagingStallType uploadWillStall( size_t sizeBytes ) override;
 
         void cleanUnfencedHazards();
         void _notifyDeviceStalled();
 
         void _unmapToV1( v1::MetalHardwareBufferCommon *hwBuffer, size_t lockStart, size_t lockSize );
 
-        virtual bool   canDownload( size_t length ) const;
-        virtual size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength );
-        virtual void   _cancelDownload( size_t offset, size_t sizeBytes );
-        virtual size_t _asyncDownloadV1( v1::MetalHardwareBufferCommon *source, size_t srcOffset,
-                                         size_t srcLength );
+        bool   canDownload( size_t length ) const override;
+        size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
+        void   _cancelDownload( size_t offset, size_t sizeBytes ) override;
+        size_t _asyncDownloadV1( v1::MetalHardwareBufferCommon *source, size_t srcOffset,
+                                 size_t srcLength );
 
         id<MTLBuffer> getBufferName() const { return mVboName; }
     };

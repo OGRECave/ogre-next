@@ -37,20 +37,20 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalAsyncTicket : public AsyncTicket
+    class _OgreMetalExport MetalAsyncTicket final : public AsyncTicket
     {
     protected:
         dispatch_semaphore_t mFenceName;
         MetalDevice *        mDevice;
 
-        virtual const void *mapImpl();
+        const void *mapImpl() override;
 
     public:
         MetalAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
                           size_t elementCount, MetalDevice *device );
-        virtual ~MetalAsyncTicket();
+        ~MetalAsyncTicket() override;
 
-        virtual bool queryIsTransferDone();
+        bool queryIsTransferDone() override;
     };
 }  // namespace Ogre
 

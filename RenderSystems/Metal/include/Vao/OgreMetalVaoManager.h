@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalVaoManager : public VaoManager
+    class _OgreMetalExport MetalVaoManager final : public VaoManager
     {
     protected:
         enum VboFlag
@@ -202,53 +202,53 @@ namespace Ogre
         static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
     protected:
-        virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                            BufferType bufferType, void *initialData,
-                                                            bool                     keepAsShadow,
-                                                            const VertexElement2Vec &vertexElements );
+        VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                    BufferType bufferType, void *initialData,
+                                                    bool                     keepAsShadow,
+                                                    const VertexElement2Vec &vertexElements ) override;
 
-        virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
+        void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) override;
 
 #ifdef _OGRE_MULTISOURCE_VBO
-        virtual MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
+        MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
             const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
-            size_t totalBytesPerVertex, BufferType bufferType );
+            size_t totalBytesPerVertex, BufferType bufferType ) override;
 #endif
 
-        virtual IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                          BufferType bufferType, void *initialData,
-                                                          bool keepAsShadow );
+        IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                  BufferType bufferType, void *initialData,
+                                                  bool keepAsShadow ) override;
 
-        virtual void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer );
+        void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer ) override;
 
-        virtual ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                          void *initialData, bool keepAsShadow );
-        virtual void               destroyConstBufferImpl( ConstBufferPacked *constBuffer );
+        ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                  void *initialData, bool keepAsShadow ) override;
+        void               destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
 
-        virtual TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                      BufferType bufferType, void *initialData,
-                                                      bool keepAsShadow );
-        virtual void             destroyTexBufferImpl( TexBufferPacked *texBuffer );
+        TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                              BufferType bufferType, void *initialData,
+                                              bool keepAsShadow ) override;
+        void             destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
 
-        virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
-                                                                size_t sizeBytes, BufferType bufferType,
-                                                                void *initialData, bool keepAsShadow );
-        virtual void                  destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer );
+        ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                        BufferType bufferType, void *initialData,
+                                                        bool keepAsShadow ) override;
+        void                  destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
 
-        virtual UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                      uint32 bindFlags, void *initialData,
-                                                      bool keepAsShadow );
-        virtual void             destroyUavBufferImpl( UavBufferPacked *uavBuffer );
+        UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                              uint32 bindFlags, void *initialData,
+                                              bool keepAsShadow ) override;
+        void             destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
 
-        virtual IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                                void *initialData, bool keepAsShadow );
-        virtual void                  destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer );
+        IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                        void *initialData, bool keepAsShadow ) override;
+        void                  destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual VertexArrayObject *createVertexArrayObjectImpl(
-            const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
-            OperationType opType );
+        VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
+                                                        IndexBufferPacked *          indexBuffer,
+                                                        OperationType                opType ) override;
 
-        virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
+        void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;
 
         /// Finds the Vao. Calls createVao automatically if not found.
         /// Increases refCount before returning the iterator.
@@ -264,17 +264,17 @@ namespace Ogre
                                     size_t poolCapacity, LwString &text, MemoryStatsEntryVec &outStats,
                                     Log *log ) const;
 
-        virtual void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
-                                             size_t newPoolIdx, BufferPacked *buffer );
+        void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                     size_t newPoolIdx, BufferPacked *buffer ) override;
 
     public:
         MetalVaoManager( MetalDevice *device, const NameValuePairList *params );
-        virtual ~MetalVaoManager();
+        ~MetalVaoManager() override;
 
-        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                     size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
+        void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                             size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const override;
 
-        virtual void cleanupEmptyPools();
+        void cleanupEmptyPools() override;
 
         /// Binds the Draw ID to the current RenderEncoder. (Assumed to be active!)
         void bindDrawId();
@@ -284,10 +284,10 @@ namespace Ogre
             The returned buffer starts with a reference count of 1. You should decrease
             it when you're done using it.
         */
-        virtual StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload );
+        StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload ) override;
 
-        virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                                                  size_t elementStart, size_t elementCount );
+        AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                          size_t elementStart, size_t elementCount ) override;
 
         MetalDevice *getDevice() { return mDevice; }
 
@@ -299,18 +299,18 @@ namespace Ogre
                             size_t srcOffsetBytes, size_t sizeBytes );
 #endif
 
-        virtual void _update();
-        void         _notifyNewCommandBuffer();
-        void         _notifyDeviceStalled();
+        void _update() override;
+        void _notifyNewCommandBuffer();
+        void _notifyDeviceStalled();
 
         /// @see VaoManager::waitForTailFrameToFinish
-        virtual uint8 waitForTailFrameToFinish();
+        uint8 waitForTailFrameToFinish() override;
 
         /// See VaoManager::waitForSpecificFrameToFinish
-        virtual void waitForSpecificFrameToFinish( uint32 frameCount );
+        void waitForSpecificFrameToFinish( uint32 frameCount ) override;
 
         /// See VaoManager::isFrameFinished
-        virtual bool isFrameFinished( uint32 frameCount );
+        bool isFrameFinished( uint32 frameCount ) override;
 
         /** Will stall undefinitely until GPU finishes (signals the sync object).
         @param fenceName

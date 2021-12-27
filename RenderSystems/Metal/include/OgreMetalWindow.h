@@ -32,7 +32,6 @@ THE SOFTWARE.
 
 #include "OgreWindow.h"
 
-#include "OgreMetalRenderTargetCommon.h"
 #include "OgreMetalView.h"
 
 #import <QuartzCore/CAMetalLayer.h>

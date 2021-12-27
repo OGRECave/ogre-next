@@ -35,36 +35,36 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalTextureGpuWindow : public MetalTextureGpuRenderTarget
+    class _OgreMetalExport MetalTextureGpuWindow final : public MetalTextureGpuRenderTarget
     {
         MetalWindow *mWindow;
 
-        virtual void createInternalResourcesImpl();
-        virtual void destroyInternalResourcesImpl();
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
     public:
         MetalTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
                                MetalWindow *window );
-        virtual ~MetalTextureGpuWindow();
+        ~MetalTextureGpuWindow() override;
 
         void nextDrawable();
 
         void _setBackbuffer( id<MTLTexture> backbuffer );
         void _setMsaaBackbuffer( id<MTLTexture> msaaTex );
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void notifyDataIsReady();
-        virtual bool _isDataReadyImpl() const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void swapBuffers();
+        void swapBuffers() override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
 
-        virtual void _setToDisplayDummyTexture();
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
 }  // namespace Ogre
 

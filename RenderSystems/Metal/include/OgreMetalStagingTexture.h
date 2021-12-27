@@ -39,25 +39,25 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalStagingTexture : public StagingTextureBufferImpl
+    class _OgreMetalExport MetalStagingTexture final : public StagingTextureBufferImpl
     {
         id<MTLBuffer> mVboName;
         void *        mMappedPtr;
         MetalDevice * mDevice;
 
-        virtual bool  belongsToUs( const TextureBox &box );
-        virtual void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
+        bool  belongsToUs( const TextureBox &box ) override;
+        void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:
         MetalStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t sizeBytes,
                              MetalDevice *device );
-        virtual ~MetalStagingTexture();
+        ~MetalStagingTexture() override;
 
-        virtual void stopMapRegion();
+        void stopMapRegion() override;
 
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
-                             const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
-                             bool skipSysRamCopy = false );
+        void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                     const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                     bool skipSysRamCopy = false ) override;
     };
 }  // namespace Ogre
 

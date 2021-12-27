@@ -45,7 +45,7 @@ namespace Ogre
     /** \addtogroup Resources
      *  @{
      */
-    class _OgreMetalExport MetalTextureGpuManager : public TextureGpuManager
+    class _OgreMetalExport MetalTextureGpuManager final : public TextureGpuManager
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
@@ -53,22 +53,22 @@ namespace Ogre
 
         MetalDevice *mDevice;
 
-        virtual TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags,
-                                               TextureTypes::TextureTypes initialType );
-        virtual StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void            destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        TextureGpu *    createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                           IdString name, uint32 textureFlags,
+                                           TextureTypes::TextureTypes initialType ) override;
+        StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                  uint32 slices, PixelFormatGpu pixelFormat ) override;
+        void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
-        virtual AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
-                                                                  uint32 depthOrSlices,
-                                                                  TextureTypes::TextureTypes textureType,
-                                                                  PixelFormatGpu pixelFormatFamily );
+        AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                          uint32                     depthOrSlices,
+                                                          TextureTypes::TextureTypes textureType,
+                                                          PixelFormatGpu pixelFormatFamily ) override;
 
     public:
         MetalTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
                                 MetalDevice *device );
-        virtual ~MetalTextureGpuManager();
+        ~MetalTextureGpuManager() override;
 
         /** Creates a special MetalTextureGpuWindow pointer, to be used by Ogre::Window.
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
@@ -79,8 +79,8 @@ namespace Ogre
 
         id<MTLTexture> getBlankTextureMetalName( TextureTypes::TextureTypes textureType ) const;
 
-        virtual bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
-                                   uint32 textureFlags ) const;
+        bool checkSupport( PixelFormatGpu format, TextureTypes::TextureTypes textureType,
+                           uint32 textureFlags ) const override;
 
         MetalDevice *getDevice() const { return mDevice; }
     };

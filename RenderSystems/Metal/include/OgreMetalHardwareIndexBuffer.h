@@ -38,20 +38,20 @@ namespace Ogre
     namespace v1
     {
         /// Specialisation of HardwareIndexBuffer for Metal
-        class _OgreMetalExport MetalHardwareIndexBuffer : public HardwareIndexBuffer
+        class _OgreMetalExport MetalHardwareIndexBuffer final : public HardwareIndexBuffer
         {
         private:
             MetalHardwareBufferCommon mMetalHardwareBufferCommon;
 
         protected:
-            virtual void *lockImpl( size_t offset, size_t length, LockOptions options );
-            virtual void  unlockImpl();
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
+            void  unlockImpl() override;
 
         public:
             MetalHardwareIndexBuffer( MetalHardwareBufferManagerBase *mgr, IndexType idxType,
                                       size_t numIndexes, HardwareBuffer::Usage usage,
                                       bool useShadowBuffer );
-            virtual ~MetalHardwareIndexBuffer();
+            ~MetalHardwareIndexBuffer() override;
 
             void _notifyDeviceStalled();
 
@@ -60,15 +60,15 @@ namespace Ogre
             /// @copydoc MetalHardwareBufferCommon::getBufferNameForGpuWrite
             id<MTLBuffer> getBufferNameForGpuWrite();
 
-            virtual void readData( size_t offset, size_t length, void *pDest );
-            virtual void writeData( size_t offset, size_t length, const void *pSource,
-                                    bool discardWholeBuffer = false );
-            virtual void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
-                                   size_t length, bool discardWholeBuffer = false );
+            void readData( size_t offset, size_t length, void *pDest ) override;
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
 
-            virtual void _updateFromShadow();
+            void _updateFromShadow() override;
 
-            virtual void *getRenderSystemData();
+            void *getRenderSystemData() override;
         };
     }  // namespace v1
 }  // namespace Ogre

@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreMetalExport MetalMultiSourceVertexBufferPool : public MultiSourceVertexBufferPool
+    class _OgreMetalExport MetalMultiSourceVertexBufferPool final : public MultiSourceVertexBufferPool
     {
         size_t        mVboPoolIndex;
         id<MTLBuffer> mVboName;
@@ -59,14 +59,14 @@ namespace Ogre
         /// Deallocates a buffer allocated with @allocateVbo. All params are in vertices, not bytes.
         void deallocateVbo( size_t bufferOffset, size_t numVertices );
 
-        virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers );
+        void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers ) override;
 
     public:
         MetalMultiSourceVertexBufferPool( size_t vboPoolIndex, id<MTLBuffer> vboName,
                                           const VertexElement2VecVec &vertexElementsBySource,
                                           size_t maxVertices, BufferType bufferType,
                                           size_t internalBufferStart, VaoManager *vaoManager );
-        virtual ~MetalMultiSourceVertexBufferPool();
+        ~MetalMultiSourceVertexBufferPool() override;
 
         void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
                                   void *const *initialData, bool keepAsShadow );

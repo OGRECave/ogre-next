@@ -49,22 +49,22 @@ namespace Ogre
                               bool keepAsShadow, VaoManager *vaoManager,
                               MetalBufferInterface *bufferInterface, PixelFormatGpu pf,
                               MetalDevice *device );
-        virtual ~MetalTexBufferPacked();
+        ~MetalTexBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 );
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
 
         void bindBufferForDescriptor( __unsafe_unretained id<MTLBuffer> *buffers, NSUInteger *offsets,
                                       size_t offset );
 
-        virtual BufferPackedTypes getBufferPackedType() const { return BP_TYPE_TEX; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_TEX; }
     };
 
-    class _OgreMetalExport MetalReadOnlyBufferPacked : public MetalTexBufferPacked
+    class _OgreMetalExport MetalReadOnlyBufferPacked final : public MetalTexBufferPacked
     {
     public:
         MetalReadOnlyBufferPacked( size_t internalBufStartBytes, size_t numElements,
@@ -73,7 +73,7 @@ namespace Ogre
                                    VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
                                    PixelFormatGpu pf, MetalDevice *device );
 
-        virtual BufferPackedTypes getBufferPackedType() const { return BP_TYPE_READONLY; }
+        BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_READONLY; }
     };
 }
 

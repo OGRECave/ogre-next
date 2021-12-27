@@ -68,8 +68,8 @@ namespace Ogre
         /// Only used when hasMsaaExplicitResolves() == false.
         id<MTLTexture> mMsaaFramebufferName;
 
-        virtual void createInternalResourcesImpl();
-        virtual void destroyInternalResourcesImpl();
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
         MTLTextureType getMetalTextureType() const;
 
@@ -77,27 +77,27 @@ namespace Ogre
         MetalTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
                          IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                          TextureGpuManager *textureManager );
-        virtual ~MetalTextureGpu();
+        ~MetalTextureGpu() override;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        void setTextureType( TextureTypes::TextureTypes textureType ) override;
 
-        virtual void copyTo(
+        void copyTo(
             TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel, const TextureBox &srcBox,
             uint8 srcMipLevel, bool keepResolvedTexSynced = true,
             CopyEncTransitionMode::CopyEncTransitionMode srcTransitionMode = CopyEncTransitionMode::Auto,
             CopyEncTransitionMode::CopyEncTransitionMode dstTransitionMode =
-                CopyEncTransitionMode::Auto );
+                CopyEncTransitionMode::Auto ) override;
 
-        virtual void _autogenerateMipmaps(
-            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
+        void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                       CopyEncTransitionMode::Auto ) override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
-        virtual void notifyDataIsReady();
-        virtual bool _isDataReadyImpl() const;
+        void notifyDataIsReady() override;
+        bool _isDataReadyImpl() const override;
 
-        virtual void _setToDisplayDummyTexture();
-        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+        void _setToDisplayDummyTexture() override;
+        void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
 
         id<MTLTexture> getView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
                                 uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav );
@@ -127,15 +127,15 @@ namespace Ogre
                                      TextureTypes::TextureTypes initialType,
                                      TextureGpuManager *        textureManager );
 
-        virtual void   _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                                PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId() const;
-        virtual bool   getPreferDepthTexture() const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
+        void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16         getDepthBufferPoolId() const override;
+        bool           getPreferDepthTexture() const override;
+        PixelFormatGpu getDesiredDepthBufferFormat() const override;
 
-        virtual void setOrientationMode( OrientationMode orientationMode );
+        void setOrientationMode( OrientationMode orientationMode ) override;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-        virtual OrientationMode getOrientationMode() const;
+        OrientationMode getOrientationMode() const override;
 #endif
     };
 }  // namespace Ogre

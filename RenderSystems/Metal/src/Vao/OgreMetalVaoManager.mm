@@ -839,11 +839,11 @@ namespace Ogre
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
             // For dynamic buffers, the size will be 3x times larger
-            //(depending on mDynamicBufferMultiplier); we need the
+            // (depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            const uint32 alignment = Math::lcm( 1, c_minimumAlignment );
-            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+            const size_t sizeMultiple = Math::lcm( 1u, c_minimumAlignment );
+            sizeBytes = alignToNextMultiple( sizeBytes, sizeMultiple );
         }
 
         allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
@@ -852,7 +852,7 @@ namespace Ogre
         MetalBufferInterface *bufferInterface =
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         TexBufferPacked *retVal = OGRE_NEW MetalTexBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
+            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1u, bufferType, initialData,
             keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
 
         if( initialData )
@@ -892,8 +892,8 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            const uint32 alignment = Math::lcm( 1, c_minimumAlignment );
-            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+            const size_t sizeMultiple = Math::lcm( 1, c_minimumAlignment );
+            sizeBytes = alignToNextMultiple( sizeBytes, sizeMultiple );
         }
 
         allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
@@ -902,7 +902,7 @@ namespace Ogre
         MetalBufferInterface *bufferInterface =
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         ReadOnlyBufferPacked *retVal = OGRE_NEW MetalReadOnlyBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
+            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1u, bufferType, initialData,
             keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
 
         if( initialData )
