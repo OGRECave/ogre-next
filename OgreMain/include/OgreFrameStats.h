@@ -33,11 +33,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
 #define OGRE_FRAME_STATS_SAMPLES 60
     /** All return values are either in milliseconds or frames per second;
@@ -45,28 +45,26 @@ namespace Ogre
     */
     class _OgreExport FrameStats : public ProfilerAlloc
     {
-        int mNextFrame;
+        int           mNextFrame;
         unsigned long mBestFrameTime;
         unsigned long mWorstFrameTime;
-        uint64 mLastTime;
+        uint64        mLastTime;
         unsigned long mFrameTimes[OGRE_FRAME_STATS_SAMPLES];
-        size_t mFramesSampled;
+        size_t        mFramesSampled;
 
     public:
-        FrameStats()
-        {
-            reset( 0 );
-        }
+        FrameStats() { reset( 0 ); }
 
-        float getFps() const                { return 1000.0f / getLastTime(); }
-        float getAvgFps() const             { return 1000.0f / getAvgTime(); }
+        float getFps() const { return 1000.0f / getLastTime(); }
+        float getAvgFps() const { return 1000.0f / getAvgTime(); }
 
-        float getBestTime() const   { return mBestFrameTime * 0.001f; }
-        float getWorstTime() const  { return mWorstFrameTime * 0.001f; }
+        float getBestTime() const { return mBestFrameTime * 0.001f; }
+        float getWorstTime() const { return mWorstFrameTime * 0.001f; }
         float getLastTime() const
         {
-            return mFrameTimes[(mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1) %
-                                OGRE_FRAME_STATS_SAMPLES] * 0.001f;
+            return mFrameTimes[( mNextFrame + OGRE_FRAME_STATS_SAMPLES - 1 ) %
+                               OGRE_FRAME_STATS_SAMPLES] *
+                   0.001f;
         }
 
         float getAvgTime() const
@@ -76,11 +74,11 @@ namespace Ogre
 
             unsigned long avg = 0;
 
-            for( size_t i=0; i<mFramesSampled; ++i )
+            for( size_t i = 0; i < mFramesSampled; ++i )
             {
-                //idx is first in the range [(mNextFrame - mFramesSampled); mNextFrame),
-                //but then warped around mNextFrame
-                size_t idx = (i + mNextFrame + (mFramesSampled * 2 - 1)) % mFramesSampled;
+                // idx is first in the range [(mNextFrame - mFramesSampled); mNextFrame),
+                // but then warped around mNextFrame
+                size_t idx = ( i + mNextFrame + ( mFramesSampled * 2 - 1 ) ) % mFramesSampled;
                 avg += mFrameTimes[idx];
             }
 
@@ -90,27 +88,27 @@ namespace Ogre
         /// Adds a new measured time, in *microseconds*
         void addSample( uint64 timeMs )
         {
-            unsigned long frameTimeMs = static_cast<unsigned long>(timeMs - mLastTime);
-            mFrameTimes[mNextFrame]  = frameTimeMs;
-            mBestFrameTime              = std::min( frameTimeMs, mBestFrameTime );
-            mWorstFrameTime             = std::max( frameTimeMs, mWorstFrameTime );
+            unsigned long frameTimeMs = static_cast<unsigned long>( timeMs - mLastTime );
+            mFrameTimes[mNextFrame] = frameTimeMs;
+            mBestFrameTime = std::min( frameTimeMs, mBestFrameTime );
+            mWorstFrameTime = std::max( frameTimeMs, mWorstFrameTime );
 
-            mFramesSampled = std::min<size_t>( (mFramesSampled + 1), OGRE_FRAME_STATS_SAMPLES );
-            mNextFrame = (mNextFrame + 1) % OGRE_FRAME_STATS_SAMPLES;
+            mFramesSampled = std::min<size_t>( ( mFramesSampled + 1 ), OGRE_FRAME_STATS_SAMPLES );
+            mNextFrame = ( mNextFrame + 1 ) % OGRE_FRAME_STATS_SAMPLES;
 
             mLastTime = timeMs;
         }
 
         void reset( uint64 timeMs )
         {
-            mNextFrame   = 0;
-            mBestFrameTime  = std::numeric_limits<unsigned long>::max();
+            mNextFrame = 0;
+            mBestFrameTime = std::numeric_limits<unsigned long>::max();
             mWorstFrameTime = 0;
-            mLastTime       = timeMs;
+            mLastTime = timeMs;
             memset( mFrameTimes, 0, sizeof( unsigned long ) * OGRE_FRAME_STATS_SAMPLES );
-            mFramesSampled  = 0;
+            mFramesSampled = 0;
         }
     };
 
-} // Namespace Ogre
+}  // Namespace Ogre
 #endif

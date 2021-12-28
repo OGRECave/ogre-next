@@ -31,11 +31,12 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "Vao/OgreVertexArrayObject.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    typedef FastArray<VertexArrayObject*> VertexArrayObjectArray;
+    typedef FastArray<VertexArrayObject *> VertexArrayObjectArray;
 
     class VertexShadowMapHelper
     {
@@ -58,9 +59,9 @@ namespace Ogre
         @param outVao
             Output vao to store the cloned, optimized version.
         */
-        static void optimizeForShadowMapping( VaoManager *vaoManager,
+        static void optimizeForShadowMapping( VaoManager *                  vaoManager,
                                               const VertexArrayObjectArray &inVao,
-                                              VertexArrayObjectArray &outVao );
+                                              VertexArrayObjectArray &      outVao );
 
         /** Copies the contents from srcData into dstData, but shrinking it by removing
             duplicated vertices.
@@ -86,14 +87,14 @@ namespace Ogre
         @returns
             The new vertex count. Will be <= numVertices
         */
-        static uint32 shrinkVertexBuffer( uint8 *dstData,
-                                          const VertexElement2 *vertexElements[3],
-                                          FastArray<uint32> &vertexConversionLut,
-                                          bool hasIndexBuffer,
-                                          const uint8 *srcData[3],
-                                          const size_t srcOffset[3],
-                                          const size_t srcBytesPerVertex[3],
-                                          uint32 numVertices );
+        static uint32 shrinkVertexBuffer( uint8 *               dstData,               //
+                                          const VertexElement2 *vertexElements[3],     //
+                                          FastArray<uint32> &   vertexConversionLut,   //
+                                          bool                  hasIndexBuffer,        //
+                                          const uint8 *         srcData[3],            //
+                                          const size_t          srcOffset[3],          //
+                                          const size_t          srcBytesPerVertex[3],  //
+                                          uint32                numVertices );
 
         /** Finds the first occurence of 'vertexBuffer' pointer in vao, and returns
             its indexes so that vao[outVaoIdx].getVertexBuffers()[outVertexBufferIdx]
@@ -110,55 +111,52 @@ namespace Ogre
         @return
             True if found, false if not found.
         */
-        static bool findFirstAppearance( const VertexArrayObjectArray &vao,
-                                         const VertexBufferPacked *vertexBuffer,
-                                         size_t &outVaoIdx,
-                                         size_t &outVertexBufferIdx );
+        static bool findFirstAppearance( const VertexArrayObjectArray &vao,           //
+                                         const VertexBufferPacked *    vertexBuffer,  //
+                                         size_t &                      outVaoIdx,     //
+                                         size_t &                      outVertexBufferIdx );
     };
 
-namespace v1
-{
-    class VertexShadowMapHelper
+    namespace v1
     {
-    public:
-        struct Geometry
+        class VertexShadowMapHelper
         {
-            v1::VertexData *vertexData;
-            v1::IndexData *indexData;
+        public:
+            struct Geometry
+            {
+                v1::VertexData *vertexData;
+                v1::IndexData * indexData;
+            };
+
+            typedef vector<Geometry>::type GeometryVec;
+
+            static void useSameGeoms( const GeometryVec &inGeom, GeometryVec &outGeom );
+
+            /** Reads all the vertex & index buffer from all the LOD levels in inVao, optimizes
+                the buffers for shadow mapping, and stores them as new Vaos in outVao.
+            @remarks
+                If the buffers can't be optimized (i.e. it is invalid because an LOD level doesn't
+                contain the VES_POSITION semantic), useSameVaos is used; which does not
+                clone the Vaos.
+            @param vaoManager
+                VaoManager. Required for buffer management.
+            @param inVao
+                Input Vao to clone and optimize.
+            @param outVao
+                Output vao to store the cloned, optimized version.
+            */
+            static void optimizeForShadowMapping( const VertexShadowMapHelper::GeometryVec &inGeom,
+                                                  VertexShadowMapHelper::GeometryVec &      outGeom );
+
+            static bool findFirstAppearance( const GeometryVec &geom, const VertexData *vertexBuffer,
+                                             size_t &outVaoIdx );
         };
+        /** @} */
+        /** @} */
 
-        typedef vector<Geometry>::type GeometryVec;
-
-        static void useSameGeoms( const GeometryVec &inGeom, GeometryVec &outGeom );
-
-        /** Reads all the vertex & index buffer from all the LOD levels in inVao, optimizes
-            the buffers for shadow mapping, and stores them as new Vaos in outVao.
-        @remarks
-            If the buffers can't be optimized (i.e. it is invalid because an LOD level doesn't
-            contain the VES_POSITION semantic), useSameVaos is used; which does not
-            clone the Vaos.
-        @param vaoManager
-            VaoManager. Required for buffer management.
-        @param inVao
-            Input Vao to clone and optimize.
-        @param outVao
-            Output vao to store the cloned, optimized version.
-        */
-        static void optimizeForShadowMapping( const VertexShadowMapHelper::GeometryVec &inGeom,
-                                              VertexShadowMapHelper::GeometryVec &outGeom );
-
-        static bool findFirstAppearance( const GeometryVec &geom,
-                                         const VertexData *vertexBuffer,
-                                         size_t &outVaoIdx );
-    };
-    /** @} */
-    /** @} */
-
-} // namespace v1
-} // namespace Ogre
+    }  // namespace v1
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-
-

@@ -30,40 +30,41 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility push(default)
+#if defined( OGRE_GCC_VISIBILITY )
+#    pragma GCC visibility push( default )
 #endif
 
 #include <sstream>
 
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility pop
+#if defined( OGRE_GCC_VISIBILITY )
+#    pragma GCC visibility pop
 #endif
 
 #include "OgreHeaderPrefix.h"
 
 #include "Threading/OgreThreadHeaders.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     /// Utility class to generate a sequentially numbered series of names
     class _OgreExport NameGenerator
     {
     protected:
-        String mPrefix;
+        String                 mPrefix;
         unsigned long long int mNext;
         OGRE_AUTO_MUTEX;
+
     public:
-        NameGenerator(const NameGenerator& rhs)
-            : mPrefix(rhs.mPrefix), mNext(rhs.mNext) {}
-        
-        NameGenerator(const String& prefix) : mPrefix(prefix), mNext(1) {}
+        NameGenerator( const NameGenerator &rhs ) : mPrefix( rhs.mPrefix ), mNext( rhs.mNext ) {}
+
+        NameGenerator( const String &prefix ) : mPrefix( prefix ), mNext( 1 ) {}
 
         /// Generate a new name
         String generate()
@@ -82,7 +83,7 @@ namespace Ogre {
         }
 
         /// Manually set the internal counter (use caution)
-        void setNext(unsigned long long int val)
+        void setNext( unsigned long long int val )
         {
             OGRE_LOCK_AUTO_MUTEX;
             mNext = val;
@@ -99,7 +100,7 @@ namespace Ogre {
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

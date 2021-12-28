@@ -29,10 +29,11 @@ THE SOFTWARE.
 #include <CoreFoundation/CoreFoundation.h>
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
-    void* mac_loadDylib(const char* name);
+namespace Ogre
+{
+    void *      mac_loadDylib( const char *name );
     _OgreExport String macCachePath();
     _OgreExport String macBundlePath();
     _OgreExport String macTempFileName();
     _OgreExport String iOSDocumentsDirectory();
-}
+}  // namespace Ogre

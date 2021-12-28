@@ -26,14 +26,11 @@ THE SOFTWARE
 #ifndef __OgreThreadHeadersTBB_H__
 #define __OgreThreadHeadersTBB_H__
 
+#include <tbb/enumerable_thread_specific.h>
+#include <tbb/queuing_rw_mutex.h>
 #include <tbb/recursive_mutex.h>
 #include <tbb/task_group.h>
 #include <tbb/task_scheduler_init.h>
-#include <tbb/queuing_rw_mutex.h>
-#include <tbb/enumerable_thread_specific.h>
 #include <tbb/tbb_thread.h>
 
-
 #endif
-
-

@@ -29,18 +29,18 @@ THE SOFTWARE.
 #define __Vector3_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreQuaternion.h"
 #include "OgreVector2.h"
 
 namespace Ogre
 {
-
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Standard 3-dimensional vector.
         @remarks
             A direction in 3D space represented as distances along the 3
@@ -58,19 +58,14 @@ namespace Ogre
             @note
                 It does <b>NOT</b> initialize the vector for efficiency.
         */
-        inline Vector3()
-        {
-        }
+        inline Vector3() {}
 
-        inline Vector3( const Real fX, const Real fY, const Real fZ )
-            : x( fX ), y( fY ), z( fZ )
-        {
-        }
+        inline Vector3( const Real fX, const Real fY, const Real fZ ) : x( fX ), y( fY ), z( fZ ) {}
 
-        inline explicit Vector3( const Real afCoordinate[3] )
-            : x( afCoordinate[0] ),
-              y( afCoordinate[1] ),
-              z( afCoordinate[2] )
+        inline explicit Vector3( const Real afCoordinate[3] ) :
+            x( afCoordinate[0] ),
+            y( afCoordinate[1] ),
+            z( afCoordinate[2] )
         {
         }
 
@@ -81,59 +76,42 @@ namespace Ogre
             z = (Real)afCoordinate[2];
         }
 
-        inline explicit Vector3( Real* const r )
-            : x( r[0] ), y( r[1] ), z( r[2] )
-        {
-        }
+        inline explicit Vector3( Real *const r ) : x( r[0] ), y( r[1] ), z( r[2] ) {}
 
-        inline explicit Vector3( const Real scaler )
-            : x( scaler )
-            , y( scaler )
-            , z( scaler )
-        {
-        }
+        inline explicit Vector3( const Real scaler ) : x( scaler ), y( scaler ), z( scaler ) {}
 
         /** Swizzle-like narrowing operations
-        */
-        inline Vector2 xy() const
+         */
+        inline Vector2 xy() const { return Vector2( x, y ); }
+
+        /** Exchange the contents of this vector with another.
+         */
+        inline void swap( Vector3 &other )
         {
-            return Vector2(x, y);
+            std::swap( x, other.x );
+            std::swap( y, other.y );
+            std::swap( z, other.z );
         }
 
-        /** Exchange the contents of this vector with another. 
-        */
-        inline void swap(Vector3& other)
-        {
-            std::swap(x, other.x);
-            std::swap(y, other.y);
-            std::swap(z, other.z);
-        }
-
-        inline Real operator [] ( const size_t i ) const
+        inline Real operator[]( const size_t i ) const
         {
             assert( i < 3 );
 
-            return *(&x+i);
+            return *( &x + i );
         }
 
-        inline Real& operator [] ( const size_t i )
+        inline Real &operator[]( const size_t i )
         {
             assert( i < 3 );
 
-            return *(&x+i);
+            return *( &x + i );
         }
         /// Pointer accessor for direct copying
-        inline Real* ptr()
-        {
-            return &x;
-        }
+        inline Real *ptr() { return &x; }
         /// Pointer accessor for direct copying
-        inline const Real* ptr() const
-        {
-            return &x;
-        }
+        inline const Real *ptr() const { return &x; }
 
-        inline Vector3& operator = ( const Real fScaler )
+        inline Vector3 &operator=( const Real fScaler )
         {
             x = fScaler;
             y = fScaler;
@@ -142,130 +120,88 @@ namespace Ogre
             return *this;
         }
 
-        inline bool operator == ( const Vector3& rkVector ) const
+        inline bool operator==( const Vector3 &rkVector ) const
         {
             return ( x == rkVector.x && y == rkVector.y && z == rkVector.z );
         }
 
-        inline bool operator != ( const Vector3& rkVector ) const
+        inline bool operator!=( const Vector3 &rkVector ) const
         {
             return ( x != rkVector.x || y != rkVector.y || z != rkVector.z );
         }
 
         // arithmetic operations
-        inline Vector3 operator + ( const Vector3& rkVector ) const
+        inline Vector3 operator+( const Vector3 &rkVector ) const
         {
-            return Vector3(
-                x + rkVector.x,
-                y + rkVector.y,
-                z + rkVector.z);
+            return Vector3( x + rkVector.x, y + rkVector.y, z + rkVector.z );
         }
 
-        inline Vector3 operator - ( const Vector3& rkVector ) const
+        inline Vector3 operator-( const Vector3 &rkVector ) const
         {
-            return Vector3(
-                x - rkVector.x,
-                y - rkVector.y,
-                z - rkVector.z);
+            return Vector3( x - rkVector.x, y - rkVector.y, z - rkVector.z );
         }
 
-        inline Vector3 operator * ( const Real fScalar ) const
+        inline Vector3 operator*( const Real fScalar ) const
         {
-            return Vector3(
-                x * fScalar,
-                y * fScalar,
-                z * fScalar);
+            return Vector3( x * fScalar, y * fScalar, z * fScalar );
         }
 
-        inline Vector3 operator * ( const Vector3& rhs) const
+        inline Vector3 operator*( const Vector3 &rhs ) const
         {
-            return Vector3(
-                x * rhs.x,
-                y * rhs.y,
-                z * rhs.z);
+            return Vector3( x * rhs.x, y * rhs.y, z * rhs.z );
         }
 
-        inline Vector3 operator / ( const Real fScalar ) const
+        inline Vector3 operator/( const Real fScalar ) const
         {
             assert( fScalar != 0.0 );
 
             Real fInv = 1.0f / fScalar;
 
-            return Vector3(
-                x * fInv,
-                y * fInv,
-                z * fInv);
+            return Vector3( x * fInv, y * fInv, z * fInv );
         }
 
-        inline Vector3 operator / ( const Vector3& rhs) const
+        inline Vector3 operator/( const Vector3 &rhs ) const
         {
-            return Vector3(
-                x / rhs.x,
-                y / rhs.y,
-                z / rhs.z);
+            return Vector3( x / rhs.x, y / rhs.y, z / rhs.z );
         }
 
-        inline const Vector3& operator + () const
-        {
-            return *this;
-        }
+        inline const Vector3 &operator+() const { return *this; }
 
-        inline Vector3 operator - () const
-        {
-            return Vector3(-x, -y, -z);
-        }
+        inline Vector3 operator-() const { return Vector3( -x, -y, -z ); }
 
         // overloaded operators to help Vector3
-        inline friend Vector3 operator * ( const Real fScalar, const Vector3& rkVector )
+        inline friend Vector3 operator*( const Real fScalar, const Vector3 &rkVector )
         {
-            return Vector3(
-                fScalar * rkVector.x,
-                fScalar * rkVector.y,
-                fScalar * rkVector.z);
+            return Vector3( fScalar * rkVector.x, fScalar * rkVector.y, fScalar * rkVector.z );
         }
 
-        inline friend Vector3 operator / ( const Real fScalar, const Vector3& rkVector )
+        inline friend Vector3 operator/( const Real fScalar, const Vector3 &rkVector )
         {
-            return Vector3(
-                fScalar / rkVector.x,
-                fScalar / rkVector.y,
-                fScalar / rkVector.z);
+            return Vector3( fScalar / rkVector.x, fScalar / rkVector.y, fScalar / rkVector.z );
         }
 
-        inline friend Vector3 operator + (const Vector3& lhs, const Real rhs)
+        inline friend Vector3 operator+( const Vector3 &lhs, const Real rhs )
         {
-            return Vector3(
-                lhs.x + rhs,
-                lhs.y + rhs,
-                lhs.z + rhs);
+            return Vector3( lhs.x + rhs, lhs.y + rhs, lhs.z + rhs );
         }
 
-        inline friend Vector3 operator + (const Real lhs, const Vector3& rhs)
+        inline friend Vector3 operator+( const Real lhs, const Vector3 &rhs )
         {
-            return Vector3(
-                lhs + rhs.x,
-                lhs + rhs.y,
-                lhs + rhs.z);
+            return Vector3( lhs + rhs.x, lhs + rhs.y, lhs + rhs.z );
         }
 
-        inline friend Vector3 operator - (const Vector3& lhs, const Real rhs)
+        inline friend Vector3 operator-( const Vector3 &lhs, const Real rhs )
         {
-            return Vector3(
-                lhs.x - rhs,
-                lhs.y - rhs,
-                lhs.z - rhs);
+            return Vector3( lhs.x - rhs, lhs.y - rhs, lhs.z - rhs );
         }
 
-        inline friend Vector3 operator - (const Real lhs, const Vector3& rhs)
+        inline friend Vector3 operator-( const Real lhs, const Vector3 &rhs )
         {
-            return Vector3(
-                lhs - rhs.x,
-                lhs - rhs.y,
-                lhs - rhs.z);
+            return Vector3( lhs - rhs.x, lhs - rhs.y, lhs - rhs.z );
         }
 
         // arithmetic updates
-        inline Vector3& operator += ( const Vector3& rkVector )
+        inline Vector3 &operator+=( const Vector3 &rkVector )
         {
             x += rkVector.x;
             y += rkVector.y;
@@ -274,7 +210,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator += ( const Real fScalar )
+        inline Vector3 &operator+=( const Real fScalar )
         {
             x += fScalar;
             y += fScalar;
@@ -282,7 +218,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator -= ( const Vector3& rkVector )
+        inline Vector3 &operator-=( const Vector3 &rkVector )
         {
             x -= rkVector.x;
             y -= rkVector.y;
@@ -291,7 +227,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator -= ( const Real fScalar )
+        inline Vector3 &operator-=( const Real fScalar )
         {
             x -= fScalar;
             y -= fScalar;
@@ -299,7 +235,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator *= ( const Real fScalar )
+        inline Vector3 &operator*=( const Real fScalar )
         {
             x *= fScalar;
             y *= fScalar;
@@ -307,7 +243,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator *= ( const Vector3& rkVector )
+        inline Vector3 &operator*=( const Vector3 &rkVector )
         {
             x *= rkVector.x;
             y *= rkVector.y;
@@ -316,7 +252,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator /= ( const Real fScalar )
+        inline Vector3 &operator/=( const Real fScalar )
         {
             assert( fScalar != 0.0 );
 
@@ -329,7 +265,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector3& operator /= ( const Vector3& rkVector )
+        inline Vector3 &operator/=( const Vector3 &rkVector )
         {
             x /= rkVector.x;
             y /= rkVector.y;
@@ -338,7 +274,6 @@ namespace Ogre
             return *this;
         }
 
-
         /** Returns the length (magnitude) of the vector.
             @warning
                 This operation requires a square root and is expensive in
@@ -346,10 +281,7 @@ namespace Ogre
                 length (e.g. for just comparing lengths) use squaredLength()
                 instead.
         */
-        inline Real length () const
-        {
-            return Math::Sqrt( x * x + y * y + z * z );
-        }
+        inline Real length() const { return Math::Sqrt( x * x + y * y + z * z ); }
 
         /** Returns the square of the length(magnitude) of the vector.
             @remarks
@@ -361,10 +293,7 @@ namespace Ogre
                 want to find the longest / shortest vector without incurring
                 the square root.
         */
-        inline Real squaredLength () const
-        {
-            return x * x + y * y + z * z;
-        }
+        inline Real squaredLength() const { return x * x + y * y + z * z; }
 
         /** Returns the distance to another vector.
             @warning
@@ -373,10 +302,7 @@ namespace Ogre
                 distance (e.g. for just comparing distances) use squaredDistance()
                 instead.
         */
-        inline Real distance(const Vector3& rhs) const
-        {
-            return (*this - rhs).length();
-        }
+        inline Real distance( const Vector3 &rhs ) const { return ( *this - rhs ).length(); }
 
         /** Returns the square of the distance to another vector.
             @remarks
@@ -388,9 +314,9 @@ namespace Ogre
                 Use this if you want to find the longest / shortest distance
                 without incurring the square root.
         */
-        inline Real squaredDistance(const Vector3& rhs) const
+        inline Real squaredDistance( const Vector3 &rhs ) const
         {
-            return (*this - rhs).squaredLength();
+            return ( *this - rhs ).squaredLength();
         }
 
         /** Calculates the dot (scalar) product of this vector with another.
@@ -407,10 +333,7 @@ namespace Ogre
             @return
                 A float representing the dot product value.
         */
-        inline Real dotProduct(const Vector3& vec) const
-        {
-            return x * vec.x + y * vec.y + z * vec.z;
-        }
+        inline Real dotProduct( const Vector3 &vec ) const { return x * vec.x + y * vec.y + z * vec.z; }
 
         /** Calculates the absolute dot (scalar) product of this vector with another.
             @remarks
@@ -422,9 +345,9 @@ namespace Ogre
             @return
                 A Real representing the absolute dot product value.
         */
-        inline Real absDotProduct(const Vector3& vec) const
+        inline Real absDotProduct( const Vector3 &vec ) const
         {
-            return Math::Abs(x * vec.x) + Math::Abs(y * vec.y) + Math::Abs(z * vec.z);
+            return Math::Abs( x * vec.x ) + Math::Abs( y * vec.y ) + Math::Abs( z * vec.z );
         }
 
         /** Normalises the vector.
@@ -443,7 +366,7 @@ namespace Ogre
             // Will also work for zero-sized vectors, but will change nothing
             // We're not using epsilons because we don't need to.
             // Read http://www.ogre3d.org/forums/viewtopic.php?f=4&t=61259
-            if ( fLength > Real(0.0f) )
+            if( fLength > Real( 0.0f ) )
             {
                 Real fInvLength = 1.0f / fLength;
                 x *= fInvLength;
@@ -482,29 +405,24 @@ namespace Ogre
                 and will go <i>inside</i> the screen, towards the cathode tube
                 (assuming you're using a CRT monitor, of course).
         */
-        inline Vector3 crossProduct( const Vector3& rkVector ) const
+        inline Vector3 crossProduct( const Vector3 &rkVector ) const
         {
-            return Vector3(
-                y * rkVector.z - z * rkVector.y,
-                z * rkVector.x - x * rkVector.z,
-                x * rkVector.y - y * rkVector.x);
+            return Vector3( y * rkVector.z - z * rkVector.y, z * rkVector.x - x * rkVector.z,
+                            x * rkVector.y - y * rkVector.x );
         }
 
         /** Returns a vector at a point half way between this and the passed
             in vector.
         */
-        inline Vector3 midPoint( const Vector3& vec ) const
+        inline Vector3 midPoint( const Vector3 &vec ) const
         {
-            return Vector3(
-                ( x + vec.x ) * 0.5f,
-                ( y + vec.y ) * 0.5f,
-                ( z + vec.z ) * 0.5f );
+            return Vector3( ( x + vec.x ) * 0.5f, ( y + vec.y ) * 0.5f, ( z + vec.z ) * 0.5f );
         }
 
         /** Returns true if the vector's scalar components are all greater
             that the ones of the vector it is compared against.
         */
-        inline bool operator < ( const Vector3& rhs ) const
+        inline bool operator<( const Vector3 &rhs ) const
         {
             if( x < rhs.x && y < rhs.y && z < rhs.z )
                 return true;
@@ -514,7 +432,7 @@ namespace Ogre
         /** Returns true if the vector's scalar components are all smaller
             that the ones of the vector it is compared against.
         */
-        inline bool operator > ( const Vector3& rhs ) const
+        inline bool operator>( const Vector3 &rhs ) const
         {
             if( x > rhs.x && y > rhs.y && z > rhs.z )
                 return true;
@@ -528,7 +446,7 @@ namespace Ogre
                 value of x, y and z from both vectors. Lowest is taken just
                 numerically, not magnitude, so -1 < 0.
         */
-        inline void makeFloor( const Vector3& cmp )
+        inline void makeFloor( const Vector3 &cmp )
         {
             x = std::min( x, cmp.x );
             y = std::min( y, cmp.y );
@@ -542,7 +460,7 @@ namespace Ogre
                 value of x, y and z from both vectors. Highest is taken just
                 numerically, not magnitude, so 1 > -3.
         */
-        inline void makeCeil( const Vector3& cmp )
+        inline void makeCeil( const Vector3 &cmp )
         {
             x = std::max( x, cmp.x );
             y = std::max( y, cmp.y );
@@ -566,7 +484,7 @@ namespace Ogre
         */
         inline Vector3 perpendicular() const
         {
-            static const Real fSquareZero = (Real)(1e-06 * 1e-06);
+            static const Real fSquareZero = ( Real )( 1e-06 * 1e-06 );
 
             Vector3 perp = this->crossProduct( Vector3::UNIT_X );
 
@@ -601,13 +519,11 @@ namespace Ogre
                 vector will not be normalised, normalise it if you wish
                 afterwards.
         */
-        inline Vector3 randomDeviant(
-            const Radian& angle,
-            const Vector3& up = Vector3::ZERO ) const
+        inline Vector3 randomDeviant( const Radian &angle, const Vector3 &up = Vector3::ZERO ) const
         {
             Vector3 newUp;
 
-            if (up == Vector3::ZERO)
+            if( up == Vector3::ZERO )
             {
                 // Generate an up vector
                 newUp = this->perpendicular();
@@ -619,31 +535,30 @@ namespace Ogre
 
             // Rotate up vector by random amount around this
             Quaternion q;
-            q.FromAngleAxis( Radian(Math::UnitRandom() * Math::TWO_PI), *this );
+            q.FromAngleAxis( Radian( Math::UnitRandom() * Math::TWO_PI ), *this );
             newUp = q * newUp;
 
             // Finally rotate this by given angle around randomised up
             q.FromAngleAxis( angle, newUp );
-            return q * (*this);
+            return q * ( *this );
         }
 
         /** Gets the angle between 2 vectors.
         @remarks
             Vectors do not have to be unit-length but must represent directions.
         */
-        inline Radian angleBetween(const Vector3& dest) const
+        inline Radian angleBetween( const Vector3 &dest ) const
         {
             Real lenProduct = length() * dest.length();
 
             // Divide by zero check
-            if(lenProduct < 1e-6f)
+            if( lenProduct < 1e-6f )
                 lenProduct = 1e-6f;
 
-            Real f = dotProduct(dest) / lenProduct;
+            Real f = dotProduct( dest ) / lenProduct;
 
-            f = Math::Clamp(f, (Real)-1.0, (Real)1.0);
-            return Math::ACos(f);
-
+            f = Math::Clamp( f, (Real)-1.0, (Real)1.0 );
+            return Math::ACos( f );
         }
         /** Gets the shortest arc quaternion to rotate this vector to the destination
             vector.
@@ -653,8 +568,8 @@ namespace Ogre
             (if specified, or a generated axis if not) since in this case
             ANY axis of rotation is valid.
         */
-        Quaternion getRotationTo(const Vector3& dest,
-            const Vector3& fallbackAxis = Vector3::ZERO) const
+        Quaternion getRotationTo( const Vector3 &dest,
+                                  const Vector3 &fallbackAxis = Vector3::ZERO ) const
         {
             // Based on Stan Melax's article in Game Programming Gems
             Quaternion q;
@@ -664,35 +579,35 @@ namespace Ogre
             v0.normalise();
             v1.normalise();
 
-            Real d = v0.dotProduct(v1);
+            Real d = v0.dotProduct( v1 );
             // If dot == 1, vectors are the same
-            if (d >= 1.0f)
+            if( d >= 1.0f )
             {
                 return Quaternion::IDENTITY;
             }
-            if (d < (1e-6f - 1.0f))
+            if( d < ( 1e-6f - 1.0f ) )
             {
-                if (fallbackAxis != Vector3::ZERO)
+                if( fallbackAxis != Vector3::ZERO )
                 {
                     // rotate 180 degrees about the fallback axis
-                    q.FromAngleAxis(Radian(Math::PI), fallbackAxis);
+                    q.FromAngleAxis( Radian( Math::PI ), fallbackAxis );
                 }
                 else
                 {
                     // Generate an axis
-                    Vector3 axis = Vector3::UNIT_X.crossProduct(*this);
-                    if (axis.isZeroLength()) // pick another if colinear
-                        axis = Vector3::UNIT_Y.crossProduct(*this);
+                    Vector3 axis = Vector3::UNIT_X.crossProduct( *this );
+                    if( axis.isZeroLength() )  // pick another if colinear
+                        axis = Vector3::UNIT_Y.crossProduct( *this );
                     axis.normalise();
-                    q.FromAngleAxis(Radian(Math::PI), axis);
+                    q.FromAngleAxis( Radian( Math::PI ), axis );
                 }
             }
             else
             {
-                Real s = Math::Sqrt( (1+d)*2 );
+                Real s = Math::Sqrt( ( 1 + d ) * 2 );
                 Real invs = 1 / s;
 
-                Vector3 c = v0.crossProduct(v1);
+                Vector3 c = v0.crossProduct( v1 );
 
                 q.x = c.x * invs;
                 q.y = c.y * invs;
@@ -706,9 +621,8 @@ namespace Ogre
         /** Returns true if this vector is zero length. */
         inline bool isZeroLength() const
         {
-            Real sqlen = (x * x) + (y * y) + (z * z);
-            return (sqlen < (1e-06 * 1e-06));
-
+            Real sqlen = ( x * x ) + ( y * y ) + ( z * z );
+            return ( sqlen < ( 1e-06 * 1e-06 ) );
         }
 
         /** As normalise, except that this vector is unaffected and the
@@ -723,9 +637,9 @@ namespace Ogre
         /** Calculates a reflection vector to the plane with the given normal .
         @remarks NB assumes 'this' is pointing AWAY FROM the plane, invert if it is not.
         */
-        inline Vector3 reflect(const Vector3& normal) const
+        inline Vector3 reflect( const Vector3 &normal ) const
         {
-            return Vector3( *this - ( 2 * this->dotProduct(normal) * normal ) );
+            return Vector3( *this - ( 2 * this->dotProduct( normal ) * normal ) );
         }
 
         /** Returns whether this vector is within a positional tolerance
@@ -734,12 +648,10 @@ namespace Ogre
         @param tolerance The amount that each element of the vector may vary by
             and still be considered equal
         */
-        inline bool positionEquals(const Vector3& rhs, Real tolerance = 1e-03) const
+        inline bool positionEquals( const Vector3 &rhs, Real tolerance = 1e-03 ) const
         {
-            return Math::RealEqual(x, rhs.x, tolerance) &&
-                Math::RealEqual(y, rhs.y, tolerance) &&
-                Math::RealEqual(z, rhs.z, tolerance);
-
+            return Math::RealEqual( x, rhs.x, tolerance ) && Math::RealEqual( y, rhs.y, tolerance ) &&
+                   Math::RealEqual( z, rhs.z, tolerance );
         }
 
         /** Returns whether this vector is within a positional tolerance
@@ -748,10 +660,9 @@ namespace Ogre
         @param tolerance The amount (related to the scale of vectors) that distance
             of the vector may vary by and still be considered close
         */
-        inline bool positionCloses(const Vector3& rhs, Real tolerance = 1e-03f) const
+        inline bool positionCloses( const Vector3 &rhs, Real tolerance = 1e-03f ) const
         {
-            return squaredDistance(rhs) <=
-                (squaredLength() + rhs.squaredLength()) * tolerance;
+            return squaredDistance( rhs ) <= ( squaredLength() + rhs.squaredLength() ) * tolerance;
         }
 
         /** Returns whether this vector is within a directional tolerance
@@ -761,40 +672,33 @@ namespace Ogre
             still be considered equal
         @note Both vectors should be normalised.
         */
-        inline bool directionEquals(const Vector3& rhs,
-            const Radian& tolerance) const
+        inline bool directionEquals( const Vector3 &rhs, const Radian &tolerance ) const
         {
-            Real dot = dotProduct(rhs);
-            Radian angle = Math::ACos(dot);
+            Real   dot = dotProduct( rhs );
+            Radian angle = Math::ACos( dot );
 
-            return Math::Abs(angle.valueRadians()) <= tolerance.valueRadians();
-
+            return Math::Abs( angle.valueRadians() ) <= tolerance.valueRadians();
         }
 
         /// Check whether this vector contains valid values
-        inline bool isNaN() const
-        {
-            return Math::isNaN(x) || Math::isNaN(y) || Math::isNaN(z);
-        }
+        inline bool isNaN() const { return Math::isNaN( x ) || Math::isNaN( y ) || Math::isNaN( z ); }
 
         /// Extract the primary (dominant) axis from this direction vector
         inline Vector3 primaryAxis() const
         {
-            Real absx = Math::Abs(x);
-            Real absy = Math::Abs(y);
-            Real absz = Math::Abs(z);
-            if (absx > absy)
-                if (absx > absz)
+            Real absx = Math::Abs( x );
+            Real absy = Math::Abs( y );
+            Real absz = Math::Abs( z );
+            if( absx > absy )
+                if( absx > absz )
                     return x > 0 ? Vector3::UNIT_X : Vector3::NEGATIVE_UNIT_X;
                 else
                     return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
-            else // absx <= absy
-                if (absy > absz)
-                    return y > 0 ? Vector3::UNIT_Y : Vector3::NEGATIVE_UNIT_Y;
-                else
-                    return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
-
-
+            else  // absx <= absy
+                if( absy > absz )
+                return y > 0 ? Vector3::UNIT_Y : Vector3::NEGATIVE_UNIT_Y;
+            else
+                return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
         }
 
         // special points
@@ -808,11 +712,11 @@ namespace Ogre
         static const Vector3 UNIT_SCALE;
 
         /** Function for writing to a stream.
-        */
+         */
         _OgreExport friend std::ostream &operator<<( std::ostream &o, const Vector3 &v );
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 #endif

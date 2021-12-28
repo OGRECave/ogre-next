@@ -29,21 +29,21 @@ THE SOFTWARE.
 #ifndef __CompositorPassQuadDef_H__
 #define __CompositorPassQuadDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorNodeDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport CompositorPassQuadDef : public CompositorPassDef
     {
@@ -51,18 +51,21 @@ namespace Ogre
         struct QuadTextureSource
         {
             /// Index of texture unit state to change
-            size_t      texUnitIdx;
+            size_t texUnitIdx;
             /// Name of the texture (can come from input channel, local textures, or global ones)
-            IdString    textureName;
+            IdString textureName;
 
             QuadTextureSource( size_t _texUnitIdx, IdString _textureName ) :
-                texUnitIdx( _texUnitIdx ), textureName( _textureName ) {}
+                texUnitIdx( _texUnitIdx ),
+                textureName( _textureName )
+            {
+            }
         };
         typedef vector<QuadTextureSource>::type TextureSources;
 
     protected:
-        TextureSources      mTextureSources;
-        CompositorNodeDef   *mParentNodeDef;
+        TextureSources     mTextureSources;
+        CompositorNodeDef *mParentNodeDef;
 
     public:
         enum FrustumCorners
@@ -73,7 +76,7 @@ namespace Ogre
             /// This causes vector.z to be always 1, but the length of the vector
             /// itself may not be unit-length.
             VIEW_SPACE_CORNERS_NORMALIZED,
-            VIEW_SPACE_CORNERS_NORMALIZED_LH,   /// Left-handed
+            VIEW_SPACE_CORNERS_NORMALIZED_LH,  /// Left-handed
             WORLD_SPACE_CORNERS,
             WORLD_SPACE_CORNERS_CENTERED,
             CAMERA_DIRECTION
@@ -82,7 +85,7 @@ namespace Ogre
         /** Whether to use a full screen quad or triangle. (default: false). Note that you may not
             always get the triangle (for example, if you ask for WORLD_SPACE_CORNERS)
         */
-        bool    mUseQuad;
+        bool mUseQuad;
 
         /** When true, the user is telling Ogre this pass just performs a custom FSAA resolve filter.
             Hence we should skip this pass for those APIs that don't support explicit resolving
@@ -90,26 +93,26 @@ namespace Ogre
         @remarks
             @See TextureDefinitionBase::TextureDefinition::fsaaExplicitResolve
         */
-        bool     mIsResolve;
+        bool mIsResolve;
 
         /** When true, the camera will be rotated 90°, -90° or 180° depending on the value of
             mRtIndex and then restored to its original rotation after we're done.
         */
-        bool    mCameraCubemapReorient;
+        bool mCameraCubemapReorient;
 
         /// When true, Ogre will check all bound textures in the material
         /// to see if they were properly transitioned to ResourceLayout::Texture,
         /// not just the textures referenced by the compositor
-        bool    mAnalyzeAllTextureLayouts;
+        bool mAnalyzeAllTextureLayouts;
 
-        bool    mMaterialIsHlms;    /// If true, mMaterialName is an Hlms material
-        String  mMaterialName;
+        bool   mMaterialIsHlms;  /// If true, mMaterialName is an Hlms material
+        String mMaterialName;
 
         /** Type of frustum corners to pass in the quad normals.
             mCameraName contains which camera's frustum to pass
         */
-        FrustumCorners  mFrustumCorners;
-        IdString        mCameraName;
+        FrustumCorners mFrustumCorners;
+        IdString       mCameraName;
 
         CompositorPassQuadDef( CompositorNodeDef *parentNodeDef, CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_QUAD, parentTargetDef ),
@@ -128,12 +131,12 @@ namespace Ogre
         */
         void addQuadTextureSource( size_t texUnitIdx, const String &textureName );
 
-        const TextureSources& getTextureSources() const     { return mTextureSources; }
+        const TextureSources &getTextureSources() const { return mTextureSources; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

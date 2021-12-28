@@ -35,14 +35,14 @@ THE SOFTWARE.
 // Forward-declaration to avoid external dependency on FreeImage
 struct FIBITMAP;
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** Codec specialized in images loaded using FreeImage.
         @remarks
             The users implementing subclasses of ImageCodec are required to return
@@ -51,31 +51,30 @@ namespace Ogre {
     class _OgreExport FreeImageCodec2 : public ImageCodec2
     {
     private:
-        String mType;
+        String       mType;
         unsigned int mFreeImageType;
 
-        typedef list<ImageCodec2*>::type RegisteredCodecList;
-        static RegisteredCodecList msCodecList;
+        typedef list<ImageCodec2 *>::type RegisteredCodecList;
+        static RegisteredCodecList        msCodecList;
 
     public:
-        FreeImageCodec2(const String &type, unsigned int fiType);
-        ~FreeImageCodec2() override { }
+        FreeImageCodec2( const String &type, unsigned int fiType );
+        ~FreeImageCodec2() override {}
 
         /** Common encoding routine. */
-        FIBITMAP* encodeBitmap(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
+        FIBITMAP *encodeBitmap( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
         /// @copydoc Codec::encode
-        DataStreamPtr encode(MemoryDataStreamPtr& input, CodecDataPtr& pData) const override;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
         void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
                            CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
-        DecodeResult decode(DataStreamPtr& input) const override;
+        DecodeResult decode( DataStreamPtr &input ) const override;
 
-        
         virtual String getType() const override;
 
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const override;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const override;
 
         /// Static method to startup FreeImage and register the FreeImage codecs
         static void startup();
@@ -85,6 +84,6 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif

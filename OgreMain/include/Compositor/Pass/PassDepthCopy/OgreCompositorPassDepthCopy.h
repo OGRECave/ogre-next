@@ -29,21 +29,21 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassDepthCopy_H_
 #define _OgreCompositorPassDepthCopy_H_
 
-#include "OgreHeaderPrefix.h"
-
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorCommon.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorPassDepthCopyDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will copy one DepthBuffer to another DepthBuffer from
@@ -61,15 +61,14 @@ namespace Ogre
 
     public:
         CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
-                                 const RenderTargetViewDef *rtv,
-                                 CompositorNode *parentNode );
+                                 const RenderTargetViewDef *rtv, CompositorNode *parentNode );
 
         void execute( const Camera *lodCamera ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

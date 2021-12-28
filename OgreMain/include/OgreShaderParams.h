@@ -29,16 +29,17 @@ THE SOFTWARE.
 #define _OgreShaderParams_H_
 
 #include "OgreGpuProgramParams.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     /** The purpose of this class is to contain a set of both auto and
         manual parameters that may apply to multiple shaders; without
@@ -61,18 +62,18 @@ namespace Ogre
 
         struct AutoParam
         {
-            ElementType                             extraParamType;
-            double                                  extraParamValue;
-            GpuProgramParameters::AutoConstantType  acType;
+            ElementType                            extraParamType;
+            double                                 extraParamValue;
+            GpuProgramParameters::AutoConstantType acType;
         };
         struct ManualParam
         {
             ElementType elementType;
             /// Size in bytes from dataBytes
-            uint8       dataSizeBytes;
+            uint8 dataSizeBytes;
             /// Enough data to cover up to a 4x4 matrix.
             /// Gets reinterpret_cast'ed based on elementType
-            uint32      dataBytes[16];
+            uint32 dataBytes[16];
         };
         struct ManualParamEx
         {
@@ -84,15 +85,15 @@ namespace Ogre
         };
         struct _OgreExport Param
         {
-            String  name;
-            bool    isAutomatic;
-            bool    isEx;
-            bool    isDirty;
+            String name;
+            bool   isAutomatic;
+            bool   isEx;
+            bool   isDirty;
 
             union
             {
-                AutoParam ap;
-                ManualParam mp;
+                AutoParam     ap;
+                ManualParam   mp;
                 ManualParamEx mpEx;
             };
 
@@ -131,8 +132,8 @@ namespace Ogre
             template <typename T>
             void getManualValue( T &value ) const
             {
-                assert( !isAutomatic && !isEx && sizeof(T) <= mp.dataSizeBytes );
-                memcpy( &value, mp.dataBytes, sizeof(T) );
+                assert( !isAutomatic && !isEx && sizeof( T ) <= mp.dataSizeBytes );
+                memcpy( &value, mp.dataBytes, sizeof( T ) );
             }
             /// See other overload.
             /// Examples:
@@ -145,7 +146,6 @@ namespace Ogre
                 getManualValue( retVal );
                 return retVal;
             }
-
 
             template <typename T>
             void setManualValueEx( const T *value, uint32 numValues, ElementType elementType );
@@ -168,8 +168,8 @@ namespace Ogre
         typedef vector<Param>::type ParamVec;
 
         /// Don't log exceptions about missing parameters
-        bool mSilenceMissingParameterWarnings;
-        uint32 mUpdateCounter;
+        bool     mSilenceMissingParameterWarnings;
+        uint32   mUpdateCounter;
         ParamVec mParams;
 
         ShaderParams();
@@ -177,14 +177,14 @@ namespace Ogre
         void updateParameters( GpuProgramParametersSharedPtr params, bool bForce );
 
         /// Call this whenever you've updated a parameter in mParams
-        void setDirty()                         { ++mUpdateCounter; }
-        uint32 getUpdateCounter() const         { return mUpdateCounter; }
+        void   setDirty() { ++mUpdateCounter; }
+        uint32 getUpdateCounter() const { return mUpdateCounter; }
 
         /// Finds a parameter. Returns null if not found.
         /// This operation is O(N) as it makes a linear search.
         /// You can cache the return pointer (as long as the
         /// iterators from mParams aren't invalidated)
-        Param* findParameter( const String &name );
+        Param *findParameter( const String &name );
 
         /** Removes a parameter if it matches the name
         @remarks
@@ -205,7 +205,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

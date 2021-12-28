@@ -30,15 +30,14 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
-
-	/** \addtogroup Core
-	*  @{
-	*/
-	/** \addtogroup General
-	*  @{
-	*/
-
+namespace Ogre
+{
+    /** \addtogroup Core
+     *  @{
+     */
+    /** \addtogroup General
+     *  @{
+     */
 
     /** Class which provides the run-time platform information Ogre runs on.
         @remarks
@@ -56,10 +55,10 @@ namespace Ogre {
     class _OgreExport PlatformInformation
     {
     public:
-
         /// Enum describing the different CPU features we want to check for, platform-dependent
         enum CpuFeatures
         {
+// clang-format off
 #if OGRE_CPU == OGRE_CPU_X86
             CPU_FEATURE_SSE         = 1 << 0,
             CPU_FEATURE_SSE2        = 1 << 1,
@@ -80,6 +79,7 @@ namespace Ogre {
 #endif
 
             CPU_FEATURE_NONE        = 0
+            // clang-format on
         };
 
         /** Gets a string of the CPU identifier.
@@ -87,7 +87,7 @@ namespace Ogre {
             Actual detecting are performs in the first time call to this function,
             and then all future calls with return internal cached value.
         */
-        static const String& getCpuIdentifier();
+        static const String &getCpuIdentifier();
 
         /** Gets a or-masked of enum CpuFeatures that are supported by the CPU.
         @note
@@ -101,7 +101,7 @@ namespace Ogre {
             Actual detecting are performs in the first time call to this function,
             and then all future calls with return internal cached value.
         */
-        static bool hasCpuFeature(CpuFeatures feature);
+        static bool hasCpuFeature( CpuFeatures feature );
 
         /** Returns the number of logical cores, including Hyper Threaded / SMT cores
         @note
@@ -109,14 +109,12 @@ namespace Ogre {
         */
         static uint32 getNumLogicalCores();
 
-
         /** Write the CPU information to the passed in Log */
-        static void log(Log* pLog);
-
+        static void log( Log *pLog );
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif  // _OgrePlatformInformation_H_

@@ -38,56 +38,56 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     namespace ResourceLayout
     {
-    enum Layout
-    {
-        Undefined,
-        Texture,
-        RenderTarget,
-        RenderTargetReadOnly,
-        ResolveDest,
-        Clear,
-        Uav,
-        CopySrc,
-        CopyDst,
-        MipmapGen,
-        /// Copy encoder is managing this texture. BarrierSolver can't resolve
-        /// operations until the copy encoder is closed.
-        /// (i.e. call RenderSystem::endCopyEncoder)
-        CopyEncoderManaged,
-        PresentReady,
+        enum Layout
+        {
+            Undefined,
+            Texture,
+            RenderTarget,
+            RenderTargetReadOnly,
+            ResolveDest,
+            Clear,
+            Uav,
+            CopySrc,
+            CopyDst,
+            MipmapGen,
+            /// Copy encoder is managing this texture. BarrierSolver can't resolve
+            /// operations until the copy encoder is closed.
+            /// (i.e. call RenderSystem::endCopyEncoder)
+            CopyEncoderManaged,
+            PresentReady,
 
-        NumResourceLayouts
-    };
+            NumResourceLayouts
+        };
     }
 
     namespace ResourceAccess
     {
-    /// Enum identifying the texture access privilege
-    enum ResourceAccess
-    {
-        Undefined = 0x00,
-        Read = 0x01,
-        Write = 0x02,
-        ReadWrite = Read | Write
-    };
+        /// Enum identifying the texture access privilege
+        enum ResourceAccess
+        {
+            Undefined = 0x00,
+            Read = 0x01,
+            Write = 0x02,
+            ReadWrite = Read | Write
+        };
 
-    const char* toString( ResourceAccess value );
-    }
+        const char *toString( ResourceAccess value );
+    }  // namespace ResourceAccess
 
     struct ResourceTransition
     {
         GpuTrackedResource *resource;
 
-        ResourceLayout::Layout      oldLayout;
-        ResourceLayout::Layout      newLayout;
+        ResourceLayout::Layout oldLayout;
+        ResourceLayout::Layout newLayout;
 
         /// If oldAccess == Undefined, it means there are no previous stage dependencies
         /// AND there is no guarantee previous contents will be preserved.
@@ -112,7 +112,7 @@ namespace Ogre
 
     struct ResourceStatus
     {
-        ResourceLayout::Layout layout;
+        ResourceLayout::Layout         layout;
         ResourceAccess::ResourceAccess access;
         // Accumulates a bitmaks of shader stages currently using this resource
         uint8 stageMask;
@@ -124,7 +124,7 @@ namespace Ogre
         }
     };
 
-    typedef StdMap<GpuTrackedResource*, ResourceStatus> ResourceStatusMap;
+    typedef StdMap<GpuTrackedResource *, ResourceStatus> ResourceStatusMap;
 
     class _OgreExport BarrierSolver
     {
@@ -135,10 +135,10 @@ namespace Ogre
         ResourceTransitionArray mTmpResourceTransitions;
 
         static void debugCheckDivergingTransition( const ResourceTransitionArray &resourceTransitions,
-                                                   const TextureGpu *texture,
-                                                   const ResourceLayout::Layout newLayout,
-                                                   const RenderSystem *renderSystem,
-                                                   const ResourceLayout::Layout lastKnownLayout );
+                                                   const TextureGpu *             texture,
+                                                   const ResourceLayout::Layout   newLayout,
+                                                   const RenderSystem *           renderSystem,
+                                                   const ResourceLayout::Layout   lastKnownLayout );
 
     public:
         const ResourceStatusMap &getResourceStatus();
@@ -209,7 +209,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

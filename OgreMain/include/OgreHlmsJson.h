@@ -30,34 +30,38 @@ THE SOFTWARE.
 
 #if !OGRE_NO_JSON
 
-#include "OgreHlmsCommon.h"
-#include "OgreHlmsDatablock.h"
-#include "OgreHlmsSamplerblock.h"
-#include "OgreLwConstString.h"
-#include "OgreHeaderPrefix.h"
+#    include "OgreHeaderPrefix.h"
+#    include "OgreHlmsCommon.h"
+#    include "OgreHlmsDatablock.h"
+#    include "OgreHlmsSamplerblock.h"
+#    include "OgreLwConstString.h"
 
 // Forward declaration for |Document|.
 namespace rapidjson
 {
     class CrtAllocator;
-    template <typename> class MemoryPoolAllocator;
-    template <typename> struct UTF8;
-    //template <typename, typename, typename> class GenericDocument;
-    //typedef GenericDocument< UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator > Document;
+    template <typename>
+    class MemoryPoolAllocator;
+    template <typename>
+    struct UTF8;
+    // template <typename, typename, typename> class GenericDocument;
+    // typedef GenericDocument< UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator > Document;
 
-    template <typename BaseAllocator> class MemoryPoolAllocator;
-    template <typename Encoding, typename>  class GenericValue;
+    template <typename BaseAllocator>
+    class MemoryPoolAllocator;
+    template <typename Encoding, typename>
+    class GenericValue;
     typedef GenericValue<UTF8<char>, MemoryPoolAllocator<CrtAllocator> > Value;
-}
+}  // namespace rapidjson
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport HlmsJsonListener
     {
@@ -72,30 +76,30 @@ namespace Ogre
     public:
         struct NamedBlocks
         {
-            map<LwConstString, const HlmsMacroblock*>::type macroblocks;
-            map<LwConstString, const HlmsBlendblock*>::type blendblocks;
-            map<LwConstString, const HlmsSamplerblock*>::type samplerblocks;
+            map<LwConstString, const HlmsMacroblock *>::type   macroblocks;
+            map<LwConstString, const HlmsBlendblock *>::type   blendblocks;
+            map<LwConstString, const HlmsSamplerblock *>::type samplerblocks;
         };
 
     protected:
-        HlmsManager *mHlmsManager;
-        HlmsJsonListener    *mListener;
+        HlmsManager *     mHlmsManager;
+        HlmsJsonListener *mListener;
 
     public:
-        static FilterOptions parseFilterOptions( const char *value );
+        static FilterOptions         parseFilterOptions( const char *value );
         static TextureAddressingMode parseTextureAddressingMode( const char *value );
-        static CompareFunction parseCompareFunction( const char *value );
-        static CullingMode parseCullMode( const char *value );
-        static PolygonMode parsePolygonMode( const char *value );
-        static SceneBlendFactor parseBlendFactor( const char *value );
-        static SceneBlendOperation parseBlendOperation( const char *value );
+        static CompareFunction       parseCompareFunction( const char *value );
+        static CullingMode           parseCullMode( const char *value );
+        static PolygonMode           parsePolygonMode( const char *value );
+        static SceneBlendFactor      parseBlendFactor( const char *value );
+        static SceneBlendOperation   parseBlendOperation( const char *value );
 
     protected:
         static void loadSampler( const rapidjson::Value &samplers, HlmsSamplerblock &samplerblock );
         static void loadMacroblock( const rapidjson::Value &macroblocksJson,
-                                    HlmsMacroblock &macroblock );
+                                    HlmsMacroblock &        macroblock );
         static void loadBlendblock( const rapidjson::Value &blendblocksJson,
-                                    HlmsBlendblock &blendblock );
+                                    HlmsBlendblock &        blendblock );
         static void loadDatablockCommon( const rapidjson::Value &json, const NamedBlocks &blocks,
                                          HlmsDatablock *datablock );
 
@@ -116,8 +120,8 @@ namespace Ogre
         static void toStr( const Vector3 &value, String &outString );
         static void toStr( const Vector4 &value, String &outString );
 
-        String getName( const HlmsMacroblock *macroblock ) const;
-        String getName( const HlmsBlendblock *blendblock ) const;
+        String        getName( const HlmsMacroblock *macroblock ) const;
+        String        getName( const HlmsBlendblock *blendblock ) const;
         static String getName( const HlmsSamplerblock *samplerblock );
 
     protected:
@@ -148,8 +152,7 @@ namespace Ogre
             then the actual texture loaded will be "mytex.png.dds"
             Leave it blank if you don't know what to put
         */
-        void loadMaterials( const String &filename, const String &resourceGroup,
-                            const char *jsonString,
+        void loadMaterials( const String &filename, const String &resourceGroup, const char *jsonString,
                             const String &additionalTextureExtension );
 
         /** Saves all the Datablocks defined in the given
@@ -184,9 +187,9 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
-#include "OgreHeaderSuffix.h"
+#    include "OgreHeaderSuffix.h"
 
 #endif
 

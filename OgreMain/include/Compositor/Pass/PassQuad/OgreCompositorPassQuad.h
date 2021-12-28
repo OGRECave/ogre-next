@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef __CompositorPassQuad_H__
 #define __CompositorPassQuad_H__
 
-#include "OgreHeaderPrefix.h"
-
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorCommon.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
 #include "OgreMaterial.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -44,11 +44,11 @@ namespace Ogre
     class CompositorPassQuadDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will render a fullscreen triangle/quad to the RenderTarget using
@@ -86,15 +86,16 @@ namespace Ogre
     class _OgreExport CompositorPassQuad : public CompositorPass
     {
         CompositorPassQuadDef const *mDefinition;
+
     protected:
         v1::Rectangle2D *mFsRect;
-        HlmsDatablock   *mDatablock;
-        MaterialPtr     mMaterial;
-        Pass            *mPass;
-        Camera          *mCamera;
+        HlmsDatablock *  mDatablock;
+        MaterialPtr      mMaterial;
+        Pass *           mPass;
+        Camera *         mCamera;
 
-        Real        mHorizonalTexelOffset;
-        Real        mVerticalTexelOffset;
+        Real mHorizonalTexelOffset;
+        Real mVerticalTexelOffset;
 
         void analyzeBarriers( const bool bClearBarriers = true ) override;
 
@@ -108,13 +109,13 @@ namespace Ogre
 
         /// Don't make this const (useful for compile-time multithreading errors)
         /// Pointer can be null if using HLMS
-        Pass* getPass()                                     { return mPass; }
-        Camera* getCamera()                                 { return mCamera; }
+        Pass *  getPass() { return mPass; }
+        Camera *getCamera() { return mCamera; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

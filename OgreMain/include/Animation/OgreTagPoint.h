@@ -32,14 +32,14 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     /** TagPoints are like SceneNodes, that can be children of a Bone.
 
@@ -101,13 +101,13 @@ namespace Ogre {
     {
     protected:
         /// Pointer to parent node
-        Bone    *mParentBone;
+        Bone *mParentBone;
 
         /// @copydoc Node::updateFromParentImpl.
         void updateFromParentImpl() override;
 
     public:
-        TagPoint( IdType id, SceneManager* creator, NodeMemoryManager *nodeMemoryManager,
+        TagPoint( IdType id, SceneManager *creator, NodeMemoryManager *nodeMemoryManager,
                   SceneNode *parent );
         ~TagPoint() override;
 
@@ -116,7 +116,7 @@ namespace Ogre {
         void _unsetParentBone();
 
         /// Gets this Bones's parent (NULL if no parent).
-        Bone* getParentBone() const                                 { return mParentBone; }
+        Bone *getParentBone() const { return mParentBone; }
 
         Matrix3 _getDerivedOrientationMatrix() const;
 
@@ -132,14 +132,13 @@ namespace Ogre {
         /// of another TagPoint, respecting non-uniform scaling.
         static void updateAllTransformsTagOnTag( const size_t numNodes, Transform t );
 
-        virtual TagPoint* createChildTagPoint( const Vector3& vPos = Vector3::ZERO,
-                                               const Quaternion& qRot = Quaternion::IDENTITY );
+        virtual TagPoint *createChildTagPoint( const Vector3 &   vPos = Vector3::ZERO,
+                                               const Quaternion &qRot = Quaternion::IDENTITY );
     };
     /** @} */
     /** @} */
 
-
-}// namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

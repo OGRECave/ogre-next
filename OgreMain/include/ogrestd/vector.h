@@ -12,12 +12,12 @@ namespace Ogre
     struct vector
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename std::vector<T, A> type;
-        typedef typename std::vector<T, A>::iterator iterator;
+        typedef typename std::vector<T, A>                 type;
+        typedef typename std::vector<T, A>::iterator       iterator;
         typedef typename std::vector<T, A>::const_iterator const_iterator;
 #else
-        typedef typename std::vector<T> type;
-        typedef typename std::vector<T>::iterator iterator;
+        typedef typename std::vector<T>                 type;
+        typedef typename std::vector<T>::iterator       iterator;
         typedef typename std::vector<T>::const_iterator const_iterator;
 #endif
     };

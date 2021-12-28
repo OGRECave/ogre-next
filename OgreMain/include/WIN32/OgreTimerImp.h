@@ -31,10 +31,10 @@ THE SOFTWARE.
 #include "../OgrePrerequisites.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
-#   define WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
 #endif
-#if !defined(NOMINMAX) && defined(_MSC_VER)
-#   define NOMINMAX // required to stop windows.h messing up std::min
+#if !defined( NOMINMAX ) && defined( _MSC_VER )
+#    define NOMINMAX  // required to stop windows.h messing up std::min
 #endif
 #include <windows.h>
 
@@ -43,19 +43,19 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport Timer : public TimerAlloc
     {
     private:
         clock_t mZeroClock;
 
-        DWORD mStartTick;
-        LONGLONG mLastTime;
+        DWORD         mStartTick;
+        LONGLONG      mLastTime;
         LARGE_INTEGER mStartTime;
         LARGE_INTEGER mFrequency;
 
@@ -91,7 +91,7 @@ namespace Ogre
             @par
                 On failure, false is returned.
         */
-        bool setOption( const String& strKey, const void* pValue );
+        bool setOption( const String &strKey, const void *pValue );
 
         /** Resets timer */
         void reset();
@@ -110,5 +110,5 @@ namespace Ogre
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 #endif

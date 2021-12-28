@@ -30,17 +30,18 @@ THE SOFTWARE.
 #define _Ogre_VertexArrayObject_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreVertexBufferPacked.h"
+
 #include "OgreRenderOperation.h"
+#include "OgreVertexBufferPacked.h"
 
 namespace Ogre
 {
-    typedef vector<VertexBufferPacked*>::type VertexBufferPackedVec;
+    typedef vector<VertexBufferPacked *>::type VertexBufferPackedVec;
 
     /// When cloning Vaos, some vertex buffers are used multiple times for LOD'ing
     /// purposes (only the IndexBuffer changes). This maps an old VertexBuffer
     /// to a new VertexBuffer to know when to reuse an existing one while cloning.
-    typedef map<VertexBufferPacked*, VertexBufferPacked*>::type SharedVertexBufferMap;
+    typedef map<VertexBufferPacked *, VertexBufferPacked *>::type SharedVertexBufferMap;
 
     /** Vertex array objects (Vaos) are immutable objects that describe a
         combination of vertex buffers and index buffer with a given operation
@@ -83,34 +84,33 @@ namespace Ogre
         ///     mVaoName changes when the vertex/index buffer needs to change.
         uint16 mInputLayoutId;
 
-        uint32                  mPrimStart;
-        uint32                  mPrimCount;
-        VertexBufferPackedVec   mVertexBuffers;
-        IndexBufferPacked       *mIndexBuffer;
+        uint32                mPrimStart;
+        uint32                mPrimCount;
+        VertexBufferPackedVec mVertexBuffers;
+        IndexBufferPacked *   mIndexBuffer;
 
-        VertexBufferPacked      *mBaseVertexBuffer;
+        VertexBufferPacked *mBaseVertexBuffer;
 
         /// The type of operation to perform
         OperationType mOperationType;
 
     public:
         VertexArrayObject( uint32 vaoName, uint32 renderQueueId, uint16 inputLayoutId,
-                           const VertexBufferPackedVec &vertexBuffers,
-                           IndexBufferPacked *indexBuffer,
+                           const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
                            OperationType operationType );
 
-        uint32 getRenderQueueId() const                             { return mRenderQueueId; }
-        uint32 getVaoName() const                                   { return mVaoName; }
-        uint16 getInputLayoutId() const                             { return mInputLayoutId; }
+        uint32 getRenderQueueId() const { return mRenderQueueId; }
+        uint32 getVaoName() const { return mVaoName; }
+        uint16 getInputLayoutId() const { return mInputLayoutId; }
 
-        const VertexBufferPackedVec& getVertexBuffers() const       { return mVertexBuffers; }
-        IndexBufferPacked* getIndexBuffer() const                   { return mIndexBuffer; }
-        VertexBufferPacked* getBaseVertexBuffer() const             { return mBaseVertexBuffer; }
+        const VertexBufferPackedVec &getVertexBuffers() const { return mVertexBuffers; }
+        IndexBufferPacked *          getIndexBuffer() const { return mIndexBuffer; }
+        VertexBufferPacked *         getBaseVertexBuffer() const { return mBaseVertexBuffer; }
 
         OperationType getOperationType() const { return mOperationType; }
 
-        uint32 getPrimitiveStart() const                            { return mPrimStart; }
-        uint32 getPrimitiveCount() const                            { return mPrimCount; }
+        uint32 getPrimitiveStart() const { return mPrimStart; }
+        uint32 getPrimitiveCount() const { return mPrimCount; }
 
         /** Limits the range of triangle primitives that is rendered.
             For VAOs with index buffers, this controls the index start & count,
@@ -148,8 +148,8 @@ namespace Ogre
             strange since in general these objects are immutable once they've been
             constructed.
         */
-        const VertexElement2* findBySemantic( VertexElementSemantic semantic, size_t &outIndex,
-                                              size_t &outOffset, size_t repeat=0 ) const;
+        const VertexElement2 *findBySemantic( VertexElementSemantic semantic, size_t &outIndex,
+                                              size_t &outOffset, size_t repeat = 0 ) const;
 
         /// Gets the combined vertex declaration of all the vertex buffers. Note that we
         /// iterate through all of them and allocate the vector. You should cache
@@ -176,21 +176,27 @@ namespace Ogre
         @return
             New cloned Vao.
         */
-        VertexArrayObject* clone( VaoManager *vaoManager, SharedVertexBufferMap *sharedBuffers,
+        VertexArrayObject *clone( VaoManager *vaoManager, SharedVertexBufferMap *sharedBuffers,
                                   int vertexBufferType = -1, int indexBufferType = -1 ) const;
 
         struct ReadRequests
         {
             VertexElementSemantic semantic;
-            VertexElementType type;
-            AsyncTicketPtr asyncTicket;
+            VertexElementType     type;
+            AsyncTicketPtr        asyncTicket;
             /// Data is already offseted. To get the vertex location, perform (data - offset);
-            char const *data;
-            size_t offset;
+            char const *              data;
+            size_t                    offset;
             VertexBufferPacked const *vertexBuffer;
 
             ReadRequests( VertexElementSemantic _semantic ) :
-                semantic( _semantic ), type(VET_FLOAT1), data( 0 ), offset( 0 ), vertexBuffer( 0 ) {}
+                semantic( _semantic ),
+                type( VET_FLOAT1 ),
+                data( 0 ),
+                offset( 0 ),
+                vertexBuffer( 0 )
+            {
+            }
         };
 
         typedef FastArray<ReadRequests> ReadRequestsArray;
@@ -226,8 +232,8 @@ namespace Ogre
             The 'data' variable will be filled immediately if there's a shadow copy available,
             and mapAsyncTickets can be safely called even if skipRequestIfBufferHasShadowCopy=true
         */
-        void readRequests( ReadRequestsArray &requests, size_t elementStart=0, size_t elementCount=0,
-                           bool skipRequestIfBufferHasShadowCopy=false );
+        void readRequests( ReadRequestsArray &requests, size_t elementStart = 0, size_t elementCount = 0,
+                           bool skipRequestIfBufferHasShadowCopy = false );
 
         /// Maps the buffers requested via @see readRequests
         static void mapAsyncTickets( ReadRequestsArray &tickets );
@@ -239,6 +245,6 @@ namespace Ogre
         /// reasons (avoid checking if pointer is null, avoid crashing inside Ogre)
         static VertexBufferPacked msDummyVertexBuffer;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -69,7 +69,7 @@ namespace Ogre
         /// @copydoc CompositorPassSceneDef::mCameraCubemapReorient
         bool mCameraCubemapReorient;
 
-        CompositorPassShadowsDef( CompositorNodeDef *parentNodeDef,
+        CompositorPassShadowsDef( CompositorNodeDef *  parentNodeDef,
                                   CompositorTargetDef *parentTargetDef );
 
         void setVisibilityMask( uint32 visibilityMask );

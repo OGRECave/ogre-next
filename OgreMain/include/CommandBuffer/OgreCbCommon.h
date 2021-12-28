@@ -80,10 +80,10 @@ namespace Ogre
 
     struct _OgreExport CbBase
     {
-        uint16  commandType;
+        uint16 commandType;
 
         CbBase( uint16 cmdType ) : commandType( cmdType ) {}
     };
-}
+}  // namespace Ogre
 
 #endif

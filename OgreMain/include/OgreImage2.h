@@ -29,16 +29,18 @@ THE SOFTWARE.
 #define _OgreImage2_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreTextureGpu.h"
-#include "OgreCommon.h"
 
-namespace Ogre {
+#include "OgreCommon.h"
+#include "OgreTextureGpu.h"
+
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
 
     /** Class representing an image file.
     @remarks
@@ -55,14 +57,14 @@ namespace Ogre {
     {
     protected:
         /// The width of the image in pixels
-        uint32  mWidth;
-        uint32  mHeight;
-        uint32  mDepthOrSlices;
-        uint8   mNumMipmaps;
+        uint32 mWidth;
+        uint32 mHeight;
+        uint32 mDepthOrSlices;
+        uint8  mNumMipmaps;
 
         /// The pixel format of the image
-        TextureTypes::TextureTypes  mTextureType;
-        PixelFormatGpu              mPixelFormat;
+        TextureTypes::TextureTypes mTextureType;
+        PixelFormatGpu             mPixelFormat;
 
         void *mBuffer;
 
@@ -79,12 +81,12 @@ namespace Ogre {
         virtual ~Image2();
 
         /// Assignment operator - copies all the data from the target image.
-        Image2& operator = ( const Image2 & img );
+        Image2 &operator=( const Image2 &img );
 
-        /** Flips (mirrors) the image around the Y-axis. 
+        /** Flips (mirrors) the image around the Y-axis.
             @remarks
                 An example of an original and flipped image:
-                <pre>                
+                <pre>
                 originalimg
                 00000000000
                 00000000000
@@ -166,7 +168,7 @@ namespace Ogre {
          */
         void loadDynamicImage( void *pData, uint32 width, uint32 height, uint32 depthOrSlices,
                                TextureTypes::TextureTypes textureType, PixelFormatGpu format,
-                               bool autoDelete, uint8 numMipmaps=1u );
+                               bool autoDelete, uint8 numMipmaps = 1u );
 
         /// Convenience function. Same as Image2::loadDynamicImage, but retrieves
         /// all metadata parameters from the input texture
@@ -192,12 +194,12 @@ namespace Ogre {
             so that the download from GPU works fine.
         */
         void convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip,
-                                 bool automaticResolve=true );
+                                 bool automaticResolve = true );
 
         /** Synchronously downloads the mip 0 from a TextureGpu into the TextureBox.
             This function is for convenience for when going async is not important.
         @param srcBox
-            Source region of source texture to download. 
+            Source region of source texture to download.
             Only x, y, z, sliceStart, width, height, depth, numSlices fields are used.
         @param dstBox
             Together with dstFormat describes the destination memory region.
@@ -229,16 +231,16 @@ namespace Ogre {
         @param srcDepthOrSlices
             How many slices from this Image2 to upload. Zero to upload all of them.
         */
-        void uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip,
-                       uint32 dstZorSliceStart=0u, uint32 srcDepthOrSlices=0u );
+        void uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip, uint32 dstZorSliceStart = 0u,
+                       uint32 srcDepthOrSlices = 0u );
 
         /** Loads an image file.
             @remarks
-                This method loads an image into memory. Any format for which 
-                an associated ImageCodec is registered can be loaded. 
-                This can include complex formats like DDS with embedded custom 
+                This method loads an image into memory. Any format for which
+                an associated ImageCodec is registered can be loaded.
+                This can include complex formats like DDS with embedded custom
                 mipmaps, cube faces and volume textures.
-                The type can be determined by calling getFormat().             
+                The type can be determined by calling getFormat().
             @param
                 filename Name of an image file to load.
             @param
@@ -247,19 +249,19 @@ namespace Ogre {
                 The memory associated with this buffer is destroyed with the
                 Image object.
         */
-        void load( const String& filename, const String& groupName );
+        void load( const String &filename, const String &groupName );
 
         /** Loads an image file from a stream.
             @remarks
-                This method works in the same way as the filename-based load 
-                method except it loads the image from a DataStream object. 
-                This DataStream is expected to contain the 
-                encoded data as it would be held in a file. 
-                Any format for which an associated ImageCodec is registered 
-                can be loaded. 
-                This can include complex formats like DDS with embedded custom 
+                This method works in the same way as the filename-based load
+                method except it loads the image from a DataStream object.
+                This DataStream is expected to contain the
+                encoded data as it would be held in a file.
+                Any format for which an associated ImageCodec is registered
+                can be loaded.
+                This can include complex formats like DDS with embedded custom
                 mipmaps, cube faces and volume textures.
-                The type can be determined by calling getFormat().             
+                The type can be determined by calling getFormat().
             @param
                 stream The source data.
             @param
@@ -269,24 +271,24 @@ namespace Ogre {
             @see
                 Image::load( const String& filename )
         */
-        void load( DataStreamPtr& stream, const String& type = BLANKSTRING );
-        
-        /** Save the image as a file. 
+        void load( DataStreamPtr &stream, const String &type = BLANKSTRING );
+
+        /** Save the image as a file.
         @remarks
-            Saving and loading are implemented by back end (sometimes third 
+            Saving and loading are implemented by back end (sometimes third
             party) codecs.  Implemented saving functionality is more limited
-            than loading in some cases. Particularly DDS file format support 
-            is currently limited to true colour or single channel float32, 
+            than loading in some cases. Particularly DDS file format support
+            is currently limited to true colour or single channel float32,
             square, power of two textures with no mipmaps.  Volumetric support
             is currently limited to DDS files.
         */
-        void save( const String& filename, uint8 mipLevel, uint8 numMipmaps );
+        void save( const String &filename, uint8 mipLevel, uint8 numMipmaps );
 
-        /** Encode the image and return a stream to the data. 
+        /** Encode the image and return a stream to the data.
             @param formatextension An extension to identify the image format
                 to encode into, e.g. "jpg" or "png"
         */
-        DataStreamPtr encode( const String& formatextension, uint8 mipLevel, uint8 numMipmaps );
+        DataStreamPtr encode( const String &formatextension, uint8 mipLevel, uint8 numMipmaps );
 
         /** Get colour value from a certain location in the image.
         @remarks
@@ -294,7 +296,7 @@ namespace Ogre {
             If you need to call it often, prefer using Image2::getData and then call
             TextureBox::getColourAt instead.
         */
-        ColourValue getColourAt( size_t x, size_t y, size_t z, uint8 mipLevel=0 ) const;
+        ColourValue getColourAt( size_t x, size_t y, size_t z, uint8 mipLevel = 0 ) const;
 
         /** Set colour value at a certain location in the image.
         @remarks
@@ -302,9 +304,9 @@ namespace Ogre {
             If you need to call it often, prefer using Image2::getData and then call
             TextureBox::setColourAt instead.
         */
-        void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z, uint8 mipLevel=0 );
+        void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z, uint8 mipLevel = 0 );
 
-        void* getRawBuffer()    { return mBuffer; }
+        void *getRawBuffer() { return mBuffer; }
 
         /// Returns a pointer to the internal image buffer.
         TextureBox getData( uint8 mipLevel ) const;
@@ -317,8 +319,10 @@ namespace Ogre {
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
         uint32 getNumSlices() const;
-        uint8 getNumMipmaps() const;
+        uint8  getNumMipmaps() const;
+
         TextureTypes::TextureTypes getTextureType() const;
+
         PixelFormatGpu getPixelFormat() const;
 
         size_t getBytesPerRow( uint8 mipLevel ) const;
@@ -346,16 +350,16 @@ namespace Ogre {
             FILTER_GAUSSIAN_HIGH,
         };
 
-        /** Scale a 1D, 2D or 3D image volume. 
+        /** Scale a 1D, 2D or 3D image volume.
             @param  src         PixelBox containing the source pointer, dimensions and format
             @param  dst         PixelBox containing the destination pointer, dimensions and format
             @param  filter      Which filter to use
             @remarks    This function can do pixel format conversion in the process.
             @note   dst and src can point to the same PixelBox object without any problem
         */
-        static void scale( const TextureBox &src, PixelFormatGpu srcFormat,
-                           TextureBox &dst, PixelFormatGpu dstFormat, Filter filter = FILTER_BILINEAR );
-        
+        static void scale( const TextureBox &src, PixelFormatGpu srcFormat, TextureBox &dst,
+                           PixelFormatGpu dstFormat, Filter filter = FILTER_BILINEAR );
+
         /** Resize a 2D image, applying the appropriate filter. */
         void resize( uint32 width, uint32 height, Filter filter = FILTER_BILINEAR );
 
@@ -378,19 +382,18 @@ namespace Ogre {
             True if mipmaps can be generated.
             False if mipmaps cannot be generated.
         */
-        static bool getDownsamplerFunctions( PixelFormatGpu format,
-                                             void **imageDownsampler2D,
-                                             void **imageDownsampler3D,
-                                             void **imageDownsamplerCube,
-                                             void **imageBlur2D,
-                                             bool gammaCorrected,
-                                             uint32 depthOrSlices,
-                                             TextureTypes::TextureTypes textureType,
-                                             Filter filter );
+        static bool getDownsamplerFunctions( PixelFormatGpu             format,                //
+                                             void **                    imageDownsampler2D,    //
+                                             void **                    imageDownsampler3D,    //
+                                             void **                    imageDownsamplerCube,  //
+                                             void **                    imageBlur2D,           //
+                                             bool                       gammaCorrected,        //
+                                             uint32                     depthOrSlices,         //
+                                             TextureTypes::TextureTypes textureType,           //
+                                             Filter                     filter );
 
         static bool supportsSwMipmaps( PixelFormatGpu format, uint32 depthOrSlices,
-                                       TextureTypes::TextureTypes textureType,
-                                       Filter filter );
+                                       TextureTypes::TextureTypes textureType, Filter filter );
 
         /** Generates the mipmaps for this image. For Cubemaps, the filtering is seamless; and a
             gaussian filter is recommended although it's slow.
@@ -418,6 +421,6 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif

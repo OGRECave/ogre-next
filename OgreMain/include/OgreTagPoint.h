@@ -30,94 +30,91 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreOldBone.h"
 #include "OgreMatrix4.h"
+#include "OgreOldBone.h"
 
-namespace Ogre  {
-namespace v1 {
-
-    
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Animation
-    *  @{
-    */
-    /** A tagged point on a skeleton, which can be used to attach entities to on specific
-        other entities.
-    @remarks
-        A Skeleton, like a Mesh, is shared between Entity objects and simply updated as required
-        when it comes to rendering. However there are times when you want to attach another object
-        to an animated entity, and make sure that attachment follows the parent entity's animation
-        (for example, a character holding a gun in his / her hand). This class simply identifies
-        attachment points on a skeleton which can be used to attach child objects. 
-    @par
-        The child objects themselves are not physically attached to this class; as it's name suggests
-        this class just 'tags' the area. The actual child objects are attached to the Entity using the
-        skeleton which has this tag point. Use the Entity::attachMovableObjectToBone method to attach
-        the objects, which creates a new TagPoint on demand.
-    */
-    class _OgreExport TagPoint : public OldBone
+namespace Ogre
+{
+    namespace v1
     {
-
-    public:
-        TagPoint(unsigned short handle, Skeleton* creator);
-        ~TagPoint() override;
-
-        Entity *getParentEntity() const;
-        MovableObject* getChildObject() const;
-        
-        void setParentEntity(Entity *pEntity);
-        void setChildObject(MovableObject *pObject);
-
-        /** Tells the TagPoint whether it should inherit orientation from it's parent entity.
-        @param inherit If true, this TagPoint's orientation will be affected by
-            its parent entity's orientation. If false, it will not be affected.
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Animation
+         *  @{
+         */
+        /** A tagged point on a skeleton, which can be used to attach entities to on specific
+            other entities.
+        @remarks
+            A Skeleton, like a Mesh, is shared between Entity objects and simply updated as required
+            when it comes to rendering. However there are times when you want to attach another object
+            to an animated entity, and make sure that attachment follows the parent entity's animation
+            (for example, a character holding a gun in his / her hand). This class simply identifies
+            attachment points on a skeleton which can be used to attach child objects.
+        @par
+            The child objects themselves are not physically attached to this class; as it's name suggests
+            this class just 'tags' the area. The actual child objects are attached to the Entity using
+        the skeleton which has this tag point. Use the Entity::attachMovableObjectToBone method to attach
+            the objects, which creates a new TagPoint on demand.
         */
-        void setInheritParentEntityOrientation(bool inherit);
+        class _OgreExport TagPoint : public OldBone
+        {
+        public:
+            TagPoint( unsigned short handle, Skeleton *creator );
+            ~TagPoint() override;
 
-        /** Returns true if this TagPoint is affected by orientation applied to the parent entity. 
-        */
-        bool getInheritParentEntityOrientation() const;
+            Entity *       getParentEntity() const;
+            MovableObject *getChildObject() const;
 
-        /** Tells the TagPoint whether it should inherit scaling factors from it's parent entity.
-        @param inherit If true, this TagPoint's scaling factors will be affected by
-            its parent entity's scaling factors. If false, it will not be affected.
-        */
-        void setInheritParentEntityScale(bool inherit);
+            void setParentEntity( Entity *pEntity );
+            void setChildObject( MovableObject *pObject );
 
-        /** Returns true if this TagPoint is affected by scaling factors applied to the parent entity. 
-        */
-        bool getInheritParentEntityScale() const;
+            /** Tells the TagPoint whether it should inherit orientation from it's parent entity.
+            @param inherit If true, this TagPoint's orientation will be affected by
+                its parent entity's orientation. If false, it will not be affected.
+            */
+            void setInheritParentEntityOrientation( bool inherit );
 
-        /** Gets the transform of parent entity. */
-        const Matrix4& getParentEntityTransform() const;
+            /** Returns true if this TagPoint is affected by orientation applied to the parent entity.
+             */
+            bool getInheritParentEntityOrientation() const;
 
-        /** Gets the transform of this node just for the skeleton (not entity) */
-        const Matrix4& _getFullLocalTransform() const;
+            /** Tells the TagPoint whether it should inherit scaling factors from it's parent entity.
+            @param inherit If true, this TagPoint's scaling factors will be affected by
+                its parent entity's scaling factors. If false, it will not be affected.
+            */
+            void setInheritParentEntityScale( bool inherit );
 
-        /** @copydoc Node::needUpdate */
-        void needUpdate(bool forceParentUpdate = false) override;
+            /** Returns true if this TagPoint is affected by scaling factors applied to the parent
+             * entity.
+             */
+            bool getInheritParentEntityScale() const;
 
-        /** Overridden from Node in order to include parent Entity transform. */
-        void updateFromParentImpl() const override;
-        /** @copydoc Renderable::getLights */
-        const LightList& getLights() const;
+            /** Gets the transform of parent entity. */
+            const Matrix4 &getParentEntityTransform() const;
 
+            /** Gets the transform of this node just for the skeleton (not entity) */
+            const Matrix4 &_getFullLocalTransform() const;
 
+            /** @copydoc Node::needUpdate */
+            void needUpdate( bool forceParentUpdate = false ) override;
 
-    private:
-        Entity *mParentEntity;
-        MovableObject *mChildObject;
-        mutable Matrix4 mFullLocalTransform;
-        bool mInheritParentEntityOrientation;
-        bool mInheritParentEntityScale;
-    };
+            /** Overridden from Node in order to include parent Entity transform. */
+            void updateFromParentImpl() const override;
+            /** @copydoc Renderable::getLights */
+            const LightList &getLights() const;
 
-    /** @} */
-    /** @} */
-}
-} //namespace
+        private:
+            Entity *        mParentEntity;
+            MovableObject * mChildObject;
+            mutable Matrix4 mFullLocalTransform;
+            bool            mInheritParentEntityOrientation;
+            bool            mInheritParentEntityScale;
+        };
 
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 
-#endif//__TagPoint_H_
+#endif  //__TagPoint_H_

@@ -60,9 +60,9 @@ namespace Ogre
 
     struct _OgreExport CbDrawCall : public CbBase
     {
-        VertexArrayObject   *vao;
-        uint32              numDraws;
-        void                *indirectBufferOffset;
+        VertexArrayObject *vao;
+        uint32             numDraws;
+        void *             indirectBufferOffset;
         CbDrawCall( uint16 cmdType, VertexArrayObject *_vao, void *_indirectBufferOffset );
     };
 
@@ -78,47 +78,47 @@ namespace Ogre
                          void *_indirectBufferOffset );
     };
 
-namespace v1
-{
-    struct CbStartV1LegacyRendering : public CbBase
+    namespace v1
     {
-        CbStartV1LegacyRendering();
-    };
+        struct CbStartV1LegacyRendering : public CbBase
+        {
+            CbStartV1LegacyRendering();
+        };
 
-    struct _OgreExport CbRenderOp : public CbBase
-    {
-        v1::VertexData  *vertexData;
-        v1::IndexData   *indexData;
-        uint8           operationType;
-        //uint32          numberOfInstances;
-        //uint8           renderToVertexBuffer; //Is this used???
-        //uint8           useGlobalInstancingVertexBufferIsAvailable;
+        struct _OgreExport CbRenderOp : public CbBase
+        {
+            v1::VertexData *vertexData;
+            v1::IndexData * indexData;
+            uint8           operationType;
+            // uint32          numberOfInstances;
+            // uint8           renderToVertexBuffer; //Is this used???
+            // uint8           useGlobalInstancingVertexBufferIsAvailable;
 
-        CbRenderOp( const v1::RenderOperation &_renderOp );
-    };
+            CbRenderOp( const v1::RenderOperation &_renderOp );
+        };
 
-    struct _OgreExport CbDrawCall : public CbBase
-    {
-        //uint8           renderToVertexBuffer; //Is this used???
-        //uint8           useGlobalInstancingVertexBufferIsAvailable;
-        //void            *indirectBufferOffset;
-        uint32          baseInstance;
-        uint32          primCount;
-        uint32          instanceCount;
-        uint32          firstVertexIndex;
-        CbDrawCall( uint16 cmdType );
-    };
+        struct _OgreExport CbDrawCall : public CbBase
+        {
+            // uint8           renderToVertexBuffer; //Is this used???
+            // uint8           useGlobalInstancingVertexBufferIsAvailable;
+            // void            *indirectBufferOffset;
+            uint32 baseInstance;
+            uint32 primCount;
+            uint32 instanceCount;
+            uint32 firstVertexIndex;
+            CbDrawCall( uint16 cmdType );
+        };
 
-    struct _OgreExport CbDrawCallIndexed : public CbDrawCall
-    {
-        CbDrawCallIndexed( bool supportsBaseInstance );
-    };
+        struct _OgreExport CbDrawCallIndexed : public CbDrawCall
+        {
+            CbDrawCallIndexed( bool supportsBaseInstance );
+        };
 
-    struct _OgreExport CbDrawCallStrip : public CbDrawCall
-    {
-        CbDrawCallStrip( bool supportsBaseInstance );
-    };
-}
-}
+        struct _OgreExport CbDrawCallStrip : public CbDrawCall
+        {
+            CbDrawCallStrip( bool supportsBaseInstance );
+        };
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

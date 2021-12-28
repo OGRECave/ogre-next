@@ -52,16 +52,17 @@ namespace Ogre
     {
         static const size_t COMMAND_FIXED_SIZE;
 
-        RenderSystem    *mRenderSystem;
+        RenderSystem *mRenderSystem;
 
-        FastArray<unsigned char>    mCommandBuffer;
+        FastArray<unsigned char> mCommandBuffer;
+
     public:
         CommandBuffer();
 
         void setCurrentRenderSystem( RenderSystem *renderSystem );
 
-        typedef void (CommandBufferExecuteFunc)( CommandBuffer *_this,
-                                                 const CbBase * RESTRICT_ALIAS cmd );
+        typedef void( CommandBufferExecuteFunc )( CommandBuffer *_this,
+                                                  const CbBase *RESTRICT_ALIAS cmd );
 
         static CommandBufferExecuteFunc execute_setVao;
         static CommandBufferExecuteFunc execute_setIndirectBuffer;
@@ -111,19 +112,19 @@ namespace Ogre
         /// Creates/Records a command already casted to the typename.
         /// May invalidate returned pointers from previous calls.
         template <typename T>
-        T* addCommand()
+        T *addCommand()
         {
-            assert( sizeof(T) <= COMMAND_FIXED_SIZE );
+            assert( sizeof( T ) <= COMMAND_FIXED_SIZE );
             mCommandBuffer.resize( mCommandBuffer.size() + COMMAND_FIXED_SIZE );
 
-            T *retVal = reinterpret_cast<T*>( mCommandBuffer.end() - COMMAND_FIXED_SIZE );
+            T *retVal = reinterpret_cast<T *>( mCommandBuffer.end() - COMMAND_FIXED_SIZE );
             retVal->commandType = MAX_COMMAND_BUFFER;
 
             return retVal;
         }
 
         /// Returns a pointer to the last created command
-        CbBase* getLastCommand();
+        CbBase *getLastCommand();
 
         /// Returns the offset of the given command, in case you want to retrieve
         /// the command later (addCommand may invalidate the pointer.
@@ -133,8 +134,8 @@ namespace Ogre
         /// Retrieves the command from the given offset.
         /// Returns null if no such command at that offset (out of bounds).
         /// @see getCommandOffset.
-        CbBase* getCommandFromOffset( size_t offset );
+        CbBase *getCommandFromOffset( size_t offset );
     };
-}
+}  // namespace Ogre
 
 #endif

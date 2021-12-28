@@ -28,101 +28,93 @@ THE SOFTWARE.
 #ifndef __AtomicObject_H__
 #define __AtomicObject_H__
 
-#include <signal.h>
 #include "OgrePrerequisites.h"
+
 #include "Threading/OgreThreadHeaders.h"
 
-namespace Ogre {
+#include <signal.h>
 
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
-    template <class T> class AtomicObject {
+     *  @{
+     */
+    template <class T>
+    class AtomicObject
+    {
+    public:
+        AtomicObject( const T &initial ) : mField( initial ) {}
 
-        public:
+        AtomicObject( const AtomicObject<T> &cousin ) : mField( cousin.get() ) {}
 
-        AtomicObject (const T &initial)
-            : mField(initial)
-        {   }
+        AtomicObject() {}
 
-        AtomicObject (const AtomicObject<T> &cousin)
-            : mField(cousin.get())
-        {   }
+        void operator=( const AtomicObject<T> &cousin ) { set( cousin.get() ); }
 
-        AtomicObject ()
-        {   }
-
-        void operator= (const AtomicObject<T> &cousin)
-        {
-            set(cousin.get());
-        }
-
-        T get () const
+        T get() const
         {
             OGRE_LOCK_AUTO_MUTEX;
             return mField;
         }
 
-        void set (const T &v)
+        void set( const T &v )
         {
             OGRE_LOCK_AUTO_MUTEX;
             mField = v;
         }
 
-        bool cas (const T &old, const T &nu)
+        bool cas( const T &old, const T &nu )
         {
             OGRE_LOCK_AUTO_MUTEX;
-            if (mField != old) return false;
+            if( mField != old )
+                return false;
             mField = nu;
             return true;
         }
 
-        T operator++ (void)
+        T operator++( void )
         {
             OGRE_LOCK_AUTO_MUTEX;
             return ++mField;
         }
 
-        T operator++ (int)
+        T operator++( int )
         {
             OGRE_LOCK_AUTO_MUTEX;
             return mField++;
         }
 
-        T operator-- (int)
+        T operator--( int )
         {
             OGRE_LOCK_AUTO_MUTEX;
             return mField--;
         }
 
-        T operator+=(const T &add)
+        T operator+=( const T &add )
         {
-                    OGRE_LOCK_AUTO_MUTEX;
+            OGRE_LOCK_AUTO_MUTEX;
             mField += add;
             return mField;
         }
 
-        T operator-=(const T &sub)
+        T operator-=( const T &sub )
         {
-                    OGRE_LOCK_AUTO_MUTEX;
+            OGRE_LOCK_AUTO_MUTEX;
             mField -= sub;
             return mField;
         }
 
-        protected:
-
-                OGRE_AUTO_MUTEX;
+    protected:
+        OGRE_AUTO_MUTEX;
 
         volatile T mField;
-
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif
-

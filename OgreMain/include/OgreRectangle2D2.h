@@ -66,8 +66,8 @@ namespace Ogre
             NumCorners
         };
 
-        bool mChanged;
-        uint32 mGeometryFlags;
+        bool    mChanged;
+        uint32  mGeometryFlags;
         Vector3 mNormals[NumCorners];
 
         Vector2 mPosition;
@@ -81,11 +81,11 @@ namespace Ogre
         Rectangle2D( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         ~Rectangle2D() override;
 
-        bool isQuad() const;
-        bool isStereo() const;
-        bool hasNormals() const;
+        bool       isQuad() const;
+        bool       isStereo() const;
+        bool       hasNormals() const;
         BufferType getBufferType() const;
-        bool isHollowFullscreenRect() const;
+        bool       isHollowFullscreenRect() const;
 
         uint32 calculateNumVertices() const;
 
@@ -106,9 +106,9 @@ namespace Ogre
 
         // Overrides from Renderable
         const LightList &getLights() const override;
-        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
-        void getWorldTransforms( Matrix4 *xform ) const override;
-        bool getCastsShadows() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
 
     /** Factory object for creating Entity instances */
@@ -116,7 +116,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *manager,
+                                           SceneManager *           manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:
@@ -126,6 +126,7 @@ namespace Ogre
         static String FACTORY_TYPE_NAME;
 
         const String &getType() const override;
+
         void destroyInstance( MovableObject *obj ) override;
     };
 }  // namespace Ogre

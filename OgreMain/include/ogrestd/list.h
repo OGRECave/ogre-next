@@ -12,12 +12,12 @@ namespace Ogre
     struct list
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename std::list<T, A> type;
-        typedef typename std::list<T, A>::iterator iterator;
+        typedef typename std::list<T, A>                 type;
+        typedef typename std::list<T, A>::iterator       iterator;
         typedef typename std::list<T, A>::const_iterator const_iterator;
 #else
-        typedef typename std::list<T> type;
-        typedef typename std::list<T>::iterator iterator;
+        typedef typename std::list<T>                 type;
+        typedef typename std::list<T>::iterator       iterator;
         typedef typename std::list<T>::const_iterator const_iterator;
 #endif
     };

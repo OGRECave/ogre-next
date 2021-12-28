@@ -28,28 +28,31 @@ THE SOFTWARE.
 #ifndef _Ogre_ArrayRay_H_
 #define _Ogre_ArrayRay_H_
 
-#include "OgreArrayVector3.h"
 #include "OgreArrayAabb.h"
+#include "OgreArrayVector3.h"
 
 namespace Ogre
 {
     class ArrayRay
     {
     public:
-        ArrayVector3    mOrigin;
-        ArrayVector3    mDirection;
+        ArrayVector3 mOrigin;
+        ArrayVector3 mDirection;
 
         ArrayRay() : mOrigin( ArrayVector3::ZERO ), mDirection( ArrayVector3::UNIT_Z ) {}
-        ArrayRay( const ArrayVector3 &origin, const ArrayVector3 &direction) :
-            mOrigin( origin ), mDirection( direction ) {}
+        ArrayRay( const ArrayVector3 &origin, const ArrayVector3 &direction ) :
+            mOrigin( origin ),
+            mDirection( direction )
+        {
+        }
 
         /// SLAB method
         /// See https://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
         ArrayMaskR intersects( const ArrayAabb &aabb ) const
         {
             ArrayVector3 invDir = Mathlib::SetAll( 1.0f ) / mDirection;
-            ArrayVector3 intersectAtMinPlane = (aabb.getMinimum() - mOrigin) * invDir;
-            ArrayVector3 intersectAtMaxPlane = (aabb.getMaximum() - mOrigin) * invDir;
+            ArrayVector3 intersectAtMinPlane = ( aabb.getMinimum() - mOrigin ) * invDir;
+            ArrayVector3 intersectAtMaxPlane = ( aabb.getMaximum() - mOrigin ) * invDir;
 
             ArrayVector3 minIntersect = intersectAtMinPlane;
             minIntersect.makeFloor( intersectAtMaxPlane );
@@ -61,15 +64,13 @@ namespace Ogre
             tmax = maxIntersect.mChunkBase[0];
 
 #if OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
-            //ARM's NEON behaves the way we want, by propagating NaNs. No need to do anything weird
-            tmin = Mathlib::Max( Mathlib::Max( minIntersect.mChunkBase[0],
-                                               minIntersect.mChunkBase[1] ),
-                                               minIntersect.mChunkBase[2] );
-            tmax = Mathlib::Min( Mathlib::Min( maxIntersect.mChunkBase[0],
-                                               maxIntersect.mChunkBase[1] ),
-                                               maxIntersect.mChunkBase[2] );
+            // ARM's NEON behaves the way we want, by propagating NaNs. No need to do anything weird
+            tmin = Mathlib::Max( Mathlib::Max( minIntersect.mChunkBase[0], minIntersect.mChunkBase[1] ),
+                                 minIntersect.mChunkBase[2] );
+            tmax = Mathlib::Min( Mathlib::Min( maxIntersect.mChunkBase[0], maxIntersect.mChunkBase[1] ),
+                                 maxIntersect.mChunkBase[2] );
 #else
-            //We need to do weird min/max so that NaNs get propagated
+            // We need to do weird min/max so that NaNs get propagated
             //(happens if mOrigin is in the AABB's border)
             tmin = Mathlib::Max( tmin, Mathlib::Min( minIntersect.mChunkBase[1], tmax ) );
             tmax = Mathlib::Min( tmax, Mathlib::Max( maxIntersect.mChunkBase[1], tmin ) );
@@ -77,10 +78,10 @@ namespace Ogre
             tmin = Mathlib::Max( tmin, Mathlib::Min( minIntersect.mChunkBase[2], tmax ) );
             tmax = Mathlib::Min( tmax, Mathlib::Max( maxIntersect.mChunkBase[2], tmin ) );
 #endif
-            //tmax >= max( tmin, 0 )
+            // tmax >= max( tmin, 0 )
             return Mathlib::CompareGreaterEqual( tmax, Mathlib::Max( tmin, ARRAY_REAL_ZERO ) );
         }
     };
-}
+}  // namespace Ogre
 
 #endif

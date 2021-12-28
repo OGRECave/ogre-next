@@ -49,18 +49,19 @@ namespace Ogre
         uint32 mInstancingStepRate;
 
         VertexElement2( VertexElementType type, VertexElementSemantic semantic ) :
-            mType( type ), mSemantic( semantic ), mInstancingStepRate( 0 ) {}
+            mType( type ),
+            mSemantic( semantic ),
+            mInstancingStepRate( 0 )
+        {
+        }
 
-        bool operator == ( const VertexElement2 _r ) const
+        bool operator==( const VertexElement2 _r ) const
         {
             return mType == _r.mType && mSemantic == _r.mSemantic &&
-                    mInstancingStepRate == _r.mInstancingStepRate;
+                   mInstancingStepRate == _r.mInstancingStepRate;
         }
 
-        bool operator == ( VertexElementSemantic semantic ) const
-        {
-            return mSemantic == semantic;
-        }
+        bool operator==( VertexElementSemantic semantic ) const { return mSemantic == semantic; }
 
         /// Warning: Beware a VertexElement2Vec shouldn't be sorted.
         /// The order in which they're pushed into the vector defines the offsets
@@ -69,19 +70,23 @@ namespace Ogre
         /// This operator exists because it's useful when implementing
         /// a '<' operator in other structs that contain VertexElement2Vecs
         /// (see HlmsPso)
-        bool operator < ( const VertexElement2 &_r ) const
+        bool operator<( const VertexElement2 &_r ) const
         {
-            if( this->mType < _r.mType ) return true;
-            if( this->mType > _r.mType ) return false;
+            if( this->mType < _r.mType )
+                return true;
+            if( this->mType > _r.mType )
+                return false;
 
-            if( this->mSemantic < _r.mSemantic ) return true;
-            if( this->mSemantic > _r.mSemantic ) return false;
+            if( this->mSemantic < _r.mSemantic )
+                return true;
+            if( this->mSemantic > _r.mSemantic )
+                return false;
 
             return this->mInstancingStepRate < _r.mInstancingStepRate;
         }
     };
 
-    typedef vector<VertexElement2>::type VertexElement2Vec;
+    typedef vector<VertexElement2>::type    VertexElement2Vec;
     typedef vector<VertexElement2Vec>::type VertexElement2VecVec;
 
     class _OgreExport VertexBufferPacked : public BufferPacked
@@ -102,43 +107,44 @@ namespace Ogre
         /// by the VaoManager (unless you know in advance the full number of vertices you need per
         /// vertex declaration and reserve this size) or waste a lot of GPU RAM, and/or increase
         /// the draw call count.
-        size_t                      mMultiSourceId;
+        size_t                       mMultiSourceId;
         MultiSourceVertexBufferPool *mMultiSourcePool;
-        uint8                       mSourceIdx;
+        uint8                        mSourceIdx;
 #endif
 
     public:
         VertexBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                            uint32 numElementsPadding, BufferType bufferType,
-                            void *initialData, bool keepAsShadow,
-                            VaoManager *vaoManager, BufferInterface *bufferInterface,
+                            uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                            bool keepAsShadow, VaoManager *vaoManager, BufferInterface *bufferInterface,
                             const VertexElement2Vec &vertexElements
 #ifdef _OGRE_MULTISOURCE_VBO
-        , size_t multiSourceId = 0, MultiSourceVertexBufferPool *multiSourcePool = 0, uint8 sourceIdx = 0
+                            ,
+                            size_t multiSourceId = 0, MultiSourceVertexBufferPool *multiSourcePool = 0,
+                            uint8 sourceIdx = 0
 #endif
         );
         ~VertexBufferPacked() override;
 
         BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_VERTEX; }
 
-        const VertexElement2Vec& getVertexElements() const  { return mVertexElements; }
+        const VertexElement2Vec &getVertexElements() const { return mVertexElements; }
 
 #ifdef _OGRE_MULTISOURCE_VBO
-        size_t getMultiSourceId()                           { return mMultiSourceId; }
+        size_t getMultiSourceId() { return mMultiSourceId; }
 
         /// Return value may be null
-        MultiSourceVertexBufferPool* getMultiSourcePool()   { return mMultiSourcePool; }
+        MultiSourceVertexBufferPool *getMultiSourcePool() { return mMultiSourcePool; }
 
         /// Source index reference assigned by the MultiSourceVertexBufferPool.
         /// This value does not restrict the fact that you can actually assign this buffer to
         /// another index (as long as it's with another buffer with the same multisource ID
         /// and pool). This value is for internal use.
         /// Always 0 for non-multisource vertex buffers.
-        uint8 _getSourceIndex() const                       { return mSourceIdx; }
+        uint8 _getSourceIndex() const { return mSourceIdx; }
 #endif
     };
 
-    typedef vector<VertexBufferPacked*>::type VertexBufferPackedVec;
-}
+    typedef vector<VertexBufferPacked *>::type VertexBufferPackedVec;
+}  // namespace Ogre
 
 #endif

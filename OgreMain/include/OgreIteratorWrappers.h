@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define __Ogre_IteratorWrappers_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreIteratorWrapper.h"
 
 #endif

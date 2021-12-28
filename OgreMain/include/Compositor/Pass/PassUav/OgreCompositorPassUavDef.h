@@ -29,23 +29,23 @@ THE SOFTWARE.
 #ifndef __CompositorPassUavDef_H__
 #define __CompositorPassUavDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreResourceTransition.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorNodeDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport CompositorPassUavDef : public CompositorPassDef
     {
@@ -53,51 +53,59 @@ namespace Ogre
         struct TextureSource
         {
             /// Index of texture unit state to change
-            uint32      uavSlot;
+            uint32 uavSlot;
             /// Name of the texture (can come from input channel, local textures, or global ones)
             /// Not used if externalTextureName is not empty
-            IdString    textureName;
-            bool        isExternal;
+            IdString textureName;
+            bool     isExternal;
 
             ResourceAccess::ResourceAccess access;
-            int32           mipmapLevel;
-            PixelFormatGpu  pixelFormat;
+            int32                          mipmapLevel;
+            PixelFormatGpu                 pixelFormat;
 
-            TextureSource( uint32 _uavSlot, IdString _textureName,
-                           bool _isExternal,
-                           ResourceAccess::ResourceAccess _access,
-                           int32 _mipmapLevel, PixelFormatGpu _pixelFormat ) :
-                uavSlot( _uavSlot ), textureName( _textureName ),
+            TextureSource( uint32 _uavSlot, IdString _textureName, bool _isExternal,
+                           ResourceAccess::ResourceAccess _access, int32 _mipmapLevel,
+                           PixelFormatGpu _pixelFormat ) :
+                uavSlot( _uavSlot ),
+                textureName( _textureName ),
                 isExternal( _isExternal ),
-                access( _access ), mipmapLevel( _mipmapLevel ), pixelFormat( _pixelFormat ) {}
+                access( _access ),
+                mipmapLevel( _mipmapLevel ),
+                pixelFormat( _pixelFormat )
+            {
+            }
         };
         typedef vector<TextureSource>::type TextureSources;
 
         struct BufferSource
         {
-            uint32      uavSlot;
-            IdString    bufferName;
+            uint32                         uavSlot;
+            IdString                       bufferName;
             ResourceAccess::ResourceAccess access;
-            size_t      offset;
-            size_t      sizeBytes;
+            size_t                         offset;
+            size_t                         sizeBytes;
 
-            BufferSource( uint32 _uavSlot, IdString _bufferName,
-                          ResourceAccess::ResourceAccess _access, size_t _offset=0,
-                          size_t _sizeBytes=0 ) :
-                uavSlot( _uavSlot ), bufferName( _bufferName ), access( _access ), offset( _offset ),
-                sizeBytes( _sizeBytes ) {}
+            BufferSource( uint32 _uavSlot, IdString _bufferName, ResourceAccess::ResourceAccess _access,
+                          size_t _offset = 0, size_t _sizeBytes = 0 ) :
+                uavSlot( _uavSlot ),
+                bufferName( _bufferName ),
+                access( _access ),
+                offset( _offset ),
+                sizeBytes( _sizeBytes )
+            {
+            }
         };
         typedef vector<BufferSource>::type BufferSourceVec;
 
     protected:
-        TextureSources      mTextureSources;
-        BufferSourceVec     mBufferSources;
-        CompositorNodeDef   *mParentNodeDef;
+        TextureSources     mTextureSources;
+        BufferSourceVec    mBufferSources;
+        CompositorNodeDef *mParentNodeDef;
 
     public:
         /// Max value (0xff) means don't alter it.
         /// @see RenderSystem::setUavStartingSlot
-        uint8   mStartingSlot;
+        uint8 mStartingSlot;
 
         CompositorPassUavDef( CompositorNodeDef *parentNodeDef, CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_UAV, parentTargetDef ),
@@ -125,19 +133,19 @@ namespace Ogre
             Will be the same is left as PFG_UNKNOWN
         */
         void setUav( uint32 slot, bool isExternal, const String &textureName,
-                     ResourceAccess::ResourceAccess access, int32 mipmapLevel, PixelFormatGpu pixelFormat );
+                     ResourceAccess::ResourceAccess access, int32 mipmapLevel,
+                     PixelFormatGpu pixelFormat );
 
-        void addUavBuffer( uint32 slotIdx, IdString bufferName,
-                           ResourceAccess::ResourceAccess access, size_t offset=0,
-                           size_t sizeBytes=0 );
+        void addUavBuffer( uint32 slotIdx, IdString bufferName, ResourceAccess::ResourceAccess access,
+                           size_t offset = 0, size_t sizeBytes = 0 );
 
-        const TextureSources& getTextureSources() const     { return mTextureSources; }
-        const BufferSourceVec& getBufferSources() const     { return mBufferSources; }
+        const TextureSources & getTextureSources() const { return mTextureSources; }
+        const BufferSourceVec &getBufferSources() const { return mBufferSources; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

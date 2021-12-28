@@ -42,10 +42,10 @@ namespace Ogre
     class _OgreExport UavBufferPacked : public BufferPacked
     {
     protected:
-        uint32 mBindFlags;  /// @see BufferBindFlags
+        uint32                          mBindFlags;  /// @see BufferBindFlags
         vector<TexBufferPacked *>::type mTexBufferViews;
 
-        virtual TexBufferPacked *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
+        virtual TexBufferPacked *     getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
         virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() = 0;
 
     public:

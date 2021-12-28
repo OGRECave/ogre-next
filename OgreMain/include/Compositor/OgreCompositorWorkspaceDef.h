@@ -29,19 +29,20 @@ THE SOFTWARE.
 #ifndef __CompositorWorkspaceDef_H__
 #define __CompositorWorkspaceDef_H__
 
-#include "OgreHeaderPrefix.h"
 #include "Compositor/OgreTextureDefinition.h"
 
 #include "ogrestd/list.h"
 
+#include "OgreHeaderPrefix.h"
+
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** @See CompositorWorkspace. Workspace definitions assume all other definitions are already
         parsed as we need them to perform validation checks.
@@ -57,41 +58,46 @@ namespace Ogre
     class _OgreExport CompositorWorkspaceDef : public TextureDefinitionBase
     {
         friend class CompositorWorkspace;
+
     public:
         struct ChannelRoute
         {
-            uint32      outChannel;
-            IdString    outNode;        /// Name of the alias
-            uint32      inChannel;
-            IdString    inNode;         /// Name of the alias
+            uint32   outChannel;
+            IdString outNode;  /// Name of the alias
+            uint32   inChannel;
+            IdString inNode;  /// Name of the alias
             ChannelRoute( uint32 _outChannel, IdString _outNode, uint32 _inChannel, IdString _inNode ) :
-                        outChannel( _outChannel ), outNode( _outNode ),
-                        inChannel( _inChannel ), inNode( _inNode ) {}
+                outChannel( _outChannel ),
+                outNode( _outNode ),
+                inChannel( _inChannel ),
+                inNode( _inNode )
+            {
+            }
         };
 
-        typedef map<IdString, IdString>::type   NodeAliasMap;
-        typedef list<ChannelRoute>::type        ChannelRouteList;
-    protected:
+        typedef map<IdString, IdString>::type NodeAliasMap;
+        typedef list<ChannelRoute>::type      ChannelRouteList;
 
-        IdString            mName;
-        String              mNameStr;
-        NodeAliasMap        mAliasedNodes;
-        ChannelRouteList    mChannelRoutes;
-        ChannelRouteList    mBufferChannelRoutes;
-        
+    protected:
+        IdString         mName;
+        String           mNameStr;
+        NodeAliasMap     mAliasedNodes;
+        ChannelRouteList mChannelRoutes;
+        ChannelRouteList mBufferChannelRoutes;
+
         /// outChannel  => Index to CompositorWorkspace::mExternalRenderTargets.
         /// outNode     => Not used.
         /// inChannel   => Which channel to connect to.
         /// inNode      => Which node to connect to.
-        ChannelRouteList	mExternalChannelRoutes;
+        ChannelRouteList mExternalChannelRoutes;
 
         /// outChannel  => Index to CompositorWorkspace::mExternalBuffers
         /// outNode     => Not used.
         /// inChannel   => Which channel to connect to.
         /// inNode      => Which node to connect to.
-        ChannelRouteList    mExternalBufferChannelRoutes;
+        ChannelRouteList mExternalBufferChannelRoutes;
 
-        CompositorManager2  *mCompositorManager;
+        CompositorManager2 *mCompositorManager;
 
         /** Checks if nodeName is already aliased (whether explicitly or implicitly). If not,
             checks whether the name of the node corresponds to an actual Node definition.
@@ -107,29 +113,26 @@ namespace Ogre
         /// Checks the input channel of the given node is not in use.
         /// Logs a warning if it's in use. Generic version.
         void checkInputChannelIsEmpty( const ChannelRouteList &internalChannelRoutes,
-                                       const ChannelRouteList &externalChannelRoutes,
-                                       IdString inNode, uint32 inChannel,
-                                       const std::string &outNodeName,
+                                       const ChannelRouteList &externalChannelRoutes, IdString inNode,
+                                       uint32 inChannel, const std::string &outNodeName,
                                        uint32 outChannel ) const;
 
         /// Checks the input channel of the given node is not in use.
         /// Logs a warning if it's in use.
-        void checkInputChannelIsEmpty( IdString inNode, uint32 inChannel,
-                                       const std::string &outNodeName,
+        void checkInputChannelIsEmpty( IdString inNode, uint32 inChannel, const std::string &outNodeName,
                                        uint32 outChannel ) const;
 
         /// Checks the buffer input channel of the given node is not in use.
         /// Logs a warning if it's in use.
         void checkInputBufferChannelIsEmpty( IdString inNode, uint32 inChannel,
-                                             const std::string &outNodeName,
-                                             uint32 outChannel ) const;
+                                             const std::string &outNodeName, uint32 outChannel ) const;
 
     public:
-        CompositorWorkspaceDef( const String& name, CompositorManager2 *compositorManager );
+        CompositorWorkspaceDef( const String &name, CompositorManager2 *compositorManager );
         virtual ~CompositorWorkspaceDef() {}
 
-        IdString getName() const                                { return mName; }
-        String getNameStr() const                               { return mNameStr; }
+        IdString getName() const { return mName; }
+        String   getNameStr() const { return mNameStr; }
 
         /** Connects outNode's output channel to inNode's input channel.
         @remarks
@@ -234,7 +237,7 @@ namespace Ogre
             Useful to know which nodes are in use by this compositor.
             Use @addNodeAlias @removeNodeAlias and @connect to safely modify the map.
         */
-        const NodeAliasMap& getNodeAliasMap()                   { return mAliasedNodes; }
+        const NodeAliasMap &getNodeAliasMap() { return mAliasedNodes; }
 
         /** Gets direct access to the channel route (aka the interconnections between all of our nodes).
             Useful for advanced C++ users who want fine control of the connections.
@@ -247,14 +250,14 @@ namespace Ogre
                 3. A node that doesn't have all of its input channels connected is incomplete
                    and should be disabled for the Workspace instance to be valid.
         */
-        ChannelRouteList& _getChannelRoutes()                   { return mChannelRoutes; }
+        ChannelRouteList &_getChannelRoutes() { return mChannelRoutes; }
 
-        CompositorManager2* getCompositorManager() const        { return mCompositorManager; }
+        CompositorManager2 *getCompositorManager() const { return mCompositorManager; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

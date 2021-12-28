@@ -29,22 +29,23 @@ THE SOFTWARE.
 #ifndef __CompositorPassSceneDef_H__
 #define __CompositorPassSceneDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 
-#include "OgreVisibilityFlags.h"
 #include "OgreMaterialManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreRoot.h"
+#include "OgreVisibilityFlags.h"
+
+#include "OgreHeaderPrefix.h"
+
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     enum ShadowNodeRecalculation
     {
@@ -66,57 +67,57 @@ namespace Ogre
         /// camera.
         SHADOW_NODE_FIRST_ONLY,
 
-        SHADOW_NODE_CASTER_PASS     //Set automatically only when this pass is used by a ShadowNode
+        SHADOW_NODE_CASTER_PASS  // Set automatically only when this pass is used by a ShadowNode
     };
 
     class _OgreExport CompositorPassSceneDef : public CompositorPassDef
     {
     public:
         /// Viewport's visibility mask while rendering our pass
-        uint32                  mVisibilityMask;
+        uint32 mVisibilityMask;
         /// Used by Forward+ to determine which lights should be used (via Light::setVisibilityFlags)
         uint32                  mLightVisibilityMask;
         IdString                mShadowNode;
-        ShadowNodeRecalculation mShadowNodeRecalculation; //Only valid if mShadowNode is not empty
+        ShadowNodeRecalculation mShadowNodeRecalculation;  // Only valid if mShadowNode is not empty
         /// When empty, uses the default camera.
-        IdString                mCameraName;
+        IdString mCameraName;
         /** When empty, it implies mCameraName == mLodCameraName; except for shadow nodes.
             For shadow nodes, when empty, it will use the receiver's lod camera.
         */
-        IdString                mLodCameraName;
+        IdString mLodCameraName;
         /// When empty, it implies mCameraName == mCullCameraName.
-        IdString                mCullCameraName;
+        IdString mCullCameraName;
 
         /// Only used if mPrePassMode == PrePassUse
-        IdStringVec     mPrePassTexture;
-        IdString        mPrePassDepthTexture;
-        IdString        mPrePassSsrTexture;
+        IdStringVec mPrePassTexture;
+        IdString    mPrePassDepthTexture;
+        IdString    mPrePassSsrTexture;
 
-        IdString        mDepthTextureNoMsaa;
-        IdString        mRefractionsTexture;
+        IdString mDepthTextureNoMsaa;
+        IdString mRefractionsTexture;
 
         /// This is a depth pre-pass. Note: Implementations may write
         /// to colour too for hybrid deferred & forward rendering.
         /// If you modify this, you probably want to modify
         /// mReadOnlyDepth & mReadOnlyStencil too
-        PrePassMode     mPrePassMode;
+        PrePassMode mPrePassMode;
         /// Generate Normals for a GBuffer in RTV output 1,
         /// This flag is ignored mPrePassMode if mPrePassMode != PrePassNone
-        bool            mGenNormalsGBuf;
+        bool mGenNormalsGBuf;
 
         /// First Render Queue ID to render. Inclusive
-        uint8           mFirstRQ;
+        uint8 mFirstRQ;
         /// Last Render Queue ID to render. Not inclusive
-        uint8           mLastRQ;
+        uint8 mLastRQ;
 
         /// Enable ForwardPlus during the pass (if Forward3D or ForwardClustered systems
         /// were created). Disabling optimizes performance when you don't need it.
-        bool            mEnableForwardPlus;
+        bool mEnableForwardPlus;
 
         /** When true, the camera will be rotated 90°, -90° or 180° depending on the value of
             mRtIndex and then restored to its original rotation after we're done.
         */
-        bool            mCameraCubemapReorient;
+        bool mCameraCubemapReorient;
 
         /** When true, which Lod index is current will be updated. Reasons to set this to false:
              1. You don't use LOD (i.e. you're GPU bottleneck). Setting to false helps CPU.
@@ -126,7 +127,7 @@ namespace Ogre
         @remarks
             Automatically set to false for shadow nodes that leave mLodCameraName empty
         */
-        bool            mUpdateLodLists;
+        bool mUpdateLodLists;
 
         /** Multiplier to the Lod value. What it means depends on the technique.
             You'll probably want to avoid setting it directly and rather use
@@ -134,22 +135,22 @@ namespace Ogre
 
             @see    LodStrategy::transformBias
         */
-        Real            mLodBias;
+        Real mLodBias;
 
         /// When true, will render in instanced stereo mode, thus outputting left & right eyes
         /// at the same time
-        bool            mInstancedStereo;
+        bool mInstancedStereo;
 
         /// When true, the frustum culling is skipped in this pass. To cull objects, data from
         /// the most recent frustum culling execution are used.
-        bool            mReuseCullData;
+        bool mReuseCullData;
 
         /// Same as CompositorPassDef::mFlushCommandBuffers, but executed after the shadow node
         /// Note you may end up flushing twice if the shadow node also has flushing of its own
         ///
         /// Does not do anything if mShadowNodeRecalculation is set to SHADOW_NODE_REUSE
         /// (whether explicitly or automatically determined)
-        bool            mFlushCommandBuffersAfterShadowNode;
+        bool mFlushCommandBuffersAfterShadowNode;
 
         /// Used for baking lightmaps and similar stuff.
         /// When set to 0xFF it is disabled.
@@ -157,7 +158,7 @@ namespace Ogre
         /// If the mesh doesn't have such UV, then the max UV will be used.
         /// If the mesh doesn't have UVs, it is up to the Hlms implementation
         /// what to do (probably raise an exception)
-        uint8           mUvBakingSet;
+        uint8 mUvBakingSet;
 
         /// When mUvBakingSet is set, tells whether we should bake the whole render
         /// result or just the lighting intensity, in order to create a lightmap.
@@ -165,7 +166,7 @@ namespace Ogre
         /// Typically, when baking with this setting, it's because you're going
         /// to use this texture with HlmsPbsDatablock as an emissive map and calling
         /// HlmsPbsDatablock::setUseEmissiveAsLightmap with true.
-        bool            mBakeLightingOnly;
+        bool mBakeLightingOnly;
 
         /// When mUvBakingSet is enabled, this defines the UV offset (in pixels).
         /// Without conservative rasterization, the baking won't render on pixels that
@@ -182,11 +183,11 @@ namespace Ogre
         /// don't work well because the MSAA sample locations are not in the center.
         ///
         /// See https://ndotl.wordpress.com/2018/08/29/baking-artifact-free-lightmaps/
-        Vector2         mUvBakingOffset;
+        Vector2 mUvBakingOffset;
 
         /// The material scheme used for this pass. If no material scheme is set then
         /// it will use the default scheme
-        String          mMaterialScheme;
+        String mMaterialScheme;
 
         CompositorPassSceneDef( CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_SCENE, parentTargetDef ),
@@ -207,12 +208,13 @@ namespace Ogre
             mUvBakingSet( 0xFF ),
             mBakeLightingOnly( false ),
             mUvBakingOffset( Vector2::ZERO ),
-            mMaterialScheme(MaterialManager::DEFAULT_SCHEME_NAME)
+            mMaterialScheme( MaterialManager::DEFAULT_SCHEME_NAME )
         {
-            //Change base defaults
+            // Change base defaults
             mIncludeOverlays = true;
-            //retrieve the rendersystem default scheme name, which can be different from DEFAULT_SCHEME_NAME if RS doesn't have fixed function support.
-            RenderSystem* rs = Root::getSingleton().getRenderSystem();
+            // retrieve the rendersystem default scheme name, which can be different from
+            // DEFAULT_SCHEME_NAME if RS doesn't have fixed function support.
+            RenderSystem *rs = Root::getSingleton().getRenderSystem();
             mMaterialScheme = rs->_getDefaultViewportMaterialScheme();
         }
 
@@ -250,7 +252,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

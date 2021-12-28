@@ -29,17 +29,19 @@ THE SOFTWARE.
 #define _OgrePixelFormatGpu_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreResourceTransition.h"
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** The pixel format used for images, textures, and render surfaces */
     enum PixelFormatGpu
     {
@@ -68,7 +70,7 @@ namespace Ogre {
 
         PFG_D32_FLOAT_S8X24_UINT,
 
-		PFG_R10G10B10A2_UNORM,
+        PFG_R10G10B10A2_UNORM,
         PFG_R10G10B10A2_UINT,
         PFG_R11G11B10_FLOAT,
 
@@ -264,7 +266,7 @@ namespace Ogre {
         PFG_ASTC_RGBA_UNORM_12X10_sRGB,
         PFG_ASTC_RGBA_UNORM_12X12_sRGB,
 
-		PFG_COUNT
+        PFG_COUNT
     };
 
     class _OgreExport PixelFormatToShaderType
@@ -280,7 +282,7 @@ namespace Ogre {
             The validity of the pointer lasts as long as the RenderSystem remains
             loaded.
         */
-        virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const = 0;
+        virtual const char *getPixelFormatType( PixelFormatGpu pixelFormat ) const = 0;
 
         /**
         @param pixelFormat
@@ -294,13 +296,13 @@ namespace Ogre {
             The validity of the pointer lasts as long as the RenderSystem remains
             loaded.
         */
-        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
-                                         bool isMsaa, ResourceAccess::ResourceAccess access ) const = 0;
+        virtual const char *getDataType( PixelFormatGpu pixelFormat, uint32 textureType, bool isMsaa,
+                                         ResourceAccess::ResourceAccess access ) const = 0;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

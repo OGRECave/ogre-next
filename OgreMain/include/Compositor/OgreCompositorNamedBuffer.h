@@ -33,36 +33,38 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgrePrerequisites.h"
 
-
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     struct CompositorNamedBuffer
     {
-        IdString        name;
+        IdString         name;
         UavBufferPacked *buffer;
 
         CompositorNamedBuffer() {}
         CompositorNamedBuffer( IdString _name, UavBufferPacked *_buffer ) :
-            name( _name ), buffer( _buffer ) {}
+            name( _name ),
+            buffer( _buffer )
+        {
+        }
 
-        bool operator () ( const CompositorNamedBuffer &left, IdString right ) const
+        bool operator()( const CompositorNamedBuffer &left, IdString right ) const
         {
             return left.name < right;
         }
-        bool operator () ( IdString left, const CompositorNamedBuffer &right ) const
+        bool operator()( IdString left, const CompositorNamedBuffer &right ) const
         {
             return left < right.name;
         }
-        bool operator () ( const CompositorNamedBuffer &left, const CompositorNamedBuffer &right ) const
+        bool operator()( const CompositorNamedBuffer &left, const CompositorNamedBuffer &right ) const
         {
-            return left.name< right.name;
+            return left.name < right.name;
         }
     };
 
@@ -70,7 +72,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

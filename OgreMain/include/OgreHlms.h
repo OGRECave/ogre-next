@@ -28,26 +28,29 @@ THE SOFTWARE.
 #ifndef _OgreHlms_H_
 #define _OgreHlms_H_
 
-#include "OgreStringVector.h"
+#include "OgrePrerequisites.h"
+
 #include "OgreHlmsCommon.h"
 #include "OgreHlmsPso.h"
+#include "OgreStringVector.h"
 #if !OGRE_NO_JSON
-    #include "OgreHlmsJson.h"
+#    include "OgreHlmsJson.h"
 #endif
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorShadowNode;
     struct QueuedRenderable;
-    typedef vector<Archive*>::type ArchiveVec;
+    typedef vector<Archive *>::type ArchiveVec;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** HLMS stands for "High Level Material System".
 
@@ -92,16 +95,21 @@ namespace Ogre
 
         struct DatablockEntry
         {
-            HlmsDatablock   *datablock;
-            bool            visibleToManager;
-            String          name;
-            String          srcFile;            ///Filename in which it was defined, if any
-            String          srcResourceGroup;   ///ResourceGroup in which it was defined, if any
+            HlmsDatablock *datablock;
+            bool           visibleToManager;
+            String         name;
+            String         srcFile;           /// Filename in which it was defined, if any
+            String         srcResourceGroup;  /// ResourceGroup in which it was defined, if any
             DatablockEntry() : datablock( 0 ), visibleToManager( false ) {}
             DatablockEntry( HlmsDatablock *_datablock, bool _visibleToManager, const String &_name,
                             const String &_srcFile, const String &_srcGroup ) :
-                datablock( _datablock ), visibleToManager( _visibleToManager ), name( _name ),
-                srcFile( _srcFile ), srcResourceGroup( _srcGroup  ) {}
+                datablock( _datablock ),
+                visibleToManager( _visibleToManager ),
+                name( _name ),
+                srcFile( _srcFile ),
+                srcResourceGroup( _srcGroup )
+            {
+            }
         };
 
         typedef std::map<IdString, DatablockEntry> HlmsDatablockMap;
@@ -112,21 +120,20 @@ namespace Ogre
             HlmsPropertyVec setProperties;
             PiecesMap       pieces[NumShaderTypes];
 
-            RenderableCache( const HlmsPropertyVec &properties,
-                             const PiecesMap *_pieces ) :
+            RenderableCache( const HlmsPropertyVec &properties, const PiecesMap *_pieces ) :
                 setProperties( properties )
             {
                 if( _pieces )
                 {
-                    for( size_t i=0; i<NumShaderTypes; ++i )
+                    for( size_t i = 0; i < NumShaderTypes; ++i )
                         pieces[i] = _pieces[i];
                 }
             }
 
-            bool operator == ( const RenderableCache &_r ) const
+            bool operator==( const RenderableCache &_r ) const
             {
                 bool piecesEqual = true;
-                for( size_t i=0; i<NumShaderTypes; ++i )
+                for( size_t i = 0; i < NumShaderTypes; ++i )
                     piecesEqual &= pieces[i] == _r.pieces[i];
 
                 return setProperties == _r.setProperties && piecesEqual;
@@ -138,7 +145,7 @@ namespace Ogre
             HlmsPropertyVec properties;
             HlmsPassPso     passPso;
 
-            bool operator == ( const PassCache &_r ) const
+            bool operator==( const PassCache &_r ) const
             {
                 return properties == _r.properties && passPso == _r.passPso;
             }
@@ -150,12 +157,9 @@ namespace Ogre
             RenderableCache mergedCache;
             GpuProgramPtr   shaders[NumShaderTypes];
 
-            ShaderCodeCache( const PiecesMap *_pieces ) :
-                mergedCache( HlmsPropertyVec(), _pieces )
-            {
-            }
+            ShaderCodeCache( const PiecesMap *_pieces ) : mergedCache( HlmsPropertyVec(), _pieces ) {}
 
-            bool operator == ( const ShaderCodeCache &_r ) const
+            bool operator==( const ShaderCodeCache &_r ) const
             {
                 return this->mergedCache == _r.mergedCache;
             }
@@ -164,8 +168,8 @@ namespace Ogre
         struct TextureRegs
         {
             uint32 strNameIdxStart;
-            int32 texUnit;
-            int32 numTexUnits;
+            int32  texUnit;
+            int32  numTexUnits;
             TextureRegs( uint32 _strNameIdxStart, int32 _texUnit, int32 _numTexUnits ) :
                 strNameIdxStart( _strNameIdxStart ),
                 texUnit( _texUnit ),
@@ -173,20 +177,20 @@ namespace Ogre
             {
             }
         };
-        typedef vector<char>::type TextureNameStrings;
+        typedef vector<char>::type        TextureNameStrings;
         typedef vector<TextureRegs>::type TextureRegsVec;
 
-        typedef vector<PassCache>::type PassCacheVec;
+        typedef vector<PassCache>::type       PassCacheVec;
         typedef vector<RenderableCache>::type RenderableCacheVec;
         typedef vector<ShaderCodeCache>::type ShaderCodeCacheVec;
 
-        PassCacheVec        mPassCache;
-        RenderableCacheVec  mRenderableCache;
-        ShaderCodeCacheVec  mShaderCodeCache;
-        HlmsCacheVec        mShaderCache;
+        PassCacheVec       mPassCache;
+        RenderableCacheVec mRenderableCache;
+        ShaderCodeCacheVec mShaderCodeCache;
+        HlmsCacheVec       mShaderCache;
 
-        TextureNameStrings  mTextureNameStrings;
-        TextureRegsVec      mTextureRegs[NumShaderTypes];
+        TextureNameStrings mTextureNameStrings;
+        TextureRegsVec     mTextureRegs[NumShaderTypes];
 
         HlmsPropertyVec mSetProperties;
         PiecesMap       mPieces;
@@ -194,51 +198,52 @@ namespace Ogre
     public:
         struct Library
         {
-            Archive         *dataFolder;
-            StringVector    pieceFiles[NumShaderTypes];
+            Archive *    dataFolder;
+            StringVector pieceFiles[NumShaderTypes];
         };
 
         typedef vector<Library>::type LibraryVec;
-    protected:
-        LibraryVec      mLibrary;
-        Archive         *mDataFolder;
-        StringVector    mPieceFiles[NumShaderTypes];
-        HlmsManager     *mHlmsManager;
 
-        LightGatheringMode  mLightGatheringMode;
-        uint16              mNumLightsLimit;
-        uint16              mNumAreaApproxLightsLimit;
-        uint16              mNumAreaLtcLightsLimit;
-        uint32              mAreaLightsGlobalLightListStart;
-        uint32              mRealNumDirectionalLights;
-        uint32              mRealNumAreaApproxLightsWithMask;
-        uint32              mRealNumAreaApproxLights;
-        uint32              mRealNumAreaLtcLights;
+    protected:
+        LibraryVec   mLibrary;
+        Archive *    mDataFolder;
+        StringVector mPieceFiles[NumShaderTypes];
+        HlmsManager *mHlmsManager;
+
+        LightGatheringMode mLightGatheringMode;
+        uint16             mNumLightsLimit;
+        uint16             mNumAreaApproxLightsLimit;
+        uint16             mNumAreaLtcLightsLimit;
+        uint32             mAreaLightsGlobalLightListStart;
+        uint32             mRealNumDirectionalLights;
+        uint32             mRealNumAreaApproxLightsWithMask;
+        uint32             mRealNumAreaApproxLights;
+        uint32             mRealNumAreaLtcLights;
 
         /// Listener for adding extensions. @see setListener.
         /// Pointer is [b]never[/b] null.
-        HlmsListener    *mListener;
-        RenderSystem    *mRenderSystem;
+        HlmsListener *mListener;
+        RenderSystem *mRenderSystem;
 
         HlmsDatablockMap mDatablocks;
 
-        String          mShaderProfile; /// "glsl", "glsles", "hlsl"
-        IdString        mShaderSyntax;
-        IdStringVec     mRsSpecificExtensions;
-        String const    *mShaderTargets[NumShaderTypes]; ///[0] = "vs_4_0", etc. Only used by D3D
-        String          mShaderFileExt; /// Either glsl or hlsl
-        String          mOutputPath;
-        bool            mDebugOutput;
-        bool            mDebugOutputProperties;
-        bool            mHighQuality;
-        bool            mFastShaderBuildHack;
+        String        mShaderProfile;  /// "glsl", "glsles", "hlsl"
+        IdString      mShaderSyntax;
+        IdStringVec   mRsSpecificExtensions;
+        String const *mShaderTargets[NumShaderTypes];  ///[0] = "vs_4_0", etc. Only used by D3D
+        String        mShaderFileExt;                  /// Either glsl or hlsl
+        String        mOutputPath;
+        bool          mDebugOutput;
+        bool          mDebugOutputProperties;
+        bool          mHighQuality;
+        bool          mFastShaderBuildHack;
 
         /// The default datablock occupies the name IdString(); which is not the same as IdString("")
-        HlmsDatablock   *mDefaultDatablock;
+        HlmsDatablock *mDefaultDatablock;
 
-        HlmsTypes       mType;
-        IdString        mTypeName;
-        String          mTypeNameStr;
+        HlmsTypes mType;
+        IdString  mTypeName;
+        String    mTypeNameStr;
 
         /** Inserts common properties about the current Renderable,
             such as hlms_skeleton hlms_uv_count, etc
@@ -257,22 +262,22 @@ namespace Ogre
         /// Populates pieceFiles, returns true if found at least one piece file.
         static bool enumeratePieceFiles( Archive *dataFolder, StringVector *pieceFiles );
 
-        void setProperty( IdString key, int32 value );
-        int32 getProperty( IdString key, int32 defaultVal=0 ) const;
+        void  setProperty( IdString key, int32 value );
+        int32 getProperty( IdString key, int32 defaultVal = 0 ) const;
 
         void unsetProperty( IdString key );
 
         enum ExpressionType
         {
-            EXPR_OPERATOR_OR,        //||
-            EXPR_OPERATOR_AND,       //&&
-            EXPR_OPERATOR_LE,        //<
-            EXPR_OPERATOR_LEEQ,      //<=
-            EXPR_OPERATOR_EQ,        //==
-            EXPR_OPERATOR_NEQ,       //!=
-            EXPR_OPERATOR_GR,        //>
-            EXPR_OPERATOR_GREQ,      //>=
-            EXPR_OBJECT,             //(...)
+            EXPR_OPERATOR_OR,    //||
+            EXPR_OPERATOR_AND,   //&&
+            EXPR_OPERATOR_LE,    //<
+            EXPR_OPERATOR_LEEQ,  //<=
+            EXPR_OPERATOR_EQ,    //==
+            EXPR_OPERATOR_NEQ,   //!=
+            EXPR_OPERATOR_GR,    //>
+            EXPR_OPERATOR_GREQ,  //>=
+            EXPR_OBJECT,         //(...)
             EXPR_VAR
         };
 
@@ -286,8 +291,7 @@ namespace Ogre
 
             Expression() : result( false ), negated( false ), type( EXPR_VAR ) {}
 
-            bool isOperator() const
-                { return type >= EXPR_OPERATOR_OR && type <= EXPR_OPERATOR_GREQ; }
+            bool isOperator() const { return type >= EXPR_OPERATOR_OR && type <= EXPR_OPERATOR_GREQ; }
             inline void swap( Expression &other );
         };
 
@@ -298,6 +302,7 @@ namespace Ogre
         static void copy( String &outBuffer, const SubStringRef &inSubString, size_t length );
         static void repeat( String &outBuffer, const SubStringRef &inSubString, size_t length,
                             size_t passNum, const String &counterVar );
+
         bool parseMath( const String &inBuffer, String &outBuffer );
         bool parseForEach( const String &inBuffer, String &outBuffer ) const;
         bool parseProperties( String &inBuffer, String &outBuffer ) const;
@@ -318,16 +323,17 @@ namespace Ogre
 
         /// Returns true if we found an @end, false if we found
         /// \@else instead (can only happen if allowsElse=true).
-        static bool findBlockEnd( SubStringRef &outSubString, bool &syntaxError, bool allowsElse=false );
+        static bool findBlockEnd( SubStringRef &outSubString, bool &syntaxError,
+                                  bool allowsElse = false );
 
-        bool evaluateExpression( SubStringRef &outSubString, bool &outSyntaxError ) const;
+        bool  evaluateExpression( SubStringRef &outSubString, bool &outSyntaxError ) const;
         int32 evaluateExpressionRecursive( ExpressionVec &expression, bool &outSyntaxError ) const;
         static size_t evaluateExpressionEnd( const SubStringRef &outSubString );
 
         static void evaluateParamArgs( SubStringRef &outSubString, StringVector &outArgs,
                                        bool &outSyntaxError );
 
-        static unsigned long calculateLineCount(const String &buffer, size_t idx );
+        static unsigned long calculateLineCount( const String &buffer, size_t idx );
         static unsigned long calculateLineCount( const SubStringRef &subString );
 
         /** Caches a set of properties (i.e. key-value pairs) & snippets of shaders. If an
@@ -342,14 +348,14 @@ namespace Ogre
             The index to the cache entry.
         */
         size_t addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
-                                   const PiecesMap *pieces );
+                                   const PiecesMap *      pieces );
 
         /// Retrieves a cache entry using the returned value from @addRenderableCache
-        const RenderableCache& getRenderableCache( uint32 hash ) const;
+        const RenderableCache &getRenderableCache( uint32 hash ) const;
 
-        const HlmsCache* addShaderCache( uint32 hash, const HlmsPso &pso );
-        const HlmsCache* getShaderCache( uint32 hash ) const;
-        virtual void clearShaderCache();
+        const HlmsCache *addShaderCache( uint32 hash, const HlmsPso &pso );
+        const HlmsCache *getShaderCache( uint32 hash ) const;
+        virtual void     clearShaderCache();
 
         void processPieces( Archive *archive, const StringVector &pieceFiles );
         void hashPieceFiles( Archive *archive, const StringVector &pieceFiles,
@@ -367,12 +373,12 @@ namespace Ogre
         virtual void setupRootLayout( RootLayout &rootLayout ) = 0;
 
         HighLevelGpuProgramPtr compileShaderCode( const String &source,
-                                                  const String &debugFilenameOutput,
-                                                  uint32 finalHash, ShaderType shaderType );
+                                                  const String &debugFilenameOutput, uint32 finalHash,
+                                                  ShaderType shaderType );
 
     public:
         void _compileShaderFromPreprocessedSource( const RenderableCache &mergedCache,
-                                                   const String source[NumShaderTypes] );
+                                                   const String           source[NumShaderTypes] );
 
         /** Compiles input properties and adds it to the shader code cache
         @param codeCache [in/out]
@@ -380,7 +386,7 @@ namespace Ogre
         */
         void compileShaderCode( ShaderCodeCache &codeCache );
 
-        const ShaderCodeCacheVec& getShaderCodeCache() const    { return mShaderCodeCache; }
+        const ShaderCodeCacheVec &getShaderCodeCache() const { return mShaderCodeCache; }
 
     protected:
         /** Creates a shader based on input parameters. Caller is responsible for ensuring
@@ -400,9 +406,8 @@ namespace Ogre
         @return
             The newly created shader.
         */
-        virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
-                                                         const HlmsCache &passCache,
-                                                         uint32 finalHash,
+        virtual const HlmsCache *createShaderCacheEntry( uint32           renderableHash,
+                                                         const HlmsCache &passCache, uint32 finalHash,
                                                          const QueuedRenderable &queuedRenderable );
 
         /// This function gets called right before starting parsing all templates, and after
@@ -412,25 +417,26 @@ namespace Ogre
         /// on member variables or other state. All state info should come from getProperty()
         virtual void notifyPropertiesMergedPreGenerationStep();
 
-        virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
+        virtual HlmsDatablock *createDatablockImpl( IdString              datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,
-                                                    const HlmsParamVec &paramVec ) = 0;
+                                                    const HlmsParamVec &  paramVec ) = 0;
 
-        virtual HlmsDatablock* createDefaultDatablock();
+        virtual HlmsDatablock *createDefaultDatablock();
+
         void _destroyAllDatablocks();
 
         inline void calculateHashForSemantic( VertexElementSemantic semantic, VertexElementType type,
                                               uint16 index, uint &inOutNumTexCoords );
+
         uint16 calculateHashForV1( Renderable *renderable );
         uint16 calculateHashForV2( Renderable *renderable );
 
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces ) {}
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces ) {}
 
-        HlmsCache preparePassHashBase( const Ogre::CompositorShadowNode *shadowNode,
-                                       bool casterPass, bool dualParaboloid,
-                                       SceneManager *sceneManager );
+        HlmsCache preparePassHashBase( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
+                                       bool dualParaboloid, SceneManager *sceneManager );
 
         HlmsPassPso getPassPsoForScene( SceneManager *sceneManager );
 
@@ -458,17 +464,17 @@ namespace Ogre
             Path to folders to be processed first for collecting pieces. Will be processed in order.
             Pointer can be null.
         */
-        Hlms(HlmsTypes type, const String &typeName, Archive *dataFolder,
-              ArchiveVec *libraryFolders );
+        Hlms( HlmsTypes type, const String &typeName, Archive *dataFolder, ArchiveVec *libraryFolders );
         virtual ~Hlms();
 
-        HlmsTypes getType() const                       { return mType; }
-        IdString getTypeName() const                    { return mTypeName; }
-        const String& getTypeNameStr() const            { return mTypeNameStr; }
-        void _notifyManager( HlmsManager *manager )         { mHlmsManager = manager; }
-        HlmsManager* getHlmsManager() const             { return mHlmsManager; }
-        const String& getShaderProfile() const          { return mShaderProfile; }
-        IdString getShaderSyntax() const                { return mShaderSyntax; }
+        HlmsTypes getType() const { return mType; }
+        IdString  getTypeName() const { return mTypeName; }
+
+        const String &getTypeNameStr() const { return mTypeNameStr; }
+        void          _notifyManager( HlmsManager *manager ) { mHlmsManager = manager; }
+        HlmsManager * getHlmsManager() const { return mHlmsManager; }
+        const String &getShaderProfile() const { return mShaderProfile; }
+        IdString      getShaderSyntax() const { return mShaderSyntax; }
 
         void getTemplateChecksum( uint64 outHash[2] ) const;
 
@@ -487,7 +493,7 @@ namespace Ogre
             device, the recommended option is to have this off.
         */
         void setHighQuality( bool highQuality );
-        bool getHighQuality() const                     { return mHighQuality; }
+        bool getHighQuality() const { return mHighQuality; }
 
         /** Non-caster directional lights are hardcoded into shaders. This means that if you
             have 6 directional lights and then you add a 7th one, a whole new set of shaders
@@ -515,8 +521,8 @@ namespace Ogre
             Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited
             (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass)
          */
-        void setMaxNonCasterDirectionalLights( uint16 maxLights );
-        uint16 getMaxNonCasterDirectionalLights() const     { return mNumLightsLimit; }
+        void   setMaxNonCasterDirectionalLights( uint16 maxLights );
+        uint16 getMaxNonCasterDirectionalLights() const { return mNumLightsLimit; }
 
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit
@@ -533,9 +539,9 @@ namespace Ogre
         @param areaLightsLtcLimit
             Same as areaLightsApproxLimit, but for LTC lights
         */
-        void setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit );
-        uint16 getAreaLightsApproxLimit() const				{ return mNumAreaApproxLightsLimit; }
-        uint16 getAreaLightsLtcLimit() const				{ return mNumAreaLtcLightsLimit; }
+        void   setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit );
+        uint16 getAreaLightsApproxLimit() const { return mNumAreaApproxLightsLimit; }
+        uint16 getAreaLightsLtcLimit() const { return mNumAreaLtcLightsLimit; }
 
 #if !OGRE_NO_JSON
         /** Loads datablock values from a JSON value. @see HlmsJson.
@@ -550,13 +556,19 @@ namespace Ogre
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                                 HlmsDatablock *datablock, const String &resourceGroup,
                                 HlmsJsonListener *listener,
-                                const String &additionalTextureExtension ) const {}
+                                const String &    additionalTextureExtension ) const
+        {
+        }
         virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
                                 HlmsJsonListener *listener,
-                                const String &additionalTextureExtension ) const {}
+                                const String &    additionalTextureExtension ) const
+        {
+        }
 
-        virtual void _collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,
-                                            const HlmsDatablock *datablock ) const {}
+        virtual void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
+                                            const HlmsDatablock *                datablock ) const
+        {
+        }
 #endif
 
         void saveAllTexturesFromDatablocks( const String &folderPath, set<String>::type &savedTextures,
@@ -579,11 +591,11 @@ namespace Ogre
             When non-null pointer, the library folders will be overwriten.
             Pass an empty container if you want to stop using libraries.
         */
-        virtual void reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders=0 );
+        virtual void reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders = 0 );
 
-        Archive* getDataFolder()                        { return mDataFolder; }
-        const LibraryVec& getPiecesLibrary() const      { return mLibrary; }
-        ArchiveVec getPiecesLibraryAsArchiveVec() const;
+        Archive *         getDataFolder() { return mDataFolder; }
+        const LibraryVec &getPiecesLibrary() const { return mLibrary; }
+        ArchiveVec        getPiecesLibraryAsArchiveVec() const;
 
         /** Creates a unique datablock that can be shared by multiple renderables.
         @remarks
@@ -612,19 +624,18 @@ namespace Ogre
         @return
             Pointer to created Datablock
         */
-        HlmsDatablock* createDatablock( IdString name, const String &refName,
+        HlmsDatablock *createDatablock( IdString name, const String &refName,
                                         const HlmsMacroblock &macroblockRef,
                                         const HlmsBlendblock &blendblockRef,
-                                        const HlmsParamVec &paramVec,
-                                        bool visibleToManager=true,
-                                        const String &filename=BLANKSTRING,
-                                        const String &resourceGroup=BLANKSTRING );
+                                        const HlmsParamVec &paramVec, bool visibleToManager = true,
+                                        const String &filename = BLANKSTRING,
+                                        const String &resourceGroup = BLANKSTRING );
 
         /** Finds an existing datablock based on its name (@see createDatablock)
         @return
             The datablock associated with that name. Null pointer if not found. Doesn't throw.
         */
-        HlmsDatablock* getDatablock( IdString name ) const;
+        HlmsDatablock *getDatablock( IdString name ) const;
 
         /// Returns the string name associated with its hashed name (this was
         /// passed as refName in @createDatablock). Returns null ptr if
@@ -632,7 +643,7 @@ namespace Ogre
         /// The reason this String doesn't live in HlmsDatablock is to prevent
         /// cache trashing (datablocks are hot iterated every frame, and the
         /// full name is rarely ever used)
-        const String* getNameStr(IdString name) const;
+        const String *getNameStr( IdString name ) const;
 
         /// Returns the filaname & resource group a datablock was created from, and
         /// is associated with its hashed name (this was passed as in @createDatablock).
@@ -649,8 +660,8 @@ namespace Ogre
         ///     {
         ///         //Valid filename & resource group.
         ///     }
-        void getFilenameAndResourceGroup(IdString name, String const * *outFilename,
-                                          String const * *outResourceGroup ) const;
+        void getFilenameAndResourceGroup( IdString name, String const **outFilename,
+                                          String const **outResourceGroup ) const;
 
         /** Destroys a datablocks given its name. Caller is responsible for ensuring
             those pointers aren't still in use (i.e. dangling pointers)
@@ -665,10 +676,10 @@ namespace Ogre
         void destroyAllDatablocks();
 
         /// @copydoc HlmsManager::getDefaultDatablock
-        HlmsDatablock* getDefaultDatablock() const;
+        HlmsDatablock *getDefaultDatablock() const;
 
         /// Returns all datablocks owned by this Hlms, including the default one.
-        const HlmsDatablockMap& getDatablockMap() const { return mDatablocks; }
+        const HlmsDatablockMap &getDatablockMap() const { return mDatablocks; }
 
         /** Finds the parameter with key 'key' in the given 'paramVec'. If found, outputs
             the value to 'inOut', otherwise leaves 'inOut' as is.
@@ -690,7 +701,7 @@ namespace Ogre
         */
         virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
 
-        virtual void analyzeBarriers( BarrierSolver &barrierSolver,
+        virtual void analyzeBarriers( BarrierSolver &          barrierSolver,
                                       ResourceTransitionArray &resourceTransitions,
                                       Camera *renderingCamera, const bool bCasterPass );
 
@@ -704,9 +715,8 @@ namespace Ogre
             and is one for the whole pass, but Mesh' properties usually stay consistent
             through its lifetime but may differ per mesh)
         */
-        virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode,
-                                           bool casterPass, bool dualParaboloid,
-                                           SceneManager *sceneManager );
+        virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode, bool casterPass,
+                                           bool dualParaboloid, SceneManager *sceneManager );
 
         /** Retrieves an HlmsCache filled with the GPU programs to be used by the given
             renderable. If the shaders have already been created (i.e. whether for this
@@ -726,7 +736,7 @@ namespace Ogre
         @return
             Structure containing all necessary shaders
         */
-        const HlmsCache* getMaterial( HlmsCache const *lastReturnedValue, const HlmsCache &passCache,
+        const HlmsCache *getMaterial( HlmsCache const *lastReturnedValue, const HlmsCache &passCache,
                                       const QueuedRenderable &queuedRenderable, bool casterPass );
 
         /** Fills the constant buffers. Gets executed right before drawing the mesh.
@@ -747,15 +757,13 @@ namespace Ogre
                                        bool casterPass, uint32 lastCacheHash,
                                        uint32 lastTextureHash ) = 0;
 
-        virtual uint32 fillBuffersForV1( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer ) = 0;
+        virtual uint32 fillBuffersForV1( const HlmsCache *       cache,
+                                         const QueuedRenderable &queuedRenderable, bool casterPass,
+                                         uint32 lastCacheHash, CommandBuffer *commandBuffer ) = 0;
 
-        virtual uint32 fillBuffersForV2( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer ) = 0;
+        virtual uint32 fillBuffersForV2( const HlmsCache *       cache,
+                                         const QueuedRenderable &queuedRenderable, bool casterPass,
+                                         uint32 lastCacheHash, CommandBuffer *commandBuffer ) = 0;
 
         /// This gets called right before executing the command buffer.
         virtual void preCommandBufferExecution( CommandBuffer *commandBuffer ) {}
@@ -802,12 +810,14 @@ namespace Ogre
         @remarks
             If the default listener is being used (that does nothing) then null is returned.
         */
-        HlmsListener* getListener() const;
+        HlmsListener *getListener() const;
 
         /// For debugging stuff. I.e. the Command line uses it for testing manually set properties
-        void _setProperty( IdString key, int32 value )      { setProperty( key, value ); }
-        int32 _getProperty( IdString key, int32 defaultVal=0 ) const
-                                                { return getProperty( key, defaultVal ); }
+        void  _setProperty( IdString key, int32 value ) { setProperty( key, value ); }
+        int32 _getProperty( IdString key, int32 defaultVal = 0 ) const
+        {
+            return getProperty( key, defaultVal );
+        }
 
         void _setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit )
         {
@@ -817,14 +827,14 @@ namespace Ogre
         /// Utility helper, mostly useful to HlmsListener implementations.
         static void setProperty( HlmsPropertyVec &properties, IdString key, int32 value );
         /// Utility helper, mostly useful to HlmsListener implementations.
-        static int32 getProperty( const HlmsPropertyVec &properties,
-                                  IdString key, int32 defaultVal=0 );
+        static int32 getProperty( const HlmsPropertyVec &properties, IdString key,
+                                  int32 defaultVal = 0 );
 
         void _clearShaderCache();
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
 
-        RenderSystem* getRenderSystem() const           { return mRenderSystem; }
+        RenderSystem *getRenderSystem() const { return mRenderSystem; }
     };
 
     /// These are "default" or "Base" properties common to many implementations and thus defined here.
@@ -858,8 +868,8 @@ namespace Ogre
         static const IdString UvCount5;
         static const IdString UvCount6;
         static const IdString UvCount7;
-        
-        //Change per frame (grouped together with scene pass)
+
+        // Change per frame (grouped together with scene pass)
         static const IdString LightsDirectional;
         static const IdString LightsDirNonCaster;
         static const IdString LightsPoint;
@@ -872,7 +882,7 @@ namespace Ogre
         static const IdString LightsAreaTexColour;
         static const IdString AllPointLights;
 
-        //Change per scene pass
+        // Change per scene pass
         static const IdString PsoClipDistances;
         static const IdString GlobalClipPlanes;
         static const IdString DualParaboloidMapping;
@@ -924,7 +934,7 @@ namespace Ogre
         static const IdString ScreenPosUv;
         static const IdString VertexId;
 
-        //Change per material (hash can be cached on the renderable)
+        // Change per material (hash can be cached on the renderable)
         static const IdString AlphaTest;
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
@@ -932,7 +942,7 @@ namespace Ogre
         // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
 
-        //Standard depth range is being used instead of reverse Z.
+        // Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;
         static const IdString ReadOnlyIsTex;
 
@@ -953,7 +963,7 @@ namespace Ogre
         static const IdString TexGather;
         static const IdString DisableStage;
 
-        //Useful GL Extensions
+        // Useful GL Extensions
         static const IdString GlAmdTrinaryMinMax;
 
         static const IdString *UvCountPtrs[8];
@@ -992,7 +1002,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -30,20 +30,21 @@ THE SOFTWARE.
 #define _OgreDescriptorSetUav_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
-#include "OgreResourceTransition.h"
 #include "OgrePixelFormatGpu.h"
+#include "OgreResourceTransition.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** Descriptor sets describe what uavs should be bound together in one place.
     @remarks
@@ -73,15 +74,13 @@ namespace Ogre
             /// resolve memory barrier dependencies.
             ResourceAccess::ResourceAccess access;
 
-            bool operator != ( const BufferSlot &other ) const
+            bool operator!=( const BufferSlot &other ) const
             {
-                return  this->buffer != other.buffer ||
-                        this->offset != other.offset ||
-                        this->sizeBytes != other.sizeBytes ||
-                        this->access != other.access;
+                return this->buffer != other.buffer || this->offset != other.offset ||
+                       this->sizeBytes != other.sizeBytes || this->access != other.access;
             }
 
-            bool operator < ( const BufferSlot &other ) const
+            bool operator<( const BufferSlot &other ) const
             {
                 if( this->buffer != other.buffer )
                     return this->buffer < other.buffer;
@@ -107,21 +106,20 @@ namespace Ogre
             TextureGpu *texture;
 
             ResourceAccess::ResourceAccess access;
-            uint8           mipmapLevel;
-            uint16          textureArrayIndex;
+            uint8                          mipmapLevel;
+            uint16                         textureArrayIndex;
             /// When left as PFG_UNKNOWN, we'll automatically use the TextureGpu's native format
-            PixelFormatGpu  pixelFormat;
+            PixelFormatGpu pixelFormat;
 
-            bool operator != ( const TextureSlot &other ) const
+            bool operator!=( const TextureSlot &other ) const
             {
-                return  this->texture != other.texture ||
-                        this->access != other.access ||
-                        this->mipmapLevel != other.mipmapLevel ||
-                        this->textureArrayIndex != other.textureArrayIndex ||
-                        this->pixelFormat != other.pixelFormat;
+                return this->texture != other.texture || this->access != other.access ||
+                       this->mipmapLevel != other.mipmapLevel ||
+                       this->textureArrayIndex != other.textureArrayIndex ||
+                       this->pixelFormat != other.pixelFormat;
             }
 
-            bool operator < ( const TextureSlot &other ) const
+            bool operator<( const TextureSlot &other ) const
             {
                 if( this->texture != other.texture )
                     return this->texture < other.texture;
@@ -149,65 +147,55 @@ namespace Ogre
         };
         struct _OgreExport Slot
         {
-            SlotType        slotType;
+            SlotType slotType;
+
         protected:
             union
             {
                 BufferSlot  buffer;
                 TextureSlot texture;
             };
+
         public:
-            Slot()
-            {
-                memset( this, 0, sizeof(*this) );
-            }
+            Slot() { memset( this, 0, sizeof( *this ) ); }
 
             Slot( SlotType _slotType )
             {
-                memset( this, 0, sizeof(*this) );
+                memset( this, 0, sizeof( *this ) );
                 slotType = _slotType;
             }
 
-            bool empty() const
-            {
-                return buffer.buffer == 0 && texture.texture == 0;
-            }
+            bool empty() const { return buffer.buffer == 0 && texture.texture == 0; }
 
-            bool isBuffer() const
-            {
-                return slotType == SlotTypeBuffer;
-            }
+            bool isBuffer() const { return slotType == SlotTypeBuffer; }
 
-            BufferSlot& getBuffer()
+            BufferSlot &getBuffer()
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
             }
 
-            const BufferSlot& getBuffer() const
+            const BufferSlot &getBuffer() const
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
             }
 
-            bool isTexture() const
-            {
-                return slotType == SlotTypeTexture;
-            }
+            bool isTexture() const { return slotType == SlotTypeTexture; }
 
-            TextureSlot& getTexture()
+            TextureSlot &getTexture()
             {
                 assert( slotType == SlotTypeTexture );
                 return texture;
             }
 
-            const TextureSlot& getTexture() const
+            const TextureSlot &getTexture() const
             {
                 assert( slotType == SlotTypeTexture );
                 return texture;
             }
 
-            bool operator != ( const Slot &other ) const
+            bool operator!=( const Slot &other ) const
             {
                 if( this->slotType != other.slotType )
                     return true;
@@ -222,7 +210,7 @@ namespace Ogre
                 }
             }
 
-            bool operator < ( const Slot &other ) const
+            bool operator<( const Slot &other ) const
             {
                 if( this->slotType != other.slotType )
                     return this->slotType < other.slotType;
@@ -239,26 +227,22 @@ namespace Ogre
         };
 
         uint16          mRefCount;
-        void            *mRsData;           /// Render-System specific data
+        void *          mRsData;  /// Render-System specific data
         FastArray<Slot> mUavs;
 
-        DescriptorSetUav() :
-            mRefCount( 0 ),
-            mRsData( 0 )
-        {
-        }
+        DescriptorSetUav() : mRefCount( 0 ), mRsData( 0 ) {}
 
         /// Warning: This operator won't see changes in UAVs (i.e. data baked into mRsData).
         /// If you get notifyTextureChanged call, the UAV has changed and you must
         /// assume the DescriptorSetUav has changed.
         /// UAV = Unordered Access View.
-        bool operator != ( const DescriptorSetUav &other ) const
+        bool operator!=( const DescriptorSetUav &other ) const
         {
             const size_t thisNumUavs = mUavs.size();
             if( thisNumUavs != other.mUavs.size() )
                 return true;
 
-            for( size_t i=0; i<thisNumUavs; ++i )
+            for( size_t i = 0; i < thisNumUavs; ++i )
             {
                 if( this->mUavs[i] != other.mUavs[i] )
                     return true;
@@ -267,13 +251,13 @@ namespace Ogre
             return false;
         }
 
-        bool operator < ( const DescriptorSetUav &other ) const
+        bool operator<( const DescriptorSetUav &other ) const
         {
             const size_t thisNumUavs = mUavs.size();
             if( thisNumUavs != other.mUavs.size() )
                 return thisNumUavs < other.mUavs.size();
 
-            for( size_t i=0; i<thisNumUavs; ++i )
+            for( size_t i = 0; i < thisNumUavs; ++i )
             {
                 if( this->mUavs[i] != other.mUavs[i] )
                     return this->mUavs[i] < other.mUavs[i];
@@ -287,7 +271,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

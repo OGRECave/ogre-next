@@ -28,25 +28,26 @@ THE SOFTWARE.
 #ifndef _OgreHlmsManager_H_
 #define _OgreHlmsManager_H_
 
+#include "OgreDescriptorSetSampler.h"
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreHlmsCommon.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
-#include "OgreDescriptorSetTexture.h"
-#include "OgreDescriptorSetSampler.h"
-#include "OgreDescriptorSetUav.h"
 #if !OGRE_NO_JSON
-    #include "OgreScriptLoader.h"
+#    include "OgreScriptLoader.h"
 #endif
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class HlmsJsonListener;
 
@@ -57,7 +58,7 @@ namespace Ogre
 #define OGRE_HLMS_NUM_BLENDBLOCKS 32
 #define OGRE_HLMS_NUM_SAMPLERBLOCKS 64
 
-//Biggest value between all three (Input Layouts is not a block)
+// Biggest value between all three (Input Layouts is not a block)
 #define OGRE_HLMS_MAX_BASIC_BLOCKS OGRE_HLMS_NUM_SAMPLERBLOCKS
 
     /** HLMS stands for "High Level Material System".
@@ -71,78 +72,83 @@ namespace Ogre
         If for some reason you need more, increase these values (they're macros) and recompile Ogre
     */
     class _OgreExport HlmsManager :
-        #if !OGRE_NO_JSON
-            public ScriptLoader,
-        #endif
-            public HlmsAlloc
+#if !OGRE_NO_JSON
+        public ScriptLoader,
+#endif
+        public HlmsAlloc
     {
     public:
         typedef vector<uint16>::type BlockIdxVec;
+
     protected:
         typedef vector<HlmsMacroblock>::type HlmsMacroblockVec;
         typedef vector<HlmsBlendblock>::type HlmsBlendblockVec;
 
-        Hlms    *mRegisteredHlms[HLMS_MAX];
-        bool    mDeleteRegisteredOnExit[HLMS_MAX];
+        Hlms *       mRegisteredHlms[HLMS_MAX];
+        bool         mDeleteRegisteredOnExit[HLMS_MAX];
         HlmsCompute *mComputeHlms;
 
-        HlmsMacroblockVec   mMacroblocks;
-        HlmsBlendblockVec   mBlendblocks;
-        HlmsSamplerblock    mSamplerblocks[OGRE_HLMS_NUM_SAMPLERBLOCKS];
-        BlockIdxVec         mActiveBlocks[NUM_BASIC_BLOCKS];
-        BlockIdxVec         mFreeBlockIds[NUM_BASIC_BLOCKS];
-        BasicBlock          *mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
+        HlmsMacroblockVec mMacroblocks;
+        HlmsBlendblockVec mBlendblocks;
+        HlmsSamplerblock  mSamplerblocks[OGRE_HLMS_NUM_SAMPLERBLOCKS];
+        BlockIdxVec       mActiveBlocks[NUM_BASIC_BLOCKS];
+        BlockIdxVec       mFreeBlockIds[NUM_BASIC_BLOCKS];
+        BasicBlock *      mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
 
-        typedef set<DescriptorSetTexture>::type     DescriptorSetTextureSet;
-        typedef set<DescriptorSetTexture2>::type    DescriptorSetTexture2Set;
-        typedef set<DescriptorSetSampler>::type     DescriptorSetSamplerSet;
-        typedef set<DescriptorSetUav>::type         DescriptorSetUavSet;
-        DescriptorSetTextureSet     mDescriptorSetTextures;
-        DescriptorSetTexture2Set    mDescriptorSetTextures2;
-        DescriptorSetSamplerSet     mDescriptorSetSamplers;
-        DescriptorSetUavSet         mDescriptorSetUavs;
+        typedef set<DescriptorSetTexture>::type  DescriptorSetTextureSet;
+        typedef set<DescriptorSetTexture2>::type DescriptorSetTexture2Set;
+        typedef set<DescriptorSetSampler>::type  DescriptorSetSamplerSet;
+        typedef set<DescriptorSetUav>::type      DescriptorSetUavSet;
+
+        DescriptorSetTextureSet  mDescriptorSetTextures;
+        DescriptorSetTexture2Set mDescriptorSetTextures2;
+        DescriptorSetSamplerSet  mDescriptorSetSamplers;
+        DescriptorSetUavSet      mDescriptorSetUavs;
 
         struct InputLayouts
         {
-            //OperationType           opType;
-            VertexElement2VecVec    vertexElements;
+            // OperationType           opType;
+            VertexElement2VecVec vertexElements;
         };
 
         typedef vector<InputLayouts>::type InputLayoutsVec;
 
-        InputLayoutsVec     mInputLayouts;
+        InputLayoutsVec mInputLayouts;
 
-        RenderSystem        *mRenderSystem;
+        RenderSystem *mRenderSystem;
 
-        public: typedef std::map<IdString, HlmsDatablock*> HlmsDatablockMap;
+    public:
+        typedef std::map<IdString, HlmsDatablock *> HlmsDatablockMap;
+
     protected:
         HlmsDatablockMap mRegisteredDatablocks;
 
-        HlmsTypes           mDefaultHlmsType;
+        HlmsTypes mDefaultHlmsType;
 
 #if !OGRE_NO_JSON
         StringVector mScriptPatterns;
 
     public:
         typedef map<String, String>::type ResourceToTexExtensionMap;
-        ResourceToTexExtensionMap   mAdditionalTextureExtensionsPerGroup;
-        HlmsJsonListener            *mJsonListener;
+        ResourceToTexExtensionMap         mAdditionalTextureExtensionsPerGroup;
+        HlmsJsonListener *                mJsonListener;
+
     protected:
 #endif
 
-        void renderSystemDestroyAllBlocks();
+        void   renderSystemDestroyAllBlocks();
         uint16 getFreeBasicBlock( uint8 type, BasicBlock *basicBlock );
-        void destroyBasicBlock( BasicBlock *block );
+        void   destroyBasicBlock( BasicBlock *block );
 
         template <typename T, HlmsBasicBlock type, size_t maxLimit>
-        T* getBasicBlock( typename vector<T>::type &container, const T &baseParams );
+        T *getBasicBlock( typename vector<T>::type &container, const T &baseParams );
 
         template <typename T>
-        const T* getDescriptorSet( typename set<T>::type &container, const T &baseParams,
-                                   void (*renderSysFunc)( RenderSystem*, T*) );
+        const T *getDescriptorSet( typename set<T>::type &container, const T &baseParams,
+                                   void ( *renderSysFunc )( RenderSystem *, T * ) );
         template <typename T>
         void destroyDescriptorSet( typename set<T>::type &container, const T *descSet,
-                                   void (*renderSysFunc)( RenderSystem*, T*) );
+                                   void ( *renderSysFunc )( RenderSystem *, T * ) );
 
     public:
         HlmsManager();
@@ -152,12 +158,12 @@ namespace Ogre
         void addReference( const BasicBlock *block );
 
         /// Returns a registered HLMS based on type. May be null.
-        Hlms* getHlms( HlmsTypes type )                 { return mRegisteredHlms[type]; }
+        Hlms *getHlms( HlmsTypes type ) { return mRegisteredHlms[type]; }
 
         /// Returns a registered HLMS based on name. May be null.
-        Hlms* getHlms( IdString name );
+        Hlms *getHlms( IdString name );
 
-        HlmsCompute* getComputeHlms()               { return mComputeHlms; }
+        HlmsCompute *getComputeHlms() { return mComputeHlms; }
 
         /** Creates a macroblock that matches the same parameter as the input.
             If it already exists, returns the existing one.
@@ -189,7 +195,7 @@ namespace Ogre
         @return
             Created or cached datablock with same parameters as baseParams
         */
-        const HlmsMacroblock* getMacroblock( const HlmsMacroblock &baseParams );
+        const HlmsMacroblock *getMacroblock( const HlmsMacroblock &baseParams );
 
         /// Destroys a macroblock created by HlmsManager::getMacroblock.
         /// Blocks are manually reference counted and calling this function will decrease the count.
@@ -206,7 +212,7 @@ namespace Ogre
 
         /// See HlmsManager::getMacroblock. This is the same for blend states
         /// The block's reference count will be increased. Use destroyBlendblock to decrease it.
-        const HlmsBlendblock* getBlendblock( const HlmsBlendblock &baseParams );
+        const HlmsBlendblock *getBlendblock( const HlmsBlendblock &baseParams );
 
         /// @see    destroyMacroblock
         void destroyBlendblock( const HlmsBlendblock *Blendblock );
@@ -218,21 +224,21 @@ namespace Ogre
             (i.e. specifying anisotropic level higher than 1, but no anisotropic filter)
             A warning on the log will be generated in such cases.
         */
-        const HlmsSamplerblock* getSamplerblock( HlmsSamplerblock baseParams );
+        const HlmsSamplerblock *getSamplerblock( HlmsSamplerblock baseParams );
 
         /// @See destroyMacroblock
         void destroySamplerblock( const HlmsSamplerblock *Samplerblock );
 
-        const DescriptorSetTexture* getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
-        void destroyDescriptorSetTexture( const DescriptorSetTexture *descSet );
-        const DescriptorSetTexture2* getDescriptorSetTexture2( const DescriptorSetTexture2 &baseParams );
+        const DescriptorSetTexture * getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
+        void                         destroyDescriptorSetTexture( const DescriptorSetTexture *descSet );
+        const DescriptorSetTexture2 *getDescriptorSetTexture2( const DescriptorSetTexture2 &baseParams );
         void destroyDescriptorSetTexture2( const DescriptorSetTexture2 *descSet );
 
-        const DescriptorSetSampler* getDescriptorSetSampler( const DescriptorSetSampler &baseParams );
-        void destroyDescriptorSetSampler( const DescriptorSetSampler *descSet );
+        const DescriptorSetSampler *getDescriptorSetSampler( const DescriptorSetSampler &baseParams );
+        void                        destroyDescriptorSetSampler( const DescriptorSetSampler *descSet );
 
-        const DescriptorSetUav* getDescriptorSetUav( const DescriptorSetUav &baseParams );
-        void destroyDescriptorSetUav( const DescriptorSetUav *descSet );
+        const DescriptorSetUav *getDescriptorSetUav( const DescriptorSetUav &baseParams );
+        void                    destroyDescriptorSetUav( const DescriptorSetUav *descSet );
 
         /** Always returns a unique ID for the given vertexElement / OperationType combination,
             necessary by Hlms to generate a unique PSO.
@@ -281,25 +287,25 @@ namespace Ogre
         @return
             Pointer to the datablock
         */
-        HlmsDatablock* getDatablock( IdString name ) const;
+        HlmsDatablock *getDatablock( IdString name ) const;
 
         /// @See getDatablock. Exactly the same, but returns null pointer if it wasn't found,
         /// instead of going fallback to default.
-        HlmsDatablock* getDatablockNoDefault( IdString name ) const;
+        HlmsDatablock *getDatablockNoDefault( IdString name ) const;
 
         /// Returns all registered datablocks. @see getDatablock,
         /// @see _datablockAdded, @see _datablockDestroyed
-        const HlmsDatablockMap& getDatablocks() const   { return mRegisteredDatablocks; }
+        const HlmsDatablockMap &getDatablocks() const { return mRegisteredDatablocks; }
 
         /// Alias function. @See getDatablock, as many beginners will probably think of the word
         /// "Material" first. Datablock is a more technical (and accurate) name of what it does
         /// (it's a block.. of data). Prefer calling getDatablock directly.
-        HlmsDatablock* getMaterial( IdString name ) const   { return getDatablock( name ); }
+        HlmsDatablock *getMaterial( IdString name ) const { return getDatablock( name ); }
 
-        void useDefaultDatablockFrom( HlmsTypes type )      { mDefaultHlmsType = type; }
+        void useDefaultDatablockFrom( HlmsTypes type ) { mDefaultHlmsType = type; }
 
         /// Datablock to use when another datablock failed or none was specified.
-        HlmsDatablock* getDefaultDatablock() const;
+        HlmsDatablock *getDefaultDatablock() const;
 
         /** Registers an HLMS provider. The type is retrieved from the provider. Two providers of
             the same type cannot be registered at the same time (@see HlmsTypes) and will throw
@@ -311,7 +317,7 @@ namespace Ogre
             unregistered or when this manager is destroyed. Otherwise it's caller's
             responsability to free the pointer.
         */
-        void registerHlms( Hlms *provider, bool deleteOnExit=true );
+        void registerHlms( Hlms *provider, bool deleteOnExit = true );
 
         /// Unregisters an HLMS provider of the given type. Does nothing if no provider was registered.
         /// @See registerHlms for details.
@@ -322,7 +328,7 @@ namespace Ogre
 
         void _changeRenderSystem( RenderSystem *newRs );
 
-        RenderSystem* getRenderSystem() const           { return mRenderSystem; }
+        RenderSystem *getRenderSystem() const { return mRenderSystem; }
 
 #if !OGRE_NO_JSON
         /** Opens a file containing a JSON string to load all Hlms materials from.
@@ -336,8 +342,7 @@ namespace Ogre
         @param filename
         @param groupName
         */
-        void loadMaterials( const String &filename, const String &groupName,
-                            HlmsJsonListener *listener,
+        void loadMaterials( const String &filename, const String &groupName, HlmsJsonListener *listener,
                             const String &additionalTextureExtension );
 
         /** Saves all materials of the registered Hlms at the given file location.
@@ -346,8 +351,7 @@ namespace Ogre
         @param filename
             Valid file path.
         */
-        void saveMaterials( HlmsTypes hlmsType,const String &filename,
-                            HlmsJsonListener *listener,
+        void saveMaterials( HlmsTypes hlmsType, const String &filename, HlmsJsonListener *listener,
                             const String &additionalTextureExtension );
 
         /** Saves a specific Hlms material at the given file location.
@@ -357,18 +361,17 @@ namespace Ogre
             Valid file path.
         */
         void saveMaterial( const HlmsDatablock *datablock, const String &filename,
-                           HlmsJsonListener *listener,
-                           const String &additionalTextureExtension );
+                           HlmsJsonListener *listener, const String &additionalTextureExtension );
 
-        //ScriptLoader overloads
-        void parseScript( DataStreamPtr &stream, const String &groupName ) override;
+        // ScriptLoader overloads
+        void                parseScript( DataStreamPtr &stream, const String &groupName ) override;
         const StringVector &getScriptPatterns() const override { return mScriptPatterns; }
-        Real getLoadingOrder() const override;
+        Real                getLoadingOrder() const override;
 #endif
 
         /// Gets the indices of active blocks
         /// @see    HlmsManager::_getBlocks
-        const BlockIdxVec& _getActiveBlocksIndices( const HlmsBasicBlock &blockType ) const;
+        const BlockIdxVec &_getActiveBlocksIndices( const HlmsBasicBlock &blockType ) const;
 
         /// Gets all blocks of a given type. This is an advanced function useful in retrieving
         /// all the Macroblocks, all the Blendblocks, and all the Samplerblocks currently in use.
@@ -384,27 +387,27 @@ namespace Ogre
         ///                                                                  macroblocks[*itor] );
         ///             ++itor;
         ///         }
-        BasicBlock const * const *  _getBlocks( const HlmsBasicBlock &blockType ) const;
+        BasicBlock const *const *_getBlocks( const HlmsBasicBlock &blockType ) const;
 
         /// Gets a macroblock based on its index. @see _getActiveBlocksIndices
         /// to get how which indices are active. @see _getBlocks to retrieve
         /// all types of block in a generic way.
-        const HlmsMacroblock* _getMacroblock( uint16 idx ) const;
+        const HlmsMacroblock *_getMacroblock( uint16 idx ) const;
 
         /// Gets a blendblock based on its index. @see _getActiveBlocksIndices
         /// to get how which indices are active. @see _getBlocks to retrieve
         /// all types of block in a generic way.
-        const HlmsBlendblock* _getBlendblock( uint16 idx ) const;
+        const HlmsBlendblock *_getBlendblock( uint16 idx ) const;
 
         /// Gets a samplerblock based on its index. @see _getActiveBlocksIndices
         /// to get how which indices are active. @see _getBlocks to retrieve
         /// all types of block in a generic way.
-        const HlmsSamplerblock* _getSamplerblock( uint16 idx ) const;
+        const HlmsSamplerblock *_getSamplerblock( uint16 idx ) const;
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 //#include "OgreHeaderSuffix.h"
 

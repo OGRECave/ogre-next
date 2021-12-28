@@ -31,21 +31,21 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreRenderQueue.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup RenderSystem
-    *  @{
-    */
+     *  @{
+     */
     /** Abstract interface which classes must implement if they wish to receive
-        events from the render queue. 
+        events from the render queue.
     @remarks
         The OGRE render queue is divided into several queue groups, as defined by
         uint8. A class may implement this interface, and register itself
         as a listener by calling SceneManager::addRenderQueueListener. After doing so,
-        the class will receive an event before and after each queue group is sent to 
+        the class will receive an event before and after each queue group is sent to
         the rendering system.
     @par
         The event listeners have an option to make a queue either be skipped, or to repeat.
@@ -58,42 +58,50 @@ namespace Ogre {
     public:
         virtual ~RenderQueueListener() {}
 
-        /** Event raised before a queue group is rendered. 
+        /** Event raised before a queue group is rendered.
         @remarks
             This method is called by the SceneManager before each queue group is
-            rendered. 
+            rendered.
         @param queueGroupId The id of the queue group which is about to be rendered
-        @param invocation Name of the invocation which is causing this to be 
+        @param invocation Name of the invocation which is causing this to be
             called (@see RenderQueueInvocation)
-        @param skipThisInvocation A boolean passed by reference which is by default set to 
+        @param skipThisInvocation A boolean passed by reference which is by default set to
             false. If the event sets this to true, the queue will be skipped and not
             rendered. Note that in this case the renderQueueEnded event will not be raised
             for this queue group.
         */
-        virtual void renderQueueStarted( RenderQueue *rq, uint8 queueGroupId, const String& invocation, 
-                                         bool& skipThisInvocation)
-        { (void)rq; (void)queueGroupId; (void)invocation; (void)skipThisInvocation; }
+        virtual void renderQueueStarted( RenderQueue *rq, uint8 queueGroupId, const String &invocation,
+                                         bool &skipThisInvocation )
+        {
+            (void)rq;
+            (void)queueGroupId;
+            (void)invocation;
+            (void)skipThisInvocation;
+        }
 
-        /** Event raised after a queue group is rendered. 
+        /** Event raised after a queue group is rendered.
         @remarks
             This method is called by the SceneManager after each queue group is
-            rendered. 
+            rendered.
         @param queueGroupId The id of the queue group which has just been rendered
-        @param invocation Name of the invocation which is causing this to be 
+        @param invocation Name of the invocation which is causing this to be
             called (@see RenderQueueInvocation)
-        @param repeatThisInvocation A boolean passed by reference which is by default set to 
+        @param repeatThisInvocation A boolean passed by reference which is by default set to
             false. If the event sets this to true, the queue which has just been
             rendered will be repeated, and the renderQueueStarted and renderQueueEnded
             events will also be fired for it again.
         */
-        virtual void renderQueueEnded(uint8 queueGroupId, const String& invocation, 
-            bool& repeatThisInvocation)
-        { (void)queueGroupId; (void)invocation; (void)repeatThisInvocation; }
+        virtual void renderQueueEnded( uint8 queueGroupId, const String &invocation,
+                                       bool &repeatThisInvocation )
+        {
+            (void)queueGroupId;
+            (void)invocation;
+            (void)repeatThisInvocation;
+        }
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif
-

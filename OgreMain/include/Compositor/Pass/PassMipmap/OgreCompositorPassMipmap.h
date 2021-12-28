@@ -29,10 +29,10 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassMipmap_H_
 #define _OgreCompositorPassMipmap_H_
 
-#include "OgreHeaderPrefix.h"
-
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/Pass/PassMipmap/OgreCompositorPassMipmapDef.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -56,7 +56,7 @@ namespace Ogre
         TextureGpuVec mTextures;
 
         /// Compute
-        TextureGpuVec mTmpTextures;
+        TextureGpuVec               mTmpTextures;
         FastArray<HlmsComputeJob *> mJobs;
 
         bool mWarnedNoAutomipmapsAlready;

@@ -30,96 +30,102 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreRenderOperation.h"
 #include "OgreMovableObject.h"
+#include "OgreRenderOperation.h"
 #include "OgreRenderable.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Scene
-    *  @{
-    */
-    /** Allows the rendering of a simple 2D rectangle
-    This class renders a simple 2D rectangle; this rectangle has no depth and
-    therefore is best used with 'depth_write off' materials.
-    @par
-    Beginning Ogre 2.0, it supports building a full screen triangle instead
-    of rectangle. Position & UVs are in the first source. Normals are in the second one
-    */
-    class _OgreExport Rectangle2D : public Renderable, public MovableObject
+namespace Ogre
+{
+    namespace v1
     {
-    protected:
-        Vector3     mPosition;
-        Quaternion  mOrientation;
-        Vector3     mScale;
-
-        bool        mQuad;
-
-        RenderOperation mRenderOp;
-
-    public:
-        Rectangle2D( bool bQuad, IdType id, ObjectMemoryManager *objectMemoryManager,
-                     SceneManager *manager );
-        ~Rectangle2D() override;
-
-        /** @copydoc MovableObject::_releaseManualHardwareResources */
-        void _releaseManualHardwareResources() override;
-        /** @copydoc MovableObject::_restoreManualHardwareResources */
-        void _restoreManualHardwareResources() override;
-
-        /** Sets the corners of the rectangle, in relative coordinates.
-        @param
-        left Left position in screen normalized coordinates, 0 = left edge, 1 = right edge
-        @param top Top position in screen normalized coordinates, 0 = top edge, 1 = bottom edge
-        @param width Width in screen normalized coordinates
-        @param height Height in screen normalized coordinates
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Scene
+         *  @{
+         */
+        /** Allows the rendering of a simple 2D rectangle
+        This class renders a simple 2D rectangle; this rectangle has no depth and
+        therefore is best used with 'depth_write off' materials.
+        @par
+        Beginning Ogre 2.0, it supports building a full screen triangle instead
+        of rectangle. Position & UVs are in the first source. Normals are in the second one
         */
-        void setCorners( Real left, Real top, Real width, Real height );
+        class _OgreExport Rectangle2D : public Renderable, public MovableObject
+        {
+        protected:
+            Vector3    mPosition;
+            Quaternion mOrientation;
+            Vector3    mScale;
 
-        /** Sets the normals of the rectangle
-        @remarks
-            Be careful the normals can be bilinearly interpolated correctly, otherwise the
-            results between Fullscreen Triangles & Fullscreen Quads will be different
-        */
-        void setNormals( const Ogre::Vector3 &topLeft, const Ogre::Vector3 &bottomLeft,
-                        const Ogre::Vector3 &topRight, const Ogre::Vector3 &bottomRight );
+            bool mQuad;
 
-        Real getSquaredViewDepth(const Camera* cam) const   { (void)cam; return 0; }
+            RenderOperation mRenderOp;
 
-        void getWorldTransforms( Matrix4* xform ) const override;
-        void getRenderOperation( RenderOperation& op, bool casterPass ) override;
-        const LightList& getLights() const override;
+        public:
+            Rectangle2D( bool bQuad, IdType id, ObjectMemoryManager *objectMemoryManager,
+                         SceneManager *manager );
+            ~Rectangle2D() override;
 
-        /** Returns the type name of this object. */
-        const String& getMovableType() const override;
-    };
+            /** @copydoc MovableObject::_releaseManualHardwareResources */
+            void _releaseManualHardwareResources() override;
+            /** @copydoc MovableObject::_restoreManualHardwareResources */
+            void _restoreManualHardwareResources() override;
 
-    /** Factory object for creating Entity instances */
-    class _OgreExport Rectangle2DFactory final : public MovableObjectFactory
-    {
-    protected:
-        MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *manager,
-                                           const NameValuePairList *params = 0 ) override;
+            /** Sets the corners of the rectangle, in relative coordinates.
+            @param
+            left Left position in screen normalized coordinates, 0 = left edge, 1 = right edge
+            @param top Top position in screen normalized coordinates, 0 = top edge, 1 = bottom edge
+            @param width Width in screen normalized coordinates
+            @param height Height in screen normalized coordinates
+            */
+            void setCorners( Real left, Real top, Real width, Real height );
 
-    public:
-        Rectangle2DFactory() {}
-        ~Rectangle2DFactory() override {}
+            /** Sets the normals of the rectangle
+            @remarks
+                Be careful the normals can be bilinearly interpolated correctly, otherwise the
+                results between Fullscreen Triangles & Fullscreen Quads will be different
+            */
+            void setNormals( const Ogre::Vector3 &topLeft, const Ogre::Vector3 &bottomLeft,
+                             const Ogre::Vector3 &topRight, const Ogre::Vector3 &bottomRight );
 
-        static String FACTORY_TYPE_NAME;
+            Real getSquaredViewDepth( const Camera *cam ) const
+            {
+                (void)cam;
+                return 0;
+            }
 
-        const String &getType() const override;
-        void destroyInstance( MovableObject *obj ) override;
-    };
+            void             getWorldTransforms( Matrix4 *xform ) const override;
+            void             getRenderOperation( RenderOperation &op, bool casterPass ) override;
+            const LightList &getLights() const override;
 
-    /** @} */
-    /** @} */
+            /** Returns the type name of this object. */
+            const String &getMovableType() const override;
+        };
 
-}
-}// namespace
+        /** Factory object for creating Entity instances */
+        class _OgreExport Rectangle2DFactory final : public MovableObjectFactory
+        {
+        protected:
+            MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                               SceneManager *           manager,
+                                               const NameValuePairList *params = 0 ) override;
+
+        public:
+            Rectangle2DFactory() {}
+            ~Rectangle2DFactory() override {}
+
+            static String FACTORY_TYPE_NAME;
+
+            const String &getType() const override;
+
+            void destroyInstance( MovableObject *obj ) override;
+        };
+
+        /** @} */
+        /** @} */
+
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

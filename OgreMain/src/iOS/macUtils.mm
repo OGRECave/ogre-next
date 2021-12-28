@@ -32,45 +32,43 @@ THE SOFTWARE.
 #include "OgreString.h"
 #include "macUtils.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     // Basically a dummy function.  Dynamic libraries aren't supported on iOS
-    void* mac_loadDylib(const char* name)
-    {
-        return NULL;
-    }
+    void *mac_loadDylib( const char *name ) { return NULL; }
 
     String macBundlePath()
     {
         char path[PATH_MAX];
         CFBundleRef mainBundle = CFBundleGetMainBundle();
-        assert(mainBundle);
-        
-        CFURLRef mainBundleURL = CFBundleCopyBundleURL(mainBundle);
-        assert(mainBundleURL);
-        
-        CFStringRef cfStringRef = CFURLCopyFileSystemPath( mainBundleURL, kCFURLPOSIXPathStyle);
-        assert(cfStringRef);
-        
-        CFStringGetFileSystemRepresentation(cfStringRef, path, PATH_MAX);
-        
-        CFRelease(mainBundleURL);
-        CFRelease(cfStringRef);
-        
-        return String(path);
+        assert( mainBundle );
+
+        CFURLRef mainBundleURL = CFBundleCopyBundleURL( mainBundle );
+        assert( mainBundleURL );
+
+        CFStringRef cfStringRef = CFURLCopyFileSystemPath( mainBundleURL, kCFURLPOSIXPathStyle );
+        assert( cfStringRef );
+
+        CFStringGetFileSystemRepresentation( cfStringRef, path, PATH_MAX );
+
+        CFRelease( mainBundleURL );
+        CFRelease( cfStringRef );
+
+        return String( path );
     }
-    
+
     String iOSDocumentsDirectory()
     {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSArray *paths =
+            NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
         NSString *documentsDirectory = [paths objectAtIndex:0];
-        
-        return String([documentsDirectory fileSystemRepresentation]);
+
+        return String( [documentsDirectory fileSystemRepresentation] );
     }
 
     String macCachePath()
     {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSArray *paths = NSSearchPathForDirectoriesInDomains( NSCachesDirectory, NSUserDomainMask, YES );
         NSString *cachesDirectory = [paths objectAtIndex:0];
         NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
 
@@ -81,13 +79,14 @@ namespace Ogre {
     {
         NSString *tempFilePath;
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        for (;;) {
+        for( ;; )
+        {
             NSString *baseName = [NSString stringWithFormat:@"tmp-%x", arc4random()];
             tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:baseName];
-            if (![fileManager fileExistsAtPath:tempFilePath])
+            if( ![fileManager fileExistsAtPath:tempFilePath] )
                 break;
         }
-        return String([tempFilePath fileSystemRepresentation]);
+        return String( [tempFilePath fileSystemRepresentation] );
     }
 
 }

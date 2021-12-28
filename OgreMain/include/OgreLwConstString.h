@@ -34,19 +34,19 @@
 #define _OgreLwConstString_H_
 
 #include "OgrePrerequisites.h"
+
 #include <assert.h>
 #include <string.h>
 #include <algorithm>
 
-#if !defined( _MSC_VER ) || (_MSC_VER > 1600)
-    #include <stdint.h>
+#if !defined( _MSC_VER ) || ( _MSC_VER > 1600 )
+#    include <stdint.h>
 #endif
 #include <stdio.h>
 
-
 #ifdef _MSC_VER
-    #pragma warning( push ) // CRT deprecation
-    #pragma warning( disable : 4996 )
+#    pragma warning( push )  // CRT deprecation
+#    pragma warning( disable : 4996 )
 #endif
 
 namespace Ogre
@@ -63,12 +63,13 @@ namespace Ogre
     class _OgreExport LwConstString
     {
         friend class LwString;
+
     protected:
 #if OGRE_DEBUG_MODE
-        char const *WarningHeader;
+        char const *       WarningHeader;
         static const char *WarningHeaderConst;
 #endif
-        char *mStrPtr;
+        char * mStrPtr;
         size_t mSize;
 
         /// Unlike the std lib, mCapacity is ALWAYS going to be mSize < mCapacity
@@ -77,12 +78,12 @@ namespace Ogre
 
     public:
         LwConstString( const char *inStr, size_t maxLength ) :
-            mStrPtr( const_cast<char*>( inStr ) ),
+            mStrPtr( const_cast<char *>( inStr ) ),
             mSize( strnlen( inStr, maxLength ) ),
             mCapacity( maxLength )
         {
-            //mSize < mCapacity and not mSize <= mCapacity
-            //because we need to account the null terminator
+            // mSize < mCapacity and not mSize <= mCapacity
+            // because we need to account the null terminator
             assert( mSize < mCapacity );
 #if OGRE_DEBUG_MODE
             WarningHeader = WarningHeaderConst;
@@ -94,22 +95,19 @@ namespace Ogre
             return LwConstString( cStr, strlen( cStr ) + 1 );
         }
 
-        const char *c_str() const
-        {
-            return mStrPtr;
-        }
+        const char *c_str() const { return mStrPtr; }
 
-        size_t size() const         { return mSize; }
-        size_t capacity() const     { return mCapacity; }
+        size_t size() const { return mSize; }
+        size_t capacity() const { return mCapacity; }
 
-        const char* begin() const   { return mStrPtr; }
-        const char* end() const     { return mStrPtr + mSize; }
+        const char *begin() const { return mStrPtr; }
+        const char *end() const { return mStrPtr + mSize; }
 
         size_t find( const char *val, size_t pos = 0 ) const
         {
             pos = std::min( pos, mSize );
             const char *result = strstr( mStrPtr + pos, val );
-            return result ? result - mStrPtr : (size_t)(~0);
+            return result ? result - mStrPtr : ( size_t )( ~0 );
         }
 
         size_t find( const LwConstString *val, size_t pos = 0 ) const
@@ -121,21 +119,21 @@ namespace Ogre
         {
             pos = std::min( pos, mSize );
             const char *result = strchr( mStrPtr + pos, c );
-            return result ? result - mStrPtr : (size_t)(~0);
+            return result ? result - mStrPtr : ( size_t )( ~0 );
         }
 
         size_t find_first_of( const char *val, size_t pos = 0 ) const
         {
             pos = std::min( pos, mSize );
             const char *result = strpbrk( mStrPtr + pos, val );
-            return result ? result - mStrPtr : (size_t)(~0);
+            return result ? result - mStrPtr : ( size_t )( ~0 );
         }
 
         size_t find_last_of( char c, size_t pos = ~0 ) const
         {
-            size_t retVal = size_t(~0);
+            size_t retVal = size_t( ~0 );
 
-            size_t curr = 0;
+            size_t      curr = 0;
             const char *s = mStrPtr;
             do
             {
@@ -147,63 +145,51 @@ namespace Ogre
             return retVal;
         }
 
-        bool operator == ( const LwConstString &other ) const
+        bool operator==( const LwConstString &other ) const
         {
             return strcmp( mStrPtr, other.mStrPtr ) == 0;
         }
 
-        bool operator != ( const LwConstString &other ) const
+        bool operator!=( const LwConstString &other ) const
         {
             return strcmp( mStrPtr, other.mStrPtr ) != 0;
         }
 
-        bool operator < ( const LwConstString &other ) const
+        bool operator<( const LwConstString &other ) const
         {
             return strcmp( mStrPtr, other.mStrPtr ) < 0;
         }
 
-        bool operator > ( const LwConstString &other ) const
+        bool operator>( const LwConstString &other ) const
         {
             return strcmp( mStrPtr, other.mStrPtr ) > 0;
         }
 
-        bool operator == ( const char *other ) const
-        {
-            return strcmp( mStrPtr, other ) == 0;
-        }
+        bool operator==( const char *other ) const { return strcmp( mStrPtr, other ) == 0; }
 
-        bool operator != ( const char *other ) const
-        {
-            return strcmp( mStrPtr, other ) != 0;
-        }
+        bool operator!=( const char *other ) const { return strcmp( mStrPtr, other ) != 0; }
 
-        bool operator < ( const char *other ) const
-        {
-            return strcmp( mStrPtr, other ) < 0;
-        }
+        bool operator<( const char *other ) const { return strcmp( mStrPtr, other ) < 0; }
 
-        bool operator > ( const char *other ) const
-        {
-            return strcmp( mStrPtr, other ) > 0;
-        }
+        bool operator>( const char *other ) const { return strcmp( mStrPtr, other ) > 0; }
 
     private:
         // Forbidden calls
         // Assignment.
 #if __cplusplus >= 201103L
-        LwConstString& operator = ( const LwConstString &other ) = delete;
+        LwConstString &operator=( const LwConstString &other ) = delete;
 #else
-        LwConstString& operator = ( const LwConstString &other )
+        LwConstString &operator=( const LwConstString &other )
         {
             assert( false && "Can't call asignment operator!" );
             return *this;
         }
 #endif
     };
-}
+}  // namespace Ogre
 
 #ifdef _MSC_VER
-    #pragma warning( pop )
+#    pragma warning( pop )
 #endif
 
 #endif

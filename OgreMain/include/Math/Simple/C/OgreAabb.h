@@ -29,20 +29,20 @@ THE SOFTWARE.
 #define __C_Aabb_H__
 
 #ifndef __Aabb_H__
-    #error "Don't include this file directly. include Math/Simple/OgreAabb.h"
+#    error "Don't include this file directly. include Math/Simple/OgreAabb.h"
 #endif
 
-#include "OgreVector3.h"
 #include "OgreMatrix4.h"
+#include "OgreVector3.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** AoS (array of structures) version of ArrayAabb. This class also deprecates
         AxisAlignedBox. It's A 3D box aligned with the x/y/z axes.
         @par
@@ -77,30 +77,24 @@ namespace Ogre
 
     struct _OgreExport Aabb
     {
-        Ogre::Vector3       mCenter;
-        Ogre::Vector3       mHalfSize;
+        Ogre::Vector3 mCenter;
+        Ogre::Vector3 mHalfSize;
 
-        Aabb() :
-            mCenter( Vector3::ZERO ),
-            mHalfSize( Vector3::ZERO )
-        {
-        }
+        Aabb() : mCenter( Vector3::ZERO ), mHalfSize( Vector3::ZERO ) {}
         /*Aabb( const AxisAlignedBox &aab ) :
                     mCenter( aab.getCenter() ),
                     m_index( aab.getHalfSize() )
         {
         }*/
-        Aabb( const Vector3 &center, const Vector3 &halfSize ) :
-                    mCenter( center ),
-                    mHalfSize( halfSize )
+        Aabb( const Vector3 &center, const Vector3 &halfSize ) : mCenter( center ), mHalfSize( halfSize )
         {
         }
 
         /// Sets both minimum and maximum extents at once.
-        inline void setExtents( const Vector3& min, const Vector3& max );
+        inline void setExtents( const Vector3 &min, const Vector3 &max );
 
         /// Sets both minimum and maximum extents at once (static version).
-        inline static Aabb newFromExtents( const Vector3& min, const Vector3& max );
+        inline static Aabb newFromExtents( const Vector3 &min, const Vector3 &max );
 
         /// Gets the minimum corner of the box.
         inline Vector3 getMinimum() const;
@@ -114,10 +108,10 @@ namespace Ogre
         /** Merges the passed in box into the current box. The result is the
             box which encompasses both.
         */
-        inline void merge( const Aabb& rhs );
+        inline void merge( const Aabb &rhs );
 
         /// Extends the box to encompass the specified point (if needed).
-        inline void merge( const Vector3& points );
+        inline void merge( const Vector3 &points );
 
         /** Transforms the box according to the matrix supplied.
         @remarks
@@ -133,10 +127,10 @@ namespace Ogre
         inline void transformAffine( const Matrix4 &matrix );
 
         /// Returns whether or not this box intersects another.
-        inline bool intersects( const Aabb& b2 ) const;
+        inline bool intersects( const Aabb &b2 ) const;
 
         /// Calculate the area of intersection of this box and another
-        inline Aabb intersection( const Aabb& b2 ) const;
+        inline Aabb intersection( const Aabb &b2 ) const;
 
         /// Calculate the volume of this box
         inline Real volume() const;
@@ -159,19 +153,19 @@ namespace Ogre
         /// Returns the radius of a sphere enclosing the aabb from origin as center
         inline Real getRadiusOrigin() const;
 
-        inline bool operator == ( const Aabb &_r ) const;
-        inline bool operator != ( const Aabb &_r ) const;
+        inline bool operator==( const Aabb &_r ) const;
+        inline bool operator!=( const Aabb &_r ) const;
 
         static const Aabb BOX_INFINITE;
         static const Aabb BOX_NULL;
 
-        //Contains all zeroes. Used for inactive objects to avoid causing unnecessary NaNs
+        // Contains all zeroes. Used for inactive objects to avoid causing unnecessary NaNs
         static const Aabb BOX_ZERO;
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreAabb.inl"
 

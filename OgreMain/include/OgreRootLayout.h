@@ -56,6 +56,7 @@ namespace Ogre
         DescBindingRange();
 
         size_t getNumUsedSlots() const { return end - start; }
+
         bool isInUse() const { return start < end; }
         bool isValid() const { return start <= end; }
 
@@ -394,12 +395,12 @@ namespace Ogre
             }
 
             static ArrayDesc fromKey( uint32 x ) { return ArrayDesc( x >> 16u, x & 0x0000FFFFu ); }
-            uint32 toKey() const { return uint32( bindingIdx << 16u ) | arraySize; }
+            uint32           toKey() const { return uint32( bindingIdx << 16u ) | arraySize; }
         };
 
-        bool mCompute;
-        uint8 mParamsBuffStages;
-        bool mBaked[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS];
+        bool             mCompute;
+        uint8            mParamsBuffStages;
+        bool             mBaked[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS];
         DescBindingRange mDescBindingRanges[OGRE_MAX_NUM_BOUND_DESCRIPTOR_SETS]
                                            [DescBindingTypes::NumDescBindingTypes];
 

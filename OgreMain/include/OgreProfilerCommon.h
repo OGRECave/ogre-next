@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE-Next
-	(Object-oriented Graphics Rendering Engine)
+    (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2018 Torus Knot Software Ltd
@@ -31,13 +31,13 @@ THE SOFTWARE.
 
 namespace ProfileSampleFlags
 {
-	enum ProfileSampleFlags
-	{
-		/// Default behaviour
-		FlagsNone = 0,
-		/// Search parent for same-named samples and merge timing instead of adding a new sample
-		Aggregate
-	};
+    enum ProfileSampleFlags
+    {
+        /// Default behaviour
+        FlagsNone = 0,
+        /// Search parent for same-named samples and merge timing instead of adding a new sample
+        Aggregate
+    };
 }
 
 #endif

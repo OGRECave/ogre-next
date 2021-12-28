@@ -29,51 +29,52 @@ THE SOFTWARE.
 #define __RENDERSYSTEMCAPABILITIESMANAGER_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreSingleton.h"
+
 #include "OgreHeaderPrefix.h"
 
-
-namespace Ogre {
-
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup RenderSystem
-    *  @{
-    */
+     *  @{
+     */
     /** Class for managing RenderSystemCapabilities database for Ogre.
-        @remarks This class behaves similarly to other ResourceManager, although .rendercaps are not resources.
-                        It contains and abstract a .rendercaps Serializer
+        @remarks This class behaves similarly to other ResourceManager, although .rendercaps are not
+       resources. It contains and abstract a .rendercaps Serializer
     */
-    class _OgreExport RenderSystemCapabilitiesManager :  public Singleton<RenderSystemCapabilitiesManager>, public RenderSysAlloc
+    class _OgreExport RenderSystemCapabilitiesManager
+        : public Singleton<RenderSystemCapabilitiesManager>,
+          public RenderSysAlloc
     {
-
     public:
-
         /** Default constructor.
-        */
+         */
         RenderSystemCapabilitiesManager();
 
         /** Default destructor.
-        */
+         */
         virtual ~RenderSystemCapabilitiesManager();
 
-
         /** @see ScriptLoader::parseScript
-        */
-        void parseCapabilitiesFromArchive(const String& filename, const String& archiveType, bool recursive = true);
-        
-        /** Returns a capability loaded with RenderSystemCapabilitiesManager::parseCapabilitiesFromArchive method
-        * @return NULL if the name is invalid, a parsed RenderSystemCapabilities otherwise.
-        */
-        RenderSystemCapabilities* loadParsedCapabilities(const String& name);
+         */
+        void parseCapabilitiesFromArchive( const String &filename, const String &archiveType,
+                                           bool recursive = true );
+
+        /** Returns a capability loaded with
+         * RenderSystemCapabilitiesManager::parseCapabilitiesFromArchive method
+         * @return NULL if the name is invalid, a parsed RenderSystemCapabilities otherwise.
+         */
+        RenderSystemCapabilities *loadParsedCapabilities( const String &name );
 
         /** Access to the internal map of loaded capabilities */
-        const map<String, RenderSystemCapabilities*>::type &getCapabilities() const;
+        const map<String, RenderSystemCapabilities *>::type &getCapabilities() const;
 
         /** Method used by RenderSystemCapabilitiesSerializer::parseScript */
-        void _addRenderSystemCapabilities(const String& name, RenderSystemCapabilities* caps);
+        void _addRenderSystemCapabilities( const String &name, RenderSystemCapabilities *caps );
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -90,7 +91,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static RenderSystemCapabilitiesManager& getSingleton();
+        static RenderSystemCapabilitiesManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -106,22 +107,20 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static RenderSystemCapabilitiesManager* getSingletonPtr();
+        static RenderSystemCapabilitiesManager *getSingletonPtr();
 
     protected:
+        RenderSystemCapabilitiesSerializer *mSerializer;
 
-        RenderSystemCapabilitiesSerializer* mSerializer;
-
-        typedef map<String, RenderSystemCapabilities*>::type CapabilitiesMap;
-        CapabilitiesMap mCapabilitiesMap;
+        typedef map<String, RenderSystemCapabilities *>::type CapabilitiesMap;
+        CapabilitiesMap                                       mCapabilitiesMap;
 
         const String mScriptPattern;
-
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

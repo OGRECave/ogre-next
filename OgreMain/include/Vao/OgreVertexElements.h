@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 // Precompiler options
 #include "OgrePrerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -75,9 +76,9 @@ namespace Ogre
         VET_FLOAT4 = 3,
         /// alias to more specific colour type - use the current rendersystem's colour packing
         VET_COLOUR = 4,
-        //VET_SHORT1 = 5,   Deprecated for being invalid
+        // VET_SHORT1 = 5,   Deprecated for being invalid
         VET_SHORT2 = 6,
-        //VET_SHORT3 = 7,   Deprecated for being invalid
+        // VET_SHORT3 = 7,   Deprecated for being invalid
         VET_SHORT4 = 8,
         VET_UBYTE4 = 9,
         /// D3D style compact colour
@@ -88,9 +89,9 @@ namespace Ogre
         VET_DOUBLE2 = 13,
         VET_DOUBLE3 = 14,
         VET_DOUBLE4 = 15,
-        VET_USHORT1_DEPRECATED = 16, // Deprecated for being invalid
+        VET_USHORT1_DEPRECATED = 16,  // Deprecated for being invalid
         VET_USHORT2 = 17,
-        VET_USHORT3_DEPRECATED = 18, // Deprecated for being invalid
+        VET_USHORT3_DEPRECATED = 18,  // Deprecated for being invalid
         VET_USHORT4 = 19,
         VET_INT1 = 20,
         VET_INT2 = 21,
@@ -100,17 +101,17 @@ namespace Ogre
         VET_UINT2 = 25,
         VET_UINT3 = 26,
         VET_UINT4 = 27,
-        VET_BYTE4 = 28, // signed bytes
-        VET_BYTE4_SNORM = 29,  // signed normalized bytes
-        VET_UBYTE4_NORM = 30,  // unsigned normalized bytes
-        VET_SHORT2_SNORM = 31, // signed normalized shorts
+        VET_BYTE4 = 28,         // signed bytes
+        VET_BYTE4_SNORM = 29,   // signed normalized bytes
+        VET_UBYTE4_NORM = 30,   // unsigned normalized bytes
+        VET_SHORT2_SNORM = 31,  // signed normalized shorts
         VET_SHORT4_SNORM = 32,
-        VET_USHORT2_NORM = 33, // unsigned normalized shorts
+        VET_USHORT2_NORM = 33,  // unsigned normalized shorts
         VET_USHORT4_NORM = 34,
         VET_HALF2 = 35,
         VET_HALF4 = 36
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __Aabb_H__
 #define __Aabb_H__
 
-//This file is a proxy, it redirects to the proper file depending on platform
+// This file is a proxy, it redirects to the proper file depending on platform
 #include "../Array/OgreArrayConfig.h"
 
 /*#if OGRE_CPU == OGRE_CPU_X86 && defined( OGRE_USE_SIMD )
@@ -38,7 +38,7 @@ THE SOFTWARE.
         #include "SSE2/Single/OgreAabb.h"
     #endif
 #else*/
-    #include "C/OgreAabb.h"
+#include "C/OgreAabb.h"
 //#endif
 
 #endif

@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTextureGpuFilter_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgrePixelFormatGpu.h"
 
 #include "OgreHeaderPrefix.h"
@@ -37,120 +38,122 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     namespace TextureFilter
     {
         class FilterBase;
     }
-    typedef FastArray<TextureFilter::FilterBase*> FilterBaseArray;
+    typedef FastArray<TextureFilter::FilterBase *> FilterBaseArray;
 
-namespace TextureFilter
-{
-    enum FilterTypes
+    namespace TextureFilter
     {
-        TypeGenerateSwMipmaps               = 1u << 0u,
-        TypeGenerateHwMipmaps               = 1u << 1u,
-        TypePrepareForNormalMapping         = 1u << 2u,
-        TypeLeaveChannelR                   = 1u << 3u,
+        enum FilterTypes
+        {
+            // clang-format off
+            TypeGenerateSwMipmaps               = 1u << 0u,
+            TypeGenerateHwMipmaps               = 1u << 1u,
+            TypePrepareForNormalMapping         = 1u << 2u,
+            TypeLeaveChannelR                   = 1u << 3u,
+            // clang-format on
 
-        TypeGenerateDefaultMipmaps          = TypeGenerateSwMipmaps|TypeGenerateHwMipmaps
-    };
+            TypeGenerateDefaultMipmaps = TypeGenerateSwMipmaps | TypeGenerateHwMipmaps
+        };
 
-    class _OgreExport FilterBase : public ResourceAlloc
-    {
-    public:
-        virtual ~FilterBase();
+        class _OgreExport FilterBase : public ResourceAlloc
+        {
+        public:
+            virtual ~FilterBase();
 
-        /// Gets executed from worker thread, right after the Image was loaded from
-        /// file and we're done setting the metadata to the Texture. Beware the
-        /// texture may or may not have been transitioned to resident yet (it's
-        /// likely not resident, but 2nd face and onwards of cubemaps will be
-        /// resident)
-        virtual void _executeStreaming( Image2 &image, TextureGpu *texture ) {}
+            /// Gets executed from worker thread, right after the Image was loaded from
+            /// file and we're done setting the metadata to the Texture. Beware the
+            /// texture may or may not have been transitioned to resident yet (it's
+            /// likely not resident, but 2nd face and onwards of cubemaps will be
+            /// resident)
+            virtual void _executeStreaming( Image2 &image, TextureGpu *texture ) {}
 
-        /// Gets executed after the TextureGpu is fully resident and fully loaded.
-        /// (except for the steps this filter is supposed to do)
-        virtual void _executeSerial( TextureGpu *texture ) {}
+            /// Gets executed after the TextureGpu is fully resident and fully loaded.
+            /// (except for the steps this filter is supposed to do)
+            virtual void _executeSerial( TextureGpu *texture ) {}
 
-    protected:
-        /**
-        @param filters
-        @return
-            See DefaultMipmapGen::DefaultMipmapGen
-        */
-        static uint8 selectMipmapGen( uint32 filters, const Image2 &image,
-                                      PixelFormatGpu finalPixelFormat,
-                                      const TextureGpuManager *textureManager );
+        protected:
+            /**
+            @param filters
+            @return
+                See DefaultMipmapGen::DefaultMipmapGen
+            */
+            static uint8 selectMipmapGen( uint32 filters, const Image2 &image,
+                                          PixelFormatGpu           finalPixelFormat,
+                                          const TextureGpuManager *textureManager );
 
-    public:
-        static void createFilters( uint32 filters, FilterBaseArray &outFilters,
-                                   const TextureGpu *texture, const Image2 &image,
-                                   bool toSysRam );
-        static void destroyFilters( FilterBaseArray &inOutFilters );
+        public:
+            static void createFilters( uint32 filters, FilterBaseArray &outFilters,
+                                       const TextureGpu *texture, const Image2 &image, bool toSysRam );
+            static void destroyFilters( FilterBaseArray &inOutFilters );
 
-        /// Simulates as if the given filters were applied, producing
-        /// the resulting number mipmaps & PixelFormat
-        ///
-        /// When a TextureGpu transitions OnStorage -> Resident, we use the metadata
-        /// cache and later compare if the cache was up to date.
-        /// To check if it's up to date, we need to know the final number of mipmaps
-        /// and final pixel format. Thus this function is needed in this case.
-        ///
-        /// However then transitioning OnStorage -> OnSystemRam, the cache is not
-        /// used, because A. the metadata is not needed (it cannot optimize the
-        /// shader) and B. the number of mipmaps may not match.
-        /// This can happen because the HW mipmap filter won't be run.
-        /// This function is not needed in such case.
-        ///
-        /// When transitioning OnSystemRam -> Resident, we already have all the
-        /// metadata except for the mipmaps, as the HW mipmap filter will be run.
-        /// Thus we need this function so we can set the number of mipmaps
-        /// to the final value, immediately transition to Resident, and start
-        /// loading the image on the background thread without ping-pong.
-        static void simulateFiltersForCacheConsistency( uint32 filters, const Image2 &image,
-                                                        const TextureGpuManager *textureGpuManager,
-                                                        uint8 &inOutNumMipmaps,
-                                                        PixelFormatGpu &inOutPixelFormat );
-    };
-    //-----------------------------------------------------------------------------------
-    class _OgreExport GenerateSwMipmaps : public FilterBase
-    {
-    public:
-        /// See Image2::Filter
-        static uint32 getFilter( const Image2 &image );
-        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
-    };
-    //-----------------------------------------------------------------------------------
-    class _OgreExport GenerateHwMipmaps : public FilterBase
-    {
-        bool mNeedsMipmaps;
-    public:
-        GenerateHwMipmaps() : mNeedsMipmaps( false ) {}
-        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
-        void _executeSerial( TextureGpu *texture ) override;
-    };
-    //-----------------------------------------------------------------------------------
-    class _OgreExport PrepareForNormalMapping : public FilterBase
-    {
-    public:
-        static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
-        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
-    };
-    //-----------------------------------------------------------------------------------
-    class _OgreExport LeaveChannelR : public FilterBase
-    {
-    public:
-        static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
-        void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
-    };
-}
+            /// Simulates as if the given filters were applied, producing
+            /// the resulting number mipmaps & PixelFormat
+            ///
+            /// When a TextureGpu transitions OnStorage -> Resident, we use the metadata
+            /// cache and later compare if the cache was up to date.
+            /// To check if it's up to date, we need to know the final number of mipmaps
+            /// and final pixel format. Thus this function is needed in this case.
+            ///
+            /// However then transitioning OnStorage -> OnSystemRam, the cache is not
+            /// used, because A. the metadata is not needed (it cannot optimize the
+            /// shader) and B. the number of mipmaps may not match.
+            /// This can happen because the HW mipmap filter won't be run.
+            /// This function is not needed in such case.
+            ///
+            /// When transitioning OnSystemRam -> Resident, we already have all the
+            /// metadata except for the mipmaps, as the HW mipmap filter will be run.
+            /// Thus we need this function so we can set the number of mipmaps
+            /// to the final value, immediately transition to Resident, and start
+            /// loading the image on the background thread without ping-pong.
+            static void simulateFiltersForCacheConsistency( uint32 filters, const Image2 &image,
+                                                            const TextureGpuManager *textureGpuManager,
+                                                            uint8 &                  inOutNumMipmaps,
+                                                            PixelFormatGpu &         inOutPixelFormat );
+        };
+        //-----------------------------------------------------------------------------------
+        class _OgreExport GenerateSwMipmaps : public FilterBase
+        {
+        public:
+            /// See Image2::Filter
+            static uint32 getFilter( const Image2 &image );
+            void          _executeStreaming( Image2 &image, TextureGpu *texture ) override;
+        };
+        //-----------------------------------------------------------------------------------
+        class _OgreExport GenerateHwMipmaps : public FilterBase
+        {
+            bool mNeedsMipmaps;
+
+        public:
+            GenerateHwMipmaps() : mNeedsMipmaps( false ) {}
+            void _executeStreaming( Image2 &image, TextureGpu *texture ) override;
+            void _executeSerial( TextureGpu *texture ) override;
+        };
+        //-----------------------------------------------------------------------------------
+        class _OgreExport PrepareForNormalMapping : public FilterBase
+        {
+        public:
+            static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
+            void                  _executeStreaming( Image2 &image, TextureGpu *texture ) override;
+        };
+        //-----------------------------------------------------------------------------------
+        class _OgreExport LeaveChannelR : public FilterBase
+        {
+        public:
+            static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
+            void                  _executeStreaming( Image2 &image, TextureGpu *texture ) override;
+        };
+    }  // namespace TextureFilter
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -30,8 +30,9 @@ THE SOFTWARE.
 #define _OgreSkeletonAnimManager_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreIdString.h"
+
 #include "Math/Array/OgreBoneMemoryManager.h"
+#include "OgreIdString.h"
 
 #include "ogrestd/list.h"
 
@@ -40,29 +41,29 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     struct BySkeletonDef
     {
-        SkeletonDef const               *skeletonDef;
-        IdString                        skeletonDefName;
-        BoneMemoryManager               boneMemoryManager;
+        SkeletonDef const *skeletonDef;
+        IdString           skeletonDefName;
+        BoneMemoryManager  boneMemoryManager;
 
         /** MUST be sorted by location in its BoneMemoryManager's slot
             (in order to update in parallel without causing race conditions)
             @See threadStarts
         */
-        FastArray<SkeletonInstance*>    skeletons;
+        FastArray<SkeletonInstance *> skeletons;
 
         /** One per thread (plus one), tells where we should start from in each
             thread. It's not exactly skeletons.size() / mNumWorkerThreads because
             we need to account that instances that share the same memory block.
         */
-        FastArray<size_t>               threadStarts;
+        FastArray<size_t> threadStarts;
 
         BySkeletonDef( const SkeletonDef *skeletonDef, size_t threadCount );
 
@@ -71,7 +72,7 @@ namespace Ogre
         void updateThreadStarts();
         void _updateBoneStartTransforms();
 
-        bool operator == ( IdString name ) const { return skeletonDefName == name; }
+        bool operator==( IdString name ) const { return skeletonDefName == name; }
     };
 
     /** This is how the Skeleton system works in 2.0:
@@ -104,18 +105,18 @@ namespace Ogre
     struct _OgreExport SkeletonAnimManager
     {
         typedef list<BySkeletonDef>::type BySkeletonDefList;
-        BySkeletonDefList bySkeletonDefs;
+        BySkeletonDefList                 bySkeletonDefs;
 
         /// Creates an instance of a skeleton based on the given definition.
-        SkeletonInstance* createSkeletonInstance( const SkeletonDef *skeletonDef,
-                                                    size_t numWorkerThreads );
-        void destroySkeletonInstance( SkeletonInstance *skeletonInstance );
-        void removeSkeletonDef( const SkeletonDef *skeletonDef );
+        SkeletonInstance *createSkeletonInstance( const SkeletonDef *skeletonDef,
+                                                  size_t             numWorkerThreads );
+        void              destroySkeletonInstance( SkeletonInstance *skeletonInstance );
+        void              removeSkeletonDef( const SkeletonDef *skeletonDef );
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

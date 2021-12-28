@@ -32,22 +32,22 @@ THE SOFTWARE.
 
 #include "OgreSharedPtr.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
-    
-    
-    /** Subclasses of this class are responsible for performing a function on an input value for a Controller.
+     *  @{
+     */
+
+    /** Subclasses of this class are responsible for performing a function on an input value for a
+       Controller.
         @remarks
-            This abstract class provides the interface that needs to be supported for a custom function which
-            can be 'plugged in' to a Controller instance, which controls some object value based on an input value.
-            For example, the WaveControllerFunction class provided by Ogre allows you to use various waveforms to
-            translate an input value to an output value.
+            This abstract class provides the interface that needs to be supported for a custom function
+       which can be 'plugged in' to a Controller instance, which controls some object value based on an
+       input value. For example, the WaveControllerFunction class provided by Ogre allows you to use
+       various waveforms to translate an input value to an output value.
         @par
             You are free to create your own subclasses in order to define any function you wish.
     */
@@ -57,19 +57,19 @@ namespace Ogre {
     protected:
         /// If true, function will add input values together and wrap at 1.0 before evaluating
         bool mDeltaInput;
-        T mDeltaCount;
+        T    mDeltaCount;
 
         /** Gets the input value as adjusted by any delta.
-        */
-        T getAdjustedInput(T input)
+         */
+        T getAdjustedInput( T input )
         {
-            if (mDeltaInput)
+            if( mDeltaInput )
             {
                 mDeltaCount += input;
                 // Wrap
-                while (mDeltaCount >= 1.0)
+                while( mDeltaCount >= 1.0 )
                     mDeltaCount -= 1.0;
-                while (mDeltaCount < 0.0)
+                while( mDeltaCount < 0.0 )
                     mDeltaCount += 1.0;
 
                 return mDeltaCount;
@@ -83,10 +83,10 @@ namespace Ogre {
     public:
         /** Constructor.
             @param
-                deltaInput If true, signifies that the input will be a delta value such that the function should
-                add it to an internal counter before calculating the output.
+                deltaInput If true, signifies that the input will be a delta value such that the function
+           should add it to an internal counter before calculating the output.
         */
-        ControllerFunction(bool deltaInput)
+        ControllerFunction( bool deltaInput )
         {
             mDeltaInput = deltaInput;
             mDeltaCount = 0;
@@ -94,21 +94,18 @@ namespace Ogre {
 
         virtual ~ControllerFunction() {}
 
-        virtual T calculate(T sourceValue) = 0;
+        virtual T calculate( T sourceValue ) = 0;
     };
 
-
     /** Can either be used as an input or output value.
-    */
+     */
     template <typename T>
     class ControllerValue : public ControllerAlloc
     {
-
     public:
-        virtual ~ControllerValue() { }
-        virtual T getValue() const = 0;
-        virtual void setValue(T value) = 0;
-
+        virtual ~ControllerValue() {}
+        virtual T    getValue() const = 0;
+        virtual void setValue( T value ) = 0;
     };
 
     /** Instances of this class 'control' the value of another object in the system.
@@ -121,12 +118,12 @@ namespace Ogre {
         @par
             The Controller is an intentionally abstract concept - it can generate values
             based on input and a function, which can either be one of the standard ones
-            supplied, or a function can be 'plugged in' for custom behaviour - see the ControllerFunction class for details.
-            Both the input and output values are via ControllerValue objects, meaning that any value can be both
-            input and output of the controller.
+            supplied, or a function can be 'plugged in' for custom behaviour - see the ControllerFunction
+       class for details. Both the input and output values are via ControllerValue objects, meaning that
+       any value can be both input and output of the controller.
         @par
-            Whilst this is very flexible, it can be a little bit confusing so to make it simpler the most often used
-            controller setups are available by calling methods on the ControllerManager object.
+            Whilst this is very flexible, it can be a little bit confusing so to make it simpler the most
+       often used controller setups are available by calling methods on the ControllerManager object.
         @see
             ControllerFunction
 
@@ -136,98 +133,74 @@ namespace Ogre {
     {
     protected:
         /// Source value
-        SharedPtr< ControllerValue<T> > mSource;
+        SharedPtr<ControllerValue<T> > mSource;
         /// Destination value
-        SharedPtr< ControllerValue<T> > mDest;
+        SharedPtr<ControllerValue<T> > mDest;
         /// Function
-        SharedPtr< ControllerFunction<T> > mFunc;
+        SharedPtr<ControllerFunction<T> > mFunc;
         /// Controller is enabled or not
         bool mEnabled;
 
-
     public:
-
         /** Usual constructor.
             @remarks
-                Requires source and destination values, and a function object. None of these are destroyed
-                with the Controller when it is deleted (they can be shared) so you must delete these as appropriate.
+                Requires source and destination values, and a function object. None of these are
+           destroyed with the Controller when it is deleted (they can be shared) so you must delete these
+           as appropriate.
         */
-        Controller(const SharedPtr< ControllerValue<T> >& src, 
-            const SharedPtr< ControllerValue<T> >& dest, const SharedPtr< ControllerFunction<T> >& func)
-            : mSource(src), mDest(dest), mFunc(func)
+        Controller( const SharedPtr<ControllerValue<T> > &   src,
+                    const SharedPtr<ControllerValue<T> > &   dest,
+                    const SharedPtr<ControllerFunction<T> > &func ) :
+            mSource( src ),
+            mDest( dest ),
+            mFunc( func )
         {
             mEnabled = true;
         }
 
         /** Default d-tor.
-        */
+         */
         virtual ~Controller() {}
 
-
         /// Sets the input controller value
-        void setSource(const SharedPtr< ControllerValue<T> >& src)
-        {
-            mSource = src;
-        }
+        void setSource( const SharedPtr<ControllerValue<T> > &src ) { mSource = src; }
         /// Gets the input controller value
-        const SharedPtr< ControllerValue<T> >& getSource() const
-        {
-            return mSource;
-        }
+        const SharedPtr<ControllerValue<T> > &getSource() const { return mSource; }
         /// Sets the output controller value
-        void setDestination(const SharedPtr< ControllerValue<T> >& dest)
-        {
-            mDest = dest;
-        }
+        void setDestination( const SharedPtr<ControllerValue<T> > &dest ) { mDest = dest; }
 
         /// Gets the output controller value
-        const SharedPtr< ControllerValue<T> >& getDestination() const
-        {
-            return mDest;
-        }
+        const SharedPtr<ControllerValue<T> > &getDestination() const { return mDest; }
 
         /// Returns true if this controller is currently enabled
-        bool getEnabled() const
-        {
-            return mEnabled;
-        }
+        bool getEnabled() const { return mEnabled; }
 
         /// Sets whether this controller is enabled
-        void setEnabled(bool enabled)
-        {
-            mEnabled = enabled;
-        }
+        void setEnabled( bool enabled ) { mEnabled = enabled; }
 
         /** Sets the function object to be used by this controller.
-        */
-        void setFunction(const SharedPtr< ControllerFunction<T> >& func)
-        {
-            mFunc = func;
-        }
+         */
+        void setFunction( const SharedPtr<ControllerFunction<T> > &func ) { mFunc = func; }
 
         /** Returns a pointer to the function object used by this controller.
-        */
-        const SharedPtr< ControllerFunction<T> >& getFunction() const
-        {
-            return mFunc;
-        }
+         */
+        const SharedPtr<ControllerFunction<T> > &getFunction() const { return mFunc; }
 
         /** Tells this controller to map it's input controller value
-            to it's output controller value, via the controller function. 
+            to it's output controller value, via the controller function.
         @remarks
             This method is called automatically every frame by ControllerManager.
         */
         void update()
         {
-            if(mEnabled)
-                mDest->setValue(mFunc->calculate(mSource->getValue()));
+            if( mEnabled )
+                mDest->setValue( mFunc->calculate( mSource->getValue() ) );
         }
-
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

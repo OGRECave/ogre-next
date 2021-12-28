@@ -29,22 +29,22 @@ THE SOFTWARE.
 #define __NEON_ArrayAabb_H__
 
 #ifndef __ArrayAabb_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayAabb.h"
+#    error "Don't include this file directly. include Math/Array/OgreArrayAabb.h"
 #endif
 
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
 #include "Math/Array/OgreArrayMatrix4.h"
+#include "Math/Array/OgreArrayVector3.h"
+#include "Math/Array/OgreMathlib.h"
 #include "Math/Simple/OgreAabb.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Cache-friendly array of Aabb represented as a SoA array.
         @remarks
             ArrayAabb is a SIMD & cache-friendly version of AxisAlignedBox.
@@ -69,26 +69,27 @@ namespace Ogre
     class _OgreExport ArrayAabb
     {
     public:
-        ArrayVector3    mCenter;
-        ArrayVector3    mHalfSize;
+        ArrayVector3 mCenter;
+        ArrayVector3 mHalfSize;
 
         ArrayAabb() {}
 
         ArrayAabb( const ArrayVector3 &center, const ArrayVector3 &halfSize ) :
-                mCenter( center ), mHalfSize( halfSize )
+            mCenter( center ),
+            mHalfSize( halfSize )
         {
         }
 
         void getAsAabb( Aabb &out, size_t index ) const
         {
-            //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( &mCenter );
-            out.mCenter.x = aliasedReal[ARRAY_PACKED_REALS * 0 + index];        //X
-            out.mCenter.y = aliasedReal[ARRAY_PACKED_REALS * 1 + index];        //Y
-            out.mCenter.z = aliasedReal[ARRAY_PACKED_REALS * 2 + index];        //Z
-            out.mHalfSize.x = aliasedReal[ARRAY_PACKED_REALS * 3 + index];      //X
-            out.mHalfSize.y = aliasedReal[ARRAY_PACKED_REALS * 4 + index];      //Y
-            out.mHalfSize.z = aliasedReal[ARRAY_PACKED_REALS * 5 + index];      //Z
+            // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
+            const Real *aliasedReal = reinterpret_cast<const Real *>( &mCenter );
+            out.mCenter.x = aliasedReal[ARRAY_PACKED_REALS * 0 + index];    // X
+            out.mCenter.y = aliasedReal[ARRAY_PACKED_REALS * 1 + index];    // Y
+            out.mCenter.z = aliasedReal[ARRAY_PACKED_REALS * 2 + index];    // Z
+            out.mHalfSize.x = aliasedReal[ARRAY_PACKED_REALS * 3 + index];  // X
+            out.mHalfSize.y = aliasedReal[ARRAY_PACKED_REALS * 4 + index];  // Y
+            out.mHalfSize.z = aliasedReal[ARRAY_PACKED_REALS * 5 + index];  // Z
         }
 
         /// Prefer using @see getAsAabb() because this function may have more
@@ -102,16 +103,16 @@ namespace Ogre
 
         void setFromAabb( const Aabb &aabb, size_t index )
         {
-            Real *aliasedReal = reinterpret_cast<Real*>( &mCenter );
-            aliasedReal[ARRAY_PACKED_REALS * 0 + index] = aabb.mCenter.x;       //X
-            aliasedReal[ARRAY_PACKED_REALS * 1 + index] = aabb.mCenter.y;       //Y
-            aliasedReal[ARRAY_PACKED_REALS * 2 + index] = aabb.mCenter.z;       //Z
-            aliasedReal[ARRAY_PACKED_REALS * 3 + index] = aabb.mHalfSize.x;     //X
-            aliasedReal[ARRAY_PACKED_REALS * 4 + index] = aabb.mHalfSize.y;     //Y
-            aliasedReal[ARRAY_PACKED_REALS * 5 + index] = aabb.mHalfSize.z;     //Z
+            Real *aliasedReal = reinterpret_cast<Real *>( &mCenter );
+            aliasedReal[ARRAY_PACKED_REALS * 0 + index] = aabb.mCenter.x;    // X
+            aliasedReal[ARRAY_PACKED_REALS * 1 + index] = aabb.mCenter.y;    // Y
+            aliasedReal[ARRAY_PACKED_REALS * 2 + index] = aabb.mCenter.z;    // Z
+            aliasedReal[ARRAY_PACKED_REALS * 3 + index] = aabb.mHalfSize.x;  // X
+            aliasedReal[ARRAY_PACKED_REALS * 4 + index] = aabb.mHalfSize.y;  // Y
+            aliasedReal[ARRAY_PACKED_REALS * 5 + index] = aabb.mHalfSize.z;  // Z
         }
 
-		void setAll( const Aabb &aabb )
+        void setAll( const Aabb &aabb )
         {
             mCenter.setAll( aabb.mCenter );
             mHalfSize.setAll( aabb.mHalfSize );
@@ -126,10 +127,10 @@ namespace Ogre
         /** Merges the passed in box into the current box. The result is the
             box which encompasses both.
         */
-        inline void merge( const ArrayAabb& rhs );
+        inline void merge( const ArrayAabb &rhs );
 
         /// Extends the box to encompass the specified point (if needed).
-        inline void merge( const ArrayVector3& points );
+        inline void merge( const ArrayVector3 &points );
 
         /** Transforms the box according to the matrix supplied.
         @remarks
@@ -145,10 +146,10 @@ namespace Ogre
         inline void transformAffine( const ArrayMatrix4 &matrix );
 
         /// Returns whether or not this box intersects another.
-        inline ArrayMaskR intersects( const ArrayAabb& b2 ) const;
+        inline ArrayMaskR intersects( const ArrayAabb &b2 ) const;
 
         /// Calculate the area of intersection of this box and another
-        inline ArrayAabb intersection( const ArrayAabb& b2 ) const;
+        inline ArrayAabb intersection( const ArrayAabb &b2 ) const;
 
         /// Calculate the volume of this box
         inline ArrayReal volume() const;
@@ -167,13 +168,13 @@ namespace Ogre
 
         static const ArrayAabb BOX_INFINITE;
 
-        //Contains all zeroes. Used for inactive objects to avoid causing unnecessary NaNs
+        // Contains all zeroes. Used for inactive objects to avoid causing unnecessary NaNs
         static const ArrayAabb BOX_ZERO;
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreArrayAabb.inl"
 

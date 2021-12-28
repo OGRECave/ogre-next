@@ -29,19 +29,20 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassProvider_H_
 #define _OgreCompositorPassProvider_H_
 
-#include "OgreHeaderPrefix.h"
 #include "Compositor/OgreCompositorCommon.h"
 #include "OgreCompositorPassDef.h"
 #include "OgreScriptParser.h"
 
+#include "OgreHeaderPrefix.h"
+
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
 
     struct RenderTargetViewDef;
 
@@ -84,32 +85,34 @@ namespace Ogre
         @param parentNodeDef
         @return
         */
-        virtual CompositorPassDef* addPassDef( CompositorPassType passType,
-                                               IdString customId,
+        virtual CompositorPassDef *addPassDef( CompositorPassType passType, IdString customId,
                                                CompositorTargetDef *parentTargetDef,
-                                               CompositorNodeDef *parentNodeDef ) = 0;
+                                               CompositorNodeDef *  parentNodeDef ) = 0;
 
         /** Creates a CompositorPass from a CompositorPassDef for Compositor Pass of type 'custom'
         @remarks    If you have multiple custom pass types then you will need to use dynamic_cast<>()
                     on the CompositorPassDef to determine what custom pass it is.
         */
-        virtual CompositorPass* addPass( const CompositorPassDef *definition, Camera *defaultCamera,
+        virtual CompositorPass *addPass( const CompositorPassDef *definition, Camera *defaultCamera,
                                          CompositorNode *parentNode, const RenderTargetViewDef *rtvDef,
                                          SceneManager *sceneManager ) = 0;
 
-        /** Optional override which allows users to define custom properties in the compositor scripts for custom passes.
-        @remarks    Please note this is called after CompositorPassProvider::addPassDef and similar to addPass
-                    you will need to dynamic_cast<>() to determine custom pass type.
+        /** Optional override which allows users to define custom properties in the compositor scripts
+        for custom passes.
+        @remarks    Please note this is called after CompositorPassProvider::addPassDef and similar to
+        addPass you will need to dynamic_cast<>() to determine custom pass type.
         @param node             The AST node for this pass
         @param customPassDef    The CompositorPassDef returned in CompositorPassProvider::addPassDef
 
         */
-        virtual void translateCustomPass(const AbstractNodePtr &node, CompositorPassDef* customPassDef) {}
+        virtual void translateCustomPass( const AbstractNodePtr &node, CompositorPassDef *customPassDef )
+        {
+        }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

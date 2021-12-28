@@ -30,30 +30,32 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
+     *  @{
+     */
+    /** Definition of the OGRE .mesh file format
+
+        .mesh files are binary files (for read efficiency at runtime) and are arranged into chunks
+        of data, very like 3D Studio's format.
+        A chunk always consists of:
+            unsigned short CHUNK_ID        : one of the following chunk ids identifying the chunk
+            unsigned long  LENGTH          : length of the chunk in bytes, including this header
+            void*          DATA            : the data, which may contain other sub-chunks (various data
+       types)
+
+        A .mesh file can contain both the definition of the Mesh itself, and optionally the definitions
+        of the materials is uses (although these can be omitted, if so the Mesh assumes that at runtime
+       the Materials referred to by name in the Mesh are loaded/created from another source)
+
+        A .mesh file only contains a single mesh, which can itself have multiple submeshes.
+
     */
-/** Definition of the OGRE .mesh file format 
-
-    .mesh files are binary files (for read efficiency at runtime) and are arranged into chunks 
-    of data, very like 3D Studio's format.
-    A chunk always consists of:
-        unsigned short CHUNK_ID        : one of the following chunk ids identifying the chunk
-        unsigned long  LENGTH          : length of the chunk in bytes, including this header
-        void*          DATA            : the data, which may contain other sub-chunks (various data types)
-    
-    A .mesh file can contain both the definition of the Mesh itself, and optionally the definitions
-    of the materials is uses (although these can be omitted, if so the Mesh assumes that at runtime the
-    Materials referred to by name in the Mesh are loaded/created from another source)
-
-    A .mesh file only contains a single mesh, which can itself have multiple submeshes.
-
-*/
+    // clang-format off
     enum MeshChunkID {
         M_HEADER                = 0x1000,
             // char*          version           : Version number check
@@ -416,10 +418,10 @@ namespace Ogre {
 
     */
     };
+    // clang-format on
     /** @} */
     /** @} */
 
-} // namespace
-
+}  // namespace Ogre
 
 #endif

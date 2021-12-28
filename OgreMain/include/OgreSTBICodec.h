@@ -28,17 +28,18 @@ THE SOFTWARE.
 #ifndef __STBICodec_H__
 #define __STBICodec_H__
 
-#include "ogrestd/list.h"
 #include "OgreImageCodec2.h"
 
-namespace Ogre {
+#include "ogrestd/list.h"
 
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** Codec specialized in images loaded using stbi (https://github.com/nothings/stb).
         @remarks
             The users implementing subclasses of ImageCodec are required to return
@@ -49,25 +50,26 @@ namespace Ogre {
     private:
         String mType;
 
-        typedef list<ImageCodec2*>::type RegisteredCodecList;
+        typedef list<ImageCodec2 *>::type RegisteredCodecList;
+
         static RegisteredCodecList msCodecList;
 
     public:
-        STBIImageCodec(const String &type);
-        virtual ~STBIImageCodec() { }
+        STBIImageCodec( const String &type );
+        virtual ~STBIImageCodec() {}
 
         /// @copydoc Codec::encode
-        DataStreamPtr encode(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
+        DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const;
         /// @copydoc Codec::encodeToFile
-        void encodeToFile(MemoryDataStreamPtr& input, const String& outFileName, CodecDataPtr& pData) const;
+        void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                           CodecDataPtr &pData ) const;
         /// @copydoc Codec::decode
-        DecodeResult decode(DataStreamPtr& input) const;
-
+        DecodeResult decode( DataStreamPtr &input ) const;
 
         virtual String getType() const;
 
         /// @copydoc Codec::magicNumberToFileExt
-        String magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const;
+        String magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const;
 
         /// Static method to startup FreeImage and register the FreeImage codecs
         static void startup();
@@ -77,6 +79,6 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif

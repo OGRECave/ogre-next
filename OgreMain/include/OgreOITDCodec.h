@@ -33,11 +33,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
 
     // Forward declarations
     struct DXTColourBlock;
@@ -59,12 +59,13 @@ namespace Ogre
         String mType;
 
         // invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
-        static void flipEndian(void * pData, size_t size, size_t count);
+        static void flipEndian( void *pData, size_t size, size_t count );
         // invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
-        static void flipEndian(void * pData, size_t size);
+        static void flipEndian( void *pData, size_t size );
 
         /// Single registered codec instance
-        static OITDCodec* msInstance;
+        static OITDCodec *msInstance;
+
     public:
         OITDCodec();
         ~OITDCodec() override {}
@@ -73,7 +74,7 @@ namespace Ogre
         DataStreamPtr encode( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const override;
         /// @copydoc Codec::encodeToFile
         void encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
-                                   CodecDataPtr &pData ) const override;
+                           CodecDataPtr &pData ) const override;
         /// @copydoc Codec::decode
         DecodeResult decode( DataStreamPtr &input ) const override;
 
@@ -90,7 +91,6 @@ namespace Ogre
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif
-

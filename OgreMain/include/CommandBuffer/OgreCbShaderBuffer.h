@@ -36,10 +36,10 @@ namespace Ogre
 {
     struct _OgreExport CbShaderBuffer : CbBase
     {
-        uint16          slot;
-        BufferPacked   *bufferPacked;
-        uint32          bindOffset;
-        uint32          bindSizeBytes;
+        uint16        slot;
+        BufferPacked *bufferPacked;
+        uint32        bindOffset;
+        uint32        bindSizeBytes;
 
         CbShaderBuffer( ShaderType shaderType, uint16 _slot, ConstBufferPacked *_bufferPacked,
                         uint32 _bindOffset, uint32 _bindSizeBytes );
@@ -57,6 +57,6 @@ namespace Ogre
 
         CbIndirectBuffer( IndirectBufferPacked *_indirectBuffer );
     };
-}
+}  // namespace Ogre
 
 #endif

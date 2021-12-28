@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreDepthBuffer_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgrePixelFormatGpu.h"
 
 #include "OgreHeaderPrefix.h"
@@ -36,11 +37,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup RenderSystem
-    *  @{
-    */
+     *  @{
+     */
 
     /** An abstract class that contains a depth/stencil buffer.
         Depth Buffers can be attached to render targets. Note we handle Depth & Stencil together.
@@ -49,30 +50,30 @@ namespace Ogre
         You can control this by hinting Ogre with POOL IDs. Created depth buffers can live in different
         pools, or all together in the same one.
         Usually, a depth buffer can only be attached to a RenderTarget if it's dimensions are bigger
-        and have the same bit depth and same multisample settings. Depth Buffers are created automatically
-        for new RTs when needed, and stored in the pool where the RenderTarget should have drawn from.
-        By default, all RTs have the Id POOL_DEFAULT, which means all depth buffers are stored by default
-        in that pool. By choosing a different Pool Id for a specific RenderTarget, that RT will only
-        retrieve depth buffers from _that_ pool, therefore not conflicting with sharing depth buffers
+        and have the same bit depth and same multisample settings. Depth Buffers are created
+       automatically for new RTs when needed, and stored in the pool where the RenderTarget should have
+       drawn from. By default, all RTs have the Id POOL_DEFAULT, which means all depth buffers are stored
+       by default in that pool. By choosing a different Pool Id for a specific RenderTarget, that RT will
+       only retrieve depth buffers from _that_ pool, therefore not conflicting with sharing depth buffers
         with other RTs (such as shadows maps).
-        Setting an RT to POOL_MANUAL_USAGE means Ogre won't manage the DepthBuffer for you (not recommended)
-        RTs with POOL_NO_DEPTH are very useful when you don't want to create a DepthBuffer for it. You can
-        still manually attach a depth buffer though as internally POOL_NO_DEPTH & POOL_MANUAL_USAGE are
-        handled in the same way.
+        Setting an RT to POOL_MANUAL_USAGE means Ogre won't manage the DepthBuffer for you (not
+       recommended) RTs with POOL_NO_DEPTH are very useful when you don't want to create a DepthBuffer
+       for it. You can still manually attach a depth buffer though as internally POOL_NO_DEPTH &
+       POOL_MANUAL_USAGE are handled in the same way.
 
         Behavior is consistent across all render systems, if, and only if, the same RSC flags are set
         RSC flags that affect this class are:
             * RSC_RTT_SEPARATE_DEPTHBUFFER:
-                The RTT can create a custom depth buffer different from the main depth buffer. This means,
-                an RTT is able to not share it's depth buffer with the main window if it wants to.
+                The RTT can create a custom depth buffer different from the main depth buffer. This
+       means, an RTT is able to not share it's depth buffer with the main window if it wants to.
             * RSC_RTT_MAIN_DEPTHBUFFER_ATTACHABLE:
                 When RSC_RTT_SEPARATE_DEPTHBUFFER is set, some APIs (ie. OpenGL w/ FBO) don't allow using
                 the main depth buffer for offscreen RTTs. When this flag is set, the depth buffer can be
                 shared between the main window and an RTT.
             * RSC_RTT_DEPTHBUFFER_RESOLUTION_LESSEQUAL:
-                When this flag isn't set, the depth buffer can only be shared across RTTs who have the EXACT
-                same resolution. When it's set, it can be shared with RTTs as long as they have a
-                resolution less or equal than the depth buffer's.
+                When this flag isn't set, the depth buffer can only be shared across RTTs who have the
+       EXACT same resolution. When it's set, it can be shared with RTTs as long as they have a resolution
+       less or equal than the depth buffer's.
 
         @remarks
             Design discussion http://www.ogre3d.org/forums/viewtopic.php?f=4&t=53534&p=365582
@@ -85,11 +86,11 @@ namespace Ogre
     {
         enum PoolId
         {
-            POOL_NO_DEPTH       = 0,
-            POOL_MANUAL_USAGE   = 0,
-            POOL_DEFAULT        = 1,
-            POOL_NON_SHAREABLE  = 65534,
-            POOL_INVALID        = 65535
+            POOL_NO_DEPTH = 0,
+            POOL_MANUAL_USAGE = 0,
+            POOL_DEFAULT = 1,
+            POOL_NON_SHAREABLE = 65534,
+            POOL_INVALID = 65535
         };
 
         enum DepthFormatsMask
@@ -126,7 +127,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

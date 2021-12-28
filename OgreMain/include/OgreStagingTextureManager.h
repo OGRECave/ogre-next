@@ -29,8 +29,8 @@ THE SOFTWARE.
 #ifndef _OgreStagingTexture_H_
 #define _OgreStagingTexture_H_
 
-#include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpu.h"
+#include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -42,10 +42,10 @@ namespace Ogre
         StagingTextureManager();
         virtual ~StagingTextureManager();
 
-        StagingTexture* getStagingTextureForRegion( uint32 width, uint32 height, uint32 depth,
+        StagingTexture *getStagingTextureForRegion( uint32 width, uint32 height, uint32 depth,
                                                     PixelFormatGpu pixelFormat );
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

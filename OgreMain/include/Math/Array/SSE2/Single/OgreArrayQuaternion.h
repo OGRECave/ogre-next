@@ -29,24 +29,24 @@ THE SOFTWARE.
 #define __SSE2_ArrayQuaternion_H__
 
 #ifndef __ArrayQuaternion_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayQuaternion.h"
+#    error "Don't include this file directly. include Math/Array/OgreArrayQuaternion.h"
 #endif
 
 #include "OgreQuaternion.h"
 
-#include "Math/Array/OgreMathlib.h"
 #include "Math/Array/OgreArrayVector3.h"
+#include "Math/Array/OgreMathlib.h"
 
 #include "OgreArrayQuaternion.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Cache-friendly array of Quaternion represented as a SoA array.
         @remarks
             ArrayQuaternion is a SIMD & cache-friendly version of Quaternion.
@@ -65,11 +65,11 @@ namespace Ogre
     class _OgreExport ArrayQuaternion
     {
     public:
-        ArrayReal       mChunkBase[4];
+        ArrayReal mChunkBase[4];
 
         ArrayQuaternion() {}
-        ArrayQuaternion( const ArrayReal &chunkW, const ArrayReal &chunkX,
-                                const ArrayReal &chunkY, const ArrayReal &chunkZ )
+        ArrayQuaternion( const ArrayReal &chunkW, const ArrayReal &chunkX, const ArrayReal &chunkY,
+                         const ArrayReal &chunkZ )
         {
             mChunkBase[0] = chunkW;
             mChunkBase[1] = chunkX;
@@ -79,29 +79,29 @@ namespace Ogre
 
         void getAsQuaternion( Quaternion &out, size_t index ) const
         {
-            //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( mChunkBase );
-            out.w = aliasedReal[ARRAY_PACKED_REALS * 0 + index];        //W
-            out.x = aliasedReal[ARRAY_PACKED_REALS * 1 + index];        //X
-            out.y = aliasedReal[ARRAY_PACKED_REALS * 2 + index];        //Y
-            out.z = aliasedReal[ARRAY_PACKED_REALS * 3 + index];        //Z
+            // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
+            const Real *aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
+            out.w = aliasedReal[ARRAY_PACKED_REALS * 0 + index];  // W
+            out.x = aliasedReal[ARRAY_PACKED_REALS * 1 + index];  // X
+            out.y = aliasedReal[ARRAY_PACKED_REALS * 2 + index];  // Y
+            out.z = aliasedReal[ARRAY_PACKED_REALS * 3 + index];  // Z
         }
 
         /// Prefer using @see getAsQuaternion() because this function may have more
         /// overhead (the other one is faster)
         Quaternion getAsQuaternion( size_t index ) const
         {
-            //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( mChunkBase );
-            return Quaternion( aliasedReal[ARRAY_PACKED_REALS * 0 + index], //W
-                            aliasedReal[ARRAY_PACKED_REALS * 1 + index],        //X
-                            aliasedReal[ARRAY_PACKED_REALS * 2 + index],        //Y
-                            aliasedReal[ARRAY_PACKED_REALS * 3 + index] );  //Z
+            // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
+            const Real *aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
+            return Quaternion( aliasedReal[ARRAY_PACKED_REALS * 0 + index],    // W
+                               aliasedReal[ARRAY_PACKED_REALS * 1 + index],    // X
+                               aliasedReal[ARRAY_PACKED_REALS * 2 + index],    // Y
+                               aliasedReal[ARRAY_PACKED_REALS * 3 + index] );  // Z
         }
 
         void setFromQuaternion( const Quaternion &v, size_t index )
         {
-            Real *aliasedReal = reinterpret_cast<Real*>( mChunkBase );
+            Real *aliasedReal = reinterpret_cast<Real *>( mChunkBase );
             aliasedReal[ARRAY_PACKED_REALS * 0 + index] = v.w;
             aliasedReal[ARRAY_PACKED_REALS * 1 + index] = v.x;
             aliasedReal[ARRAY_PACKED_REALS * 2 + index] = v.y;
@@ -123,23 +123,26 @@ namespace Ogre
         @param matrix
             9-element matrix (3x3)
         */
-		inline void FromOrthoDet1RotationMatrix( const ArrayReal * RESTRICT_ALIAS matrix );
+        inline void FromOrthoDet1RotationMatrix( const ArrayReal *RESTRICT_ALIAS matrix );
 
         /// @copydoc Quaternion::FromAngleAxis
-        inline void FromAngleAxis( const ArrayRadian& rfAngle, const ArrayVector3& rkAxis );
+        inline void FromAngleAxis( const ArrayRadian &rfAngle, const ArrayVector3 &rkAxis );
 
         /// @copydoc Quaternion::ToAngleAxis
         inline void ToAngleAxis( ArrayRadian &rfAngle, ArrayVector3 &rkAxis ) const;
 
-        inline friend ArrayQuaternion operator * ( const ArrayQuaternion &lhs, const ArrayQuaternion &rhs );
+        inline friend ArrayQuaternion operator*( const ArrayQuaternion &lhs,
+                                                 const ArrayQuaternion &rhs );
 
-        inline friend ArrayQuaternion operator + ( const ArrayQuaternion &lhs, const ArrayQuaternion &rhs );
-        inline friend ArrayQuaternion operator - ( const ArrayQuaternion &lhs, const ArrayQuaternion &rhs );
-        inline friend ArrayQuaternion operator * ( const ArrayQuaternion &lhs, ArrayReal scalar );
-        inline friend ArrayQuaternion operator * ( ArrayReal scalar, const ArrayQuaternion &lhs );
-        inline void operator += ( const ArrayQuaternion &a );
-        inline void operator -= ( const ArrayQuaternion &a );
-        inline void operator *= ( const ArrayReal fScalar );
+        inline friend ArrayQuaternion operator+( const ArrayQuaternion &lhs,
+                                                 const ArrayQuaternion &rhs );
+        inline friend ArrayQuaternion operator-( const ArrayQuaternion &lhs,
+                                                 const ArrayQuaternion &rhs );
+        inline friend ArrayQuaternion operator*( const ArrayQuaternion &lhs, ArrayReal scalar );
+        inline friend ArrayQuaternion operator*( ArrayReal scalar, const ArrayQuaternion &lhs );
+        inline void                   operator+=( const ArrayQuaternion &a );
+        inline void                   operator-=( const ArrayQuaternion &a );
+        inline void                   operator*=( const ArrayReal fScalar );
 
         /// @copydoc Quaternion::xAxis
         inline ArrayVector3 xAxis() const;
@@ -149,22 +152,22 @@ namespace Ogre
         inline ArrayVector3 zAxis() const;
 
         /// @copydoc Quaternion::Dot
-        inline ArrayReal Dot( const ArrayQuaternion& rkQ ) const;
+        inline ArrayReal Dot( const ArrayQuaternion &rkQ ) const;
 
         /// @copydoc Quaternion::Norm
-        inline ArrayReal Norm() const; //Returns the squared length, doesn't modify
+        inline ArrayReal Norm() const;  // Returns the squared length, doesn't modify
 
         /// Unlike Quaternion::normalise(), this function does not return the length of the vector
         /// because such value was not cached and was never available @see Quaternion::normalise()
         inline void normalise();
 
-        inline ArrayQuaternion Inverse() const;       // apply to non-zero quaternion
-        inline ArrayQuaternion UnitInverse() const;   // apply to unit-length quaternion
+        inline ArrayQuaternion Inverse() const;      // apply to non-zero quaternion
+        inline ArrayQuaternion UnitInverse() const;  // apply to unit-length quaternion
         inline ArrayQuaternion Exp() const;
         inline ArrayQuaternion Log() const;
 
         /// Rotation of a vector by a quaternion
-        inline ArrayVector3 operator * ( const ArrayVector3 &v ) const;
+        inline ArrayVector3 operator*( const ArrayVector3 &v ) const;
 
         /** Rotates a vector by multiplying the quaternion to the vector, and modifies it's contents
             by storing the results there.
@@ -182,7 +185,7 @@ namespace Ogre
                 prefer calling this function to using an operator when just updating an ArrayVector3 is
                 involved. (It's fine using operators for ArrayVector3s)
             @param
-                
+
         */
         static inline void mul( const ArrayQuaternion &inQ, ArrayVector3 &inOutVec );
 
@@ -190,19 +193,19 @@ namespace Ogre
         /// @remarks
         ///     shortestPath is always true
         static inline ArrayQuaternion Slerp( ArrayReal fT, const ArrayQuaternion &rkP,
-                                                const ArrayQuaternion &rkQ );
+                                             const ArrayQuaternion &rkQ );
 
         /// @See Quaternion::nlerp
         /// @remarks
         ///     shortestPath is always true
-        static inline ArrayQuaternion nlerpShortest( ArrayReal fT, const ArrayQuaternion& rkP, 
-                                                    const ArrayQuaternion& rkQ );
+        static inline ArrayQuaternion nlerpShortest( ArrayReal fT, const ArrayQuaternion &rkP,
+                                                     const ArrayQuaternion &rkQ );
 
         /// @See Quaternion::nlerp
         /// @remarks
         ///     shortestPath is always false
-        static inline ArrayQuaternion nlerp( ArrayReal fT, const ArrayQuaternion& rkP, 
-                                                const ArrayQuaternion& rkQ );
+        static inline ArrayQuaternion nlerp( ArrayReal fT, const ArrayQuaternion &rkP,
+                                             const ArrayQuaternion &rkQ );
 
         /** Conditional move update. @See MathlibSSE2::Cmov4
             Changes each of the four vectors contained in 'this' with
@@ -243,7 +246,8 @@ namespace Ogre
             @return
                 this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
         */
-        inline static ArrayQuaternion Cmov4( const ArrayQuaternion &arg1, const ArrayQuaternion &arg2, ArrayMaskR mask );
+        inline static ArrayQuaternion Cmov4( const ArrayQuaternion &arg1, const ArrayQuaternion &arg2,
+                                             ArrayMaskR mask );
 
         static const ArrayQuaternion ZERO;
         static const ArrayQuaternion IDENTITY;
@@ -251,7 +255,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreArrayQuaternion.inl"
 

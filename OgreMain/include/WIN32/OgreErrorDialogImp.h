@@ -31,19 +31,19 @@ THE SOFTWARE.
 #include "OgreHeaderPrefix.h"
 
 #define WIN32_LEAN_AND_MEAN
-#if !defined(NOMINMAX) && defined(_MSC_VER)
-#   define NOMINMAX // required to stop windows.h messing up std::min
+#if !defined( NOMINMAX ) && defined( _MSC_VER )
+#    define NOMINMAX  // required to stop windows.h messing up std::min
 #endif
 #include <windows.h>
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** Class for displaying the error dialog if Ogre fails badly. */
     class _OgreExport ErrorDialog
     {
@@ -59,23 +59,22 @@ namespace Ogre
         @param
             logName Optional name of the log to display in the detail pane.
         */
-        void display(const String& errorMessage, String logName = "");
+        void display( const String &errorMessage, String logName = "" );
 
     protected:
         String mErrorMsg;
         /** Callback to process window events */
 #if OGRE_ARCHITECTURE_64 == OGRE_ARCH_TYPE
-        static INT_PTR CALLBACK DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
+        static INT_PTR CALLBACK DlgProc( HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam );
 #else
-        static BOOL CALLBACK DlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
+        static BOOL CALLBACK DlgProc( HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam );
 #endif
 
-        HINSTANCE mHInstance; // HInstance of application, for dialog
-
+        HINSTANCE mHInstance;  // HInstance of application, for dialog
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

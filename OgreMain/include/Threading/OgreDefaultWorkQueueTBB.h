@@ -27,6 +27,7 @@ THE SOFTWARE
 #define __OgreDefaultWorkQueueTBB_H__
 
 #include "../OgreWorkQueue.h"
+
 #include <set>
 
 namespace Ogre
@@ -38,13 +39,13 @@ namespace Ogre
     class _OgreExport DefaultWorkQueue : public DefaultWorkQueueBase
     {
     public:
-        DefaultWorkQueue(const String& name = BLANKSTRING);
-        virtual ~DefaultWorkQueue() noexcept(true);
+        DefaultWorkQueue( const String &name = BLANKSTRING );
+        virtual ~DefaultWorkQueue() noexcept( true );
 
-        /** Process the next request on the queue. 
+        /** Process the next request on the queue.
         @remarks
-            This method is public, but only intended for advanced users to call. 
-            The only reason you would call this, is if you were using your 
+            This method is public, but only intended for advanced users to call.
+            The only reason you would call this, is if you were using your
             own thread to drive the worker processing. The thread calling this
             method will be the thread used to call the RequestHandler.
         */
@@ -56,7 +57,7 @@ namespace Ogre
         virtual void shutdown();
 
         /// @copydoc WorkQueue::startup
-        virtual void startup(bool forceRestart = true);
+        virtual void startup( bool forceRestart = true );
 
         /// Register the current thread with the rendersystem
         void _registerThreadWithRenderSystem();
@@ -70,12 +71,10 @@ namespace Ogre
 #endif
         tbb::task_group mTaskGroup;
         /// Synchronise registering threads with the RenderSystem
-        OGRE_MUTEX(mRegisterRSMutex);
+        OGRE_MUTEX( mRegisterRSMutex );
         std::set<tbb::tbb_thread::id> mRegisteredThreads;
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

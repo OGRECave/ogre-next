@@ -39,11 +39,11 @@ namespace Ogre
     class RenderTarget;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will clear the RenderTarget using the parameters from definition
@@ -56,7 +56,7 @@ namespace Ogre
     class _OgreExport CompositorPassClear : public CompositorPass
     {
     protected:
-        SceneManager    *mSceneManager;
+        SceneManager *mSceneManager;
 
         bool allowResolveStoreActionsWithoutResolveTexture() const override;
         void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc ) override;
@@ -75,7 +75,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

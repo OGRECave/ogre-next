@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGpuResource_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreIdString.h"
 
 #include "OgreHeaderPrefix.h"
@@ -66,7 +67,7 @@ namespace Ogre
         };
 
         const char *toString( GpuResidency value );
-    }
+    }  // namespace GpuResidency
 
     namespace GpuPageOutStrategy
     {
@@ -99,12 +100,12 @@ namespace Ogre
             /// This is made async, but if you queue more than one copyTo call, it can stall.
             AlwaysKeepSystemRamCopy
         };
-    }
+    }  // namespace GpuPageOutStrategy
 
     class _OgreExport GpuResource : public ResourceAlloc
     {
     protected:
-        GpuResidency::GpuResidency              mResidencyStatus;
+        GpuResidency::GpuResidency mResidencyStatus;
         /// Usually mResidencyStatus == mNextResidencyStatus; but if they're not equal,
         /// that means a change has been scheduled (async). Note: it only stores
         /// the last residency we'll be transitioning to. For example, it's possible
@@ -112,11 +113,12 @@ namespace Ogre
         /// executed yet, in which case mNextResidencyStatus will be OnSystemRam
         ///
         /// @see    GpuResource::mPendingResidencyChanges
-        GpuResidency::GpuResidency              mNextResidencyStatus;
+        GpuResidency::GpuResidency mNextResidencyStatus;
         /// Developer notes: Strategy cannot be changed immediately,
         /// it has to be queued (due to multithreading safety).
-        GpuPageOutStrategy::GpuPageOutStrategy  mPageOutStrategy;
-        uint32  mPendingResidencyChanges;
+        GpuPageOutStrategy::GpuPageOutStrategy mPageOutStrategy;
+
+        uint32 mPendingResidencyChanges;
 
         /// User tells us priorities via a "rank" system.
         /// Must be loaded first. Must be kept always resident. Rank = 0
@@ -125,24 +127,24 @@ namespace Ogre
         /// Avoid using the terms "high" rank and "low" rank since it's confusing.
         /// (because a "high" rank is important, but it is set by having a low
         /// number in mRank)
-        int32   mRank;
+        int32 mRank;
 
         /// Every time a resource is used the frame count it was used in is saved.
-        /// We’ll refer to this as resources "getting touched".
+        /// We'll refer to this as resources "getting touched".
         /// The older a texture remains unused, the more likely it will be paged out
         /// (if memory thresholds are exceeded, and multiplied by rank).
         /// The minimum distance to camera may be saved as well. More distant textures
         /// may be paged out and replaced with 64x64 mips.
-        uint32  mLastFrameUsed;
-        float   mLowestDistanceToCamera;
+        uint32 mLastFrameUsed;
+        float  mLowestDistanceToCamera;
 
-        VaoManager  *mVaoManager;
+        VaoManager *mVaoManager;
 
         IdString mName;
 
     public:
-        GpuResource( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                     VaoManager *vaoManager, IdString name );
+        GpuResource( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                     IdString name );
         virtual ~GpuResource();
 
         void _setNextResidencyStatus( GpuResidency::GpuResidency nextResidency );
@@ -180,6 +182,7 @@ namespace Ogre
             Use GpuResource::getPendingResidencyChanges to fix the ABA problem.
         */
         GpuResidency::GpuResidency getNextResidencyStatus() const;
+
         GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy() const;
 
         void _addPendingResidencyChanges( uint32 value );
@@ -197,7 +200,7 @@ namespace Ogre
         /// NOT THREAD SAFE. ONLY CALL FROM MAIN THREAD.
         virtual String getNameStr() const;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

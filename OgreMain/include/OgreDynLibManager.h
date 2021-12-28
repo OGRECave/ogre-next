@@ -35,24 +35,26 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** Manager for Dynamic-loading Libraries.
     @remarks
         This manager keeps a track of all the open dynamic-loading
         libraries, opens them and returns references to already-open
         libraries.
     */
-    class _OgreExport DynLibManager: public Singleton<DynLibManager>, public DynLibAlloc
+    class _OgreExport DynLibManager : public Singleton<DynLibManager>, public DynLibAlloc
     {
     protected:
-        typedef map<String, DynLib*>::type DynLibList;
-        DynLibList mLibList;
+        typedef map<String, DynLib *>::type DynLibList;
+        DynLibList                          mLibList;
+
     public:
         /** Default constructor.
         @note
@@ -81,7 +83,7 @@ namespace Ogre {
         @param lib
             The library.
         */
-        void unload(DynLib* lib);
+        void unload( DynLib *lib );
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -98,7 +100,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DynLibManager& getSingleton();
+        static DynLibManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -114,12 +116,12 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DynLibManager* getSingletonPtr();
+        static DynLibManager *getSingletonPtr();
     };
     /** @} */
     /** @} */
-} // namespace Ogre
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
-#endif // __DynLibManager_H__
+#endif  // __DynLibManager_H__

@@ -28,23 +28,23 @@ THE SOFTWARE.
 #ifndef __ArrayQuaternion_H__
 #define __ArrayQuaternion_H__
 
-//This file is a proxy, it redirects to the proper file depending on platform
+// This file is a proxy, it redirects to the proper file depending on platform
 #include "OgreArrayConfig.h"
 
 #if OGRE_CPU == OGRE_CPU_X86 && OGRE_USE_SIMD == 1
-    #if OGRE_DOUBLE_PRECISION == 1
-        #include "SSE2/Double/OgreArrayQuaternion.h"
-    #else
-        #include "SSE2/Single/OgreArrayQuaternion.h"
-    #endif
+#    if OGRE_DOUBLE_PRECISION == 1
+#        include "SSE2/Double/OgreArrayQuaternion.h"
+#    else
+#        include "SSE2/Single/OgreArrayQuaternion.h"
+#    endif
 #elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD == 1
-    #if OGRE_DOUBLE_PRECISION == 1
-        #error Double precision with SIMD on ARM is not supported
-    #else
-        #include "NEON/Single/OgreArrayQuaternion.h"
-    #endif
+#    if OGRE_DOUBLE_PRECISION == 1
+#        error Double precision with SIMD on ARM is not supported
+#    else
+#        include "NEON/Single/OgreArrayQuaternion.h"
+#    endif
 #else
-    #include "C/OgreArrayQuaternion.h"
+#    include "C/OgreArrayQuaternion.h"
 #endif
 
 #endif

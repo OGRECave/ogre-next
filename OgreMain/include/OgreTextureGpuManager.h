@@ -48,13 +48,13 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
-    typedef vector<TextureGpu*>::type TextureGpuVec;
+    typedef vector<TextureGpu *>::type TextureGpuVec;
     class ObjCmdBuffer;
     class ResourceLoadingListener;
     class TextureGpuManagerListener;
@@ -64,15 +64,15 @@ namespace Ogre
         class FilterBase;
     }
 
-    typedef FastArray<TextureFilter::FilterBase*> FilterBaseArray;
+    typedef FastArray<TextureFilter::FilterBase *> FilterBaseArray;
 
     struct _OgreExport TexturePool
     {
-        TextureGpu  *masterTexture;
-        bool                    manuallyReserved;
-        uint16                  usedMemory;
-        vector<uint16>::type    availableSlots;
-        TextureGpuVec           usedSlots;
+        TextureGpu *         masterTexture;
+        bool                 manuallyReserved;
+        uint16               usedMemory;
+        vector<uint16>::type availableSlots;
+        TextureGpuVec        usedSlots;
 
         bool hasFreeSlot() const;
         bool empty() const;
@@ -80,7 +80,7 @@ namespace Ogre
 
     typedef list<TexturePool>::type TexturePoolList;
 
-    typedef vector<StagingTexture*>::type StagingTextureVec;
+    typedef vector<StagingTexture *>::type StagingTextureVec;
 
     namespace DefaultMipmapGen
     {
@@ -246,28 +246,31 @@ namespace Ogre
         struct BudgetEntry
         {
             PixelFormatGpu formatFamily;
-            uint32 minResolution;
-            uint32 minNumSlices;
+            uint32         minResolution;
+            uint32         minNumSlices;
             BudgetEntry() : formatFamily( PFG_UNKNOWN ), minResolution( 0 ), minNumSlices( 0 ) {}
             BudgetEntry( PixelFormatGpu _formatFamily, uint32 _minResolution, uint32 _minNumSlices ) :
-                formatFamily( _formatFamily ), minResolution( _minResolution ),
-                minNumSlices( _minNumSlices ) {}
+                formatFamily( _formatFamily ),
+                minResolution( _minResolution ),
+                minNumSlices( _minNumSlices )
+            {
+            }
 
-            bool operator () ( const BudgetEntry &_l, const BudgetEntry &_r ) const;
+            bool operator()( const BudgetEntry &_l, const BudgetEntry &_r ) const;
         };
 
         typedef vector<BudgetEntry>::type BudgetEntryVec;
 
         struct MetadataCacheEntry
         {
-            String  aliasName;
-            uint32  width;
-            uint32  height;
-            uint32  depthOrSlices;
-            PixelFormatGpu pixelFormat;
-            uint32  poolId;
+            String                     aliasName;
+            uint32                     width;
+            uint32                     height;
+            uint32                     depthOrSlices;
+            PixelFormatGpu             pixelFormat;
+            uint32                     poolId;
             TextureTypes::TextureTypes textureType;
-            uint8   numMipmaps;
+            uint8                      numMipmaps;
             MetadataCacheEntry();
         };
 
@@ -278,15 +281,19 @@ namespace Ogre
             String      name;
             String      alias;
             String      resourceGroup;
-            TextureGpu  *texture;
+            TextureGpu *texture;
             uint32      filters;
             bool        destroyRequested;
 
             ResourceEntry() : texture( 0 ) {}
             ResourceEntry( const String &_name, const String &_alias, const String &_resourceGroup,
                            TextureGpu *_texture, uint32 _filters ) :
-                name( _name ), alias( _alias ), resourceGroup( _resourceGroup ),
-                texture( _texture ), filters( _filters ), destroyRequested( false )
+                name( _name ),
+                alias( _alias ),
+                resourceGroup( _resourceGroup ),
+                texture( _texture ),
+                filters( _filters ),
+                destroyRequested( false )
             {
             }
         };
@@ -295,41 +302,46 @@ namespace Ogre
     protected:
         struct LoadRequest
         {
-            String                      name;
-            Archive                     *archive;
-            ResourceLoadingListener     *loadingListener;
-            Image2                      *image;
-            TextureGpu                  *texture;
+            String                   name;
+            Archive *                archive;
+            ResourceLoadingListener *loadingListener;
+            Image2 *                 image;
+            TextureGpu *             texture;
             /// Slice to upload this image to (in case we're uploading a 2D image into an cubemap)
             /// std::numeric_limits<uint32>::max() to disable it.
-            uint32                      sliceOrDepth;
-            uint32                      filters;
+            uint32 sliceOrDepth;
+            uint32 filters;
             /// Whether we should call "delete this->image" once we're done using the image.
             /// Otherwise you should listen for TextureGpuListener::ReadyForRendering
             /// message to know when we're done using the image.
-            bool                        autoDeleteImage;
+            bool autoDeleteImage;
             /// Indicates we're going to GpuResidency::OnSystemRam instead of Resident
-            bool                        toSysRam;
+            bool toSysRam;
 
             LoadRequest( const String &_name, Archive *_archive,
-                         ResourceLoadingListener *_loadingListener,
-                         Image2 *_image, TextureGpu *_texture,
-                         uint32 _sliceOrDepth, uint32 _filters, bool _autoDeleteImage,
-                         bool _toSysRam ) :
-                name( _name ), archive( _archive ), loadingListener( _loadingListener ),
-                image( _image ), texture( _texture ),
-                sliceOrDepth( _sliceOrDepth ), filters( _filters ),
-                autoDeleteImage( _autoDeleteImage ), toSysRam( _toSysRam ) {}
+                         ResourceLoadingListener *_loadingListener, Image2 *_image, TextureGpu *_texture,
+                         uint32 _sliceOrDepth, uint32 _filters, bool _autoDeleteImage, bool _toSysRam ) :
+                name( _name ),
+                archive( _archive ),
+                loadingListener( _loadingListener ),
+                image( _image ),
+                texture( _texture ),
+                sliceOrDepth( _sliceOrDepth ),
+                filters( _filters ),
+                autoDeleteImage( _autoDeleteImage ),
+                toSysRam( _toSysRam )
+            {
+            }
         };
 
         typedef vector<LoadRequest>::type LoadRequestVec;
 
         struct UsageStats
         {
-            uint32 width;
-            uint32 height;
+            uint32         width;
+            uint32         height;
             PixelFormatGpu formatFamily;
-            size_t accumSizeBytes;
+            size_t         accumSizeBytes;
             /// This value gets reset in worker thread every time UsageStats have
             /// been updated for this formatFamily. Main thread will decrease it
             /// with every fulfillUsageStats call. When it reaches 0, the
@@ -385,18 +397,18 @@ namespace Ogre
         {
             Image2      image;
             bitset64    mipLevelBitSet;
-            TextureGpu  *dstTexture;
+            TextureGpu *dstTexture;
             bool        autoDeleteImage;
             /// See LoadRequest::sliceOrDepth
-            uint32      dstSliceOrDepth;
+            uint32          dstSliceOrDepth;
             FilterBaseArray filters;
 
-			QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
-						 FilterBaseArray &inOutFilters );
-            void destroy();
-            bool empty() const;
-            bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
-            void unqueueMipSlice( uint8 mipLevel, uint8 slice );
+            QueuedImage( Image2 &srcImage, TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
+                         FilterBaseArray &inOutFilters );
+            void  destroy();
+            bool  empty() const;
+            bool  isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
+            void  unqueueMipSlice( uint8 mipLevel, uint8 slice );
             uint8 getMinMipLevel() const;
             uint8 getMaxMipLevelPlusOne() const;
         };
@@ -412,55 +424,55 @@ namespace Ogre
         */
         struct PartialImage
         {
-            void    *sysRamPtr;
-            uint32  numProcessedDepthOrSlices;
-            bool    toSysRam;
+            void * sysRamPtr;
+            uint32 numProcessedDepthOrSlices;
+            bool   toSysRam;
 
             PartialImage();
             PartialImage( void *_sysRamPtr, bool _toSysRam );
         };
 
-        typedef map<TextureGpu*, PartialImage>::type PartialImageMap;
+        typedef map<TextureGpu *, PartialImage>::type PartialImageMap;
 
         struct ThreadData
         {
-            LoadRequestVec  loadRequests;
-            ObjCmdBuffer    *objCmdBuffer;
+            LoadRequestVec    loadRequests;
+            ObjCmdBuffer *    objCmdBuffer;
             StagingTextureVec usedStagingTex;
         };
         struct StreamingData
         {
-            StagingTextureVec   availableStagingTex;    /// Used by both threads. Needs mutex protection.
-            QueuedImageVec      queuedImages;           /// Used by mostly by worker thread. Needs mutex.
-            UsageStatsVec       usageStats; /// Exclusively used by worker thread. No protection needed.
-            UsageStatsVec       prevStats;              /// Used by both threads.
+            StagingTextureVec availableStagingTex;  /// Used by both threads. Needs mutex protection.
+            QueuedImageVec    queuedImages;         /// Used by mostly by worker thread. Needs mutex.
+            UsageStatsVec     usageStats;  /// Exclusively used by worker thread. No protection needed.
+            UsageStatsVec     prevStats;   /// Used by both threads.
             /// Set to true when worker thread iterates (meaning prevStats.loopCount
             /// can be decremented).
             /// Set to false by main thread every _update call.
             /// Needs mutex.
-            bool                workerThreadRan;
+            bool workerThreadRan;
             /// Number of bytes preloaded by worker thread. Main thread resets this counter.
-            size_t              bytesPreloaded;
+            size_t bytesPreloaded;
             /// See setWorkerThreadMinimumBudget
             /// Read by worker thread. Occasionally written by main thread. Not protected.
-            size_t              maxSplitResolution;
+            size_t maxSplitResolution;
             /// See setWorkerThreadMaxPerStagingTextureRequestBytes
             /// Read by worker thread. Occasionally written by main thread. Not protected.
-            size_t              maxPerStagingTextureRequestBytes;
+            size_t maxPerStagingTextureRequestBytes;
 
             /// Resheduled textures are textures which were transitioned to Resident
             /// preemptively using the metadata cache, but it turned out to be wrong
             /// (out of date), so we need to do some ping pong first
             ///
             /// Used by worker thread. No protection needed.
-            set<TextureGpu*>::type  rescheduledTextures;
+            set<TextureGpu *>::type rescheduledTextures;
 
             /// Only used for textures that need more than one Image to load
             ///
             /// Used by worker thread. No protection needed (except in abortAllRequests).
             ///
             /// @see    TextureGpuManager::PartialImage
-            PartialImageMap     partialImages;
+            PartialImageMap partialImages;
         };
 
         enum TasksType
@@ -471,10 +483,10 @@ namespace Ogre
 
         struct ResidencyTransitionTask
         {
-            GpuResidency::GpuResidency  targetResidency;
-            Image2                      *image;
-            bool                        autoDeleteImage;
-            bool                        reuploadOnly;
+            GpuResidency::GpuResidency targetResidency;
+            Image2 *                   image;
+            bool                       autoDeleteImage;
+            bool                       reuploadOnly;
 
             void init( GpuResidency::GpuResidency _targetResidency, Image2 *_image,
                        bool _autoDeleteImage, bool _reuploadOnly )
@@ -488,7 +500,7 @@ namespace Ogre
 
         struct ScheduledTasks
         {
-            TasksType   tasksType;
+            TasksType tasksType;
             union
             {
                 ResidencyTransitionTask residencyTransitionTask;
@@ -497,77 +509,80 @@ namespace Ogre
             ScheduledTasks();
         };
 
-        typedef vector<ScheduledTasks>::type ScheduledTasksVec;
-        typedef map<TextureGpu*, ScheduledTasksVec>::type ScheduledTasksMap;
+        typedef vector<ScheduledTasks>::type               ScheduledTasksVec;
+        typedef map<TextureGpu *, ScheduledTasksVec>::type ScheduledTasksMap;
 
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGenCubemaps;
-        bool                mShuttingDown;
-        ThreadHandlePtr     mWorkerThread;
+        bool                               mShuttingDown;
+        ThreadHandlePtr                    mWorkerThread;
         /// Main thread wakes, worker waits.
-        WaitableEvent       mWorkerWaitableEvent;
+        WaitableEvent mWorkerWaitableEvent;
         /// Worker wakes, main thread waits. Used by waitForStreamingCompletion();
-        WaitableEvent       mRequestToMainThreadEvent;
-        LightweightMutex    mLoadRequestsMutex;
-        LightweightMutex    mMutex;
-        //Counts how many times mMutex.tryLock returned false in a row
-        uint32              mTryLockMutexFailureCount;
-        uint32              mTryLockMutexFailureLimit;
-        uint64              mLoadRequestsCounter;
-        bool                mLastUpdateIsStreamingDone;
-        bool                mAddedNewLoadRequests;
-        ThreadData          mThreadData[2];
-        StreamingData       mStreamingData;
+        WaitableEvent    mRequestToMainThreadEvent;
+        LightweightMutex mLoadRequestsMutex;
+        LightweightMutex mMutex;
+        // Counts how many times mMutex.tryLock returned false in a row
+        uint32        mTryLockMutexFailureCount;
+        uint32        mTryLockMutexFailureLimit;
+        uint64        mLoadRequestsCounter;
+        bool          mLastUpdateIsStreamingDone;
+        bool          mAddedNewLoadRequests;
+        ThreadData    mThreadData[2];
+        StreamingData mStreamingData;
 
-        TexturePoolList     mTexturePool;
-        ResourceEntryMap    mEntries;
+        TexturePoolList  mTexturePool;
+        ResourceEntryMap mEntries;
         /// Protects mEntries
         mutable LightweightMutex mEntriesMutex;
 
-        size_t              mEntriesToProcessPerIteration;
-        size_t              mMaxPreloadBytes;
+        size_t mEntriesToProcessPerIteration;
+        size_t mMaxPreloadBytes;
         /// See BudgetEntry. Must be sorted by size in bytes (biggest entries first).
-        BudgetEntryVec              mBudget;
-        TextureGpuManagerListener   *mTextureGpuManagerListener;
-        size_t                      mStagingTextureMaxBudgetBytes;
+        BudgetEntryVec             mBudget;
+        TextureGpuManagerListener *mTextureGpuManagerListener;
+        size_t                     mStagingTextureMaxBudgetBytes;
 
-        StagingTextureVec   mUsedStagingTextures;
-        StagingTextureVec   mAvailableStagingTextures;
+        StagingTextureVec mUsedStagingTextures;
+        StagingTextureVec mAvailableStagingTextures;
 
-        StagingTextureVec   mTmpAvailableStagingTex;
+        StagingTextureVec mTmpAvailableStagingTex;
 
-        MetadataCacheMap    mMetadataCache;
+        MetadataCacheMap mMetadataCache;
 
-        typedef vector<AsyncTextureTicket*>::type AsyncTextureTicketVec;
-        AsyncTextureTicketVec   mAsyncTextureTickets;
+        typedef vector<AsyncTextureTicket *>::type AsyncTextureTicketVec;
+        AsyncTextureTicketVec                      mAsyncTextureTickets;
 
         struct DownloadToRamEntry
         {
-            TextureGpu              *texture;
+            TextureGpu *texture;
             /// One per mip. Entries with nullptr means the ticket has already been copied and destroyed
-            AsyncTextureTicketVec   asyncTickets;
-            uint8                   *sysRamPtr;
-            ///When resyncOnly == true, the download is from textures currently Resident that
-            ///will remain Resident. Otherwise a Resident -> OnSystemRam transition will occur
-            bool                    resyncOnly;
+            AsyncTextureTicketVec asyncTickets;
+            uint8 *               sysRamPtr;
+            /// When resyncOnly == true, the download is from textures currently Resident that
+            /// will remain Resident. Otherwise a Resident -> OnSystemRam transition will occur
+            bool resyncOnly;
         };
         typedef vector<DownloadToRamEntry>::type DownloadToRamEntryVec;
 
         struct MissedListenerCall
         {
-            TextureGpu *texture;
+            TextureGpu *               texture;
             TextureGpuListener::Reason reason;
             MissedListenerCall( TextureGpu *_texture, TextureGpuListener::Reason _reason ) :
-                texture( _texture ), reason( _reason ) {}
+                texture( _texture ),
+                reason( _reason )
+            {
+            }
         };
         typedef list<MissedListenerCall>::type MissedListenerCallList;
 
-        ScheduledTasksMap       mScheduledTasks;
-        DownloadToRamEntryVec   mDownloadToRamQueue;
-        MissedListenerCallList  mMissedListenerCalls;
-        MissedListenerCallList  mMissedListenerCallsTmp;
-        bool                    mDelayListenerCalls;
-        bool                    mIgnoreScheduledTasks;
+        ScheduledTasksMap      mScheduledTasks;
+        DownloadToRamEntryVec  mDownloadToRamQueue;
+        MissedListenerCallList mMissedListenerCalls;
+        MissedListenerCallList mMissedListenerCallsTmp;
+        bool                   mDelayListenerCalls;
+        bool                   mIgnoreScheduledTasks;
 
     public:
         /** While true, calls to createTexture & createOrRetrieveTexture will ignore
@@ -601,12 +616,12 @@ namespace Ogre
         bool mIgnoreSRgbPreference;
 
     protected:
-        VaoManager          *mVaoManager;
-        RenderSystem        *mRenderSystem;
+        VaoManager *  mVaoManager;
+        RenderSystem *mRenderSystem;
 
-        //Be able to hold up to a 2x2 cubemap RGBA8 for when a
-        //image raises an exception in the worker thread
-        uint8 mErrorFallbackTexData[2u*2u*6u*4u];
+        // Be able to hold up to a 2x2 cubemap RGBA8 for when a
+        // image raises an exception in the worker thread
+        uint8 mErrorFallbackTexData[2u * 2u * 6u * 4u];
 
         void destroyAll();
         void abortAllRequests();
@@ -614,14 +629,15 @@ namespace Ogre
         void destroyAllTextures();
         void destroyAllPools();
 
-        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        virtual TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags,
                                                TextureTypes::TextureTypes initialType ) = 0;
-        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat )=0;
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture ) = 0;
+        virtual StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                          uint32         slices,
+                                                          PixelFormatGpu pixelFormat ) = 0;
+        virtual void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) = 0;
 
-        virtual AsyncTextureTicket* createAsyncTextureTicketImpl( uint32 width, uint32 height,
+        virtual AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
                                                                   uint32 depthOrSlices,
                                                                   TextureTypes::TextureTypes textureType,
                                                                   PixelFormatGpu pixelFormatFamily ) = 0;
@@ -659,14 +675,15 @@ namespace Ogre
         static TextureBox getStreaming( ThreadData &workerData, StreamingData &streamingData,
                                         const TextureBox &box, PixelFormatGpu pixelFormat,
                                         StagingTexture **outStagingTexture );
-        static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
-                                        StreamingData &streamingData );
+        static void       processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
+                                              StreamingData &streamingData );
 
         static void addTransitionToLoadedCmd( ObjCmdBuffer *commandBuffer, TextureGpu *texture,
                                               void *sysRamCopy, bool toSysRam );
 
         /// Retrieves, in bytes, the memory consumed by StagingTextures in a container like
-        /// mAvailableStagingTextures, which are textures waiting either to be reused, or to be destroyed.
+        /// mAvailableStagingTextures, which are textures waiting either to be reused, or to be
+        /// destroyed.
         size_t getConsumedMemoryByStagingTextures( const StagingTextureVec &stagingTextures ) const;
         /** Checks if we've exceeded our memory budget for available staging textures.
                 * If we haven't, it early outs and returns nullptr.
@@ -675,9 +692,8 @@ namespace Ogre
                 * If we couldn't find a fit, we start removing StagingTextures until we've
                   freed enough to stay below the budget; and return a nullptr.
         */
-        StagingTexture* checkStagingTextureLimits( uint32 width, uint32 height,
-                                                   uint32 depth, uint32 slices,
-                                                   PixelFormatGpu pixelFormat,
+        StagingTexture *checkStagingTextureLimits( uint32 width, uint32 height, uint32 depth,
+                                                   uint32 slices, PixelFormatGpu pixelFormat,
                                                    size_t minConsumptionRatioThreshold );
 
         /// Called from main thread. Processes mDownloadToRamQueue, which handles transitions from
@@ -710,7 +726,7 @@ namespace Ogre
         DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGeneration() const;
         DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGenerationCubemaps() const;
 
-        const ResourceEntryMap& getEntries() const              { return mEntries; }
+        const ResourceEntryMap &getEntries() const { return mEntries; }
 
         /// Must be called from main thread.
         void _reserveSlotForTexture( TextureGpu *texture );
@@ -718,6 +734,7 @@ namespace Ogre
         void _releaseSlotFromTexture( TextureGpu *texture );
 
         unsigned long _updateStreamingWorkerThread( ThreadHandle *threadHandle );
+
     protected:
         /// This function processes a load request coming from main thread. It basically
         /// gets called once per Image to load. Usually that means once per texture,
@@ -727,6 +744,7 @@ namespace Ogre
         /// workerData is needed to pass it on to processQueuedImage
         void processLoadRequest( ObjCmdBuffer *commandBuffer, ThreadData &workerData,
                                  const LoadRequest &loadRequest );
+
     public:
         void _updateStreaming();
 
@@ -802,11 +820,11 @@ namespace Ogre
         /// Returns the master texture that owns the pool
         ///
         /// Destroy this pool with TextureGpuManager::destroyTexture
-        TextureGpu* reservePoolId( uint32 poolId, uint32 width, uint32 height,
-                                   uint32 numSlices, uint8 numMipmaps, PixelFormatGpu pixelFormat );
+        TextureGpu *reservePoolId( uint32 poolId, uint32 width, uint32 height, uint32 numSlices,
+                                   uint8 numMipmaps, PixelFormatGpu pixelFormat );
 
-        bool hasPoolId( uint32 poolId, uint32 width, uint32 height,
-                        uint8 numMipmaps, PixelFormatGpu pixelFormat ) const;
+        bool hasPoolId( uint32 poolId, uint32 width, uint32 height, uint8 numMipmaps,
+                        PixelFormatGpu pixelFormat ) const;
 
         /**
         @param name
@@ -841,48 +859,43 @@ namespace Ogre
             as the texture was already created with a pool ID.
         @return
         */
-        TextureGpu* createTexture( const String &name,
-                                   const String &aliasName,
+        TextureGpu *createTexture( const String &name, const String &aliasName,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
-                                   const String &resourceGroup=BLANKSTRING,
-                                   uint32 filters=0,
-                                   uint32 poolId=0 );
-        TextureGpu* createTexture( const String &name,
+                                   const String &resourceGroup = BLANKSTRING, uint32 filters = 0,
+                                   uint32 poolId = 0 );
+        TextureGpu *createTexture( const String &                         name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
-                                   const String &resourceGroup=BLANKSTRING,
-                                   uint32 filters=0, uint32 poolId=0 );
-        TextureGpu* createOrRetrieveTexture( const String &name,
-                                             const String &aliasName,
+                                   const String &resourceGroup = BLANKSTRING, uint32 filters = 0,
+                                   uint32 poolId = 0 );
+        TextureGpu *createOrRetrieveTexture( const String &name, const String &aliasName,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                             uint32 textureFlags,
-                                             TextureTypes::TextureTypes initialType,
-                                             const String &resourceGroup=BLANKSTRING,
-                                             uint32 filters=0,
-                                             uint32 poolId=0 );
-        TextureGpu* createOrRetrieveTexture( const String &name,
+                                             uint32 textureFlags, TextureTypes::TextureTypes initialType,
+                                             const String &resourceGroup = BLANKSTRING,
+                                             uint32 filters = 0, uint32 poolId = 0 );
+        TextureGpu *createOrRetrieveTexture( const String &                         name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                             uint32 textureFlags,
-                                             TextureTypes::TextureTypes initialType,
-                                             const String &resourceGroup=BLANKSTRING,
-                                             uint32 filters=0, uint32 poolId=0 );
+                                             uint32 textureFlags, TextureTypes::TextureTypes initialType,
+                                             const String &resourceGroup = BLANKSTRING,
+                                             uint32 filters = 0, uint32 poolId = 0 );
         /// Helper function to call createOrRetrieveTexture with common
         /// parameters used for 2D diffuse textures loaded from file.
-        TextureGpu* createOrRetrieveTexture( const String &name,
-                                             const String &aliasName,
+        TextureGpu *createOrRetrieveTexture( const String &name, const String &aliasName,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              CommonTextureTypes::CommonTextureTypes type,
-                                             const String &resourceGroup=BLANKSTRING,
-                                             uint32 poolId=0 );
-        TextureGpu* createOrRetrieveTexture( const String &name,
+                                             const String &resourceGroup = BLANKSTRING,
+                                             uint32        poolId = 0 );
+        TextureGpu *createOrRetrieveTexture( const String &                         name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              CommonTextureTypes::CommonTextureTypes type,
-                                             const String &resourceGroup=BLANKSTRING,
-                                             uint32 poolId=0 );
-        TextureGpu* findTextureNoThrow( IdString name ) const;
+                                             const String &resourceGroup = BLANKSTRING,
+                                             uint32        poolId = 0 );
+        TextureGpu *findTextureNoThrow( IdString name ) const;
+
     protected:
         void destroyTextureImmediate( TextureGpu *texture );
+
     public:
         /** Destroys a texture
 
@@ -948,10 +961,10 @@ namespace Ogre
             StagingTexture that meets the criteria. When you're done, remove it by calling
             removeStagingTexture.
         */
-        StagingTexture* getStagingTexture( uint32 width, uint32 height, uint32 depth,
-                                           uint32 slices, PixelFormatGpu pixelFormat,
-                                           size_t minConsumptionRatioThreshold=25u );
-        void removeStagingTexture( StagingTexture *stagingTexture );
+        StagingTexture *getStagingTexture( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                           PixelFormatGpu pixelFormat,
+                                           size_t         minConsumptionRatioThreshold = 25u );
+        void            removeStagingTexture( StagingTexture *stagingTexture );
 
         /** Creates an AsyncTextureTicket that can be used to download data GPU -> CPU
             from a TextureGpu.
@@ -963,15 +976,14 @@ namespace Ogre
             If the value is not a family value, it will automatically be converted to one.
         @return
         */
-        AsyncTextureTicket* createAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
+        AsyncTextureTicket *createAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                                       TextureTypes::TextureTypes textureType,
-                                                      PixelFormatGpu pixelFormatFamily );
-        void destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
-        void destroyAllAsyncTextureTicket();
+                                                      PixelFormatGpu             pixelFormatFamily );
+        void                destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
+        void                destroyAllAsyncTextureTicket();
 
-        void saveTexture( TextureGpu *texture,
-                          const String &folderPath, set<String>::type &savedTextures,
-                          bool saveOitd, bool saveOriginal,
+        void saveTexture( TextureGpu *texture, const String &folderPath,
+                          set<String>::type &savedTextures, bool saveOitd, bool saveOriginal,
                           HlmsTextureExportListener *listener );
 
         /** Checks if the given format with the texture flags combination is supported
@@ -997,6 +1009,7 @@ namespace Ogre
     protected:
         /// Returns false if the entry was not found in the cache
         bool applyMetadataCacheTo( TextureGpu *texture );
+
     public:
         void _updateMetadataCache( TextureGpu *texture );
         void _removeMetadataCacheEntry( TextureGpu *texture );
@@ -1052,9 +1065,9 @@ namespace Ogre
             because a texture whose resolution is >= maxSplitResolution will force us to use
             multiple StagingTextures, thus relieving the pressure on memory and memory fragmentation.
         */
-        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, size_t maxSplitResolution=0 );
+        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, size_t maxSplitResolution = 0 );
 
-        const BudgetEntryVec& getBudget() const;
+        const BudgetEntryVec &getBudget() const;
 
         /** At a high level, texture loading works like this:
             1. Grab a free StagingTexture from "available" pool in main thread
@@ -1173,11 +1186,11 @@ namespace Ogre
         void setTrylockMutexFailureLimit( uint32 tryLockFailureLimit );
 
         /// This function CAN be called from any thread
-        const String* findAliasNameStr( IdString idName ) const;
+        const String *findAliasNameStr( IdString idName ) const;
         /// This function CAN be called from any thread
-        const String* findResourceNameStr( IdString idName ) const;
+        const String *findResourceNameStr( IdString idName ) const;
         /// This function CAN be called from any thread
-        const String* findResourceGroupStr( IdString idName ) const;
+        const String *findResourceGroupStr( IdString idName ) const;
 
         /// Implements TaskTypeResidencyTransition when doing any of the following transitions:
         ///     OnStorage   -> Resident
@@ -1197,13 +1210,14 @@ namespace Ogre
     protected:
         void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                    bool ignoreDelay );
+
     public:
         /// @see    TextureGpuListener::notifyTextureChanged
         void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                    void *extraData ) override;
 
-        RenderSystem* getRenderSystem() const;
-        VaoManager* getVaoManager() const;
+        RenderSystem *getRenderSystem() const;
+        VaoManager *  getVaoManager() const;
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage,
@@ -1223,7 +1237,7 @@ namespace Ogre
 
     public:
         void _scheduleUpdate( TextureGpu *texture, uint32 filters, Image2 *image, bool autoDeleteImage,
-                              bool skipMetadataCache = false,
+                              bool   skipMetadataCache = false,
                               uint32 sliceOrDepth = std::numeric_limits<uint32>::max() );
 
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency targetResidency,
@@ -1241,7 +1255,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

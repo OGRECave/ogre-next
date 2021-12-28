@@ -34,16 +34,17 @@ THE SOFTWARE.
 #include "OgreSingleton.h"
 #include "OgreVector3.h"
 #include "Vao/OgreBufferPacked.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** Handles the management of mesh resources.
         @remarks
             This class deals with the runtime management of
@@ -51,22 +52,23 @@ namespace Ogre
             the creation of resources (in this case mesh data),
             working within a fixed memory budget.
     */
-    class _OgreExport MeshManager final : public ResourceManager, public Singleton<MeshManager>,
-        public ManualResourceLoader
+    class _OgreExport MeshManager final : public ResourceManager,
+                                          public Singleton<MeshManager>,
+                                          public ManualResourceLoader
     {
     protected:
         /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* createParams) override;
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *createParams ) override;
 
         VaoManager *mVaoManager;
 
-        //the factor by which the bounding box of an entity is padded
+        // the factor by which the bounding box of an entity is padded
         Real mBoundsPaddingFactor;
 
         // The listener to pass to serializers
-        //MeshSerializerListener *mListener;
+        // MeshSerializerListener *mListener;
 
     public:
         MeshManager();
@@ -78,39 +80,37 @@ namespace Ogre
 
         /// Get a resource by name
         /// @see ResourceManager::getResourceByName
-        MeshPtr getByName(const String& name, const String& groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-
+        MeshPtr getByName(
+            const String &name,
+            const String &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
         /// Create a new mesh
         /// @see ResourceManager::createResource
-        MeshPtr create (const String& name, const String& group,
-                            bool isManual = false, ManualResourceLoader* loader = 0,
-                            const NameValuePairList* createParams = 0);
+        MeshPtr create( const String &name, const String &group, bool isManual = false,
+                        ManualResourceLoader *loader = 0, const NameValuePairList *createParams = 0 );
 
 #if OGRE_COMPILER == OGRE_COMPILER_CLANG
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Woverloaded-virtual"
 #endif
 
         /** Create a new mesh, or retrieve an existing one with the same
             name if it already exists.
             @param vertexBufferUsage The usage flags with which the vertex buffer(s)
                 will be created
-            @param indexBufferUsage The usage flags with which the index buffer(s) created for 
+            @param indexBufferUsage The usage flags with which the index buffer(s) created for
                 this mesh will be created with.
-            @param vertexBufferShadowed If true, the vertex buffers will be shadowed by system memory 
+            @param vertexBufferShadowed If true, the vertex buffers will be shadowed by system memory
                 copies for faster read access
-            @param indexBufferShadowed If true, the index buffers will be shadowed by system memory 
+            @param indexBufferShadowed If true, the index buffers will be shadowed by system memory
                 copies for faster read access
         @see ResourceManager::createOrRetrieve
         */
-        ResourceCreateOrRetrieveResult createOrRetrieve(const String& name,
-            const String& group,
-            bool isManual=false, ManualResourceLoader* loader=0,
-            const NameValuePairList* params=0,
-            BufferType vertexBufferType = BT_IMMUTABLE,
-            BufferType indexBufferType = BT_IMMUTABLE,
-            bool vertexBufferShadowed = true, bool indexBufferShadowed = true);
+        ResourceCreateOrRetrieveResult createOrRetrieve(
+            const String &name, const String &group, bool isManual = false,
+            ManualResourceLoader *loader = 0, const NameValuePairList *params = 0,
+            BufferType vertexBufferType = BT_IMMUTABLE, BufferType indexBufferType = BT_IMMUTABLE,
+            bool vertexBufferShadowed = true, bool indexBufferShadowed = true );
 
         /** Prepares a mesh for loading from a file.  This does the IO in advance of the call to load().
             @note
@@ -123,20 +123,20 @@ namespace Ogre
                 control over pre-processed data (such as
                 collision boxes, LOD reductions etc).
             @param filename The name of the .mesh file
-            @param groupName The name of the resource group to assign the mesh to 
+            @param groupName The name of the resource group to assign the mesh to
             @param vertexBufferUsage The usage flags with which the vertex buffer(s)
                 will be created
-            @param indexBufferUsage The usage flags with which the index buffer(s) created for 
+            @param indexBufferUsage The usage flags with which the index buffer(s) created for
                 this mesh will be created with.
-            @param vertexBufferShadowed If true, the vertex buffers will be shadowed by system memory 
+            @param vertexBufferShadowed If true, the vertex buffers will be shadowed by system memory
                 copies for faster read access
-            @param indexBufferShadowed If true, the index buffers will be shadowed by system memory 
+            @param indexBufferShadowed If true, the index buffers will be shadowed by system memory
                 copies for faster read access
         */
-        MeshPtr prepare( const String& filename, const String& groupName,
+        MeshPtr prepare( const String &filename, const String &groupName,
                          BufferType vertexBufferType = BT_IMMUTABLE,
-                         BufferType indexBufferType = BT_IMMUTABLE,
-                         bool vertexBufferShadowed = true, bool indexBufferShadowed = true );
+                         BufferType indexBufferType = BT_IMMUTABLE, bool vertexBufferShadowed = true,
+                         bool indexBufferShadowed = true );
 
         /** Loads a mesh from a file, making it immediately available for use.
             @note
@@ -149,40 +149,40 @@ namespace Ogre
                 control over pre-processed data (such as
                 collision boxes, LOD reductions etc).
             @param filename The name of the .mesh file
-            @param groupName The name of the resource group to assign the mesh to 
+            @param groupName The name of the resource group to assign the mesh to
             @param vertexBufferUsage The usage flags with which the vertex buffer(s)
                 will be created
-            @param indexBufferUsage The usage flags with which the index buffer(s) created for 
+            @param indexBufferUsage The usage flags with which the index buffer(s) created for
                 this mesh will be created with.
-            @param vertexBufferShadowed If true, the vertex buffers will be shadowed by system memory 
+            @param vertexBufferShadowed If true, the vertex buffers will be shadowed by system memory
                 copies for faster read access
-            @param indexBufferShadowed If true, the index buffers will be shadowed by system memory 
+            @param indexBufferShadowed If true, the index buffers will be shadowed by system memory
                 copies for faster read access
         */
-        MeshPtr load( const String& filename, const String& groupName,
+        MeshPtr load( const String &filename, const String &groupName,
                       BufferType vertexBufferType = BT_IMMUTABLE,
-                      BufferType indexBufferType = BT_IMMUTABLE,
-                      bool vertexBufferShadowed = true, bool indexBufferShadowed = true );
+                      BufferType indexBufferType = BT_IMMUTABLE, bool vertexBufferShadowed = true,
+                      bool indexBufferShadowed = true );
 
 #if OGRE_COMPILER == OGRE_COMPILER_CLANG
-#pragma clang diagnostic pop
+#    pragma clang diagnostic pop
 #endif
 
         /** Creates a new Mesh specifically for manual definition rather
-            than loading from an object file. 
+            than loading from an object file.
         @remarks
             Note that once you've defined your mesh, you must call Mesh::_setBounds and
             Mesh::_setBoundingRadius in order to define the bounds of your mesh. In previous
-            versions of OGRE you could call Mesh::_updateBounds, but OGRE's support of 
+            versions of OGRE you could call Mesh::_updateBounds, but OGRE's support of
             write-only vertex buffers makes this no longer appropriate.
         @param name The name to give the new mesh
-        @param groupName The name of the resource group to assign the mesh to 
+        @param groupName The name of the resource group to assign the mesh to
         @param loader ManualResourceLoader which will be called to load this mesh
             when the time comes. It is recommended that you populate this field
             in order that the mesh can be rebuilt should the need arise
         */
-        MeshPtr createManual( const String& name, const String& groupName, 
-            ManualResourceLoader* loader = 0);
+        MeshPtr createManual( const String &name, const String &groupName,
+                              ManualResourceLoader *loader = 0 );
 
         /** Imports a v1 mesh to new mesh, with optional optimization conversions.
         @remarks
@@ -195,7 +195,7 @@ namespace Ogre
                 [1] = POSITION NORMALS UV, POS NORM UV, POS NORM UV, POS NORM UV, ...
             Resulting mesh is reloadable as long as original mesh exists and is reloadable.
         @param name The name to give the new mesh
-        @param groupName The name of the resource group to assign the mesh to 
+        @param groupName The name of the resource group to assign the mesh to
         @param mesh
             The source v1 mesh to convert from. You can unload but should not delete
             this pointer if you want to be able to reload the converted mesh.
@@ -220,8 +220,9 @@ namespace Ogre
             which uses significantly less memory. Otherwise it is created with pixel
             format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
         */
-        MeshPtr createByImportingV1( const String& name, const String& groupName, 
-            v1::Mesh* mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose = true);
+        MeshPtr createByImportingV1( const String &name, const String &groupName, v1::Mesh *mesh,
+                                     bool halfPos, bool halfTexCoords, bool qTangents,
+                                     bool halfPose = true );
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -238,7 +239,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MeshManager& getSingleton();
+        static MeshManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -254,44 +255,45 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static MeshManager* getSingletonPtr();
+        static MeshManager *getSingletonPtr();
 
         /** Gets the factor by which the bounding box of an entity is padded.
             Default is 0.01
         */
         Real getBoundsPaddingFactor();
-    
+
         /** Sets the factor by which the bounding box of an entity is padded
-        */
-        void setBoundsPaddingFactor(Real paddingFactor);
+         */
+        void setBoundsPaddingFactor( Real paddingFactor );
 
         /** Sets the listener used to control mesh loading through the serializer.
-        */
-        //void setListener(MeshSerializerListener *listener);
-        
+         */
+        // void setListener(MeshSerializerListener *listener);
+
         /** Gets the listener used to control mesh loading through the serializer.
-        */
-        //MeshSerializerListener *getListener();
+         */
+        // MeshSerializerListener *getListener();
 
         /** @see ManualResourceLoader::loadResource */
-        void loadResource(Resource* res) override;
+        void loadResource( Resource *res ) override;
 
     protected:
         /** Saved parameters used to (re)build a manual mesh built by this class */
         struct V1MeshImportParams
         {
             String name, groupName;
-            bool halfPos, halfTexCoords, qTangents, halfPose;
+            bool   halfPos, halfTexCoords, qTangents, halfPose;
         };
         /** Map from resource pointer to parameter set */
-        typedef map<Resource*, V1MeshImportParams>::type V1MeshImportParamsMap;
+        typedef map<Resource *, V1MeshImportParams>::type V1MeshImportParamsMap;
+
         V1MeshImportParamsMap mV1MeshImportParams;
     };
 
     /** @} */
     /** @} */
 
-} //namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

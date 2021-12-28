@@ -29,90 +29,107 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassComputeDef_H_
 #define _OgreCompositorPassComputeDef_H_
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
 #include "OgrePixelFormatGpu.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorNodeDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
-	class _OgreExport CompositorPassComputeDef : public CompositorPassDef
+    class _OgreExport CompositorPassComputeDef : public CompositorPassDef
     {
-
     public:
-		struct ComputeTextureSource
+        struct ComputeTextureSource
         {
             /// Index of texture unit state to change
-            uint32      texUnitIdx;
+            uint32 texUnitIdx;
             /// Name of the texture (can come from input channel, local textures, or global ones)
-            IdString    textureName;
+            IdString textureName;
 
-            //Used by UAVs
+            // Used by UAVs
             ResourceAccess::ResourceAccess access;
-            int32           mipmapLevel;
-            int32           textureArrayIndex;
-            PixelFormatGpu  pixelFormat;
+            int32                          mipmapLevel;
+            int32                          textureArrayIndex;
+            PixelFormatGpu                 pixelFormat;
             union
             {
-                bool        allowWriteAfterWrite;
-                bool        usesAllFields;
+                bool allowWriteAfterWrite;
+                bool usesAllFields;
             };
 
             ComputeTextureSource( uint32 _texUnitIdx, IdString _textureName ) :
-                texUnitIdx( _texUnitIdx ), textureName( _textureName ),
-                access( ResourceAccess::Undefined ), mipmapLevel( 0 ), textureArrayIndex( 0 ),
-                pixelFormat( PFG_UNKNOWN ), allowWriteAfterWrite( false ) {}
+                texUnitIdx( _texUnitIdx ),
+                textureName( _textureName ),
+                access( ResourceAccess::Undefined ),
+                mipmapLevel( 0 ),
+                textureArrayIndex( 0 ),
+                pixelFormat( PFG_UNKNOWN ),
+                allowWriteAfterWrite( false )
+            {
+            }
 
             ComputeTextureSource( uint32 _texUnitIdx, IdString _textureName,
                                   ResourceAccess::ResourceAccess _access, int32 _mipmapLevel,
                                   int32 _textureArrayIndex, PixelFormatGpu _pixelFormat,
                                   bool _allowWriteAfterWrite ) :
-                texUnitIdx( _texUnitIdx ), textureName( _textureName ),
-                access( _access ), mipmapLevel( _mipmapLevel ), textureArrayIndex( _textureArrayIndex ),
-                pixelFormat( _pixelFormat ), allowWriteAfterWrite( _allowWriteAfterWrite ) {}
+                texUnitIdx( _texUnitIdx ),
+                textureName( _textureName ),
+                access( _access ),
+                mipmapLevel( _mipmapLevel ),
+                textureArrayIndex( _textureArrayIndex ),
+                pixelFormat( _pixelFormat ),
+                allowWriteAfterWrite( _allowWriteAfterWrite )
+            {
+            }
         };
         typedef vector<ComputeTextureSource>::type TextureSources;
 
         struct BufferSource
         {
-            uint32      slotIdx;
-            IdString    bufferName;
+            uint32                         slotIdx;
+            IdString                       bufferName;
             ResourceAccess::ResourceAccess access;
-            size_t      offset;
-            size_t      sizeBytes;
-            bool        allowWriteAfterWrite;
-            //PixelFormatGpu pixelFormat; /// PFG_UNKNOWN if used as UAV.
+            size_t                         offset;
+            size_t                         sizeBytes;
+            bool                           allowWriteAfterWrite;
+            // PixelFormatGpu pixelFormat; /// PFG_UNKNOWN if used as UAV.
 
-            BufferSource( uint32 _slotIdx, IdString _bufferName,
-                          ResourceAccess::ResourceAccess _access, size_t _offset=0,
-                          size_t _sizeBytes=0, bool _allowWriteAfterWrite=false ) :
-                slotIdx( _slotIdx ), bufferName( _bufferName ), access( _access ), offset( _offset ),
-                sizeBytes( _sizeBytes ), allowWriteAfterWrite( _allowWriteAfterWrite ) {}
+            BufferSource( uint32 _slotIdx, IdString _bufferName, ResourceAccess::ResourceAccess _access,
+                          size_t _offset = 0, size_t _sizeBytes = 0,
+                          bool _allowWriteAfterWrite = false ) :
+                slotIdx( _slotIdx ),
+                bufferName( _bufferName ),
+                access( _access ),
+                offset( _offset ),
+                sizeBytes( _sizeBytes ),
+                allowWriteAfterWrite( _allowWriteAfterWrite )
+            {
+            }
         };
         typedef vector<BufferSource>::type BufferSourceVec;
 
     protected:
-        TextureSources      mTextureSources;
-        TextureSources      mUavSources;
-        BufferSourceVec     mBufferSources;
-        CompositorNodeDef   *mParentNodeDef;
+        TextureSources     mTextureSources;
+        TextureSources     mUavSources;
+        BufferSourceVec    mBufferSources;
+        CompositorNodeDef *mParentNodeDef;
 
     public:
         /// Name of the HlmsComputeJob to run.
         IdString mJobName;
         IdString mCameraName;
 
-        CompositorPassComputeDef( CompositorNodeDef *parentNodeDef,
+        CompositorPassComputeDef( CompositorNodeDef *  parentNodeDef,
                                   CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_COMPUTE, parentTargetDef ),
             mParentNodeDef( parentNodeDef )
@@ -123,27 +140,27 @@ namespace Ogre
             @See ComputeTextureSource for params
         */
         void addTextureSource( uint32 texUnitIdx, const String &textureName );
-        void addTextureSource( uint32 texUnitIdx, const String &textureName,
-                               int32 textureArrayIndex, int32 mipmapLevel, PixelFormatGpu pixelFormat );
+        void addTextureSource( uint32 texUnitIdx, const String &textureName, int32 textureArrayIndex,
+                               int32 mipmapLevel, PixelFormatGpu pixelFormat );
 
         void addUavSource( uint32 texUnitIdx, const String &textureName,
                            ResourceAccess::ResourceAccess access, int32 textureArrayIndex,
                            int32 mipmapLevel, PixelFormatGpu pixelFormat, bool allowWriteAfterWrite );
 
-//        void addTexBuffer( uint32 slotIdx, const String &bufferName,
-//                           size_t offset=0, size_t sizeBytes=0 );
+        //        void addTexBuffer( uint32 slotIdx, const String &bufferName,
+        //                           size_t offset=0, size_t sizeBytes=0 );
         void addUavBuffer( uint32 slotIdx, const String &bufferName,
-                           ResourceAccess::ResourceAccess access, size_t offset=0,
-                           size_t sizeBytes=0, bool allowWriteAfterWrite=false );
+                           ResourceAccess::ResourceAccess access, size_t offset = 0,
+                           size_t sizeBytes = 0, bool allowWriteAfterWrite = false );
 
-        const TextureSources& getTextureSources() const     { return mTextureSources; }
-        const TextureSources& getUavSources() const         { return mUavSources; }
-        const BufferSourceVec& getBufferSources() const     { return mBufferSources; }
+        const TextureSources & getTextureSources() const { return mTextureSources; }
+        const TextureSources & getUavSources() const { return mUavSources; }
+        const BufferSourceVec &getBufferSources() const { return mBufferSources; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

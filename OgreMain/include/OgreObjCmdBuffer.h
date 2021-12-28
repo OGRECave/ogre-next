@@ -30,26 +30,27 @@ THE SOFTWARE.
 #define _OgreObjCmdBuffer_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreTextureBox.h"
-#include "OgreImage2.h"
+
 #include "OgreException.h"
+#include "OgreImage2.h"
+#include "OgreTextureBox.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     namespace TextureFilter
     {
         class FilterBase;
     }
-    typedef FastArray<TextureFilter::FilterBase*> FilterBaseArray;
+    typedef FastArray<TextureFilter::FilterBase *> FilterBaseArray;
 
     class _OgreExport ObjCmdBuffer : public ResourceAlloc
     {
@@ -62,19 +63,20 @@ namespace Ogre
         };
 
     protected:
-        FastArray<uint8>    mCommandAllocator;
-        FastArray<Cmd*>     mCommandBuffer;
+        FastArray<uint8> mCommandAllocator;
+        FastArray<Cmd *> mCommandBuffer;
 
-        void* requestMemory( size_t sizeBytes );
+        void *requestMemory( size_t sizeBytes );
 
     public:
         ~ObjCmdBuffer();
         void clear();
         void execute();
 
-        template <typename T> T* addCommand()
+        template <typename T>
+        T *addCommand()
         {
-            T *newCmd = reinterpret_cast<T*>( requestMemory( sizeof(T) ) );
+            T *newCmd = reinterpret_cast<T *>( requestMemory( sizeof( T ) ) );
             mCommandBuffer.push_back( newCmd );
             return newCmd;
         }
@@ -84,8 +86,8 @@ namespace Ogre
 
         class TransitionToLoaded : public Cmd
         {
-            TextureGpu  *texture;
-            void        *sysRamCopy;
+            TextureGpu *               texture;
+            void *                     sysRamCopy;
             GpuResidency::GpuResidency targetResidency;
 
         public:
@@ -96,7 +98,7 @@ namespace Ogre
 
         class OutOfDateCache : public Cmd
         {
-            TextureGpu  *texture;
+            TextureGpu *texture;
             Image2      loadedImage;
 
         public:
@@ -106,7 +108,7 @@ namespace Ogre
 
         class ExceptionThrown : public Cmd
         {
-            TextureGpu  *texture;
+            TextureGpu *texture;
             Exception   exception;
 
         public:
@@ -116,24 +118,21 @@ namespace Ogre
 
         class UploadFromStagingTex : public Cmd
         {
-            StagingTexture  *stagingTexture;
+            StagingTexture *stagingTexture;
             TextureBox      box;
-            TextureGpu      *dstTexture;
+            TextureGpu *    dstTexture;
             TextureBox      dstBox;
             uint8           mipLevel;
 
         public:
-            UploadFromStagingTex( StagingTexture *_stagingTexture,
-                                  const TextureBox &_box,
-                                  TextureGpu *_dstTexture,
-                                  const TextureBox &_dstBox,
-                                  uint8 _mipLevel );
+            UploadFromStagingTex( StagingTexture *_stagingTexture, const TextureBox &_box,
+                                  TextureGpu *_dstTexture, const TextureBox &_dstBox, uint8 _mipLevel );
             void execute() override;
         };
 
         class NotifyDataIsReady : public Cmd
         {
-            TextureGpu      *texture;
+            TextureGpu *    texture;
             FilterBaseArray filters;
 
         public:
@@ -144,7 +143,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -29,20 +29,20 @@ THE SOFTWARE.
 #ifndef __CompositorPassMipmapDef_H__
 #define __CompositorPassMipmapDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
-#include "OgreCommon.h"
 #include "OgreColourValue.h"
+#include "OgreCommon.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport CompositorPassMipmapDef : public CompositorPassDef
     {
@@ -53,7 +53,7 @@ namespace Ogre
             ApiDefault,
             /// Tell the API's to use high quality. Not recommended
             /// ("quality" varies a lot across vendors).
-            //ApiDefaultHQ,
+            // ApiDefaultHQ,
             /** Use a compute shader. Ogre must be compiled with JSON and the
                 Compute shaders bundled at Samples/Media/2.0/scripts/materials/Common
                 must be in the resource path.
@@ -85,7 +85,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

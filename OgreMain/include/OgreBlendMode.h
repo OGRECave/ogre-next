@@ -29,18 +29,20 @@ THE SOFTWARE.
 #define __BLENDMODE_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreColourValue.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Materials
-    *  @{
-    */
+     *  @{
+     */
 
     /** Type of texture blend mode.
-    */
+     */
     enum LayerBlendType
     {
         LBT_COLOUR,
@@ -54,7 +56,8 @@ namespace Ogre {
             rendering and thus provides automatic fallback if multitexture hardware
             is lacking or insufficient.
     */
-    enum LayerBlendOperation {
+    enum LayerBlendOperation
+    {
         /// Replace all colour with texture with no adjustment
         LBO_REPLACE,
         /// Add colour components together.
@@ -66,13 +69,15 @@ namespace Ogre {
 
     };
 
-    /** Expert list of valid texture blending operations, for use with TextureUnitState::setColourOperationEx
-        and TextureUnitState::setAlphaOperation, and internally in the LayerBlendModeEx class. It's worth
-        noting that these operations are for blending <i>between texture layers</i> and not between rendered objects
-        and the existing scene. Because all of these modes are only supported in multitexture hardware it may be
-        required to set up a fallback operation where this hardware is not available.
+    /** Expert list of valid texture blending operations, for use with
+       TextureUnitState::setColourOperationEx and TextureUnitState::setAlphaOperation, and internally in
+       the LayerBlendModeEx class. It's worth noting that these operations are for blending <i>between
+       texture layers</i> and not between rendered objects and the existing scene. Because all of these
+       modes are only supported in multitexture hardware it may be required to set up a fallback
+       operation where this hardware is not available.
     */
-    enum LayerBlendOperationEx {
+    enum LayerBlendOperationEx
+    {
         /// use source1 without modification
         LBX_SOURCE1,
         /// use source2 without modification
@@ -91,7 +96,8 @@ namespace Ogre {
         LBX_ADD_SMOOTH,
         /// subtract source2 from source1
         LBX_SUBTRACT,
-        /// use interpolated alpha value from vertices to scale source1, then add source2 scaled by (1-alpha)
+        /// use interpolated alpha value from vertices to scale source1, then add source2 scaled by
+        /// (1-alpha)
         LBX_BLEND_DIFFUSE_ALPHA,
         /// as LBX_BLEND_DIFFUSE_ALPHA, but use alpha from texture
         LBX_BLEND_TEXTURE_ALPHA,
@@ -99,9 +105,10 @@ namespace Ogre {
         LBX_BLEND_CURRENT_ALPHA,
         /// as LBX_BLEND_DIFFUSE_ALPHA but use a constant manual blend value (0.0-1.0)
         LBX_BLEND_MANUAL,
-        /// dot product of color1 and color2 
+        /// dot product of color1 and color2
         LBX_DOTPRODUCT,
-        /// use interpolated color values from vertices to scale source1, then add source2 scaled by (1-color)
+        /// use interpolated color values from vertices to scale source1, then add source2 scaled by
+        /// (1-color)
         LBX_BLEND_DIFFUSE_COLOUR
     };
 
@@ -159,31 +166,24 @@ namespace Ogre {
         /// Manual blending factor
         Real factor;
 
-        bool operator==(const LayerBlendModeEx& rhs) const
+        bool operator==( const LayerBlendModeEx &rhs ) const
         {
-            if (blendType != rhs.blendType) return false;
+            if( blendType != rhs.blendType )
+                return false;
 
-            if (blendType == LBT_COLOUR)
+            if( blendType == LBT_COLOUR )
             {
-
-                if (operation == rhs.operation &&
-                    source1 == rhs.source1 &&
-                    source2 == rhs.source2 &&
-                    colourArg1 == rhs.colourArg1 &&
-                    colourArg2 == rhs.colourArg2 &&
-                    factor == rhs.factor)
+                if( operation == rhs.operation && source1 == rhs.source1 && source2 == rhs.source2 &&
+                    colourArg1 == rhs.colourArg1 && colourArg2 == rhs.colourArg2 &&
+                    factor == rhs.factor )
                 {
                     return true;
                 }
             }
-            else // if (blendType == LBT_ALPHA)
+            else  // if (blendType == LBT_ALPHA)
             {
-                if (operation == rhs.operation &&
-                    source1 == rhs.source1 &&
-                    source2 == rhs.source2 &&
-                    alphaArg1 == rhs.alphaArg1 &&
-                    alphaArg2 == rhs.alphaArg2 &&
-                    factor == rhs.factor)
+                if( operation == rhs.operation && source1 == rhs.source1 && source2 == rhs.source2 &&
+                    alphaArg1 == rhs.alphaArg1 && alphaArg2 == rhs.alphaArg2 && factor == rhs.factor )
                 {
                     return true;
                 }
@@ -191,20 +191,14 @@ namespace Ogre {
             return false;
         }
 
-        bool operator!=(const LayerBlendModeEx& rhs) const
-        {
-            return !(*this == rhs);
-        }
-
-
-
+        bool operator!=( const LayerBlendModeEx &rhs ) const { return !( *this == rhs ); }
     };
 
     /** Types of blending that you can specify between an object and the existing contents of the scene.
         @remarks
-            As opposed to the LayerBlendType, which classifies blends between texture layers, these blending
-            types blend between the output of the texture units and the pixels already in the viewport,
-            allowing for object transparency, glows, etc.
+            As opposed to the LayerBlendType, which classifies blends between texture layers, these
+       blending types blend between the output of the texture units and the pixels already in the
+       viewport, allowing for object transparency, glows, etc.
         @par
             These types are provided to give quick and easy access to common effects. You can also use
             the more manual method of supplying source and destination blending factors.
@@ -216,7 +210,8 @@ namespace Ogre {
     {
         /// Make the object transparent based on the final alpha values in the texture
         SBT_TRANSPARENT_ALPHA,
-        /// Make the object transparent based on the colour values in the texture (brighter = more opaque)
+        /// Make the object transparent based on the colour values in the texture (brighter = more
+        /// opaque)
         SBT_TRANSPARENT_COLOUR,
         /// Add the texture values to the existing scene content
         SBT_ADD,
@@ -261,6 +256,6 @@ namespace Ogre {
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

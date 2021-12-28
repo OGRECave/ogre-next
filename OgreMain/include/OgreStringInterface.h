@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define __StringInterface_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 #include "Threading/OgreThreadHeaders.h"
 
@@ -38,14 +39,14 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     /// List of parameter types available
     enum ParameterType
@@ -70,11 +71,15 @@ namespace Ogre {
     class _OgreExport ParameterDef
     {
     public:
-        String name;
-        String description;
+        String        name;
+        String        description;
         ParameterType paramType;
-        ParameterDef(const String& newName, const String& newDescription, ParameterType newType)
-            : name(newName), description(newDescription), paramType(newType) {}
+        ParameterDef( const String &newName, const String &newDescription, ParameterType newType ) :
+            name( newName ),
+            description( newDescription ),
+            paramType( newType )
+        {
+        }
     };
     typedef vector<ParameterDef>::type ParameterList;
 
@@ -82,17 +87,18 @@ namespace Ogre {
     class _OgreExport ParamCommand
     {
     public:
-        virtual String doGet(const void* target) const = 0;
-        virtual void doSet(void* target, const String& val) = 0;
+        virtual String doGet( const void *target ) const = 0;
+        virtual void   doSet( void *target, const String &val ) = 0;
 
         virtual ~ParamCommand();
     };
-    typedef map<String, ParamCommand* >::type ParamCommandMap;
+    typedef map<String, ParamCommand *>::type ParamCommandMap;
 
     /** Class to hold a dictionary of parameters for a single class. */
     class _OgreExport ParamDictionary
     {
         friend class StringInterface;
+
     protected:
         /// Definitions of parameters
         ParameterList mParamDefs;
@@ -101,10 +107,10 @@ namespace Ogre {
         ParamCommandMap mParamCommands;
 
         /** Retrieves the parameter command object for a named parameter. */
-        ParamCommand* getParamCommand(const String& name)
+        ParamCommand *getParamCommand( const String &name )
         {
-            ParamCommandMap::iterator i = mParamCommands.find(name);
-            if (i != mParamCommands.end())
+            ParamCommandMap::iterator i = mParamCommands.find( name );
+            if( i != mParamCommands.end() )
             {
                 return i->second;
             }
@@ -114,10 +120,10 @@ namespace Ogre {
             }
         }
 
-        const ParamCommand* getParamCommand(const String& name) const
+        const ParamCommand *getParamCommand( const String &name ) const
         {
-            ParamCommandMap::const_iterator i = mParamCommands.find(name);
-            if (i != mParamCommands.end())
+            ParamCommandMap::const_iterator i = mParamCommands.find( name );
+            if( i != mParamCommands.end() )
             {
                 return i->second;
             }
@@ -126,141 +132,132 @@ namespace Ogre {
                 return 0;
             }
         }
+
     public:
-        ParamDictionary()  {}
-        /** Method for adding a parameter definition for this class. 
-        @param paramDef A ParameterDef object defining the parameter
-        @param paramCmd Pointer to a ParamCommand subclass to handle the getting / setting of this parameter.
-            NB this class will not destroy this on shutdown, please ensure you do
-
+        ParamDictionary() {}
+        /** Method for adding a parameter definition for this class.
+        @param paramDef
+            A ParameterDef object defining the parameter
+        @param paramCmd
+            Pointer to a ParamCommand subclass to handle the getting / setting of this
+            parameter. NB this class will not destroy this on shutdown, please ensure you do
         */
-        void addParameter(const ParameterDef& paramDef, ParamCommand* paramCmd)
+        void addParameter( const ParameterDef &paramDef, ParamCommand *paramCmd )
         {
-            mParamDefs.push_back(paramDef);
+            mParamDefs.push_back( paramDef );
             mParamCommands[paramDef.name] = paramCmd;
         }
-        /** Retrieves a list of parameters valid for this object. 
+        /** Retrieves a list of parameters valid for this object.
         @return
             A reference to a static list of ParameterDef objects.
 
         */
-        const ParameterList& getParameters() const
-        {
-            return mParamDefs;
-        }
-
-
-
+        const ParameterList &getParameters() const { return mParamDefs; }
     };
-    
-    /** Class defining the common interface which classes can use to 
+
+    /** Class defining the common interface which classes can use to
         present a reflection-style, self-defining parameter set to callers.
     @remarks
         This class also holds a static map of class name to parameter dictionaries
-        for each subclass to use. See ParamDictionary for details. 
+        for each subclass to use. See ParamDictionary for details.
     @remarks
         In order to use this class, each subclass must call createParamDictionary in their constructors
         which will create a parameter dictionary for the class if it does not exist yet.
     */
-    class _OgreExport StringInterface 
+    class _OgreExport StringInterface
     {
     private:
         /// Class name for this instance to be used as a lookup (must be initialised by subclasses)
-        String mParamDictName;
-        ParamDictionary* mParamDict;
+        String           mParamDictName;
+        ParamDictionary *mParamDict;
 
     protected:
-        /** Internal method for creating a parameter dictionary for the class, if it does not already exist.
+        /** Internal method for creating a parameter dictionary for the class, if it does not already
+        exist.
         @remarks
             This method will check to see if a parameter dictionary exist for this class yet,
-            and if not will create one. NB you must supply the name of the class (RTTI is not 
+            and if not will create one. NB you must supply the name of the class (RTTI is not
             used or performance).
-        @param
-            className the name of the class using the dictionary
+        @param className
+            the name of the class using the dictionary
         @return
             true if a new dictionary was created, false if it was already there
         */
-        bool createParamDictionary(const String& className);
+        bool createParamDictionary( const String &className );
 
     public:
-        StringInterface() : mParamDict(NULL) { }
+        StringInterface() : mParamDict( NULL ) {}
 
         /** Virtual destructor, see Effective C++ */
         virtual ~StringInterface() {}
 
-        /** Retrieves the parameter dictionary for this class. 
+        /** Retrieves the parameter dictionary for this class.
         @remarks
             Only valid to call this after createParamDictionary.
         @return
             Pointer to ParamDictionary shared by all instances of this class
             which you can add parameters to, retrieve parameters etc.
         */
-        ParamDictionary* getParamDictionary()
-        {
-            return mParamDict;
-        }
+        ParamDictionary *getParamDictionary() { return mParamDict; }
 
-        const ParamDictionary* getParamDictionary() const
-        {
-            return mParamDict;
-        }
+        const ParamDictionary *getParamDictionary() const { return mParamDict; }
 
-        /** Retrieves a list of parameters valid for this object. 
+        /** Retrieves a list of parameters valid for this object.
         @return
             A reference to a static list of ParameterDef objects.
 
         */
-        const ParameterList& getParameters() const;
+        const ParameterList &getParameters() const;
 
         /** Generic parameter setting method.
         @remarks
             Call this method with the name of a parameter and a string version of the value
             to set. The implementor will convert the string to a native type internally.
-            If in doubt, check the parameter definition in the list returned from 
+            If in doubt, check the parameter definition in the list returned from
             StringInterface::getParameters.
-        @param
-            name The name of the parameter to set
-        @param
-            value String value. Must be in the right format for the type specified in the parameter definition.
-            See the StringConverter class for more information.
+        @param name
+            The name of the parameter to set
+        @param value
+            String value. Must be in the right format for the type specified in the parameter
+            definition. See the StringConverter class for more information.
         @return
             true if set was successful, false otherwise (NB no exceptions thrown - tolerant method)
         */
-        virtual bool setParameter(const String& name, const String& value);
+        virtual bool setParameter( const String &name, const String &value );
         /** Generic multiple parameter setting method.
         @remarks
             Call this method with a list of name / value pairs
             to set. The implementor will convert the string to a native type internally.
-            If in doubt, check the parameter definition in the list returned from 
+            If in doubt, check the parameter definition in the list returned from
             StringInterface::getParameters.
-        @param
-            paramList Name/value pair list
+        @param paramList
+            Name/value pair list
         */
-        virtual void setParameterList(const NameValuePairList& paramList);
+        virtual void setParameterList( const NameValuePairList &paramList );
         /** Generic parameter retrieval method.
         @remarks
             Call this method with the name of a parameter to retrieve a string-format value of
             the parameter in question. If in doubt, check the parameter definition in the
             list returned from getParameters for the type of this parameter. If you
             like you can use StringConverter to convert this string back into a native type.
-        @param
-            name The name of the parameter to get
+        @param name
+            The name of the parameter to get
         @return
             String value of parameter, blank if not found
         */
-        virtual String getParameter(const String& name) const
+        virtual String getParameter( const String &name ) const
         {
             // Get dictionary
-            const ParamDictionary* dict = getParamDictionary();
+            const ParamDictionary *dict = getParamDictionary();
 
-            if (dict)
+            if( dict )
             {
                 // Look up command object
-                const ParamCommand* cmd = dict->getParamCommand(name);
+                const ParamCommand *cmd = dict->getParamCommand( name );
 
-                if (cmd)
+                if( cmd )
                 {
-                    return cmd->doGet(this);
+                    return cmd->doGet( this );
                 }
             }
 
@@ -271,47 +268,42 @@ namespace Ogre {
         @remarks
             This method takes the values of all the object's parameters and tries to set the
             same values on the destination object. This provides a completely type independent
-            way to copy parameters to other objects. Note that because of the String manipulation 
+            way to copy parameters to other objects. Note that because of the String manipulation
             involved, this should not be regarded as an efficient process and should be saved for
             times outside of the rendering loop.
         @par
             Any unrecognised parameters will be ignored as with setParameter method.
-        @param dest Pointer to object to have it's parameters set the same as this object.
-
+        @param dest
+            Pointer to object to have it's parameters set the same as this object.
         */
-        virtual void copyParametersTo(StringInterface* dest) const
+        virtual void copyParametersTo( StringInterface *dest ) const
         {
             // Get dictionary
-            const ParamDictionary* dict = getParamDictionary();
+            const ParamDictionary *dict = getParamDictionary();
 
-            if (dict)
+            if( dict )
             {
                 // Iterate through own parameters
                 ParameterList::const_iterator i;
-            
-                for (i = dict->mParamDefs.begin(); 
-                i != dict->mParamDefs.end(); ++i)
+
+                for( i = dict->mParamDefs.begin(); i != dict->mParamDefs.end(); ++i )
                 {
-                    dest->setParameter(i->name, getParameter(i->name));
+                    dest->setParameter( i->name, getParameter( i->name ) );
                 }
             }
-
-
         }
 
         /** Cleans up the static 'msDictionary' required to reset Ogre,
         otherwise the containers are left with invalid pointers, which will lead to a crash
         as soon as one of the ResourceManager implementers (e.g. MaterialManager) initializes.*/
-        static void cleanupDictionary () ;
-
+        static void cleanupDictionary();
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

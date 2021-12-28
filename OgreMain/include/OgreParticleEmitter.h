@@ -29,39 +29,39 @@ THE SOFTWARE.
 #define __ParticleEmitter_H__
 
 #include "OgrePrerequisites.h"
-#include "OgreVector3.h"
+
 #include "OgreColourValue.h"
-#include "OgreStringInterface.h"
-#include "OgreParticleEmitterCommands.h"
 #include "OgreParticle.h"
+#include "OgreParticleEmitterCommands.h"
+#include "OgreStringInterface.h"
+#include "OgreVector3.h"
+
 #include "OgreHeaderPrefix.h"
 
-
-namespace Ogre {
-
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
     /** Abstract class defining the interface to be implemented by particle emitters.
     @remarks
-        Particle emitters are the sources of particles in a particle system. 
-        This class defines the ParticleEmitter interface, and provides a basic implementation 
+        Particle emitters are the sources of particles in a particle system.
+        This class defines the ParticleEmitter interface, and provides a basic implementation
         for tasks which most emitters will do (these are of course overridable).
-        Particle emitters can be  grouped into types, e.g. 'point' emitters, 'box' emitters etc; each type will 
-        create particles with a different starting point, direction and velocity (although
-        within the types you can configure the ranges of these parameters). 
+        Particle emitters can be  grouped into types, e.g. 'point' emitters, 'box' emitters etc; each
+    type will create particles with a different starting point, direction and velocity (although within
+    the types you can configure the ranges of these parameters).
     @par
         Because there are so many types of emitters you could use, OGRE chooses not to dictate
-        the available types. It comes with some in-built, but allows plugins or applications to extend the emitter types available.
-        This is done by subclassing ParticleEmitter to have the appropriate emission behaviour you want,
-        and also creating a subclass of ParticleEmitterFactory which is responsible for creating instances 
-        of your new emitter type. You register this factory with the ParticleSystemManager using
-        addEmitterFactory, and from then on emitters of this type can be created either from code or through
-        text particle scripts by naming the type.
+        the available types. It comes with some in-built, but allows plugins or applications to extend
+    the emitter types available. This is done by subclassing ParticleEmitter to have the appropriate
+    emission behaviour you want, and also creating a subclass of ParticleEmitterFactory which is
+    responsible for creating instances of your new emitter type. You register this factory with the
+    ParticleSystemManager using addEmitterFactory, and from then on emitters of this type can be created
+    either from code or through text particle scripts by naming the type.
     @par
         This same approach is used for ParticleAffectors (which modify existing particles per frame).
         This means that OGRE is particularly flexible when it comes to creating particle system effects,
@@ -71,35 +71,33 @@ namespace Ogre {
     class _OgreExport ParticleEmitter : public StringInterface, public Particle
     {
     protected:
-
         // Command object for setting / getting parameters
-        static EmitterCommands::CmdAngle msAngleCmd;
-        static EmitterCommands::CmdColour msColourCmd;
+        static EmitterCommands::CmdAngle            msAngleCmd;
+        static EmitterCommands::CmdColour           msColourCmd;
         static EmitterCommands::CmdColourRangeStart msColourRangeStartCmd;
-        static EmitterCommands::CmdColourRangeEnd msColourRangeEndCmd;
-        static EmitterCommands::CmdDirection msDirectionCmd;
-        static EmitterCommands::CmdUp msUpCmd;
-        static EmitterCommands::CmdDirPositionRef msDirPositionRefCmd;
-        static EmitterCommands::CmdEmissionRate msEmissionRateCmd;
-        static EmitterCommands::CmdMaxTTL msMaxTTLCmd;
-        static EmitterCommands::CmdMaxVelocity msMaxVelocityCmd;
-        static EmitterCommands::CmdMinTTL msMinTTLCmd;
-        static EmitterCommands::CmdMinVelocity msMinVelocityCmd;
-        static EmitterCommands::CmdPosition msPositionCmd;
-        static EmitterCommands::CmdTTL msTTLCmd;
-        static EmitterCommands::CmdVelocity msVelocityCmd;
-        static EmitterCommands::CmdDuration msDurationCmd;
-        static EmitterCommands::CmdMinDuration msMinDurationCmd;
-        static EmitterCommands::CmdMaxDuration msMaxDurationCmd;
-        static EmitterCommands::CmdRepeatDelay msRepeatDelayCmd;
-        static EmitterCommands::CmdMinRepeatDelay msMinRepeatDelayCmd;
-        static EmitterCommands::CmdMaxRepeatDelay msMaxRepeatDelayCmd;
-        static EmitterCommands::CmdName msNameCmd;
-        static EmitterCommands::CmdEmittedEmitter msEmittedEmitterCmd;
-
+        static EmitterCommands::CmdColourRangeEnd   msColourRangeEndCmd;
+        static EmitterCommands::CmdDirection        msDirectionCmd;
+        static EmitterCommands::CmdUp               msUpCmd;
+        static EmitterCommands::CmdDirPositionRef   msDirPositionRefCmd;
+        static EmitterCommands::CmdEmissionRate     msEmissionRateCmd;
+        static EmitterCommands::CmdMaxTTL           msMaxTTLCmd;
+        static EmitterCommands::CmdMaxVelocity      msMaxVelocityCmd;
+        static EmitterCommands::CmdMinTTL           msMinTTLCmd;
+        static EmitterCommands::CmdMinVelocity      msMinVelocityCmd;
+        static EmitterCommands::CmdPosition         msPositionCmd;
+        static EmitterCommands::CmdTTL              msTTLCmd;
+        static EmitterCommands::CmdVelocity         msVelocityCmd;
+        static EmitterCommands::CmdDuration         msDurationCmd;
+        static EmitterCommands::CmdMinDuration      msMinDurationCmd;
+        static EmitterCommands::CmdMaxDuration      msMaxDurationCmd;
+        static EmitterCommands::CmdRepeatDelay      msRepeatDelayCmd;
+        static EmitterCommands::CmdMinRepeatDelay   msMinRepeatDelayCmd;
+        static EmitterCommands::CmdMaxRepeatDelay   msMaxRepeatDelayCmd;
+        static EmitterCommands::CmdName             msNameCmd;
+        static EmitterCommands::CmdEmittedEmitter   msEmittedEmitterCmd;
 
         /// Parent particle system
-        ParticleSystem* mParent;
+        ParticleSystem *mParent;
         /// Position relative to the center of the ParticleSystem
         Vector3 mPosition;
         /// Rate in particles per second at which this emitter wishes to emit particles
@@ -108,14 +106,17 @@ namespace Ogre {
         String mType;
         /// Base direction of the emitter, may not be used by some emitters
         Vector3 mDirection;
-        /// Notional up vector, used to speed up generation of variant directions, and also to orient some emitters.
+        /// Notional up vector, used to speed up generation of variant directions, and also to orient
+        /// some emitters.
         Vector3 mUp;
         /// When true, mDirPositionRef is used instead of mDirection to generate particles
         bool mUseDirPositionRef;
-        /* Center position to tell in which direction will particles be emitted according to their position,
+        /* Center position to tell in which direction will particles be emitted according to their
+           position,
             useful for explosions & implosions, some emitters (i.e. point emitter) may not need it. */
         Vector3 mDirPositionRef;
-        /// Angle around direction which particles may be emitted, internally radians but angleunits for interface
+        /// Angle around direction which particles may be emitted, internally radians but angleunits for
+        /// interface
         Radian mAngle;
         /// Min speed of particles
         Real mMinSpeed;
@@ -151,14 +152,16 @@ namespace Ogre {
         // Fractions of particles wanted to be emitted last time
         Real mRemainder;
 
-        /// The name of the emitter. The name is optional unless it is used as an emitter that is emitted itself.
+        /// The name of the emitter. The name is optional unless it is used as an emitter that is emitted
+        /// itself.
         String mName;
 
         /// The name of the emitter to be emitted (optional)
         String mEmittedEmitter;
 
         // If 'true', this emitter is emitted by another emitter.
-        // NB. That doesn't imply that the emitter itself emits other emitters (that could or could not be the case)
+        // NB. That doesn't imply that the emitter itself emits other emitters (that could or could not
+        // be the case)
         bool mEmitted;
 
         // NB Method below here are to help out people implementing emitters by providing the
@@ -167,24 +170,25 @@ namespace Ogre {
         /** Internal utility method for generating particle exit direction
         @param destVector Reference to vector to complete with new direction (normalised)
         */
-        virtual void genEmissionDirection( const Vector3 &particlePos, Vector3& destVector );
+        virtual void genEmissionDirection( const Vector3 &particlePos, Vector3 &destVector );
 
         /** Internal utility method to apply velocity to a particle direction.
         @param destVector The vector to scale by a randomly generated scale between min and max speed.
             Assumed normalised already, and likely already oriented in the right direction.
         */
-        virtual void genEmissionVelocity(Vector3& destVector);
+        virtual void genEmissionVelocity( Vector3 &destVector );
 
         /** Internal utility method for generating a time-to-live for a particle. */
         virtual Real genEmissionTTL();
 
         /** Internal utility method for generating a colour for a particle. */
-        virtual void genEmissionColour(ColourValue& destColour);
+        virtual void genEmissionColour( ColourValue &destColour );
 
-        /** Internal utility method for generating an emission count based on a constant emission rate. */
-        virtual unsigned short genConstantEmissionCount(Real timeElapsed);
+        /** Internal utility method for generating an emission count based on a constant emission rate.
+         */
+        virtual unsigned short genConstantEmissionCount( Real timeElapsed );
 
-        /** Internal method for setting up the basic parameter definitions for a subclass. 
+        /** Internal method for setting up the basic parameter definitions for a subclass.
         @remarks
             Because StringInterface holds a dictionary of parameters per class, subclasses need to
             call this to ask the base class to add it's parameters to their dictionary as well.
@@ -197,33 +201,32 @@ namespace Ogre {
         /** Internal method for initialising the duration & repeat of an emitter. */
         void initDurationRepeat();
 
-
     public:
-        ParticleEmitter(ParticleSystem* psys);
+        ParticleEmitter( ParticleSystem *psys );
         /** Virtual destructor essential. */
         virtual ~ParticleEmitter();
 
         /** Sets the position of this emitter relative to the particle system center. */
-        virtual void setPosition(const Vector3& pos);
+        virtual void setPosition( const Vector3 &pos );
 
         /** Returns the position of this emitter relative to the center of the particle system. */
-        virtual const Vector3& getPosition() const;
+        virtual const Vector3 &getPosition() const;
 
         /** Sets the direction of the emitter.
         @remarks
             Most emitters will have a base direction in which they emit particles (those which
             emit in all directions will ignore this parameter). They may not emit exactly along this
-            vector for every particle, many will introduce a random scatter around this vector using 
+            vector for every particle, many will introduce a random scatter around this vector using
             the angle property.
-        @note 
+        @note
             This resets the up vector.
         @param direction
             The base direction for particles emitted.
         */
-        virtual void setDirection(const Vector3& direction);
+        virtual void setDirection( const Vector3 &direction );
 
         /** Returns the base direction of the emitter. */
-        virtual const Vector3& getDirection() const;
+        virtual const Vector3 &getDirection() const;
 
         /** Sets the notional up vector of the emitter
         @remarks
@@ -233,10 +236,10 @@ namespace Ogre {
         @param up
             The base direction for particles emitted. It must be perpendicular to the direction vector.
         */
-        virtual void setUp(const Vector3& up);
+        virtual void setUp( const Vector3 &up );
 
         /** Returns the up vector of the emitter. */
-        virtual const Vector3& getUp() const;
+        virtual const Vector3 &getUp() const;
 
         /** Sets the direction of the emitter.
             Some particle effects need to emit particles in many random directions, but still
@@ -251,53 +254,56 @@ namespace Ogre {
         @param enable
             True to use mDirPositionRef, false to use the default behaviour with mDirection
         */
-        virtual void setDirPositionReference( const Vector3& position, bool enable );
+        virtual void setDirPositionReference( const Vector3 &position, bool enable );
 
         /** Returns the position reference to generate direction of emitted particles */
-        virtual const Vector3& getDirPositionReference() const;
+        virtual const Vector3 &getDirPositionReference() const;
 
         /** Returns whether direction or position reference is used */
         virtual bool getDirPositionReferenceEnabled() const;
 
         /** Sets the maximum angle away from the emitter direction which particle will be emitted.
         @remarks
-            Whilst the direction property defines the general direction of emission for particles, 
+            Whilst the direction property defines the general direction of emission for particles,
             this property defines how far the emission angle can deviate away from this base direction.
             This allows you to create a scatter effect - if set to 0, all particles will be emitted
             exactly along the emitters direction vector, whereas if you set it to 180 degrees or more,
             particles will be emitted in a sphere, i.e. in all directions.
         @param angle
-            Maximum angle which initial particle direction can deviate from the emitter base direction vector.
+            Maximum angle which initial particle direction can deviate from the emitter base direction
+        vector.
         */
-        virtual void setAngle(const Radian& angle);
+        virtual void setAngle( const Radian &angle );
 
-        /** Returns the maximum angle which the initial particle direction can deviate from the emitters base direction. */
-        virtual const Radian& getAngle() const;
+        /** Returns the maximum angle which the initial particle direction can deviate from the emitters
+         * base direction. */
+        virtual const Radian &getAngle() const;
 
         /** Sets the initial velocity of particles emitted.
         @remarks
             This method sets a constant speed for emitted particles. See the alternate version
-            of this method which takes 2 parameters if you want a variable speed. 
+            of this method which takes 2 parameters if you want a variable speed.
         @param
             speed The initial speed in world units per second which every particle emitted starts with.
         */
-        virtual void setParticleVelocity(Real speed);
-
+        virtual void setParticleVelocity( Real speed );
 
         /** Sets the initial velocity range of particles emitted.
         @remarks
-            This method sets the range of starting speeds for emitted particles. 
-            See the alternate version of this method which takes 1 parameter if you want a 
-            constant speed. This emitter will randomly choose a speed between the minimum and 
+            This method sets the range of starting speeds for emitted particles.
+            See the alternate version of this method which takes 1 parameter if you want a
+            constant speed. This emitter will randomly choose a speed between the minimum and
             maximum for each particle.
-        @param max The maximum speed in world units per second for the initial particle speed on emission.
-        @param min The minimum speed in world units per second for the initial particle speed on emission.
+        @param max The maximum speed in world units per second for the initial particle speed on
+        emission.
+        @param min The minimum speed in world units per second for the initial particle speed on
+        emission.
         */
-        virtual void setParticleVelocity(Real min, Real max);
+        virtual void setParticleVelocity( Real min, Real max );
         /** Returns the minimum particle velocity. */
-        virtual void setMinParticleVelocity(Real min);
+        virtual void setMinParticleVelocity( Real min );
         /** Returns the maximum particle velocity. */
-        virtual void setMaxParticleVelocity(Real max);
+        virtual void setMaxParticleVelocity( Real max );
 
         /** Returns the initial velocity of particles emitted. */
         virtual Real getParticleVelocity() const;
@@ -320,7 +326,7 @@ namespace Ogre {
         @param
             particlesPerSecond The number of particles to be emitted every second.
         */
-        virtual void setEmissionRate(Real particlesPerSecond);
+        virtual void setEmissionRate( Real particlesPerSecond );
 
         /** Returns the emission rate set for this emitter. */
         virtual Real getEmissionRate() const;
@@ -331,31 +337,30 @@ namespace Ogre {
             will exist before being destroyed. This method sets a constant TTL for all particles emitted.
             Note that affectors are able to modify the TTL of particles later.
         @par
-            Also see the alternate version of this method which takes a min and max TTL in order to 
+            Also see the alternate version of this method which takes a min and max TTL in order to
             have the TTL vary per particle.
         @param ttl The number of seconds each particle will live for.
         */
-        virtual void setTimeToLive(Real ttl);
+        virtual void setTimeToLive( Real ttl );
         /** Sets the range of lifetime for particles emitted.
         @remarks
             The emitter initialises particles with a time-to-live (TTL), the number of seconds a particle
-            will exist before being destroyed. This method sets a range for the TTL for all particles emitted;
-            the ttl may be randomised between these 2 extremes or will vary some other way depending on the
-            emitter.
-            Note that affectors are able to modify the TTL of particles later.
+            will exist before being destroyed. This method sets a range for the TTL for all particles
+        emitted; the ttl may be randomised between these 2 extremes or will vary some other way depending
+        on the emitter. Note that affectors are able to modify the TTL of particles later.
         @par
-            Also see the alternate version of this method which takes a single TTL in order to 
+            Also see the alternate version of this method which takes a single TTL in order to
             set a constant TTL for all particles.
         @param minTtl The minimum number of seconds each particle will live for. Must be non-negative!
         @param maxTtl The maximum number of seconds each particle will live for. Must be non-negative!
         */
-        virtual void setTimeToLive(Real minTtl, Real maxTtl);
+        virtual void setTimeToLive( Real minTtl, Real maxTtl );
 
         /** Sets the minimum time each particle will live for. Must be non-negative! */
-        virtual void setMinTimeToLive(Real min);
+        virtual void setMinTimeToLive( Real min );
         /** Sets the maximum time each particle will live for. Must be non-negative! */
-        virtual void setMaxTimeToLive(Real max);
-        
+        virtual void setMaxTimeToLive( Real max );
+
         /** Gets the time each particle will live for. */
         virtual Real getTimeToLive() const;
 
@@ -367,45 +372,45 @@ namespace Ogre {
         /** Sets the initial colour of particles emitted.
         @remarks
             Particles have an initial colour on emission which the emitter sets. This method sets
-            this colour. See the alternate version of this method which takes 2 colours in order to establish 
-            a range of colours to be assigned to particles.
+            this colour. See the alternate version of this method which takes 2 colours in order to
+        establish a range of colours to be assigned to particles.
         @param colour The colour which all particles will be given on emission.
         */
-        virtual void setColour(const ColourValue& colour);
+        virtual void setColour( const ColourValue &colour );
         /** Sets the range of colours for emitted particles.
         @remarks
             Particles have an initial colour on emission which the emitter sets. This method sets
-            the range of this colour. See the alternate version of this method which takes a single colour
-            in order to set a constant colour for all particles. Emitters may choose to randomly assign
-            a colour in this range, or may use some other method to vary the colour.
+            the range of this colour. See the alternate version of this method which takes a single
+        colour in order to set a constant colour for all particles. Emitters may choose to randomly
+        assign a colour in this range, or may use some other method to vary the colour.
         @param colourStart The start of the colour range
         @param colourEnd The end of the colour range
         */
-        virtual void setColour(const ColourValue& colourStart, const ColourValue& colourEnd);
+        virtual void setColour( const ColourValue &colourStart, const ColourValue &colourEnd );
         /** Sets the minimum colour of particles to be emitted. */
-        virtual void setColourRangeStart(const ColourValue& colour);
+        virtual void setColourRangeStart( const ColourValue &colour );
         /** Sets the maximum colour of particles to be emitted. */
-        virtual void setColourRangeEnd(const ColourValue& colour);
+        virtual void setColourRangeEnd( const ColourValue &colour );
         /** Gets the colour of particles to be emitted. */
-        virtual const ColourValue& getColour() const;
+        virtual const ColourValue &getColour() const;
         /** Gets the minimum colour of particles to be emitted. */
-        virtual const ColourValue& getColourRangeStart() const;
+        virtual const ColourValue &getColourRangeStart() const;
         /** Gets the maximum colour of particles to be emitted. */
-        virtual const ColourValue& getColourRangeEnd() const;
+        virtual const ColourValue &getColourRangeEnd() const;
 
         /** Gets the number of particles which this emitter would like to emit based on the time elapsed.
         @remarks
             For efficiency the emitter does not actually create new Particle instances (these are reused
             by the ParticleSystem as existing particles 'die'). The implementation for this method must
-            return the number of particles the emitter would like to emit given the number of seconds which
-            have elapsed (passed in as a parameter).
+            return the number of particles the emitter would like to emit given the number of seconds
+        which have elapsed (passed in as a parameter).
         @par
-            Based on the return value from this method, the ParticleSystem class will call 
+            Based on the return value from this method, the ParticleSystem class will call
             _initParticle once for each particle it chooses to allow to be emitted by this emitter.
             The emitter should not track these _initParticle calls, it should assume all emissions
             requested were made (even if they could not be because of particle quotas).
         */
-        virtual unsigned short _getEmissionCount(Real timeElapsed) = 0;
+        virtual unsigned short _getEmissionCount( Real timeElapsed ) = 0;
 
         /** Initialises a particle based on the emitter's approach and parameters.
         @remarks
@@ -416,13 +421,13 @@ namespace Ogre {
             starts particles. This is passed as a pointer rather than being created by the emitter so the
             ParticleSystem can reuse Particle instances, and can also set defaults itself.
         */
-        virtual void _initParticle(Particle* pParticle) {
+        virtual void _initParticle( Particle *pParticle )
+        {
             // Initialise size in case it's been altered
             pParticle->resetDimensions();
         }
 
-
-        /** Returns the name of the type of emitter. 
+        /** Returns the name of the type of emitter.
         @remarks
             This property is useful for determining the type of emitter procedurally so another
             can be created.
@@ -433,7 +438,7 @@ namespace Ogre {
         @remarks
             You can turn an emitter off completely by setting this parameter to false.
         */
-        virtual void setEnabled(bool enabled);
+        virtual void setEnabled( bool enabled );
 
         /** Gets the flag indicating if this emitter is enabled or not. */
         virtual bool getEnabled() const;
@@ -445,7 +450,7 @@ namespace Ogre {
             that the emitter does not 'kick in' until later.
         @param startTime The time in seconds from the creation or enabling of the emitter.
         */
-        virtual void setStartTime(Real startTime);
+        virtual void setStartTime( Real startTime );
         /** Gets the start time of the emitter. */
         virtual Real getStartTime() const;
 
@@ -453,34 +458,34 @@ namespace Ogre {
         @remarks
             By default emitters run indefinitely (unless you manually disable them). By setting this
             parameter, you can make an emitter turn off on it's own after a set number of seconds. It
-            will then remain disabled until either setEnabled(true) is called, or if the 'repeatAfter' parameter
-            has been set it will also repeat after a number of seconds.
+            will then remain disabled until either setEnabled(true) is called, or if the 'repeatAfter'
+        parameter has been set it will also repeat after a number of seconds.
         @par
-            Also see the alternative version of this method which allows you to set a min and max duration for
-            a random variable duration.
+            Also see the alternative version of this method which allows you to set a min and max
+        duration for a random variable duration.
         @param duration The duration in seconds.
         */
-        virtual void setDuration(Real duration);
+        virtual void setDuration( Real duration );
 
         /** Gets the duration of the emitter from when it is created or re-enabled. */
         virtual Real getDuration() const;
 
-        /** Sets the range of random duration for this emitter. 
+        /** Sets the range of random duration for this emitter.
         @remarks
             By default emitters run indefinitely (unless you manually disable them). By setting this
             parameter, you can make an emitter turn off on it's own after a random number of seconds. It
-            will then remain disabled until either setEnabled(true) is called, or if the 'repeatAfter' parameter
-            has been set it will also repeat after a number of seconds.
+            will then remain disabled until either setEnabled(true) is called, or if the 'repeatAfter'
+        parameter has been set it will also repeat after a number of seconds.
         @par
             Also see the alternative version of this method which allows you to set a constant duration.
         @param min The minimum duration in seconds.
         @param max The minimum duration in seconds.
         */
-        virtual void setDuration(Real min, Real max);
+        virtual void setDuration( Real min, Real max );
         /** Sets the minimum duration of this emitter in seconds (see setDuration for more details) */
-        virtual void setMinDuration(Real min);
+        virtual void setMinDuration( Real min );
         /** Sets the maximum duration of this emitter in seconds (see setDuration for more details) */
-        virtual void setMaxDuration(Real max);
+        virtual void setMaxDuration( Real max );
         /** Gets the minimum duration of this emitter in seconds (see setDuration for more details) */
         virtual Real getMinDuration() const;
         /** Gets the maximum duration of this emitter in seconds (see setDuration for more details) */
@@ -488,34 +493,35 @@ namespace Ogre {
 
         /** Sets the time between repeats of the emitter.
         @remarks
-            By default emitters run indefinitely (unless you manually disable them). However, if you manually
-            disable the emitter (by calling setEnabled(false), or it's duration runs out, it will cease to emit
+            By default emitters run indefinitely (unless you manually disable them). However, if you
+        manually disable the emitter (by calling setEnabled(false), or it's duration runs out, it will
+        cease to emit
         @par
-            Also see the alternative version of this method which allows you to set a min and max duration for
-            a random variable duration.
+            Also see the alternative version of this method which allows you to set a min and max
+        duration for a random variable duration.
         @param duration The duration in seconds.
         */
-        virtual void setRepeatDelay(Real duration);
+        virtual void setRepeatDelay( Real duration );
 
         /** Gets the duration of the emitter from when it is created or re-enabled. */
         virtual Real getRepeatDelay() const;
 
-        /** Sets the range of random duration for this emitter. 
+        /** Sets the range of random duration for this emitter.
         @remarks
             By default emitters run indefinitely (unless you manually disable them). By setting this
             parameter, you can make an emitter turn off on it's own after a random number of seconds. It
-            will then remain disabled until either setEnabled(true) is called, or if the 'repeatAfter' parameter
-            has been set it will also repeat after a number of seconds.
+            will then remain disabled until either setEnabled(true) is called, or if the 'repeatAfter'
+        parameter has been set it will also repeat after a number of seconds.
         @par
             Also see the alternative version of this method which allows you to set a constant duration.
         @param min The minimum duration in seconds.
         @param max The minimum duration in seconds.
         */
-        virtual void setRepeatDelay(Real min, Real max);
+        virtual void setRepeatDelay( Real min, Real max );
         /** Sets the minimum duration of this emitter in seconds (see setRepeatDelay for more details) */
-        virtual void setMinRepeatDelay(Real min);
+        virtual void setMinRepeatDelay( Real min );
         /** Sets the maximum duration of this emitter in seconds (see setRepeatDelay for more details) */
-        virtual void setMaxRepeatDelay(Real max);
+        virtual void setMaxRepeatDelay( Real max );
         /** Gets the minimum duration of this emitter in seconds (see setRepeatDelay for more details) */
         virtual Real getMinRepeatDelay() const;
         /** Gets the maximum duration of this emitter in seconds (see setRepeatDelay for more details) */
@@ -525,28 +531,25 @@ namespace Ogre {
         const String &getName() const;
 
         /** Sets the name of the emitter */
-        virtual void setName(const String& newName);
+        virtual void setName( const String &newName );
 
         /** Returns the name of the emitter to be emitted */
         const String &getEmittedEmitter() const;
 
         /** Sets the name of the emitter to be emitted*/
-        virtual void setEmittedEmitter(const String& emittedEmitter);
+        virtual void setEmittedEmitter( const String &emittedEmitter );
 
         /** Return true if the emitter is emitted by another emitter */
         virtual bool isEmitted() const;
 
         /** Set the indication (true/false) to indicate that the emitter is emitted by another emitter */
-        virtual void setEmitted(bool emitted);
-
-
+        virtual void setEmitted( bool emitted );
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

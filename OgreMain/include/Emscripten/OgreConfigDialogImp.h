@@ -30,8 +30,9 @@ THE SOFTWARE.
 #define __EmscriptenConfigDialog_H__
 
 #include "OgrePrerequisites.h"
-#include "OgreRoot.h"
+
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -40,7 +41,7 @@ namespace Ogre
     public:
         ConfigDialog();
         virtual ~ConfigDialog();
-    
+
     public:
         void initialise();
         void run();
@@ -49,9 +50,9 @@ namespace Ogre
         virtual bool display();
 
     protected:
-        RenderSystem* iSelectedRenderSystem;
-        bool        iDisplayStatus;     
+        RenderSystem *iSelectedRenderSystem;
+        bool          iDisplayStatus;
     };
-}
+}  // namespace Ogre
 
-#endif // __AndroidConfigDialog_H__
+#endif  // __AndroidConfigDialog_H__

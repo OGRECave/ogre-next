@@ -29,16 +29,17 @@ THE SOFTWARE.
 #define __RenderObjectListener_H__
 
 #include "OgrePrerequisites.h"
-#include "OgreRenderable.h"
+
 #include "OgrePass.h"
+#include "OgreRenderable.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     class Pass;
     class Renderable;
 
     /** Abstract interface which classes must implement if they wish to receive
-        events from the scene manager when single object is about to be rendered. 
+        events from the scene manager when single object is about to be rendered.
     */
     class _OgreExport RenderObjectListener
     {
@@ -58,11 +59,12 @@ namespace Ogre {
         @param suppressRenderStateChanges
             True if render state changes should be suppressed.
         */
-        virtual void notifyRenderSingleObject(Renderable* rend, const Pass* pass, const AutoParamDataSource* source, 
-            const LightList* pLightList, bool suppressRenderStateChanges) = 0;
+        virtual void notifyRenderSingleObject( Renderable *rend, const Pass *pass,
+                                               const AutoParamDataSource *source,
+                                               const LightList *          pLightList,
+                                               bool suppressRenderStateChanges ) = 0;
     };
 
-} // namespace Ogre
+}  // namespace Ogre
 
-#endif // __RenderObjectListener_H__
-
+#endif  // __RenderObjectListener_H__

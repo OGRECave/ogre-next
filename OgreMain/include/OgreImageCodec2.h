@@ -32,14 +32,14 @@ THE SOFTWARE.
 #include "OgreTextureBox.h"
 #include "OgreTextureGpu.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** Codec specialized in images.
         @remarks
             The users implementing subclasses of ImageCodec2 are required to return
@@ -70,28 +70,22 @@ namespace Ogre {
                 }
             }
 
-            TextureBox                  box;
-            TextureTypes::TextureTypes  textureType;
-            PixelFormatGpu              format;
-            uint8                       numMipmaps;
-            bool                        freeOnDestruction;
+            TextureBox                 box;
+            TextureTypes::TextureTypes textureType;
+            PixelFormatGpu             format;
+            uint8                      numMipmaps;
+            bool                       freeOnDestruction;
 
         public:
-            String dataType() const override
-            {
-                return "ImageData2";
-            }
+            String dataType() const override { return "ImageData2"; }
         };
 
     public:
-        String getDataType() const override
-        {
-            return "ImageCodec2";
-        }
+        String getDataType() const override { return "ImageCodec2"; }
     };
 
     /** @} */
     /** @} */
-} // namespace
+}  // namespace Ogre
 
 #endif

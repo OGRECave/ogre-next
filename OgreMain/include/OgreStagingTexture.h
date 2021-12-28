@@ -29,20 +29,20 @@ THE SOFTWARE.
 #ifndef _OgreStagingTexture_H_
 #define _OgreStagingTexture_H_
 
-#include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreTextureBox.h"
+#include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** A StagingTexture is an intermediate texture that can be read and be written from both
         CPU & GPU.
@@ -80,16 +80,17 @@ namespace Ogre
     class _OgreExport StagingTexture : public RenderSysAlloc
     {
     protected:
-        VaoManager  *mVaoManager;
-        uint32      mLastFrameUsed;
+        VaoManager *   mVaoManager;
+        uint32         mLastFrameUsed;
         PixelFormatGpu mFormatFamily;
 
-        bool        mMapRegionStarted;
+        bool mMapRegionStarted;
 #if OGRE_DEBUG_MODE
-        bool        mUserQueriedIfUploadWillStall;
+        bool mUserQueriedIfUploadWillStall;
 #endif
 
         virtual bool belongsToUs( const TextureBox &box ) = 0;
+
         virtual TextureBox mapRegionImpl( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                           PixelFormatGpu pixelFormat ) = 0;
 
@@ -122,7 +123,7 @@ namespace Ogre
         /// different APIs (e.g. on D3D11 two StagingTextures, one that supports RGB8,
         /// another for BC1 of 64 MB each; on OpenGL we need to request two textures of 64MB
         /// each, and not just one because the first one can fulfill every request)
-        PixelFormatGpu getFormatFamily() const                  { return mFormatFamily; }
+        PixelFormatGpu getFormatFamily() const { return mFormatFamily; }
 
         /// If it returns true, startMapRegion will stall.
         bool uploadWillStall();
@@ -184,17 +185,16 @@ namespace Ogre
             If misused, readbacks will be incorrect as data in CPU won't mirror that of
             the data in GPU, and possibly other bugs too.
         */
-        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
-                             const TextureBox *dstBox=0,
-                             bool skipSysRamCopy=false );
+        virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                             const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
+                             bool skipSysRamCopy = false );
 
-        uint32 getLastFrameUsed() const             { return mLastFrameUsed; }
+        uint32 getLastFrameUsed() const { return mLastFrameUsed; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

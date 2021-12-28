@@ -28,14 +28,13 @@ THE SOFTWARE
 
 #define OGRE_AUTO_MUTEX_NAME mutex
 #if OGRE_THREAD_PROVIDER == 0
-    #include "OgreThreadDefinesNone.h"
+#    include "OgreThreadDefinesNone.h"
 #elif OGRE_THREAD_PROVIDER == 2
-    #include "OgreThreadDefinesPoco.h"
+#    include "OgreThreadDefinesPoco.h"
 #elif OGRE_THREAD_PROVIDER == 3
-    #include "OgreThreadDefinesTBB.h"
+#    include "OgreThreadDefinesTBB.h"
 #elif OGRE_THREAD_PROVIDER == 4
-   #include "OgreThreadDefinesSTD.h"
+#    include "OgreThreadDefinesSTD.h"
 #endif
 
 #endif
-

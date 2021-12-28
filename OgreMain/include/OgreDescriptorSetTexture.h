@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreDescriptorSetTexture_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 #include "OgrePixelFormatGpu.h"
 
@@ -38,11 +39,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** Descriptor sets describe what textures should be bound together in one place.
         They must be pushed to mTexture in the order of ShaderType.
@@ -67,36 +68,34 @@ namespace Ogre
     */
     struct _OgreExport DescriptorSetTexture
     {
-        uint16      mRefCount;
-        uint16      mShaderTypeTexCount[NumShaderTypes];
-        void        *mRsData;           /// Render-System specific data
+        uint16 mRefCount;
+        uint16 mShaderTypeTexCount[NumShaderTypes];
+        void * mRsData;  /// Render-System specific data
 
-        FastArray<const TextureGpu*> mTextures;
+        FastArray<const TextureGpu *> mTextures;
 
-        DescriptorSetTexture() :
-            mRefCount( 0 ),
-            mRsData( 0 )
+        DescriptorSetTexture() : mRefCount( 0 ), mRsData( 0 )
         {
-            memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
+            memset( mShaderTypeTexCount, 0, sizeof( mShaderTypeTexCount ) );
         }
 
         /// Warning: This operator won't see changes in SRVs (i.e. data baked into mRsData).
         /// If you get notifyTextureChanged call, the SRV has changed and you must
         /// assume the DescriptorSetTexture has changed.
         /// SRV = Shader Resource View.
-        bool operator != ( const DescriptorSetTexture &other ) const
+        bool operator!=( const DescriptorSetTexture &other ) const
         {
             const size_t thisNumTextures = mTextures.size();
             if( thisNumTextures != other.mTextures.size() )
                 return true;
 
-            for( size_t i=0; i<thisNumTextures; ++i )
+            for( size_t i = 0; i < thisNumTextures; ++i )
             {
                 if( this->mTextures[i] != other.mTextures[i] )
                     return true;
             }
 
-            for( size_t i=0; i<NumShaderTypes; ++i )
+            for( size_t i = 0; i < NumShaderTypes; ++i )
             {
                 if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
                     return true;
@@ -105,19 +104,19 @@ namespace Ogre
             return false;
         }
 
-        bool operator < ( const DescriptorSetTexture &other ) const
+        bool operator<( const DescriptorSetTexture &other ) const
         {
             const size_t thisNumTextures = mTextures.size();
             if( thisNumTextures != other.mTextures.size() )
                 return thisNumTextures < other.mTextures.size();
 
-            for( size_t i=0; i<thisNumTextures; ++i )
+            for( size_t i = 0; i < thisNumTextures; ++i )
             {
                 if( this->mTextures[i] != other.mTextures[i] )
                     return this->mTextures[i] < other.mTextures[i];
             }
 
-            for( size_t i=0; i<NumShaderTypes; ++i )
+            for( size_t i = 0; i < NumShaderTypes; ++i )
             {
                 if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
                     return this->mShaderTypeTexCount[i] < other.mShaderTypeTexCount[i];
@@ -152,14 +151,13 @@ namespace Ogre
             /// binds from offset until the end of the buffer.
             size_t sizeBytes;
 
-            bool operator != ( const BufferSlot &other ) const
+            bool operator!=( const BufferSlot &other ) const
             {
-                return  this->buffer != other.buffer ||
-                        this->offset != other.offset ||
-                        this->sizeBytes != other.sizeBytes;
+                return this->buffer != other.buffer || this->offset != other.offset ||
+                       this->sizeBytes != other.sizeBytes;
             }
 
-            bool operator < ( const BufferSlot &other ) const
+            bool operator<( const BufferSlot &other ) const
             {
                 if( this->buffer != other.buffer )
                     return this->buffer < other.buffer;
@@ -180,27 +178,26 @@ namespace Ogre
         };
         struct _OgreExport TextureSlot
         {
-            TextureGpu      *texture;
-            bool            generalReadWrite;
-            bool            cubemapsAs2DArrays;
-            uint8           mipmapLevel;
+            TextureGpu *texture;
+            bool        generalReadWrite;
+            bool        cubemapsAs2DArrays;
+            uint8       mipmapLevel;
             /// When this value is 0, it means all mipmaps from mipmapLevel until the end.
-            uint8           numMipmaps;
-            uint16          textureArrayIndex;
+            uint8  numMipmaps;
+            uint16 textureArrayIndex;
             /// When left as PFG_UNKNOWN, we'll automatically use the TextureGpu's native format
-            PixelFormatGpu  pixelFormat;
+            PixelFormatGpu pixelFormat;
 
-            bool operator != ( const TextureSlot &other ) const
+            bool operator!=( const TextureSlot &other ) const
             {
-                return  this->texture != other.texture ||
-                        this->generalReadWrite != other.generalReadWrite ||
-                        this->mipmapLevel != other.mipmapLevel ||
-                        this->numMipmaps != other.numMipmaps ||
-                        this->textureArrayIndex != other.textureArrayIndex ||
-                        this->pixelFormat != other.pixelFormat;
+                return this->texture != other.texture ||
+                       this->generalReadWrite != other.generalReadWrite ||
+                       this->mipmapLevel != other.mipmapLevel || this->numMipmaps != other.numMipmaps ||
+                       this->textureArrayIndex != other.textureArrayIndex ||
+                       this->pixelFormat != other.pixelFormat;
             }
 
-            bool operator < ( const TextureSlot &other ) const
+            bool operator<( const TextureSlot &other ) const
             {
                 if( this->texture != other.texture )
                     return this->texture < other.texture;
@@ -230,65 +227,55 @@ namespace Ogre
         };
         struct _OgreExport Slot
         {
-            SlotType        slotType;
+            SlotType slotType;
+
         protected:
             union
             {
                 BufferSlot  buffer;
                 TextureSlot texture;
             };
+
         public:
-            Slot()
-            {
-                memset( this, 0, sizeof(*this) );
-            }
+            Slot() { memset( this, 0, sizeof( *this ) ); }
 
             Slot( SlotType _slotType )
             {
-                memset( this, 0, sizeof(*this) );
+                memset( this, 0, sizeof( *this ) );
                 slotType = _slotType;
             }
 
-            bool empty() const
-            {
-                return buffer.buffer == 0 && texture.texture == 0;
-            }
+            bool empty() const { return buffer.buffer == 0 && texture.texture == 0; }
 
-            bool isBuffer() const
-            {
-                return slotType == SlotTypeBuffer;
-            }
+            bool isBuffer() const { return slotType == SlotTypeBuffer; }
 
-            BufferSlot& getBuffer()
+            BufferSlot &getBuffer()
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
             }
 
-            const BufferSlot& getBuffer() const
+            const BufferSlot &getBuffer() const
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
             }
 
-            bool isTexture() const
-            {
-                return slotType == SlotTypeTexture;
-            }
+            bool isTexture() const { return slotType == SlotTypeTexture; }
 
-            TextureSlot& getTexture()
+            TextureSlot &getTexture()
             {
                 assert( slotType == SlotTypeTexture );
                 return texture;
             }
 
-            const TextureSlot& getTexture() const
+            const TextureSlot &getTexture() const
             {
                 assert( slotType == SlotTypeTexture );
                 return texture;
             }
 
-            bool operator != ( const Slot &other ) const
+            bool operator!=( const Slot &other ) const
             {
                 if( this->slotType != other.slotType )
                     return true;
@@ -303,7 +290,7 @@ namespace Ogre
                 }
             }
 
-            bool operator < ( const Slot &other ) const
+            bool operator<( const Slot &other ) const
             {
                 if( this->slotType != other.slotType )
                     return this->slotType < other.slotType;
@@ -320,34 +307,32 @@ namespace Ogre
         };
 
         uint16          mRefCount;
-        void            *mRsData;           /// Render-System specific data
+        void *          mRsData;  /// Render-System specific data
         uint16          mShaderTypeTexCount[NumShaderTypes];
         FastArray<Slot> mTextures;
 
-        DescriptorSetTexture2() :
-            mRefCount( 0 ),
-            mRsData( 0 )
+        DescriptorSetTexture2() : mRefCount( 0 ), mRsData( 0 )
         {
-            memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
+            memset( mShaderTypeTexCount, 0, sizeof( mShaderTypeTexCount ) );
         }
 
         /// Warning: This operator won't see changes in SRV (i.e. data baked into mRsData).
         /// If you get notifyTextureChanged call, the Texture has changed and you must
         /// assume the DescriptorSetTexture2 has changed.
         /// SRV = Shader Resource View.
-        bool operator != ( const DescriptorSetTexture2 &other ) const
+        bool operator!=( const DescriptorSetTexture2 &other ) const
         {
             const size_t thisNumTextures = mTextures.size();
             if( thisNumTextures != other.mTextures.size() )
                 return true;
 
-            for( size_t i=0; i<thisNumTextures; ++i )
+            for( size_t i = 0; i < thisNumTextures; ++i )
             {
                 if( this->mTextures[i] != other.mTextures[i] )
                     return true;
             }
 
-            for( size_t i=0; i<NumShaderTypes; ++i )
+            for( size_t i = 0; i < NumShaderTypes; ++i )
             {
                 if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
                     return true;
@@ -356,19 +341,19 @@ namespace Ogre
             return false;
         }
 
-        bool operator < ( const DescriptorSetTexture2 &other ) const
+        bool operator<( const DescriptorSetTexture2 &other ) const
         {
             const size_t thisNumTextures = mTextures.size();
             if( thisNumTextures != other.mTextures.size() )
                 return thisNumTextures < other.mTextures.size();
 
-            for( size_t i=0; i<thisNumTextures; ++i )
+            for( size_t i = 0; i < thisNumTextures; ++i )
             {
                 if( this->mTextures[i] != other.mTextures[i] )
                     return this->mTextures[i] < other.mTextures[i];
             }
 
-            for( size_t i=0; i<NumShaderTypes; ++i )
+            for( size_t i = 0; i < NumShaderTypes; ++i )
             {
                 if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
                     return this->mShaderTypeTexCount[i] < other.mShaderTypeTexCount[i];
@@ -382,7 +367,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

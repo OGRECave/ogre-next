@@ -38,58 +38,58 @@ namespace Ogre
     struct ObjectData
     {
         /// Which of the packed values is ours. Value in range [0; 4) for SSE2
-        unsigned char       mIndex;
+        unsigned char mIndex;
 
         /// Holds the pointers to each parent. Ours is mParents[mIndex]
-        Node                **mParents;
+        Node **mParents;
 
         /// The movable object that owns this ObjectData. Ours is mOwner[mIndex]
-        MovableObject       **mOwner;
+        MovableObject **mOwner;
 
         /** Bounding box in local space. It's argueable whether it should be like this, or pointer
             to a shared aabb (i.e. mesh aabb) to save RAM at the cost of another level of indirection,
             and converting AoS to SoA, but it's more convenient for SIMD processing to store each local
             aabb in the movable object (maximize throughput).
         */
-        ArrayAabb   * RESTRICT_ALIAS    mLocalAabb;
+        ArrayAabb *RESTRICT_ALIAS mLocalAabb;
 
         /// Bounding box in world space.
-        ArrayAabb   * RESTRICT_ALIAS    mWorldAabb;
+        ArrayAabb *RESTRICT_ALIAS mWorldAabb;
 
-        //ArraySphere   * RESTRICT_ALIAS    mWorldSphere;
+        // ArraySphere   * RESTRICT_ALIAS    mWorldSphere;
 
         /** @See mLocalAabb
         @remarks
             Its center is at mLocalAabb's center, not at the position or origin
         */
-        Real        * RESTRICT_ALIAS    mLocalRadius;
+        Real *RESTRICT_ALIAS mLocalRadius;
 
         /** Ours is mWorldRadius[mIndex]. It is the local radius transformed by scale
             An ArraySphere out of mWorldAabb & WorldRadius for computations
         @remarks
             Its center is at mWorldAabb's, not at the derived position
         */
-        Real        * RESTRICT_ALIAS    mWorldRadius;
+        Real *RESTRICT_ALIAS mWorldRadius;
 
         /** Ours is mDistanceToCamera[mIndex]. It is the distance to camera.
             Value can be negative to account for radius (i.e. when the camera is
             "inside" the bounds of the object)
         */
-        RealAsUint  * RESTRICT_ALIAS    mDistanceToCamera;
+        RealAsUint *RESTRICT_ALIAS mDistanceToCamera;
 
 #if OGRE_COMPILER != OGRE_COMPILER_CLANG
         /// Upper distance to still render. Ours is mUpperDistance[mIndex]
-        Real        * RESTRICT_ALIAS    mUpperDistance[2];
+        Real *RESTRICT_ALIAS mUpperDistance[2];
 #else
         /// Upper distance to still render. Ours is mUpperDistance[mIndex]
-        Real        *                   mUpperDistance[2];
+        Real *mUpperDistance[2];
 #endif
 
         /// Flags determining whether this object is visible (compared to SceneManager mask)
-        uint32      * RESTRICT_ALIAS    mVisibilityFlags;
+        uint32 *RESTRICT_ALIAS mVisibilityFlags;
 
         /// Flags determining whether this object is included / excluded from scene queries
-        uint32      * RESTRICT_ALIAS    mQueryFlags;
+        uint32 *RESTRICT_ALIAS mQueryFlags;
 
         /** The light mask defined for this movable. This will be taken into consideration when
             deciding which light should affect this movable
@@ -98,7 +98,7 @@ namespace Ogre
             or 0; using 0 to avoid adding null mOwner pointers to vectors (due to the SoA nature
             of working 4 items at a time, even if we just have 2 or 3)
         */
-        uint32      * RESTRICT_ALIAS    mLightMask;
+        uint32 *RESTRICT_ALIAS mLightMask;
 
         ObjectData() :
             mIndex( 0 ),
@@ -118,8 +118,8 @@ namespace Ogre
         /// @copydoc Transform::copy
         void copy( const ObjectData &inCopy )
         {
-            mParents[mIndex]    = inCopy.mParents[inCopy.mIndex];
-            mOwner[mIndex]      = inCopy.mOwner[inCopy.mIndex];
+            mParents[mIndex] = inCopy.mParents[inCopy.mIndex];
+            mOwner[mIndex] = inCopy.mOwner[inCopy.mIndex];
 
             Aabb tmp;
             inCopy.mLocalAabb->getAsAabb( tmp, inCopy.mIndex );
@@ -128,14 +128,14 @@ namespace Ogre
             inCopy.mWorldAabb->getAsAabb( tmp, inCopy.mIndex );
             mWorldAabb->setFromAabb( tmp, mIndex );
 
-            mLocalRadius[mIndex]        = inCopy.mLocalRadius[inCopy.mIndex];
-            mWorldRadius[mIndex]        = inCopy.mWorldRadius[inCopy.mIndex];
-            mDistanceToCamera[mIndex]   = inCopy.mDistanceToCamera[mIndex];
-            mUpperDistance[0][mIndex]   = inCopy.mUpperDistance[0][inCopy.mIndex];
-            mUpperDistance[1][mIndex]   = inCopy.mUpperDistance[1][inCopy.mIndex];
-            mVisibilityFlags[mIndex]    = inCopy.mVisibilityFlags[inCopy.mIndex];
-            mQueryFlags[mIndex]         = inCopy.mQueryFlags[inCopy.mIndex];
-            mLightMask[mIndex]          = inCopy.mLightMask[inCopy.mIndex];
+            mLocalRadius[mIndex] = inCopy.mLocalRadius[inCopy.mIndex];
+            mWorldRadius[mIndex] = inCopy.mWorldRadius[inCopy.mIndex];
+            mDistanceToCamera[mIndex] = inCopy.mDistanceToCamera[mIndex];
+            mUpperDistance[0][mIndex] = inCopy.mUpperDistance[0][inCopy.mIndex];
+            mUpperDistance[1][mIndex] = inCopy.mUpperDistance[1][inCopy.mIndex];
+            mVisibilityFlags[mIndex] = inCopy.mVisibilityFlags[inCopy.mIndex];
+            mQueryFlags[mIndex] = inCopy.mQueryFlags[inCopy.mIndex];
+            mLightMask[mIndex] = inCopy.mLightMask[inCopy.mIndex];
         }
 
         /** Advances all pointers to the next pack, i.e. if we're processing 4
@@ -143,34 +143,34 @@ namespace Ogre
         */
         void advancePack()
         {
-            mParents            += ARRAY_PACKED_REALS;
-            mOwner              += ARRAY_PACKED_REALS;
+            mParents += ARRAY_PACKED_REALS;
+            mOwner += ARRAY_PACKED_REALS;
             ++mLocalAabb;
             ++mWorldAabb;
-            mLocalRadius        += ARRAY_PACKED_REALS;
-            mWorldRadius        += ARRAY_PACKED_REALS;
-            mDistanceToCamera   += ARRAY_PACKED_REALS;
-            mUpperDistance[0]   += ARRAY_PACKED_REALS;
-            mUpperDistance[1]   += ARRAY_PACKED_REALS;
-            mVisibilityFlags    += ARRAY_PACKED_REALS;
-            mQueryFlags         += ARRAY_PACKED_REALS;
-            mLightMask          += ARRAY_PACKED_REALS;
+            mLocalRadius += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
+            mDistanceToCamera += ARRAY_PACKED_REALS;
+            mUpperDistance[0] += ARRAY_PACKED_REALS;
+            mUpperDistance[1] += ARRAY_PACKED_REALS;
+            mVisibilityFlags += ARRAY_PACKED_REALS;
+            mQueryFlags += ARRAY_PACKED_REALS;
+            mLightMask += ARRAY_PACKED_REALS;
         }
 
         void advancePack( size_t numAdvance )
         {
-            mParents            += ARRAY_PACKED_REALS * numAdvance;
-            mOwner              += ARRAY_PACKED_REALS * numAdvance;
-            mLocalAabb          += numAdvance;
-            mWorldAabb          += numAdvance;
-            mLocalRadius        += ARRAY_PACKED_REALS * numAdvance;
-            mWorldRadius        += ARRAY_PACKED_REALS * numAdvance;
-            mDistanceToCamera   += ARRAY_PACKED_REALS * numAdvance;
-            mUpperDistance[0]   += ARRAY_PACKED_REALS * numAdvance;
-            mUpperDistance[1]   += ARRAY_PACKED_REALS * numAdvance;
-            mVisibilityFlags    += ARRAY_PACKED_REALS * numAdvance;
-            mQueryFlags         += ARRAY_PACKED_REALS * numAdvance;
-            mLightMask          += ARRAY_PACKED_REALS * numAdvance;
+            mParents += ARRAY_PACKED_REALS * numAdvance;
+            mOwner += ARRAY_PACKED_REALS * numAdvance;
+            mLocalAabb += numAdvance;
+            mWorldAabb += numAdvance;
+            mLocalRadius += ARRAY_PACKED_REALS * numAdvance;
+            mWorldRadius += ARRAY_PACKED_REALS * numAdvance;
+            mDistanceToCamera += ARRAY_PACKED_REALS * numAdvance;
+            mUpperDistance[0] += ARRAY_PACKED_REALS * numAdvance;
+            mUpperDistance[1] += ARRAY_PACKED_REALS * numAdvance;
+            mVisibilityFlags += ARRAY_PACKED_REALS * numAdvance;
+            mQueryFlags += ARRAY_PACKED_REALS * numAdvance;
+            mLightMask += ARRAY_PACKED_REALS * numAdvance;
         }
 
         /** Advances all pointers needed by MovableObject::updateAllBounds to the next pack,
@@ -179,13 +179,13 @@ namespace Ogre
         void advanceBoundsPack()
         {
 #ifndef NDEBUG
-            mOwner              += ARRAY_PACKED_REALS;
+            mOwner += ARRAY_PACKED_REALS;
 #endif
-            mParents            += ARRAY_PACKED_REALS;
+            mParents += ARRAY_PACKED_REALS;
             ++mLocalAabb;
             ++mWorldAabb;
-            mLocalRadius        += ARRAY_PACKED_REALS;
-            mWorldRadius        += ARRAY_PACKED_REALS;
+            mLocalRadius += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
         }
 
         /** Advances all pointers needed by MovableObject::cullFrustum to the next pack,
@@ -193,13 +193,13 @@ namespace Ogre
         */
         void advanceFrustumPack()
         {
-            mOwner              += ARRAY_PACKED_REALS;
+            mOwner += ARRAY_PACKED_REALS;
             ++mWorldAabb;
-            mWorldRadius        += ARRAY_PACKED_REALS;
-            mDistanceToCamera   += ARRAY_PACKED_REALS;
-            mUpperDistance[0]   += ARRAY_PACKED_REALS;
-            mUpperDistance[1]   += ARRAY_PACKED_REALS;
-            mVisibilityFlags    += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
+            mDistanceToCamera += ARRAY_PACKED_REALS;
+            mUpperDistance[0] += ARRAY_PACKED_REALS;
+            mUpperDistance[1] += ARRAY_PACKED_REALS;
+            mVisibilityFlags += ARRAY_PACKED_REALS;
         }
 
         /** Advances all pointers needed by InstanceBatch::_updateBounds to the next pack,
@@ -208,8 +208,8 @@ namespace Ogre
         void advanceDirtyInstanceMgr()
         {
             ++mWorldAabb;
-            mWorldRadius        += ARRAY_PACKED_REALS;
-            mVisibilityFlags    += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
+            mVisibilityFlags += ARRAY_PACKED_REALS;
         }
 
         /** Advances all pointers needed by MovableObject::cullLights to the next pack,
@@ -217,11 +217,11 @@ namespace Ogre
         */
         void advanceCullLightPack()
         {
-            mOwner              += ARRAY_PACKED_REALS;
+            mOwner += ARRAY_PACKED_REALS;
             ++mWorldAabb;
-            mWorldRadius        += ARRAY_PACKED_REALS;
-            mVisibilityFlags    += ARRAY_PACKED_REALS;
-            mLightMask          += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
+            mVisibilityFlags += ARRAY_PACKED_REALS;
+            mLightMask += ARRAY_PACKED_REALS;
         }
 
         /** Advances all pointers needed by MovableObject::buildLightList to the next pack,
@@ -229,20 +229,20 @@ namespace Ogre
         */
         void advanceLightPack()
         {
-            mOwner              += ARRAY_PACKED_REALS;
+            mOwner += ARRAY_PACKED_REALS;
             ++mWorldAabb;
-            mWorldRadius        += ARRAY_PACKED_REALS;
-            mVisibilityFlags    += ARRAY_PACKED_REALS;
-            mLightMask          += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
+            mVisibilityFlags += ARRAY_PACKED_REALS;
+            mLightMask += ARRAY_PACKED_REALS;
         }
 
         void advanceLodPack()
         {
-            mOwner              += ARRAY_PACKED_REALS;
+            mOwner += ARRAY_PACKED_REALS;
             ++mWorldAabb;
-            mWorldRadius        += ARRAY_PACKED_REALS;
+            mWorldRadius += ARRAY_PACKED_REALS;
         }
     };
-}
+}  // namespace Ogre
 
 #endif

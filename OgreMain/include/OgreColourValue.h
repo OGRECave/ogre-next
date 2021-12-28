@@ -30,13 +30,14 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     typedef uint32 RGBA;
     typedef uint32 ARGB;
@@ -64,70 +65,73 @@ namespace Ogre {
         static const ColourValue Green;
         static const ColourValue Blue;
 
-        explicit ColourValue( float red = 1.0f,
-                    float green = 1.0f,
-                    float blue = 1.0f,
-                    float alpha = 1.0f ) : r(red), g(green), b(blue), a(alpha)
-        { }
+        explicit ColourValue( float red = 1.0f, float green = 1.0f, float blue = 1.0f,
+                              float alpha = 1.0f ) :
+            r( red ),
+            g( green ),
+            b( blue ),
+            a( alpha )
+        {
+        }
 
-        bool operator==(const ColourValue& rhs) const;
-        bool operator!=(const ColourValue& rhs) const;
+        bool operator==( const ColourValue &rhs ) const;
+        bool operator!=( const ColourValue &rhs ) const;
 
-        float r,g,b,a;
+        float r, g, b, a;
 
         /** Retrieves colour as RGBA.
-        */
+         */
         RGBA getAsRGBA() const;
 
         /** Retrieves colour as ARGB.
-        */
+         */
         ARGB getAsARGB() const;
 
         /** Retrieves colour as BGRA.
-        */
+         */
         BGRA getAsBGRA() const;
 
         /** Retrieves colours as ABGR */
         ABGR getAsABGR() const;
 
         /** Sets colour as RGBA.
-        */
-        void setAsRGBA(const RGBA val);
+         */
+        void setAsRGBA( const RGBA val );
 
         /** Sets colour as ARGB.
-        */
-        void setAsARGB(const ARGB val);
+         */
+        void setAsARGB( const ARGB val );
 
         /** Sets colour as BGRA.
-        */
-        void setAsBGRA(const BGRA val);
+         */
+        void setAsBGRA( const BGRA val );
 
         /** Sets colour as ABGR.
-        */
-        void setAsABGR(const ABGR val);
+         */
+        void setAsABGR( const ABGR val );
 
         /** Clamps colour value to the range [0, 1].
-        */
+         */
         void saturate()
         {
-            if (r < 0)
+            if( r < 0 )
                 r = 0;
-            else if (r > 1)
+            else if( r > 1 )
                 r = 1;
 
-            if (g < 0)
+            if( g < 0 )
                 g = 0;
-            else if (g > 1)
+            else if( g > 1 )
                 g = 1;
 
-            if (b < 0)
+            if( b < 0 )
                 b = 0;
-            else if (b > 1)
+            else if( b > 1 )
                 b = 1;
 
-            if (a < 0)
+            if( a < 0 )
                 a = 0;
-            else if (a > 1)
+            else if( a > 1 )
                 a = 1;
         }
 
@@ -141,35 +145,28 @@ namespace Ogre {
         }
 
         /// Array accessor operator
-        inline float operator [] ( const size_t i ) const
+        inline float operator[]( const size_t i ) const
         {
             assert( i < 4 );
 
-            return *(&r+i);
+            return *( &r + i );
         }
 
         /// Array accessor operator
-        inline float& operator [] ( const size_t i )
+        inline float &operator[]( const size_t i )
         {
             assert( i < 4 );
 
-            return *(&r+i);
+            return *( &r + i );
         }
 
         /// Pointer accessor for direct copying
-        inline float* ptr()
-        {
-            return &r;
-        }
+        inline float *ptr() { return &r; }
         /// Pointer accessor for direct copying
-        inline const float* ptr() const
-        {
-            return &r;
-        }
+        inline const float *ptr() const { return &r; }
 
-        
         // arithmetic operations
-        inline ColourValue operator + ( const ColourValue& rkVector ) const
+        inline ColourValue operator+( const ColourValue &rkVector ) const
         {
             ColourValue kSum;
 
@@ -181,7 +178,7 @@ namespace Ogre {
             return kSum;
         }
 
-        inline ColourValue operator - ( const ColourValue& rkVector ) const
+        inline ColourValue operator-( const ColourValue &rkVector ) const
         {
             ColourValue kDiff;
 
@@ -193,19 +190,19 @@ namespace Ogre {
             return kDiff;
         }
 
-        inline ColourValue operator * (const float fScalar ) const
+        inline ColourValue operator*( const float fScalar ) const
         {
             ColourValue kProd;
 
-            kProd.r = fScalar*r;
-            kProd.g = fScalar*g;
-            kProd.b = fScalar*b;
-            kProd.a = fScalar*a;
+            kProd.r = fScalar * r;
+            kProd.g = fScalar * g;
+            kProd.b = fScalar * b;
+            kProd.a = fScalar * a;
 
             return kProd;
         }
 
-        inline ColourValue operator * ( const ColourValue& rhs) const
+        inline ColourValue operator*( const ColourValue &rhs ) const
         {
             ColourValue kProd;
 
@@ -217,7 +214,7 @@ namespace Ogre {
             return kProd;
         }
 
-        inline ColourValue operator / ( const ColourValue& rhs) const
+        inline ColourValue operator/( const ColourValue &rhs ) const
         {
             ColourValue kProd;
 
@@ -229,7 +226,7 @@ namespace Ogre {
             return kProd;
         }
 
-        inline ColourValue operator / (const float fScalar ) const
+        inline ColourValue operator/( const float fScalar ) const
         {
             assert( fScalar != 0.0 );
 
@@ -244,7 +241,7 @@ namespace Ogre {
             return kDiv;
         }
 
-        inline friend ColourValue operator * (const float fScalar, const ColourValue& rkVector )
+        inline friend ColourValue operator*( const float fScalar, const ColourValue &rkVector )
         {
             ColourValue kProd;
 
@@ -257,7 +254,7 @@ namespace Ogre {
         }
 
         // arithmetic updates
-        inline ColourValue& operator += ( const ColourValue& rkVector )
+        inline ColourValue &operator+=( const ColourValue &rkVector )
         {
             r += rkVector.r;
             g += rkVector.g;
@@ -267,7 +264,7 @@ namespace Ogre {
             return *this;
         }
 
-        inline ColourValue& operator -= ( const ColourValue& rkVector )
+        inline ColourValue &operator-=( const ColourValue &rkVector )
         {
             r -= rkVector.r;
             g -= rkVector.g;
@@ -277,7 +274,7 @@ namespace Ogre {
             return *this;
         }
 
-        inline ColourValue& operator *= (const float fScalar )
+        inline ColourValue &operator*=( const float fScalar )
         {
             r *= fScalar;
             g *= fScalar;
@@ -286,7 +283,7 @@ namespace Ogre {
             return *this;
         }
 
-        inline ColourValue& operator /= (const float fScalar )
+        inline ColourValue &operator/=( const float fScalar )
         {
             assert( fScalar != 0.0 );
 
@@ -305,23 +302,21 @@ namespace Ogre {
         @param saturation Saturation level, [0,1]
         @param brightness Brightness level, [0,1]
         */
-        void setHSB(Real hue, Real saturation, Real brightness);
+        void setHSB( Real hue, Real saturation, Real brightness );
 
-        /** Convert the current colour to Hue, Saturation and Brightness values. 
+        /** Convert the current colour to Hue, Saturation and Brightness values.
         @param hue Output hue value, scaled to the [0,1] range as opposed to the 0-360
         @param saturation Output saturation level, [0,1]
         @param brightness Output brightness level, [0,1]
         */
-        void getHSB(Real* hue, Real* saturation, Real* brightness) const;
-
-
+        void getHSB( Real *hue, Real *saturation, Real *brightness ) const;
 
         /** Function for writing to a stream.
-        */
+         */
         _OgreExport friend std::ostream &operator<<( std::ostream &o, const ColourValue &c );
     };
     /** @} */
     /** @} */
-} // namespace
+}  // namespace Ogre
 
 #endif

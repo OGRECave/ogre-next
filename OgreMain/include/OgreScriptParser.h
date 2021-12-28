@@ -30,18 +30,20 @@ THE SOFTWARE.
 #define __SCRIPTPARSER_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreScriptCompiler.h"
 #include "OgreScriptLexer.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport ScriptParser : public ScriptCompilerAlloc
     {
@@ -49,16 +51,18 @@ namespace Ogre {
         ScriptParser();
         virtual ~ScriptParser() {}
 
-        ConcreteNodeListPtr parse(const ScriptTokenListPtr &tokens, const String& sourceFile);
-        ConcreteNodeListPtr parseChunk(const ScriptTokenListPtr &tokens, const String &sourceFile);
+        ConcreteNodeListPtr parse( const ScriptTokenListPtr &tokens, const String &sourceFile );
+        ConcreteNodeListPtr parseChunk( const ScriptTokenListPtr &tokens, const String &sourceFile );
+
     private:
-        ScriptToken *getToken(ScriptTokenList::iterator i, ScriptTokenList::iterator end, int offset);
-        ScriptTokenList::iterator skipNewlines(ScriptTokenList::iterator i, ScriptTokenList::iterator end);
+        ScriptToken *getToken( ScriptTokenList::iterator i, ScriptTokenList::iterator end, int offset );
+        ScriptTokenList::iterator skipNewlines( ScriptTokenList::iterator i,
+                                                ScriptTokenList::iterator end );
     };
-    
+
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

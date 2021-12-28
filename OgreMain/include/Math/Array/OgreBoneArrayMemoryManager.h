@@ -33,11 +33,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation to create the Transform variables needed by Bones
     @author
@@ -67,15 +67,14 @@ namespace Ogre
             NumMemoryTypes
         };
 
-        static const size_t ElementsMemSize[NumMemoryTypes];
+        static const size_t          ElementsMemSize[NumMemoryTypes];
         static const CleanupRoutines BoneInitRoutines[NumMemoryTypes];
         static const CleanupRoutines BoneCleanupRoutines[NumMemoryTypes];
 
         /// @copydoc ArrayMemoryManager::ArrayMemoryManager
-        BoneArrayMemoryManager(uint16 depthLevel, size_t hintMaxNodes,
-                                size_t cleanupThreshold=100,
-                                size_t maxHardLimit=MAX_MEMORY_SLOTS,
-                                RebaseListener *rebaseListener=0 );
+        BoneArrayMemoryManager( uint16 depthLevel, size_t hintMaxNodes, size_t cleanupThreshold = 100,
+                                size_t          maxHardLimit = MAX_MEMORY_SLOTS,
+                                RebaseListener *rebaseListener = 0 );
 
         /** Requests memory for a new Bone (for the Array vectors & matrices)
             May be also be used for a new Entity, etc.
@@ -105,6 +104,6 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

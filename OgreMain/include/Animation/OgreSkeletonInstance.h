@@ -30,20 +30,21 @@ THE SOFTWARE.
 #define _SkeletonInstance2_H__
 
 #include "OgreSkeletonAnimation.h"
+
 #include "Animation/OgreBone.h"
 
 namespace Ogre
 {
     class SkeletonDef;
-    typedef vector<SkeletonAnimation>::type SkeletonAnimationVec;
-    typedef vector<SkeletonAnimation*>::type ActiveAnimationsVec;
+    typedef vector<SkeletonAnimation>::type   SkeletonAnimationVec;
+    typedef vector<SkeletonAnimation *>::type ActiveAnimationsVec;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     /** Instance of a Skeleton, main external interface for retrieving bone positions and applying
         animations.
@@ -74,36 +75,39 @@ namespace Ogre
         typedef vector<Bone>::type BoneVec;
 
     protected:
-        BoneVec             mBones;
-        TransformArray      mBoneStartTransforms; /// The start of Transform at each depth level
+        BoneVec        mBones;
+        TransformArray mBoneStartTransforms;  /// The start of Transform at each depth level
 
         RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mManualBones;
 
-        FastArray<size_t>       mSlotStarts;
+        FastArray<size_t> mSlotStarts;
 
-        SkeletonAnimationVec    mAnimations;
-        ActiveAnimationsVec     mActiveAnimations;
+        SkeletonAnimationVec mAnimations;
+        ActiveAnimationsVec  mActiveAnimations;
 
-        SkeletonDef const       *mDefinition;
+        SkeletonDef const *mDefinition;
 
         /** Unused slots for each parent depth level that had more bones
             than >= ARRAY_PACKED_REALS /2 but less than < ARRAY_PACKED_REALS (or a multiple of it)
         */
-        BoneVec                 mUnusedNodes;
+        BoneVec mUnusedNodes;
 
         /// Node this SkeletonInstance is attached to (so we can work in world space)
-        Node                    *mParentNode;
+        Node *mParentNode;
 
         struct SceneNodeBonePair
         {
-            Bone        *boneChild;
-            SceneNode   *sceneNodeParent;
+            Bone *     boneChild;
+            SceneNode *sceneNodeParent;
             SceneNodeBonePair( Bone *_boneChild, SceneNode *_sceneNodeParent ) :
-                boneChild( _boneChild ), sceneNodeParent( _sceneNodeParent ) {}
+                boneChild( _boneChild ),
+                sceneNodeParent( _sceneNodeParent )
+            {
+            }
         };
         typedef vector<SceneNodeBonePair>::type SceneNodeBonePairVec;
-                
-        SceneNodeBonePairVec    mCustomParentSceneNodes;
+
+        SceneNodeBonePairVec mCustomParentSceneNodes;
 
         uint16 mRefCount;
 
@@ -111,7 +115,7 @@ namespace Ogre
         SkeletonInstance( const SkeletonDef *skeletonDef, BoneMemoryManager *boneMemoryManager );
         ~SkeletonInstance();
 
-        const SkeletonDef* getDefinition() const                { return mDefinition; }
+        const SkeletonDef *getDefinition() const { return mDefinition; }
 
         void update();
 
@@ -149,24 +153,24 @@ namespace Ogre
         void setSceneNodeAsParentOfBone( Bone *bone, SceneNode *nodeParent );
 
         /// Gets full transform of a bone by its index.
-        FORCEINLINE const SimpleMatrixAf4x3& _getBoneFullTransform( size_t index ) const
+        FORCEINLINE const SimpleMatrixAf4x3 &_getBoneFullTransform( size_t index ) const
         {
             return mBones[index]._getFullTransform();
         }
 
         bool hasBone( IdString name ) const;
         /// Gets the bone with given name. Throws if not found.
-        Bone* getBone( IdString boneName );
+        Bone *getBone( IdString boneName );
 
         /// Gets the bone from its index. Don't overflow!. @see getNumBones
-        Bone* getBone( size_t index );
+        Bone *getBone( size_t index );
 
         /// Gets the number of bones.
         size_t getNumBones() const;
 
         bool hasAnimation( IdString name ) const;
         /// Returns the requested animations. Throws if not found. O(N) Linear search
-        SkeletonAnimation* getAnimation( IdString name );
+        SkeletonAnimation *getAnimation( IdString name );
 
         /// Return all animations associated with this skeleton
         const SkeletonAnimationVec &getAnimations() const { return mAnimations; }
@@ -200,34 +204,34 @@ namespace Ogre
         void setParentNode( Node *parentNode );
 
         /// Returns our parent node. May be null.
-        Node* getParentNode() const                                     { return mParentNode; }
+        Node *getParentNode() const { return mParentNode; }
 
-        void getTransforms( SimpleMatrixAf4x3 * RESTRICT_ALIAS outTransform,
-                            const FastArray<unsigned short> &usedBones ) const;
+        void getTransforms( SimpleMatrixAf4x3 *RESTRICT_ALIAS outTransform,
+                            const FastArray<unsigned short> & usedBones ) const;
 
         /** Updates the contents of @mBoneStartTransforms. Needed when our
             memory manager performs a cleanup or similar memory change.
         */
         void _updateBoneStartTransforms();
 
-        const TransformArray& _getTransformArray() const        { return mBoneStartTransforms; }
+        const TransformArray &_getTransformArray() const { return mBoneStartTransforms; }
 
-        const void* _getMemoryBlock() const;
-        const void* _getMemoryUniqueOffset() const;
+        const void *_getMemoryBlock() const;
+        const void *_getMemoryUniqueOffset() const;
 
-        void _incrementRefCount();
-        void _decrementRefCount();
+        void   _incrementRefCount();
+        void   _decrementRefCount();
         uint16 _getRefCount() const;
     };
 
     inline bool OrderSkeletonInstanceByMemory( const SkeletonInstance *_left,
-                                                const SkeletonInstance *_right )
+                                               const SkeletonInstance *_right )
     {
         return _left->_getMemoryUniqueOffset() < _right->_getMemoryUniqueOffset();
     }
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

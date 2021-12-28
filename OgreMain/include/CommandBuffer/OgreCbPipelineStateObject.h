@@ -37,6 +37,6 @@ namespace Ogre
         HlmsPso const *pso;
         CbPipelineStateObject( const HlmsPso *_pso );
     };
-}
+}  // namespace Ogre
 
 #endif

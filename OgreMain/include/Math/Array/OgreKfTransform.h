@@ -40,6 +40,6 @@ namespace Ogre
         ArrayQuaternion mOrientation;
         ArrayVector3    mScale;
     };
-}
+}  // namespace Ogre
 
 #endif

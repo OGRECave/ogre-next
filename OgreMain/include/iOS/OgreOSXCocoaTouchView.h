@@ -29,8 +29,8 @@ THE SOFTWARE.
 #ifndef __OSXCocoaView_H__
 #define __OSXCocoaView_H__
 
-#include "OgreRenderWindow.h"
 #include <UIKit/UIKit.h>
+#include "OgreRenderWindow.h"
 
 @interface OgreView : UIView
 {
@@ -38,18 +38,18 @@ THE SOFTWARE.
 }
 
 - (id)initWithFrame:(CGRect)f;
-- (id)initWithGLiPhoneWindow:(Ogre::RenderWindow*)w;
+- (id)initWithGLiPhoneWindow:(Ogre::RenderWindow *)w;
 
-- (void)setOgreWindow:(Ogre::RenderWindow*)w;
-- (Ogre::RenderWindow*)ogreWindow;
+- (void)setOgreWindow:(Ogre::RenderWindow *)w;
+- (Ogre::RenderWindow *)ogreWindow;
 
 - (void)setFrameSize:(CGSize)s;
 
 @end
 
 @interface OgreWindow : UIWindow
-{}
+{
+}
 @end
 
 #endif
-

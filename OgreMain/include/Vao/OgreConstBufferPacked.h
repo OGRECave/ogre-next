@@ -39,9 +39,9 @@ namespace Ogre
     {
     public:
         ConstBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                           uint32 numElementsPadding, BufferType bufferType,
-                           void *initialData, bool keepAsShadow,
-                           VaoManager *vaoManager, BufferInterface *bufferInterface ) :
+                           uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                           bool keepAsShadow, VaoManager *vaoManager,
+                           BufferInterface *bufferInterface ) :
             BufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                           bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
         {
@@ -66,6 +66,6 @@ namespace Ogre
         virtual void bindBufferDS( uint16 slot ) = 0;
         virtual void bindBufferCS( uint16 slot ) = 0;
     };
-}
+}  // namespace Ogre
 
 #endif

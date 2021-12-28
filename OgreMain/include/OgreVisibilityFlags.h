@@ -31,27 +31,30 @@ THE SOFTWARE.
 
 // Precompiler options
 #include "OgrePrerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
 
     namespace VisibilityFlags
     {
-        extern _OgreExport const uint32 LAYER_SHADOW_CASTER;    ///Object casts shadows (is rendered to shadow camera)
-        extern _OgreExport const uint32 LAYER_VISIBILITY;       ///When this is bit is clear, the obj is not rendered at all.
+        /// Object casts shadows (is rendered to shadow camera)
+        extern _OgreExport const uint32 LAYER_SHADOW_CASTER;
+        /// When this is bit is clear, the obj is not rendered at all.
+        extern _OgreExport const uint32 LAYER_VISIBILITY;
         extern _OgreExport const uint32 RESERVED_VISIBILITY_FLAGS;
-    };
+    };  // namespace VisibilityFlags
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

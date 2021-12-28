@@ -30,7 +30,7 @@ THE SOFTWARE.
 #define _C_BooleanMask_H_
 
 #ifndef __BooleanMask_H__
-    #error "Don't include this file directly. include Math/Array/OgreBooleanMask.h"
+#    error "Don't include this file directly. include Math/Array/OgreBooleanMask.h"
 #endif
 
 namespace Ogre
@@ -40,10 +40,11 @@ namespace Ogre
     public:
         enum
         {
-            MASK_NONE           = 0,
-            MASK_X              = 1,
-            NUM_MASKS           = 2
+            MASK_NONE = 0,
+            MASK_X = 1,
+            NUM_MASKS = 2
         };
+
     public:
         inline static ArrayMaskR getMask( bool x );
         inline static ArrayMaskR getMask( bool booleans[1] );
@@ -60,7 +61,7 @@ namespace Ogre
         */
         inline static uint32 getScalarMask( ArrayMaskR mask );
     };
-}
+}  // namespace Ogre
 
 #include "OgreBooleanMask.inl"
 

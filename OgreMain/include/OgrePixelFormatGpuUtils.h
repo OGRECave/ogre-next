@@ -32,13 +32,14 @@ THE SOFTWARE.
 
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Image
-    *  @{
-    */
+     *  @{
+     */
     /** The pixel format used for images, textures, and render surfaces */
     class _OgreExport PixelFormatGpuUtils
     {
@@ -71,6 +72,7 @@ namespace Ogre {
 
         enum PixelFormatFlags
         {
+            // clang-format off
             /// Pixel Format is an actual float (32-bit float)
             PFF_FLOAT       = 1u << 0u,
             /// Pixel Format is 16-bit float
@@ -99,41 +101,41 @@ namespace Ogre {
             PFF_COMPRESSED  = 1u << 9u,
             /// Format is palletized
             PFF_PALLETE     = 1u << 10u
+            // clang-format on
         };
 
     protected:
         struct PixelFormatDesc
         {
-            const char  *name;
+            const char *name;
             uint8       components;
             uint8       bytesPerPixel;
             uint16      layout;
             uint32      flags;
         };
 
-        static PixelFormatDesc msPixelFormatDesc[PFG_COUNT+1u];
+        static PixelFormatDesc msPixelFormatDesc[PFG_COUNT + 1u];
 
-        static inline const PixelFormatDesc& getDescriptionFor( const PixelFormatGpu fmt );
+        static inline const PixelFormatDesc &getDescriptionFor( const PixelFormatGpu fmt );
 
         template <typename T>
-        static void convertFromFloat( const float *rgbaPtr, void *dstPtr,
-                                      size_t numComponents, uint32 flags );
+        static void convertFromFloat( const float *rgbaPtr, void *dstPtr, size_t numComponents,
+                                      uint32 flags );
         template <typename T>
-        static void convertToFloat( float *rgbaPtr, const void *srcPtr,
-                                    size_t numComponents, uint32 flags );
+        static void convertToFloat( float *rgbaPtr, const void *srcPtr, size_t numComponents,
+                                    uint32 flags );
 
     public:
-        static size_t getBytesPerPixel( PixelFormatGpu format );
-        static size_t getNumberOfComponents( PixelFormatGpu format );
+        static size_t            getBytesPerPixel( PixelFormatGpu format );
+        static size_t            getNumberOfComponents( PixelFormatGpu format );
         static PixelFormatLayout getPixelLayout( PixelFormatGpu format );
 
-        static size_t getSizeBytes( uint32 width, uint32 height, uint32 depth,
-                                    uint32 slices, PixelFormatGpu format,
-                                    uint32 rowAlignment=1u );
+        static size_t getSizeBytes( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                    PixelFormatGpu format, uint32 rowAlignment = 1u );
 
-        static size_t calculateSizeBytes( uint32 width, uint32 height, uint32 depth,
-                                          uint32 slices, PixelFormatGpu format,
-                                          uint8 numMipmaps, uint32 rowAlignment=1u );
+        static size_t calculateSizeBytes( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                          PixelFormatGpu format, uint8 numMipmaps,
+                                          uint32 rowAlignment = 1u );
 
         /** Returns the maximum number of mipmaps given the resolution
             e.g. at 4x4 there's 3 mipmaps. At 1x1 there's 1 mipmaps.
@@ -172,15 +174,15 @@ namespace Ogre {
             The width of compression block, in pixels. Can be 0 (see remarks). If format is not
             compressed, returns 1.
         */
-        static uint32 getCompressedBlockWidth( PixelFormatGpu format, bool apiStrict=true );
+        static uint32 getCompressedBlockWidth( PixelFormatGpu format, bool apiStrict = true );
 
         /// See getCompressedBlockWidth
-        static uint32 getCompressedBlockHeight( PixelFormatGpu format, bool apiStrict=true );
+        static uint32 getCompressedBlockHeight( PixelFormatGpu format, bool apiStrict = true );
 
         /// Returns in bytes, the size of the compressed block
         static size_t getCompressedBlockSize( PixelFormatGpu format );
 
-        static const char* toString( PixelFormatGpu format );
+        static const char *toString( PixelFormatGpu format );
 
         /** Makes a O(N) search to return the PixelFormatGpu based on its string version.
             Opposite version of toString
@@ -192,14 +194,13 @@ namespace Ogre {
         @return
             The format you're looking for, PFG_UNKNOWN if not found.
         */
-        static PixelFormatGpu getFormatFromName( const char *name, uint32 exclusionFlags=0 );
-        static PixelFormatGpu getFormatFromName( const String &name, uint32 exclusionFlags=0 );
+        static PixelFormatGpu getFormatFromName( const char *name, uint32 exclusionFlags = 0 );
+        static PixelFormatGpu getFormatFromName( const String &name, uint32 exclusionFlags = 0 );
 
         /// Takes an image allocated for GPU usage (i.e. rowAlignment = 4u) from the beginning of
         /// its base mip level 0, and returns a pointer at the beginning of the specified mipLevel.
-        static void* advancePointerToMip( void *basePtr, uint32 width, uint32 height,
-                                          uint32 depth, uint32 numSlices, uint8 mipLevel,
-                                          PixelFormatGpu format );
+        static void *advancePointerToMip( void *basePtr, uint32 width, uint32 height, uint32 depth,
+                                          uint32 numSlices, uint8 mipLevel, PixelFormatGpu format );
 
         static float toSRGB( float x );
         static float fromSRGB( float x );
@@ -209,14 +210,15 @@ namespace Ogre {
         static void packColour( const ColourValue &rgbaPtr, PixelFormatGpu pf, void *dstPtr );
         static void unpackColour( ColourValue *rgbaPtr, PixelFormatGpu pf, const void *srcPtr );
 
-        static void convertForNormalMapping( TextureBox src, PixelFormatGpu srcFormat,
-                                             TextureBox dst, PixelFormatGpu dstFormat );
+        static void convertForNormalMapping( TextureBox src, PixelFormatGpu srcFormat, TextureBox dst,
+                                             PixelFormatGpu dstFormat );
         static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
                                          TextureBox &dst, PixelFormatGpu dstFormat,
                                          bool verticalFlip = false );
 
         /// See PixelFormatFlags
         static uint32 getFlags( PixelFormatGpu format );
+
         static bool isFloat( PixelFormatGpu format );
         static bool isHalf( PixelFormatGpu format );
         static bool isFloatRare( PixelFormatGpu format );
@@ -231,7 +233,7 @@ namespace Ogre {
         static bool isAccessible( PixelFormatGpu format );
         static bool hasAlpha( PixelFormatGpu format );
 
-        static bool hasSRGBEquivalent( PixelFormatGpu format );
+        static bool           hasSRGBEquivalent( PixelFormatGpu format );
         static PixelFormatGpu getEquivalentSRGB( PixelFormatGpu format );
         static PixelFormatGpu getEquivalentLinear( PixelFormatGpu sRgbFormat );
 
@@ -240,7 +242,7 @@ namespace Ogre {
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

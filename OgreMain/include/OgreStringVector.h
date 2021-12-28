@@ -29,26 +29,28 @@ THE SOFTWARE.
 #define _StringVector_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreSharedPtr.h"
 
 #include "ogrestd/vector.h"
 
-namespace Ogre {
+namespace Ogre
+{
     typedef _StringBase String;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
-    typedef vector<String>::type StringVector;
+    typedef vector<String>::type    StringVector;
     typedef SharedPtr<StringVector> StringVectorPtr;
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

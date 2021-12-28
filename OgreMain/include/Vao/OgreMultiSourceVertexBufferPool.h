@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreVertexBufferPacked.h"
+#    include "Vao/OgreVertexBufferPacked.h"
 
 namespace Ogre
 {
@@ -62,25 +62,22 @@ namespace Ogre
     class _OgreExport MultiSourceVertexBufferPool : public BufferPackedAlloc
     {
     protected:
-        VertexElement2VecVec    mVertexElementsBySource;
-        size_t                  mMaxVertices;
-        BufferType              mBufferType;
+        VertexElement2VecVec mVertexElementsBySource;
+        size_t               mMaxVertices;
+        BufferType           mBufferType;
 
-        size_t                  mInternalBufferStart;   /// In Vertices
-        vector<uint32>::type    mBytesPerVertexPerSource;
-        vector<size_t>::type    mSourceOffset;          /// Where each source starts, in vertices
-        VaoManager              *mVaoManager;
+        size_t               mInternalBufferStart;  /// In Vertices
+        vector<uint32>::type mBytesPerVertexPerSource;
+        vector<size_t>::type mSourceOffset;  /// Where each source starts, in vertices
+        VaoManager *         mVaoManager;
 
         virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers ) = 0;
 
     public:
         MultiSourceVertexBufferPool( const VertexElement2VecVec &vertexElementsBySource,
                                      size_t maxVertices, BufferType bufferType,
-                                     size_t internalBufferStart,
-                                     VaoManager *vaoManager );
-        virtual ~MultiSourceVertexBufferPool()
-        {
-        }
+                                     size_t internalBufferStart, VaoManager *vaoManager );
+        virtual ~MultiSourceVertexBufferPool() {}
 
         /** Creates a vertex buffer based on the given parameters. Behind the scenes, the vertex buffer
             is part of much larger vertex buffer, in order to reduce bindings at runtime.
@@ -112,7 +109,7 @@ namespace Ogre
             The desired vertex buffer pointer
         */
         virtual void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
-                                          void * const *initialData, bool keepAsShadow ) = 0;
+                                          void *const *initialData, bool keepAsShadow ) = 0;
 
         /** Destroys all the buffers returned from a call to createVertexBuffers.
             All the returned buffers from that call must be supplied. Not one more, not one less.
@@ -125,7 +122,7 @@ namespace Ogre
 
         size_t getBytesOffsetToSource( uint8 sourceIdx ) const;
     };
-}
+}  // namespace Ogre
 
 #endif
 #endif

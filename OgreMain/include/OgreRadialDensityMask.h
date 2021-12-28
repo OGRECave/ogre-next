@@ -59,16 +59,16 @@ namespace Ogre
     {
         Rectangle2D *mRectangle;
 
-        float mRadius[3];
+        float   mRadius[3];
         Vector2 mLeftEyeCenter;
         Vector2 mRightEyeCenter;
 
-        bool mDirty;
-        int32 mLastVpWidth;
-        int32 mLastVpHeight;
+        bool                          mDirty;
+        int32                         mLastVpWidth;
+        int32                         mLastVpHeight;
         GpuProgramParametersSharedPtr mPsParams;
 
-        HlmsComputeJob *mReconstructJob;
+        HlmsComputeJob *   mReconstructJob;
         ConstBufferPacked *mJobParams;
 
         static void setEyeCenter( Real *outEyeCenter, Vector2 inEyeCenterClipSpace, const Viewport &vp );
@@ -112,7 +112,7 @@ namespace Ogre
         @param radius
             For best performance, do not change the value of mRadius[0]
         */
-        void setNewRadius( const float radius[3] );
+        void         setNewRadius( const float radius[3] );
         const float *getRadius() const { return mRadius; }
 
         Rectangle2D *getRectangle() const { return mRectangle; }

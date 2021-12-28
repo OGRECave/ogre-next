@@ -193,7 +193,7 @@ namespace Ogre
     {
     protected:
         FastArray<uint64> mValues;
-        size_t mBitsCapacity;
+        size_t            mBitsCapacity;
 
     public:
         bitset64() : mBitsCapacity( 0u ) {}

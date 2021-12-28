@@ -31,11 +31,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** Class for displaying the error dialog if Ogre fails badly. */
     class _OgreExport ErrorDialog
     {
@@ -51,10 +51,9 @@ namespace Ogre
         @param
             logName Optional name of the log to display in the detail pane.
         */
-        void display(const String& errorMessage, String logName = "");
-
+        void display( const String &errorMessage, String logName = "" );
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 #endif

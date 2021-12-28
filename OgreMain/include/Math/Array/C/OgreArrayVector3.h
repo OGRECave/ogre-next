@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define __C_ArrayVector3_H__
 
 #ifndef __ArrayVector3_H__
-    #error "Don't include this file directly. include Math/Array/OgreArrayVector3.h"
+#    error "Don't include this file directly. include Math/Array/OgreArrayVector3.h"
 #endif
 
 #include "OgreVector3.h"
@@ -41,11 +41,11 @@ namespace Ogre
     class ArrayInterQuaternion;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Cache-friendly array of 3-dimensional represented as a SoA array.
         @remarks
             ArrayVector3 is a SIMD & cache-friendly version of Vector3.
@@ -64,7 +64,7 @@ namespace Ogre
     class _OgreExport ArrayVector3
     {
     public:
-        ArrayReal       mChunkBase[3];
+        ArrayReal mChunkBase[3];
 
         ArrayVector3() {}
         ArrayVector3( ArrayReal chunkX, ArrayReal chunkY, ArrayReal chunkZ )
@@ -76,27 +76,27 @@ namespace Ogre
 
         void getAsVector3( Vector3 &out, size_t index ) const
         {
-            //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( mChunkBase );
-            out.x = aliasedReal[ARRAY_PACKED_REALS * 0 + index];        //X
-            out.y = aliasedReal[ARRAY_PACKED_REALS * 1 + index];        //Y
-            out.z = aliasedReal[ARRAY_PACKED_REALS * 2 + index];        //Z
+            // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
+            const Real *aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
+            out.x = aliasedReal[ARRAY_PACKED_REALS * 0 + index];  // X
+            out.y = aliasedReal[ARRAY_PACKED_REALS * 1 + index];  // Y
+            out.z = aliasedReal[ARRAY_PACKED_REALS * 2 + index];  // Z
         }
 
         /// Prefer using @see getAsVector3() because this function may have more
         /// overhead (the other one is faster)
         Vector3 getAsVector3( size_t index ) const
         {
-            //Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
-            const Real *aliasedReal = reinterpret_cast<const Real*>( mChunkBase );
-            return Vector3( aliasedReal[ARRAY_PACKED_REALS * 0 + index],        //X
-                            aliasedReal[ARRAY_PACKED_REALS * 1 + index],        //Y
-                            aliasedReal[ARRAY_PACKED_REALS * 2 + index] );  //Z
+            // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
+            const Real *aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
+            return Vector3( aliasedReal[ARRAY_PACKED_REALS * 0 + index],    // X
+                            aliasedReal[ARRAY_PACKED_REALS * 1 + index],    // Y
+                            aliasedReal[ARRAY_PACKED_REALS * 2 + index] );  // Z
         }
 
         void setFromVector3( const Vector3 &v, size_t index )
         {
-            Real *aliasedReal = reinterpret_cast<Real*>( mChunkBase );
+            Real *aliasedReal = reinterpret_cast<Real *>( mChunkBase );
             aliasedReal[ARRAY_PACKED_REALS * 0 + index] = v.x;
             aliasedReal[ARRAY_PACKED_REALS * 1 + index] = v.y;
             aliasedReal[ARRAY_PACKED_REALS * 2 + index] = v.z;
@@ -118,7 +118,7 @@ namespace Ogre
             this->setFromVector3( tmp );
         }*/
 
-        inline ArrayVector3& operator = ( const Real fScalar )
+        inline ArrayVector3 &operator=( const Real fScalar )
         {
             mChunkBase[0] = fScalar;
             mChunkBase[1] = fScalar;
@@ -128,48 +128,48 @@ namespace Ogre
         }
 
         // Arithmetic operations
-        inline const ArrayVector3& operator + () const;
-        inline ArrayVector3 operator - () const;
+        inline const ArrayVector3 &operator+() const;
+        inline ArrayVector3        operator-() const;
 
-        inline friend ArrayVector3 operator + ( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator + ( Real fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator + ( const ArrayVector3 &lhs, Real fScalar );
+        inline friend ArrayVector3 operator+( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator+( Real fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator+( const ArrayVector3 &lhs, Real fScalar );
 
-        inline friend ArrayVector3 operator + ( ArrayReal fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator + ( const ArrayVector3 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector3 operator+( ArrayReal fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator+( const ArrayVector3 &lhs, ArrayReal fScalar );
 
-        inline friend ArrayVector3 operator - ( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator - ( Real fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator - ( const ArrayVector3 &lhs, Real fScalar );
+        inline friend ArrayVector3 operator-( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator-( Real fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator-( const ArrayVector3 &lhs, Real fScalar );
 
-        inline friend ArrayVector3 operator - ( ArrayReal fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator - ( const ArrayVector3 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector3 operator-( ArrayReal fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator-( const ArrayVector3 &lhs, ArrayReal fScalar );
 
-        inline friend ArrayVector3 operator * ( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator * ( Real fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator * ( const ArrayVector3 &lhs, Real fScalar );
+        inline friend ArrayVector3 operator*( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator*( Real fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator*( const ArrayVector3 &lhs, Real fScalar );
 
-        inline friend ArrayVector3 operator * ( ArrayReal fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator * ( const ArrayVector3 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector3 operator*( ArrayReal fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator*( const ArrayVector3 &lhs, ArrayReal fScalar );
 
-        inline friend ArrayVector3 operator / ( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator / ( Real fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator / ( const ArrayVector3 &lhs, Real fScalar );
+        inline friend ArrayVector3 operator/( const ArrayVector3 &lhs, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator/( Real fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator/( const ArrayVector3 &lhs, Real fScalar );
 
-        inline friend ArrayVector3 operator / ( ArrayReal fScalar, const ArrayVector3 &rhs );
-        inline friend ArrayVector3 operator / ( const ArrayVector3 &lhs, ArrayReal fScalar );
+        inline friend ArrayVector3 operator/( ArrayReal fScalar, const ArrayVector3 &rhs );
+        inline friend ArrayVector3 operator/( const ArrayVector3 &lhs, ArrayReal fScalar );
 
-        inline void operator += ( const ArrayVector3 &a );
-        inline void operator += ( const ArrayReal fScalar );
+        inline void operator+=( const ArrayVector3 &a );
+        inline void operator+=( const ArrayReal fScalar );
 
-        inline void operator -= ( const ArrayVector3 &a );
-        inline void operator -= ( const ArrayReal fScalar );
+        inline void operator-=( const ArrayVector3 &a );
+        inline void operator-=( const ArrayReal fScalar );
 
-        inline void operator *= ( const ArrayVector3 &a );
-        inline void operator *= ( const ArrayReal fScalar );
+        inline void operator*=( const ArrayVector3 &a );
+        inline void operator*=( const ArrayReal fScalar );
 
-        inline void operator /= ( const ArrayVector3 &a );
-        inline void operator /= ( const ArrayReal fScalar );
+        inline void operator/=( const ArrayVector3 &a );
+        inline void operator/=( const ArrayReal fScalar );
 
         /// @copydoc Vector3::length()
         inline ArrayReal length() const;
@@ -178,32 +178,32 @@ namespace Ogre
         inline ArrayReal squaredLength() const;
 
         /// @copydoc Vector3::distance()
-        inline ArrayReal distance( const ArrayVector3& rhs ) const;
+        inline ArrayReal distance( const ArrayVector3 &rhs ) const;
 
         /// @copydoc Vector3::squaredDistance()
-        inline ArrayReal squaredDistance( const ArrayVector3& rhs ) const;
+        inline ArrayReal squaredDistance( const ArrayVector3 &rhs ) const;
 
         /// @copydoc Vector3::dotProduct()
-        inline ArrayReal dotProduct( const ArrayVector3& vec ) const;
+        inline ArrayReal dotProduct( const ArrayVector3 &vec ) const;
 
         /// @copydoc Vector3::absDotProduct()
-        inline ArrayReal absDotProduct( const ArrayVector3& vec ) const;
+        inline ArrayReal absDotProduct( const ArrayVector3 &vec ) const;
 
         /// Unlike Vector3::normalise(), this function does not return the length of the vector
         /// because such value was not cached and was never available @see Vector3::normalise()
         inline void normalise();
 
         /// @copydoc Vector3::crossProduct()
-        inline ArrayVector3 crossProduct( const ArrayVector3& rkVector ) const;
+        inline ArrayVector3 crossProduct( const ArrayVector3 &rkVector ) const;
 
         /// @copydoc Vector3::midPoint()
-        inline ArrayVector3 midPoint( const ArrayVector3& vec ) const;
+        inline ArrayVector3 midPoint( const ArrayVector3 &vec ) const;
 
         /// @copydoc Vector3::makeFloor()
-        inline void makeFloor( const ArrayVector3& cmp );
+        inline void makeFloor( const ArrayVector3 &cmp );
 
         /// @copydoc Vector3::makeCeil()
-        inline void makeCeil( const ArrayVector3& cmp );
+        inline void makeCeil( const ArrayVector3 &cmp );
 
         /// Returns the smallest value between x, y, z; min( x, y, z )
         inline ArrayReal getMinComponent() const;
@@ -228,7 +228,7 @@ namespace Ogre
         inline ArrayVector3 normalisedCopy() const;
 
         /// @copydoc Vector3::reflect()
-        inline ArrayVector3 reflect( const ArrayVector3& normal ) const;
+        inline ArrayVector3 reflect( const ArrayVector3 &normal ) const;
 
         /** Calculates the inverse of the vectors: 1.0f / v;
             But if original is zero, the zero is left (0 / 0 = 0).
@@ -333,15 +333,16 @@ namespace Ogre
             @return
                 this[i] = mask[i] != 0 ? arg1[i] : arg2[i]
         */
-        inline static ArrayVector3 Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2, ArrayMaskR mask );
+        inline static ArrayVector3 Cmov4( const ArrayVector3 &arg1, const ArrayVector3 &arg2,
+                                          ArrayMaskR mask );
 
         /** Converts 4 ARRAY_PACKED_REALS reals into this ArrayVector3
          @remarks
          'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS Vector3
          @See Frustum::getCustomWorldSpaceCorners implementation for an actual, advanced use case.
          */
-        inline void loadFromAoS( const Real * RESTRICT_ALIAS src );
-        
+        inline void loadFromAoS( const Real *RESTRICT_ALIAS src );
+
         static const ArrayVector3 ZERO;
         static const ArrayVector3 UNIT_X;
         static const ArrayVector3 UNIT_Y;
@@ -354,7 +355,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreArrayVector3.inl"
 

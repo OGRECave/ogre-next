@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassIblSpecularDef_H_
 #define _OgreCompositorPassIblSpecularDef_H_
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
 #include "OgreVector4.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -64,7 +64,7 @@ namespace Ogre
         CompositorNodeDef *mParentNodeDef;
 
     public:
-        CompositorPassIblSpecularDef( CompositorNodeDef *parentNodeDef,
+        CompositorPassIblSpecularDef( CompositorNodeDef *  parentNodeDef,
                                       CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_IBL_SPECULAR, parentTargetDef ),
             mSamplesPerIteration( 128.0 ),

@@ -32,10 +32,10 @@ THE SOFTWARE.
 #include "OgrePlatform.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    //No need to include the heavy windows.h header for something like this!
-    typedef void* HANDLE;
+// No need to include the heavy windows.h header for something like this!
+typedef void *HANDLE;
 #else
-    #include <pthread.h>
+#    include <pthread.h>
 #endif
 
 namespace Ogre
@@ -52,9 +52,9 @@ namespace Ogre
     class _OgreExport WaitableEvent
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        HANDLE  mEvent;
+        HANDLE mEvent;
 #else
-        bool mWait;
+        bool            mWait;
         pthread_mutex_t mMutex;
         pthread_cond_t  mCondition;
 #endif
@@ -75,6 +75,6 @@ namespace Ogre
         /// as calling it just once.
         void wake();
     };
-}
+}  // namespace Ogre
 
 #endif

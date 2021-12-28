@@ -29,17 +29,19 @@ THE SOFTWARE.
 #define _ArchiveFactory_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreFactoryObj.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** Abstract factory class, archive codec plugins can register concrete
         subclasses of this.
         @remarks
@@ -56,7 +58,7 @@ namespace Ogre {
             Each Archive and ArchiveFactory subclass pair deal with a
             single archive type (identified by a string).
     */
-    class _OgreExport ArchiveFactory : public FactoryObj< Archive >, public ArchiveAlloc
+    class _OgreExport ArchiveFactory : public FactoryObj<Archive>, public ArchiveAlloc
     {
     public:
         virtual ~ArchiveFactory() {}
@@ -66,9 +68,9 @@ namespace Ogre {
             An object created by the factory. The type of the object depends on
             the factory.
         */
-        virtual Archive* createInstance(const String& name, bool readOnly) = 0;
+        virtual Archive *createInstance( const String &name, bool readOnly ) = 0;
 
-        Archive* createInstance(const String& name) override { return createInstance(name, true); }
+        Archive *createInstance( const String &name ) override { return createInstance( name, true ); }
 
         /** Some implementations (i.e. APKFileSystemArchive) usually modify the filename. For example
             in APKFileSystemArchive, "/path/to/localfile.mesh" gets internally stored as
@@ -77,12 +79,12 @@ namespace Ogre {
         @param inOutPath
             Given the input path, converts it to the final path.
         */
-        virtual void convertPath( String& inOutPath ) const {}
+        virtual void convertPath( String &inOutPath ) const {}
     };
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

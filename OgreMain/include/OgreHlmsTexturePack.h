@@ -28,29 +28,30 @@ THE SOFTWARE.
 #ifndef _OgreHlmsTexturePack_H_
 #define _OgreHlmsTexturePack_H_
 
-#include "OgreStringVector.h"
 #include "OgrePixelFormat.h"
+#include "OgreStringVector.h"
 #include "OgreTexture.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /**
-    */
+     */
     struct _OgreExport HlmsTexturePack
     {
         struct TextureEntry
         {
-            String          name;
+            String name;
             /// For cubemaps, the order is +X, -X, +Y, -Y, +Z, -Z
-            StringVector    paths;
+            StringVector paths;
         };
 
         typedef vector<TextureEntry>::type TextureEntryVec;
@@ -76,7 +77,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

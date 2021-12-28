@@ -65,7 +65,8 @@ namespace Ogre
 
         bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                              PixelFormatGpu pixelFormat ) const override;
-        bool isSmallerThan( const StagingTexture *other ) const override;
+
+        bool   isSmallerThan( const StagingTexture *other ) const override;
         size_t _getSizeBytes() override;
 
         /// @copydoc StagingTexture::notifyStartMapRegion

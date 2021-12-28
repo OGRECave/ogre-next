@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "OgreGpuResource.h"
 #include "OgrePixelFormatGpu.h"
-
 #include "Vao/OgreBufferPacked.h"
 
 #include "ogrestd/vector.h"
@@ -42,11 +41,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     namespace TextureTypes
     {
@@ -70,16 +69,19 @@ namespace Ogre
         /// and OpenGL common conventions of being right handed, where -Z = Forward)
         enum CubemapSide
         {
+            // clang-format off
             PX, NX,
             PY, NY,
             PZ, NZ,
+            // clang-format on
         };
-    }
+    }  // namespace CubemapSide
 
     namespace TextureFlags
     {
         enum TextureFlags
         {
+            // clang-format off
             /// Texture cannot be used as a regular texture (bound to SRV in D3D11 terms)
             NotTexture          = 1u << 0u,
             /// Texture can be used as an RTT (FBO in GL terms)
@@ -166,6 +168,7 @@ namespace Ogre
             ///
             /// If this flag is present, either RenderToTexture or Uav must be present
             DiscardableContent  = 1u << 14u
+            // clang-format on
         };
     }
 
@@ -249,7 +252,7 @@ namespace Ogre
             /// as possible
             AlreadyInLayoutThenManual
         };
-    }
+    }  // namespace CopyEncTransitionMode
 
     /**
     @remarks
@@ -287,20 +290,20 @@ namespace Ogre
     class _OgreExport TextureGpu : public GpuTrackedResource, public GpuResource
     {
     protected:
-        uint32      mWidth;
-        uint32      mHeight;
+        uint32 mWidth;
+        uint32 mHeight;
         /// For TypeCube this value is 6. For TypeCubeArray,
         /// it contains the number of cubemaps in the array * 6u.
-        uint32      mDepthOrSlices;
+        uint32 mDepthOrSlices;
         /// Set mNumMipmaps = 0 to auto generate until last level.
         /// mNumMipmaps = 1 means no extra mipmaps other than level 0.
-        uint8       mNumMipmaps;
+        uint8             mNumMipmaps;
         SampleDescription mSampleDescription;
         SampleDescription mRequestedSampleDescription;
 
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
-        uint16      mInternalSliceStart;
+        uint16 mInternalSliceStart;
 
         /// This setting is for where the texture is created, e.g. its a compositor texture, a shadow
         /// texture or standard texture loaded for a mesh etc...
@@ -320,23 +323,23 @@ namespace Ogre
         uint8 mDataPreparationsPending;
 
         /// This setting can only be altered if mResidencyStatus == OnStorage).
-        TextureTypes::TextureTypes  mTextureType;
-        PixelFormatGpu              mPixelFormat;
+        TextureTypes::TextureTypes mTextureType;
+        PixelFormatGpu             mPixelFormat;
 
         /// See TextureFlags::TextureFlags
-        uint32      mTextureFlags;
+        uint32 mTextureFlags;
         /// Used if hasAutomaticBatching() == true
-        uint32		mPoolId;
+        uint32 mPoolId;
 
         /// If this pointer is nullptr and mResidencyStatus == GpuResidency::OnSystemRam
         /// then that means the data is being loaded to SystemRAM
-        uint8       *mSysRamCopy;
+        uint8 *mSysRamCopy;
 
-        TextureGpuManager   *mTextureManager;
+        TextureGpuManager *mTextureManager;
         /// Used if hasAutomaticBatching() == true
-        TexturePool const   *mTexturePool;
+        TexturePool const *mTexturePool;
 
-        vector<TextureGpuListener*>::type mListeners;
+        vector<TextureGpuListener *>::type mListeners;
 
         virtual void createInternalResourcesImpl() = 0;
         virtual void destroyInternalResourcesImpl() = 0;
@@ -345,9 +348,8 @@ namespace Ogre
         void transitionToResident();
 
     public:
-        TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                    VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                    TextureTypes::TextureTypes initialType,
+        TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                    IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                     TextureGpuManager *textureManager );
         ~TextureGpu() override;
 
@@ -359,6 +361,7 @@ namespace Ogre
         /// Returns the real name (e.g. disk in file) of the resource.
         virtual String getRealResourceNameStr() const;
         virtual String getResourceGroupStr() const;
+
         String getSettingsDesc() const;
 
         /** Schedules an async transition in residency. If transitioning from
@@ -387,14 +390,14 @@ namespace Ogre
             Otherwise you must listen for TextureGpuListener::ReadyForRendering
             message to know when we're done using the image.
         */
-        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
-                                         Image2 *image=0, bool autoDeleteImage=true );
+        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image = 0,
+                                         bool autoDeleteImage = true );
 
         /// Same as unsafeScheduleTransitionTo, but first checks if we're already
         /// in the residency state we want to go to, or if it has already
         /// been scheduled; thus it can be called multiple times
-        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
-                                   Image2 *image=0, bool autoDeleteImage=true );
+        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image = 0,
+                                   bool autoDeleteImage = true );
 
         /** There are times where you want to reload a texture again (e.g. file on
             disk changed, uploading a new Image2, etc) without visual disruption.
@@ -431,7 +434,7 @@ namespace Ogre
         void scheduleReupload( Image2 *image = 0, bool autoDeleteImage = true );
 
         // See isMetadataReady for threadsafety on these functions.
-        void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );
+        void   setResolution( uint32 width, uint32 height, uint32 depthOrSlices = 1u );
         uint32 getWidth() const;
         uint32 getHeight() const;
         uint32 getDepthOrSlices() const;
@@ -447,12 +450,12 @@ namespace Ogre
         /// Real API height accounting for TextureGpu::getOrientationMode. See getInternalWidth
         uint32 getInternalHeight() const;
 
-        void setNumMipmaps( uint8 numMipmaps );
+        void  setNumMipmaps( uint8 numMipmaps );
         uint8 getNumMipmaps() const;
 
         uint32 getInternalSliceStart() const;
 
-        virtual void setTextureType( TextureTypes::TextureTypes textureType );
+        virtual void               setTextureType( TextureTypes::TextureTypes textureType );
         TextureTypes::TextureTypes getTextureType() const;
         TextureTypes::TextureTypes getInternalTextureType() const;
 
@@ -465,7 +468,7 @@ namespace Ogre
             If prefersLoadingFromFileAsSRGB() returns true, the format may not be fully honoured
             (as we'll use the equivalent _SRGB variation).
         */
-        void setPixelFormat( PixelFormatGpu pixelFormat );
+        void           setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat() const;
 
         void setSampleDescription( SampleDescription desc );
@@ -477,7 +480,7 @@ namespace Ogre
         SampleDescription getSampleDescription() const;
         /// Returns original requested sample description, i.e. the raw input to setSampleDescription
         SampleDescription getRequestedSampleDescription() const;
-        bool isMultisample() const;
+        bool              isMultisample() const;
 
         void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
@@ -591,10 +594,10 @@ namespace Ogre
                 PFG_D32_FLOAT
                 PFG_D32_FLOAT_X24_S8_UINT
         */
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
+        virtual void   _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat );
         virtual uint16 getDepthBufferPoolId() const;
-        virtual bool getPreferDepthTexture() const;
+        virtual bool   getPreferDepthTexture() const;
         virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
 
         /** Immediately resolves this texture to the resolveTexture argument.
@@ -668,10 +671,10 @@ namespace Ogre
             This setting has only been tested with Vulkan and is likely to malfunction
             with the other APIs if set to anything other than OR_DEGREE_0
         */
-        virtual void setOrientationMode( OrientationMode orientationMode );
+        virtual void            setOrientationMode( OrientationMode orientationMode );
         virtual OrientationMode getOrientationMode() const;
 
-        ResourceLayout::Layout getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
+        ResourceLayout::Layout         getDefaultLayout( bool bIgnoreDiscardableFlag = false ) const;
         virtual ResourceLayout::Layout getCurrentLayout() const;
 
         /// Sets the layout the texture should be transitioned to after the next copy operation
@@ -703,37 +706,39 @@ namespace Ogre
         @param poolId
             Arbitrary value. Default value is 0.
         */
-        void setTexturePoolId( uint32 poolId );
-        uint32 getTexturePoolId() const						{ return mPoolId; }
-        const TexturePool* getTexturePool() const           { return mTexturePool; }
+        void   setTexturePoolId( uint32 poolId );
+        uint32 getTexturePoolId() const { return mPoolId; }
+
+        const TexturePool *getTexturePool() const { return mTexturePool; }
 
         void addListener( TextureGpuListener *listener );
         void removeListener( TextureGpuListener *listener );
-        void notifyAllListenersTextureChanged( uint32 reason, void *extraData=0 );
+        void notifyAllListenersTextureChanged( uint32 reason, void *extraData = 0 );
 
-        const vector<TextureGpuListener*>::type& getListeners() const;
+        const vector<TextureGpuListener *>::type &getListeners() const;
 
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 
         /// Writes the current contents of the render target to the named file.
-        void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
-                                  bool automaticResolve=true );
+        void writeContentsToFile( const String &filename, uint8 minMip, uint8 maxMip,
+                                  bool automaticResolve = true );
 
         /// Writes the current contents of the render target to the memory.
-        void copyContentsToMemory(TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
-                                   bool automaticResolve=true);
+        void copyContentsToMemory( TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
+                                   bool automaticResolve = true );
 
         static const IdString msFinalTextureBuffer;
         static const IdString msMsaaTextureBuffer;
+
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
         bool isTextureGpu() const override;
 
-        TextureGpuManager* getTextureManager() const;
+        TextureGpuManager *getTextureManager() const;
 
         TextureBox getEmptyBox( uint8 mipLevel );
         TextureBox _getSysRamCopyAsBox( uint8 mipLevel );
-        uint8* _getSysRamCopy( uint8 mipLevel );
+        uint8 *    _getSysRamCopy( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
@@ -815,7 +820,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

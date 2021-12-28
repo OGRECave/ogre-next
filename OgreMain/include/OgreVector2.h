@@ -28,18 +28,18 @@ THE SOFTWARE.
 #ifndef __Vector2_H__
 #define __Vector2_H__
 
-
 #include "OgrePrerequisites.h"
+
 #include "OgreMath.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Standard 2-dimensional vector.
         @remarks
             A direction in 2D space represented as distances along the 2
@@ -57,23 +57,15 @@ namespace Ogre
             @note
                 It does <b>NOT</b> initialize the vector for efficiency.
         */
-        inline Vector2()
-        {
-        }
+        inline Vector2() {}
 
-        inline Vector2(const Real fX, const Real fY )
-            : x( fX ), y( fY )
-        {
-        }
+        inline Vector2( const Real fX, const Real fY ) : x( fX ), y( fY ) {}
 
-        inline explicit Vector2( const Real scaler )
-            : x( scaler), y( scaler )
-        {
-        }
+        inline explicit Vector2( const Real scaler ) : x( scaler ), y( scaler ) {}
 
-        inline explicit Vector2( const Real afCoordinate[2] )
-            : x( afCoordinate[0] ),
-              y( afCoordinate[1] )
+        inline explicit Vector2( const Real afCoordinate[2] ) :
+            x( afCoordinate[0] ),
+            y( afCoordinate[1] )
         {
         }
 
@@ -83,45 +75,36 @@ namespace Ogre
             y = (Real)afCoordinate[1];
         }
 
-        inline explicit Vector2( Real* const r )
-            : x( r[0] ), y( r[1] )
+        inline explicit Vector2( Real *const r ) : x( r[0] ), y( r[1] ) {}
+
+        /** Exchange the contents of this vector with another.
+         */
+        inline void swap( Vector2 &other )
         {
+            std::swap( x, other.x );
+            std::swap( y, other.y );
         }
 
-        /** Exchange the contents of this vector with another. 
-        */
-        inline void swap(Vector2& other)
-        {
-            std::swap(x, other.x);
-            std::swap(y, other.y);
-        }
-
-        inline Real operator [] ( const size_t i ) const
+        inline Real operator[]( const size_t i ) const
         {
             assert( i < 2 );
 
-            return *(&x+i);
+            return *( &x + i );
         }
 
-        inline Real& operator [] ( const size_t i )
+        inline Real &operator[]( const size_t i )
         {
             assert( i < 2 );
 
-            return *(&x+i);
+            return *( &x + i );
         }
 
         /// Pointer accessor for direct copying
-        inline Real* ptr()
-        {
-            return &x;
-        }
+        inline Real *ptr() { return &x; }
         /// Pointer accessor for direct copying
-        inline const Real* ptr() const
-        {
-            return &x;
-        }
+        inline const Real *ptr() const { return &x; }
 
-        inline Vector2& operator = ( const Real fScalar)
+        inline Vector2 &operator=( const Real fScalar )
         {
             x = fScalar;
             y = fScalar;
@@ -129,118 +112,82 @@ namespace Ogre
             return *this;
         }
 
-        inline bool operator == ( const Vector2& rkVector ) const
+        inline bool operator==( const Vector2 &rkVector ) const
         {
             return ( x == rkVector.x && y == rkVector.y );
         }
 
-        inline bool operator != ( const Vector2& rkVector ) const
+        inline bool operator!=( const Vector2 &rkVector ) const
         {
-            return ( x != rkVector.x || y != rkVector.y  );
+            return ( x != rkVector.x || y != rkVector.y );
         }
 
         // arithmetic operations
-        inline Vector2 operator + ( const Vector2& rkVector ) const
+        inline Vector2 operator+( const Vector2 &rkVector ) const
         {
-            return Vector2(
-                x + rkVector.x,
-                y + rkVector.y);
+            return Vector2( x + rkVector.x, y + rkVector.y );
         }
 
-        inline Vector2 operator - ( const Vector2& rkVector ) const
+        inline Vector2 operator-( const Vector2 &rkVector ) const
         {
-            return Vector2(
-                x - rkVector.x,
-                y - rkVector.y);
+            return Vector2( x - rkVector.x, y - rkVector.y );
         }
 
-        inline Vector2 operator * ( const Real fScalar ) const
+        inline Vector2 operator*( const Real fScalar ) const
         {
-            return Vector2(
-                x * fScalar,
-                y * fScalar);
+            return Vector2( x * fScalar, y * fScalar );
         }
 
-        inline Vector2 operator * ( const Vector2& rhs) const
-        {
-            return Vector2(
-                x * rhs.x,
-                y * rhs.y);
-        }
+        inline Vector2 operator*( const Vector2 &rhs ) const { return Vector2( x * rhs.x, y * rhs.y ); }
 
-        inline Vector2 operator / ( const Real fScalar ) const
+        inline Vector2 operator/( const Real fScalar ) const
         {
             assert( fScalar != 0.0 );
 
             Real fInv = 1.0f / fScalar;
 
-            return Vector2(
-                x * fInv,
-                y * fInv);
+            return Vector2( x * fInv, y * fInv );
         }
 
-        inline Vector2 operator / ( const Vector2& rhs) const
-        {
-            return Vector2(
-                x / rhs.x,
-                y / rhs.y);
-        }
+        inline Vector2 operator/( const Vector2 &rhs ) const { return Vector2( x / rhs.x, y / rhs.y ); }
 
-        inline const Vector2& operator + () const
-        {
-            return *this;
-        }
+        inline const Vector2 &operator+() const { return *this; }
 
-        inline Vector2 operator - () const
-        {
-            return Vector2(-x, -y);
-        }
+        inline Vector2 operator-() const { return Vector2( -x, -y ); }
 
         // overloaded operators to help Vector2
-        inline friend Vector2 operator * ( const Real fScalar, const Vector2& rkVector )
+        inline friend Vector2 operator*( const Real fScalar, const Vector2 &rkVector )
         {
-            return Vector2(
-                fScalar * rkVector.x,
-                fScalar * rkVector.y);
+            return Vector2( fScalar * rkVector.x, fScalar * rkVector.y );
         }
 
-        inline friend Vector2 operator / ( const Real fScalar, const Vector2& rkVector )
+        inline friend Vector2 operator/( const Real fScalar, const Vector2 &rkVector )
         {
-            return Vector2(
-                fScalar / rkVector.x,
-                fScalar / rkVector.y);
+            return Vector2( fScalar / rkVector.x, fScalar / rkVector.y );
         }
 
-        inline friend Vector2 operator + (const Vector2& lhs, const Real rhs)
+        inline friend Vector2 operator+( const Vector2 &lhs, const Real rhs )
         {
-            return Vector2(
-                lhs.x + rhs,
-                lhs.y + rhs);
+            return Vector2( lhs.x + rhs, lhs.y + rhs );
         }
 
-        inline friend Vector2 operator + (const Real lhs, const Vector2& rhs)
+        inline friend Vector2 operator+( const Real lhs, const Vector2 &rhs )
         {
-            return Vector2(
-                lhs + rhs.x,
-                lhs + rhs.y);
+            return Vector2( lhs + rhs.x, lhs + rhs.y );
         }
 
-        inline friend Vector2 operator - (const Vector2& lhs, const Real rhs)
+        inline friend Vector2 operator-( const Vector2 &lhs, const Real rhs )
         {
-            return Vector2(
-                lhs.x - rhs,
-                lhs.y - rhs);
+            return Vector2( lhs.x - rhs, lhs.y - rhs );
         }
 
-        inline friend Vector2 operator - (const Real lhs, const Vector2& rhs)
+        inline friend Vector2 operator-( const Real lhs, const Vector2 &rhs )
         {
-            return Vector2(
-                lhs - rhs.x,
-                lhs - rhs.y);
+            return Vector2( lhs - rhs.x, lhs - rhs.y );
         }
 
         // arithmetic updates
-        inline Vector2& operator += ( const Vector2& rkVector )
+        inline Vector2 &operator+=( const Vector2 &rkVector )
         {
             x += rkVector.x;
             y += rkVector.y;
@@ -248,7 +195,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator += ( const Real fScaler )
+        inline Vector2 &operator+=( const Real fScaler )
         {
             x += fScaler;
             y += fScaler;
@@ -256,7 +203,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator -= ( const Vector2& rkVector )
+        inline Vector2 &operator-=( const Vector2 &rkVector )
         {
             x -= rkVector.x;
             y -= rkVector.y;
@@ -264,7 +211,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator -= ( const Real fScaler )
+        inline Vector2 &operator-=( const Real fScaler )
         {
             x -= fScaler;
             y -= fScaler;
@@ -272,7 +219,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator *= ( const Real fScalar )
+        inline Vector2 &operator*=( const Real fScalar )
         {
             x *= fScalar;
             y *= fScalar;
@@ -280,7 +227,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator *= ( const Vector2& rkVector )
+        inline Vector2 &operator*=( const Vector2 &rkVector )
         {
             x *= rkVector.x;
             y *= rkVector.y;
@@ -288,7 +235,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator /= ( const Real fScalar )
+        inline Vector2 &operator/=( const Real fScalar )
         {
             assert( fScalar != 0.0 );
 
@@ -300,7 +247,7 @@ namespace Ogre
             return *this;
         }
 
-        inline Vector2& operator /= ( const Vector2& rkVector )
+        inline Vector2 &operator/=( const Vector2 &rkVector )
         {
             x /= rkVector.x;
             y /= rkVector.y;
@@ -315,10 +262,7 @@ namespace Ogre
                 length (e.g. for just comparing lengths) use squaredLength()
                 instead.
         */
-        inline Real length () const
-        {
-            return Math::Sqrt( x * x + y * y );
-        }
+        inline Real length() const { return Math::Sqrt( x * x + y * y ); }
 
         /** Returns the square of the length(magnitude) of the vector.
             @remarks
@@ -330,10 +274,7 @@ namespace Ogre
                 want to find the longest / shortest vector without incurring
                 the square root.
         */
-        inline Real squaredLength () const
-        {
-            return x * x + y * y;
-        }
+        inline Real squaredLength() const { return x * x + y * y; }
 
         /** Returns the distance to another vector.
             @warning
@@ -342,10 +283,7 @@ namespace Ogre
                 distance (e.g. for just comparing distances) use squaredDistance()
                 instead.
         */
-        inline Real distance(const Vector2& rhs) const
-        {
-            return (*this - rhs).length();
-        }
+        inline Real distance( const Vector2 &rhs ) const { return ( *this - rhs ).length(); }
 
         /** Returns the square of the distance to another vector.
             @remarks
@@ -357,9 +295,9 @@ namespace Ogre
                 Use this if you want to find the longest / shortest distance
                 without incurring the square root.
         */
-        inline Real squaredDistance(const Vector2& rhs) const
+        inline Real squaredDistance( const Vector2 &rhs ) const
         {
-            return (*this - rhs).squaredLength();
+            return ( *this - rhs ).squaredLength();
         }
 
         /** Calculates the dot (scalar) product of this vector with another.
@@ -376,10 +314,7 @@ namespace Ogre
             @return
                 A float representing the dot product value.
         */
-        inline Real dotProduct(const Vector2& vec) const
-        {
-            return x * vec.x + y * vec.y;
-        }
+        inline Real dotProduct( const Vector2 &vec ) const { return x * vec.x + y * vec.y; }
 
         /** Normalises the vector.
             @remarks
@@ -393,12 +328,12 @@ namespace Ogre
 
         inline Real normalise()
         {
-            Real fLength = Math::Sqrt( x * x + y * y);
+            Real fLength = Math::Sqrt( x * x + y * y );
 
             // Will also work for zero-sized vectors, but will change nothing
             // We're not using epsilons because we don't need to.
             // Read http://www.ogre3d.org/forums/viewtopic.php?f=4&t=61259
-            if ( fLength > Real(0.0f) )
+            if( fLength > Real( 0.0f ) )
             {
                 Real fInvLength = 1.0f / fLength;
                 x *= fInvLength;
@@ -411,17 +346,15 @@ namespace Ogre
         /** Returns a vector at a point half way between this and the passed
             in vector.
         */
-        inline Vector2 midPoint( const Vector2& vec ) const
+        inline Vector2 midPoint( const Vector2 &vec ) const
         {
-            return Vector2(
-                ( x + vec.x ) * 0.5f,
-                ( y + vec.y ) * 0.5f );
+            return Vector2( ( x + vec.x ) * 0.5f, ( y + vec.y ) * 0.5f );
         }
 
         /** Returns true if the vector's scalar components are all greater
             that the ones of the vector it is compared against.
         */
-        inline bool operator < ( const Vector2& rhs ) const
+        inline bool operator<( const Vector2 &rhs ) const
         {
             if( x < rhs.x && y < rhs.y )
                 return true;
@@ -431,7 +364,7 @@ namespace Ogre
         /** Returns true if the vector's scalar components are all smaller
             that the ones of the vector it is compared against.
         */
-        inline bool operator > ( const Vector2& rhs ) const
+        inline bool operator>( const Vector2 &rhs ) const
         {
             if( x > rhs.x && y > rhs.y )
                 return true;
@@ -445,10 +378,10 @@ namespace Ogre
                 value of x, y and z from both vectors. Lowest is taken just
                 numerically, not magnitude, so -1 < 0.
         */
-        inline void makeFloor( const Vector2& cmp )
+        inline void makeFloor( const Vector2 &cmp )
         {
-            if( cmp.x < x ) x = cmp.x;
-            if( cmp.y < y ) y = cmp.y;
+            this->x = std::min( this->x, cmp.x );
+            this->y = std::min( this->y, cmp.y );
         }
 
         /** Sets this vector's components to the maximum of its own and the
@@ -458,10 +391,10 @@ namespace Ogre
                 value of x, y and z from both vectors. Highest is taken just
                 numerically, not magnitude, so 1 > -3.
         */
-        inline void makeCeil( const Vector2& cmp )
+        inline void makeCeil( const Vector2 &cmp )
         {
-            if( cmp.x > x ) x = cmp.x;
-            if( cmp.y > y ) y = cmp.y;
+            this->x = std::max( this->x, cmp.x );
+            this->y = std::max( this->y, cmp.y );
         }
 
         /** Generates a vector perpendicular to this vector (eg an 'up' vector).
@@ -471,15 +404,12 @@ namespace Ogre
                 method will guarantee to generate one of them. If you need more
                 control you should use the Quaternion class.
         */
-        inline Vector2 perpendicular() const
-        {
-            return Vector2 (-y, x);
-        }
+        inline Vector2 perpendicular() const { return Vector2( -y, x ); }
 
         /** Calculates the 2 dimensional cross-product of 2 vectors, which results
             in a single floating point value which is 2 times the area of the triangle.
         */
-        inline Real crossProduct( const Vector2& rkVector ) const
+        inline Real crossProduct( const Vector2 &rkVector ) const
         {
             return x * rkVector.y - y * rkVector.x;
         }
@@ -496,21 +426,19 @@ namespace Ogre
                 vector will not be normalised, normalise it if you wish
                 afterwards.
         */
-        inline Vector2 randomDeviant(Radian angle) const
+        inline Vector2 randomDeviant( Radian angle ) const
         {
-            angle *= Math::RangeRandom(-1, 1);
-            Real cosa = Math::Cos(angle);
-            Real sina = Math::Sin(angle);
-            return Vector2(cosa * x - sina * y,
-                           sina * x + cosa * y);
+            angle *= Math::RangeRandom( -1, 1 );
+            Real cosa = Math::Cos( angle );
+            Real sina = Math::Sin( angle );
+            return Vector2( cosa * x - sina * y, sina * x + cosa * y );
         }
 
         /** Returns true if this vector is zero length. */
         inline bool isZeroLength() const
         {
-            Real sqlen = (x * x) + (y * y);
-            return (sqlen < (1e-06 * 1e-06));
-
+            Real sqlen = ( x * x ) + ( y * y );
+            return ( sqlen < ( 1e-06 * 1e-06 ) );
         }
 
         /** As normalise, except that this vector is unaffected and the
@@ -525,32 +453,29 @@ namespace Ogre
         /** Calculates a reflection vector to the plane with the given normal .
         @remarks NB assumes 'this' is pointing AWAY FROM the plane, invert if it is not.
         */
-        inline Vector2 reflect(const Vector2& normal) const
+        inline Vector2 reflect( const Vector2 &normal ) const
         {
-            return Vector2( *this - ( 2 * this->dotProduct(normal) * normal ) );
+            return Vector2( *this - ( 2 * this->dotProduct( normal ) * normal ) );
         }
 
         /// Check whether this vector contains valid values
-        inline bool isNaN() const
-        {
-            return Math::isNaN(x) || Math::isNaN(y);
-        }
+        inline bool isNaN() const { return Math::isNaN( x ) || Math::isNaN( y ); }
 
         /**  Gets the angle between 2 vectors.
         @remarks
             Vectors do not have to be unit-length but must represent directions.
         */
-        inline Ogre::Radian angleBetween(const Ogre::Vector2& other) const
-        {       
+        inline Ogre::Radian angleBetween( const Ogre::Vector2 &other ) const
+        {
             Ogre::Real lenProduct = length() * other.length();
             // Divide by zero check
-            if(lenProduct < 1e-6f)
+            if( lenProduct < 1e-6f )
                 lenProduct = 1e-6f;
-        
-            Ogre::Real f = dotProduct(other) / lenProduct;
-    
-            f = Ogre::Math::Clamp(f, (Ogre::Real)-1.0, (Ogre::Real)1.0);
-            return Ogre::Math::ACos(f);
+
+            Ogre::Real f = dotProduct( other ) / lenProduct;
+
+            f = Ogre::Math::Clamp( f, (Ogre::Real)-1.0, (Ogre::Real)1.0 );
+            return Ogre::Math::ACos( f );
         }
 
         /**  Gets the oriented angle between 2 vectors.
@@ -558,12 +483,12 @@ namespace Ogre
             Vectors do not have to be unit-length but must represent directions.
             The angle is comprised between 0 and 2 PI.
         */
-        inline Ogre::Radian angleTo(const Ogre::Vector2& other) const
+        inline Ogre::Radian angleTo( const Ogre::Vector2 &other ) const
         {
-            Ogre::Radian angle = angleBetween(other);
-        
-            if (crossProduct(other)<0)          
-                angle = (Ogre::Radian)Ogre::Math::TWO_PI - angle;       
+            Ogre::Radian angle = angleBetween( other );
+
+            if( crossProduct( other ) < 0 )
+                angle = (Ogre::Radian)Ogre::Math::TWO_PI - angle;
 
             return angle;
         }
@@ -577,10 +502,10 @@ namespace Ogre
         static const Vector2 UNIT_SCALE;
 
         /** Function for writing to a stream.
-        */
+         */
         _OgreExport friend std::ostream &operator<<( std::ostream &o, const Vector2 &v );
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 #endif

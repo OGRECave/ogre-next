@@ -29,19 +29,21 @@ THE SOFTWARE.
 #define __CustomCompositionPass_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCompositionPass.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
     /** Interface for custom composition passes, allowing custom operations (in addition to
-    *   the quad, scene and clear operations) in composition passes.
-    *   @see CompositorManager::registerCustomCompositionPass
-    */
+     *   the quad, scene and clear operations) in composition passes.
+     *   @see CompositorManager::registerCustomCompositionPass
+     */
     class _OgreExport CustomCompositionPass
     {
     public:
@@ -52,14 +54,14 @@ namespace Ogre {
             get called each render.
             @remarks The created operation must be instanciated using the OGRE_NEW macro.
         */
-        virtual CompositorInstance::RenderSystemOperation* createOperation(
-            CompositorInstance* instance, const CompositionPass* pass) = 0;
+        virtual CompositorInstance::RenderSystemOperation *createOperation(
+            CompositorInstance *instance, const CompositionPass *pass ) = 0;
 
     protected:
         virtual ~CustomCompositionPass() {}
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

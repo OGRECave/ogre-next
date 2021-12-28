@@ -54,8 +54,9 @@ namespace Ogre
 
         /// @copydoc ArrayMemoryManager::ArrayMemoryManager
         KfTransformArrayMemoryManager( uint16 depthLevel, size_t hintMaxNodes,
-                                size_t cleanupThreshold=100, size_t maxHardLimit=MAX_MEMORY_SLOTS,
-                                RebaseListener *rebaseListener=0 );
+                                       size_t          cleanupThreshold = 100,
+                                       size_t          maxHardLimit = MAX_MEMORY_SLOTS,
+                                       RebaseListener *rebaseListener = 0 );
 
         virtual ~KfTransformArrayMemoryManager() {}
 
@@ -72,6 +73,6 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

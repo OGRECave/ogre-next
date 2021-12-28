@@ -29,17 +29,16 @@ THE SOFTWARE.
 #ifndef __LodListener_H__
 #define __LodListener_H__
 
-
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
     /// Struct containing information about a LOD change event for movable objects.
     struct MovableObjectLodChangedEvent
     {
@@ -88,7 +87,6 @@ namespace Ogre {
         ushort newLodIndex;
     };
 
-
     /** A interface class defining a listener which can be used to receive
         notifications of LOD events.
         @remarks
@@ -117,22 +115,24 @@ namespace Ogre {
     class _OgreExport LodListener
     {
     public:
-
         virtual ~LodListener();
 
         /**
         Called before a movable object's LOD has changed.
         @remarks
-            Do not change the Ogre state from this method, 
-            instead return true and perform changes in 
+            Do not change the Ogre state from this method,
+            instead return true and perform changes in
             postqueueMovableObjectLodChanged.
         @return
             True to indicate the event should be queued and
             postqueueMovableObjectLodChanged called after
             rendering is complete.
         */
-        virtual bool prequeueMovableObjectLodChanged(const MovableObjectLodChangedEvent& evt)
-        { (void)evt; return false; }
+        virtual bool prequeueMovableObjectLodChanged( const MovableObjectLodChangedEvent &evt )
+        {
+            (void)evt;
+            return false;
+        }
 
         /**
         Called after a movable object's LOD has changed.
@@ -140,27 +140,32 @@ namespace Ogre {
             May be called even if not requested from prequeueMovableObjectLodChanged
             as only one event queue is maintained per SceneManger instance.
         */
-        virtual void postqueueMovableObjectLodChanged(const MovableObjectLodChangedEvent& evt)
-        { (void)evt; }
+        virtual void postqueueMovableObjectLodChanged( const MovableObjectLodChangedEvent &evt )
+        {
+            (void)evt;
+        }
 
         /**
         Called before an entity's mesh LOD has changed.
         @remarks
-            Do not change the Ogre state from this method, 
-            instead return true and perform changes in 
+            Do not change the Ogre state from this method,
+            instead return true and perform changes in
             postqueueEntityMeshLodChanged.
 
-            It is possible to change the event notification 
-            and even alter the newLodIndex field (possibly to 
-            prevent the LOD from changing, or to skip an 
+            It is possible to change the event notification
+            and even alter the newLodIndex field (possibly to
+            prevent the LOD from changing, or to skip an
             index).
         @return
             True to indicate the event should be queued and
             postqueueEntityMeshLodChanged called after
             rendering is complete.
         */
-        virtual bool prequeueEntityMeshLodChanged(EntityMeshLodChangedEvent& evt)
-        { (void)evt; return false; }
+        virtual bool prequeueEntityMeshLodChanged( EntityMeshLodChangedEvent &evt )
+        {
+            (void)evt;
+            return false;
+        }
 
         /**
         Called after an entity's mesh LOD has changed.
@@ -168,27 +173,29 @@ namespace Ogre {
             May be called even if not requested from prequeueEntityMeshLodChanged
             as only one event queue is maintained per SceneManger instance.
         */
-        virtual void postqueueEntityMeshLodChanged(const EntityMeshLodChangedEvent& evt)
-        { (void)evt; }
+        virtual void postqueueEntityMeshLodChanged( const EntityMeshLodChangedEvent &evt ) { (void)evt; }
 
         /**
         Called before an entity's material LOD has changed.
         @remarks
-            Do not change the Ogre state from this method, 
-            instead return true and perform changes in 
+            Do not change the Ogre state from this method,
+            instead return true and perform changes in
             postqueueMaterialLodChanged.
 
-            It is possible to change the event notification 
-            and even alter the newLodIndex field (possibly to 
-            prevent the LOD from changing, or to skip an 
+            It is possible to change the event notification
+            and even alter the newLodIndex field (possibly to
+            prevent the LOD from changing, or to skip an
             index).
         @return
             True to indicate the event should be queued and
             postqueueMaterialLodChanged called after
             rendering is complete.
         */
-        virtual bool prequeueEntityMaterialLodChanged(EntityMaterialLodChangedEvent& evt)
-        { (void)evt; return false; }
+        virtual bool prequeueEntityMaterialLodChanged( EntityMaterialLodChangedEvent &evt )
+        {
+            (void)evt;
+            return false;
+        }
 
         /**
         Called after an entity's material LOD has changed.
@@ -196,12 +203,13 @@ namespace Ogre {
             May be called even if not requested from prequeueEntityMaterialLodChanged
             as only one event queue is maintained per SceneManger instance.
         */
-        virtual void postqueueEntityMaterialLodChanged(const EntityMaterialLodChangedEvent& evt)
-        { (void)evt; }
-
+        virtual void postqueueEntityMaterialLodChanged( const EntityMaterialLodChangedEvent &evt )
+        {
+            (void)evt;
+        }
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

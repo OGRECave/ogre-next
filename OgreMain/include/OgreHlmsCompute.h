@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreHlmsCompute_H_
 
 #include "OgreHlms.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -37,11 +38,11 @@ namespace Ogre
     struct QueuedRenderable;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     /** HLMS implementation that handles compute shaders. It isn't registered in
         the usual way to the HlmsManager.
@@ -50,11 +51,14 @@ namespace Ogre
     {
         struct ComputeJobEntry
         {
-            HlmsComputeJob  *computeJob;
+            HlmsComputeJob *computeJob;
             String          name;
             ComputeJobEntry() : computeJob( 0 ) {}
             ComputeJobEntry( HlmsComputeJob *_computeJob, const String &_name ) :
-                computeJob( _computeJob ), name( _name ) {}
+                computeJob( _computeJob ),
+                name( _name )
+            {
+            }
         };
 
         typedef std::map<IdString, ComputeJobEntry> HlmsComputeJobMap;
@@ -63,13 +67,16 @@ namespace Ogre
         {
             uint64 hashVal[2];
 
-            bool operator < ( const Hash &_r ) const
+            bool operator<( const Hash &_r ) const
             {
-                if( hashVal[0] < _r.hashVal[0] ) return true;
-                if( hashVal[0] > _r.hashVal[0] ) return false;
+                if( hashVal[0] < _r.hashVal[0] )
+                    return true;
+                if( hashVal[0] > _r.hashVal[0] )
+                    return false;
 
-                if( hashVal[1] < _r.hashVal[1] ) return true;
-                //if( hashVal[1] > _r.hashVal[1] ) return false;
+                if( hashVal[1] < _r.hashVal[1] )
+                    return true;
+                // if( hashVal[1] > _r.hashVal[1] ) return false;
 
                 return false;
             }
@@ -83,42 +90,47 @@ namespace Ogre
             uint32          paramsUpdateCounter;
             uint32          paramsProfileUpdateCounter;
 
-            ComputePsoCache() :
-                job( 0 ), paramsUpdateCounter( ~0u ), paramsProfileUpdateCounter( ~0u ) {}
-            ComputePsoCache( HlmsComputeJob *_job, const HlmsPropertyVec &properties ) :
-                job( _job ), setProperties( properties ),
-                paramsUpdateCounter( ~0u ), paramsProfileUpdateCounter( ~0u ) {}
-
-            bool operator == ( const ComputePsoCache &_r ) const
+            ComputePsoCache() : job( 0 ), paramsUpdateCounter( ~0u ), paramsProfileUpdateCounter( ~0u )
             {
-                //Exclude the PSO from the comparison!
+            }
+            ComputePsoCache( HlmsComputeJob *_job, const HlmsPropertyVec &properties ) :
+                job( _job ),
+                setProperties( properties ),
+                paramsUpdateCounter( ~0u ),
+                paramsProfileUpdateCounter( ~0u )
+            {
+            }
+
+            bool operator==( const ComputePsoCache &_r ) const
+            {
+                // Exclude the PSO from the comparison!
                 return setProperties == _r.setProperties && job == _r.job;
             }
         };
 
-        typedef vector<ComputePsoCache>::type ComputePsoCacheVec;
+        typedef vector<ComputePsoCache>::type  ComputePsoCacheVec;
         typedef map<Hash, GpuProgramPtr>::type CompiledShaderMap;
 
         AutoParamDataSource *mAutoParamDataSource;
-        String const        *mComputeShaderTarget;
+        String const *       mComputeShaderTarget;
 
         /// Caches a compiled shader based on the hash of its source string
         /// We need this in case two HlmsComputeJobs use the same exact
         /// shader but with different buffers.
-        CompiledShaderMap   mCompiledShaderCache;
+        CompiledShaderMap mCompiledShaderCache;
         /// Caches a full PSO.
-        ComputePsoCacheVec  mComputeShaderCache;
-        FastArray<size_t>   mFreeShaderCacheEntries;
+        ComputePsoCacheVec mComputeShaderCache;
+        FastArray<size_t>  mFreeShaderCacheEntries;
 
-        HlmsComputeJobMap   mComputeJobs;
+        HlmsComputeJobMap mComputeJobs;
 
-        void processPieces( const StringVector &pieceFiles );
+        void           processPieces( const StringVector &pieceFiles );
         HlmsComputePso compileShader( HlmsComputeJob *job, uint32 finalHash );
 
-        HlmsDatablock *createDatablockImpl( IdString datablockName,            //
-                                            const HlmsMacroblock *macroblock,  //
-                                            const HlmsBlendblock *blendblock,  //
-                                            const HlmsParamVec &paramVec ) override;
+        HlmsDatablock *createDatablockImpl( IdString              datablockName,  //
+                                            const HlmsMacroblock *macroblock,     //
+                                            const HlmsBlendblock *blendblock,     //
+                                            const HlmsParamVec &  paramVec ) override;
 
         void setupRootLayout( RootLayout &rootLayout ) override;
 
@@ -126,7 +138,7 @@ namespace Ogre
         HlmsCompute( AutoParamDataSource *autoParamDataSource );
         ~HlmsCompute() override;
 
-        void reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders=0 ) override;
+        void reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders = 0 ) override;
 
         /** An HlmsComputeJob is very similar to an HlmsDatablock, except it
             contains a compute job instead. If multiple HlmsComputeJob end up
@@ -143,15 +155,15 @@ namespace Ogre
         @return
             A new job.
         */
-        HlmsComputeJob* createComputeJob( IdString datablockName, const String &refName,
-                                          const String &sourceFilename,
+        HlmsComputeJob *createComputeJob( IdString datablockName, const String &refName,
+                                          const String &      sourceFilename,
                                           const StringVector &includedPieceFiles );
 
         /// Finds an existing Compute Job. If none found, throws an exception.
-        HlmsComputeJob* findComputeJob( IdString datablockName ) const;
+        HlmsComputeJob *findComputeJob( IdString datablockName ) const;
 
         /// Finds an existing Compute Job. If none found, returns null.
-        HlmsComputeJob* findComputeJobNoThrow( IdString datablockName ) const;
+        HlmsComputeJob *findComputeJobNoThrow( IdString datablockName ) const;
 
         /// Returns the string name associated with its hashed name (this was
         /// passed as refName in @createComputeJob). Returns null ptr if
@@ -159,7 +171,7 @@ namespace Ogre
         /// The reason this String doesn't live in HlmsComputeJob is to prevent
         /// cache trashing (jobs are hot iterated every frame, and the
         /// full name is rarely ever used)
-        const String* getJobNameStr( IdString name ) const;
+        const String *getJobNameStr( IdString name ) const;
 
         /// Destroys a specific Compute Job. You are responsible for ensuring
         /// is not in use anywhere (otherwise a dangling pointer will ensue)
@@ -176,7 +188,7 @@ namespace Ogre
 
         void _changeRenderSystem( RenderSystem *newRs ) override;
 
-        HlmsDatablock* createDefaultDatablock() override;
+        HlmsDatablock *createDefaultDatablock() override;
 
         uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash ) override;
@@ -203,17 +215,17 @@ namespace Ogre
 
         static const IdString NumTextureSlots;
         static const IdString MaxTextureSlot;
-        static const char *Texture;
+        static const char *   Texture;
 
         static const IdString NumUavSlots;
         static const IdString MaxUavSlot;
-        static const char *Uav;
+        static const char *   Uav;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

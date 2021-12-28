@@ -24,69 +24,71 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE
 -------------------------------------------------------------------------*/
 #ifndef __OgrePrerequisites_H__
-#define __OgrePrerequisites_H__
+#    define __OgrePrerequisites_H__
 
 // Platform-specific stuff
-#include "OgrePlatform.h"
+#    include "OgrePlatform.h"
 
-#include <string>
+#    include <string>
 
 // configure memory tracking
-#if OGRE_DEBUG_MODE 
-#   if OGRE_MEMORY_TRACKER_DEBUG_MODE
-#       define OGRE_MEMORY_TRACKER 1
-#   else
-#       define OGRE_MEMORY_TRACKER 0
-#   endif
-#else
-#   if OGRE_MEMORY_TRACKER_RELEASE_MODE
-#       define OGRE_MEMORY_TRACKER 1
-#   else
-#       define OGRE_MEMORY_TRACKER 0
-#   endif
-#endif
+#    if OGRE_DEBUG_MODE
+#        if OGRE_MEMORY_TRACKER_DEBUG_MODE
+#            define OGRE_MEMORY_TRACKER 1
+#        else
+#            define OGRE_MEMORY_TRACKER 0
+#        endif
+#    else
+#        if OGRE_MEMORY_TRACKER_RELEASE_MODE
+#            define OGRE_MEMORY_TRACKER 1
+#        else
+#            define OGRE_MEMORY_TRACKER 0
+#        endif
+#    endif
 
-namespace Ogre {
-    // Define ogre version
-    #define OGRE_VERSION_MAJOR 2
-    #define OGRE_VERSION_MINOR 4
-    #define OGRE_VERSION_PATCH 0
-    #define OGRE_VERSION_SUFFIX "unstable"
-    #define OGRE_VERSION_NAME "E"
+namespace Ogre
+{
+// Define ogre version
+#    define OGRE_VERSION_MAJOR 2
+#    define OGRE_VERSION_MINOR 4
+#    define OGRE_VERSION_PATCH 0
+#    define OGRE_VERSION_SUFFIX "unstable"
+#    define OGRE_VERSION_NAME "E"
 
-    #define OGRE_VERSION    ((OGRE_VERSION_MAJOR << 16) | (OGRE_VERSION_MINOR << 8) | OGRE_VERSION_PATCH)
+#    define OGRE_VERSION \
+        ( ( OGRE_VERSION_MAJOR << 16 ) | ( OGRE_VERSION_MINOR << 8 ) | OGRE_VERSION_PATCH )
 
-    #define OGRE_UNUSED_VAR(x) ((void)x)
+#    define OGRE_UNUSED_VAR( x ) ( (void)x )
 
-    // define the real number values to be used
-    // default to use 'float' unless precompiler option set
-    #if OGRE_DOUBLE_PRECISION == 1
-        /** Software floating point type.
-        @note Not valid as a pointer to GPU buffers / parameters
-        */
-        typedef double Real;
-        typedef uint64 RealAsUint;
-    #else
-        /** Software floating point type.
-        @note Not valid as a pointer to GPU buffers / parameters
-        */
-        typedef float Real;
-        typedef uint32 RealAsUint;
-    #endif
+// define the real number values to be used
+// default to use 'float' unless precompiler option set
+#    if OGRE_DOUBLE_PRECISION == 1
+    /** Software floating point type.
+    @note Not valid as a pointer to GPU buffers / parameters
+    */
+    typedef double Real;
+    typedef uint64 RealAsUint;
+#    else
+    /** Software floating point type.
+    @note Not valid as a pointer to GPU buffers / parameters
+    */
+    typedef float        Real;
+    typedef uint32       RealAsUint;
+#    endif
 
     /** In order to avoid finger-aches :)
-    */
-    typedef unsigned char uchar;
+     */
+    typedef unsigned char  uchar;
     typedef unsigned short ushort;
-    typedef unsigned int uint;
-    typedef unsigned long ulong;
+    typedef unsigned int   uint;
+    typedef unsigned long  ulong;
 
-    #if __cplusplus >= 201103L || ( defined(_MSC_VER) && _MSC_VER >= 1800 )
-    #define register
-    #endif
-// Pre-declare classes
-// Allows use of pointers in header files without including individual .h
-// so decreases dependencies between files
+#    if __cplusplus >= 201103L || ( defined( _MSC_VER ) && _MSC_VER >= 1800 )
+#        define register
+#    endif
+    // Pre-declare classes
+    // Allows use of pointers in header files without including individual .h
+    // so decreases dependencies between files
 
     struct Aabb;
     class Angle;
@@ -120,17 +122,20 @@ namespace Ogre {
     class ComputeTools;
     class ConfigDialog;
     class ConstBufferPacked;
-    template <typename T> class Controller;
-    template <typename T> class ControllerFunction;
+    template <typename T>
+    class Controller;
+    template <typename T>
+    class ControllerFunction;
     class ControllerManager;
-    template <typename T> class ControllerValue;
+    template <typename T>
+    class ControllerValue;
     class DataStream;
     class Decal;
     class DefaultWorkQueue;
     class Degree;
-#ifndef OGRE_DEPRECATED_2_2
+#    ifndef OGRE_DEPRECATED_2_2
     struct DepthBuffer;
-#endif
+#    endif
     struct DescriptorSetSampler;
     struct DescriptorSetTexture;
     struct DescriptorSetTexture2;
@@ -202,9 +207,9 @@ namespace Ogre {
     class ManualObject;
     class MovableObject;
     class MovablePlane;
-#ifdef _OGRE_MULTISOURCE_VBO
+#    ifdef _OGRE_MULTISOURCE_VBO
     class MultiSourceVertexBufferPool;
-#endif
+#    endif
     class Node;
     class NodeMemoryManager;
     struct ObjectData;
@@ -302,7 +307,7 @@ namespace Ogre {
     class CompositorManager2;
     class CompositorWorkspace;
 
-#ifdef OGRE_DEPRECATED_2_2
+#    ifdef OGRE_DEPRECATED_2_2
     class DepthBuffer;
     class HlmsTextureManager;
     class Image;
@@ -316,27 +321,29 @@ namespace Ogre {
     class Texture;
     class TextureManager;
 
-    template<typename T> class SharedPtr;
+    template <typename T>
+    class SharedPtr;
     typedef SharedPtr<RenderToVertexBuffer> RenderToVertexBufferSharedPtr;
-    typedef SharedPtr<Texture> TexturePtr;
-#endif
+    typedef SharedPtr<Texture>              TexturePtr;
+#    endif
 
-    template<typename T> class SharedPtr;
-    typedef SharedPtr<AnimableValue> AnimableValuePtr;
-    typedef SharedPtr<AsyncTicket> AsyncTicketPtr;
-    typedef SharedPtr<DataStream> DataStreamPtr;
-    typedef SharedPtr<GpuProgram> GpuProgramPtr;
-    typedef SharedPtr<GpuNamedConstants> GpuNamedConstantsPtr;
+    template <typename T>
+    class SharedPtr;
+    typedef SharedPtr<AnimableValue>          AnimableValuePtr;
+    typedef SharedPtr<AsyncTicket>            AsyncTicketPtr;
+    typedef SharedPtr<DataStream>             DataStreamPtr;
+    typedef SharedPtr<GpuProgram>             GpuProgramPtr;
+    typedef SharedPtr<GpuNamedConstants>      GpuNamedConstantsPtr;
     typedef SharedPtr<GpuLogicalBufferStruct> GpuLogicalBufferStructPtr;
-    typedef SharedPtr<GpuSharedParameters> GpuSharedParametersPtr;
-    typedef SharedPtr<GpuProgramParameters> GpuProgramParametersSharedPtr;
-    typedef SharedPtr<HighLevelGpuProgram> HighLevelGpuProgramPtr;
-    typedef SharedPtr<Material> MaterialPtr;
-    typedef SharedPtr<MemoryDataStream> MemoryDataStreamPtr;
-    typedef SharedPtr<Mesh> MeshPtr;
-    typedef SharedPtr<Resource> ResourcePtr;
-    typedef SharedPtr<ShadowCameraSetup> ShadowCameraSetupPtr;
-    typedef SharedPtr<SkeletonDef> SkeletonDefPtr;
+    typedef SharedPtr<GpuSharedParameters>    GpuSharedParametersPtr;
+    typedef SharedPtr<GpuProgramParameters>   GpuProgramParametersSharedPtr;
+    typedef SharedPtr<HighLevelGpuProgram>    HighLevelGpuProgramPtr;
+    typedef SharedPtr<Material>               MaterialPtr;
+    typedef SharedPtr<MemoryDataStream>       MemoryDataStreamPtr;
+    typedef SharedPtr<Mesh>                   MeshPtr;
+    typedef SharedPtr<Resource>               ResourcePtr;
+    typedef SharedPtr<ShadowCameraSetup>      ShadowCameraSetupPtr;
+    typedef SharedPtr<SkeletonDef>            SkeletonDefPtr;
 
     namespace v1
     {
@@ -384,203 +391,211 @@ namespace Ogre {
         class VertexDeclaration;
         class VertexMorphKeyFrame;
 
-        typedef SharedPtr<Mesh> MeshPtr;
+        typedef SharedPtr<Mesh>      MeshPtr;
         typedef SharedPtr<PatchMesh> PatchMeshPtr;
-        typedef SharedPtr<Skeleton> SkeletonPtr;
-    }
-}
+        typedef SharedPtr<Skeleton>  SkeletonPtr;
+    }  // namespace v1
+}  // namespace Ogre
 
 /* Include all the standard header *after* all the configuration
 settings have been made.
 */
-#include "OgreStdHeaders.h"
-#include "OgreMemoryAllocatorConfig.h"
-
+#    include "OgreMemoryAllocatorConfig.h"
+#    include "OgreStdHeaders.h"
 
 namespace Ogre
 {
-#if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
-    #if OGRE_WCHAR_T_STRINGS
-        typedef std::basic_string<wchar_t, std::char_traits<wchar_t>, STLAllocator<wchar_t,GeneralAllocPolicy > >   _StringBase;
-    #else
-        typedef std::basic_string<char, std::char_traits<char>, STLAllocator<char,GeneralAllocPolicy > >    _StringBase;
-    #endif
+#    if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
+#        if OGRE_WCHAR_T_STRINGS
+    typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
+                              STLAllocator<wchar_t, GeneralAllocPolicy>>
+        _StringBase;
+#        else
+    typedef std::basic_string<char, std::char_traits<char>, STLAllocator<char, GeneralAllocPolicy>>
+        _StringBase;
+#        endif
 
-    #if OGRE_WCHAR_T_STRINGS
-        typedef std::basic_stringstream<wchar_t,std::char_traits<wchar_t>,STLAllocator<wchar_t,GeneralAllocPolicy >> _StringStreamBase;
-    #else
-        typedef std::basic_stringstream<char,std::char_traits<char>,STLAllocator<char,GeneralAllocPolicy > > _StringStreamBase;
-    #endif
+#        if OGRE_WCHAR_T_STRINGS
+    typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
+                                    STLAllocator<wchar_t, GeneralAllocPolicy>>
+        _StringStreamBase;
+#        else
+    typedef std::basic_stringstream<char, std::char_traits<char>, STLAllocator<char, GeneralAllocPolicy>>
+        _StringStreamBase;
+#        endif
 
-    #define StdStringT(T) std::basic_string<T, std::char_traits<T>, std::allocator<T> > 
-    #define CustomMemoryStringT(T) std::basic_string<T, std::char_traits<T>, STLAllocator<T,GeneralAllocPolicy> >   
+#        define StdStringT( T ) std::basic_string<T, std::char_traits<T>, std::allocator<T>>
+#        define CustomMemoryStringT( T ) \
+            std::basic_string<T, std::char_traits<T>, STLAllocator<T, GeneralAllocPolicy>>
 
-    template<typename T>
-    bool operator <(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
+    template <typename T>
+    bool operator<( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())<0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) < 0;
     }
-    template<typename T>
-    bool operator <(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    bool operator<( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())<0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) < 0;
     }
-    template<typename T>
-    bool operator <=(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
+    template <typename T>
+    bool operator<=( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())<=0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) <= 0;
     }
-    template<typename T>
-    bool operator <=(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    bool operator<=( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())<=0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) <= 0;
     }
-    template<typename T>
-    bool operator >(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
+    template <typename T>
+    bool operator>( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())>0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) > 0;
     }
-    template<typename T>
-    bool operator >(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    bool operator>( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())>0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) > 0;
     }
-    template<typename T>
-    bool operator >=(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
+    template <typename T>
+    bool operator>=( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())>=0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) >= 0;
     }
-    template<typename T>
-    bool operator >=(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    bool operator>=( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())>=0;
-    }
-
-    template<typename T>
-    bool operator ==(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
-    {
-        return l.compare(0,l.length(),o.c_str(),o.length())==0;
-    }
-    template<typename T>
-    bool operator ==(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
-    {
-        return l.compare(0,l.length(),o.c_str(),o.length())==0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) >= 0;
     }
 
-    template<typename T>
-    bool operator !=(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
+    template <typename T>
+    bool operator==( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())!=0;
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) == 0;
     }
-    template<typename T>
-    bool operator !=(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    bool operator==( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
     {
-        return l.compare(0,l.length(),o.c_str(),o.length())!=0;
-    }
-
-    template<typename T>
-    CustomMemoryStringT(T) operator +=(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
-    {
-        return CustomMemoryStringT(T)(l)+=o.c_str();
-    }
-    template<typename T>
-    CustomMemoryStringT(T) operator +=(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
-    {
-        return CustomMemoryStringT(T)(l.c_str())+=o.c_str();
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) == 0;
     }
 
-    template<typename T>
-    CustomMemoryStringT(T) operator +(const CustomMemoryStringT(T)& l,const StdStringT(T)& o)
+    template <typename T>
+    bool operator!=( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return CustomMemoryStringT(T)(l)+=o.c_str();
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) != 0;
+    }
+    template <typename T>
+    bool operator!=( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
+    {
+        return l.compare( 0, l.length(), o.c_str(), o.length() ) != 0;
     }
 
-    template<typename T>
-    CustomMemoryStringT(T) operator +(const StdStringT(T)& l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    CustomMemoryStringT( T ) operator+=( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return CustomMemoryStringT(T)(l.c_str())+=o.c_str();
+        return CustomMemoryStringT( T )( l ) += o.c_str();
+    }
+    template <typename T>
+    CustomMemoryStringT( T ) operator+=( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
+    {
+        return CustomMemoryStringT( T )( l.c_str() ) += o.c_str();
     }
 
-    template<typename T>
-    CustomMemoryStringT(T) operator +(const T* l,const CustomMemoryStringT(T)& o)
+    template <typename T>
+    CustomMemoryStringT( T ) operator+( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
     {
-        return CustomMemoryStringT(T)(l)+=o;
+        return CustomMemoryStringT( T )( l ) += o.c_str();
     }
 
-    #undef StdStringT
-    #undef CustomMemoryStringT
+    template <typename T>
+    CustomMemoryStringT( T ) operator+( const StdStringT( T ) & l, const CustomMemoryStringT( T ) & o )
+    {
+        return CustomMemoryStringT( T )( l.c_str() ) += o.c_str();
+    }
 
-#else
-    #if OGRE_WCHAR_T_STRINGS
-        typedef std::wstring _StringBase;
-    #else
-        typedef std::string _StringBase;
-    #endif
+    template <typename T>
+    CustomMemoryStringT( T ) operator+( const T *l, const CustomMemoryStringT( T ) & o )
+    {
+        return CustomMemoryStringT( T )( l ) += o;
+    }
 
-    #if OGRE_WCHAR_T_STRINGS
-        typedef std::basic_stringstream<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> > _StringStreamBase;
-    #else
-        typedef std::basic_stringstream<char,std::char_traits<char>,std::allocator<char> > _StringStreamBase;
-    #endif
+#        undef StdStringT
+#        undef CustomMemoryStringT
 
-#endif
+#    else
+#        if OGRE_WCHAR_T_STRINGS
+    typedef std::wstring _StringBase;
+#        else
+    typedef std::string _StringBase;
+#        endif
 
-    typedef _StringBase String;
+#        if OGRE_WCHAR_T_STRINGS
+    typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>
+        _StringStreamBase;
+#        else
+    typedef std::basic_stringstream<char, std::char_traits<char>, std::allocator<char>>
+        _StringStreamBase;
+#        endif
+
+#    endif
+
+    typedef _StringBase       String;
     typedef _StringStreamBase StringStream;
-    typedef StringStream stringstream;
+    typedef StringStream      stringstream;
 
-}
+}  // namespace Ogre
 
-#if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR 
-namespace std 
+#    if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
+namespace std
 {
-    template <> struct hash<Ogre::String>
+    template <>
+    struct hash<Ogre::String>
     {
-    public :
-        size_t operator()(const Ogre::String &str ) const
+    public:
+        size_t operator()( const Ogre::String &str ) const
         {
             size_t _Val = 2166136261U;
             size_t _First = 0;
             size_t _Last = str.size();
             size_t _Stride = 1 + _Last / 10;
 
-            for(; _First < _Last; _First += _Stride)
+            for( ; _First < _Last; _First += _Stride )
                 _Val = 16777619U * _Val ^ (size_t)str[_First];
-            return (_Val);
+            return ( _Val );
         }
     };
-}
-#endif
+}  // namespace std
+#    endif
 
 // Forward declaration of a regular STL. This is a workaround to prevent forward declaring
 // an std::map & co (which is undefined behavior). Use this for rarely used maps/vector/etc that
 // are passed by reference & need to be everywhere in headers (thus affecting compilation times)
 namespace Ogre
 {
-    template <typename, typename> class STLAllocator;
+    template <typename, typename>
+    class STLAllocator;
 
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy> >
+    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy>>
     class StdVector;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy>>
     class StdMap;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy>>
     class StdMultiMap;
 
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy> >
+    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy>>
     class StdList;
 
     template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
               typename A = STLAllocator<K, GeneralAllocPolicy>>
     class StdUnorderedSet;
-}
+}  // namespace Ogre
 
-#include "OgreAssert.h"
-#include "OgreWorkarounds.h"
+#    include "OgreAssert.h"
+#    include "OgreWorkarounds.h"
 
-#endif // __OgrePrerequisites_H__
-
-
+#endif  // __OgrePrerequisites_H__

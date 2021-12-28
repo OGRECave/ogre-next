@@ -33,49 +33,57 @@ THE SOFTWARE.
 #include "OgreLodStrategy.h"
 #include "OgreSingleton.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
 
     class DistanceLodBoxStrategy;
     /// Backward compatible name for Distance_Box strategy.
     typedef DistanceLodBoxStrategy DistanceLodStrategy;
 
-    /** Level of detail strategy based on distance from camera. This is an abstract base class for DistanceLodBoxStrategy and DistanceLodSphereStrategy.
+    /** Level of detail strategy based on distance from camera. This is an abstract base class for
+       DistanceLodBoxStrategy and DistanceLodSphereStrategy.
         @remarks
-            The purpose of the reference view is to ensure a consistent experience for all users. Monitors of different resolutions and aspect ratios will each have different results for the distance queries.
+            The purpose of the reference view is to ensure a consistent experience for all users.
+       Monitors of different resolutions and aspect ratios will each have different results for the
+       distance queries.
         @par
-            It depends on gameplay testing. If all testers had 16:9 monitors and 110° FOV, then that's the value you should enter (to ensure as much as possible the experience stays consistent for all other users who don't have a 16:9 monitor and/or use a different FOV).
+            It depends on gameplay testing. If all testers had 16:9 monitors and 110° FOV, then that's
+       the value you should enter (to ensure as much as possible the experience stays consistent for all
+       other users who don't have a 16:9 monitor and/or use a different FOV).
         @par
             If all your testers had 4:3 monitors, then enter a 4:3 resolution.
         @par
-            If all your testers had varying resolutions or you just didn't care, then this feature is useless for you and should be disabled (default: disabled).
+            If all your testers had varying resolutions or you just didn't care, then this feature is
+       useless for you and should be disabled (default: disabled).
      */
     class _OgreExport DistanceLodStrategyBase : public LodStrategy
     {
     protected:
         /// @copydoc LodStrategy::getValueImpl
-        Real getValueImpl(const MovableObject *movableObject, const Camera *camera) const override;
+        Real getValueImpl( const MovableObject *movableObject, const Camera *camera ) const override;
 
     public:
         /** Default constructor. */
-        DistanceLodStrategyBase(const String& name);
+        DistanceLodStrategyBase( const String &name );
 
         /// @copydoc LodStrategy::getBaseValue
         Real getBaseValue() const override;
 
         /// @copydoc LodStrategy::transformBias
-        Real transformBias(Real factor) const override;
+        Real transformBias( Real factor ) const override;
 
         /// @copydoc LodStrategy::transformUserValue
-        Real transformUserValue(Real userValue) const override;
+        Real transformUserValue( Real userValue ) const override;
 
         /** Get the squared depth from camera to the LOD object */
-        virtual Real getSquaredDepth(const MovableObject *movableObject, const Ogre::Camera *camera) const = 0;
+        virtual Real getSquaredDepth( const MovableObject *movableObject,
+                                      const Ogre::Camera * camera ) const = 0;
 
         void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
                             Real bias ) const override;
@@ -87,12 +95,12 @@ namespace Ogre {
             There is no corresponding get method for these values as
             they are not saved, but used to compute a reference value.
         */
-        void setReferenceView(Real viewportWidth, Real viewportHeight, Radian fovY);
+        void setReferenceView( Real viewportWidth, Real viewportHeight, Radian fovY );
 
         /** Enables to disables use of the reference view.
         @note Do not enable use of the reference view before setting it.
         */
-        void setReferenceViewEnabled(bool value);
+        void setReferenceViewEnabled( bool value );
 
         /** Determine if use of the reference view is enabled */
         bool isReferenceViewEnabled() const;
@@ -100,29 +108,34 @@ namespace Ogre {
     private:
         bool mReferenceViewEnabled;
         Real mReferenceViewValue;
-
     };
     /** @} */
     /** @} */
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
 
     /** Level of detail strategy based on distance from camera to an object's bounding sphere.
         @remarks
-            The purpose of the reference view is to ensure a consistent experience for all users. Monitors of different resolutions and aspect ratios will each have different results for the distance queries.
+            The purpose of the reference view is to ensure a consistent experience for all users.
+       Monitors of different resolutions and aspect ratios will each have different results for the
+       distance queries.
         @par
-            It depends on gameplay testing. If all testers had 16:9 monitors and 110° FOV, then that's the value you should enter (to ensure as much as possible the experience stays consistent for all other users who don't have a 16:9 monitor and/or use a different FOV).
+            It depends on gameplay testing. If all testers had 16:9 monitors and 110° FOV, then that's
+       the value you should enter (to ensure as much as possible the experience stays consistent for all
+       other users who don't have a 16:9 monitor and/or use a different FOV).
         @par
             If all your testers had 4:3 monitors, then enter a 4:3 resolution.
         @par
-            If all your testers had varying resolutions or you just didn't care, then this feature is useless for you and should be disabled (default: disabled).
+            If all your testers had varying resolutions or you just didn't care, then this feature is
+       useless for you and should be disabled (default: disabled).
      */
-    class _OgreExport DistanceLodSphereStrategy : public DistanceLodStrategyBase, public Singleton<DistanceLodSphereStrategy>
+    class _OgreExport DistanceLodSphereStrategy : public DistanceLodStrategyBase,
+                                                  public Singleton<DistanceLodSphereStrategy>
     {
     public:
         /** Default constructor. */
@@ -130,7 +143,7 @@ namespace Ogre {
 
         /// @copydoc DistanceLodStrategy::getSquaredDepth
         Real getSquaredDepth( const MovableObject *movableObject,
-                              const Ogre::Camera *camera ) const override;
+                              const Ogre::Camera * camera ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -147,7 +160,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodSphereStrategy& getSingleton();
+        static DistanceLodSphereStrategy &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -163,29 +176,35 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodSphereStrategy* getSingletonPtr();
+        static DistanceLodSphereStrategy *getSingletonPtr();
     };
     /** @} */
     /** @} */
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup LOD
-    *  @{
-    */
+     *  @{
+     */
 
     /** Level of detail strategy based on distance from camera to an object's bounding box.
         @remarks
-            The purpose of the reference view is to ensure a consistent experience for all users. Monitors of different resolutions and aspect ratios will each have different results for the distance queries.
+            The purpose of the reference view is to ensure a consistent experience for all users.
+       Monitors of different resolutions and aspect ratios will each have different results for the
+       distance queries.
         @par
-            It depends on gameplay testing. If all testers had 16:9 monitors and 110° FOV, then that's the value you should enter (to ensure as much as possible the experience stays consistent for all other users who don't have a 16:9 monitor and/or use a different FOV).
+            It depends on gameplay testing. If all testers had 16:9 monitors and 110° FOV, then that's
+       the value you should enter (to ensure as much as possible the experience stays consistent for all
+       other users who don't have a 16:9 monitor and/or use a different FOV).
         @par
             If all your testers had 4:3 monitors, then enter a 4:3 resolution.
         @par
-            If all your testers had varying resolutions or you just didn't care, then this feature is useless for you and should be disabled (default: disabled).
+            If all your testers had varying resolutions or you just didn't care, then this feature is
+       useless for you and should be disabled (default: disabled).
      */
-    class _OgreExport DistanceLodBoxStrategy : public DistanceLodStrategyBase, public Singleton<DistanceLodBoxStrategy>
+    class _OgreExport DistanceLodBoxStrategy : public DistanceLodStrategyBase,
+                                               public Singleton<DistanceLodBoxStrategy>
     {
     public:
         /** Default constructor. */
@@ -193,7 +212,7 @@ namespace Ogre {
 
         /// @copydoc DistanceLodStrategy::getSquaredDepth
         Real getSquaredDepth( const MovableObject *movableObject,
-                              const Ogre::Camera *camera ) const override;
+                              const Ogre::Camera * camera ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -210,7 +229,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodBoxStrategy& getSingleton();
+        static DistanceLodBoxStrategy &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -226,12 +245,12 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static DistanceLodBoxStrategy* getSingletonPtr();
+        static DistanceLodBoxStrategy *getSingletonPtr();
     };
 
     /** @} */
     /** @} */
 
-} // namespace
+}  // namespace Ogre
 
 #endif

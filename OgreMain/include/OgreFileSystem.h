@@ -33,35 +33,36 @@ THE SOFTWARE.
 #include "OgreArchive.h"
 #include "OgreArchiveFactory.h"
 #include "Threading/OgreThreadHeaders.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Some machinery to properly handle Unicode filesystem pathes.
-    *   It is designed to be later replaced by typedef std::filesystem::path FileSystemPath;
-    *   FileSystemPath is always internally Unicode and is intended to be passed to the same
-    *   std::[iof]stream constructors and methods that accepts std::filesystem::path in C++17.
-    *   Note: Narrow strings are interpreted as UTF-8 on most platforms, but on Windows 
-    *   interpretation in both this machinery and FileSystemArchive is controlled by internal 
-    *   define _OGRE_FILESYSTEM_ARCHIVE_UNICODE, and could be CP_UTF8, CP_ACP or even CP_OEMCP.
-    */
+     *   It is designed to be later replaced by typedef std::filesystem::path FileSystemPath;
+     *   FileSystemPath is always internally Unicode and is intended to be passed to the same
+     *   std::[iof]stream constructors and methods that accepts std::filesystem::path in C++17.
+     *   Note: Narrow strings are interpreted as UTF-8 on most platforms, but on Windows
+     *   interpretation in both this machinery and FileSystemArchive is controlled by internal
+     *   define _OGRE_FILESYSTEM_ARCHIVE_UNICODE, and could be CP_UTF8, CP_ACP or even CP_OEMCP.
+     */
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
     typedef std::wstring FileSystemPath;
-    FileSystemPath fileSystemPathFromString(const String& path);
-    String fileSystemPathToString(const FileSystemPath& path);
+    FileSystemPath       fileSystemPathFromString( const String &path );
+    String               fileSystemPathToString( const FileSystemPath &path );
 #else
-    typedef String FileSystemPath;
-    inline const FileSystemPath& fileSystemPathFromString(const String& path) { return path; }
-    inline const String& fileSystemPathToString(const FileSystemPath& path) { return path; }
+    typedef String               FileSystemPath;
+    inline const FileSystemPath &fileSystemPathFromString( const String &path ) { return path; }
+    inline const String &        fileSystemPathToString( const FileSystemPath &path ) { return path; }
 #endif
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
-    /** Specialisation of the Archive class to allow reading of files from 
+     *  @{
+     */
+    /** Specialisation of the Archive class to allow reading of files from
         filesystem folders / directories.
     */
     class _OgreExport FileSystemArchive final : public Archive
@@ -79,12 +80,13 @@ namespace Ogre {
         @param detailList
             Populated if retrieving a detailed list.
         */
-        void findFiles(const String& pattern, bool recursive, bool dirs,
-            StringVector* simpleList, FileInfoList* detailList);
+        void findFiles( const String &pattern, bool recursive, bool dirs, StringVector *simpleList,
+                        FileInfoList *detailList );
 
         OGRE_AUTO_MUTEX;
+
     public:
-        FileSystemArchive(const String& name, const String& archType, bool readOnly );
+        FileSystemArchive( const String &name, const String &archType, bool readOnly );
         ~FileSystemArchive() override;
 
         /// @copydoc Archive::isCaseSensitive
@@ -96,47 +98,40 @@ namespace Ogre {
         void unload() override;
 
         /// @copydoc Archive::open
-        DataStreamPtr open(const String& filename, bool readOnly = true) override;
+        DataStreamPtr open( const String &filename, bool readOnly = true ) override;
 
         /// @copydoc Archive::create
-        DataStreamPtr create(const String& filename) override;
+        DataStreamPtr create( const String &filename ) override;
 
         /// @copydoc Archive::remove
-        void remove(const String& filename) override;
+        void remove( const String &filename ) override;
 
         /// @copydoc Archive::list
-        StringVectorPtr list(bool recursive = true, bool dirs = false) override;
+        StringVectorPtr list( bool recursive = true, bool dirs = false ) override;
 
         /// @copydoc Archive::listFileInfo
-        FileInfoListPtr listFileInfo(bool recursive = true, bool dirs = false) override;
+        FileInfoListPtr listFileInfo( bool recursive = true, bool dirs = false ) override;
 
         /// @copydoc Archive::find
-        StringVectorPtr find(const String& pattern, bool recursive = true,
-            bool dirs = false) override;
+        StringVectorPtr find( const String &pattern, bool recursive = true, bool dirs = false ) override;
 
         /// @copydoc Archive::findFileInfo
-        FileInfoListPtr findFileInfo(const String& pattern, bool recursive = true,
-            bool dirs = false) override;
+        FileInfoListPtr findFileInfo( const String &pattern, bool recursive = true,
+                                      bool dirs = false ) override;
 
         /// @copydoc Archive::exists
-        bool exists(const String& filename) override;
+        bool exists( const String &filename ) override;
 
         /// @copydoc Archive::getModifiedTime
-        time_t getModifiedTime(const String& filename) override;
+        time_t getModifiedTime( const String &filename ) override;
 
         /// Set whether filesystem enumeration will include hidden files or not.
         /// This should be called prior to declaring and/or initializing filesystem
         /// resource locations. The default is true (ignore hidden files).
-        static void setIgnoreHidden(bool ignore)
-        {
-            msIgnoreHidden = ignore;
-        }
+        static void setIgnoreHidden( bool ignore ) { msIgnoreHidden = ignore; }
 
         /// Get whether hidden files are ignored during filesystem enumeration.
-        static bool getIgnoreHidden()
-        {
-            return msIgnoreHidden;
-        }
+        static bool getIgnoreHidden() { return msIgnoreHidden; }
 
         static bool msIgnoreHidden;
     };
@@ -147,21 +142,21 @@ namespace Ogre {
     public:
         ~FileSystemArchiveFactory() override {}
         /// @copydoc FactoryObj::getType
-        const String& getType() const override;
+        const String &getType() const override;
         /// @copydoc FactoryObj::createInstance
-        Archive *createInstance( const String& name, bool readOnly ) override
+        Archive *createInstance( const String &name, bool readOnly ) override
         {
-            return OGRE_NEW FileSystemArchive(name, "FileSystem", readOnly);
+            return OGRE_NEW FileSystemArchive( name, "FileSystem", readOnly );
         }
         /// @copydoc FactoryObj::destroyInstance
-        void destroyInstance(Archive* ptr) override { OGRE_DELETE ptr; }
+        void destroyInstance( Archive *ptr ) override { OGRE_DELETE ptr; }
     };
 
     /** @} */
     /** @} */
 
-} // namespace Ogre
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
-#endif // __FileSystem_H__
+#endif  // __FileSystem_H__

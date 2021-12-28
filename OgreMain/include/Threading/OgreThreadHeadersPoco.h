@@ -27,16 +27,15 @@ THE SOFTWARE
 #define __OgreThreadHeadersPoco_H__
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define POCO_NO_UNWINDOWS
+#    define POCO_NO_UNWINDOWS
 #endif
 
-#include <Poco/ThreadLocal.h>
-#include <Poco/Mutex.h>
 #include <Poco/Condition.h>
-#include <Poco/Thread.h>
-#include <Poco/Runnable.h>
-#include <Poco/RWLock.h>
 #include <Poco/Environment.h>
+#include <Poco/Mutex.h>
+#include <Poco/RWLock.h>
+#include <Poco/Runnable.h>
+#include <Poco/Thread.h>
+#include <Poco/ThreadLocal.h>
 
 #endif
-

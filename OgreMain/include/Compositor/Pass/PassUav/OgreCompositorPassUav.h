@@ -29,11 +29,11 @@ THE SOFTWARE.
 #ifndef __CompositorPassUav_H__
 #define __CompositorPassUav_H__
 
-#include "OgreHeaderPrefix.h"
-
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorCommon.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
 #include "OgreTextureGpuListener.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -44,11 +44,11 @@ namespace Ogre
     class CompositorPassUavDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will set UAVs.
@@ -60,12 +60,13 @@ namespace Ogre
     class _OgreExport CompositorPassUav : public CompositorPass, public TextureGpuListener
     {
         CompositorPassUavDef const *mDefinition;
+
     protected:
         DescriptorSetUav const *mDescriptorSetUav;
 
         uint32 calculateNumberUavSlots() const;
-        void setupDescriptorSetUav();
-        void destroyDescriptorSetUav();
+        void   setupDescriptorSetUav();
+        void   destroyDescriptorSetUav();
 
     public:
         CompositorPassUav( const CompositorPassUavDef *definition, CompositorNode *parentNode,
@@ -82,7 +83,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

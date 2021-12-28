@@ -79,20 +79,20 @@ namespace Ogre
     class _OgreExport Decal final : public MovableObject, public TextureGpuListener
     {
     protected:
-        TextureGpu  *mDiffuseTexture;
-        TextureGpu  *mNormalTexture;
-        TextureGpu  *mEmissiveTexture;
+        TextureGpu *mDiffuseTexture;
+        TextureGpu *mNormalTexture;
+        TextureGpu *mEmissiveTexture;
 
     public:
         uint16 mDiffuseIdx;
         uint16 mNormalMapIdx;
         uint16 mEmissiveIdx;
         uint16 mIgnoreDiffuseAlpha;
-        float mMetalness;
-        float mRoughness;
+        float  mMetalness;
+        float  mRoughness;
 
     public:
-        Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
+        Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         ~Decal() override;
 
         /// Call this family of functions if the input texture is automatically batched
@@ -108,9 +108,9 @@ namespace Ogre
         void setNormalTextureRaw( TextureGpu *normalTex, uint32 sliceIdx );
         void setEmissiveTextureRaw( TextureGpu *emissiveTex, uint32 sliceIdx );
 
-        TextureGpu* getDiffuseTexture() const;
-        TextureGpu* getNormalTexture() const;
-        TextureGpu* getEmissiveTexture() const;
+        TextureGpu *getDiffuseTexture() const;
+        TextureGpu *getNormalTexture() const;
+        TextureGpu *getEmissiveTexture() const;
 
         /** When diffuse textures are used (globally), the alpha component of the diffuse texture
             will be used to mask all the other textures (e.g. normal & emissive maps).
@@ -124,12 +124,12 @@ namespace Ogre
         bool getIgnoreAlphaDiffuse() const;
 
         /// Value for Metalness. Must be in range [0; 1]
-        void setMetalness( float value );
-        float getMetalness() const              { return mMetalness; }
+        void  setMetalness( float value );
+        float getMetalness() const { return mMetalness; }
 
         /// Value for Roughness. Valid range depends on the BRDF used.
-        void setRoughness( float roughness );
-        float getRoughness() const              { return mRoughness; }
+        void  setRoughness( float roughness );
+        float getRoughness() const { return mRoughness; }
 
         /** Helper function to set width, height and depth of the decal.
             This is a helper function because these parameters actually live in the parent scene node
@@ -149,8 +149,8 @@ namespace Ogre
         */
         void setRectSize( Vector2 planeDimensions, Real depth );
 
-        //Overrides from MovableObject
-        const String& getMovableType() const override;
+        // Overrides from MovableObject
+        const String &getMovableType() const override;
 
         /// Decals only allow ForwardPlusBase::MinDecalRq <= queueID < ForwardPlusBase::MaxDecalRq
         void setRenderQueueGroup( uint8 queueID ) override;
@@ -162,7 +162,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *manager,
+                                           SceneManager *           manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:
@@ -171,9 +171,9 @@ namespace Ogre
 
         static String FACTORY_TYPE_NAME;
 
-        const String& getType() const override;
-        void destroyInstance(MovableObject* obj) override;
+        const String &getType() const override;
+        void          destroyInstance( MovableObject *obj ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

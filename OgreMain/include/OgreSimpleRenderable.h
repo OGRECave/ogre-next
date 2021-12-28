@@ -30,69 +30,70 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreMovableObject.h"
-#include "OgreRenderable.h"
 #include "OgreAxisAlignedBox.h"
+#include "OgreMovableObject.h"
 #include "OgreRenderOperation.h"
+#include "OgreRenderable.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Scene
-    *  @{
-    */
-    /** Simple implementation of MovableObject and Renderable for single-part custom objects. 
-    @see ManualObject for a simpler interface with more flexibility
-    */
-    class _OgreExport SimpleRenderable : public MovableObject, public Renderable
+namespace Ogre
+{
+    namespace v1
     {
-    protected:
-        RenderOperation mRenderOp;
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Scene
+         *  @{
+         */
+        /** Simple implementation of MovableObject and Renderable for single-part custom objects.
+        @see ManualObject for a simpler interface with more flexibility
+        */
+        class _OgreExport SimpleRenderable : public MovableObject, public Renderable
+        {
+        protected:
+            RenderOperation mRenderOp;
 
-        Matrix4 mWorldTransform;
-        AxisAlignedBox mBox;
+            Matrix4        mWorldTransform;
+            AxisAlignedBox mBox;
 
-        String mMatName;
-        MaterialPtr mMaterial;
+            String      mMatName;
+            MaterialPtr mMaterial;
 
-        /// The scene manager for the current frame.
-        SceneManager *mParentSceneManager;
+            /// The scene manager for the current frame.
+            SceneManager *mParentSceneManager;
 
-    public:
-        /// Constructor
-        SimpleRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        ~SimpleRenderable() override;
+        public:
+            /// Constructor
+            SimpleRenderable( IdType id, ObjectMemoryManager *objectMemoryManager,
+                              SceneManager *manager );
+            ~SimpleRenderable() override;
 
-        virtual void setMaterial( const String& matName );
-        void setMaterial(const MaterialPtr& mat) override;
-        virtual const MaterialPtr& getMaterial() const;
+            virtual void               setMaterial( const String &matName );
+            void                       setMaterial( const MaterialPtr &mat ) override;
+            virtual const MaterialPtr &getMaterial() const;
 
-        virtual void setRenderOperation( const RenderOperation& rend );
-        void getRenderOperation(RenderOperation& op, bool casterPass) override;
+            virtual void setRenderOperation( const RenderOperation &rend );
+            void         getRenderOperation( RenderOperation &op, bool casterPass ) override;
 
-        void setWorldTransform( const Matrix4& xform );
-        void getWorldTransforms( Matrix4* xform ) const override;
+            void setWorldTransform( const Matrix4 &xform );
+            void getWorldTransforms( Matrix4 *xform ) const override;
 
-        void setBoundingBox( const AxisAlignedBox& box );
-        virtual const AxisAlignedBox& getBoundingBox() const;
+            void                          setBoundingBox( const AxisAlignedBox &box );
+            virtual const AxisAlignedBox &getBoundingBox() const;
 
-        /** Overridden from MovableObject */
-        const String& getMovableType() const override;
+            /** Overridden from MovableObject */
+            const String &getMovableType() const override;
 
-        /** @copydoc Renderable::getLights */
-        const LightList& getLights() const override;
-
-    };
-    /** @} */
-    /** @} */
-}
-}
+            /** @copydoc Renderable::getLights */
+            const LightList &getLights() const override;
+        };
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
 #endif
-

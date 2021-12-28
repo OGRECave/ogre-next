@@ -29,18 +29,20 @@ THE SOFTWARE.
 #define _OgreForwardPlusBase_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 #include "OgreLight.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class CompositorShadowNode;
 
@@ -74,15 +76,15 @@ namespace Ogre
             /// but that's twice the memory (and less cache friendly).
             /// Only Android really could use ReadOnlyBufferPacked, but if you need to
             /// exceed the 65535 texel limit, it's likely too slow for phones anyway
-            TexBufferPacked *gridBuffer;
+            TexBufferPacked *     gridBuffer;
             ReadOnlyBufferPacked *globalLightListBuffer;
             CachedGridBuffer() : gridBuffer( 0 ), globalLightListBuffer( 0 ) {}
         };
 
         typedef vector<CachedGridBuffer>::type CachedGridBufferVec;
 
-        static const size_t MinDecalRq;     // Inclusive
-        static const size_t MaxDecalRq;     // Inclusive
+        static const size_t MinDecalRq;  // Inclusive
+        static const size_t MaxDecalRq;  // Inclusive
 
         static const size_t MinCubemapProbeRq;  // Inclusive
         static const size_t MaxCubemapProbeRq;  // Inclusive
@@ -94,21 +96,21 @@ namespace Ogre
 
         struct CachedGrid
         {
-            Camera                  *camera;
-            Vector3                 lastPos;
-            Quaternion              lastRot;
+            Camera *   camera;
+            Vector3    lastPos;
+            Quaternion lastRot;
             /// Cameras used for reflection have a different view proj matrix
-            bool                    reflection;
+            bool reflection;
             /// Cameras can change their AR depending on the RTT they're rendering to.
-            Real                    aspectRatio;
-            uint32                  visibilityMask;
+            Real   aspectRatio;
+            uint32 visibilityMask;
             /// Cameras w/out shadows have a different light list from cameras that do.
             CompositorShadowNode const *shadowNode;
             /// Last frame this cache was updated.
-            uint32                  lastFrame;
+            uint32 lastFrame;
 
-            uint32                  currentBufIdx;
-            CachedGridBufferVec     gridBuffers;
+            uint32              currentBufIdx;
+            CachedGridBufferVec gridBuffers;
         };
 
         enum ObjTypes
@@ -120,43 +122,44 @@ namespace Ogre
 
         struct LightCount
         {
-            //We use LT_DIRECTIONAL (index = 0) to contain the total light count.
-            uint32  lightCount[Light::MAX_FORWARD_PLUS_LIGHTS];
-            uint32  objCount[NumObjTypes];
+            // We use LT_DIRECTIONAL (index = 0) to contain the total light count.
+            uint32 lightCount[Light::MAX_FORWARD_PLUS_LIGHTS];
+            uint32 objCount[NumObjTypes];
             LightCount()
             {
-                memset( lightCount, 0, sizeof(lightCount) );
-                memset( objCount, 0, sizeof(objCount) );
+                memset( lightCount, 0, sizeof( lightCount ) );
+                memset( objCount, 0, sizeof( objCount ) );
             }
         };
 
         typedef vector<CachedGrid>::type CachedGridVec;
-        CachedGridVec   mCachedGrid;
-        LightArray      mCurrentLightList;
+        CachedGridVec                    mCachedGrid;
+        LightArray                       mCurrentLightList;
 
-        FastArray<LightCount>   mLightCountInCell;
+        FastArray<LightCount> mLightCountInCell;
 
         // Used to save and restore visibility of shadow casting lights. Lives here
         // to reuse memory, otherwise on stack it keeps constantly reallocating memory
-        FastArray<bool>   mShadowCastingLightVisibility;
+        FastArray<bool> mShadowCastingLightVisibility;
 
-        VaoManager      *mVaoManager;
-        SceneManager    *mSceneManager;
+        VaoManager *  mVaoManager;
+        SceneManager *mSceneManager;
 
-        bool    mDebugMode;
-        bool    mFadeAttenuationRange;
+        bool mDebugMode;
+        bool mFadeAttenuationRange;
         /// VPLs = Virtual Point Lights. Used by InstantRadiosity.
-        bool    mEnableVpls;
-        bool    mDecalsEnabled;
-        bool    mCubemapProbesEnabled;
+        bool mEnableVpls;
+        bool mDecalsEnabled;
+        bool mCubemapProbesEnabled;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
-        bool    mFineLightMaskGranularity;
+        bool mFineLightMaskGranularity;
 #endif
-        //How many float4 to skip before Decals / CubemapProbes start in globalLightListBuffer
+        // How many float4 to skip before Decals / CubemapProbes start in globalLightListBuffer
         uint16 mDecalFloat4Offset;
         uint16 mCubemapProbeFloat4Offset;
 
-        static size_t calculateBytesNeeded( size_t numLights, size_t numDecals, size_t numCubemapProbes );
+        static size_t calculateBytesNeeded( size_t numLights, size_t numDecals,
+                                            size_t numCubemapProbes );
 
         void fillGlobalLightListBuffer( Camera *camera, TexBufferPacked *globalLightListBuffer );
 
@@ -194,7 +197,7 @@ namespace Ogre
         bool isCacheDirty( const Camera *camera ) const;
 
         /// Cache the return value as internally we perform an O(N) search
-        TexBufferPacked* getGridBuffer( const Camera *camera ) const;
+        TexBufferPacked *getGridBuffer( const Camera *camera ) const;
         /// Cache the return value as internally we perform an O(N) search
         ReadOnlyBufferPacked *getGlobalLightListBuffer( const Camera *camera ) const;
 
@@ -207,15 +210,15 @@ namespace Ogre
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
         virtual void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
-                                          uint32 renderTargetHeight,
-                                          IdString shaderSyntax, bool instancedStereo,
-                                          float * RESTRICT_ALIAS passBufferPtr ) const = 0;
+                                          uint32 renderTargetHeight, IdString shaderSyntax,
+                                          bool   instancedStereo,
+                                          float *RESTRICT_ALIAS passBufferPtr ) const = 0;
 
         virtual void setHlmsPassProperties( Hlms *hlms );
 
         /// Turns on visualization of light cell occupancy
-        void setDebugMode( bool debugMode )                             { mDebugMode = debugMode; }
-        bool getDebugMode() const                                   { return mDebugMode; }
+        void setDebugMode( bool debugMode ) { mDebugMode = debugMode; }
+        bool getDebugMode() const { return mDebugMode; }
 
         /// Attenuates the light by the attenuation range, causing smooth endings when
         /// at the end of the light range instead of a sudden sharp termination. This
@@ -231,13 +234,13 @@ namespace Ogre
         ///
         /// In math:
         ///     atten *= max( (attenRange - fDistance) / attenRange, 0.0f );
-        void setFadeAttenuationRange( bool fade )                       { mFadeAttenuationRange = fade; }
-        bool getFadeAttenuationRange() const                        { return mFadeAttenuationRange; }
+        void setFadeAttenuationRange( bool fade ) { mFadeAttenuationRange = fade; }
+        bool getFadeAttenuationRange() const { return mFadeAttenuationRange; }
 
-        void setEnableVpls( bool enable )                               { mEnableVpls = enable; }
-        bool getEnableVpls() const                                  { return mEnableVpls; }
+        void setEnableVpls( bool enable ) { mEnableVpls = enable; }
+        bool getEnableVpls() const { return mEnableVpls; }
 
-        bool getDecalsEnabled() const                               { return mDecalsEnabled; }
+        bool getDecalsEnabled() const { return mDecalsEnabled; }
 
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         /// Toggles whether light masks will be obeyed per object & per light by doing:
@@ -250,15 +253,17 @@ namespace Ogre
         /// may get higher performance via CompositorPassSceneDef::mLightVisibilityMask
         /// (light_visibility_mask keyword in scripts).
         void setFineLightMaskGranularity( bool useFineGranularity )
-                                                    { mFineLightMaskGranularity = useFineGranularity; }
-        bool getFineLightMaskGranularity() const{ return mFineLightMaskGranularity; }
+        {
+            mFineLightMaskGranularity = useFineGranularity;
+        }
+        bool getFineLightMaskGranularity() const { return mFineLightMaskGranularity; }
 #endif
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

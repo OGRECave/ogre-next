@@ -29,10 +29,10 @@ THE SOFTWARE.
 #ifndef __SkeletonDef_H__
 #define __SkeletonDef_H__
 
-#include "OgreSkeletonAnimation.h"
-#include "OgreSkeletonAnimationDef.h"
 #include "OgreIdString.h"
 #include "OgreRawPtr.h"
+#include "OgreSkeletonAnimation.h"
+#include "OgreSkeletonAnimationDef.h"
 
 #include "Math/Array/OgreArrayMatrixAf4x3.h"
 
@@ -44,21 +44,22 @@ namespace Ogre
     class _OgreExport SkeletonDef : public MovableAlloc
     {
         friend class SkeletonInstance;
+
     public:
         struct BoneData
         {
-            size_t      index;
-            size_t      parent;
-            Vector3     vPos;
-            Quaternion  qRot;
-            Vector3     vScale;
-            String      name;
-            uint8       bInheritOrientation:1;
-            uint8       bInheritScale:1;
+            size_t     index;
+            size_t     parent;
+            Vector3    vPos;
+            Quaternion qRot;
+            Vector3    vScale;
+            String     name;
+            uint8      bInheritOrientation : 1;
+            uint8      bInheritScale : 1;
 
             BoneData( size_t _index, size_t _parent, const Vector3 &_pos, const Quaternion &_rot,
-                        const Vector3 &_scale, const String &_name,
-                        bool _inheritOrientation, bool _inheritScale ) :
+                      const Vector3 &_scale, const String &_name, bool _inheritOrientation,
+                      bool _inheritScale ) :
                 index( _index ),
                 parent( _parent ),
                 vPos( _pos ),
@@ -74,15 +75,15 @@ namespace Ogre
 
         struct DepthLevelInfo
         {
-            size_t  firstBoneIndex;
-            size_t  numBonesInLevel;
+            size_t firstBoneIndex;
+            size_t numBonesInLevel;
             DepthLevelInfo() : firstBoneIndex( -1 ), numBonesInLevel( 0 ) {}
         };
 
         typedef vector<DepthLevelInfo>::type DepthLevelInfoVec;
 
         typedef map<uint32, uint32>::type IndexToIndexMap;
-        typedef vector<uint32>::type BoneToSlotVec;
+        typedef vector<uint32>::type      BoneToSlotVec;
 
     protected:
         typedef map<IdString, size_t>::type BoneNameMap;
@@ -112,25 +113,25 @@ namespace Ogre
         ///     E is (2 << 24) | (0 & 0x00FFFFF); because it's the first bone in depth lv 2 (child of B)
         ///
         /// Block Index.
-        ///  It's the same as slot index, but the slot part (low 24 bits) is divided by ARRAY_PACKED_REALS
-        ///  For example, ARRAY_PACKED_REALS = 4, slots 0 1 2 & 3 are in block 0
+        ///  It's the same as slot index, but the slot part (low 24 bits) is divided by
+        ///  ARRAY_PACKED_REALS For example, ARRAY_PACKED_REALS = 4, slots 0 1 2 & 3 are in block 0
         ///
         /// Converts Slot Index -> Bone Index
         IndexToIndexMap mSlotToBone;
         /// Converts Bone Index -> Slot Index
-        BoneToSlotVec   mBoneToSlot;
+        BoneToSlotVec mBoneToSlot;
 
-        RawSimdUniquePtr<KfTransform, MEMCATEGORY_ANIMATION>        mBindPose;
-        RawSimdUniquePtr<ArrayMatrixAf4x3, MEMCATEGORY_ANIMATION>   mReverseBindPose;
+        RawSimdUniquePtr<KfTransform, MEMCATEGORY_ANIMATION>      mBindPose;
+        RawSimdUniquePtr<ArrayMatrixAf4x3, MEMCATEGORY_ANIMATION> mReverseBindPose;
 
-        DepthLevelInfoVec       mDepthLevelInfoVec;
+        DepthLevelInfoVec mDepthLevelInfoVec;
 
         /// Cached for SkeletonInstance::mUnusedNodes
-        size_t                  mNumUnusedSlots;
+        size_t mNumUnusedSlots;
 
         vector<list<size_t>::type>::type mBonesPerDepth;
 
-        String                  mName;
+        String mName;
 
     public:
         /** Constructs this Skeleton based on the old format's Skeleton. The frameRate parameter
@@ -141,14 +142,16 @@ namespace Ogre
         */
         SkeletonDef( const v1::Skeleton *originalSkeleton, Real frameRate );
 
-        const String& getNameStr() const                            { return mName; }
+        const String &getNameStr() const { return mName; }
 
-        const BoneDataVec& getBones() const                         { return mBones; }
-        const SkeletonAnimationDefVec& getAnimationDefs() const     { return mAnimationDefs; }
-        const DepthLevelInfoVec& getDepthLevelInfo() const          { return mDepthLevelInfoVec; }
-        const KfTransform * getBindPose() const                     { return mBindPose.get(); }
-        const RawSimdUniquePtr<ArrayMatrixAf4x3, MEMCATEGORY_ANIMATION>&
-                                getReverseBindPose() const          { return mReverseBindPose; }
+        const BoneDataVec &            getBones() const { return mBones; }
+        const SkeletonAnimationDefVec &getAnimationDefs() const { return mAnimationDefs; }
+        const DepthLevelInfoVec &      getDepthLevelInfo() const { return mDepthLevelInfoVec; }
+        const KfTransform *            getBindPose() const { return mBindPose.get(); }
+        const RawSimdUniquePtr<ArrayMatrixAf4x3, MEMCATEGORY_ANIMATION> &getReverseBindPose() const
+        {
+            return mReverseBindPose;
+        }
         void getBonesPerDepth( vector<size_t>::type &out ) const;
 
         /** Returns the total number of bone blocks to reach the given level. i.e On SSE2,
@@ -179,7 +182,7 @@ namespace Ogre
         */
         inline static uint32 slotToBlockIdx( uint32 slotIdx )
         {
-            return (slotIdx & 0xFF000000) | ((slotIdx & 0x00FFFFFF) / ARRAY_PACKED_REALS);
+            return ( slotIdx & 0xFF000000 ) | ( ( slotIdx & 0x00FFFFFF ) / ARRAY_PACKED_REALS );
         }
 
         /** Convertes a block index back to a slot index. However the slot points at the
@@ -191,15 +194,15 @@ namespace Ogre
         */
         inline static uint32 blockIdxToSlotStart( uint32 blockIdx )
         {
-            return (blockIdx & 0xFF000000) | ((blockIdx & 0x00FFFFFF) * ARRAY_PACKED_REALS);
+            return ( blockIdx & 0xFF000000 ) | ( ( blockIdx & 0x00FFFFFF ) * ARRAY_PACKED_REALS );
         }
 
         /// @see mSlotToBone
-        const IndexToIndexMap& getSlotToBone() const    { return mSlotToBone; }
+        const IndexToIndexMap &getSlotToBone() const { return mSlotToBone; }
 
         /// @see mBoneToSlot
-        const BoneToSlotVec& getBoneToSlot() const      { return mBoneToSlot; }
+        const BoneToSlotVec &getBoneToSlot() const { return mBoneToSlot; }
     };
-}
+}  // namespace Ogre
 
 #endif

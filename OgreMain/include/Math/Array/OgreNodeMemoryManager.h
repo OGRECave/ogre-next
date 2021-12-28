@@ -28,19 +28,19 @@ THE SOFTWARE.
 #ifndef __NodeMemoryManager_H__
 #define __NodeMemoryManager_H__
 
-#include "OgreTransform.h"
 #include "OgreArrayMemoryManager.h"
+#include "OgreTransform.h"
 
 namespace Ogre
 {
     enum SceneMemoryMgrTypes;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
     /** Wrap-around class that contains multiple ArrayMemoryManager, one per hierarchy depth
     @remarks
@@ -55,18 +55,18 @@ namespace Ogre
     {
         typedef vector<NodeArrayMemoryManager>::type ArrayMemoryManagerVec;
         /// ArrayMemoryManagers grouped by hierarchy depth
-        ArrayMemoryManagerVec                   mMemoryManagers;
+        ArrayMemoryManagerVec mMemoryManagers;
 
         /// Dummy node where to point Transform::mParents[i] when they're unused slots.
-        SceneNode                               *mDummyNode;
-        Transform                               mDummyTransformPtrs;
+        SceneNode *mDummyNode;
+        Transform  mDummyTransformPtrs;
 
         /** Memory managers can have a 'twin' (optional). A twin is used when there
             static and dynamic scene managers, thus caching their pointers here is
             very convenient.
         */
-        SceneMemoryMgrTypes                     mMemoryManagerType;
-        NodeMemoryManager                       *mTwinMemoryManager;
+        SceneMemoryMgrTypes mMemoryManagerType;
+        NodeMemoryManager * mTwinMemoryManager;
 
         /** Makes mMemoryManagers big enough to be able to fulfill mMemoryManagers[newDepth]
         @param newDepth
@@ -81,11 +81,11 @@ namespace Ogre
         /// @See mMemoryManagerType
         void _setTwin( SceneMemoryMgrTypes memoryManagerType, NodeMemoryManager *twinMemoryManager );
 
-        SceneNode* _getDummyNode() const                        { return mDummyNode; }
+        SceneNode *_getDummyNode() const { return mDummyNode; }
 
         /// Note the return value can be null
-        NodeMemoryManager* getTwin() const                          { return mTwinMemoryManager; }
-        SceneMemoryMgrTypes getMemoryManagerType() const            { return mMemoryManagerType; }
+        NodeMemoryManager * getTwin() const { return mTwinMemoryManager; }
+        SceneMemoryMgrTypes getMemoryManagerType() const { return mMemoryManagerType; }
 
         /** Requests memory for the given transform for the first, initializing values.
         @param outTransform
@@ -222,6 +222,6 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

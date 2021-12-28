@@ -50,19 +50,19 @@ namespace Ogre
     class _OgreExport AsyncTicket : public RenderSysAlloc
     {
     protected:
-        bool mHasBeenMapped;
-        BufferPacked    *mCreator;
-        StagingBuffer   *mStagingBuffer;
+        bool           mHasBeenMapped;
+        BufferPacked * mCreator;
+        StagingBuffer *mStagingBuffer;
 
         size_t mStagingBufferMapOffset;
         size_t mElementStart;
         size_t mElementCount;
 
-        virtual const void* mapImpl() = 0;
+        virtual const void *mapImpl() = 0;
 
     public:
-        AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                     size_t elementStart, size_t elementCount );
+        AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                     size_t elementCount );
         virtual ~AsyncTicket();
 
         /** Maps the buffer for CPU access. Will stall if transfer from GPU memory to
@@ -73,13 +73,13 @@ namespace Ogre
         @return
             The pointer with the data read from the GPU. Read only.
         */
-        const void* map();
+        const void *map();
 
         /// Unmaps the pointer mapped with map().
         void unmap();
 
-        virtual bool queryIsTransferDone()              { return true; }
+        virtual bool queryIsTransferDone() { return true; }
     };
-}
+}  // namespace Ogre
 
 #endif

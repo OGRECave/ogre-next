@@ -30,45 +30,49 @@ THE SOFTWARE.
 #define __APKZipArchive_H__
 
 #include <OgreZip.h>
+
 #include <OgreLogManager.h>
 #include <android/asset_manager.h>
 
-
-namespace Ogre{
+namespace Ogre
+{
     class APKZipArchiveFactory : public EmbeddedZipArchiveFactory
     {
     protected:
-        AAssetManager* mAssetMgr;
+        AAssetManager *mAssetMgr;
+
     public:
-        APKZipArchiveFactory(AAssetManager* assetMgr) : mAssetMgr(assetMgr) {}
+        APKZipArchiveFactory( AAssetManager *assetMgr ) : mAssetMgr( assetMgr ) {}
         virtual ~APKZipArchiveFactory() {}
 
         /// @copydoc FactoryObj::getType
-        const String& getType() const;
+        const String &getType() const;
 
         /// @copydoc FactoryObj::createInstance
-        Archive *createInstance( const String& name, bool readOnly )
+        Archive *createInstance( const String &name, bool readOnly )
         {
             String apkName = name;
-            if (apkName.size() > 0 && apkName[0] == '/')
-                apkName.erase(apkName.begin());
+            if( apkName.size() > 0 && apkName[0] == '/' )
+                apkName.erase( apkName.begin() );
 
-            AAsset* asset = AAssetManager_open(mAssetMgr, apkName.c_str(), AASSET_MODE_BUFFER);
-            if(asset)
+            AAsset *asset = AAssetManager_open( mAssetMgr, apkName.c_str(), AASSET_MODE_BUFFER );
+            if( asset )
             {
-                EmbeddedZipArchiveFactory::addEmbbeddedFile(apkName, (const Ogre::uint8*)AAsset_getBuffer(asset), AAsset_getLength(asset), 0);
+                EmbeddedZipArchiveFactory::addEmbbeddedFile(
+                    apkName, (const Ogre::uint8 *)AAsset_getBuffer( asset ), AAsset_getLength( asset ),
+                    0 );
             }
 
-            ZipArchive * resZipArchive = OGRE_NEW ZipArchive(apkName, "APKZip", mPluginIo);
+            ZipArchive *resZipArchive = OGRE_NEW ZipArchive( apkName, "APKZip", mPluginIo );
             return resZipArchive;
         }
 
-		virtual void convertPath( String &inOutPath ) const
-		{
-			if( inOutPath.size() > 0 && inOutPath[0] == '/' )
-				inOutPath.erase( inOutPath.begin() );
-		}
+        virtual void convertPath( String &inOutPath ) const
+        {
+            if( inOutPath.size() > 0 && inOutPath[0] == '/' )
+                inOutPath.erase( inOutPath.begin() );
+        }
     };
-}
+}  // namespace Ogre
 
 #endif

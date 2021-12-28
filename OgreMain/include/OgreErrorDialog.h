@@ -29,29 +29,30 @@ THE SOFTWARE.
 #define __COMMON_OGRE_ERRORDIALOG_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgrePlatform.h"
 
 // Bring in the specific platform's header file
 #if defined OGRE_GUI_WIN32
-# include "WIN32/OgreErrorDialogImp.h"
+#    include "WIN32/OgreErrorDialogImp.h"
 #elif defined OGRE_GUI_gtk
-# include "gtk/OgreErrorDialogImp.h"
+#    include "gtk/OgreErrorDialogImp.h"
 #elif defined OGRE_GUI_GLX
-# include "GLX/OgreErrorDialogImp.h"
+#    include "GLX/OgreErrorDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-# include "WIN32/OgreErrorDialogImp.h"
+#    include "WIN32/OgreErrorDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-# include "WIN32/OgreErrorDialogImpWinRT.h"
+#    include "WIN32/OgreErrorDialogImpWinRT.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
-# include "GLX/OgreErrorDialogImp.h"
+#    include "GLX/OgreErrorDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-# include "OSX/OgreErrorDialogImp.h"
+#    include "OSX/OgreErrorDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-# include "iOS/OgreErrorDialogImp.h"
+#    include "iOS/OgreErrorDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-# include "Android/OgreErrorDialogImp.h"
+#    include "Android/OgreErrorDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-#include "Emscripten/OgreErrorDialogImp.h"
+#    include "Emscripten/OgreErrorDialogImp.h"
 #endif
 
 #endif

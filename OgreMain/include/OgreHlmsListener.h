@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreHlmsListener_H_
 
 #include "OgreHlmsCommon.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -37,11 +38,11 @@ namespace Ogre
     struct QueuedRenderable;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     /** Listener that can be hooked to an Hlms implementation for extending it with custom
         code. See "8.6.5 Customizing an existing implementation" of the 2.x manual
@@ -80,12 +81,11 @@ namespace Ogre
         @param queuedRenderable
         */
         virtual void propertiesMergedPreGenerationStep(
-                Hlms *hlms,
-                const HlmsCache &passCache,
-                const HlmsPropertyVec &renderableCacheProperties,
-                const PiecesMap renderableCachePieces[NumShaderTypes],
-                const HlmsPropertyVec &properties,
-                const QueuedRenderable &queuedRenderable ) {}
+            Hlms *hlms, const HlmsCache &passCache, const HlmsPropertyVec &renderableCacheProperties,
+            const PiecesMap renderableCachePieces[NumShaderTypes], const HlmsPropertyVec &properties,
+            const QueuedRenderable &queuedRenderable )
+        {
+        }
 
         /** If hlmsTypeChanged is going to be binding extra textures, override this function
             to tell us how many textures you will use, so that we don't use those slots
@@ -95,7 +95,7 @@ namespace Ogre
             value. Otherwise caching (i.e. HlmsDiskCache) won't work correctly
         */
         virtual uint16 getNumExtraPassTextures( const HlmsPropertyVec &properties,
-                                                bool casterPass ) const
+                                                bool                   casterPass ) const
         {
             return 0u;
         }
@@ -130,11 +130,13 @@ namespace Ogre
         @param queuedRenderable
             @see Hlms::createShaderCacheEntry
         */
-        virtual void shaderCacheEntryCreated( const String &shaderProfile,
-                                              const HlmsCache *hlmsCacheEntry,
-                                              const HlmsCache &passCache,
-                                              const HlmsPropertyVec &properties,
-                                              const QueuedRenderable &queuedRenderable ) {}
+        virtual void shaderCacheEntryCreated( const String &          shaderProfile,
+                                              const HlmsCache *       hlmsCacheEntry,
+                                              const HlmsCache &       passCache,
+                                              const HlmsPropertyVec & properties,
+                                              const QueuedRenderable &queuedRenderable )
+        {
+        }
 
         /** Called right before creating the pass cache, to allow the listener
             to add/remove properties.
@@ -143,35 +145,43 @@ namespace Ogre
         @param hlms
             Caller Hlms; from which you can alter the properties using Hlms::setProperty
         */
-        virtual void preparePassHash( const CompositorShadowNode *shadowNode,
-                                      bool casterPass, bool dualParaboloid,
-                                      SceneManager *sceneManager, Hlms *hlms ) {}
+        virtual void preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
+                                      bool dualParaboloid, SceneManager *sceneManager, Hlms *hlms )
+        {
+        }
 
         /// Listeners should return the extra bytes they wish to allocate for storing additional
         /// data in the pass buffer. Return value must be in bytes.
         virtual uint32 getPassBufferSize( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager ) const
-                                                                    { return 0; }
+        {
+            return 0;
+        }
 
         /// Users can write to passBufferPtr. Implementations must ensure they make the buffer
         /// big enough via getPassBufferSize.
         /// The passBufferPtr is already aligned to 16 bytes.
         /// Implementations must return the pointer past the end, aligned to 16 bytes.
-        virtual float* preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
+        virtual float *preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager,
-                                          float *passBufferPtr )    { return passBufferPtr; }
+                                          float *passBufferPtr )
+        {
+            return passBufferPtr;
+        }
 
         /// Called when the last Renderable processed was of a different Hlms type, thus we
         /// need to rebind certain buffers (like the pass buffer). You can use
         /// this moment to bind your own buffers.
         virtual void hlmsTypeChanged( bool casterPass, CommandBuffer *commandBuffer,
-                                      const HlmsDatablock *datablock, size_t texUnit ) {}
+                                      const HlmsDatablock *datablock, size_t texUnit )
+        {
+        }
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

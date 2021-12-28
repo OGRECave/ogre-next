@@ -30,10 +30,11 @@ THE SOFTWARE.
 #define __MathlibC_H__
 
 #ifndef __Mathlib_H__
-    #error "Don't include this file directly. include Math/Array/OgreMathlib.h"
+#    error "Don't include this file directly. include Math/Array/OgreMathlib.h"
 #endif
 
 #include "OgrePrerequisites.h"
+
 #include "OgreCommon.h"
 #include "OgreMath.h"
 
@@ -42,23 +43,25 @@ namespace Ogre
     class _OgreExport MathlibC
     {
     public:
-        static const ArrayReal HALF;        //0.5f, 0.5f, 0.5f, 0.5f
-        static const ArrayReal ONE;         //1.0f, 1.0f, 1.0f, 1.0f
-        static const ArrayReal THREE;       //3.0f, 3.0f, 3.0f, 3.0f
-        static const ArrayReal NEG_ONE;     //-1.0f, -1.0f, -1.0f, -1.0f
-        static const ArrayReal PI;          //PI, PI, PI, PI
-        static const ArrayReal TWO_PI;      //2*PI, 2*PI, 2*PI, 2*PI
-        static const ArrayReal ONE_DIV_2PI; //1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
-        static const ArrayReal fEpsilon;    //1e-6f, 1e-6f, 1e-6f, 1e-6f
-        static const ArrayReal fSqEpsilon;  //1e-12f, 1e-12f, 1e-12f, 1e-12f
-        static const ArrayReal OneMinusEpsilon;//1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
-        static const ArrayReal fDeg2Rad;    //Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
-        static const ArrayReal fRad2Deg;    //Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
-        static const ArrayReal FLOAT_MIN;   //FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
-        static const ArrayReal SIGN_MASK;   //0x80000000, 0x80000000, 0x80000000, 0x80000000
-        static const ArrayReal INFINITEA;   //Inf, Inf, Inf, Inf
-        static const ArrayReal MAX_NEG;     //Max negative number (x4)
-        static const ArrayReal MAX_POS;     //Max negative number (x4)
+        static const ArrayReal HALF;             // 0.5f, 0.5f, 0.5f, 0.5f
+        static const ArrayReal ONE;              // 1.0f, 1.0f, 1.0f, 1.0f
+        static const ArrayReal THREE;            // 3.0f, 3.0f, 3.0f, 3.0f
+        static const ArrayReal NEG_ONE;          //-1.0f, -1.0f, -1.0f, -1.0f
+        static const ArrayReal PI;               // PI, PI, PI, PI
+        static const ArrayReal TWO_PI;           // 2*PI, 2*PI, 2*PI, 2*PI
+        static const ArrayReal ONE_DIV_2PI;      // 1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
+        static const ArrayReal fEpsilon;         // 1e-6f, 1e-6f, 1e-6f, 1e-6f
+        static const ArrayReal fSqEpsilon;       // 1e-12f, 1e-12f, 1e-12f, 1e-12f
+        static const ArrayReal OneMinusEpsilon;  // 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
+        static const ArrayReal
+            fDeg2Rad;  // Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
+        static const ArrayReal
+                               fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
+        static const ArrayReal FLOAT_MIN;  // FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
+        static const ArrayReal SIGN_MASK;  // 0x80000000, 0x80000000, 0x80000000, 0x80000000
+        static const ArrayReal INFINITEA;  // Inf, Inf, Inf, Inf
+        static const ArrayReal MAX_NEG;    // Max negative number (x4)
+        static const ArrayReal MAX_POS;    // Max negative number (x4)
 
         /** Returns the absolute values of each 4 floats
             @param
@@ -66,10 +69,7 @@ namespace Ogre
             @return
                 abs( a )
         */
-        static inline ArrayReal Abs4( ArrayReal a )
-        {
-            return Math::Abs( a );
-        }
+        static inline ArrayReal Abs4( ArrayReal a ) { return Math::Abs( a ); }
 
         /** Branchless conditional move for 4 floating point values
             @remarks
@@ -93,11 +93,10 @@ namespace Ogre
         */
         static inline ArrayReal Cmov4( ArrayReal arg1, ArrayReal arg2, ArrayMaskR mask )
         {
-            assert( !Math::isNaN( arg1 ) && !Math::isNaN( arg2 ) &&
-                    "Passing NaN values to CMov4" );
-#ifndef  NDEBUG
-            ArrayReal newNan1 = arg1 * 0; //+-Inf * 0 = nan
-            ArrayReal newNan2 = arg2 * 0; //+-Inf * 0 = nan
+            assert( !Math::isNaN( arg1 ) && !Math::isNaN( arg2 ) && "Passing NaN values to CMov4" );
+#ifndef NDEBUG
+            ArrayReal newNan1 = arg1 * 0;  //+-Inf * 0 = nan
+            ArrayReal newNan2 = arg2 * 0;  //+-Inf * 0 = nan
             assert( !Math::isNaN( newNan1 ) && !Math::isNaN( newNan2 ) &&
                     "Passing +/- Infinity values to CMov4" );
 #endif
@@ -144,141 +143,99 @@ namespace Ogre
         @return
             r[i] = a[i] & b[i];
         */
-        static inline ArrayInt And( ArrayInt a, ArrayInt b )
-        {
-            return a & b;
-        }
+        static inline ArrayInt And( ArrayInt a, ArrayInt b ) { return a & b; }
 
         static inline ArrayMaskI And( ArrayMaskI a, ArrayInt b )
         {
-            return ((a ? 0xffffffff : 0) & b) != 0;
+            return ( ( a ? 0xffffffff : 0 ) & b ) != 0;
         }
 
         static inline ArrayMaskI And( ArrayInt a, ArrayMaskI b )
         {
-            return (a & (b ? 0xffffffff : 0)) != 0;
+            return ( a & ( b ? 0xffffffff : 0 ) ) != 0;
         }
 
-        static inline ArrayMaskI And( ArrayMaskI a, ArrayMaskI b )
-        {
-            return a & b;
-        }
+        static inline ArrayMaskI And( ArrayMaskI a, ArrayMaskI b ) { return a & b; }
 
         /** Test if "a AND b" will result in non-zero, returning 0xffffffff on those cases
         @return
             r[i] = (a[i] & b[i]) ? 0xffffffff : 0;
         */
-        static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayInt b )
-        {
-            return (a & b) != 0;
-        }
+        static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayInt b ) { return ( a & b ) != 0; }
 
         static inline ArrayMaskI TestFlags4( ArrayMaskI a, ArrayInt b )
         {
-            return ( (a ? 0xffffffff : 0) & b ) != 0;
+            return ( ( a ? 0xffffffff : 0 ) & b ) != 0;
         }
 
-        static inline ArrayMaskI TestFlags4( ArrayInt a,  ArrayMaskI b )
+        static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayMaskI b )
         {
-            return ( a & (b ? 0xffffffff : 0) ) != 0;
+            return ( a & ( b ? 0xffffffff : 0 ) ) != 0;
         }
 
         /** Returns the result of "a & ~b"
         @return
             r[i] = a[i] & ~b[i];
         */
-        static inline ArrayInt AndNot( ArrayInt a, ArrayInt b )
-        {
-            return a & ~b;
-        }
+        static inline ArrayInt AndNot( ArrayInt a, ArrayInt b ) { return a & ~b; }
 
         static inline ArrayMaskI AndNot( ArrayMaskI a, ArrayInt b )
         {
-            return ((a ? 0xffffffff : 0) & ~b) != 0;
+            return ( ( a ? 0xffffffff : 0 ) & ~b ) != 0;
         }
 
         static inline ArrayMaskI AndNot( ArrayInt a, ArrayMaskI b )
         {
-            return (a & (b ? 0 : 0xffffffff)) != 0;
+            return ( a & ( b ? 0 : 0xffffffff ) ) != 0;
         }
 
-        static inline ArrayMaskI AndNot( ArrayMaskI a, ArrayMaskI b )
-        {
-            return a & (!b);
-        }
+        static inline ArrayMaskI AndNot( ArrayMaskI a, ArrayMaskI b ) { return a & ( !b ); }
 
         /** Returns the result of "a | b"
         @return
             r[i] = a[i] | b[i];
         */
-        static inline ArrayInt Or( ArrayInt a, ArrayInt b )
-        {
-            return a | b;
-        }
-        static inline ArrayMaskI Or( ArrayMaskI a, ArrayMaskI b )
-        {
-            return a | b;
-        }
+        static inline ArrayInt   Or( ArrayInt a, ArrayInt b ) { return a | b; }
+        static inline ArrayMaskI Or( ArrayMaskI a, ArrayMaskI b ) { return a | b; }
 
         static inline ArrayMaskI Or( ArrayMaskI a, ArrayInt b )
         {
-            return ( (a ? 0xffffffff : 0) | b ) != 0;
+            return ( ( a ? 0xffffffff : 0 ) | b ) != 0;
         }
-        static inline ArrayMaskI Or( ArrayInt a,  ArrayMaskI b )
+        static inline ArrayMaskI Or( ArrayInt a, ArrayMaskI b )
         {
-            return ( a | (b ? 0xffffffff : 0) ) != 0;
+            return ( a | ( b ? 0xffffffff : 0 ) ) != 0;
         }
 
         /** Returns the result of "a < b"
         @return
             r[i] = a[i] < b[i] ? 0xffffffff : 0;
         */
-        static inline ArrayMaskR CompareLess( ArrayReal a, ArrayReal b )
-        {
-            return a < b;
-        }
+        static inline ArrayMaskR CompareLess( ArrayReal a, ArrayReal b ) { return a < b; }
 
         /** Returns the result of "a <= b"
         @return
             r[i] = a[i] <= b[i] ? 0xffffffff : 0;
         */
-        static inline ArrayMaskR CompareLessEqual( ArrayReal a, ArrayReal b )
-        {
-            return a <= b;
-        }
+        static inline ArrayMaskR CompareLessEqual( ArrayReal a, ArrayReal b ) { return a <= b; }
 
         /** Returns the result of "a > b"
         @return
             r[i] = a[i] > b[i] ? 0xffffffff : 0;
         */
-        static inline ArrayMaskR CompareGreater( ArrayReal a, ArrayReal b )
-        {
-            return a > b;
-        }
+        static inline ArrayMaskR CompareGreater( ArrayReal a, ArrayReal b ) { return a > b; }
 
         /** Returns the result of "a >= b"
         @return
             r[i] = a[i] >= b[i] ? 0xffffffff : 0;
         */
-        static inline ArrayMaskR CompareGreaterEqual( ArrayReal a, ArrayReal b )
-        {
-            return a >= b;
-        }
+        static inline ArrayMaskR CompareGreaterEqual( ArrayReal a, ArrayReal b ) { return a >= b; }
 
-        static inline ArrayReal SetAll( Real val )
-        {
-            return val;
-        }
+        static inline ArrayReal SetAll( Real val ) { return val; }
 
-        static inline ArrayInt SetAll( uint32 val )
-        {
-            return val;
-        }
+        static inline ArrayInt SetAll( uint32 val ) { return val; }
 
-        static inline void Set( ArrayReal &dst, Real val, size_t index )
-        {
-            dst = val;
-        }
+        static inline void Set( ArrayReal &dst, Real val, size_t index ) { dst = val; }
 
         /** Returns the result of "a == std::numeric_limits<float>::infinity()"
         @return
@@ -290,34 +247,22 @@ namespace Ogre
         }
 
         /// Returns the maximum value between a and b
-        static inline ArrayReal Max( ArrayReal a, ArrayReal b )
-        {
-            return std::max( a, b );
-        }
+        static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return std::max( a, b ); }
 
         /// Returns the minimum value between a and b
-        static inline ArrayReal Min( ArrayReal a, ArrayReal b )
-        {
-            return std::min( a, b );
-        }
-        
+        static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return std::min( a, b ); }
+
         /** Returns the minimum value of all elements in a
         @return
             r[0] = min( a[0], a[1], a[2], a[3] )
         */
-        static inline Real ColapseMin( ArrayReal a )
-        {
-            return a;
-        }
+        static inline Real ColapseMin( ArrayReal a ) { return a; }
 
         /** Returns the maximum value of all elements in a
         @return
             r[0] = max( a[0], a[1], a[2], a[3] )
         */
-        static inline Real ColapseMax( ArrayReal a )
-        {
-            return a;
-        }
+        static inline Real ColapseMax( ArrayReal a ) { return a; }
 
         /** Returns the reciprocal of x
             @remarks
@@ -327,10 +272,7 @@ namespace Ogre
             @return
                 1 / x (packed as 4 floats)
         */
-        static inline ArrayReal Inv4( ArrayReal val )
-        {
-            return 1.0f / val;
-        }
+        static inline ArrayReal Inv4( ArrayReal val ) { return 1.0f / val; }
 
         /** Returns the reciprocal of x
             @remarks
@@ -343,28 +285,19 @@ namespace Ogre
             @return
                 1 / x
         */
-        static inline ArrayReal InvNonZero4( ArrayReal val )
-        {
-            return 1.0f / val;
-        }
+        static inline ArrayReal InvNonZero4( ArrayReal val ) { return 1.0f / val; }
 
         /** Returns the squared root of the reciprocal of x
             @return
                 1 / sqrt( x )
         */
-        static inline ArrayReal InvSqrt4( ArrayReal f )
-        {
-            return 1.0f / std::sqrt( f );
-        }
+        static inline ArrayReal InvSqrt4( ArrayReal f ) { return 1.0f / std::sqrt( f ); }
 
         /** Returns the squared root of the reciprocal of x
             @return
                 1 / sqrt( x ) (packed as 4 floats)
         */
-        static inline ArrayReal InvSqrtNonZero4( ArrayReal f )
-        {
-            return 1.0f / std::sqrt( f );
-        }
+        static inline ArrayReal InvSqrtNonZero4( ArrayReal f ) { return 1.0f / std::sqrt( f ); }
 
         /** Break x into fractional and integral parts
             @param
@@ -411,7 +344,7 @@ namespace Ogre
         */
         static void SinCos4( ArrayReal x, ArrayReal &outSin, ArrayReal &outCos );
     };
-}
+}  // namespace Ogre
 
 #include "OgreMathlibC.inl"
 

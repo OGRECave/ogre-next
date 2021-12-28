@@ -55,6 +55,6 @@ namespace Ogre
         */
         virtual void execute( size_t threadId, size_t numThreads ) = 0;
     };
-};
+};  // namespace Ogre
 
 #endif

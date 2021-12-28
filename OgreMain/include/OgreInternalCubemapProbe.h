@@ -65,7 +65,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *manager,
+                                           SceneManager *           manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:
@@ -75,6 +75,7 @@ namespace Ogre
         static String FACTORY_TYPE_NAME;
 
         const String &getType() const override;
+
         void destroyInstance( MovableObject *obj ) override;
     };
 }  // namespace Ogre

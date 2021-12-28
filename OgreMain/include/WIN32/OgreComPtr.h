@@ -35,14 +35,14 @@ https://msdn.microsoft.com/en-us/magazine/dn904668.aspx  of the same author.
 Code was downgraded to C++ 98, and to more closely match Microsoft::Wrl::ComPtr,
 which is actually what we want except licensing issues.
 
-'noexcept' was removed for performance reasons, to avoid extra try/catch block 
+'noexcept' was removed for performance reasons, to avoid extra try/catch block
 generation that calls std::terminate. It was replaced with ASSUME_NOEXCEPT macro
 that expands to VC++ specific non-compliant 'throw ()' that works like a hint and
 does not call std::unexpected nor std::terminate.
 
 'explicit operator bool()' was replaced using SafeBool idiom
 
-ComPtr::GetAddressOf() behavior reverted to match Microsoft::Wrl::ComPtr and not 
+ComPtr::GetAddressOf() behavior reverted to match Microsoft::Wrl::ComPtr and not
 check that smart pointer is empty - this behavior is dangerous as it allows to modify
 smart pointer internals, but it is preferred as many Direct3D11 samples expect it.
 
@@ -53,29 +53,32 @@ smart pointer internals, but it is preferred as many Direct3D11 samples expect i
 
 #include "OgrePrerequisites.h"
 #if defined( __MINGW32__ )
-    #define WIN32_LEAN_AND_MEAN
-    #ifndef NOMINMAX
-        #define NOMINMAX
-    #endif
-    #include <windows.h>
+#    define WIN32_LEAN_AND_MEAN
+#    ifndef NOMINMAX
+#        define NOMINMAX
+#    endif
+#    include <windows.h>
 #else
-    #include <winerror.h> // for HRESULT
+#    include <winerror.h>  // for HRESULT
 #endif
 
-#if !defined(ASSUME_NOEXCEPT) && defined( _MSC_VER )
-#define ASSUME_NOEXCEPT throw () // use non-compliant behavior of VC++ - compile as if exceptions are not possible, performing no run-time checks
+#if !defined( ASSUME_NOEXCEPT ) && defined( _MSC_VER )
+#    define ASSUME_NOEXCEPT \
+        throw()  // use non-compliant behavior of VC++ - compile as if exceptions are not possible,
+                 // performing no run-time checks
 #else
-#define ASSUME_NOEXCEPT // don`t define it as 'noexcept' or compliant 'throw ()' or extra try/catch frame would be generated to call std::terminate/std::unexpected
+#    define ASSUME_NOEXCEPT  // don`t define it as 'noexcept' or compliant 'throw ()' or extra try/catch
+                             // frame would be generated to call std::terminate/std::unexpected
 #endif
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     // Helper to hide reference count management from user
     template <typename T>
@@ -88,13 +91,14 @@ namespace Ogre
     template <typename T>
     class ComPtr
     {
-        T* m_ptr;
+        T *m_ptr;
 
-        template <typename U> friend class ComPtr;
+        template <typename U>
+        friend class ComPtr;
 
         void InternalAddRef() const ASSUME_NOEXCEPT
         {
-            if(m_ptr)
+            if( m_ptr )
             {
                 m_ptr->AddRef();
             }
@@ -102,16 +106,16 @@ namespace Ogre
 
         void InternalRelease() ASSUME_NOEXCEPT
         {
-            if(T * temp = m_ptr)
+            if( T *temp = m_ptr )
             {
                 m_ptr = 0;
                 temp->Release();
             }
         }
 
-        void InternalCopy(T * other) ASSUME_NOEXCEPT
+        void InternalCopy( T *other ) ASSUME_NOEXCEPT
         {
-            if(m_ptr != other)
+            if( m_ptr != other )
             {
                 InternalRelease();
                 m_ptr = other;
@@ -123,125 +127,134 @@ namespace Ogre
         typedef T Type;
 
     public:
-        ComPtr() ASSUME_NOEXCEPT : m_ptr(0) {}
+        ComPtr() ASSUME_NOEXCEPT : m_ptr( 0 ) {}
 
         template <typename U>
-        ComPtr(U* other) ASSUME_NOEXCEPT : m_ptr(other)
+        ComPtr( U *other ) ASSUME_NOEXCEPT : m_ptr( other )
         {
             InternalAddRef();
         }
 
-        ComPtr(const ComPtr & other) ASSUME_NOEXCEPT : m_ptr(other.m_ptr)
+        ComPtr( const ComPtr &other ) ASSUME_NOEXCEPT : m_ptr( other.m_ptr ) { InternalAddRef(); }
+
+        template <typename U>
+        ComPtr( ComPtr<U> const &other ) ASSUME_NOEXCEPT : m_ptr( other.m_ptr )
         {
             InternalAddRef();
         }
 
-        template <typename U>
-        ComPtr(ComPtr<U> const & other) ASSUME_NOEXCEPT : m_ptr(other.m_ptr)
-        {
-            InternalAddRef();
-        }
+        ~ComPtr() ASSUME_NOEXCEPT { InternalRelease(); }
 
-        ~ComPtr() ASSUME_NOEXCEPT
+        ComPtr &operator=( T *other ) ASSUME_NOEXCEPT
         {
-            InternalRelease();
-        }
-
-        ComPtr& operator=(T* other) ASSUME_NOEXCEPT
-        {
-            InternalCopy(other);
+            InternalCopy( other );
             return *this;
         }
 
         template <typename U>
-        ComPtr& operator=(U* other) ASSUME_NOEXCEPT
+        ComPtr &operator=( U *other ) ASSUME_NOEXCEPT
         {
-            InternalCopy(other);
+            InternalCopy( other );
             return *this;
         }
 
-        ComPtr& operator=(const ComPtr& other) ASSUME_NOEXCEPT
+        ComPtr &operator=( const ComPtr &other ) ASSUME_NOEXCEPT
         {
-            InternalCopy(other.m_ptr);
+            InternalCopy( other.m_ptr );
             return *this;
         }
 
         template <typename U>
-        ComPtr& operator=(const ComPtr<U>& other) ASSUME_NOEXCEPT
+        ComPtr &operator=( const ComPtr<U> &other ) ASSUME_NOEXCEPT
         {
-            InternalCopy(other.m_ptr);
+            InternalCopy( other.m_ptr );
             return *this;
         }
 
-        void Swap(ComPtr& other) ASSUME_NOEXCEPT
+        void Swap( ComPtr &other ) ASSUME_NOEXCEPT
         {
-            T* temp = m_ptr;
+            T *temp = m_ptr;
             m_ptr = other.m_ptr;
             other.m_ptr = temp;
         }
 
-        explicit operator bool() const ASSUME_NOEXCEPT
+        explicit operator bool() const ASSUME_NOEXCEPT { return 0 != m_ptr; }
+
+        T *Get() const ASSUME_NOEXCEPT { return m_ptr; }
+
+        NoAddRefRelease<T> *operator->() const ASSUME_NOEXCEPT
         {
-            return 0 != m_ptr;
+            return static_cast<NoAddRefRelease<T> *>( m_ptr );
         }
 
-        T* Get() const ASSUME_NOEXCEPT
-        {
-            return m_ptr;
-        }
+        T **GetAddressOf() ASSUME_NOEXCEPT { return &m_ptr; }
 
-        NoAddRefRelease<T>* operator->() const ASSUME_NOEXCEPT
-        {
-            return static_cast<NoAddRefRelease<T> *>(m_ptr);
-        }
-
-        T** GetAddressOf() ASSUME_NOEXCEPT
-        {
-            return &m_ptr;
-        }
-
-        T** ReleaseAndGetAddressOf() ASSUME_NOEXCEPT
+        T **ReleaseAndGetAddressOf() ASSUME_NOEXCEPT
         {
             InternalRelease();
             return &m_ptr;
         }
 
-        T* Detach() ASSUME_NOEXCEPT
+        T *Detach() ASSUME_NOEXCEPT
         {
-            T* temp = m_ptr;
+            T *temp = m_ptr;
             m_ptr = 0;
             return temp;
         }
 
-        void Attach(T* other) ASSUME_NOEXCEPT
+        void Attach( T *other ) ASSUME_NOEXCEPT
         {
             InternalRelease();
             m_ptr = other;
         }
 
-        void Reset() ASSUME_NOEXCEPT
-        {
-            InternalRelease();
-        }
+        void Reset() ASSUME_NOEXCEPT { InternalRelease(); }
 
         template <typename U>
-        HRESULT As(ComPtr<U> *res) const ASSUME_NOEXCEPT
+        HRESULT As( ComPtr<U> *res ) const ASSUME_NOEXCEPT
         {
-            return m_ptr->QueryInterface(res->ReleaseAndGetAddressOf());
+            return m_ptr->QueryInterface( res->ReleaseAndGetAddressOf() );
         }
-
     };
 
-    template<class T> void swap(ComPtr<T>& a, ComPtr<T>& b) { return a.Swap(b); }
+    template <class T>
+    void swap( ComPtr<T> &a, ComPtr<T> &b )
+    {
+        return a.Swap( b );
+    }
 
-    template<class T> bool operator==(const ComPtr<T>& a, const ComPtr<T>& b) ASSUME_NOEXCEPT { return a.Get() == b.Get(); }
-    template<class T> bool operator!=(const ComPtr<T>& a, const ComPtr<T>& b) ASSUME_NOEXCEPT { return a.Get() != b.Get(); }
-    template<class T> bool operator< (const ComPtr<T>& a, const ComPtr<T>& b) ASSUME_NOEXCEPT { return a.Get() < b.Get(); }
-    template<class T> bool operator> (const ComPtr<T>& a, const ComPtr<T>& b) ASSUME_NOEXCEPT { return a.Get() > b.Get(); }
-    template<class T> bool operator<=(const ComPtr<T>& a, const ComPtr<T>& b) ASSUME_NOEXCEPT { return a.Get() <= b.Get(); }
-    template<class T> bool operator>=(const ComPtr<T>& a, const ComPtr<T>& b) ASSUME_NOEXCEPT { return a.Get() >= b.Get(); }
+    template <class T>
+    bool operator==( const ComPtr<T> &a, const ComPtr<T> &b ) ASSUME_NOEXCEPT
+    {
+        return a.Get() == b.Get();
+    }
+    template <class T>
+    bool operator!=( const ComPtr<T> &a, const ComPtr<T> &b ) ASSUME_NOEXCEPT
+    {
+        return a.Get() != b.Get();
+    }
+    template <class T>
+    bool operator<( const ComPtr<T> &a, const ComPtr<T> &b ) ASSUME_NOEXCEPT
+    {
+        return a.Get() < b.Get();
+    }
+    template <class T>
+    bool operator>( const ComPtr<T> &a, const ComPtr<T> &b ) ASSUME_NOEXCEPT
+    {
+        return a.Get() > b.Get();
+    }
+    template <class T>
+    bool operator<=( const ComPtr<T> &a, const ComPtr<T> &b ) ASSUME_NOEXCEPT
+    {
+        return a.Get() <= b.Get();
+    }
+    template <class T>
+    bool operator>=( const ComPtr<T> &a, const ComPtr<T> &b ) ASSUME_NOEXCEPT
+    {
+        return a.Get() >= b.Get();
+    }
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 #endif

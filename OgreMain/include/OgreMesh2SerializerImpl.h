@@ -30,23 +30,24 @@ THE SOFTWARE.
 #define _OgreMesh2SerializerImpl_H_
 
 #include "OgrePrerequisites.h"
-#include "OgreSerializer.h"
+
 #include "OgreEdgeListBuilder.h"
 #include "OgreKeyFrame.h"
+#include "OgreSerializer.h"
 #include "OgreVertexBoneAssignment.h"
-
 #include "Vao/OgreVertexBufferPacked.h"
 
-namespace Ogre {
+namespace Ogre
+{
     class MeshSerializerListener;
     struct MeshLodUsage;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** Internal implementation of Mesh reading / writing for the latest version of the
     .mesh format.
     @remarks
@@ -63,7 +64,7 @@ namespace Ogre {
     public:
         MeshSerializerImpl( VaoManager *vaoManager );
         virtual ~MeshSerializerImpl();
-        /** Exports a mesh to the file specified. 
+        /** Exports a mesh to the file specified.
         @remarks
         This method takes an externally created Mesh object, and exports both it
         and optionally the Materials it uses to a .mesh file.
@@ -71,33 +72,33 @@ namespace Ogre {
         @param stream The destination stream
         @param endianMode The endian mode for the written file
         */
-        void exportMesh(const Mesh* pMesh, DataStreamPtr stream,
-            Endian endianMode = ENDIAN_NATIVE);
+        void exportMesh( const Mesh *pMesh, DataStreamPtr stream, Endian endianMode = ENDIAN_NATIVE );
 
         /** Imports Mesh and (optionally) Material data from a .mesh file DataStream.
         @remarks
         This method imports data from a DataStream opened from a .mesh file and places it's
-        contents into the Mesh object which is passed in. 
-        @param stream The DataStream holding the .mesh data. Must be initialised (pos at the start of the buffer).
+        contents into the Mesh object which is passed in.
+        @param stream The DataStream holding the .mesh data. Must be initialised (pos at the start of the
+        buffer).
         @param pDest Pointer to the Mesh object which will receive the data. Should be blank already.
         */
-        void importMesh(DataStreamPtr& stream, Mesh* pDest, MeshSerializerListener *listener);
+        void importMesh( DataStreamPtr &stream, Mesh *pDest, MeshSerializerListener *listener );
 
     protected:
-        typedef vector<uint8>::type LodLevelVertexBufferTable;
-        typedef vector<LodLevelVertexBufferTable>::type LodLevelVertexBufferTableVec; //One per submesh
-        typedef vector<uint8*>::type Uint8Vec;
+        typedef vector<uint8>::type                     LodLevelVertexBufferTable;
+        typedef vector<LodLevelVertexBufferTable>::type LodLevelVertexBufferTableVec;  // One per submesh
+        typedef vector<uint8 *>::type                   Uint8Vec;
 
         struct SubMeshLod
         {
-            uint32                  numVertices;
-            VertexElement2VecVec    vertexDeclarations;
-            Uint8Vec                vertexBuffers;
-            uint8                   lodSource;
-            bool                    index32Bit;
-            uint32                  numIndices;
-            void                    *indexData;
-            OperationType operationType;
+            uint32               numVertices;
+            VertexElement2VecVec vertexDeclarations;
+            Uint8Vec             vertexBuffers;
+            uint8                lodSource;
+            bool                 index32Bit;
+            uint32               numIndices;
+            void *               indexData;
+            OperationType        operationType;
 
             SubMeshLod();
         };
@@ -105,18 +106,18 @@ namespace Ogre {
         typedef vector<SubMeshLod>::type SubMeshLodVec;
 
         // Internal methods
-        virtual void writeSubMeshNameTable(const Mesh* pMesh);
-        virtual void writeMeshHashForCaches(const Mesh* pMesh);
-        virtual void writeMesh(const Mesh* pMesh);
-        virtual void writeSubMesh( const SubMesh* s, const LodLevelVertexBufferTable &lodVertexTable );
+        virtual void writeSubMeshNameTable( const Mesh *pMesh );
+        virtual void writeMeshHashForCaches( const Mesh *pMesh );
+        virtual void writeMesh( const Mesh *pMesh );
+        virtual void writeSubMesh( const SubMesh *s, const LodLevelVertexBufferTable &lodVertexTable );
         virtual void writeSubMeshLod( const VertexArrayObject *vao, uint8 lodLevel, uint8 lodSource );
         virtual void writeSubMeshLodOperation( const VertexArrayObject *vao );
-        virtual void writeIndexes(IndexBufferPacked *indexBuffer);
-        virtual void writeGeometry(const VertexBufferPackedVec &pGeom);
-        virtual void writeSkeletonLink(const String& skelName);
+        virtual void writeIndexes( IndexBufferPacked *indexBuffer );
+        virtual void writeGeometry( const VertexBufferPackedVec &pGeom );
+        virtual void writeSkeletonLink( const String &skelName );
 
-        virtual void writeMeshLodLevel(const Mesh* pMesh);
-        virtual void writeBoundsInfo(const Mesh* pMesh);
+        virtual void writeMeshLodLevel( const Mesh *pMesh );
+        virtual void writeBoundsInfo( const Mesh *pMesh );
         /*virtual void writeEdgeList(const Mesh* pMesh);
         virtual void writeAnimations(const Mesh* pMesh);
         virtual void writeAnimation(const Animation* anim);
@@ -127,15 +128,17 @@ namespace Ogre {
         virtual void writePoseKeyframe(const VertexPoseKeyFrame* kf);
         virtual void writePoseKeyframePoseRef(const VertexPoseKeyFrame::PoseRef& poseRef);*/
 
-        virtual size_t calcMeshSize(const Mesh* pMesh, const LodLevelVertexBufferTableVec &lodVertexTable);
-        virtual size_t calcSubMeshSize(const SubMesh* pSub, const LodLevelVertexBufferTable &lodVertexTable);
+        virtual size_t calcMeshSize( const Mesh *                        pMesh,
+                                     const LodLevelVertexBufferTableVec &lodVertexTable );
+        virtual size_t calcSubMeshSize( const SubMesh *                  pSub,
+                                        const LodLevelVertexBufferTable &lodVertexTable );
         virtual size_t calcSubMeshLodSize( const VertexArrayObject *vao, bool skipVertexBuffer );
-        virtual size_t calcGeometrySize(const VertexBufferPackedVec &vertexData );
-        virtual size_t calcVertexDeclSize(const VertexBufferPackedVec &vertexData);
-        size_t calcHashForCachesSize();
-        virtual size_t calcSkeletonLinkSize(const String& skelName);
-        virtual size_t calcSubMeshLodOperationSize(const VertexArrayObject *vao);
-        virtual size_t calcSubMeshNameTableSize(const Mesh* pMesh);
+        virtual size_t calcGeometrySize( const VertexBufferPackedVec &vertexData );
+        virtual size_t calcVertexDeclSize( const VertexBufferPackedVec &vertexData );
+        size_t         calcHashForCachesSize();
+        virtual size_t calcSkeletonLinkSize( const String &skelName );
+        virtual size_t calcSubMeshLodOperationSize( const VertexArrayObject *vao );
+        virtual size_t calcSubMeshNameTableSize( const Mesh *pMesh );
         /*virtual size_t calcEdgeListSize(const Mesh* pMesh);
         virtual size_t calcEdgeListLodSize(const EdgeData* data, bool isManual);
         virtual size_t calcEdgeGroupSize(const EdgeData::EdgeGroup& group);
@@ -148,70 +151,71 @@ namespace Ogre {
         virtual size_t calcPoseKeyframeSize(const VertexPoseKeyFrame* kf);
         virtual size_t calcPoseKeyframePoseRefSize();
         virtual size_t calcPoseVertexSize(const Pose* pose);*/
-        virtual size_t calcLodLevelSize(const Mesh* pMesh);
-        virtual size_t calcBoundsInfoSize(const Mesh* pMesh);
+        virtual size_t calcLodLevelSize( const Mesh *pMesh );
+        virtual size_t calcBoundsInfoSize( const Mesh *pMesh );
 
-        virtual void readTextureLayer(DataStreamPtr& stream, Mesh* pMesh, MaterialPtr& pMat);
-        virtual void readSubMeshNameTable(DataStreamPtr& stream, Mesh* pMesh);
-        virtual void readHashForCaches(DataStreamPtr& stream, Mesh* pMesh);
-        virtual void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
-        virtual void readSubMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener, uint8 numVaoPasses);
-        virtual void readSubMeshLod( DataStreamPtr& stream, Mesh *pMesh,
-                                     SubMeshLod *subLod, uint8 currentLod );
-        virtual void readIndexes(DataStreamPtr& stream, SubMeshLod *subLod);
-        virtual void readGeometry(DataStreamPtr& stream, SubMeshLod *subLod);
-        virtual void readVertexDeclaration(DataStreamPtr& stream, SubMeshLod *subLod);
-        virtual void readVertexBuffer(DataStreamPtr& stream, SubMeshLod *subLod);
-        virtual void readSubMeshLodOperation(DataStreamPtr& stream, SubMeshLod *subLod);
+        virtual void readTextureLayer( DataStreamPtr &stream, Mesh *pMesh, MaterialPtr &pMat );
+        virtual void readSubMeshNameTable( DataStreamPtr &stream, Mesh *pMesh );
+        virtual void readHashForCaches( DataStreamPtr &stream, Mesh *pMesh );
+        virtual void readMesh( DataStreamPtr &stream, Mesh *pMesh, MeshSerializerListener *listener );
+        virtual void readSubMesh( DataStreamPtr &stream, Mesh *pMesh, MeshSerializerListener *listener,
+                                  uint8 numVaoPasses );
+        virtual void readSubMeshLod( DataStreamPtr &stream, Mesh *pMesh, SubMeshLod *subLod,
+                                     uint8 currentLod );
+        virtual void readIndexes( DataStreamPtr &stream, SubMeshLod *subLod );
+        virtual void readGeometry( DataStreamPtr &stream, SubMeshLod *subLod );
+        virtual void readVertexDeclaration( DataStreamPtr &stream, SubMeshLod *subLod );
+        virtual void readVertexBuffer( DataStreamPtr &stream, SubMeshLod *subLod );
+        virtual void readSubMeshLodOperation( DataStreamPtr &stream, SubMeshLod *subLod );
         /*virtual void readGeometry(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest);
         virtual void readGeometryVertexDeclaration(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest);
         virtual void readGeometryVertexElement(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest);
         virtual void readGeometryVertexBuffer(DataStreamPtr& stream, Mesh* pMesh, VertexData* dest);*/
 
-        virtual void readSkeletonLink(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener);
-        virtual void readMeshLodLevel(DataStreamPtr& stream, Mesh* pMesh);
-        virtual void readBoundsInfo(DataStreamPtr& stream, Mesh* pMesh);
+        virtual void readSkeletonLink( DataStreamPtr &stream, Mesh *pMesh,
+                                       MeshSerializerListener *listener );
+        virtual void readMeshLodLevel( DataStreamPtr &stream, Mesh *pMesh );
+        virtual void readBoundsInfo( DataStreamPtr &stream, Mesh *pMesh );
         /*virtual void readEdgeList(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readEdgeListLodInfo(DataStreamPtr& stream, EdgeData* edgeData);
         virtual void readPoses(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readPose(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readAnimations(DataStreamPtr& stream, Mesh* pMesh);
         virtual void readAnimation(DataStreamPtr& stream, Mesh* pMesh);
-        virtual void readAnimationTrack(DataStreamPtr& stream, Animation* anim, 
+        virtual void readAnimationTrack(DataStreamPtr& stream, Animation* anim,
             Mesh* pMesh);
         virtual void readMorphKeyFrame(DataStreamPtr& stream, VertexAnimationTrack* track);
         virtual void readPoseKeyFrame(DataStreamPtr& stream, VertexAnimationTrack* track);*/
 
-        virtual void createSubMeshVao( SubMesh *sm, SubMeshLodVec &submeshLods,
-                                       uint8 numVaoPasses );
+        virtual void createSubMeshVao( SubMesh *sm, SubMeshLodVec &submeshLods, uint8 numVaoPasses );
 
         /// Flip an entire vertex buffer to/from little endian
         /// working on the data pointer passed in pData
-        void flipLittleEndian( void* pData, VertexBufferPacked *vertexBuffer );
-        void flipLittleEndian( void* pData, size_t numVertices, size_t bytesPerVertex,
+        void flipLittleEndian( void *pData, VertexBufferPacked *vertexBuffer );
+        void flipLittleEndian( void *pData, size_t numVertices, size_t bytesPerVertex,
                                const VertexElement2Vec &vertexElements );
 
-        /// Flip the endianness of an entire vertex buffer, passed in as a 
-        /// pointer to locked or temporary memory 
-        void flipEndian( void* pData, size_t vertexCount,
-                         size_t vertexSize, size_t baseOffset,
+        /// Flip the endianness of an entire vertex buffer, passed in as a
+        /// pointer to locked or temporary memory
+        void flipEndian( void *pData, size_t vertexCount, size_t vertexSize, size_t baseOffset,
                          const VertexElementType elementType );
-        
+
         /// This function can be overloaded to disable validation in debug builds.
         virtual void enableValidation();
 
         /// Appends the given data to mCalculatedHash
         void addToHash( const void *data, size_t sizeBytes );
 
-        template<typename T> void addToHash( T value )
+        template <typename T>
+        void addToHash( T value )
         {
             OGRE_ALIGNED_DECL( T, alignedValue, 8 );
             alignedValue = value;
             addToHash( reinterpret_cast<const void *>( &alignedValue ), sizeof( T ) );
         }
 
-        uint64 mCalculatedHash[2]; // Calculated when exporting
-        ushort exportedLodCount; // Needed to limit exported Edge data, when exporting
+        uint64      mCalculatedHash[2];  // Calculated when exporting
+        ushort      exportedLodCount;    // Needed to limit exported Edge data, when exporting
         VaoManager *mVaoManager;
     };
 
@@ -222,7 +226,8 @@ namespace Ogre {
         ~MeshSerializerImpl_v2_1_R1() override;
 
     protected:
-        void readSubMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener, uint8 numVaoPasses) override;
+        void readSubMesh( DataStreamPtr &stream, Mesh *pMesh, MeshSerializerListener *listener,
+                          uint8 numVaoPasses ) override;
     };
 
     class _OgrePrivate MeshSerializerImpl_v2_1_R0 : public MeshSerializerImpl_v2_1_R1
@@ -232,11 +237,11 @@ namespace Ogre {
         ~MeshSerializerImpl_v2_1_R0() override;
 
     protected:
-        void readMesh(DataStreamPtr& stream, Mesh* pMesh, MeshSerializerListener *listener) override;
+        void readMesh( DataStreamPtr &stream, Mesh *pMesh, MeshSerializerListener *listener ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #endif

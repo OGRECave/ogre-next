@@ -29,26 +29,26 @@ THE SOFTWARE.
 #ifndef __CompositorNode_H__
 #define __CompositorNode_H__
 
-#include "OgreHeaderPrefix.h"
-#include "Compositor/OgreCompositorCommon.h"
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorNamedBuffer.h"
-#include "OgreResourceTransition.h"
-#include "OgreIdString.h"
 #include "OgreId.h"
+#include "OgreIdString.h"
+#include "OgreResourceTransition.h"
 
 #include "ogrestd/map.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class CompositorNodeDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     struct BoundUav;
 
@@ -97,28 +97,28 @@ namespace Ogre
     {
     protected:
         /// Unique name across the same workspace
-        IdString                mName;
-        bool                    mEnabled;
+        IdString mName;
+        bool     mEnabled;
 
         /// Must be <= mInTextures.size(). Tracks how many pointers are not null in mInTextures
-        size_t                  mNumConnectedInputs;
-        CompositorChannelVec    mInTextures;
-        CompositorChannelVec    mLocalTextures;
+        size_t               mNumConnectedInputs;
+        CompositorChannelVec mInTextures;
+        CompositorChannelVec mLocalTextures;
 
         /// Contains pointers that are ither in mInTextures or mLocalTextures
-        CompositorChannelVec    mOutTextures;
+        CompositorChannelVec mOutTextures;
 
-        size_t                      mNumConnectedBufferInputs;
-        CompositorNamedBufferVec    mBuffers;
+        size_t                   mNumConnectedBufferInputs;
+        CompositorNamedBufferVec mBuffers;
 
-        CompositorPassVec   mPasses;
+        CompositorPassVec mPasses;
 
         /// Nodes we're connected to. If we destroy our local textures, we need to inform them
-        CompositorNodeVec   mConnectedNodes;
+        CompositorNodeVec mConnectedNodes;
 
         CompositorWorkspace *mWorkspace;
 
-        RenderSystem        *mRenderSystem; /// Used to create/destroy MRTs
+        RenderSystem *mRenderSystem;  /// Used to create/destroy MRTs
 
         /** Fills mOutTextures with the pointers from mInTextures & mLocalTextures according
             to CompositorNodeDef::mOutChannelMapping. Call this immediately after modifying
@@ -158,10 +158,10 @@ namespace Ogre
 
         void destroyAllPasses();
 
-        IdString getName() const                                { return mName; }
-        const CompositorNodeDef* getDefinition() const              { return mDefinition; }
+        IdString                 getName() const { return mName; }
+        const CompositorNodeDef *getDefinition() const { return mDefinition; }
 
-        RenderSystem* getRenderSystem() const                   { return mRenderSystem; }
+        RenderSystem *getRenderSystem() const { return mRenderSystem; }
 
         /** Enables or disables all instances of this node
         @remarks
@@ -176,7 +176,7 @@ namespace Ogre
         void setEnabled( bool bEnabled );
 
         /// Returns if this instance is enabled. @See setEnabled
-        bool getEnabled() const                         { return mEnabled; }
+        bool getEnabled() const { return mEnabled; }
 
         /** Connects this node (let's call it node 'A') to node 'B', mapping the output
             channel from A into the input channel from B (buffer version)
@@ -217,9 +217,9 @@ namespace Ogre
         */
         void connectExternalBuffer( UavBufferPacked *buffer, size_t inChannelA );
 
-        bool areAllInputsConnected() const;
-        const CompositorChannelVec& getInputChannel() const         { return mInTextures; }
-        const CompositorChannelVec& getLocalTextures() const        { return mLocalTextures; }
+        bool                        areAllInputsConnected() const;
+        const CompositorChannelVec &getInputChannel() const { return mInTextures; }
+        const CompositorChannelVec &getLocalTextures() const { return mLocalTextures; }
 
         /** Returns the texture pointer of a texture based on it's name & mrt index.
         @remarks
@@ -233,7 +233,7 @@ namespace Ogre
         @return
             Null if not found (or global texture not registered). The texture otherwise
         */
-        TextureGpu* getDefinedTexture( IdString textureName ) const;
+        TextureGpu *getDefinedTexture( IdString textureName ) const;
 
         /** Returns the buffer pointer of a buffer based on it's name.
         @remarks
@@ -248,8 +248,8 @@ namespace Ogre
             Regular: The buffer. Throws if buffer wasn't found.
             No throw version: Null if not found. The buffer otherwise
         */
-        UavBufferPacked* getDefinedBuffer( IdString bufferName ) const;
-        UavBufferPacked* getDefinedBufferNoThrow( IdString bufferName ) const;
+        UavBufferPacked *getDefinedBuffer( IdString bufferName ) const;
+        UavBufferPacked *getDefinedBufferNoThrow( IdString bufferName ) const;
 
         /** Creates all passes based on our definition
         @remarks
@@ -259,7 +259,7 @@ namespace Ogre
         */
         void createPasses();
 
-        const CompositorPassVec& _getPasses() const                 { return mPasses; }
+        const CompositorPassVec &_getPasses() const { return mPasses; }
 
         /** Calling this function every frame will cause us to execute all our passes (ie. render)
         @param lodCamera
@@ -319,10 +319,10 @@ namespace Ogre
         size_t getPassNumber( CompositorPass *pass ) const;
 
         /// Returns our parent workspace
-        CompositorWorkspace* getWorkspace()                     { return mWorkspace; }
+        CompositorWorkspace *getWorkspace() { return mWorkspace; }
 
         /// Returns our parent workspace
-        const CompositorWorkspace* getWorkspace() const         { return mWorkspace; }
+        const CompositorWorkspace *getWorkspace() const { return mWorkspace; }
 
     private:
         CompositorNodeDef const *mDefinition;
@@ -330,7 +330,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

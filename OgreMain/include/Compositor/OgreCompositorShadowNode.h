@@ -29,23 +29,23 @@ THE SOFTWARE.
 #ifndef __CompositorShadowNode_H__
 #define __CompositorShadowNode_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorShadowNodeDef.h"
-#include "OgreShadowCameraSetup.h"
 #include "OgreLight.h"
+#include "OgreShadowCameraSetup.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
-    typedef vector<TextureGpu*>::type TextureGpuVec;
+    typedef vector<TextureGpu *>::type TextureGpuVec;
 
     /** Shadow Nodes are special nodes (not to be confused with @see CompositorNode)
         that are only used for rendering shadow maps.
@@ -97,51 +97,51 @@ namespace Ogre
 
         struct ShadowMapCamera
         {
-            ShadowCameraSetupPtr    shadowCameraSetup;
-            Camera                  *camera;
+            ShadowCameraSetupPtr shadowCameraSetup;
+            Camera *             camera;
             /// TextureGpu is at mLocalTextures[idxToLocalTextures]
-            uint32                  idxToLocalTextures;
+            uint32 idxToLocalTextures;
             /// Index to mContiguousShadowMapTex[idxToContiguousTex]
             /// mContiguousShadowMapTex keeps them together for binding quickly
             /// during render.
             /// Several shadow maps may reference the same texture (i.e. UV atlas)
             /// Hence the need for this idx variable.
-            uint32                  idxToContiguousTex;
+            uint32 idxToContiguousTex;
             /// @See ShadowCameraSetup mMinDistance
-            Real                    minDistance;
-            Real                    maxDistance;
-            Vector2                 scenePassesViewportSize[Light::NUM_LIGHT_TYPES];
+            Real    minDistance;
+            Real    maxDistance;
+            Vector2 scenePassesViewportSize[Light::NUM_LIGHT_TYPES];
         };
 
         typedef vector<ShadowMapCamera>::type ShadowMapCameraVec;
         /// One per shadow map (whether texture or atlas)
-        ShadowMapCameraVec      mShadowMapCameras;
+        ShadowMapCameraVec mShadowMapCameras;
 
         /// If all shadowmaps share the same texture (i.e. UV atlas), then
         /// mContiguousShadowMapTex.size() == 1. We can't use mLocalTextures
         /// directly because it could have textures unrelated to shadow mapping
         /// (or indirectly related)
-        TextureGpuVec           mContiguousShadowMapTex;
+        TextureGpuVec mContiguousShadowMapTex;
 
-        Camera const *          mLastCamera;
-        size_t                  mLastFrame;
-        size_t                  mNumActiveShadowMapCastingLights;
+        Camera const *mLastCamera;
+        size_t        mLastFrame;
+        size_t        mNumActiveShadowMapCastingLights;
         /// mShadowMapCastingLights may have gaps (can happen if no light of
         /// the types the shadow map supports could be assigned at this slot)
-        LightClosestArray       mShadowMapCastingLights;
-        vector<size_t>::type    mTmpSortedIndexes;
+        LightClosestArray    mShadowMapCastingLights;
+        vector<size_t>::type mTmpSortedIndexes;
 
         /** Cached value. Contains the aabb of all caster-only objects (filtered by
             camera's visibility flags) from the minimum RQ used by our shadow render
             passes, to the maximum RQ used. The tighter the box, the higher the
             shadow quality.
         */
-        AxisAlignedBox          mCastersBox;
+        AxisAlignedBox mCastersBox;
 
-        LightsBitSet            mAffectedLights;
+        LightsBitSet mAffectedLights;
 
         /// Changes with each call to setShadowMapsToPass
-        LightList               mCurrentLightList;
+        LightList mCurrentLightList;
 
         /** Called by update to find out which lights are the ones closest to the given
             camera. Early outs if we've already calculated our stuff for that camera in
@@ -150,7 +150,7 @@ namespace Ogre
         @param newCamera
             User camera to base our shadow map cameras from.
         */
-        void buildClosestLightList(Camera *newCamera , const Camera *lodCamera);
+        void buildClosestLightList( Camera *newCamera, const Camera *lodCamera );
 
         /** Finds the first index to mShadowMapCastingLights[*startIdx] where
             mShadowMapCastingLights[i].light == 0; starting from startIdx (inclusive).
@@ -173,9 +173,9 @@ namespace Ogre
             What entry to use. Outputs mShadowMapCastingLights.size() if there are no more
             empty that supports the requested light types.
         */
-        void findNextEmptyShadowCastingLightEntry( uint8 lightTypeMask,
-                                                   size_t * RESTRICT_ALIAS inOutStartIdx,
-                                                   size_t * RESTRICT_ALIAS outEntryToUse ) const;
+        void findNextEmptyShadowCastingLightEntry( uint8   lightTypeMask,
+                                                   size_t *RESTRICT_ALIAS inOutStartIdx,
+                                                   size_t *RESTRICT_ALIAS outEntryToUse ) const;
 
         void clearShadowCastingLights( const LightListInfo &globalLightList );
         void restoreStaticShadowCastingLights( const LightListInfo &globalLightList );
@@ -186,23 +186,23 @@ namespace Ogre
                               TextureGpu *finalTarget );
         virtual ~CompositorShadowNode();
 
-        const CompositorShadowNodeDef* getDefinition() const            { return mDefinition; }
+        const CompositorShadowNodeDef *getDefinition() const { return mDefinition; }
 
         /** Renders into the shadow map, executes passes
         @param camera
             Camera used to calculate our shadow camera (in case of directional lights).
         */
-        void _update(Camera* camera, const Camera *lodCamera, SceneManager *sceneManager);
+        void _update( Camera *camera, const Camera *lodCamera, SceneManager *sceneManager );
 
         /// We derive so we can override the camera with ours
         void postInitializePass( CompositorPass *pass ) override;
 
-        const LightList* setShadowMapsToPass( Renderable* rend, const Pass* pass,
+        const LightList *setShadowMapsToPass( Renderable *rend, const Pass *pass,
                                               AutoParamDataSource *autoParamDataSource,
-                                              size_t startLight );
+                                              size_t               startLight );
 
         /// @See mCastersBox
-        const AxisAlignedBox& getCastersBox() const     { return mCastersBox; }
+        const AxisAlignedBox &getCastersBox() const { return mCastersBox; }
 
         bool isShadowMapIdxInValidRange( uint32 shadowMapIdx ) const;
 
@@ -220,7 +220,7 @@ namespace Ogre
         /// is no light that could be linked with that shadow map index.
         /// i.e. if isShadowMapIdxActive( shadowMapIdx ) is true, then we'll
         /// return a valid pointer.
-        const Light* getLightAssociatedWith( uint32 shadowMapIdx ) const;
+        const Light *getLightAssociatedWith( uint32 shadowMapIdx ) const;
 
         /** Outputs the min & max depth range for the given camera. 0 & 100000 if camera not found
         @remarks
@@ -232,7 +232,7 @@ namespace Ogre
         /// Returns the texture view projection matrix for the given shadow map index
         Matrix4 getViewProjectionMatrix( size_t shadowMapIdx ) const;
         /// Returns the texture view matrix for the given shadow map index
-        const Matrix4& getViewMatrix( size_t shadowMapIdx ) const;
+        const Matrix4 &getViewMatrix( size_t shadowMapIdx ) const;
 
         /** Returns a list of points with the limits of each PSSM split in projection space
             for the given shadow map index.
@@ -244,7 +244,7 @@ namespace Ogre
             of splits for that shadow map.
             Returns null if shadowMapIdx is out of bounds, or is not a PSSM technique.
         */
-        const vector<Real>::type* getPssmSplits( size_t shadowMapIdx ) const;
+        const vector<Real>::type *getPssmSplits( size_t shadowMapIdx ) const;
 
         /** Returns a list of points with the blend band boundaries of the closest N-1 PSSM split
             in projection space for the given shadow map index.
@@ -255,7 +255,7 @@ namespace Ogre
             of splits for that shadow map.
             Returns null if shadowMapIdx is out of bounds, or is not a PSSM technique.
         */
-        const vector<Real>::type* getPssmBlends( size_t shadowMapIdx ) const;
+        const vector<Real>::type *getPssmBlends( size_t shadowMapIdx ) const;
 
         /** Returns the fade point of the last PSSM split in projection space
             for the given shadow map index.
@@ -265,20 +265,19 @@ namespace Ogre
             The fade point.
             Returns null if shadowMapIdx is out of bounds, or is not a PSSM technique.
         */
-        const Real* getPssmFade( size_t shadowMapIdx ) const;
+        const Real *getPssmFade( size_t shadowMapIdx ) const;
 
         /** The return value may change in the future, which happens when the number of lights
             changes to or from a value lower than the supported shadow casting lights by the
             definition.
         */
-        size_t getNumActiveShadowCastingLights() const
-                                                            { return mNumActiveShadowMapCastingLights; }
-        const LightClosestArray& getShadowCastingLights() const { return mShadowMapCastingLights; }
+        size_t getNumActiveShadowCastingLights() const { return mNumActiveShadowMapCastingLights; }
+        const LightClosestArray &getShadowCastingLights() const { return mShadowMapCastingLights; }
 
-        const LightsBitSet& getAffectedLightsBitSet() const     { return mAffectedLights; }
+        const LightsBitSet &getAffectedLightsBitSet() const { return mAffectedLights; }
 
-        const TextureGpuVec& getContiguousShadowMapTex() const  { return mContiguousShadowMapTex; }
-        uint32 getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const;
+        const TextureGpuVec &getContiguousShadowMapTex() const { return mContiguousShadowMapTex; }
+        uint32               getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const;
 
         float getNormalOffsetBias( const size_t shadowMapIdx ) const;
 
@@ -334,7 +333,7 @@ namespace Ogre
         /// static shadow maps that share the same atlas.
         /// Set it to false if that's explicitly what you want, or if you're already going
         /// to call it for every shadow map (otherwise you will trigger a O(N^2) behavior).
-        void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked=true );
+        void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked = true );
 
         /// @copydoc CompositorNode::finalTargetResized
         void finalTargetResized01( const TextureGpu *finalTarget ) override;
@@ -418,26 +417,26 @@ namespace Ogre
             See firstRq
         */
         static void createShadowNodeWithSettings(
-            CompositorManager2 *compositorManager,                               //
-            const RenderSystemCapabilities *capabilities,                        //
-            const String &shadowNodeName,                                        //
-            const ShadowNodeHelper::ShadowParamVec &shadowParams,                //
-            bool useEsm,                                                         //
-            uint32 pointLightCubemapResolution = 1024u,                          //
-            Real pssmLambda = 0.95f,                                             //
-            Real splitPadding = 1.0f,                                            //
-            Real splitBlend = 0.125f,                                            //
-            Real splitFade = 0.313f,                                             //
-            uint32 numStableSplits = 0,                                          //
-            uint32 visibilityMask = VisibilityFlags::RESERVED_VISIBILITY_FLAGS,  //
-            float xyPadding = 1.5f,                                              //
-            uint8 firstRq = 0u,                                                  //
-            uint8 lastRq = 255u );
+            CompositorManager2 *                    compositorManager,                    //
+            const RenderSystemCapabilities *        capabilities,                         //
+            const String &                          shadowNodeName,                       //
+            const ShadowNodeHelper::ShadowParamVec &shadowParams,                         //
+            bool                                    useEsm,                               //
+            uint32                                  pointLightCubemapResolution = 1024u,  //
+            Real                                    pssmLambda = 0.95f,                   //
+            Real                                    splitPadding = 1.0f,                  //
+            Real                                    splitBlend = 0.125f,                  //
+            Real                                    splitFade = 0.313f,                   //
+            uint32                                  numStableSplits = 0,                  //
+            uint32 visibilityMask = VisibilityFlags::RESERVED_VISIBILITY_FLAGS,           //
+            float  xyPadding = 1.5f,                                                      //
+            uint8  firstRq = 0u,                                                          //
+            uint8  lastRq = 255u );
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

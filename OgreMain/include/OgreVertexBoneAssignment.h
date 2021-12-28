@@ -31,43 +31,43 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-
-namespace Ogre 
+namespace Ogre
 {
-    
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Animation
-    *  @{
-    */
+     *  @{
+     */
 
     namespace v1
     {
-    /** Records the assignment of a single vertex to a single bone with the corresponding weight.
-    @remarks
-        This simple struct simply holds a vertex index, bone index and weight representing the
-        assignment of a vertex to a bone for skeletal animation. There may be many of these
-        per vertex if blended vertex assignments are allowed.
-    */
-    typedef struct VertexBoneAssignment_s
-    {
-        unsigned int vertexIndex;
-        unsigned short boneIndex;
-        Real weight;
+        /** Records the assignment of a single vertex to a single bone with the corresponding weight.
+        @remarks
+            This simple struct simply holds a vertex index, bone index and weight representing the
+            assignment of a vertex to a bone for skeletal animation. There may be many of these
+            per vertex if blended vertex assignments are allowed.
+        */
+        typedef struct VertexBoneAssignment_s
+        {
+            unsigned int   vertexIndex;
+            unsigned short boneIndex;
+            Real           weight;
 
-    } VertexBoneAssignment;
-    }
+        } VertexBoneAssignment;
+    }  // namespace v1
 
     /// @copydoc v1::VertexBoneAssignment_s
     struct VertexBoneAssignment
     {
-        uint32  vertexIndex;
-        uint16  boneIndex;
-        Real    weight;
+        uint32 vertexIndex;
+        uint16 boneIndex;
+        Real   weight;
 
-        VertexBoneAssignment( uint32 _vertexIndex,  uint16 _boneIndex, Real _weight ) :
-            vertexIndex( _vertexIndex ), boneIndex( _boneIndex ), weight( _weight )
+        VertexBoneAssignment( uint32 _vertexIndex, uint16 _boneIndex, Real _weight ) :
+            vertexIndex( _vertexIndex ),
+            boneIndex( _boneIndex ),
+            weight( _weight )
         {
         }
 
@@ -78,7 +78,7 @@ namespace Ogre
         {
         }
 
-        bool operator < ( const VertexBoneAssignment &_r ) const
+        bool operator<( const VertexBoneAssignment &_r ) const
         {
             if( vertexIndex < _r.vertexIndex )
                 return true;
@@ -89,16 +89,16 @@ namespace Ogre
             return false;
         }
 
-        friend bool operator < ( const VertexBoneAssignment &_l, uint32 _vertexIndex );
-        friend bool operator < ( uint32 _vertexIndex, const VertexBoneAssignment &_r );
+        friend bool operator<( const VertexBoneAssignment &_l, uint32 _vertexIndex );
+        friend bool operator<( uint32 _vertexIndex, const VertexBoneAssignment &_r );
     };
 
-    inline bool operator < ( const VertexBoneAssignment &_l, uint32 _vertexIndex )
+    inline bool operator<( const VertexBoneAssignment &_l, uint32 _vertexIndex )
     {
         return _l.vertexIndex < _vertexIndex;
     }
 
-    inline bool operator < ( uint32 _vertexIndex, const VertexBoneAssignment &_r )
+    inline bool operator<( uint32 _vertexIndex, const VertexBoneAssignment &_r )
     {
         return _vertexIndex < _r.vertexIndex;
     }
@@ -106,6 +106,6 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

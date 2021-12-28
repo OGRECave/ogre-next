@@ -42,11 +42,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** The log manager handles the creation and retrieval of logs for the
         application.
         @remarks
@@ -56,28 +56,28 @@ namespace Ogre
             One log is the default log, and is the one written to when the
             logging methods of this class are called.
         @par
-            By default, Root will instantiate a LogManager (which becomes the 
+            By default, Root will instantiate a LogManager (which becomes the
             Singleton instance) on construction, and will create a default log
             based on the Root construction parameters. If you want more control,
             for example redirecting log output right from the start or suppressing
             debug output, you need to create a LogManager yourself before creating
-            a Root instance, then create a default log. Root will detect that 
+            a Root instance, then create a default log. Root will detect that
             you've created one yourself and won't create one of its own, thus
             using all your logging preferences from the first instance.
     */
     class _OgreExport LogManager : public Singleton<LogManager>, public LogAlloc
     {
     protected:
-        typedef map<String, Log*>::type LogList;
+        typedef map<String, Log *>::type LogList;
 
         /// A list of all the logs the manager can access
         LogList mLogs;
 
         /// The default log to which output is done
-        Log* mDefaultLog;
+        Log *mDefaultLog;
 
     public:
-        OGRE_AUTO_MUTEX; // public to allow external locking
+        OGRE_AUTO_MUTEX;  // public to allow external locking
 
         LogManager();
         ~LogManager();
@@ -98,44 +98,45 @@ namespace Ogre
                 log and no file output will be written. If you do this you should
                 register a LogListener so log output is not lost.
         */
-        Log* createLog( const String& name, bool defaultLog = false, bool debuggerOutput = true, 
-            bool suppressFileOutput = false);
+        Log *createLog( const String &name, bool defaultLog = false, bool debuggerOutput = true,
+                        bool suppressFileOutput = false );
 
         /** Retrieves a log managed by this class.
-        */
-        Log* getLog( const String& name);
+         */
+        Log *getLog( const String &name );
 
         /** Returns a pointer to the default log.
-        */
-        Log* getDefaultLog();
+         */
+        Log *getDefaultLog();
 
         /** Closes and removes a named log. */
-        void destroyLog(const String& name);
+        void destroyLog( const String &name );
         /** Closes and removes a log. */
-        void destroyLog(Log* log);
+        void destroyLog( Log *log );
 
         /** Sets the passed in log as the default log.
         @return The previous default log.
         */
-        Log* setDefaultLog(Log* newLog);
+        Log *setDefaultLog( Log *newLog );
 
         /** Log a message to the default log.
-        */
-        void logMessage( const String& message, LogMessageLevel lml = LML_NORMAL, 
-            bool maskDebug = false);
+         */
+        void logMessage( const String &message, LogMessageLevel lml = LML_NORMAL,
+                         bool maskDebug = false );
 
         /** Log a message to the default log (signature for backward compatibility).
-        */
-        void logMessage( LogMessageLevel lml, const String& message,  
-            bool maskDebug = false) { logMessage(message, lml, maskDebug); }
+         */
+        void logMessage( LogMessageLevel lml, const String &message, bool maskDebug = false )
+        {
+            logMessage( message, lml, maskDebug );
+        }
 
         /** Get a stream on the default log. */
-        Log::Stream stream(LogMessageLevel lml = LML_NORMAL, 
-            bool maskDebug = false);
+        Log::Stream stream( LogMessageLevel lml = LML_NORMAL, bool maskDebug = false );
 
         /** Sets the level of detail of the default log.
-        */
-        void setLogDetail(LoggingLevel ll);
+         */
+        void setLogDetail( LoggingLevel ll );
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -151,7 +152,7 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static LogManager& getSingleton();
+        static LogManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -167,14 +168,12 @@ namespace Ogre
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static LogManager* getSingletonPtr();
-
+        static LogManager *getSingletonPtr();
     };
 
-
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

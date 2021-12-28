@@ -46,7 +46,7 @@ namespace Ogre
         @param
             logName Optional name of the log to display in the detail pane.
         */
-        void display(const String& errorMessage, String logName = "");
+        void display( const String &errorMessage, String logName = "" );
     };
-}
+}  // namespace Ogre
 #endif

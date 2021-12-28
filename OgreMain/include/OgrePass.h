@@ -29,14 +29,15 @@ THE SOFTWARE.
 #define __Pass_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreColourValue.h"
 #include "OgreCommon.h"
 #include "OgreLight.h"
 #include "OgreTextureUnitState.h"
 #include "OgreUserObjectBindings.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
      *  @{
      */
@@ -69,24 +70,24 @@ namespace Ogre {
         /// Increments on the constructor, in order to create a unique datablock for each material pass
         static AtomicScalar<uint32> gId;
 
-        uint32 mId;
-        Technique* mParent;
-        unsigned short mIndex; /// Pass index
-        String mName; /// Optional name for the pass
+        uint32         mId;
+        Technique *    mParent;
+        unsigned short mIndex;  /// Pass index
+        String         mName;   /// Optional name for the pass
         //-------------------------------------------------------------------------
         // Colour properties, only applicable in fixed-function passes
-        ColourValue mAmbient;
-        ColourValue mDiffuse;
-        ColourValue mSpecular;
-        ColourValue mEmissive;
-        Real mShininess;
+        ColourValue           mAmbient;
+        ColourValue           mDiffuse;
+        ColourValue           mSpecular;
+        ColourValue           mEmissive;
+        Real                  mShininess;
         TrackVertexColourType mTracking;
         //-------------------------------------------------------------------------
         HlmsLowLevelDatablock *mDatablock;
 
         // Alpha reject settings
         CompareFunction mAlphaRejectFunc;
-        unsigned char mAlphaRejectVal;
+        unsigned char   mAlphaRejectVal;
 
         //-------------------------------------------------------------------------
 
@@ -99,7 +100,7 @@ namespace Ogre {
         /// Iterate per how many lights?
         unsigned short mLightsPerIteration;
         /// Should it only be run for a certain light type?
-        bool mRunOnlyForOneLightType;
+        bool              mRunOnlyForOneLightType;
         Light::LightTypes mOnlyLightType;
         /// With a specific light mask?
         uint32 mLightMask;
@@ -110,17 +111,17 @@ namespace Ogre {
         bool mPolygonModeOverrideable;
         //-------------------------------------------------------------------------
         // Fog
-        bool mFogOverride;
-        FogMode mFogMode;
+        bool        mFogOverride;
+        FogMode     mFogMode;
         ColourValue mFogColour;
-        Real mFogStart;
-        Real mFogEnd;
-        Real mFogDensity;
+        Real        mFogStart;
+        Real        mFogEnd;
+        Real        mFogDensity;
         //-------------------------------------------------------------------------
 
         /// Storage of texture unit states
-        typedef vector<TextureUnitState*>::type TextureUnitStates;
-        TextureUnitStates mTextureUnitStates;
+        typedef vector<TextureUnitState *>::type TextureUnitStates;
+        TextureUnitStates                        mTextureUnitStates;
 
         /// Vertex program details
         GpuProgramUsage *mVertexProgramUsage;
@@ -150,37 +151,41 @@ namespace Ogre {
         Real mPointAttenuationCoeffs[3];
         // TU Content type lookups
         typedef vector<size_t>::type ContentTypeLookup;
-        ContentTypeLookup mShadowContentTypeLookup;
+        ContentTypeLookup            mShadowContentTypeLookup;
         /// Scissoring for the light?
         bool mLightScissoring;
         /// User clip planes for light?
         bool mLightClipPlanes;
         /// User objects binding.
-        UserObjectBindings  mUserObjectBindings;
-        
+        UserObjectBindings mUserObjectBindings;
 
     public:
         /// Used to get scene blending flags from a blending type
-        static void _getBlendFlags(SceneBlendType type, SceneBlendFactor& source, SceneBlendFactor& dest);
+        static void _getBlendFlags( SceneBlendType type, SceneBlendFactor &source,
+                                    SceneBlendFactor &dest );
 
     public:
-        OGRE_STATIC_MUTEX(msDirtyHashListMutex);
-        OGRE_STATIC_MUTEX(msPassGraveyardMutex);
-        OGRE_MUTEX(mTexUnitChangeMutex);
-        OGRE_MUTEX(mGpuProgramChangeMutex);
+        OGRE_STATIC_MUTEX( msDirtyHashListMutex );
+        OGRE_STATIC_MUTEX( msPassGraveyardMutex );
+        OGRE_MUTEX( mTexUnitChangeMutex );
+        OGRE_MUTEX( mGpuProgramChangeMutex );
         /// Default constructor
-        Pass(Technique* parent, unsigned short index);
+        Pass( Technique *parent, unsigned short index );
         /// Copy constructor
-        Pass(Technique* parent, unsigned short index, const Pass& oth );
+        Pass( Technique *parent, unsigned short index, const Pass &oth );
         /// Operator = overload
-        Pass& operator=(const Pass& oth);
+        Pass &operator=( const Pass &oth );
         virtual ~Pass();
 
-        uint32 getId() const            { return mId; }
+        uint32 getId() const { return mId; }
 
         /// Returns true if this pass is programmable i.e. includes either a vertex or fragment program.
-        bool isProgrammable() const { return mVertexProgramUsage || mFragmentProgramUsage || mGeometryProgramUsage ||
-                                                 mTessellationHullProgramUsage || mTessellationDomainProgramUsage || mComputeProgramUsage; }
+        bool isProgrammable() const
+        {
+            return mVertexProgramUsage || mFragmentProgramUsage || mGeometryProgramUsage ||
+                   mTessellationHullProgramUsage || mTessellationDomainProgramUsage ||
+                   mComputeProgramUsage;
+        }
 
         /// Returns true if this pass uses a programmable vertex pipeline
         bool hasVertexProgram() const { return mVertexProgramUsage != NULL; }
@@ -205,142 +210,140 @@ namespace Ogre {
         unsigned short getIndex() const { return mIndex; }
         /* Set the name of the pass
            @remarks
-           The name of the pass is optional.  Its useful in material scripts where a material could inherit
-           from another material and only want to modify a particular pass.
+           The name of the pass is optional.  Its useful in material scripts where a material could
+           inherit from another material and only want to modify a particular pass.
         */
-        void setName(const String& name);
+        void setName( const String &name );
         /// Get the name of the pass
-        const String& getName() const { return mName; }
+        const String &getName() const { return mName; }
 
         /** Sets the ambient colour reflectance properties of this pass.
             @remarks
             The base colour of a pass is determined by how much red, green and blue light is reflects
-            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines how
-            much ambient light (directionless global light) is reflected. The default is full white, meaning
-            objects are completely globally illuminated. Reduce this if you want to see diffuse or specular light
-            effects, or change the blend of colours to make the object have a base colour other than white.
+            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines
+           how much ambient light (directionless global light) is reflected. The default is full white,
+           meaning objects are completely globally illuminated. Reduce this if you want to see diffuse or
+           specular light effects, or change the blend of colours to make the object have a base colour
+           other than white.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setAmbient(Real red, Real green, Real blue);
+        void setAmbient( Real red, Real green, Real blue );
 
         /** Sets the ambient colour reflectance properties of this pass.
             @remarks
             The base colour of a pass is determined by how much red, green and blue light is reflects
-            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines how
-            much ambient light (directionless global light) is reflected. The default is full white, meaning
-            objects are completely globally illuminated. Reduce this if you want to see diffuse or specular light
-            effects, or change the blend of colours to make the object have a base colour other than white.
+            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines
+           how much ambient light (directionless global light) is reflected. The default is full white,
+           meaning objects are completely globally illuminated. Reduce this if you want to see diffuse or
+           specular light effects, or change the blend of colours to make the object have a base colour
+           other than white.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
 
-        void setAmbient(const ColourValue& ambient);
-
-        /** Sets the diffuse colour reflectance properties of this pass.
-            @remarks
-            The base colour of a pass is determined by how much red, green and blue light is reflects
-            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines how
-            much diffuse light (light from instances of the Light class in the scene) is reflected. The default
-            is full white, meaning objects reflect the maximum white light they can from Light objects.
-            @note
-            This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
-            or if this is a programmable pass.
-        */
-        void setDiffuse(Real red, Real green, Real blue, Real alpha);
+        void setAmbient( const ColourValue &ambient );
 
         /** Sets the diffuse colour reflectance properties of this pass.
             @remarks
             The base colour of a pass is determined by how much red, green and blue light is reflects
-            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines how
-            much diffuse light (light from instances of the Light class in the scene) is reflected. The default
-            is full white, meaning objects reflect the maximum white light they can from Light objects.
+            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines
+           how much diffuse light (light from instances of the Light class in the scene) is reflected.
+           The default is full white, meaning objects reflect the maximum white light they can from Light
+           objects.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setDiffuse(const ColourValue& diffuse);
+        void setDiffuse( Real red, Real green, Real blue, Real alpha );
+
+        /** Sets the diffuse colour reflectance properties of this pass.
+            @remarks
+            The base colour of a pass is determined by how much red, green and blue light is reflects
+            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines
+           how much diffuse light (light from instances of the Light class in the scene) is reflected.
+           The default is full white, meaning objects reflect the maximum white light they can from Light
+           objects.
+            @note
+            This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
+            or if this is a programmable pass.
+        */
+        void setDiffuse( const ColourValue &diffuse );
 
         /** Sets the specular colour reflectance properties of this pass.
             @remarks
             The base colour of a pass is determined by how much red, green and blue light is reflects
-            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines how
-            much specular light (highlights from instances of the Light class in the scene) is reflected.
-            The default is to reflect no specular light.
+            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines
+           how much specular light (highlights from instances of the Light class in the scene) is
+           reflected. The default is to reflect no specular light.
             @note
             The size of the specular highlights is determined by the separate 'shininess' property.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setSpecular(Real red, Real green, Real blue, Real alpha);
+        void setSpecular( Real red, Real green, Real blue, Real alpha );
 
         /** Sets the specular colour reflectance properties of this pass.
             @remarks
             The base colour of a pass is determined by how much red, green and blue light is reflects
-            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines how
-            much specular light (highlights from instances of the Light class in the scene) is reflected.
-            The default is to reflect no specular light.
+            (provided texture layer #0 has a blend mode other than LBO_REPLACE). This property determines
+           how much specular light (highlights from instances of the Light class in the scene) is
+           reflected. The default is to reflect no specular light.
             @note
             The size of the specular highlights is determined by the separate 'shininess' property.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setSpecular(const ColourValue& specular);
+        void setSpecular( const ColourValue &specular );
 
         /** Sets the shininess of the pass, affecting the size of specular highlights.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setShininess(Real val);
+        void setShininess( Real val );
 
         /** Sets the amount of self-illumination an object has.
             @remarks
             If an object is self-illuminating, it does not need external sources to light it, ambient or
-            otherwise. It's like the object has it's own personal ambient light. This property is rarely useful since
-            you can already specify per-pass ambient light, but is here for completeness.
+            otherwise. It's like the object has it's own personal ambient light. This property is rarely
+           useful since you can already specify per-pass ambient light, but is here for completeness.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setSelfIllumination(Real red, Real green, Real blue);
+        void setSelfIllumination( Real red, Real green, Real blue );
 
         /** Sets the amount of self-illumination an object has.
             @see
             setSelfIllumination
         */
-        void setEmissive(Real red, Real green, Real blue)
-        {
-            setSelfIllumination(red, green, blue);
-        }
+        void setEmissive( Real red, Real green, Real blue ) { setSelfIllumination( red, green, blue ); }
 
         /** Sets the amount of self-illumination an object has.
             @remarks
             If an object is self-illuminating, it does not need external sources to light it, ambient or
-            otherwise. It's like the object has it's own personal ambient light. This property is rarely useful since
-            you can already specify per-pass ambient light, but is here for completeness.
+            otherwise. It's like the object has it's own personal ambient light. This property is rarely
+           useful since you can already specify per-pass ambient light, but is here for completeness.
             @note
             This setting has no effect if dynamic lighting is disabled (see Pass::setLightingEnabled),
             or if this is a programmable pass.
         */
-        void setSelfIllumination(const ColourValue& selfIllum);
+        void setSelfIllumination( const ColourValue &selfIllum );
 
         /** Sets the amount of self-illumination an object has.
             @see
             setSelfIllumination
         */
-        void setEmissive(const ColourValue& emissive)
-        {
-            setSelfIllumination(emissive);
-        }
+        void setEmissive( const ColourValue &emissive ) { setSelfIllumination( emissive ); }
 
         /** Sets which material properties follow the vertex colour
          */
-        void setVertexColourTracking(TrackVertexColourType tracking);
+        void setVertexColourTracking( TrackVertexColourType tracking );
 
         /** Gets the point size of the pass.
         @remarks
@@ -364,14 +367,14 @@ namespace Ogre {
             since they may get clamped on some cards. Upper sizes can range from
             64 to 256 pixels.
         */
-        void setPointSize(Real ps);
+        void setPointSize( Real ps );
 
         /** Sets whether or not rendering points using OT_POINT_LIST will
             render point sprites (textured quads) or plain points (dots).
         @param enabled True enables point sprites, false returns to normal
             point rendering.
         */
-        void setPointSpritesEnabled(bool enabled);
+        void setPointSpritesEnabled( bool enabled );
 
         /** Returns whether point sprites are enabled when rendering a
             point list.
@@ -394,8 +397,8 @@ namespace Ogre {
         @param constant, linear, quadratic Parameters to the attenuation
             function defined above
         */
-        void setPointAttenuation(bool enabled,
-            Real constant = 0.0f, Real linear = 1.0f, Real quadratic = 0.0f);
+        void setPointAttenuation( bool enabled, Real constant = 0.0f, Real linear = 1.0f,
+                                  Real quadratic = 0.0f );
 
         /** Returns whether points are attenuated with distance. */
         bool isPointAttenuationEnabled() const;
@@ -408,42 +411,39 @@ namespace Ogre {
         Real getPointAttenuationQuadratic() const;
 
         /** Set the minimum point size, when point attenuation is in use. */
-        void setPointMinSize(Real min);
+        void setPointMinSize( Real min );
         /** Get the minimum point size, when point attenuation is in use. */
         Real getPointMinSize() const;
         /** Set the maximum point size, when point attenuation is in use.
         @remarks Setting this to 0 indicates the max size supported by the card.
         */
-        void setPointMaxSize(Real max);
+        void setPointMaxSize( Real max );
         /** Get the maximum point size, when point attenuation is in use.
         @remarks 0 indicates the max size supported by the card.
         */
         Real getPointMaxSize() const;
 
         /** Gets the ambient colour reflectance of the pass.
-        */
-        const ColourValue& getAmbient() const;
+         */
+        const ColourValue &getAmbient() const;
 
         /** Gets the diffuse colour reflectance of the pass.
          */
-        const ColourValue& getDiffuse() const;
+        const ColourValue &getDiffuse() const;
 
         /** Gets the specular colour reflectance of the pass.
          */
-        const ColourValue& getSpecular() const;
+        const ColourValue &getSpecular() const;
 
         /** Gets the self illumination colour of the pass.
          */
-        const ColourValue& getSelfIllumination() const;
+        const ColourValue &getSelfIllumination() const;
 
         /** Gets the self illumination colour of the pass.
             @see
             getSelfIllumination
         */
-        const ColourValue& getEmissive() const
-        {
-            return getSelfIllumination();
-        }
+        const ColourValue &getEmissive() const { return getSelfIllumination(); }
 
         /** Gets the 'shininess' property of the pass (affects specular highlights).
          */
@@ -457,7 +457,7 @@ namespace Ogre {
             @remarks
             This unit is is added on top of all previous units.
         */
-        TextureUnitState* createTextureUnitState();
+        TextureUnitState *createTextureUnitState();
         /** Inserts a new TextureUnitState object into the Pass.
             @remarks
             This unit is is added on top of all previous units.
@@ -468,27 +468,29 @@ namespace Ogre {
             @note
             Applies to both fixed-function and programmable passes.
         */
-        TextureUnitState* createTextureUnitState( const String& textureName, unsigned short texCoordSet = 0);
+        TextureUnitState *createTextureUnitState( const String & textureName,
+                                                  unsigned short texCoordSet = 0 );
         /** Adds the passed in TextureUnitState, to the existing Pass.
         @param
-        state The Texture Unit State to be attached to this pass.  It must not be attached to another pass.
+        state The Texture Unit State to be attached to this pass.  It must not be attached to another
+        pass.
         @note
             Throws an exception if the TextureUnitState is attached to another Pass.*/
-        void addTextureUnitState(TextureUnitState* state);
+        void addTextureUnitState( TextureUnitState *state );
         /** Retrieves a pointer to a texture unit state so it may be modified.
-        */
-        TextureUnitState* getTextureUnitState( size_t index );
+         */
+        TextureUnitState *getTextureUnitState( size_t index );
         /** Retrieves the Texture Unit State matching name.
             Returns 0 if name match is not found.
         */
-        TextureUnitState* getTextureUnitState(const String& name);
+        TextureUnitState *getTextureUnitState( const String &name );
         /** Retrieves a const pointer to a texture unit state.
-        */
-        const TextureUnitState* getTextureUnitState( size_t index ) const;
+         */
+        const TextureUnitState *getTextureUnitState( size_t index ) const;
         /** Retrieves the Texture Unit State matching name.
         Returns 0 if name match is not found.
         */
-        const TextureUnitState* getTextureUnitState(const String& name) const;
+        const TextureUnitState *getTextureUnitState( const String &name ) const;
 
         /**  Retrieve the index of the Texture Unit State in the pass.
              @param
@@ -496,7 +498,7 @@ namespace Ogre {
              @note
              Throws an exception if the state is not attached to the pass.
         */
-        unsigned short getTextureUnitStateIndex(const TextureUnitState* state) const;
+        unsigned short getTextureUnitStateIndex( const TextureUnitState *state ) const;
 
         typedef VectorIterator<TextureUnitStates> TextureUnitStateIterator;
         /** Get an iterator over the TextureUnitStates contained in this Pass. */
@@ -510,7 +512,7 @@ namespace Ogre {
         @remarks
             Note that removing a texture which is not the topmost will have a larger performance impact.
         */
-        void removeTextureUnitState(unsigned short index);
+        void removeTextureUnitState( unsigned short index );
 
         /** Removes all texture unit settings.
          */
@@ -520,10 +522,10 @@ namespace Ogre {
          */
         unsigned short getNumTextureUnitStates() const
         {
-            return static_cast<unsigned short>(mTextureUnitStates.size());
+            return static_cast<unsigned short>( mTextureUnitStates.size() );
         }
 
-        size_t getNumShadowContentTextures() const      { return mShadowContentTypeLookup.size(); }
+        size_t getNumShadowContentTextures() const { return mShadowContentTypeLookup.size(); }
 
         /// Recreates the contents of mShadowContentTypeLookup from scratch
         void recreateShadowContentTypeLookup();
@@ -553,7 +555,7 @@ namespace Ogre {
             parameter sets the limit on the number of lights which should apply to objects
             rendered with this pass.
         */
-        void setMaxSimultaneousLights(unsigned short maxLights);
+        void setMaxSimultaneousLights( unsigned short maxLights );
         /** Gets the maximum number of lights to be used by this pass. */
         unsigned short getMaxSimultaneousLights() const;
 
@@ -562,17 +564,18 @@ namespace Ogre {
             Normally the lights passed to a pass will start from the beginning
             of the light list for this object. This option allows you to make this
             pass start from a higher light index, for example if one of your earlier
-            passes could deal with lights 0-3, and this pass dealt with lights 4+. 
+            passes could deal with lights 0-3, and this pass dealt with lights 4+.
             This option also has an interaction with pass iteration, in that
             if you choose to iterate this pass per light too, the iteration will
             only begin from light 4.
         */
-        void setStartLight(unsigned short startLight);
+        void setStartLight( unsigned short startLight );
         /** Gets the light index that this pass will start at in the light list. */
         unsigned short getStartLight() const;
 
-        /** Sets the light mask which can be matched to specific light flags to be handled by this pass */
-        void setLightMask(uint32 mask);
+        /** Sets the light mask which can be matched to specific light flags to be handled by this pass
+         */
+        void setLightMask( uint32 mask );
         /** Gets the light mask controlling which lights are used for this pass */
         uint32 getLightMask() const;
 
@@ -587,22 +590,16 @@ namespace Ogre {
         ShadeOptions getShadingMode() const;
 
         /** Sets whether this pass's chosen detail level can be
-            overridden (downgraded) by the camera setting. 
+            overridden (downgraded) by the camera setting.
         @param override true means that a lower camera detail will override this
             pass's detail level, false means it won't (default true).
         */
-        virtual void setPolygonModeOverrideable(bool override)
-        {
-            mPolygonModeOverrideable = override;
-        }
+        virtual void setPolygonModeOverrideable( bool override ) { mPolygonModeOverrideable = override; }
 
         /** Gets whether this renderable's chosen detail level can be
             overridden (downgraded) by the camera setting.
         */
-        virtual bool getPolygonModeOverrideable() const
-        {
-            return mPolygonModeOverrideable;
-        }
+        virtual bool getPolygonModeOverrideable() const { return mPolygonModeOverrideable; }
         /** Sets the fogging mode applied to this pass.
             @remarks
             Fogging is an effect that is applied as polys are rendered. Sometimes, you want
@@ -613,8 +610,9 @@ namespace Ogre {
             The SceneManager class also has a setFog method which applies scene-level fog. This method
             lets you change the fog behaviour for this pass compared to the standard scene-level fog.
             @param
-            overrideScene If true, you authorise this pass to override the scene's fog params with it's own settings.
-            If you specify false, so other parameters are necessary, and this is the default behaviour for passes.
+            overrideScene If true, you authorise this pass to override the scene's fog params with it's
+           own settings. If you specify false, so other parameters are necessary, and this is the default
+           behaviour for passes.
             @param
             mode Only applicable if overrideScene is true. You can disable fog which is turned on for the
             rest of the scene by specifying FOG_NONE. Otherwise, set a pass-specific fog mode as
@@ -632,11 +630,9 @@ namespace Ogre {
             linearEnd Distance in world units at which linear fog becomes completely opaque.
             Only applicable if mode is FOG_LINEAR.
         */
-        void setFog(
-            bool overrideScene,
-            FogMode mode = FOG_NONE,
-            const ColourValue& colour = ColourValue::White,
-            Real expDensity = 0.001, Real linearStart = 0.0, Real linearEnd = 1.0 );
+        void setFog( bool overrideScene, FogMode mode = FOG_NONE,
+                     const ColourValue &colour = ColourValue::White, Real expDensity = 0.001,
+                     Real linearStart = 0.0, Real linearEnd = 1.0 );
 
         /** Returns true if this pass is to override the scene fog settings.
          */
@@ -650,7 +646,7 @@ namespace Ogre {
 
         /** Returns the fog colour for the scene.
          */
-        const ColourValue& getFogColour() const;
+        const ColourValue &getFogColour() const;
 
         /** Returns the fog start distance for this pass.
             @note
@@ -671,7 +667,7 @@ namespace Ogre {
         Real getFogDensity() const;
 
         /// Gets the internal datablock that acts as proxy for us
-        HlmsDatablock* _getDatablock() const;
+        HlmsDatablock *_getDatablock() const;
 
         /// Changes the current macroblock for a new one. Pointer can't be null
         void setMacroblock( const HlmsMacroblock &macroblock );
@@ -679,7 +675,7 @@ namespace Ogre {
         /** Retrieves current macroblock. Don't const_cast the return value to modify it.
             @See HlmsDatablock remarks.
         */
-        const HlmsMacroblock* getMacroblock() const;
+        const HlmsMacroblock *getMacroblock() const;
 
         /// Changes the current blendblock for a new one. Pointer can't be null
         void setBlendblock( const HlmsBlendblock &blendblock );
@@ -687,22 +683,22 @@ namespace Ogre {
         /** Retrieves current blendblock. Don't const_cast the return value to modify it.
             @See HlmsDatablock remarks.
         */
-        const HlmsBlendblock* getBlendblock() const;
+        const HlmsBlendblock *getBlendblock() const;
 
         /** Sets the alpha reject function. See setAlphaRejectSettings for more information.
-        */
-        void setAlphaRejectFunction(CompareFunction func);
+         */
+        void setAlphaRejectFunction( CompareFunction func );
 
-		/** Gets the alpha reject value. See setAlphaRejectSettings for more information.
-        */
-        void setAlphaRejectValue(unsigned char val);
+        /** Gets the alpha reject value. See setAlphaRejectSettings for more information.
+         */
+        void setAlphaRejectValue( unsigned char val );
 
         /** Gets the alpha reject function. See setAlphaRejectSettings for more information.
-        */
+         */
         CompareFunction getAlphaRejectFunction() const { return mAlphaRejectFunc; }
 
         /** Gets the alpha reject value. See setAlphaRejectSettings for more information.
-        */
+         */
         unsigned char getAlphaRejectValue() const { return mAlphaRejectVal; }
 
         /** Sets whether or not this pass should iterate per light or number of
@@ -728,7 +724,7 @@ namespace Ogre {
             a single program can be used for any number of lights</li>
             </ul>
             However, this technique is more expensive, and typically you
-            will want an additional ambient pass, because if no lights are 
+            will want an additional ambient pass, because if no lights are
             affecting the object it will not be rendered at all, which will look
             odd even if ambient light is zero (imagine if there are lit objects
             behind it - the objects silhouette would not show up). Therefore,
@@ -740,15 +736,15 @@ namespace Ogre {
             you will never get more passes than this. Also, the iteration is
             started from the 'start light' as set in Pass::setStartLight, and
             the number of passes is the number of lights to iterate over divided
-            by the number of lights per iteration (default 1, set by 
+            by the number of lights per iteration (default 1, set by
             setLightCountPerIteration).
         @param enabled Whether this feature is enabled
         @param onlyForOneLightType If true, the pass will only be run for a single type
             of light, other light types will be ignored.
         @param lightType The single light type which will be considered for this pass
         */
-        void setIteratePerLight(bool enabled,
-                                bool onlyForOneLightType = true, Light::LightTypes lightType = Light::LT_POINT);
+        void setIteratePerLight( bool enabled, bool onlyForOneLightType = true,
+                                 Light::LightTypes lightType = Light::LT_POINT );
 
         /** Does this pass run once for every light in range? */
         bool getIteratePerLight() const { return mIteratePerLight; }
@@ -767,17 +763,17 @@ namespace Ogre {
             The start of the iteration is set by Pass::setStartLight and the end
             by Pass::setMaxSimultaneousLights.
         */
-        void setLightCountPerIteration(unsigned short c);
+        void setLightCountPerIteration( unsigned short c );
         /** If light iteration is enabled, determine the number of lights per
         iteration.
         */
         unsigned short getLightCountPerIteration() const;
-        
+
         /// Gets the parent Technique
-        Technique* getParent() const { return mParent; }
+        Technique *getParent() const { return mParent; }
 
         /// Gets the resource group of the ultimate parent Material
-        const String& getResourceGroup() const;
+        const String &getResourceGroup() const;
 
         /** Sets the details of the vertex program to use.
         @remarks
@@ -795,21 +791,20 @@ namespace Ogre {
             case of named parameters refers to the indexes underlying them,
             not just the names.
         */
-        void setVertexProgram(const String& name, bool resetParams = true);
+        void setVertexProgram( const String &name, bool resetParams = true );
         /** Sets the vertex program parameters.
         @remarks
             Only applicable to programmable passes, and this particular call is
             designed for low-level programs; use the named parameter methods
             for setting high-level program parameters.
         */
-        void setVertexProgramParameters(GpuProgramParametersSharedPtr params);
+        void setVertexProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the vertex program used by this pass. */
-        const String& getVertexProgramName() const;
+        const String &getVertexProgramName() const;
         /** Gets the vertex program parameters used by this pass. */
         GpuProgramParametersSharedPtr getVertexProgramParameters() const;
         /** Gets the vertex program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getVertexProgram() const;
-
+        const GpuProgramPtr &getVertexProgram() const;
 
         /** Sets the details of the vertex program to use when rendering as a
             shadow caster.
@@ -840,21 +835,21 @@ namespace Ogre {
             The default behaviour is for Ogre to switch to fixed-function
             rendering if an explicit vertex program alternative is not set.
         */
-        void setShadowCasterVertexProgram(const String& name);
+        void setShadowCasterVertexProgram( const String &name );
         /** Sets the vertex program parameters for rendering as a shadow caster.
             @remarks
             Only applicable to programmable passes, and this particular call is
             designed for low-level programs; use the named parameter methods
             for setting high-level program parameters.
         */
-        void setShadowCasterVertexProgramParameters(GpuProgramParametersSharedPtr params);
+        void setShadowCasterVertexProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the vertex program used by this pass when rendering shadow casters. */
-        const String& getShadowCasterVertexProgramName() const;
+        const String &getShadowCasterVertexProgramName() const;
         /** Gets the vertex program parameters used by this pass when rendering shadow casters. */
         GpuProgramParametersSharedPtr getShadowCasterVertexProgramParameters() const;
         /** Gets the vertex program used by this pass when rendering shadow casters,
             only available after _load(). */
-        const GpuProgramPtr& getShadowCasterVertexProgram() const;
+        const GpuProgramPtr &getShadowCasterVertexProgram() const;
 
         /** Sets the details of the fragment program to use when rendering as a
             shadow caster.
@@ -885,21 +880,21 @@ namespace Ogre {
             The default behaviour is for Ogre to switch to fixed-function
             rendering if an explicit fragment program alternative is not set.
         */
-        void setShadowCasterFragmentProgram(const String& name);
+        void setShadowCasterFragmentProgram( const String &name );
         /** Sets the fragment program parameters for rendering as a shadow caster.
             @remarks
             Only applicable to programmable passes, and this particular call is
             designed for low-level programs; use the named parameter methods
             for setting high-level program parameters.
         */
-        void setShadowCasterFragmentProgramParameters(GpuProgramParametersSharedPtr params);
+        void setShadowCasterFragmentProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the fragment program used by this pass when rendering shadow casters. */
-        const String& getShadowCasterFragmentProgramName() const;
+        const String &getShadowCasterFragmentProgramName() const;
         /** Gets the fragment program parameters used by this pass when rendering shadow casters. */
         GpuProgramParametersSharedPtr getShadowCasterFragmentProgramParameters() const;
         /** Gets the fragment program used by this pass when rendering shadow casters,
             only available after _load(). */
-        const GpuProgramPtr& getShadowCasterFragmentProgram() const;
+        const GpuProgramPtr &getShadowCasterFragmentProgram() const;
 
         /** Sets the details of the fragment program to use.
         @remarks
@@ -917,18 +912,18 @@ namespace Ogre {
             case of named parameters refers to the indexes underlying them,
             not just the names.
         */
-        void setFragmentProgram(const String& name, bool resetParams = true);
+        void setFragmentProgram( const String &name, bool resetParams = true );
         /** Sets the fragment program parameters.
         @remarks
             Only applicable to programmable passes.
         */
-        void setFragmentProgramParameters(GpuProgramParametersSharedPtr params);
+        void setFragmentProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the fragment program used by this pass. */
-        const String& getFragmentProgramName() const;
+        const String &getFragmentProgramName() const;
         /** Gets the fragment program parameters used by this pass. */
         GpuProgramParametersSharedPtr getFragmentProgramParameters() const;
         /** Gets the fragment program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getFragmentProgram() const;
+        const GpuProgramPtr &getFragmentProgram() const;
 
         /** Sets the details of the geometry program to use.
         @remarks
@@ -946,21 +941,21 @@ namespace Ogre {
             case of named parameters refers to the indexes underlying them,
             not just the names.
         */
-        void setGeometryProgram(const String& name, bool resetParams = true);
+        void setGeometryProgram( const String &name, bool resetParams = true );
         /** Sets the geometry program parameters.
         @remarks
             Only applicable to programmable passes.
         */
-        void setGeometryProgramParameters(GpuProgramParametersSharedPtr params);
+        void setGeometryProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the geometry program used by this pass. */
-        const String& getGeometryProgramName() const;
+        const String &getGeometryProgramName() const;
         /** Gets the geometry program parameters used by this pass. */
         GpuProgramParametersSharedPtr getGeometryProgramParameters() const;
         /** Gets the geometry program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getGeometryProgram() const;
+        const GpuProgramPtr &getGeometryProgram() const;
 
         /** Internal method to adjust pass index. */
-        void _notifyIndex(unsigned short index);
+        void _notifyIndex( unsigned short index );
 
         /** Internal method for preparing to load this pass. */
         void _prepare();
@@ -975,9 +970,10 @@ namespace Ogre {
 
         /** Update automatic parameters.
         @param source The source of the parameters
-        @param variabilityMask A mask of GpuParamVariability which identifies which autos will need updating
+        @param variabilityMask A mask of GpuParamVariability which identifies which autos will need
+        updating
         */
-        void _updateAutoParams(const AutoParamDataSource* source, uint16 variabilityMask) const;
+        void _updateAutoParams( const AutoParamDataSource *source, uint16 variabilityMask ) const;
 
         /** Gets the 'nth' texture which references the given content type.
         @remarks
@@ -986,7 +982,7 @@ namespace Ogre {
             valid range to index texture units.
         */
         size_t _getTextureUnitWithContentTypeIndex( TextureUnitState::ContentType contentType,
-                                                    size_t index) const;
+                                                    size_t                        index ) const;
 
         /** Set samplerblock for every texture unit
             @note
@@ -1015,7 +1011,7 @@ namespace Ogre {
             A value of 1 turns off multi pass operation and the pass does
             the normal pass operation.
         */
-        void setPassIterationCount(const size_t count) { mPassIterationCount = count; }
+        void setPassIterationCount( const size_t count ) { mPassIterationCount = count; }
 
         /** Gets the pass iteration count value.
          */
@@ -1028,11 +1024,13 @@ namespace Ogre {
             @param
             aliasList is a map container of texture alias, texture name pairs
             @param
-            apply set true to apply the texture aliases else just test to see if texture alias matches are found.
+            apply set true to apply the texture aliases else just test to see if texture alias matches
+           are found.
             @return
             True if matching texture aliases were found in the pass.
         */
-        bool applyTextureAliases(const AliasTextureNamePairList& aliasList, const bool apply = true) const;
+        bool applyTextureAliases( const AliasTextureNamePairList &aliasList,
+                                  const bool                      apply = true ) const;
 
         /** Sets whether or not this pass will be clipped by a scissor rectangle
             encompassing the lights that are being used in it.
@@ -1040,12 +1038,12 @@ namespace Ogre {
             In order to cut down on fillrate when you have a number of fixed-range
             lights in the scene, you can enable this option to request that
             during rendering, only the region of the screen which is covered by
-            the lights is rendered. This region is the screen-space rectangle 
+            the lights is rendered. This region is the screen-space rectangle
             covering the union of the spheres making up the light ranges. Directional
             lights are ignored for this.
         @par
-            This is only likely to be useful for multipass additive lighting 
-            algorithms, where the scene has already been 'seeded' with an ambient 
+            This is only likely to be useful for multipass additive lighting
+            algorithms, where the scene has already been 'seeded' with an ambient
             pass and this pass is just adding light in affected areas.
         @note
             When using SHADOWTYPE_STENCIL_ADDITIVE or SHADOWTYPE_TEXTURE_ADDITIVE,
@@ -1054,7 +1052,7 @@ namespace Ogre {
             a modulative or an integrated shadow technique then this could be useful.
 
         */
-        void setLightScissoringEnabled(bool enabled) { mLightScissoring = enabled; }
+        void setLightScissoringEnabled( bool enabled ) { mLightScissoring = enabled; }
         /** Gets whether or not this pass will be clipped by a scissor rectangle
             encompassing the lights that are being used in it.
         */
@@ -1063,27 +1061,27 @@ namespace Ogre {
         /** Gets whether or not this pass will be clipped by user clips planes
             bounding the area covered by the light.
         @remarks
-            In order to cut down on the geometry set up to render this pass 
-            when you have a single fixed-range light being rendered through it, 
-            you can enable this option to request that during triangle setup, 
+            In order to cut down on the geometry set up to render this pass
+            when you have a single fixed-range light being rendered through it,
+            you can enable this option to request that during triangle setup,
             clip planes are defined to bound the range of the light. In the case
-            of a point light these planes form a cube, and in the case of 
+            of a point light these planes form a cube, and in the case of
             a spotlight they form a pyramid. Directional lights are never clipped.
         @par
-            This option is only likely to be useful for multipass additive lighting 
-            algorithms, where the scene has already been 'seeded' with an ambient 
+            This option is only likely to be useful for multipass additive lighting
+            algorithms, where the scene has already been 'seeded' with an ambient
             pass and this pass is just adding light in affected areas. In addition,
             it will only be honoured if there is exactly one non-directional light
             being used in this pass. Also, these clip planes override any user clip
             planes set on Camera.
         @note
             When using SHADOWTYPE_STENCIL_ADDITIVE or SHADOWTYPE_TEXTURE_ADDITIVE,
-            this option is automatically used for all per-light passes if you 
+            this option is automatically used for all per-light passes if you
             enable SceneManager::setShadowUseLightClipPlanes and does
             not need to be specified. It is disabled by default since clip planes have
             a cost of their own which may not always exceed the benefits they give you.
         */
-        void setLightClipPlanesEnabled(bool enabled) { mLightClipPlanes = enabled; }
+        void setLightClipPlanesEnabled( bool enabled ) { mLightClipPlanes = enabled; }
         /** Gets whether or not this pass will be clipped by user clips planes
             bounding the area covered by the light.
         */
@@ -1093,13 +1091,13 @@ namespace Ogre {
         You can use it to associate one or more custom objects with this class instance.
         @see UserObjectBindings::setUserAny.
         */
-        UserObjectBindings& getUserObjectBindings() { return mUserObjectBindings; }
+        UserObjectBindings &getUserObjectBindings() { return mUserObjectBindings; }
 
         /** Return an instance of user objects binding associated with this class.
         You can use it to associate one or more custom objects with this class instance.
-        @see UserObjectBindings::setUserAny.        
+        @see UserObjectBindings::setUserAny.
         */
-        const UserObjectBindings& getUserObjectBindings() const { return mUserObjectBindings; }
+        const UserObjectBindings &getUserObjectBindings() const { return mUserObjectBindings; }
 
         /// Support for shader model 5.0, hull and domain shaders
         /** Sets the details of the Tessellation control program to use.
@@ -1109,7 +1107,8 @@ namespace Ogre {
             loaded until the parent Material is loaded.
         @param name The name of the program - this must have been
             created using GpuProgramManager by the time that this Pass
-            is loaded. If this parameter is blank, any Tessellation Hull program in this pass is disabled.
+            is loaded. If this parameter is blank, any Tessellation Hull program in this pass is
+        disabled.
         @param resetParams
             If true, this will create a fresh set of parameters from the
             new program being linked, so if you had previously set parameters
@@ -1118,18 +1117,18 @@ namespace Ogre {
             case of named parameters refers to the indexes underlying them,
             not just the names.
         */
-        void setTessellationHullProgram(const String& name, bool resetParams = true);
+        void setTessellationHullProgram( const String &name, bool resetParams = true );
         /** Sets the Tessellation Hull program parameters.
         @remarks
             Only applicable to programmable passes.
         */
-        void setTessellationHullProgramParameters(GpuProgramParametersSharedPtr params);
+        void setTessellationHullProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the Tessellation Hull program used by this pass. */
-        const String& getTessellationHullProgramName() const;
+        const String &getTessellationHullProgramName() const;
         /** Gets the Tessellation Hull program parameters used by this pass. */
         GpuProgramParametersSharedPtr getTessellationHullProgramParameters() const;
         /** Gets the Tessellation Hull program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getTessellationHullProgram() const;
+        const GpuProgramPtr &getTessellationHullProgram() const;
 
         /** Sets the details of the Tessellation domain program to use.
         @remarks
@@ -1138,7 +1137,8 @@ namespace Ogre {
             loaded until the parent Material is loaded.
         @param name The name of the program - this must have been
             created using GpuProgramManager by the time that this Pass
-            is loaded. If this parameter is blank, any Tessellation domain program in this pass is disabled.
+            is loaded. If this parameter is blank, any Tessellation domain program in this pass is
+        disabled.
         @param resetParams
             If true, this will create a fresh set of parameters from the
             new program being linked, so if you had previously set parameters
@@ -1147,18 +1147,18 @@ namespace Ogre {
             case of named parameters refers to the indexes underlying them,
             not just the names.
         */
-        void setTessellationDomainProgram(const String& name, bool resetParams = true);
+        void setTessellationDomainProgram( const String &name, bool resetParams = true );
         /** Sets the Tessellation Domain program parameters.
         @remarks
             Only applicable to programmable passes.
         */
-        void setTessellationDomainProgramParameters(GpuProgramParametersSharedPtr params);
+        void setTessellationDomainProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the Domain Evaluation program used by this pass. */
-        const String& getTessellationDomainProgramName() const;
+        const String &getTessellationDomainProgramName() const;
         /** Gets the Tessellation Domain program parameters used by this pass. */
         GpuProgramParametersSharedPtr getTessellationDomainProgramParameters() const;
         /** Gets the Tessellation Domain program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getTessellationDomainProgram() const;
+        const GpuProgramPtr &getTessellationDomainProgram() const;
 
         /** Sets the details of the compute program to use.
         @remarks
@@ -1176,23 +1176,23 @@ namespace Ogre {
             case of named parameters refers to the indexes underlying them,
             not just the names.
         */
-        void setComputeProgram(const String& name, bool resetParams = true);
+        void setComputeProgram( const String &name, bool resetParams = true );
         /** Sets the Tessellation Evaluation program parameters.
         @remarks
             Only applicable to programmable passes.
         */
-        void setComputeProgramParameters(GpuProgramParametersSharedPtr params);
+        void setComputeProgramParameters( GpuProgramParametersSharedPtr params );
         /** Gets the name of the Tessellation Hull program used by this pass. */
-        const String& getComputeProgramName() const;
+        const String &getComputeProgramName() const;
         /** Gets the Tessellation Hull program parameters used by this pass. */
         GpuProgramParametersSharedPtr getComputeProgramParameters() const;
         /** Gets the Tessellation EHull program used by this pass, only available after _load(). */
-        const GpuProgramPtr& getComputeProgram() const;
+        const GpuProgramPtr &getComputeProgram() const;
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

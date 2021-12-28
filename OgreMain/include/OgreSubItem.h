@@ -30,19 +30,20 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreRenderable.h"
 #include "OgreHardwareBufferManager.h"
+#include "OgreRenderable.h"
 #include "OgreResourceGroupManager.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Utility class which defines the sub-parts of an Item.
         @remarks
             Just as meshes are split into submeshes, an Item is made up of
@@ -64,54 +65,55 @@ namespace Ogre {
         // Note no virtual functions for efficiency
         friend class Item;
         friend class SceneManager;
+
     protected:
         /** Private constructor - don't allow creation by anybody else.
-        */
-        SubItem(Item* parent, SubMesh* subMeshBasis);
+         */
+        SubItem( Item *parent, SubMesh *subMeshBasis );
 
     public:
         /** Destructor.
-        */
+         */
         virtual ~SubItem();
 
     protected:
         /// Pointer to parent.
-        Item* mParentItem;
+        Item *mParentItem;
 
         /// Pointer to the SubMesh defining geometry.
-        SubMesh         *mSubMesh;
-        unsigned char   mMaterialLodIndex;
+        SubMesh *     mSubMesh;
+        unsigned char mMaterialLodIndex;
 
     public:
         /** Accessor method to read mesh data.
-        */
-        SubMesh* getSubMesh() const;
+         */
+        SubMesh *getSubMesh() const;
 
         void _setHlmsHashes( uint32 hash, uint32 casterHash ) override;
 
         /** Accessor to get parent Item */
-        Item* getParent() const { return mParentItem; }
+        Item *getParent() const { return mParentItem; }
 
         /** @copydoc Renderable::getLights */
-        const LightList& getLights() const override;
+        const LightList &getLights() const override;
 
-        void getRenderOperation(v1::RenderOperation& op, bool casterPass) override;
-        void getWorldTransforms(Matrix4* xform) const override;
+        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4 *xform ) const override;
         bool getCastsShadows() const override;
-        
+
         // needs this to not hide the base class' methods with same name
+        using Renderable::addPoseWeight;
         using Renderable::getPoseWeight;
         using Renderable::setPoseWeight;
-        using Renderable::addPoseWeight;
-        
-        float getPoseWeight(const Ogre::String& poseName) const;
-        void setPoseWeight(const Ogre::String& poseName, float w);
-        void addPoseWeight(const Ogre::String& poseName, float w);
+
+        float getPoseWeight( const Ogre::String &poseName ) const;
+        void  setPoseWeight( const Ogre::String &poseName, float w );
+        void  addPoseWeight( const Ogre::String &poseName, float w );
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

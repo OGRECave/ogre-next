@@ -28,23 +28,25 @@ THE SOFTWARE.
 #ifndef __GpuProgramManager_H_
 #define __GpuProgramManager_H_
 
-// Precompiler options
 #include "OgrePrerequisites.h"
-#include "OgreResourceManager.h"
+
+// Precompiler options
 #include "OgreGpuProgram.h"
+#include "OgreResourceManager.h"
 #include "OgreSingleton.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
-        //TODO Add documentation and explain rationale of this class.
+namespace Ogre
+{
+    // TODO Add documentation and explain rationale of this class.
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     class _OgreExport GpuProgramManager : public ResourceManager, public Singleton<GpuProgramManager>
     {
     private:
@@ -52,50 +54,53 @@ namespace Ogre {
         using ResourceManager::load;
 
     public:
-
-        typedef set<String>::type SyntaxCodes;
+        typedef set<String>::type                         SyntaxCodes;
         typedef map<String, GpuSharedParametersPtr>::type SharedParametersMap;
 
         struct Hash
         {
             uint64 hashVal[2];
 
-            bool operator < ( const Hash &_r ) const
+            bool operator<( const Hash &_r ) const
             {
-                if( hashVal[0] < _r.hashVal[0] ) return true;
-                if( hashVal[0] > _r.hashVal[0] ) return false;
+                if( hashVal[0] < _r.hashVal[0] )
+                    return true;
+                if( hashVal[0] > _r.hashVal[0] )
+                    return false;
 
-                if( hashVal[1] < _r.hashVal[1] ) return true;
-                //if( hashVal[1] > _r.hashVal[1] ) return false;
+                if( hashVal[1] < _r.hashVal[1] )
+                    return true;
+                // if( hashVal[1] > _r.hashVal[1] ) return false;
 
                 return false;
             }
         };
 
-        typedef MemoryDataStreamPtr Microcode;
+        typedef MemoryDataStreamPtr        Microcode;
         typedef map<Hash, Microcode>::type MicrocodeMap;
 
     protected:
         SharedParametersMap mSharedParametersMap;
-        MicrocodeMap mMicrocodeCache;
-        bool mSaveMicrocodesToCache;
-        bool mCacheDirty;           // When this is true the cache is 'dirty' and should be resaved to disk.
+        MicrocodeMap        mMicrocodeCache;
+        bool                mSaveMicrocodesToCache;
+        bool mCacheDirty;  // When this is true the cache is 'dirty' and should be resaved to disk.
 
         static Hash computeHashWithRenderSystemName( const String &source );
 
         /// Specialised create method with specific parameters
-        virtual Resource* createImpl(const String& name, ResourceHandle handle, 
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            GpuProgramType gptype, const String& syntaxCode) = 0;
+        virtual Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                                      bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
+                                      const String &syntaxCode ) = 0;
+
     public:
         GpuProgramManager();
         virtual ~GpuProgramManager();
 
         /// Get a resource by name
         /// @see GpuProgramManager::getResourceByName
-        GpuProgramPtr getByName(const String& name, bool preferHighLevelPrograms = true);
+        GpuProgramPtr getByName( const String &name, bool preferHighLevelPrograms = true );
 
-        /** Loads a GPU program from a file of assembly. 
+        /** Loads a GPU program from a file of assembly.
         @remarks
             This method creates a new program of the type specified as the second parameter.
             As with all types of ResourceManager, this class will search for the file in
@@ -106,14 +111,13 @@ namespace Ogre {
         @param gptype The type of program to create
         @param syntaxCode The name of the syntax to be used for this program e.g. arbvp1, vs_1_1
         */
-        virtual GpuProgramPtr load(const String& name, const String& groupName, 
-            const String& filename, GpuProgramType gptype, 
-            const String& syntaxCode);
+        virtual GpuProgramPtr load( const String &name, const String &groupName, const String &filename,
+                                    GpuProgramType gptype, const String &syntaxCode );
 
         /** Loads a GPU program from a string of assembly code.
         @remarks
-            The assembly code must be compatible with this manager - call the 
-            getSupportedSyntax method for details of the supported syntaxes 
+            The assembly code must be compatible with this manager - call the
+            getSupportedSyntax method for details of the supported syntaxes
         @param name The identifying name to give this program, which can be used to
             retrieve this program later with getByName.
         @param groupName The name of the resource group
@@ -121,49 +125,48 @@ namespace Ogre {
         @param gptype The type of program to create.
         @param syntaxCode The name of the syntax to be used for this program e.g. arbvp1, vs_1_1
         */
-        virtual GpuProgramPtr loadFromString(const String& name, const String& groupName,
-            const String& code, GpuProgramType gptype,
-            const String& syntaxCode);
+        virtual GpuProgramPtr loadFromString( const String &name, const String &groupName,
+                                              const String &code, GpuProgramType gptype,
+                                              const String &syntaxCode );
 
         /** Returns the syntaxes that this manager supports. */
-        virtual const SyntaxCodes& getSupportedSyntax() const;
-         
+        virtual const SyntaxCodes &getSupportedSyntax() const;
 
         /** Returns whether a given syntax code (e.g. "ps_1_3", "fp20", "arbvp1") is supported. */
-        virtual bool isSyntaxSupported(const String& syntaxCode) const;
-        
+        virtual bool isSyntaxSupported( const String &syntaxCode ) const;
+
         /** Creates a new GpuProgramParameters instance which can be used to bind
             parameters to your programs.
         @remarks
             Program parameters can be shared between multiple programs if you wish.
         */
         virtual GpuProgramParametersSharedPtr createParameters();
-        
-        /** Create a new, unloaded GpuProgram from a file of assembly. 
-        @remarks    
+
+        /** Create a new, unloaded GpuProgram from a file of assembly.
+        @remarks
             Use this method in preference to the 'load' methods if you wish to define
             a GpuProgram, but not load it yet; useful for saving memory.
         @par
             This method creates a new program of the type specified as the second parameter.
             As with all types of ResourceManager, this class will search for the file in
-            all resource locations it has been configured to look in. 
+            all resource locations it has been configured to look in.
         @param name The name of the program
         @param groupName The name of the resource group
         @param filename The file to load
         @param syntaxCode The name of the syntax to be used for this program e.g. arbvp1, vs_1_1
         @param gptype The type of program to create
         */
-        virtual GpuProgramPtr createProgram(const String& name, 
-            const String& groupName, const String& filename, 
-            GpuProgramType gptype, const String& syntaxCode);
+        virtual GpuProgramPtr createProgram( const String &name, const String &groupName,
+                                             const String &filename, GpuProgramType gptype,
+                                             const String &syntaxCode );
 
         /** Create a GPU program from a string of assembly code.
-        @remarks    
+        @remarks
             Use this method in preference to the 'load' methods if you wish to define
             a GpuProgram, but not load it yet; useful for saving memory.
         @par
-            The assembly code must be compatible with this manager - call the 
-            getSupportedSyntax method for details of the supported syntaxes 
+            The assembly code must be compatible with this manager - call the
+            getSupportedSyntax method for details of the supported syntaxes
         @param name The identifying name to give this program, which can be used to
             retrieve this program later with getByName.
         @param groupName The name of the resource group
@@ -171,20 +174,20 @@ namespace Ogre {
         @param gptype The type of program to create.
         @param syntaxCode The name of the syntax to be used for this program e.g. arbvp1, vs_1_1
         */
-        virtual GpuProgramPtr createProgramFromString(const String& name, 
-            const String& groupName, const String& code, 
-            GpuProgramType gptype, const String& syntaxCode);
+        virtual GpuProgramPtr createProgramFromString( const String &name, const String &groupName,
+                                                       const String &code, GpuProgramType gptype,
+                                                       const String &syntaxCode );
 
         /** General create method, using specific create parameters
-            instead of name / value pairs. 
+            instead of name / value pairs.
         */
-        virtual ResourcePtr create(const String& name, const String& group, 
-            GpuProgramType gptype, const String& syntaxCode, bool isManual = false, 
-            ManualResourceLoader* loader = 0);
+        virtual ResourcePtr create( const String &name, const String &group, GpuProgramType gptype,
+                                    const String &syntaxCode, bool isManual = false,
+                                    ManualResourceLoader *loader = 0 );
 
 #if OGRE_COMPILER == OGRE_COMPILER_CLANG
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Woverloaded-virtual"
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Woverloaded-virtual"
 #endif
 
         /** Overrides the standard ResourceManager getResourceByName method.
@@ -192,37 +195,37 @@ namespace Ogre {
         @param preferHighLevelPrograms If set to true (the default), high level programs will be
             returned in preference to low-level programs.
         */
-        ResourcePtr getResourceByName(const String& name, bool preferHighLevelPrograms = true);
+        ResourcePtr getResourceByName( const String &name, bool preferHighLevelPrograms = true );
 
 #if OGRE_COMPILER == OGRE_COMPILER_CLANG
-#pragma clang diagnostic pop
+#    pragma clang diagnostic pop
 #endif
 
-        /** Create a new set of shared parameters, which can be used across many 
+        /** Create a new set of shared parameters, which can be used across many
             GpuProgramParameters objects of different structures.
         @param name The name to give the shared parameters so you can refer to them
             later.
         */
-        virtual GpuSharedParametersPtr createSharedParameters(const String& name);
+        virtual GpuSharedParametersPtr createSharedParameters( const String &name );
 
-        /** Retrieve a set of shared parameters, which can be used across many 
+        /** Retrieve a set of shared parameters, which can be used across many
         GpuProgramParameters objects of different structures.
         */
-        virtual GpuSharedParametersPtr getSharedParameters(const String& name) const;
+        virtual GpuSharedParametersPtr getSharedParameters( const String &name ) const;
 
-        /** Get (const) access to the available shared parameter sets. 
-        */
-        virtual const SharedParametersMap& getAvailableSharedParameters() const;
+        /** Get (const) access to the available shared parameter sets.
+         */
+        virtual const SharedParametersMap &getAvailableSharedParameters() const;
 
         /** Get if the microcode of a shader should be saved to a cache
-        */
+         */
         bool getSaveMicrocodesToCache();
         /** Set if the microcode of a shader should be saved to a cache
-        */
+         */
         void setSaveMicrocodesToCache( const bool val );
 
         /** Returns true if the microcodecache changed during the run.
-        */
+         */
         bool isCacheDirty() const;
 
         bool canGetCompiledShaderBuffer();
@@ -233,7 +236,7 @@ namespace Ogre {
         /** Returns a microcode for a program from the microcode cache.
         @param name The name of the program.
         */
-        virtual const Microcode & getMicrocodeFromCache( const String &source ) const;
+        virtual const Microcode &getMicrocodeFromCache( const String &source ) const;
 
         /** Creates a microcode to be later added to the cache.
         @param size The size of the microcode in bytes
@@ -243,12 +246,12 @@ namespace Ogre {
         /** Adds a microcode for a program to the microcode cache.
         @param name The name of the program.
         */
-        virtual void addMicrocodeToCache( const String & source, const Microcode & microcode );
+        virtual void addMicrocodeToCache( const String &source, const Microcode &microcode );
 
         /** Removes a microcode for a program from the microcode cache.
         @param name The name of the program.
         */
-        virtual void removeMicrocodeFromCache( const String & source );
+        virtual void removeMicrocodeFromCache( const String &source );
 
         /** Saves the microcode cache to disk.
         @param stream The destination stream
@@ -261,8 +264,6 @@ namespace Ogre {
 
         /// Deletes all microcodes. Useful when hot reloading.
         virtual void clearMicrocodeCache();
-        
-
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -279,7 +280,7 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static GpuProgramManager& getSingleton();
+        static GpuProgramManager &getSingleton();
         /** Override standard Singleton retrieval.
         @remarks
         Why do we do this? Well, it's because the Singleton
@@ -295,15 +296,12 @@ namespace Ogre {
         but the implementation stays in this single compilation unit,
         preventing link errors.
         */
-        static GpuProgramManager* getSingletonPtr();
-    
-
-
+        static GpuProgramManager *getSingletonPtr();
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

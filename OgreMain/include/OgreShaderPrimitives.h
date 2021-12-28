@@ -85,7 +85,8 @@ namespace Ogre
 
     struct float4x4
     {
-        union {
+        union
+        {
             float m[4][4];
             float _m[16];
         };
@@ -99,7 +100,8 @@ namespace Ogre
     };
     struct float4x3
     {
-        union {
+        union
+        {
             float m[3][4];
             float _m[12];
         };

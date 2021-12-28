@@ -29,39 +29,41 @@ THE SOFTWARE.
 #define __Renderable_H__
 
 #include "OgrePrerequisites.h"
-#include "OgreCommon.h"
 
-#include "OgreIdString.h"
-#include "OgreMatrix4.h"
-#include "OgreMaterial.h"
-#include "OgrePlane.h"
-#include "OgreVector4.h"
+#include "OgreCommon.h"
 #include "OgreException.h"
-#include "OgreUserObjectBindings.h"
+#include "OgreIdString.h"
 #include "OgreLodStrategy.h"
+#include "OgreMaterial.h"
+#include "OgreMatrix4.h"
+#include "OgrePlane.h"
+#include "OgreUserObjectBindings.h"
+#include "OgreVector4.h"
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
-    typedef FastArray<VertexArrayObject*> VertexArrayObjectArray;
+namespace Ogre
+{
+    typedef FastArray<VertexArrayObject *> VertexArrayObjectArray;
     class GpuProgramParameters_AutoConstantEntry;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /** Abstract class defining the interface all renderable objects must implement.
     @remarks
         This interface abstracts renderable discrete objects which will be queued in the render pipeline,
-        grouped by material. Classes implementing this interface must be based on a single material, a single
-        world matrix (or a collection of world matrices which are blended by weights), and must be 
+        grouped by material. Classes implementing this interface must be based on a single material, a
+    single world matrix (or a collection of world matrices which are blended by weights), and must be
         renderable via a single render operation.
     @par
-        Note that deciding whether to put these objects in the rendering pipeline is done from the more specific
-        classes e.g. entities. Only once it is decided that the specific class is to be rendered is the abstract version
-        created (could be more than one per visible object) and pushed onto the rendering queue.
+        Note that deciding whether to put these objects in the rendering pipeline is done from the more
+    specific classes e.g. entities. Only once it is decided that the specific class is to be rendered is
+    the abstract version created (could be more than one per visible object) and pushed onto the
+    rendering queue.
     */
     class _OgreExport Renderable
     {
@@ -72,10 +74,10 @@ namespace Ogre {
         virtual ~Renderable();
 
         /// Sets the name of the Material to be used. Prefer using HLMS @See setHlms
-        void setMaterialName( const String& name, const String& groupName );
+        void setMaterialName( const String &name, const String &groupName );
 
         /// Sets the given material. Overrides HLMS materials.
-        virtual void setMaterial( const MaterialPtr& material );
+        virtual void setMaterial( const MaterialPtr &material );
 
         /** Retrieves the material this renderable object uses. It may be null if it's using
             the HLMS. @See getDatablock
@@ -83,40 +85,47 @@ namespace Ogre {
         MaterialPtr getMaterial() const;
 
         /** Gets the render operation required to send this object to the frame buffer.
-        */
-        virtual void getRenderOperation(v1::RenderOperation& op, bool casterPass) = 0;
+         */
+        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass ) = 0;
 
-        /** Called just prior to the Renderable being rendered. 
+        /** Called just prior to the Renderable being rendered.
         @remarks
-            OGRE is a queued renderer, so the actual render commands are executed 
+            OGRE is a queued renderer, so the actual render commands are executed
             at a later time than the point at which an object is discovered to be
             visible. This allows ordering & grouping of renders without the discovery
             process having to be aware of it. It also means OGRE uses declarative
             render information rather than immediate mode rendering - this is very useful
-            in that certain effects and processes can automatically be applied to 
+            in that certain effects and processes can automatically be applied to
             a wide range of scenes, but the downside is that special cases are
-            more difficult to handle, because there is not the declared state to 
-            cope with it. 
+            more difficult to handle, because there is not the declared state to
+            cope with it.
         @par
             This method allows a Renderable to do something special at the actual
             point of rendering if it wishes to. When this method is called, all the
-            material render state as declared by this Renderable has already been set, 
-            all that is left to do is to bind the buffers and perform the render. 
-            The Renderable may modify render state itself if it wants to (and restore it in the 
+            material render state as declared by this Renderable has already been set,
+            all that is left to do is to bind the buffers and perform the render.
+            The Renderable may modify render state itself if it wants to (and restore it in the
             postRender call) before the automated render happens, or by returning
             'false' from this method can actually suppress the automatic render
             and perform one of its own.
         @return
-            true if the automatic render should proceed, false to skip it on 
+            true if the automatic render should proceed, false to skip it on
             the assumption that the Renderable has done it manually.
         */
-        virtual bool preRender(SceneManager* sm, RenderSystem* rsys)
-                { (void)sm; (void)rsys; return true; }
+        virtual bool preRender( SceneManager *sm, RenderSystem *rsys )
+        {
+            (void)sm;
+            (void)rsys;
+            return true;
+        }
 
-        /** Called immediately after the Renderable has been rendered. 
-        */
-        virtual void postRender(SceneManager* sm, RenderSystem* rsys)
-                { (void)sm; (void)rsys; }
+        /** Called immediately after the Renderable has been rendered.
+         */
+        virtual void postRender( SceneManager *sm, RenderSystem *rsys )
+        {
+            (void)sm;
+            (void)rsys;
+        }
 
         /** Gets the world transform matrix / matrices for this renderable object.
         @remarks
@@ -130,27 +139,28 @@ namespace Ogre {
             Internal Ogre never supports non-affine matrix for world transform matrix/matrices,
             the behavior is undefined if returns non-affine matrix here. @see Matrix4::isAffine.
         */
-        virtual void getWorldTransforms(Matrix4* xform) const = 0;
+        virtual void getWorldTransforms( Matrix4 *xform ) const = 0;
 
         /** Returns the number of world transform matrices this renderable requires.
         @remarks
             When a renderable uses vertex blending, it uses multiple world matrices instead of a single
             one. Each vertex sent to the pipeline can reference one or more matrices in this list
             with given weights.
-            If a renderable does not use vertex blending this method returns 1, which is the default for 
+            If a renderable does not use vertex blending this method returns 1, which is the default for
             simplicity.
         */
         virtual unsigned short getNumWorldTransforms() const { return 1; }
 
-        bool hasSkeletonAnimation() const               { return mHasSkeletonAnimation; }
+        bool hasSkeletonAnimation() const { return mHasSkeletonAnimation; }
 
         unsigned short getNumPoses() const;
-        bool getPoseHalfPrecision() const;
-        bool getPoseNormals() const;
-        float* getPoseWeights() const;
-        float getPoseWeight(size_t index) const;
-        void setPoseWeight(size_t index, float w);
-        void addPoseWeight(size_t index, float w);
+
+        bool   getPoseHalfPrecision() const;
+        bool   getPoseNormals() const;
+        float *getPoseWeights() const;
+        float  getPoseWeight( size_t index ) const;
+        void   setPoseWeight( size_t index, float w );
+        void   addPoseWeight( size_t index, float w );
 
         TexBufferPacked *getPoseTexBuffer() const;
 
@@ -163,7 +173,7 @@ namespace Ogre {
             and this function will be called at creation time to use a different shader;
             not during rendering time per Renderable.
         */
-        virtual bool getUseIdentityWorldMatrix() const          { return false; }
+        virtual bool getUseIdentityWorldMatrix() const { return false; }
 
         /** Returns whether the Hlms implementation should evaluate getUseIdentityProjection
             per object at runtime, or if it can assume the Renderable will remain with
@@ -174,7 +184,7 @@ namespace Ogre {
             For example currently Unlit supports them all, but will assume this returns
             always true if getUseIdentityWorldMatrix returns false.
         */
-        virtual bool getUseIdentityViewProjMatrixIsDynamic() const  { return false; }
+        virtual bool getUseIdentityViewProjMatrixIsDynamic() const { return false; }
 
         /** Sets whether or not to use an 'identity' projection.
         @remarks
@@ -185,7 +195,7 @@ namespace Ogre {
             need not change this. The default is false.
         @see Renderable::getUseIdentityProjection
         */
-        void setUseIdentityProjection(bool useIdentityProjection)
+        void setUseIdentityProjection( bool useIdentityProjection )
         {
             mUseIdentityProjection = useIdentityProjection;
         }
@@ -206,21 +216,18 @@ namespace Ogre {
             Usually Renderable objects will use a view matrix as determined
             by the active camera. However, if they want they can cancel this out
             and use an identity matrix, which means all geometry is assumed
-            to be relative to camera space already. Useful for overlay rendering. 
+            to be relative to camera space already. Useful for overlay rendering.
             Normal renderables need not change this. The default is false.
         @see Renderable::getUseIdentityView
         */
-        void setUseIdentityView(bool useIdentityView)
-        {
-            mUseIdentityView = useIdentityView;
-        }
+        void setUseIdentityView( bool useIdentityView ) { mUseIdentityView = useIdentityView; }
 
         /** Returns whether or not to use an 'identity' view.
         @remarks
             Usually Renderable objects will use a view matrix as determined
             by the active camera. However, if they want they can cancel this out
             and use an identity matrix, which means all geometry is assumed
-            to be relative to camera space already. Useful for overlay rendering. 
+            to be relative to camera space already. Useful for overlay rendering.
             Normal renderables need not change this.
         @see Renderable::setUseIdentityView
         */
@@ -230,22 +237,22 @@ namespace Ogre {
         @remarks
             Directional lights, which have no position, will always be first on this list.
         */
-        virtual const LightList& getLights() const = 0;
+        virtual const LightList &getLights() const = 0;
 
         /** Method which reports whether this renderable would normally cast a
-            shadow. 
+            shadow.
         @remarks
-            Subclasses should override this if they could have been used to 
+            Subclasses should override this if they could have been used to
             generate a shadow.
         */
         virtual bool getCastsShadows() const { return false; }
 
-        /** Sets a custom parameter for this Renderable, which may be used to 
+        /** Sets a custom parameter for this Renderable, which may be used to
             drive calculations for this specific Renderable, like GPU program parameters.
         @remarks
             Calling this method simply associates a numeric index with a 4-dimensional
             value for this specific Renderable. This is most useful if the material
-            which this Renderable uses a vertex or fragment program, and has an 
+            which this Renderable uses a vertex or fragment program, and has an
             ACT_CUSTOM parameter entry. This parameter entry can refer to the
             index you specify as part of this call, thereby mapping a custom
             parameter for this renderable to a program parameter.
@@ -255,7 +262,7 @@ namespace Ogre {
             two is performed by the ACT_CUSTOM entry, if that is used.
         @param value The value to associate.
         */
-        void setCustomParameter(size_t index, const Vector4& value) 
+        void setCustomParameter( size_t index, const Vector4 &value )
         {
             mCustomParameters[index] = value;
         }
@@ -264,43 +271,40 @@ namespace Ogre {
         @param index Index of the parameter to remove.
             @see setCustomParameter for full details.
         */
-        void removeCustomParameter(size_t index)
-        {
-            mCustomParameters.erase(index);
-        }
+        void removeCustomParameter( size_t index ) { mCustomParameters.erase( index ); }
 
         /** Checks whether a custom value is associated with this Renderable at the given index.
         @param index Index of the parameter to check for existence.
             @see setCustomParameter for full details.
         */
-        bool hasCustomParameter(size_t index) const
+        bool hasCustomParameter( size_t index ) const
         {
-            return mCustomParameters.find(index) != mCustomParameters.end();
+            return mCustomParameters.find( index ) != mCustomParameters.end();
         }
 
         /** Gets the custom value associated with this Renderable at the given index.
         @param index Index of the parameter to retrieve.
             @see setCustomParameter for full details.
         */
-        const Vector4& getCustomParameter(size_t index) const
+        const Vector4 &getCustomParameter( size_t index ) const
         {
-            CustomParameterMap::const_iterator i = mCustomParameters.find(index);
-            if (i != mCustomParameters.end())
+            CustomParameterMap::const_iterator i = mCustomParameters.find( index );
+            if( i != mCustomParameters.end() )
             {
                 return i->second;
             }
             else
             {
-                OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                    "Parameter at the given index was not found.",
-                    "Renderable::getCustomParameter");
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Parameter at the given index was not found.",
+                             "Renderable::getCustomParameter" );
             }
         }
 
         typedef map<size_t, Vector4>::type CustomParameterMap;
-        const CustomParameterMap& getCustomParameters() const   { return mCustomParameters; }
+        const CustomParameterMap &         getCustomParameters() const { return mCustomParameters; }
 
-        /** Update a custom GpuProgramParameters constant which is derived from 
+        /** Update a custom GpuProgramParameters constant which is derived from
             information only this Renderable knows.
         @remarks
             This method allows a Renderable to map in a custom GPU program parameter
@@ -308,7 +312,7 @@ namespace Ogre {
             of ACT_CUSTOM, and to allow there to be more than one of these per
             Renderable, the 'data' field on the auto parameter will identify
             which parameter is being updated. The implementation of this method
-            must identify the parameter being updated, and call a 'setConstant' 
+            must identify the parameter being updated, and call a 'setConstant'
             method on the passed in GpuProgramParameters object, using the details
             provided in the incoming auto constant setting to identify the index
             at which to set the parameter.
@@ -321,65 +325,67 @@ namespace Ogre {
             this if they want, in any case.
         @param constantEntry The auto constant entry referring to the parameter
             being updated
-        @param params The parameters object which this method should call to 
+        @param params The parameters object which this method should call to
             set the updated parameters.
         */
         virtual void _updateCustomGpuParameter(
             const GpuProgramParameters_AutoConstantEntry &constantEntry,
-            GpuProgramParameters *params ) const;
+            GpuProgramParameters *                        params ) const;
 
         /** Sets whether this renderable's chosen detail level can be
-            overridden (downgraded) by the camera setting. 
+            overridden (downgraded) by the camera setting.
         @param override true means that a lower camera detail will override this
             renderables detail level, false means it won't.
         */
-        virtual void setPolygonModeOverrideable(bool override)
-        {
-            mPolygonModeOverrideable = override;
-        }
+        virtual void setPolygonModeOverrideable( bool override ) { mPolygonModeOverrideable = override; }
 
         /** Gets whether this renderable's chosen detail level can be
-            overridden (downgraded) by the camera setting. 
+            overridden (downgraded) by the camera setting.
         */
-        virtual bool getPolygonModeOverrideable() const
-        {
-            return mPolygonModeOverrideable;
-        }
+        virtual bool getPolygonModeOverrideable() const { return mPolygonModeOverrideable; }
 
         /** @deprecated use UserObjectBindings::setUserAny via getUserObjectBindings() instead.
             Sets any kind of user value on this object.
         @remarks
-            This method allows you to associate any user value you like with 
+            This method allows you to associate any user value you like with
             this Renderable. This can be a pointer back to one of your own
             classes for instance.
         */
-        OGRE_DEPRECATED virtual void setUserAny(const Any& anything) { getUserObjectBindings().setUserAny(anything); }
+        OGRE_DEPRECATED virtual void setUserAny( const Any &anything )
+        {
+            getUserObjectBindings().setUserAny( anything );
+        }
 
         /** @deprecated use UserObjectBindings::getUserAny via getUserObjectBindings() instead.
             Retrieves the custom user value associated with this object.
         */
-        OGRE_DEPRECATED virtual const Any& getUserAny() const { return getUserObjectBindings().getUserAny(); }
+        OGRE_DEPRECATED virtual const Any &getUserAny() const
+        {
+            return getUserObjectBindings().getUserAny();
+        }
 
         /** Return an instance of user objects binding associated with this class.
             You can use it to associate one or more custom objects with this class instance.
         @see UserObjectBindings::setUserAny.
         */
-        UserObjectBindings& getUserObjectBindings() { return mUserObjectBindings; }
+        UserObjectBindings &getUserObjectBindings() { return mUserObjectBindings; }
 
         /** Return an instance of user objects binding associated with this class.
             You can use it to associate one or more custom objects with this class instance.
         @see UserObjectBindings::setUserAny.
         */
-        const UserObjectBindings& getUserObjectBindings() const { return mUserObjectBindings; }
+        const UserObjectBindings &getUserObjectBindings() const { return mUserObjectBindings; }
 
-        const VertexArrayObjectArray& getVaos( VertexPass vertexPass ) const
-                                                { return mVaoPerLod[vertexPass]; }
+        const VertexArrayObjectArray &getVaos( VertexPass vertexPass ) const
+        {
+            return mVaoPerLod[vertexPass];
+        }
 
-        uint32 getHlmsHash() const          { return mHlmsHash; }
-        uint32 getHlmsCasterHash() const    { return mHlmsCasterHash; }
-        HlmsDatablock* getDatablock() const { return mHlmsDatablock; }
+        uint32         getHlmsHash() const { return mHlmsHash; }
+        uint32         getHlmsCasterHash() const { return mHlmsCasterHash; }
+        HlmsDatablock *getDatablock() const { return mHlmsDatablock; }
 
-        const String& getDatablockOrMaterialName() const;
+        const String &getDatablockOrMaterialName() const;
 
         /** First tries to see if an HLMS datablock exist with the given name,
             if not, tries to search among low level materials.
@@ -428,12 +434,15 @@ namespace Ogre {
             The sub group. This value can't exceed OGRE_MAKE_MASK( SubRqIdBits )
             @See RenderQueue
         */
-        void setRenderQueueSubGroup( uint8 subGroup )   { mRenderQueueSubGroup = subGroup; }
-        uint8 getRenderQueueSubGroup() const        { return mRenderQueueSubGroup; }
+        void  setRenderQueueSubGroup( uint8 subGroup ) { mRenderQueueSubGroup = subGroup; }
+        uint8 getRenderQueueSubGroup() const { return mRenderQueueSubGroup; }
 
         /** Sets the default render queue sub group for all future Renderable instances.
-        */
-        static void setDefaultRenderQueueSubGroup( uint8 subGroup ) { msDefaultRenderQueueSubGroup = subGroup; }
+         */
+        static void setDefaultRenderQueueSubGroup( uint8 subGroup )
+        {
+            msDefaultRenderQueueSubGroup = subGroup;
+        }
         static uint8 getDefaultRenderQueueSubGroup() { return msDefaultRenderQueueSubGroup; }
 
     protected:
@@ -448,24 +457,28 @@ namespace Ogre {
         /// Note that mVaoPerLod[1] = mVaoPerLod[0] is valid.
         /// But if they're not exactly the same VertexArrayObject pointers,
         /// then they won't share any pointer.
-        VertexArrayObjectArray  mVaoPerLod[NumVertexPass];
-        uint32              mHlmsHash;
-        uint32              mHlmsCasterHash;
-        HlmsDatablock       *mHlmsDatablock;
-        MaterialPtr         mMaterial; /// Only valid when using low level materials
-        public: uint8       mCustomParameter;
+        VertexArrayObjectArray mVaoPerLod[NumVertexPass];
+        uint32                 mHlmsHash;
+        uint32                 mHlmsCasterHash;
+        HlmsDatablock *        mHlmsDatablock;
+        MaterialPtr            mMaterial;  /// Only valid when using low level materials
+        // clang-format off
+        public: uint8 mCustomParameter;
+        // clang-format on
+
     protected:
-        uint8               mRenderQueueSubGroup;
-        bool                    mHasSkeletonAnimation;
-        uint8                   mCurrentMaterialLod;
-        FastArray<Real> const   *mLodMaterial;
-        
+        uint8                  mRenderQueueSubGroup;
+        bool                   mHasSkeletonAnimation;
+        uint8                  mCurrentMaterialLod;
+        FastArray<Real> const *mLodMaterial;
+
         /** Index in the vector holding this Rendrable reference in the HLMS datablock.
             Used for O(1) removals.
         @remarks
             Despite being public, Do NOT modify it manually.
         */
-        public: uint32      mHlmsGlobalIndex;
+    public:
+        uint32 mHlmsGlobalIndex;
 
     public:
         /** Control visibility at Renderable (e.g. SubMesh) level
@@ -479,18 +492,18 @@ namespace Ogre {
         bool mRenderableVisible;
 
     protected:
-        bool mPolygonModeOverrideable;
-        bool mUseIdentityProjection;
-        bool mUseIdentityView;
-        UserObjectBindings mUserObjectBindings;      /// User objects binding.
-        
+        bool               mPolygonModeOverrideable;
+        bool               mUseIdentityProjection;
+        bool               mUseIdentityView;
+        UserObjectBindings mUserObjectBindings;  /// User objects binding.
+
         struct PoseData
         {
-            unsigned short numPoses;
-            float weights[OGRE_MAX_POSES];
+            unsigned short   numPoses;
+            float            weights[OGRE_MAX_POSES];
             TexBufferPacked *buffer;
-            bool halfPrecision;
-            bool hasNormals;
+            bool             halfPrecision;
+            bool             hasNormals;
 
             PoseData();
         };
@@ -501,18 +514,20 @@ namespace Ogre {
     {
     public:
         typedef FastArray<unsigned short> IndexMap;
+
     protected:
-        IndexMap    *mBlendIndexToBoneIndexMap;
+        IndexMap *mBlendIndexToBoneIndexMap;
+
     public:
         RenderableAnimated();
 
-        const IndexMap* getBlendIndexToBoneIndexMap() const { return mBlendIndexToBoneIndexMap; }
+        const IndexMap *getBlendIndexToBoneIndexMap() const { return mBlendIndexToBoneIndexMap; }
     };
 
     /** @} */
     /** @} */
 
-} // namespace Ogre
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
-#endif //__Renderable_H__
+#endif  //__Renderable_H__

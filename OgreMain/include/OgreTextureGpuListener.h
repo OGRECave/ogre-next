@@ -30,20 +30,21 @@ THE SOFTWARE.
 #define _OgreTextureGpuListener_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport TextureGpuListener
     {
-	public:
+    public:
         virtual ~TextureGpuListener();
 
         enum Reason
@@ -101,9 +102,9 @@ namespace Ogre
             Deleted
         };
 
-		/// Called when a TextureGpu changed in a way that affects how it is displayed:
-		///		1. TextureGpu::notifyDataIsReady got called (texture is ready to be displayed)
-		///		2. Texture changed residency status.
+        /// Called when a TextureGpu changed in a way that affects how it is displayed:
+        ///		1. TextureGpu::notifyDataIsReady got called (texture is ready to be displayed)
+        ///		2. Texture changed residency status.
         ///     3. Texture is being deleted. It won't be a valid pointer after this call.
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData ) = 0;
@@ -112,12 +113,16 @@ namespace Ogre
         /// graphical changes could occur.
         ///
         /// Return false if it is certainly safe to unload.
-        virtual bool shouldStayLoaded( TextureGpu *texture )        { return true; }
+        virtual bool shouldStayLoaded( TextureGpu *texture )
+        {
+            OGRE_UNUSED_VAR( texture );
+            return true;
+        }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

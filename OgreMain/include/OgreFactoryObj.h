@@ -30,18 +30,19 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
     /** Abstract factory class. Does nothing by itself, but derived classes can add
         functionality.
     */
-    template< typename T > class FactoryObj
+    template <typename T>
+    class FactoryObj
     {
     public:
         virtual ~FactoryObj() {}
@@ -50,7 +51,7 @@ namespace Ogre {
         @return
             The factory type.
         */
-        virtual const String& getType() const = 0;
+        virtual const String &getType() const = 0;
 
         /** Creates a new object.
         @param name Name of the object to create
@@ -58,15 +59,15 @@ namespace Ogre {
             An object created by the factory. The type of the object depends on
             the factory.
         */
-        virtual T* createInstance(const String& name) = 0;
+        virtual T *createInstance( const String &name ) = 0;
         /** Destroys an object which was created by this factory.
         @param ptr Pointer to the object to destroy
         */
-        virtual void destroyInstance(T* ptr) = 0;
+        virtual void destroyInstance( T *ptr ) = 0;
     };
 
     /** @} */
     /** @} */
-} // namespace Ogre
+}  // namespace Ogre
 
-#endif // _FactoryObj_H__
+#endif  // _FactoryObj_H__

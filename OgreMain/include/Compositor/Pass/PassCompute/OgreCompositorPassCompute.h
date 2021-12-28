@@ -29,21 +29,21 @@ THE SOFTWARE.
 #ifndef _OgreCompositorPassCompute_H_
 #define _OgreCompositorPassCompute_H_
 
-#include "OgreHeaderPrefix.h"
-
-#include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorCommon.h"
+#include "Compositor/Pass/OgreCompositorPass.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-	class CompositorPassComputeDef;
+    class CompositorPassComputeDef;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will render a fullscreen triangle/quad to the RenderTarget using
@@ -65,7 +65,7 @@ namespace Ogre
         rectangle approach)
     @par
         This faster technique only works for passes that cover the entire screen. When the viewport
-		is not 0 0 1 1; the CompositorPassCompute automatically switches to a fullscreen quad.
+        is not 0 0 1 1; the CompositorPassCompute automatically switches to a fullscreen quad.
     @par
         <b>IMPORTANT:</b> The texel-to-pixel adjustment offset is included in the world matrix passed
         to the vertex shader. This differs from Ogre 1.x which tried to embed the offset into the
@@ -78,12 +78,13 @@ namespace Ogre
     @version
         1.0
     */
-	class _OgreExport CompositorPassCompute : public CompositorPass
+    class _OgreExport CompositorPassCompute : public CompositorPass
     {
-		CompositorPassComputeDef const *mDefinition;
+        CompositorPassComputeDef const *mDefinition;
+
     protected:
-        HlmsComputeJob  *mComputeJob;
-        Camera          *mCamera;
+        HlmsComputeJob *mComputeJob;
+        Camera *        mCamera;
 
         void setResourcesToJob();
 
@@ -97,7 +98,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

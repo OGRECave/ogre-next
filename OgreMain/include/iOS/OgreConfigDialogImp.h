@@ -3,19 +3,19 @@
  This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
- 
+
  Copyright (c) 2000-2014 Torus Knot Software Ltd
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,8 +29,9 @@
 #define __iOSConfigDialog_H__
 
 #include "OgrePrerequisites.h"
-#include "OgreRoot.h"
+
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -39,7 +40,7 @@ namespace Ogre
     public:
         ConfigDialog();
         virtual ~ConfigDialog();
-    
+
     public:
         void initialise();
         void run();
@@ -48,9 +49,9 @@ namespace Ogre
         virtual bool display();
 
     protected:
-        RenderSystem* iSelectedRenderSystem;
-        bool        iDisplayStatus;     
+        RenderSystem *iSelectedRenderSystem;
+        bool          iDisplayStatus;
     };
-}
+}  // namespace Ogre
 
-#endif // __iOS_CONFIG_DIALOG_H__
+#endif  // __iOS_CONFIG_DIALOG_H__

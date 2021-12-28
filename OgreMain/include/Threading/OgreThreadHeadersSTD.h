@@ -26,10 +26,10 @@ THE SOFTWARE
 #ifndef __OgreThreadHeadersSTD_H__
 #define __OgreThreadHeadersSTD_H__
 
-#include <memory>
-#include <thread>
-#include <mutex>
 #include <condition_variable>
+#include <memory>
+#include <mutex>
 #include <shared_mutex>
+#include <thread>
 
 #endif

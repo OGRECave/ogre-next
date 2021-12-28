@@ -38,23 +38,23 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** A channel in the compositor transports textures between nodes.
         In Ogre 2.1 there were issues with MRT (Multiple Render Targets) that caused a struct
         to be used as a workaround.
         But starting Ogre 2.2; CompositorChannel is just a typedef to a single TextureGpu.
     */
-    typedef TextureGpu* CompositorChannel;
+    typedef TextureGpu *                    CompositorChannel;
     typedef vector<CompositorChannel>::type CompositorChannelVec;
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

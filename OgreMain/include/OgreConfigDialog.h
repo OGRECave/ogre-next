@@ -29,30 +29,31 @@ THE SOFTWARE.
 #define __CommonConfigDialog_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgrePlatform.h"
 
 // Bring in the specific platform's header file: first allow forced override
 #if defined OGRE_GUI_WIN32
-# include "WIN32/OgreConfigDialogImp.h"
+#    include "WIN32/OgreConfigDialogImp.h"
 #elif defined OGRE_GUI_gtk
-# include "gtk/OgreConfigDialogImp.h"
+#    include "gtk/OgreConfigDialogImp.h"
 #elif defined OGRE_GUI_GLX
-# include "GLX/OgreConfigDialogImp.h"
+#    include "GLX/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-# include "WIN32/OgreConfigDialogImp.h"
+#    include "WIN32/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-# include "WIN32/OgreConfigDialogImpWinRT.h"
+#    include "WIN32/OgreConfigDialogImpWinRT.h"
 #elif( OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD ) && \
     !defined( OGRE_CONFIG_UNIX_NO_X11 )
 #    include "GLX/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-# include "OSX/OgreConfigDialogImp.h"
+#    include "OSX/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-# include "iOS/OgreConfigDialogImp.h"
+#    include "iOS/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-# include "Android/OgreConfigDialogImp.h"
+#    include "Android/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || defined( OGRE_CONFIG_UNIX_NO_X11 )
-# include "Emscripten/OgreConfigDialogImp.h"
+#    include "Emscripten/OgreConfigDialogImp.h"
 #endif
 
 #endif

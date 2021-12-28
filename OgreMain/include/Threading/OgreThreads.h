@@ -25,64 +25,64 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-
-#ifndef __Threads_H__
-#define __Threads_H__
+#ifndef _OgreThreads_H__
+#define _OgreThreads_H__
 
 #include "OgreSharedPtr.h"
 
-#if defined(__i386) || defined(_M_IX86)
-    // Calling conventions are needed for x86 (32-bit ONLY) CPUs
-    #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        #define OGRE_THREAD_CALL_CONVENTION _OGRE_SIMD_ALIGN_ATTRIBUTE __stdcall
-    #elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
-        #define __cdecl __attribute__((__cdecl__))
-        #define OGRE_THREAD_CALL_CONVENTION __cdecl
-    #endif
+// Calling conventions are needed for x86 (32-bit ONLY) CPUs
+#if defined( __i386 ) || defined( _M_IX86 )
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+#        define OGRE_THREAD_CALL_CONVENTION _OGRE_SIMD_ALIGN_ATTRIBUTE __stdcall
+#    elif OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
+#        define OGRE_THREAD_CALL_CONVENTION __attribute__( ( __cdecl__ ) )
+#    endif
 #else
-    #define OGRE_THREAD_CALL_CONVENTION
+#    define OGRE_THREAD_CALL_CONVENTION
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    /// @See Threads::CreateThread for an example on how to use
-    #define THREAD_DECLARE( threadFunction ) \
-    unsigned long OGRE_THREAD_CALL_CONVENTION threadFunction##_internal( void *argName )\
-    {\
-        unsigned long retVal = 0;\
-        Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle*>( argName ) );\
-        try {\
-            retVal = threadFunction( threadHandle );\
-        }\
-        catch( ... )\
-        {\
-        }\
-        delete threadHandle;\
-        return retVal;\
-    }
+/// @See Threads::CreateThread for an example on how to use
+#    define THREAD_DECLARE( threadFunction ) \
+        unsigned long OGRE_THREAD_CALL_CONVENTION threadFunction##_internal( void *argName ) \
+        { \
+            unsigned long       retVal = 0; \
+            Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
+            try \
+            { \
+                retVal = threadFunction( threadHandle ); \
+            } \
+            catch( ... ) \
+            { \
+            } \
+            delete threadHandle; \
+            return retVal; \
+        }
 #else
-    /// @See Threads::CreateThread for an example on how to use
-    #define THREAD_DECLARE( threadFunction ) \
-    void* OGRE_THREAD_CALL_CONVENTION threadFunction##_internal( void *argName )\
-    {\
-        unsigned long retVal = 0;\
-        Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle*>( argName ) );\
-        try {\
-            retVal = threadFunction( threadHandle );\
-        }\
-        catch( ... )\
-        {\
-        }\
-        delete threadHandle;\
-        \
-        return (void*)retVal;\
-    }
+/// @See Threads::CreateThread for an example on how to use
+#    define THREAD_DECLARE( threadFunction ) \
+        void *OGRE_THREAD_CALL_CONVENTION threadFunction##_internal( void *argName ) \
+        { \
+            unsigned long       retVal = 0; \
+            Ogre::ThreadHandle *threadHandle( reinterpret_cast<Ogre::ThreadHandle *>( argName ) ); \
+            try \
+            { \
+                retVal = threadFunction( threadHandle ); \
+            } \
+            catch( ... ) \
+            { \
+            } \
+            delete threadHandle; \
+\
+            return (void *)retVal; \
+        }
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    //No need to include the heavy windows.h header for something like this!
-    typedef void* HANDLE;
+// No need to include the heavy windows.h header for something like this!
+typedef void *HANDLE;
 #else
-    #include <pthread.h>
+#    include <pthread.h>
 #endif
 
 namespace Ogre
@@ -90,40 +90,40 @@ namespace Ogre
     class _OgreExport ThreadHandle
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        HANDLE  mThread;
+        HANDLE mThread;
 #else
         pthread_t mThread;
 #endif
-        size_t  mThreadIdx;
-        void    *mUserParam;
+        size_t mThreadIdx;
+        void * mUserParam;
 
     public:
         ThreadHandle( size_t threadIdx, void *userParam );
         ~ThreadHandle();
 
-        size_t getThreadIdx() const         { return mThreadIdx; }
-        void* getUserParam() const          { return mUserParam; }
+        size_t getThreadIdx() const { return mThreadIdx; }
+        void * getUserParam() const { return mUserParam; }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
         /// Internal use
-        void _setOsHandle( HANDLE handle )  { mThread = handle; }
+        void _setOsHandle( HANDLE handle ) { mThread = handle; }
         /// Internal use
-        HANDLE _getOsHandle() const         { return mThread; }
+        HANDLE _getOsHandle() const { return mThread; }
 #else
         /// Internal use
-        void _setOsHandle( pthread_t &handle )  { mThread = handle; }
+        void _setOsHandle( pthread_t &handle ) { mThread = handle; }
         /// Internal use
-        pthread_t _getOsHandle() const          { return mThread; }
+        pthread_t _getOsHandle() const { return mThread; }
 #endif
     };
 
-    typedef SharedPtr<ThreadHandle> ThreadHandlePtr;
+    typedef SharedPtr<ThreadHandle>    ThreadHandlePtr;
     typedef StdVector<ThreadHandlePtr> ThreadHandleVec;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    typedef unsigned long (OGRE_THREAD_CALL_CONVENTION *THREAD_ENTRY_POINT)( void *lpThreadParameter );
+    typedef unsigned long( OGRE_THREAD_CALL_CONVENTION *THREAD_ENTRY_POINT )( void *lpThreadParameter );
 #else
-    typedef void* (OGRE_THREAD_CALL_CONVENTION *THREAD_ENTRY_POINT)( void *lpThreadParameter );
+    typedef void *( OGRE_THREAD_CALL_CONVENTION *THREAD_ENTRY_POINT )( void *lpThreadParameter );
 #endif
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
@@ -132,12 +132,12 @@ namespace Ogre
     typedef pthread_key_t TlsHandle;
 #endif
 
-    #define OGRE_TLS_INVALID_HANDLE 0xFFFFFFFF
+#define OGRE_TLS_INVALID_HANDLE 0xFFFFFFFF
 
     class _OgreExport Threads
     {
     public:
-        #define THREAD_GET( threadFunction ) threadFunction##_internal
+#define THREAD_GET( threadFunction ) threadFunction##_internal
         /** Creates and executes a new thread
         @remarks
             The function to execute must be declared via THREAD_DECLARE, and the first argument
@@ -172,8 +172,8 @@ namespace Ogre
         @return
             Handle to created thread.
         */
-        static ThreadHandlePtr CreateThread( THREAD_ENTRY_POINT entryPoint,
-                                             size_t threadIdx, void *param );
+        static ThreadHandlePtr CreateThread( THREAD_ENTRY_POINT entryPoint, size_t threadIdx,
+                                             void *param );
 
         /** Waits until all threads are finished
         @param numThreadInfos
@@ -207,9 +207,9 @@ namespace Ogre
         */
         static void DestroyTls( TlsHandle tlsHandle );
 
-        static void SetTls( TlsHandle tlsHandle, void *value );
-        static void* GetTls( TlsHandle tlsHandle );
+        static void  SetTls( TlsHandle tlsHandle, void *value );
+        static void *GetTls( TlsHandle tlsHandle );
     };
-}
+}  // namespace Ogre
 
 #endif

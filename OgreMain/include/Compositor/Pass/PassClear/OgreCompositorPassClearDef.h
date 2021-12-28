@@ -29,26 +29,26 @@ THE SOFTWARE.
 #ifndef __CompositorPassClearDef_H__
 #define __CompositorPassClearDef_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "../OgreCompositorPassDef.h"
-#include "OgreCommon.h"
 #include "OgreColourValue.h"
+#include "OgreCommon.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreExport CompositorPassClearDef : public CompositorPassDef
     {
     public:
         /// Only execute this pass on non-tilers
-        bool                    mNonTilersOnly;
+        bool mNonTilersOnly;
 
         /** By default clear all buffers. Stencil needs to be cleared because it hinders Fast Z Clear
             on GPU architectures that don't separate the stencil from depth and the program requested
@@ -58,16 +58,16 @@ namespace Ogre
             CompositorPassDef( PASS_CLEAR, parentTargetDef ),
             mNonTilersOnly( false )
         {
-            //Override so that it only gets executed on the first execution on the
-            //whole screen (i.e. clear the whole viewport during the left eye pass)
-            mExecutionMask          = 0x01;
-            mViewportModifierMask   = 0x00;
+            // Override so that it only gets executed on the first execution on the
+            // whole screen (i.e. clear the whole viewport during the left eye pass)
+            mExecutionMask = 0x01;
+            mViewportModifierMask = 0x00;
 
-            for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
                 mLoadActionColour[i] = LoadAction::Clear;
 
-            mLoadActionDepth    = LoadAction::Clear;
-            mLoadActionStencil  = LoadAction::Clear;
+            mLoadActionDepth = LoadAction::Clear;
+            mLoadActionStencil = LoadAction::Clear;
 
             setAllStoreActions( StoreAction::StoreAndMultisampleResolve );
         }
@@ -83,9 +83,9 @@ namespace Ogre
         */
         void setBuffersToClear( uint32 buffersToClear )
         {
-            for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            for( size_t i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {
-                if( buffersToClear & (RenderPassDescriptor::Colour0 << i) )
+                if( buffersToClear & ( RenderPassDescriptor::Colour0 << i ) )
                     mLoadActionColour[i] = LoadAction::Clear;
                 else
                     mLoadActionColour[i] = LoadAction::Load;
@@ -105,7 +105,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

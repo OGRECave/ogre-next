@@ -31,18 +31,16 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Real type for numeric solvers */
     typedef double PreciseReal;
-
 
     /** Provides numeric solvers for Ogre
         @remarks
@@ -51,16 +49,16 @@ namespace Ogre {
     class _OgreExport NumericSolver
     {
     public:
-        /** Solves a full rank NxN linear system of equations 
+        /** Solves a full rank NxN linear system of equations
             @remarks
                This implements a naive Gaussian elimination algorithm.
                The algorithm is destructive, so there are side effects in coeff and col.
         */
-        static bool solveNxNLinearSysDestr(int n, PreciseReal **coeff, PreciseReal *col);
+        static bool solveNxNLinearSysDestr( int n, PreciseReal **coeff, PreciseReal *col );
     };
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif

@@ -28,44 +28,47 @@ THE SOFTWARE.
 #ifndef __HardwareIndexBuffer__
 #define __HardwareIndexBuffer__
 
-// Precompiler options
 #include "OgrePrerequisites.h"
+
+// Precompiler options
 #include "OgreCommon.h"
 #include "OgreHardwareBuffer.h"
 #include "OgreSharedPtr.h"
 
-namespace Ogre {
-namespace v1 {
-
-    class HardwareBufferManagerBase;
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup RenderSystem
-    *  @{
-    */
-    /** Specialisation of HardwareBuffer for vertex index buffers, still abstract. */
-    class _OgreExport HardwareIndexBuffer : public HardwareBuffer
+namespace Ogre
+{
+    namespace v1
     {
+        class HardwareBufferManagerBase;
+
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup RenderSystem
+         *  @{
+         */
+        /** Specialisation of HardwareBuffer for vertex index buffers, still abstract. */
+        class _OgreExport HardwareIndexBuffer : public HardwareBuffer
+        {
         public:
             typedef Ogre::IndexType IndexType;
-            static const IndexType IT_16BIT = Ogre::IT_16BIT;
-            static const IndexType IT_32BIT = Ogre::IT_32BIT;
+            static const IndexType  IT_16BIT = Ogre::IT_16BIT;
+            static const IndexType  IT_32BIT = Ogre::IT_32BIT;
 
         protected:
-            HardwareBufferManagerBase* mMgr;
-            IndexType mIndexType;
-            size_t mNumIndexes;
-            size_t mIndexSize;
+            HardwareBufferManagerBase *mMgr;
+            IndexType                  mIndexType;
+            size_t                     mNumIndexes;
+            size_t                     mIndexSize;
 
         public:
             /// Should be called by HardwareBufferManager
-            HardwareIndexBuffer(HardwareBufferManagerBase* mgr, IndexType idxType, size_t numIndexes, HardwareBuffer::Usage usage,
-                bool useSystemMemory, bool useShadowBuffer);
+            HardwareIndexBuffer( HardwareBufferManagerBase *mgr, IndexType idxType, size_t numIndexes,
+                                 HardwareBuffer::Usage usage, bool useSystemMemory,
+                                 bool useShadowBuffer );
             ~HardwareIndexBuffer();
             /// Return the manager of this buffer, if any
-            HardwareBufferManagerBase* getManager() const { return mMgr; }
+            HardwareBufferManagerBase *getManager() const { return mMgr; }
             /// Get the type of indexes used in this buffer
             IndexType getType() const { return mIndexType; }
             /// Get the number of indexes in this buffer
@@ -74,23 +77,22 @@ namespace v1 {
             size_t getIndexSize() const { return mIndexSize; }
 
             // NB subclasses should override lock, unlock, readData, writeData
-    };
+        };
 
+        /** Shared pointer implementation used to share index buffers. */
+        class _OgreExport HardwareIndexBufferSharedPtr : public SharedPtr<HardwareIndexBuffer>
+        {
+        public:
+            HardwareIndexBufferSharedPtr() : SharedPtr<HardwareIndexBuffer>() {}
+            explicit HardwareIndexBufferSharedPtr( HardwareIndexBuffer *buf );
+        };
 
-    /** Shared pointer implementation used to share index buffers. */
-    class _OgreExport HardwareIndexBufferSharedPtr : public SharedPtr<HardwareIndexBuffer>
-    {
-    public:
-        HardwareIndexBufferSharedPtr() : SharedPtr<HardwareIndexBuffer>() {}
-        explicit HardwareIndexBufferSharedPtr(HardwareIndexBuffer* buf);
-    };
-    
-    /** Locking helper. */    
-    typedef HardwareBufferLockGuard HardwareIndexBufferLockGuard; // deprecated, use HardwareBufferLockGuard directly
+        /** Locking helper. */
+        typedef HardwareBufferLockGuard
+            HardwareIndexBufferLockGuard;  // deprecated, use HardwareBufferLockGuard directly
 
-    /** @} */
-    /** @} */
-}
-}
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 #endif
-

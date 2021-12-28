@@ -24,7 +24,7 @@ namespace Ogre
         void createBuffers();
 
     public:
-        WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
+        WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         virtual ~WireAabb();
 
         /** Starts tracking the given MovableObject and render its Aabb.
@@ -42,20 +42,20 @@ namespace Ogre
         */
         void setToAabb( const Aabb &aabb );
 
-        const MovableObject* getTrackedObject() const       { return mTrackedObject; }
+        const MovableObject *getTrackedObject() const { return mTrackedObject; }
 
         /// Called by the SceneManager every frame to
         /// update our data based on tracked target
         void _updateTracking();
 
-        //Overrides from MovableObject
-        const String& getMovableType() const override;
+        // Overrides from MovableObject
+        const String &getMovableType() const override;
 
-        //Overrides from Renderable
-        const LightList& getLights() const override;
-        void getRenderOperation( v1::RenderOperation& op, bool casterPass ) override;
-        void getWorldTransforms( Matrix4* xform ) const override;
-        bool getCastsShadows() const override;
+        // Overrides from Renderable
+        const LightList &getLights() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
 
     /** Factory object for creating WireAabb instances */
@@ -63,7 +63,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *manager,
+                                           SceneManager *           manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:
@@ -73,9 +73,10 @@ namespace Ogre
         static String FACTORY_TYPE_NAME;
 
         const String &getType() const override;
+
         void destroyInstance( MovableObject *obj ) override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

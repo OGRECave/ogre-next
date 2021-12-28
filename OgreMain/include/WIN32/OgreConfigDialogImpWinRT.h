@@ -31,19 +31,19 @@ THE SOFTWARE.
 #include "../OgrePrerequisites.h"
 
 #define WIN32_LEAN_AND_MEAN
-#if !defined(NOMINMAX) && defined(_MSC_VER)
-#   define NOMINMAX // required to stop windows.h messing up std::min
+#if !defined( NOMINMAX ) && defined( _MSC_VER )
+#    define NOMINMAX  // required to stop windows.h messing up std::min
 #endif
 #include <windows.h>
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup General
-    *  @{
-    */
+     *  @{
+     */
 
     /** Defines the behaviour of an automatic renderer configuration dialog.
     @remarks
@@ -61,7 +61,7 @@ namespace Ogre
     public:
         ConfigDialog();
         virtual ~ConfigDialog();
-        
+
         /** Displays the dialog.
         @remarks
             This method displays the dialog and from then on the dialog
@@ -80,9 +80,9 @@ namespace Ogre
         virtual bool display();
 
     protected:
-        RenderSystem* mSelectedRenderSystem;
+        RenderSystem *mSelectedRenderSystem;
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 #endif

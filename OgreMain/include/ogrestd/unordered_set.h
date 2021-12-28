@@ -15,9 +15,9 @@ namespace Ogre
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
         typedef typename ::std::unordered_set<K, H, E, A> type;
 #else
-        typedef typename ::std::unordered_set<K, H, E> type;
+        typedef typename ::std::unordered_set<K, H, E>      type;
 #endif
-        typedef typename type::iterator iterator;
+        typedef typename type::iterator       iterator;
         typedef typename type::const_iterator const_iterator;
     };
 
@@ -30,7 +30,7 @@ namespace Ogre
 #else
         typedef typename ::std::unordered_multiset<K, H, E> type;
 #endif
-        typedef typename type::iterator iterator;
+        typedef typename type::iterator       iterator;
         typedef typename type::const_iterator const_iterator;
     };
 

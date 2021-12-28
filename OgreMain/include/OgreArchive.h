@@ -29,29 +29,33 @@ THE SOFTWARE.
 #define _Archive_H__
 
 #include "OgrePrerequisites.h"
+
 #include "OgreDataStream.h"
-#include "OgreStringVector.h"
 #include "OgreException.h"
+#include "OgreStringVector.h"
+
 #include <ctime>
+
 #include "OgreHeaderPrefix.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** Information about a file/directory within the archive will be
     returned using a FileInfo struct.
     @see
     Archive
     */
-    struct FileInfo {
+    struct FileInfo
+    {
         /// The archive in which the file has been found (for info when performing
         /// multi-Archive searches, note you should still open through ResourceGroupManager)
-        Archive* archive;
+        Archive *archive;
         /// The file's fully qualified name
         String filename;
         /// Path name; separated by '/' and ending with '/'
@@ -64,48 +68,51 @@ namespace Ogre {
         size_t uncompressedSize;
     };
 
-    typedef vector<FileInfo>::type FileInfoList;
+    typedef vector<FileInfo>::type  FileInfoList;
     typedef SharedPtr<FileInfoList> FileInfoListPtr;
 
     /** Archive-handling class.
     @remarks
         An archive is a generic term for a container of files. This may be a
-        filesystem folder, it may be a compressed archive, it may even be 
-        a remote location shared on the web. This class is designed to be 
-        subclassed to provide access to a range of file locations. 
+        filesystem folder, it may be a compressed archive, it may even be
+        a remote location shared on the web. This class is designed to be
+        subclassed to provide access to a range of file locations.
     @par
         Instances of this class are never constructed or even handled by end-user
-        applications. They are constructed by custom ArchiveFactory classes, 
-        which plugins can register new instances of using ArchiveManager. 
-        End-user applications will typically use ResourceManager or 
-        ResourceGroupManager to manage resources at a higher level, rather than 
+        applications. They are constructed by custom ArchiveFactory classes,
+        which plugins can register new instances of using ArchiveManager.
+        End-user applications will typically use ResourceManager or
+        ResourceGroupManager to manage resources at a higher level, rather than
         reading files directly through this class. Doing it this way allows you
-        to benefit from OGRE's automatic searching of multiple file locations 
+        to benefit from OGRE's automatic searching of multiple file locations
         for the resources you are looking for.
     */
     class _OgreExport Archive : public ArchiveAlloc
     {
     protected:
         /// Archive name
-        String mName; 
+        String mName;
         /// Archive type code
         String mType;
         /// Read-only flag
         bool mReadOnly;
+
     public:
-
-
         /** Constructor - don't call direct, used by ArchiveFactory.
-        */
-        Archive( const String& name, const String& archType )
-            : mName(name), mType(archType), mReadOnly(true) {}
+         */
+        Archive( const String &name, const String &archType ) :
+            mName( name ),
+            mType( archType ),
+            mReadOnly( true )
+        {
+        }
 
         /** Default destructor.
-        */
+         */
         virtual ~Archive() {}
 
         /// Get the name of this archive
-        const String& getName() const { return mName; }
+        const String &getName() const { return mName; }
 
         /// Returns whether this archive is case sensitive in the way it matches files
         virtual bool isCaseSensitive() const = 0;
@@ -127,58 +134,58 @@ namespace Ogre {
         virtual void unload() = 0;
 
         /** Reports whether this Archive is read-only, or whether the contents
-            can be updated. 
+            can be updated.
         */
         virtual bool isReadOnly() const { return mReadOnly; }
 
-        /** Open a stream on a given file. 
+        /** Open a stream on a given file.
         @note
             There is no equivalent 'close' method; the returned stream
             controls the lifecycle of this file operation.
         @param filename The fully qualified name of the file
-        @param readOnly Whether to open the file in read-only mode or not (note, 
+        @param readOnly Whether to open the file in read-only mode or not (note,
             if the archive is read-only then this cannot be set to false)
-        @return A shared pointer to a DataStream which can be used to 
+        @return A shared pointer to a DataStream which can be used to
             read / write the file. If the file is not present, returns a null
             shared pointer.
         */
-        virtual DataStreamPtr open(const String& filename, bool readOnly = true) = 0;
+        virtual DataStreamPtr open( const String &filename, bool readOnly = true ) = 0;
 
-        /** Create a new file (or overwrite one already there). 
+        /** Create a new file (or overwrite one already there).
         @note If the archive is read-only then this method will fail.
         @param filename The fully qualified name of the file
-        @return A shared pointer to a DataStream which can be used to 
-        read / write the file. 
+        @return A shared pointer to a DataStream which can be used to
+        read / write the file.
         */
-        virtual DataStreamPtr create(const String& filename);
+        virtual DataStreamPtr create( const String &filename );
 
         /** Delete a named file.
         @remarks Not possible on read-only archives
         @param filename The fully qualified name of the file
         */
-        virtual void remove(const String& filename);
+        virtual void remove( const String &filename );
 
         /** List all file names in the archive.
         @note
             This method only returns filenames, you can also retrieve other
             information using listFileInfo.
-        @param recursive Whether all paths of the archive are searched (if the 
+        @param recursive Whether all paths of the archive are searched (if the
             archive has a concept of that)
         @param dirs Set to true if you want the directories to be listed
             instead of files
         @return A list of filenames matching the criteria, all are fully qualified
         */
-        virtual StringVectorPtr list(bool recursive = true, bool dirs = false) = 0;
-        
+        virtual StringVectorPtr list( bool recursive = true, bool dirs = false ) = 0;
+
         /** List all files in the archive with accompanying information.
-        @param recursive Whether all paths of the archive are searched (if the 
+        @param recursive Whether all paths of the archive are searched (if the
             archive has a concept of that)
         @param dirs Set to true if you want the directories to be listed
             instead of files
         @return A list of structures detailing quite a lot of information about
             all the files in the archive.
         */
-        virtual FileInfoListPtr listFileInfo(bool recursive = true, bool dirs = false) = 0;
+        virtual FileInfoListPtr listFileInfo( bool recursive = true, bool dirs = false ) = 0;
 
         /** Find all file or directory names matching a given pattern
             in this archive.
@@ -186,46 +193,44 @@ namespace Ogre {
             This method only returns filenames, you can also retrieve other
             information using findFileInfo.
         @param pattern The pattern to search for; wildcards (*) are allowed
-        @param recursive Whether all paths of the archive are searched (if the 
+        @param recursive Whether all paths of the archive are searched (if the
             archive has a concept of that)
         @param dirs Set to true if you want the directories to be listed
             instead of files
         @return A list of filenames matching the criteria, all are fully qualified
         */
-        virtual StringVectorPtr find(const String& pattern, bool recursive = true,
-            bool dirs = false) = 0;
+        virtual StringVectorPtr find( const String &pattern, bool recursive = true,
+                                      bool dirs = false ) = 0;
 
         /** Find out if the named file exists (note: fully qualified filename required) */
-        virtual bool exists(const String& filename) = 0; 
+        virtual bool exists( const String &filename ) = 0;
 
         /** Retrieve the modification time of a given file */
-        virtual time_t getModifiedTime(const String& filename) = 0; 
-
+        virtual time_t getModifiedTime( const String &filename ) = 0;
 
         /** Find all files or directories matching a given pattern in this
             archive and get some detailed information about them.
         @param pattern The pattern to search for; wildcards (*) are allowed
-        @param recursive Whether all paths of the archive are searched (if the 
+        @param recursive Whether all paths of the archive are searched (if the
         archive has a concept of that)
         @param dirs Set to true if you want the directories to be listed
             instead of files
-        @return A list of file information structures for all files matching 
+        @return A list of file information structures for all files matching
             the criteria.
         */
-        virtual FileInfoListPtr findFileInfo(const String& pattern, 
-            bool recursive = true, bool dirs = false) = 0;
+        virtual FileInfoListPtr findFileInfo( const String &pattern, bool recursive = true,
+                                              bool dirs = false ) = 0;
 
         /// Return the type code of this Archive
-        const String& getType() const { return mType; }
-        
+        const String &getType() const { return mType; }
     };
 
-    typedef vector<Archive*>::type ArchiveVec;
+    typedef vector<Archive *>::type ArchiveVec;
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

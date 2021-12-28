@@ -142,7 +142,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     bool DynLib::isLoaded() const { return mInst != NULL; }
     //-----------------------------------------------------------------------
-    void* DynLib::getSymbol( const String& strName ) const throw()
+    void* DynLib::getSymbol( const String& strName ) const noexcept
     {
         return (void*)DYNLIB_GETSYM( mInst, strName.c_str() );
     }

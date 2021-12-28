@@ -30,27 +30,28 @@ THE SOFTWARE.
 
 #if !OGRE_NO_JSON
 
-#include "OgreHlmsJson.h"
-#include "OgreResourceTransition.h"
-#include "OgreHeaderPrefix.h"
+#    include "OgreHlmsJson.h"
+#    include "OgreResourceTransition.h"
+
+#    include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class ShaderParams;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     /** HLMS stands for "High Level Material System". */
     class _OgreExport HlmsJsonCompute : public PassAlloc
     {
-        HlmsManager         *mHlmsManager;
-        TextureGpuManager   *mTextureManager;
+        HlmsManager *      mHlmsManager;
+        TextureGpuManager *mTextureManager;
 
-        static uint8 parseAccess( const char *value );
+        static uint8                          parseAccess( const char *value );
         static ResourceAccess::ResourceAccess parseAccess( const rapidjson::Value &json );
 
         void loadParams( const rapidjson::Value &jsonArray, ShaderParams &shaderParams,
@@ -60,6 +61,7 @@ namespace Ogre
 
         void loadBasedOnTextureOrUav( const rapidjson::Value &objValue, const String &jobName,
                                       HlmsComputeJob *job, int threadGroupsBasedOn );
+
     public:
         HlmsJsonCompute( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
 
@@ -73,9 +75,9 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
-#include "OgreHeaderSuffix.h"
+#    include "OgreHeaderSuffix.h"
 
 #endif
 

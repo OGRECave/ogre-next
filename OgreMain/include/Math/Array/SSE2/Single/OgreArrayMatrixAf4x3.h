@@ -29,25 +29,25 @@ THE SOFTWARE.
 #define _SSE2_ArrayMatrixAf4x3_H_
 
 #ifndef _ArrayMatrixAf4x3_H_
-    #error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
+#    error "Don't include this file directly. include Math/Array/OgreArrayMatrix4.h"
 #endif
 
 #include "OgreMatrix4.h"
 
-#include "Math/Array/OgreMathlib.h"
-#include "Math/Array/OgreArrayVector3.h"
 #include "Math/Array/OgreArrayQuaternion.h"
+#include "Math/Array/OgreArrayVector3.h"
+#include "Math/Array/OgreMathlib.h"
 
 namespace Ogre
 {
     class SimpleMatrixAf4x3;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Math
-    *  @{
-    */
+     *  @{
+     */
     /** Cache-friendly container of AFFINE 4x4 matrices represented as a SoA array.
         @remarks
             ArrayMatrix4 is a SIMD & cache-friendly version of Matrix4.
@@ -69,23 +69,23 @@ namespace Ogre
     class _OgreExport ArrayMatrixAf4x3
     {
     public:
-        ArrayReal       mChunkBase[12];
+        ArrayReal mChunkBase[12];
 
         ArrayMatrixAf4x3() {}
 
         /// Sets all packed matrices to the same value as the scalar input matrix
         void setAll( const Matrix4 &m )
         {
-            mChunkBase[0]  = _mm_set_ps1( m._m[0] );
-            mChunkBase[1]  = _mm_set_ps1( m._m[1] );
-            mChunkBase[2]  = _mm_set_ps1( m._m[2] );
-            mChunkBase[3]  = _mm_set_ps1( m._m[3] );
-            mChunkBase[4]  = _mm_set_ps1( m._m[4] );
-            mChunkBase[5]  = _mm_set_ps1( m._m[5] );
-            mChunkBase[6]  = _mm_set_ps1( m._m[6] );
-            mChunkBase[7]  = _mm_set_ps1( m._m[7] );
-            mChunkBase[8]  = _mm_set_ps1( m._m[8] );
-            mChunkBase[9]  = _mm_set_ps1( m._m[9] );
+            mChunkBase[0] = _mm_set_ps1( m._m[0] );
+            mChunkBase[1] = _mm_set_ps1( m._m[1] );
+            mChunkBase[2] = _mm_set_ps1( m._m[2] );
+            mChunkBase[3] = _mm_set_ps1( m._m[3] );
+            mChunkBase[4] = _mm_set_ps1( m._m[4] );
+            mChunkBase[5] = _mm_set_ps1( m._m[5] );
+            mChunkBase[6] = _mm_set_ps1( m._m[6] );
+            mChunkBase[7] = _mm_set_ps1( m._m[7] );
+            mChunkBase[8] = _mm_set_ps1( m._m[8] );
+            mChunkBase[9] = _mm_set_ps1( m._m[9] );
             mChunkBase[10] = _mm_set_ps1( m._m[10] );
             mChunkBase[11] = _mm_set_ps1( m._m[11] );
         }
@@ -98,13 +98,14 @@ namespace Ogre
         }
 
         // Concatenation
-        FORCEINLINE friend ArrayMatrixAf4x3 operator * ( const ArrayMatrixAf4x3 &lhs, const ArrayMatrixAf4x3 &rhs );
+        FORCEINLINE friend ArrayMatrixAf4x3 operator*( const ArrayMatrixAf4x3 &lhs,
+                                                       const ArrayMatrixAf4x3 &rhs );
 
-        inline ArrayVector3 operator * ( const ArrayVector3 &rhs ) const;
+        inline ArrayVector3 operator*( const ArrayVector3 &rhs ) const;
 
         /// Prefer the update version 'a *= b' A LOT over 'a = a * b'
         /// (copying from an ArrayMatrix4 is 256 bytes!)
-        FORCEINLINE void operator *= ( const ArrayMatrixAf4x3 &rhs );
+        FORCEINLINE void operator*=( const ArrayMatrixAf4x3 &rhs );
 
         /** Converts the given quaternion to a 3x3 matrix representation and fill our values
             @remarks
@@ -121,7 +122,7 @@ namespace Ogre
 
         /// @copydoc Matrix4::makeTransform()
         inline void makeTransform( const ArrayVector3 &position, const ArrayVector3 &scale,
-                                    const ArrayQuaternion &orientation );
+                                   const ArrayQuaternion &orientation );
 
         /// @copydoc Matrix4::decomposition()
         inline void decomposition( ArrayVector3 &position, ArrayVector3 &scale,
@@ -154,18 +155,18 @@ namespace Ogre
         @remarks
             'dst' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS matrices
         */
-        inline void streamToAoS( Matrix4 * RESTRICT_ALIAS dst ) const;
-        inline void storeToAoS( SimpleMatrixAf4x3 * RESTRICT_ALIAS src ) const;
-        inline void streamToAoS( SimpleMatrixAf4x3 * RESTRICT_ALIAS src ) const;
+        inline void streamToAoS( Matrix4 *RESTRICT_ALIAS dst ) const;
+        inline void storeToAoS( SimpleMatrixAf4x3 *RESTRICT_ALIAS src ) const;
+        inline void streamToAoS( SimpleMatrixAf4x3 *RESTRICT_ALIAS src ) const;
 
         /** Converts ARRAY_PACKED_REALS matrices into this ArrayMatrix
         @remarks
             'src' must be aligned and assumed to have enough memory for ARRAY_PACKED_REALS matrices
         */
-        inline void loadFromAoS( const Matrix4 * RESTRICT_ALIAS src );
-        inline void loadFromAoS( const Matrix4 * RESTRICT_ALIAS * src );
-        inline void loadFromAoS( const SimpleMatrixAf4x3 * RESTRICT_ALIAS src );
-        inline void loadFromAoS( const SimpleMatrixAf4x3 * RESTRICT_ALIAS * src );
+        inline void loadFromAoS( const Matrix4 *RESTRICT_ALIAS src );
+        inline void loadFromAoS( const Matrix4 *RESTRICT_ALIAS *src );
+        inline void loadFromAoS( const SimpleMatrixAf4x3 *RESTRICT_ALIAS src );
+        inline void loadFromAoS( const SimpleMatrixAf4x3 *RESTRICT_ALIAS *src );
 
         static const ArrayMatrixAf4x3 IDENTITY;
     };
@@ -177,7 +178,7 @@ namespace Ogre
     class _OgreExport SimpleMatrixAf4x3
     {
     public:
-        ArrayReal       mChunkBase[3];
+        ArrayReal mChunkBase[3];
 
         SimpleMatrixAf4x3() {}
         SimpleMatrixAf4x3( ArrayReal row0, ArrayReal row1, ArrayReal row2 )
@@ -191,14 +192,14 @@ namespace Ogre
         void load( const Matrix4 &src )
         {
             mChunkBase[0] = _mm_load_ps( src._m );
-            mChunkBase[1] = _mm_load_ps( src._m+4 );
-            mChunkBase[2] = _mm_load_ps( src._m+8 );
+            mChunkBase[1] = _mm_load_ps( src._m + 4 );
+            mChunkBase[2] = _mm_load_ps( src._m + 8 );
         }
 
         /// Assumes dst is aligned
         void store( Matrix4 *dst ) const
         {
-            float * RESTRICT_ALIAS dstPtr = reinterpret_cast<float*>( dst );
+            float *RESTRICT_ALIAS dstPtr = reinterpret_cast<float *>( dst );
 
             _mm_store_ps( dstPtr, mChunkBase[0] );
             _mm_store_ps( dstPtr + 4, mChunkBase[1] );
@@ -209,7 +210,7 @@ namespace Ogre
         /// Assumes dst is aligned
         void store4x3( Matrix4 *dst ) const
         {
-            float * RESTRICT_ALIAS dstPtr = reinterpret_cast<float*>( dst );
+            float *RESTRICT_ALIAS dstPtr = reinterpret_cast<float *>( dst );
 
             _mm_store_ps( dstPtr, mChunkBase[0] );
             _mm_store_ps( dstPtr + 4, mChunkBase[1] );
@@ -217,7 +218,7 @@ namespace Ogre
         }
 
         /// Assumes dst is aligned
-        void store4x3( float * RESTRICT_ALIAS dst ) const
+        void store4x3( float *RESTRICT_ALIAS dst ) const
         {
             _mm_store_ps( dst, mChunkBase[0] );
             _mm_store_ps( dst + 4, mChunkBase[1] );
@@ -225,16 +226,16 @@ namespace Ogre
         }
 
         /// Copies our 4x3 contents using memory write combining when possible.
-        void streamTo4x3( float * RESTRICT_ALIAS dst ) const
+        void streamTo4x3( float *RESTRICT_ALIAS dst ) const
         {
 #ifndef OGRE_RENDERSYSTEM_API_ALIGN_COMPATIBILITY
-            _mm_stream_ps( dst,    mChunkBase[0] );
-            _mm_stream_ps( dst+4,  mChunkBase[1] );
-            _mm_stream_ps( dst+8,  mChunkBase[2] );
+            _mm_stream_ps( dst, mChunkBase[0] );
+            _mm_stream_ps( dst + 4, mChunkBase[1] );
+            _mm_stream_ps( dst + 8, mChunkBase[2] );
 #else
-            _mm_storeu_ps( dst,    mChunkBase[0] );
-            _mm_storeu_ps( dst+4,  mChunkBase[1] );
-            _mm_storeu_ps( dst+8,  mChunkBase[2] );
+            _mm_storeu_ps( dst, mChunkBase[0] );
+            _mm_storeu_ps( dst + 4, mChunkBase[1] );
+            _mm_storeu_ps( dst + 8, mChunkBase[2] );
 #endif
         }
 
@@ -244,7 +245,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreArrayMatrixAf4x3.inl"
 

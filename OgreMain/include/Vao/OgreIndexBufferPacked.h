@@ -29,8 +29,8 @@ THE SOFTWARE.
 #ifndef _Ogre_IndexBufferPacked_H_
 #define _Ogre_IndexBufferPacked_H_
 
-#include "Vao/OgreBufferPacked.h"
 #include "OgreCommon.h"
+#include "Vao/OgreBufferPacked.h"
 
 namespace Ogre
 {
@@ -38,13 +38,13 @@ namespace Ogre
     {
     public:
         typedef Ogre::IndexType IndexType;
-        static const IndexType IT_16BIT = Ogre::IT_16BIT;
-        static const IndexType IT_32BIT = Ogre::IT_32BIT;
+        static const IndexType  IT_16BIT = Ogre::IT_16BIT;
+        static const IndexType  IT_32BIT = Ogre::IT_32BIT;
 
         IndexBufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                           uint32 numElementsPadding, BufferType bufferType,
-                           void *initialData, bool keepAsShadow,
-                           VaoManager *vaoManager, BufferInterface *bufferInterface ) :
+                           uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                           bool keepAsShadow, VaoManager *vaoManager,
+                           BufferInterface *bufferInterface ) :
             BufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                           bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
         {
@@ -52,8 +52,8 @@ namespace Ogre
 
         BufferPackedTypes getBufferPackedType() const override { return BP_TYPE_INDEX; }
 
-        IndexType getIndexType() const  { return mBytesPerElement == 2 ? IT_16BIT : IT_32BIT; }
+        IndexType getIndexType() const { return mBytesPerElement == 2 ? IT_16BIT : IT_32BIT; }
     };
-}
+}  // namespace Ogre
 
 #endif

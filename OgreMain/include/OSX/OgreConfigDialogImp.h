@@ -30,29 +30,31 @@ THE SOFTWARE.
 #define __OSXConfigDialog_H__
 
 #include "../OgrePrerequisites.h"
-#include "../OgreRoot.h"
-#include "../OgreRenderSystem.h"
+
 #include "../OgreConfigOptionMap.h"
+#include "../OgreRenderSystem.h"
+#include "../OgreRoot.h"
 
 #ifdef __OBJC__
-#import <Cocoa/Cocoa.h>
-#import <AppKit/AppKit.h>
+#    import <AppKit/AppKit.h>
+#    import <Cocoa/Cocoa.h>
 
-#if defined(MAC_OS_X_VERSION_10_6) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-@interface OgreConfigWindowDelegate : NSObject <NSWindowDelegate, NSTableViewDelegate, NSTableViewDataSource>
-#else
+#    if defined( MAC_OS_X_VERSION_10_6 ) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+@interface OgreConfigWindowDelegate
+    : NSObject <NSWindowDelegate, NSTableViewDelegate, NSTableViewDataSource>
+#    else
 @interface OgreConfigWindowDelegate : NSObject
-#endif
+#    endif
 {
-    NSWindow *mConfigWindow;
-    NSImageView *mOgreLogo;
+    NSWindow *     mConfigWindow;
+    NSImageView *  mOgreLogo;
     NSPopUpButton *mRenderSystemsPopUp;
     NSPopUpButton *mOptionsPopUp;
-    NSTableView *mOptionsTable;
-    NSButton *mOkButton;
-    NSButton *mCancelButton;
-    NSTextField *mOptionLabel;
-    
+    NSTableView *  mOptionsTable;
+    NSButton *     mOkButton;
+    NSButton *     mCancelButton;
+    NSTextField *  mOptionLabel;
+
     NSMutableArray *mOptionsKeys;
     NSMutableArray *mOptionsValues;
 }
@@ -85,7 +87,7 @@ namespace Ogre
         ConfigDialog();
         virtual ~ConfigDialog();
 
-        void initialise();
+        void         initialise();
         virtual bool display();
 
     protected:
@@ -95,10 +97,10 @@ namespace Ogre
         // This object is allocated in C++, but used in Objective-C. The original code was only defining
         // mWindowDelegate for the ObjC case. This led to a size mismatch and a memory smash. The fix is
         // to make the C++ code aware of the space needed, which is the size of one native pointer.
-        void* pad;
+        void *pad;
 #endif
         RenderSystem *mSelectedRenderSystem;
     };
-}
+}  // namespace Ogre
 
-#endif // __OSX_CONFIG_DIALOG_H__
+#endif  // __OSX_CONFIG_DIALOG_H__

@@ -32,10 +32,10 @@ THE SOFTWARE.
 #include "OgrePlatform.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    //No need to include the heavy windows.h header for something like this!
-    typedef void* HANDLE;
+// No need to include the heavy windows.h header for something like this!
+typedef void *HANDLE;
 #else
-    #include <pthread.h>
+#    include <pthread.h>
 #endif
 
 namespace Ogre
@@ -71,12 +71,12 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
         OGRE_ALIGNED_DECL( long, mCounter, 4 );
-        HANDLE  mSemaphore;
+        HANDLE mSemaphore;
 #else
-        //The joys of POSIX programming... PThread mutexes are already lightweight.
-        //MS is lighyears behind UNIX regarding thread synchronization. (I'm sorry
-        //if I don't like CRITICAL_SECTION; MS changed their behavior between XP &
-        //Vista. We need consistent behavior)
+        // The joys of POSIX programming... PThread mutexes are already lightweight.
+        // MS is lighyears behind UNIX regarding thread synchronization. (I'm sorry
+        // if I don't like CRITICAL_SECTION; MS changed their behavior between XP &
+        // Vista. We need consistent behavior)
         pthread_mutex_t mMutex;
 #endif
 
@@ -100,17 +100,12 @@ namespace Ogre
 
     class _OgreExport ScopedLock
     {
-        LightweightMutex    &mMutex;
+        LightweightMutex &mMutex;
+
     public:
-        ScopedLock( LightweightMutex &mutex ) : mMutex( mutex )
-        {
-            mMutex.lock();
-        }
-        ~ScopedLock()
-        {
-            mMutex.unlock();
-        }
+        ScopedLock( LightweightMutex &mutex ) : mMutex( mutex ) { mMutex.lock(); }
+        ~ScopedLock() { mMutex.unlock(); }
     };
-}
+}  // namespace Ogre
 
 #endif

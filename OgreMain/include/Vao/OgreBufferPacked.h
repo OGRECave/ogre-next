@@ -93,6 +93,7 @@ namespace Ogre
 
     enum BufferBindFlags
     {
+        // clang-format off
         BB_FLAG_VERTEX      = 1u << BP_TYPE_VERTEX,
         BB_FLAG_INDEX       = 1u << BP_TYPE_INDEX,
         BB_FLAG_CONST       = 1u << BP_TYPE_CONST,
@@ -100,6 +101,7 @@ namespace Ogre
         BB_FLAG_READONLY    = 1u << BP_TYPE_READONLY,
         BB_FLAG_UAV         = 1u << BP_TYPE_UAV,
         BB_FLAG_INDIRECT    = 1u << BP_TYPE_INDIRECT
+        // clang-format on
     };
 
     /** Helper class to that will free the pointer on the destructor. Usage:
@@ -128,9 +130,9 @@ namespace Ogre
         }
 
     private:
-        //Prevent being able to copy this object
-        FreeOnDestructor(const FreeOnDestructor&);
-        FreeOnDestructor& operator=(const FreeOnDestructor&);
+        // Prevent being able to copy this object
+        FreeOnDestructor( const FreeOnDestructor & );
+        FreeOnDestructor &operator=( const FreeOnDestructor & );
     };
 
     class _OgreExport BufferPacked : public GpuTrackedResource, public BufferPackedAlloc
@@ -152,17 +154,17 @@ namespace Ogre
         size_t mBytesPerElement;
         size_t mNumElementsPadding;
 
-        BufferType      mBufferType;
-        VaoManager      *mVaoManager;
+        BufferType  mBufferType;
+        VaoManager *mVaoManager;
 
-        MappingState    mMappingState;
+        MappingState mMappingState;
 
         BufferInterface *mBufferInterface;
 
         /// Stores the range of the last map() call so that
         /// we can flush it correctly when calling unmap
-        size_t          mLastMappingStart;
-        size_t          mLastMappingCount;
+        size_t mLastMappingStart;
+        size_t mLastMappingCount;
 
         void *mShadowCopy;
 
@@ -173,7 +175,6 @@ namespace Ogre
 #endif
 
     public:
-
         /** Generic constructor.
         @param initialData
             Initial data to populate. If bufferType == BT_IMMUTABLE, can't be null.
@@ -194,9 +195,8 @@ namespace Ogre
             Must be false if bufferType >= BT_DYNAMIC
         */
         BufferPacked( size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                      uint32 numElementsPadding, BufferType bufferType,
-                      void *initialData, bool keepAsShadow,
-                      VaoManager *vaoManager, BufferInterface *bufferInterface );
+                      uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                      bool keepAsShadow, VaoManager *vaoManager, BufferInterface *bufferInterface );
         virtual ~BufferPacked();
 
         /// Useful to query which one is the derived class.
@@ -205,8 +205,9 @@ namespace Ogre
         /// For internal use.
         void _setBufferInterface( BufferInterface *bufferInterface );
 
-        BufferType getBufferType() const                    { return mBufferType; }
-        BufferInterface* getBufferInterface() const         { return mBufferInterface; }
+        BufferType getBufferType() const { return mBufferType; }
+
+        BufferInterface *getBufferInterface() const { return mBufferInterface; }
 
         /// If this buffer has been reinterpreted from an UavBufferPacked,
         /// returns the original version, otherwise returns 'this'
@@ -248,12 +249,12 @@ namespace Ogre
             Calling this with false allows to call map multiple times. However ater calling unmap,
             you must call advanceFrame. THIS IS ONLY FOR VERY ADVANCED USERS.
         */
-        void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount, bool bAdvanceFrame=true );
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         bool bAdvanceFrame = true );
 
-        /** Unmaps or flushes the region mapped with @see map. Alternatively, you can flush a smaller region
-            (i.e. you didn't know which regions you were to update when mapping, but now that you're done,
-            you know).
-            The region being flushed is [flushStart; flushStart + flushSize)
+        /** Unmaps or flushes the region mapped with @see map. Alternatively, you can flush a smaller
+            region (i.e. you didn't know which regions you were to update when mapping, but now that
+            you're done, you know). The region being flushed is [flushStart; flushStart + flushSize)
         @param unmapOption
             When using persistent mapping, UO_KEEP_PERSISTENT will keep the map alive; but you will
             have to call map again to use it. This requirement allows Ogre to:
@@ -300,42 +301,44 @@ namespace Ogre
             When this value is out of bounds, it gets clamped.
             See remarks.
         */
-        void copyTo( BufferPacked *dstBuffer, size_t dstElemStart=0,
-                     size_t srcElemStart=0, size_t srcNumElems=std::numeric_limits<size_t>::max() );
+        void copyTo( BufferPacked *dstBuffer, size_t dstElemStart = 0, size_t srcElemStart = 0,
+                     size_t srcNumElems = std::numeric_limits<size_t>::max() );
 
         /// Returns the mapping state. Note that if you call map with MS_PERSISTENT_INCOHERENT or
         /// MS_PERSISTENT_COHERENT, then call unmap( UO_KEEP_PERSISTENT ); the returned value will
         /// still be MS_PERSISTENT_INCOHERENT/_COHERENT when persistent mapping is supported.
         /// This differs from isCurrentlyMapped
-        MappingState getMappingState() const                { return mMappingState; }
+        MappingState getMappingState() const { return mMappingState; }
 
         /// Returns whether the buffer is currently mapped. If you've persistently mapped the buffer
         /// and then called unmap( UO_KEEP_PERSISTENT ); this function will return false; which
         /// differs from getMappingState's behavior.
         bool isCurrentlyMapped() const;
 
-        size_t getNumElements() const       { return mNumElements; }
-        size_t getBytesPerElement() const   { return mBytesPerElement; }
-        size_t getTotalSizeBytes() const    { return mNumElements * mBytesPerElement; }
+        size_t getNumElements() const { return mNumElements; }
+        size_t getBytesPerElement() const { return mBytesPerElement; }
+        size_t getTotalSizeBytes() const { return mNumElements * mBytesPerElement; }
 
-        size_t _getInternalBufferStart() const              { return mInternalBufferStart; }
-        size_t _getFinalBufferStart() const                 { return mFinalBufferStart; }
-        size_t _getInternalTotalSizeBytes() const   { return (mNumElements + mNumElementsPadding) *
-                                                                 mBytesPerElement; }
-        size_t _getInternalNumElements() const      { return mNumElements + mNumElementsPadding; }
+        size_t _getInternalBufferStart() const { return mInternalBufferStart; }
+        size_t _getFinalBufferStart() const { return mFinalBufferStart; }
+        size_t _getInternalTotalSizeBytes() const
+        {
+            return ( mNumElements + mNumElementsPadding ) * mBytesPerElement;
+        }
+        size_t _getInternalNumElements() const { return mNumElements + mNumElementsPadding; }
 
-        const void* getShadowCopy() const   { return mShadowCopy; }
+        const void *getShadowCopy() const { return mShadowCopy; }
 
         /// This will not delete the existing shadow copy so it can be used for other purposes
         /// if it is not needed call OGRE_FREE_SIMD( m->getShadowCopy(), MEMCATEGORY_GEOMETRY )
         /// before calling this function.
         /// This will also not automatically upload the shadow data to the GPU. The user must call
         /// upload or use a staging buffer themselves to achieve this.
-        void _setShadowCopy( void* copy );
+        void _setShadowCopy( void *copy );
     };
 
-    typedef StdVector<BufferPacked*>BufferPackedVec;
-    typedef StdUnorderedSet<BufferPacked*> BufferPackedSet;
-}
+    typedef StdVector<BufferPacked *>       BufferPackedVec;
+    typedef StdUnorderedSet<BufferPacked *> BufferPackedSet;
+}  // namespace Ogre
 
 #endif

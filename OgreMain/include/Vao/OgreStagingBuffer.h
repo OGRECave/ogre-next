@@ -92,8 +92,8 @@ namespace Ogre
             /// Amount of bytes to copy
             size_t length;
 
-            Destination( BufferPacked *_destination, size_t _dstOffset,
-                         size_t _srcOffset, size_t _length ) :
+            Destination( BufferPacked *_destination, size_t _dstOffset, size_t _srcOffset,
+                         size_t _length ) :
                 destination( _destination ),
                 dstOffset( _dstOffset ),
                 srcOffset( _srcOffset ),
@@ -107,11 +107,10 @@ namespace Ogre
     protected:
         struct Fence
         {
-            size_t  start;
-            size_t  end;
+            size_t start;
+            size_t end;
 
-            Fence( size_t _start, size_t _end ) :
-                start( _start ), end( _end )
+            Fence( size_t _start, size_t _end ) : start( _start ), end( _end )
             {
                 assert( _start <= _end );
             }
@@ -126,21 +125,21 @@ namespace Ogre
 
         typedef vector<Fence>::type FenceVec;
 
-        size_t  mInternalBufferStart;
-        size_t  mSizeBytes;
-        bool    mUploadOnly;
+        size_t mInternalBufferStart;
+        size_t mSizeBytes;
+        bool   mUploadOnly;
 
-        VaoManager      *mVaoManager;
+        VaoManager *mVaoManager;
 
-        MappingState    mMappingState;
-        size_t          mMappingStart;
-        size_t          mMappingCount;
+        MappingState mMappingState;
+        size_t       mMappingStart;
+        size_t       mMappingCount;
 
         /// Manual reference count. Note on creation it starts already at 1.
-        int16           mRefCount;
-        uint32          mUnfenceTimeThreshold;
-        uint32          mLifetimeThreshold;
-        uint64          mLastUsedTimestamp;
+        int16  mRefCount;
+        uint32 mUnfenceTimeThreshold;
+        uint32 mLifetimeThreshold;
+        uint64 mLastUsedTimestamp;
 
         //------------------------------------
         // Begin used for downloads
@@ -152,10 +151,10 @@ namespace Ogre
 
         void mapChecks( size_t sizeBytes );
 
-        virtual const void* _mapForReadImpl( size_t offset, size_t sizeBytes ) = 0;
+        virtual const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) = 0;
 
-        virtual void* mapImpl( size_t sizeBytes ) = 0;
-        virtual void unmapImpl( const Destination *destinations, size_t numDestinations ) = 0;
+        virtual void *mapImpl( size_t sizeBytes ) = 0;
+        virtual void  unmapImpl( const Destination *destinations, size_t numDestinations ) = 0;
 
         /// Returns the offset that can hold length bytes
         size_t getFreeDownloadRegion( size_t length );
@@ -172,19 +171,18 @@ namespace Ogre
         @param blocks
             Vector of blocks where blockToMerge belongs to.
         */
-        static void mergeContiguousBlocks( FenceVec::iterator blockToMerge,
-                                           FenceVec &blocks );
+        static void mergeContiguousBlocks( FenceVec::iterator blockToMerge, FenceVec &blocks );
 
     public:
-        StagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                       VaoManager *vaoManager, bool uploadOnly );
+        StagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
+                       bool uploadOnly );
         virtual ~StagingBuffer();
 
         /// When true, this buffer can only be used for uploading to GPU.
         /// When false, can only be used for downloading from GPU
-        bool getUploadOnly() const                  { return mUploadOnly; }
+        bool getUploadOnly() const { return mUploadOnly; }
 
-        MappingState getMappingState() const        { return mMappingState; }
+        MappingState getMappingState() const { return mMappingState; }
 
         /** Returns true if our next call to @map() with the same parameters will stall.
             @See StagingStallType
@@ -247,26 +245,28 @@ namespace Ogre
         @return
             The pointer with the data read from the GPU. Read only.
         */
-        const void* _mapForRead( size_t offset, size_t sizeBytes );
+        const void *_mapForRead( size_t offset, size_t sizeBytes );
 
         /** Maps the given amount of bytes. May block if not ready.
             @See uploadWillStall if you wish to know.
         @remarks
             Will throw if sizeBytes > this->getMaxSize()
         */
-        void* map( size_t sizeBytes );
+        void *map( size_t sizeBytes );
 
         void unmap( const Destination *destinations, size_t numDestinations );
 
         /// Unmaps the mapped region and copies the data to the given region. @See Destination
-        void unmap( const Destination &destination )    { unmap( &destination, 1 ); }
+        void unmap( const Destination &destination ) { unmap( &destination, 1 ); }
 
         /// Unmaps the mapped region and copies the data to multiple buffers. Useful when
         /// loading many meshes or textures at once (i.e. from multiple threads)
         void unmap( const DestinationVec &destinations )
-                                { unmap( &destinations.front(), destinations.size() ); }
+        {
+            unmap( &destinations.front(), destinations.size() );
+        }
 
-        size_t getMaxSize()                     { return mSizeBytes; }
+        size_t getMaxSize() { return mSizeBytes; }
 
         /// Adds a reference count to the StagingBuffer. @See removeReferenceCount
         void addReferenceCount();
@@ -292,7 +292,7 @@ namespace Ogre
         */
         void removeReferenceCount();
 
-        int16 getReferenceCount() const         { return mRefCount; }
+        int16 getReferenceCount() const { return mRefCount; }
 
         /// Returns the time in milliseconds in which a StagingBuffer should
         /// hazards unfenced while with a reference count of 0. @see getLifetimeThreshold
@@ -300,11 +300,11 @@ namespace Ogre
 
         /// Returns the time in milliseconds in which a StagingBuffer should
         /// live with a reference count of 0 before being deleted.
-        uint32 getLifetimeThreshold() const     { return mLifetimeThreshold; }
+        uint32 getLifetimeThreshold() const { return mLifetimeThreshold; }
 
         /// Returns the time in millisecond when the ref. count became 0.
-        uint64 getLastUsedTimestamp() const     { return mLastUsedTimestamp; }
+        uint64 getLastUsedTimestamp() const { return mLastUsedTimestamp; }
     };
-}
+}  // namespace Ogre
 
 #endif

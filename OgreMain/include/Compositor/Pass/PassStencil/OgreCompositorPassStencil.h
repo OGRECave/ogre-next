@@ -29,21 +29,21 @@ THE SOFTWARE.
 #ifndef __CompositorPassStencil_H__
 #define __CompositorPassStencil_H__
 
-#include "OgreHeaderPrefix.h"
-
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class RenderTarget;
 
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     /** Implementation of CompositorPass
         This implementation will clear the RenderTarget using the parameters from definition
@@ -72,7 +72,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

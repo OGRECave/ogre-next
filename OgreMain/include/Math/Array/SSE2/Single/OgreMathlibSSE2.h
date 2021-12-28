@@ -31,11 +31,11 @@ THE SOFTWARE.
 
 #if __OGRE_HAVE_SSE
 
-#ifndef __Mathlib_H__
-    #error "Don't include this file directly. include Math/Array/OgreMathlib.h"
-#endif
+#    ifndef __Mathlib_H__
+#        error "Don't include this file directly. include Math/Array/OgreMathlib.h"
+#    endif
 
-#include "OgrePrerequisites.h"
+#    include "OgrePrerequisites.h"
 
 namespace Ogre
 {
@@ -44,61 +44,71 @@ namespace Ogre
         ArrayReal mRad;
 
     public:
-        explicit ArrayRadian ( ArrayReal r ) : mRad( r ) {}
-        //ArrayRadian ( const ArrayDegree& d );
-        ArrayRadian& operator = ( const ArrayReal &f )      { mRad = f; return *this; }
-        ArrayRadian& operator = ( const ArrayRadian &r )    { mRad = r.mRad; return *this; }
-        //ArrayRadian& operator = ( const ArrayDegree& d );
+        explicit ArrayRadian( ArrayReal r ) : mRad( r ) {}
+        // ArrayRadian ( const ArrayDegree& d );
+        ArrayRadian &operator=( const ArrayReal &f )
+        {
+            mRad = f;
+            return *this;
+        }
+        ArrayRadian &operator=( const ArrayRadian &r )
+        {
+            mRad = r.mRad;
+            return *this;
+        }
+        // ArrayRadian& operator = ( const ArrayDegree& d );
 
-        //ArrayReal valueDegrees() const; // see bottom of this file
-        ArrayReal valueRadians() const                      { return mRad; }
+        // ArrayReal valueDegrees() const; // see bottom of this file
+        ArrayReal valueRadians() const { return mRad; }
 
-        inline const ArrayRadian& operator + () const;
-        inline ArrayRadian operator + ( const ArrayRadian& r ) const;
-        //inline ArrayRadian operator + ( const ArrayDegree& d ) const;
-        inline ArrayRadian& operator += ( const ArrayRadian& r );
-        //inline ArrayRadian& operator += ( const ArrayDegree& d );
-        inline ArrayRadian operator - () const;
-        inline ArrayRadian operator - ( const ArrayRadian& r ) const;
-        //inline ArrayRadian operator - ( const ArrayDegree& d ) const;
-        inline ArrayRadian& operator -= ( const ArrayRadian& r );
-        //inline ArrayRadian& operator -= ( const ArrayDegree& d );
-        inline ArrayRadian operator * ( ArrayReal f ) const;
-        inline ArrayRadian operator * ( const ArrayRadian& f ) const;
-        inline ArrayRadian& operator *= ( ArrayReal f );
-        inline ArrayRadian operator / ( ArrayReal f ) const;
-        inline ArrayRadian& operator /= ( ArrayReal f );
+        inline const ArrayRadian &operator+() const;
+        inline ArrayRadian        operator+( const ArrayRadian &r ) const;
+        // inline ArrayRadian operator + ( const ArrayDegree& d ) const;
+        inline ArrayRadian &operator+=( const ArrayRadian &r );
+        // inline ArrayRadian& operator += ( const ArrayDegree& d );
+        inline ArrayRadian operator-() const;
+        inline ArrayRadian operator-( const ArrayRadian &r ) const;
+        // inline ArrayRadian operator - ( const ArrayDegree& d ) const;
+        inline ArrayRadian &operator-=( const ArrayRadian &r );
+        // inline ArrayRadian& operator -= ( const ArrayDegree& d );
+        inline ArrayRadian  operator*( ArrayReal f ) const;
+        inline ArrayRadian  operator*( const ArrayRadian &f ) const;
+        inline ArrayRadian &operator*=( ArrayReal f );
+        inline ArrayRadian  operator/( ArrayReal f ) const;
+        inline ArrayRadian &operator/=( ArrayReal f );
 
-        inline ArrayReal operator <  ( const ArrayRadian& r ) const;
-        inline ArrayReal operator <= ( const ArrayRadian& r ) const;
-        inline ArrayReal operator == ( const ArrayRadian& r ) const;
-        inline ArrayReal operator != ( const ArrayRadian& r ) const;
-        inline ArrayReal operator >= ( const ArrayRadian& r ) const;
-        inline ArrayReal operator >  ( const ArrayRadian& r ) const;
+        inline ArrayReal operator<( const ArrayRadian &r ) const;
+        inline ArrayReal operator<=( const ArrayRadian &r ) const;
+        inline ArrayReal operator==( const ArrayRadian &r ) const;
+        inline ArrayReal operator!=( const ArrayRadian &r ) const;
+        inline ArrayReal operator>=( const ArrayRadian &r ) const;
+        inline ArrayReal operator>( const ArrayRadian &r ) const;
     };
 
     class _OgreExport MathlibSSE2
     {
     public:
-        static const ArrayReal HALF;        //0.5f, 0.5f, 0.5f, 0.5f
-        static const ArrayReal ONE;         //1.0f, 1.0f, 1.0f, 1.0f
-        static const ArrayReal THREE;       //3.0f, 3.0f, 3.0f, 3.0f
-        static const ArrayReal NEG_ONE;     //-1.0f, -1.0f, -1.0f, -1.0f
-        static const ArrayReal PI;          //PI, PI, PI, PI
-        static const ArrayReal TWO_PI;      //2*PI, 2*PI, 2*PI, 2*PI
-        static const ArrayReal ONE_DIV_2PI; //1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
-        static const ArrayReal fEpsilon;    //1e-6f, 1e-6f, 1e-6f, 1e-6f
-        static const ArrayReal fSqEpsilon;  //1e-12f, 1e-12f, 1e-12f, 1e-12f
-        static const ArrayReal OneMinusEpsilon;//1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
-        static const ArrayReal fDeg2Rad;    //Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
-        static const ArrayReal fRad2Deg;    //Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
-        static const ArrayReal FLOAT_MIN;   //FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
-        static const ArrayReal SIGN_MASK;   //0x80000000, 0x80000000, 0x80000000, 0x80000000
-        //INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea
-        static const ArrayReal INFINITEA;   //Inf, Inf, Inf, Inf
-        static const ArrayReal MAX_NEG;     //Max negative number (x4)
-        static const ArrayReal MAX_POS;     //Max negative number (x4)
-        static const ArrayReal LAST_AFFINE_COLUMN;//0, 0, 0, 1
+        static const ArrayReal HALF;             // 0.5f, 0.5f, 0.5f, 0.5f
+        static const ArrayReal ONE;              // 1.0f, 1.0f, 1.0f, 1.0f
+        static const ArrayReal THREE;            // 3.0f, 3.0f, 3.0f, 3.0f
+        static const ArrayReal NEG_ONE;          //-1.0f, -1.0f, -1.0f, -1.0f
+        static const ArrayReal PI;               // PI, PI, PI, PI
+        static const ArrayReal TWO_PI;           // 2*PI, 2*PI, 2*PI, 2*PI
+        static const ArrayReal ONE_DIV_2PI;      // 1 / 2PI, 1 / 2PI, 1 / 2PI, 1 / 2PI
+        static const ArrayReal fEpsilon;         // 1e-6f, 1e-6f, 1e-6f, 1e-6f
+        static const ArrayReal fSqEpsilon;       // 1e-12f, 1e-12f, 1e-12f, 1e-12f
+        static const ArrayReal OneMinusEpsilon;  // 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f, 1 - 1e-6f
+        static const ArrayReal
+            fDeg2Rad;  // Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
+        static const ArrayReal
+                               fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
+        static const ArrayReal FLOAT_MIN;  // FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
+        static const ArrayReal SIGN_MASK;  // 0x80000000, 0x80000000, 0x80000000, 0x80000000
+        // INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea
+        static const ArrayReal INFINITEA;           // Inf, Inf, Inf, Inf
+        static const ArrayReal MAX_NEG;             // Max negative number (x4)
+        static const ArrayReal MAX_POS;             // Max negative number (x4)
+        static const ArrayReal LAST_AFFINE_COLUMN;  // 0, 0, 0, 1
 
         /** Returns the absolute values of each 4 floats
             @param
@@ -106,10 +116,7 @@ namespace Ogre
             @return
                 abs( a )
         */
-        static inline ArrayReal Abs4( ArrayReal a )
-        {
-            return _mm_andnot_ps( _mm_set1_ps( -0.0f ), a );
-        }
+        static inline ArrayReal Abs4( ArrayReal a ) { return _mm_andnot_ps( _mm_set1_ps( -0.0f ), a ); }
 
         /** Branchless conditional move for 4 floating point values
             @remarks
@@ -136,16 +143,16 @@ namespace Ogre
             assert( _mm_movemask_ps( _mm_cmpeq_ps( arg1, arg1 ) ) == 0x0f &&
                     _mm_movemask_ps( _mm_cmpeq_ps( arg2, arg2 ) ) == 0x0f &&
                     "Passing NaN values to CMov4" );
-#ifndef  NDEBUG
-            ArrayReal newNan1 = _mm_mul_ps( arg1, _mm_setzero_ps() ); //+-Inf * 0 = nan
-            ArrayReal newNan2 = _mm_mul_ps( arg2, _mm_setzero_ps() ); //+-Inf * 0 = nan
+#    ifndef NDEBUG
+            ArrayReal newNan1 = _mm_mul_ps( arg1, _mm_setzero_ps() );  //+-Inf * 0 = nan
+            ArrayReal newNan2 = _mm_mul_ps( arg2, _mm_setzero_ps() );  //+-Inf * 0 = nan
             assert( _mm_movemask_ps( _mm_cmpeq_ps( newNan1, newNan1 ) ) == 0x0f &&
                     _mm_movemask_ps( _mm_cmpeq_ps( newNan2, newNan2 ) ) == 0x0f &&
                     "Passing +/- Infinity values to CMov4" );
-#endif
+#    endif
 
-            ArrayReal t = _mm_sub_ps( arg1, arg2 );             // t = arg1 - arg2
-            return _mm_add_ps( arg2, _mm_and_ps( t, mask ) );   // r = arg2 + (t & mask)
+            ArrayReal t = _mm_sub_ps( arg1, arg2 );            // t = arg1 - arg2
+            return _mm_add_ps( arg2, _mm_and_ps( t, mask ) );  // r = arg2 + (t & mask)
         }
 
         /** Robust, branchless conditional move for a 128-bit value.
@@ -174,7 +181,6 @@ namespace Ogre
                     else
                         arg2[i];
         */
-        #
         static inline __m128 CmovRobust( __m128 arg1, __m128 arg2, __m128 mask )
         {
             return _mm_or_ps( _mm_and_ps( arg1, mask ), _mm_andnot_ps( mask, arg2 ) );
@@ -192,14 +198,8 @@ namespace Ogre
         @return
             r[i] = a[i] & b[i];
         */
-        static inline ArrayReal And( ArrayReal a, ArrayReal b )
-        {
-            return _mm_and_ps( a, b );
-        }
-        static inline ArrayInt And( ArrayInt a, ArrayInt b )
-        {
-            return _mm_and_si128( a, b );
-        }
+        static inline ArrayReal And( ArrayReal a, ArrayReal b ) { return _mm_and_ps( a, b ); }
+        static inline ArrayInt  And( ArrayInt a, ArrayInt b ) { return _mm_and_si128( a, b ); }
 
         /** Returns the result of "a & b"
         @return
@@ -224,80 +224,53 @@ namespace Ogre
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
             return _mm_xor_si128( _mm_cmpeq_epi32( _mm_and_si128( a, b ), _mm_setzero_si128() ),
-                                    _mm_set1_epi32( -1 ) );
+                                  _mm_set1_epi32( -1 ) );
         }
 
         /** Returns the result of "a & ~b"
         @return
             r[i] = a[i] & ~b[i];
         */
-        static inline __m128i AndNot( __m128i a, __m128i b )
-        {
-            return _mm_andnot_si128( b, a );
-        }
+        static inline __m128i AndNot( __m128i a, __m128i b ) { return _mm_andnot_si128( b, a ); }
 
         /** Returns the result of "a | b"
         @return
             r[i] = a[i] | b[i];
         */
-        static inline __m128 Or( __m128 a, __m128 b )
-        {
-            return _mm_or_ps( a, b );
-        }
-        static inline __m128i Or( __m128i a, __m128i b )
-        {
-            return _mm_or_si128( a, b );
-        }
+        static inline __m128  Or( __m128 a, __m128 b ) { return _mm_or_ps( a, b ); }
+        static inline __m128i Or( __m128i a, __m128i b ) { return _mm_or_si128( a, b ); }
 
         /** Returns the result of "a < b"
         @return
             r[i] = a[i] < b[i] ? 0xffffffff : 0;
         */
-        static inline __m128 CompareLess( __m128 a, __m128 b )
-        {
-            return _mm_cmplt_ps( a, b );
-        }
+        static inline __m128 CompareLess( __m128 a, __m128 b ) { return _mm_cmplt_ps( a, b ); }
 
         /** Returns the result of "a <= b"
         @return
             r[i] = a[i] <= b[i] ? 0xffffffff : 0;
         */
-        static inline __m128 CompareLessEqual( __m128 a, __m128 b )
-        {
-            return _mm_cmple_ps( a, b );
-        }
+        static inline __m128 CompareLessEqual( __m128 a, __m128 b ) { return _mm_cmple_ps( a, b ); }
 
         /** Returns the result of "a > b"
         @return
             r[i] = a[i] > b[i] ? 0xffffffff : 0;
         */
-        static inline __m128 CompareGreater( __m128 a, __m128 b )
-        {
-            return _mm_cmpgt_ps( a, b );
-        }
+        static inline __m128 CompareGreater( __m128 a, __m128 b ) { return _mm_cmpgt_ps( a, b ); }
 
         /** Returns the result of "a >= b"
         @return
             r[i] = a[i] >= b[i] ? 0xffffffff : 0;
         */
-        static inline __m128 CompareGreaterEqual( __m128 a, __m128 b )
-        {
-            return _mm_cmpge_ps( a, b );
-        }
+        static inline __m128 CompareGreaterEqual( __m128 a, __m128 b ) { return _mm_cmpge_ps( a, b ); }
 
-        static inline ArrayReal SetAll( Real val )
-        {
-            return _mm_set_ps1( val );
-        }
+        static inline ArrayReal SetAll( Real val ) { return _mm_set_ps1( val ); }
 
-        static inline ArrayInt SetAll( uint32 val )
-        {
-            return _mm_set1_epi32( val );
-        }
+        static inline ArrayInt SetAll( uint32 val ) { return _mm_set1_epi32( val ); }
 
         static inline void Set( ArrayReal &_dst, Real val, size_t index )
         {
-            float *dst = reinterpret_cast<float*>( &_dst );
+            float *dst = reinterpret_cast<float *>( &_dst );
             dst[index] = val;
         }
 
@@ -311,16 +284,10 @@ namespace Ogre
         }
 
         /// Returns the maximum value between a and b
-        static inline ArrayReal Max( ArrayReal a, ArrayReal b )
-        {
-            return _mm_max_ps( a, b );
-        }
+        static inline ArrayReal Max( ArrayReal a, ArrayReal b ) { return _mm_max_ps( a, b ); }
 
         /// Returns the minimum value between a and b
-        static inline ArrayReal Min( ArrayReal a, ArrayReal b )
-        {
-            return _mm_min_ps( a, b );
-        }
+        static inline ArrayReal Min( ArrayReal a, ArrayReal b ) { return _mm_min_ps( a, b ); }
 
         /** Returns the minimum value of all elements in a
         @return
@@ -328,7 +295,7 @@ namespace Ogre
         */
         static inline Real CollapseMin( ArrayReal a )
         {
-            float r;
+            float     r;
             ArrayReal t0 = _mm_shuffle_ps( a, a, _MM_SHUFFLE( 2, 3, 2, 3 ) );
             t0 = _mm_min_ps( a, t0 );
             a = _mm_shuffle_ps( t0, t0, _MM_SHUFFLE( 1, 1, 0, 0 ) );
@@ -343,7 +310,7 @@ namespace Ogre
         */
         static inline Real CollapseMax( ArrayReal a )
         {
-            float r;
+            float     r;
             ArrayReal t0 = _mm_shuffle_ps( a, a, _MM_SHUFFLE( 2, 3, 2, 3 ) );
             t0 = _mm_max_ps( a, t0 );
             a = _mm_shuffle_ps( t0, t0, _MM_SHUFFLE( 1, 1, 0, 0 ) );
@@ -359,7 +326,7 @@ namespace Ogre
 
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that _mm_rcp_ps gives us 
+                12 bits of accuracy that _mm_rcp_ps gives us
                 In short, one Newton-Raphson Iteration:
                  f( i+1 ) = 2 * rcp( f ) - f * rcp( f ) * rcp( f )
                 See Intel AP-803 (Application note), Order N° 243637-002 (if you can get it!)
@@ -376,9 +343,10 @@ namespace Ogre
         static inline ArrayReal Inv4( ArrayReal val )
         {
             ArrayReal inv = _mm_rcp_ps( val );
-            ArrayReal twoRcp    = _mm_add_ps( inv, inv );                   //2 * rcp( f )
-            ArrayReal rightSide= _mm_mul_ps( val, _mm_mul_ps( inv, inv ) ); //f * rcp( f ) * rcp( f )
-            rightSide = _mm_and_ps( rightSide, _mm_cmpneq_ps( val, _mm_setzero_ps() ) ); //Nuke this NaN
+            ArrayReal twoRcp = _mm_add_ps( inv, inv );                        // 2 * rcp( f )
+            ArrayReal rightSide = _mm_mul_ps( val, _mm_mul_ps( inv, inv ) );  // f * rcp( f ) * rcp( f )
+            rightSide = _mm_and_ps( rightSide, _mm_cmpneq_ps( val, _mm_setzero_ps() ) );  // Nuke this
+                                                                                          // NaN
             return _mm_sub_ps( twoRcp, rightSide );
         }
 
@@ -391,7 +359,7 @@ namespace Ogre
 
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that _mm_rcp_ps gives us 
+                12 bits of accuracy that _mm_rcp_ps gives us
                 In short, one Newton-Raphson Iteration:
                  f( i+1 ) = 2 * rcp( f ) - f * rcp( f ) * rcp( f )
                 See Intel AP-803 (Application note), Order N° 243637-002 (if you can get it!)
@@ -407,8 +375,8 @@ namespace Ogre
         static inline ArrayReal InvNonZero4( ArrayReal val )
         {
             ArrayReal inv = _mm_rcp_ps( val );
-            ArrayReal twoRcp    = _mm_add_ps( inv, inv );                   //2 * rcp( f )
-            ArrayReal rightSide= _mm_mul_ps( val, _mm_mul_ps( inv, inv ) ); //f * rcp( f ) * rcp( f )
+            ArrayReal twoRcp = _mm_add_ps( inv, inv );                        // 2 * rcp( f )
+            ArrayReal rightSide = _mm_mul_ps( val, _mm_mul_ps( inv, inv ) );  // f * rcp( f ) * rcp( f )
             return _mm_sub_ps( twoRcp, rightSide );
         }
 
@@ -416,7 +384,7 @@ namespace Ogre
             @remarks
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that _mm_rcp_ps gives us 
+                12 bits of accuracy that _mm_rcp_ps gives us
                 In short, one Newton-Raphson Iteration:
                      f( i+1 ) = 0.5 * rsqrt( f ) * ( 3 - f * rsqrt( f ) * rsqrt( f ) )
                 See Intel AP-803 (Application note), Order N° 243637-002 (if you can get it!)
@@ -432,19 +400,21 @@ namespace Ogre
         */
         static inline ArrayReal InvSqrt4( ArrayReal f )
         {
-            ArrayReal invSqrt   = _mm_rsqrt_ps( f );
+            ArrayReal invSqrt = _mm_rsqrt_ps( f );
 
-            ArrayReal halfInvSqrt= _mm_mul_ps( HALF, invSqrt );                     //0.5 * rsqrt( f )
-            ArrayReal rightSide  = _mm_mul_ps( invSqrt, _mm_mul_ps( f, invSqrt ) ); //f * rsqrt( f ) * rsqrt( f )
-            rightSide = _mm_and_ps( rightSide, _mm_cmpneq_ps( f, _mm_setzero_ps() ) );//Nuke this NaN
-            return _mm_mul_ps( halfInvSqrt, _mm_sub_ps( THREE, rightSide ) );       //halfInvSqrt*(3 - rightSide)
+            ArrayReal halfInvSqrt = _mm_mul_ps( HALF, invSqrt );  // 0.5 * rsqrt( f )
+            ArrayReal rightSide =
+                _mm_mul_ps( invSqrt, _mm_mul_ps( f, invSqrt ) );  // f * rsqrt( f ) * rsqrt( f )
+            rightSide = _mm_and_ps( rightSide, _mm_cmpneq_ps( f, _mm_setzero_ps() ) );  // Nuke this NaN
+            return _mm_mul_ps( halfInvSqrt,
+                               _mm_sub_ps( THREE, rightSide ) );  // halfInvSqrt*(3 - rightSide)
         }
 
         /** Returns the squared root of the reciprocal of x
             @remarks
                 Use SSE Newton-Raphson reciprocal estimate, accurate to 23 significant
                 bits of the mantissa after an extra iteration, instead of the little
-                12 bits of accuracy that _mm_rcp_ps gives us 
+                12 bits of accuracy that _mm_rcp_ps gives us
                 In short, one Newton-Raphson Iteration:
                      f( i+1 ) = 0.5 * rsqrt( f ) * ( 3 - f * rsqrt( f ) * rsqrt( f ) )
                 See Intel AP-803 (Application note), Order N° 243637-002 (if you can get it!)
@@ -464,9 +434,11 @@ namespace Ogre
         {
             ArrayReal invSqrt = _mm_rsqrt_ps( f );
 
-            ArrayReal halfInvSqrt= _mm_mul_ps( HALF, invSqrt );                     //0.5 * rsqrt( f )
-            ArrayReal rightSide  = _mm_mul_ps( invSqrt, _mm_mul_ps( f, invSqrt ) ); //f * rsqrt( f ) * rsqrt( f )
-            return _mm_mul_ps( halfInvSqrt, _mm_sub_ps( THREE, rightSide ) );       //halfInvSqrt*(3 - rightSide)
+            ArrayReal halfInvSqrt = _mm_mul_ps( HALF, invSqrt );  // 0.5 * rsqrt( f )
+            ArrayReal rightSide =
+                _mm_mul_ps( invSqrt, _mm_mul_ps( f, invSqrt ) );  // f * rsqrt( f ) * rsqrt( f )
+            return _mm_mul_ps( halfInvSqrt,
+                               _mm_sub_ps( THREE, rightSide ) );  // halfInvSqrt*(3 - rightSide)
         }
 
         /** Break x into fractional and integral parts
@@ -515,7 +487,8 @@ namespace Ogre
         static void SinCos4( ArrayReal x, ArrayReal &outSin, ArrayReal &outCos );
     };
 
-#if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
+#    if OGRE_COMPILER != OGRE_COMPILER_CLANG && OGRE_COMPILER != OGRE_COMPILER_GNUC
+    // clang-format off
     inline ArrayReal operator - ( ArrayReal l )                 { return _mm_xor_ps( l, MathlibSSE2::SIGN_MASK ); }
 //  inline ArrayReal operator + ( ArrayReal l, Real r )         { return _mm_add_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator + ( Real l, ArrayReal r )         { return _mm_add_ps( _mm_set1_ps( l ), r ); }
@@ -529,10 +502,11 @@ namespace Ogre
 //  inline ArrayReal operator / ( ArrayReal l, Real r )         { return _mm_div_ps( l, _mm_set1_ps( r ) ); }
 //  inline ArrayReal operator / ( Real l, ArrayReal r )         { return _mm_div_ps( _mm_set1_ps( l ), r ); }
     inline ArrayReal operator / ( ArrayReal l, ArrayReal r )    { return _mm_div_ps( l, r ); }
-#endif
-}
+// clang-format on
+#    endif
+}  // namespace Ogre
 
-#include "OgreMathlibSSE2.inl"
+#    include "OgreMathlibSSE2.inl"
 
 #endif
 #endif

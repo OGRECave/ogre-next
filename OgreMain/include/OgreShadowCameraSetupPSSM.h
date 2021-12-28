@@ -5,7 +5,7 @@ This source file is part of OGRE-Next
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
-Copyright (c) 2006 Matthias Fink, netAllied GmbH <matthias.fink@web.de>                             
+Copyright (c) 2006 Matthias Fink, netAllied GmbH <matthias.fink@web.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,23 +40,22 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
-    /** Parallel Split Shadow Map (PSSM) shadow camera setup. 
+     *  @{
+     */
+    /** Parallel Split Shadow Map (PSSM) shadow camera setup.
     @remarks
         A PSSM shadow system uses multiple shadow maps per light and maps each
         texture into a region of space, progressing away from the camera. As such
         it is most appropriate for directional light setups. This particular version
-        also uses LiSPSM projection for each split to maximise the quality. 
+        also uses LiSPSM projection for each split to maximise the quality.
     @note
         Because PSSM uses multiple shadow maps per light, you will need to increase
-        the number of shadow textures available (via SceneManager) to match the 
-        number of shadow maps required (default is 3 per light). 
+        the number of shadow textures available (via SceneManager) to match the
+        number of shadow maps required (default is 3 per light).
     */
     class _OgreExport PSSMShadowCameraSetup : public FocusedShadowCameraSetup
     {
@@ -64,12 +63,12 @@ namespace Ogre
         typedef vector<Real>::type SplitPointList;
 
     protected:
-        uint32 mSplitCount;
-        uint32 mNumStableSplits;
+        uint32         mSplitCount;
+        uint32         mNumStableSplits;
         SplitPointList mSplitPoints;
         SplitPointList mSplitBlendPoints;
-        Real mSplitFadePoint;
-        Real mSplitPadding;
+        Real           mSplitFadePoint;
+        Real           mSplitPadding;
 
         mutable size_t mCurrentIteration;
 
@@ -84,11 +83,12 @@ namespace Ogre
         @param splitCount The number of splits to use
         @param nearDist The near plane to use for the first split
         @param farDist The far plane to use for the last split
-        @param lambda Factor to use to reduce the split size 
+        @param lambda Factor to use to reduce the split size
         @param blend Factor to use to reduce the split seams
         @param fade Factor to use to fade out the last split
         */
-        void calculateSplitPoints(uint splitCount, Real nearDist, Real farDist, Real lambda = 0.95, Real blend = 0.125, Real fade = 0.313);
+        void calculateSplitPoints( uint splitCount, Real nearDist, Real farDist, Real lambda = 0.95,
+                                   Real blend = 0.125, Real fade = 0.313 );
 
         /** Manually configure a new splitting scheme.
         @param newSplitPoints A list which is splitCount + 1 entries long, containing the
@@ -98,23 +98,24 @@ namespace Ogre
         @param blend Factor to use to reduce the split seams.
         @param fade Factor to use to fade out the last split.
         */
-        void setSplitPoints(const SplitPointList& newSplitPoints, Real blend = 0.125, Real fade = 0.313);
+        void setSplitPoints( const SplitPointList &newSplitPoints, Real blend = 0.125,
+                             Real fade = 0.313 );
 
         /** Set the LiSPSM optimal adjust factor for a given split (call after
             configuring splits).
         */
-        void setOptimalAdjustFactor(size_t splitIndex, Real factor);
+        void setOptimalAdjustFactor( size_t splitIndex, Real factor );
 
         /** Set the padding factor to apply to the near & far distances when matching up
             splits to one another, to avoid 'cracks'.
         */
-        void setSplitPadding(Real pad) { mSplitPadding = pad; }
+        void setSplitPadding( Real pad ) { mSplitPadding = pad; }
 
         /** Get the padding factor to apply to the near & far distances when matching up
             splits to one another, to avoid 'cracks'.
         */
         Real getSplitPadding() const { return mSplitPadding; }
-        /// Get the number of splits. 
+        /// Get the number of splits.
         uint getSplitCount() const { return mSplitCount; }
 
         /// PSSM tends to be very unstable to camera rotation changes. Rotate the camera around
@@ -129,7 +130,7 @@ namespace Ogre
         /// thus the recommended values are numStableSplits = 1 or numStableSplits = 2
         ///
         /// The default is numStableSplits = 0 which disables the feature
-        void setNumStableSplits( uint32 numStableSplits ) { mNumStableSplits = numStableSplits; }
+        void   setNumStableSplits( uint32 numStableSplits ) { mNumStableSplits = numStableSplits; }
         uint32 getNumStableSplits() const { return mNumStableSplits; }
 
         /// Returns a LiSPSM shadow camera with PSSM splits base on iteration.
@@ -138,20 +139,17 @@ namespace Ogre
                               const Vector2 &viewportRealSize ) const override;
 
         /// Returns the calculated split points.
-        inline const SplitPointList& getSplitPoints() const
-        { return mSplitPoints; }
+        inline const SplitPointList &getSplitPoints() const { return mSplitPoints; }
 
         /// Returns the calculated split blend points.
-        inline const SplitPointList& getSplitBlendPoints() const
-        { return mSplitBlendPoints; }
+        inline const SplitPointList &getSplitBlendPoints() const { return mSplitBlendPoints; }
 
         /// Returns the calculated split fade point.
-        inline const Real& getSplitFadePoint() const
-        { return mSplitFadePoint; }
+        inline const Real &getSplitFadePoint() const { return mSplitFadePoint; }
     };
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -31,10 +31,8 @@ THE SOFTWARE
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_PLATFORM != OGRE_PLATFORM_WINRT
 
 // restore previous warnings settings
-#   pragma warning (pop)
-
+#    pragma warning( pop )
 
 #endif
-
 
 //#endif

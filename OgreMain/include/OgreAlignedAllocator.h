@@ -28,15 +28,15 @@ THE SOFTWARE.
 #ifndef __AlignedAllocator_H__
 #define __AlignedAllocator_H__
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
 
     /** \addtogroup Memory
-    *  @{
-    */
+     *  @{
+     */
 
     /** Class to provide aligned memory allocate functionality.
     @remarks
@@ -70,7 +70,7 @@ namespace Ogre {
             @par
                 On failure, exception will be throw.
         */
-        static DECL_MALLOC void* allocate(size_t size, size_t alignment);
+        static DECL_MALLOC void *allocate( size_t size, size_t alignment );
 
         /** Allocate memory with default platform dependent alignment.
             @remarks
@@ -84,7 +84,7 @@ namespace Ogre {
             @par
                 On failure, exception will be throw.
         */
-        static DECL_MALLOC void* allocate(size_t size);
+        static DECL_MALLOC void *allocate( size_t size );
 
         /** Deallocate memory that allocated by this class.
             @param
@@ -92,12 +92,12 @@ namespace Ogre {
             @par
                 On <b>NULL</b> pointer, nothing happen.
         */
-        static void deallocate(void* p);
+        static void deallocate( void *p );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #endif  // __AlignedAllocator_H__

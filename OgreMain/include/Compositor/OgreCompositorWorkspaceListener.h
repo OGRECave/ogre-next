@@ -37,11 +37,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
     class CompositorWorkspaceListener
     {
@@ -52,7 +52,7 @@ namespace Ogre
         */
         virtual void workspacePreUpdate( CompositorWorkspace *workspace ) {}
         /** Called after all nodes has been updated.
-        */
+         */
         virtual void workspacePosUpdate( CompositorWorkspace *workspace ) {}
         /** Called early on in pass' execution. Happens before passPreExecute,
             before the pass has set anything.
@@ -104,7 +104,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -28,25 +28,26 @@ THE SOFTWARE.
 #ifndef _OgreHlmsComputeJob_H_
 #define _OgreHlmsComputeJob_H_
 
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreHlmsDatablock.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreResourceTransition.h"
 #include "OgreShaderParams.h"
-#include "OgrePixelFormatGpu.h"
 #include "OgreTextureGpuListener.h"
-#include "OgreDescriptorSetUav.h"
-#include "OgreDescriptorSetTexture.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
-    //class _OgreExport HlmsComputeJob : public HlmsDatablock
+    // class _OgreExport HlmsComputeJob : public HlmsDatablock
     class _OgreExport HlmsComputeJob : public PassAlloc, public TextureGpuListener
     {
         friend class HlmsCompute;
@@ -65,37 +66,37 @@ namespace Ogre
     protected:
         struct ConstBufferSlot
         {
-            uint8 slotIdx;
+            uint8              slotIdx;
             ConstBufferPacked *buffer;
 
-            bool operator () ( const ConstBufferSlot &left, uint8 right ) const
+            bool operator()( const ConstBufferSlot &left, uint8 right ) const
             {
                 return left.slotIdx < right;
             }
-            bool operator () ( uint8 left, const ConstBufferSlot &right ) const
+            bool operator()( uint8 left, const ConstBufferSlot &right ) const
             {
                 return left < right.slotIdx;
             }
-            bool operator () ( const ConstBufferSlot &left, const ConstBufferSlot &right ) const
+            bool operator()( const ConstBufferSlot &left, const ConstBufferSlot &right ) const
             {
                 return left.slotIdx < right.slotIdx;
             }
         };
 
-        typedef vector<ConstBufferSlot>::type ConstBufferSlotVec;
+        typedef vector<ConstBufferSlot>::type          ConstBufferSlotVec;
         typedef FastArray<DescriptorSetTexture2::Slot> DescriptorSetTexSlotArray;
-        typedef FastArray<DescriptorSetUav::Slot> DescriptorSetUavSlotArray;
+        typedef FastArray<DescriptorSetUav::Slot>      DescriptorSetUavSlotArray;
 
-        Hlms    *mCreator;
+        Hlms *   mCreator;
         IdString mName;
 
-        String          mSourceFilename;
-        StringVector    mIncludedPieceFiles;
+        String       mSourceFilename;
+        StringVector mIncludedPieceFiles;
 
         /// See setThreadsPerGroup
-        uint32  mThreadsPerGroup[3];
+        uint32 mThreadsPerGroup[3];
         /// See setNumThreadGroups
-        uint32  mNumThreadGroups[3];
+        uint32 mNumThreadGroups[3];
 
         ThreadGroupsBasedOn mThreadGroupsBasedOnTexture;
         uint8               mThreadGroupsBasedOnTexSlot;
@@ -103,22 +104,22 @@ namespace Ogre
 
         uint8 mGlTexSlotStart;
 
-        ConstBufferSlotVec          mConstBuffers;
-        FastArray<const HlmsSamplerblock*>  mSamplerSlots;
+        ConstBufferSlotVec                  mConstBuffers;
+        FastArray<const HlmsSamplerblock *> mSamplerSlots;
         DescriptorSetTexSlotArray           mTexSlots;
         DescriptorSetUavSlotArray           mUavSlots;
 
         DescriptorSetTexture2 const *mTexturesDescSet;
-        DescriptorSetSampler const  *mSamplersDescSet;
-        DescriptorSetUav const      *mUavsDescSet;
+        DescriptorSetSampler const * mSamplersDescSet;
+        DescriptorSetUav const *     mUavsDescSet;
 
-        bool mInformHlmsOfTextureData;
-        uint8 mMaxTexUnitReached;
-        uint8 mMaxUavUnitReached;
+        bool            mInformHlmsOfTextureData;
+        uint8           mMaxTexUnitReached;
+        uint8           mMaxUavUnitReached;
         HlmsPropertyVec mSetProperties;
         /// Don't add or remove directly! See setPiece and see removePiece
-        PiecesMap       mPieces;
-        size_t          mPsoCacheHash;
+        PiecesMap mPieces;
+        size_t    mPsoCacheHash;
 
         map<IdString, ShaderParams>::type mShaderParams;
 
@@ -131,9 +132,9 @@ namespace Ogre
         void destroyDescriptorTextures();
         void destroyDescriptorUavs();
 
-        void setTextureProperties( const TextureGpu *texture,
-                                   PixelFormatGpu pixelFormat, ResourceAccess::ResourceAccess access,
-                                   LwString &propName, const PixelFormatToShaderType *toShaderType );
+        void setTextureProperties( const TextureGpu *texture, PixelFormatGpu pixelFormat,
+                                   ResourceAccess::ResourceAccess access, LwString &propName,
+                                   const PixelFormatToShaderType *toShaderType );
         void clearAutoProperties( const char *propTexture, uint8 maxTexUnitReached );
 
         void removeProperty( IdString key );
@@ -143,10 +144,10 @@ namespace Ogre
                         const StringVector &includedPieceFiles );
         ~HlmsComputeJob() override;
 
-        Hlms* getCreator() const                { return mCreator; }
+        Hlms *getCreator() const { return mCreator; }
 
-        IdString getName() const                { return mName; }
-        String getNameStr() const;
+        IdString getName() const { return mName; }
+        String   getNameStr() const;
 
         void setupRootLayout( RootLayout &rootLayout );
 
@@ -178,11 +179,14 @@ namespace Ogre
             There may be API / HW limitations on the max values for each
             dimension.
         */
-        void setThreadsPerGroup( uint32 threadsPerGroupX, uint32 threadsPerGroupY, uint32 threadsPerGroupZ );
-        uint32 getThreadsPerGroupX() const          { return mThreadsPerGroup[0]; }
-        uint32 getThreadsPerGroupY() const          { return mThreadsPerGroup[1]; }
-        uint32 getThreadsPerGroupZ() const          { return mThreadsPerGroup[2]; }
-        const uint32* getThreadsPerGroup() const    { return mThreadsPerGroup; }
+        void setThreadsPerGroup( uint32 threadsPerGroupX, uint32 threadsPerGroupY,
+                                 uint32 threadsPerGroupZ );
+
+        uint32 getThreadsPerGroupX() const { return mThreadsPerGroup[0]; }
+        uint32 getThreadsPerGroupY() const { return mThreadsPerGroup[1]; }
+        uint32 getThreadsPerGroupZ() const { return mThreadsPerGroup[2]; }
+
+        const uint32 *getThreadsPerGroup() const { return mThreadsPerGroup; }
 
         /** Sets the number of groups of threads to dispatch. Note the actual value may be
             changed by the shader template using the @pset() function.
@@ -200,11 +204,14 @@ namespace Ogre
             There may be API / HW limitations on the max values for each
             dimension.
         */
-        void setNumThreadGroups( uint32 numThreadGroupsX, uint32 numThreadGroupsY, uint32 numThreadGroupsZ );
-        uint32 getNumThreadGroupsX() const          { return mNumThreadGroups[0]; }
-        uint32 getNumThreadGroupsY() const          { return mNumThreadGroups[1]; }
-        uint32 getNumThreadGroupsZ() const          { return mNumThreadGroups[2]; }
-        const uint32* getNumThreadGroups() const    { return mNumThreadGroups; }
+        void setNumThreadGroups( uint32 numThreadGroupsX, uint32 numThreadGroupsY,
+                                 uint32 numThreadGroupsZ );
+
+        uint32 getNumThreadGroupsX() const { return mNumThreadGroups[0]; }
+        uint32 getNumThreadGroupsY() const { return mNumThreadGroups[1]; }
+        uint32 getNumThreadGroupsZ() const { return mNumThreadGroups[2]; }
+
+        const uint32 *getNumThreadGroups() const { return mNumThreadGroups; }
 
         /** Instead of calling setNumThreadGroups, Ogre can automatically deduce
             them based on the Texture resolution and the threads per group.
@@ -226,8 +233,8 @@ namespace Ogre
             thread groups. For example if you operate on blocks of 2x2, then you
             want divisorX = 2 and divisorY = 2.
         */
-        void setNumThreadGroupsBasedOn( ThreadGroupsBasedOn source, uint8 texSlot,
-                                        uint8 divisorX, uint8 divisorY, uint8 divisorZ );
+        void setNumThreadGroupsBasedOn( ThreadGroupsBasedOn source, uint8 texSlot, uint8 divisorX,
+                                        uint8 divisorY, uint8 divisorZ );
 
         /// INTERNAL USE. Calculates the number of thread groups as specified
         /// in setNumThreadGroupsBasedOn, overriding setNumThreadGroups.
@@ -242,8 +249,8 @@ namespace Ogre
         @param value
             Value to set
         */
-        void setProperty( IdString key, int32 value );
-        int32 getProperty( IdString key, int32 defaultVal=0 ) const;
+        void  setProperty( IdString key, int32 value );
+        int32 getProperty( IdString key, int32 defaultVal = 0 ) const;
 
         /** Defines a piece, i.e. the same as doing @piece( pieceName )pieceContent@end
             If the piece doesn't exist, it gets created.
@@ -276,12 +283,12 @@ namespace Ogre
         /// Gets a shader parameter with the given key.
         /// e.g. "default" "glsl" "hlsl".
         /// Creates if does not exist.
-        ShaderParams& getShaderParams( IdString key );
+        ShaderParams &getShaderParams( IdString key );
 
         /// Gets a shader parameter with the given key.
         /// e.g. "default" "glsl" "hlsl".
         /// Returns null if doesn't exist. See createShaderParams
-        ShaderParams* _getShaderParams( IdString key );
+        ShaderParams *_getShaderParams( IdString key );
 
         /** Sets a const/uniform bufferat the given slot ID.
         @param slotIdx
@@ -294,19 +301,19 @@ namespace Ogre
         /// Creates 'numSlots' number of slots before they can be set.
         void setNumTexUnits( uint8 numSlots );
         /// Destroys a given texture unit, displacing all the higher tex units.
-        void removeTexUnit( uint8 slotIdx );
-        size_t getNumTexUnits() const               { return mTexSlots.size(); }
+        void   removeTexUnit( uint8 slotIdx );
+        size_t getNumTexUnits() const { return mTexSlots.size(); }
 
-        TextureGpu* getTexture( uint8 slotIdx ) const;
+        TextureGpu *getTexture( uint8 slotIdx ) const;
 
         /// @copydoc setNumTexUnits
         void setNumUavUnits( uint8 numSlots );
         /// @copydoc removeTexUnit
-        void removeUavUnit( uint8 slotIdx );
-        size_t getNumUavUnits() const               { return mUavSlots.size(); }
+        void   removeUavUnit( uint8 slotIdx );
+        size_t getNumUavUnits() const { return mUavSlots.size(); }
 
-        TextureGpu *getUavTexture( uint8 slotIdx ) const;
-        UavBufferPacked* getUavBuffer( uint8 slotIdx ) const;
+        TextureGpu *     getUavTexture( uint8 slotIdx ) const;
+        UavBufferPacked *getUavBuffer( uint8 slotIdx ) const;
 
         /// This value is overriden by setNumTexUnits to be compatible with OpenGL
         ///
@@ -468,6 +475,7 @@ namespace Ogre
         void analyzeBarriers( ResourceTransitionArray &resourceTransitions, bool clearBarriers = true );
 
         HlmsComputeJob *clone( const String &cloneName );
+
         void cloneTo( HlmsComputeJob *dstJob );
 
         // TextureGpuListener overloads
@@ -478,7 +486,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

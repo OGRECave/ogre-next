@@ -31,193 +31,189 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreStringInterface.h"
 
-namespace Ogre  {
-
+namespace Ogre
+{
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Effects
-    *  @{
-    */
+     *  @{
+     */
 
-    namespace EmitterCommands {
-        /// Command object for ParticleEmitter  - see ParamCommand 
+    namespace EmitterCommands
+    {
+        /// Command object for ParticleEmitter  - see ParamCommand
         class _OgreExport CmdAngle final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdColour final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdColourRangeStart final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdColourRangeEnd final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdDirection final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        
-        /// Command object for particle emitter  - see ParamCommand 
+
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdUp final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdDirPositionRef final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdEmissionRate final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdVelocity final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMinVelocity final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMaxVelocity final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdTTL final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMinTTL final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMaxTTL final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdPosition final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdDuration final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMinDuration final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMaxDuration final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdRepeatDelay final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMinRepeatDelay final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdMaxRepeatDelay final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdName final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-        /// Command object for particle emitter  - see ParamCommand 
+        /// Command object for particle emitter  - see ParamCommand
         class _OgreExport CmdEmittedEmitter final : public ParamCommand
         {
         public:
-            String doGet(const void* target) const override;
-            void doSet(void* target, const String& val) override;
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
-    }
+    }  // namespace EmitterCommands
     /** @} */
     /** @} */
 
-}
-
-
-
-
+}  // namespace Ogre
 
 #endif
-

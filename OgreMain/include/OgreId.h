@@ -33,7 +33,7 @@ namespace Ogre
 {
     /// Big projects with lots, lots of units for very long periods of time (MMORPGs?)
     /// may want to define this to 64-bit
-    typedef Ogre::uint32    IdType;
+    typedef Ogre::uint32 IdType;
 
     /**
         Usage:
@@ -42,8 +42,9 @@ namespace Ogre
     class _OgreExport Id
     {
     public:
-        //This function assumes creation of new objects can't be made from multiple threads!!!
-        template <typename T> static IdType generateNewId()
+        // This function assumes creation of new objects can't be made from multiple threads!!!
+        template <typename T>
+        static IdType generateNewId()
         {
             static IdType g_currentId = 0;
             return g_currentId++;
@@ -53,14 +54,14 @@ namespace Ogre
     class _OgreExport IdObject
     {
     private:
-        friend struct IdCmp; //Avoid calling getId()
+        friend struct IdCmp;  // Avoid calling getId()
         IdType mId;
 
     protected:
         /**In the rare case our derived class wants to override our Id
             (normally we don't want that, that's why it's private).
         */
-        void _setId( IdType newId )         { mId = newId; }
+        void _setId( IdType newId ) { mId = newId; }
 
     public:
         /** We don't call generateNewId() here, to prevent objects in the stack (i.e. local variables)
@@ -71,18 +72,12 @@ namespace Ogre
         IdObject( IdType id ) : mId( id ) {}
 
         /// Get the unique id of this object
-        IdType getId() const                { return mId; }
+        IdType getId() const { return mId; }
 
-        bool operator()( const IdObject *left, const IdObject *right )
-        {
-            return left->mId < right->mId;
-        }
+        bool operator()( const IdObject *left, const IdObject *right ) { return left->mId < right->mId; }
 
-        bool operator()( const IdObject &left, const IdObject &right )
-        {
-            return left.mId < right.mId;
-        }
+        bool operator()( const IdObject &left, const IdObject &right ) { return left.mId < right.mId; }
     };
-}
+}  // namespace Ogre
 
 #endif
