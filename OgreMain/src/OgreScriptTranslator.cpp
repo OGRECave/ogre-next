@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreScriptTranslator.h"
+
 #include "OgreLogManager.h"
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
@@ -46,11 +48,9 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreResourceTransition.h"
-
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgrePixelFormatGpuUtils.h"
-
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 #include "Compositor/OgreCompositorShadowNodeDef.h"
@@ -1215,13 +1215,13 @@ namespace Ogre{
                     {
                     String value;
                     AbstractNodeList::const_iterator itor = prop->values.begin();
-                    AbstractNodeList::const_iterator end  = prop->values.end();
-                    if( itor != end )
+                    AbstractNodeList::const_iterator endt = prop->values.end();
+                    if( itor != endt )
                     {
                         if( (*itor)->type == ANT_ATOM )
                             value += static_cast<AtomAbstractNode*>((*itor).get())->getValue();
                         ++itor;
-                        while( itor != end )
+                        while( itor != endt )
                         {
                             if( (*itor)->type == ANT_ATOM )
                                 value += " " + static_cast<AtomAbstractNode*>((*itor).get())->getValue();
@@ -6787,11 +6787,11 @@ namespace Ogre{
 
                         //Find out the names of the out & in nodes.
                         AbstractNodeList::const_iterator itor = prop->values.begin();
-                        AbstractNodeList::const_iterator end  = prop->values.end();
+                        AbstractNodeList::const_iterator endt = prop->values.end();
 
                         AbstractNodeList::const_iterator inNodeStart = itor;
 
-                        while( itor != end )
+                        while( itor != endt )
                         {
                             uint32 unused;
                             if( !getUInt( *itor, &unused ) )
@@ -6867,11 +6867,11 @@ namespace Ogre{
 
                         //Find out the names of the out & in nodes.
                         AbstractNodeList::const_iterator itor = prop->values.begin();
-                        AbstractNodeList::const_iterator end  = prop->values.end();
+                        AbstractNodeList::const_iterator endt = prop->values.end();
 
                         AbstractNodeList::const_iterator inNodeStart = itor;
 
-                        while( itor != end )
+                        while( itor != endt )
                         {
                             uint32 unused;
                             if( !getUInt( *itor, &unused ) )
@@ -7770,7 +7770,7 @@ namespace Ogre{
         }
 
         AbstractNodeList::const_iterator itor = prop->values.begin();
-        AbstractNodeList::const_iterator end  = prop->values.end();
+        AbstractNodeList::const_iterator endt = prop->values.end();
 
         if( isColour )
             ++itor; //Skip the attachment index
@@ -7786,7 +7786,7 @@ namespace Ogre{
         bool resolveMipSet = false;
         bool resolveSliceSet = false;
 
-        while( itor != end )
+        while( itor != endt )
         {
             AtomAbstractNode *atom = (AtomAbstractNode*)(*itor).get();
 
@@ -7796,7 +7796,7 @@ namespace Ogre{
                 // advance to next to get actual desired value
                 AbstractNodeList::const_iterator it = itor;
                 ++it;
-                if( it != end )
+                if( it != endt )
                     nextAtom = *it;
             }
 
@@ -8416,9 +8416,9 @@ namespace Ogre{
 
                 const CompositorPassDefVec &compositorPasses = tagetDef->getCompositorPasses();
                 CompositorPassDefVec::const_iterator itor = compositorPasses.begin();
-                CompositorPassDefVec::const_iterator end  = compositorPasses.end();
+                CompositorPassDefVec::const_iterator endt = compositorPasses.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     (*itor)->mShadowMapIdx      = static_cast<uint32>(shadowMapIdx);
                     (*itor)->mIncludeOverlays   = false;
@@ -8538,9 +8538,9 @@ namespace Ogre{
 
             const CompositorPassDefVec &compositorPasses = mTargetDef->getCompositorPasses();
             CompositorPassDefVec::const_iterator itor = compositorPasses.begin();
-            CompositorPassDefVec::const_iterator end  = compositorPasses.end();
+            CompositorPassDefVec::const_iterator endt = compositorPasses.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->mShadowMapIdx      = static_cast<uint32>(shadowMapIdx);
                 (*itor)->mIncludeOverlays   = false;

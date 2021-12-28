@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreOptimisedUtil.h"
+
 #include "OgrePlatformInformation.h"
 
 #if __OGRE_HAVE_SSE

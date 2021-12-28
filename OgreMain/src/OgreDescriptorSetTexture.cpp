@@ -29,10 +29,10 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreDescriptorSetTexture.h"
+
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "Vao/OgreTexBufferPacked.h"
-
 #include "OgreException.h"
 
 namespace Ogre
@@ -87,9 +87,9 @@ namespace Ogre
 #endif
 
         FastArray<Slot>::const_iterator itor = mTextures.begin();
-        FastArray<Slot>::const_iterator end  = mTextures.end();
+        FastArray<Slot>::const_iterator endt = mTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const Slot &slot = *itor;
             if( slot.isTexture() )

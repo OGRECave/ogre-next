@@ -28,11 +28,11 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgreException.h"
 #include "OgreStagingTexture.h"
+
+#include "OgreException.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "Vao/OgreVaoManager.h"
-
 #include "OgreLogManager.h"
 
 namespace Ogre

@@ -30,6 +30,7 @@ THE SOFTWARE.
 // class, although it has now been mostly rewritten
 
 #include "OgreStableHeaders.h"
+
 #include "OgreBillboardChain.h"
 
 #include "OgreHardwareBufferManager.h"

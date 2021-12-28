@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePlatformInformation.h"
+
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 #include "OgreString.h"

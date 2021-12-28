@@ -29,10 +29,10 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreDescriptorSetUav.h"
+
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "Vao/OgreUavBufferPacked.h"
-
 #include "OgreException.h"
 
 namespace Ogre
@@ -58,9 +58,9 @@ namespace Ogre
                 "This DescriptorSetUav doesn't use any texture/buffer! Perhaps incorrectly setup?" );
 
         FastArray<Slot>::const_iterator itor = mUavs.begin();
-        FastArray<Slot>::const_iterator end  = mUavs.end();
+        FastArray<Slot>::const_iterator endt = mUavs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const Slot &slot = *itor;
             if( slot.isTexture() )

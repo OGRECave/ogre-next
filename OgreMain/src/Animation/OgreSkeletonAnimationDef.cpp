@@ -29,13 +29,12 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Animation/OgreSkeletonAnimationDef.h"
-#include "Animation/OgreSkeletonDef.h"
 
+#include "Animation/OgreSkeletonDef.h"
 #include "Math/Array/OgreMathlib.h"
 #include "Math/Array/OgreTransform.h"
 #include "Math/Array/OgreKfTransformArrayMemoryManager.h"
 #include "Math/Array/OgreKfTransform.h"
-
 #include "OgreAnimation.h"
 #include "OgreOldBone.h"
 #include "OgreKeyFrame.h"
@@ -264,9 +263,9 @@ namespace Ogre
 
         size_t numKeyFrames = 0;
         TimestampsPerBlock::const_iterator itor = timestampsByBlock.begin();
-        TimestampsPerBlock::const_iterator end  = timestampsByBlock.end();
+        TimestampsPerBlock::const_iterator endt = timestampsByBlock.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             numKeyFrames += itor->second.size();
             ++itor;
@@ -281,7 +280,7 @@ namespace Ogre
 
         //1st pass: All first keyframes.
         itor = timestampsByBlock.begin();
-        while( itor != end )
+        while( itor != endt )
         {
             size_t blockIdx = itor->first;
             mTracks.push_back( SkeletonTrack( static_cast<uint32>(blockIdx), mKfTransformMemoryManager ) );
@@ -302,7 +301,7 @@ namespace Ogre
             //Keep adding keyframes until we're done with them
             size_t i = 0;
             itor = timestampsByBlock.begin();
-            while( itor != end )
+            while( itor != endt )
             {
                 if( keyframesDone[i] < itor->second.size() - 1 )
                 {
@@ -315,7 +314,7 @@ namespace Ogre
                     size_t j = i+1;
                     TimestampsPerBlock::const_iterator itor2 = itor;
                     ++itor2;
-                    while( itor2 != end )
+                    while( itor2 != endt )
                     {
                         if( keyframesDone[j] < itor2->second.size() - 1 )
                         {
@@ -371,7 +370,7 @@ namespace Ogre
         //3rd Pass: Create the last key frames
         size_t i = 0;
         itor = timestampsByBlock.begin();
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->second.size() > 1 )
             {
@@ -389,9 +388,9 @@ namespace Ogre
         const SkeletonDef::IndexToIndexMap &slotToBone = mSkeletonDef->getSlotToBone();
 
         SkeletonTrackVec::const_iterator itor = mTracks.begin();
-        SkeletonTrackVec::const_iterator end  = mTracks.end();
+        SkeletonTrackVec::const_iterator endt = mTracks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const SkeletonTrack &track = *itor;
             uint32 blockIdx = track.getBoneBlockIdx();

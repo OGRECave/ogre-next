@@ -29,15 +29,14 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopy.h"
+
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "OgreDepthBuffer.h"
 #include "OgreTextureBox.h"
-
 #include "OgreRenderSystem.h"
 
 namespace Ogre

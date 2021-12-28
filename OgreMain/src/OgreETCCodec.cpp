@@ -29,10 +29,10 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreETCCodec.h"
+
 #include "OgreImage2.h"
 #include "OgreException.h"
 #include "OgreDataStream.h"
-
 #include "OgreLogManager.h"
 #include "OgreBitwise.h"
 

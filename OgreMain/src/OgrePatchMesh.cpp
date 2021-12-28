@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgrePatchMesh.h"
+
 #include "OgreSubMesh.h"
 #include "OgreHardwareBufferManager.h"
 

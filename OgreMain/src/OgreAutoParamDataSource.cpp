@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreAutoParamDataSource.h"
+
 #include "OgreRenderable.h"
 #include "OgreCamera.h"
 #include "OgreControllerManager.h"
@@ -42,7 +43,6 @@ THE SOFTWARE.
 #include "OgrePass.h"
 #include "OgreViewport.h"
 #include "OgreHlmsComputeJob.h"
-
 #include "Compositor/OgreCompositorShadowNode.h"
 
 namespace Ogre {

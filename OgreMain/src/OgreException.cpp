@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreException.h"
+
 #include "OgreLogManager.h"
 
 #include <sstream>

@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreBufferInterface.h"
+
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreStagingBuffer.h"
 

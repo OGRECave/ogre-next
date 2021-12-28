@@ -26,6 +26,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
   -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreEntity.h"
 
 #include "OgreMeshManager.h"
@@ -167,8 +168,8 @@ namespace v1 {
             //catch our sub entities and thus we won't be rendered
             mRenderables.reserve( mSubEntityList.size() );
             SubEntityList::iterator itor = mSubEntityList.begin();
-            SubEntityList::iterator end  = mSubEntityList.end();
-            while( itor != end )
+            SubEntityList::iterator endt = mSubEntityList.end();
+            while( itor != endt )
             {
                 mRenderables.push_back( &(*itor) );
                 ++itor;
@@ -347,9 +348,9 @@ namespace v1 {
     void Entity::setDatablock( HlmsDatablock *datablock )
     {
         SubEntityList::iterator itor = mSubEntityList.begin();
-        SubEntityList::iterator end  = mSubEntityList.end();
+        SubEntityList::iterator endt = mSubEntityList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->setDatablock( datablock );
             ++itor;
@@ -465,8 +466,8 @@ namespace v1 {
         /*{
             FastArray<unsigned char>::const_iterator itCurrentMatLod = mCurrentMaterialLod.begin();
             SubEntityList::iterator itor = mSubEntityList.begin();
-            SubEntityList::iterator end  = mSubEntityList.end();
-            while( itor != end )
+            SubEntityList::iterator endt = mSubEntityList.end();
+            while( itor != endt )
             {
                 // Propagate Lod index to our sub entities (which is already calculated by now).
                 itor->mMaterialLodIndex = *itCurrentMatLod++;

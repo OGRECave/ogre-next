@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/OgreCompositorPassDef.h"
+
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
@@ -40,17 +41,15 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrierDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
-
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/Pass/OgreCompositorPassProvider.h"
-
 #include "OgreLwString.h"
 
 namespace Ogre
 {
-    const char *CompositorPassTypeEnumNames[PASS_CUSTOM+1u] =
-    {
+    const char *CompositorPassTypeEnumNames[PASS_CUSTOM + 1u] = {
+        // clang-format off
         "INVALID",
         "SCENE",
         "QUAD",
@@ -65,6 +64,7 @@ namespace Ogre
         "TARGET_BARRIER",
         "COMPUTE",
         "CUSTOM"
+        // clang-format on
     };
 
     CompositorTargetDef::CompositorTargetDef( const String &renderTargetName, uint32 rtIndex,
@@ -81,9 +81,9 @@ namespace Ogre
     CompositorTargetDef::~CompositorTargetDef()
     {
         CompositorPassDefVec::const_iterator itor = mCompositorPasses.begin();
-        CompositorPassDefVec::const_iterator end  = mCompositorPasses.end();
+        CompositorPassDefVec::const_iterator endt = mCompositorPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             OGRE_DELETE *itor;
             ++itor;

@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreFrustum.h"
 
 #include "OgreMath.h"
@@ -39,7 +40,6 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreMovablePlane.h"
 #include "OgreRenderOperation.h"
-
 #include "Math/Array/OgreArrayMatrixAf4x3.h"
 
 namespace Ogre {

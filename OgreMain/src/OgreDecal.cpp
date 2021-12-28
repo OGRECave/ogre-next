@@ -28,10 +28,9 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreDecal.h"
+
 #include "OgreForwardPlusBase.h"
-
 #include "OgreSceneManager.h"
-
 #include "OgreRoot.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"

@@ -28,12 +28,11 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
 
+#include "CommandBuffer/OgreCommandBuffer.h"
 #include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreIndirectBufferPacked.h"
-
 #include "OgreRenderSystem.h"
 
 namespace Ogre

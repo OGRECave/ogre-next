@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreSubMesh.h"
 
 #include "OgreMesh.h"
@@ -35,7 +36,6 @@ THE SOFTWARE.
 #include "OgreSubMesh2.h"
 #include "OgreMesh2.h"
 #include "OgreMaterial.h"
-
 #include "Vao/OgreAsyncTicket.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -241,9 +241,9 @@ namespace v1 {
     void SubMesh::removeLodLevel( LODFaceList &lodList )
     {
         LODFaceList::const_iterator itor = lodList.begin();
-        LODFaceList::const_iterator end  = lodList.end();
+        LODFaceList::const_iterator endt = lodList.end();
 
-        while( itor != end )
+        while( itor != endt )
             OGRE_DELETE *itor++;
 
         lodList.clear();
@@ -566,9 +566,9 @@ namespace v1 {
 
         {
             Ogre::SubMesh::VertexBoneAssignmentVec::const_iterator itor = v2BoneAssignments.begin();
-            Ogre::SubMesh::VertexBoneAssignmentVec::const_iterator end  = v2BoneAssignments.end();
+            Ogre::SubMesh::VertexBoneAssignmentVec::const_iterator endt = v2BoneAssignments.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 v1::VertexBoneAssignment assignment;
                 assignment.vertexIndex  = itor->vertexIndex;
@@ -587,9 +587,9 @@ namespace v1 {
         for( uint8 i=0; i<numVaoPasses; ++i )
         {
             VertexArrayObjectArray::const_iterator itor = subMesh->mVao[i].begin();
-            VertexArrayObjectArray::const_iterator end  = subMesh->mVao[i].end();
+            VertexArrayObjectArray::const_iterator endt = subMesh->mVao[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const VertexBufferPackedVec &vertexBuffers = (*itor)->getVertexBuffers();
 
@@ -700,9 +700,9 @@ namespace v1 {
             const VertexDeclaration::VertexElementList &elements = vertexData[i]->vertexDeclaration->
                                                                                         getElements();
             VertexDeclaration::VertexElementList::const_iterator itor = elements.begin();
-            VertexDeclaration::VertexElementList::const_iterator end  = elements.end();
+            VertexDeclaration::VertexElementList::const_iterator endt = elements.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( (itor->getSemantic() == VES_NORMAL && itor->getType() == VET_SHORT4_SNORM) ||
                     VertexElement::getBaseType( itor->getType() ) == VET_HALF2 )

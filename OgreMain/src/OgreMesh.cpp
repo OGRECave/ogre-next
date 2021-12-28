@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreMesh.h"
 
 #include "OgreSubMesh.h"
@@ -48,10 +49,8 @@ THE SOFTWARE.
 #include "OgrePixelCountLodStrategy.h"
 #include "OgreVertexShadowMapHelper.h"
 #include "OgreStringConverter.h"
-
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonManager.h"
-
 #include "OgreMesh2.h"
 #include "OgreProfiler.h"
 
@@ -438,9 +437,9 @@ namespace v1 {
         }
 
         SubMeshList::const_iterator itor = mSubMeshList.begin();
-        SubMeshList::const_iterator end  = mSubMeshList.end();
+        SubMeshList::const_iterator endt = mSubMeshList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->arrangeEfficient( halfPos, halfTexCoords, qTangents );
             ++itor;
@@ -457,9 +456,9 @@ namespace v1 {
         }
 
         SubMeshList::const_iterator itor = mSubMeshList.begin();
-        SubMeshList::const_iterator end  = mSubMeshList.end();
+        SubMeshList::const_iterator endt = mSubMeshList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->dearrangeToInefficient();
             ++itor;
@@ -1171,9 +1170,9 @@ namespace v1 {
 
             // check submesh vertices
             SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator end  = mSubMeshList.end();
+            SubMeshList::const_iterator endt = mSubMeshList.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 SubMesh* submesh = *itor;
                 if (!submesh->useSharedVertices && submesh->vertexData[VpNormal])
@@ -1397,9 +1396,9 @@ namespace v1 {
             mergeAdjacentTexcoords( finalTexCoordSet, texCoordSetToDestroy, sharedVertexData[VpNormal] );
 
         SubMeshList::const_iterator itor = mSubMeshList.begin();
-        SubMeshList::const_iterator end  = mSubMeshList.end();
+        SubMeshList::const_iterator endt = mSubMeshList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( !(*itor)->useSharedVertices )
             {
@@ -1464,9 +1463,9 @@ namespace v1 {
         sharedVertexData[VpShadow] = 0;
 
         SubMeshList::const_iterator itor = mSubMeshList.begin();
-        SubMeshList::const_iterator end  = mSubMeshList.end();
+        SubMeshList::const_iterator endt = mSubMeshList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->vertexData[VpShadow] != (*itor)->vertexData[VpNormal] )
                 OGRE_DELETE (*itor)->vertexData[VpShadow];
@@ -1501,9 +1500,9 @@ namespace v1 {
             sharedVertexData[VpShadow] = sharedVertexData[VpNormal];
 
             SubMeshList::const_iterator itor = mSubMeshList.begin();
-            SubMeshList::const_iterator end  = mSubMeshList.end();
+            SubMeshList::const_iterator endt = mSubMeshList.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->vertexData[VpShadow] = (*itor)->vertexData[VpNormal];
                 (*itor)->indexData[VpShadow] = (*itor)->indexData[VpNormal];
@@ -1523,9 +1522,9 @@ namespace v1 {
 
             {
                 SubMeshList::const_iterator itor = mSubMeshList.begin();
-                SubMeshList::const_iterator end  = mSubMeshList.end();
+                SubMeshList::const_iterator endt = mSubMeshList.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     VertexShadowMapHelper::Geometry geom;
 
@@ -1584,9 +1583,9 @@ namespace v1 {
                 (sharedVertexData[VpNormal] != 0 && sharedVertexData[VpShadow] != 0);
 
         SubMeshList::const_iterator itor = mSubMeshList.begin();
-        SubMeshList::const_iterator end  = mSubMeshList.end();
+        SubMeshList::const_iterator endt = mSubMeshList.end();
 
-        while( itor != end && retVal )
+        while( itor != endt && retVal )
         {
             retVal &= ((*itor)->vertexData[VpNormal] == 0) || ((*itor)->vertexData[VpNormal] != 0 &&
                                                                (*itor)->vertexData[VpShadow] != 0);
@@ -1609,9 +1608,9 @@ namespace v1 {
         bool independent = sharedVertexData[VpNormal] != sharedVertexData[VpShadow];
 
         SubMeshList::const_iterator itor = mSubMeshList.begin();
-        SubMeshList::const_iterator end  = mSubMeshList.end();
+        SubMeshList::const_iterator endt = mSubMeshList.end();
 
-        while( itor != end && !independent )
+        while( itor != endt && !independent )
         {
             independent |= (*itor)->vertexData[VpNormal] != (*itor)->vertexData[VpShadow];
             ++itor;

@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreAnimable.h"
+
 #include "OgreAny.h"
 
 #include <ostream>

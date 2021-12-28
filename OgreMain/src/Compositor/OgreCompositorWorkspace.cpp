@@ -29,19 +29,16 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorWorkspace.h"
+
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadows.h"
-
 #include "OgreViewport.h"
-
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
 #include "OgreLogManager.h"
-
 #include "OgreProfiler.h"
 
 namespace Ogre
@@ -119,13 +116,13 @@ namespace Ogre
         destroyAllNodes();
 
         CompositorWorkspaceDef::NodeAliasMap::const_iterator itor = mDefinition->mAliasedNodes.begin();
-        CompositorWorkspaceDef::NodeAliasMap::const_iterator end  = mDefinition->mAliasedNodes.end();
+        CompositorWorkspaceDef::NodeAliasMap::const_iterator endt = mDefinition->mAliasedNodes.end();
 
         const CompositorManager2 *compoManager = mDefinition->mCompositorManager;
 
         TextureGpu *finalTarget = getFinalTarget();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const CompositorNodeDef *nodeDef = compoManager->getNodeDefinition( itor->second );
             CompositorNode *newNode = OGRE_NEW CompositorNode( Id::generateNewId<CompositorNode>(),
@@ -141,32 +138,32 @@ namespace Ogre
         mValid = false;
         {
             CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-            CompositorNodeVec::const_iterator end  = mNodeSequence.end();
+            CompositorNodeVec::const_iterator endt = mNodeSequence.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->destroyAllPasses();
                 ++itor;
             }
 
             itor = mNodeSequence.begin();
-            while( itor != end )
+            while( itor != endt )
                 OGRE_DELETE *itor++;
             mNodeSequence.clear();
         }
 
         {
             CompositorShadowNodeVec::const_iterator itor = mShadowNodes.begin();
-            CompositorShadowNodeVec::const_iterator end  = mShadowNodes.end();
+            CompositorShadowNodeVec::const_iterator endt = mShadowNodes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->destroyAllPasses();
                 ++itor;
             }
 
             itor = mShadowNodes.begin();
-            while( itor != end )
+            while( itor != endt )
                 OGRE_DELETE *itor++;
             mShadowNodes.clear();
         }
@@ -180,10 +177,10 @@ namespace Ogre
             {
                 CompositorWorkspaceDef::ChannelRouteList::const_iterator itor =
                         mDefinition->mExternalChannelRoutes.begin();
-                CompositorWorkspaceDef::ChannelRouteList::const_iterator end =
+                CompositorWorkspaceDef::ChannelRouteList::const_iterator endt =
                         mDefinition->mExternalChannelRoutes.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     if( itor->outChannel >= mExternalRenderTargets.size() )
                     {
@@ -205,10 +202,10 @@ namespace Ogre
             {
                 CompositorWorkspaceDef::ChannelRouteList::const_iterator itor =
                         mDefinition->mExternalBufferChannelRoutes.begin();
-                CompositorWorkspaceDef::ChannelRouteList::const_iterator end =
+                CompositorWorkspaceDef::ChannelRouteList::const_iterator endt =
                         mDefinition->mExternalBufferChannelRoutes.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     CompositorNode *node = findNode( itor->inNode );
                     node->connectExternalBuffer( mExternalBuffers[itor->outChannel], itor->inChannel );
@@ -227,9 +224,9 @@ namespace Ogre
         {
             noneProcessed = true;
             CompositorNodeVec::iterator itor = unprocessedList.begin();
-            CompositorNodeVec::iterator end  = unprocessedList.end();
+            CompositorNodeVec::iterator endt = unprocessedList.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 CompositorNode *node = *itor;
                 if( node->areAllInputsConnected() )
@@ -271,7 +268,7 @@ namespace Ogre
 
                     //Remove processed nodes from the list. We'll keep until there's no one left
                     itor = efficientVectorRemove( unprocessedList, itor );
-                    end  = unprocessedList.end();
+                    endt = unprocessedList.end();
 
                     noneProcessed = false;
                 }
@@ -286,9 +283,9 @@ namespace Ogre
         bool incomplete = false;
         {
             CompositorNodeVec::const_iterator itor = unprocessedList.begin();
-            CompositorNodeVec::const_iterator end  = unprocessedList.end();
+            CompositorNodeVec::const_iterator endt = unprocessedList.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 incomplete |= (*itor)->getEnabled();
                 ++itor;
@@ -298,8 +295,8 @@ namespace Ogre
         if( incomplete )
         {
             CompositorNodeVec::const_iterator itor = unprocessedList.begin();
-            CompositorNodeVec::const_iterator end  = unprocessedList.end();
-            while( itor != end )
+            CompositorNodeVec::const_iterator endt = unprocessedList.end();
+            while( itor != endt )
             {
                 if( (*itor)->getEnabled() )
                 {
@@ -332,9 +329,9 @@ namespace Ogre
             mNodeSequence.insert( mNodeSequence.end(), processedList.begin(), processedList.end() );
 
             CompositorNodeVec::iterator itor = mNodeSequence.begin();
-            CompositorNodeVec::iterator end  = mNodeSequence.end();
+            CompositorNodeVec::iterator endt = mNodeSequence.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->createPasses();
                 ++itor;
@@ -361,9 +358,9 @@ namespace Ogre
     {
         {
             CompositorNodeVec::iterator itor = mNodeSequence.begin();
-            CompositorNodeVec::iterator end  = mNodeSequence.end();
+            CompositorNodeVec::iterator endt = mNodeSequence.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->_notifyCleared();
                 ++itor;
@@ -372,16 +369,16 @@ namespace Ogre
 
         {
             CompositorShadowNodeVec::const_iterator itor = mShadowNodes.begin();
-            CompositorShadowNodeVec::const_iterator end  = mShadowNodes.end();
+            CompositorShadowNodeVec::const_iterator endt = mShadowNodes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->destroyAllPasses();
                 ++itor;
             }
 
             itor = mShadowNodes.begin();
-            while( itor != end )
+            while( itor != endt )
                 OGRE_DELETE *itor++;
             mShadowNodes.clear();
         }
@@ -401,8 +398,8 @@ namespace Ogre
             CompositorShadowNode *shadowNode = *itShadowNode;
 
             CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-            CompositorNodeVec::const_iterator end  = mNodeSequence.end();
-            while( itor != end )
+            CompositorNodeVec::const_iterator endt = mNodeSequence.end();
+            while( itor != endt )
             {
                 const CompositorPassVec &passes = (*itor)->_getPasses();
                 CompositorPassVec::const_iterator itPasses = passes.begin();
@@ -502,9 +499,9 @@ namespace Ogre
         CompositorNode *retVal = 0;
 
         CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-        CompositorNodeVec::const_iterator end  = mNodeSequence.end();
+        CompositorNodeVec::const_iterator endt = mNodeSequence.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->getEnabled() )
                 retVal = *itor;
@@ -535,9 +532,9 @@ namespace Ogre
     {
         CompositorNode *retVal = 0;
         CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-        CompositorNodeVec::const_iterator end  = mNodeSequence.end();
+        CompositorNodeVec::const_iterator endt = mNodeSequence.end();
 
-        while( itor != end && !retVal )
+        while( itor != endt && !retVal )
         {
             if( (*itor)->getName() == aliasName )
                 retVal = *itor;
@@ -651,9 +648,9 @@ namespace Ogre
     void CompositorWorkspace::resetAllNumPassesLeft()
     {
         CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-        CompositorNodeVec::const_iterator end  = mNodeSequence.end();
+        CompositorNodeVec::const_iterator endt = mNodeSequence.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->resetAllNumPassesLeft();
             ++itor;
@@ -747,9 +744,9 @@ namespace Ogre
         }
         {
             CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();
+            CompositorWorkspaceListenerVec::const_iterator endt = mListeners.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->workspacePreUpdate( this );
                 ++itor;
@@ -772,9 +769,9 @@ namespace Ogre
 
             {
                 CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-                CompositorNodeVec::const_iterator end  = mNodeSequence.end();
+                CompositorNodeVec::const_iterator endt = mNodeSequence.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     CompositorNode *node = *itor;
                     node->finalTargetResized01( finalTarget );
@@ -782,7 +779,7 @@ namespace Ogre
                 }
 
                 itor = mNodeSequence.begin();
-                while( itor != end )
+                while( itor != endt )
                 {
                     CompositorNode *node = *itor;
                     node->finalTargetResized02( finalTarget );
@@ -792,9 +789,9 @@ namespace Ogre
 
             {
                 CompositorShadowNodeVec::const_iterator itor = mShadowNodes.begin();
-                CompositorShadowNodeVec::const_iterator end  = mShadowNodes.end();
+                CompositorShadowNodeVec::const_iterator endt = mShadowNodes.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     CompositorShadowNode *node = *itor;
                     node->finalTargetResized01( finalTarget );
@@ -802,7 +799,7 @@ namespace Ogre
                 }
 
                 itor = mShadowNodes.begin();
-                while( itor != end )
+                while( itor != endt )
                 {
                     CompositorShadowNode *node = *itor;
                     node->finalTargetResized02( finalTarget );
@@ -826,9 +823,9 @@ namespace Ogre
         mDefinition->mCompositorManager->getBarrierSolver().assumeTransitions( mInitialLayouts );
 
         CompositorNodeVec::const_iterator itor = mNodeSequence.begin();
-        CompositorNodeVec::const_iterator end  = mNodeSequence.end();
+        CompositorNodeVec::const_iterator endt = mNodeSequence.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorNode *node = *itor;
             if( node->getEnabled() )
@@ -863,9 +860,9 @@ namespace Ogre
     void CompositorWorkspace::_swapFinalTarget( vector<TextureGpu*>::type &swappedTargets )
     {
         CompositorChannelVec::const_iterator itor = mExternalRenderTargets.begin();
-        CompositorChannelVec::const_iterator end  = mExternalRenderTargets.end();
+        CompositorChannelVec::const_iterator endt = mExternalRenderTargets.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             TextureGpu *externalTarget = *itor;
             const bool alreadySwapped = std::find( swappedTargets.begin(),
@@ -894,9 +891,9 @@ namespace Ogre
         CompositorShadowNode *retVal = 0;
 
         CompositorShadowNodeVec::const_iterator itor = mShadowNodes.begin();
-        CompositorShadowNodeVec::const_iterator end  = mShadowNodes.end();
+        CompositorShadowNodeVec::const_iterator endt = mShadowNodes.end();
 
-        while( itor != end && !retVal )
+        while( itor != endt && !retVal )
         {
             if( (*itor)->getName() == nodeDefName )
                 retVal = *itor;

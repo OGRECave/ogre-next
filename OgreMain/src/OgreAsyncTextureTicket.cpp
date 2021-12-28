@@ -32,7 +32,6 @@ THE SOFTWARE.
 
 #include "OgreTextureBox.h"
 #include "OgrePixelFormatGpuUtils.h"
-
 #include "OgreException.h"
 #include "OgreLogManager.h"
 

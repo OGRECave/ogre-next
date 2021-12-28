@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "OgreRenderSystem.h"
 
 namespace Ogre

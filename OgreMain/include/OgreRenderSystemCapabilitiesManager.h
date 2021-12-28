@@ -32,6 +32,8 @@ THE SOFTWARE.
 
 #include "OgreSingleton.h"
 
+#include <ogrestd/map.h>
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

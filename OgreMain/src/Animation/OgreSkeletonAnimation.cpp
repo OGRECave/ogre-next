@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Animation/OgreSkeletonAnimation.h"
+
 #include "Animation/OgreSkeletonAnimationDef.h"
 #include "Animation/OgreSkeletonInstance.h"
 
@@ -64,9 +65,9 @@ namespace Ogre
         Real *boneWeightsScalar = reinterpret_cast<Real*>( mBoneWeights.get() );
 
         SkeletonTrackVec::const_iterator itor = mDefinition->mTracks.begin();
-        SkeletonTrackVec::const_iterator end  = mDefinition->mTracks.end();
+        SkeletonTrackVec::const_iterator endt = mDefinition->mTracks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->getUsedSlots() <= (ARRAY_PACKED_REALS >> 1) )
             {
@@ -310,14 +311,14 @@ namespace Ogre
     void SkeletonAnimation::_applyAnimation( const TransformArray &boneTransforms )
     {
         SkeletonTrackVec::const_iterator itor = mDefinition->mTracks.begin();
-        SkeletonTrackVec::const_iterator end  = mDefinition->mTracks.end();
+        SkeletonTrackVec::const_iterator endt = mDefinition->mTracks.end();
 
         KnownKeyFramesVec::iterator itLastKnownKeyFrame = mLastKnownKeyFrames.begin();
 
         ArrayReal simdWeight = Mathlib::SetAll( mWeight );
         ArrayReal * RESTRICT_ALIAS boneWeights = mBoneWeights.get();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->applyKeyFrameRigAt( *itLastKnownKeyFrame, mCurrentFrame, simdWeight,
                                         boneWeights, boneTransforms );

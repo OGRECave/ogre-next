@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreIndirectBufferPacked.h"
+
 #include "Vao/OgreVaoManager.h"
 
 namespace Ogre

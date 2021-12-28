@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreMesh2.h"
 
 #include "OgreSubMesh2.h"
@@ -42,15 +43,11 @@ THE SOFTWARE.
 #include "OgreLodStrategyManager.h"
 #include "OgrePixelCountLodStrategy.h"
 #include "OgreMovableObject.h"
-
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonManager.h"
-
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreVertexArrayObject.h"
-
 #include "OgreOldSkeletonManager.h"
-
 #include "OgreProfiler.h"
 
 namespace Ogre {
@@ -213,8 +210,8 @@ namespace Ogre {
 
         // Teardown submeshes
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
-        while( itor != end )
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
+        while( itor != endt )
             OGRE_DELETE *itor++;
 
         mSubMeshes.clear();
@@ -253,9 +250,9 @@ namespace Ogre {
 
         // Copy submeshes first
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->clone( destination.get(), vertexBufferType, indexBufferType );
             ++itor;
@@ -485,9 +482,9 @@ namespace Ogre {
         size_t retVal = 0;
 
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             SubMesh *s = *itor;
 
@@ -603,9 +600,9 @@ namespace Ogre {
     void Mesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
     {
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->arrangeEfficient( halfPos, halfTexCoords, qTangents );
             ++itor;
@@ -615,9 +612,9 @@ namespace Ogre {
     void Mesh::dearrangeToInefficient()
     {
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->dearrangeToInefficient();
             ++itor;
@@ -629,9 +626,9 @@ namespace Ogre {
         OgreProfileExhaustive( "Mesh2::prepareForShadowMapping" );
 
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_prepareForShadowMapping( forceSameBuffers );
             ++itor;
@@ -642,9 +639,9 @@ namespace Ogre {
     {
         bool retVal = true;
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end && retVal )
+        while( itor != endt && retVal )
         {
             retVal &= (*itor)->mVao[VpNormal].size() == (*itor)->mVao[VpShadow].size();
             ++itor;
@@ -661,9 +658,9 @@ namespace Ogre {
         bool independent = false;
 
         SubMeshVec::const_iterator itor = mSubMeshes.begin();
-        SubMeshVec::const_iterator end  = mSubMeshes.end();
+        SubMeshVec::const_iterator endt = mSubMeshes.end();
 
-        while( itor != end && !independent )
+        while( itor != endt && !independent )
         {
             if( !(*itor)->mVao[VpNormal].empty() )
                 independent |= (*itor)->mVao[VpNormal][0] != (*itor)->mVao[VpShadow][0];

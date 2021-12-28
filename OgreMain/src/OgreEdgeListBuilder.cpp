@@ -26,12 +26,13 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreEdgeListBuilder.h"
+
 #include "OgreVertexIndexData.h"
 #include "OgreException.h"
 #include "OgreOptimisedUtil.h"
 #include "OgreStringConverter.h"
-
 #include "OgreLogManager.h"
 
 namespace Ogre {

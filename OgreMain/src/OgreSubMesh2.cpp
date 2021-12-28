@@ -26,21 +26,18 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
-#include "OgreSubMesh2.h"
-#include "OgreSubMesh.h"
 
-//#include "OgreMesh.h"
+#include "OgreSubMesh2.h"
+
+#include "OgreSubMesh.h"
 #include "OgreMesh2.h"
 #include "OgreException.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreLogManager.h"
 #include "OgreBitwise.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreAsyncTicket.h"
-
 #include "OgreMesh.h"
-
 #include "OgreVertexShadowMapHelper.h"
 #include "OgreStringConverter.h"
 
@@ -86,7 +83,7 @@ namespace Ogre {
         //Ensure bone assignments are sorted.
         std::sort( mBoneAssignments.begin(), mBoneAssignments.end() );
 
-        const VertexBoneAssignmentVec::const_iterator end = mBoneAssignments.end();
+        const VertexBoneAssignmentVec::const_iterator endt = mBoneAssignments.end();
 
         const uint32 numVertices = mVao[VpNormal][0]->getVertexBuffers()[0]->getNumElements();
 
@@ -97,7 +94,7 @@ namespace Ogre {
                                                                         mBoneAssignments.end(), i );
             VertexBoneAssignmentVec::iterator itor = first;
 
-            while( itor != end && itor->vertexIndex == i )
+            while( itor != endt && itor->vertexIndex == i )
             {
                 ++bonesPerVertex;
                 ++itor;
@@ -105,7 +102,7 @@ namespace Ogre {
 
             maxBonesPerVertex = std::max( maxBonesPerVertex, bonesPerVertex );
 
-            if( first == end || first->vertexIndex != i )
+            if( first == endt || first->vertexIndex != i )
             {
                 existsNonSkinnedVertices = true;
             }
@@ -122,7 +119,7 @@ namespace Ogre {
                 Real totalWeight = 0;
 
                 itor = first;
-                while( itor != end && (itor - first) < bonesPerVertex )
+                while( itor != endt && (itor - first) < bonesPerVertex )
                 {
                     totalWeight += itor->weight;
                     ++itor;
@@ -130,7 +127,7 @@ namespace Ogre {
 
                 totalWeight = 1.0f / totalWeight;
                 itor = first;
-                while( itor != end && (itor - first) < bonesPerVertex )
+                while( itor != endt && (itor - first) < bonesPerVertex )
                 {
                     itor->weight *= totalWeight;
                     ++itor;
@@ -195,9 +192,9 @@ namespace Ogre {
             {
                 VertexElement2VecVec vertexDeclaration = mVao[VpNormal][0]->getVertexDeclaration();
                 VertexElement2VecVec::const_iterator itor = vertexDeclaration.begin();
-                VertexElement2VecVec::const_iterator end  = vertexDeclaration.end();
+                VertexElement2VecVec::const_iterator endt = vertexDeclaration.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     VertexElement2Vec::const_iterator itElement = itor->begin();
                     VertexElement2Vec::const_iterator enElement = itor->end();
@@ -244,9 +241,9 @@ namespace Ogre {
             for( size_t i=0; i<numVertices; ++i )
             {
                 VertexArrayObject::ReadRequestsArray::const_iterator itor = readRequests.begin();
-                VertexArrayObject::ReadRequestsArray::const_iterator end  = readRequests.end();
+                VertexArrayObject::ReadRequestsArray::const_iterator endt = readRequests.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     memcpy( newVertexBufData, itor->data + i * itor->vertexBuffer->getBytesPerElement(),
                             v1::VertexElement::getTypeSize( itor->type ) );
@@ -318,8 +315,8 @@ namespace Ogre {
         {
             // Collect actually used bones
             VertexBoneAssignmentVec::const_iterator itor = mBoneAssignments.begin();
-            VertexBoneAssignmentVec::const_iterator end  = mBoneAssignments.end();
-            while( itor != end )
+            VertexBoneAssignmentVec::const_iterator endt = mBoneAssignments.end();
+            while( itor != endt )
             {
                 usedBones.insert( itor->boneIndex );
                 ++itor;
@@ -332,9 +329,9 @@ namespace Ogre {
             mBlendIndexToBoneIndexMap.reserve( usedBones.size() );
 
             set<unsigned short>::type::const_iterator itor = usedBones.begin();
-            set<unsigned short>::type::const_iterator end  = usedBones.end();
+            set<unsigned short>::type::const_iterator endt = usedBones.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 mBlendIndexToBoneIndexMap.push_back( *itor );
                 ++itor;
@@ -482,9 +479,9 @@ namespace Ogre {
 
             SharedVertexBufferMap sharedBuffers;
             VertexArrayObjectArray::const_iterator itor = mVao[i].begin();
-            VertexArrayObjectArray::const_iterator end  = mVao[i].end();
+            VertexArrayObjectArray::const_iterator endt = mVao[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 VertexArrayObject *newVao = (*itor)->clone( parentMesh->mVaoManager, &sharedBuffers,
                                                             vertexBufferType, indexBufferType );
@@ -512,9 +509,9 @@ namespace Ogre {
 
         {
             v1::SubMesh::VertexBoneAssignmentList::const_iterator itor = v1BoneAssignments.begin();
-            v1::SubMesh::VertexBoneAssignmentList::const_iterator end  = v1BoneAssignments.end();
+            v1::SubMesh::VertexBoneAssignmentList::const_iterator endt = v1BoneAssignments.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 mBoneAssignments.push_back( VertexBoneAssignment( itor->second ) );
                 ++itor;
@@ -578,9 +575,9 @@ namespace Ogre {
 
         //Now deal with the automatic LODs
         v1::SubMesh::LODFaceList::const_iterator itor = subMesh->mLodFaceList[vaoPassIdx].begin();
-        v1::SubMesh::LODFaceList::const_iterator end  = subMesh->mLodFaceList[vaoPassIdx].end();
+        v1::SubMesh::LODFaceList::const_iterator endt = subMesh->mLodFaceList[vaoPassIdx].end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             IndexBufferPacked *lodIndexBuffer = importFromV1( *itor );
 
@@ -644,9 +641,9 @@ namespace Ogre {
         poseList.reserve( poseListOrig.size() );
         {
             v1::PoseList::const_iterator itor = poseListOrig.begin();
-            v1::PoseList::const_iterator end  = poseListOrig.end();
+            v1::PoseList::const_iterator endt = poseListOrig.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( (*itor)->getTarget() == subMeshIndex )
                     poseList.push_back( *itor );
@@ -816,9 +813,9 @@ namespace Ogre {
             newVaos.reserve( mVao[vaoPassIdx].size() );
             SharedVertexBufferMap sharedBuffers;
             VertexArrayObjectArray::const_iterator itor = mVao[vaoPassIdx].begin();
-            VertexArrayObjectArray::const_iterator end  = mVao[vaoPassIdx].end();
+            VertexArrayObjectArray::const_iterator endt = mVao[vaoPassIdx].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 newVaos.push_back( arrangeEfficient( halfPos, halfTexCoords, qTangents, *itor,
                                                      sharedBuffers, mParent->mVaoManager ) );
@@ -870,9 +867,9 @@ namespace Ogre {
                 //Setup the VertexElement array and the srcData for the conversion.
                 size_t accumOffset = 0, reorderedElements = 0;
                 VertexElement2Vec::const_iterator itor = vertexBuffers[i]->getVertexElements().begin();
-                VertexElement2Vec::const_iterator end  = vertexBuffers[i]->getVertexElements().end();
+                VertexElement2Vec::const_iterator endt = vertexBuffers[i]->getVertexElements().end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     const VertexElement2 &origElement = *itor;
 
@@ -986,9 +983,9 @@ namespace Ogre {
                                                                 vertexDeclaration->getElements();
             srcElements.reserve( origElements.size() );
             v1::VertexDeclaration::VertexElementList::const_iterator itor = origElements.begin();
-            v1::VertexDeclaration::VertexElementList::const_iterator end  = origElements.end();
+            v1::VertexDeclaration::VertexElementList::const_iterator endt = origElements.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const v1::VertexElement &origElement = *itor;
 
@@ -1045,8 +1042,8 @@ namespace Ogre {
             //Put VES_TANGENT & VES_BINORMAL at the bottom of the array.
             size_t reorderedElements = 0;
             VertexElementArray::iterator itor = srcElements.begin();
-            VertexElementArray::iterator end  = srcElements.end();
-            while( itor != end )
+            VertexElementArray::iterator endt = srcElements.end();
+            while( itor != endt )
             {
                 if( itor->getSemantic() == VES_TANGENT || itor->getSemantic() == VES_BINORMAL )
                 {
@@ -1057,7 +1054,7 @@ namespace Ogre {
                     itor = srcElements.erase( itor );
                     srcElements.push_back( element );
                     itor = srcElements.begin() + idx;
-                    end  = srcElements.end() - reorderedElements;
+                    endt = srcElements.end() - reorderedElements;
                 }
                 else
                 {
@@ -1085,9 +1082,9 @@ namespace Ogre {
         sourceData.reserve( srcElements.size() );
 
         VertexElementArray::const_iterator itor = srcElements.begin();
-        VertexElementArray::const_iterator end  = srcElements.end();
+        VertexElementArray::const_iterator endt = srcElements.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const VertexElement2 element( itor->getType(), itor->getSemantic() );
             const SourceData srcData( srcPtrs[itor->getSource()] + itor->getOffset(),
@@ -1131,9 +1128,9 @@ namespace Ogre {
             bool wantsQTangents = false;
             {
                 VertexElement2Vec::const_iterator itor = vertexElements.begin();
-                VertexElement2Vec::const_iterator end  = vertexElements.end();
+                VertexElement2Vec::const_iterator endt = vertexElements.end();
 
-                while( itor != end && !wantsQTangents )
+                while( itor != endt && !wantsQTangents )
                 {
                     if( itor->mSemantic == VES_NORMAL && itor->mType == VET_SHORT4_SNORM )
                         wantsQTangents = true;
@@ -1145,9 +1142,9 @@ namespace Ogre {
             if( wantsQTangents )
             {
                 SourceDataArray::iterator itor = srcData.begin();
-                SourceDataArray::iterator end  = srcData.end();
+                SourceDataArray::iterator endt = srcData.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     if( itor->element.mSemantic == VES_TANGENT )
                     {
@@ -1180,10 +1177,10 @@ namespace Ogre {
         {
             size_t acumOffset = 0;
             VertexElement2Vec::const_iterator itor = vertexElements.begin();
-            VertexElement2Vec::const_iterator end  = vertexElements.end();
+            VertexElement2Vec::const_iterator endt = vertexElements.end();
             SourceDataArray::iterator itSrc = srcData.begin();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const VertexElement2 &vElement = *itor;
                 size_t writeSize = v1::VertexElement::getTypeSize( vElement.mType );
@@ -1323,9 +1320,9 @@ namespace Ogre {
             newVaos.reserve( mVao[vaoPassIdx].size() );
             SharedVertexBufferMap sharedBuffers;
             VertexArrayObjectArray::const_iterator itor = mVao[vaoPassIdx].begin();
-            VertexArrayObjectArray::const_iterator end  = mVao[vaoPassIdx].end();
+            VertexArrayObjectArray::const_iterator endt = mVao[vaoPassIdx].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 newVaos.push_back( dearrangeEfficient( *itor, sharedBuffers, mParent->mVaoManager ) );
                 ++itor;
@@ -1355,9 +1352,9 @@ namespace Ogre {
 
         VertexElement2VecVec::iterator itNewElementVec = newVertexElements.begin();
         VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
-        VertexBufferPackedVec::const_iterator end  = vertexBuffers.end();
+        VertexBufferPackedVec::const_iterator endt = vertexBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             AsyncTicketPtr asyncTicket = (*itor)->readRequest( 0, (*itor)->getNumElements() );
 
@@ -1515,8 +1512,8 @@ namespace Ogre {
         VertexBufferPackedSet destroyedBuffers;
 
         VertexArrayObjectArray::const_iterator itor = vaos.begin();
-        VertexArrayObjectArray::const_iterator end  = vaos.end();
-        while( itor != end )
+        VertexArrayObjectArray::const_iterator endt = vaos.end();
+        while( itor != endt )
         {
             VertexArrayObject *vao = *itor;
 

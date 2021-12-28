@@ -52,7 +52,6 @@ THE SOFTWARE.
 #include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreUavBufferPacked.h"
 #include "OgreProfiler.h"
-
 #include "OgreLwString.h"
 
 #if OGRE_NO_RENDERDOC_INTEGRATION == 0
@@ -498,9 +497,9 @@ namespace Ogre {
     void RenderSystem::destroyAllRenderPassDescriptors()
     {
         RenderPassDescriptorSet::const_iterator itor = mRenderPassDescs.begin();
-        RenderPassDescriptorSet::const_iterator end  = mRenderPassDescs.end();
+        RenderPassDescriptorSet::const_iterator endt = mRenderPassDescs.end();
 
-        while( itor != end )
+        while( itor != endt )
             delete *itor++;
 
         mRenderPassDescs.clear();
@@ -687,11 +686,11 @@ namespace Ogre {
 
         //Find a depth buffer in the pool
         TextureGpuVec::const_iterator itor = mDepthBufferPool2[poolId].begin();
-        TextureGpuVec::const_iterator end  = mDepthBufferPool2[poolId].end();
+        TextureGpuVec::const_iterator endt = mDepthBufferPool2[poolId].end();
 
         TextureGpu *retVal = 0;
 
-        while( itor != end && !retVal )
+        while( itor != endt && !retVal )
         {
             if( preferDepthTexture == (*itor)->isTexture() &&
                 (depthBufferFormat == PFG_UNKNOWN ||
@@ -819,9 +818,9 @@ namespace Ogre {
             // (destroy primary window last since others may depend on it)
             Window *primary = 0;
             WindowSet::const_iterator itor = mWindows.begin();
-            WindowSet::const_iterator end  = mWindows.end();
+            WindowSet::const_iterator endt = mWindows.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 //Set mTextureManager to 0 as it is no longer valid on shutdown
                 if( (*itor)->getTexture() )

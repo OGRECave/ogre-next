@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreViewport.h"
 
 #include "OgreLogManager.h"
@@ -33,6 +34,7 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreMaterialManager.h"
 #include "OgreRenderSystem.h"
+
 #include <iomanip>
 
 namespace Ogre {

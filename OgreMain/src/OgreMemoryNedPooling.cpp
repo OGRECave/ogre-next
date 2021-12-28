@@ -27,8 +27,11 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgrePrerequisites.h"
+
 #include "OgreMemoryNedPooling.h"
+
 #include "OgrePlatformInformation.h"
 #include "OgreMemoryTracker.h"
 

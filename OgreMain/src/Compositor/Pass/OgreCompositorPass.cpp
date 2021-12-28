@@ -28,21 +28,19 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "Compositor/Pass/OgreCompositorPass.h"
+
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "Compositor/Pass/OgreCompositorPass.h"
-
 #include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
-
 #include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
-
 #include "OgreStringConverter.h"
 
 namespace Ogre
@@ -529,9 +527,9 @@ namespace Ogre
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->passEarlyPreExecute( this );
             ++itor;
@@ -543,9 +541,9 @@ namespace Ogre
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->passPreExecute( this );
             ++itor;
@@ -557,9 +555,9 @@ namespace Ogre
         const CompositorWorkspaceListenerVec &listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             ( *itor )->passPosExecute( this );
             ++itor;

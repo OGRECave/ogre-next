@@ -26,10 +26,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgrePrerequisites.h"
 #if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_TRACK
 
 #include "OgreMemoryTrackAlloc.h"
+
 #include "Threading/OgreLightweightMutex.h"
 
 namespace Ogre

@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreSimpleRenderable.h"
+
 #include "OgreException.h"
 #include "OgreRenderQueue.h"
 #include "OgreMaterialManager.h"

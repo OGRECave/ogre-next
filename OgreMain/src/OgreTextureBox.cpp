@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreTextureBox.h"
 
 namespace Ogre

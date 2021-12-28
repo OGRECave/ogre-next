@@ -31,6 +31,7 @@ THE SOFTWARE.
 #if !OGRE_NO_JSON
 
 #include "OgreHlmsJson.h"
+
 #include "OgreHlmsJsonCompute.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
@@ -500,9 +501,9 @@ namespace Ogre
                                    const String &additionalTextureExtension )
     {
         rapidjson::Value::ConstMemberIterator itor = json.MemberBegin();
-        rapidjson::Value::ConstMemberIterator end  = json.MemberEnd();
+        rapidjson::Value::ConstMemberIterator endt = json.MemberEnd();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->value.IsObject() )
             {
@@ -1012,9 +1013,9 @@ namespace Ogre
 
         {
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
-            Hlms::HlmsDatablockMap::const_iterator end  = datablockMap.end();
+            Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
@@ -1039,12 +1040,12 @@ namespace Ogre
 
         {
             set<const HlmsSamplerblock*>::type::const_iterator itor = samplerblocks.begin();
-            set<const HlmsSamplerblock*>::type::const_iterator end  = samplerblocks.end();
+            set<const HlmsSamplerblock*>::type::const_iterator endt = samplerblocks.end();
 
             if( !samplerblocks.empty() )
                 outString += "\n\t\"samplers\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveSamplerblock( *itor++, outString );
 
             if( !samplerblocks.empty() )
@@ -1056,12 +1057,12 @@ namespace Ogre
 
         {
             set<const HlmsMacroblock*>::type::const_iterator itor = macroblocks.begin();
-            set<const HlmsMacroblock*>::type::const_iterator end  = macroblocks.end();
+            set<const HlmsMacroblock*>::type::const_iterator endt = macroblocks.end();
 
             if( !macroblocks.empty() )
                 outString += "\n\n\t\"macroblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveMacroblock( *itor++, outString );
 
             if( !macroblocks.empty() )
@@ -1073,12 +1074,12 @@ namespace Ogre
 
         {
             set<const HlmsBlendblock*>::type::const_iterator itor = blendblocks.begin();
-            set<const HlmsBlendblock*>::type::const_iterator end  = blendblocks.end();
+            set<const HlmsBlendblock*>::type::const_iterator endt = blendblocks.end();
 
             if( !blendblocks.empty() )
                 outString += "\n\n\t\"blendblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveBlendblock( *itor++, outString );
 
             if( !blendblocks.empty() )
@@ -1100,9 +1101,9 @@ namespace Ogre
             const HlmsDatablock *defaultDatablock = hlms->getDefaultDatablock();
 
             Hlms::HlmsDatablockMap::const_iterator itor = datablockMap.begin();
-            Hlms::HlmsDatablockMap::const_iterator end  = datablockMap.end();
+            Hlms::HlmsDatablockMap::const_iterator endt = datablockMap.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const HlmsDatablock *datablock = itor->second.datablock;
 
@@ -1155,12 +1156,12 @@ namespace Ogre
 
         {
             set<const HlmsSamplerblock*>::type::const_iterator itor = samplerblocks.begin();
-            set<const HlmsSamplerblock*>::type::const_iterator end  = samplerblocks.end();
+            set<const HlmsSamplerblock*>::type::const_iterator endt = samplerblocks.end();
 
             if( !samplerblocks.empty() )
                 outString += "\n\t\"samplers\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveSamplerblock( *itor++, outString );
 
             if( !samplerblocks.empty() )
@@ -1172,12 +1173,12 @@ namespace Ogre
 
         {
             set<const HlmsMacroblock*>::type::const_iterator itor = macroblocks.begin();
-            set<const HlmsMacroblock*>::type::const_iterator end  = macroblocks.end();
+            set<const HlmsMacroblock*>::type::const_iterator endt = macroblocks.end();
 
             if( !macroblocks.empty() )
                 outString += "\n\n\t\"macroblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveMacroblock( *itor++, outString );
 
             if( !macroblocks.empty() )
@@ -1189,12 +1190,12 @@ namespace Ogre
 
         {
             set<const HlmsBlendblock*>::type::const_iterator itor = blendblocks.begin();
-            set<const HlmsBlendblock*>::type::const_iterator end  = blendblocks.end();
+            set<const HlmsBlendblock*>::type::const_iterator endt = blendblocks.end();
 
             if( !blendblocks.empty() )
                 outString += "\n\n\t\"blendblocks\" :\n\t{";
 
-            while( itor != end )
+            while( itor != endt )
                 saveBlendblock( *itor++, outString );
 
             if( !blendblocks.empty() )

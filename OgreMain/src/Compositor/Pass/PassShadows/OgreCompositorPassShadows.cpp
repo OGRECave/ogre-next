@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/Pass/PassShadows/OgreCompositorPassShadowsDef.h"
-
 #include "OgreCamera.h"
 #include "OgreRoot.h"
 

@@ -29,9 +29,9 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreShaderParams.h"
+
 #include "OgreGpuProgram.h"
 #include "OgreLogManager.h"
-
 #include "OgreVector2.h"
 #include "OgreVector3.h"
 #include "OgreMatrix4.h"
@@ -47,9 +47,9 @@ namespace Ogre
     void ShaderParams::updateParameters( GpuProgramParametersSharedPtr params, bool bForce )
     {
         ParamVec::iterator itor = mParams.begin();
-        ParamVec::iterator end  = mParams.end();
+        ParamVec::iterator endt = mParams.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->isDirty || bForce )
             {
@@ -137,12 +137,12 @@ namespace Ogre
         ShaderParams::Param *retVal = 0;
 
         ParamVec::iterator itor = mParams.begin();
-        ParamVec::iterator end  = mParams.end();
+        ParamVec::iterator endt = mParams.end();
 
-        while( itor != end && itor->name != name )
+        while( itor != endt && itor->name != name )
             ++itor;
 
-        if( itor != end )
+        if( itor != endt )
             retVal = &(*itor);
 
         return retVal;
@@ -153,12 +153,12 @@ namespace Ogre
         bool wasRemoved = false;
 
         ParamVec::iterator itor = mParams.begin();
-        ParamVec::iterator end  = mParams.end();
+        ParamVec::iterator endt = mParams.end();
 
-        while( itor != end && itor->name != name )
+        while( itor != endt && itor->name != name )
             ++itor;
 
-        if( itor != end )
+        if( itor != endt )
         {
             efficientVectorRemove( mParams, itor );
             wasRemoved = true;

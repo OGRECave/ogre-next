@@ -30,8 +30,8 @@ THE SOFTWARE.
 
 #ifdef _OGRE_MULTISOURCE_VBO
 #include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreVaoManager.h"
 
+#include "Vao/OgreVaoManager.h"
 #include "OgreStringConverter.h"
 
 namespace Ogre
@@ -86,9 +86,9 @@ namespace Ogre
         size_t multiSourceId = inOutVertexBuffers[0]->getMultiSourceId();
 
         VertexBufferPackedVec::const_iterator itor = inOutVertexBuffers.begin();
-        VertexBufferPackedVec::const_iterator end  = inOutVertexBuffers.end();
+        VertexBufferPackedVec::const_iterator endt = inOutVertexBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->getMultiSourcePool() != this )
             {
@@ -112,7 +112,7 @@ namespace Ogre
 
         itor = inOutVertexBuffers.begin();
 
-        while( itor != end )
+        while( itor != endt )
             delete *itor++;
 
         inOutVertexBuffers.clear();

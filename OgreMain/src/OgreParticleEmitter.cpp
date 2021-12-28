@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreParticleEmitter.h"
+
 #include "OgreParticleEmitterFactory.h"
 
 namespace Ogre

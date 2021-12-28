@@ -29,10 +29,9 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorShadowNodeDef.h"
+
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-
 #include "OgreLight.h"
-
 #include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 
@@ -84,11 +83,11 @@ namespace Ogre
         }
 
         ShadowMapTexDefVec::const_iterator itor = mShadowMapTexDefinitions.begin();
-        ShadowMapTexDefVec::const_iterator end  = mShadowMapTexDefinitions.end();
+        ShadowMapTexDefVec::const_iterator endt = mShadowMapTexDefinitions.end();
 
         size_t newLight = 1;
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->light == lightIdx )
                 newLight = 0;
@@ -125,9 +124,9 @@ namespace Ogre
         mLightTypesMask.resize( mNumLights, 0u );
 
         CompositorTargetDefVec::iterator itor = mTargetPasses.begin();
-        CompositorTargetDefVec::iterator end  = mTargetPasses.end();
+        CompositorTargetDefVec::iterator endt = mTargetPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const CompositorPassDefVec &passDefVec = itor->getCompositorPasses();
             CompositorPassDefVec::const_iterator it = passDefVec.begin();

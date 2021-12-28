@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMaterialSerializer.h"
+
 #include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 #include "OgreException.h"

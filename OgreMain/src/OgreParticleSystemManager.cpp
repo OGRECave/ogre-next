@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreParticleSystemManager.h"
+
 #include "OgreParticleEmitterFactory.h"
 #include "OgreParticleAffectorFactory.h"
 #include "OgreException.h"

@@ -32,7 +32,6 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/Pass/PassTargetBarrier/OgreCompositorPassTargetBarrierDef.h"
-
 #include "OgreRenderSystem.h"
 
 namespace Ogre

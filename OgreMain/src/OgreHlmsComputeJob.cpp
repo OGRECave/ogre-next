@@ -33,16 +33,12 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsManager.h"
 #include "OgreRootLayout.h"
-
 #include "OgreRenderSystem.h"
-
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
-
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreLwString.h"
-
 #include "OgreLogManager.h"
 
 namespace Ogre
@@ -97,9 +93,9 @@ namespace Ogre
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         FastArray<const HlmsSamplerblock*>::const_iterator itor = mSamplerSlots.begin();
-        FastArray<const HlmsSamplerblock*>::const_iterator end  = mSamplerSlots.end();
+        FastArray<const HlmsSamplerblock*>::const_iterator endt = mSamplerSlots.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( *itor )
                 hlmsManager->destroySamplerblock( *itor );
@@ -159,8 +155,8 @@ namespace Ogre
     void HlmsComputeJob::removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne )
     {
         typename T::const_iterator itor = container.begin() + first;
-        typename T::const_iterator end  = container.begin() + lastPlusOne;
-        while( itor != end )
+        typename T::const_iterator endt = container.begin() + lastPlusOne;
+        while( itor != endt )
         {
             if( itor->isTexture() && itor->getTexture().texture )
                 itor->getTexture().texture->removeListener( this );
@@ -557,9 +553,9 @@ namespace Ogre
 
                 DescriptorSetTexSlotArray::const_iterator begin= mTexSlots.begin();
                 DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
-                DescriptorSetTexSlotArray::const_iterator end  = mTexSlots.end();
+                DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     const size_t slotIdx = ( size_t )( itor - begin );
                     propName.resize( texturePropNameSize );
@@ -607,9 +603,9 @@ namespace Ogre
 
                 DescriptorSetUavSlotArray::const_iterator begin= mUavSlots.begin();
                 DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
-                DescriptorSetUavSlotArray::const_iterator end  = mUavSlots.end();
+                DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     const size_t slotIdx = itor - begin;
                     propName.resize( texturePropNameSize );
@@ -916,9 +912,9 @@ namespace Ogre
         {
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             FastArray<const HlmsSamplerblock*>::const_iterator itor = mSamplerSlots.begin() + numSlots;
-            FastArray<const HlmsSamplerblock*>::const_iterator end  = mSamplerSlots.end();
+            FastArray<const HlmsSamplerblock*>::const_iterator endt = mSamplerSlots.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( *itor )
                     hlmsManager->destroySamplerblock( *itor );
@@ -1202,9 +1198,9 @@ namespace Ogre
         bool bChanged = false;
         DescriptorSetTexture2::BufferSlot emptySlot = DescriptorSetTexture2::BufferSlot::makeEmpty();
         DescriptorSetTexSlotArray::iterator itor = mTexSlots.begin();
-        DescriptorSetTexSlotArray::iterator end  = mTexSlots.end();
+        DescriptorSetTexSlotArray::iterator endt = mTexSlots.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->isBuffer() && itor->getBuffer().buffer )
             {
@@ -1223,9 +1219,9 @@ namespace Ogre
         bool bChanged = false;
         DescriptorSetUav::BufferSlot emptySlot = DescriptorSetUav::BufferSlot::makeEmpty();
         DescriptorSetUavSlotArray::iterator itor = mUavSlots.begin();
-        DescriptorSetUavSlotArray::iterator end  = mUavSlots.end();
+        DescriptorSetUavSlotArray::iterator endt = mUavSlots.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->isBuffer() && itor->getBuffer().buffer )
             {
@@ -1334,9 +1330,9 @@ namespace Ogre
             dstJob->mUavsDescSet = hlmsManager->getDescriptorSetUav( *this->mUavsDescSet );
 
         FastArray<const HlmsSamplerblock*>::const_iterator itor = dstJob->mSamplerSlots.begin();
-        FastArray<const HlmsSamplerblock*>::const_iterator end  = dstJob->mSamplerSlots.end();
+        FastArray<const HlmsSamplerblock*>::const_iterator endt = dstJob->mSamplerSlots.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( *itor )
                 hlmsManager->addReference( *itor );
@@ -1352,9 +1348,9 @@ namespace Ogre
             if( texture->isTexture() )
             {
                 DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
-                DescriptorSetTexSlotArray::const_iterator end  = mTexSlots.end();
+                DescriptorSetTexSlotArray::const_iterator endt = mTexSlots.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     if( itor->isTexture() && itor->getTexture().texture == texture )
                     {
@@ -1369,9 +1365,9 @@ namespace Ogre
             if( texture->isUav() )
             {
                 DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
-                DescriptorSetUavSlotArray::const_iterator end  = mUavSlots.end();
+                DescriptorSetUavSlotArray::const_iterator endt = mUavSlots.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     if( itor->isTexture() && itor->getTexture().texture == texture )
                     {

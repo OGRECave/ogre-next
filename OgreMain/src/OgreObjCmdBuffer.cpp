@@ -29,19 +29,17 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreObjCmdBuffer.h"
+
 #include "OgreTextureGpu.h"
 #include "OgreStagingTexture.h"
 #include "OgreTextureGpuManager.h"
-
 #include "OgreId.h"
 #include "OgreLwString.h"
 #include "OgreCommon.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreImage2.h"
 #include "OgreTextureFilters.h"
-
 #include "OgreException.h"
 #include "OgreProfiler.h"
 
@@ -64,9 +62,9 @@ namespace Ogre
             uint8 *newBuffStart = mCommandAllocator.begin();
 
             FastArray<Cmd*>::iterator itor = mCommandBuffer.begin();
-            FastArray<Cmd*>::iterator end  = mCommandBuffer.end();
+            FastArray<Cmd*>::iterator endt = mCommandBuffer.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const uintptr_t ptrDiff = reinterpret_cast<uint8*>( *itor ) - prevBuffStart;
                 *itor = reinterpret_cast<Cmd*>( newBuffStart + ptrDiff );
@@ -86,9 +84,9 @@ namespace Ogre
     void ObjCmdBuffer::clear()
     {
         FastArray<Cmd*>::const_iterator itor = mCommandBuffer.begin();
-        FastArray<Cmd*>::const_iterator end  = mCommandBuffer.end();
+        FastArray<Cmd*>::const_iterator endt = mCommandBuffer.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->~Cmd();
             ++itor;
@@ -101,9 +99,9 @@ namespace Ogre
     void ObjCmdBuffer::execute()
     {
         FastArray<Cmd*>::const_iterator itor = mCommandBuffer.begin();
-        FastArray<Cmd*>::const_iterator end  = mCommandBuffer.end();
+        FastArray<Cmd*>::const_iterator endt = mCommandBuffer.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->execute();
             ++itor;
@@ -200,9 +198,9 @@ namespace Ogre
         OgreProfileExhaustive( "ObjCmdBuffer::NotifyDataIsReady::execute" );
 
         FilterBaseArray::const_iterator itor = filters.begin();
-        FilterBaseArray::const_iterator end  = filters.end();
+        FilterBaseArray::const_iterator endt = filters.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_executeSerial( texture );
             OGRE_DELETE *itor;

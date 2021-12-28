@@ -27,10 +27,11 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Compositor/OgreTextureDefinition.h"
+
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
-
 #include "OgreRenderSystem.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -50,9 +51,9 @@ namespace Ogre
     {
         size_t numInputChannels = 0;
         NameToChannelMap::const_iterator itor = mNameToChannelMap.begin();
-        NameToChannelMap::const_iterator end  = mNameToChannelMap.end();
+        NameToChannelMap::const_iterator endt = mNameToChannelMap.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             size_t index;
             TextureSource texSource;
@@ -70,9 +71,9 @@ namespace Ogre
         size_t numInputChannels = 0;
         IdString nullString;
         IdStringVec::const_iterator itor = mInputBuffers.begin();
-        IdStringVec::const_iterator end  = mInputBuffers.end();
+        IdStringVec::const_iterator endt = mInputBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( *itor != nullString )
                 ++numInputChannels;
@@ -156,9 +157,9 @@ namespace Ogre
 
             //Update the references
             NameToChannelMap::iterator itor = mNameToChannelMap.begin();
-            NameToChannelMap::iterator end  = mNameToChannelMap.end();
+            NameToChannelMap::iterator endt = mNameToChannelMap.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 size_t otherIndex;
                 decodeTexSource( itor->second, otherIndex, textureSource );
@@ -288,9 +289,9 @@ namespace Ogre
 
         //Create the local textures
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
-        TextureDefinitionVec::const_iterator end  = textureDefs.end();
+        TextureDefinitionVec::const_iterator endt = textureDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             String textureName = (itor->getName() + IdString( id )).getFriendlyText();
 
@@ -392,9 +393,9 @@ namespace Ogre
     {
         TextureGpuManager *textureManager = renderSys->getTextureGpuManager();
         CompositorChannelVec::const_iterator itor = inOutTexContainer.begin();
-        CompositorChannelVec::const_iterator end  = inOutTexContainer.end();
+        CompositorChannelVec::const_iterator endt = inOutTexContainer.end();
 
-        while( itor != end )
+        while( itor != endt )
             textureManager->destroyTexture( *itor++ );
 
         inOutTexContainer.clear();
@@ -405,11 +406,11 @@ namespace Ogre
                                                              const TextureGpu *finalTarget )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
-        TextureDefinitionVec::const_iterator end  = textureDefs.end();
+        TextureDefinitionVec::const_iterator endt = textureDefs.end();
 
         CompositorChannelVec::iterator itorTex = inOutTexContainer.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (itor->width == 0 || itor->height == 0) )
             {
@@ -427,11 +428,11 @@ namespace Ogre
                                                              const CompositorPassVec *passes )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
-        TextureDefinitionVec::const_iterator end  = textureDefs.end();
+        TextureDefinitionVec::const_iterator endt = textureDefs.end();
 
         CompositorChannelVec::iterator itorTex = inOutTexContainer.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (itor->width == 0 || itor->height == 0) )
             {
@@ -483,9 +484,9 @@ namespace Ogre
         //Search it everywhere and remove where it's appropiate
         {
             IdStringVec::iterator itor = mInputBuffers.begin();
-            IdStringVec::iterator end  = mInputBuffers.end();
+            IdStringVec::iterator endt = mInputBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( *itor == name )
                     *itor = IdString();
@@ -498,14 +499,14 @@ namespace Ogre
 
         {
             BufferDefinitionVec::iterator itor = mLocalBufferDefs.begin();
-            BufferDefinitionVec::iterator end  = mLocalBufferDefs.end();
+            BufferDefinitionVec::iterator endt = mLocalBufferDefs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->getName() == name )
                 {
                     itor = efficientVectorRemove( mLocalBufferDefs, itor );
-                    end  = mLocalBufferDefs.end();
+                    endt = mLocalBufferDefs.end();
                 }
                 else
                 {
@@ -520,9 +521,9 @@ namespace Ogre
         //Search it everywhere and remove where it's appropiate
         {
             IdStringVec::iterator itor = mInputBuffers.begin();
-            IdStringVec::iterator end  = mInputBuffers.end();
+            IdStringVec::iterator endt = mInputBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( *itor == oldName )
                     *itor = newName;
@@ -532,9 +533,9 @@ namespace Ogre
 
         {
             BufferDefinitionVec::iterator itor = mLocalBufferDefs.begin();
-            BufferDefinitionVec::iterator end  = mLocalBufferDefs.end();
+            BufferDefinitionVec::iterator endt = mLocalBufferDefs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->getName() == oldName )
                     itor->_setName( newName );
@@ -551,9 +552,9 @@ namespace Ogre
 
         VaoManager *vaoManager = renderSys->getVaoManager();
         BufferDefinitionVec::const_iterator itor = bufferDefs.begin();
-        BufferDefinitionVec::const_iterator end  = bufferDefs.end();
+        BufferDefinitionVec::const_iterator endt = bufferDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorNamedBufferVec::iterator itBuf = std::lower_bound( inOutBufContainer.begin(),
                                                                          inOutBufContainer.end(),
@@ -601,9 +602,9 @@ namespace Ogre
 
         VaoManager *vaoManager = renderSys->getVaoManager();
         BufferDefinitionVec::const_iterator itor = bufferDefs.begin();
-        BufferDefinitionVec::const_iterator end  = bufferDefs.end();
+        BufferDefinitionVec::const_iterator endt = bufferDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorNamedBufferVec::iterator itBuf = std::lower_bound( inOutBufContainer.begin(),
                                                                          inOutBufContainer.end(),
@@ -630,9 +631,9 @@ namespace Ogre
 
         VaoManager *vaoManager = renderSys->getVaoManager();
         BufferDefinitionVec::const_iterator itor = bufferDefs.begin();
-        BufferDefinitionVec::const_iterator end  = bufferDefs.end();
+        BufferDefinitionVec::const_iterator endt = bufferDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->widthFactor > 0 || itor->heightFactor > 0 )
             {

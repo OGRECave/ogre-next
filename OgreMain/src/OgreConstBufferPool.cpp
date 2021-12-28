@@ -62,9 +62,9 @@ namespace Ogre
     {
         {
             BufferPoolVecMap::const_iterator itor = mPools.begin();
-            BufferPoolVecMap::const_iterator end  = mPools.end();
+            BufferPoolVecMap::const_iterator endt = mPools.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 BufferPoolVec::const_iterator it = itor->second.begin();
                 BufferPoolVec::const_iterator en = itor->second.end();
@@ -102,9 +102,9 @@ namespace Ogre
 
         {
             ConstBufferPoolUserVec::const_iterator itor = mUsers.begin();
-            ConstBufferPoolUserVec::const_iterator end  = mUsers.end();
+            ConstBufferPoolUserVec::const_iterator endt = mUsers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->mAssignedSlot  = 0;
                 (*itor)->mAssignedPool  = 0;
@@ -151,13 +151,13 @@ namespace Ogre
         extraDestinations.reserve( mDirtyUsersTmp.size() );
 
         ConstBufferPoolUserVec::const_iterator itor = mDirtyUsersTmp.begin();
-        ConstBufferPoolUserVec::const_iterator end  = mDirtyUsersTmp.end();
+        ConstBufferPoolUserVec::const_iterator endt = mDirtyUsersTmp.end();
 
         char *bufferStart = reinterpret_cast<char*>( stagingBuffer->map( uploadSize ) );
         char *data      = bufferStart;
         char *extraData = bufferStart + materialSizeInGpu * mDirtyUsersTmp.size();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const size_t srcOffset = static_cast<size_t>( data - bufferStart );
             const size_t dstOffset = (*itor)->getAssignedSlot() * materialSizeInGpu;
@@ -254,12 +254,12 @@ namespace Ogre
         BufferPoolVec &bufferPool = it->second;
 
         BufferPoolVec::iterator itor = bufferPool.begin();
-        BufferPoolVec::iterator end  = bufferPool.end();
+        BufferPoolVec::iterator endt = bufferPool.end();
 
-        while( itor != end && (*itor)->freeSlots.empty() )
+        while( itor != endt && (*itor)->freeSlots.empty() )
             ++itor;
 
-        if( itor == end )
+        if( itor == endt )
         {
             ConstBufferPacked *materialBuffer = _mVaoManager->createConstBuffer( mBufferSize, BT_DEFAULT,
                                                                                  0, false );
@@ -386,9 +386,9 @@ namespace Ogre
             {
                 //Save all the data we need before we destroy the pools.
                 ConstBufferPoolUserVec::const_iterator itor = mUsers.begin();
-                ConstBufferPoolUserVec::const_iterator end  = mUsers.end();
+                ConstBufferPoolUserVec::const_iterator endt = mUsers.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     OldUserRecord record( *itor, (*itor)->mAssignedPool->hash,
                                           (*itor)->mAssignedPool->extraBuffer != 0 );
@@ -412,9 +412,9 @@ namespace Ogre
             {
                 //Recreate the pools.
                 OldUserRecordVec::const_iterator itor = oldUserRecords.begin();
-                OldUserRecordVec::const_iterator end  = oldUserRecords.end();
+                OldUserRecordVec::const_iterator endt = oldUserRecords.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     this->requestSlot( itor->hash, itor->user, itor->wantsExtraBuffer );
                     itor->user->notifyOptimizationStrategyChanged();

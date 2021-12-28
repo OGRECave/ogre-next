@@ -29,10 +29,10 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassClear/OgreCompositorPassClear.h"
+
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"

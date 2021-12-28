@@ -28,28 +28,24 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgreCamera.h"
-
 #include "Compositor/OgreCompositorShadowNode.h"
+
+#include "OgreCamera.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
-
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgrePass.h"
 #include "OgreDepthBuffer.h"
 #include "OgrePixelFormatGpuUtils.h"
-
 #include "OgreShadowCameraSetupFocused.h"
 #include "OgreShadowCameraSetupPSSM.h"
-
 #include "OgreLogManager.h"
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
@@ -116,10 +112,10 @@ namespace Ogre
         //Create the local textures
         CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itor =
                                                             definition->mShadowMapTexDefinitions.begin();
-        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator end  =
+        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator endt =
                                                             definition->mShadowMapTexDefinitions.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             // One map, one camera
             const size_t shadowMapIdx = itor - definition->mShadowMapTexDefinitions.begin();
@@ -233,9 +229,9 @@ namespace Ogre
                 sceneManager->_setCurrentShadowNode(0, false);
             
             ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-            ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
+            ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 pseudoRootNode = itor->camera->getParentSceneNode();
                 sceneManager->destroyCamera( itor->camera );
@@ -367,11 +363,11 @@ namespace Ogre
         {
             //SceneManager puts the directional lights first. Add them first as casters.
             LightArray::const_iterator itor = globalLightList.lights.begin();
-            LightArray::const_iterator end  = globalLightList.lights.end();
+            LightArray::const_iterator endt = globalLightList.lights.end();
 
             uint32 const * RESTRICT_ALIAS visibilityMask = globalLightList.visibilityMask;
 
-            while( itor != end && (*itor)->getType() == Light::LT_DIRECTIONAL &&
+            while( itor != endt && (*itor)->getType() == Light::LT_DIRECTIONAL &&
                    nxtEmptyLightIdx < mShadowMapCastingLights.size() )
             {
                 if( (*visibilityMask & combinedVisibilityFlags) &&
@@ -390,7 +386,7 @@ namespace Ogre
             }
 
             //Reach the end of directional lights section
-            while( itor != end && (*itor)->getType() == Light::LT_DIRECTIONAL )
+            while( itor != endt && (*itor)->getType() == Light::LT_DIRECTIONAL )
                 ++itor;
 
             startIndex = itor - globalLightList.lights.begin();
@@ -411,9 +407,9 @@ namespace Ogre
                    SortByLightTypeCmp( &globalLightList ) );
 
         vector<size_t>::type::const_iterator itor = mTmpSortedIndexes.begin();
-        vector<size_t>::type::const_iterator end  = mTmpSortedIndexes.end();
+        vector<size_t>::type::const_iterator endt = mTmpSortedIndexes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             assert( *itor < globalLightList.lights.size() ); //This should never happen.
 
@@ -490,9 +486,9 @@ namespace Ogre
         mNumActiveShadowMapCastingLights = 0;
 
         LightClosestArray::iterator itor = mShadowMapCastingLights.begin();
-        LightClosestArray::iterator end  = mShadowMapCastingLights.end();
+        LightClosestArray::iterator endt = mShadowMapCastingLights.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( !itor->isStatic )
             {
@@ -528,9 +524,9 @@ namespace Ogre
     void CompositorShadowNode::restoreStaticShadowCastingLights( const LightListInfo &globalLightList )
     {
         LightClosestArray::iterator itor = mShadowMapCastingLights.begin();
-        LightClosestArray::iterator end  = mShadowMapCastingLights.end();
+        LightClosestArray::iterator endt = mShadowMapCastingLights.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->isStatic && itor->globalIndex < globalLightList.lights.size() )
             {
@@ -551,10 +547,10 @@ namespace Ogre
         //Setup all the cameras
         CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itor =
                                                             mDefinition->mShadowMapTexDefinitions.begin();
-        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator end  =
+        CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator endt =
                                                             mDefinition->mShadowMapTexDefinitions.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             Light const *light = mShadowMapCastingLights[itor->light].light;
 
@@ -720,8 +716,8 @@ namespace Ogre
         //Push **all** shadow casting lights first.
         {
             LightClosestArray::const_iterator itor = mShadowMapCastingLights.begin() + shadowMapStart;
-            LightClosestArray::const_iterator end  = mShadowMapCastingLights.begin() + shadowMapEnd;
-            while( itor != end )
+            LightClosestArray::const_iterator endt = mShadowMapCastingLights.begin() + shadowMapEnd;
+            while( itor != endt )
             {
                 mCurrentLightList.push_back( *itor );
                 ++itor;
@@ -733,8 +729,8 @@ namespace Ogre
             size_t slotsToSkip  = std::max<ptrdiff_t>( startLight - mCurrentLightList.size(), 0 );
             size_t slotsLeft    = std::max<ptrdiff_t>( lightsPerPass - (shadowMapEnd - shadowMapStart), 0 );
             LightList::const_iterator itor = renderableLights.begin();
-            LightList::const_iterator end  = renderableLights.end();
-            while( itor != end && slotsLeft > 0 )
+            LightList::const_iterator endt = renderableLights.end();
+            while( itor != endt && slotsLeft > 0 )
             {
                 if( !mAffectedLights[itor->globalIndex] )
                 {
@@ -761,7 +757,7 @@ namespace Ogre
             size_t shadowIdx=0;
             CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItor =
                                         mDefinition->mShadowMapTexDefinitions.begin() + shadowMapStart;
-            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItorEnd  =
+            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItorEnd =
                                         mDefinition->mShadowMapTexDefinitions.end();
             while( shadowTexItor != shadowTexItorEnd && shadowIdx < pass->getNumShadowContentTextures() )
             {
@@ -870,9 +866,9 @@ namespace Ogre
                                                     Real &outMin, Real &outMax ) const
     {
         ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-        ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
+        ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->camera == shadowMapCamera )
             {
@@ -1041,10 +1037,10 @@ namespace Ogre
         {
             CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itor =
                     mDefinition->mShadowMapTexDefinitions.begin();
-            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator end =
+            CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator endt =
                     mDefinition->mShadowMapTexDefinitions.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( shadowTexDef.getTextureName() == itor->getTextureName() )
                     mShadowMapCastingLights[itor->light].isDirty = true;
@@ -1063,9 +1059,9 @@ namespace Ogre
         CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator itDef =
                 mDefinition->mShadowMapTexDefinitions.begin();
         ShadowMapCameraVec::const_iterator itor = mShadowMapCameras.begin();
-        ShadowMapCameraVec::const_iterator end  = mShadowMapCameras.end();
+        ShadowMapCameraVec::const_iterator endt = mShadowMapCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->idxToContiguousTex >= mContiguousShadowMapTex.size() )
                 mContiguousShadowMapTex.push_back( mLocalTextures[itor->idxToLocalTextures] );
@@ -1146,9 +1142,9 @@ namespace Ogre
         bool hasPointLights = false;
 
         ShadowParamVec::const_iterator itor = shadowParams.begin();
-        ShadowParamVec::const_iterator end  = shadowParams.end();
+        ShadowParamVec::const_iterator endt = shadowParams.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->technique == SHADOWMAP_PSSM )
             {
@@ -1338,7 +1334,7 @@ namespace Ogre
 
         itor = shadowParams.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const size_t lightIdx = itor - shadowParams.begin();
             const ShadowParam &shadowParam = *itor;
@@ -1398,7 +1394,7 @@ namespace Ogre
             //Pass scene for directional and spot lights first
             size_t shadowMapIdx = 0;
             itor = shadowParams.begin();
-            while( itor != end )
+            while( itor != endt )
             {
                 const ShadowParam &shadowParam = *itor;
                 const size_t numSplits = shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
@@ -1440,7 +1436,7 @@ namespace Ogre
             //Pass scene for point lights last
             shadowMapIdx = 0;
             itor = shadowParams.begin();
-            while( itor != end )
+            while( itor != endt )
             {
                 const ShadowParam &shadowParam = *itor;
                 if( shadowParam.atlasId == atlasId &&

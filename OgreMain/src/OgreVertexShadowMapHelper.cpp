@@ -26,13 +26,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreVertexShadowMapHelper.h"
 
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreAsyncTicket.h"
-
 #include "OgreSubMesh2.h"
-
 #include "OgreHardwareBufferManager.h"
 
 namespace Ogre
@@ -50,9 +49,9 @@ namespace Ogre
         outVao.reserve( inVao.size() );
 
         VertexArrayObjectArray::const_iterator itor = inVao.begin();
-        VertexArrayObjectArray::const_iterator end  = inVao.end();
+        VertexArrayObjectArray::const_iterator endt = inVao.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             outVao.push_back( *itor );
             ++itor;
@@ -67,12 +66,12 @@ namespace Ogre
         outVao.reserve( inVao.size() );
 
         VertexArrayObjectArray::const_iterator itor = inVao.begin();
-        VertexArrayObjectArray::const_iterator end  = inVao.end();
+        VertexArrayObjectArray::const_iterator endt = inVao.end();
 
         vector< FastArray<uint32> >::type vertexConversionLuts; //One per Vao
         vertexConversionLuts.resize( inVao.size() );
 
-        while( itor != end )
+        while( itor != endt )
         {
             VertexArrayObject *vao = *itor;
             const size_t currentVaoIdx = itor - inVao.begin();
@@ -377,9 +376,9 @@ namespace Ogre
         bool bFound = false;
 
         VertexArrayObjectArray::const_iterator itor = vao.begin();
-        VertexArrayObjectArray::const_iterator end  = vao.end();
+        VertexArrayObjectArray::const_iterator endt = vao.end();
 
-        while( itor != end && !bFound )
+        while( itor != endt && !bFound )
         {
             const VertexBufferPackedVec &vertexBuffers = (*itor)->getVertexBuffers();
             VertexBufferPackedVec::const_iterator itBuffers = vertexBuffers.begin();
@@ -410,9 +409,9 @@ namespace v1
         if( inGeom.empty() || outGeom.empty() || inGeom[0].vertexData != outGeom[0].vertexData )
         {
             GeometryVec::const_iterator itor = outGeom.begin();
-            GeometryVec::const_iterator end  = outGeom.end();
+            GeometryVec::const_iterator endt = outGeom.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_DELETE itor->vertexData;
                 OGRE_DELETE itor->indexData;
@@ -424,9 +423,9 @@ namespace v1
         outGeom.reserve( inGeom.size() );
 
         GeometryVec::const_iterator itor = inGeom.begin();
-        GeometryVec::const_iterator end  = inGeom.end();
+        GeometryVec::const_iterator endt = inGeom.end();
 
-        while( itor != end )
+        while( itor != endt )
             outGeom.push_back( *itor++ );
     }
     //---------------------------------------------------------------------
@@ -438,12 +437,12 @@ namespace v1
         outGeom.reserve( inGeom.size() );
 
         GeometryVec::const_iterator itor = inGeom.begin();
-        GeometryVec::const_iterator end  = inGeom.end();
+        GeometryVec::const_iterator endt = inGeom.end();
 
         vector< FastArray<uint32> >::type vertexConversionLuts; //One per Geom
         vertexConversionLuts.resize( inGeom.size() );
 
-        while( itor != end )
+        while( itor != endt )
         {
             const Geometry &geom = *itor;
             const size_t currentVaoIdx = itor - inGeom.begin();
@@ -655,9 +654,9 @@ namespace v1
         bool bFound = false;
 
         GeometryVec::const_iterator itor = geom.begin();
-        GeometryVec::const_iterator end  = geom.end();
+        GeometryVec::const_iterator endt = geom.end();
 
-        while( itor != end && !bFound )
+        while( itor != endt && !bFound )
         {
             if( itor->vertexData == vertexBuffer )
             {

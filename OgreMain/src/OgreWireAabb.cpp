@@ -5,9 +5,7 @@
 
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
-
 #include "OgreSceneManager.h"
-
 #include "OgreRoot.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
@@ -41,8 +39,8 @@ namespace Ogre
         VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
         VertexArrayObjectArray::const_iterator itor = mVaoPerLod[0].begin();
-        VertexArrayObjectArray::const_iterator end  = mVaoPerLod[0].end();
-        while( itor != end )
+        VertexArrayObjectArray::const_iterator endt = mVaoPerLod[0].end();
+        while( itor != endt )
         {
             VertexArrayObject *vao = *itor;
 

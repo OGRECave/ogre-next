@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Vao/OgreVertexBufferPacked.h"
+
 #include "Vao/OgreIndexBufferPacked.h"
 
 namespace Ogre

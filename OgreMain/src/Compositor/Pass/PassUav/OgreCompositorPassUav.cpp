@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassUav/OgreCompositorPassUav.h"
+
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorNode.h"
@@ -36,7 +37,6 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Vao/OgreUavBufferPacked.h"
-
 #include "OgreRenderSystem.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreRoot.h"
@@ -101,9 +101,9 @@ namespace Ogre
             const CompositorPassUavDef::TextureSources &textureSources =
                     mDefinition->getTextureSources();
             CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
+            CompositorPassUavDef::TextureSources::const_iterator endt = textureSources.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 retVal = std::max( retVal, itor->uavSlot + 1u );
                 ++itor;
@@ -113,8 +113,8 @@ namespace Ogre
         {
             const CompositorPassUavDef::BufferSourceVec &bufferSources = mDefinition->getBufferSources();
             CompositorPassUavDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassUavDef::BufferSourceVec::const_iterator end  = bufferSources.end();
-            while( itor != end )
+            CompositorPassUavDef::BufferSourceVec::const_iterator endt = bufferSources.end();
+            while( itor != endt )
             {
                 retVal = std::max( retVal, itor->uavSlot + 1u );
                 ++itor;
@@ -135,8 +135,8 @@ namespace Ogre
             const CompositorPassUavDef::TextureSources &textureSources =
                     mDefinition->getTextureSources();
             CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
+            CompositorPassUavDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 TextureGpu *texture;
 
@@ -178,8 +178,8 @@ namespace Ogre
         {
             const CompositorPassUavDef::BufferSourceVec &bufferSources = mDefinition->getBufferSources();
             CompositorPassUavDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
-            CompositorPassUavDef::BufferSourceVec::const_iterator end  = bufferSources.end();
-            while( itor != end )
+            CompositorPassUavDef::BufferSourceVec::const_iterator endt = bufferSources.end();
+            while( itor != endt )
             {
                 UavBufferPacked *uavBuffer = 0;
 
@@ -245,9 +245,9 @@ namespace Ogre
         {
             HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
             FastArray<DescriptorSetUav::Slot>::const_iterator itor = mDescriptorSetUav->mUavs.begin();
-            FastArray<DescriptorSetUav::Slot>::const_iterator end  = mDescriptorSetUav->mUavs.end();
+            FastArray<DescriptorSetUav::Slot>::const_iterator endt = mDescriptorSetUav->mUavs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->isTexture() )
                     itor->getTexture().texture->removeListener( this );

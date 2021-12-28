@@ -27,8 +27,9 @@ THE SOFTWARE.
 */
 #include "OgreStableHeaders.h"
 
-#include "OgreCommon.h"
 #include "OgreStreamSerialiser.h"
+
+#include "OgreCommon.h"
 #include "OgreBitwise.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"

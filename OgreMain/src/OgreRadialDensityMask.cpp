@@ -35,14 +35,12 @@ THE SOFTWARE.
 #include "OgreRectangle2D2.h"
 #include "OgreSceneManager.h"
 #include "OgreTechnique.h"
-
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
-
 #include "OgreShaderPrimitives.h"
 
 namespace Ogre

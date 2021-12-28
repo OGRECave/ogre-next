@@ -37,7 +37,6 @@ THE SOFTWARE.
 #include "OgrePlane.h"
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
-#include "OgreStableHeaders.h"
 
 namespace Ogre
 {

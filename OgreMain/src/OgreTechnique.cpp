@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreTechnique.h"
+
 #include "OgreMaterial.h"
 #include "OgrePass.h"
 #include "OgreRoot.h"

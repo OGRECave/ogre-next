@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreInternalCubemapProbe.h"
-#include "OgreForwardPlusBase.h"
 
+#include "OgreForwardPlusBase.h"
 #include "OgreSceneManager.h"
 
 namespace Ogre

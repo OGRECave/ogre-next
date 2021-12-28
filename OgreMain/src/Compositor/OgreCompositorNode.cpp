@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorNode.h"
+
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/Pass/PassClear/OgreCompositorPassClear.h"
@@ -49,16 +50,12 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/Pass/OgreCompositorPassProvider.h"
 #include "Vao/OgreUavBufferPacked.h"
-
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
-
 #include "OgreTextureGpu.h"
-
 #include "OgreLogManager.h"
 
 namespace Ogre
@@ -114,8 +111,8 @@ namespace Ogre
     {
         //Destroy all passes
         CompositorPassVec::const_iterator itor = mPasses.begin();
-        CompositorPassVec::const_iterator end  = mPasses.end();
-        while( itor != end )
+        CompositorPassVec::const_iterator endt = mPasses.end();
+        while( itor != endt )
             OGRE_DELETE *itor++;
         mPasses.clear();
     }
@@ -123,10 +120,10 @@ namespace Ogre
     void CompositorNode::routeOutputs()
     {
         CompositorChannelVec::iterator itor = mOutTextures.begin();
-        CompositorChannelVec::iterator end  = mOutTextures.end();
+        CompositorChannelVec::iterator endt = mOutTextures.end();
         CompositorChannelVec::iterator begin= mOutTextures.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             size_t index;
             TextureDefinitionBase::TextureSource textureSource;
@@ -146,9 +143,9 @@ namespace Ogre
     void CompositorNode::disconnectOutput()
     {
         CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-        CompositorNodeVec::const_iterator end  = mConnectedNodes.end();
+        CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorChannelVec::const_iterator texIt = mLocalTextures.begin();
             CompositorChannelVec::const_iterator texEn = mLocalTextures.end();
@@ -181,8 +178,8 @@ namespace Ogre
         CompositorNamedBuffer cmp;
         const CompositorNamedBufferVec &globalBuffers = mWorkspace->getGlobalBuffers();
         CompositorNamedBufferVec::const_iterator itor = globalBuffers.begin();
-        CompositorNamedBufferVec::const_iterator end  = globalBuffers.end();
-        while( itor != end )
+        CompositorNamedBufferVec::const_iterator endt = globalBuffers.end();
+        while( itor != endt )
         {
             CompositorNamedBufferVec::iterator itBuf = std::lower_bound( mBuffers.begin(),
                                                                          mBuffers.end(),
@@ -221,9 +218,9 @@ namespace Ogre
         {
             //Our attachees may have that texture too.
             CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator end  = mConnectedNodes.end();
+            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->notifyRecreated( channel );
                 ++itor;
@@ -257,9 +254,9 @@ namespace Ogre
 
                 //Check if we'll need to clear our outputs
                 IdStringVec::const_iterator itor = mDefinition->mOutBufferChannelMapping.begin();
-                IdStringVec::const_iterator end  = mDefinition->mOutBufferChannelMapping.end();
+                IdStringVec::const_iterator endt = mDefinition->mOutBufferChannelMapping.end();
 
-                while( itor != end && !bFoundOuts )
+                while( itor != endt && !bFoundOuts )
                 {
                     if( *itor == bufIt->name )
                         bFoundOuts = true;
@@ -274,9 +271,9 @@ namespace Ogre
         {
             //Our attachees may be using that buffer too.
             CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator end  = mConnectedNodes.end();
+            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->notifyRecreated( oldBuffer, newBuffer );
                 ++itor;
@@ -330,9 +327,9 @@ namespace Ogre
         {
             //Our attachees may have that texture too.
             CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator end  = mConnectedNodes.end();
+            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->notifyDestroyed( channel );
                 ++itor;
@@ -364,9 +361,9 @@ namespace Ogre
             {
                 //Check if we'll need to clear our outputs
                 IdStringVec::const_iterator itor = mDefinition->mOutBufferChannelMapping.begin();
-                IdStringVec::const_iterator end  = mDefinition->mOutBufferChannelMapping.end();
+                IdStringVec::const_iterator endt = mDefinition->mOutBufferChannelMapping.end();
 
-                while( itor != end && !bFoundOuts )
+                while( itor != endt && !bFoundOuts )
                 {
                     if( *itor == bufIt->name )
                         bFoundOuts = true;
@@ -388,9 +385,9 @@ namespace Ogre
         {
             //Our attachees may be using that buffer too.
             CompositorNodeVec::const_iterator itor = mConnectedNodes.begin();
-            CompositorNodeVec::const_iterator end  = mConnectedNodes.end();
+            CompositorNodeVec::const_iterator endt = mConnectedNodes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->notifyDestroyed( buffer );
                 ++itor;
@@ -789,9 +786,9 @@ namespace Ogre
 
         //Execute our passes
         CompositorPassVec::const_iterator itor = mPasses.begin();
-        CompositorPassVec::const_iterator end  = mPasses.end();
+        CompositorPassVec::const_iterator endt = mPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorPass *pass = *itor;
             const CompositorPassDef *passDef = pass->getDefinition();
@@ -852,9 +849,9 @@ namespace Ogre
     void CompositorNode::resetAllNumPassesLeft()
     {
         CompositorPassVec::const_iterator itor = mPasses.begin();
-        CompositorPassVec::const_iterator end  = mPasses.end();
+        CompositorPassVec::const_iterator endt = mPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->resetNumPassesLeft();
             ++itor;

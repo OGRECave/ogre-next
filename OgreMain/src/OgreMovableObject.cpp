@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMovableObject.h"
+
 #include "OgreSceneNode.h"
 #include "OgreLight.h"
 #include "OgreEntity.h"
@@ -619,10 +620,10 @@ namespace Ogre {
                                                     MEMCATEGORY_SCENE_CONTROL );
 
         FrustumVec::const_iterator itor = frustums.begin();
-        FrustumVec::const_iterator end  = frustums.end();
+        FrustumVec::const_iterator endt = frustums.end();
         ArraySixPlanes *planesIt = planes;
 
-        while( itor != end )
+        while( itor != endt )
         {
             const Plane *frustumPlanes = (*itor)->_getCachedFrustumPlanes();
 
@@ -644,10 +645,10 @@ namespace Ogre {
         ArrayAabb * RESTRICT_ALIAS aabbs = aabbsPtr.get();
 
         itor = cubemapFrustums.begin();
-        end  = cubemapFrustums.end();
+        endt = cubemapFrustums.end();
         ArrayAabb *aabbsIt = aabbs;
 
-        while( itor != end )
+        while( itor != endt )
         {
             assert( dynamic_cast<const Camera*>(*itor) );
             const Camera *c = static_cast<const Camera*>(*itor);

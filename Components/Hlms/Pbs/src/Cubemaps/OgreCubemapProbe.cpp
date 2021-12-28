@@ -29,22 +29,19 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Cubemaps/OgreCubemapProbe.h"
+
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
-
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreId.h"
-
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
-
 #include "OgreInternalCubemapProbe.h"
-
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 

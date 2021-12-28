@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreTextureUnitState.h"
+
 #include "OgrePass.h"
 #include "OgreMaterialManager.h"
 #include "OgreControllerManager.h"
@@ -153,8 +154,8 @@ namespace Ogre {
 
         {
             vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
-            vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
-            while( itor != end )
+            vector<TextureGpu*>::type::iterator endt = mFramePtrs.end();
+            while( itor != endt )
             {
                 if( *itor )
                     (*itor)->addListener( this );
@@ -1469,8 +1470,8 @@ namespace Ogre {
     void TextureUnitState::cleanFramePtrs()
     {
         vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
-        vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
-        while( itor != end )
+        vector<TextureGpu*>::type::iterator endt = mFramePtrs.end();
+        while( itor != endt )
         {
             if( *itor )
                 (*itor)->removeListener( this );
@@ -1485,9 +1486,9 @@ namespace Ogre {
         if( reason == TextureGpuListener::Deleted )
         {
             vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
-            vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
+            vector<TextureGpu*>::type::iterator endt = mFramePtrs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( *itor == texture )
                 {

@@ -26,9 +26,10 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
-#include "OgreSceneManager.h"
-#include "OgreRoot.h"
 
+#include "OgreSceneManager.h"
+
+#include "OgreRoot.h"
 #include "Math/Array/OgreMathlib.h"
 #include "Math/Array/OgreArraySphere.h"
 #include "Math/Array/OgreBooleanMask.h"

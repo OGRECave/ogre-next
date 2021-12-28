@@ -28,13 +28,12 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHiddenAreaMeshVr.h"
+
 #include "OgreRoot.h"
 #include "Vao/OgreVaoManager.h"
-
 #include "OgreMesh2.h"
 #include "OgreMeshManager2.h"
 #include "OgreSubMesh2.h"
-
 #include "OgreConfigFile.h"
 #include "OgreLogManager.h"
 #include "OgreString.h"

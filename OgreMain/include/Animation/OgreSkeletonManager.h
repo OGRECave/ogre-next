@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgreResourceManager.h"
 #include "OgreSingleton.h"
+#include "OgreIdString.h"
 
 namespace Ogre
 {

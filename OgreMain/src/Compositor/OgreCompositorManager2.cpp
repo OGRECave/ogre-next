@@ -29,18 +29,16 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorManager2.h"
+
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorShadowNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-
 #include "Math/Array/OgreObjectMemoryManager.h"
-
 #include "OgreRectangle2D.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -57,8 +55,8 @@ namespace Ogre
     {
         //Delete all workspace definitions
         typename T::const_iterator itor = container.begin();
-        typename T::const_iterator end  = container.end();
-        while( itor != end )
+        typename T::const_iterator endt = container.end();
+        while( itor != endt )
         {
             OGRE_DELETE itor->second;
             ++itor;
@@ -70,8 +68,8 @@ namespace Ogre
     {
         //Delete all workspace definitions
         typename T::const_iterator itor = container.begin();
-        typename T::const_iterator end  = container.end();
-        while( itor != end )
+        typename T::const_iterator endt = container.end();
+        while( itor != endt )
             OGRE_DELETE *itor++;
         container.clear();
     }
@@ -524,9 +522,9 @@ namespace Ogre
     void CompositorManager2::addQueuedWorkspaces()
     {
         QueuedWorkspaceVec::const_iterator itor = mQueuedWorkspaces.begin();
-        QueuedWorkspaceVec::const_iterator end  = mQueuedWorkspaces.end();
+        QueuedWorkspaceVec::const_iterator endt = mQueuedWorkspaces.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             int position = std::min<int>( itor->position, mWorkspaces.size() );
 
@@ -639,9 +637,9 @@ namespace Ogre
     void CompositorManager2::validateAllNodes()
     {
         CompositorShadowNodeDefVec::iterator itor = mUnfinishedShadowNodes.begin();
-        CompositorShadowNodeDefVec::iterator end  = mUnfinishedShadowNodes.end();
+        CompositorShadowNodeDefVec::iterator endt = mUnfinishedShadowNodes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_validateAndFinish();
             mShadowNodeDefs[(*itor)->getName()] = *itor;
@@ -710,10 +708,10 @@ namespace Ogre
         addQueuedWorkspaces();
 
         WorkspaceVec::const_iterator itor = mWorkspaces.begin();
-        WorkspaceVec::const_iterator end  = mWorkspaces.end();
+        WorkspaceVec::const_iterator endt = mWorkspaces.end();
 
         // We need to validate the device (D3D9) before calling _beginFrame()
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() )
@@ -736,7 +734,7 @@ namespace Ogre
 
         itor = mWorkspaces.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() )
@@ -776,7 +774,7 @@ namespace Ogre
         //The actual update
         itor = mWorkspaces.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() && workspace->isValid() )
@@ -786,7 +784,7 @@ namespace Ogre
 
         itor = mWorkspaces.begin();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() && workspace->isValid() )
@@ -804,12 +802,12 @@ namespace Ogre
     void CompositorManager2::_swapAllFinalTargets()
     {
         WorkspaceVec::const_iterator itor = mWorkspaces.begin();
-        WorkspaceVec::const_iterator end  = mWorkspaces.end();
+        WorkspaceVec::const_iterator endt = mWorkspaces.end();
 
         vector<TextureGpu*>::type swappedTargets;
         swappedTargets.reserve( mWorkspaces.size() * 2u );
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorWorkspace *workspace = (*itor);
             if( workspace->getEnabled() && workspace->isValid() )

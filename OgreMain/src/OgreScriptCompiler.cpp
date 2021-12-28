@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreScriptCompiler.h"
+
 #include "OgreScriptParser.h"
 #include "OgreScriptTranslator.h"
 #include "OgreResourceGroupManager.h"

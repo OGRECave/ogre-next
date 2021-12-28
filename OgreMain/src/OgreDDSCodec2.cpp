@@ -28,9 +28,10 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "OgreDDSCodec2.h"
+
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
-#include "OgreDDSCodec2.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreBitwise.h"

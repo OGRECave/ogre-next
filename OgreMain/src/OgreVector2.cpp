@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreVector2.h"
 
 namespace Ogre

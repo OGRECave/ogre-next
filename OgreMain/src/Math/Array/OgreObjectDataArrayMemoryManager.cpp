@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "Math/Array/OgreArrayMemoryManager.h"
 
 #include "Math/Array/OgreObjectData.h"
-
 #include "OgreMovableObject.h"
 
 namespace Ogre

@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreVertexIndexData.h"
+
 #include "OgreHardwareBufferManager.h"
 #include "OgreHardwareVertexBuffer.h"
 #include "OgreRoot.h"
@@ -700,9 +702,9 @@ namespace v1 {
         memset( semanticCounts, 0, sizeof( semanticCounts ) );
 
         ReadRequestsArray::iterator itor = requests.begin();
-        ReadRequestsArray::iterator end  = requests.end();
+        ReadRequestsArray::iterator endt = requests.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const VertexElement *vElement = vertexDeclaration->findElementBySemantic(
                         itor->semantic, semanticCounts[itor->semantic-1] );
@@ -742,9 +744,9 @@ namespace v1 {
     void VertexData::unlockMultipleElements( ReadRequestsArray &requests )
     {
         ReadRequestsArray::iterator itor = requests.begin();
-        ReadRequestsArray::iterator end  = requests.end();
+        ReadRequestsArray::iterator endt = requests.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->data = 0;
             if( itor->vertexBuffer->isLocked() )

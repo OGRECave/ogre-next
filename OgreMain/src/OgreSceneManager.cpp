@@ -801,9 +801,9 @@ void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCamera
     {
         //Add back to the mSceneNodes list the indestructible nodes.
         SceneNodeList::const_iterator itor = newSceneNodeList.begin();
-        SceneNodeList::const_iterator end  = newSceneNodeList.end();
+        SceneNodeList::const_iterator endt = newSceneNodeList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             SceneNode *sceneNode = *itor;
             sceneNode->mGlobalIndex = mSceneNodes.size();
@@ -822,9 +822,9 @@ void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCamera
     {
         //Reattach all cameras to the root scene node
         CameraList::const_iterator itor = mCameras.begin();
-        CameraList::const_iterator end  = mCameras.end();
+        CameraList::const_iterator endt = mCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             Camera *camera = *itor;
             if( !camera->isAttached() )
@@ -896,14 +896,14 @@ void SceneManager::destroySceneNode( SceneNode* sn )
 		// For any scene nodes which are tracking this node
 		// (or if this node is a tracker), remove its entry.
 		AutoTrackingSceneNodeVec::iterator itor = mAutoTrackingSceneNodes.begin();
-		AutoTrackingSceneNodeVec::iterator end  = mAutoTrackingSceneNodes.end();
+		AutoTrackingSceneNodeVec::iterator endt = mAutoTrackingSceneNodes.end();
 
-		while( itor != end )
+		while( itor != endt )
 		{
 			if( itor->source == sn || itor->target == sn )
 			{
 				itor = efficientVectorRemove( mAutoTrackingSceneNodes, itor );
-				end  = mAutoTrackingSceneNodes.end();
+				endt = mAutoTrackingSceneNodes.end();
 			}
 			else
 			{
@@ -940,9 +940,9 @@ SceneNode* SceneManager::getSceneNode( IdType id )
     // Use reverse iterators, as we assume the most used nodes are the last ones created.
     SceneNode *retVal = 0;
     SceneNodeList::reverse_iterator ritor = mSceneNodes.rbegin();
-    SceneNodeList::reverse_iterator rend  = mSceneNodes.rend();
+    SceneNodeList::reverse_iterator rendt = mSceneNodes.rend();
 
-    while( ritor != rend && (*ritor)->getId() != id )
+    while( ritor != rendt && (*ritor)->getId() != id )
         ++ritor;
 
     if( ritor != mSceneNodes.rend() )
@@ -956,9 +956,9 @@ const SceneNode* SceneManager::getSceneNode( IdType id ) const
     // Use reverse iterators, as we assume the most used nodes are the last ones created.
     SceneNode const *retVal = 0;
     SceneNodeList::const_reverse_iterator ritor = mSceneNodes.rbegin();
-    SceneNodeList::const_reverse_iterator rend  = mSceneNodes.rend();
+    SceneNodeList::const_reverse_iterator rendt = mSceneNodes.rend();
 
-    while( ritor != rend && (*ritor)->getId() != id )
+    while( ritor != rendt && (*ritor)->getId() != id )
         ++ritor;
 
     if( ritor != mSceneNodes.rend() )
@@ -1305,8 +1305,8 @@ void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera, const
             uint8 realLastRq = 0;
             {
                 ObjectMemoryManagerVec::const_iterator itor = mEntitiesMemoryManagerCulledList.begin();
-                ObjectMemoryManagerVec::const_iterator end  = mEntitiesMemoryManagerCulledList.end();
-                while( itor != end )
+                ObjectMemoryManagerVec::const_iterator endt = mEntitiesMemoryManagerCulledList.end();
+                while( itor != endt )
                 {
                     realFirstRq = std::min<uint8>( realFirstRq, (*itor)->_getTotalRenderQueues() );
                     realLastRq  = std::max<uint8>( realLastRq, (*itor)->_getTotalRenderQueues() );
@@ -1425,9 +1425,9 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
                 for( uint8 i=firstRq; i<lastRq; ++i )
                 {
                     MovableObject::MovableObjectArray::const_iterator itor = (*it)[i].begin();
-                    MovableObject::MovableObjectArray::const_iterator end  = (*it)[i].end();
+                    MovableObject::MovableObjectArray::const_iterator endt = (*it)[i].end();
 
-                    while( itor != end )
+                    while( itor != endt )
                     {
                         //Only v1 are added here. v2 objects have already
                         //been added in parallel in phase 01.
@@ -1502,10 +1502,10 @@ void SceneManager::cullLights( Camera *camera, Light::LightTypes startType,
         for( uint8 i=startType; i<endType; ++i )
         {
             MovableObject::MovableObjectArray::const_iterator itor = (*it)[i].begin();
-            MovableObject::MovableObjectArray::const_iterator end  = (*it)[i].end();
+            MovableObject::MovableObjectArray::const_iterator endt = (*it)[i].end();
 
             Light * const *lightBegin  = reinterpret_cast<Light * const *>( itor );
-            Light * const *lightEnd    = reinterpret_cast<Light * const *>( end );
+            Light * const *lightEnd    = reinterpret_cast<Light * const *>( endt );
 
             outLights.appendPOD( lightBegin, lightEnd );
         }
@@ -1595,9 +1595,9 @@ void SceneManager::updateAllAnimationsThread( size_t threadIdx )
         {
             FastArray<SkeletonInstance*>::iterator itor = itByDef->skeletons.begin() +
                                                                     itByDef->threadStarts[threadIdx];
-            FastArray<SkeletonInstance*>::iterator end  = itByDef->skeletons.begin() +
+            FastArray<SkeletonInstance*>::iterator endt = itByDef->skeletons.begin() +
                                                                     itByDef->threadStarts[threadIdx+1];
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->update();
                 ++itor;
@@ -1722,9 +1722,9 @@ void SceneManager::updateAllTransforms()
 
     //Call all listeners
     SceneNodeList::const_iterator itor = mSceneNodesWithListeners.begin();
-    SceneNodeList::const_iterator end  = mSceneNodesWithListeners.end();
+    SceneNodeList::const_iterator endt = mSceneNodesWithListeners.end();
 
-    while( itor != end )
+    while( itor != endt )
     {
         (*itor)->getListener()->nodeUpdated( *itor );
         ++itor;
@@ -1899,9 +1899,9 @@ void SceneManager::cullFrustum( const CullFrustumRequest &request, size_t thread
     {
         visibleObjectsPerRq.resize( 255 );
         VisibleObjectsPerRq::iterator itor = visibleObjectsPerRq.begin();
-        VisibleObjectsPerRq::iterator end  = visibleObjectsPerRq.end();
+        VisibleObjectsPerRq::iterator endt = visibleObjectsPerRq.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->clear();
             ++itor;
@@ -1959,9 +1959,9 @@ void SceneManager::cullFrustum( const CullFrustumRequest &request, size_t thread
                 //V2 meshes can be added to the render queue in parallel
                 bool casterPass = request.casterPass;
                 MovableObject::MovableObjectArray::const_iterator itor = outVisibleObjects.begin();
-                MovableObject::MovableObjectArray::const_iterator end  = outVisibleObjects.end();
+                MovableObject::MovableObjectArray::const_iterator endt = outVisibleObjects.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     RenderableArray::const_iterator itRend = (*itor)->mRenderables.begin();
                     RenderableArray::const_iterator enRend = (*itor)->mRenderables.end();
@@ -2145,18 +2145,18 @@ void SceneManager::buildLightList()
         //const function, silencing a race condition: Update the frustum planes now
         //in case they weren't up to date.
         FrustumVec::const_iterator itor = mVisibleCameras.begin();
-        FrustumVec::const_iterator end  = mVisibleCameras.end();
+        FrustumVec::const_iterator endt = mVisibleCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->getFrustumPlanes();
             ++itor;
         }
 
         itor = mCubeMapCameras.begin();
-        end  = mCubeMapCameras.end();
+        endt = mCubeMapCameras.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->getFrustumPlanes();
             ++itor;
@@ -2366,9 +2366,9 @@ void SceneManager::updateSceneGraph()
     {
         // Auto-track nodes
         AutoTrackingSceneNodeVec::const_iterator itor = mAutoTrackingSceneNodes.begin();
-        AutoTrackingSceneNodeVec::const_iterator end  = mAutoTrackingSceneNodes.end();
+        AutoTrackingSceneNodeVec::const_iterator endt = mAutoTrackingSceneNodes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->source->lookAt( itor->target->_getDerivedPosition() + itor->offset,
                                      Node::TS_WORLD, itor->localDirection );
@@ -2380,8 +2380,8 @@ void SceneManager::updateSceneGraph()
     {
         // Auto-track camera if required
         CameraList::const_iterator itor = mCameras.begin();
-        CameraList::const_iterator end  = mCameras.end();
-        while( itor != end )
+        CameraList::const_iterator endt = mCameras.end();
+        while( itor != endt )
         {
             (*itor)->_autoTrack();
             ++itor;
@@ -2390,9 +2390,9 @@ void SceneManager::updateSceneGraph()
 
     {
         WireAabbVec::const_iterator itor = mTrackingWireAabbs.begin();
-        WireAabbVec::const_iterator end  = mTrackingWireAabbs.end();
+        WireAabbVec::const_iterator endt = mTrackingWireAabbs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_updateTracking();
             (*itor)->getParentNode()->_getFullTransformUpdated();
@@ -2407,8 +2407,8 @@ void SceneManager::updateSceneGraph()
     uint8 numRqs = 0;
     {
         ObjectMemoryManagerVec::const_iterator itor = mEntitiesMemoryManagerCulledList.begin();
-        ObjectMemoryManagerVec::const_iterator end  = mEntitiesMemoryManagerCulledList.end();
-        while( itor != end )
+        ObjectMemoryManagerVec::const_iterator endt = mEntitiesMemoryManagerCulledList.end();
+        while( itor != endt )
         {
             numRqs = std::max<uint8>( numRqs, (*itor)->_getTotalRenderQueues() );
             ++itor;
@@ -2416,8 +2416,8 @@ void SceneManager::updateSceneGraph()
     }
 
     CameraList::const_iterator itor = mCameras.begin();
-    CameraList::const_iterator end  = mCameras.end();
-    while( itor != end )
+    CameraList::const_iterator endt = mCameras.end();
+    while( itor != endt )
     {
         (*itor)->_resetRenderedRqs( numRqs );
         ++itor;
@@ -3354,12 +3354,12 @@ void SceneManager::_addAutotrackingSceneNode( SceneNode* source, SceneNode* targ
 void SceneManager::_removeAutotrackingSceneNode( SceneNode* source )
 {
 	AutoTrackingSceneNodeVec::iterator itor = mAutoTrackingSceneNodes.begin();
-	AutoTrackingSceneNodeVec::iterator end  = mAutoTrackingSceneNodes.end();
+	AutoTrackingSceneNodeVec::iterator endt = mAutoTrackingSceneNodes.end();
 
-	while( itor != end && itor->source != source )
+	while( itor != endt && itor->source != source )
 		++itor;
 
-	if( itor != end )
+	if( itor != endt )
 		efficientVectorRemove( mAutoTrackingSceneNodes, itor );
 }
 //---------------------------------------------------------------------
@@ -4158,15 +4158,15 @@ void SceneManager::destroyMovableObject( MovableObject *m, const String& typeNam
 {
     {
         WireAabbVec::const_iterator itor = mTrackingWireAabbs.begin();
-        WireAabbVec::const_iterator end  = mTrackingWireAabbs.end();
+        WireAabbVec::const_iterator endt = mTrackingWireAabbs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->getTrackedObject() == m )
             {
                 (*itor)->track( (MovableObject*)0 );
                 //Iterators got invalidated. Also stop iterating
-                itor = end = mTrackingWireAabbs.end();
+                itor = endt = mTrackingWireAabbs.end();
             }
             else
             {
@@ -4219,19 +4219,19 @@ void SceneManager::destroyAllMovableObjectsByType(const String& typeName)
     {
             OGRE_LOCK_MUTEX(objectMap->mutex);
         MovableObjectVec::iterator itor = objectMap->movableObjects.begin();
-        MovableObjectVec::iterator end  = objectMap->movableObjects.end();
-        while( itor != end )
+        MovableObjectVec::iterator endt = objectMap->movableObjects.end();
+        while( itor != endt )
         {
             if( (*itor)->_getManager() == this )
             {
                 // Only destroy our own
                 MovableObject *mo = *itor;
                 itor = efficientVectorRemove( objectMap->movableObjects, itor );
-                end  = objectMap->movableObjects.end();
+                endt = objectMap->movableObjects.end();
                 factory->destroyInstance( mo );
 
                 //The node that was at the end got swapped and has now a different index
-                if( itor != end )
+                if( itor != endt )
                     (*itor)->mGlobalIndex = itor - objectMap->movableObjects.begin();
             }
             else
@@ -4263,19 +4263,19 @@ void SceneManager::destroyAllMovableObjects()
                 Root::getSingleton().getMovableObjectFactory(ci->first);
 
             MovableObjectVec::iterator itor = coll->movableObjects.begin();
-            MovableObjectVec::iterator end  = coll->movableObjects.end();
-            while( itor != end )
+            MovableObjectVec::iterator endt = coll->movableObjects.end();
+            while( itor != endt )
             {
                 if( (*itor)->_getManager() == this )
                 {
                     // Only destroy our own
                     MovableObject *mo = *itor;
                     itor = efficientVectorRemove( coll->movableObjects, itor );
-                    end  = coll->movableObjects.end();
+                    endt = coll->movableObjects.end();
                     factory->destroyInstance( mo );
 
                     //The node that was at the end got swapped and has now a different index
-                    if( itor != end )
+                    if( itor != endt )
                         (*itor)->mGlobalIndex = itor - coll->movableObjects.begin();
                 }
                 else

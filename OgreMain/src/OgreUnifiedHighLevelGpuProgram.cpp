@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreUnifiedHighLevelGpuProgram.h"
 #include "OgreException.h"
 #include "OgreGpuProgramManager.h"

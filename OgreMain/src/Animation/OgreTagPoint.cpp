@@ -26,9 +26,10 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
-#include "Animation/OgreTagPoint.h"
-#include "Animation/OgreBone.h"
 
+#include "Animation/OgreTagPoint.h"
+
+#include "Animation/OgreBone.h"
 #include "Math/Array/OgreBooleanMask.h"
 #include "Math/Array/OgreNodeMemoryManager.h"
 #include "OgreSceneManager.h"

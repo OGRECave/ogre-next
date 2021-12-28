@@ -27,13 +27,12 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
-#include "Vao/OgreVertexArrayObject.h"
-#include "Vao/OgreIndexBufferPacked.h"
 
-//Needed by VertexArrayObject::clone
+#include "Vao/OgreVertexArrayObject.h"
+
+#include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreAsyncTicket.h"
 #include "Vao/OgreVaoManager.h"
-
 #include "OgreStringConverter.h"
 
 #include "ogrestd/set.h"
@@ -314,9 +313,9 @@ namespace Ogre
         memset( semanticCounts, 0, sizeof( semanticCounts ) );
 
         ReadRequestsArray::iterator itor = requests.begin();
-        ReadRequestsArray::iterator end  = requests.end();
+        ReadRequestsArray::iterator endt = requests.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             size_t bufferIdx, offset;
             const VertexElement2 *vElement = findBySemantic( itor->semantic, bufferIdx, offset,
@@ -360,9 +359,9 @@ namespace Ogre
         map<VertexBufferPacked const *, size_t>::type seenBuffers;
 
         ReadRequestsArray::iterator itor = tickets.begin();
-        ReadRequestsArray::iterator end  = tickets.end();
+        ReadRequestsArray::iterator endt = tickets.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             assert( ( !itor->asyncTicket.isNull() ||
                       seenBuffers.find( itor->vertexBuffer ) != seenBuffers.end() ||
@@ -394,9 +393,9 @@ namespace Ogre
     void VertexArrayObject::unmapAsyncTickets( ReadRequestsArray &tickets )
     {
         ReadRequestsArray::iterator itor = tickets.begin();
-        ReadRequestsArray::iterator end  = tickets.end();
+        ReadRequestsArray::iterator endt = tickets.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->data = 0;
             if( !itor->asyncTicket.isNull() )

@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 // Ogre includes
 #include "OgreStableHeaders.h"
-#
+
 #include "OgreRoot.h"
 
 #include "OgreRenderSystem.h"
@@ -76,6 +76,13 @@ THE SOFTWARE.
 #include "Animation/OgreSkeletonManager.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "OgreString.h"
+#include "OgreLwString.h"
+#include "OgreHardwareBufferManager.h"
+#include "OgreHighLevelGpuProgramManager.h"
+#include "OgreExternalTextureSourceManager.h"
+#include "OgreScriptCompiler.h"
+#include "OgreWindowEventUtilities.h"
+#include "OgreWindow.h"
 
 #if OGRE_NO_FREEIMAGE == 0
 #include "OgreFreeImageCodec2.h"
@@ -90,15 +97,6 @@ THE SOFTWARE.
 #include "OgreZip.h"
 #endif
 #include "OgreOITDCodec.h"
-
-#include "OgreLwString.h"
-
-#include "OgreHardwareBufferManager.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreExternalTextureSourceManager.h"
-#include "OgreScriptCompiler.h"
-#include "OgreWindowEventUtilities.h"
-#include "OgreWindow.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
 #include "macUtils.h"

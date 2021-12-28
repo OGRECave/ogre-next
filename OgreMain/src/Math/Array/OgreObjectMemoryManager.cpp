@@ -78,9 +78,9 @@ namespace Ogre
     ObjectMemoryManager::~ObjectMemoryManager()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->destroy();
             ++itor;
@@ -174,9 +174,9 @@ namespace Ogre
     void ObjectMemoryManager::defragment()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->defragment();
             ++itor;
@@ -186,9 +186,9 @@ namespace Ogre
     void ObjectMemoryManager::shrinkToFit()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->shrinkToFit();
             ++itor;
@@ -200,9 +200,9 @@ namespace Ogre
         size_t retVal = -1;
         ArrayMemoryManagerVec::const_iterator begin= mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::const_iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->getUsedMemory() )
                 retVal = itor - begin;
@@ -217,9 +217,9 @@ namespace Ogre
         size_t retVal = 0;
 
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::const_iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             retVal += itor->getNumUsedSlotsIncludingFragmented();
             ++itor;

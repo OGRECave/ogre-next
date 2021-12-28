@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMesh2SerializerImpl.h"
+
 #include "OgreMeshFileFormat.h"
 #include "OgreMesh2Serializer.h"
 #include "OgreMesh2.h"
@@ -42,14 +43,13 @@ THE SOFTWARE.
 #include "OgreDistanceLodStrategy.h"
 #include "OgreBitwise.h"
 #include "Hash/MurmurHash3.h"
-
 #include "Vao/OgreVaoManager.h"
-#ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#endif
 #include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreAsyncTicket.h"
+#ifdef _OGRE_MULTISOURCE_VBO
+#include "Vao/OgreMultiSourceVertexBufferPool.h"
+#endif
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 // Disable conversion warnings, we do a lot of them, intentionally
@@ -429,9 +429,9 @@ namespace Ogre {
             {
                 //Go through all the sources
                 VertexBufferPackedVec::const_iterator itor = vertexData.begin();
-                VertexBufferPackedVec::const_iterator end  = vertexData.end();
+                VertexBufferPackedVec::const_iterator endt = vertexData.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     VertexElement2Vec vertexElements = (*itor)->getVertexElements();
 
@@ -661,9 +661,9 @@ namespace Ogre {
             size += vertexData.size() * (MSTREAM_OVERHEAD_SIZE + (sizeof(uint8)* 2));
 
             VertexBufferPackedVec::const_iterator itor = vertexData.begin();
-            VertexBufferPackedVec::const_iterator end  = vertexData.end();
+            VertexBufferPackedVec::const_iterator endt = vertexData.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 size += (*itor)->getTotalSizeBytes();
                 ++itor;
@@ -678,9 +678,9 @@ namespace Ogre {
         size_t size = MSTREAM_OVERHEAD_SIZE;
 
         VertexBufferPackedVec::const_iterator itor = vertexData.begin();
-        VertexBufferPackedVec::const_iterator end  = vertexData.end();
+        VertexBufferPackedVec::const_iterator endt = vertexData.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             //Number of elements in the declaration in this source.
             size += sizeof(uint8);
@@ -885,9 +885,9 @@ namespace Ogre {
         catch( Exception& )
         {
             SubMeshLodVec::iterator itor = totalSubmeshLods.begin();
-            SubMeshLodVec::iterator end  = totalSubmeshLods.end();
+            SubMeshLodVec::iterator endt = totalSubmeshLods.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Uint8Vec::iterator it = itor->vertexBuffers.begin();
                 Uint8Vec::iterator en = itor->vertexBuffers.end();
@@ -1128,9 +1128,9 @@ namespace Ogre {
     void MeshSerializerImpl::readVertexDeclaration(DataStreamPtr& stream, SubMeshLod *subLod)
     {
         VertexElement2VecVec::iterator itor = subLod->vertexDeclarations.begin();
-        VertexElement2VecVec::iterator end  = subLod->vertexDeclarations.end();
+        VertexElement2VecVec::iterator endt = subLod->vertexDeclarations.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             uint8 numVertexElements;
             readChar( stream, &numVertexElements );
@@ -2352,9 +2352,9 @@ namespace Ogre {
         catch( Exception& )
         {
             SubMeshLodVec::iterator itor = totalSubmeshLods.begin();
-            SubMeshLodVec::iterator end  = totalSubmeshLods.end();
+            SubMeshLodVec::iterator endt = totalSubmeshLods.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Uint8Vec::iterator it = itor->vertexBuffers.begin();
                 Uint8Vec::iterator en = itor->vertexBuffers.end();

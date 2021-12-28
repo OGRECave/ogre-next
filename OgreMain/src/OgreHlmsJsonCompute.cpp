@@ -31,6 +31,7 @@ THE SOFTWARE.
 #if !OGRE_NO_JSON
 
 #include "OgreHlmsJsonCompute.h"
+
 #include "OgreHlmsManager.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"

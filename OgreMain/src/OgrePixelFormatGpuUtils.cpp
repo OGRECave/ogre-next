@@ -29,13 +29,13 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePixelFormatGpuUtils.h"
+
 #include "OgreTextureBox.h"
 #include "OgreMath.h"
 #include "OgreBitwise.h"
 #include "OgreCommon.h"
 #include "OgreColourValue.h"
 #include "OgreException.h"
-
 #include "OgreProfiler.h"
 
 namespace Ogre

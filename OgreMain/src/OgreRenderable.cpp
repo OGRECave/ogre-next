@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreRenderable.h"
+
 #include "OgreHlmsLowLevelDatablock.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"

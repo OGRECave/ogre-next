@@ -28,13 +28,13 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreSerializer.h"
+
 #include "OgreBitwise.h"
 #include "OgreLogManager.h"
 #include "OgreException.h"
 #include "OgreVector3.h"
 #include "OgreQuaternion.h"
 #include "OgreStringConverter.h"
-
 
 namespace Ogre {
 

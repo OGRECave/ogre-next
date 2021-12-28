@@ -26,11 +26,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "Animation/OgreBone.h"
+
 #include "Animation/OgreTagPoint.h"
 #include "OgreNode.h"
 #include "OgreLogManager.h"
-
 #include "Math/Array/OgreBoneMemoryManager.h"
 #include "Math/Array/OgreKfTransform.h"
 #include "Math/Array/OgreBooleanMask.h"
@@ -101,9 +102,9 @@ namespace Ogre {
     void Bone::_deinitialize( bool debugCheckLifoOrder )
     {
         TagPointVec::const_iterator itor = mTagPointChildren.begin();
-        TagPointVec::const_iterator end  = mTagPointChildren.end();
+        TagPointVec::const_iterator endt = mTagPointChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_unsetParentBone();
             (*itor)->mParentIndex = -1;
@@ -139,9 +140,9 @@ namespace Ogre {
         mCachedTransformOutOfDate = true;
 
         BoneVec::const_iterator itor = mChildren.begin();
-        BoneVec::const_iterator end  = mChildren.end();
+        BoneVec::const_iterator endt = mChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->setCachedTransformOutOfDate();
             ++itor;
@@ -169,8 +170,8 @@ namespace Ogre {
     void Bone::_memoryRebased()
     {
         BoneVec::iterator itor = mChildren.begin();
-        BoneVec::iterator end  = mChildren.end();
-        while( itor != end )
+        BoneVec::iterator endt = mChildren.end();
+        while( itor != endt )
         {
             (*itor)->resetParentTransformPtr();
             ++itor;

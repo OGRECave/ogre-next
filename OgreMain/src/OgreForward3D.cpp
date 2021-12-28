@@ -29,17 +29,14 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreForward3D.h"
+
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgreCamera.h"
-
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-
 #include "OgreHlms.h"
-
 #include "OgreProfiler.h"
 
 namespace Ogre
@@ -152,9 +149,9 @@ namespace Ogre
             mShadowCastingLightVisibility.reserve( shadowCastingLights.size() );
 
             LightClosestArray::const_iterator itor = shadowCastingLights.begin();
-            LightClosestArray::const_iterator end  = shadowCastingLights.end();
+            LightClosestArray::const_iterator endt = shadowCastingLights.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->light )
                 {
@@ -170,9 +167,9 @@ namespace Ogre
             //Restore shadow casting lights
             FastArray<bool>::const_iterator itVis = mShadowCastingLightVisibility.begin();
             itor = shadowCastingLights.begin();
-            end  = shadowCastingLights.end();
+            endt = shadowCastingLights.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->light )
                 {
@@ -396,12 +393,12 @@ namespace Ogre
         {
             //Now write all the light counts
             FastArray<LightCount>::const_iterator itor = mLightCountInCell.begin();
-            FastArray<LightCount>::const_iterator end  = mLightCountInCell.end();
+            FastArray<LightCount>::const_iterator endt = mLightCountInCell.end();
 
             const size_t cellSize = mLightsPerCell;
             size_t gridIdx = 0;
 
-            while( itor != end )
+            while( itor != endt )
             {
                 uint32 accumLight = itor->lightCount[1];
                 gridBuffer[gridIdx+0u] = static_cast<uint16>( accumLight );

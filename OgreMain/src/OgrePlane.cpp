@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgrePlane.h"
+
 #include "OgreMatrix3.h"
 #include "OgreAxisAlignedBox.h" 
 

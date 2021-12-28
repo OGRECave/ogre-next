@@ -29,12 +29,11 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsBufferManager.h"
-#include "OgreRenderSystem.h"
 
+#include "OgreRenderSystem.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
 

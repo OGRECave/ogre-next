@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreAtomicScalar.h"
 
 #ifdef NEED_TO_INIT_INTERLOCKEDCOMPAREEXCHANGE64WRAPPER

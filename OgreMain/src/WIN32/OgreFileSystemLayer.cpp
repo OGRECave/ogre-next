@@ -26,7 +26,9 @@
  -----------------------------------------------------------------------------
  */
 #include "OgreStableHeaders.h"
+
 #include "OgreFileSystemLayer.h"
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

@@ -28,9 +28,9 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbPipelineStateObject.h"
 
+#include "CommandBuffer/OgreCommandBuffer.h"
 #include "OgreRenderSystem.h"
 
 namespace Ogre

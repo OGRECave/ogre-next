@@ -26,9 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreRotationalSpline.h"
-
-
 
 namespace Ogre {
 

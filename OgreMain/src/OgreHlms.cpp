@@ -29,34 +29,27 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlms.h"
-#include "OgreHlmsManager.h"
 
+#include "OgreHlmsManager.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreRootLayout.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
-
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-
 #include "OgreLight.h"
 #include "OgreSceneManager.h"
 #include "OgreLogManager.h"
 #include "OgreForward3D.h"
 #include "OgreCamera.h"
-//#include "OgreMovableObject.h"
-//#include "OgreRenderable.h"
 #include "OgreViewport.h"
 #include "OgreDepthBuffer.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreLwString.h"
 #include "OgreRenderQueue.h"
-
 #include "OgreHlmsListener.h"
 #include "OgreBitset.inl"
-
 #include "OgreFileSystem.h"
 #include "OgreProfiler.h"
 
@@ -300,9 +293,9 @@ namespace Ogre
         if( libraryFolders )
         {
             ArchiveVec::const_iterator itor = libraryFolders->begin();
-            ArchiveVec::const_iterator end  = libraryFolders->end();
+            ArchiveVec::const_iterator endt = libraryFolders->end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Library library;
                 library.dataFolder = *itor;
@@ -350,9 +343,9 @@ namespace Ogre
                                FastArray<uint8> &fileContents ) const
     {
         StringVector::const_iterator itor = pieceFiles.begin();
-        StringVector::const_iterator end  = pieceFiles.end();
+        StringVector::const_iterator endt = pieceFiles.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             //Only open piece files with current render system extension
             const String::size_type extPos0 = itor->find( mShaderFileExt );
@@ -380,9 +373,9 @@ namespace Ogre
             {
                 //Library piece files first
                 LibraryVec::const_iterator itor = mLibrary.begin();
-                LibraryVec::const_iterator end  = mLibrary.end();
+                LibraryVec::const_iterator endt = mLibrary.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     hashPieceFiles( itor->dataFolder, itor->pieceFiles[i], fileContents );
                     ++itor;
@@ -463,9 +456,9 @@ namespace Ogre
         enumeratePieceFiles( mDataFolder, mPieceFiles );
 
         LibraryVec::iterator itor = mLibrary.begin();
-        LibraryVec::iterator end  = mLibrary.end();
+        LibraryVec::iterator endt = mLibrary.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             bool foundPieceFiles = enumeratePieceFiles( itor->dataFolder, itor->pieceFiles );
 
@@ -490,8 +483,8 @@ namespace Ogre
 
         {
             StringVector::iterator itor = stringVectorLowerCase.begin();
-            StringVector::iterator end  = stringVectorLowerCase.end();
-            while( itor != end )
+            StringVector::iterator endt = stringVectorLowerCase.end();
+            while( itor != endt )
             {
                 std::transform( itor->begin(), itor->end(), itor->begin(), ::tolower );
                 ++itor;
@@ -502,9 +495,9 @@ namespace Ogre
         {
             StringVector::const_iterator itLowerCase = stringVectorLowerCase.begin();
             StringVector::const_iterator itor = stringVectorPtr->begin();
-            StringVector::const_iterator end  = stringVectorPtr->end();
+            StringVector::const_iterator endt = stringVectorPtr->end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itLowerCase->find( PieceFilePatterns[i] ) != String::npos ||
                     itLowerCase->find( "piece_all" ) != String::npos )
@@ -820,9 +813,9 @@ namespace Ogre
         bool syntaxError = outSyntaxError;
         bool lastExpWasOperator = true;
         ExpressionVec::iterator itor = expression.begin();
-        ExpressionVec::iterator end  = expression.end();
+        ExpressionVec::iterator endt = expression.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             Expression &exp = *itor;
 
@@ -873,8 +866,8 @@ namespace Ogre
             //are neither operators and we can't have two operators in a row, then they can
             //only be in the middle, or there is no operator at all.
             itor = expression.begin() + 1;
-            end  = expression.end();
-            while( itor != end )
+            endt = expression.end();
+            while( itor != endt )
             {
                 if( itor->type >= EXPR_OPERATOR_LE && itor->type <= EXPR_OPERATOR_GREQ )
                 {
@@ -894,7 +887,7 @@ namespace Ogre
                     (itor - 1)->swap( *itor );
 
                     itor = expression.erase( itor, itor + 2 );
-                    end  = expression.end();
+                    endt = expression.end();
                 }
                 else
                 {
@@ -905,7 +898,7 @@ namespace Ogre
 
         //Evaluate the individual properties.
         itor = expression.begin();
-        while( itor != end && !syntaxError )
+        while( itor != endt && !syntaxError )
         {
             Expression &exp = *itor;
             if( exp.type == EXPR_VAR )
@@ -936,7 +929,7 @@ namespace Ogre
 
             ExpressionType nextOperation = EXPR_VAR;
 
-            while( itor != end )
+            while( itor != endt )
             {
                 int32 result = itor->negated ? !itor->result : itor->result;
 
@@ -1078,9 +1071,9 @@ namespace Ogre
                        size_t passNum, const String &counterVar )
     {
         String::const_iterator itor = inSubString.begin();
-        String::const_iterator end  = inSubString.begin() + length;
+        String::const_iterator endt = inSubString.begin() + length;
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( *itor == '@' && !counterVar.empty() )
             {
@@ -1704,9 +1697,9 @@ namespace Ogre
                                               HlmsTextureExportListener *listener )
     {
         HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-        HlmsDatablockMap::const_iterator end  = mDatablocks.end();
+        HlmsDatablockMap::const_iterator endt = mDatablocks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->second.datablock->saveTextures( folderPath, savedTextures, saveOitd,
                                                   saveOriginal, listener );
@@ -1723,9 +1716,9 @@ namespace Ogre
             mLibrary.clear();
 
             ArchiveVec::const_iterator itor = libraryFolders->begin();
-            ArchiveVec::const_iterator end  = libraryFolders->end();
+            ArchiveVec::const_iterator endt = libraryFolders->end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Library library;
                 library.dataFolder = *itor;
@@ -1736,9 +1729,9 @@ namespace Ogre
         else
         {
             LibraryVec::iterator itor = mLibrary.begin();
-            LibraryVec::iterator end  = mLibrary.end();
+            LibraryVec::iterator endt = mLibrary.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 for( size_t i=0; i<NumShaderTypes; ++i )
                     itor->pieceFiles[i].clear();
@@ -1757,9 +1750,9 @@ namespace Ogre
     {
         ArchiveVec retVal;
         LibraryVec::const_iterator itor = mLibrary.begin();
-        LibraryVec::const_iterator end  = mLibrary.end();
+        LibraryVec::const_iterator endt = mLibrary.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             retVal.push_back( itor->dataFolder );
             ++itor;
@@ -1851,9 +1844,9 @@ namespace Ogre
     void Hlms::_destroyAllDatablocks()
     {
         HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-        HlmsDatablockMap::const_iterator end  = mDatablocks.end();
+        HlmsDatablockMap::const_iterator endt = mDatablocks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->second.visibleToManager && mHlmsManager )
                 mHlmsManager->_datablockDestroyed( itor->first );
@@ -1928,9 +1921,9 @@ namespace Ogre
         HlmsCacheVec shaderCache;
         shaderCache.swap( mShaderCache );
         HlmsCacheVec::const_iterator itor = shaderCache.begin();
-        HlmsCacheVec::const_iterator end  = shaderCache.end();
+        HlmsCacheVec::const_iterator endt = shaderCache.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             mRenderSystem->_hlmsPipelineStateObjectDestroyed( &(*itor)->pso );
             if( (*itor)->pso.pass.hasStrongMacroblock() )
@@ -1948,9 +1941,9 @@ namespace Ogre
     void Hlms::processPieces( Archive *archive, const StringVector &pieceFiles )
     {
         StringVector::const_iterator itor = pieceFiles.begin();
-        StringVector::const_iterator end  = pieceFiles.end();
+        StringVector::const_iterator endt = pieceFiles.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             //Only open piece files with current render system extension
             const String::size_type extPos0 = itor->find( mShaderFileExt );
@@ -1991,9 +1984,9 @@ namespace Ogre
 
         {
             HlmsPropertyVec::const_iterator itor = mSetProperties.begin();
-            HlmsPropertyVec::const_iterator end  = mSetProperties.end();
+            HlmsPropertyVec::const_iterator endt = mSetProperties.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 itor->keyName.getFriendlyText( friendlyText, 32 );
                 value.clear();
@@ -2012,9 +2005,9 @@ namespace Ogre
 
         {
             PiecesMap::const_iterator itor = mPieces.begin();
-            PiecesMap::const_iterator end  = mPieces.end();
+            PiecesMap::const_iterator endt = mPieces.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 itor->first.getFriendlyText( friendlyText, 32 );
                 outFile.write( "\n\t***\t", sizeof( "\n\t***\t" ) - 1u );
@@ -2225,9 +2218,9 @@ namespace Ogre
 
                 //Library piece files first
                 LibraryVec::const_iterator itor = mLibrary.begin();
-                LibraryVec::const_iterator end  = mLibrary.end();
+                LibraryVec::const_iterator endt = mLibrary.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     processPieces( itor->dataFolder, itor->pieceFiles[i] );
                     ++itor;
@@ -2310,9 +2303,9 @@ namespace Ogre
         {
             //Now copy the properties from the pass (one by one, since be must maintain the order)
             HlmsPropertyVec::const_iterator itor = passCache.setProperties.begin();
-            HlmsPropertyVec::const_iterator end  = passCache.setProperties.end();
+            HlmsPropertyVec::const_iterator endt = passCache.setProperties.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 setProperty( itor->keyName, itor->value );
                 ++itor;
@@ -2326,9 +2319,9 @@ namespace Ogre
         {
             //Add RenderSystem-specific properties
             IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
-            IdStringVec::const_iterator end  = mRsSpecificExtensions.end();
+            IdStringVec::const_iterator endt = mRsSpecificExtensions.end();
 
-            while( itor != end )
+            while( itor != endt )
                 setProperty( *itor++, 1 );
         }
 
@@ -2425,10 +2418,10 @@ namespace Ogre
         v1::VertexDeclaration *vertexDecl = op.vertexData->vertexDeclaration;
         const v1::VertexDeclaration::VertexElementList &elementList = vertexDecl->getElements();
         v1::VertexDeclaration::VertexElementList::const_iterator itor = elementList.begin();
-        v1::VertexDeclaration::VertexElementList::const_iterator end  = elementList.end();
+        v1::VertexDeclaration::VertexElementList::const_iterator endt = elementList.end();
 
         uint numTexCoords = 0;
-        while( itor != end )
+        while( itor != endt )
         {
             const v1::VertexElement &vertexElem = *itor;
             calculateHashForSemantic( vertexElem.getSemantic(), vertexElem.getType(),
@@ -2454,9 +2447,9 @@ namespace Ogre
         uint16 semIndex[VES_COUNT];
         memset( semIndex, 0, sizeof( semIndex ) );
         VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
-        VertexBufferPackedVec::const_iterator end  = vertexBuffers.end();
+        VertexBufferPackedVec::const_iterator endt = vertexBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const VertexElement2Vec &vertexElements = (*itor)->getVertexElements();
             VertexElement2Vec::const_iterator itElements = vertexElements.begin();
@@ -2846,8 +2839,8 @@ namespace Ogre
                     //Gather shadow casting lights, regardless of their type.
                     const LightClosestArray &lights = shadowNode->getShadowCastingLights();
                     LightClosestArray::const_iterator itor = lights.begin();
-                    LightClosestArray::const_iterator end  = lights.end();
-                    while( itor != end )
+                    LightClosestArray::const_iterator endt = lights.end();
+                    while( itor != endt )
                     {
                         if( itor->light )
                         {
@@ -2868,9 +2861,9 @@ namespace Ogre
                     const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
                     LightArray::const_iterator begin= globalLightList.lights.begin();
                     LightArray::const_iterator itor = begin;
-                    LightArray::const_iterator end  = globalLightList.lights.end();
+                    LightArray::const_iterator endt = globalLightList.lights.end();
 
-                    while( itor != end )
+                    while( itor != endt )
                     {
                         const Light::LightTypes lightType = (*itor)->getType();
                         if( lightType == Light::LT_DIRECTIONAL )
@@ -2910,8 +2903,8 @@ namespace Ogre
                     //Gather shadow casting *directional* lights.
                     const LightClosestArray &lights = shadowNode->getShadowCastingLights();
                     LightClosestArray::const_iterator itor = lights.begin();
-                    LightClosestArray::const_iterator end  = lights.end();
-                    while( itor != end )
+                    LightClosestArray::const_iterator endt = lights.end();
+                    while( itor != endt )
                     {
                         if( itor->light && itor->light->getType() == Light::LT_DIRECTIONAL )
                             ++shadowCasterDirectional;
@@ -2922,11 +2915,11 @@ namespace Ogre
                 //Gather all lights.
                 const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
                 LightArray::const_iterator itor = globalLightList.lights.begin();
-                LightArray::const_iterator end  = globalLightList.lights.end();
+                LightArray::const_iterator endt = globalLightList.lights.end();
 
                 size_t numTotalLights = 0;
 
-                while( itor != end && numTotalLights < mNumLightsLimit )
+                while( itor != endt && numTotalLights < mNumLightsLimit )
                 {
                     ++numLightsPerType[(*itor)->getType()];
                     ++numTotalLights;
@@ -3444,11 +3437,11 @@ namespace Ogre
     unsigned long Hlms::calculateLineCount( const String &buffer, size_t idx )
     {
         String::const_iterator itor = buffer.begin();
-        String::const_iterator end  = buffer.begin() + idx;
+        String::const_iterator endt = buffer.begin() + idx;
 
         unsigned long lineCount = 0;
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( *itor == '\n' )
                 ++lineCount;

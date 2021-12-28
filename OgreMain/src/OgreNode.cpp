@@ -26,13 +26,13 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreNode.h"
 
 #include "OgreCamera.h"
 #include "OgreException.h"
 #include "OgreMath.h"
 #include "OgreStringConverter.h"
-
 #include "Math/Array/OgreNodeMemoryManager.h"
 #include "Math/Array/OgreBooleanMask.h"
 
@@ -127,9 +127,9 @@ namespace Ogre {
     void Node::migrateTo( NodeMemoryManager *nodeMemoryManager )
     {
         NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator end  = mChildren.end();
+        NodeVec::const_iterator endt = mChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->migrateTo( nodeMemoryManager );
             ++itor;
@@ -197,9 +197,9 @@ namespace Ogre {
             {
                 //Propagate the change to our children
                 NodeVec::const_iterator itor = mChildren.begin();
-                NodeVec::const_iterator end  = mChildren.end();
+                NodeVec::const_iterator endt = mChildren.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     (*itor)->parentDepthLevelChanged();
                     ++itor;
@@ -244,9 +244,9 @@ namespace Ogre {
 
                 //Propagate the change to our children
                 NodeVec::const_iterator itor = mChildren.begin();
-                NodeVec::const_iterator end  = mChildren.end();
+                NodeVec::const_iterator endt = mChildren.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     (*itor)->parentDepthLevelChanged();
                     ++itor;
@@ -276,9 +276,9 @@ namespace Ogre {
 
         //Keep propagating changes to our children
         NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator end  = mChildren.end();
+        NodeVec::const_iterator endt = mChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->parentDepthLevelChanged();
             ++itor;
@@ -309,9 +309,9 @@ namespace Ogre {
         
         //Keep propagating changes to our children
         NodeVec::iterator itor = mChildren.begin();
-        NodeVec::iterator end  = mChildren.end();
+        NodeVec::iterator endt = mChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_updateChildren();
             ++itor;
@@ -589,9 +589,9 @@ namespace Ogre {
     void Node::_notifyStaticDirty() const
     {
         NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator end  = mChildren.end();
+        NodeVec::const_iterator endt = mChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_notifyStaticDirty();
             ++itor;
@@ -884,8 +884,8 @@ namespace Ogre {
     void Node::removeAllChildren()
     {
         NodeVec::iterator itor = mChildren.begin();
-        NodeVec::iterator end  = mChildren.end();
-        while( itor != end )
+        NodeVec::iterator endt = mChildren.end();
+        while( itor != endt )
         {
             (*itor)->unsetParent();
             (*itor)->mParentIndex = -1;
@@ -970,9 +970,9 @@ namespace Ogre {
 
     #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         NodeVec::const_iterator itor = mChildren.begin();
-        NodeVec::const_iterator end  = mChildren.end();
+        NodeVec::const_iterator endt = mChildren.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_setCachedTransformOutOfDate();
             ++itor;

@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreHardwareOcclusionQuery.h"
 
 namespace Ogre {

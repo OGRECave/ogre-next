@@ -27,13 +27,13 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreTextureFilters.h"
 
 #include "OgreImage2.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureBox.h"
-
 #include "OgreProfiler.h"
 
 namespace Ogre
@@ -119,9 +119,9 @@ namespace TextureFilter
     void FilterBase::destroyFilters( FilterBaseArray &inOutFilters )
     {
         FilterBaseArray::const_iterator itor = inOutFilters.begin();
-        FilterBaseArray::const_iterator end  = inOutFilters.end();
+        FilterBaseArray::const_iterator endt = inOutFilters.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             delete *itor;
             ++itor;

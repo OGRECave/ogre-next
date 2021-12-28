@@ -36,11 +36,8 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
-
 #include "OgreHlmsPbs.h"
-
 #include "OgreBitwise.h"
-
 #include "OgreRoot.h"
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
@@ -50,17 +47,14 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 #include "OgreDepthBuffer.h"
 #include "OgreTextureBox.h"
-
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
 #include "OgreLwString.h"
-
 #include "OgreMeshManager2.h"
 #include "OgreMesh2.h"
 #include "OgreSubMesh2.h"
 #include "OgreItem.h"
 #include "OgreInternalCubemapProbe.h"
-
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreStagingBuffer.h"
 

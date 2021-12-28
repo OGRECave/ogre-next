@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Vao/OgreStagingBuffer.h"
+
 #include "Vao/OgreVaoManager.h"
 #include "OgreException.h"
 #include "OgreStringConverter.h"
@@ -155,12 +157,12 @@ namespace Ogre
         assert( !mUploadOnly );
 
         FenceVec::const_iterator itor = mAvailableDownloadRegions.begin();
-        FenceVec::const_iterator end  = mAvailableDownloadRegions.end();
+        FenceVec::const_iterator endt = mAvailableDownloadRegions.end();
 
-        while( itor != end && length > itor->length() )
+        while( itor != endt && length > itor->length() )
             ++itor;
 
-        return itor != end;
+        return itor != endt;
     }
     //-----------------------------------------------------------------------------------
     void StagingBuffer::_cancelDownload( size_t offset, size_t sizeBytes )
@@ -169,9 +171,9 @@ namespace Ogre
         Fence mappedArea( offset, offset + sizeBytes );
 #if OGRE_DEBUG_MODE
         FenceVec::const_iterator itor = mAvailableDownloadRegions.begin();
-        FenceVec::const_iterator end  = mAvailableDownloadRegions.end();
+        FenceVec::const_iterator endt = mAvailableDownloadRegions.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             assert( !itor->overlaps( mappedArea ) &&
                     "Already called _mapForReadImpl on this area (or part of it!) before!" );
@@ -204,11 +206,11 @@ namespace Ogre
         //Grab the smallest region that fits the request.
         size_t lowestLength = std::numeric_limits<size_t>::max();
         FenceVec::iterator itor = mAvailableDownloadRegions.begin();
-        FenceVec::iterator end  = mAvailableDownloadRegions.end();
+        FenceVec::iterator endt = mAvailableDownloadRegions.end();
 
-        FenceVec::iterator itLowest = end;
+        FenceVec::iterator itLowest = endt;
 
-        while( itor != end )
+        while( itor != endt )
         {
             size_t freeRegionLength = itor->length();
             if( length <= freeRegionLength && freeRegionLength < lowestLength )
@@ -222,7 +224,7 @@ namespace Ogre
 
         size_t retVal = -1;
 
-        if( itLowest != end )
+        if( itLowest != endt )
         {
             //Got a region! Shrink our records
             retVal = itLowest->start;
@@ -239,9 +241,9 @@ namespace Ogre
     void StagingBuffer::mergeContiguousBlocks( FenceVec::iterator blockToMerge, FenceVec &blocks )
     {
         FenceVec::iterator itor = blocks.begin();
-        FenceVec::iterator end  = blocks.end();
+        FenceVec::iterator endt = blocks.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->end == blockToMerge->start )
             {
@@ -257,7 +259,7 @@ namespace Ogre
 
                 blockToMerge = blocks.begin() + idx;
                 itor = blocks.begin();
-                end  = blocks.end();
+                endt = blocks.end();
             }
             else if( blockToMerge->end == itor->start )
             {
@@ -273,7 +275,7 @@ namespace Ogre
 
                 blockToMerge = blocks.begin() + idx;
                 itor = blocks.begin();
-                end  = blocks.end();
+                endt = blocks.end();
             }
             else
             {

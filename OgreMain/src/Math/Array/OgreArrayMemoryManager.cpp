@@ -29,15 +29,15 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Math/Array/OgreArrayConfig.h"
+
 #include "Math/Array/OgreArrayMemoryManager.h"
+
 #include "Math/Array/OgreArrayQuaternion.h"
 #include "Math/Array/OgreArrayAabb.h"
 #include "Math/Simple/OgreAabb.h"
 #include "Math/Array/OgreArrayAabb.h"
 #include "Math/Array/OgreArrayMatrix4.h"
-
 #include "OgreMatrix4.h"
-
 #include "OgreException.h"
 
 namespace Ogre
@@ -102,9 +102,9 @@ namespace Ogre
 
         size_t i=0;
         MemoryPoolVec::iterator itor = mMemoryPools.begin();
-        MemoryPoolVec::iterator end  = mMemoryPools.end();
+        MemoryPoolVec::iterator endt = mMemoryPools.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
 //          *itor = reinterpret_cast<char*>(_aligned_malloc(mMaxMemory * ElementsMemSize[i], 16));
             *itor = (char*)OGRE_MALLOC_SIMD( mMaxMemory * mElementsMemSizes[i],
@@ -123,9 +123,9 @@ namespace Ogre
     void ArrayMemoryManager::destroy()
     {
         MemoryPoolVec::iterator itor = mMemoryPools.begin();
-        MemoryPoolVec::iterator end  = mMemoryPools.end();
+        MemoryPoolVec::iterator endt = mMemoryPools.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             OGRE_FREE_SIMD( *itor, MEMCATEGORY_SCENE_OBJECTS );
             *itor++ = 0;
@@ -194,9 +194,9 @@ namespace Ogre
 
             size_t i=0;
             MemoryPoolVec::iterator itor = mMemoryPools.begin();
-            MemoryPoolVec::iterator end  = mMemoryPools.end();
+            MemoryPoolVec::iterator endt = mMemoryPools.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 //Reallocate
                 char *tmp = (char*)OGRE_MALLOC_SIMD( newMemory * mElementsMemSizes[i],
@@ -262,14 +262,14 @@ namespace Ogre
         //scenarios by reducing the amount of data to be shifted
         std::sort( mAvailableSlots.begin(), mAvailableSlots.end(), std::greater<size_t>() );
         SlotsVec::const_iterator itor = mAvailableSlots.begin();
-        SlotsVec::const_iterator end  = mAvailableSlots.end();
+        SlotsVec::const_iterator endt = mAvailableSlots.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             //First see if we have a continuous range of unused slots
             size_t lastRange = 1;
             SlotsVec::const_iterator it = itor + 1;
-            while( it != end && (*itor - lastRange) == *it )
+            while( it != endt && (*itor - lastRange) == *it )
             {
                 ++lastRange;
                 ++it;
@@ -325,9 +325,9 @@ namespace Ogre
 
         size_t i=0;
         MemoryPoolVec::iterator itor = mMemoryPools.begin();
-        MemoryPoolVec::iterator end  = mMemoryPools.end();
+        MemoryPoolVec::iterator endt = mMemoryPools.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             //Reallocate
             char *tmp = (char*)OGRE_MALLOC_SIMD( newMemory * mElementsMemSizes[i],

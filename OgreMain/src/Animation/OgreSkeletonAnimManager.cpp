@@ -28,9 +28,9 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgreException.h"
-
 #include "Animation/OgreSkeletonAnimManager.h"
+
+#include "OgreException.h"
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonInstance.h"
 
@@ -77,9 +77,9 @@ namespace Ogre
     void BySkeletonDef::_updateBoneStartTransforms()
     {
         FastArray<SkeletonInstance*>::iterator itor = skeletons.begin();
-        FastArray<SkeletonInstance*>::iterator end  = skeletons.end();
+        FastArray<SkeletonInstance*>::iterator endt = skeletons.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_updateBoneStartTransforms();
             ++itor;

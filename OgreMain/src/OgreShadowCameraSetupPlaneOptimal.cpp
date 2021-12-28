@@ -27,9 +27,11 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
+#include "OgreShadowCameraSetupPlaneOptimal.h"
+
 #include "OgreCommon.h"
 #include "OgreLight.h"
-#include "OgreShadowCameraSetupPlaneOptimal.h"
 #include "OgreNumerics.h"
 #include "OgreCamera.h"
 #include "OgreMovablePlane.h"
@@ -40,7 +42,6 @@ THE SOFTWARE.
 #   pragma warning (disable : 4244)
 #   pragma warning (disable : 4305)
 #endif
-
 
 namespace Ogre 
 {

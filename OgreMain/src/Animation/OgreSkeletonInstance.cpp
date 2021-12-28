@@ -29,12 +29,11 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Animation/OgreSkeletonInstance.h"
+
 #include "Animation/OgreSkeletonDef.h"
 #include "Animation/OgreSkeletonAnimationDef.h"
 #include "Animation/OgreSkeletonManager.h"
-
 #include "OgreId.h"
-
 #include "OgreOldBone.h"
 #include "OgreSceneNode.h"
 #include "OgreSkeleton.h"
@@ -55,9 +54,9 @@ namespace Ogre
         while( itDepth != enDepth )
         {
             list<size_t>::type::const_iterator itor = itDepth->begin();
-            list<size_t>::type::const_iterator end  = itDepth->end();
+            list<size_t>::type::const_iterator endt = itDepth->end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 Bone *parent = 0;
                 size_t parentIdx = mDefinition->mBones[*itor].parent;
@@ -99,9 +98,9 @@ namespace Ogre
             ArrayMatrixAf4x3 const *reverseBindPose = mDefinition->mReverseBindPose.get();
 
             SkeletonDef::DepthLevelInfoVec::const_iterator itor = depthLevelInfo.begin();
-            SkeletonDef::DepthLevelInfoVec::const_iterator end  = depthLevelInfo.end();
+            SkeletonDef::DepthLevelInfoVec::const_iterator endt = depthLevelInfo.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const BoneTransform &firstBoneTransform = mBones[itor->firstBoneIndex]._getTransform();
                 mBoneStartTransforms.push_back( firstBoneTransform );
@@ -175,9 +174,9 @@ namespace Ogre
         mAnimations.reserve( animationDefs.size() );
 
         SkeletonAnimationDefVec::const_iterator itor = animationDefs.begin();
-        SkeletonAnimationDefVec::const_iterator end  = animationDefs.end();
+        SkeletonAnimationDefVec::const_iterator endt = animationDefs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             SkeletonAnimation animation( &(*itor), &mSlotStarts, this );
             mAnimations.push_back( animation );
@@ -190,8 +189,8 @@ namespace Ogre
     {
         {
             SceneNodeBonePairVec::iterator itor = mCustomParentSceneNodes.begin();
-            SceneNodeBonePairVec::iterator end  = mCustomParentSceneNodes.end();
-            while( itor != end )
+            SceneNodeBonePairVec::iterator endt = mCustomParentSceneNodes.end();
+            while( itor != endt )
             {
                 itor->sceneNodeParent->_detachAllBones( this );
                 ++itor;
@@ -215,8 +214,8 @@ namespace Ogre
             }
 
             list<size_t>::type::const_reverse_iterator ritor = ritDepth->rbegin();
-            list<size_t>::type::const_reverse_iterator rend  = ritDepth->rend();
-            while( ritor != rend )
+            list<size_t>::type::const_reverse_iterator rendt = ritDepth->rend();
+            while( ritor != rendt )
             {
                 mBones[*ritor]._deinitialize();
                 ++ritor;
@@ -238,9 +237,9 @@ namespace Ogre
             resetToPose();
 
         ActiveAnimationsVec::iterator itor = mActiveAnimations.begin();
-        ActiveAnimationsVec::iterator end  = mActiveAnimations.end();
+        ActiveAnimationsVec::iterator endt = mActiveAnimations.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_applyAnimation( mBoneStartTransforms );
             ++itor;
@@ -256,9 +255,9 @@ namespace Ogre
                                                 mDefinition->getDepthLevelInfo().begin();
 
         TransformArray::iterator itor = mBoneStartTransforms.begin();
-        TransformArray::iterator end  = mBoneStartTransforms.end();
+        TransformArray::iterator endt = mBoneStartTransforms.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             BoneTransform t = *itor;
             for( size_t i=0; i<itDepthLevelInfo->numBonesInLevel; i += ARRAY_PACKED_REALS )
@@ -333,11 +332,11 @@ namespace Ogre
         assert( &mBones[bone->mGlobalIndex] == bone && "The bone doesn't belong to this instance!" );
 
         SceneNodeBonePairVec::iterator itor = mCustomParentSceneNodes.begin();
-        SceneNodeBonePairVec::iterator end  = mCustomParentSceneNodes.end();
-        while( itor != end && itor->boneChild != bone )
+        SceneNodeBonePairVec::iterator endt = mCustomParentSceneNodes.end();
+        while( itor != endt && itor->boneChild != bone )
             ++itor;
 
-        if( itor != end && itor->boneChild == bone )
+        if( itor != endt && itor->boneChild == bone )
         {
             itor->sceneNodeParent->_detachBone( this, itor->boneChild );
             efficientVectorRemove( mCustomParentSceneNodes, itor );
@@ -387,20 +386,20 @@ namespace Ogre
     bool SkeletonInstance::hasAnimation( IdString name ) const
     {
         SkeletonAnimationVec::const_iterator itor = mAnimations.begin();
-        SkeletonAnimationVec::const_iterator end  = mAnimations.end();
+        SkeletonAnimationVec::const_iterator endt = mAnimations.end();
 
-        while( itor != end && itor->getName() != name )
+        while( itor != endt && itor->getName() != name )
             ++itor;
 
-        return itor != end;
+        return itor != endt;
     }
     //-----------------------------------------------------------------------------------
     SkeletonAnimation* SkeletonInstance::getAnimation( IdString name )
     {
         SkeletonAnimationVec::iterator itor = mAnimations.begin();
-        SkeletonAnimationVec::iterator end  = mAnimations.end();
+        SkeletonAnimationVec::iterator endt = mAnimations.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->getName() == name )
                 return &(*itor);
@@ -431,8 +430,8 @@ namespace Ogre
         mAnimations.reserve( mAnimations.size() + animationDefs.size() );
 
         SkeletonAnimationDefVec::const_iterator itor = animationDefs.begin();
-        SkeletonAnimationDefVec::const_iterator end  = animationDefs.end();
-        while( itor != end )
+        SkeletonAnimationDefVec::const_iterator endt = animationDefs.end();
+        while( itor != endt )
         {
             SkeletonAnimation animation( &(*itor), &mSlotStarts, this );
             mAnimations.push_back( animation );
@@ -464,9 +463,9 @@ namespace Ogre
 
         {
             BoneVec::iterator itor = mBones.begin();
-            BoneVec::iterator end  = mBones.end();
+            BoneVec::iterator endt = mBones.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 itor->_setNodeParent( mParentNode );
                 ++itor;
@@ -476,8 +475,8 @@ namespace Ogre
         {
             //Restore the bones with custom scene nodes.
             SceneNodeBonePairVec::iterator itor = mCustomParentSceneNodes.begin();
-            SceneNodeBonePairVec::iterator end  = mCustomParentSceneNodes.end();
-            while( itor != end )
+            SceneNodeBonePairVec::iterator endt = mCustomParentSceneNodes.end();
+            while( itor != endt )
             {
                 itor->boneChild->_setNodeParent( itor->sceneNodeParent );
                 ++itor;
@@ -489,9 +488,9 @@ namespace Ogre
                                             const FastArray<unsigned short> &usedBones ) const
     {
         FastArray<unsigned short>::const_iterator itor = usedBones.begin();
-        FastArray<unsigned short>::const_iterator end  = usedBones.end();
+        FastArray<unsigned short>::const_iterator endt = usedBones.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             *outTransform++ = mBones[*itor]._getFullTransform();
             ++itor;

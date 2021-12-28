@@ -28,14 +28,12 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgrePrerequisites.h"
-
 #include "OgreCommon.h"
+
 #include "OgreString.h"
 
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
-
 #include "OgreLwString.h"
 
 namespace Ogre 

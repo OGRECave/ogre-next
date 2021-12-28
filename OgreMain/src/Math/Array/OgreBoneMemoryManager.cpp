@@ -42,9 +42,9 @@ namespace Ogre
     BoneMemoryManager::~BoneMemoryManager()
     {
         ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->destroy();
             ++itor;
@@ -163,9 +163,9 @@ namespace Ogre
         size_t retVal = -1;
         ArrayMemoryManagerVec::const_iterator begin= mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
-        ArrayMemoryManagerVec::const_iterator end  = mMemoryManagers.end();
+        ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->getUsedMemory() )
                 retVal = itor - begin;

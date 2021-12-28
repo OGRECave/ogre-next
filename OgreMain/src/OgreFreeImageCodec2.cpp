@@ -29,11 +29,11 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreFreeImageCodec2.h"
+
 #include "OgreDataStream.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreString.h"
-
 #include "OgrePixelFormatGpuUtils.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 && !defined(_WINDOWS_)

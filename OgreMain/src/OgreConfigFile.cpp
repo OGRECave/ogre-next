@@ -31,7 +31,6 @@ THE SOFTWARE.
 
 #include "OgreResourceGroupManager.h"
 #include "OgreString.h"
-
 #include "OgreException.h"
 
 #include <iostream>

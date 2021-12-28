@@ -29,12 +29,12 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsDatablock.h"
+
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 #include "OgreString.h"
-
 #include "OgrePass.h"
 #include "OgreProfiler.h"
 
@@ -147,9 +147,9 @@ namespace Ogre
                 StringVector vec = StringUtil::split( paramVal );
 
                 StringVector::const_iterator itor = vec.begin();
-                StringVector::const_iterator end  = vec.end();
+                StringVector::const_iterator endt = vec.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     if( *itor == "less" )
                         mAlphaTestCmp = CMPF_LESS;
@@ -457,9 +457,9 @@ namespace Ogre
         OgreProfileExhaustiveAggr( "HlmsDatablock::flushRenderables" );
 
         vector<Renderable*>::type::const_iterator itor = mLinkedRenderables.begin();
-        vector<Renderable*>::type::const_iterator end  = mLinkedRenderables.end();
+        vector<Renderable*>::type::const_iterator endt = mLinkedRenderables.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             try
             {
@@ -497,7 +497,7 @@ namespace Ogre
                 //The container was changed with setDatablock change,
                 //the iterators may have been invalidated.
                 itor = mLinkedRenderables.begin() + currentIdx;
-                end  = mLinkedRenderables.end();
+                endt = mLinkedRenderables.end();
             }
         }
     }

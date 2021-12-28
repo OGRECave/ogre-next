@@ -26,12 +26,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreSceneNode.h"
 
 #include "OgreException.h"
 #include "OgreSceneManager.h"
 #include "OgreMovableObject.h"
-
 #include "Animation/OgreSkeletonInstance.h"
 
 namespace Ogre {
@@ -74,9 +74,9 @@ namespace Ogre {
 
             //Now apply the same state to all our attachments.
             ObjectVec::const_iterator itor = mAttachments.begin();
-            ObjectVec::const_iterator end  = mAttachments.end();
+            ObjectVec::const_iterator endt = mAttachments.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 MovableObject *obj = *itor;
                 if( obj->isStatic() != ourCurrentStatus )
@@ -104,9 +104,9 @@ namespace Ogre {
         {
             //All our attachments are dirty now.
             ObjectVec::const_iterator itor = mAttachments.begin();
-            ObjectVec::const_iterator end  = mAttachments.end();
+            ObjectVec::const_iterator endt = mAttachments.end();
 
-            while( itor != end )
+            while( itor != endt )
                 mCreator->notifyStaticAabbDirty( *itor++ );
         }
     }
@@ -139,31 +139,31 @@ namespace Ogre {
     SceneNode::ObjectVec::iterator SceneNode::getAttachedObjectIt( const String& name )
     {
         ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator end  = mAttachments.end();
+        ObjectVec::iterator endt = mAttachments.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->getName() == name )
                 return itor;
             ++itor;
         }
 
-        return end;
+        return endt;
     }
     //-----------------------------------------------------------------------
     SceneNode::ObjectVec::const_iterator SceneNode::getAttachedObjectIt( const String& name ) const
     {
         ObjectVec::const_iterator itor = mAttachments.begin();
-        ObjectVec::const_iterator end  = mAttachments.end();
+        ObjectVec::const_iterator endt = mAttachments.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->getName() == name )
                 return itor;
             ++itor;
         }
 
-        return end;
+        return endt;
     }
     //-----------------------------------------------------------------------
     MovableObject* SceneNode::getAttachedObject( const String& name )
@@ -264,9 +264,9 @@ namespace Ogre {
     void SceneNode::_callMemoryChangeListeners()
     {
         ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator end  = mAttachments.end();
+        ObjectVec::iterator endt = mAttachments.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_notifyParentNodeMemoryChanged();
             ++itor;
@@ -331,8 +331,8 @@ namespace Ogre {
     void SceneNode::removeAndDestroyAllChildren()
     {
         NodeVec::iterator itor = mChildren.begin();
-        NodeVec::iterator end  = mChildren.end();
-        while( itor != end )
+        NodeVec::iterator endt = mChildren.end();
+        while( itor != endt )
         {
             SceneNode *sceneNode = static_cast<SceneNode*>( *itor );
             sceneNode->removeAndDestroyAllChildren();
@@ -522,9 +522,9 @@ namespace Ogre {
     void SceneNode::setVisible( bool visible, bool cascade )
     {
         ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator end  = mAttachments.end();
+        ObjectVec::iterator endt = mAttachments.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->setVisible( visible );
             ++itor;
@@ -533,7 +533,7 @@ namespace Ogre {
         if (cascade)
         {
             NodeVec::iterator childItor = mChildren.begin();
-            NodeVec::iterator childItorEnd  = mChildren.end();
+            NodeVec::iterator childItorEnd = mChildren.end();
             while( childItor != childItorEnd )
             {
                 static_cast<SceneNode*>( *childItor )->setVisible( visible, cascade );
@@ -545,9 +545,9 @@ namespace Ogre {
     void SceneNode::flipVisibility(bool cascade)
     {
         ObjectVec::iterator itor = mAttachments.begin();
-        ObjectVec::iterator end  = mAttachments.end();
+        ObjectVec::iterator endt = mAttachments.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->setVisible( !(*itor)->getVisible() );
             ++itor;
@@ -556,7 +556,7 @@ namespace Ogre {
         if (cascade)
         {
             NodeVec::iterator childItor = mChildren.begin();
-            NodeVec::iterator childItorEnd  = mChildren.end();
+            NodeVec::iterator childItorEnd = mChildren.end();
             while( childItor != childItorEnd )
             {
                 static_cast<SceneNode*>( *childItor )->flipVisibility( cascade );
@@ -576,9 +576,9 @@ namespace Ogre {
         Node::_setCachedTransformOutOfDate();
 
         ObjectVec::const_iterator itor = mAttachments.begin();
-        ObjectVec::const_iterator end  = mAttachments.end();
+        ObjectVec::const_iterator endt = mAttachments.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->_setCachedAabbOutOfDate();
             ++itor;

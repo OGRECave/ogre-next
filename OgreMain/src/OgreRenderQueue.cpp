@@ -41,19 +41,15 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 #include "OgreRoot.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
-
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbPipelineStateObject.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
-
 #include "OgreProfiler.h"
-
 
 namespace Ogre
 {
@@ -118,9 +114,9 @@ namespace Ogre
         assert( mUsedIndirectBuffers.empty() );
 
         IndirectBufferPackedVec::const_iterator itor = mFreeIndirectBuffers.begin();
-        IndirectBufferPackedVec::const_iterator end  = mFreeIndirectBuffers.end();
+        IndirectBufferPackedVec::const_iterator endt = mFreeIndirectBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( (*itor)->getMappingState() != MS_UNMAPPED )
                 (*itor)->unmap( UO_UNMAP_ALL );
@@ -134,13 +130,13 @@ namespace Ogre
         size_t requiredBytes = numDraws * sizeof( CbDrawIndexed );
 
         IndirectBufferPackedVec::iterator itor = mFreeIndirectBuffers.begin();
-        IndirectBufferPackedVec::iterator end  = mFreeIndirectBuffers.end();
+        IndirectBufferPackedVec::iterator endt = mFreeIndirectBuffers.end();
 
         size_t smallestBufferSize                           = std::numeric_limits<size_t>::max();
-        IndirectBufferPackedVec::iterator smallestBuffer    = end;
+        IndirectBufferPackedVec::iterator smallestBuffer    = endt;
 
         //Find the smallest buffer in the pool that can fit the request.
-        while( itor != end )
+        while( itor != endt )
         {
             size_t bufferSize = (*itor)->getTotalSizeBytes();
             if( requiredBytes <= bufferSize && smallestBufferSize > bufferSize )
@@ -152,7 +148,7 @@ namespace Ogre
             ++itor;
         }
 
-        if( smallestBuffer == end )
+        if( smallestBuffer == endt )
         {
             //None found? Create a new one.
             mFreeIndirectBuffers.push_back( mVaoManager->createIndirectBuffer( requiredBytes,
@@ -175,10 +171,10 @@ namespace Ogre
         {
             QueuedRenderableArrayPerThread::iterator itor =
                     mRenderQueues[i].mQueuedRenderablesPerThread.begin();
-            QueuedRenderableArrayPerThread::iterator end  =
+            QueuedRenderableArrayPerThread::iterator endt =
                     mRenderQueues[i].mQueuedRenderablesPerThread.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 itor->q.clear();
                 ++itor;
@@ -338,10 +334,10 @@ namespace Ogre
             {
                 QueuedRenderableArrayPerThread::const_iterator itor =
                         mRenderQueues[i].mQueuedRenderablesPerThread.begin();
-                QueuedRenderableArrayPerThread::const_iterator end  =
+                QueuedRenderableArrayPerThread::const_iterator endt =
                         mRenderQueues[i].mQueuedRenderablesPerThread.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     numNeededDraws += itor->q.size();
                     ++itor;
@@ -385,9 +381,9 @@ namespace Ogre
 
                 size_t numRenderables = 0;
                 QueuedRenderableArrayPerThread::const_iterator itor = perThreadQueue.begin();
-                QueuedRenderableArrayPerThread::const_iterator end  = perThreadQueue.end();
+                QueuedRenderableArrayPerThread::const_iterator endt = perThreadQueue.end();
 
-                while( itor != end )
+                while( itor != endt )
                 {
                     numRenderables += itor->q.size();
                     ++itor;
@@ -396,7 +392,7 @@ namespace Ogre
                 queuedRenderables.reserve( numRenderables );
 
                 itor = perThreadQueue.begin();
-                while( itor != end )
+                while( itor != endt )
                 {
                     queuedRenderables.appendPOD( itor->q.begin(), itor->q.end() );
                     ++itor;
@@ -494,9 +490,9 @@ namespace Ogre
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
         QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
-        QueuedRenderableArray::const_iterator end  = queuedRenderables.end();
+        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const QueuedRenderable &queuedRenderable = *itor;
             /*uint32 hlmsHash = casterPass ? queuedRenderable.renderable->getHlmsCasterHash() :
@@ -574,9 +570,9 @@ namespace Ogre
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
         QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
-        QueuedRenderableArray::const_iterator end  = queuedRenderables.end();
+        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const QueuedRenderable &queuedRenderable = *itor;
             uint8 meshLod = queuedRenderable.movableObject->getCurrentMeshLod();
@@ -737,9 +733,9 @@ namespace Ogre
         const QueuedRenderableArray &queuedRenderables = renderQueueGroup.mQueuedRenderables;
 
         QueuedRenderableArray::const_iterator itor = queuedRenderables.begin();
-        QueuedRenderableArray::const_iterator end  = queuedRenderables.end();
+        QueuedRenderableArray::const_iterator endt = queuedRenderables.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const QueuedRenderable &queuedRenderable = *itor;
 

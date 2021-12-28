@@ -29,33 +29,28 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreTextureGpuManager.h"
+
 #include "OgreTextureGpuManagerListener.h"
 #include "OgreObjCmdBuffer.h"
 #include "OgreTextureGpu.h"
 #include "OgreAsyncTextureTicket.h"
 #include "OgreStagingTexture.h"
 #include "OgrePixelFormatGpuUtils.h"
-
 #include "OgreId.h"
 #include "OgreLwString.h"
 #include "OgreCommon.h"
 #include "OgreBitwise.h"
 #include "OgreBitset.inl"
-
 #include "Vao/OgreVaoManager.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreImage2.h"
 #include "OgreTextureFilters.h"
-
 #include "OgreHlmsDatablock.h"
-
 #include "Threading/OgreThreads.h"
-
 #include "OgreRenderSystem.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreString.h"
-
 #include "OgreProfiler.h"
 
 #include <fstream>
@@ -247,9 +242,9 @@ namespace Ogre
     void TextureGpuManager::destroyAllStagingBuffers()
     {
         StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-        StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+        StagingTextureVec::iterator endt = mStreamingData.availableStagingTex.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->stopMapRegion();
             ++itor;
@@ -258,9 +253,9 @@ namespace Ogre
         mStreamingData.availableStagingTex.clear();
 
         itor = mAvailableStagingTextures.begin();
-        end  = mAvailableStagingTextures.end();
+        endt = mAvailableStagingTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroyStagingTextureImpl( *itor );
             delete *itor;
@@ -270,9 +265,9 @@ namespace Ogre
         mAvailableStagingTextures.clear();
 
         itor = mUsedStagingTextures.begin();
-        end  = mUsedStagingTextures.end();
+        endt = mUsedStagingTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroyStagingTextureImpl( *itor );
             delete *itor;
@@ -285,9 +280,9 @@ namespace Ogre
     void TextureGpuManager::destroyAllTextures()
     {
         ResourceEntryMap::const_iterator itor = mEntries.begin();
-        ResourceEntryMap::const_iterator end  = mEntries.end();
+        ResourceEntryMap::const_iterator endt = mEntries.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const ResourceEntry &entry = itor->second;
             delete entry.texture;
@@ -300,9 +295,9 @@ namespace Ogre
     void TextureGpuManager::destroyAllPools()
     {
         TexturePoolList::const_iterator itor = mTexturePool.begin();
-        TexturePoolList::const_iterator end  = mTexturePool.end();
+        TexturePoolList::const_iterator endt = mTexturePool.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             delete itor->masterTexture;
             ++itor;
@@ -592,9 +587,9 @@ namespace Ogre
             //created with that function (i.e. automatically / on demand)
             //are released automatically in _releaseSlotFromTexture
             TexturePoolList::iterator itor = mTexturePool.begin();
-            TexturePoolList::iterator end  = mTexturePool.end();
+            TexturePoolList::iterator endt = mTexturePool.end();
 
-            while( itor != end && itor->masterTexture != texture )
+            while( itor != endt && itor->masterTexture != texture )
                 ++itor;
 
             if( itor == mTexturePool.end() )
@@ -663,14 +658,14 @@ namespace Ogre
 
         StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
         StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+        StagingTextureVec::iterator endt = mAvailableStagingTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             StagingTexture *stagingTexture = *itor;
 
             if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
-                (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
+                (bestCandidate == endt || stagingTexture->isSmallerThan( *bestCandidate )) )
             {
                 if( !stagingTexture->uploadWillStall() )
                     bestCandidate = itor;
@@ -681,16 +676,16 @@ namespace Ogre
 
         StagingTexture *retVal = 0;
 
-        if( bestCandidate != end && minConsumptionRatioThreshold != 0u )
+        if( bestCandidate != endt && minConsumptionRatioThreshold != 0u )
         {
             const size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth,
                                                                            slices, pixelFormat, 4u );
             const size_t ratio = (requiredSize * 100u) / (*bestCandidate)->_getSizeBytes();
             if( ratio < minConsumptionRatioThreshold )
-                bestCandidate = end;
+                bestCandidate = endt;
         }
 
-        if( bestCandidate != end )
+        if( bestCandidate != endt )
         {
             retVal = *bestCandidate;
             mUsedStagingTextures.push_back( *bestCandidate );
@@ -762,9 +757,9 @@ namespace Ogre
     void TextureGpuManager::destroyAllAsyncTextureTicket()
     {
         AsyncTextureTicketVec::const_iterator itor = mAsyncTextureTickets.begin();
-        AsyncTextureTicketVec::const_iterator end  = mAsyncTextureTickets.end();
+        AsyncTextureTicketVec::const_iterator endt = mAsyncTextureTickets.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             OGRE_DELETE *itor;
             ++itor;
@@ -1073,9 +1068,9 @@ namespace Ogre
         bool firstIteration = true;
         {
             TexturePoolList::const_iterator itor = mTexturePool.begin();
-            TexturePoolList::const_iterator end  = mTexturePool.end();
+            TexturePoolList::const_iterator endt = mTexturePool.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const TexturePool &pool = *itor;
                 if( pool.manuallyReserved )
@@ -1104,9 +1099,9 @@ namespace Ogre
         jsonStr.a( "\n\t],\n\t\"textures\" :\n\t{" );
         firstIteration = true;
         MetadataCacheMap::const_iterator itor = mMetadataCache.begin();
-        MetadataCacheMap::const_iterator end  = mMetadataCache.end();
+        MetadataCacheMap::const_iterator endt = mMetadataCache.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const MetadataCacheEntry &entry = itor->second;
 
@@ -1149,9 +1144,9 @@ namespace Ogre
         size_t textureBytesGpu = 0;
 
         ResourceEntryMap::const_iterator itor = mEntries.begin();
-        ResourceEntryMap::const_iterator end  = mEntries.end();
+        ResourceEntryMap::const_iterator endt = mEntries.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const ResourceEntry &entry = itor->second;
             GpuResidency::GpuResidency residency = entry.texture->getResidencyStatus();
@@ -1354,9 +1349,9 @@ namespace Ogre
             maxSplitResolution = mStreamingData.maxSplitResolution;
 
         BudgetEntryVec::const_iterator itor = budget.begin();
-        BudgetEntryVec::const_iterator end  = budget.end();
+        BudgetEntryVec::const_iterator endt = budget.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( ( itor->minNumSlices > 2u && itor->minResolution >= maxSplitResolution ) ||
                 ( itor->minNumSlices > 1u && itor->minResolution > maxSplitResolution ) )
@@ -1999,9 +1994,9 @@ namespace Ogre
         bool matchFound = false;
 
         TexturePoolList::iterator itor = mTexturePool.begin();
-        TexturePoolList::iterator end  = mTexturePool.end();
+        TexturePoolList::iterator endt = mTexturePool.end();
 
-        while( itor != end && !matchFound )
+        while( itor != endt && !matchFound )
         {
             const TexturePool &pool = *itor;
 
@@ -2019,7 +2014,7 @@ namespace Ogre
                 ++itor;
         }
 
-        if( itor == end )
+        if( itor == endt )
         {
             IdType newId = Id::generateNewId<TextureGpuManager>();
             char tmpBuffer[64];
@@ -2124,9 +2119,9 @@ namespace Ogre
                 bool isSupported = false;
 
                 StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-                StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+                StagingTextureVec::iterator endt = mStreamingData.availableStagingTex.end();
 
-                while( itor != end && !isSupported )
+                while( itor != endt && !isSupported )
                 {
                     //Check if the free StagingTextures can take the current usage load.
                     isSupported = (*itor)->supportsFormat( itStats->width, itStats->height, 1u,
@@ -2136,7 +2131,7 @@ namespace Ogre
                     {
                         mTmpAvailableStagingTex.push_back( *itor );
                         itor = mStreamingData.availableStagingTex.erase( itor );
-                        end  = mStreamingData.availableStagingTex.end();
+                        endt = mStreamingData.availableStagingTex.end();
                     }
                     else
                     {
@@ -2170,9 +2165,9 @@ namespace Ogre
             bool isSupported = false;
 
             StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-            StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+            StagingTextureVec::iterator endt = mStreamingData.availableStagingTex.end();
 
-            while( itor != end && !isSupported )
+            while( itor != endt && !isSupported )
             {
                 if( (*itor)->getFormatFamily() == itBudget->formatFamily )
                 {
@@ -2186,7 +2181,7 @@ namespace Ogre
                 {
                     mTmpAvailableStagingTex.push_back( *itor );
                     itor = mStreamingData.availableStagingTex.erase( itor );
-                    end  = mStreamingData.availableStagingTex.end();
+                    endt = mStreamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -2197,9 +2192,9 @@ namespace Ogre
             //We now have to look in mTmpAvailableStagingTex in case fulfillUsageStats
             //already created a staging texture that fulfills the minimum budget.
             itor = mTmpAvailableStagingTex.begin();
-            end  = mTmpAvailableStagingTex.end();
+            endt = mTmpAvailableStagingTex.end();
 
-            while( itor != end && !isSupported )
+            while( itor != endt && !isSupported )
             {
                 if( (*itor)->getFormatFamily() == itBudget->formatFamily )
                 {
@@ -2245,9 +2240,9 @@ namespace Ogre
         {
             //The textures that are left are wasting memory, thus can be removed.
             StagingTextureVec::const_iterator itor = mStreamingData.availableStagingTex.begin();
-            StagingTextureVec::const_iterator end  = mStreamingData.availableStagingTex.end();
+            StagingTextureVec::const_iterator endt = mStreamingData.availableStagingTex.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->stopMapRegion();
                 removeStagingTexture( *itor );
@@ -2282,9 +2277,9 @@ namespace Ogre
         uint32 c_loopResetValue = 15u;
 
         UsageStatsVec::const_iterator itor = mStreamingData.usageStats.begin();
-        UsageStatsVec::const_iterator end  = mStreamingData.usageStats.end();
+        UsageStatsVec::const_iterator endt = mStreamingData.usageStats.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             UsageStatsVec::iterator itPrev = mStreamingData.prevStats.begin();
             UsageStatsVec::iterator enPrev = mStreamingData.prevStats.end();
@@ -2364,9 +2359,9 @@ namespace Ogre
         TextureBox retVal;
 
         StagingTextureVec::iterator itor = workerData.usedStagingTex.begin();
-        StagingTextureVec::iterator end  = workerData.usedStagingTex.end();
+        StagingTextureVec::iterator endt = workerData.usedStagingTex.end();
 
-        while( itor != end && !retVal.data )
+        while( itor != endt && !retVal.data )
         {
             //supportsFormat will return false if it could never fit, or the format is not compatible.
             if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
@@ -2382,9 +2377,9 @@ namespace Ogre
         }
 
         itor = streamingData.availableStagingTex.begin();
-        end  = streamingData.availableStagingTex.end();
+        endt = streamingData.availableStagingTex.end();
 
-        while( itor != end && !retVal.data )
+        while( itor != endt && !retVal.data )
         {
             if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
             {
@@ -2397,7 +2392,7 @@ namespace Ogre
                     //We need to move this to the 'used' textures
                     workerData.usedStagingTex.push_back( *itor );
                     itor = efficientVectorRemove( streamingData.availableStagingTex, itor );
-                    end  = streamingData.availableStagingTex.end();
+                    endt = streamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -2512,15 +2507,15 @@ namespace Ogre
             //unless there's more QueuedImage like us because the Texture is
             //being loaded from multiple files.
             PartialImageMap::iterator itor = streamingData.partialImages.find( texture );
-            PartialImageMap::iterator end  = streamingData.partialImages.end();
+            PartialImageMap::iterator endt = streamingData.partialImages.end();
 
-            if( itor != end )
+            if( itor != endt )
                 itor->second.numProcessedDepthOrSlices += img.getDepthOrSlices();
 
-            if( itor == end ||
+            if( itor == endt ||
                 itor->second.numProcessedDepthOrSlices == texture->getDepthOrSlices() )
             {
-                if( itor != end )
+                if( itor != endt )
                 {
                     if( itor->second.sysRamPtr )
                     {
@@ -3000,9 +2995,9 @@ namespace Ogre
         size_t entriesProcessed = 0;
         //Now process new requests from main thread
         LoadRequestVec::const_iterator itor = workerData.loadRequests.begin();
-        LoadRequestVec::const_iterator end  = workerData.loadRequests.end();
+        LoadRequestVec::const_iterator endt = workerData.loadRequests.end();
 
-        while( itor != end &&
+        while( itor != endt &&
                entriesProcessed < entriesToProcessPerIteration &&
                mStreamingData.bytesPreloaded < mMaxPreloadBytes )
         {
@@ -3040,8 +3035,8 @@ namespace Ogre
     {
         size_t totalSizeBytes = 0;
         StagingTextureVec::const_iterator itor = stagingTextures.begin();
-        StagingTextureVec::const_iterator end  = stagingTextures.end();
-        while( itor != end )
+        StagingTextureVec::const_iterator endt = stagingTextures.end();
+        while( itor != endt )
         {
             totalSizeBytes += (*itor)->_getSizeBytes();
             ++itor;
@@ -3078,8 +3073,8 @@ namespace Ogre
         //the existing staging textures available for use.
         StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
         StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
-        while( itor != end && bestCandidate == end )
+        StagingTextureVec::iterator endt = mAvailableStagingTextures.end();
+        while( itor != endt && bestCandidate == endt )
         {
             StagingTexture *stagingTexture = *itor;
             const uint32 frameUsed = stagingTexture->getLastFrameUsed();
@@ -3091,7 +3086,7 @@ namespace Ogre
             }
 
             if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
-                (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
+                (bestCandidate == endt || stagingTexture->isSmallerThan( *bestCandidate )) )
             {
                 const size_t ratio = (requiredSize * 100u) / (*itor)->_getSizeBytes();
                 if( ratio >= minConsumptionRatioThreshold )
@@ -3103,14 +3098,14 @@ namespace Ogre
 
         StagingTexture *retVal = 0;
 
-        if( bestCandidate == end )
+        if( bestCandidate == endt )
         {
             LogManager::getSingleton().logMessage( "Stalling was not enough. Freeing memory." );
 
             //Could not find any best candidate even after stalling.
             //Start deleting staging textures until we've freed enough space.
             itor = mAvailableStagingTextures.begin();
-            while( itor != end && (consumedBytes + requiredSize > mStagingTextureMaxBudgetBytes) )
+            while( itor != endt && (consumedBytes + requiredSize > mStagingTextureMaxBudgetBytes) )
             {
                 consumedBytes -= (*itor)->_getSizeBytes();
                 destroyStagingTextureImpl( *itor );
@@ -3137,9 +3132,9 @@ namespace Ogre
         DownloadToRamEntryVec readyTextures;
 
         DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
-        DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
+        DownloadToRamEntryVec::iterator endt = mDownloadToRamQueue.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             Image2 image; //Use an Image2 as helper for calculating offsets
             image.loadDynamicImage( itor->sysRamPtr, false, itor->texture );
@@ -3197,7 +3192,7 @@ namespace Ogre
                 itor->asyncTickets.clear();
                 readyTextures.push_back( *itor );
                 itor = mDownloadToRamQueue.erase( itor );
-                end  = mDownloadToRamQueue.end();
+                endt = mDownloadToRamQueue.end();
             }
             else
             {
@@ -3206,9 +3201,9 @@ namespace Ogre
         }
 
         itor = readyTextures.begin();
-        end  = readyTextures.end();
+        endt = readyTextures.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->texture->_notifySysRamDownloadIsReady( itor->sysRamPtr, itor->resyncOnly );
             ++itor;
@@ -3279,9 +3274,9 @@ namespace Ogre
 
         {
             StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
-            StagingTextureVec::const_iterator end  = mainData.usedStagingTex.end();
+            StagingTextureVec::const_iterator endt = mainData.usedStagingTex.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 (*itor)->stopMapRegion();
                 ++itor;
@@ -3292,12 +3287,12 @@ namespace Ogre
             OgreProfileExhaustive( "TextureGpuManager::_update destroy old StagingTextures" );
 
             StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-            StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+            StagingTextureVec::iterator endt = mAvailableStagingTextures.end();
 
             const uint32 numFramesThreshold = mVaoManager->getDynamicBufferMultiplier() + 2u;
 
             //They're kept in order.
-            while( itor != end &&
+            while( itor != endt &&
                    mVaoManager->getFrameCount() - (*itor)->getLastFrameUsed() > numFramesThreshold )
             {
                 destroyStagingTextureImpl( *itor );
@@ -3316,9 +3311,9 @@ namespace Ogre
 
         {
             StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
-            StagingTextureVec::const_iterator end  = mainData.usedStagingTex.end();
+            StagingTextureVec::const_iterator endt = mainData.usedStagingTex.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 removeStagingTexture( *itor );
                 ++itor;
@@ -3418,15 +3413,15 @@ namespace Ogre
         while( !bDone )
         {
             DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
-            DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
+            DownloadToRamEntryVec::iterator endt = mDownloadToRamQueue.end();
 
             //Only stall for the texture we're looking for, where resyncOnly == true;
             //since those are from textures currently Resident that will remain Resident.
             //The cases where resyncOnly == false are handled by the residency transition
-            while( itor != end && itor->texture != texture && !itor->resyncOnly )
+            while( itor != endt && itor->texture != texture && !itor->resyncOnly )
                 ++itor;
 
-            if( itor == end )
+            if( itor == endt )
                 bDone = true;
             else
             {

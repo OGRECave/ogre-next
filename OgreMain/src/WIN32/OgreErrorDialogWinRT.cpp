@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreErrorDialog.h"
+
 #include <iostream>
 
 namespace Ogre

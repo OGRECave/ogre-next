@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreImage2.h"
+
 #include "OgreException.h"
 #include "OgreImageCodec2.h"
 #include "OgrePixelFormatGpuUtils.h"

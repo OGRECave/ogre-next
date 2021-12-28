@@ -29,14 +29,13 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
+
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "OgreCamera.h"
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
-
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -149,9 +148,9 @@ namespace Ogre
         const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->passSceneAfterShadowMaps( this );
             ++itor;
@@ -163,9 +162,9 @@ namespace Ogre
         const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
 
         CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+        CompositorWorkspaceListenerVec::const_iterator endt = listeners.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->passSceneAfterFrustumCulling( this );
             ++itor;

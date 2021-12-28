@@ -27,7 +27,9 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "Threading/OgreBarrier.h"
+
 #include <errno.h>
 
 namespace Ogre

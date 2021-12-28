@@ -27,6 +27,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreItem.h"
 
 #include "OgreMeshManager.h"
@@ -115,8 +116,8 @@ namespace Ogre {
             //catch our sub entities and thus we won't be rendered
             mRenderables.reserve( mSubItems.size() );
             SubItemVec::iterator itor = mSubItems.begin();
-            SubItemVec::iterator end  = mSubItems.end();
-            while( itor != end )
+            SubItemVec::iterator endt = mSubItems.end();
+            while( itor != endt )
             {
                 mRenderables.push_back( &(*itor) );
                 ++itor;
@@ -198,9 +199,9 @@ namespace Ogre {
     void Item::setDatablock( HlmsDatablock *datablock )
     {
         SubItemVec::iterator itor = mSubItems.begin();
-        SubItemVec::iterator end  = mSubItems.end();
+        SubItemVec::iterator endt = mSubItems.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             itor->setDatablock( datablock );
             ++itor;

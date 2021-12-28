@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorWorkspaceDef.h"
+
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "OgreStringConverter.h"
@@ -72,9 +73,9 @@ namespace Ogre
                                                            uint32 outChannel ) const
     {
         ChannelRouteList::const_iterator itor = internalChannelRoutes.begin();
-        ChannelRouteList::const_iterator end  = internalChannelRoutes.end();
+        ChannelRouteList::const_iterator endt = internalChannelRoutes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->inNode == inNode && itor->inChannel == inChannel )
             {
@@ -91,9 +92,9 @@ namespace Ogre
         }
 
         itor = externalChannelRoutes.begin();
-        end  = externalChannelRoutes.end();
+        endt = externalChannelRoutes.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->inNode == inNode && itor->inChannel == inChannel )
             {
@@ -230,9 +231,9 @@ namespace Ogre
             mAliasedNodes.erase( it );
 
             ChannelRouteList::iterator itor = mChannelRoutes.begin();
-            ChannelRouteList::iterator end  = mChannelRoutes.end();
+            ChannelRouteList::iterator endt = mChannelRoutes.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->outNode == alias || itor->inNode == alias )
                 {

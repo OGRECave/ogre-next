@@ -26,10 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreOldSkeletonInstance.h"
+
 #include "OgreOldBone.h"
 #include "OgreTagPoint.h"
-
 
 namespace Ogre {
 namespace v1 {

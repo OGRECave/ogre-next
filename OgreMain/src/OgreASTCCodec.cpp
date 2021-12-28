@@ -28,11 +28,11 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#include "OgreASTCCodec.h"
+
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
-#include "OgreASTCCodec.h"
 #include "OgreException.h"
-
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 

@@ -33,15 +33,11 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "OgreRenderSystem.h"
-
 #include "OgreLwString.h"
 #include "OgreTextureGpuManager.h"
-
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
-
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreLogManager.h"

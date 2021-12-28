@@ -43,9 +43,9 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
-#include <algorithm>
-
 #include "Vao/OgreVaoManager.h"
+
+#include <algorithm>
 
 namespace Ogre {
 namespace v1 {

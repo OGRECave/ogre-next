@@ -28,11 +28,11 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreBillboardParticleRenderer.h"
+
 #include "OgreParticle.h"
 #include "OgreBillboard.h"
 #include "OgreStringConverter.h"
 #include "OgreSceneNode.h"
-
 #include "Math/Array/OgreObjectMemoryManager.h"
 
 namespace Ogre {

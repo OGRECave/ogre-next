@@ -2,9 +2,9 @@
 #include "OgreStableHeaders.h"
 
 #include "OgreOfflineProfiler.h"
+
 #include "OgreTimer.h"
 #include "OgreLwString.h"
-
 #include "OgreRoot.h"
 #include "OgreLogManager.h"
 
@@ -30,9 +30,9 @@ namespace Ogre
 
         mMutex.lock();
         PerThreadDataArray::const_iterator itor = mThreadData.begin();
-        PerThreadDataArray::const_iterator end  = mThreadData.end();
+        PerThreadDataArray::const_iterator endt = mThreadData.end();
 
-        while( itor != end )
+        while( itor != endt )
             delete *itor++;
         mThreadData.clear();
         mMutex.unlock();
@@ -72,9 +72,9 @@ namespace Ogre
     void OfflineProfiler::PerThreadData::destroySampleAndChildren( ProfileSample *sample )
     {
         FastArray<ProfileSample*>::const_iterator itor = sample->children.begin();
-        FastArray<ProfileSample*>::const_iterator end  = sample->children.end();
+        FastArray<ProfileSample*>::const_iterator endt = sample->children.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroySampleAndChildren( *itor );
             (*itor)->children.destroy();
@@ -102,9 +102,9 @@ namespace Ogre
         }
 
         FastArray<uint8_t*>::const_iterator itor = mMemoryPool.begin();
-        FastArray<uint8_t*>::const_iterator end  = mMemoryPool.end();
+        FastArray<uint8_t*>::const_iterator endt = mMemoryPool.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             OGRE_FREE( *itor, MEMCATEGORY_GENERAL );
             ++itor;
@@ -249,9 +249,9 @@ namespace Ogre
         outCsvString += tmpStr.c_str();
 
         FastArray<ProfileSample*>::const_iterator itor = sample->children.begin();
-        FastArray<ProfileSample*>::const_iterator end  = sample->children.end();
+        FastArray<ProfileSample*>::const_iterator endt = sample->children.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             dumpSample( *itor, tmpStr, outCsvString, accumStats, stackDepth + 1u );
             ++itor;
@@ -276,9 +276,9 @@ namespace Ogre
             uint32 stackDepth = 0;
 
             FastArray<ProfileSample*>::const_iterator itor = mRoot->children.begin();
-            FastArray<ProfileSample*>::const_iterator end  = mRoot->children.end();
+            FastArray<ProfileSample*>::const_iterator endt = mRoot->children.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 dumpSample( *itor, tmpStr, csvString0, accumStats, stackDepth + 1u );
                 ++itor;
@@ -289,9 +289,9 @@ namespace Ogre
             csvString1 += "Name|Milliseconds|%\n";
 
             StdMap<IdString, ProfileSample>::const_iterator itor = accumStats.begin();
-            StdMap<IdString, ProfileSample>::const_iterator end  = accumStats.end();
+            StdMap<IdString, ProfileSample>::const_iterator endt = accumStats.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const ProfileSample *sample = &itor->second;
                 const float msTaken = (float)(((double)sample->usTaken) / 1000.0);
@@ -343,9 +343,9 @@ namespace Ogre
         mMutex.lock();
 
         PerThreadDataArray::const_iterator itor = mThreadData.begin();
-        PerThreadDataArray::const_iterator end  = mThreadData.end();
+        PerThreadDataArray::const_iterator endt = mThreadData.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->setPauseRequest( bPaused );
             ++itor;
@@ -364,9 +364,9 @@ namespace Ogre
         mMutex.lock();
 
         PerThreadDataArray::const_iterator itor = mThreadData.begin();
-        PerThreadDataArray::const_iterator end  = mThreadData.end();
+        PerThreadDataArray::const_iterator endt = mThreadData.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->requestReset();
             ++itor;
@@ -405,9 +405,9 @@ namespace Ogre
         size_t idx = 0;
 
         PerThreadDataArray::const_iterator itor = mThreadData.begin();
-        PerThreadDataArray::const_iterator end  = mThreadData.end();
+        PerThreadDataArray::const_iterator endt = mThreadData.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             actualFullPathPerFrame.resize( fullPathPerFrame.size() );
             actualFullPathAccum.resize( fullPathAccum.size() );

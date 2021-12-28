@@ -28,7 +28,9 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePlatform.h"
+
 #include "OgrePrerequisites.h"
+
 #include "OgreMemoryTracker.h"
 
 #include <iostream>

@@ -27,7 +27,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "Threading/OgreDefaultWorkQueueStandard.h"
+
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"

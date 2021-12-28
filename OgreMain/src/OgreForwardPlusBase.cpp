@@ -29,17 +29,14 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreForwardPlusBase.h"
+
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgreCamera.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-
 #include "OgreHlms.h"
-
 #include "OgreRoot.h"
-
 #include "OgreDecal.h"
 #include "OgreInternalCubemapProbe.h"
 
@@ -80,9 +77,9 @@ namespace Ogre
     void ForwardPlusBase::_releaseManualHardwareResources()
     {
         CachedGridVec::iterator itor = mCachedGrid.begin();
-        CachedGridVec::iterator end  = mCachedGrid.end();
+        CachedGridVec::iterator endt = mCachedGrid.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CachedGridBufferVec::iterator itBuf = itor->gridBuffers.begin();
             CachedGridBufferVec::iterator enBuf = itor->gridBuffers.end();
@@ -263,9 +260,9 @@ namespace Ogre
         for( size_t rqId=MinDecalRq; rqId<=actualMaxDecalRq; ++rqId )
         {
             MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
-            MovableObject::MovableObjectArray::const_iterator end  = objsPerRqInThread0[rqId].end();
+            MovableObject::MovableObjectArray::const_iterator endt = objsPerRqInThread0[rqId].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_ASSERT_HIGH( dynamic_cast<Decal*>( *itor ) );
                 Decal *decal = static_cast<Decal*>( *itor );
@@ -304,9 +301,9 @@ namespace Ogre
         for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
         {
             MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
-            MovableObject::MovableObjectArray::const_iterator end  = objsPerRqInThread0[rqId].end();
+            MovableObject::MovableObjectArray::const_iterator endt = objsPerRqInThread0[rqId].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe*>( *itor ) );
                 InternalCubemapProbe *probe = static_cast<InternalCubemapProbe*>( *itor );
@@ -386,9 +383,9 @@ namespace Ogre
         const uint32 visibilityMask = camera->getLastViewport()->getLightVisibilityMask();
 
         CachedGridVec::iterator itor = mCachedGrid.begin();
-        CachedGridVec::iterator end  = mCachedGrid.end();
+        CachedGridVec::iterator endt = mCachedGrid.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->camera == camera &&
                 itor->reflection == camera->isReflected() &&
@@ -462,9 +459,9 @@ namespace Ogre
         const uint32 visibilityMask = camera->getLastViewport()->getLightVisibilityMask();
 
         CachedGridVec::const_iterator itor = mCachedGrid.begin();
-        CachedGridVec::const_iterator end  = mCachedGrid.end();
+        CachedGridVec::const_iterator endt = mCachedGrid.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->camera == camera &&
                 itor->reflection == camera->isReflected() &&
@@ -491,11 +488,11 @@ namespace Ogre
     {
         //Check if some of the caches are really old and delete them
         CachedGridVec::iterator itor = mCachedGrid.begin();
-        CachedGridVec::iterator end  = mCachedGrid.end();
+        CachedGridVec::iterator endt = mCachedGrid.end();
 
         const uint32 currentFrame = mVaoManager->getFrameCount();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->lastFrame + 3 < currentFrame )
             {
@@ -524,7 +521,7 @@ namespace Ogre
                 }
 
                 itor = efficientVectorRemove( mCachedGrid, itor );
-                end  = mCachedGrid.end();
+                endt = mCachedGrid.end();
             }
             else
             {

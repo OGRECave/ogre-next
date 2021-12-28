@@ -29,23 +29,18 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsLowLevel.h"
-#include "OgreHlmsLowLevelDatablock.h"
 
+#include "OgreHlmsLowLevelDatablock.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
-
 #include "OgreMaterial.h"
 #include "OgreTechnique.h"
 #include "OgrePass.h"
-
 #include "OgreSceneManager.h"
 #include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "Animation/OgreSkeletonInstance.h"
-
 #include "Vao/OgreVertexArrayObject.h"
-
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbLowLevelMaterial.h"
 

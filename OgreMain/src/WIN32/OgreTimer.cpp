@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreTimer.h"
+
 #include "OgreBitwise.h"
 
 using namespace Ogre;

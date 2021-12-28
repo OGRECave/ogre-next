@@ -27,7 +27,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreConvexBody.h"
+
 #include "OgreException.h"
 #include "OgreVector3.h"
 #include "OgreLogManager.h"

@@ -95,9 +95,9 @@ namespace Ogre
         for( size_t i = 0; i < 2; ++i )
         {
             StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();
-            StagingBufferVec::const_iterator end = mRefedStagingBuffers[i].end();
+            StagingBufferVec::const_iterator endt = mRefedStagingBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_DELETE *itor;
                 ++itor;
@@ -107,9 +107,9 @@ namespace Ogre
             mRefedStagingBuffers[i].clear();
 
             itor = mZeroRefStagingBuffers[i].begin();
-            end = mZeroRefStagingBuffers[i].end();
+            endt = mZeroRefStagingBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 OGRE_DELETE *itor;
                 ++itor;
@@ -123,11 +123,11 @@ namespace Ogre
     uint32 VaoManager::calculateVertexSize( const VertexElement2Vec &vertexElements )
     {
         VertexElement2Vec::const_iterator itor = vertexElements.begin();
-        VertexElement2Vec::const_iterator end  = vertexElements.end();
+        VertexElement2Vec::const_iterator endt = vertexElements.end();
 
         uint32 bytesPerVertex = 0;
 
-        while( itor != end )
+        while( itor != endt )
         {
             bytesPerVertex += v1::VertexElement::getTypeSize( itor->mType );
             ++itor;
@@ -418,9 +418,9 @@ namespace Ogre
             MultiSourceVertexBufferPool *multiSourcePool    = vertexBuffers[0]->getMultiSourcePool();
 
             VertexBufferPackedVec::const_iterator itor = vertexBuffers.begin();
-            VertexBufferPackedVec::const_iterator end  = vertexBuffers.end();
+            VertexBufferPackedVec::const_iterator endt = vertexBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( !(*itor)->getMultiSourcePool() )
                 {
@@ -472,9 +472,9 @@ namespace Ogre
     void VaoManager::destroyAllVertexArrayObjects()
     {
         VertexArrayObjectSet::const_iterator itor = mVertexArrayObjects.begin();
-        VertexArrayObjectSet::const_iterator end  = mVertexArrayObjects.end();
+        VertexArrayObjectSet::const_iterator endt = mVertexArrayObjects.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             destroyVertexArrayObjectImpl( *itor );
             ++itor;
@@ -488,9 +488,9 @@ namespace Ogre
         for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
         {
             BufferPackedSet::const_iterator itor = mBuffers[i].begin();
-            BufferPackedSet::const_iterator end  = mBuffers[i].end();
+            BufferPackedSet::const_iterator endt = mBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 //For some RS 'callDestroyBufferImpl' is unnecessary and will only
                 //increase shutdown times. However for other RS, this is necessary.
@@ -503,9 +503,9 @@ namespace Ogre
 
         {
             DelayedBufferVec::const_iterator itor = mDelayedDestroyBuffers.begin();
-            DelayedBufferVec::const_iterator end  = mDelayedDestroyBuffers.end();
+            DelayedBufferVec::const_iterator endt = mDelayedDestroyBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 //For some RS 'callDestroyBufferImpl' is unnecessary and will only
                 //increase shutdown times. However for other RS, this is necessary.
@@ -524,9 +524,9 @@ namespace Ogre
         memset( candidates, 0, sizeof( candidates ) );
 
         StagingBufferVec::const_iterator itor = mZeroRefStagingBuffers[forUpload].begin();
-        StagingBufferVec::const_iterator end  = mZeroRefStagingBuffers[forUpload].end();
+        StagingBufferVec::const_iterator endt = mZeroRefStagingBuffers[forUpload].end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( forUpload )
             {
@@ -573,9 +573,9 @@ namespace Ogre
     void VaoManager::destroyDelayedBuffers( uint8 fromDynamicFrame )
     {
         DelayedBufferVec::iterator itor = mDelayedDestroyBuffers.begin();
-        DelayedBufferVec::iterator end  = mDelayedDestroyBuffers.end();
+        DelayedBufferVec::iterator endt = mDelayedDestroyBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->frameNumDynamic != fromDynamicFrame || itor->frame == mFrameCount )
                 break;
@@ -596,9 +596,9 @@ namespace Ogre
     void VaoManager::_destroyAllDelayedBuffers()
     {
         DelayedBufferVec::iterator itor = mDelayedDestroyBuffers.begin();
-        DelayedBufferVec::iterator end  = mDelayedDestroyBuffers.end();
+        DelayedBufferVec::iterator endt = mDelayedDestroyBuffers.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             callDestroyBufferImpl( itor->bufferPacked );
             OGRE_DELETE itor->bufferPacked;
@@ -651,9 +651,9 @@ namespace Ogre
         for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
         {
             BufferPackedSet::const_iterator itor = mBuffers[i].begin();
-            BufferPackedSet::const_iterator end  = mBuffers[i].end();
+            BufferPackedSet::const_iterator endt = mBuffers[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 switchVboPoolIndexImpl( internalVboBufferType, oldPoolIdx, newPoolIdx, *itor );
                 ++itor;
@@ -662,9 +662,9 @@ namespace Ogre
 
         {
             DelayedBufferVec::const_iterator itor = mDelayedDestroyBuffers.begin();
-            DelayedBufferVec::const_iterator end  = mDelayedDestroyBuffers.end();
+            DelayedBufferVec::const_iterator endt = mDelayedDestroyBuffers.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 switchVboPoolIndexImpl( internalVboBufferType, oldPoolIdx, newPoolIdx,
                                         itor->bufferPacked );

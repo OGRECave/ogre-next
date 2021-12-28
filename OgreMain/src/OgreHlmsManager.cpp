@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsManager.h"
+
 #include "OgreHlms.h"
 #include "OgreRenderSystem.h"
 #include "OgreHlmsCompute.h"
@@ -315,13 +316,13 @@ namespace Ogre
         }
 
         BlockIdxVec::iterator itor = mActiveBlocks[BLOCK_SAMPLER].begin();
-        BlockIdxVec::iterator end  = mActiveBlocks[BLOCK_SAMPLER].end();
+        BlockIdxVec::iterator endt = mActiveBlocks[BLOCK_SAMPLER].end();
 
-        while( itor != end && mSamplerblocks[*itor] != baseParams )
+        while( itor != endt && mSamplerblocks[*itor] != baseParams )
             ++itor;
 
         HlmsSamplerblock *retVal = 0;
-        if( itor != end )
+        if( itor != endt )
         {
             //Already exists
             retVal = &mSamplerblocks[*itor];
@@ -527,15 +528,15 @@ namespace Ogre
                                            OperationType opType )
     {
         InputLayoutsVec::const_iterator itor = mInputLayouts.begin();
-        InputLayoutsVec::const_iterator end  = mInputLayouts.end();
+        InputLayoutsVec::const_iterator endt = mInputLayouts.end();
 
-        while( itor != end &&
+        while( itor != endt &&
                (itor->vertexElements != vertexElements /*|| itor->opType != opType*/) )
         {
             ++itor;
         }
 
-        if( itor == end )
+        if( itor == endt )
         {
             OGRE_ASSERT_LOW( mInputLayouts.size() < (1u << 10u) && "Too many input layouts!!!" );
 
@@ -677,8 +678,8 @@ namespace Ogre
 
             {
                 BlockIdxVec::const_iterator itor = mActiveBlocks[BLOCK_MACRO].begin();
-                BlockIdxVec::const_iterator end  = mActiveBlocks[BLOCK_MACRO].end();
-                while( itor != end )
+                BlockIdxVec::const_iterator endt = mActiveBlocks[BLOCK_MACRO].end();
+                while( itor != endt )
                 {
                     HlmsMacroblock *block = static_cast<HlmsMacroblock*>( mBlocks[BLOCK_MACRO][*itor] );
                     mRenderSystem->_hlmsMacroblockDestroyed( block );
@@ -686,8 +687,8 @@ namespace Ogre
                 }
 
                 itor = mActiveBlocks[BLOCK_BLEND].begin();
-                end  = mActiveBlocks[BLOCK_BLEND].end();
-                while( itor != end )
+                endt = mActiveBlocks[BLOCK_BLEND].end();
+                while( itor != endt )
                 {
                     HlmsBlendblock *block = static_cast<HlmsBlendblock*>( mBlocks[BLOCK_BLEND][*itor] );
                     mRenderSystem->_hlmsBlendblockDestroyed( block );
@@ -695,15 +696,15 @@ namespace Ogre
                 }
 
                 itor = mActiveBlocks[BLOCK_SAMPLER].begin();
-                end  = mActiveBlocks[BLOCK_SAMPLER].end();
-                while( itor != end )
+                endt = mActiveBlocks[BLOCK_SAMPLER].end();
+                while( itor != endt )
                     mRenderSystem->_hlmsSamplerblockDestroyed( &mSamplerblocks[*itor++] );
             }
 
             {
                 DescriptorSetTextureSet::iterator itor = mDescriptorSetTextures.begin();
-                DescriptorSetTextureSet::iterator end  = mDescriptorSetTextures.end();
-                while( itor != end )
+                DescriptorSetTextureSet::iterator endt = mDescriptorSetTextures.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
@@ -713,8 +714,8 @@ namespace Ogre
             }
             {
                 DescriptorSetTexture2Set::iterator itor = mDescriptorSetTextures2.begin();
-                DescriptorSetTexture2Set::iterator end  = mDescriptorSetTextures2.end();
-                while( itor != end )
+                DescriptorSetTexture2Set::iterator endt = mDescriptorSetTextures2.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetTexture2 *descSetPtr = const_cast<DescriptorSetTexture2*>( &(*itor) );
@@ -724,8 +725,8 @@ namespace Ogre
             }
             {
                 DescriptorSetSamplerSet::iterator itor = mDescriptorSetSamplers.begin();
-                DescriptorSetSamplerSet::iterator end  = mDescriptorSetSamplers.end();
-                while( itor != end )
+                DescriptorSetSamplerSet::iterator endt = mDescriptorSetSamplers.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
@@ -735,8 +736,8 @@ namespace Ogre
             }
             {
                 DescriptorSetUavSet::iterator itor = mDescriptorSetUavs.begin();
-                DescriptorSetUavSet::iterator end  = mDescriptorSetUavs.end();
-                while( itor != end )
+                DescriptorSetUavSet::iterator endt = mDescriptorSetUavs.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav*>( &(*itor) );
@@ -756,8 +757,8 @@ namespace Ogre
         {
             {
                 BlockIdxVec::const_iterator itor = mActiveBlocks[BLOCK_MACRO].begin();
-                BlockIdxVec::const_iterator end  = mActiveBlocks[BLOCK_MACRO].end();
-                while( itor != end )
+                BlockIdxVec::const_iterator endt = mActiveBlocks[BLOCK_MACRO].end();
+                while( itor != endt )
                 {
                     HlmsMacroblock *block = static_cast<HlmsMacroblock*>( mBlocks[BLOCK_MACRO][*itor] );
                     mRenderSystem->_hlmsMacroblockCreated( block );
@@ -765,8 +766,8 @@ namespace Ogre
                 }
 
                 itor = mActiveBlocks[BLOCK_BLEND].begin();
-                end  = mActiveBlocks[BLOCK_BLEND].end();
-                while( itor != end )
+                endt = mActiveBlocks[BLOCK_BLEND].end();
+                while( itor != endt )
                 {
                     HlmsBlendblock *block = static_cast<HlmsBlendblock*>( mBlocks[BLOCK_BLEND][*itor] );
                     mRenderSystem->_hlmsBlendblockCreated( block );
@@ -775,15 +776,15 @@ namespace Ogre
 
 
                 itor = mActiveBlocks[BLOCK_SAMPLER].begin();
-                end  = mActiveBlocks[BLOCK_SAMPLER].end();
-                while( itor != end )
+                endt = mActiveBlocks[BLOCK_SAMPLER].end();
+                while( itor != endt )
                     mRenderSystem->_hlmsSamplerblockCreated( &mSamplerblocks[*itor++] );
             }
 
             {
                 DescriptorSetTextureSet::iterator itor = mDescriptorSetTextures.begin();
-                DescriptorSetTextureSet::iterator end  = mDescriptorSetTextures.end();
-                while( itor != end )
+                DescriptorSetTextureSet::iterator endt = mDescriptorSetTextures.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
@@ -793,8 +794,8 @@ namespace Ogre
             }
             {
                 DescriptorSetTexture2Set::iterator itor = mDescriptorSetTextures2.begin();
-                DescriptorSetTexture2Set::iterator end  = mDescriptorSetTextures2.end();
-                while( itor != end )
+                DescriptorSetTexture2Set::iterator endt = mDescriptorSetTextures2.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetTexture2 *descSetPtr = const_cast<DescriptorSetTexture2*>( &(*itor) );
@@ -804,8 +805,8 @@ namespace Ogre
             }
             {
                 DescriptorSetSamplerSet::iterator itor = mDescriptorSetSamplers.begin();
-                DescriptorSetSamplerSet::iterator end  = mDescriptorSetSamplers.end();
-                while( itor != end )
+                DescriptorSetSamplerSet::iterator endt = mDescriptorSetSamplers.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetSampler comments
                     DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
@@ -815,8 +816,8 @@ namespace Ogre
             }
             {
                 DescriptorSetUavSet::iterator itor = mDescriptorSetUavs.begin();
-                DescriptorSetUavSet::iterator end  = mDescriptorSetUavs.end();
-                while( itor != end )
+                DescriptorSetUavSet::iterator endt = mDescriptorSetUavs.end();
+                while( itor != endt )
                 {
                     //const_cast see HlmsManager::destroyDescriptorSetSampler comments
                     DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav*>( &(*itor) );

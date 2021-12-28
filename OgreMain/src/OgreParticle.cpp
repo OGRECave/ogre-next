@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreParticle.h"
+
 #include "OgreParticleSystem.h"
 
 namespace Ogre

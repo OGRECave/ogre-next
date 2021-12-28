@@ -32,9 +32,7 @@ THE SOFTWARE.
 #include "Vao/OgreStagingBuffer.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
-
 #include "OgreSceneManager.h"
-
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"

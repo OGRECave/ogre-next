@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/OgreCompositorNodeDef.h"
+
 #include "OgreStringConverter.h"
 
 namespace Ogre
@@ -100,9 +101,9 @@ namespace Ogre
         if( textureSource == mDefaultLocalTextureSource )
         {
             ChannelMappings::iterator itor = mOutChannelMapping.begin();
-            ChannelMappings::iterator end  = mOutChannelMapping.end();
+            ChannelMappings::iterator endt = mOutChannelMapping.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 size_t otherIndex;
                 decodeTexSource( *itor, otherIndex, textureSource );
@@ -128,9 +129,9 @@ namespace Ogre
             bool stopIterating = false;
             size_t mappingsToRemove = 0;
             ChannelMappings::const_reverse_iterator ritor = mOutChannelMapping.rbegin();
-            ChannelMappings::const_reverse_iterator rend  = mOutChannelMapping.rend();
+            ChannelMappings::const_reverse_iterator rendt = mOutChannelMapping.rend();
 
-            while( ritor != rend && !stopIterating )
+            while( ritor != rendt && !stopIterating )
             {
                 size_t otherIndex;
                 decodeTexSource( *ritor, otherIndex, textureSource );
@@ -162,9 +163,9 @@ namespace Ogre
         if( inputIt == mInputBuffers.end() )
         {
             BufferDefinitionVec::const_iterator itor = mLocalBufferDefs.begin();
-            BufferDefinitionVec::const_iterator end  = mLocalBufferDefs.end();
+            BufferDefinitionVec::const_iterator endt = mLocalBufferDefs.end();
 
-            while( itor != end && itor->getName() != bufferName )
+            while( itor != endt && itor->getName() != bufferName )
                 ++itor;
 
             if( itor == mLocalBufferDefs.end() )
@@ -186,9 +187,9 @@ namespace Ogre
     {
         size_t passCount = 0;
         CompositorTargetDefVec::const_iterator itor = mTargetPasses.begin();
-        CompositorTargetDefVec::const_iterator end  = mTargetPasses.end();
+        CompositorTargetDefVec::const_iterator endt = mTargetPasses.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             CompositorPassDefVec::const_iterator itPassDef = itor->getCompositorPasses().begin();
             CompositorPassDefVec::const_iterator enPassDef = itor->getCompositorPasses().end();

@@ -29,19 +29,18 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreTextureGpu.h"
+
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
+#include "OgreLwString.h"
+#include "OgreException.h"
+#include "OgreLogManager.h"
 
 //Needed by _resolveTo
 #include "OgreRenderPassDescriptor.h"
 #include "OgreRenderSystem.h"
-
-#include "OgreLwString.h"
-#include "OgreException.h"
-
-#include "OgreLogManager.h"
 
 namespace Ogre
 {
@@ -924,9 +923,9 @@ namespace Ogre
         //Iterate through a copy in case one of the listeners decides to remove itself.
         vector<TextureGpuListener*>::type listenersVec = mListeners;
         vector<TextureGpuListener*>::type::iterator itor = listenersVec.begin();
-        vector<TextureGpuListener*>::type::iterator end  = listenersVec.end();
+        vector<TextureGpuListener*>::type::iterator endt = listenersVec.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             (*itor)->notifyTextureChanged( this, reason, extraData );
             ++itor;

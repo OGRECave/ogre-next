@@ -54,9 +54,9 @@ namespace Ogre
     PsoCacheHelper::~PsoCacheHelper()
     {
         PsoCacheEntryVec::iterator itor = mPsoCache.begin();
-        PsoCacheEntryVec::iterator end  = mPsoCache.end();
+        PsoCacheEntryVec::iterator endt = mPsoCache.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             mRenderSystem->_hlmsPipelineStateObjectDestroyed( &itor->pso );
             ++itor;

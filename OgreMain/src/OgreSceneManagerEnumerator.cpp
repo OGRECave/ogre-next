@@ -26,11 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreSceneManagerEnumerator.h"
 
 #include "OgreException.h"
 #include "OgreLogManager.h"
-
 
 namespace Ogre {
 

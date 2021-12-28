@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePass.h"
+
 #include "OgreRoot.h"
 #include "OgreTechnique.h"
 #include "OgreException.h"
@@ -689,9 +690,9 @@ namespace Ogre {
                                                              mShadowContentTypeLookup.end(),
                                                              textureUnitIndex );
         itor = mShadowContentTypeLookup.insert( itor, textureUnitIndex ) + 1;
-        ContentTypeLookup::iterator end  = mShadowContentTypeLookup.end();
+        ContentTypeLookup::iterator endt = mShadowContentTypeLookup.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             *itor += 1;
             ++itor;
@@ -710,9 +711,9 @@ namespace Ogre {
             mShadowContentTypeLookup.erase( itor );
             itor = mShadowContentTypeLookup.begin() + idx;
         }
-        ContentTypeLookup::iterator end  = mShadowContentTypeLookup.end();
+        ContentTypeLookup::iterator endt = mShadowContentTypeLookup.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             *itor -= 1;
             ++itor;

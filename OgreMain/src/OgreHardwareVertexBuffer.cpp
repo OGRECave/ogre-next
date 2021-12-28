@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreHardwareVertexBuffer.h"
+
 #include "OgreColourValue.h"
 #include "OgreException.h"
 #include "OgreHardwareBufferManager.h"
@@ -628,18 +630,18 @@ namespace v1 {
         {
             VertexElementList::const_iterator currElement = mElementList.begin();
             VertexElementList::const_iterator nextElement = mElementList.begin();
-            VertexElementList::const_iterator end  = mElementList.end();
+            VertexElementList::const_iterator endt = mElementList.end();
 
             ++nextElement;
 
-            while( nextElement != end &&
+            while( nextElement != endt &&
                    VertexDeclaration::vertexElementLessForV2( *currElement, *nextElement ) )
             {
                 ++currElement;
                 ++nextElement;
             }
 
-            retVal = nextElement == end;
+            retVal = nextElement == endt;
         }
 
         return retVal;
@@ -658,9 +660,9 @@ namespace v1 {
         }
 
         VertexElementList::const_iterator itor = mElementList.begin();
-        VertexElementList::const_iterator end  = mElementList.end();
+        VertexElementList::const_iterator endt = mElementList.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             retVal[itor->getSource()].push_back( VertexElement2( itor->getType(),
                                                                  itor->getSemantic() ) );
@@ -680,9 +682,9 @@ namespace v1 {
         memset( repeatCounts, 0, sizeof( repeatCounts ) );
 
         VertexElement2Vec::const_iterator itor = v2Decl.begin();
-        VertexElement2Vec::const_iterator end  = v2Decl.end();
+        VertexElement2Vec::const_iterator endt = v2Decl.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             addElement( 0, acumOffset, itor->mType, itor->mSemantic,
                         repeatCounts[itor->mSemantic-1]++ );
@@ -703,9 +705,9 @@ namespace v1 {
         for( size_t i=0; i<v2Decl.size(); ++i )
         {
             VertexElement2Vec::const_iterator itor = v2Decl[i].begin();
-            VertexElement2Vec::const_iterator end  = v2Decl[i].end();
+            VertexElement2Vec::const_iterator endt = v2Decl[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 addElement( i, acumOffset, itor->mType, itor->mSemantic,
                             repeatCounts[itor->mSemantic-1]++ );

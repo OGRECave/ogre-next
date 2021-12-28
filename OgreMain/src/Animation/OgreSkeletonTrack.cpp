@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "Math/Array/OgreMathlib.h"
 #include "Math/Array/OgreBoneTransform.h"
 #include "Math/Array/OgreKfTransformArrayMemoryManager.h"
-
 #include "OgreException.h"
 
 namespace Ogre
@@ -78,9 +77,9 @@ namespace Ogre
                                                 const Quaternion &qRot, const Vector3 vScale )
     {
         KeyFrameRigVec::iterator itor = mKeyFrameRigs.begin();
-        KeyFrameRigVec::iterator end  = mKeyFrameRigs.end();
+        KeyFrameRigVec::iterator endt = mKeyFrameRigs.end();
 
-        while( itor != end && Math::Abs( itor->mFrame - frame ) < 1e-6f )
+        while( itor != endt && Math::Abs( itor->mFrame - frame ) < 1e-6f )
             ++itor;
 
         if( itor == mKeyFrameRigs.end() )
@@ -169,9 +168,9 @@ namespace Ogre
         if( mUsedSlots <= (ARRAY_PACKED_REALS >> 1) )
         {
             KeyFrameRigVec::const_iterator itor = mKeyFrameRigs.begin();
-            KeyFrameRigVec::const_iterator end  = mKeyFrameRigs.end();
+            KeyFrameRigVec::const_iterator endt = mKeyFrameRigs.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 size_t j=0;
                 for( size_t i=mUsedSlots; i<ARRAY_PACKED_REALS; ++i )

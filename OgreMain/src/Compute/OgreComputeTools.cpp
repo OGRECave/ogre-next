@@ -32,7 +32,6 @@ THE SOFTWARE.
 
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
-
 #include "OgreRenderSystem.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"

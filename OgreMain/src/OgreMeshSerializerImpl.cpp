@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreMeshSerializerImpl.h"
+
 #include "OgreMeshFileFormat.h"
 #include "OgreMeshSerializer.h"
 #include "OgreMesh.h"

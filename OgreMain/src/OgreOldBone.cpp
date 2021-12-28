@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreOldBone.h"
+
 #include "OgreSkeleton.h"
 
 namespace Ogre {

@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreMatrix3.h"
 
 // Adapted from Matrix math by Wild Magic http://www.geometrictools.com/

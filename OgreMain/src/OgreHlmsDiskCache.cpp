@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsDiskCache.h"
+
 #include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
@@ -109,9 +110,9 @@ namespace Ogre
             //Copy shaders
             mCache.sourceCode.reserve( hlms->mShaderCodeCache.size() );
             Hlms::ShaderCodeCacheVec::const_iterator itor = hlms->mShaderCodeCache.begin();
-            Hlms::ShaderCodeCacheVec::const_iterator end  = hlms->mShaderCodeCache.end();
+            Hlms::ShaderCodeCacheVec::const_iterator endt = hlms->mShaderCodeCache.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 SourceCode sourceCode( *itor );
                 mCache.sourceCode.push_back( sourceCode );
@@ -123,9 +124,9 @@ namespace Ogre
             //Copy PSOs
             mCache.pso.reserve( hlms->mShaderCache.size() );
             HlmsCacheVec::const_iterator itor = hlms->mShaderCache.begin();
-            HlmsCacheVec::const_iterator end  = hlms->mShaderCache.end();
+            HlmsCacheVec::const_iterator endt = hlms->mShaderCache.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const uint32 finalHash = (*itor)->hash;
 
@@ -186,9 +187,9 @@ namespace Ogre
         {
             //Compile shaders
             SourceCodeVec::const_iterator itor = mCache.sourceCode.begin();
-            SourceCodeVec::const_iterator end  = mCache.sourceCode.end();
+            SourceCodeVec::const_iterator endt = mCache.sourceCode.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( !mTemplatesOutOfDate )
                 {
@@ -211,9 +212,9 @@ namespace Ogre
             hlms->mRenderableCache.reserve( hlms->mRenderableCache.size() + mCache.pso.size() );
 
             PsoVec::const_iterator itor = mCache.pso.begin();
-            PsoVec::const_iterator end  = mCache.pso.end();
+            PsoVec::const_iterator endt = mCache.pso.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 //uint32 renderableHash = static_cast<uint32>( hlms->addRenderableCache(
                 //        itor->renderableCache.setProperties, itor->renderableCache.pieces ) );
@@ -273,9 +274,9 @@ namespace Ogre
         write<uint32>( dataStream, static_cast<uint32>( properties.size() ) );
 
         HlmsPropertyVec::const_iterator itor = properties.begin();
-        HlmsPropertyVec::const_iterator end  = properties.end();
+        HlmsPropertyVec::const_iterator endt = properties.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             save( dataStream, itor->keyName );
             write( dataStream, itor->value );
@@ -294,9 +295,9 @@ namespace Ogre
             write<uint32>( dataStream, static_cast<uint32>( renderableCache.pieces[i].size() ) );
 
             PiecesMap::const_iterator itor = renderableCache.pieces[i].begin();
-            PiecesMap::const_iterator end  = renderableCache.pieces[i].end();
+            PiecesMap::const_iterator endt = renderableCache.pieces[i].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 save( dataStream, itor->first );
                 save( dataStream, itor->second );
@@ -324,9 +325,9 @@ namespace Ogre
             write<uint32>( dataStream, static_cast<uint32>( mCache.sourceCode.size() ) );
 
             SourceCodeVec::const_iterator itor = mCache.sourceCode.begin();
-            SourceCodeVec::const_iterator end  = mCache.sourceCode.end();
+            SourceCodeVec::const_iterator endt = mCache.sourceCode.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 save( dataStream, itor->mergedCache );
                 for( size_t i=0; i<NumShaderTypes; ++i )
@@ -341,9 +342,9 @@ namespace Ogre
             write<uint32>( dataStream, static_cast<uint32>( mCache.pso.size() ) );
 
             PsoVec::const_iterator itor = mCache.pso.begin();
-            PsoVec::const_iterator end  = mCache.pso.end();
+            PsoVec::const_iterator endt = mCache.pso.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 save( dataStream, itor->renderableCache );
                 save( dataStream, itor->passProperties );

@@ -32,23 +32,17 @@ THE SOFTWARE.
 
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
-
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreRootLayout.h"
-
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "CommandBuffer/OgreCommandBuffer.h"
-
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
-
 #include "OgreFileSystem.h"
 #include "OgreLogManager.h"
-
 #include "Hash/MurmurHash3.h"
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
@@ -125,9 +119,9 @@ namespace Ogre
         ResourceGroupManager &resourceGroupMgr = ResourceGroupManager::getSingleton();
 
         StringVector::const_iterator itor = pieceFiles.begin();
-        StringVector::const_iterator end  = pieceFiles.end();
+        StringVector::const_iterator endt = pieceFiles.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             String filename = *itor;
 
@@ -175,9 +169,9 @@ namespace Ogre
         {
             //Add RenderSystem-specific properties
             IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
-            IdStringVec::const_iterator end  = mRsSpecificExtensions.end();
+            IdStringVec::const_iterator endt = mRsSpecificExtensions.end();
 
-            while( itor != end )
+            while( itor != endt )
                 setProperty( *itor++, 1 );
         }
 
@@ -414,9 +408,9 @@ namespace Ogre
         clearShaderCache();
 
         HlmsComputeJobMap::const_iterator itor = mComputeJobs.begin();
-        HlmsComputeJobMap::const_iterator end  = mComputeJobs.end();
+        HlmsComputeJobMap::const_iterator endt = mComputeJobs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             OGRE_DELETE itor->second.computeJob;
             ++itor;
@@ -431,9 +425,9 @@ namespace Ogre
             mRenderSystem->_setComputePso( 0 );
 
         ComputePsoCacheVec::iterator itor = mComputeShaderCache.begin();
-        ComputePsoCacheVec::iterator end  = mComputeShaderCache.end();
+        ComputePsoCacheVec::iterator endt = mComputeShaderCache.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             if( itor->job )
             {
@@ -579,9 +573,9 @@ namespace Ogre
         Hlms::reloadFrom( newDataFolder, libraryFolders );
 
         HlmsComputeJobMap::const_iterator itor = mComputeJobs.begin();
-        HlmsComputeJobMap::const_iterator end  = mComputeJobs.end();
+        HlmsComputeJobMap::const_iterator endt = mComputeJobs.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             HlmsComputeJob *job = itor->second.computeJob;
             map<IdString, ShaderParams>::type::iterator it = job->mShaderParams.begin();

@@ -29,13 +29,12 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Animation/OgreSkeletonDef.h"
+
 #include "Animation/OgreSkeletonAnimationDef.h"
 #include "Animation/OgreBone.h"
 #include "Math/Array/OgreBoneMemoryManager.h"
 #include "Math/Array/OgreKfTransformArrayMemoryManager.h"
-
 #include "OgreId.h"
-
 #include "OgreOldBone.h"
 #include "OgreSkeleton.h"
 
@@ -140,7 +139,7 @@ namespace Ogre
         while( itDepth != enDepth )
         {
             list<size_t>::type::const_iterator bonesItor = itDepth->begin();
-            list<size_t>::type::const_iterator bonesItorEnd  = itDepth->end();
+            list<size_t>::type::const_iterator bonesItorEnd = itDepth->end();
 
             while( bonesItor != bonesItorEnd )
             {
@@ -192,7 +191,7 @@ namespace Ogre
 
             size_t currentDepthLevel = 0;
             DepthLevelInfoVec::const_iterator bonesItor = mDepthLevelInfoVec.begin();
-            DepthLevelInfoVec::const_iterator bonesItorEnd  = mDepthLevelInfoVec.end();
+            DepthLevelInfoVec::const_iterator bonesItorEnd = mDepthLevelInfoVec.end();
 
             while( bonesItor != bonesItorEnd )
             {
@@ -299,8 +298,8 @@ namespace Ogre
 
         {
             vector<Bone>::type::iterator boneNodeItor = boneNodes.begin();
-            vector<Bone>::type::iterator end  = boneNodes.end();
-            while( boneNodeItor != end )
+            vector<Bone>::type::iterator endt = boneNodes.end();
+            while( boneNodeItor != endt )
             {
                 //Don't check LIFO Order since the BoneMemoryManager dies with us.
                 const bool debugCheckLifoOrder = false;
@@ -316,9 +315,9 @@ namespace Ogre
         out.reserve( mDepthLevelInfoVec.size() );
 
         DepthLevelInfoVec::const_iterator itor = mDepthLevelInfoVec.begin();
-        DepthLevelInfoVec::const_iterator end  = mDepthLevelInfoVec.end();
+        DepthLevelInfoVec::const_iterator endt = mDepthLevelInfoVec.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             out.push_back( itor->numBonesInLevel );
             ++itor;
@@ -330,9 +329,9 @@ namespace Ogre
         size_t numBlocks = 0;
 
         DepthLevelInfoVec::const_iterator itor = mDepthLevelInfoVec.begin();
-        DepthLevelInfoVec::const_iterator end  = mDepthLevelInfoVec.begin() + numLevels;
+        DepthLevelInfoVec::const_iterator endt = mDepthLevelInfoVec.begin() + numLevels;
 
-        while( itor != end )
+        while( itor != endt )
         {
             numBlocks += (itor->numBonesInLevel - 1 + ARRAY_PACKED_REALS) / ARRAY_PACKED_REALS;
             ++itor;

@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreAnimationTrack.h"
+
 #include "OgreAnimation.h"
 #include "OgreKeyFrame.h"
 #include "OgreOldNode.h"

@@ -29,24 +29,19 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreForwardClustered.h"
+
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgreCamera.h"
 #include "OgreDecal.h"
-
 #include "Math/Array/OgreArraySphere.h"
 #include "Math/Array/OgreBooleanMask.h"
-
 #include "Compositor/OgreCompositorShadowNode.h"
-
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-
 #include "Math/Array/OgreObjectMemoryManager.h"
-
 #include "OgreHlms.h"
 #include "OgreWireAabb.h"
-
 #include "OgreProfiler.h"
 
 namespace Ogre
@@ -175,9 +170,9 @@ namespace Ogre
         for( size_t rqId=minRq; rqId<=actualMaxRq; ++rqId )
         {
             MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
-            MovableObject::MovableObjectArray::const_iterator end  = objsPerRqInThread0[rqId].end();
+            MovableObject::MovableObjectArray::const_iterator endt = objsPerRqInThread0[rqId].end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 MovableObject *decal = *itor;
 
@@ -656,7 +651,7 @@ namespace Ogre
             //Now write all the light counts
             FastArray<LightCount>::const_iterator itor = mLightCountInCell.begin() +
                     frustumStartIdx * ARRAY_PACKED_REALS;
-            FastArray<LightCount>::const_iterator end  = mLightCountInCell.begin() +
+            FastArray<LightCount>::const_iterator endt = mLightCountInCell.begin() +
                     (frustumStartIdx + numPackedFrustumsPerSlice) * ARRAY_PACKED_REALS;
 
             const size_t cellSize = mObjsPerCell;
@@ -664,7 +659,7 @@ namespace Ogre
             const bool hasLights = true;
             size_t gridIdx = frustumStartIdx * ARRAY_PACKED_REALS * cellSize;
 
-            while( itor != end )
+            while( itor != endt )
             {
                 uint32 accumLight = itor->lightCount[1];
                 if( hasLights )
@@ -711,9 +706,9 @@ namespace Ogre
         {
             //Merge objects collected in all threads into just thread0
             VisibleObjectsPerThreadArray::const_iterator itor = objsPerThread.begin() + 1u;
-            VisibleObjectsPerThreadArray::const_iterator end  = objsPerThread.end();
+            VisibleObjectsPerThreadArray::const_iterator endt = objsPerThread.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 const size_t numRqs = objsPerRqInThread0.size();
 
@@ -784,9 +779,9 @@ namespace Ogre
             mShadowCastingLightVisibility.reserve( shadowCastingLights.size() );
 
             LightClosestArray::const_iterator itor = shadowCastingLights.begin();
-            LightClosestArray::const_iterator end  = shadowCastingLights.end();
+            LightClosestArray::const_iterator endt = shadowCastingLights.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->light )
                 {
@@ -802,9 +797,9 @@ namespace Ogre
             //Restore shadow casting lights
             FastArray<bool>::const_iterator itVis = mShadowCastingLightVisibility.begin();
             itor = shadowCastingLights.begin();
-            end  = shadowCastingLights.end();
+            endt = shadowCastingLights.end();
 
-            while( itor != end )
+            while( itor != endt )
             {
                 if( itor->light )
                 {
@@ -1004,9 +999,9 @@ namespace Ogre
         {
             //LIFO order for optimum cleanup perfomance
             vector<WireAabb*>::type::const_reverse_iterator ritor = mDebugWireAabb.rbegin();
-            vector<WireAabb*>::type::const_reverse_iterator rend  = mDebugWireAabb.rend();
+            vector<WireAabb*>::type::const_reverse_iterator rendt = mDebugWireAabb.rend();
 
-            while( ritor != rend )
+            while( ritor != rendt )
             {
                 SceneNode *sceneNode = (*ritor)->getParentSceneNode();
                 sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );

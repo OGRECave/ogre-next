@@ -27,8 +27,9 @@ THE SOFTWARE.
 */
 #include "OgreStableHeaders.h"
 
-#include "OgreSkeletonFileFormat.h"
 #include "OgreSkeletonSerializer.h"
+
+#include "OgreSkeletonFileFormat.h"
 #include "OgreSkeleton.h"
 #include "OgreAnimation.h"
 #include "OgreAnimationTrack.h"

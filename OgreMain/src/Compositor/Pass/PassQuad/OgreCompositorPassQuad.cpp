@@ -29,13 +29,13 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
+
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-
 #include "OgreMaterialManager.h"
 #include "OgreRectangle2D.h"
 #include "OgreSceneManager.h"
@@ -123,8 +123,8 @@ namespace Ogre
         //List all our RTT dependencies
         const CompositorPassQuadDef::TextureSources &textureSources = mDefinition->getTextureSources();
         CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
-        CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
-        while( itor != end )
+        CompositorPassQuadDef::TextureSources::const_iterator endt = textureSources.end();
+        while( itor != endt )
         {
             TextureGpu *channel = mParentNode->getDefinedTexture( itor->textureName );
             CompositorTextureVec::const_iterator it = mTextureDependencies.begin();
@@ -147,8 +147,8 @@ namespace Ogre
             const CompositorPassQuadDef::TextureSources &textureSources =
                                                                 mDefinition->getTextureSources();
             CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
+            CompositorPassQuadDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 if( itor->texUnitIdx < mPass->getNumTextureUnitStates() )
                 {
@@ -181,8 +181,8 @@ namespace Ogre
             const CompositorPassQuadDef::TextureSources &textureSources =
                                                                 mDefinition->getTextureSources();
             CompositorPassQuadDef::TextureSources::const_iterator itor = textureSources.begin();
-            CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
-            while( itor != end )
+            CompositorPassQuadDef::TextureSources::const_iterator endt = textureSources.end();
+            while( itor != endt )
             {
                 if( itor->texUnitIdx < mPass->getNumTextureUnitStates() )
                 {

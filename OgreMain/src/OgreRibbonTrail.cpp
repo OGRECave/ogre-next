@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreRibbonTrail.h"
+
 #include "OgreMath.h"
 #include "OgreException.h"
 #include "OgreSceneNode.h"

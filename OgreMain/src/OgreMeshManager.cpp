@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "OgreHardwareBufferManager.h"
 #include "OgreException.h"
 #include "OgreVertexRemapping.h"
-
 #include "OgrePrefabFactory.h"
 
 namespace Ogre

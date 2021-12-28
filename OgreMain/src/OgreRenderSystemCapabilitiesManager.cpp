@@ -27,13 +27,12 @@ THE SOFTWARE.
 */
 #include "OgreStableHeaders.h"
 
+#include "OgreRenderSystemCapabilitiesManager.h"
+
 #include "OgreStringVector.h"
 #include "OgreArchiveManager.h"
 #include "OgreArchive.h"
-#include "OgreRenderSystemCapabilitiesManager.h"
 #include "OgreRenderSystemCapabilitiesSerializer.h"
-
-
 
 namespace Ogre {
 

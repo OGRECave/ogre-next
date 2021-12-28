@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreStableHeaders.h"
+
 #include "OgreColourValue.h"
+
 #include "OgreMath.h"
 
 namespace Ogre {
