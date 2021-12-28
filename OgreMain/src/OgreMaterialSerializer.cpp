@@ -29,21 +29,21 @@ THE SOFTWARE.
 
 #include "OgreMaterialSerializer.h"
 
-#include "OgreStringConverter.h"
-#include "OgreLogManager.h"
-#include "OgreException.h"
-#include "OgreTechnique.h"
-#include "OgrePass.h"
-#include "OgreTextureUnitState.h"
-#include "OgreMaterialManager.h"
-#include "OgreGpuProgramManager.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreExternalTextureSourceManager.h"
-#include "OgreLodStrategyManager.h"
 #include "OgreDistanceLodStrategy.h"
+#include "OgreException.h"
+#include "OgreExternalTextureSourceManager.h"
+#include "OgreGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
+#include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
+#include "OgreLodStrategyManager.h"
+#include "OgreLogManager.h"
+#include "OgreMaterialManager.h"
+#include "OgrePass.h"
+#include "OgreStringConverter.h"
+#include "OgreTechnique.h"
+#include "OgreTextureUnitState.h"
 
 namespace Ogre
 {
@@ -55,65 +55,69 @@ namespace Ogre
         mBuffer.clear();
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::exportMaterial(const MaterialPtr& pMat, const String &fileName, bool exportDefaults,
-        const bool includeProgDef, const String& programFilename, const String& materialName)
+    void MaterialSerializer::exportMaterial( const MaterialPtr &pMat, const String &fileName,
+                                             bool exportDefaults, const bool includeProgDef,
+                                             const String &programFilename, const String &materialName )
     {
         clearQueue();
         mDefaults = exportDefaults;
-        writeMaterial(pMat, materialName);
-        exportQueued(fileName, includeProgDef, programFilename);
+        writeMaterial( pMat, materialName );
+        exportQueued( fileName, includeProgDef, programFilename );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::exportQueued(const String &fileName, const bool includeProgDef, const String& programFilename)
+    void MaterialSerializer::exportQueued( const String &fileName, const bool includeProgDef,
+                                           const String &programFilename )
     {
         // write out gpu program definitions to the buffer
         writeGpuPrograms();
 
-        if (mBuffer.empty())
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Queue is empty !", "MaterialSerializer::exportQueued");
+        if( mBuffer.empty() )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Queue is empty !",
+                         "MaterialSerializer::exportQueued" );
 
-        LogManager::getSingleton().logMessage("MaterialSerializer : writing material(s) to material script : " + fileName, LML_NORMAL);
+        LogManager::getSingleton().logMessage(
+            "MaterialSerializer : writing material(s) to material script : " + fileName, LML_NORMAL );
         FILE *fp;
-        fp = fopen(fileName.c_str(), "w");
-        if (!fp)
-            OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, "Cannot create material file.",
-            "MaterialSerializer::export");
+        fp = fopen( fileName.c_str(), "w" );
+        if( !fp )
+            OGRE_EXCEPT( Exception::ERR_CANNOT_WRITE_TO_FILE, "Cannot create material file.",
+                         "MaterialSerializer::export" );
 
         // output gpu program definitions to material script file if includeProgDef is true
-        if (includeProgDef && !mGpuProgramBuffer.empty())
+        if( includeProgDef && !mGpuProgramBuffer.empty() )
         {
-            fputs(mGpuProgramBuffer.c_str(), fp);
+            fputs( mGpuProgramBuffer.c_str(), fp );
         }
 
         // output main buffer holding material script
-        fputs(mBuffer.c_str(), fp);
-        fclose(fp);
+        fputs( mBuffer.c_str(), fp );
+        fclose( fp );
 
         // write program script if program filename and program definitions
         // were not included in material script
-        if (!includeProgDef && !mGpuProgramBuffer.empty() && !programFilename.empty())
+        if( !includeProgDef && !mGpuProgramBuffer.empty() && !programFilename.empty() )
         {
             FILE *locFp;
-            locFp = fopen(programFilename.c_str(), "w");
-            if (!locFp)
-                OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, "Cannot create program material file.",
-                "MaterialSerializer::export");
-            fputs(mGpuProgramBuffer.c_str(), locFp);
-            fclose(locFp);
+            locFp = fopen( programFilename.c_str(), "w" );
+            if( !locFp )
+                OGRE_EXCEPT( Exception::ERR_CANNOT_WRITE_TO_FILE, "Cannot create program material file.",
+                             "MaterialSerializer::export" );
+            fputs( mGpuProgramBuffer.c_str(), locFp );
+            fclose( locFp );
         }
 
-        LogManager::getSingleton().logMessage("MaterialSerializer : done.", LML_NORMAL);
+        LogManager::getSingleton().logMessage( "MaterialSerializer : done.", LML_NORMAL );
         clearQueue();
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::queueForExport(const MaterialPtr& pMat,
-        bool clearQueued, bool exportDefaults, const String& materialName)
+    void MaterialSerializer::queueForExport( const MaterialPtr &pMat, bool clearQueued,
+                                             bool exportDefaults, const String &materialName )
     {
-        if (clearQueued)
+        if( clearQueued )
             clearQueue();
 
         mDefaults = exportDefaults;
-        writeMaterial(pMat, materialName);
+        writeMaterial( pMat, materialName );
     }
     //-----------------------------------------------------------------------
     void MaterialSerializer::clearQueue()
@@ -123,16 +127,13 @@ namespace Ogre
         mGpuProgramDefinitionContainer.clear();
     }
     //-----------------------------------------------------------------------
-    const String &MaterialSerializer::getQueuedAsString() const
-    {
-        return mBuffer;
-    }
+    const String &MaterialSerializer::getQueuedAsString() const { return mBuffer; }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeMaterial(const MaterialPtr& pMat, const String& materialName)
+    void MaterialSerializer::writeMaterial( const MaterialPtr &pMat, const String &materialName )
     {
         String outMaterialName;
 
-        if (materialName.length() > 0)
+        if( materialName.length() > 0 )
         {
             outMaterialName = materialName;
         }
@@ -141,610 +142,577 @@ namespace Ogre
             outMaterialName = pMat->getName();
         }
 
-        LogManager::getSingleton().logMessage("MaterialSerializer : writing material " + outMaterialName + " to queue.", LML_NORMAL);
+        LogManager::getSingleton().logMessage(
+            "MaterialSerializer : writing material " + outMaterialName + " to queue.", LML_NORMAL );
 
         bool skipWriting = false;
 
         // Fire pre-write event.
-        fireMaterialEvent(MSE_PRE_WRITE, skipWriting, pMat.get());
-        if (skipWriting)        
-            return;     
+        fireMaterialEvent( MSE_PRE_WRITE, skipWriting, pMat.get() );
+        if( skipWriting )
+            return;
 
         // Material name
-        writeAttribute(0, "material");
-        writeValue(quoteWord(outMaterialName));
-        
-        beginSection(0);
+        writeAttribute( 0, "material" );
+        writeValue( quoteWord( outMaterialName ) );
+
+        beginSection( 0 );
         {
             // Fire write begin event.
-            fireMaterialEvent(MSE_WRITE_BEGIN, skipWriting, pMat.get());
+            fireMaterialEvent( MSE_WRITE_BEGIN, skipWriting, pMat.get() );
 
             // Write LOD information
             Material::LodValueIterator valueIt = pMat->getUserLodValueIterator();
             // Skip zero value
-            if (valueIt.hasMoreElements())
+            if( valueIt.hasMoreElements() )
                 valueIt.getNext();
             String attributeVal;
-            while (valueIt.hasMoreElements())
+            while( valueIt.hasMoreElements() )
             {
-                attributeVal.append(StringConverter::toString(valueIt.getNext()));
-                if (valueIt.hasMoreElements())
-                    attributeVal.append(" ");
+                attributeVal.append( StringConverter::toString( valueIt.getNext() ) );
+                if( valueIt.hasMoreElements() )
+                    attributeVal.append( " " );
             }
-            if (!attributeVal.empty())
+            if( !attributeVal.empty() )
             {
-                writeAttribute(1, "lod_values");
-                writeValue(attributeVal);
+                writeAttribute( 1, "lod_values" );
+                writeValue( attributeVal );
             }
-
 
             // Shadow receive
-            if (mDefaults ||
-                pMat->getReceiveShadows() != true)
+            if( mDefaults || pMat->getReceiveShadows() != true )
             {
-                writeAttribute(1, "receive_shadows");
-                writeValue(pMat->getReceiveShadows() ? "on" : "off");
+                writeAttribute( 1, "receive_shadows" );
+                writeValue( pMat->getReceiveShadows() ? "on" : "off" );
             }
 
             // When rendering shadows, treat transparent things as opaque?
-            if (mDefaults ||
-                pMat->getTransparencyCastsShadows() == true)
+            if( mDefaults || pMat->getTransparencyCastsShadows() == true )
             {
-                writeAttribute(1, "transparency_casts_shadows");
-                writeValue(pMat->getTransparencyCastsShadows() ? "on" : "off");
+                writeAttribute( 1, "transparency_casts_shadows" );
+                writeValue( pMat->getTransparencyCastsShadows() ? "on" : "off" );
             }
 
             // Iterate over techniques
             Material::TechniqueIterator it = pMat->getTechniqueIterator();
-            while (it.hasMoreElements())
+            while( it.hasMoreElements() )
             {
-                writeTechnique(it.getNext());
+                writeTechnique( it.getNext() );
                 mBuffer += "\n";
             }
 
             // Fire write end event.
-            fireMaterialEvent(MSE_WRITE_END, skipWriting, pMat.get());
+            fireMaterialEvent( MSE_WRITE_END, skipWriting, pMat.get() );
         }
-        endSection(0);
+        endSection( 0 );
         mBuffer += "\n";
 
         // Fire post section write event.
-        fireMaterialEvent(MSE_POST_WRITE, skipWriting, pMat.get());
+        fireMaterialEvent( MSE_POST_WRITE, skipWriting, pMat.get() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeTechnique(const Technique* pTech)
+    void MaterialSerializer::writeTechnique( const Technique *pTech )
     {
         bool skipWriting = false;
 
         // Fire pre-write event.
-        fireTechniqueEvent(MSE_PRE_WRITE, skipWriting, pTech);
-        if (skipWriting)        
-            return; 
-        
-        // Technique header
-        writeAttribute(1, "technique");
-        // only output technique name if it exists.
-        if (!pTech->getName().empty())
-            writeValue(quoteWord(pTech->getName()));
+        fireTechniqueEvent( MSE_PRE_WRITE, skipWriting, pTech );
+        if( skipWriting )
+            return;
 
-        beginSection(1);
+        // Technique header
+        writeAttribute( 1, "technique" );
+        // only output technique name if it exists.
+        if( !pTech->getName().empty() )
+            writeValue( quoteWord( pTech->getName() ) );
+
+        beginSection( 1 );
         {
             // Fire write begin event.
-            fireTechniqueEvent(MSE_WRITE_BEGIN, skipWriting, pTech);
+            fireTechniqueEvent( MSE_WRITE_BEGIN, skipWriting, pTech );
 
             // LOD index
-            if (mDefaults ||
-                pTech->getLodIndex() != 0)
+            if( mDefaults || pTech->getLodIndex() != 0 )
             {
-                writeAttribute(2, "lod_index");
-                writeValue(StringConverter::toString(pTech->getLodIndex()));
+                writeAttribute( 2, "lod_index" );
+                writeValue( StringConverter::toString( pTech->getLodIndex() ) );
             }
 
             // Scheme name
-            if (mDefaults ||
-                pTech->getSchemeName() != MaterialManager::DEFAULT_SCHEME_NAME)
+            if( mDefaults || pTech->getSchemeName() != MaterialManager::DEFAULT_SCHEME_NAME )
             {
-                writeAttribute(2, "scheme");
-                writeValue(quoteWord(pTech->getSchemeName()));
+                writeAttribute( 2, "scheme" );
+                writeValue( quoteWord( pTech->getSchemeName() ) );
             }
 
             // ShadowCasterMaterial name
-            if (!pTech->getShadowCasterMaterial().isNull())
+            if( !pTech->getShadowCasterMaterial().isNull() )
             {
-                writeAttribute(2, "shadow_caster_material");
-                writeValue(quoteWord(pTech->getShadowCasterMaterial()->getName()));
+                writeAttribute( 2, "shadow_caster_material" );
+                writeValue( quoteWord( pTech->getShadowCasterMaterial()->getName() ) );
             }
             // GPU vendor rules
             Technique::GPUVendorRuleIterator vrit = pTech->getGPUVendorRuleIterator();
-            while (vrit.hasMoreElements())
+            while( vrit.hasMoreElements() )
             {
-                const Technique::GPUVendorRule& rule = vrit.getNext();
-                writeAttribute(2, "gpu_vendor_rule");
-                if (rule.includeOrExclude == Technique::INCLUDE)
-                    writeValue("include");
+                const Technique::GPUVendorRule &rule = vrit.getNext();
+                writeAttribute( 2, "gpu_vendor_rule" );
+                if( rule.includeOrExclude == Technique::INCLUDE )
+                    writeValue( "include" );
                 else
-                    writeValue("exclude");
-                writeValue(quoteWord(RenderSystemCapabilities::vendorToString(rule.vendor)));
+                    writeValue( "exclude" );
+                writeValue( quoteWord( RenderSystemCapabilities::vendorToString( rule.vendor ) ) );
             }
             // GPU device rules
             Technique::GPUDeviceNameRuleIterator dnit = pTech->getGPUDeviceNameRuleIterator();
-            while (dnit.hasMoreElements())
+            while( dnit.hasMoreElements() )
             {
-                const Technique::GPUDeviceNameRule& rule = dnit.getNext();
-                writeAttribute(2, "gpu_device_rule");
-                if (rule.includeOrExclude == Technique::INCLUDE)
-                    writeValue("include");
+                const Technique::GPUDeviceNameRule &rule = dnit.getNext();
+                writeAttribute( 2, "gpu_device_rule" );
+                if( rule.includeOrExclude == Technique::INCLUDE )
+                    writeValue( "include" );
                 else
-                    writeValue("exclude");
-                writeValue(quoteWord(rule.devicePattern));
-                writeValue(StringConverter::toString(rule.caseSensitive));
+                    writeValue( "exclude" );
+                writeValue( quoteWord( rule.devicePattern ) );
+                writeValue( StringConverter::toString( rule.caseSensitive ) );
             }
             // Iterate over passes
-            Technique::PassIterator it = const_cast<Technique*>(pTech)->getPassIterator();
-            while (it.hasMoreElements())
+            Technique::PassIterator it = const_cast<Technique *>( pTech )->getPassIterator();
+            while( it.hasMoreElements() )
             {
-                writePass(it.getNext());
+                writePass( it.getNext() );
                 mBuffer += "\n";
             }
 
             // Fire write end event.
-            fireTechniqueEvent(MSE_WRITE_END, skipWriting, pTech);
+            fireTechniqueEvent( MSE_WRITE_END, skipWriting, pTech );
         }
-        endSection(1);
+        endSection( 1 );
 
         // Fire post section write event.
-        fireTechniqueEvent(MSE_POST_WRITE, skipWriting, pTech);
-
+        fireTechniqueEvent( MSE_POST_WRITE, skipWriting, pTech );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writePass(const Pass* pPass)
+    void MaterialSerializer::writePass( const Pass *pPass )
     {
         bool skipWriting = false;
 
         // Fire pre-write event.
-        firePassEvent(MSE_PRE_WRITE, skipWriting, pPass);
-        if (skipWriting)        
+        firePassEvent( MSE_PRE_WRITE, skipWriting, pPass );
+        if( skipWriting )
             return;
-        
-        writeAttribute(2, "pass");
-        // only output pass name if its not the default name
-        if (pPass->getName() != StringConverter::toString(pPass->getIndex()))
-            writeValue(quoteWord(pPass->getName()));
 
-        beginSection(2);
+        writeAttribute( 2, "pass" );
+        // only output pass name if its not the default name
+        if( pPass->getName() != StringConverter::toString( pPass->getIndex() ) )
+            writeValue( quoteWord( pPass->getName() ) );
+
+        beginSection( 2 );
         {
             // Fire write begin event.
-            firePassEvent(MSE_WRITE_BEGIN, skipWriting, pPass);
+            firePassEvent( MSE_WRITE_BEGIN, skipWriting, pPass );
 
-            //lighting
+            // lighting
             // max_lights
-            if (mDefaults ||
-                pPass->getMaxSimultaneousLights() != OGRE_MAX_SIMULTANEOUS_LIGHTS)
+            if( mDefaults || pPass->getMaxSimultaneousLights() != OGRE_MAX_SIMULTANEOUS_LIGHTS )
             {
-                writeAttribute(3, "max_lights");
-                writeValue(StringConverter::toString(pPass->getMaxSimultaneousLights()));
+                writeAttribute( 3, "max_lights" );
+                writeValue( StringConverter::toString( pPass->getMaxSimultaneousLights() ) );
             }
             // start_light
-            if (mDefaults ||
-                pPass->getStartLight() != 0)
+            if( mDefaults || pPass->getStartLight() != 0 )
             {
-                writeAttribute(3, "start_light");
-                writeValue(StringConverter::toString(pPass->getStartLight()));
+                writeAttribute( 3, "start_light" );
+                writeValue( StringConverter::toString( pPass->getStartLight() ) );
             }
             // iteration
-            if (mDefaults ||
-                pPass->getIteratePerLight() || (pPass->getPassIterationCount() > 1))
+            if( mDefaults || pPass->getIteratePerLight() || ( pPass->getPassIterationCount() > 1 ) )
             {
-                writeAttribute(3, "iteration");
+                writeAttribute( 3, "iteration" );
                 // pass iteration count
-                if (pPass->getPassIterationCount() > 1 || pPass->getLightCountPerIteration() > 1)
+                if( pPass->getPassIterationCount() > 1 || pPass->getLightCountPerIteration() > 1 )
                 {
-                    writeValue(StringConverter::toString(pPass->getPassIterationCount()));
-                    if (pPass->getIteratePerLight())
+                    writeValue( StringConverter::toString( pPass->getPassIterationCount() ) );
+                    if( pPass->getIteratePerLight() )
                     {
-                        if (pPass->getLightCountPerIteration() > 1)
+                        if( pPass->getLightCountPerIteration() > 1 )
                         {
-                            writeValue("per_n_lights");
-                            writeValue(StringConverter::toString(
-                                pPass->getLightCountPerIteration()));
+                            writeValue( "per_n_lights" );
+                            writeValue(
+                                StringConverter::toString( pPass->getLightCountPerIteration() ) );
                         }
                         else
                         {
-                            writeValue("per_light");
+                            writeValue( "per_light" );
                         }
                     }
                 }
                 else
                 {
-                    writeValue(pPass->getIteratePerLight() ? "once_per_light" : "once");
+                    writeValue( pPass->getIteratePerLight() ? "once_per_light" : "once" );
                 }
 
-                if (pPass->getIteratePerLight() && pPass->getRunOnlyForOneLightType())
+                if( pPass->getIteratePerLight() && pPass->getRunOnlyForOneLightType() )
                 {
-                    switch (pPass->getOnlyLightType())
+                    switch( pPass->getOnlyLightType() )
                     {
                     case Light::LT_DIRECTIONAL:
-                        writeValue("directional");
+                        writeValue( "directional" );
                         break;
                     case Light::LT_POINT:
-                        writeValue("point");
+                        writeValue( "point" );
                         break;
                     case Light::LT_SPOTLIGHT:
-                        writeValue("spot");
+                        writeValue( "spot" );
                         break;
                     case Light::LT_VPL:
                     case Light::LT_AREA_APPROX:
                     case Light::LT_AREA_LTC:
-                    case Light::NUM_LIGHT_TYPES: //Keep compiler happy
+                    case Light::NUM_LIGHT_TYPES:  // Keep compiler happy
                         break;
                     };
                 }
             }
 
-            if(mDefaults || pPass->getLightMask() != 0xFFFFFFFF)
+            if( mDefaults || pPass->getLightMask() != 0xFFFFFFFF )
             {
-                writeAttribute(3, "light_mask");
-                writeValue(StringConverter::toString(pPass->getLightMask()));
+                writeAttribute( 3, "light_mask" );
+                writeValue( StringConverter::toString( pPass->getLightMask() ) );
             }
 
             {
                 // Ambient
-                if (mDefaults ||
-                    pPass->getAmbient().r != 1 ||
-                    pPass->getAmbient().g != 1 ||
-                    pPass->getAmbient().b != 1 ||
-                    pPass->getAmbient().a != 1 ||
-                    (pPass->getVertexColourTracking() & TVC_AMBIENT))
+                if( mDefaults || pPass->getAmbient().r != 1 || pPass->getAmbient().g != 1 ||
+                    pPass->getAmbient().b != 1 || pPass->getAmbient().a != 1 ||
+                    ( pPass->getVertexColourTracking() & TVC_AMBIENT ) )
                 {
-                    writeAttribute(3, "ambient");
-                    if (pPass->getVertexColourTracking() & TVC_AMBIENT)
-                        writeValue("vertexcolour");
+                    writeAttribute( 3, "ambient" );
+                    if( pPass->getVertexColourTracking() & TVC_AMBIENT )
+                        writeValue( "vertexcolour" );
                     else
-                        writeColourValue(pPass->getAmbient(), true);
+                        writeColourValue( pPass->getAmbient(), true );
                 }
 
                 // Diffuse
-                if (mDefaults ||
-                    pPass->getDiffuse().r != 1 ||
-                    pPass->getDiffuse().g != 1 ||
-                    pPass->getDiffuse().b != 1 ||
-                    pPass->getDiffuse().a != 1 ||
-                    (pPass->getVertexColourTracking() & TVC_DIFFUSE))
+                if( mDefaults || pPass->getDiffuse().r != 1 || pPass->getDiffuse().g != 1 ||
+                    pPass->getDiffuse().b != 1 || pPass->getDiffuse().a != 1 ||
+                    ( pPass->getVertexColourTracking() & TVC_DIFFUSE ) )
                 {
-                    writeAttribute(3, "diffuse");
-                    if (pPass->getVertexColourTracking() & TVC_DIFFUSE)
-                        writeValue("vertexcolour");
+                    writeAttribute( 3, "diffuse" );
+                    if( pPass->getVertexColourTracking() & TVC_DIFFUSE )
+                        writeValue( "vertexcolour" );
                     else
-                        writeColourValue(pPass->getDiffuse(), true);
+                        writeColourValue( pPass->getDiffuse(), true );
                 }
 
                 // Specular
-                if (mDefaults ||
-                    pPass->getSpecular().r != 0 ||
-                    pPass->getSpecular().g != 0 ||
-                    pPass->getSpecular().b != 0 ||
-                    pPass->getSpecular().a != 1 ||
-                    pPass->getShininess() != 0 ||
-                    (pPass->getVertexColourTracking() & TVC_SPECULAR))
+                if( mDefaults || pPass->getSpecular().r != 0 || pPass->getSpecular().g != 0 ||
+                    pPass->getSpecular().b != 0 || pPass->getSpecular().a != 1 ||
+                    pPass->getShininess() != 0 || ( pPass->getVertexColourTracking() & TVC_SPECULAR ) )
                 {
-                    writeAttribute(3, "specular");
-                    if (pPass->getVertexColourTracking() & TVC_SPECULAR)
+                    writeAttribute( 3, "specular" );
+                    if( pPass->getVertexColourTracking() & TVC_SPECULAR )
                     {
-                        writeValue("vertexcolour");
+                        writeValue( "vertexcolour" );
                     }
                     else
                     {
-                        writeColourValue(pPass->getSpecular(), true);
+                        writeColourValue( pPass->getSpecular(), true );
                     }
-                    writeValue(StringConverter::toString(pPass->getShininess()));
-
+                    writeValue( StringConverter::toString( pPass->getShininess() ) );
                 }
 
                 // Emissive
-                if (mDefaults ||
-                    pPass->getSelfIllumination().r != 0 ||
-                    pPass->getSelfIllumination().g != 0 ||
-                    pPass->getSelfIllumination().b != 0 ||
+                if( mDefaults || pPass->getSelfIllumination().r != 0 ||
+                    pPass->getSelfIllumination().g != 0 || pPass->getSelfIllumination().b != 0 ||
                     pPass->getSelfIllumination().a != 1 ||
-                    (pPass->getVertexColourTracking() & TVC_EMISSIVE))
+                    ( pPass->getVertexColourTracking() & TVC_EMISSIVE ) )
                 {
-                    writeAttribute(3, "emissive");
-                    if (pPass->getVertexColourTracking() & TVC_EMISSIVE)
-                        writeValue("vertexcolour");
+                    writeAttribute( 3, "emissive" );
+                    if( pPass->getVertexColourTracking() & TVC_EMISSIVE )
+                        writeValue( "vertexcolour" );
                     else
-                        writeColourValue(pPass->getSelfIllumination(), true);
+                        writeColourValue( pPass->getSelfIllumination(), true );
                 }
             }
 
             // Point size
-            if (mDefaults ||
-                pPass->getPointSize() != 1.0)
+            if( mDefaults || pPass->getPointSize() != 1.0 )
             {
-                writeAttribute(3, "point_size");
-                writeValue(StringConverter::toString(pPass->getPointSize()));
+                writeAttribute( 3, "point_size" );
+                writeValue( StringConverter::toString( pPass->getPointSize() ) );
             }
 
             // Point sprites
-            if (mDefaults ||
-                pPass->getPointSpritesEnabled())
+            if( mDefaults || pPass->getPointSpritesEnabled() )
             {
-                writeAttribute(3, "point_sprites");
-                writeValue(pPass->getPointSpritesEnabled() ? "on" : "off");
+                writeAttribute( 3, "point_sprites" );
+                writeValue( pPass->getPointSpritesEnabled() ? "on" : "off" );
             }
 
             // Point attenuation
-            if (mDefaults ||
-                pPass->isPointAttenuationEnabled())
+            if( mDefaults || pPass->isPointAttenuationEnabled() )
             {
-                writeAttribute(3, "point_size_attenuation");
-                writeValue(pPass->isPointAttenuationEnabled() ? "on" : "off");
-                if (pPass->isPointAttenuationEnabled() &&
-                    (pPass->getPointAttenuationConstant() != 0.0 ||
-                     pPass->getPointAttenuationLinear() != 1.0 ||
-                     pPass->getPointAttenuationQuadratic() != 0.0))
+                writeAttribute( 3, "point_size_attenuation" );
+                writeValue( pPass->isPointAttenuationEnabled() ? "on" : "off" );
+                if( pPass->isPointAttenuationEnabled() &&
+                    ( pPass->getPointAttenuationConstant() != 0.0 ||
+                      pPass->getPointAttenuationLinear() != 1.0 ||
+                      pPass->getPointAttenuationQuadratic() != 0.0 ) )
                 {
-                    writeValue(StringConverter::toString(pPass->getPointAttenuationConstant()));
-                    writeValue(StringConverter::toString(pPass->getPointAttenuationLinear()));
-                    writeValue(StringConverter::toString(pPass->getPointAttenuationQuadratic()));
+                    writeValue( StringConverter::toString( pPass->getPointAttenuationConstant() ) );
+                    writeValue( StringConverter::toString( pPass->getPointAttenuationLinear() ) );
+                    writeValue( StringConverter::toString( pPass->getPointAttenuationQuadratic() ) );
                 }
             }
 
             // Point min size
-            if (mDefaults ||
-                pPass->getPointMinSize() != 0.0)
+            if( mDefaults || pPass->getPointMinSize() != 0.0 )
             {
-                writeAttribute(3, "point_size_min");
-                writeValue(StringConverter::toString(pPass->getPointMinSize()));
+                writeAttribute( 3, "point_size_min" );
+                writeValue( StringConverter::toString( pPass->getPointMinSize() ) );
             }
 
             // Point max size
-            if (mDefaults ||
-                pPass->getPointMaxSize() != 0.0)
+            if( mDefaults || pPass->getPointMaxSize() != 0.0 )
             {
-                writeAttribute(3, "point_size_max");
-                writeValue(StringConverter::toString(pPass->getPointMaxSize()));
+                writeAttribute( 3, "point_size_max" );
+                writeValue( StringConverter::toString( pPass->getPointMaxSize() ) );
             }
 
             const HlmsBlendblock *blendblock = pPass->getBlendblock();
             // scene blend factor
             if( blendblock->mSeparateBlend )
             {
-                if (mDefaults ||
-                    blendblock->mSourceBlendFactor != SBF_ONE ||
+                if( mDefaults || blendblock->mSourceBlendFactor != SBF_ONE ||
                     blendblock->mDestBlendFactor != SBF_ZERO ||
                     blendblock->mSourceBlendFactorAlpha != SBF_ONE ||
-                    blendblock->mDestBlendFactorAlpha != SBF_ZERO)
+                    blendblock->mDestBlendFactorAlpha != SBF_ZERO )
                 {
-                    writeAttribute(3, "separate_scene_blend");
+                    writeAttribute( 3, "separate_scene_blend" );
                     writeSceneBlendFactor( blendblock->mSourceBlendFactor, blendblock->mDestBlendFactor,
-                        blendblock->mSourceBlendFactorAlpha, blendblock->mDestBlendFactorAlpha );
+                                           blendblock->mSourceBlendFactorAlpha,
+                                           blendblock->mDestBlendFactorAlpha );
                 }
             }
             else
             {
-                if (mDefaults ||
-                    blendblock->mSourceBlendFactor != SBF_ONE ||
+                if( mDefaults || blendblock->mSourceBlendFactor != SBF_ONE ||
                     blendblock->mDestBlendFactor != SBF_ZERO )
                 {
-                    writeAttribute(3, "scene_blend");
-                    writeSceneBlendFactor( blendblock->mSourceBlendFactor, blendblock->mDestBlendFactor );
+                    writeAttribute( 3, "scene_blend" );
+                    writeSceneBlendFactor( blendblock->mSourceBlendFactor,
+                                           blendblock->mDestBlendFactor );
                 }
             }
 
             // alpha_to_coverage
-            if (mDefaults ||blendblock->mAlphaToCoverageEnabled)
+            if( mDefaults || blendblock->mAlphaToCoverageEnabled )
             {
-                writeAttribute(3, "alpha_to_coverage");
-                writeValue(blendblock->mAlphaToCoverageEnabled ? "on" : "off");
+                writeAttribute( 3, "alpha_to_coverage" );
+                writeValue( blendblock->mAlphaToCoverageEnabled ? "on" : "off" );
             }
 
             const HlmsMacroblock *macroblock = pPass->getMacroblock();
 
             // alpha_rejection
-            if (mDefaults ||
-                pPass->getAlphaRejectFunction() != CMPF_ALWAYS_PASS ||
-                pPass->getAlphaRejectValue() != 0)
+            if( mDefaults || pPass->getAlphaRejectFunction() != CMPF_ALWAYS_PASS ||
+                pPass->getAlphaRejectValue() != 0 )
             {
-                writeAttribute(3, "alpha_rejection");
-                writeCompareFunction(pPass->getAlphaRejectFunction());
-                writeValue(StringConverter::toString(pPass->getAlphaRejectValue()));
+                writeAttribute( 3, "alpha_rejection" );
+                writeCompareFunction( pPass->getAlphaRejectFunction() );
+                writeValue( StringConverter::toString( pPass->getAlphaRejectValue() ) );
             }
 
-            //depth check
-            if (mDefaults || macroblock->mDepthCheck != true)
+            // depth check
+            if( mDefaults || macroblock->mDepthCheck != true )
             {
-                writeAttribute(3, "depth_check");
-                writeValue(macroblock->mDepthCheck ? "on" : "off");
+                writeAttribute( 3, "depth_check" );
+                writeValue( macroblock->mDepthCheck ? "on" : "off" );
             }
-            //depth write
-            if (mDefaults || macroblock->mDepthWrite != true)
+            // depth write
+            if( mDefaults || macroblock->mDepthWrite != true )
             {
-                writeAttribute(3, "depth_write");
-                writeValue(macroblock->mDepthWrite ? "on" : "off");
+                writeAttribute( 3, "depth_write" );
+                writeValue( macroblock->mDepthWrite ? "on" : "off" );
             }
-            //depth function
-            if (mDefaults || macroblock->mDepthFunc != CMPF_LESS_EQUAL)
+            // depth function
+            if( mDefaults || macroblock->mDepthFunc != CMPF_LESS_EQUAL )
             {
-                writeAttribute(3, "depth_func");
+                writeAttribute( 3, "depth_func" );
                 writeCompareFunction( macroblock->mDepthFunc );
             }
 
-            //depth bias
-            if (mDefaults ||
-                macroblock->mDepthBiasConstant != 0 ||
-                macroblock->mDepthBiasSlopeScale != 0)
+            // depth bias
+            if( mDefaults || macroblock->mDepthBiasConstant != 0 ||
+                macroblock->mDepthBiasSlopeScale != 0 )
             {
-                writeAttribute(3, "depth_bias");
-                writeValue(StringConverter::toString(macroblock->mDepthBiasConstant));
-                writeValue(StringConverter::toString(macroblock->mDepthBiasSlopeScale));
+                writeAttribute( 3, "depth_bias" );
+                writeValue( StringConverter::toString( macroblock->mDepthBiasConstant ) );
+                writeValue( StringConverter::toString( macroblock->mDepthBiasSlopeScale ) );
             }
 
-            //light scissor
-            if (mDefaults ||
-                pPass->getLightScissoringEnabled() != false)
+            // light scissor
+            if( mDefaults || pPass->getLightScissoringEnabled() != false )
             {
-                writeAttribute(3, "light_scissor");
-                writeValue(pPass->getLightScissoringEnabled() ? "on" : "off");
+                writeAttribute( 3, "light_scissor" );
+                writeValue( pPass->getLightScissoringEnabled() ? "on" : "off" );
             }
 
-            //light clip planes
-            if (mDefaults ||
-                pPass->getLightClipPlanesEnabled() != false)
+            // light clip planes
+            if( mDefaults || pPass->getLightClipPlanesEnabled() != false )
             {
-                writeAttribute(3, "light_clip_planes");
-                writeValue(pPass->getLightClipPlanesEnabled() ? "on" : "off");
+                writeAttribute( 3, "light_clip_planes" );
+                writeValue( pPass->getLightClipPlanesEnabled() ? "on" : "off" );
             }
 
             // hardware culling mode
-            if (mDefaults || macroblock->mCullMode != CULL_CLOCKWISE)
+            if( mDefaults || macroblock->mCullMode != CULL_CLOCKWISE )
             {
                 CullingMode hcm = macroblock->mCullMode;
-                writeAttribute(3, "cull_hardware");
-                switch (hcm)
+                writeAttribute( 3, "cull_hardware" );
+                switch( hcm )
                 {
-                case CULL_NONE :
-                    writeValue("none");
+                case CULL_NONE:
+                    writeValue( "none" );
                     break;
-                case CULL_CLOCKWISE :
-                    writeValue("clockwise");
+                case CULL_CLOCKWISE:
+                    writeValue( "clockwise" );
                     break;
-                case CULL_ANTICLOCKWISE :
-                    writeValue("anticlockwise");
+                case CULL_ANTICLOCKWISE:
+                    writeValue( "anticlockwise" );
                     break;
                 }
             }
 
-            //shading
-            if (mDefaults ||
-                pPass->getShadingMode() != SO_GOURAUD)
+            // shading
+            if( mDefaults || pPass->getShadingMode() != SO_GOURAUD )
             {
-                writeAttribute(3, "shading");
-                switch (pPass->getShadingMode())
+                writeAttribute( 3, "shading" );
+                switch( pPass->getShadingMode() )
                 {
                 case SO_FLAT:
-                    writeValue("flat");
+                    writeValue( "flat" );
                     break;
                 case SO_GOURAUD:
-                    writeValue("gouraud");
+                    writeValue( "gouraud" );
                     break;
                 case SO_PHONG:
-                    writeValue("phong");
+                    writeValue( "phong" );
                     break;
                 }
             }
 
-
-            if (mDefaults || macroblock->mPolygonMode != PM_SOLID)
+            if( mDefaults || macroblock->mPolygonMode != PM_SOLID )
             {
-                writeAttribute(3, "polygon_mode");
-                switch (macroblock->mPolygonMode)
+                writeAttribute( 3, "polygon_mode" );
+                switch( macroblock->mPolygonMode )
                 {
                 case PM_POINTS:
-                    writeValue("points");
+                    writeValue( "points" );
                     break;
                 case PM_WIREFRAME:
-                    writeValue("wireframe");
+                    writeValue( "wireframe" );
                     break;
                 case PM_SOLID:
-                    writeValue("solid");
+                    writeValue( "solid" );
                     break;
                 }
             }
 
             // polygon mode overrideable
-            if (mDefaults ||
-                !pPass->getPolygonModeOverrideable())
+            if( mDefaults || !pPass->getPolygonModeOverrideable() )
             {
-                writeAttribute(3, "polygon_mode_overrideable");
-                writeValue(pPass->getPolygonModeOverrideable() ? "on" : "off");
+                writeAttribute( 3, "polygon_mode_overrideable" );
+                writeValue( pPass->getPolygonModeOverrideable() ? "on" : "off" );
             }
 
-            //fog override
-            if (mDefaults ||
-                pPass->getFogOverride() != false)
+            // fog override
+            if( mDefaults || pPass->getFogOverride() != false )
             {
-                writeAttribute(3, "fog_override");
-                writeValue(pPass->getFogOverride() ? "true" : "false");
-                if (pPass->getFogOverride())
+                writeAttribute( 3, "fog_override" );
+                writeValue( pPass->getFogOverride() ? "true" : "false" );
+                if( pPass->getFogOverride() )
                 {
-                    switch (pPass->getFogMode())
+                    switch( pPass->getFogMode() )
                     {
                     case FOG_NONE:
-                        writeValue("none");
+                        writeValue( "none" );
                         break;
                     case FOG_LINEAR:
-                        writeValue("linear");
+                        writeValue( "linear" );
                         break;
                     case FOG_EXP2:
-                        writeValue("exp2");
+                        writeValue( "exp2" );
                         break;
                     case FOG_EXP:
-                        writeValue("exp");
+                        writeValue( "exp" );
                         break;
                     }
 
-                    if (pPass->getFogMode() != FOG_NONE)
+                    if( pPass->getFogMode() != FOG_NONE )
                     {
-                        writeColourValue(pPass->getFogColour());
-                        writeValue(StringConverter::toString(pPass->getFogDensity()));
-                        writeValue(StringConverter::toString(pPass->getFogStart()));
-                        writeValue(StringConverter::toString(pPass->getFogEnd()));
+                        writeColourValue( pPass->getFogColour() );
+                        writeValue( StringConverter::toString( pPass->getFogDensity() ) );
+                        writeValue( StringConverter::toString( pPass->getFogStart() ) );
+                        writeValue( StringConverter::toString( pPass->getFogEnd() ) );
                     }
                 }
             }
 
             //  GPU Vertex and Fragment program references and parameters
-            if (pPass->hasVertexProgram())
+            if( pPass->hasVertexProgram() )
             {
-                writeVertexProgramRef(pPass);
+                writeVertexProgramRef( pPass );
             }
 
-            if (pPass->hasFragmentProgram())
+            if( pPass->hasFragmentProgram() )
             {
-                writeFragmentProgramRef(pPass);
+                writeFragmentProgramRef( pPass );
             }
 
-            if(pPass->hasTessellationHullProgram())
+            if( pPass->hasTessellationHullProgram() )
             {
-                writeTessellationHullProgramRef(pPass);
+                writeTessellationHullProgramRef( pPass );
             }
 
-            if(pPass->hasTessellationHullProgram())
+            if( pPass->hasTessellationHullProgram() )
             {
-                writeTessellationDomainProgramRef(pPass);
-            }
-            
-            if (pPass->hasGeometryProgram())
-            {
-                writeGeometryProgramRef(pPass);
+                writeTessellationDomainProgramRef( pPass );
             }
 
-            if (pPass->hasShadowCasterVertexProgram())
+            if( pPass->hasGeometryProgram() )
             {
-                writeShadowCasterVertexProgramRef(pPass);
+                writeGeometryProgramRef( pPass );
+            }
+
+            if( pPass->hasShadowCasterVertexProgram() )
+            {
+                writeShadowCasterVertexProgramRef( pPass );
             }
 
             // Nested texture layers
-            Pass::TextureUnitStateIterator it = const_cast<Pass*>(pPass)->getTextureUnitStateIterator();
-            while(it.hasMoreElements())
+            Pass::TextureUnitStateIterator it =
+                const_cast<Pass *>( pPass )->getTextureUnitStateIterator();
+            while( it.hasMoreElements() )
             {
-                writeTextureUnit(it.getNext());
+                writeTextureUnit( it.getNext() );
             }
 
             // Fire write end event.
-            firePassEvent(MSE_WRITE_END, skipWriting, pPass);
+            firePassEvent( MSE_WRITE_END, skipWriting, pPass );
         }
-        endSection(2);
-        
+        endSection( 2 );
+
         // Fire post section write event.
-        firePassEvent(MSE_POST_WRITE, skipWriting, pPass);
-        
-        LogManager::getSingleton().logMessage("MaterialSerializer : done.", LML_NORMAL);
+        firePassEvent( MSE_POST_WRITE, skipWriting, pPass );
+
+        LogManager::getSingleton().logMessage( "MaterialSerializer : done.", LML_NORMAL );
     }
     //-----------------------------------------------------------------------
-    String MaterialSerializer::convertFiltering(FilterOptions fo)
+    String MaterialSerializer::convertFiltering( FilterOptions fo )
     {
-        switch (fo)
+        switch( fo )
         {
         case FO_NONE:
             return "none";
@@ -759,9 +727,9 @@ namespace Ogre
         return "point";
     }
     //-----------------------------------------------------------------------
-    String convertTexAddressMode( TextureAddressingMode tam)
+    String convertTexAddressMode( TextureAddressingMode tam )
     {
-        switch (tam)
+        switch( tam )
         {
         case TAM_BORDER:
             return "border";
@@ -777,50 +745,52 @@ namespace Ogre
         return "wrap";
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeTextureUnit(const TextureUnitState *pTex)
+    void MaterialSerializer::writeTextureUnit( const TextureUnitState *pTex )
     {
         bool skipWriting = false;
 
         // Fire pre-write event.
-        fireTextureUnitStateEvent(MSE_PRE_WRITE, skipWriting, pTex);
-        if (skipWriting)        
+        fireTextureUnitStateEvent( MSE_PRE_WRITE, skipWriting, pTex );
+        if( skipWriting )
             return;
-    
-        LogManager::getSingleton().logMessage("MaterialSerializer : parsing texture layer.", LML_NORMAL);
-        mBuffer += "\n";
-        writeAttribute(3, "texture_unit");
-        // only write out name if its not equal to the default name
-        if (pTex->getName() != StringConverter::toString(pTex->getParent()->getTextureUnitStateIndex(pTex)))
-            writeValue(quoteWord(pTex->getName()));
 
-        beginSection(3);
+        LogManager::getSingleton().logMessage( "MaterialSerializer : parsing texture layer.",
+                                               LML_NORMAL );
+        mBuffer += "\n";
+        writeAttribute( 3, "texture_unit" );
+        // only write out name if its not equal to the default name
+        if( pTex->getName() !=
+            StringConverter::toString( pTex->getParent()->getTextureUnitStateIndex( pTex ) ) )
+            writeValue( quoteWord( pTex->getName() ) );
+
+        beginSection( 3 );
         {
             // Fire write begin event.
-            fireTextureUnitStateEvent(MSE_WRITE_BEGIN, skipWriting, pTex);
+            fireTextureUnitStateEvent( MSE_WRITE_BEGIN, skipWriting, pTex );
 
             // texture_alias
-            if (!pTex->getTextureNameAlias().empty())
+            if( !pTex->getTextureNameAlias().empty() )
             {
-                writeAttribute(4, "texture_alias");
-                writeValue(quoteWord(pTex->getTextureNameAlias()));
+                writeAttribute( 4, "texture_alias" );
+                writeValue( quoteWord( pTex->getTextureNameAlias() ) );
             }
 
-            //texture name
-            if (pTex->getNumFrames() == 1 && !pTex->getTextureName().empty() && !pTex->isCubic())
+            // texture name
+            if( pTex->getNumFrames() == 1 && !pTex->getTextureName().empty() && !pTex->isCubic() )
             {
-                writeAttribute(4, "texture");
-                writeValue(quoteWord(pTex->getTextureName()));
+                writeAttribute( 4, "texture" );
+                writeValue( quoteWord( pTex->getTextureName() ) );
 
-                switch (pTex->getTextureType())
+                switch( pTex->getTextureType() )
                 {
                 case TextureTypes::Type1D:
-                    writeValue("1d");
+                    writeValue( "1d" );
                     break;
                 case TextureTypes::Type2D:
                     // nothing, this is the default
                     break;
                 case TextureTypes::Type3D:
-                    writeValue("3d");
+                    writeValue( "3d" );
                     break;
                 case TextureTypes::TypeCube:
                     // nothing, deal with this as cubic_texture since it copes with all variants
@@ -829,185 +799,169 @@ namespace Ogre
                     break;
                 };
 
-                if (pTex->getNumMipmaps() != 1u)
+                if( pTex->getNumMipmaps() != 1u )
                 {
-                    writeValue(StringConverter::toString(pTex->getNumMipmaps()));
+                    writeValue( StringConverter::toString( pTex->getNumMipmaps() ) );
                 }
 
-                if (pTex->getIsAlpha())
+                if( pTex->getIsAlpha() )
                 {
-                    writeValue("alpha");
+                    writeValue( "alpha" );
                 }
             }
 
-            //anim. texture
-            if (pTex->getNumFrames() > 1 && !pTex->isCubic())
+            // anim. texture
+            if( pTex->getNumFrames() > 1 && !pTex->isCubic() )
             {
-                writeAttribute(4, "anim_texture");
-                for (unsigned int n = 0; n < pTex->getNumFrames(); n++)
-                    writeValue(quoteWord(pTex->getFrameTextureName(n)));
-                writeValue(StringConverter::toString(pTex->getAnimationDuration()));
+                writeAttribute( 4, "anim_texture" );
+                for( unsigned int n = 0; n < pTex->getNumFrames(); n++ )
+                    writeValue( quoteWord( pTex->getFrameTextureName( n ) ) );
+                writeValue( StringConverter::toString( pTex->getAnimationDuration() ) );
             }
 
-            //cubic texture
-            if (pTex->isCubic())
+            // cubic texture
+            if( pTex->isCubic() )
             {
-                writeAttribute(4, "cubic_texture");
-                for (unsigned int n = 0; n < pTex->getNumFrames(); n++)
-                    writeValue(quoteWord(pTex->getFrameTextureName(n)));
+                writeAttribute( 4, "cubic_texture" );
+                for( unsigned int n = 0; n < pTex->getNumFrames(); n++ )
+                    writeValue( quoteWord( pTex->getFrameTextureName( n ) ) );
 
-                //combinedUVW/separateUW
-                if (pTex->getTextureType() == TextureTypes::TypeCube)
-                    writeValue("combinedUVW");
+                // combinedUVW/separateUW
+                if( pTex->getTextureType() == TextureTypes::TypeCube )
+                    writeValue( "combinedUVW" );
                 else
-                    writeValue("separateUV");
+                    writeValue( "separateUV" );
             }
 
             const HlmsSamplerblock *samplerblock = pTex->getSamplerblock();
 
-            //anisotropy level
-            writeAttribute(4, "max_anisotropy");
-            writeValue(StringConverter::toString( samplerblock->mMaxAnisotropy ));
+            // anisotropy level
+            writeAttribute( 4, "max_anisotropy" );
+            writeValue( StringConverter::toString( samplerblock->mMaxAnisotropy ) );
 
-            //texture coordinate set
-            if (mDefaults ||
-                pTex->getTextureCoordSet() != 0)
+            // texture coordinate set
+            if( mDefaults || pTex->getTextureCoordSet() != 0 )
             {
-                writeAttribute(4, "tex_coord_set");
-                writeValue(StringConverter::toString(pTex->getTextureCoordSet()));
+                writeAttribute( 4, "tex_coord_set" );
+                writeValue( StringConverter::toString( pTex->getTextureCoordSet() ) );
             }
 
-            //addressing mode
-            if (mDefaults ||
-                samplerblock->mU != Ogre::TAM_WRAP ||
-                samplerblock->mV != Ogre::TAM_WRAP ||
+            // addressing mode
+            if( mDefaults || samplerblock->mU != Ogre::TAM_WRAP || samplerblock->mV != Ogre::TAM_WRAP ||
                 samplerblock->mW != Ogre::TAM_WRAP )
             {
-                writeAttribute(4, "tex_address_mode");
-                if( samplerblock->mU == samplerblock->mV &&
-                    samplerblock->mV == samplerblock->mW )
+                writeAttribute( 4, "tex_address_mode" );
+                if( samplerblock->mU == samplerblock->mV && samplerblock->mV == samplerblock->mW )
                 {
-                    writeValue(convertTexAddressMode(samplerblock->mU));
+                    writeValue( convertTexAddressMode( samplerblock->mU ) );
                 }
                 else
                 {
-                    writeValue(convertTexAddressMode(samplerblock->mU));
-                    writeValue(convertTexAddressMode(samplerblock->mV));
-                    if (samplerblock->mW != TAM_WRAP)
+                    writeValue( convertTexAddressMode( samplerblock->mU ) );
+                    writeValue( convertTexAddressMode( samplerblock->mV ) );
+                    if( samplerblock->mW != TAM_WRAP )
                     {
-                        writeValue(convertTexAddressMode(samplerblock->mW));
+                        writeValue( convertTexAddressMode( samplerblock->mW ) );
                     }
                 }
             }
 
-            //border colour
-            if (mDefaults || samplerblock->mBorderColour != ColourValue::White)
+            // border colour
+            if( mDefaults || samplerblock->mBorderColour != ColourValue::White )
             {
-                writeAttribute(4, "tex_border_colour");
-                writeColourValue(samplerblock->mBorderColour, true);
+                writeAttribute( 4, "tex_border_colour" );
+                writeColourValue( samplerblock->mBorderColour, true );
             }
 
-            //filtering
-            writeAttribute(4, "filtering");
-            writeValue(
-                convertFiltering( samplerblock->mMinFilter )
-                + " "
-                + convertFiltering( samplerblock->mMagFilter )
-                + " "
-                + convertFiltering( samplerblock->mMipFilter ) );
+            // filtering
+            writeAttribute( 4, "filtering" );
+            writeValue( convertFiltering( samplerblock->mMinFilter ) + " " +
+                        convertFiltering( samplerblock->mMagFilter ) + " " +
+                        convertFiltering( samplerblock->mMipFilter ) );
 
             // Mip biasing
-            if (mDefaults || samplerblock->mMipLodBias != 0.0f)
+            if( mDefaults || samplerblock->mMipLodBias != 0.0f )
             {
-                writeAttribute(4, "mipmap_bias");
-                writeValue(
-                    StringConverter::toString( samplerblock->mMipLodBias ));
+                writeAttribute( 4, "mipmap_bias" );
+                writeValue( StringConverter::toString( samplerblock->mMipLodBias ) );
             }
 
             // colour_op_ex
-            if (mDefaults ||
-                pTex->getColourBlendMode().operation != LBX_MODULATE ||
+            if( mDefaults || pTex->getColourBlendMode().operation != LBX_MODULATE ||
                 pTex->getColourBlendMode().source1 != LBS_TEXTURE ||
-                pTex->getColourBlendMode().source2 != LBS_CURRENT)
+                pTex->getColourBlendMode().source2 != LBS_CURRENT )
             {
-                writeAttribute(4, "colour_op_ex");
-                writeLayerBlendOperationEx(pTex->getColourBlendMode().operation);
-                writeLayerBlendSource(pTex->getColourBlendMode().source1);
-                writeLayerBlendSource(pTex->getColourBlendMode().source2);
-                if (pTex->getColourBlendMode().operation == LBX_BLEND_MANUAL)
-                    writeValue(StringConverter::toString(pTex->getColourBlendMode().factor));
-                if (pTex->getColourBlendMode().source1 == LBS_MANUAL)
-                    writeColourValue(pTex->getColourBlendMode().colourArg1, false);
-                if (pTex->getColourBlendMode().source2 == LBS_MANUAL)
-                    writeColourValue(pTex->getColourBlendMode().colourArg2, false);
+                writeAttribute( 4, "colour_op_ex" );
+                writeLayerBlendOperationEx( pTex->getColourBlendMode().operation );
+                writeLayerBlendSource( pTex->getColourBlendMode().source1 );
+                writeLayerBlendSource( pTex->getColourBlendMode().source2 );
+                if( pTex->getColourBlendMode().operation == LBX_BLEND_MANUAL )
+                    writeValue( StringConverter::toString( pTex->getColourBlendMode().factor ) );
+                if( pTex->getColourBlendMode().source1 == LBS_MANUAL )
+                    writeColourValue( pTex->getColourBlendMode().colourArg1, false );
+                if( pTex->getColourBlendMode().source2 == LBS_MANUAL )
+                    writeColourValue( pTex->getColourBlendMode().colourArg2, false );
 
-                //colour_op_multipass_fallback
-                writeAttribute(4, "colour_op_multipass_fallback");
-                writeSceneBlendFactor(pTex->getColourBlendFallbackSrc());
-                writeSceneBlendFactor(pTex->getColourBlendFallbackDest());
+                // colour_op_multipass_fallback
+                writeAttribute( 4, "colour_op_multipass_fallback" );
+                writeSceneBlendFactor( pTex->getColourBlendFallbackSrc() );
+                writeSceneBlendFactor( pTex->getColourBlendFallbackDest() );
             }
 
             // alpha_op_ex
-            if (mDefaults ||
-                pTex->getAlphaBlendMode().operation != LBX_MODULATE ||
+            if( mDefaults || pTex->getAlphaBlendMode().operation != LBX_MODULATE ||
                 pTex->getAlphaBlendMode().source1 != LBS_TEXTURE ||
-                pTex->getAlphaBlendMode().source2 != LBS_CURRENT)
+                pTex->getAlphaBlendMode().source2 != LBS_CURRENT )
             {
-                writeAttribute(4, "alpha_op_ex");
-                writeLayerBlendOperationEx(pTex->getAlphaBlendMode().operation);
-                writeLayerBlendSource(pTex->getAlphaBlendMode().source1);
-                writeLayerBlendSource(pTex->getAlphaBlendMode().source2);
-                if (pTex->getAlphaBlendMode().operation == LBX_BLEND_MANUAL)
-                    writeValue(StringConverter::toString(pTex->getAlphaBlendMode().factor));
-                else if (pTex->getAlphaBlendMode().source1 == LBS_MANUAL)
-                    writeValue(StringConverter::toString(pTex->getAlphaBlendMode().alphaArg1));
-                else if (pTex->getAlphaBlendMode().source2 == LBS_MANUAL)
-                    writeValue(StringConverter::toString(pTex->getAlphaBlendMode().alphaArg2));
+                writeAttribute( 4, "alpha_op_ex" );
+                writeLayerBlendOperationEx( pTex->getAlphaBlendMode().operation );
+                writeLayerBlendSource( pTex->getAlphaBlendMode().source1 );
+                writeLayerBlendSource( pTex->getAlphaBlendMode().source2 );
+                if( pTex->getAlphaBlendMode().operation == LBX_BLEND_MANUAL )
+                    writeValue( StringConverter::toString( pTex->getAlphaBlendMode().factor ) );
+                else if( pTex->getAlphaBlendMode().source1 == LBS_MANUAL )
+                    writeValue( StringConverter::toString( pTex->getAlphaBlendMode().alphaArg1 ) );
+                else if( pTex->getAlphaBlendMode().source2 == LBS_MANUAL )
+                    writeValue( StringConverter::toString( pTex->getAlphaBlendMode().alphaArg2 ) );
             }
 
             bool individualTransformElems = false;
             // rotate
-            if (mDefaults ||
-                pTex->getTextureRotate() != Radian(0))
+            if( mDefaults || pTex->getTextureRotate() != Radian( 0 ) )
             {
-                writeAttribute(4, "rotate");
-                writeValue(StringConverter::toString(pTex->getTextureRotate().valueDegrees()));
+                writeAttribute( 4, "rotate" );
+                writeValue( StringConverter::toString( pTex->getTextureRotate().valueDegrees() ) );
                 individualTransformElems = true;
             }
 
             // scroll
-            if (mDefaults ||
-                pTex->getTextureUScroll() != 0 ||
-                pTex->getTextureVScroll() != 0 )
+            if( mDefaults || pTex->getTextureUScroll() != 0 || pTex->getTextureVScroll() != 0 )
             {
-                writeAttribute(4, "scroll");
-                writeValue(StringConverter::toString(pTex->getTextureUScroll()));
-                writeValue(StringConverter::toString(pTex->getTextureVScroll()));
+                writeAttribute( 4, "scroll" );
+                writeValue( StringConverter::toString( pTex->getTextureUScroll() ) );
+                writeValue( StringConverter::toString( pTex->getTextureVScroll() ) );
                 individualTransformElems = true;
             }
             // scale
-            if (mDefaults ||
-                pTex->getTextureUScale() != 1.0 ||
-                pTex->getTextureVScale() != 1.0 )
+            if( mDefaults || pTex->getTextureUScale() != 1.0 || pTex->getTextureVScale() != 1.0 )
             {
-                writeAttribute(4, "scale");
-                writeValue(StringConverter::toString(pTex->getTextureUScale()));
-                writeValue(StringConverter::toString(pTex->getTextureVScale()));
+                writeAttribute( 4, "scale" );
+                writeValue( StringConverter::toString( pTex->getTextureUScale() ) );
+                writeValue( StringConverter::toString( pTex->getTextureVScale() ) );
                 individualTransformElems = true;
             }
 
             // free transform
-            if (!individualTransformElems &&
-                (mDefaults ||
-                pTex->getTextureTransform() != Matrix4::IDENTITY))
+            if( !individualTransformElems &&
+                ( mDefaults || pTex->getTextureTransform() != Matrix4::IDENTITY ) )
             {
-                writeAttribute(4, "transform");
-                const Matrix4& xform = pTex->getTextureTransform();
-                for (int row = 0; row < 4; ++row)
+                writeAttribute( 4, "transform" );
+                const Matrix4 &xform = pTex->getTextureTransform();
+                for( int row = 0; row < 4; ++row )
                 {
-                    for (int col = 0; col < 4; ++col)
+                    for( int col = 0; col < 4; ++col )
                     {
-                        writeValue(StringConverter::toString(xform[row][col]));
+                        writeValue( StringConverter::toString( xform[row][col] ) );
                     }
                 }
             }
@@ -1017,31 +971,31 @@ namespace Ogre
             float scrollAnimV = 0;
 
             EffectMap effMap = pTex->getEffects();
-            if (!effMap.empty())
+            if( !effMap.empty() )
             {
                 EffectMap::const_iterator it;
-                for (it = effMap.begin(); it != effMap.end(); ++it)
+                for( it = effMap.begin(); it != effMap.end(); ++it )
                 {
-                    const TextureUnitState::TextureEffect& ef = it->second;
-                    switch (ef.type)
+                    const TextureUnitState::TextureEffect &ef = it->second;
+                    switch( ef.type )
                     {
-                    case TextureUnitState::ET_ENVIRONMENT_MAP :
-                        writeEnvironmentMapEffect(ef, pTex);
+                    case TextureUnitState::ET_ENVIRONMENT_MAP:
+                        writeEnvironmentMapEffect( ef, pTex );
                         break;
-                    case TextureUnitState::ET_ROTATE :
-                        writeRotationEffect(ef, pTex);
+                    case TextureUnitState::ET_ROTATE:
+                        writeRotationEffect( ef, pTex );
                         break;
-                    case TextureUnitState::ET_UVSCROLL :
+                    case TextureUnitState::ET_UVSCROLL:
                         scrollAnimU = scrollAnimV = ef.arg1;
                         break;
-                    case TextureUnitState::ET_USCROLL :
+                    case TextureUnitState::ET_USCROLL:
                         scrollAnimU = ef.arg1;
                         break;
-                    case TextureUnitState::ET_VSCROLL :
+                    case TextureUnitState::ET_VSCROLL:
                         scrollAnimV = ef.arg1;
                         break;
-                    case TextureUnitState::ET_TRANSFORM :
-                        writeTransformEffect(ef, pTex);
+                    case TextureUnitState::ET_TRANSFORM:
+                        writeTransformEffect( ef, pTex );
                         break;
                     default:
                         break;
@@ -1050,471 +1004,469 @@ namespace Ogre
             }
 
             // u and v scroll animation speeds merged, if present serialize scroll_anim
-            if(scrollAnimU || scrollAnimV) {
+            if( scrollAnimU || scrollAnimV )
+            {
                 TextureUnitState::TextureEffect texEffect;
                 texEffect.arg1 = scrollAnimU;
                 texEffect.arg2 = scrollAnimV;
-                writeScrollEffect(texEffect, pTex);
+                writeScrollEffect( texEffect, pTex );
             }
 
             // Binding type
             TextureUnitState::BindingType bt = pTex->getBindingType();
-            if (mDefaults ||
-                bt != TextureUnitState::BT_FRAGMENT)
+            if( mDefaults || bt != TextureUnitState::BT_FRAGMENT )
             {
-                writeAttribute(4, "binding_type");
-                switch(bt)
+                writeAttribute( 4, "binding_type" );
+                switch( bt )
                 {
                 case TextureUnitState::BT_FRAGMENT:
-                    writeValue("fragment");
+                    writeValue( "fragment" );
                     break;
                 case TextureUnitState::BT_VERTEX:
-                    writeValue("vertex");
+                    writeValue( "vertex" );
                     break;
                 case TextureUnitState::BT_GEOMETRY:
-                    writeValue("geometry");
+                    writeValue( "geometry" );
                     break;
                 case TextureUnitState::BT_TESSELLATION_DOMAIN:
-                    writeValue("tessellation_domain");
+                    writeValue( "tessellation_domain" );
                     break;
                 case TextureUnitState::BT_TESSELLATION_HULL:
-                    writeValue("tessellation_hull");
+                    writeValue( "tessellation_hull" );
                     break;
                 };
-        
             }
             // Content type
-            if (mDefaults ||
-                pTex->getContentType() != TextureUnitState::CONTENT_NAMED)
+            if( mDefaults || pTex->getContentType() != TextureUnitState::CONTENT_NAMED )
             {
-                writeAttribute(4, "content_type");
-                switch(pTex->getContentType())
+                writeAttribute( 4, "content_type" );
+                switch( pTex->getContentType() )
                 {
                 case TextureUnitState::CONTENT_NAMED:
-                    writeValue("named");
+                    writeValue( "named" );
                     break;
                 case TextureUnitState::CONTENT_SHADOW:
-                    writeValue("shadow");
+                    writeValue( "shadow" );
                     break;
                 case TextureUnitState::CONTENT_COMPOSITOR:
-                    writeValue("compositor");
-                    writeValue(quoteWord(pTex->getTextureName()));
+                    writeValue( "compositor" );
+                    writeValue( quoteWord( pTex->getTextureName() ) );
                     break;
                 };
             }
 
             // Fire write end event.
-            fireTextureUnitStateEvent(MSE_WRITE_END, skipWriting, pTex);
+            fireTextureUnitStateEvent( MSE_WRITE_END, skipWriting, pTex );
         }
-        endSection(3);
+        endSection( 3 );
 
         // Fire post section write event.
-        fireTextureUnitStateEvent(MSE_POST_WRITE, skipWriting, pTex);
-
+        fireTextureUnitStateEvent( MSE_POST_WRITE, skipWriting, pTex );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeEnvironmentMapEffect(const TextureUnitState::TextureEffect& effect, const TextureUnitState *pTex)
+    void MaterialSerializer::writeEnvironmentMapEffect( const TextureUnitState::TextureEffect &effect,
+                                                        const TextureUnitState *pTex )
     {
-        writeAttribute(4, "env_map");
-        switch (effect.subtype)
+        writeAttribute( 4, "env_map" );
+        switch( effect.subtype )
         {
         case TextureUnitState::ENV_PLANAR:
-            writeValue("planar");
+            writeValue( "planar" );
             break;
         case TextureUnitState::ENV_CURVED:
-            writeValue("spherical");
+            writeValue( "spherical" );
             break;
         case TextureUnitState::ENV_NORMAL:
-            writeValue("cubic_normal");
+            writeValue( "cubic_normal" );
             break;
         case TextureUnitState::ENV_REFLECTION:
-            writeValue("cubic_reflection");
+            writeValue( "cubic_reflection" );
             break;
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeRotationEffect(const TextureUnitState::TextureEffect& effect, const TextureUnitState *pTex)
+    void MaterialSerializer::writeRotationEffect( const TextureUnitState::TextureEffect &effect,
+                                                  const TextureUnitState *pTex )
     {
-        if (effect.arg1)
+        if( effect.arg1 )
         {
-            writeAttribute(4, "rotate_anim");
-            writeValue(StringConverter::toString(effect.arg1));
+            writeAttribute( 4, "rotate_anim" );
+            writeValue( StringConverter::toString( effect.arg1 ) );
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeTransformEffect(const TextureUnitState::TextureEffect& effect, const TextureUnitState *pTex)
+    void MaterialSerializer::writeTransformEffect( const TextureUnitState::TextureEffect &effect,
+                                                   const TextureUnitState *pTex )
     {
-        writeAttribute(4, "wave_xform");
+        writeAttribute( 4, "wave_xform" );
 
-        switch (effect.subtype)
+        switch( effect.subtype )
         {
         case TextureUnitState::TT_ROTATE:
-            writeValue("rotate");
+            writeValue( "rotate" );
             break;
         case TextureUnitState::TT_SCALE_U:
-            writeValue("scale_x");
+            writeValue( "scale_x" );
             break;
         case TextureUnitState::TT_SCALE_V:
-            writeValue("scale_y");
+            writeValue( "scale_y" );
             break;
         case TextureUnitState::TT_TRANSLATE_U:
-            writeValue("scroll_x");
+            writeValue( "scroll_x" );
             break;
         case TextureUnitState::TT_TRANSLATE_V:
-            writeValue("scroll_y");
+            writeValue( "scroll_y" );
             break;
         }
 
-        switch (effect.waveType)
+        switch( effect.waveType )
         {
         case WFT_INVERSE_SAWTOOTH:
-            writeValue("inverse_sawtooth");
+            writeValue( "inverse_sawtooth" );
             break;
         case WFT_SAWTOOTH:
-            writeValue("sawtooth");
+            writeValue( "sawtooth" );
             break;
         case WFT_SINE:
-            writeValue("sine");
+            writeValue( "sine" );
             break;
         case WFT_SQUARE:
-            writeValue("square");
+            writeValue( "square" );
             break;
         case WFT_TRIANGLE:
-            writeValue("triangle");
+            writeValue( "triangle" );
             break;
         case WFT_PWM:
-            writeValue("pwm");
+            writeValue( "pwm" );
             break;
         }
 
-        writeValue(StringConverter::toString(effect.base));
-        writeValue(StringConverter::toString(effect.frequency));
-        writeValue(StringConverter::toString(effect.phase));
-        writeValue(StringConverter::toString(effect.amplitude));
+        writeValue( StringConverter::toString( effect.base ) );
+        writeValue( StringConverter::toString( effect.frequency ) );
+        writeValue( StringConverter::toString( effect.phase ) );
+        writeValue( StringConverter::toString( effect.amplitude ) );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeScrollEffect(
-        const TextureUnitState::TextureEffect& effect, const TextureUnitState *pTex)
+    void MaterialSerializer::writeScrollEffect( const TextureUnitState::TextureEffect &effect,
+                                                const TextureUnitState *pTex )
     {
-        if (effect.arg1 || effect.arg2)
+        if( effect.arg1 || effect.arg2 )
         {
-            writeAttribute(4, "scroll_anim");
-            writeValue(StringConverter::toString(effect.arg1));
-            writeValue(StringConverter::toString(effect.arg2));
+            writeAttribute( 4, "scroll_anim" );
+            writeValue( StringConverter::toString( effect.arg1 ) );
+            writeValue( StringConverter::toString( effect.arg2 ) );
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeSceneBlendFactor(const SceneBlendFactor sbf)
+    void MaterialSerializer::writeSceneBlendFactor( const SceneBlendFactor sbf )
     {
-        switch (sbf)
+        switch( sbf )
         {
         case SBF_DEST_ALPHA:
-            writeValue("dest_alpha");
+            writeValue( "dest_alpha" );
             break;
         case SBF_DEST_COLOUR:
-            writeValue("dest_colour");
+            writeValue( "dest_colour" );
             break;
         case SBF_ONE:
-            writeValue("one");
+            writeValue( "one" );
             break;
         case SBF_ONE_MINUS_DEST_ALPHA:
-            writeValue("one_minus_dest_alpha");
+            writeValue( "one_minus_dest_alpha" );
             break;
         case SBF_ONE_MINUS_DEST_COLOUR:
-            writeValue("one_minus_dest_colour");
+            writeValue( "one_minus_dest_colour" );
             break;
         case SBF_ONE_MINUS_SOURCE_ALPHA:
-            writeValue("one_minus_src_alpha");
+            writeValue( "one_minus_src_alpha" );
             break;
         case SBF_ONE_MINUS_SOURCE_COLOUR:
-            writeValue("one_minus_src_colour");
+            writeValue( "one_minus_src_colour" );
             break;
         case SBF_SOURCE_ALPHA:
-            writeValue("src_alpha");
+            writeValue( "src_alpha" );
             break;
         case SBF_SOURCE_COLOUR:
-            writeValue("src_colour");
+            writeValue( "src_colour" );
             break;
         case SBF_ZERO:
-            writeValue("zero");
+            writeValue( "zero" );
             break;
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeSceneBlendFactor(const SceneBlendFactor sbf_src, const SceneBlendFactor sbf_dst)
+    void MaterialSerializer::writeSceneBlendFactor( const SceneBlendFactor sbf_src,
+                                                    const SceneBlendFactor sbf_dst )
     {
-        if (sbf_src == SBF_ONE && sbf_dst == SBF_ONE )
-            writeValue("add");
-        else if (sbf_src == SBF_DEST_COLOUR && sbf_dst == SBF_ZERO)
-            writeValue("modulate");
-        else if (sbf_src == SBF_SOURCE_COLOUR && sbf_dst == SBF_ONE_MINUS_SOURCE_COLOUR)
-            writeValue("colour_blend");
-        else if (sbf_src == SBF_SOURCE_ALPHA && sbf_dst == SBF_ONE_MINUS_SOURCE_ALPHA)
-            writeValue("alpha_blend");
+        if( sbf_src == SBF_ONE && sbf_dst == SBF_ONE )
+            writeValue( "add" );
+        else if( sbf_src == SBF_DEST_COLOUR && sbf_dst == SBF_ZERO )
+            writeValue( "modulate" );
+        else if( sbf_src == SBF_SOURCE_COLOUR && sbf_dst == SBF_ONE_MINUS_SOURCE_COLOUR )
+            writeValue( "colour_blend" );
+        else if( sbf_src == SBF_SOURCE_ALPHA && sbf_dst == SBF_ONE_MINUS_SOURCE_ALPHA )
+            writeValue( "alpha_blend" );
         else
         {
-            writeSceneBlendFactor(sbf_src);
-            writeSceneBlendFactor(sbf_dst);
+            writeSceneBlendFactor( sbf_src );
+            writeSceneBlendFactor( sbf_dst );
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeSceneBlendFactor(
-        const SceneBlendFactor c_src, const SceneBlendFactor c_dest, 
-        const SceneBlendFactor a_src, const SceneBlendFactor a_dest)
+    void MaterialSerializer::writeSceneBlendFactor( const SceneBlendFactor c_src,
+                                                    const SceneBlendFactor c_dest,
+                                                    const SceneBlendFactor a_src,
+                                                    const SceneBlendFactor a_dest )
     {
-        writeSceneBlendFactor(c_src, c_dest);
-        writeSceneBlendFactor(a_src, a_dest);
+        writeSceneBlendFactor( c_src, c_dest );
+        writeSceneBlendFactor( a_src, a_dest );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeCompareFunction(const CompareFunction cf)
+    void MaterialSerializer::writeCompareFunction( const CompareFunction cf )
     {
-        switch (cf)
+        switch( cf )
         {
         case CMPF_ALWAYS_FAIL:
-            writeValue("always_fail");
+            writeValue( "always_fail" );
             break;
         case CMPF_ALWAYS_PASS:
-            writeValue("always_pass");
+            writeValue( "always_pass" );
             break;
         case CMPF_EQUAL:
-            writeValue("equal");
+            writeValue( "equal" );
             break;
         case CMPF_GREATER:
-            writeValue("greater");
+            writeValue( "greater" );
             break;
         case CMPF_GREATER_EQUAL:
-            writeValue("greater_equal");
+            writeValue( "greater_equal" );
             break;
         case CMPF_LESS:
-            writeValue("less");
+            writeValue( "less" );
             break;
         case CMPF_LESS_EQUAL:
-            writeValue("less_equal");
+            writeValue( "less_equal" );
             break;
         case CMPF_NOT_EQUAL:
-            writeValue("not_equal");
+            writeValue( "not_equal" );
             break;
-        case NUM_COMPARE_FUNCTIONS: //keep compiler happy
+        case NUM_COMPARE_FUNCTIONS:  // keep compiler happy
             break;
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeColourValue(const ColourValue &colour, bool writeAlpha)
+    void MaterialSerializer::writeColourValue( const ColourValue &colour, bool writeAlpha )
     {
-        writeValue(StringConverter::toString(colour.r));
-        writeValue(StringConverter::toString(colour.g));
-        writeValue(StringConverter::toString(colour.b));
-        if (writeAlpha)
-            writeValue(StringConverter::toString(colour.a));
+        writeValue( StringConverter::toString( colour.r ) );
+        writeValue( StringConverter::toString( colour.g ) );
+        writeValue( StringConverter::toString( colour.b ) );
+        if( writeAlpha )
+            writeValue( StringConverter::toString( colour.a ) );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeLayerBlendOperationEx(const LayerBlendOperationEx op)
+    void MaterialSerializer::writeLayerBlendOperationEx( const LayerBlendOperationEx op )
     {
-        switch (op)
+        switch( op )
         {
         case LBX_ADD:
-            writeValue("add");
+            writeValue( "add" );
             break;
         case LBX_ADD_SIGNED:
-            writeValue("add_signed");
+            writeValue( "add_signed" );
             break;
         case LBX_ADD_SMOOTH:
-            writeValue("add_smooth");
+            writeValue( "add_smooth" );
             break;
         case LBX_BLEND_CURRENT_ALPHA:
-            writeValue("blend_current_alpha");
+            writeValue( "blend_current_alpha" );
             break;
         case LBX_BLEND_DIFFUSE_COLOUR:
-            writeValue("blend_diffuse_colour");
+            writeValue( "blend_diffuse_colour" );
             break;
         case LBX_BLEND_DIFFUSE_ALPHA:
-            writeValue("blend_diffuse_alpha");
+            writeValue( "blend_diffuse_alpha" );
             break;
         case LBX_BLEND_MANUAL:
-            writeValue("blend_manual");
+            writeValue( "blend_manual" );
             break;
         case LBX_BLEND_TEXTURE_ALPHA:
-            writeValue("blend_texture_alpha");
+            writeValue( "blend_texture_alpha" );
             break;
         case LBX_MODULATE:
-            writeValue("modulate");
+            writeValue( "modulate" );
             break;
         case LBX_MODULATE_X2:
-            writeValue("modulate_x2");
+            writeValue( "modulate_x2" );
             break;
         case LBX_MODULATE_X4:
-            writeValue("modulate_x4");
+            writeValue( "modulate_x4" );
             break;
         case LBX_SOURCE1:
-            writeValue("source1");
+            writeValue( "source1" );
             break;
         case LBX_SOURCE2:
-            writeValue("source2");
+            writeValue( "source2" );
             break;
         case LBX_SUBTRACT:
-            writeValue("subtract");
+            writeValue( "subtract" );
             break;
         case LBX_DOTPRODUCT:
-            writeValue("dotproduct");
+            writeValue( "dotproduct" );
             break;
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeLayerBlendSource(const LayerBlendSource lbs)
+    void MaterialSerializer::writeLayerBlendSource( const LayerBlendSource lbs )
     {
-        switch (lbs)
+        switch( lbs )
         {
         case LBS_CURRENT:
-            writeValue("src_current");
+            writeValue( "src_current" );
             break;
         case LBS_DIFFUSE:
-            writeValue("src_diffuse");
+            writeValue( "src_diffuse" );
             break;
         case LBS_MANUAL:
-            writeValue("src_manual");
+            writeValue( "src_manual" );
             break;
         case LBS_SPECULAR:
-            writeValue("src_specular");
+            writeValue( "src_specular" );
             break;
         case LBS_TEXTURE:
-            writeValue("src_texture");
+            writeValue( "src_texture" );
             break;
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeVertexProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeVertexProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("vertex_program_ref",
-            pPass->getVertexProgram(), pPass->getVertexProgramParameters());
+        writeGpuProgramRef( "vertex_program_ref", pPass->getVertexProgram(),
+                            pPass->getVertexProgramParameters() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeTessellationHullProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeTessellationHullProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("tessellation_hull_program_ref",
-            pPass->getTessellationHullProgram(), pPass->getTessellationHullProgramParameters());
+        writeGpuProgramRef( "tessellation_hull_program_ref", pPass->getTessellationHullProgram(),
+                            pPass->getTessellationHullProgramParameters() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeTessellationDomainProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeTessellationDomainProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("tessellation_domain_program_ref",
-            pPass->getTessellationDomainProgram(), pPass->getTessellationDomainProgramParameters());
+        writeGpuProgramRef( "tessellation_domain_program_ref", pPass->getTessellationDomainProgram(),
+                            pPass->getTessellationDomainProgramParameters() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeShadowCasterVertexProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeShadowCasterVertexProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("shadow_caster_vertex_program_ref",
-            pPass->getShadowCasterVertexProgram(), pPass->getShadowCasterVertexProgramParameters());
+        writeGpuProgramRef( "shadow_caster_vertex_program_ref", pPass->getShadowCasterVertexProgram(),
+                            pPass->getShadowCasterVertexProgramParameters() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeShadowCasterFragmentProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeShadowCasterFragmentProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("shadow_caster_fragment_program_ref",
-            pPass->getShadowCasterFragmentProgram(), pPass->getShadowCasterFragmentProgramParameters());
+        writeGpuProgramRef( "shadow_caster_fragment_program_ref",
+                            pPass->getShadowCasterFragmentProgram(),
+                            pPass->getShadowCasterFragmentProgramParameters() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeGeometryProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeGeometryProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("geometry_program_ref",
-            pPass->getGeometryProgram(), pPass->getGeometryProgramParameters());
+        writeGpuProgramRef( "geometry_program_ref", pPass->getGeometryProgram(),
+                            pPass->getGeometryProgramParameters() );
     }
     //--
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeFragmentProgramRef(const Pass* pPass)
+    void MaterialSerializer::writeFragmentProgramRef( const Pass *pPass )
     {
-        writeGpuProgramRef("fragment_program_ref",
-            pPass->getFragmentProgram(), pPass->getFragmentProgramParameters());
+        writeGpuProgramRef( "fragment_program_ref", pPass->getFragmentProgram(),
+                            pPass->getFragmentProgramParameters() );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeGpuProgramRef(const String& attrib,
-                                                const GpuProgramPtr& program, const GpuProgramParametersSharedPtr& params)
-    {       
+    void MaterialSerializer::writeGpuProgramRef( const String &attrib, const GpuProgramPtr &program,
+                                                 const GpuProgramParametersSharedPtr &params )
+    {
         bool skipWriting = false;
 
         // Fire pre-write event.
-        fireGpuProgramRefEvent(MSE_PRE_WRITE, skipWriting, attrib, program, params, NULL);
-        if (skipWriting)        
+        fireGpuProgramRefEvent( MSE_PRE_WRITE, skipWriting, attrib, program, params, NULL );
+        if( skipWriting )
             return;
 
         mBuffer += "\n";
-        writeAttribute(3, attrib);
-        writeValue(quoteWord(program->getName()));
-        beginSection(3);
+        writeAttribute( 3, attrib );
+        writeValue( quoteWord( program->getName() ) );
+        beginSection( 3 );
         {
             // write out parameters
-            GpuProgramParameters* defaultParams = 0;
+            GpuProgramParameters *defaultParams = 0;
             // does the GPU program have default parameters?
-            if (program->hasDefaultParameters())
+            if( program->hasDefaultParameters() )
                 defaultParams = program->getDefaultParameters().getPointer();
 
             // Fire write begin event.
-            fireGpuProgramRefEvent(MSE_WRITE_BEGIN, skipWriting, attrib, program, params, defaultParams);
+            fireGpuProgramRefEvent( MSE_WRITE_BEGIN, skipWriting, attrib, program, params,
+                                    defaultParams );
 
-            writeGPUProgramParameters(params, defaultParams);
+            writeGPUProgramParameters( params, defaultParams );
 
             // Fire write end event.
-            fireGpuProgramRefEvent(MSE_WRITE_END, skipWriting, attrib, program, params, defaultParams);
+            fireGpuProgramRefEvent( MSE_WRITE_END, skipWriting, attrib, program, params, defaultParams );
         }
-        endSection(3);
+        endSection( 3 );
 
         // add to GpuProgram container
-        mGpuProgramDefinitionContainer.insert(program->getName());
+        mGpuProgramDefinitionContainer.insert( program->getName() );
 
         // Fire post section write event.
-        fireGpuProgramRefEvent(MSE_POST_WRITE, skipWriting, attrib, program, params, NULL);     
+        fireGpuProgramRefEvent( MSE_POST_WRITE, skipWriting, attrib, program, params, NULL );
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeGPUProgramParameters(
-        const GpuProgramParametersSharedPtr& params,
-        GpuProgramParameters* defaultParams, unsigned short level,
-        const bool useMainBuffer)
+    void MaterialSerializer::writeGPUProgramParameters( const GpuProgramParametersSharedPtr &params,
+                                                        GpuProgramParameters *defaultParams,
+                                                        unsigned short level, const bool useMainBuffer )
     {
         // iterate through the constant definitions
-        if (params->hasNamedParameters())
+        if( params->hasNamedParameters() )
         {
-            writeNamedGpuProgramParameters(params, defaultParams, level, useMainBuffer);
+            writeNamedGpuProgramParameters( params, defaultParams, level, useMainBuffer );
         }
         else
         {
-            writeLowLevelGpuProgramParameters(params, defaultParams, level, useMainBuffer);
+            writeLowLevelGpuProgramParameters( params, defaultParams, level, useMainBuffer );
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialSerializer::writeNamedGpuProgramParameters(
-        const GpuProgramParametersSharedPtr& params,
-        GpuProgramParameters* defaultParams, unsigned short level,
-        const bool useMainBuffer)
+    void MaterialSerializer::writeNamedGpuProgramParameters( const GpuProgramParametersSharedPtr &params,
+                                                             GpuProgramParameters *defaultParams,
+                                                             unsigned short level,
+                                                             const bool useMainBuffer )
     {
         GpuConstantDefinitionIterator constIt = params->getConstantDefinitionIterator();
-        while(constIt.hasMoreElements())
+        while( constIt.hasMoreElements() )
         {
             // get the constant definition
-            const String& paramName = constIt.peekNextKey();
-            const GpuConstantDefinition& def =
-                constIt.getNext();
+            const String &paramName = constIt.peekNextKey();
+            const GpuConstantDefinition &def = constIt.getNext();
 
             // get any auto-link
-            const GpuProgramParameters_AutoConstantEntry* autoEntry =
-                params->findAutoConstantEntry(paramName);
-            const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
-            if (defaultParams)
+            const GpuProgramParameters_AutoConstantEntry *autoEntry =
+                params->findAutoConstantEntry( paramName );
+            const GpuProgramParameters_AutoConstantEntry *defaultAutoEntry = 0;
+            if( defaultParams )
             {
-                defaultAutoEntry = 
-                    defaultParams->findAutoConstantEntry(paramName);
+                defaultAutoEntry = defaultParams->findAutoConstantEntry( paramName );
             }
 
-            writeGpuProgramParameter("param_named", 
-                                     paramName, autoEntry, defaultAutoEntry, 
-                                     def.isFloat(), def.isDouble(), (def.isInt() || def.isSampler()), def.isUnsignedInt(),
-                                     def.physicalIndex, def.elementSize * def.arraySize,
-                                     params, defaultParams, level, useMainBuffer);
+            writeGpuProgramParameter(
+                "param_named", paramName, autoEntry, defaultAutoEntry, def.isFloat(), def.isDouble(),
+                ( def.isInt() || def.isSampler() ), def.isUnsignedInt(), def.physicalIndex,
+                def.elementSize * def.arraySize, params, defaultParams, level, useMainBuffer );
         }
-
     }
     //-----------------------------------------------------------------------
     void MaterialSerializer::writeLowLevelGpuProgramParameters(
-        const GpuProgramParametersSharedPtr& params,
-        GpuProgramParameters* defaultParams, unsigned short level,
-        const bool useMainBuffer)
+        const GpuProgramParametersSharedPtr &params, GpuProgramParameters *defaultParams,
+        unsigned short level, const bool useMainBuffer )
     {
         // Iterate over the logical->physical mappings
         // This will represent the values which have been set
@@ -1523,27 +1475,26 @@ namespace Ogre
         GpuLogicalBufferStructPtr floatLogical = params->getFloatLogicalBufferStruct();
         if( !floatLogical.isNull() )
         {
-            OGRE_LOCK_MUTEX(floatLogical->mutex);
+            OGRE_LOCK_MUTEX( floatLogical->mutex );
 
-            for(GpuLogicalIndexUseMap::const_iterator i = floatLogical->map.begin();
-                i != floatLogical->map.end(); ++i)
+            for( GpuLogicalIndexUseMap::const_iterator i = floatLogical->map.begin();
+                 i != floatLogical->map.end(); ++i )
             {
                 size_t logicalIndex = i->first;
-                const GpuLogicalIndexUse& logicalUse = i->second;
+                const GpuLogicalIndexUse &logicalUse = i->second;
 
-                const GpuProgramParameters_AutoConstantEntry* autoEntry =
-                    params->findFloatAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
-                if (defaultParams)
+                const GpuProgramParameters_AutoConstantEntry *autoEntry =
+                    params->findFloatAutoConstantEntry( logicalIndex );
+                const GpuProgramParameters_AutoConstantEntry *defaultAutoEntry = 0;
+                if( defaultParams )
                 {
-                    defaultAutoEntry = defaultParams->findFloatAutoConstantEntry(logicalIndex);
+                    defaultAutoEntry = defaultParams->findFloatAutoConstantEntry( logicalIndex );
                 }
 
-                writeGpuProgramParameter("param_indexed", 
-                                         StringConverter::toString(logicalIndex), autoEntry, 
-                                         defaultAutoEntry, true, false, false, false,
-                                         logicalUse.physicalIndex, logicalUse.currentSize,
-                                         params, defaultParams, level, useMainBuffer);
+                writeGpuProgramParameter( "param_indexed", StringConverter::toString( logicalIndex ),
+                                          autoEntry, defaultAutoEntry, true, false, false, false,
+                                          logicalUse.physicalIndex, logicalUse.currentSize, params,
+                                          defaultParams, level, useMainBuffer );
             }
         }
 
@@ -1551,27 +1502,26 @@ namespace Ogre
         GpuLogicalBufferStructPtr doubleLogical = params->getDoubleLogicalBufferStruct();
         if( !doubleLogical.isNull() )
         {
-            OGRE_LOCK_MUTEX(doubleLogical->mutex);
+            OGRE_LOCK_MUTEX( doubleLogical->mutex );
 
-            for(GpuLogicalIndexUseMap::const_iterator i = doubleLogical->map.begin();
-                i != doubleLogical->map.end(); ++i)
+            for( GpuLogicalIndexUseMap::const_iterator i = doubleLogical->map.begin();
+                 i != doubleLogical->map.end(); ++i )
             {
                 size_t logicalIndex = i->first;
-                const GpuLogicalIndexUse& logicalUse = i->second;
+                const GpuLogicalIndexUse &logicalUse = i->second;
 
-                const GpuProgramParameters_AutoConstantEntry* autoEntry =
-                    params->findDoubleAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
-                if (defaultParams)
+                const GpuProgramParameters_AutoConstantEntry *autoEntry =
+                    params->findDoubleAutoConstantEntry( logicalIndex );
+                const GpuProgramParameters_AutoConstantEntry *defaultAutoEntry = 0;
+                if( defaultParams )
                 {
-                    defaultAutoEntry = defaultParams->findDoubleAutoConstantEntry(logicalIndex);
+                    defaultAutoEntry = defaultParams->findDoubleAutoConstantEntry( logicalIndex );
                 }
 
-                writeGpuProgramParameter("param_indexed",
-                                         StringConverter::toString(logicalIndex), autoEntry,
-                                         defaultAutoEntry, false, true, false, false,
-                                         logicalUse.physicalIndex, logicalUse.currentSize,
-                                         params, defaultParams, level, useMainBuffer);
+                writeGpuProgramParameter( "param_indexed", StringConverter::toString( logicalIndex ),
+                                          autoEntry, defaultAutoEntry, false, true, false, false,
+                                          logicalUse.physicalIndex, logicalUse.currentSize, params,
+                                          defaultParams, level, useMainBuffer );
             }
         }
 
@@ -1579,58 +1529,54 @@ namespace Ogre
         GpuLogicalBufferStructPtr intLogical = params->getIntLogicalBufferStruct();
         if( !intLogical.isNull() )
         {
-            OGRE_LOCK_MUTEX(intLogical->mutex);
+            OGRE_LOCK_MUTEX( intLogical->mutex );
 
-            for(GpuLogicalIndexUseMap::const_iterator i = intLogical->map.begin();
-                i != intLogical->map.end(); ++i)
+            for( GpuLogicalIndexUseMap::const_iterator i = intLogical->map.begin();
+                 i != intLogical->map.end(); ++i )
             {
                 size_t logicalIndex = i->first;
-                const GpuLogicalIndexUse& logicalUse = i->second;
+                const GpuLogicalIndexUse &logicalUse = i->second;
 
-                const GpuProgramParameters_AutoConstantEntry* autoEntry =
-                    params->findIntAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
-                if (defaultParams)
+                const GpuProgramParameters_AutoConstantEntry *autoEntry =
+                    params->findIntAutoConstantEntry( logicalIndex );
+                const GpuProgramParameters_AutoConstantEntry *defaultAutoEntry = 0;
+                if( defaultParams )
                 {
-                    defaultAutoEntry = defaultParams->findIntAutoConstantEntry(logicalIndex);
+                    defaultAutoEntry = defaultParams->findIntAutoConstantEntry( logicalIndex );
                 }
 
-                writeGpuProgramParameter("param_indexed", 
-                                         StringConverter::toString(logicalIndex), autoEntry, 
-                                         defaultAutoEntry, false, false, true, false,
-                                         logicalUse.physicalIndex, logicalUse.currentSize,
-                                         params, defaultParams, level, useMainBuffer);
+                writeGpuProgramParameter( "param_indexed", StringConverter::toString( logicalIndex ),
+                                          autoEntry, defaultAutoEntry, false, false, true, false,
+                                          logicalUse.physicalIndex, logicalUse.currentSize, params,
+                                          defaultParams, level, useMainBuffer );
             }
-
         }
 
         // uint params
         GpuLogicalBufferStructPtr uintLogical = params->getUnsignedIntLogicalBufferStruct();
         if( !uintLogical.isNull() )
         {
-            OGRE_LOCK_MUTEX(uintLogical->mutex);
+            OGRE_LOCK_MUTEX( uintLogical->mutex );
 
-            for(GpuLogicalIndexUseMap::const_iterator i = uintLogical->map.begin();
-                i != uintLogical->map.end(); ++i)
+            for( GpuLogicalIndexUseMap::const_iterator i = uintLogical->map.begin();
+                 i != uintLogical->map.end(); ++i )
             {
                 size_t logicalIndex = i->first;
-                const GpuLogicalIndexUse& logicalUse = i->second;
+                const GpuLogicalIndexUse &logicalUse = i->second;
 
-                const GpuProgramParameters_AutoConstantEntry* autoEntry =
-                    params->findUnsignedIntAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
-                if (defaultParams)
+                const GpuProgramParameters_AutoConstantEntry *autoEntry =
+                    params->findUnsignedIntAutoConstantEntry( logicalIndex );
+                const GpuProgramParameters_AutoConstantEntry *defaultAutoEntry = 0;
+                if( defaultParams )
                 {
-                    defaultAutoEntry = defaultParams->findUnsignedIntAutoConstantEntry(logicalIndex);
+                    defaultAutoEntry = defaultParams->findUnsignedIntAutoConstantEntry( logicalIndex );
                 }
 
-                writeGpuProgramParameter("param_indexed", 
-                                         StringConverter::toString(logicalIndex), autoEntry, 
-                                         defaultAutoEntry, false, false, false, true,
-                                         logicalUse.physicalIndex, logicalUse.currentSize,
-                                         params, defaultParams, level, useMainBuffer);
+                writeGpuProgramParameter( "param_indexed", StringConverter::toString( logicalIndex ),
+                                          autoEntry, defaultAutoEntry, false, false, false, true,
+                                          logicalUse.physicalIndex, logicalUse.currentSize, params,
+                                          defaultParams, level, useMainBuffer );
             }
-
         }
 
         // // bool params
@@ -1653,30 +1599,28 @@ namespace Ogre
         //             defaultAutoEntry = defaultParams->findBoolAutoConstantEntry(logicalIndex);
         //         }
 
-        //         writeGpuProgramParameter("param_indexed", 
-        //                                  StringConverter::toString(logicalIndex), autoEntry, 
+        //         writeGpuProgramParameter("param_indexed",
+        //                                  StringConverter::toString(logicalIndex), autoEntry,
         //                                  defaultAutoEntry, false, false, false, false,
         //                                  logicalUse.physicalIndex, logicalUse.currentSize,
         //                                  params, defaultParams, level, useMainBuffer);
         //     }
 
         // }
-
     }
     //-----------------------------------------------------------------------
     void MaterialSerializer::writeGpuProgramParameter(
-        const String& commandName, const String& identifier, 
-        const GpuProgramParameters_AutoConstantEntry* autoEntry,
-        const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry,
-        bool isFloat, bool isDouble, bool isInt, bool isUnsignedInt,
-        size_t physicalIndex, size_t physicalSize,
-        const GpuProgramParametersSharedPtr& params, GpuProgramParameters* defaultParams,
-        const ushort level, const bool useMainBuffer)
+        const String &commandName, const String &identifier,
+        const GpuProgramParameters_AutoConstantEntry *autoEntry,
+        const GpuProgramParameters_AutoConstantEntry *defaultAutoEntry, bool isFloat, bool isDouble,
+        bool isInt, bool isUnsignedInt, size_t physicalIndex, size_t physicalSize,
+        const GpuProgramParametersSharedPtr &params, GpuProgramParameters *defaultParams,
+        const ushort level, const bool useMainBuffer )
     {
         // Skip any params with array qualifiers
         // These are only for convenience of setters, the full array will be
         // written using the base, non-array identifier
-        if (identifier.find("[") != String::npos)
+        if( identifier.find( "[" ) != String::npos )
         {
             return;
         }
@@ -1684,160 +1628,156 @@ namespace Ogre
         // get any auto-link
         // don't duplicate constants that are defined as a default parameter
         bool different = false;
-        if (defaultParams)
+        if( defaultParams )
         {
             // if default is auto but we're not or vice versa
-            if ((autoEntry == 0) != (defaultAutoEntry == 0))
+            if( ( autoEntry == 0 ) != ( defaultAutoEntry == 0 ) )
             {
                 different = true;
             }
-            else if (autoEntry)
+            else if( autoEntry )
             {
                 // both must be auto
                 // compare the auto values
-                different = (autoEntry->paramType != defaultAutoEntry->paramType
-                             || autoEntry->data != defaultAutoEntry->data);
+                different = ( autoEntry->paramType != defaultAutoEntry->paramType ||
+                              autoEntry->data != defaultAutoEntry->data );
             }
             else
             {
                 // compare the non-auto (raw buffer) values
                 // param buffers are always initialised with all zeros
                 // so unset == unset
-                if (isFloat)
+                if( isFloat )
                 {
-                    different = memcmp(
-                        params->getFloatPointer(physicalIndex), 
-                        defaultParams->getFloatPointer(physicalIndex),
-                        sizeof(float) * physicalSize) != 0;
+                    different = memcmp( params->getFloatPointer( physicalIndex ),
+                                        defaultParams->getFloatPointer( physicalIndex ),
+                                        sizeof( float ) * physicalSize ) != 0;
                 }
-                else if (isDouble)
+                else if( isDouble )
                 {
-                    different = memcmp(
-                        params->getDoublePointer(physicalIndex),
-                        defaultParams->getDoublePointer(physicalIndex),
-                        sizeof(double) * physicalSize) != 0;
+                    different = memcmp( params->getDoublePointer( physicalIndex ),
+                                        defaultParams->getDoublePointer( physicalIndex ),
+                                        sizeof( double ) * physicalSize ) != 0;
                 }
-                else if (isInt)
+                else if( isInt )
                 {
-                    different = memcmp(
-                        params->getIntPointer(physicalIndex), 
-                        defaultParams->getIntPointer(physicalIndex),
-                        sizeof(int) * physicalSize) != 0;
+                    different = memcmp( params->getIntPointer( physicalIndex ),
+                                        defaultParams->getIntPointer( physicalIndex ),
+                                        sizeof( int ) * physicalSize ) != 0;
                 }
-                else if (isUnsignedInt)
+                else if( isUnsignedInt )
                 {
-                    different = memcmp(
-                        params->getUnsignedIntPointer(physicalIndex),
-                        defaultParams->getUnsignedIntPointer(physicalIndex),
-                        sizeof(uint) * physicalSize) != 0;
+                    different = memcmp( params->getUnsignedIntPointer( physicalIndex ),
+                                        defaultParams->getUnsignedIntPointer( physicalIndex ),
+                                        sizeof( uint ) * physicalSize ) != 0;
                 }
-                //else if (isBool)
+                // else if (isBool)
                 //{
                 //    // different = memcmp(
-                //    //     params->getBoolPointer(physicalIndex), 
+                //    //     params->getBoolPointer(physicalIndex),
                 //    //     defaultParams->getBoolPointer(physicalIndex),
                 //    //     sizeof(bool) * physicalSize) != 0;
                 //    different = memcmp(
-                //        params->getUnsignedIntPointer(physicalIndex), 
+                //        params->getUnsignedIntPointer(physicalIndex),
                 //        defaultParams->getUnsignedIntPointer(physicalIndex),
                 //        sizeof(uint) * physicalSize) != 0;
                 //}
             }
         }
 
-        if (!defaultParams || different)
+        if( !defaultParams || different )
         {
             String label = commandName;
 
             // is it auto
-            if (autoEntry)
+            if( autoEntry )
                 label += "_auto";
 
-            writeAttribute(level, label, useMainBuffer);
+            writeAttribute( level, label, useMainBuffer );
             // output param index / name
-            writeValue(quoteWord(identifier), useMainBuffer);
+            writeValue( quoteWord( identifier ), useMainBuffer );
 
             // if auto output auto type name and data if needed
-            if (autoEntry)
+            if( autoEntry )
             {
-                const GpuProgramParameters::AutoConstantDefinition* autoConstDef =
-                    GpuProgramParameters::getAutoConstantDefinition(autoEntry->paramType);
+                const GpuProgramParameters::AutoConstantDefinition *autoConstDef =
+                    GpuProgramParameters::getAutoConstantDefinition( autoEntry->paramType );
 
-                assert(autoConstDef && "Bad auto constant Definition Table");
+                assert( autoConstDef && "Bad auto constant Definition Table" );
                 // output auto constant name
-                writeValue(quoteWord(autoConstDef->name), useMainBuffer);
+                writeValue( quoteWord( autoConstDef->name ), useMainBuffer );
                 // output data if it uses it
-                switch(autoConstDef->dataType)
+                switch( autoConstDef->dataType )
                 {
                 case GpuProgramParameters::ACDT_REAL:
-                    writeValue(StringConverter::toString(autoEntry->fData), useMainBuffer);
+                    writeValue( StringConverter::toString( autoEntry->fData ), useMainBuffer );
                     break;
 
                 case GpuProgramParameters::ACDT_INT:
-                    writeValue(StringConverter::toString(autoEntry->data), useMainBuffer);
+                    writeValue( StringConverter::toString( autoEntry->data ), useMainBuffer );
                     break;
 
                 default:
                     break;
                 }
             }
-            else // not auto so output all the values used
+            else  // not auto so output all the values used
             {
                 String countLabel;
 
                 // only write a number if > 1
-                if (physicalSize > 1)
-                    countLabel = StringConverter::toString(physicalSize);
+                if( physicalSize > 1 )
+                    countLabel = StringConverter::toString( physicalSize );
 
-                if (isFloat)
+                if( isFloat )
                 {
                     // Get pointer to start of values
-                    const float* pFloat = params->getFloatPointer(physicalIndex);
+                    const float *pFloat = params->getFloatPointer( physicalIndex );
 
-                    writeValue("float" + countLabel, useMainBuffer);
+                    writeValue( "float" + countLabel, useMainBuffer );
                     // iterate through real constants
-                    for (size_t f = 0; f < physicalSize; ++f)
+                    for( size_t f = 0; f < physicalSize; ++f )
                     {
-                        writeValue(StringConverter::toString(*pFloat++), useMainBuffer);
+                        writeValue( StringConverter::toString( *pFloat++ ), useMainBuffer );
                     }
                 }
-                else if (isDouble)
+                else if( isDouble )
                 {
                     // Get pointer to start of values
-                    const double* pDouble = params->getDoublePointer(physicalIndex);
+                    const double *pDouble = params->getDoublePointer( physicalIndex );
 
-                    writeValue("double" + countLabel, useMainBuffer);
+                    writeValue( "double" + countLabel, useMainBuffer );
                     // iterate through double constants
-                    for (size_t f = 0; f < physicalSize; ++f)
+                    for( size_t f = 0; f < physicalSize; ++f )
                     {
-                        writeValue(StringConverter::toString(*pDouble++), useMainBuffer);
+                        writeValue( StringConverter::toString( *pDouble++ ), useMainBuffer );
                     }
                 }
-                else if (isInt)
+                else if( isInt )
                 {
                     // Get pointer to start of values
-                    const int* pInt = params->getIntPointer(physicalIndex);
+                    const int *pInt = params->getIntPointer( physicalIndex );
 
-                    writeValue("int" + countLabel, useMainBuffer);
+                    writeValue( "int" + countLabel, useMainBuffer );
                     // iterate through int constants
-                    for (size_t f = 0; f < physicalSize; ++f)
+                    for( size_t f = 0; f < physicalSize; ++f )
                     {
-                        writeValue(StringConverter::toString(*pInt++), useMainBuffer);
+                        writeValue( StringConverter::toString( *pInt++ ), useMainBuffer );
                     }
                 }
-                else if (isUnsignedInt) 
+                else if( isUnsignedInt )
                 {
                     // Get pointer to start of values
-                    const uint* pUInt = params->getUnsignedIntPointer(physicalIndex);
+                    const uint *pUInt = params->getUnsignedIntPointer( physicalIndex );
 
-                    writeValue("uint" + countLabel, useMainBuffer);
+                    writeValue( "uint" + countLabel, useMainBuffer );
                     // iterate through uint constants
-                    for (size_t f = 0; f < physicalSize; ++f)
+                    for( size_t f = 0; f < physicalSize; ++f )
                     {
-                        writeValue(StringConverter::toString(*pUInt++), useMainBuffer);
+                        writeValue( StringConverter::toString( *pUInt++ ), useMainBuffer );
                     }
                 }
-                //else if (isBool)
+                // else if (isBool)
                 //{
                 //    // Get pointer to start of values
                 //    // const bool* pBool = params->getBoolPointer(physicalIndex);
@@ -1860,184 +1800,179 @@ namespace Ogre
         GpuProgramDefIterator currentDef = mGpuProgramDefinitionContainer.begin();
         GpuProgramDefIterator endDef = mGpuProgramDefinitionContainer.end();
 
-        while (currentDef != endDef)
+        while( currentDef != endDef )
         {
             // get gpu program from gpu program manager
-            GpuProgramPtr program = GpuProgramManager::getSingleton().getByName((*currentDef));
+            GpuProgramPtr program = GpuProgramManager::getSingleton().getByName( ( *currentDef ) );
             // write gpu program definition type to buffer
             // check program type for vertex program
             // write program type
             mGpuProgramBuffer += "\n";
-            writeAttribute(0, program->getParameter("type"), false);
+            writeAttribute( 0, program->getParameter( "type" ), false );
 
             // write program name
-            writeValue( quoteWord(program->getName()), false);
+            writeValue( quoteWord( program->getName() ), false );
             // write program language
             const String language = program->getLanguage();
             writeValue( language, false );
             // write opening braces
-            beginSection(0, false);
+            beginSection( 0, false );
             {
                 // write program source + filename
-                writeAttribute(1, "source", false);
-                writeValue(quoteWord(program->getSourceFile()), false);
+                writeAttribute( 1, "source", false );
+                writeValue( quoteWord( program->getSourceFile() ), false );
                 // write special parameters based on language
-                const ParameterList& params = program->getParameters();
+                const ParameterList &params = program->getParameters();
                 ParameterList::const_iterator currentParam = params.begin();
                 ParameterList::const_iterator endParam = params.end();
 
-                while (currentParam != endParam)
+                while( currentParam != endParam )
                 {
-                    if (currentParam->name != "type" &&
-                        currentParam->name != "assemble_code" &&
+                    if( currentParam->name != "type" && currentParam->name != "assemble_code" &&
                         currentParam->name != "micro_code" &&
-                        currentParam->name != "external_micro_code")
+                        currentParam->name != "external_micro_code" )
                     {
-                        String paramstr = program->getParameter(currentParam->name);
-                        if ((currentParam->name == "includes_skeletal_animation")
-                            && (paramstr == "false"))
+                        String paramstr = program->getParameter( currentParam->name );
+                        if( ( currentParam->name == "includes_skeletal_animation" ) &&
+                            ( paramstr == "false" ) )
                             paramstr.clear();
-                        if ((currentParam->name == "includes_morph_animation")
-                            && (paramstr == "false"))
+                        if( ( currentParam->name == "includes_morph_animation" ) &&
+                            ( paramstr == "false" ) )
                             paramstr.clear();
-                        if ((currentParam->name == "includes_pose_animation")
-                            && (paramstr == "0"))
+                        if( ( currentParam->name == "includes_pose_animation" ) && ( paramstr == "0" ) )
                             paramstr.clear();
-                        if ((currentParam->name == "uses_vertex_texture_fetch")
-                            && (paramstr == "false"))
-                            paramstr.clear();
-
-                        if ((language != "asm") && (currentParam->name == "syntax"))
+                        if( ( currentParam->name == "uses_vertex_texture_fetch" ) &&
+                            ( paramstr == "false" ) )
                             paramstr.clear();
 
-                        if (!paramstr.empty())
+                        if( ( language != "asm" ) && ( currentParam->name == "syntax" ) )
+                            paramstr.clear();
+
+                        if( !paramstr.empty() )
                         {
-                            writeAttribute(1, currentParam->name, false);
-                            writeValue(paramstr, false);
+                            writeAttribute( 1, currentParam->name, false );
+                            writeValue( paramstr, false );
                         }
                     }
                     ++currentParam;
                 }
 
                 // write default parameters
-                if (program->hasDefaultParameters())
+                if( program->hasDefaultParameters() )
                 {
                     mGpuProgramBuffer += "\n";
                     GpuProgramParametersSharedPtr gpuDefaultParams = program->getDefaultParameters();
-                    writeAttribute(1, "default_params", false);
-                    beginSection(1, false);
-                    writeGPUProgramParameters(gpuDefaultParams, 0, 2, false);
-                    endSection(1, false);
+                    writeAttribute( 1, "default_params", false );
+                    beginSection( 1, false );
+                    writeGPUProgramParameters( gpuDefaultParams, 0, 2, false );
+                    endSection( 1, false );
                 }
             }
             // write closing braces
-            endSection(0, false);
+            endSection( 0, false );
 
             ++currentDef;
-
         }
 
         mGpuProgramBuffer += "\n";
     }
 
     //---------------------------------------------------------------------
-    void MaterialSerializer::addListener(Listener* listener)
-    {
-        mListeners.push_back(listener);
-    }
+    void MaterialSerializer::addListener( Listener *listener ) { mListeners.push_back( listener ); }
 
     //---------------------------------------------------------------------
-    void MaterialSerializer::removeListener(Listener* listener)
+    void MaterialSerializer::removeListener( Listener *listener )
     {
         ListenerListIterator i, iend;
         iend = mListeners.end();
-        for (i = mListeners.begin(); i != iend; ++i)
+        for( i = mListeners.begin(); i != iend; ++i )
         {
-            if (*i == listener)
+            if( *i == listener )
             {
-                mListeners.erase(i);
+                mListeners.erase( i );
                 break;
             }
         }
     }
 
     //---------------------------------------------------------------------
-    void MaterialSerializer::fireMaterialEvent(SerializeEvent event, bool& skip, const Material* mat)
+    void MaterialSerializer::fireMaterialEvent( SerializeEvent event, bool &skip, const Material *mat )
     {
-        ListenerListIterator it    = mListeners.begin();
+        ListenerListIterator it = mListeners.begin();
         ListenerListIterator itEnd = mListeners.end();
 
-        while (it != itEnd)
+        while( it != itEnd )
         {
-            (*it)->materialEventRaised(this, event, skip, mat);         
-            if (skip)
-                break;
-            ++it;
-        }       
-    }
-
-    //---------------------------------------------------------------------
-    void MaterialSerializer::fireTechniqueEvent(SerializeEvent event, bool& skip, const Technique* tech)
-    {
-        ListenerListIterator it    = mListeners.begin();
-        ListenerListIterator itEnd = mListeners.end();
-
-        while (it != itEnd)
-        {
-            (*it)->techniqueEventRaised(this, event, skip, tech);
-            if (skip)
+            ( *it )->materialEventRaised( this, event, skip, mat );
+            if( skip )
                 break;
             ++it;
         }
     }
 
     //---------------------------------------------------------------------
-    void MaterialSerializer::firePassEvent(SerializeEvent event, bool& skip, const Pass* pass)
+    void MaterialSerializer::fireTechniqueEvent( SerializeEvent event, bool &skip,
+                                                 const Technique *tech )
     {
-        ListenerListIterator it    = mListeners.begin();
+        ListenerListIterator it = mListeners.begin();
         ListenerListIterator itEnd = mListeners.end();
 
-        while (it != itEnd)
+        while( it != itEnd )
         {
-            (*it)->passEventRaised(this, event, skip, pass);
-            if (skip)
+            ( *it )->techniqueEventRaised( this, event, skip, tech );
+            if( skip )
                 break;
             ++it;
         }
     }
 
     //---------------------------------------------------------------------
-    void MaterialSerializer::fireGpuProgramRefEvent(SerializeEvent event, bool& skip,
-        const String& attrib, 
-        const GpuProgramPtr& program, 
-        const GpuProgramParametersSharedPtr& params,
-        GpuProgramParameters* defaultParams)
+    void MaterialSerializer::firePassEvent( SerializeEvent event, bool &skip, const Pass *pass )
     {
-        ListenerListIterator it    = mListeners.begin();
+        ListenerListIterator it = mListeners.begin();
         ListenerListIterator itEnd = mListeners.end();
 
-        while (it != itEnd)
+        while( it != itEnd )
         {
-            (*it)->gpuProgramRefEventRaised(this, event, skip, attrib, program, params, defaultParams);
-            if (skip)
+            ( *it )->passEventRaised( this, event, skip, pass );
+            if( skip )
                 break;
             ++it;
         }
-    }   
+    }
 
     //---------------------------------------------------------------------
-    void MaterialSerializer::fireTextureUnitStateEvent(SerializeEvent event, bool& skip,
-        const TextureUnitState* textureUnit)
+    void MaterialSerializer::fireGpuProgramRefEvent( SerializeEvent event, bool &skip,
+                                                     const String &attrib, const GpuProgramPtr &program,
+                                                     const GpuProgramParametersSharedPtr &params,
+                                                     GpuProgramParameters *defaultParams )
     {
-        ListenerListIterator it    = mListeners.begin();
+        ListenerListIterator it = mListeners.begin();
         ListenerListIterator itEnd = mListeners.end();
 
-        while (it != itEnd)
+        while( it != itEnd )
         {
-            (*it)->textureUnitStateEventRaised(this, event, skip, textureUnit);
-            if (skip)
+            ( *it )->gpuProgramRefEventRaised( this, event, skip, attrib, program, params,
+                                               defaultParams );
+            if( skip )
                 break;
             ++it;
         }
-    }   
-}
+    }
+
+    //---------------------------------------------------------------------
+    void MaterialSerializer::fireTextureUnitStateEvent( SerializeEvent event, bool &skip,
+                                                        const TextureUnitState *textureUnit )
+    {
+        ListenerListIterator it = mListeners.begin();
+        ListenerListIterator itEnd = mListeners.end();
+
+        while( it != itEnd )
+        {
+            ( *it )->textureUnitStateEventRaised( this, event, skip, textureUnit );
+            if( skip )
+                break;
+            ++it;
+        }
+    }
+}  // namespace Ogre

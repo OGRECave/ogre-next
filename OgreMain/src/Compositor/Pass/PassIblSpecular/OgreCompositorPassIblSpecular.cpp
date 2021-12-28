@@ -34,15 +34,15 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "OgreRenderSystem.h"
-#include "OgreLwString.h"
-#include "OgreTextureBox.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreHlmsManager.h"
-#include "OgreRoot.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+#include "OgreTextureBox.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {

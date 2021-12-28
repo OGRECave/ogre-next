@@ -30,16 +30,16 @@ THE SOFTWARE.
 
 #if !OGRE_NO_JSON
 
-#include "OgreHlmsJsonCompute.h"
+#    include "OgreHlmsJsonCompute.h"
 
-#include "OgreHlmsManager.h"
-#include "OgreHlmsCompute.h"
-#include "OgreHlmsComputeJob.h"
-#include "OgreLwString.h"
-#include "OgreLogManager.h"
-#include "OgreTextureGpuManager.h"
+#    include "OgreHlmsCompute.h"
+#    include "OgreHlmsComputeJob.h"
+#    include "OgreHlmsManager.h"
+#    include "OgreLogManager.h"
+#    include "OgreLwString.h"
+#    include "OgreTextureGpuManager.h"
 
-#include "rapidjson/document.h"
+#    include "rapidjson/document.h"
 
 namespace Ogre
 {
@@ -66,7 +66,7 @@ namespace Ogre
         uint8 access = 0;
         if( json.IsArray() )
         {
-            for( rapidjson::SizeType i=0; i<json.Size(); ++i )
+            for( rapidjson::SizeType i = 0; i < json.Size(); ++i )
             {
                 if( json[i].IsString() )
                     access |= parseAccess( json[i].GetString() );
@@ -83,25 +83,25 @@ namespace Ogre
     void HlmsJsonCompute::loadParams( const rapidjson::Value &jsonArray, ShaderParams &shaderParams,
                                       const String &jobName )
     {
-        //JSON syntax has the following alternates:
+        // JSON syntax has the following alternates:
         //  Manual Parameters. Syntax is:
         //      ["parameter_name", [array, with, int, values], "int" "float" "uint"]
-        //The 3rd parameter is optional and specifies how the array values are going to be
-        //interpreted. Default is float. The array with the parameters can have up to
-        //16 elements.
+        // The 3rd parameter is optional and specifies how the array values are going to be
+        // interpreted. Default is float. The array with the parameters can have up to
+        // 16 elements.
         //
         //  Auto params. Syntax is:
         //      ["parameter_name", "camera_position"]
         //      ["parameter_name", "camera_position", extra_param_value]
-        //The 3rd parameter is mandatory in some cases, optional in others. Its value
-        //depends on the auto parameter.
-        for( rapidjson::SizeType i=0; i<jsonArray.Size(); ++i )
+        // The 3rd parameter is mandatory in some cases, optional in others. Its value
+        // depends on the auto parameter.
+        for( rapidjson::SizeType i = 0; i < jsonArray.Size(); ++i )
         {
             const rapidjson::Value &subArray = jsonArray[i];
 
             if( !subArray.IsArray() )
             {
-                //Not an array. Could be a comment. Skip it.
+                // Not an array. Could be a comment. Skip it.
                 continue;
             }
 
@@ -125,19 +125,20 @@ namespace Ogre
 
             if( subArray[1].IsString() )
             {
-                //Automatic param
+                // Automatic param
                 ShaderParams::Param param;
-                param.isAutomatic   = true;
-                param.isEx          = false;
-                param.isDirty       = true;
+                param.isAutomatic = true;
+                param.isEx = false;
+                param.isDirty = true;
                 param.name = paramName;
 
-                const GpuProgramParameters::AutoConstantDefinition *acDef = GpuProgramParameters::
-                        getAutoConstantDefinition( subArray[1].GetString() );
+                const GpuProgramParameters::AutoConstantDefinition *acDef =
+                    GpuProgramParameters::getAutoConstantDefinition( subArray[1].GetString() );
                 param.ap.acType = acDef->acType;
 
-                param.ap.extraParamType = acDef->dataType == GpuProgramParameters::ACDT_REAL ?
-                            ShaderParams::ElementFloat : ShaderParams::ElementUInt;
+                param.ap.extraParamType = acDef->dataType == GpuProgramParameters::ACDT_REAL
+                                              ? ShaderParams::ElementFloat
+                                              : ShaderParams::ElementUInt;
 
                 if( subArray.Size() > 2u && acDef->dataType != GpuProgramParameters::ACDT_NONE )
                 {
@@ -146,29 +147,29 @@ namespace Ogre
                     else
                     {
                         LogManager::getSingleton().logMessage( "Error parsing JSON '" + jobName +
-                                                               "': invalid 3rd parameter for "
-                                                               + param.name );
+                                                               "': invalid 3rd parameter for " +
+                                                               param.name );
                         continue;
                     }
                 }
                 else
                 {
-                    //No extra parameter given. Assign default (or raise
-                    //error if extra parameter must be present)
+                    // No extra parameter given. Assign default (or raise
+                    // error if extra parameter must be present)
                     param.ap.extraParamValue = 0;
                     if( acDef->dataType == GpuProgramParameters::ACDT_REAL )
                     {
                         if( acDef->acType == GpuProgramParameters::ACT_TIME ||
                             acDef->acType == GpuProgramParameters::ACT_FRAME_TIME )
                         {
-                            //Set default
+                            // Set default
                             param.ap.extraParamValue = 1;
                         }
                         else
                         {
                             LogManager::getSingleton().logMessage( "Error parsing JSON '" + jobName +
-                                                                   "': expecting 3rd parameter for "
-                                                                   + param.name );
+                                                                   "': expecting 3rd parameter for " +
+                                                                   param.name );
                             continue;
                         }
                     }
@@ -179,14 +180,14 @@ namespace Ogre
                             acDef->acType == GpuProgramParameters::ACT_SPOTLIGHT_VIEWPROJ_MATRIX ||
                             acDef->acType == GpuProgramParameters::ACT_SPOTLIGHT_WORLDVIEWPROJ_MATRIX )
                         {
-                            //Set default
+                            // Set default
                             param.ap.extraParamValue = 0;
                         }
                         else
                         {
                             LogManager::getSingleton().logMessage( "Error parsing JSON '" + jobName +
-                                                                   "': expecting 3rd parameter for "
-                                                                   + param.name );
+                                                                   "': expecting 3rd parameter for " +
+                                                                   param.name );
                             continue;
                         }
                     }
@@ -197,9 +198,9 @@ namespace Ogre
             else
             {
                 ShaderParams::Param param;
-                param.isAutomatic   = false;
-                param.isEx          = false;
-                param.isDirty       = true;
+                param.isAutomatic = false;
+                param.isEx = false;
+                param.isDirty = true;
                 param.name = paramName;
 
                 param.mp.elementType = ShaderParams::ElementFloat;
@@ -216,8 +217,7 @@ namespace Ogre
                 if( !subArray[1].IsArray() )
                 {
                     LogManager::getSingleton().logMessage( "Error parsing JSON '" + jobName +
-                                                           "': expecting an array for "
-                                                           + param.name );
+                                                           "': expecting an array for " + param.name );
                     continue;
                 }
 
@@ -227,19 +227,17 @@ namespace Ogre
                 param.mp.dataSizeBytes = paramArraySize * 4u;
                 memset( param.mp.dataBytes, 0, param.mp.dataSizeBytes );
 
-                float *dataFloat = reinterpret_cast<float*>( param.mp.dataBytes );
-                int32 *dataInt32 = reinterpret_cast<int32*>( param.mp.dataBytes );
-                uint32 *dataUint32 = reinterpret_cast<uint32*>( param.mp.dataBytes );
+                float *dataFloat = reinterpret_cast<float *>( param.mp.dataBytes );
+                int32 *dataInt32 = reinterpret_cast<int32 *>( param.mp.dataBytes );
+                uint32 *dataUint32 = reinterpret_cast<uint32 *>( param.mp.dataBytes );
 
-                for( rapidjson::SizeType j=0; j<paramArraySize; ++j )
+                for( rapidjson::SizeType j = 0; j < paramArraySize; ++j )
                 {
-                    if( param.mp.elementType == ShaderParams::ElementFloat &&
-                        paramArray[j].IsNumber() )
+                    if( param.mp.elementType == ShaderParams::ElementFloat && paramArray[j].IsNumber() )
                     {
-                       dataFloat[j] = static_cast<float>( paramArray[j].GetDouble() );
+                        dataFloat[j] = static_cast<float>( paramArray[j].GetDouble() );
                     }
-                    else if( param.mp.elementType == ShaderParams::ElementInt &&
-                             paramArray[j].IsInt() )
+                    else if( param.mp.elementType == ShaderParams::ElementInt && paramArray[j].IsInt() )
                     {
                         dataInt32[j] = paramArray[j].GetInt();
                     }
@@ -261,10 +259,9 @@ namespace Ogre
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( "sampler" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
         {
-            map<LwConstString, const HlmsSamplerblock*>::type::const_iterator it =
-                    blocks.samplerblocks.find(
-                        LwConstString( itor->value.GetString(),
-                                       itor->value.GetStringLength() + 1u ) );
+            map<LwConstString, const HlmsSamplerblock *>::type::const_iterator it =
+                blocks.samplerblocks.find(
+                    LwConstString( itor->value.GetString(), itor->value.GetStringLength() + 1u ) );
             if( it != blocks.samplerblocks.end() )
             {
                 job->_setSamplerblock( slotIdx, it->second );
@@ -277,34 +274,33 @@ namespace Ogre
         {
             const char *textureName = itor->value.GetString();
 
-            //TODO: allow specifying texture flags.
+            // TODO: allow specifying texture flags.
             uint32 textureFlags = TextureFlags::AutomaticBatching;
             TextureGpu *texture = mTextureManager->createOrRetrieveTexture(
-                                      textureName, GpuPageOutStrategy::Discard,
-                                      textureFlags, TextureTypes::Unknown,
-                                      resourceGroup );
+                textureName, GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Unknown,
+                resourceGroup );
 
-            DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
-                                                        makeEmpty() );
+            DescriptorSetTexture2::TextureSlot texSlot(
+                DescriptorSetTexture2::TextureSlot::makeEmpty() );
             texSlot.texture = texture;
             job->setTexture( slotIdx, texSlot );
         }
 
-        //TODO: Implement named buffers
-//        itor = json.FindMember( "buffer" );
-//        if( itor != json.MemberEnd() && itor->value.IsString() )
-//        {
-//            const char *bufferName = itor->value.GetString();
+        // TODO: Implement named buffers
+        //        itor = json.FindMember( "buffer" );
+        //        if( itor != json.MemberEnd() && itor->value.IsString() )
+        //        {
+        //            const char *bufferName = itor->value.GetString();
 
-//            size_t bufferOffset = 0, bufferSize = 0;
-//            itor = json.FindMember( "offset" );
-//            if( itor != json.MemberEnd() && itor->value.IsUint() )
-//                bufferOffset = itor->value.GetUint();
+        //            size_t bufferOffset = 0, bufferSize = 0;
+        //            itor = json.FindMember( "offset" );
+        //            if( itor != json.MemberEnd() && itor->value.IsUint() )
+        //                bufferOffset = itor->value.GetUint();
 
-//            itor = json.FindMember( "size" );
-//            if( itor != json.MemberEnd() && itor->value.IsUint() ){}
-//                bufferSize = itor->value.GetUint();
-//        }
+        //            itor = json.FindMember( "size" );
+        //            if( itor != json.MemberEnd() && itor->value.IsUint() ){}
+        //                bufferSize = itor->value.GetUint();
+        //        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonCompute::loadBasedOnTextureOrUav( const rapidjson::Value &objValue,
@@ -312,13 +308,12 @@ namespace Ogre
                                                    int _threadGroupsBasedOn )
     {
         HlmsComputeJob::ThreadGroupsBasedOn threadGroupsBasedOn =
-                static_cast<HlmsComputeJob::ThreadGroupsBasedOn>( _threadGroupsBasedOn );
+            static_cast<HlmsComputeJob::ThreadGroupsBasedOn>( _threadGroupsBasedOn );
 
         if( objValue.IsUint() )
         {
             job->setNumThreadGroupsBasedOn( threadGroupsBasedOn,
-                                            static_cast<uint8>( objValue.GetUint() ),
-                                            1u, 1u, 1u );
+                                            static_cast<uint8>( objValue.GetUint() ), 1u, 1u, 1u );
         }
         else if( objValue.IsObject() )
         {
@@ -341,7 +336,7 @@ namespace Ogre
             {
                 const rapidjson::Value &divArray = itor->value;
                 const rapidjson::SizeType arraySize = std::min( 3u, divArray.Size() );
-                for( rapidjson::SizeType i=0; i<arraySize; ++i )
+                for( rapidjson::SizeType i = 0; i < arraySize; ++i )
                 {
                     if( divArray[i].IsUint() )
                     {
@@ -351,18 +346,19 @@ namespace Ogre
                     {
                         hasError = true;
                         LogManager::getSingleton().logMessage(
-                                    "Array with 3 integers expected in " + jobName + ". "
-                                    "Syntax is thread_groups_based_on_texture : { \"slot\" "
-                                    ": 0, \"divisor\" : [1, 1, 1] } or the short form: "
-                                    "thread_groups_based_on_texture : 0 (with no divisors)" );
+                            "Array with 3 integers expected in " + jobName +
+                            ". "
+                            "Syntax is thread_groups_based_on_texture : { \"slot\" "
+                            ": 0, \"divisor\" : [1, 1, 1] } or the short form: "
+                            "thread_groups_based_on_texture : 0 (with no divisors)" );
                     }
                 }
             }
 
             if( !hasError )
             {
-                job->setNumThreadGroupsBasedOn( threadGroupsBasedOn,
-                                                slot, divisors[0], divisors[1], divisors[2] );
+                job->setNumThreadGroupsBasedOn( threadGroupsBasedOn, slot, divisors[0], divisors[1],
+                                                divisors[2] );
             }
         }
     }
@@ -381,7 +377,7 @@ namespace Ogre
             const rapidjson::Value &jsonArray = itor->value;
             if( jsonArray.Size() != 3u )
                 hasError = true;
-            for( rapidjson::SizeType i=0; i<3u && !hasError; ++i )
+            for( rapidjson::SizeType i = 0; i < 3u && !hasError; ++i )
             {
                 if( jsonArray[i].IsUint() )
                     val[i] = jsonArray[i].GetUint();
@@ -409,7 +405,7 @@ namespace Ogre
             const rapidjson::Value &jsonArray = itor->value;
             if( jsonArray.Size() != 3u )
                 hasError = true;
-            for( rapidjson::SizeType i=0; i<3u && !hasError; ++i )
+            for( rapidjson::SizeType i = 0; i < 3u && !hasError; ++i )
             {
                 if( jsonArray[i].IsUint() )
                     val[i] = jsonArray[i].GetUint();
@@ -441,8 +437,7 @@ namespace Ogre
         itor = json.FindMember( "thread_groups_based_on_uav" );
         if( itor != json.MemberEnd() )
         {
-            loadBasedOnTextureOrUav( itor->value, jobName, job,
-                                     HlmsComputeJob::ThreadGroupsBasedOnUav );
+            loadBasedOnTextureOrUav( itor->value, jobName, job, HlmsComputeJob::ThreadGroupsBasedOnUav );
         }
 
         itor = json.FindMember( "properties" );
@@ -458,7 +453,7 @@ namespace Ogre
                 if( itSubObj->value.IsInt() )
                 {
                     job->setProperty( itSubObj->name.GetString(),
-                                      static_cast<int32>(itSubObj->value.GetInt()) );
+                                      static_cast<int32>( itSubObj->value.GetInt() ) );
                 }
 
                 ++itSubObj;
@@ -487,7 +482,7 @@ namespace Ogre
             const uint8 arraySize = std::min( jsonArray.Size(), 255u );
             job->setNumTexUnits( arraySize );
 
-            for( uint8 i=0; i<arraySize; ++i )
+            for( uint8 i = 0; i < arraySize; ++i )
             {
                 if( jsonArray[i].IsObject() )
                     loadTexture( jsonArray[i], blocks, job, i, resourceGroup );
@@ -530,7 +525,7 @@ namespace Ogre
                 else if( itor != itJob->value.MemberEnd() && itor->value.IsArray() )
                 {
                     const rapidjson::Value &jsonArray = itor->value;
-                    for( rapidjson::SizeType i=0; i<jsonArray.Size(); ++i )
+                    for( rapidjson::SizeType i = 0; i < jsonArray.Size(); ++i )
                     {
                         if( jsonArray[i].IsString() )
                             pieceFiles.push_back( jsonArray[i].GetString() );
@@ -540,9 +535,8 @@ namespace Ogre
                 itor = itJob->value.FindMember( "source" );
                 if( itor != itJob->value.MemberEnd() && itor->value.IsString() )
                 {
-                    HlmsComputeJob *job = hlmsCompute->createComputeJob( jobName, jobName,
-                                                                         itor->value.GetString(),
-                                                                         pieceFiles );
+                    HlmsComputeJob *job = hlmsCompute->createComputeJob(
+                        jobName, jobName, itor->value.GetString(), pieceFiles );
                     loadJob( itJob->value, blocks, job, jobName, resourceGroup );
                 }
             }
@@ -550,5 +544,5 @@ namespace Ogre
             ++itJob;
         }
     }
-}
+}  // namespace Ogre
 #endif

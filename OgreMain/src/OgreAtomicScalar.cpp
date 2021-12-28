@@ -32,30 +32,34 @@ THE SOFTWARE.
 
 #ifdef NEED_TO_INIT_INTERLOCKEDCOMPAREEXCHANGE64WRAPPER
 
-namespace Ogre {
-
-InterlockedCompareExchange64Wrapper::func_InterlockedCompareExchange64 InterlockedCompareExchange64Wrapper::Ogre_InterlockedCompareExchange64;
-
-InterlockedCompareExchange64Wrapper::InterlockedCompareExchange64Wrapper()
+namespace Ogre
 {
-    Ogre_InterlockedCompareExchange64 = NULL;
+    InterlockedCompareExchange64Wrapper::func_InterlockedCompareExchange64
+        InterlockedCompareExchange64Wrapper::Ogre_InterlockedCompareExchange64;
 
-// In win32 we will get InterlockedCompareExchange64 function address, in XP we will get NULL - as the function doesn't exist there. 
-#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32)
-    HINSTANCE kernel32Dll = LoadLibrary("KERNEL32.DLL");
-    Ogre_InterlockedCompareExchange64 = (func_InterlockedCompareExchange64)GetProcAddress(kernel32Dll, "InterlockedCompareExchange64");
-#endif
+    InterlockedCompareExchange64Wrapper::InterlockedCompareExchange64Wrapper()
+    {
+        Ogre_InterlockedCompareExchange64 = NULL;
 
-// In WinRT we can't LoadLibrary("KERNEL32.DLL") - but on the other hand we don't have the issue - as InterlockedCompareExchange64 exist on
-// all WinRT platforms (if not - add to the #if below)
-#if (OGRE_PLATFORM == OGRE_PLATFORM_WINRT)
-    Ogre_InterlockedCompareExchange64 = _InterlockedCompareExchange64;
-#endif    
-}
+// In win32 we will get InterlockedCompareExchange64 function address, in XP we will get NULL - as the
+// function doesn't exist there.
+#    if( OGRE_PLATFORM == OGRE_PLATFORM_WIN32 )
+        HINSTANCE kernel32Dll = LoadLibrary( "KERNEL32.DLL" );
+        Ogre_InterlockedCompareExchange64 = (func_InterlockedCompareExchange64)GetProcAddress(
+            kernel32Dll, "InterlockedCompareExchange64" );
+#    endif
 
-// Here we call the InterlockedCompareExchange64Wrapper constructor so Ogre_InterlockedCompareExchange64 will be init once when the program loads.
-InterlockedCompareExchange64Wrapper interlockedCompareExchange64Wrapper;
+// In WinRT we can't LoadLibrary("KERNEL32.DLL") - but on the other hand we don't have the issue - as
+// InterlockedCompareExchange64 exist on all WinRT platforms (if not - add to the #if below)
+#    if( OGRE_PLATFORM == OGRE_PLATFORM_WINRT )
+        Ogre_InterlockedCompareExchange64 = _InterlockedCompareExchange64;
+#    endif
+    }
 
-}
+    // Here we call the InterlockedCompareExchange64Wrapper constructor so
+    // Ogre_InterlockedCompareExchange64 will be init once when the program loads.
+    InterlockedCompareExchange64Wrapper interlockedCompareExchange64Wrapper;
+
+}  // namespace Ogre
 
 #endif

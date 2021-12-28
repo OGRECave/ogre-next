@@ -38,10 +38,10 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
-#include "OgreViewport.h"
 #include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
 #include "OgreStringConverter.h"
+#include "OgreViewport.h"
 
 namespace Ogre
 {

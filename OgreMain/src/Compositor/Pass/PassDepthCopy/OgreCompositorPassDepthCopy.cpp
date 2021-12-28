@@ -30,14 +30,14 @@ THE SOFTWARE.
 
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopy.h"
 
-#include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
-#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorNode.h"
+#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
+#include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
 #include "OgreDepthBuffer.h"
-#include "OgreTextureBox.h"
 #include "OgreRenderSystem.h"
+#include "OgreTextureBox.h"
 
 namespace Ogre
 {
@@ -63,15 +63,15 @@ namespace Ogre
     CompositorPassDepthCopy::CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
                                                       const RenderTargetViewDef *rtv,
                                                       CompositorNode *parentNode ) :
-                CompositorPass( definition, parentNode ),
-                mDefinition( definition )
+        CompositorPass( definition, parentNode ),
+        mDefinition( definition )
     {
         initialize( rtv );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::execute( const Camera *lodCamera )
     {
-        //Execute a limited number of times?
+        // Execute a limited number of times?
         if( mNumPassesLeft != std::numeric_limits<uint32>::max() )
         {
             if( !mNumPassesLeft )
@@ -87,11 +87,11 @@ namespace Ogre
         analyzeBarriers();
         executeResourceTransitions();
 
-        //Fire the listener in case it wants to change anything
+        // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
 
-        //Should we retrieve every update, or cache the return values
-        //and listen to notifyRecreated and family of funtions?
+        // Should we retrieve every update, or cache the return values
+        // and listen to notifyRecreated and family of funtions?
         TextureGpu *srcChannel = mParentNode->getDefinedTexture( mDefinition->mSrcDepthTextureName );
         TextureGpu *dstChannel = mParentNode->getDefinedTexture( mDefinition->mDstDepthTextureName );
 
@@ -121,4 +121,4 @@ namespace Ogre
         resolveTransition( srcChannel, ResourceLayout::CopySrc, ResourceAccess::Read, 0u );
         resolveTransition( dstChannel, ResourceLayout::CopyDst, ResourceAccess::Write, 0u );
     }
-}
+}  // namespace Ogre

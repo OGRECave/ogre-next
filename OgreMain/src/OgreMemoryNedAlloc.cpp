@@ -31,70 +31,65 @@ THE SOFTWARE.
 
 #include "OgreMemoryNedAlloc.h"
 
-#include "OgrePlatformInformation.h"
 #include "OgreMemoryTracker.h"
+#include "OgrePlatformInformation.h"
 
 #if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NED
 
 // include ned implementation
 // don't abort() on asserts, behave as normal assert()
-#define ABORT_ON_ASSERT_FAILURE 0
-#include <nedmalloc.c>
+#    define ABORT_ON_ASSERT_FAILURE 0
+#    include <nedmalloc.c>
 
 namespace Ogre
 {
-
     //---------------------------------------------------------------------
-    void* NedAllocImpl::allocBytes(size_t count, 
-        const char* file, int line, const char* func)
+    void *NedAllocImpl::allocBytes( size_t count, const char *file, int line, const char *func )
     {
-        void* ptr = nedalloc::nedmalloc(count);
-    #if OGRE_MEMORY_TRACKER
+        void *ptr = nedalloc::nedmalloc( count );
+#    if OGRE_MEMORY_TRACKER
         // this alloc policy doesn't do pools (yet, ned can do it)
-        MemoryTracker::get()._recordAlloc(ptr, count, 0, file, line, func);
-    #endif
+        MemoryTracker::get()._recordAlloc( ptr, count, 0, file, line, func );
+#    endif
         return ptr;
     }
     //---------------------------------------------------------------------
-    void NedAllocImpl::deallocBytes(void* ptr)
+    void NedAllocImpl::deallocBytes( void *ptr )
     {
         // deal with null
-        if (!ptr)
+        if( !ptr )
             return;
-#if OGRE_MEMORY_TRACKER
-        MemoryTracker::get()._recordDealloc(ptr);
-#endif
-        nedalloc::nedfree(ptr);
+#    if OGRE_MEMORY_TRACKER
+        MemoryTracker::get()._recordDealloc( ptr );
+#    endif
+        nedalloc::nedfree( ptr );
     }
     //---------------------------------------------------------------------
-    void* NedAllocImpl::allocBytesAligned(size_t align, size_t count, 
-        const char* file, int line, const char* func)
+    void *NedAllocImpl::allocBytesAligned( size_t align, size_t count, const char *file, int line,
+                                           const char *func )
     {
         // default to platform SIMD alignment if none specified
-        void* ptr =  align ? nedalloc::nedmemalign(align, count)
-            : nedalloc::nedmemalign(OGRE_SIMD_ALIGNMENT, count);
-#if OGRE_MEMORY_TRACKER
+        void *ptr = align ? nedalloc::nedmemalign( align, count )
+                          : nedalloc::nedmemalign( OGRE_SIMD_ALIGNMENT, count );
+#    if OGRE_MEMORY_TRACKER
         // this alloc policy doesn't do pools (yet, ned can do it)
-        MemoryTracker::get()._recordAlloc(ptr, count, 0, file, line, func);
-#endif
+        MemoryTracker::get()._recordAlloc( ptr, count, 0, file, line, func );
+#    endif
         return ptr;
     }
     //---------------------------------------------------------------------
-    void NedAllocImpl::deallocBytesAligned(size_t align, void* ptr)
+    void NedAllocImpl::deallocBytesAligned( size_t align, void *ptr )
     {
         // deal with null
-        if (!ptr)
+        if( !ptr )
             return;
-#if OGRE_MEMORY_TRACKER
+#    if OGRE_MEMORY_TRACKER
         // this alloc policy doesn't do pools (yet, ned can do it)
-        MemoryTracker::get()._recordDealloc(ptr);
-#endif
-        nedalloc::nedfree(ptr);
+        MemoryTracker::get()._recordDealloc( ptr );
+#    endif
+        nedalloc::nedfree( ptr );
     }
 
-
-}
-
+}  // namespace Ogre
 
 #endif
-

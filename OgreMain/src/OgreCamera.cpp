@@ -29,49 +29,48 @@ THE SOFTWARE.
 
 #include "OgreCamera.h"
 
-#include "OgreSceneManager.h"
-#include "OgreProfiler.h"
 #include "OgreMatrix4.h"
-#include "OgreRay.h"
-#include "OgreViewport.h"
 #include "OgreMovablePlane.h"
+#include "OgreProfiler.h"
+#include "OgreRay.h"
+#include "OgreSceneManager.h"
 #include "OgreSceneNode.h"
+#include "OgreViewport.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     String Camera::msMovableType = "Camera";
     Camera::CameraSortMode Camera::msDefaultSortMode = Camera::SortModeDepth;
     //-----------------------------------------------------------------------
-    Camera::Camera( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* sm )
-        : Frustum( id, objectMemoryManager ),
-        mSceneMgr(sm),
-        mOrientation(Quaternion::IDENTITY),
-        mPosition(Vector3::ZERO),
-        mVrData(0),
-        mAutoTrackTarget(0),
-        mAutoTrackOffset(Vector3::ZERO),
-        mSceneLodFactor(1.0f),
-        mSceneLodFactorInv(1.0f),
-        mWindowSet(false),
-        mLastViewport(0),
-        mAutoAspectRatio(false),
-        mCullFrustum(0),
-        mUseRenderingDistance(true),
-        mLodCamera(0),
-        mNeedsDepthClamp(false),
-        mUseMinPixelSize(false),
-        mPixelDisplayRatio(0),
-        mConstantBiasScale(1.0f),
+    Camera::Camera( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *sm ) :
+        Frustum( id, objectMemoryManager ),
+        mSceneMgr( sm ),
+        mOrientation( Quaternion::IDENTITY ),
+        mPosition( Vector3::ZERO ),
+        mVrData( 0 ),
+        mAutoTrackTarget( 0 ),
+        mAutoTrackOffset( Vector3::ZERO ),
+        mSceneLodFactor( 1.0f ),
+        mSceneLodFactorInv( 1.0f ),
+        mWindowSet( false ),
+        mLastViewport( 0 ),
+        mAutoAspectRatio( false ),
+        mCullFrustum( 0 ),
+        mUseRenderingDistance( true ),
+        mLodCamera( 0 ),
+        mNeedsDepthClamp( false ),
+        mUseMinPixelSize( false ),
+        mPixelDisplayRatio( 0 ),
+        mConstantBiasScale( 1.0f ),
         mSortMode( msDefaultSortMode )
     {
-
         // Reasonable defaults to camera params
-        mFOVy = Radian(Math::PI/4.0f);
+        mFOVy = Radian( Math::PI / 4.0f );
         mNearDist = 100.0f;
         mFarDist = 100000.0f;
         mAspect = 1.33333333333333f;
         mProjType = PT_PERSPECTIVE;
-        setFixedYawAxis(true);    // Default to fixed yaw, like freelook since most people expect this
+        setFixedYawAxis( true );  // Default to fixed yaw, like freelook since most people expect this
 
         invalidateFrustum();
         invalidateView();
@@ -91,18 +90,15 @@ namespace Ogre {
     Camera::~Camera()
     {
         ListenerList listenersCopy = mListeners;
-        for (ListenerList::iterator i = listenersCopy.begin(); i != listenersCopy.end(); ++i)
+        for( ListenerList::iterator i = listenersCopy.begin(); i != listenersCopy.end(); ++i )
         {
-            (*i)->cameraDestroyed(this);
+            ( *i )->cameraDestroyed( this );
         }
     }
     //-----------------------------------------------------------------------
-    SceneManager* Camera::getSceneManager() const
-    {
-        return mSceneMgr;
-    }
+    SceneManager *Camera::getSceneManager() const { return mSceneMgr; }
     //-----------------------------------------------------------------------
-    void Camera::setPosition(Real x, Real y, Real z)
+    void Camera::setPosition( Real x, Real y, Real z )
     {
         mPosition.x = x;
         mPosition.y = y;
@@ -110,27 +106,24 @@ namespace Ogre {
         invalidateView();
     }
     //-----------------------------------------------------------------------
-    void Camera::setPosition(const Vector3& vec)
+    void Camera::setPosition( const Vector3 &vec )
     {
         mPosition = vec;
         invalidateView();
     }
 
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getPosition() const
-    {
-        return mPosition;
-    }
+    const Vector3 &Camera::getPosition() const { return mPosition; }
 
     //-----------------------------------------------------------------------
-    void Camera::move(const Vector3& vec)
+    void Camera::move( const Vector3 &vec )
     {
         mPosition = mPosition + vec;
         invalidateView();
     }
 
     //-----------------------------------------------------------------------
-    void Camera::moveRelative(const Vector3& vec)
+    void Camera::moveRelative( const Vector3 &vec )
     {
         // Transform the axes of the relative vector by camera's local axes
         Vector3 trans = mOrientation * vec;
@@ -140,18 +133,16 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Camera::setDirection(Real x, Real y, Real z)
-    {
-        setDirection(Vector3(x,y,z));
-    }
+    void Camera::setDirection( Real x, Real y, Real z ) { setDirection( Vector3( x, y, z ) ); }
 
     //-----------------------------------------------------------------------
-    void Camera::setDirection(const Vector3& vec)
+    void Camera::setDirection( const Vector3 &vec )
     {
         // Do nothing if given a zero vector
         // (Replaced assert since this could happen with auto tracking camera and
         //  camera passes through the lookAt point)
-        if (vec == Vector3::ZERO) return;
+        if( vec == Vector3::ZERO )
+            return;
 
         // Remember, camera points down -Z of local axes!
         // Therefore reverse direction of direction vector before determining local Z
@@ -159,7 +150,6 @@ namespace Ogre {
         zAdjustVec.normalise();
 
         Quaternion targetWorldOrientation;
-
 
         if( mYawFixed )
         {
@@ -173,36 +163,33 @@ namespace Ogre {
         }
         else
         {
-
             // Get axes from current quaternion
             Vector3 axes[3];
             updateView();
-            mRealOrientation.ToAxes(axes);
+            mRealOrientation.ToAxes( axes );
             Quaternion rotQuat;
-            if ( (axes[2]+zAdjustVec).squaredLength() <  0.00005f) 
+            if( ( axes[2] + zAdjustVec ).squaredLength() < 0.00005f )
             {
                 // Oops, a 180 degree turn (infinite possible rotation axes)
                 // Default to yaw i.e. use current UP
-                rotQuat.FromAngleAxis(Radian(Math::PI), axes[1]);
+                rotQuat.FromAngleAxis( Radian( Math::PI ), axes[1] );
             }
             else
             {
                 // Derive shortest arc to new direction
-                rotQuat = axes[2].getRotationTo(zAdjustVec);
-
+                rotQuat = axes[2].getRotationTo( zAdjustVec );
             }
             targetWorldOrientation = rotQuat * mRealOrientation;
         }
 
         // transform to parent space
-        mOrientation = mParentNode->convertWorldToLocalOrientationUpdated(targetWorldOrientation);
+        mOrientation = mParentNode->convertWorldToLocalOrientationUpdated( targetWorldOrientation );
 
         // TODO If we have a fixed yaw axis, we mustn't break it by using the
         // shortest arc because this will sometimes cause a relative yaw
         // which will tip the camera
 
         invalidateView();
-
     }
 
     //-----------------------------------------------------------------------
@@ -213,19 +200,13 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    Vector3 Camera::getUp() const
-    {
-        return mOrientation * Vector3::UNIT_Y;
-    }
+    Vector3 Camera::getUp() const { return mOrientation * Vector3::UNIT_Y; }
 
     //-----------------------------------------------------------------------
-    Vector3 Camera::getRight() const
-    {
-        return mOrientation * Vector3::UNIT_X;
-    }
+    Vector3 Camera::getRight() const { return mOrientation * Vector3::UNIT_X; }
 
     //-----------------------------------------------------------------------
-    void Camera::lookAt(const Vector3& targetPoint)
+    void Camera::lookAt( const Vector3 &targetPoint )
     {
         updateView();
         this->setDirection( targetPoint - mRealPosition );
@@ -235,25 +216,25 @@ namespace Ogre {
     void Camera::lookAt( Real x, Real y, Real z )
     {
         Vector3 vTemp( x, y, z );
-        this->lookAt(vTemp);
+        this->lookAt( vTemp );
     }
 
     //-----------------------------------------------------------------------
-    void Camera::roll(const Radian& angle)
+    void Camera::roll( const Radian &angle )
     {
         // Rotate around local Z axis
         Vector3 zAxis = mOrientation.zAxis();
-        rotate(zAxis, angle);
+        rotate( zAxis, angle );
 
         invalidateView();
     }
 
     //-----------------------------------------------------------------------
-    void Camera::yaw(const Radian& angle)
+    void Camera::yaw( const Radian &angle )
     {
         Vector3 yAxis;
 
-        if (mYawFixed)
+        if( mYawFixed )
         {
             // Rotate around fixed yaw axis
             yAxis = mYawFixedAxis;
@@ -264,32 +245,31 @@ namespace Ogre {
             yAxis = mOrientation.yAxis();
         }
 
-        rotate(yAxis, angle);
+        rotate( yAxis, angle );
 
         invalidateView();
     }
 
     //-----------------------------------------------------------------------
-    void Camera::pitch(const Radian& angle)
+    void Camera::pitch( const Radian &angle )
     {
         // Rotate around local X axis
         Vector3 xAxis = mOrientation.xAxis();
-        rotate(xAxis, angle);
+        rotate( xAxis, angle );
 
         invalidateView();
-
     }
 
     //-----------------------------------------------------------------------
-    void Camera::rotate(const Vector3& axis, const Radian& angle)
+    void Camera::rotate( const Vector3 &axis, const Radian &angle )
     {
         Quaternion q;
-        q.FromAngleAxis(angle,axis);
-        rotate(q);
+        q.FromAngleAxis( angle, axis );
+        rotate( q );
     }
 
     //-----------------------------------------------------------------------
-    void Camera::rotate(const Quaternion& q)
+    void Camera::rotate( const Quaternion &q )
     {
         // Note the order of the mult, i.e. q comes after
 
@@ -299,7 +279,6 @@ namespace Ogre {
         mOrientation = qres;
 
         invalidateView();
-
     }
 
     //-----------------------------------------------------------------------
@@ -309,43 +288,41 @@ namespace Ogre {
         const Vector3 derivedPos( mParentNode->_getDerivedPosition() );
 
         // Overridden from Frustum to use local orientation / position offsets
-        if (mRecalcView ||
-            derivedOrient != mLastParentOrientation ||
-            derivedPos != mLastParentPosition)
+        if( mRecalcView || derivedOrient != mLastParentOrientation || derivedPos != mLastParentPosition )
         {
             // Ok, we're out of date with SceneNode we're attached to
             mLastParentOrientation = derivedOrient;
             mLastParentPosition = derivedPos;
-            mRealOrientation = mParentNode->convertLocalToWorldOrientation(mOrientation);
-            mRealPosition = mParentNode->convertLocalToWorldPosition(mPosition);
+            mRealOrientation = mParentNode->convertLocalToWorldOrientation( mOrientation );
+            mRealPosition = mParentNode->convertLocalToWorldPosition( mPosition );
             mRecalcView = true;
             mRecalcWindow = true;
         }
 
         // Deriving reflection from linked plane?
-        if (mReflect && mLinkedReflectPlane && 
-            !(mLastLinkedReflectionPlane == mLinkedReflectPlane->_getDerivedPlane()))
+        if( mReflect && mLinkedReflectPlane &&
+            !( mLastLinkedReflectionPlane == mLinkedReflectPlane->_getDerivedPlane() ) )
         {
             mReflectPlane = mLinkedReflectPlane->_getDerivedPlane();
-            mReflectMatrix = Math::buildReflectionMatrix(mReflectPlane);
+            mReflectMatrix = Math::buildReflectionMatrix( mReflectPlane );
             mLastLinkedReflectionPlane = mLinkedReflectPlane->_getDerivedPlane();
             mRecalcView = true;
             mRecalcWindow = true;
         }
 
         // Deriving reflected orientation / position
-        if (mRecalcView)
+        if( mRecalcView )
         {
-            if (mReflect)
+            if( mReflect )
             {
                 // Calculate reflected orientation, use up-vector as fallback axis.
                 Vector3 dir = mRealOrientation * Vector3::NEGATIVE_UNIT_Z;
-                Vector3 rdir = dir.reflect(mReflectPlane.normal);
+                Vector3 rdir = dir.reflect( mReflectPlane.normal );
                 Vector3 up = mRealOrientation * Vector3::UNIT_Y;
-                mDerivedOrientation = dir.getRotationTo(rdir, up) * mRealOrientation;
+                mDerivedOrientation = dir.getRotationTo( rdir, up ) * mRealOrientation;
 
                 // Calculate reflected position.
-                mDerivedPosition = mReflectMatrix.transformAffine(mRealPosition);
+                mDerivedPosition = mReflectMatrix.transformAffine( mRealPosition );
             }
             else
             {
@@ -355,7 +332,6 @@ namespace Ogre {
         }
 
         return mRecalcView;
-
     }
 
     // -------------------------------------------------------------------
@@ -379,63 +355,63 @@ namespace Ogre {
     void Camera::_cullScenePhase01( Camera *renderCamera, const Camera *lodCamera, Viewport *vp,
                                     uint8 firstRq, uint8 lastRq, bool reuseCullData )
     {
-        OgreProfileBeginGPUEvent("Camera: " + getName());
+        OgreProfileBeginGPUEvent( "Camera: " + getName() );
 
-        //update the pixel display ratio
-        if (mProjType == Ogre::PT_PERSPECTIVE)
+        // update the pixel display ratio
+        if( mProjType == Ogre::PT_PERSPECTIVE )
         {
-            mPixelDisplayRatio = (2 * Ogre::Math::Tan(mFOVy * 0.5f)) / vp->getActualHeight();
+            mPixelDisplayRatio = ( 2 * Ogre::Math::Tan( mFOVy * 0.5f ) ) / vp->getActualHeight();
         }
         else
         {
-            mPixelDisplayRatio = (mTop - mBottom) / vp->getActualHeight();
+            mPixelDisplayRatio = ( mTop - mBottom ) / vp->getActualHeight();
         }
 
-        //notify prerender scene
+        // notify prerender scene
         ListenerList listenersCopy = mListeners;
-        for (ListenerList::iterator i = listenersCopy.begin(); i != listenersCopy.end(); ++i)
+        for( ListenerList::iterator i = listenersCopy.begin(); i != listenersCopy.end(); ++i )
         {
-            (*i)->cameraPreRenderScene(this);
+            ( *i )->cameraPreRenderScene( this );
         }
 
-        //render scene
+        // render scene
         mSceneMgr->_cullPhase01( this, renderCamera, lodCamera, firstRq, lastRq, reuseCullData );
     }
     //-----------------------------------------------------------------------
-    void Camera::_renderScenePhase02( const Camera *lodCamera,
-                                      uint8 firstRq, uint8 lastRq, bool includeOverlays )
+    void Camera::_renderScenePhase02( const Camera *lodCamera, uint8 firstRq, uint8 lastRq,
+                                      bool includeOverlays )
     {
-        //render scene
+        // render scene
         mSceneMgr->_renderPhase02( this, lodCamera, firstRq, lastRq, includeOverlays );
 
         // Listener list may have changed
         ListenerList listenersCopy = mListeners;
 
-        //notify postrender scene
-        for (ListenerList::iterator i = listenersCopy.begin(); i != listenersCopy.end(); ++i)
+        // notify postrender scene
+        for( ListenerList::iterator i = listenersCopy.begin(); i != listenersCopy.end(); ++i )
         {
-            (*i)->cameraPostRenderScene(this);
+            ( *i )->cameraPostRenderScene( this );
         }
-        OgreProfileEndGPUEvent("Camera: " + getName());
+        OgreProfileEndGPUEvent( "Camera: " + getName() );
     }
     //---------------------------------------------------------------------
-    void Camera::addListener(Listener* l)
+    void Camera::addListener( Listener *l )
     {
-        if (std::find(mListeners.begin(), mListeners.end(), l) == mListeners.end())
-            mListeners.push_back(l);
+        if( std::find( mListeners.begin(), mListeners.end(), l ) == mListeners.end() )
+            mListeners.push_back( l );
     }
     //---------------------------------------------------------------------
-    void Camera::removeListener(Listener* l)
+    void Camera::removeListener( Listener *l )
     {
-        ListenerList::iterator i = std::find(mListeners.begin(), mListeners.end(), l);
-        if (i != mListeners.end())
-            mListeners.erase(i);
+        ListenerList::iterator i = std::find( mListeners.begin(), mListeners.end(), l );
+        if( i != mListeners.end() )
+            mListeners.erase( i );
     }
     //-----------------------------------------------------------------------
-    std::ostream& operator<<( std::ostream& o, const Camera& c )
+    std::ostream &operator<<( std::ostream &o, const Camera &c )
     {
         o << "Camera(Name='" << c.mName << "', pos=" << c.mPosition;
-        Vector3 dir(c.mOrientation*Vector3(0,0,-1));
+        Vector3 dir( c.mOrientation * Vector3( 0, 0, -1 ) );
         o << ", direction=" << dir << ",near=" << c.mNearDist;
         o << ", far=" << c.mFarDist << ", FOVy=" << c.mFOVy.valueDegrees();
         o << ", aspect=" << c.mAspect << ", ";
@@ -453,40 +429,40 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Camera::setFixedYawAxis(bool useFixed, const Vector3& fixedAxis)
+    void Camera::setFixedYawAxis( bool useFixed, const Vector3 &fixedAxis )
     {
         mYawFixed = useFixed;
         mYawFixedAxis = fixedAxis;
     }
 
     //-----------------------------------------------------------------------
-    void Camera::_notifyRenderingMetrics( const RenderingMetrics& metrics ) { mLastRenderingMetrics = metrics; }
+    void Camera::_notifyRenderingMetrics( const RenderingMetrics &metrics )
+    {
+        mLastRenderingMetrics = metrics;
+    }
     //-----------------------------------------------------------------------
-    const RenderingMetrics& Camera::_getRenderingMetrics() const { return mLastRenderingMetrics; }
+    const RenderingMetrics &Camera::_getRenderingMetrics() const { return mLastRenderingMetrics; }
     //-----------------------------------------------------------------------
     size_t Camera::_getNumRenderedFaces() const { return mLastRenderingMetrics.mFaceCount; }
     //-----------------------------------------------------------------------
     size_t Camera::_getNumRenderedBatches() const { return mLastRenderingMetrics.mBatchCount; }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getOrientation() const
-    {
-        return mOrientation;
-    }
+    const Quaternion &Camera::getOrientation() const { return mOrientation; }
     //-----------------------------------------------------------------------
-    void Camera::setOrientation(const Quaternion& q)
+    void Camera::setOrientation( const Quaternion &q )
     {
         mOrientation = q;
         mOrientation.normalise();
         invalidateView();
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getDerivedOrientation() const
+    const Quaternion &Camera::getDerivedOrientation() const
     {
         updateView();
         return mDerivedOrientation;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getDerivedPosition() const
+    const Vector3 &Camera::getDerivedPosition() const
     {
         updateView();
         return mDerivedPosition;
@@ -511,13 +487,13 @@ namespace Ogre {
         return mDerivedOrientation * Vector3::UNIT_X;
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getRealOrientation() const
+    const Quaternion &Camera::getRealOrientation() const
     {
         updateView();
         return mRealOrientation;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getRealPosition() const
+    const Vector3 &Camera::getRealPosition() const
     {
         updateView();
         return mRealPosition;
@@ -542,27 +518,20 @@ namespace Ogre {
         return mRealOrientation * Vector3::UNIT_X;
     }
     //-----------------------------------------------------------------------
-    void Camera::getWorldTransforms(Matrix4* mat) const 
+    void Camera::getWorldTransforms( Matrix4 *mat ) const
     {
         updateView();
 
-        mat->makeTransform(
-                mDerivedPosition,
-                mParentNode->_getDerivedScale(),
-                mDerivedOrientation);
+        mat->makeTransform( mDerivedPosition, mParentNode->_getDerivedScale(), mDerivedOrientation );
     }
     //-----------------------------------------------------------------------
-    const String& Camera::getMovableType() const
-    {
-        return msMovableType;
-    }
+    const String &Camera::getMovableType() const { return msMovableType; }
     //-----------------------------------------------------------------------
-    void Camera::setAutoTracking(bool enabled, SceneNode* const target, 
-        const Vector3& offset)
+    void Camera::setAutoTracking( bool enabled, SceneNode *const target, const Vector3 &offset )
     {
-        if (enabled)
+        if( enabled )
         {
-            assert (target != 0 && "target cannot be a null pointer if tracking is enabled");
+            assert( target != 0 && "target cannot be a null pointer if tracking is enabled" );
             mAutoTrackTarget = target;
             mAutoTrackOffset = offset;
         }
@@ -575,160 +544,143 @@ namespace Ogre {
     void Camera::_autoTrack()
     {
         // NB assumes that all scene nodes have been updated
-        if (mAutoTrackTarget)
+        if( mAutoTrackTarget )
         {
-            lookAt(mAutoTrackTarget->_getFullTransform().transformAffine(mAutoTrackOffset));
+            lookAt( mAutoTrackTarget->_getFullTransform().transformAffine( mAutoTrackOffset ) );
         }
     }
     //-----------------------------------------------------------------------
-    void Camera::setLodBias(Real factor)
+    void Camera::setLodBias( Real factor )
     {
-        assert(factor > 0.0f && "Bias factor must be > 0!");
+        assert( factor > 0.0f && "Bias factor must be > 0!" );
         mSceneLodFactor = factor;
         mSceneLodFactorInv = 1.0f / factor;
     }
     //-----------------------------------------------------------------------
-    Real Camera::getLodBias() const
-    {
-        return mSceneLodFactor;
-    }
+    Real Camera::getLodBias() const { return mSceneLodFactor; }
     //-----------------------------------------------------------------------
-    Real Camera::_getLodBiasInverse() const
-    {
-        return mSceneLodFactorInv;
-    }
+    Real Camera::_getLodBiasInverse() const { return mSceneLodFactorInv; }
     //-----------------------------------------------------------------------
-    void Camera::setLodCamera(const Camera* lodCam)
+    void Camera::setLodCamera( const Camera *lodCam )
     {
-        if (lodCam == this)
+        if( lodCam == this )
             mLodCamera = 0;
         else
             mLodCamera = lodCam;
     }
     //---------------------------------------------------------------------
-    const Camera* Camera::getLodCamera() const
-    {
-        return mLodCamera? mLodCamera : this;
-    }
+    const Camera *Camera::getLodCamera() const { return mLodCamera ? mLodCamera : this; }
     //-----------------------------------------------------------------------
-    Ray Camera::getCameraToViewportRay(Real screenX, Real screenY) const
+    Ray Camera::getCameraToViewportRay( Real screenX, Real screenY ) const
     {
         Ray ret;
-        getCameraToViewportRay(screenX, screenY, &ret);
+        getCameraToViewportRay( screenX, screenY, &ret );
         return ret;
     }
     //---------------------------------------------------------------------
-    void Camera::getCameraToViewportRay(Real screenX, Real screenY, Ray* outRay) const
+    void Camera::getCameraToViewportRay( Real screenX, Real screenY, Ray *outRay ) const
     {
-        Matrix4 inverseVP = (getProjectionMatrix() * getViewMatrix(true)).inverse();
+        Matrix4 inverseVP = ( getProjectionMatrix() * getViewMatrix( true ) ).inverse();
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         // We need to convert screen point to our oriented viewport (temp solution)
-        Real tX = screenX; Real a = getOrientationMode() * Math::HALF_PI;
-        screenX = Math::Cos(a) * (tX-0.5f) + Math::Sin(a) * (screenY-0.5f) + 0.5f;
-        screenY = Math::Sin(a) * (tX-0.5f) + Math::Cos(a) * (screenY-0.5f) + 0.5f;
+        Real tX = screenX;
+        Real a = getOrientationMode() * Math::HALF_PI;
+        screenX = Math::Cos( a ) * ( tX - 0.5f ) + Math::Sin( a ) * ( screenY - 0.5f ) + 0.5f;
+        screenY = Math::Sin( a ) * ( tX - 0.5f ) + Math::Cos( a ) * ( screenY - 0.5f ) + 0.5f;
         if( (int)getOrientationMode() & 1 )
             screenY = 1.f - screenY;
 #endif
 
-        Real nx = (2.0f * screenX) - 1.0f;
-        Real ny = 1.0f - (2.0f * screenY);
-        Vector3 nearPoint(nx, ny, -1.f);
+        Real nx = ( 2.0f * screenX ) - 1.0f;
+        Real ny = 1.0f - ( 2.0f * screenY );
+        Vector3 nearPoint( nx, ny, -1.f );
         // Use midPoint rather than far point to avoid issues with infinite projection
-        Vector3 midPoint (nx, ny,  0.0f);
+        Vector3 midPoint( nx, ny, 0.0f );
 
         // Get ray origin and ray target on near plane in world space
         Vector3 rayOrigin, rayTarget;
-        
+
         rayOrigin = inverseVP * nearPoint;
         rayTarget = inverseVP * midPoint;
 
         Vector3 rayDirection = rayTarget - rayOrigin;
         rayDirection.normalise();
 
-        outRay->setOrigin(rayOrigin);
-        outRay->setDirection(rayDirection);
-    } 
+        outRay->setOrigin( rayOrigin );
+        outRay->setDirection( rayDirection );
+    }
     //---------------------------------------------------------------------
-    PlaneBoundedVolume Camera::getCameraToViewportBoxVolume(Real screenLeft, 
-        Real screenTop, Real screenRight, Real screenBottom, bool includeFarPlane)
+    PlaneBoundedVolume Camera::getCameraToViewportBoxVolume( Real screenLeft, Real screenTop,
+                                                             Real screenRight, Real screenBottom,
+                                                             bool includeFarPlane )
     {
         PlaneBoundedVolume vol;
-        getCameraToViewportBoxVolume(screenLeft, screenTop, screenRight, screenBottom, 
-            &vol, includeFarPlane);
+        getCameraToViewportBoxVolume( screenLeft, screenTop, screenRight, screenBottom, &vol,
+                                      includeFarPlane );
         return vol;
-
     }
     //---------------------------------------------------------------------()
-    void Camera::getCameraToViewportBoxVolume(Real screenLeft, 
-        Real screenTop, Real screenRight, Real screenBottom, 
-        PlaneBoundedVolume* outVolume, bool includeFarPlane)
+    void Camera::getCameraToViewportBoxVolume( Real screenLeft, Real screenTop, Real screenRight,
+                                               Real screenBottom, PlaneBoundedVolume *outVolume,
+                                               bool includeFarPlane )
     {
         outVolume->planes.clear();
 
-        if (mProjType == PT_PERSPECTIVE)
+        if( mProjType == PT_PERSPECTIVE )
         {
-
             // Use the corner rays to generate planes
-            Ray ul = getCameraToViewportRay(screenLeft, screenTop);
-            Ray ur = getCameraToViewportRay(screenRight, screenTop);
-            Ray bl = getCameraToViewportRay(screenLeft, screenBottom);
-            Ray br = getCameraToViewportRay(screenRight, screenBottom);
-
+            Ray ul = getCameraToViewportRay( screenLeft, screenTop );
+            Ray ur = getCameraToViewportRay( screenRight, screenTop );
+            Ray bl = getCameraToViewportRay( screenLeft, screenBottom );
+            Ray br = getCameraToViewportRay( screenRight, screenBottom );
 
             Vector3 normal;
             // top plane
-            normal = ul.getDirection().crossProduct(ur.getDirection());
+            normal = ul.getDirection().crossProduct( ur.getDirection() );
             normal.normalise();
-            outVolume->planes.push_back(
-                Plane(normal, getDerivedPosition()));
+            outVolume->planes.push_back( Plane( normal, getDerivedPosition() ) );
 
             // right plane
-            normal = ur.getDirection().crossProduct(br.getDirection());
+            normal = ur.getDirection().crossProduct( br.getDirection() );
             normal.normalise();
-            outVolume->planes.push_back(
-                Plane(normal, getDerivedPosition()));
+            outVolume->planes.push_back( Plane( normal, getDerivedPosition() ) );
 
             // bottom plane
-            normal = br.getDirection().crossProduct(bl.getDirection());
+            normal = br.getDirection().crossProduct( bl.getDirection() );
             normal.normalise();
-            outVolume->planes.push_back(
-                Plane(normal, getDerivedPosition()));
+            outVolume->planes.push_back( Plane( normal, getDerivedPosition() ) );
 
             // left plane
-            normal = bl.getDirection().crossProduct(ul.getDirection());
+            normal = bl.getDirection().crossProduct( ul.getDirection() );
             normal.normalise();
-            outVolume->planes.push_back(
-                Plane(normal, getDerivedPosition()));
-
+            outVolume->planes.push_back( Plane( normal, getDerivedPosition() ) );
         }
         else
         {
             // ortho planes are parallel to frustum planes
 
-            Ray ul = getCameraToViewportRay(screenLeft, screenTop);
-            Ray br = getCameraToViewportRay(screenRight, screenBottom);
+            Ray ul = getCameraToViewportRay( screenLeft, screenTop );
+            Ray br = getCameraToViewportRay( screenRight, screenBottom );
 
             updateFrustumPlanes();
             outVolume->planes.push_back(
-                Plane(mFrustumPlanes[FRUSTUM_PLANE_TOP].normal, ul.getOrigin()));
+                Plane( mFrustumPlanes[FRUSTUM_PLANE_TOP].normal, ul.getOrigin() ) );
             outVolume->planes.push_back(
-                Plane(mFrustumPlanes[FRUSTUM_PLANE_RIGHT].normal, br.getOrigin()));
+                Plane( mFrustumPlanes[FRUSTUM_PLANE_RIGHT].normal, br.getOrigin() ) );
             outVolume->planes.push_back(
-                Plane(mFrustumPlanes[FRUSTUM_PLANE_BOTTOM].normal, br.getOrigin()));
+                Plane( mFrustumPlanes[FRUSTUM_PLANE_BOTTOM].normal, br.getOrigin() ) );
             outVolume->planes.push_back(
-                Plane(mFrustumPlanes[FRUSTUM_PLANE_LEFT].normal, ul.getOrigin()));
-            
-
+                Plane( mFrustumPlanes[FRUSTUM_PLANE_LEFT].normal, ul.getOrigin() ) );
         }
 
         // near & far plane applicable to both projection types
-        outVolume->planes.push_back(getFrustumPlane(FRUSTUM_PLANE_NEAR));
-        if (includeFarPlane)
-            outVolume->planes.push_back(getFrustumPlane(FRUSTUM_PLANE_FAR));
+        outVolume->planes.push_back( getFrustumPlane( FRUSTUM_PLANE_NEAR ) );
+        if( includeFarPlane )
+            outVolume->planes.push_back( getFrustumPlane( FRUSTUM_PLANE_FAR ) );
     }
     // -------------------------------------------------------------------
-    void Camera::setWindow (Real Left, Real Top, Real Right, Real Bottom)
+    void Camera::setWindow( Real Left, Real Top, Real Right, Real Bottom )
     {
         mWLeft = Left;
         mWTop = Top;
@@ -739,87 +691,77 @@ namespace Ogre {
         mRecalcWindow = true;
     }
     // -------------------------------------------------------------------
-    void Camera::resetWindow ()
-    {
-        mWindowSet = false;
-    }
+    void Camera::resetWindow() { mWindowSet = false; }
     // -------------------------------------------------------------------
     void Camera::setWindowImpl() const
     {
-        if (!mWindowSet || !mRecalcWindow)
+        if( !mWindowSet || !mRecalcWindow )
             return;
 
         // Calculate general projection parameters
         Real vpLeft, vpRight, vpBottom, vpTop;
-        calcProjectionParameters(vpLeft, vpRight, vpBottom, vpTop);
+        calcProjectionParameters( vpLeft, vpRight, vpBottom, vpTop );
 
         Real vpWidth = vpRight - vpLeft;
         Real vpHeight = vpTop - vpBottom;
 
-        Real wvpLeft   = vpLeft + mWLeft * vpWidth;
-        Real wvpRight  = vpLeft + mWRight * vpWidth;
-        Real wvpTop    = vpTop - mWTop * vpHeight;
+        Real wvpLeft = vpLeft + mWLeft * vpWidth;
+        Real wvpRight = vpLeft + mWRight * vpWidth;
+        Real wvpTop = vpTop - mWTop * vpHeight;
         Real wvpBottom = vpTop - mWBottom * vpHeight;
 
-        Vector3 vp_ul (wvpLeft, wvpTop, -mNearDist);
-        Vector3 vp_ur (wvpRight, wvpTop, -mNearDist);
-        Vector3 vp_bl (wvpLeft, wvpBottom, -mNearDist);
-        Vector3 vp_br (wvpRight, wvpBottom, -mNearDist);
+        Vector3 vp_ul( wvpLeft, wvpTop, -mNearDist );
+        Vector3 vp_ur( wvpRight, wvpTop, -mNearDist );
+        Vector3 vp_bl( wvpLeft, wvpBottom, -mNearDist );
+        Vector3 vp_br( wvpRight, wvpBottom, -mNearDist );
 
         Matrix4 inv = mViewMatrix.inverseAffine();
 
-        Vector3 vw_ul = inv.transformAffine(vp_ul);
-        Vector3 vw_ur = inv.transformAffine(vp_ur);
-        Vector3 vw_bl = inv.transformAffine(vp_bl);
-        Vector3 vw_br = inv.transformAffine(vp_br);
+        Vector3 vw_ul = inv.transformAffine( vp_ul );
+        Vector3 vw_ur = inv.transformAffine( vp_ur );
+        Vector3 vw_bl = inv.transformAffine( vp_bl );
+        Vector3 vw_br = inv.transformAffine( vp_br );
 
         mWindowClipPlanes.clear();
-        if (mProjType == PT_PERSPECTIVE)
+        if( mProjType == PT_PERSPECTIVE )
         {
             Vector3 position = getPositionForViewUpdate();
-            mWindowClipPlanes.push_back(Plane(position, vw_bl, vw_ul));
-            mWindowClipPlanes.push_back(Plane(position, vw_ul, vw_ur));
-            mWindowClipPlanes.push_back(Plane(position, vw_ur, vw_br));
-            mWindowClipPlanes.push_back(Plane(position, vw_br, vw_bl));
+            mWindowClipPlanes.push_back( Plane( position, vw_bl, vw_ul ) );
+            mWindowClipPlanes.push_back( Plane( position, vw_ul, vw_ur ) );
+            mWindowClipPlanes.push_back( Plane( position, vw_ur, vw_br ) );
+            mWindowClipPlanes.push_back( Plane( position, vw_br, vw_bl ) );
         }
         else
         {
-            Vector3 x_axis(inv[0][0], inv[0][1], inv[0][2]);
-            Vector3 y_axis(inv[1][0], inv[1][1], inv[1][2]);
+            Vector3 x_axis( inv[0][0], inv[0][1], inv[0][2] );
+            Vector3 y_axis( inv[1][0], inv[1][1], inv[1][2] );
             x_axis.normalise();
             y_axis.normalise();
-            mWindowClipPlanes.push_back(Plane( x_axis, vw_bl));
-            mWindowClipPlanes.push_back(Plane(-x_axis, vw_ur));
-            mWindowClipPlanes.push_back(Plane( y_axis, vw_bl));
-            mWindowClipPlanes.push_back(Plane(-y_axis, vw_ur));
+            mWindowClipPlanes.push_back( Plane( x_axis, vw_bl ) );
+            mWindowClipPlanes.push_back( Plane( -x_axis, vw_ur ) );
+            mWindowClipPlanes.push_back( Plane( y_axis, vw_bl ) );
+            mWindowClipPlanes.push_back( Plane( -y_axis, vw_ur ) );
         }
 
         mRecalcWindow = false;
-
     }
     // -------------------------------------------------------------------
-    const PlaneList& Camera::getWindowPlanes() const
+    const PlaneList &Camera::getWindowPlanes() const
     {
         updateView();
         setWindowImpl();
         return mWindowClipPlanes;
     }
     //-----------------------------------------------------------------------
-    const Vector3& Camera::getPositionForViewUpdate() const
+    const Vector3 &Camera::getPositionForViewUpdate() const
     {
         // Note no update, because we're calling this from the update!
         return mRealPosition;
     }
     //-----------------------------------------------------------------------
-    const Quaternion& Camera::getOrientationForViewUpdate() const
-    {
-        return mRealOrientation;
-    }
+    const Quaternion &Camera::getOrientationForViewUpdate() const { return mRealOrientation; }
     //-----------------------------------------------------------------------
-    void Camera::setVrData( VrData *vrData )
-    {
-        mVrData = vrData;
-    }
+    void Camera::setVrData( VrData *vrData ) { mVrData = vrData; }
     //-----------------------------------------------------------------------
     Matrix4 Camera::getVrViewMatrix( size_t eyeIdx ) const
     {
@@ -837,55 +779,49 @@ namespace Ogre {
             return getProjectionMatrixWithRSDepth();
     }
     //-----------------------------------------------------------------------
-    bool Camera::getAutoAspectRatio() const
-    {
-        return mAutoAspectRatio;
-    }
+    bool Camera::getAutoAspectRatio() const { return mAutoAspectRatio; }
     //-----------------------------------------------------------------------
-    void Camera::setAutoAspectRatio(bool autoratio)
-    {
-        mAutoAspectRatio = autoratio;
-    }
+    void Camera::setAutoAspectRatio( bool autoratio ) { mAutoAspectRatio = autoratio; }
     //-----------------------------------------------------------------------
-    bool Camera::isVisible(const AxisAlignedBox& bound, FrustumPlane* culledBy) const
+    bool Camera::isVisible( const AxisAlignedBox &bound, FrustumPlane *culledBy ) const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
-            return mCullFrustum->isVisible(bound, culledBy);
+            return mCullFrustum->isVisible( bound, culledBy );
         }
         else
         {
-            return Frustum::isVisible(bound, culledBy);
+            return Frustum::isVisible( bound, culledBy );
         }
     }
     //-----------------------------------------------------------------------
-    bool Camera::isVisible(const Sphere& bound, FrustumPlane* culledBy) const
+    bool Camera::isVisible( const Sphere &bound, FrustumPlane *culledBy ) const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
-            return mCullFrustum->isVisible(bound, culledBy);
+            return mCullFrustum->isVisible( bound, culledBy );
         }
         else
         {
-            return Frustum::isVisible(bound, culledBy);
+            return Frustum::isVisible( bound, culledBy );
         }
     }
     //-----------------------------------------------------------------------
-    bool Camera::isVisible(const Vector3& vert, FrustumPlane* culledBy) const
+    bool Camera::isVisible( const Vector3 &vert, FrustumPlane *culledBy ) const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
-            return mCullFrustum->isVisible(vert, culledBy);
+            return mCullFrustum->isVisible( vert, culledBy );
         }
         else
         {
-            return Frustum::isVisible(vert, culledBy);
+            return Frustum::isVisible( vert, culledBy );
         }
     }
     //-----------------------------------------------------------------------
-    const Vector3* Camera::getWorldSpaceCorners() const
+    const Vector3 *Camera::getWorldSpaceCorners() const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
             return mCullFrustum->getWorldSpaceCorners();
         }
@@ -895,34 +831,34 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const Plane& Camera::getFrustumPlane( unsigned short plane ) const
+    const Plane &Camera::getFrustumPlane( unsigned short plane ) const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
-            return mCullFrustum->getFrustumPlane(plane);
+            return mCullFrustum->getFrustumPlane( plane );
         }
         else
         {
-            return Frustum::getFrustumPlane(plane);
+            return Frustum::getFrustumPlane( plane );
         }
     }
     //-----------------------------------------------------------------------
-    bool Camera::projectSphere(const Sphere& sphere, 
-        Real* left, Real* top, Real* right, Real* bottom) const
+    bool Camera::projectSphere( const Sphere &sphere, Real *left, Real *top, Real *right,
+                                Real *bottom ) const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
-            return mCullFrustum->projectSphere(sphere, left, top, right, bottom);
+            return mCullFrustum->projectSphere( sphere, left, top, right, bottom );
         }
         else
         {
-            return Frustum::projectSphere(sphere, left, top, right, bottom);
+            return Frustum::projectSphere( sphere, left, top, right, bottom );
         }
     }
     //-----------------------------------------------------------------------
     Real Camera::getNearClipDistance() const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
             return mCullFrustum->getNearClipDistance();
         }
@@ -934,7 +870,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Real Camera::getFarClipDistance() const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
             return mCullFrustum->getFarClipDistance();
         }
@@ -944,9 +880,9 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const Matrix4& Camera::getViewMatrix() const
+    const Matrix4 &Camera::getViewMatrix() const
     {
-        if (mCullFrustum)
+        if( mCullFrustum )
         {
             return mCullFrustum->getViewMatrix();
         }
@@ -956,9 +892,9 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    const Matrix4& Camera::getViewMatrix(bool ownFrustumOnly) const
+    const Matrix4 &Camera::getViewMatrix( bool ownFrustumOnly ) const
     {
-        if (ownFrustumOnly)
+        if( ownFrustumOnly )
         {
             return Frustum::getViewMatrix();
         }
@@ -979,71 +915,74 @@ namespace Ogre {
     //| coordinate system in which this is true.            |
     //|_____________________________________________________|
     //
-    vector<Vector4>::type Camera::getRayForwardIntersect(const Vector3& anchor, const Vector3 *dir, Real planeOffset) const
+    vector<Vector4>::type Camera::getRayForwardIntersect( const Vector3 &anchor, const Vector3 *dir,
+                                                          Real planeOffset ) const
     {
         vector<Vector4>::type res;
 
-        if(!dir)
+        if( !dir )
             return res;
 
-        int infpt[4] = {0, 0, 0, 0}; // 0=finite, 1=infinite, 2=straddles infinity
+        int infpt[4] = { 0, 0, 0, 0 };  // 0=finite, 1=infinite, 2=straddles infinity
         Vector3 vec[4];
 
         // find how much the anchor point must be displaced in the plane's
         // constant variable
         Real delta = planeOffset - anchor.z;
 
-        // now set the intersection point and note whether it is a 
+        // now set the intersection point and note whether it is a
         // point at infinity or straddles infinity
         unsigned int i;
-        for (i=0; i<4; i++)
+        for( i = 0; i < 4; i++ )
         {
             Real test = dir[i].z * delta;
-            if (test == 0.0) {
+            if( test == 0.0 )
+            {
                 vec[i] = dir[i];
                 infpt[i] = 1;
             }
-            else {
+            else
+            {
                 Real lambda = delta / dir[i].z;
-                vec[i] = anchor + (lambda * dir[i]);
-                if(test < 0.0)
+                vec[i] = anchor + ( lambda * dir[i] );
+                if( test < 0.0 )
                     infpt[i] = 2;
             }
         }
 
-        for (i=0; i<4; i++)
+        for( i = 0; i < 4; i++ )
         {
             // store the finite intersection points
-            if (infpt[i] == 0)
-                res.push_back(Vector4(vec[i].x, vec[i].y, vec[i].z, 1.0));
+            if( infpt[i] == 0 )
+                res.push_back( Vector4( vec[i].x, vec[i].y, vec[i].z, 1.0 ) );
             else
             {
                 // handle the infinite points of intersection;
-                // cases split up into the possible frustum planes 
+                // cases split up into the possible frustum planes
                 // pieces which may contain a finite intersection point
-                int nextind = (i+1) % 4;
-                int prevind = (i+3) % 4;
-                if ((infpt[prevind] == 0) || (infpt[nextind] == 0))
+                int nextind = ( i + 1 ) % 4;
+                int prevind = ( i + 3 ) % 4;
+                if( ( infpt[prevind] == 0 ) || ( infpt[nextind] == 0 ) )
                 {
-                    if (infpt[i] == 1)
-                        res.push_back(Vector4(vec[i].x, vec[i].y, vec[i].z, 0.0));
+                    if( infpt[i] == 1 )
+                        res.push_back( Vector4( vec[i].x, vec[i].y, vec[i].z, 0.0 ) );
                     else
                     {
                         // handle the intersection points that straddle infinity (back-project)
-                        if(infpt[prevind] == 0) 
+                        if( infpt[prevind] == 0 )
                         {
                             Vector3 temp = vec[prevind] - vec[i];
-                            res.push_back(Vector4(temp.x, temp.y, temp.z, 0.0));
+                            res.push_back( Vector4( temp.x, temp.y, temp.z, 0.0 ) );
                         }
-                        if(infpt[nextind] == 0)
+                        if( infpt[nextind] == 0 )
                         {
                             Vector3 temp = vec[nextind] - vec[i];
-                            res.push_back(Vector4(temp.x, temp.y, temp.z, 0.0));
+                            res.push_back( Vector4( temp.x, temp.y, temp.z, 0.0 ) );
                         }
                     }
-                } // end if we need to add an intersection point to the list
-            } // end if infinite point needs to be considered
-        } // end loop over frustun corners
+                }  // end if we need to add an intersection point to the list
+            }      // end if infinite point needs to be considered
+        }          // end loop over frustun corners
 
         // we end up with either 0, 3, 4, or 5 intersection points
 
@@ -1062,9 +1001,9 @@ namespace Ogre {
     //| line at infinity.                                   |
     //|_____________________________________________________|
     //
-    void Camera::forwardIntersect(const Plane& worldPlane, vector<Vector4>::type* intersect3d) const
+    void Camera::forwardIntersect( const Plane &worldPlane, vector<Vector4>::type *intersect3d ) const
     {
-        if(!intersect3d)
+        if( !intersect3d )
             return;
 
         Vector3 trCorner = getWorldSpaceCorners()[0];
@@ -1074,60 +1013,56 @@ namespace Ogre {
 
         // need some sort of rotation that will bring the plane normal to the z axis
         Plane pval = worldPlane;
-        if(pval.normal.z < 0.0)
+        if( pval.normal.z < 0.0 )
         {
             pval.normal *= -1.0;
             pval.d *= -1.0;
         }
-        Quaternion invPlaneRot = pval.normal.getRotationTo(Vector3::UNIT_Z);
+        Quaternion invPlaneRot = pval.normal.getRotationTo( Vector3::UNIT_Z );
 
         // get rotated light
         Vector3 lPos = invPlaneRot * getDerivedPosition();
         Vector3 vec[4];
         vec[0] = invPlaneRot * trCorner - lPos;
-        vec[1] = invPlaneRot * tlCorner - lPos; 
-        vec[2] = invPlaneRot * blCorner - lPos; 
-        vec[3] = invPlaneRot * brCorner - lPos; 
+        vec[1] = invPlaneRot * tlCorner - lPos;
+        vec[2] = invPlaneRot * blCorner - lPos;
+        vec[3] = invPlaneRot * brCorner - lPos;
 
         // compute intersection points on plane
-        vector<Vector4>::type iPnt = getRayForwardIntersect(lPos, vec, -pval.d);
-
+        vector<Vector4>::type iPnt = getRayForwardIntersect( lPos, vec, -pval.d );
 
         // return wanted data
-        if(intersect3d) 
+        if( intersect3d )
         {
             Quaternion planeRot = invPlaneRot.Inverse();
-            (*intersect3d).clear();
-            for(unsigned int i=0; i<iPnt.size(); i++)
+            ( *intersect3d ).clear();
+            for( unsigned int i = 0; i < iPnt.size(); i++ )
             {
-                Vector3 intersection = planeRot * Vector3(iPnt[i].x, iPnt[i].y, iPnt[i].z);
-                (*intersect3d).push_back(Vector4(intersection.x, intersection.y, intersection.z, iPnt[i].w));
+                Vector3 intersection = planeRot * Vector3( iPnt[i].x, iPnt[i].y, iPnt[i].z );
+                ( *intersect3d )
+                    .push_back( Vector4( intersection.x, intersection.y, intersection.z, iPnt[i].w ) );
             }
         }
     }
     //-----------------------------------------------------------------------
-    void Camera::synchroniseBaseSettingsWith(const Camera* cam)
+    void Camera::synchroniseBaseSettingsWith( const Camera *cam )
     {
-        this->setPosition(cam->getPosition());
-        this->setProjectionType(cam->getProjectionType());
-        this->setOrientation(cam->getOrientation());
-        this->setAspectRatio(cam->getAspectRatio());
-        this->setNearClipDistance(cam->getNearClipDistance());
-        this->setFarClipDistance(cam->getFarClipDistance());
-        this->setUseRenderingDistance(cam->getUseRenderingDistance());
-        this->setFOVy(cam->getFOVy());
-        this->setFocalLength(cam->getFocalLength());
+        this->setPosition( cam->getPosition() );
+        this->setProjectionType( cam->getProjectionType() );
+        this->setOrientation( cam->getOrientation() );
+        this->setAspectRatio( cam->getAspectRatio() );
+        this->setNearClipDistance( cam->getNearClipDistance() );
+        this->setFarClipDistance( cam->getFarClipDistance() );
+        this->setUseRenderingDistance( cam->getUseRenderingDistance() );
+        this->setFOVy( cam->getFOVy() );
+        this->setFocalLength( cam->getFocalLength() );
 
         // Don't do these, they're not base settings and can cause referencing issues
-        //this->setLodCamera(cam->getLodCamera());
-        //this->setCullingFrustum(cam->getCullingFrustum());
-
+        // this->setLodCamera(cam->getLodCamera());
+        // this->setCullingFrustum(cam->getCullingFrustum());
     }
     //-----------------------------------------------------------------------
-    void Camera::_setNeedsDepthClamp( bool bNeedsDepthClamp )
-    {
-        mNeedsDepthClamp = bNeedsDepthClamp;
-    }
+    void Camera::_setNeedsDepthClamp( bool bNeedsDepthClamp ) { mNeedsDepthClamp = bNeedsDepthClamp; }
     //-----------------------------------------------------------------------
     void Camera::_resetRenderedRqs( size_t numRqs )
     {
@@ -1138,9 +1073,9 @@ namespace Ogre {
     void Camera::_setRenderedRqs( size_t rqStart, size_t rqEnd )
     {
         assert( rqStart <= rqEnd );
-        for( size_t i=rqStart; i<rqEnd; ++i )
+        for( size_t i = rqStart; i < rqEnd; ++i )
             mRenderedRqs[i] = true;
     }
     //-----------------------------------------------------------------------
     Camera::Listener::~Listener() {}
-} // namespace Ogre
+}  // namespace Ogre

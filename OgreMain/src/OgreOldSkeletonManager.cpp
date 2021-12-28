@@ -34,50 +34,49 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    template<> v1::OldSkeletonManager* Singleton<v1::OldSkeletonManager>::msSingleton = 0;
-namespace v1
-{
-    OldSkeletonManager* OldSkeletonManager::getSingletonPtr()
+    template <>
+    v1::OldSkeletonManager *Singleton<v1::OldSkeletonManager>::msSingleton = 0;
+    namespace v1
     {
-        return msSingleton;
-    }
-    OldSkeletonManager& OldSkeletonManager::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
-    }
-    //-----------------------------------------------------------------------
-    OldSkeletonManager::OldSkeletonManager()
-    {
-        mLoadOrder = 300.0f;
-        mResourceType = "OldSkeleton";
+        OldSkeletonManager *OldSkeletonManager::getSingletonPtr() { return msSingleton; }
+        OldSkeletonManager &OldSkeletonManager::getSingleton()
+        {
+            assert( msSingleton );
+            return ( *msSingleton );
+        }
+        //-----------------------------------------------------------------------
+        OldSkeletonManager::OldSkeletonManager()
+        {
+            mLoadOrder = 300.0f;
+            mResourceType = "OldSkeleton";
 
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
-    }
-    //-----------------------------------------------------------------------
-    SkeletonPtr OldSkeletonManager::getByName(const String& name, const String& groupName)
-    {
-        return getResourceByName(name, groupName).staticCast<Skeleton>();
-    }
-    //-----------------------------------------------------------------------
-    SkeletonPtr OldSkeletonManager::create (const String& name, const String& group,
-                                    bool isManual, ManualResourceLoader* loader,
-                                    const NameValuePairList* createParams)
-    {
-        return createResource(name,group,isManual,loader,createParams).staticCast<Skeleton>();
-    }
-    //-----------------------------------------------------------------------
-    OldSkeletonManager::~OldSkeletonManager()
-    {
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
-    }
-    //-----------------------------------------------------------------------
-    Resource* OldSkeletonManager::createImpl(const String& name, ResourceHandle handle,
-        const String& group, bool isManual, ManualResourceLoader* loader, 
-        const NameValuePairList* createParams)
-    {
-        return OGRE_NEW Skeleton(this, name, handle, group, isManual, loader);
-    }
+            ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
+        }
+        //-----------------------------------------------------------------------
+        SkeletonPtr OldSkeletonManager::getByName( const String &name, const String &groupName )
+        {
+            return getResourceByName( name, groupName ).staticCast<Skeleton>();
+        }
+        //-----------------------------------------------------------------------
+        SkeletonPtr OldSkeletonManager::create( const String &name, const String &group, bool isManual,
+                                                ManualResourceLoader *loader,
+                                                const NameValuePairList *createParams )
+        {
+            return createResource( name, group, isManual, loader, createParams ).staticCast<Skeleton>();
+        }
+        //-----------------------------------------------------------------------
+        OldSkeletonManager::~OldSkeletonManager()
+        {
+            ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
+        }
+        //-----------------------------------------------------------------------
+        Resource *OldSkeletonManager::createImpl( const String &name, ResourceHandle handle,
+                                                  const String &group, bool isManual,
+                                                  ManualResourceLoader *loader,
+                                                  const NameValuePairList *createParams )
+        {
+            return OGRE_NEW Skeleton( this, name, handle, group, isManual, loader );
+        }
 
-
-}
-}
+    }  // namespace v1
+}  // namespace Ogre

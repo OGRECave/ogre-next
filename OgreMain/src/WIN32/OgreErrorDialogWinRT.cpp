@@ -33,12 +33,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    ErrorDialog::ErrorDialog()
-    {
-    }
+    ErrorDialog::ErrorDialog() {}
 
-    void ErrorDialog::display(const String& errorMessage, String logName)
+    void ErrorDialog::display( const String &errorMessage, String logName )
     {
         std::cout << "*** ERROR: " << errorMessage << std::endl;
     }
-}
+}  // namespace Ogre

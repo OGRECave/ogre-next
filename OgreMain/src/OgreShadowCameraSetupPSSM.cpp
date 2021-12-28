@@ -5,7 +5,7 @@ This source file is part of OGRE-Next
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
-Copyright (c) 2006 Matthias Fink, netAllied GmbH <matthias.fink@web.de>                             
+Copyright (c) 2006 Matthias Fink, netAllied GmbH <matthias.fink@web.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,80 +36,84 @@ THE SOFTWARE.
 namespace Ogre
 {
     //---------------------------------------------------------------------
-    PSSMShadowCameraSetup::PSSMShadowCameraSetup()
-        : mNumStableSplits(0u), mSplitPadding(1.0f), mCurrentIteration(0)
+    PSSMShadowCameraSetup::PSSMShadowCameraSetup() :
+        mNumStableSplits( 0u ),
+        mSplitPadding( 1.0f ),
+        mCurrentIteration( 0 )
     {
-        calculateSplitPoints(3, 100, 100000);
+        calculateSplitPoints( 3, 100, 100000 );
     }
     //---------------------------------------------------------------------
-    PSSMShadowCameraSetup::~PSSMShadowCameraSetup()
-    {
-    }
+    PSSMShadowCameraSetup::~PSSMShadowCameraSetup() {}
     //---------------------------------------------------------------------
-    void PSSMShadowCameraSetup::calculateSplitPoints(uint splitCount, Real nearDist, Real farDist, Real lambda, Real blend, Real fade)
+    void PSSMShadowCameraSetup::calculateSplitPoints( uint splitCount, Real nearDist, Real farDist,
+                                                      Real lambda, Real blend, Real fade )
     {
-        if (splitCount < 2)
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot specify less than 2 splits", 
-            "PSSMShadowCameraSetup::calculateSplitPoints");
+        if( splitCount < 2 )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Cannot specify less than 2 splits",
+                         "PSSMShadowCameraSetup::calculateSplitPoints" );
 
-        mSplitPoints.resize(splitCount + 1);
-        mSplitBlendPoints.resize(blend == 0.0f ? 0 : splitCount - 1);
+        mSplitPoints.resize( splitCount + 1 );
+        mSplitBlendPoints.resize( blend == 0.0f ? 0 : splitCount - 1 );
         mSplitCount = splitCount;
 
         mSplitPoints[0] = nearDist;
-        for (size_t i = 1; i < mSplitCount; i++)
+        for( size_t i = 1; i < mSplitCount; i++ )
         {
             Real fraction = (Real)i / (Real)mSplitCount;
-            Real splitPoint = lambda * nearDist * Math::Pow(farDist / nearDist, fraction) +
-                (1.0f - lambda) * (nearDist + fraction * (farDist - nearDist));
+            Real splitPoint = lambda * nearDist * Math::Pow( farDist / nearDist, fraction ) +
+                              ( 1.0f - lambda ) * ( nearDist + fraction * ( farDist - nearDist ) );
 
             mSplitPoints[i] = splitPoint;
 
-            if (blend != 0.0f)
+            if( blend != 0.0f )
             {
-                mSplitBlendPoints[i - 1] = Math::lerp(mSplitPoints[i], mSplitPoints[i - 1], blend);
+                mSplitBlendPoints[i - 1] = Math::lerp( mSplitPoints[i], mSplitPoints[i - 1], blend );
             }
         }
         mSplitPoints[splitCount] = farDist;
 
-        if (fade == 0.0f)
+        if( fade == 0.0f )
         {
             mSplitFadePoint = 0.0f;
         }
         else
         {
-            mSplitFadePoint = Math::lerp(mSplitPoints[mSplitCount], mSplitPoints[mSplitCount - 1], fade);
+            mSplitFadePoint =
+                Math::lerp( mSplitPoints[mSplitCount], mSplitPoints[mSplitCount - 1], fade );
         }
     }
     //---------------------------------------------------------------------
-    void PSSMShadowCameraSetup::setSplitPoints(const SplitPointList& newSplitPoints, Real blend, Real fade)
+    void PSSMShadowCameraSetup::setSplitPoints( const SplitPointList &newSplitPoints, Real blend,
+                                                Real fade )
     {
-        if (newSplitPoints.size() < 3) // 3, not 2 since splits + 1 points
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot specify less than 2 splits", 
-            "PSSMShadowCameraSetup::setSplitPoints");
-        mSplitCount = static_cast<uint>(newSplitPoints.size() - 1);
+        if( newSplitPoints.size() < 3 )  // 3, not 2 since splits + 1 points
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Cannot specify less than 2 splits",
+                         "PSSMShadowCameraSetup::setSplitPoints" );
+        mSplitCount = static_cast<uint>( newSplitPoints.size() - 1 );
         mSplitPoints = newSplitPoints;
 
-        if (blend == 0.0f)
+        if( blend == 0.0f )
         {
-            mSplitBlendPoints.resize(0);
+            mSplitBlendPoints.resize( 0 );
         }
         else
         {
-            mSplitBlendPoints.resize(mSplitCount - 1);
-            for (size_t i = 1; i < mSplitCount; i++)
+            mSplitBlendPoints.resize( mSplitCount - 1 );
+            for( size_t i = 1; i < mSplitCount; i++ )
             {
-                mSplitBlendPoints[i - 1] = Math::lerp(mSplitPoints[i], mSplitPoints[i - 1], blend);
+                mSplitBlendPoints[i - 1] = Math::lerp( mSplitPoints[i], mSplitPoints[i - 1], blend );
             }
         }
 
-        if (fade == 0.0f)
+        if( fade == 0.0f )
         {
             mSplitFadePoint = 0.0f;
         }
         else
         {
-            mSplitFadePoint = Math::lerp(mSplitPoints[mSplitCount], mSplitPoints[mSplitCount - 1], fade);
+            mSplitFadePoint =
+                Math::lerp( mSplitPoints[mSplitCount], mSplitPoints[mSplitCount - 1], fade );
         }
     }
     //---------------------------------------------------------------------
@@ -122,13 +126,14 @@ namespace Ogre
         Real nearDist = mSplitPoints[iteration];
         Real farDist = mSplitPoints[iteration + 1];
 
-        // Add a padding factor to internal distances so that the connecting split point will not have bad artifacts.
-        if (iteration > 0)
+        // Add a padding factor to internal distances so that the connecting split point will not have
+        // bad artifacts.
+        if( iteration > 0 )
         {
             nearDist -= mSplitPadding;
             nearDist = std::max( nearDist, mSplitPoints[0] );
         }
-        if (iteration < mSplitCount - 1)
+        if( iteration < mSplitCount - 1 )
         {
             farDist += mSplitPadding;
         }
@@ -137,13 +142,13 @@ namespace Ogre
 
         // Ouch, I know this is hacky, but it's the easiest way to re-use LiSPSM / Focused
         // functionality right now without major changes
-        Camera* _cam = const_cast<Camera*>(cam);
+        Camera *_cam = const_cast<Camera *>( cam );
         Real oldNear = _cam->getNearClipDistance();
         Real oldFar = _cam->getFarClipDistance();
-        Frustum* oldCull = _cam->getCullingFrustum();
-        _cam->setNearClipDistance(nearDist);
-        _cam->setFarClipDistance(farDist);
-        _cam->setCullingFrustum(NULL);
+        Frustum *oldCull = _cam->getCullingFrustum();
+        _cam->setNearClipDistance( nearDist );
+        _cam->setFarClipDistance( farDist );
+        _cam->setCullingFrustum( NULL );
 
         if( iteration < mNumStableSplits )
         {
@@ -159,9 +164,8 @@ namespace Ogre
         }
 
         // restore near/far
-        _cam->setNearClipDistance(oldNear);
-        _cam->setFarClipDistance(oldFar);
-        _cam->setCullingFrustum(oldCull);
-
+        _cam->setNearClipDistance( oldNear );
+        _cam->setFarClipDistance( oldFar );
+        _cam->setCullingFrustum( oldCull );
     }
-}
+}  // namespace Ogre

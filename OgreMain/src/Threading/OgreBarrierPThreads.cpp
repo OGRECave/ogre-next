@@ -34,69 +34,68 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-
 #if OGRE_CPU == OGRE_CPU_ARM
-#define __dmb() asm volatile ( "dmb sy\n" ::: "cc" );
+#    define __dmb() asm volatile( "dmb sy\n" ::: "cc" );
 #endif
 
 #if( defined( ANDROID ) && __ANDROID_API__ < __ANDROID_API_N__ ) || \
     OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     typedef int pthread_barrierattr_t;
     //-----------------------------------------------------------------------------------
-    int pthread_barrier_init(pthread_barrier_t *barrier, const pthread_barrierattr_t *attr, int count)
+    int pthread_barrier_init( pthread_barrier_t *barrier, const pthread_barrierattr_t *attr, int count )
     {
-        if(count == 0)
+        if( count == 0 )
         {
             errno = EINVAL;
             return -1;
         }
-        if(pthread_mutex_init(&barrier->mutex, 0) < 0)
+        if( pthread_mutex_init( &barrier->mutex, 0 ) < 0 )
         {
             return -1;
         }
-        if(pthread_cond_init(&barrier->cond, 0) < 0)
+        if( pthread_cond_init( &barrier->cond, 0 ) < 0 )
         {
-            pthread_mutex_destroy(&barrier->mutex);
+            pthread_mutex_destroy( &barrier->mutex );
             return -1;
         }
         barrier->tripCount = count;
         barrier->count = 0;
-        
+
         return 0;
     }
     //-----------------------------------------------------------------------------------
-    int pthread_barrier_destroy(pthread_barrier_t *barrier)
+    int pthread_barrier_destroy( pthread_barrier_t *barrier )
     {
-        pthread_cond_destroy(&barrier->cond);
-        pthread_mutex_destroy(&barrier->mutex);
+        pthread_cond_destroy( &barrier->cond );
+        pthread_mutex_destroy( &barrier->mutex );
         return 0;
     }
     //-----------------------------------------------------------------------------------
-    int pthread_barrier_wait(pthread_barrier_t *barrier)
+    int pthread_barrier_wait( pthread_barrier_t *barrier )
     {
-        pthread_mutex_lock(&barrier->mutex);
-        ++(barrier->count);
-        if(barrier->count >= barrier->tripCount)
+        pthread_mutex_lock( &barrier->mutex );
+        ++( barrier->count );
+        if( barrier->count >= barrier->tripCount )
         {
             barrier->count = 0;
-            pthread_cond_broadcast(&barrier->cond);
-            pthread_mutex_unlock(&barrier->mutex);
+            pthread_cond_broadcast( &barrier->cond );
+            pthread_mutex_unlock( &barrier->mutex );
             return 1;
         }
         else
         {
-            pthread_cond_wait(&barrier->cond, &(barrier->mutex));
-            pthread_mutex_unlock(&barrier->mutex);
+            pthread_cond_wait( &barrier->cond, &( barrier->mutex ) );
+            pthread_mutex_unlock( &barrier->mutex );
             return 0;
         }
     }
     //-----------------------------------------------------------------------------------
 #endif
-    
+
     Barrier::Barrier( size_t threadCount )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
-        pthread_barrier_init( &mBarrier, 0, static_cast<int>(threadCount) );
+        pthread_barrier_init( &mBarrier, 0, static_cast<int>( threadCount ) );
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -113,4 +112,4 @@ namespace Ogre
         pthread_barrier_wait( &mBarrier );
 #endif
     }
-}
+}  // namespace Ogre

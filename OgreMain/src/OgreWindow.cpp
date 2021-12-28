@@ -72,15 +72,9 @@ namespace Ogre
             mStencilBuffer->setResolution( widthPx, heightPx, 1u );
     }
     //-----------------------------------------------------------------------------------
-    void Window::setTitle( const String &title )
-    {
-        mTitle = title;
-    }
+    void Window::setTitle( const String &title ) { mTitle = title; }
     //-----------------------------------------------------------------------------------
-    const String& Window::getTitle() const
-    {
-        return mTitle;
-    }
+    const String &Window::getTitle() const { return mTitle; }
     //-----------------------------------------------------------------------------------
     void Window::requestResolution( uint32 widthPt, uint32 heightPt )
     {
@@ -89,15 +83,15 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void Window::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                          uint32 widthPt, uint32 heightPt,
-                                          uint32 frequencyNumerator, uint32 frequencyDenominator )
+                                          uint32 widthPt, uint32 heightPt, uint32 frequencyNumerator,
+                                          uint32 frequencyDenominator )
     {
-        mRequestedFullscreenMode    = goFullscreen;
-        mRequestedWidth             = widthPt;
-        mRequestedHeight            = heightPt;
-        mFrequencyNumerator         = frequencyNumerator;
-        mFrequencyDenominator       = frequencyDenominator;
-        mBorderless                 = borderless;
+        mRequestedFullscreenMode = goFullscreen;
+        mRequestedWidth = widthPt;
+        mRequestedHeight = heightPt;
+        mFrequencyNumerator = frequencyNumerator;
+        mFrequencyDenominator = frequencyDenominator;
+        mBorderless = borderless;
     }
     //-----------------------------------------------------------------------------------
     void Window::setVSync( bool vSync, uint32 vSyncInterval )
@@ -106,75 +100,33 @@ namespace Ogre
         mVSyncInterval = vSyncInterval & 0x7FFFFFFF;
     }
     //-----------------------------------------------------------------------------------
-    bool Window::getVSync() const
-    {
-        return mVSync;
-    }
+    bool Window::getVSync() const { return mVSync; }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getVSyncInterval() const
-    {
-        return mVSyncInterval;
-    }
+    uint32 Window::getVSyncInterval() const { return mVSyncInterval; }
     //-----------------------------------------------------------------------------------
-    void Window::setBorderless( bool borderless )
-    {
-        mBorderless = borderless;
-    }
+    void Window::setBorderless( bool borderless ) { mBorderless = borderless; }
     //-----------------------------------------------------------------------------------
-    bool Window::getBorderless() const
-    {
-        return mBorderless;
-    }
+    bool Window::getBorderless() const { return mBorderless; }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getWidth() const
-    {
-        return mTexture->getWidth();
-    }
+    uint32 Window::getWidth() const { return mTexture->getWidth(); }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getHeight() const
-    {
-        return mTexture->getHeight();
-    }
+    uint32 Window::getHeight() const { return mTexture->getHeight(); }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu Window::getPixelFormat() const
-    {
-        return mTexture->getPixelFormat();
-    }
+    PixelFormatGpu Window::getPixelFormat() const { return mTexture->getPixelFormat(); }
     //-----------------------------------------------------------------------------------
-    SampleDescription Window::getSampleDescription() const
-    {
-        return mTexture->getSampleDescription();
-    }
+    SampleDescription Window::getSampleDescription() const { return mTexture->getSampleDescription(); }
     //-----------------------------------------------------------------------------------
-    bool Window::isMultisample() const
-    {
-        return mTexture->isMultisample();
-    }
+    bool Window::isMultisample() const { return mTexture->isMultisample(); }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getFrequencyNumerator() const
-    {
-        return mFrequencyNumerator;
-    }
+    uint32 Window::getFrequencyNumerator() const { return mFrequencyNumerator; }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getFrequencyDenominator() const
-    {
-        return mFrequencyDenominator;
-    }
+    uint32 Window::getFrequencyDenominator() const { return mFrequencyDenominator; }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getRequestedWidthPt() const
-    {
-        return mRequestedWidth;
-    }
+    uint32 Window::getRequestedWidthPt() const { return mRequestedWidth; }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getRequestedHeightPt() const
-    {
-        return mRequestedHeight;
-    }
+    uint32 Window::getRequestedHeightPt() const { return mRequestedHeight; }
     //-----------------------------------------------------------------------------------
-    bool Window::isFullscreen() const
-    {
-        return mFullscreenMode;
-    }
+    bool Window::isFullscreen() const { return mFullscreenMode; }
     //-----------------------------------------------------------------------------------
     bool Window::wantsToGoFullscreen() const
     {
@@ -186,55 +138,34 @@ namespace Ogre
         return !mRequestedFullscreenMode && mRequestedFullscreenMode != mFullscreenMode;
     }
     //-----------------------------------------------------------------------------------
-    void Window::setFocused( bool focused )
-    {
-        mFocused = focused;
-    }
+    void Window::setFocused( bool focused ) { mFocused = focused; }
     //-----------------------------------------------------------------------------------
-    bool Window::isFocused() const
-    {
-        return mFocused;
-    }
+    bool Window::isFocused() const { return mFocused; }
     //-----------------------------------------------------------------------------------
-    void Window::_setPrimary()
-    {
-        mIsPrimary = true;
-    }
+    void Window::_setPrimary() { mIsPrimary = true; }
     //-----------------------------------------------------------------------------------
-    bool Window::isPrimary() const
-    {
-        return mIsPrimary;
-    }
+    bool Window::isPrimary() const { return mIsPrimary; }
     //-----------------------------------------------------------------------------------
     void Window::getMetrics( uint32 &width, uint32 &height, int32 &left, int32 &top ) const
     {
-        left    = mLeft;
-        top     = mTop;
-        if (mTexture)
+        left = mLeft;
+        top = mTop;
+        if( mTexture )
         {
-            width   = mTexture->getWidth();
-            height  = mTexture->getHeight();
+            width = mTexture->getWidth();
+            height = mTexture->getHeight();
         }
         else
         {
             float scale = getViewPointToPixelScale();
-            width = (uint32)floorf(mRequestedWidth * scale + 0.5f);
-            height = (uint32)floorf(mRequestedHeight * scale + 0.5f);
+            width = (uint32)floorf( mRequestedWidth * scale + 0.5f );
+            height = (uint32)floorf( mRequestedHeight * scale + 0.5f );
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Window::getTexture() const
-    {
-        return mTexture;
-    }
+    TextureGpu *Window::getTexture() const { return mTexture; }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Window::getDepthBuffer() const
-    {
-        return mDepthBuffer;
-    }
+    TextureGpu *Window::getDepthBuffer() const { return mDepthBuffer; }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Window::getStencilBuffer() const
-    {
-        return mStencilBuffer;
-    }
-}
+    TextureGpu *Window::getStencilBuffer() const { return mStencilBuffer; }
+}  // namespace Ogre

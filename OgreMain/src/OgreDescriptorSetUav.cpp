@@ -30,10 +30,10 @@ THE SOFTWARE.
 
 #include "OgreDescriptorSetUav.h"
 
-#include "OgreTextureGpu.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "Vao/OgreUavBufferPacked.h"
 #include "OgreException.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpu.h"
+#include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre
 {
@@ -68,13 +68,14 @@ namespace Ogre
                 const TextureSlot &texSlot = slot.getTexture();
                 if( texSlot.formatNeedsReinterpret() && !texSlot.texture->isReinterpretable() )
                 {
-                    //This warning here is for
+                    // This warning here is for
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "UAV sRGB textures must be bound as non-sRGB. "
                                  "You must set the reinterpretable flag "
                                  "(TextureFlags::Reinterpretable) for "
-                                 "texture: '" + texSlot.texture->getNameStr() + "' " +
-                                 texSlot.texture->getSettingsDesc(),
+                                 "texture: '" +
+                                     texSlot.texture->getNameStr() + "' " +
+                                     texSlot.texture->getSettingsDesc(),
                                  "DescriptorSetUav::checkValidity" );
                 }
             }
@@ -92,4 +93,4 @@ namespace Ogre
             ++itor;
         }
     }
-}
+}  // namespace Ogre

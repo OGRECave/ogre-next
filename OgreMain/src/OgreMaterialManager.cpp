@@ -29,31 +29,29 @@ THE SOFTWARE.
 
 #include "OgreMaterialManager.h"
 
-#include "OgreMaterialSerializer.h"
-#include "OgreTechnique.h"
-#include "OgreScriptCompiler.h"
 #include "OgreLodStrategyManager.h"
+#include "OgreMaterialSerializer.h"
+#include "OgreScriptCompiler.h"
+#include "OgreTechnique.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    template<> MaterialManager* Singleton<MaterialManager>::msSingleton = 0;
-    MaterialManager* MaterialManager::getSingletonPtr()
+    template <>
+    MaterialManager *Singleton<MaterialManager>::msSingleton = 0;
+    MaterialManager *MaterialManager::getSingletonPtr() { return msSingleton; }
+    MaterialManager &MaterialManager::getSingleton()
     {
-        return msSingleton;
-    }
-    MaterialManager& MaterialManager::getSingleton()
-    {
-        assert( msSingleton );  return ( *msSingleton );
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     String MaterialManager::DEFAULT_SCHEME_NAME = "Default";
     //-----------------------------------------------------------------------
-    MaterialManager::MaterialManager() : OGRE_THREAD_POINTER_INIT(mSerializer)
+    MaterialManager::MaterialManager() : OGRE_THREAD_POINTER_INIT( mSerializer )
     {
         // Create primary thread copies of script compiler / serializer
         // other copies for other threads may also be instantiated
-        OGRE_THREAD_POINTER_SET(mSerializer, OGRE_NEW MaterialSerializer());
+        OGRE_THREAD_POINTER_SET( mSerializer, OGRE_NEW MaterialSerializer() );
 
         // Loading order
         mLoadOrder = 100.0f;
@@ -63,13 +61,12 @@ namespace Ogre {
         mResourceType = "Material";
 
         // Register with resource group manager
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
 
         // Default scheme
         mActiveSchemeIndex = 0;
         mActiveSchemeName = DEFAULT_SCHEME_NAME;
         mSchemes[mActiveSchemeName] = 0;
-
     }
     //-----------------------------------------------------------------------
     MaterialManager::~MaterialManager()
@@ -77,203 +74,197 @@ namespace Ogre {
         mDefaultSettings.setNull();
         // Resources cleared by superclass
         // Unregister with resource group manager
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
-        ResourceGroupManager::getSingleton()._unregisterScriptLoader(this);
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
+        ResourceGroupManager::getSingleton()._unregisterScriptLoader( this );
 
         // delete primary thread instances directly, other threads will delete
         // theirs automatically when the threads end.
-        OGRE_THREAD_POINTER_DELETE(mSerializer);
+        OGRE_THREAD_POINTER_DELETE( mSerializer );
     }
     //-----------------------------------------------------------------------
-    Resource* MaterialManager::createImpl(const String& name, ResourceHandle handle,
-        const String& group, bool isManual, ManualResourceLoader* loader,
-    const NameValuePairList* params)
+    Resource *MaterialManager::createImpl( const String &name, ResourceHandle handle,
+                                           const String &group, bool isManual,
+                                           ManualResourceLoader *loader,
+                                           const NameValuePairList *params )
     {
-        return OGRE_NEW Material(this, name, handle, group, isManual, loader);
+        return OGRE_NEW Material( this, name, handle, group, isManual, loader );
     }
     //-----------------------------------------------------------------------
-    MaterialPtr MaterialManager::create (const String& name, const String& group,
-                                    bool isManual, ManualResourceLoader* loader,
-                                    const NameValuePairList* createParams)
+    MaterialPtr MaterialManager::create( const String &name, const String &group, bool isManual,
+                                         ManualResourceLoader *loader,
+                                         const NameValuePairList *createParams )
     {
-        return createResource(name,group,isManual,loader,createParams).staticCast<Material>();
+        return createResource( name, group, isManual, loader, createParams ).staticCast<Material>();
     }
     //-----------------------------------------------------------------------
-    MaterialPtr MaterialManager::getByName(const String& name, const String& groupName)
+    MaterialPtr MaterialManager::getByName( const String &name, const String &groupName )
     {
-        return getResourceByName(name, groupName).staticCast<Material>();
+        return getResourceByName( name, groupName ).staticCast<Material>();
     }
     //-----------------------------------------------------------------------
     void MaterialManager::initialise()
     {
         // Set up default material - don't use name constructor as we want to avoid applying defaults
-        mDefaultSettings = create("DefaultSettings", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME);
+        mDefaultSettings =
+            create( "DefaultSettings", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
         // Add a single technique and pass, non-programmable
         mDefaultSettings->createTechnique()->createPass();
 
         // Set up a lit base white material
-        create("BaseWhite", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME);
+        create( "BaseWhite", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
         // Set up an unlit base white material
-        MaterialPtr baseWhiteNoLighting = create("BaseWhiteNoLighting",
-            ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME);
+        MaterialPtr baseWhiteNoLighting =
+            create( "BaseWhiteNoLighting", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
     }
     //-----------------------------------------------------------------------
-    void MaterialManager::parseScript(DataStreamPtr& stream, const String& groupName)
+    void MaterialManager::parseScript( DataStreamPtr &stream, const String &groupName )
     {
-        ScriptCompilerManager::getSingleton().parseScript(stream, groupName);
+        ScriptCompilerManager::getSingleton().parseScript( stream, groupName );
     }
     //-----------------------------------------------------------------------
-    unsigned short MaterialManager::_getSchemeIndex(const String& schemeName)
+    unsigned short MaterialManager::_getSchemeIndex( const String &schemeName )
     {
         unsigned short ret = 0;
-        SchemeMap::iterator i = mSchemes.find(schemeName);
-        if (i != mSchemes.end())
+        SchemeMap::iterator i = mSchemes.find( schemeName );
+        if( i != mSchemes.end() )
         {
             ret = i->second;
         }
         else
         {
             // Create new
-            ret = static_cast<unsigned short>(mSchemes.size());
+            ret = static_cast<unsigned short>( mSchemes.size() );
             mSchemes[schemeName] = ret;
         }
         return ret;
-
     }
     //-----------------------------------------------------------------------
-    const String& MaterialManager::_getSchemeName(unsigned short index)
+    const String &MaterialManager::_getSchemeName( unsigned short index )
     {
-        for (SchemeMap::iterator i = mSchemes.begin(); i != mSchemes.end(); ++i)
+        for( SchemeMap::iterator i = mSchemes.begin(); i != mSchemes.end(); ++i )
         {
-            if (i->second == index)
+            if( i->second == index )
                 return i->first;
         }
         return DEFAULT_SCHEME_NAME;
     }
     //-----------------------------------------------------------------------
-    unsigned short MaterialManager::_getActiveSchemeIndex() const
-    {
-        return mActiveSchemeIndex;
-    }
+    unsigned short MaterialManager::_getActiveSchemeIndex() const { return mActiveSchemeIndex; }
     //-----------------------------------------------------------------------
-    const String& MaterialManager::getActiveScheme() const
-    {
-        return mActiveSchemeName;
-    }
+    const String &MaterialManager::getActiveScheme() const { return mActiveSchemeName; }
     //-----------------------------------------------------------------------
-    void MaterialManager::setActiveScheme(const String& schemeName)
+    void MaterialManager::setActiveScheme( const String &schemeName )
     {
-        if (mActiveSchemeName != schemeName)
-        {   
+        if( mActiveSchemeName != schemeName )
+        {
             // Allow the creation of new scheme indexes on demand
             // even if they're not specified in any Technique
-            mActiveSchemeIndex = _getSchemeIndex(schemeName);
+            mActiveSchemeIndex = _getSchemeIndex( schemeName );
             mActiveSchemeName = schemeName;
         }
     }
     //-----------------------------------------------------------------------
-    void MaterialManager::addListener(Listener* l, const Ogre::String& schemeName)
+    void MaterialManager::addListener( Listener *l, const Ogre::String &schemeName )
     {
-        mListenerMap[schemeName].push_back(l);
+        mListenerMap[schemeName].push_back( l );
     }
     //---------------------------------------------------------------------
-    void MaterialManager::removeListener(Listener* l, const Ogre::String& schemeName)
+    void MaterialManager::removeListener( Listener *l, const Ogre::String &schemeName )
     {
-        mListenerMap[schemeName].remove(l);
+        mListenerMap[schemeName].remove( l );
     }
     //---------------------------------------------------------------------
-    Technique* MaterialManager::_arbitrateMissingTechniqueForActiveScheme(
-        Material* mat, unsigned short lodIndex, const Renderable* rend)
+    Technique *MaterialManager::_arbitrateMissingTechniqueForActiveScheme( Material *mat,
+                                                                           unsigned short lodIndex,
+                                                                           const Renderable *rend )
     {
-        //First, check the scheme specific listeners
-        ListenerMap::iterator it = mListenerMap.find(mActiveSchemeName);
-        if (it != mListenerMap.end()) 
+        // First, check the scheme specific listeners
+        ListenerMap::iterator it = mListenerMap.find( mActiveSchemeName );
+        if( it != mListenerMap.end() )
         {
-            ListenerList& listenerList = it->second;
-            for (ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i)
+            ListenerList &listenerList = it->second;
+            for( ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i )
             {
-                Technique* t = (*i)->handleSchemeNotFound(mActiveSchemeIndex, 
-                    mActiveSchemeName, mat, lodIndex, rend);
-                if (t)
+                Technique *t = ( *i )->handleSchemeNotFound( mActiveSchemeIndex, mActiveSchemeName, mat,
+                                                             lodIndex, rend );
+                if( t )
                     return t;
             }
         }
 
-        //If no success, check generic listeners
-        it = mListenerMap.find(BLANKSTRING);
-        if (it != mListenerMap.end()) 
+        // If no success, check generic listeners
+        it = mListenerMap.find( BLANKSTRING );
+        if( it != mListenerMap.end() )
         {
-            ListenerList& listenerList = it->second;
-            for (ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i)
+            ListenerList &listenerList = it->second;
+            for( ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i )
             {
-                Technique* t = (*i)->handleSchemeNotFound(mActiveSchemeIndex, 
-                    mActiveSchemeName, mat, lodIndex, rend);
-                if (t)
+                Technique *t = ( *i )->handleSchemeNotFound( mActiveSchemeIndex, mActiveSchemeName, mat,
+                                                             lodIndex, rend );
+                if( t )
                     return t;
             }
         }
-        
 
         return 0;
-
     }
 
-	void MaterialManager::_notifyAfterIlluminationPassesCreated(Technique* tech)
-	{
-		// First, check the scheme specific listeners
-		ListenerMap::iterator it = mListenerMap.find(mActiveSchemeName);
-		if(it != mListenerMap.end())
-		{
-			ListenerList& listenerList = it->second;
-			for(ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i)
-			{
-				bool handled = (*i)->afterIlluminationPassesCreated(tech);
-				if(handled)
-					return;
-			}
-		}
+    void MaterialManager::_notifyAfterIlluminationPassesCreated( Technique *tech )
+    {
+        // First, check the scheme specific listeners
+        ListenerMap::iterator it = mListenerMap.find( mActiveSchemeName );
+        if( it != mListenerMap.end() )
+        {
+            ListenerList &listenerList = it->second;
+            for( ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i )
+            {
+                bool handled = ( *i )->afterIlluminationPassesCreated( tech );
+                if( handled )
+                    return;
+            }
+        }
 
-		//If no success, check generic listeners
-		it = mListenerMap.find(BLANKSTRING);
-		if(it != mListenerMap.end())
-		{
-			ListenerList& listenerList = it->second;
-			for(ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i)
-			{
-				bool handled = (*i)->afterIlluminationPassesCreated(tech);
-				if(handled)
-					return;
-			}
-		}
-	}
+        // If no success, check generic listeners
+        it = mListenerMap.find( BLANKSTRING );
+        if( it != mListenerMap.end() )
+        {
+            ListenerList &listenerList = it->second;
+            for( ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i )
+            {
+                bool handled = ( *i )->afterIlluminationPassesCreated( tech );
+                if( handled )
+                    return;
+            }
+        }
+    }
 
-	void MaterialManager::_notifyBeforeIlluminationPassesCleared(Technique* tech)
-	{
-		// First, check the scheme specific listeners
-		ListenerMap::iterator it = mListenerMap.find(mActiveSchemeName);
-		if(it != mListenerMap.end())
-		{
-			ListenerList& listenerList = it->second;
-			for(ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i)
-			{
-				bool handled = (*i)->beforeIlluminationPassesCleared(tech);
-				if(handled)
-					return;
-			}
-		}
+    void MaterialManager::_notifyBeforeIlluminationPassesCleared( Technique *tech )
+    {
+        // First, check the scheme specific listeners
+        ListenerMap::iterator it = mListenerMap.find( mActiveSchemeName );
+        if( it != mListenerMap.end() )
+        {
+            ListenerList &listenerList = it->second;
+            for( ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i )
+            {
+                bool handled = ( *i )->beforeIlluminationPassesCleared( tech );
+                if( handled )
+                    return;
+            }
+        }
 
-		//If no success, check generic listeners
-		it = mListenerMap.find(BLANKSTRING);
-		if(it != mListenerMap.end())
-		{
-			ListenerList& listenerList = it->second;
-			for(ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i)
-			{
-				bool handled = (*i)->beforeIlluminationPassesCleared(tech);
-				if(handled)
-					return;
-			}
-		}
-	}
+        // If no success, check generic listeners
+        it = mListenerMap.find( BLANKSTRING );
+        if( it != mListenerMap.end() )
+        {
+            ListenerList &listenerList = it->second;
+            for( ListenerList::iterator i = listenerList.begin(); i != listenerList.end(); ++i )
+            {
+                bool handled = ( *i )->beforeIlluminationPassesCleared( tech );
+                if( handled )
+                    return;
+            }
+        }
+    }
 
-}
+}  // namespace Ogre

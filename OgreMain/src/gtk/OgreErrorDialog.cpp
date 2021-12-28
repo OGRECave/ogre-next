@@ -27,37 +27,34 @@ THE SOFTWARE.
 */
 #include "OgreErrorDialog.h"
 
-#include <iostream>
 #include <gtk/gtk.h>
+#include <iostream>
 
-namespace Ogre {
-
-extern bool __gtk_init_once ();
-
-//---------------------------------------------------------------------------//
-ErrorDialog::ErrorDialog ()
+namespace Ogre
 {
-}
+    extern bool __gtk_init_once();
 
-//---------------------------------------------------------------------------//
-void ErrorDialog::display (const String& errorMessage, String logName)
-{
-    if (!__gtk_init_once ())
+    //---------------------------------------------------------------------------//
+    ErrorDialog::ErrorDialog() {}
+
+    //---------------------------------------------------------------------------//
+    void ErrorDialog::display( const String &errorMessage, String logName )
     {
-        std::cerr << "*** ERROR: " << errorMessage << std::endl;
-        return;
+        if( !__gtk_init_once() )
+        {
+            std::cerr << "*** ERROR: " << errorMessage << std::endl;
+            return;
+        }
+
+        GtkWidget *dialog = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                                                    GTK_BUTTONS_OK, errorMessage.c_str() );
+
+        gtk_dialog_run( GTK_DIALOG( dialog ) );
+        gtk_widget_destroy( dialog );
+
+        // Wait for all gtk events to be consumed ...
+        while( gtk_events_pending() )
+            gtk_main_iteration_do( FALSE );
     }
 
-    GtkWidget *dialog = gtk_message_dialog_new (
-        NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
-        errorMessage.c_str ());
-
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
-    // Wait for all gtk events to be consumed ...
-    while (gtk_events_pending ())
-        gtk_main_iteration_do (FALSE);
-}
-
-}
+}  // namespace Ogre

@@ -33,16 +33,16 @@ THE SOFTWARE.
 #include "OgreDataStream.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
-#include "OgreString.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreString.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 && !defined(_WINDOWS_)
-    //This snippet prevents breaking Unity builds in Win32
-    //(smarty FreeImage defines _WINDOWS_)
-    #define VC_EXTRALEAN
-    #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
-    #include <windows.h>
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 && !defined( _WINDOWS_ )
+// This snippet prevents breaking Unity builds in Win32
+//(smarty FreeImage defines _WINDOWS_)
+#    define VC_EXTRALEAN
+#    define WIN32_LEAN_AND_MEAN
+#    define NOMINMAX
+#    include <windows.h>
 #endif
 
 #include <FreeImage.h>
@@ -51,68 +51,61 @@ THE SOFTWARE.
 #ifndef FREEIMAGE_COLORORDER
 // we have freeimage 3.9.1, define these symbols in such way as 3.9.1 really work
 //(do not use 3.11.0 definition, as color order was changed between these two versions on Apple systems)
-#define FREEIMAGE_COLORORDER_BGR    0
-#define FREEIMAGE_COLORORDER_RGB    1
-#if defined(FREEIMAGE_BIGENDIAN)
-#define FREEIMAGE_COLORORDER FREEIMAGE_COLORORDER_RGB
-#else
-#define FREEIMAGE_COLORORDER FREEIMAGE_COLORORDER_BGR
-#endif
+#    define FREEIMAGE_COLORORDER_BGR 0
+#    define FREEIMAGE_COLORORDER_RGB 1
+#    if defined( FREEIMAGE_BIGENDIAN )
+#        define FREEIMAGE_COLORORDER FREEIMAGE_COLORORDER_RGB
+#    else
+#        define FREEIMAGE_COLORORDER FREEIMAGE_COLORORDER_BGR
+#    endif
 #endif
 
 #include <sstream>
 
-namespace Ogre {
-
+namespace Ogre
+{
     FreeImageCodec2::RegisteredCodecList FreeImageCodec2::msCodecList;
     //---------------------------------------------------------------------
-    void FreeImageLoadErrorHandler2(FREE_IMAGE_FORMAT fif, const char *message)
+    void FreeImageLoadErrorHandler2( FREE_IMAGE_FORMAT fif, const char *message )
     {
         // Callback method as required by FreeImage to report problems
-        const char* typeName = FreeImage_GetFormatFromFIF(fif);
-        if (typeName)
+        const char *typeName = FreeImage_GetFormatFromFIF( fif );
+        if( typeName )
         {
             LogManager::getSingleton().stream()
-                << "FreeImage error: '" << message << "' when loading format "
-                << typeName;
+                << "FreeImage error: '" << message << "' when loading format " << typeName;
         }
         else
         {
-            LogManager::getSingleton().stream()
-                << "FreeImage error: '" << message << "'";
+            LogManager::getSingleton().stream() << "FreeImage error: '" << message << "'";
         }
-
     }
     //---------------------------------------------------------------------
-    void FreeImageSaveErrorHandler2(FREE_IMAGE_FORMAT fif, const char *message)
+    void FreeImageSaveErrorHandler2( FREE_IMAGE_FORMAT fif, const char *message )
     {
         // Callback method as required by FreeImage to report problems
-        OGRE_EXCEPT(Exception::ERR_CANNOT_WRITE_TO_FILE, 
-                    message, "FreeImageCodec2::save");
+        OGRE_EXCEPT( Exception::ERR_CANNOT_WRITE_TO_FILE, message, "FreeImageCodec2::save" );
     }
     //---------------------------------------------------------------------
     void FreeImageCodec2::startup()
     {
-        FreeImage_Initialise(false);
+        FreeImage_Initialise( false );
 
         LogManager::getSingleton().logMessage(
-            LML_NORMAL,
-            "FreeImage version: " + String(FreeImage_GetVersion()));
-        LogManager::getSingleton().logMessage(
-            LML_NORMAL,
-            FreeImage_GetCopyrightMessage());
+            LML_NORMAL, "FreeImage version: " + String( FreeImage_GetVersion() ) );
+        LogManager::getSingleton().logMessage( LML_NORMAL, FreeImage_GetCopyrightMessage() );
 
         // Register codecs
         StringStream strExt;
         strExt << "Supported formats: ";
         bool first = true;
-        for( int i=0; i<FreeImage_GetFIFCount(); ++i )
+        for( int i = 0; i < FreeImage_GetFIFCount(); ++i )
         {
-            // Skip DDS codec since FreeImage does not have the option 
+            // Skip DDS codec since FreeImage does not have the option
             // to keep DXT data compressed, we'll use our own codec
             if( (FREE_IMAGE_FORMAT)i == FIF_DDS )
                 continue;
-            
+
             String exts( FreeImage_GetFIFExtensionList( (FREE_IMAGE_FORMAT)i ) );
             if( !first )
             {
@@ -120,7 +113,7 @@ namespace Ogre {
             }
             first = false;
             strExt << exts;
-            
+
             // Pull off individual formats (separated by comma by FI)
             StringVector extsVector = StringUtil::split( exts, "," );
             for( StringVector::iterator v = extsVector.begin(); v != extsVector.end(); ++v )
@@ -128,11 +121,11 @@ namespace Ogre {
                 // FreeImage 3.13 lists many formats twice: once under their own codec and
                 // once under the "RAW" codec, which is listed last. Avoid letting the RAW override
                 // the dedicated codec!
-                if( !Codec::isCodecRegistered(*v) )
+                if( !Codec::isCodecRegistered( *v ) )
                 {
-                    ImageCodec2* codec = OGRE_NEW FreeImageCodec2(*v, i);
-                    msCodecList.push_back(codec);
-                    Codec::registerCodec(codec);
+                    ImageCodec2 *codec = OGRE_NEW FreeImageCodec2( *v, i );
+                    msCodecList.push_back( codec );
+                    Codec::registerCodec( codec );
                 }
             }
         }
@@ -140,33 +133,32 @@ namespace Ogre {
         LogManager::getSingleton().logMessage( LML_NORMAL, strExt.str() );
 
         // Set error handler
-        FreeImage_SetOutputMessage(FreeImageLoadErrorHandler2);
+        FreeImage_SetOutputMessage( FreeImageLoadErrorHandler2 );
     }
     //---------------------------------------------------------------------
     void FreeImageCodec2::shutdown()
     {
         FreeImage_DeInitialise();
 
-        for (RegisteredCodecList::iterator i = msCodecList.begin();
-            i != msCodecList.end(); ++i)
+        for( RegisteredCodecList::iterator i = msCodecList.begin(); i != msCodecList.end(); ++i )
         {
-            Codec::unregisterCodec(*i);
+            Codec::unregisterCodec( *i );
             OGRE_DELETE *i;
         }
         msCodecList.clear();
     }
     //---------------------------------------------------------------------
-    FreeImageCodec2::FreeImageCodec2(const String &type, unsigned int fiType):
-        mType(type),
-        mFreeImageType(fiType)
-    { 
+    FreeImageCodec2::FreeImageCodec2( const String &type, unsigned int fiType ) :
+        mType( type ),
+        mFreeImageType( fiType )
+    {
     }
     //---------------------------------------------------------------------
-    FIBITMAP* FreeImageCodec2::encodeBitmap( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const
+    FIBITMAP *FreeImageCodec2::encodeBitmap( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const
     {
-        FIBITMAP* ret = 0;
+        FIBITMAP *ret = 0;
 
-        ImageData2 *pImgData = static_cast<ImageData2*>( pData.getPointer() );
+        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.getPointer() );
 
         // We need to determine the closest format supported by FreeImage.
         // Components order of 24bit and 32bit FI_BITMAPs is affected by #define FREEIMAGE_COLORORDER,
@@ -362,14 +354,13 @@ namespace Ogre {
             break;
 
         default:
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                         "Invalid image format",
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Invalid image format",
                          "FreeImageCodec2::encode" );
         };
 
         // Check BPP
         size_t bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
-        if( bpp == 32 && imageType == FIT_BITMAP && 
+        if( bpp == 32 && imageType == FIT_BITMAP &&
             !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp ) &&
             FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, 24 ) )
         {
@@ -382,23 +373,21 @@ namespace Ogre {
             bpp = 24;
         }
         else if( bpp == 128 && imageType == FIT_RGBAF &&
-            !FreeImage_FIFSupportsExportType( (FREE_IMAGE_FORMAT)mFreeImageType, imageType ) &&
-            FreeImage_FIFSupportsExportType( (FREE_IMAGE_FORMAT)mFreeImageType, FIT_RGBF ) )
+                 !FreeImage_FIFSupportsExportType( (FREE_IMAGE_FORMAT)mFreeImageType, imageType ) &&
+                 FreeImage_FIFSupportsExportType( (FREE_IMAGE_FORMAT)mFreeImageType, FIT_RGBF ) )
         {
             // drop to 96-bit floating point
             supportedFormat = PFG_RGB32_FLOAT;
             imageType = FIT_RGBF;
         }
 
-        ret = FreeImage_AllocateT( imageType,
-                                   static_cast<int>( pImgData->box.width ),
-                                   static_cast<int>( pImgData->box.height ),
-                                   bpp, red_mask, green_mask, blue_mask );
+        ret = FreeImage_AllocateT( imageType, static_cast<int>( pImgData->box.width ),
+                                   static_cast<int>( pImgData->box.height ), bpp, red_mask, green_mask,
+                                   blue_mask );
         if( !ret )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "FreeImage_AllocateT failed - possibly out of memory. ",
-                         __FUNCTION__ );
+                         "FreeImage_AllocateT failed - possibly out of memory. ", __FUNCTION__ );
         }
 
         if( PixelFormatGpuUtils::getNumberOfComponents( supportedFormat ) == 1u && bpp == 8 )
@@ -412,66 +401,65 @@ namespace Ogre {
         }
 
         TextureBox destBox( pImgData->box.width, pImgData->box.height, 1u, 1u,
-                            PixelFormatGpuUtils::getBytesPerPixel(supportedFormat),
-                            FreeImage_GetPitch(ret),
-                            FreeImage_GetPitch(ret) * pImgData->box.height);
-        destBox.data = FreeImage_GetBits(ret);
+                            PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ),
+                            FreeImage_GetPitch( ret ),
+                            FreeImage_GetPitch( ret ) * pImgData->box.height );
+        destBox.data = FreeImage_GetBits( ret );
 
         // Convert data inverting scanlines
-        PixelFormatGpuUtils::bulkPixelConversion( pImgData->box, origFormat,
-                                                  destBox, supportedFormat, true);
+        PixelFormatGpuUtils::bulkPixelConversion( pImgData->box, origFormat, destBox, supportedFormat,
+                                                  true );
 
         return ret;
     }
     //---------------------------------------------------------------------
     DataStreamPtr FreeImageCodec2::encode( MemoryDataStreamPtr &input, Codec::CodecDataPtr &pData ) const
-    {        
+    {
         FIBITMAP *fiBitmap = encodeBitmap( input, pData );
 
         // open memory chunk allocated by FreeImage
-        FIMEMORY* mem = FreeImage_OpenMemory();
+        FIMEMORY *mem = FreeImage_OpenMemory();
         // write data into memory
-        FreeImage_SaveToMemory((FREE_IMAGE_FORMAT)mFreeImageType, fiBitmap, mem);
+        FreeImage_SaveToMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiBitmap, mem );
         // Grab data information
-        BYTE* data;
+        BYTE *data;
         DWORD size;
-        FreeImage_AcquireMemory(mem, &data, &size);
+        FreeImage_AcquireMemory( mem, &data, &size );
         // Copy data into our own buffer
         // Because we're asking MemoryDataStream to free this, must create in a compatible way
-        BYTE* ourData = OGRE_ALLOC_T(BYTE, size, MEMCATEGORY_GENERAL);
-        memcpy(ourData, data, size);
-        // Wrap data in stream, tell it to free on close 
-        DataStreamPtr outstream(OGRE_NEW MemoryDataStream(ourData, size, true));
+        BYTE *ourData = OGRE_ALLOC_T( BYTE, size, MEMCATEGORY_GENERAL );
+        memcpy( ourData, data, size );
+        // Wrap data in stream, tell it to free on close
+        DataStreamPtr outstream( OGRE_NEW MemoryDataStream( ourData, size, true ) );
         // Now free FreeImage memory buffers
-        FreeImage_CloseMemory(mem);
+        FreeImage_CloseMemory( mem );
         // Unload bitmap
-        FreeImage_Unload(fiBitmap);
+        FreeImage_Unload( fiBitmap );
 
         return outstream;
     }
     //---------------------------------------------------------------------
-    void FreeImageCodec2::encodeToFile(MemoryDataStreamPtr& input,
-        const String& outFileName, Codec::CodecDataPtr& pData) const
+    void FreeImageCodec2::encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                                        Codec::CodecDataPtr &pData ) const
     {
-        FIBITMAP* fiBitmap = encodeBitmap(input, pData);
+        FIBITMAP *fiBitmap = encodeBitmap( input, pData );
 
-        FreeImage_Save((FREE_IMAGE_FORMAT)mFreeImageType, fiBitmap, outFileName.c_str());
-        FreeImage_Unload(fiBitmap);
+        FreeImage_Save( (FREE_IMAGE_FORMAT)mFreeImageType, fiBitmap, outFileName.c_str() );
+        FreeImage_Unload( fiBitmap );
     }
     //---------------------------------------------------------------------
-    Codec::DecodeResult FreeImageCodec2::decode( DataStreamPtr& input ) const
+    Codec::DecodeResult FreeImageCodec2::decode( DataStreamPtr &input ) const
     {
         // Buffer stream into memory (TODO: override IO functions instead?)
-        MemoryDataStream memStream(input, true);
+        MemoryDataStream memStream( input, true );
 
-        FIMEMORY* fiMem = FreeImage_OpenMemory( memStream.getPtr(),
-                                                static_cast<DWORD>( memStream.size() ) );
-        FIBITMAP* fiBitmap = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
+        FIMEMORY *fiMem =
+            FreeImage_OpenMemory( memStream.getPtr(), static_cast<DWORD>( memStream.size() ) );
+        FIBITMAP *fiBitmap = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
         if( !fiBitmap )
         {
             FreeImage_CloseMemory( fiMem );
-            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
-                         "Error decoding image",
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Error decoding image",
                          "FreeImageCodec2::decode" );
         }
 
@@ -482,15 +470,14 @@ namespace Ogre {
         PixelFormatGpu origFormat = PFG_UNKNOWN;
         PixelFormatGpu supportedFormat = PFG_UNKNOWN;
 
-        switch(imageType)
+        switch( imageType )
         {
         case FIT_UNKNOWN:
         case FIT_COMPLEX:
         case FIT_DOUBLE:
         default:
             FreeImage_CloseMemory( fiMem );
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                         "Unknown or unsupported image format",
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Unknown or unsupported image format",
                          "FreeImageCodec2::decode" );
             break;
         case FIT_BITMAP:
@@ -498,7 +485,7 @@ namespace Ogre {
             // Perform any colour conversions for greyscale
             if( colourType == FIC_MINISWHITE || colourType == FIC_MINISBLACK )
             {
-                FIBITMAP* newBitmap = FreeImage_ConvertToGreyscale( fiBitmap );
+                FIBITMAP *newBitmap = FreeImage_ConvertToGreyscale( fiBitmap );
                 // free old bitmap and replace
                 FreeImage_Unload( fiBitmap );
                 fiBitmap = newBitmap;
@@ -508,10 +495,10 @@ namespace Ogre {
             // Perform any colour conversions for RGB
             else if( bpp < 8 || colourType == FIC_PALETTE || colourType == FIC_CMYK )
             {
-                FIBITMAP* newBitmap =  NULL;    
+                FIBITMAP *newBitmap = NULL;
                 if( FreeImage_IsTransparent( fiBitmap ) )
                 {
-                    // convert to 32 bit to preserve the transparency 
+                    // convert to 32 bit to preserve the transparency
                     // (the alpha byte will be 0 if pixel is transparent)
                     newBitmap = FreeImage_ConvertTo32Bits( fiBitmap );
                 }
@@ -537,7 +524,7 @@ namespace Ogre {
             case 16:
                 // Determine 555 or 565 from green mask
                 // cannot be 16-bit greyscale since that's FIT_UINT16
-                if(FreeImage_GetGreenMask(fiBitmap) == FI16_565_GREEN_MASK)
+                if( FreeImage_GetGreenMask( fiBitmap ) == FI16_565_GREEN_MASK )
                 {
                     supportedFormat = PFG_B5G6R5_UNORM;
                 }
@@ -599,18 +586,18 @@ namespace Ogre {
             break;
         case FIT_RGBAF:
             supportedFormat = PFG_RGBA32_FLOAT;
-            break;  
+            break;
         };
 
         if( origFormat == PFG_UNKNOWN )
             origFormat = supportedFormat;
 
-        ImageData2* imgData = OGRE_NEW ImageData2();
-        imgData->box.width  = FreeImage_GetWidth( fiBitmap );
+        ImageData2 *imgData = OGRE_NEW ImageData2();
+        imgData->box.width = FreeImage_GetWidth( fiBitmap );
         imgData->box.height = FreeImage_GetHeight( fiBitmap );
-        imgData->box.depth = 1; // only 2D formats handled by this codec
-        imgData->box.numSlices = 1u; //Always one face, cubemaps are not currently supported
-        imgData->numMipmaps = 1; // no mipmaps in non-DDS
+        imgData->box.depth = 1;       // only 2D formats handled by this codec
+        imgData->box.numSlices = 1u;  // Always one face, cubemaps are not currently supported
+        imgData->numMipmaps = 1;      // no mipmaps in non-DDS
         imgData->textureType = TextureTypes::Type2D;
         imgData->format = supportedFormat;
 
@@ -628,31 +615,27 @@ namespace Ogre {
                            FreeImage_GetPitch( fiBitmap ) * imgData->box.height );
         srcBox.data = FreeImage_GetBits( fiBitmap );
 
-        PixelFormatGpuUtils::bulkPixelConversion( srcBox, origFormat,
-                                                  imgData->box, supportedFormat, true);
+        PixelFormatGpuUtils::bulkPixelConversion( srcBox, origFormat, imgData->box, supportedFormat,
+                                                  true );
 
-        FreeImage_Unload(fiBitmap);
-        FreeImage_CloseMemory(fiMem);
+        FreeImage_Unload( fiBitmap );
+        FreeImage_CloseMemory( fiMem );
 
         DecodeResult ret;
         ret.first.reset();
-        ret.second = CodecDataPtr(imgData);
+        ret.second = CodecDataPtr( imgData );
         return ret;
     }
-    //---------------------------------------------------------------------    
-    String FreeImageCodec2::getType() const
-    {
-        return mType;
-    }
     //---------------------------------------------------------------------
-    String FreeImageCodec2::magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const
+    String FreeImageCodec2::getType() const { return mType; }
+    //---------------------------------------------------------------------
+    String FreeImageCodec2::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
     {
-        FIMEMORY* fiMem = 
-                    FreeImage_OpenMemory( (BYTE*)const_cast<char*>(magicNumberPtr),
-                                          static_cast<DWORD>(maxbytes) );
+        FIMEMORY *fiMem = FreeImage_OpenMemory( (BYTE *)const_cast<char *>( magicNumberPtr ),
+                                                static_cast<DWORD>( maxbytes ) );
 
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory( fiMem, (int)maxbytes );
-        FreeImage_CloseMemory(fiMem);
+        FreeImage_CloseMemory( fiMem );
 
         if( fif != FIF_UNKNOWN )
         {
@@ -665,4 +648,4 @@ namespace Ogre {
             return BLANKSTRING;
         }
     }
-}
+}  // namespace Ogre

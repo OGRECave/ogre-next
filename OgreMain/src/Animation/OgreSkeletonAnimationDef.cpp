@@ -31,13 +31,13 @@ THE SOFTWARE.
 #include "Animation/OgreSkeletonAnimationDef.h"
 
 #include "Animation/OgreSkeletonDef.h"
+#include "Math/Array/OgreKfTransform.h"
+#include "Math/Array/OgreKfTransformArrayMemoryManager.h"
 #include "Math/Array/OgreMathlib.h"
 #include "Math/Array/OgreTransform.h"
-#include "Math/Array/OgreKfTransformArrayMemoryManager.h"
-#include "Math/Array/OgreKfTransform.h"
 #include "OgreAnimation.h"
-#include "OgreOldBone.h"
 #include "OgreKeyFrame.h"
+#include "OgreOldBone.h"
 #include "OgreSkeleton.h"
 #include "OgreStringConverter.h"
 
@@ -69,27 +69,27 @@ namespace Ogre
         mOriginalFrameRate = frameRate;
         mNumFrames = animation->getLength() * frameRate;
 
-        //Converts Bone Index -> Slot Index
-        const SkeletonDef::BoneToSlotVec &boneToSlot    = mSkeletonDef->getBoneToSlot();
-        const SkeletonDef::IndexToIndexMap &slotToBone  = mSkeletonDef->getSlotToBone();
+        // Converts Bone Index -> Slot Index
+        const SkeletonDef::BoneToSlotVec &boneToSlot = mSkeletonDef->getBoneToSlot();
+        const SkeletonDef::IndexToIndexMap &slotToBone = mSkeletonDef->getSlotToBone();
 
-        //1st Pass: Count the number of keyframes, so we know how
-        //much memory to allocate, as we don't listen for resizes.
-        //We also build a list of unique keyframe timestamps per block
+        // 1st Pass: Count the number of keyframes, so we know how
+        // much memory to allocate, as we don't listen for resizes.
+        // We also build a list of unique keyframe timestamps per block
         //(i.e. merge the keyframes from two bones that the same block)
         v1::Animation::OldNodeTrackIterator itor = animation->getOldNodeTrackIterator();
         {
-            //Count the number of blocks needed by counting the number of unique keyframes per block.
-            //i.e. When ARRAY_PACKED_REALS = 4; if 2 bones are in the same block and have the same
-            //keyframe time value, we'll need 4 slots (aka. 1 block). If those 2 bones have two
-            //different time values, we'll need 8 slots.
+            // Count the number of blocks needed by counting the number of unique keyframes per block.
+            // i.e. When ARRAY_PACKED_REALS = 4; if 2 bones are in the same block and have the same
+            // keyframe time value, we'll need 4 slots (aka. 1 block). If those 2 bones have two
+            // different time values, we'll need 8 slots.
             TimestampVec emptyVec;
             TimestampsPerBlock timestampsByBlock;
 
             while( itor.hasMoreElements() )
             {
-                size_t boneIdx                      = itor.peekNextKey();
-                v1::OldNodeAnimationTrack *track    = itor.getNext();
+                size_t boneIdx = itor.peekNextKey();
+                v1::OldNodeAnimationTrack *track = itor.getNext();
 
                 if( track->getNumKeyFrames() > 0 )
                 {
@@ -106,18 +106,18 @@ namespace Ogre
                     TimestampsPerBlock::iterator itKeyframes = timestampsByBlock.find( blockIdx );
                     if( itKeyframes == timestampsByBlock.end() )
                     {
-                        itKeyframes = timestampsByBlock.insert(
-                                            std::make_pair( (size_t)blockIdx, emptyVec ) ).first;
+                        itKeyframes =
+                            timestampsByBlock.insert( std::make_pair( (size_t)blockIdx, emptyVec ) )
+                                .first;
                     }
 
                     itKeyframes->second.reserve( track->getNumKeyFrames() + (size_t)extraKeyFrameAtEnd );
 
-                    for( size_t i=0; i<track->getNumKeyFrames(); ++i )
+                    for( size_t i = 0; i < track->getNumKeyFrames(); ++i )
                     {
-                        Real timestamp = track->getKeyFrame(i)->getTime();
-                        TimestampVec::iterator it = std::lower_bound( itKeyframes->second.begin(),
-                                                                      itKeyframes->second.end(),
-                                                                      timestamp );
+                        Real timestamp = track->getKeyFrame( i )->getTime();
+                        TimestampVec::iterator it = std::lower_bound(
+                            itKeyframes->second.begin(), itKeyframes->second.end(), timestamp );
                         if( it == itKeyframes->second.end() || *it != timestamp )
                             itKeyframes->second.insert( it, timestamp );
                     }
@@ -125,23 +125,22 @@ namespace Ogre
                     if( extraKeyFrameAtEnd )
                     {
                         Real timestamp = animation->getLength();
-                        TimestampVec::iterator it = std::lower_bound( itKeyframes->second.begin(),
-                                                                      itKeyframes->second.end(),
-                                                                      timestamp );
+                        TimestampVec::iterator it = std::lower_bound(
+                            itKeyframes->second.begin(), itKeyframes->second.end(), timestamp );
                         if( it == itKeyframes->second.end() || *it != timestamp )
                             itKeyframes->second.insert( it, timestamp );
                     }
                 }
             }
 
-            //We need to iterate again because 'std::distance( timestampsByBlock.begin(), itKeyframes )'
-            //would be bogus while we were still inserting to timestampsByBlock thus altering the order.
+            // We need to iterate again because 'std::distance( timestampsByBlock.begin(), itKeyframes )'
+            // would be bogus while we were still inserting to timestampsByBlock thus altering the order.
             itor = animation->getOldNodeTrackIterator();
 
             while( itor.hasMoreElements() )
             {
-                size_t boneIdx                      = itor.peekNextKey();
-                v1::OldNodeAnimationTrack *track    = itor.getNext();
+                size_t boneIdx = itor.peekNextKey();
+                v1::OldNodeAnimationTrack *track = itor.getNext();
 
                 if( track->getNumKeyFrames() > 0 )
                 {
@@ -151,17 +150,16 @@ namespace Ogre
                     TimestampsPerBlock::iterator itKeyframes = timestampsByBlock.find( blockIdx );
                     size_t trackDiff = std::distance( timestampsByBlock.begin(), itKeyframes );
                     mBoneToWeights[skeleton->getBone( boneIdx )->getName()] =
-                                        (slotIdx & 0xFF000000) |
-                                        ( (trackDiff * ARRAY_PACKED_REALS +
-                                          (slotIdx & 0x00FFFFFF) % ARRAY_PACKED_REALS) );
+                        ( slotIdx & 0xFF000000 ) | ( ( trackDiff * ARRAY_PACKED_REALS +
+                                                       ( slotIdx & 0x00FFFFFF ) % ARRAY_PACKED_REALS ) );
                 }
             }
 
-            //Now that we've built the list of unique keyframes, allocate the mTracks and its keyframes
+            // Now that we've built the list of unique keyframes, allocate the mTracks and its keyframes
             allocateCacheFriendlyKeyframes( timestampsByBlock, frameRate );
         }
 
-        //Set now all the transforms the allocated space
+        // Set now all the transforms the allocated space
         SkeletonTrackVec::iterator itTrack = mTracks.begin();
         SkeletonTrackVec::iterator enTrack = mTracks.end();
 
@@ -172,13 +170,13 @@ namespace Ogre
             KeyFrameRigVec::iterator enKeys = keyFrames.end();
 
             uint32 blockIdx = itTrack->getBoneBlockIdx();
-            uint32 slotStart= SkeletonDef::blockIdxToSlotStart( blockIdx );
+            uint32 slotStart = SkeletonDef::blockIdxToSlotStart( blockIdx );
 
             while( itKeys != enKeys )
             {
                 Real fTime = itKeys->mFrame * frameRate;
 
-                for( uint32 i=0; i<ARRAY_PACKED_REALS; ++i )
+                for( uint32 i = 0; i < ARRAY_PACKED_REALS; ++i )
                 {
                     uint32 slotIdx = slotStart + i;
 
@@ -187,7 +185,7 @@ namespace Ogre
                     if( it != slotToBone.end() )
                         boneIdx = it->second;
 
-					if( animation->hasOldNodeTrack( boneIdx ) )
+                    if( animation->hasOldNodeTrack( boneIdx ) )
                     {
                         v1::OldNodeAnimationTrack *oldTrack = animation->getOldNodeTrack( boneIdx );
 
@@ -203,10 +201,11 @@ namespace Ogre
                     }
                     else
                     {
-                        //This bone is not affected at all by the animation, but is
-                        //part of the block. Fill with identity transform
+                        // This bone is not affected at all by the animation, but is
+                        // part of the block. Fill with identity transform
                         itKeys->mBoneTransform->mPosition.setFromVector3( Vector3::ZERO, i );
-                        itKeys->mBoneTransform->mOrientation.setFromQuaternion( Quaternion::IDENTITY, i );
+                        itKeys->mBoneTransform->mOrientation.setFromQuaternion( Quaternion::IDENTITY,
+                                                                                i );
                         itKeys->mBoneTransform->mScale.setFromVector3( Vector3::UNIT_SCALE, i );
                     }
                 }
@@ -221,23 +220,23 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void SkeletonAnimationDef::getInterpolatedUnnormalizedKeyFrame( v1::OldNodeAnimationTrack *oldTrack,
-                                                                    const v1::TimeIndex& timeIndex,
-                                                                    v1::TransformKeyFrame* kf )
+                                                                    const v1::TimeIndex &timeIndex,
+                                                                    v1::TransformKeyFrame *kf )
     {
         v1::KeyFrame *kBase1, *kBase2;
         v1::TransformKeyFrame *k1, *k2;
         unsigned short firstKeyIndex;
 
-        Real t = oldTrack->getKeyFramesAtTime( timeIndex, &kBase1, &kBase2, &firstKeyIndex);
-        k1 = static_cast<v1::TransformKeyFrame*>(kBase1);
-        k2 = static_cast<v1::TransformKeyFrame*>(kBase2);
+        Real t = oldTrack->getKeyFramesAtTime( timeIndex, &kBase1, &kBase2, &firstKeyIndex );
+        k1 = static_cast<v1::TransformKeyFrame *>( kBase1 );
+        k2 = static_cast<v1::TransformKeyFrame *>( kBase2 );
 
-        if (t == 0.0)
+        if( t == 0.0 )
         {
             // Just use k1
-            kf->setRotation(k1->getRotation());
-            kf->setTranslate(k1->getTranslate());
-            kf->setScale(k1->getScale());
+            kf->setRotation( k1->getRotation() );
+            kf->setTranslate( k1->getTranslate() );
+            kf->setScale( k1->getScale() );
         }
         else
         {
@@ -245,19 +244,19 @@ namespace Ogre
             Vector3 base;
             // Translation
             base = k1->getTranslate();
-            kf->setTranslate( base + ((k2->getTranslate() - base) * t) );
+            kf->setTranslate( base + ( ( k2->getTranslate() - base ) * t ) );
 
             // Scale
             base = k1->getScale();
-            kf->setScale( base + ((k2->getScale() - base) * t) );
+            kf->setScale( base + ( ( k2->getScale() - base ) * t ) );
 
             Quaternion qBase = k1->getRotation();
-            kf->setRotation( qBase + ((k2->getRotation() - qBase) * t) );
+            kf->setRotation( qBase + ( ( k2->getRotation() - qBase ) * t ) );
         }
     }
     //-----------------------------------------------------------------------------------
     void SkeletonAnimationDef::allocateCacheFriendlyKeyframes(
-                                            const TimestampsPerBlock &timestampsByBlock, Real frameRate )
+        const TimestampsPerBlock &timestampsByBlock, Real frameRate )
     {
         assert( !mKfTransformMemoryManager );
 
@@ -272,46 +271,46 @@ namespace Ogre
         }
 
         mKfTransformMemoryManager = new KfTransformArrayMemoryManager(
-                                            0, numKeyFrames * ARRAY_PACKED_REALS,
-                                            -1, numKeyFrames * ARRAY_PACKED_REALS );
+            0, numKeyFrames * ARRAY_PACKED_REALS, -1, numKeyFrames * ARRAY_PACKED_REALS );
         mKfTransformMemoryManager->initialize();
 
         mTracks.reserve( timestampsByBlock.size() );
 
-        //1st pass: All first keyframes.
+        // 1st pass: All first keyframes.
         itor = timestampsByBlock.begin();
         while( itor != endt )
         {
             size_t blockIdx = itor->first;
-            mTracks.push_back( SkeletonTrack( static_cast<uint32>(blockIdx), mKfTransformMemoryManager ) );
+            mTracks.push_back(
+                SkeletonTrack( static_cast<uint32>( blockIdx ), mKfTransformMemoryManager ) );
 
             mTracks.back().addKeyFrame( *itor->second.begin(), frameRate );
             ++itor;
         }
 
-        vector<size_t>::type keyframesDone; //One per block
+        vector<size_t>::type keyframesDone;  // One per block
         keyframesDone.resize( timestampsByBlock.size(), 1 );
 
-        //2nd pass: The in-between keyframes.
+        // 2nd pass: The in-between keyframes.
         bool addedAny = true;
         while( addedAny )
         {
             addedAny = false;
 
-            //Keep adding keyframes until we're done with them
+            // Keep adding keyframes until we're done with them
             size_t i = 0;
             itor = timestampsByBlock.begin();
             while( itor != endt )
             {
                 if( keyframesDone[i] < itor->second.size() - 1 )
                 {
-                    //First find if there are key frames (J0) from the next blocks whose
-                    //next keyframe (J1) is before ours (I0), and add those instead (J0).
-                    //If not, add ours.
+                    // First find if there are key frames (J0) from the next blocks whose
+                    // next keyframe (J1) is before ours (I0), and add those instead (J0).
+                    // If not, add ours.
                     Real timestampI0 = itor->second[keyframesDone[i]];
 
                     bool subAddedAny = false;
-                    size_t j = i+1;
+                    size_t j = i + 1;
                     TimestampsPerBlock::const_iterator itor2 = itor;
                     ++itor2;
                     while( itor2 != endt )
@@ -332,9 +331,9 @@ namespace Ogre
                         ++itor2;
                     }
 
-                    //Don't add ours if a previous track's keyframe (H0) is between
-                    //our keyframe I0 and our next keyframe I1. We'll add both together
-                    //in the next iteration
+                    // Don't add ours if a previous track's keyframe (H0) is between
+                    // our keyframe I0 and our next keyframe I1. We'll add both together
+                    // in the next iteration
                     bool dontAdd = false;
                     Real timestampI1 = itor->second[keyframesDone[i] + 1];
                     j = 0;
@@ -347,7 +346,7 @@ namespace Ogre
                             if( timestampI1 > timestampJ0 && timestampI0 < timestampJ0 )
                             {
                                 dontAdd = true;
-                                addedAny = true; //There still a reason to iterate again
+                                addedAny = true;  // There still a reason to iterate again
                             }
                         }
                         ++j;
@@ -367,14 +366,14 @@ namespace Ogre
             }
         }
 
-        //3rd Pass: Create the last key frames
+        // 3rd Pass: Create the last key frames
         size_t i = 0;
         itor = timestampsByBlock.begin();
         while( itor != endt )
         {
             if( itor->second.size() > 1 )
             {
-                mTracks[i].addKeyFrame( *(itor->second.end()-1), frameRate );
+                mTracks[i].addKeyFrame( *( itor->second.end() - 1 ), frameRate );
                 ++keyframesDone[i];
             }
             ++i;
@@ -397,7 +396,7 @@ namespace Ogre
 
             const KeyFrameRigVec &keyFrames = track.getKeyFrames();
 
-            for( size_t i=0; i<ARRAY_PACKED_REALS; ++i )
+            for( size_t i = 0; i < ARRAY_PACKED_REALS; ++i )
             {
                 uint32 slotIdx = SkeletonDef::blockIdxToSlotStart( blockIdx ) + i;
 
@@ -419,7 +418,7 @@ namespace Ogre
                         outText += StringConverter::toString( itKeyFrames->mFrame );
                         outText += ",";
 
-                        const KfTransform * RESTRICT_ALIAS boneTransform = itKeyFrames->mBoneTransform;
+                        const KfTransform *RESTRICT_ALIAS boneTransform = itKeyFrames->mBoneTransform;
 
                         Vector3 vPos, vScale;
                         Quaternion qRot;
@@ -448,4 +447,4 @@ namespace Ogre
             ++itor;
         }
     }
-}
+}  // namespace Ogre

@@ -28,17 +28,15 @@ THE SOFTWARE.
 #include "OgreErrorDialog.h"
 #include <iostream>
 
-namespace Ogre {
-
-//---------------------------------------------------------------------------//
-ErrorDialog::ErrorDialog()
+namespace Ogre
 {
-}
+    //---------------------------------------------------------------------------//
+    ErrorDialog::ErrorDialog() {}
 
-//---------------------------------------------------------------------------//
-void ErrorDialog::display(const String& errorMessage, String logName)
-{
-    std::cout << "*** ERROR: " << errorMessage << std::endl;
-}
+    //---------------------------------------------------------------------------//
+    void ErrorDialog::display( const String &errorMessage, String logName )
+    {
+        std::cout << "*** ERROR: " << errorMessage << std::endl;
+    }
 
-}
+}  // namespace Ogre

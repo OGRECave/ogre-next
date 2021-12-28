@@ -32,25 +32,24 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    //-----------------------------------------------------------------------
+    template <>
+    SceneManagerEnumerator *Singleton<SceneManagerEnumerator>::msSingleton = 0;
+    SceneManagerEnumerator *SceneManagerEnumerator::getSingletonPtr() { return msSingleton; }
+    SceneManagerEnumerator &SceneManagerEnumerator::getSingleton()
+    {
+        assert( msSingleton );
+        return ( *msSingleton );
+    }
 
     //-----------------------------------------------------------------------
-    template<> SceneManagerEnumerator* Singleton<SceneManagerEnumerator>::msSingleton = 0;
-    SceneManagerEnumerator* SceneManagerEnumerator::getSingletonPtr()
+    SceneManagerEnumerator::SceneManagerEnumerator() :
+        mInstanceCreateCount( 0 ),
+        mCurrentRenderSystem( 0 )
     {
-        return msSingleton;
-    }
-    SceneManagerEnumerator& SceneManagerEnumerator::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
-    }
-
-    //-----------------------------------------------------------------------
-    SceneManagerEnumerator::SceneManagerEnumerator()
-        : mInstanceCreateCount(0), mCurrentRenderSystem(0)
-    {
-        addFactory(&mDefaultFactory);
-
+        addFactory( &mDefaultFactory );
     }
     //-----------------------------------------------------------------------
     SceneManagerEnumerator::~SceneManagerEnumerator()
@@ -58,48 +57,47 @@ namespace Ogre {
         // Destroy all remaining instances
         // Really should have shutdown and unregistered by now, but catch here in case
         Instances instancesCopy = mInstances;
-        for (Instances::iterator i = instancesCopy.begin(); i != instancesCopy.end(); ++i)
+        for( Instances::iterator i = instancesCopy.begin(); i != instancesCopy.end(); ++i )
         {
             // destroy instances
-            for(Factories::iterator f = mFactories.begin(); f != mFactories.end(); ++f)
+            for( Factories::iterator f = mFactories.begin(); f != mFactories.end(); ++f )
             {
-                if ((*f)->getMetaData().typeName == i->second->getTypeName())
+                if( ( *f )->getMetaData().typeName == i->second->getTypeName() )
                 {
-                    (*f)->destroyInstance(i->second);
-                    mInstances.erase(i->first);
+                    ( *f )->destroyInstance( i->second );
+                    mInstances.erase( i->first );
                     break;
                 }
             }
-
         }
         mInstances.clear();
-
     }
     //-----------------------------------------------------------------------
-    void SceneManagerEnumerator::addFactory(SceneManagerFactory* fact)
+    void SceneManagerEnumerator::addFactory( SceneManagerFactory *fact )
     {
-        mFactories.push_back(fact);
+        mFactories.push_back( fact );
         // add to metadata
-        mMetaDataList.push_back(&fact->getMetaData());
+        mMetaDataList.push_back( &fact->getMetaData() );
         // Log
-        LogManager::getSingleton().logMessage("SceneManagerFactory for type '" +
-            fact->getMetaData().typeName + "' registered.");
+        LogManager::getSingleton().logMessage( "SceneManagerFactory for type '" +
+                                               fact->getMetaData().typeName + "' registered." );
     }
     //-----------------------------------------------------------------------
-    void SceneManagerEnumerator::removeFactory(SceneManagerFactory* fact)
+    void SceneManagerEnumerator::removeFactory( SceneManagerFactory *fact )
     {
-        if(!fact)
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot remove a null SceneManagerFactory.", "SceneManagerEnumerator::removeFactory");
+        if( !fact )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Cannot remove a null SceneManagerFactory.",
+                         "SceneManagerEnumerator::removeFactory" );
 
         // destroy all instances for this factory
-        for (Instances::iterator i = mInstances.begin(); i != mInstances.end(); )
+        for( Instances::iterator i = mInstances.begin(); i != mInstances.end(); )
         {
-            SceneManager* instance = i->second;
-            if (instance->getTypeName() == fact->getMetaData().typeName)
+            SceneManager *instance = i->second;
+            if( instance->getTypeName() == fact->getMetaData().typeName )
             {
-                fact->destroyInstance(instance);
+                fact->destroyInstance( instance );
                 Instances::iterator deli = i++;
-                mInstances.erase(deli);
+                mInstances.erase( deli );
             }
             else
             {
@@ -107,106 +105,100 @@ namespace Ogre {
             }
         }
         // remove from metadata
-        for (MetaDataList::iterator m = mMetaDataList.begin(); m != mMetaDataList.end(); ++m)
+        for( MetaDataList::iterator m = mMetaDataList.begin(); m != mMetaDataList.end(); ++m )
         {
-            if(*m == &(fact->getMetaData()))
+            if( *m == &( fact->getMetaData() ) )
             {
-                mMetaDataList.erase(m);
+                mMetaDataList.erase( m );
                 break;
             }
         }
-        mFactories.remove(fact);
+        mFactories.remove( fact );
     }
     //-----------------------------------------------------------------------
-    const SceneManagerMetaData* SceneManagerEnumerator::getMetaData(const String& typeName) const
+    const SceneManagerMetaData *SceneManagerEnumerator::getMetaData( const String &typeName ) const
     {
-        for (MetaDataList::const_iterator i = mMetaDataList.begin(); 
-            i != mMetaDataList.end(); ++i)
+        for( MetaDataList::const_iterator i = mMetaDataList.begin(); i != mMetaDataList.end(); ++i )
         {
-            if (typeName == (*i)->typeName)
+            if( typeName == ( *i )->typeName )
             {
                 return *i;
             }
         }
 
-        OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-            "No metadata found for scene manager of type '" + typeName + "'",
-            "SceneManagerEnumerator::createSceneManager");
-
+        OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                     "No metadata found for scene manager of type '" + typeName + "'",
+                     "SceneManagerEnumerator::createSceneManager" );
     }
     //-----------------------------------------------------------------------
-    SceneManagerEnumerator::MetaDataIterator 
-    SceneManagerEnumerator::getMetaDataIterator() const
+    SceneManagerEnumerator::MetaDataIterator SceneManagerEnumerator::getMetaDataIterator() const
     {
-        return MetaDataIterator(mMetaDataList.begin(), mMetaDataList.end());
-
+        return MetaDataIterator( mMetaDataList.begin(), mMetaDataList.end() );
     }
     //-----------------------------------------------------------------------
-    SceneManager* SceneManagerEnumerator::createSceneManager( const String& typeName,
+    SceneManager *SceneManagerEnumerator::createSceneManager( const String &typeName,
                                                               size_t numWorkerThreads,
-                                                              const String& instanceName )
+                                                              const String &instanceName )
     {
-        if (mInstances.find(instanceName) != mInstances.end())
+        if( mInstances.find( instanceName ) != mInstances.end() )
         {
-            OGRE_EXCEPT(Exception::ERR_DUPLICATE_ITEM, 
-                "SceneManager instance called '" + instanceName + "' already exists",
-                "SceneManagerEnumerator::createSceneManager");
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "SceneManager instance called '" + instanceName + "' already exists",
+                         "SceneManagerEnumerator::createSceneManager" );
         }
 
-        SceneManager* inst = 0;
-        for(Factories::iterator i = mFactories.begin(); i != mFactories.end(); ++i)
+        SceneManager *inst = 0;
+        for( Factories::iterator i = mFactories.begin(); i != mFactories.end(); ++i )
         {
-            if ((*i)->getMetaData().typeName == typeName)
+            if( ( *i )->getMetaData().typeName == typeName )
             {
-                if (instanceName.empty())
+                if( instanceName.empty() )
                 {
                     // generate a name
                     char tmpBuffer[32];
                     LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
                     str.a( "SceneManagerInstance", (uint32)++mInstanceCreateCount );
-                    inst = (*i)->createInstance(str.c_str(), numWorkerThreads);
+                    inst = ( *i )->createInstance( str.c_str(), numWorkerThreads );
                 }
                 else
                 {
-                    inst = (*i)->createInstance(instanceName, numWorkerThreads);
+                    inst = ( *i )->createInstance( instanceName, numWorkerThreads );
                 }
                 break;
             }
         }
 
-        if (!inst)
+        if( !inst )
         {
             // Error!
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "No factory found for scene manager of type '" + typeName + "'",
-                "SceneManagerEnumerator::createSceneManager");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "No factory found for scene manager of type '" + typeName + "'",
+                         "SceneManagerEnumerator::createSceneManager" );
         }
 
         /// assign rs if already configured
-        if (mCurrentRenderSystem)
-            inst->_setDestinationRenderSystem(mCurrentRenderSystem);
+        if( mCurrentRenderSystem )
+            inst->_setDestinationRenderSystem( mCurrentRenderSystem );
 
         mInstances[inst->getName()] = inst;
-        
-        return inst;
-        
 
+        return inst;
     }
     //-----------------------------------------------------------------------
-    SceneManager* SceneManagerEnumerator::createSceneManager(
-        SceneTypeMask typeMask, size_t numWorkerThreads,
-        const String& instanceName)
+    SceneManager *SceneManagerEnumerator::createSceneManager( SceneTypeMask typeMask,
+                                                              size_t numWorkerThreads,
+                                                              const String &instanceName )
     {
-        if (mInstances.find(instanceName) != mInstances.end())
+        if( mInstances.find( instanceName ) != mInstances.end() )
         {
-            OGRE_EXCEPT(Exception::ERR_DUPLICATE_ITEM, 
-                "SceneManager instance called '" + instanceName + "' already exists",
-                "SceneManagerEnumerator::createSceneManager");
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "SceneManager instance called '" + instanceName + "' already exists",
+                         "SceneManagerEnumerator::createSceneManager" );
         }
 
-        SceneManager* inst = 0;
+        SceneManager *inst = 0;
         String name = instanceName;
-        if (name.empty())
+        if( name.empty() )
         {
             // generate a name
             char tmpBuffer[32];
@@ -216,96 +208,90 @@ namespace Ogre {
         }
 
         // Iterate backwards to find the matching factory registered last
-        for(Factories::reverse_iterator i = mFactories.rbegin(); i != mFactories.rend(); ++i)
+        for( Factories::reverse_iterator i = mFactories.rbegin(); i != mFactories.rend(); ++i )
         {
-            if ((*i)->getMetaData().sceneTypeMask & typeMask)
+            if( ( *i )->getMetaData().sceneTypeMask & typeMask )
             {
-                inst = (*i)->createInstance(name, numWorkerThreads);
+                inst = ( *i )->createInstance( name, numWorkerThreads );
                 break;
             }
         }
 
         // use default factory if none
-        if (!inst)
-            inst = mDefaultFactory.createInstance(name, numWorkerThreads);
+        if( !inst )
+            inst = mDefaultFactory.createInstance( name, numWorkerThreads );
 
         /// assign rs if already configured
-        if (mCurrentRenderSystem)
-            inst->_setDestinationRenderSystem(mCurrentRenderSystem);
-        
+        if( mCurrentRenderSystem )
+            inst->_setDestinationRenderSystem( mCurrentRenderSystem );
+
         mInstances[inst->getName()] = inst;
 
         return inst;
-
     }
     //-----------------------------------------------------------------------
-    void SceneManagerEnumerator::destroySceneManager(SceneManager* sm)
+    void SceneManagerEnumerator::destroySceneManager( SceneManager *sm )
     {
-        if(!sm)
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot destroy a null SceneManager.", "SceneManagerEnumerator::destroySceneManager");
+        if( !sm )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Cannot destroy a null SceneManager.",
+                         "SceneManagerEnumerator::destroySceneManager" );
 
         // Erase instance from map
-        mInstances.erase(sm->getName());
+        mInstances.erase( sm->getName() );
 
         // Find factory to destroy
-        for(Factories::iterator i = mFactories.begin(); i != mFactories.end(); ++i)
+        for( Factories::iterator i = mFactories.begin(); i != mFactories.end(); ++i )
         {
-            if ((*i)->getMetaData().typeName == sm->getTypeName())
+            if( ( *i )->getMetaData().typeName == sm->getTypeName() )
             {
-                (*i)->destroyInstance(sm);
+                ( *i )->destroyInstance( sm );
                 break;
             }
         }
-
     }
     //-----------------------------------------------------------------------
-    SceneManager* SceneManagerEnumerator::getSceneManager(const String& instanceName) const
+    SceneManager *SceneManagerEnumerator::getSceneManager( const String &instanceName ) const
     {
-        Instances::const_iterator i = mInstances.find(instanceName);
-        if(i != mInstances.end())
+        Instances::const_iterator i = mInstances.find( instanceName );
+        if( i != mInstances.end() )
         {
             return i->second;
         }
         else
         {
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "SceneManager instance with name '" + instanceName + "' not found.",
-                "SceneManagerEnumerator::getSceneManager");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "SceneManager instance with name '" + instanceName + "' not found.",
+                         "SceneManagerEnumerator::getSceneManager" );
         }
-
     }
     //---------------------------------------------------------------------
-    bool SceneManagerEnumerator::hasSceneManager(const String& instanceName) const
+    bool SceneManagerEnumerator::hasSceneManager( const String &instanceName ) const
     {
-        return mInstances.find(instanceName) != mInstances.end();
+        return mInstances.find( instanceName ) != mInstances.end();
     }
     //-----------------------------------------------------------------------
-    SceneManagerEnumerator::SceneManagerIterator 
-    SceneManagerEnumerator::getSceneManagerIterator()
+    SceneManagerEnumerator::SceneManagerIterator SceneManagerEnumerator::getSceneManagerIterator()
     {
-        return SceneManagerIterator(mInstances.begin(), mInstances.end());
-
+        return SceneManagerIterator( mInstances.begin(), mInstances.end() );
     }
     //-----------------------------------------------------------------------
-    void SceneManagerEnumerator::setRenderSystem(RenderSystem* rs)
+    void SceneManagerEnumerator::setRenderSystem( RenderSystem *rs )
     {
         mCurrentRenderSystem = rs;
 
-        for (Instances::iterator i = mInstances.begin(); i != mInstances.end(); ++i)
+        for( Instances::iterator i = mInstances.begin(); i != mInstances.end(); ++i )
         {
-            i->second->_setDestinationRenderSystem(rs);
+            i->second->_setDestinationRenderSystem( rs );
         }
-
     }
     //-----------------------------------------------------------------------
     void SceneManagerEnumerator::shutdownAll()
     {
-        for (Instances::iterator i = mInstances.begin(); i != mInstances.end(); ++i)
+        for( Instances::iterator i = mInstances.begin(); i != mInstances.end(); ++i )
         {
             // shutdown instances (clear scene)
             i->second->clearScene( true, false );
         }
-
     }
     //-----------------------------------------------------------------------
     const String DefaultSceneManagerFactory::FACTORY_TYPE_NAME = "DefaultSceneManager";
@@ -318,32 +304,26 @@ namespace Ogre {
         mMetaData.worldGeometrySupported = false;
     }
     //-----------------------------------------------------------------------
-    SceneManager* DefaultSceneManagerFactory::createInstance(
-        const String& instanceName, size_t numWorkerThreads)
+    SceneManager *DefaultSceneManagerFactory::createInstance( const String &instanceName,
+                                                              size_t numWorkerThreads )
     {
-        return OGRE_NEW DefaultSceneManager(instanceName, numWorkerThreads);
+        return OGRE_NEW DefaultSceneManager( instanceName, numWorkerThreads );
     }
     //-----------------------------------------------------------------------
-    void DefaultSceneManagerFactory::destroyInstance(SceneManager* instance)
-    {
-        OGRE_DELETE instance;
-    }
+    void DefaultSceneManagerFactory::destroyInstance( SceneManager *instance ) { OGRE_DELETE instance; }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    DefaultSceneManager::DefaultSceneManager(const String& name, size_t numWorkerThreads)
-        : SceneManager(name, numWorkerThreads)
+    DefaultSceneManager::DefaultSceneManager( const String &name, size_t numWorkerThreads ) :
+        SceneManager( name, numWorkerThreads )
     {
     }
     //-----------------------------------------------------------------------
-    DefaultSceneManager::~DefaultSceneManager()
-    {
-    }
+    DefaultSceneManager::~DefaultSceneManager() {}
     //-----------------------------------------------------------------------
-    const String& DefaultSceneManager::getTypeName() const
+    const String &DefaultSceneManager::getTypeName() const
     {
         return DefaultSceneManagerFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------
 
-
-}
+}  // namespace Ogre

@@ -32,6 +32,5 @@ THE SOFTWARE.
 namespace Ogre
 {
     const AxisAlignedBox AxisAlignedBox::BOX_NULL;
-    const AxisAlignedBox AxisAlignedBox::BOX_INFINITE(AxisAlignedBox::EXTENT_INFINITE);
-}
-
+    const AxisAlignedBox AxisAlignedBox::BOX_INFINITE( AxisAlignedBox::EXTENT_INFINITE );
+}  // namespace Ogre

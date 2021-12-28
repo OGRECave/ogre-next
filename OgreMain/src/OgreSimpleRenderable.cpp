@@ -30,90 +30,75 @@ THE SOFTWARE.
 #include "OgreSimpleRenderable.h"
 
 #include "OgreException.h"
-#include "OgreRenderQueue.h"
 #include "OgreMaterialManager.h"
+#include "OgreRenderQueue.h"
 
-namespace Ogre {
-namespace v1 {
-    SimpleRenderable::SimpleRenderable( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                        SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 110u )
-    , mWorldTransform(Matrix4::IDENTITY)
-    , mMatName("BaseWhite")
-    , mMaterial(MaterialManager::getSingleton().getByName("BaseWhite"))
-    , mParentSceneManager(NULL)
+namespace Ogre
+{
+    namespace v1
     {
-    }
+        SimpleRenderable::SimpleRenderable( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                            SceneManager *manager ) :
+            MovableObject( id, objectMemoryManager, manager, 110u ),
+            mWorldTransform( Matrix4::IDENTITY ),
+            mMatName( "BaseWhite" ),
+            mMaterial( MaterialManager::getSingleton().getByName( "BaseWhite" ) ),
+            mParentSceneManager( NULL )
+        {
+        }
 
-    void SimpleRenderable::setMaterial( const String& matName )
-    {
-        mMatName = matName;
-        mMaterial = MaterialManager::getSingleton().getByName(mMatName);
-        if (mMaterial.isNull())
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Could not find material " + mMatName,
-                "SimpleRenderable::setMaterial" );
-    
-        // Won't load twice anyway
-        mMaterial->load();
-    }
+        void SimpleRenderable::setMaterial( const String &matName )
+        {
+            mMatName = matName;
+            mMaterial = MaterialManager::getSingleton().getByName( mMatName );
+            if( mMaterial.isNull() )
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Could not find material " + mMatName,
+                             "SimpleRenderable::setMaterial" );
 
-    void SimpleRenderable::setMaterial( const MaterialPtr& mat )
-    {
-        mMatName = mat->getName();
-        mMaterial = mat;
-        // Won't load twice anyway
-        mMaterial->load();
-    }
+            // Won't load twice anyway
+            mMaterial->load();
+        }
 
-    const MaterialPtr& SimpleRenderable::getMaterial() const
-    {
-        return mMaterial;
-    }
+        void SimpleRenderable::setMaterial( const MaterialPtr &mat )
+        {
+            mMatName = mat->getName();
+            mMaterial = mat;
+            // Won't load twice anyway
+            mMaterial->load();
+        }
 
-    void SimpleRenderable::getRenderOperation(RenderOperation& op, bool casterPass)
-    {
-        op = mRenderOp;
-    }
+        const MaterialPtr &SimpleRenderable::getMaterial() const { return mMaterial; }
 
-    void SimpleRenderable::setRenderOperation( const RenderOperation& rend )
-    {
-        mRenderOp = rend;
-    }
+        void SimpleRenderable::getRenderOperation( RenderOperation &op, bool casterPass )
+        {
+            op = mRenderOp;
+        }
 
-    void SimpleRenderable::setWorldTransform( const Matrix4& xform )
-    {
-        mWorldTransform = xform;
-    }
+        void SimpleRenderable::setRenderOperation( const RenderOperation &rend ) { mRenderOp = rend; }
 
-    void SimpleRenderable::getWorldTransforms( Matrix4* xform ) const
-    {
-        *xform = mWorldTransform * mParentNode->_getFullTransform();
-    }
+        void SimpleRenderable::setWorldTransform( const Matrix4 &xform ) { mWorldTransform = xform; }
 
-    void SimpleRenderable::setBoundingBox( const AxisAlignedBox& box )
-    {
-        mBox = box;
-    }
+        void SimpleRenderable::getWorldTransforms( Matrix4 *xform ) const
+        {
+            *xform = mWorldTransform * mParentNode->_getFullTransform();
+        }
 
-    const AxisAlignedBox& SimpleRenderable::getBoundingBox() const
-    {
-        return mBox;
-    }
+        void SimpleRenderable::setBoundingBox( const AxisAlignedBox &box ) { mBox = box; }
 
-    SimpleRenderable::~SimpleRenderable()
-    {
-    }
-    //-----------------------------------------------------------------------
-    const String& SimpleRenderable::getMovableType() const
-    {
-        static String movType = "SimpleRenderable";
-        return movType;
-    }
-    //-----------------------------------------------------------------------
-    const LightList& SimpleRenderable::getLights() const
-    {
-        // Use movable query lights
-        return queryLights();
-    }
-}
-}
+        const AxisAlignedBox &SimpleRenderable::getBoundingBox() const { return mBox; }
+
+        SimpleRenderable::~SimpleRenderable() {}
+        //-----------------------------------------------------------------------
+        const String &SimpleRenderable::getMovableType() const
+        {
+            static String movType = "SimpleRenderable";
+            return movType;
+        }
+        //-----------------------------------------------------------------------
+        const LightList &SimpleRenderable::getLights() const
+        {
+            // Use movable query lights
+            return queryLights();
+        }
+    }  // namespace v1
+}  // namespace Ogre

@@ -31,40 +31,43 @@ THE SOFTWARE.
 #include "OgrePlatformInformation.h"
 
 #if __OGRE_HAVE_NEON
-#define __Mathlib_H__ //Needed to directly include OgreMathlibNEON
+#    define __Mathlib_H__  // Needed to directly include OgreMathlibNEON
 
-#include "Math/Array/OgreArrayConfig.h"
-#include "Math/Array/NEON/Single/OgreMathlibNEON.h"
-#include "Math/Array/NEON/Single/neon_mathfun.h"
-#include "Math/Array/OgreBooleanMask.h"
+#    include "Math/Array/NEON/Single/OgreMathlibNEON.h"
+#    include "Math/Array/NEON/Single/neon_mathfun.h"
+#    include "Math/Array/OgreArrayConfig.h"
+#    include "Math/Array/OgreBooleanMask.h"
 
 namespace Ogre
 {
-    #define init_list_4(a) { a, a, a, a }
-    const float32x4_ct MathlibNEON::HALF       = init_list_4( 0.5f );
-    const float32x4_ct MathlibNEON::ONE        = init_list_4( 1.0f );
-    const float32x4_ct MathlibNEON::THREE      = init_list_4( 3.0f );
-    const float32x4_ct MathlibNEON::NEG_ONE    = init_list_4( -1.0f );
-    const float32x4_ct MathlibNEON::fEpsilon   = init_list_4( 1e-6f );
+#    define init_list_4( a ) \
+        { \
+            a, a, a, a \
+        }
+    const float32x4_ct MathlibNEON::HALF = init_list_4( 0.5f );
+    const float32x4_ct MathlibNEON::ONE = init_list_4( 1.0f );
+    const float32x4_ct MathlibNEON::THREE = init_list_4( 3.0f );
+    const float32x4_ct MathlibNEON::NEG_ONE = init_list_4( -1.0f );
+    const float32x4_ct MathlibNEON::fEpsilon = init_list_4( 1e-6f );
     const float32x4_ct MathlibNEON::fSqEpsilon = init_list_4( 1e-12f );
-    const float32x4_ct MathlibNEON::OneMinusEpsilon= init_list_4( 1.0f - 1e-6f );
-    const float32x4_ct MathlibNEON::FLOAT_MIN  = init_list_4( std::numeric_limits<Real>::min() );
-    const float32x4_ct MathlibNEON::SIGN_MASK  = init_list_4( -0.0f );
-    const float32x4_ct MathlibNEON::INFINITEA  = init_list_4( std::numeric_limits<Real>::infinity() );
-    const float32x4_ct MathlibNEON::MAX_NEG    = init_list_4( -std::numeric_limits<Real>::max() );
-    const float32x4_ct MathlibNEON::MAX_POS    = init_list_4( std::numeric_limits<Real>::max() );
+    const float32x4_ct MathlibNEON::OneMinusEpsilon = init_list_4( 1.0f - 1e-6f );
+    const float32x4_ct MathlibNEON::FLOAT_MIN = init_list_4( std::numeric_limits<Real>::min() );
+    const float32x4_ct MathlibNEON::SIGN_MASK = init_list_4( -0.0f );
+    const float32x4_ct MathlibNEON::INFINITEA = init_list_4( std::numeric_limits<Real>::infinity() );
+    const float32x4_ct MathlibNEON::MAX_NEG = init_list_4( -std::numeric_limits<Real>::max() );
+    const float32x4_ct MathlibNEON::MAX_POS = init_list_4( std::numeric_limits<Real>::max() );
     const float32x4_ct MathlibNEON::LAST_AFFINE_COLUMN = { 0, 0, 0, 1 };
 
     static const Real _PI = Real( 4.0 * std::atan( 1.0 ) );
-    //We can't use Math::fDeg2Rad & Math::fRad2Deg directly because
-    //it's not guaranteed to have been initialized first
-    const float32x4_ct MathlibNEON::PI         = init_list_4( _PI );
-    const float32x4_ct MathlibNEON::TWO_PI     = init_list_4( 2.0f * _PI );
-    const float32x4_ct MathlibNEON::fDeg2Rad   = init_list_4( _PI / 180.0f );
-    const float32x4_ct MathlibNEON::fRad2Deg   = init_list_4( 180.0f / _PI );
+    // We can't use Math::fDeg2Rad & Math::fRad2Deg directly because
+    // it's not guaranteed to have been initialized first
+    const float32x4_ct MathlibNEON::PI = init_list_4( _PI );
+    const float32x4_ct MathlibNEON::TWO_PI = init_list_4( 2.0f * _PI );
+    const float32x4_ct MathlibNEON::fDeg2Rad = init_list_4( _PI / 180.0f );
+    const float32x4_ct MathlibNEON::fRad2Deg = init_list_4( 180.0f / _PI );
 
-    const float32x4_ct MathlibNEON::ONE_DIV_2PI= init_list_4( 1.0f / (2.0f * _PI) );
-    #undef init_list_4
+    const float32x4_ct MathlibNEON::ONE_DIV_2PI = init_list_4( 1.0f / ( 2.0f * _PI ) );
+#    undef init_list_4
 
     //-----------------------------------------------------------------------------------
     ArrayReal MathlibNEON::Sin4( ArrayReal x )
@@ -120,24 +123,23 @@ namespace Ogre
         sincos_ps( x, &outSin, &outCos );
     }
 
-    const uint32x4_ct BooleanMask4::mMasks[NUM_MASKS] =
-    {
-        { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },//MASK_NONE
-        { 0xffffffff, 0x00000000, 0x00000000, 0x00000000 },//MASK_X
-        { 0x00000000, 0xffffffff, 0x00000000, 0x00000000 },//MASK_Y
-        { 0xffffffff, 0xffffffff, 0x00000000, 0x00000000 },//MASK_XY
-        { 0x00000000, 0x00000000, 0xffffffff, 0x00000000 },//MASK_Z
-        { 0xffffffff, 0x00000000, 0xffffffff, 0x00000000 },//MASK_XZ
-        { 0x00000000, 0xffffffff, 0xffffffff, 0x00000000 },//MASK_YZ
-        { 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000 },//MASK_XYZ
-        { 0x00000000, 0x00000000, 0x00000000, 0xffffffff },//MASK_W
-        { 0xffffffff, 0x00000000, 0x00000000, 0xffffffff },//MASK_XW
-        { 0x00000000, 0xffffffff, 0x00000000, 0xffffffff },//MASK_YW
-        { 0xffffffff, 0xffffffff, 0x00000000, 0xffffffff },//MASK_XYW
-        { 0x00000000, 0x00000000, 0xffffffff, 0xffffffff },//MASK_ZW
-        { 0xffffffff, 0x00000000, 0xffffffff, 0xffffffff },//MASK_XZW
-        { 0x00000000, 0xffffffff, 0xffffffff, 0xffffffff },//MASK_YZW
-        { 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff } //MASK_XYZW
+    const uint32x4_ct BooleanMask4::mMasks[NUM_MASKS] = {
+        { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },  // MASK_NONE
+        { 0xffffffff, 0x00000000, 0x00000000, 0x00000000 },  // MASK_X
+        { 0x00000000, 0xffffffff, 0x00000000, 0x00000000 },  // MASK_Y
+        { 0xffffffff, 0xffffffff, 0x00000000, 0x00000000 },  // MASK_XY
+        { 0x00000000, 0x00000000, 0xffffffff, 0x00000000 },  // MASK_Z
+        { 0xffffffff, 0x00000000, 0xffffffff, 0x00000000 },  // MASK_XZ
+        { 0x00000000, 0xffffffff, 0xffffffff, 0x00000000 },  // MASK_YZ
+        { 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000 },  // MASK_XYZ
+        { 0x00000000, 0x00000000, 0x00000000, 0xffffffff },  // MASK_W
+        { 0xffffffff, 0x00000000, 0x00000000, 0xffffffff },  // MASK_XW
+        { 0x00000000, 0xffffffff, 0x00000000, 0xffffffff },  // MASK_YW
+        { 0xffffffff, 0xffffffff, 0x00000000, 0xffffffff },  // MASK_XYW
+        { 0x00000000, 0x00000000, 0xffffffff, 0xffffffff },  // MASK_ZW
+        { 0xffffffff, 0x00000000, 0xffffffff, 0xffffffff },  // MASK_XZW
+        { 0x00000000, 0xffffffff, 0xffffffff, 0xffffffff },  // MASK_YZW
+        { 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff }   // MASK_XYZW
     };
-}
+}  // namespace Ogre
 #endif

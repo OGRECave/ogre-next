@@ -35,9 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    BoneMemoryManager::BoneMemoryManager() : mBoneRebaseListener( 0 )
-    {
-    }
+    BoneMemoryManager::BoneMemoryManager() : mBoneRebaseListener( 0 ) {}
     //-----------------------------------------------------------------------------------
     BoneMemoryManager::~BoneMemoryManager()
     {
@@ -55,13 +53,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void BoneMemoryManager::growToDepth( size_t newDepth )
     {
-        //TODO: (dark_sylinc) give a specialized hint for each depth.
+        // TODO: (dark_sylinc) give a specialized hint for each depth.
         while( newDepth >= mMemoryManagers.size() )
         {
-            //Disable cleanups if we fall here (use _growToDepth instead)
-            mMemoryManagers.push_back( BoneArrayMemoryManager( mMemoryManagers.size(), 100,
-                                                                -1, ArrayMemoryManager::MAX_MEMORY_SLOTS,
-                                                                this ) );
+            // Disable cleanups if we fall here (use _growToDepth instead)
+            mMemoryManagers.push_back( BoneArrayMemoryManager(
+                mMemoryManagers.size(), 100, -1, ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
             mMemoryManagers.back().initialize();
         }
     }
@@ -69,7 +66,7 @@ namespace Ogre
     void BoneMemoryManager::_growToDepth( const vector<size_t>::type &bonesPerDepth )
     {
         mMemoryManagers.reserve( bonesPerDepth.size() );
-        //TODO: (dark_sylinc) give a specialized hint for each depth (number of skeletons).
+        // TODO: (dark_sylinc) give a specialized hint for each depth (number of skeletons).
         while( bonesPerDepth.size() > mMemoryManagers.size() )
         {
             size_t depthIdx = mMemoryManagers.size();
@@ -77,16 +74,15 @@ namespace Ogre
             size_t numSlots = bonesPerDepth[depthIdx];
             if( numSlots > ARRAY_PACKED_REALS >> 1 )
             {
-                //For bones, cleanup threshold must be multiple of ARRAY_PACKED_REALS - 1.
-                numSlots = (((bonesPerDepth[depthIdx] - 1) / ARRAY_PACKED_REALS) + 1) *
-                                                                    ARRAY_PACKED_REALS;
+                // For bones, cleanup threshold must be multiple of ARRAY_PACKED_REALS - 1.
+                numSlots = ( ( ( bonesPerDepth[depthIdx] - 1 ) / ARRAY_PACKED_REALS ) + 1 ) *
+                           ARRAY_PACKED_REALS;
             }
 
-            size_t cleanupThreshold = 50 * numSlots - 1; //50 is arbitrary
-            mMemoryManagers.push_back( BoneArrayMemoryManager( mMemoryManagers.size(), 100,
-                                                                cleanupThreshold,
-                                                                ArrayMemoryManager::MAX_MEMORY_SLOTS,
-                                                                this ) );
+            size_t cleanupThreshold = 50 * numSlots - 1;  // 50 is arbitrary
+            mMemoryManagers.push_back(
+                BoneArrayMemoryManager( mMemoryManagers.size(), 100, cleanupThreshold,
+                                        ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
             mMemoryManagers.back().initialize();
         }
     }
@@ -95,7 +91,7 @@ namespace Ogre
     {
         growToDepth( depth );
 
-        BoneArrayMemoryManager& mgr = mMemoryManagers[depth];
+        BoneArrayMemoryManager &mgr = mMemoryManagers[depth];
         mgr.createNewNode( outTransform );
     }
     //-----------------------------------------------------------------------------------
@@ -149,7 +145,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void BoneMemoryManager::migrateTo( BoneTransform &inOutTransform, size_t depth,
-                                        BoneMemoryManager *dstBoneMemoryManager )
+                                       BoneMemoryManager *dstBoneMemoryManager )
     {
         BoneTransform tmp;
         dstBoneMemoryManager->nodeCreated( tmp, depth );
@@ -161,7 +157,7 @@ namespace Ogre
     size_t BoneMemoryManager::getNumDepths() const
     {
         size_t retVal = -1;
-        ArrayMemoryManagerVec::const_iterator begin= mMemoryManagers.begin();
+        ArrayMemoryManagerVec::const_iterator begin = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
 
@@ -183,8 +179,8 @@ namespace Ogre
     void BoneMemoryManager::buildDiffList( uint16 level, const MemoryPoolVec &basePtrs,
                                            ArrayMemoryManager::PtrdiffVec &outDiffsList )
     {
-        //We don't need to build the diff list as we've access to the Node through mOwner
-        //and access to the actual Node with the right pointers.
+        // We don't need to build the diff list as we've access to the Node through mOwner
+        // and access to the actual Node with the right pointers.
         /*Transform transform;
         const size_t numNodes = this->getFirstNode( transform, level );
 
@@ -208,9 +204,9 @@ namespace Ogre
         BoneTransform transform;
         const size_t numNodes = this->getFirstNode( transform, level );
 
-        for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( transform.mOwner[j] )
                 {
@@ -228,8 +224,8 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     void BoneMemoryManager::performCleanup( uint16 level, const MemoryPoolVec &basePtrs,
-                                            size_t const *elementsMemSizes,
-                                            size_t startInstance, size_t diffInstances )
+                                            size_t const *elementsMemSizes, size_t startInstance,
+                                            size_t diffInstances )
     {
         BoneTransform transform;
         const size_t numNodes = this->getFirstNode( transform, level );
@@ -238,9 +234,9 @@ namespace Ogre
 
         transform.advancePack( roundedStart );
 
-        for( size_t i=roundedStart * ARRAY_PACKED_REALS; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = roundedStart * ARRAY_PACKED_REALS; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( transform.mOwner[j] )
                 {
@@ -256,4 +252,4 @@ namespace Ogre
         if( mBoneRebaseListener )
             mBoneRebaseListener->_updateBoneStartTransforms();
     }
-}
+}  // namespace Ogre

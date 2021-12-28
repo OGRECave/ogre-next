@@ -32,8 +32,8 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreGpuProgramManager.h"
 #include "OgreLogManager.h"
-#include "OgreStringConverter.h"
 #include "OgreProfiler.h"
+#include "OgreStringConverter.h"
 
 #include <sstream>
 
@@ -42,11 +42,14 @@ namespace Ogre
     //---------------------------------------------------------------------------
     HighLevelGpuProgram::CmdEnableIncludeHeader HighLevelGpuProgram::msEnableIncludeHeaderCmd;
     //---------------------------------------------------------------------------
-    HighLevelGpuProgram::HighLevelGpuProgram(ResourceManager* creator, 
-        const String& name, ResourceHandle handle, const String& group, 
-        bool isManual, ManualResourceLoader* loader)
-        : GpuProgram(creator, name, handle, group, isManual, loader), 
-        mHighLevelLoaded(false), mEnableIncludeHeader(false), mAssemblerProgram(), mConstantDefsBuilt(false)
+    HighLevelGpuProgram::HighLevelGpuProgram( ResourceManager *creator, const String &name,
+                                              ResourceHandle handle, const String &group, bool isManual,
+                                              ManualResourceLoader *loader ) :
+        GpuProgram( creator, name, handle, group, isManual, loader ),
+        mHighLevelLoaded( false ),
+        mEnableIncludeHeader( false ),
+        mAssemblerProgram(),
+        mConstantDefsBuilt( false )
     {
     }
     //---------------------------------------------------------------------------
@@ -54,58 +57,57 @@ namespace Ogre
     {
         GpuProgram::setupBaseParamDictionary();
 
-        ParamDictionary* dict = getParamDictionary();
+        ParamDictionary *dict = getParamDictionary();
 
         dict->addParameter(
-            ParameterDef("enable_include_header",
-            "Whether we should parse the source code looking for include files and\n"
-            "embedding the file. Disabled by default to avoid slowing down when\n"
-            "#include is not used. Not needed if the API natively supports it (D3D11).\n"
-            "\n"
-            "Single line comments are supported:\n"
-            "    // #include \"MyFile.h\" --> won't be included.\n"
-            "\n"
-            "Block comment lines are not supported, but may not matter if\n"
-            "the included file does not close the block:\n"
-            "    / *\n"
-            "         #include \"MyFile.h\" --> file will be included anyway.\n"
-            "     * /\n"
-            "\n"
-            "Preprocessor macros are not supported, but should not matter:\n"
-            "     #if SOME_MACRO\n"
-            "         #include \"MyFile.h\" --> file will be included anyway.\n"
-            "     #endif\n"
-            "\n"
-            "Recursive includes are supported (e.g. header includes a header)\n"
-            "\n"
-            "Beware included files mess up error reporting (wrong lines)",
-                         PT_BOOL ),
-                         &msEnableIncludeHeaderCmd );
+            ParameterDef( "enable_include_header",
+                          "Whether we should parse the source code looking for include files and\n"
+                          "embedding the file. Disabled by default to avoid slowing down when\n"
+                          "#include is not used. Not needed if the API natively supports it (D3D11).\n"
+                          "\n"
+                          "Single line comments are supported:\n"
+                          "    // #include \"MyFile.h\" --> won't be included.\n"
+                          "\n"
+                          "Block comment lines are not supported, but may not matter if\n"
+                          "the included file does not close the block:\n"
+                          "    / *\n"
+                          "         #include \"MyFile.h\" --> file will be included anyway.\n"
+                          "     * /\n"
+                          "\n"
+                          "Preprocessor macros are not supported, but should not matter:\n"
+                          "     #if SOME_MACRO\n"
+                          "         #include \"MyFile.h\" --> file will be included anyway.\n"
+                          "     #endif\n"
+                          "\n"
+                          "Recursive includes are supported (e.g. header includes a header)\n"
+                          "\n"
+                          "Beware included files mess up error reporting (wrong lines)",
+                          PT_BOOL ),
+            &msEnableIncludeHeaderCmd );
     }
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::loadImpl()
     {
-        if (isSupported())
+        if( isSupported() )
         {
-            // load self 
+            // load self
             loadHighLevel();
 
             // create low-level implementation
             createLowLevelImpl();
             // load constructed assembler program (if it exists)
-            if (!mAssemblerProgram.isNull() && mAssemblerProgram.getPointer() != this)
+            if( !mAssemblerProgram.isNull() && mAssemblerProgram.getPointer() != this )
             {
                 mAssemblerProgram->load();
             }
-
         }
     }
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::unloadImpl()
-    {   
-        if (!mAssemblerProgram.isNull() && mAssemblerProgram.getPointer() != this)
+    {
+        if( !mAssemblerProgram.isNull() && mAssemblerProgram.getPointer() != this )
         {
-            mAssemblerProgram->getCreator()->remove(mAssemblerProgram->getHandle());
+            mAssemblerProgram->getCreator()->remove( mAssemblerProgram->getHandle() );
             mAssemblerProgram.setNull();
         }
 
@@ -127,25 +129,25 @@ namespace Ogre
         // Make sure param defs are loaded
         GpuProgramParametersSharedPtr params = GpuProgramManager::getSingleton().createParameters();
         // Only populate named parameters if we can support this program
-        if (this->isSupported())
+        if( this->isSupported() )
         {
             loadHighLevel();
             // Errors during load may have prevented compile
-            if (this->isSupported())
+            if( this->isSupported() )
             {
-                populateParameterNames(params);
+                populateParameterNames( params );
             }
         }
         // Copy in default parameters if present
-        if (!mDefaultParams.isNull())
-            params->copyConstantsFrom(*(mDefaultParams.get()));
+        if( !mDefaultParams.isNull() )
+            params->copyConstantsFrom( *( mDefaultParams.get() ) );
         return params;
     }
     size_t HighLevelGpuProgram::calculateSize() const
     {
         size_t memSize = 0;
-        memSize += sizeof(bool);
-        if(!mAssemblerProgram.isNull() && (mAssemblerProgram.getPointer() != this) )
+        memSize += sizeof( bool );
+        if( !mAssemblerProgram.isNull() && ( mAssemblerProgram.getPointer() != this ) )
             memSize += mAssemblerProgram->calculateSize();
 
         memSize += GpuProgram::calculateSize();
@@ -156,13 +158,13 @@ namespace Ogre
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::loadHighLevel()
     {
-        if (!mHighLevelLoaded)
+        if( !mHighLevelLoaded )
         {
-            try 
+            try
             {
                 loadHighLevelImpl();
                 mHighLevelLoaded = true;
-                if (!mDefaultParams.isNull())
+                if( !mDefaultParams.isNull() )
                 {
                     // Keep a reference to old ones to copy
                     GpuProgramParametersSharedPtr savedParams = mDefaultParams;
@@ -174,16 +176,14 @@ namespace Ogre
 
                     // Copy old (matching) values across
                     // Don't use copyConstantsFrom since program may be different
-                    mDefaultParams->copyMatchingNamedConstantsFrom(*savedParams.get());
-
+                    mDefaultParams->copyMatchingNamedConstantsFrom( *savedParams.get() );
                 }
-
             }
-            catch (const RuntimeAssertionException&)
+            catch( const RuntimeAssertionException & )
             {
                 throw;
             }
-            catch (const Exception& e)
+            catch( const Exception &e )
             {
                 // will already have been logged
                 LogManager::getSingleton().stream()
@@ -198,12 +198,12 @@ namespace Ogre
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::unloadHighLevel()
     {
-        if (mHighLevelLoaded)
+        if( mHighLevelLoaded )
         {
             unloadHighLevelImpl();
             // Clear saved constant defs
             mConstantDefsBuilt = false;
-            createParameterMappingStructures(true);
+            createParameterMappingStructures( true );
 
             mHighLevelLoaded = false;
         }
@@ -214,9 +214,11 @@ namespace Ogre
         if( mEnableIncludeHeader && mCompileError )
         {
             LogManager::getSingleton().logMessage(
-                        "Error found while compiling with enable_include_header. "
-                        "This is the final output:\n"
-                        ">>> BEGIN SOURCE " + mFilename, LML_CRITICAL );
+                "Error found while compiling with enable_include_header. "
+                "This is the final output:\n"
+                ">>> BEGIN SOURCE " +
+                    mFilename,
+                LML_CRITICAL );
             LogManager::getSingleton().logMessage( mSource, LML_CRITICAL );
             LogManager::getSingleton().logMessage( ">>> END SOURCE " + mFilename, LML_CRITICAL );
         }
@@ -230,8 +232,8 @@ namespace Ogre
         startPos = source.find( includeKeyword, startPos );
         while( startPos != String::npos )
         {
-            //Backtrack to see if have to skip commented lines like "// #include".
-            //We do not support block comments /**/
+            // Backtrack to see if have to skip commented lines like "// #include".
+            // We do not support block comments /**/
             const size_t lineStartPos = source.rfind( '\n', startPos );
             if( lineStartPos == String::npos || lineStartPos + 2u >= source.size() ||
                 source[lineStartPos + 1] != '/' || source[lineStartPos + 2] != '/' )
@@ -242,13 +244,15 @@ namespace Ogre
                 size_t endPos1 = source.find( '>', pos );
                 size_t endPos = std::min( endPos0, endPos1 );
 
-                if( endPos == String::npos || (endPos >= eolMarkerPos && eolMarkerPos != String::npos) )
+                if( endPos == String::npos ||
+                    ( endPos >= eolMarkerPos && eolMarkerPos != String::npos ) )
                 {
                     mCompileError = true;
                     dumpSourceIfHasIncludeEnabled();
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Invalid #include syntax near " + source.substr(
-                                     startPos, std::min( startPos + 10u, source.size() - startPos ) ),
+                                 "Invalid #include syntax near " +
+                                     source.substr( startPos, std::min( startPos + 10u,
+                                                                        source.size() - startPos ) ),
                                  "HighLevelGpuProgram::parseIncludeFile" );
                 }
 
@@ -257,15 +261,14 @@ namespace Ogre
                 try
                 {
                     DataStreamPtr includeStream =
-                            ResourceGroupManager::getSingleton().openResource(
-                                file, mGroup, true, this );
+                        ResourceGroupManager::getSingleton().openResource( file, mGroup, true, this );
 
                     String content = includeStream->getAsString();
                     source.replace( startPos, ( endPos + 1u ) - startPos, content );
                 }
-                catch( FileNotFoundException& )
+                catch( FileNotFoundException & )
                 {
-                    //Leave the included header, fallback to the compiler
+                    // Leave the included header, fallback to the compiler
                     //(e.g. Metal can include system headers)
                     startPos = endPos;
                 }
@@ -283,12 +286,11 @@ namespace Ogre
     {
         OgreProfileExhaustive( "HighLevelGpuProgram::loadHighLevelImpl" );
 
-        if (mLoadFromFile)
+        if( mLoadFromFile )
         {
             // find & load source code
-            DataStreamPtr stream = 
-                ResourceGroupManager::getSingleton().openResource(
-                    mFilename, mGroup, true, this);
+            DataStreamPtr stream =
+                ResourceGroupManager::getSingleton().openResource( mFilename, mGroup, true, this );
 
             mSource = stream->getAsString();
 
@@ -300,7 +302,7 @@ namespace Ogre
         {
             loadFromSource();
         }
-        catch( RenderingAPIException& )
+        catch( RenderingAPIException & )
         {
             dumpSourceIfHasIncludeEnabled();
             throw;
@@ -309,48 +311,41 @@ namespace Ogre
         dumpSourceIfHasIncludeEnabled();
     }
     //---------------------------------------------------------------------
-    void HighLevelGpuProgram::setEnableIncludeHeader( bool bEnable )
-    {
-        mEnableIncludeHeader = bEnable;
-    }
+    void HighLevelGpuProgram::setEnableIncludeHeader( bool bEnable ) { mEnableIncludeHeader = bEnable; }
     //---------------------------------------------------------------------
-    bool HighLevelGpuProgram::getEnableIncludeHeader() const
-    {
-        return mEnableIncludeHeader;
-    }
+    bool HighLevelGpuProgram::getEnableIncludeHeader() const { return mEnableIncludeHeader; }
     //---------------------------------------------------------------------
-    const GpuNamedConstants& HighLevelGpuProgram::getConstantDefinitions() const
+    const GpuNamedConstants &HighLevelGpuProgram::getConstantDefinitions() const
     {
-        if (!mConstantDefsBuilt)
+        if( !mConstantDefsBuilt )
         {
             buildConstantDefinitions();
             mConstantDefsBuilt = true;
         }
         return *mConstantDefs.get();
-
     }
     //---------------------------------------------------------------------
-    void HighLevelGpuProgram::populateParameterNames(GpuProgramParametersSharedPtr params)
+    void HighLevelGpuProgram::populateParameterNames( GpuProgramParametersSharedPtr params )
     {
         getConstantDefinitions();
-        params->_setNamedConstants(mConstantDefs);
+        params->_setNamedConstants( mConstantDefs );
         // also set logical / physical maps for programs which use this
-        params->_setLogicalIndexes(mFloatLogicalToPhysical, mDoubleLogicalToPhysical, 
-                                           mIntLogicalToPhysical, mUIntLogicalToPhysical,
-                                           mBoolLogicalToPhysical);
+        params->_setLogicalIndexes( mFloatLogicalToPhysical, mDoubleLogicalToPhysical,
+                                    mIntLogicalToPhysical, mUIntLogicalToPhysical,
+                                    mBoolLogicalToPhysical );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    String HighLevelGpuProgram::CmdEnableIncludeHeader::doGet(const void *target) const
+    String HighLevelGpuProgram::CmdEnableIncludeHeader::doGet( const void *target ) const
     {
-        bool retVal = static_cast<const HighLevelGpuProgram*>(target)->getEnableIncludeHeader();
+        bool retVal = static_cast<const HighLevelGpuProgram *>( target )->getEnableIncludeHeader();
         return StringConverter::toString( retVal );
     }
     //-----------------------------------------------------------------------------------
-    void HighLevelGpuProgram::CmdEnableIncludeHeader::doSet(void *target, const String& val)
+    void HighLevelGpuProgram::CmdEnableIncludeHeader::doSet( void *target, const String &val )
     {
         bool enableIncludeHeader = StringConverter::parseBool( val );
-        static_cast<HighLevelGpuProgram*>(target)->setEnableIncludeHeader( enableIncludeHeader );
+        static_cast<HighLevelGpuProgram *>( target )->setEnableIncludeHeader( enableIncludeHeader );
     }
-}
+}  // namespace Ogre

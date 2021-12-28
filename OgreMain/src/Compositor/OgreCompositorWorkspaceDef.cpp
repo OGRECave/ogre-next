@@ -32,17 +32,17 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNodeDef.h"
-#include "OgreStringConverter.h"
 #include "OgreLogManager.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {
-    CompositorWorkspaceDef::CompositorWorkspaceDef( const String& name,
+    CompositorWorkspaceDef::CompositorWorkspaceDef( const String &name,
                                                     CompositorManager2 *compositorManager ) :
-            TextureDefinitionBase( TEXTURE_GLOBAL ),
-            mName( name ),
-            mNameStr( name ),
-            mCompositorManager( compositorManager )
+        TextureDefinitionBase( TEXTURE_GLOBAL ),
+        mName( name ),
+        mNameStr( name ),
+        mCompositorManager( compositorManager )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -53,14 +53,15 @@ namespace Ogre
             if( !mCompositorManager->hasNodeDefinition( nodeName ) )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                             "Can't find node '" + nodeName.getFriendlyText() + "'. "
-                             "Note declaration order is important. You may need to define "
-                             "it earlier if the name is correct.",
+                             "Can't find node '" + nodeName.getFriendlyText() +
+                                 "'. "
+                                 "Note declaration order is important. You may need to define "
+                                 "it earlier if the name is correct.",
                              "CompositorWorkspaceDef::createImplicitAlias" );
             }
             else
             {
-                //Create the implicit alias
+                // Create the implicit alias
                 mAliasedNodes[nodeName] = nodeName;
             }
         }
@@ -79,14 +80,14 @@ namespace Ogre
         {
             if( itor->inNode == inNode && itor->inChannel == inChannel )
             {
-                LogManager::getSingleton().logMessage( "WARNING: Node '" +
-                            itor->outNode.getFriendlyText() + "' from channel #" +
-                            StringConverter::toString( itor->outChannel ) + " and Node '" +
-                            outNodeName + "' from channel #" + StringConverter::toString( outChannel ) +
-                            "are both trying to connect its output to input channel #" +
-                            StringConverter::toString( inChannel ) +
-                            " of node '" + inNode.getFriendlyText() + "'. Only the latter will work" );
-                break; //Early out
+                LogManager::getSingleton().logMessage(
+                    "WARNING: Node '" + itor->outNode.getFriendlyText() + "' from channel #" +
+                    StringConverter::toString( itor->outChannel ) + " and Node '" + outNodeName +
+                    "' from channel #" + StringConverter::toString( outChannel ) +
+                    "are both trying to connect its output to input channel #" +
+                    StringConverter::toString( inChannel ) + " of node '" + inNode.getFriendlyText() +
+                    "'. Only the latter will work" );
+                break;  // Early out
             }
             ++itor;
         }
@@ -98,13 +99,16 @@ namespace Ogre
         {
             if( itor->inNode == inNode && itor->inChannel == inChannel )
             {
-                LogManager::getSingleton().logMessage( "WARNING: An external buffer/texture "
-                            "from channel #" + StringConverter::toString( itor->outChannel ) +
-                            " and Node '" + outNodeName + "' from channel #" +
-                            StringConverter::toString( outChannel ) + " are both trying to connect "
-                            "its output to input channel #" + StringConverter::toString( inChannel ) +
-                            " of node '" + inNode.getFriendlyText() + "'. Only the latter will work" );
-                break; //Early out
+                LogManager::getSingleton().logMessage(
+                    "WARNING: An external buffer/texture "
+                    "from channel #" +
+                    StringConverter::toString( itor->outChannel ) + " and Node '" + outNodeName +
+                    "' from channel #" + StringConverter::toString( outChannel ) +
+                    " are both trying to connect "
+                    "its output to input channel #" +
+                    StringConverter::toString( inChannel ) + " of node '" + inNode.getFriendlyText() +
+                    "'. Only the latter will work" );
+                break;  // Early out
             }
             ++itor;
         }
@@ -114,21 +118,20 @@ namespace Ogre
                                                            const std::string &outNodeName,
                                                            uint32 outChannel ) const
     {
-        checkInputChannelIsEmpty( mChannelRoutes, mExternalChannelRoutes,
-                                  inNode, inChannel, outNodeName, outChannel );
+        checkInputChannelIsEmpty( mChannelRoutes, mExternalChannelRoutes, inNode, inChannel, outNodeName,
+                                  outChannel );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::checkInputBufferChannelIsEmpty( IdString inNode,
-                                                                 uint32 inChannel,
+    void CompositorWorkspaceDef::checkInputBufferChannelIsEmpty( IdString inNode, uint32 inChannel,
                                                                  const std::string &outNodeName,
                                                                  uint32 outChannel ) const
     {
-        checkInputChannelIsEmpty( mBufferChannelRoutes, mExternalBufferChannelRoutes,
-                                  inNode, inChannel, outNodeName, outChannel );
+        checkInputChannelIsEmpty( mBufferChannelRoutes, mExternalBufferChannelRoutes, inNode, inChannel,
+                                  outNodeName, outChannel );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::connect( IdString outNode, uint32 outChannel,
-                                          IdString inNode, uint32 inChannel )
+    void CompositorWorkspaceDef::connect( IdString outNode, uint32 outChannel, IdString inNode,
+                                          uint32 inChannel )
     {
         checkInputChannelIsEmpty( inNode, inChannel, outNode.getFriendlyText(), outChannel );
 
@@ -141,26 +144,24 @@ namespace Ogre
     void CompositorWorkspaceDef::connect( IdString outNode, IdString inNode )
     {
         const CompositorNodeDef *outDef = mCompositorManager->getNodeDefinition( outNode );
-        const CompositorNodeDef *inDef  = mCompositorManager->getNodeDefinition( inNode );
+        const CompositorNodeDef *inDef = mCompositorManager->getNodeDefinition( inNode );
 
-        size_t inputChannels  = inDef->getNumInputChannels();
+        size_t inputChannels = inDef->getNumInputChannels();
         size_t outputChannels = outDef->getNumOutputChannels();
 
-        for( uint32 i=0; i<inputChannels && i<outputChannels; ++i )
+        for( uint32 i = 0; i < inputChannels && i < outputChannels; ++i )
             connect( outNode, i, inNode, i );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::connectExternal( uint32 externalIdx, IdString inNode,
-                                                  uint32 inChannel )
+    void CompositorWorkspaceDef::connectExternal( uint32 externalIdx, IdString inNode, uint32 inChannel )
     {
         checkInputChannelIsEmpty( inNode, inChannel, "connect_external / connect_output", externalIdx );
         createImplicitAlias( inNode );
-        mExternalChannelRoutes.push_back( ChannelRoute( externalIdx, IdString(),
-                                                        inChannel, inNode ) );
+        mExternalChannelRoutes.push_back( ChannelRoute( externalIdx, IdString(), inChannel, inNode ) );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspaceDef::connectBuffer( IdString outNode, uint32 outChannel,
-                                                IdString inNode, uint32 inChannel )
+    void CompositorWorkspaceDef::connectBuffer( IdString outNode, uint32 outChannel, IdString inNode,
+                                                uint32 inChannel )
     {
         checkInputBufferChannelIsEmpty( inNode, inChannel, outNode.getFriendlyText(), outChannel );
 
@@ -173,12 +174,12 @@ namespace Ogre
     void CompositorWorkspaceDef::connectBuffer( IdString outNode, IdString inNode )
     {
         const CompositorNodeDef *outDef = mCompositorManager->getNodeDefinition( outNode );
-        const CompositorNodeDef *inDef  = mCompositorManager->getNodeDefinition( inNode );
+        const CompositorNodeDef *inDef = mCompositorManager->getNodeDefinition( inNode );
 
-        size_t inputChannels  = inDef->getNumInputChannels();
+        size_t inputChannels = inDef->getNumInputChannels();
         size_t outputChannels = outDef->getNumOutputChannels();
 
-        for( uint32 i=0; i<inputChannels && i<outputChannels; ++i )
+        for( uint32 i = 0; i < inputChannels && i < outputChannels; ++i )
             connect( outNode, i, inNode, i );
     }
     //-----------------------------------------------------------------------------------
@@ -188,8 +189,8 @@ namespace Ogre
         checkInputBufferChannelIsEmpty( inNode, inChannel, "connect_buffer_external",
                                         externalBufferIdx );
         createImplicitAlias( inNode );
-        mExternalBufferChannelRoutes.push_back( ChannelRoute( externalBufferIdx, IdString(),
-                                                              inChannel, inNode ) );
+        mExternalBufferChannelRoutes.push_back(
+            ChannelRoute( externalBufferIdx, IdString(), inChannel, inNode ) );
     }
     //-----------------------------------------------------------------------------------
     void CompositorWorkspaceDef::clearAllInterNodeConnections()
@@ -246,4 +247,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

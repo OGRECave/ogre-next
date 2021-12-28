@@ -3,10 +3,10 @@
 
 #include "OgreOfflineProfiler.h"
 
-#include "OgreTimer.h"
+#include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreRoot.h"
-#include "OgreLogManager.h"
+#include "OgreTimer.h"
 
 #include <fstream>
 
@@ -23,7 +23,7 @@ namespace Ogre
     OfflineProfiler::~OfflineProfiler()
     {
         if( !mThreadData.empty() &&
-            (!mOnShutdownPerFramePath.empty() || !mOnShutdownAccumPath.empty()) )
+            ( !mOnShutdownPerFramePath.empty() || !mOnShutdownAccumPath.empty() ) )
         {
             dumpProfileResults( mOnShutdownPerFramePath, mOnShutdownAccumPath );
         }
@@ -57,8 +57,8 @@ namespace Ogre
         mRoot = mCurrentSample;
 
         const char *rootName = "OfflineProfiler Root";
-        strcpy( (char*)mCurrentSample->nameStr, rootName );
-        mCurrentSample->nameStr[OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH-1u] = '\0';
+        strcpy( (char *)mCurrentSample->nameStr, rootName );
+        mCurrentSample->nameStr[OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH - 1u] = '\0';
         mCurrentSample->nameHash = IdString( rootName );
     }
     //-----------------------------------------------------------------------------------
@@ -71,13 +71,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::PerThreadData::destroySampleAndChildren( ProfileSample *sample )
     {
-        FastArray<ProfileSample*>::const_iterator itor = sample->children.begin();
-        FastArray<ProfileSample*>::const_iterator endt = sample->children.end();
+        FastArray<ProfileSample *>::const_iterator itor = sample->children.begin();
+        FastArray<ProfileSample *>::const_iterator endt = sample->children.end();
 
         while( itor != endt )
         {
             destroySampleAndChildren( *itor );
-            (*itor)->children.destroy();
+            ( *itor )->children.destroy();
             ++itor;
         }
 
@@ -86,8 +86,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::PerThreadData::createNewPool()
     {
-        uint8 *newPool = reinterpret_cast<uint8*>(
-                             OGRE_MALLOC( mBytesPerPool, MEMCATEGORY_GENERAL ) );
+        uint8 *newPool = reinterpret_cast<uint8 *>( OGRE_MALLOC( mBytesPerPool, MEMCATEGORY_GENERAL ) );
         memset( newPool, 0, mBytesPerPool );
         mMemoryPool.push_back( newPool );
         mCurrMemoryPoolOffset = 0;
@@ -101,8 +100,8 @@ namespace Ogre
             mCurrentSample = 0;
         }
 
-        FastArray<uint8_t*>::const_iterator itor = mMemoryPool.begin();
-        FastArray<uint8_t*>::const_iterator endt = mMemoryPool.end();
+        FastArray<uint8_t *>::const_iterator itor = mMemoryPool.begin();
+        FastArray<uint8_t *>::const_iterator endt = mMemoryPool.end();
 
         while( itor != endt )
         {
@@ -114,31 +113,25 @@ namespace Ogre
         mCurrMemoryPoolOffset = 0;
     }
     //-----------------------------------------------------------------------------------
-    OfflineProfiler::ProfileSample* OfflineProfiler::PerThreadData::allocateSample(
-            ProfileSample *parent )
+    OfflineProfiler::ProfileSample *OfflineProfiler::PerThreadData::allocateSample(
+        ProfileSample *parent )
     {
         const size_t bytesNeeded = sizeof( ProfileSample );
         if( mCurrMemoryPoolOffset + bytesNeeded > mBytesPerPool )
             createNewPool();
 
-        ProfileSample *newSample = reinterpret_cast<ProfileSample*>( mMemoryPool.back() +
-                                                                     mCurrMemoryPoolOffset );
-        newSample = new (newSample) ProfileSample();
+        ProfileSample *newSample =
+            reinterpret_cast<ProfileSample *>( mMemoryPool.back() + mCurrMemoryPoolOffset );
+        newSample = new( newSample ) ProfileSample();
         newSample->parent = parent;
         mCurrMemoryPoolOffset += bytesNeeded;
 
         return newSample;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::setPauseRequest( bool bPause )
-    {
-        mPauseRequest = bPause;
-    }
+    void OfflineProfiler::PerThreadData::setPauseRequest( bool bPause ) { mPauseRequest = bPause; }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::requestReset()
-    {
-        mResetRequest = true;
-    }
+    void OfflineProfiler::PerThreadData::requestReset() { mResetRequest = true; }
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::PerThreadData::reset()
     {
@@ -167,7 +160,7 @@ namespace Ogre
 
         ProfileSample *sample = 0;
 
-        //Look if our last sibling has the same name (i.e. similar behavior to RMTSF_Aggregate)
+        // Look if our last sibling has the same name (i.e. similar behavior to RMTSF_Aggregate)
         if( flags == ProfileSampleFlags::Aggregate && !mCurrentSample->children.empty() )
         {
             if( mCurrentSample->children.back()->nameHash == nameHash )
@@ -179,8 +172,8 @@ namespace Ogre
             sample = allocateSample( mCurrentSample );
             mCurrentSample->children.push_back( sample );
 
-            strcpy( (char*)sample->nameStr, name );
-            sample->nameStr[OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH-1u] = '\0';
+            strcpy( (char *)sample->nameStr, name );
+            sample->nameStr[OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH - 1u] = '\0';
             sample->nameHash = nameHash;
             sample->usStart = mTimer->getMicroseconds();
         }
@@ -194,7 +187,7 @@ namespace Ogre
         if( mPaused )
             return;
 
-        //Measure before the lock! Other threads will not be using our mTimer anyway
+        // Measure before the lock! Other threads will not be using our mTimer anyway
         const uint64 usEnd = mTimer->getMicroseconds();
 
         mMutex.lock();
@@ -210,7 +203,7 @@ namespace Ogre
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    OfflineProfiler::PerThreadData* OfflineProfiler::allocatePerThreadData()
+    OfflineProfiler::PerThreadData *OfflineProfiler::allocatePerThreadData()
     {
         PerThreadData *perThreadData = new PerThreadData( mPaused, mBytesPerPool );
 
@@ -223,9 +216,10 @@ namespace Ogre
         return perThreadData;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::
-    PerThreadData::dumpSample( ProfileSample *sample, LwString &tmpStr, String &outCsvString,
-                               StdMap<IdString, ProfileSample> &accumStats, uint32 stackDepth )
+    void OfflineProfiler::PerThreadData::dumpSample( ProfileSample *sample, LwString &tmpStr,
+                                                     String &outCsvString,
+                                                     StdMap<IdString, ProfileSample> &accumStats,
+                                                     uint32 stackDepth )
     {
         map<IdString, ProfileSample>::type::iterator itAccum = accumStats.find( sample->nameHash );
         if( itAccum == accumStats.end() )
@@ -239,17 +233,18 @@ namespace Ogre
 
         itAccum->second.usTaken += sample->usTaken;
 
-        const float msTaken = (float)(((double)sample->usTaken) / 1000.0);
+        const float msTaken = (float)( ( (double)sample->usTaken ) / 1000.0 );
 
         tmpStr.clear();
-        tmpStr.a( stackDepth, "|", (const char*)sample->nameStr, "|",
-                  LwString::Float( msTaken, 2 ), "|" );
-        tmpStr.a( LwString::Float( (float)(100.0 * ((double)sample->usTaken /
-                                           (double)mTotalAccumTime)), 2 ), "%\n" );
+        tmpStr.a( stackDepth, "|", (const char *)sample->nameStr, "|", LwString::Float( msTaken, 2 ),
+                  "|" );
+        tmpStr.a( LwString::Float(
+                      (float)( 100.0 * ( (double)sample->usTaken / (double)mTotalAccumTime ) ), 2 ),
+                  "%\n" );
         outCsvString += tmpStr.c_str();
 
-        FastArray<ProfileSample*>::const_iterator itor = sample->children.begin();
-        FastArray<ProfileSample*>::const_iterator endt = sample->children.end();
+        FastArray<ProfileSample *>::const_iterator itor = sample->children.begin();
+        FastArray<ProfileSample *>::const_iterator endt = sample->children.end();
 
         while( itor != endt )
         {
@@ -258,8 +253,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::
-    PerThreadData::dumpProfileResultsStr( String &outCsvStringPerFrame, String &outCsvStringAccum )
+    void OfflineProfiler::PerThreadData::dumpProfileResultsStr( String &outCsvStringPerFrame,
+                                                                String &outCsvStringAccum )
     {
         mMutex.lock();
         String csvString0;
@@ -275,8 +270,8 @@ namespace Ogre
         {
             uint32 stackDepth = 0;
 
-            FastArray<ProfileSample*>::const_iterator itor = mRoot->children.begin();
-            FastArray<ProfileSample*>::const_iterator endt = mRoot->children.end();
+            FastArray<ProfileSample *>::const_iterator itor = mRoot->children.begin();
+            FastArray<ProfileSample *>::const_iterator endt = mRoot->children.end();
 
             while( itor != endt )
             {
@@ -294,11 +289,13 @@ namespace Ogre
             while( itor != endt )
             {
                 const ProfileSample *sample = &itor->second;
-                const float msTaken = (float)(((double)sample->usTaken) / 1000.0);
+                const float msTaken = (float)( ( (double)sample->usTaken ) / 1000.0 );
                 tmpStr.clear();
-                tmpStr.a( (const char*)sample->nameStr, "|", LwString::Float( msTaken, 2 ), "|" );
-                tmpStr.a( LwString::Float( (float)(100.0 * ((double)sample->usTaken /
-                                                   (double)mTotalAccumTime)), 2 ), "%\n" );
+                tmpStr.a( (const char *)sample->nameStr, "|", LwString::Float( msTaken, 2 ), "|" );
+                tmpStr.a(
+                    LwString::Float(
+                        (float)( 100.0 * ( (double)sample->usTaken / (double)mTotalAccumTime ) ), 2 ),
+                    "%\n" );
                 csvString1 += tmpStr.c_str();
                 ++itor;
             }
@@ -321,14 +318,14 @@ namespace Ogre
         if( !fullPathPerFrame.empty() )
         {
             std::ofstream outFile( fullPathPerFrame.c_str(), std::ios::binary | std::ios::out );
-            outFile.write( (const char*)&csvStringPerFrame[0], csvStringPerFrame.size() );
+            outFile.write( (const char *)&csvStringPerFrame[0], csvStringPerFrame.size() );
             outFile.close();
         }
 
         if( !fullPathAccum.empty() )
         {
             std::ofstream outFile( fullPathAccum.c_str(), std::ios::binary | std::ios::out );
-            outFile.write( (const char*)&csvStringAccum[0], csvStringAccum.size() );
+            outFile.write( (const char *)&csvStringAccum[0], csvStringAccum.size() );
             outFile.close();
         }
     }
@@ -347,17 +344,14 @@ namespace Ogre
 
         while( itor != endt )
         {
-            (*itor)->setPauseRequest( bPaused );
+            ( *itor )->setPauseRequest( bPaused );
             ++itor;
         }
 
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    bool OfflineProfiler::isPaused() const
-    {
-        return mPaused;
-    }
+    bool OfflineProfiler::isPaused() const { return mPaused; }
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::reset()
     {
@@ -368,7 +362,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            (*itor)->requestReset();
+            ( *itor )->requestReset();
             ++itor;
         }
 
@@ -377,7 +371,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::profileBegin( const char *name, ProfileSampleFlags::ProfileSampleFlags flags )
     {
-        PerThreadData *perThreadData = reinterpret_cast<PerThreadData*>( Threads::GetTls( mTlsHandle ) );
+        PerThreadData *perThreadData =
+            reinterpret_cast<PerThreadData *>( Threads::GetTls( mTlsHandle ) );
 
         if( !perThreadData )
             perThreadData = allocatePerThreadData();
@@ -387,7 +382,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::profileEnd()
     {
-        PerThreadData *perThreadData = reinterpret_cast<PerThreadData*>( Threads::GetTls( mTlsHandle ) );
+        PerThreadData *perThreadData =
+            reinterpret_cast<PerThreadData *>( Threads::GetTls( mTlsHandle ) );
 
         OGRE_ASSERT_HIGH( perThreadData && "Called OfflineProfiler::profileEnd before profileBegin!" );
 
@@ -417,7 +413,7 @@ namespace Ogre
             if( !actualFullPathAccum.empty() )
                 actualFullPathAccum += StringConverter::toString( idx ) + ".csv";
 
-            (*itor)->dumpProfileResults( actualFullPathPerFrame, actualFullPathAccum );
+            ( *itor )->dumpProfileResults( actualFullPathPerFrame, actualFullPathAccum );
             ++idx;
             ++itor;
         }
@@ -437,4 +433,4 @@ namespace Ogre
                                                    fullPathPerFrame + " and " + fullPathAccum );
         }
     }
-}
+}  // namespace Ogre

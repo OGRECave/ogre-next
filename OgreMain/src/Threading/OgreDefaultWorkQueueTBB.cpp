@@ -29,10 +29,10 @@ THE SOFTWARE.
 
 #include "Threading/OgreDefaultWorkQueueTBB.h"
 
-#include "OgreWorkQueue.h"
 #include "OgreLogManager.h"
-#include "OgreRoot.h"
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+#include "OgreWorkQueue.h"
 
 #include <sstream>
 
@@ -41,53 +41,53 @@ namespace Ogre
     /// Worker function to register threads with the RenderSystem, if required
     struct RegisterRSWorker
     {
-        RegisterRSWorker(DefaultWorkQueue* queue): mQueue(queue) { }
-        void operator() () const { mQueue->_registerThreadWithRenderSystem(); }
-        DefaultWorkQueue* mQueue;
+        RegisterRSWorker( DefaultWorkQueue *queue ) : mQueue( queue ) {}
+        void operator()() const { mQueue->_registerThreadWithRenderSystem(); }
+        DefaultWorkQueue *mQueue;
     };
 
     //---------------------------------------------------------------------
-    DefaultWorkQueue::DefaultWorkQueue(const String& name)
-        : DefaultWorkQueueBase(name)
+    DefaultWorkQueue::DefaultWorkQueue( const String &name ) :
+        DefaultWorkQueueBase( name )
 #if OGRE_NO_TBB_SCHEDULER == 0
-        , mTaskScheduler(tbb::task_scheduler_init::deferred)
+        ,
+        mTaskScheduler( tbb::task_scheduler_init::deferred )
 #endif
     {
     }
     //---------------------------------------------------------------------
-    void DefaultWorkQueue::startup(bool forceRestart)
+    void DefaultWorkQueue::startup( bool forceRestart )
     {
-        if (mIsRunning)
+        if( mIsRunning )
         {
-            if (forceRestart)
+            if( forceRestart )
                 shutdown();
             else
                 return;
         }
 
         mShuttingDown = false;
-        
-        mWorkerFunc = OGRE_NEW_T(WorkerFunc(this), MEMCATEGORY_GENERAL);
 
-        LogManager::getSingleton().stream() <<
-            "DefaultWorkQueue('" << mName << "') initialising.";
+        mWorkerFunc = OGRE_NEW_T( WorkerFunc( this ), MEMCATEGORY_GENERAL );
+
+        LogManager::getSingleton().stream() << "DefaultWorkQueue('" << mName << "') initialising.";
 
 #if OGRE_NO_TBB_SCHEDULER == 0
-        mTaskScheduler.initialize(mWorkerThreadCount);
+        mTaskScheduler.initialize( mWorkerThreadCount );
 #endif
 
-        if (mWorkerRenderSystemAccess)
+        if( mWorkerRenderSystemAccess )
         {
             Root::getSingleton().getRenderSystem()->preExtraThreadsStarted();
-            RegisterRSWorker worker (this);
+            RegisterRSWorker worker( this );
             // current thread need not be registered
-            mRegisteredThreads.insert(tbb::this_tbb_thread::get_id());
-            while (mRegisteredThreads.size() < mWorkerThreadCount)
+            mRegisteredThreads.insert( tbb::this_tbb_thread::get_id() );
+            while( mRegisteredThreads.size() < mWorkerThreadCount )
             {
                 // spawn tasks until all worker threads have registered themselves with the RS
-                for (size_t i = 0; i < mWorkerThreadCount*3; ++i)
+                for( size_t i = 0; i < mWorkerThreadCount * 3; ++i )
                 {
-                    mTaskGroup.run(worker);
+                    mTaskGroup.run( worker );
                 }
                 mTaskGroup.wait();
             }
@@ -100,27 +100,23 @@ namespace Ogre
     void DefaultWorkQueue::_registerThreadWithRenderSystem()
     {
         {
-                    OGRE_LOCK_MUTEX(mRegisterRSMutex);
+            OGRE_LOCK_MUTEX( mRegisterRSMutex );
             tbb::tbb_thread::id cur = tbb::this_tbb_thread::get_id();
-            if (mRegisteredThreads.find(cur) == mRegisteredThreads.end())
+            if( mRegisteredThreads.find( cur ) == mRegisteredThreads.end() )
             {
                 Root::getSingleton().getRenderSystem()->registerThread();
-                mRegisteredThreads.insert(cur);
+                mRegisteredThreads.insert( cur );
             }
         }
 
         tbb::this_tbb_thread::yield();
     }
     //---------------------------------------------------------------------
-    DefaultWorkQueue::~DefaultWorkQueue() noexcept(true)
-    {
-        shutdown();
-    }
+    DefaultWorkQueue::~DefaultWorkQueue() noexcept( true ) { shutdown(); }
     //---------------------------------------------------------------------
     void DefaultWorkQueue::shutdown()
     {
-        LogManager::getSingleton().stream() <<
-            "DefaultWorkQueue('" << mName << "') shutting down.";
+        LogManager::getSingleton().stream() << "DefaultWorkQueue('" << mName << "') shutting down.";
 
         mShuttingDown = true;
         mTaskGroup.cancel();
@@ -130,24 +126,23 @@ namespace Ogre
         mTaskGroup.wait();
 
 #if OGRE_NO_TBB_SCHEDULER == 0
-        if (mTaskScheduler.is_active())
+        if( mTaskScheduler.is_active() )
             mTaskScheduler.terminate();
 #endif
 
-        if (mWorkerFunc)
+        if( mWorkerFunc )
         {
-            OGRE_DELETE_T(mWorkerFunc, WorkerFunc, MEMCATEGORY_GENERAL);
+            OGRE_DELETE_T( mWorkerFunc, WorkerFunc, MEMCATEGORY_GENERAL );
             mWorkerFunc = 0;
         }
-            
-        mIsRunning = false;
 
+        mIsRunning = false;
     }
     //---------------------------------------------------------------------
     void DefaultWorkQueue::_threadMain()
     {
         //// Initialise the thread for RS if necessary
-        //if (mWorkerRenderSystemAccess)
+        // if (mWorkerRenderSystemAccess)
         //{
         //  Root::getSingleton().getRenderSystem()->registerThread();
         //  _notifyThreadRegistered();
@@ -161,7 +156,6 @@ namespace Ogre
     void DefaultWorkQueue::notifyWorkers()
     {
         // create a new task
-        mTaskGroup.run(*mWorkerFunc);
+        mTaskGroup.run( *mWorkerFunc );
     }
-}
-
+}  // namespace Ogre

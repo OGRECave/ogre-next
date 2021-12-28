@@ -67,7 +67,7 @@ namespace Ogre
     {
         assert( numThreadHandles < 128 );
         HANDLE hThreads[128];
-        for( size_t i=0; i<numThreadHandles; ++i )
+        for( size_t i = 0; i < numThreadHandles; ++i )
             hThreads[i] = threadHandles[i]->_getOsHandle();
 
         WaitForMultipleObjects( numThreadHandles, hThreads, true, INFINITE );
@@ -79,10 +79,7 @@ namespace Ogre
             Threads::WaitForThreads( threadHandles.size(), &threadHandles[0] );
     }
     //-----------------------------------------------------------------------------------
-    void Threads::Sleep( uint32 milliseconds )
-    {
-        ::Sleep( milliseconds );
-    }
+    void Threads::Sleep( uint32 milliseconds ) { ::Sleep( milliseconds ); }
     //-----------------------------------------------------------------------------------
     bool Threads::CreateTls( TlsHandle *outTls )
     {
@@ -93,18 +90,9 @@ namespace Ogre
         return *outTls == OGRE_TLS_INVALID_HANDLE;
     }
     //-----------------------------------------------------------------------------------
-    void Threads::DestroyTls( TlsHandle tlsHandle )
-    {
-        TlsFree( tlsHandle );
-    }
+    void Threads::DestroyTls( TlsHandle tlsHandle ) { TlsFree( tlsHandle ); }
     //-----------------------------------------------------------------------------------
-    void Threads::SetTls( TlsHandle tlsHandle, void *value )
-    {
-        TlsSetValue( tlsHandle, value );
-    }
+    void Threads::SetTls( TlsHandle tlsHandle, void *value ) { TlsSetValue( tlsHandle, value ); }
     //-----------------------------------------------------------------------------------
-    void* Threads::GetTls( TlsHandle tlsHandle )
-    {
-        return TlsGetValue( tlsHandle );
-    }
-}
+    void *Threads::GetTls( TlsHandle tlsHandle ) { return TlsGetValue( tlsHandle ); }
+}  // namespace Ogre

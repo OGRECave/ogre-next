@@ -34,52 +34,48 @@ THE SOFTWARE.
 #define NOMINMAX
 #include <windows.h>
 #ifdef __MINGW32__
-    // MinGW doesn't have "_Interlocked" functions, but those without "_" and in winbase.h
-    #include <winbase.h>
+// MinGW doesn't have "_Interlocked" functions, but those without "_" and in winbase.h
+#    include <winbase.h>
 #endif
 
 namespace Ogre
 {
-    LightweightMutex::LightweightMutex() :
-        mCounter( 0 )
+    LightweightMutex::LightweightMutex() : mCounter( 0 )
     {
         mSemaphore = CreateSemaphore( NULL, 0, 1, NULL );
     }
     //-----------------------------------------------------------------------------------
-    LightweightMutex::~LightweightMutex()
-    {
-        CloseHandle( mSemaphore );
-    }
+    LightweightMutex::~LightweightMutex() { CloseHandle( mSemaphore ); }
     //-----------------------------------------------------------------------------------
     void LightweightMutex::lock()
     {
-        #ifndef __MINGW32__
-            if( _InterlockedIncrement( &mCounter ) > 1 )
-                WaitForSingleObject( mSemaphore, INFINITE );
-        #else
-            if( InterlockedIncrement( &mCounter ) > 1 )
-                WaitForSingleObject( mSemaphore, INFINITE );
-        #endif
+#ifndef __MINGW32__
+        if( _InterlockedIncrement( &mCounter ) > 1 )
+            WaitForSingleObject( mSemaphore, INFINITE );
+#else
+        if( InterlockedIncrement( &mCounter ) > 1 )
+            WaitForSingleObject( mSemaphore, INFINITE );
+#endif
     }
     //-----------------------------------------------------------------------------------
     bool LightweightMutex::tryLock()
     {
-        #ifndef __MINGW32__
-            long result = _InterlockedCompareExchange( &mCounter, 1, 0 );
-        #else
-            long result = InterlockedCompareExchange( &mCounter, 1, 0 );
-        #endif
-        return (result == 0);
+#ifndef __MINGW32__
+        long result = _InterlockedCompareExchange( &mCounter, 1, 0 );
+#else
+        long result = InterlockedCompareExchange( &mCounter, 1, 0 );
+#endif
+        return ( result == 0 );
     }
     //-----------------------------------------------------------------------------------
     void LightweightMutex::unlock()
     {
-        #ifndef __MINGW32__
-            if( _InterlockedDecrement( &mCounter ) > 0 )
-                ReleaseSemaphore( mSemaphore, 1, NULL );
-        #else
-            if( InterlockedDecrement( &mCounter ) > 0 )
-                ReleaseSemaphore( mSemaphore, 1, NULL );
-        #endif
+#ifndef __MINGW32__
+        if( _InterlockedDecrement( &mCounter ) > 0 )
+            ReleaseSemaphore( mSemaphore, 1, NULL );
+#else
+        if( InterlockedDecrement( &mCounter ) > 0 )
+            ReleaseSemaphore( mSemaphore, 1, NULL );
+#endif
     }
-}
+}  // namespace Ogre

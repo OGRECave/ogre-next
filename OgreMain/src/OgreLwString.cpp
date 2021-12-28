@@ -39,4 +39,4 @@ namespace Ogre
 #if OGRE_DEBUG_MODE
     const char *LwConstString::WarningHeaderConst = "!!! ERROR BAD PRINTF !!!";
 #endif
-}
+}  // namespace Ogre

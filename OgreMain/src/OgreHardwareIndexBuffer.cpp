@@ -29,57 +29,55 @@ THE SOFTWARE.
 
 #include "OgreHardwareIndexBuffer.h"
 
-#include "OgreHardwareBufferManager.h"
 #include "OgreDefaultHardwareBufferManager.h"
+#include "OgreHardwareBufferManager.h"
 
-namespace Ogre {
-namespace v1 {
-    //-----------------------------------------------------------------------------
-    HardwareIndexBuffer::HardwareIndexBuffer(HardwareBufferManagerBase* mgr, IndexType idxType, 
-        size_t numIndexes, HardwareBuffer::Usage usage, 
-        bool useSystemMemory, bool useShadowBuffer) 
-        : HardwareBuffer(usage, useSystemMemory, useShadowBuffer)
-        , mMgr(mgr)
-        , mIndexType(idxType)
-        , mNumIndexes(numIndexes)
+namespace Ogre
+{
+    namespace v1
     {
-        // Calculate the size of the indexes
-        switch (mIndexType)
+        //-----------------------------------------------------------------------------
+        HardwareIndexBuffer::HardwareIndexBuffer( HardwareBufferManagerBase *mgr, IndexType idxType,
+                                                  size_t numIndexes, HardwareBuffer::Usage usage,
+                                                  bool useSystemMemory, bool useShadowBuffer ) :
+            HardwareBuffer( usage, useSystemMemory, useShadowBuffer ),
+            mMgr( mgr ),
+            mIndexType( idxType ),
+            mNumIndexes( numIndexes )
         {
-        case IT_16BIT:
-            mIndexSize = sizeof(unsigned short);
-            break;
-        case IT_32BIT:
-            mIndexSize = sizeof(unsigned int);
-            break;
-        }
-        mSizeInBytes = mIndexSize * mNumIndexes;
+            // Calculate the size of the indexes
+            switch( mIndexType )
+            {
+            case IT_16BIT:
+                mIndexSize = sizeof( unsigned short );
+                break;
+            case IT_32BIT:
+                mIndexSize = sizeof( unsigned int );
+                break;
+            }
+            mSizeInBytes = mIndexSize * mNumIndexes;
 
-        // Create a shadow buffer if required
-        if (mUseShadowBuffer)
+            // Create a shadow buffer if required
+            if( mUseShadowBuffer )
+            {
+                mShadowBuffer = OGRE_NEW DefaultHardwareIndexBuffer( mIndexType, mNumIndexes,
+                                                                     HardwareBuffer::HBU_DYNAMIC );
+            }
+        }
+        //-----------------------------------------------------------------------------
+        HardwareIndexBuffer::~HardwareIndexBuffer()
         {
-            mShadowBuffer = OGRE_NEW DefaultHardwareIndexBuffer(mIndexType, 
-                mNumIndexes, HardwareBuffer::HBU_DYNAMIC);
+            if( mMgr )
+            {
+                mMgr->_notifyIndexBufferDestroyed( this );
+            }
+
+            OGRE_DELETE mShadowBuffer;
         }
-
-
-    }
-    //-----------------------------------------------------------------------------
-    HardwareIndexBuffer::~HardwareIndexBuffer()
-    {
-        if (mMgr)
+        //-----------------------------------------------------------------------------
+        HardwareIndexBufferSharedPtr::HardwareIndexBufferSharedPtr( HardwareIndexBuffer *buf ) :
+            SharedPtr<HardwareIndexBuffer>( buf )
         {
-            mMgr->_notifyIndexBufferDestroyed(this);
         }
-
-        OGRE_DELETE mShadowBuffer;
-    }
-    //-----------------------------------------------------------------------------
-    HardwareIndexBufferSharedPtr::HardwareIndexBufferSharedPtr(HardwareIndexBuffer* buf)
-        : SharedPtr<HardwareIndexBuffer>(buf)
-    {
-
-    }
-}
-}
-
+    }  // namespace v1
+}  // namespace Ogre

@@ -30,27 +30,24 @@ THE SOFTWARE.
 
 #include "OgreObjCmdBuffer.h"
 
-#include "OgreTextureGpu.h"
-#include "OgreStagingTexture.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreId.h"
-#include "OgreLwString.h"
 #include "OgreCommon.h"
-#include "Vao/OgreVaoManager.h"
-#include "OgreResourceGroupManager.h"
-#include "OgreImage2.h"
-#include "OgreTextureFilters.h"
 #include "OgreException.h"
+#include "OgreId.h"
+#include "OgreImage2.h"
+#include "OgreLwString.h"
 #include "OgreProfiler.h"
+#include "OgreResourceGroupManager.h"
+#include "OgreStagingTexture.h"
+#include "OgreTextureFilters.h"
+#include "OgreTextureGpu.h"
+#include "OgreTextureGpuManager.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
-    ObjCmdBuffer::~ObjCmdBuffer()
-    {
-        clear();
-    }
+    ObjCmdBuffer::~ObjCmdBuffer() { clear(); }
     //-----------------------------------------------------------------------------------
-    void* ObjCmdBuffer::requestMemory( size_t sizeBytes )
+    void *ObjCmdBuffer::requestMemory( size_t sizeBytes )
     {
         void *retVal = 0;
         const size_t newSize = mCommandAllocator.size() + sizeBytes;
@@ -61,13 +58,13 @@ namespace Ogre
             mCommandAllocator.resize( newSize );
             uint8 *newBuffStart = mCommandAllocator.begin();
 
-            FastArray<Cmd*>::iterator itor = mCommandBuffer.begin();
-            FastArray<Cmd*>::iterator endt = mCommandBuffer.end();
+            FastArray<Cmd *>::iterator itor = mCommandBuffer.begin();
+            FastArray<Cmd *>::iterator endt = mCommandBuffer.end();
 
             while( itor != endt )
             {
-                const uintptr_t ptrDiff = reinterpret_cast<uint8*>( *itor ) - prevBuffStart;
-                *itor = reinterpret_cast<Cmd*>( newBuffStart + ptrDiff );
+                const uintptr_t ptrDiff = reinterpret_cast<uint8 *>( *itor ) - prevBuffStart;
+                *itor = reinterpret_cast<Cmd *>( newBuffStart + ptrDiff );
                 ++itor;
             }
         }
@@ -83,12 +80,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::clear()
     {
-        FastArray<Cmd*>::const_iterator itor = mCommandBuffer.begin();
-        FastArray<Cmd*>::const_iterator endt = mCommandBuffer.end();
+        FastArray<Cmd *>::const_iterator itor = mCommandBuffer.begin();
+        FastArray<Cmd *>::const_iterator endt = mCommandBuffer.end();
 
         while( itor != endt )
         {
-            (*itor)->~Cmd();
+            ( *itor )->~Cmd();
             ++itor;
         }
 
@@ -98,19 +95,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::execute()
     {
-        FastArray<Cmd*>::const_iterator itor = mCommandBuffer.begin();
-        FastArray<Cmd*>::const_iterator endt = mCommandBuffer.end();
+        FastArray<Cmd *>::const_iterator itor = mCommandBuffer.begin();
+        FastArray<Cmd *>::const_iterator endt = mCommandBuffer.end();
 
         while( itor != endt )
         {
-            (*itor)->execute();
+            ( *itor )->execute();
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    ObjCmdBuffer::
-    TransitionToLoaded::TransitionToLoaded( TextureGpu *_texture, void *_sysRamCopy,
-                                            GpuResidency::GpuResidency _targetResidency ) :
+    ObjCmdBuffer::TransitionToLoaded::TransitionToLoaded( TextureGpu *_texture, void *_sysRamCopy,
+                                                          GpuResidency::GpuResidency _targetResidency ) :
         texture( _texture ),
         sysRamCopy( _sysRamCopy ),
         targetResidency( _targetResidency )
@@ -120,17 +116,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::TransitionToLoaded::execute()
     {
-        texture->_transitionTo( targetResidency, reinterpret_cast<uint8*>( sysRamCopy ) );
+        texture->_transitionTo( targetResidency, reinterpret_cast<uint8 *>( sysRamCopy ) );
         OGRE_ASSERT_MEDIUM( !texture->isManualTexture() );
 
-        //Do not update metadata cache when loading from OnStorage to OnSystemRam as
-        //it may have tainted (incomplete, mostly mipmaps) data. Only when going Resident.
+        // Do not update metadata cache when loading from OnStorage to OnSystemRam as
+        // it may have tainted (incomplete, mostly mipmaps) data. Only when going Resident.
         if( targetResidency == GpuResidency::Resident )
             texture->getTextureManager()->_updateMetadataCache( texture );
     }
     //-----------------------------------------------------------------------------------
-    ObjCmdBuffer::
-    OutOfDateCache::OutOfDateCache( TextureGpu *_texture, Image2 &image ) :
+    ObjCmdBuffer::OutOfDateCache::OutOfDateCache( TextureGpu *_texture, Image2 &image ) :
         texture( _texture ),
         loadedImage()
     {
@@ -156,8 +151,7 @@ namespace Ogre
         textureManager->_setIgnoreScheduledTasks( false );
     }
     //-----------------------------------------------------------------------------------
-    ObjCmdBuffer::
-    ExceptionThrown::ExceptionThrown( TextureGpu *_texture, const Exception &_exception ) :
+    ObjCmdBuffer::ExceptionThrown::ExceptionThrown( TextureGpu *_texture, const Exception &_exception ) :
         texture( _texture ),
         exception( _exception )
     {
@@ -168,10 +162,11 @@ namespace Ogre
         texture->notifyAllListenersTextureChanged( TextureGpuListener::ExceptionThrown, &exception );
     }
     //-----------------------------------------------------------------------------------
-    ObjCmdBuffer::
-    UploadFromStagingTex::UploadFromStagingTex( StagingTexture *_stagingTexture, const TextureBox &_box,
-                                                TextureGpu *_dstTexture, const TextureBox &_dstBox,
-                                                uint8 _mipLevel ) :
+    ObjCmdBuffer::UploadFromStagingTex::UploadFromStagingTex( StagingTexture *_stagingTexture,
+                                                              const TextureBox &_box,
+                                                              TextureGpu *_dstTexture,
+                                                              const TextureBox &_dstBox,
+                                                              uint8 _mipLevel ) :
         stagingTexture( _stagingTexture ),
         box( _box ),
         dstTexture( _dstTexture ),
@@ -186,8 +181,8 @@ namespace Ogre
         stagingTexture->upload( box, dstTexture, mipLevel, &dstBox, &dstBox );
     }
     //-----------------------------------------------------------------------------------
-    ObjCmdBuffer::
-    NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseArray &inOutFilters ) :
+    ObjCmdBuffer::NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu,
+                                                        FilterBaseArray &inOutFilters ) :
         texture( _textureGpu )
     {
         filters.swap( inOutFilters );
@@ -202,12 +197,12 @@ namespace Ogre
 
         while( itor != endt )
         {
-            (*itor)->_executeSerial( texture );
+            ( *itor )->_executeSerial( texture );
             OGRE_DELETE *itor;
             ++itor;
         }
-        filters.destroy(); //Destroy manually as ~NotifyDataIsReady won't be called.
+        filters.destroy();  // Destroy manually as ~NotifyDataIsReady won't be called.
 
         texture->notifyDataIsReady();
     }
-}
+}  // namespace Ogre

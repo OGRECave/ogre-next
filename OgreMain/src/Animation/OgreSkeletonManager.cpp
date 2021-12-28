@@ -30,29 +30,24 @@ THE SOFTWARE.
 #include "Animation/OgreSkeletonManager.h"
 
 #include "Animation/OgreSkeletonDef.h"
-#include "OgreSkeleton.h"
 #include "OgreOldSkeletonManager.h"
+#include "OgreSkeleton.h"
 
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    template<> SkeletonManager* Singleton<SkeletonManager>::msSingleton = 0;
-    SkeletonManager* SkeletonManager::getSingletonPtr()
+    template <>
+    SkeletonManager *Singleton<SkeletonManager>::msSingleton = 0;
+    SkeletonManager *SkeletonManager::getSingletonPtr() { return msSingleton; }
+    SkeletonManager &SkeletonManager::getSingleton()
     {
-        return msSingleton;
-    }
-    SkeletonManager& SkeletonManager::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
-    SkeletonManager::SkeletonManager()
-    {
-    }
+    SkeletonManager::SkeletonManager() {}
     //-----------------------------------------------------------------------
-    SkeletonManager::~SkeletonManager()
-    {
-    }
+    SkeletonManager::~SkeletonManager() {}
     //-----------------------------------------------------------------------
     SkeletonDefPtr SkeletonManager::getSkeletonDef( v1::Skeleton *oldSkeletonBase )
     {
@@ -73,7 +68,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------
-    SkeletonDefPtr SkeletonManager::getSkeletonDef( const String &name, const String& groupName )
+    SkeletonDefPtr SkeletonManager::getSkeletonDef( const String &name, const String &groupName )
     {
         IdString idName( name );
         SkeletonDefPtr retVal;
@@ -81,13 +76,15 @@ namespace Ogre
         if( itor == mSkeletonDefs.end() )
         {
             bool wasNonExistent = false;
-            v1::SkeletonPtr oldSkeleton = v1::OldSkeletonManager::getSingleton().
-                    getByName( name, groupName ).staticCast<v1::Skeleton>();
+            v1::SkeletonPtr oldSkeleton = v1::OldSkeletonManager::getSingleton()
+                                              .getByName( name, groupName )
+                                              .staticCast<v1::Skeleton>();
 
             if( oldSkeleton.isNull() )
             {
-                oldSkeleton = v1::OldSkeletonManager::getSingleton().load( name, groupName ).
-                        staticCast<v1::Skeleton>();
+                oldSkeleton = v1::OldSkeletonManager::getSingleton()
+                                  .load( name, groupName )
+                                  .staticCast<v1::Skeleton>();
                 wasNonExistent = true;
             }
 
@@ -118,7 +115,7 @@ namespace Ogre
         if( mSkeletonDefs.find( idName ) != mSkeletonDefs.end() )
         {
             OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
-                         "Skeleton with name '" + skeletonDef->getNameStr() +"' already exists!",
+                         "Skeleton with name '" + skeletonDef->getNameStr() + "' already exists!",
                          "SkeletonManager::add" );
         }
 
@@ -131,10 +128,10 @@ namespace Ogre
         if( itor == mSkeletonDefs.end() )
         {
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                         "Skeleton with name '" + name.getFriendlyText() +"' not found!",
+                         "Skeleton with name '" + name.getFriendlyText() + "' not found!",
                          "SkeletonManager::remove" );
         }
 
         mSkeletonDefs.erase( itor );
     }
-}
+}  // namespace Ogre

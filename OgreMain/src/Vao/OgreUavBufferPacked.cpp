@@ -93,7 +93,6 @@ namespace Ogre
             delete *itor;
             efficientVectorRemove( mTexBufferViews, itor );
         }
-
     }
     //-----------------------------------------------------------------------------------
     ReadOnlyBufferPacked *UavBufferPacked::getAsReadOnlyBufferView()

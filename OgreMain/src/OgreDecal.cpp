@@ -30,10 +30,10 @@ THE SOFTWARE.
 #include "OgreDecal.h"
 
 #include "OgreForwardPlusBase.h"
-#include "OgreSceneManager.h"
-#include "OgreRoot.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
 
 namespace Ogre
 {
@@ -49,9 +49,9 @@ namespace Ogre
         mMetalness( 1.0f ),
         mRoughness( 1.0f )
     {
-        //NOTE: For performance reasons, ForwardClustered::collectLightForSlice ignores
-        //mLocalAabb & mWorldAabb and assumes its local AABB is this aabb we set as
-        //default. To change its shape, use node scaling
+        // NOTE: For performance reasons, ForwardClustered::collectLightForSlice ignores
+        // mLocalAabb & mWorldAabb and assumes its local AABB is this aabb we set as
+        // default. To change its shape, use node scaling
         Aabb aabb( Vector3::ZERO, Vector3::UNIT_SCALE * 0.5f );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
@@ -59,7 +59,7 @@ namespace Ogre
         mObjectData.mLocalRadius[mObjectData.mIndex] = radius;
         mObjectData.mWorldRadius[mObjectData.mIndex] = radius;
 
-        //Disable shadow casting by default. Otherwise it's a waste or resources
+        // Disable shadow casting by default. Otherwise it's a waste or resources
         setCastShadows( false );
     }
     //-----------------------------------------------------------------------------------
@@ -74,13 +74,13 @@ namespace Ogre
         if( mNormalTexture && mNormalTexture->hasAutomaticBatching() )
         {
             mNormalTexture->removeListener( this );
-            mNormalTexture= 0;
+            mNormalTexture = 0;
         }
 
         if( mEmissiveTexture && mEmissiveTexture->hasAutomaticBatching() )
         {
             mEmissiveTexture->removeListener( this );
-            mEmissiveTexture= 0;
+            mEmissiveTexture = 0;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -105,10 +105,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Decal::getDiffuseTexture() const
-    {
-        return mDiffuseTexture;
-    }
+    TextureGpu *Decal::getDiffuseTexture() const { return mDiffuseTexture; }
     //-----------------------------------------------------------------------------------
     void Decal::setNormalTexture( TextureGpu *normalTex )
     {
@@ -131,10 +128,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Decal::getNormalTexture() const
-    {
-        return mNormalTexture;
-    }
+    TextureGpu *Decal::getNormalTexture() const { return mNormalTexture; }
     //-----------------------------------------------------------------------------------
     void Decal::setEmissiveTexture( TextureGpu *emissiveTex )
     {
@@ -161,7 +155,7 @@ namespace Ogre
     {
         if( mDiffuseTexture && mDiffuseTexture->hasAutomaticBatching() )
             mDiffuseTexture->removeListener( this );
-        OGRE_ASSERT_LOW( (!diffuseTex || !diffuseTex->hasAutomaticBatching()) &&
+        OGRE_ASSERT_LOW( ( !diffuseTex || !diffuseTex->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( diffuseTex->getTextureType() == TextureTypes::Type2DArray );
         mDiffuseTexture = diffuseTex;
@@ -172,7 +166,7 @@ namespace Ogre
     {
         if( mNormalTexture && mNormalTexture->hasAutomaticBatching() )
             mNormalTexture->removeListener( this );
-        OGRE_ASSERT_LOW( (!normalTex || !normalTex->hasAutomaticBatching()) &&
+        OGRE_ASSERT_LOW( ( !normalTex || !normalTex->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( normalTex->getTextureType() == TextureTypes::Type2DArray );
         mNormalTexture = normalTex;
@@ -183,37 +177,22 @@ namespace Ogre
     {
         if( mEmissiveTexture && mEmissiveTexture->hasAutomaticBatching() )
             mEmissiveTexture->removeListener( this );
-        OGRE_ASSERT_LOW( (!emissiveTex || !emissiveTex->hasAutomaticBatching()) &&
+        OGRE_ASSERT_LOW( ( !emissiveTex || !emissiveTex->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( emissiveTex->getTextureType() == TextureTypes::Type2DArray );
         mEmissiveTexture = emissiveTex;
         mEmissiveIdx = sliceIdx;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* Decal::getEmissiveTexture() const
-    {
-        return mEmissiveTexture;
-    }
+    TextureGpu *Decal::getEmissiveTexture() const { return mEmissiveTexture; }
     //-----------------------------------------------------------------------------------
-    void Decal::setIgnoreAlphaDiffuse( bool bIgnore )
-    {
-        mIgnoreDiffuseAlpha = bIgnore ? 1u : 0u;
-    }
+    void Decal::setIgnoreAlphaDiffuse( bool bIgnore ) { mIgnoreDiffuseAlpha = bIgnore ? 1u : 0u; }
     //-----------------------------------------------------------------------------------
-    bool Decal::getIgnoreAlphaDiffuse() const
-    {
-        return mIgnoreDiffuseAlpha != 0u;
-    }
+    bool Decal::getIgnoreAlphaDiffuse() const { return mIgnoreDiffuseAlpha != 0u; }
     //-----------------------------------------------------------------------------------
-    void Decal::setRoughness( float roughness )
-    {
-        mRoughness = std::max( roughness, 0.02f );
-    }
+    void Decal::setRoughness( float roughness ) { mRoughness = std::max( roughness, 0.02f ); }
     //-----------------------------------------------------------------------------------
-    void Decal::setMetalness( float value )
-    {
-        mMetalness = value;
-    }
+    void Decal::setMetalness( float value ) { mMetalness = value; }
     //-----------------------------------------------------------------------------------
     void Decal::setRectSize( Vector2 planeDimensions, Real depth )
     {
@@ -221,12 +200,9 @@ namespace Ogre
             mParentNode->setScale( planeDimensions.x, depth, planeDimensions.y );
     }
     //-----------------------------------------------------------------------------------
-    const String& Decal::getMovableType() const
-    {
-        return DecalFactory::FACTORY_TYPE_NAME;
-    }
+    const String &Decal::getMovableType() const { return DecalFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------------
-    void Decal::setRenderQueueGroup(uint8 queueID)
+    void Decal::setRenderQueueGroup( uint8 queueID )
     {
         assert( queueID >= ForwardPlusBase::MinDecalRq && queueID <= ForwardPlusBase::MaxDecalRq &&
                 "RenderQueue IDs > 128 are reserved for other Forward+ objects" );
@@ -272,23 +248,15 @@ namespace Ogre
     //-----------------------------------------------------------------------
     String DecalFactory::FACTORY_TYPE_NAME = "Decal";
     //-----------------------------------------------------------------------
-    const String& DecalFactory::getType() const
+    const String &DecalFactory::getType() const { return FACTORY_TYPE_NAME; }
+    //-----------------------------------------------------------------------
+    MovableObject *DecalFactory::createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                                     SceneManager *manager,
+                                                     const NameValuePairList *params )
     {
-     return FACTORY_TYPE_NAME;
+        Decal *decal = OGRE_NEW Decal( id, objectMemoryManager, manager );
+        return decal;
     }
     //-----------------------------------------------------------------------
-    MovableObject* DecalFactory::createInstanceImpl( IdType id,
-                                                  ObjectMemoryManager *objectMemoryManager,
-                                                  SceneManager *manager,
-                                                  const NameValuePairList* params )
-    {
-
-     Decal* decal = OGRE_NEW Decal( id, objectMemoryManager, manager );
-     return decal;
-    }
-    //-----------------------------------------------------------------------
-    void DecalFactory::destroyInstance( MovableObject* obj)
-    {
-     OGRE_DELETE obj;
-    }
-}
+    void DecalFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
+}  // namespace Ogre

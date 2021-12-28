@@ -32,69 +32,65 @@ THE SOFTWARE.
 #include "OgreString.h"
 #include "OgreStringConverter.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    map<String, Codec *>::type Codec::msMapCodecs;
 
-    map< String, Codec * >::type Codec::msMapCodecs;
-
-    Codec::~Codec() {
-    }
+    Codec::~Codec() {}
 
     StringVector Codec::getExtensions()
     {
         StringVector result;
-        result.reserve(msMapCodecs.size());
+        result.reserve( msMapCodecs.size() );
         CodecList::const_iterator i;
-        for (i = msMapCodecs.begin(); i != msMapCodecs.end(); ++i)
+        for( i = msMapCodecs.begin(); i != msMapCodecs.end(); ++i )
         {
-            result.push_back(i->first);
+            result.push_back( i->first );
         }
         return result;
     }
 
-    Codec* Codec::getCodec(const String& extension)
+    Codec *Codec::getCodec( const String &extension )
     {
         String lwrcase = extension;
-        StringUtil::toLowerCase(lwrcase);
-        CodecList::const_iterator i = msMapCodecs.find(lwrcase);
-        if (i == msMapCodecs.end())
+        StringUtil::toLowerCase( lwrcase );
+        CodecList::const_iterator i = msMapCodecs.find( lwrcase );
+        if( i == msMapCodecs.end() )
         {
             String formats_str;
-            if(msMapCodecs.empty())
+            if( msMapCodecs.empty() )
                 formats_str = "There are no formats supported (no codecs registered).";
             else
-                formats_str = "Supported formats are: " + StringConverter::toString(getExtensions()) + ".";
+                formats_str =
+                    "Supported formats are: " + StringConverter::toString( getExtensions() ) + ".";
 
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "Can not find codec for '" + extension + "' image format.\n" + 
-                formats_str,
-                "Codec::getCodec");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Can not find codec for '" + extension + "' image format.\n" + formats_str,
+                         "Codec::getCodec" );
         }
 
         return i->second;
-
     }
 
-    Codec* Codec::getCodec(char *magicNumberPtr, size_t maxbytes)
+    Codec *Codec::getCodec( char *magicNumberPtr, size_t maxbytes )
     {
-        for (CodecList::const_iterator i = msMapCodecs. begin(); 
-            i != msMapCodecs.end(); ++i)
+        for( CodecList::const_iterator i = msMapCodecs.begin(); i != msMapCodecs.end(); ++i )
         {
-            String ext = i->second->magicNumberToFileExt(magicNumberPtr, maxbytes);
-            if (!ext.empty())
+            String ext = i->second->magicNumberToFileExt( magicNumberPtr, maxbytes );
+            if( !ext.empty() )
             {
                 // check codec type matches
-                // if we have a single codec class that can handle many types, 
+                // if we have a single codec class that can handle many types,
                 // and register many instances of it against different types, we
                 // can end up matching the wrong one here, so grab the right one
-                if (ext == i->second->getType())
+                if( ext == i->second->getType() )
                     return i->second;
                 else
-                    return getCodec(ext);
+                    return getCodec( ext );
             }
         }
 
         return 0;
-
     }
 
-}
+}  // namespace Ogre

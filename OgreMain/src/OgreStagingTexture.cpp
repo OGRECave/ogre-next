@@ -31,9 +31,9 @@ THE SOFTWARE.
 #include "OgreStagingTexture.h"
 
 #include "OgreException.h"
+#include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "Vao/OgreVaoManager.h"
-#include "OgreLogManager.h"
 
 namespace Ogre
 {
@@ -42,15 +42,14 @@ namespace Ogre
         mLastFrameUsed( vaoManager->getFrameCount() - vaoManager->getDynamicBufferMultiplier() ),
         mFormatFamily( formatFamily ),
         mMapRegionStarted( false )
-  #if OGRE_DEBUG_MODE
-        ,mUserQueriedIfUploadWillStall( false )
-  #endif
+#if OGRE_DEBUG_MODE
+        ,
+        mUserQueriedIfUploadWillStall( false )
+#endif
     {
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture::~StagingTexture()
-    {
-    }
+    StagingTexture::~StagingTexture() {}
     //-----------------------------------------------------------------------------------
     bool StagingTexture::uploadWillStall()
     {
@@ -66,9 +65,9 @@ namespace Ogre
         mMapRegionStarted = true;
 
 #if OGRE_DEBUG_MODE
-        //We only warn if uploadWillStall wasn't called. Because if you didn't wait
-        //getDynamicBufferMultiplier frames and never called uploadWillStall to check,
-        //you're risking certain machines (with slower GPUs) to stall even if yours doesn't.
+        // We only warn if uploadWillStall wasn't called. Because if you didn't wait
+        // getDynamicBufferMultiplier frames and never called uploadWillStall to check,
+        // you're risking certain machines (with slower GPUs) to stall even if yours doesn't.
         if( mVaoManager->getFrameCount() - mLastFrameUsed < mVaoManager->getDynamicBufferMultiplier() &&
             !mUserQueriedIfUploadWillStall )
         {
@@ -89,7 +88,7 @@ namespace Ogre
     {
         assert( supportsFormat( width, height, depth, slices, pixelFormat ) );
         assert( mMapRegionStarted && "You must call startMapRegion first!" );
-        if( (depth > 1u || slices > 1u) && (width > 2048 || height > 2048) )
+        if( ( depth > 1u || slices > 1u ) && ( width > 2048 || height > 2048 ) )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Textures larger than 2048x2048 can only be mapped one "
@@ -110,28 +109,27 @@ namespace Ogre
         mMapRegionStarted = false;
     }
     //-----------------------------------------------------------------------------------
-    void StagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                 uint8 mipLevel, const TextureBox *cpuSrcBox,
-                                 const TextureBox *dstBox, bool skipSysRamCopy )
+    void StagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture, uint8 mipLevel,
+                                 const TextureBox *cpuSrcBox, const TextureBox *dstBox,
+                                 bool skipSysRamCopy )
     {
         assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
 #if OGRE_DEBUG_MODE
         mUserQueriedIfUploadWillStall = false;
 #endif
-        const TextureBox fullDstTextureBox( std::max( 1u, dstTexture->getInternalWidth() >> mipLevel ),
-                                            std::max( 1u, dstTexture->getInternalHeight() >> mipLevel ),
-                                            std::max( 1u, dstTexture->getDepth() >> mipLevel ),
-                                            dstTexture->getNumSlices(),
-                                            PixelFormatGpuUtils::getBytesPerPixel(
-                                                dstTexture->getPixelFormat() ),
-                                            dstTexture->_getSysRamCopyBytesPerRow( mipLevel ),
-                                            dstTexture->_getSysRamCopyBytesPerImage( mipLevel ) );
+        const TextureBox fullDstTextureBox(
+            std::max( 1u, dstTexture->getInternalWidth() >> mipLevel ),
+            std::max( 1u, dstTexture->getInternalHeight() >> mipLevel ),
+            std::max( 1u, dstTexture->getDepth() >> mipLevel ), dstTexture->getNumSlices(),
+            PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() ),
+            dstTexture->_getSysRamCopyBytesPerRow( mipLevel ),
+            dstTexture->_getSysRamCopyBytesPerImage( mipLevel ) );
 
         assert( ( !dstBox || srcBox.equalSize( *dstBox ) ) && "Src & Dst must be equal" );
         assert( !dstBox || fullDstTextureBox.fullyContains( *dstBox ) );
         assert( mipLevel < dstTexture->getNumMipmaps() );
-        assert(( !srcBox.bytesPerRow || (srcBox.bytesPerImage % srcBox.bytesPerRow) == 0) &&
-               "srcBox.bytesPerImage must be a multiple of srcBox.bytesPerRow!" );
+        assert( ( !srcBox.bytesPerRow || ( srcBox.bytesPerImage % srcBox.bytesPerRow ) == 0 ) &&
+                "srcBox.bytesPerImage must be a multiple of srcBox.bytesPerRow!" );
         assert( belongsToUs( srcBox ) &&
                 "This srcBox does not belong to us! Was it created with mapRegion? "
                 "Did you modify it? Did it get corrupted?" );
@@ -139,17 +137,17 @@ namespace Ogre
 
         if( dstTexture->isMultisample() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Cannot upload to texture '" + dstTexture->getNameStr() +
-                         "' because it's using MSAA",
-                         "StagingTexture::upload" );
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Cannot upload to texture '" + dstTexture->getNameStr() + "' because it's using MSAA",
+                "StagingTexture::upload" );
         }
 
         if( dstTexture->getResidencyStatus() == GpuResidency::OnStorage )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "Cannot upload to texture '" + dstTexture->getNameStr() +
-                         "' which is in GpuResidency::OnStorage mode",
+                             "' which is in GpuResidency::OnStorage mode",
                          "StagingTexture::upload" );
         }
 
@@ -160,7 +158,7 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Cannot upload to texture '" + dstTexture->getNameStr() +
-                             "'. The parameter cpuSrcBox must not be null",
+                                 "'. The parameter cpuSrcBox must not be null",
                              "StagingTexture::upload" );
             }
         }
@@ -191,4 +189,4 @@ namespace Ogre
 
         mLastFrameUsed = mVaoManager->getFrameCount();
     }
-}
+}  // namespace Ogre

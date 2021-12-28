@@ -31,68 +31,69 @@ THE SOFTWARE.
 
 #include "OgreNode.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     String MovablePlane::msMovableType = "MovablePlane";
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
                                 SceneManager *manager ) :
         Plane(),
-        MovableObject(id, objectMemoryManager, manager, 110u),
-        mLastTranslate(Vector3::ZERO), 
-        mLastRotate(Quaternion::IDENTITY),
-        mDirty(true)
+        MovableObject( id, objectMemoryManager, manager, 110u ),
+        mLastTranslate( Vector3::ZERO ),
+        mLastRotate( Quaternion::IDENTITY ),
+        mDirty( true )
     {
     }
     //-----------------------------------------------------------------------
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                SceneManager *manager, const Plane& rhs ) :
-        Plane(rhs), 
+                                SceneManager *manager, const Plane &rhs ) :
+        Plane( rhs ),
         MovableObject( id, objectMemoryManager, manager, 110u ),
-        mLastTranslate(Vector3::ZERO), mLastRotate(Quaternion::IDENTITY), 
-        mDirty(true)
+        mLastTranslate( Vector3::ZERO ),
+        mLastRotate( Quaternion::IDENTITY ),
+        mDirty( true )
     {
     }
     //-----------------------------------------------------------------------
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                SceneManager *manager,
-                                const Vector3& rkNormal, Real fConstant )
-        : Plane (rkNormal, fConstant),
+                                SceneManager *manager, const Vector3 &rkNormal, Real fConstant ) :
+        Plane( rkNormal, fConstant ),
         MovableObject( id, objectMemoryManager, manager, 110u ),
-        mLastTranslate(Vector3::ZERO),
-        mLastRotate(Quaternion::IDENTITY), mDirty(true)
+        mLastTranslate( Vector3::ZERO ),
+        mLastRotate( Quaternion::IDENTITY ),
+        mDirty( true )
     {
     }
     //-----------------------------------------------------------------------
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                SceneManager *manager,
-                                const Vector3& rkNormal, const Vector3& rkPoint )
-        : Plane(rkNormal, rkPoint),
+                                SceneManager *manager, const Vector3 &rkNormal,
+                                const Vector3 &rkPoint ) :
+        Plane( rkNormal, rkPoint ),
         MovableObject( id, objectMemoryManager, manager, 110u ),
-        mLastTranslate(Vector3::ZERO), 
-        mLastRotate(Quaternion::IDENTITY), mDirty(true)
+        mLastTranslate( Vector3::ZERO ),
+        mLastRotate( Quaternion::IDENTITY ),
+        mDirty( true )
     {
     }
     //-----------------------------------------------------------------------
     MovablePlane::MovablePlane( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                SceneManager *manager,
-                                const Vector3& rkPoint0, const Vector3& rkPoint1,
-                                const Vector3& rkPoint2 )
-        : Plane(rkPoint0, rkPoint1, rkPoint2),
+                                SceneManager *manager, const Vector3 &rkPoint0, const Vector3 &rkPoint1,
+                                const Vector3 &rkPoint2 ) :
+        Plane( rkPoint0, rkPoint1, rkPoint2 ),
         MovableObject( id, objectMemoryManager, manager, 110u ),
-        mLastTranslate(Vector3::ZERO), 
-        mLastRotate(Quaternion::IDENTITY), mDirty(true)
+        mLastTranslate( Vector3::ZERO ),
+        mLastRotate( Quaternion::IDENTITY ),
+        mDirty( true )
     {
     }
     //-----------------------------------------------------------------------
-    const Plane& MovablePlane::_getDerivedPlane() const
+    const Plane &MovablePlane::_getDerivedPlane() const
     {
-        if (mParentNode)
+        if( mParentNode )
         {
-            if (mDirty ||
-                !(mParentNode->_getDerivedOrientation() == mLastRotate &&
-                mParentNode->_getDerivedPosition() == mLastTranslate))
+            if( mDirty || !( mParentNode->_getDerivedOrientation() == mLastRotate &&
+                             mParentNode->_getDerivedPosition() == mLastTranslate ) )
             {
                 mLastRotate = mParentNode->_getDerivedOrientation();
                 mLastTranslate = mParentNode->_getDerivedPosition();
@@ -101,10 +102,9 @@ namespace Ogre {
                 // d remains the same in rotation, since rotation happens first
                 mDerivedPlane.d = d;
                 // Add on the effect of the translation (project onto new normal)
-                mDerivedPlane.d -= mDerivedPlane.normal.dotProduct(mLastTranslate);
+                mDerivedPlane.d -= mDerivedPlane.normal.dotProduct( mLastTranslate );
 
                 mDirty = false;
-
             }
         }
         else
@@ -115,8 +115,5 @@ namespace Ogre {
         return mDerivedPlane;
     }
     //-----------------------------------------------------------------------
-    const String& MovablePlane::getMovableType() const
-    {
-        return msMovableType;
-    }
-}
+    const String &MovablePlane::getMovableType() const { return msMovableType; }
+}  // namespace Ogre

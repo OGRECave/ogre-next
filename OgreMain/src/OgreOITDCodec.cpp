@@ -30,65 +30,62 @@ THE SOFTWARE.
 
 #include "OgreOITDCodec.h"
 
+#include "OgreBitwise.h"
+#include "OgreDataStream.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
-#include "OgreBitwise.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
-#include "OgreDataStream.h"
 
 #include <fstream>
 
 namespace Ogre
 {
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-    #pragma pack (push, 1)
+#    pragma pack( push, 1 )
 #else
-    #pragma pack (1)
+#    pragma pack( 1 )
 #endif
     struct OITDHeader
     {
-        uint32      width;
-        uint32      height;
-        uint32      depthOrSlices;
-        uint8       numMipmaps;
-        uint8       textureType;    /// See TextureTypes::TextureTypes
-        uint16      pixelFormat;    /// See PixelFormatGpu
-        uint8       version;
+        uint32 width;
+        uint32 height;
+        uint32 depthOrSlices;
+        uint8 numMipmaps;
+        uint8 textureType;   /// See TextureTypes::TextureTypes
+        uint16 pixelFormat;  /// See PixelFormatGpu
+        uint8 version;
 
-        uint32 getDepth() const
-        {
-            return (textureType != TextureTypes::Type3D) ? 1u : depthOrSlices;
-        }
+        uint32 getDepth() const { return ( textureType != TextureTypes::Type3D ) ? 1u : depthOrSlices; }
         uint32 getNumSlices() const
         {
-            return (textureType != TextureTypes::Type3D) ? depthOrSlices : 1u;
+            return ( textureType != TextureTypes::Type3D ) ? depthOrSlices : 1u;
         }
     };
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-    #pragma pack (pop)
+#    pragma pack( pop )
 #else
-    #pragma pack ()
+#    pragma pack()
 #endif
 
 #ifndef FOURCC
-    #define FOURCC(c0, c1, c2, c3) (c0 | (c1 << 8u) | (c2 << 16u) | (c3 << 24u))
+#    define FOURCC( c0, c1, c2, c3 ) ( c0 | ( c1 << 8u ) | ( c2 << 16u ) | ( c3 << 24u ) )
 #endif
 
     static const uint8 c_OITDVersion = 1u;
-    static const uint32 OITD_MAGIC = FOURCC('O', 'I', 'T', 'D');
+    static const uint32 OITD_MAGIC = FOURCC( 'O', 'I', 'T', 'D' );
 
     //---------------------------------------------------------------------
-    OITDCodec* OITDCodec::msInstance = 0;
+    OITDCodec *OITDCodec::msInstance = 0;
     //---------------------------------------------------------------------
     void OITDCodec::startup()
     {
-        if (!msInstance)
+        if( !msInstance )
         {
-            LogManager::getSingleton().logMessage( LML_NORMAL, "OITD codec registering");
+            LogManager::getSingleton().logMessage( LML_NORMAL, "OITD codec registering" );
 
             msInstance = OGRE_NEW OITDCodec();
-            Codec::registerCodec(msInstance);
+            Codec::registerCodec( msInstance );
         }
     }
     //---------------------------------------------------------------------
@@ -96,55 +93,53 @@ namespace Ogre
     {
         if( msInstance )
         {
-            Codec::unregisterCodec(msInstance);
+            Codec::unregisterCodec( msInstance );
             OGRE_DELETE msInstance;
             msInstance = 0;
         }
     }
     //---------------------------------------------------------------------
-    OITDCodec::OITDCodec():
-        mType("oitd")
-    {
-    }
+    OITDCodec::OITDCodec() : mType( "oitd" ) {}
     //---------------------------------------------------------------------
-    DataStreamPtr OITDCodec::encode( MemoryDataStreamPtr& input, Codec::CodecDataPtr& pData ) const
+    DataStreamPtr OITDCodec::encode( MemoryDataStreamPtr &input, Codec::CodecDataPtr &pData ) const
     {
-        ImageData2 *pImgData = static_cast<ImageData2*>( pData.getPointer() );
+        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.getPointer() );
 
         OITDHeader oitdHeader;
-        oitdHeader.width            = pImgData->box.width;
-        oitdHeader.height           = pImgData->box.height;
-        oitdHeader.depthOrSlices    = std::max( pImgData->box.depth, pImgData->box.numSlices );
-        oitdHeader.numMipmaps       = pImgData->numMipmaps;
-        oitdHeader.textureType      = pImgData->textureType;
-        oitdHeader.pixelFormat      = pImgData->format;
-        oitdHeader.version          = c_OITDVersion;
+        oitdHeader.width = pImgData->box.width;
+        oitdHeader.height = pImgData->box.height;
+        oitdHeader.depthOrSlices = std::max( pImgData->box.depth, pImgData->box.numSlices );
+        oitdHeader.numMipmaps = pImgData->numMipmaps;
+        oitdHeader.textureType = pImgData->textureType;
+        oitdHeader.pixelFormat = pImgData->format;
+        oitdHeader.version = c_OITDVersion;
 
         uint32 oitdMagic = OITD_MAGIC;
 
         // Swap endian
-        flipEndian( &oitdMagic, sizeof(uint32) );
-        flipEndian( &oitdHeader, 4u, sizeof(OITDHeader) / 4u );
+        flipEndian( &oitdMagic, sizeof( uint32 ) );
+        flipEndian( &oitdHeader, 4u, sizeof( OITDHeader ) / 4u );
 
         const uint32 rowAlignment = 4u;
-        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( pImgData->box.width,
-                                                                              pImgData->box.height,
-                                                                              pImgData->box.depth,
-                                                                              pImgData->box.numSlices,
-                                                                              pImgData->format,
-                                                                              pImgData->numMipmaps,
-                                                                              rowAlignment );
+        const size_t requiredBytes =
+            PixelFormatGpuUtils::calculateSizeBytes( pImgData->box.width,      //
+                                                     pImgData->box.height,     //
+                                                     pImgData->box.depth,      //
+                                                     pImgData->box.numSlices,  //
+                                                     pImgData->format,         //
+                                                     pImgData->numMipmaps,     //
+                                                     rowAlignment );
 
-        const size_t totalSize = sizeof(uint32) + sizeof(OITDHeader) + requiredBytes;
+        const size_t totalSize = sizeof( uint32 ) + sizeof( OITDHeader ) + requiredBytes;
 
         uint8 *ourData = OGRE_ALLOC_T( uint8, totalSize, MEMCATEGORY_GENERAL );
 
         {
             uint8 *tmpData = ourData;
-            memcpy( tmpData, (const void*)&oitdMagic, sizeof(uint32) );
-            tmpData += sizeof(uint32);
-            memcpy( tmpData, (const void*)&oitdHeader, sizeof(OITDHeader) );
-            tmpData += sizeof(OITDHeader);
+            memcpy( tmpData, (const void *)&oitdMagic, sizeof( uint32 ) );
+            tmpData += sizeof( uint32 );
+            memcpy( tmpData, (const void *)&oitdHeader, sizeof( OITDHeader ) );
+            tmpData += sizeof( OITDHeader );
             memcpy( tmpData, pImgData->box.data, requiredBytes );
             tmpData += requiredBytes;
         }
@@ -155,69 +150,69 @@ namespace Ogre
         return outstream;
     }
     //---------------------------------------------------------------------
-    void OITDCodec::encodeToFile( MemoryDataStreamPtr &input, const String& outFileName,
+    void OITDCodec::encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
                                   Codec::CodecDataPtr &pData ) const
     {
-        ImageData2 *pImgData = static_cast<ImageData2*>( pData.getPointer() );
+        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.getPointer() );
 
         OITDHeader oitdHeader;
-        oitdHeader.width            = pImgData->box.width;
-        oitdHeader.height           = pImgData->box.height;
-        oitdHeader.depthOrSlices    = std::max( pImgData->box.depth, pImgData->box.numSlices );
-        oitdHeader.numMipmaps       = pImgData->numMipmaps;
-        oitdHeader.textureType      = pImgData->textureType;
-        oitdHeader.pixelFormat      = pImgData->format;
-        oitdHeader.version          = c_OITDVersion;
+        oitdHeader.width = pImgData->box.width;
+        oitdHeader.height = pImgData->box.height;
+        oitdHeader.depthOrSlices = std::max( pImgData->box.depth, pImgData->box.numSlices );
+        oitdHeader.numMipmaps = pImgData->numMipmaps;
+        oitdHeader.textureType = pImgData->textureType;
+        oitdHeader.pixelFormat = pImgData->format;
+        oitdHeader.version = c_OITDVersion;
 
         uint32 oitdMagic = OITD_MAGIC;
 
         // Swap endian
-        flipEndian( &oitdMagic, sizeof(uint32) );
-        flipEndian( &oitdHeader, 4u, sizeof(OITDHeader) / 4u );
+        flipEndian( &oitdMagic, sizeof( uint32 ) );
+        flipEndian( &oitdHeader, 4u, sizeof( OITDHeader ) / 4u );
 
         const uint32 rowAlignment = 4u;
-        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( pImgData->box.width,
-                                                                              pImgData->box.height,
-                                                                              pImgData->box.depth,
-                                                                              pImgData->box.numSlices,
-                                                                              pImgData->format,
-                                                                              pImgData->numMipmaps,
-                                                                              rowAlignment );
+        const size_t requiredBytes =
+            PixelFormatGpuUtils::calculateSizeBytes( pImgData->box.width,      //
+                                                     pImgData->box.height,     //
+                                                     pImgData->box.depth,      //
+                                                     pImgData->box.numSlices,  //
+                                                     pImgData->format,         //
+                                                     pImgData->numMipmaps,     //
+                                                     rowAlignment );
         // Write the file
         std::ofstream outFile;
-        outFile.open( outFileName.c_str(), std::ios_base::binary|std::ios_base::out );
-        outFile.write( (const char*)&oitdMagic, sizeof(uint32) );
-        outFile.write( (const char*)&oitdHeader, sizeof(OITDHeader) );
-        outFile.write( (const char*)pImgData->box.data, requiredBytes );
+        outFile.open( outFileName.c_str(), std::ios_base::binary | std::ios_base::out );
+        outFile.write( (const char *)&oitdMagic, sizeof( uint32 ) );
+        outFile.write( (const char *)&oitdHeader, sizeof( OITDHeader ) );
+        outFile.write( (const char *)pImgData->box.data, requiredBytes );
         outFile.close();
     }
     //---------------------------------------------------------------------
-    Codec::DecodeResult OITDCodec::decode( DataStreamPtr& stream ) const
+    Codec::DecodeResult OITDCodec::decode( DataStreamPtr &stream ) const
     {
         // Read 4 character code
         uint32 fileType;
-        stream->read( &fileType, sizeof(uint32) );
-        flipEndian( &fileType, sizeof(uint32) );
+        stream->read( &fileType, sizeof( uint32 ) );
+        flipEndian( &fileType, sizeof( uint32 ) );
 
         if( OITD_MAGIC != fileType )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "This is not a OITD file!",
-                         "OITDCodec::decode" );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "This is not a OITD file!", "OITDCodec::decode" );
         }
 
         // Read header in full
         OITDHeader header;
-        stream->read( &header, sizeof(OITDHeader) );
+        stream->read( &header, sizeof( OITDHeader ) );
 
         // Endian flip if required, all 32-bit values
-        flipEndian( &header, 4u, sizeof(OITDHeader) / 4u );
+        flipEndian( &header, 4u, sizeof( OITDHeader ) / 4u );
 
         if( header.version != c_OITDVersion )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "This OITD file format is version " +
-                         StringConverter::toString( header.version ) +
-                         "but we only support version " + StringConverter::toString( c_OITDVersion ),
+                             StringConverter::toString( header.version ) +
+                             "but we only support version " + StringConverter::toString( c_OITDVersion ),
                          "OITDCodec::decode" );
         }
         if( header.pixelFormat >= PFG_COUNT )
@@ -229,31 +224,31 @@ namespace Ogre
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
 
-        imgData->box.width      = header.width;
-        imgData->box.height     = header.height;
-        imgData->box.depth      = header.getDepth();
-        imgData->box.numSlices  = header.getNumSlices();
-        imgData->textureType    = static_cast<TextureTypes::TextureTypes>( header.textureType );
-        imgData->format         = static_cast<PixelFormatGpu>( header.pixelFormat );
-        imgData->numMipmaps     = header.numMipmaps;
+        imgData->box.width = header.width;
+        imgData->box.height = header.height;
+        imgData->box.depth = header.getDepth();
+        imgData->box.numSlices = header.getNumSlices();
+        imgData->textureType = static_cast<TextureTypes::TextureTypes>( header.textureType );
+        imgData->format = static_cast<PixelFormatGpu>( header.pixelFormat );
+        imgData->numMipmaps = header.numMipmaps;
 
         const uint32 rowAlignment = 4u;
-        imgData->box.bytesPerPixel  = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
-        imgData->box.bytesPerRow    = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
-                                                                         1u, 1u, 1u,
-                                                                         imgData->format,
-                                                                         rowAlignment );
-        imgData->box.bytesPerImage  = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
-                                                                         imgData->box.height,
-                                                                         1u, 1u,
-                                                                         imgData->format,
-                                                                         rowAlignment );
-        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
-                                                                              imgData->box.height,
-                                                                              imgData->box.depth,
-                                                                              imgData->box.numSlices,
-                                                                              imgData->format,
-                                                                              imgData->numMipmaps,
+        imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
+        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
+                                                                      1u, 1u, 1u,          //
+                                                                      imgData->format,     //
+                                                                      rowAlignment );
+        imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,   //
+                                                                        imgData->box.height,  //
+                                                                        1u, 1u,               //
+                                                                        imgData->format,      //
+                                                                        rowAlignment );
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,      //
+                                                                              imgData->box.height,     //
+                                                                              imgData->box.depth,      //
+                                                                              imgData->box.numSlices,  //
+                                                                              imgData->format,         //
+                                                                              imgData->numMipmaps,     //
                                                                               rowAlignment );
 
         // Bind output buffer
@@ -268,39 +263,36 @@ namespace Ogre
         return ret;
     }
     //---------------------------------------------------------------------
-    String OITDCodec::getType() const
-    {
-        return mType;
-    }
+    String OITDCodec::getType() const { return mType; }
     //---------------------------------------------------------------------
     void OITDCodec::flipEndian( void *pData, size_t size, size_t count )
     {
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-        Bitwise::bswapChunks(pData, size, count);
+        Bitwise::bswapChunks( pData, size, count );
 #endif
     }
     //---------------------------------------------------------------------
     void OITDCodec::flipEndian( void *pData, size_t size )
     {
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-        Bitwise::bswapBuffer(pData, size);
+        Bitwise::bswapBuffer( pData, size );
 #endif
     }
     //---------------------------------------------------------------------
     String OITDCodec::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
     {
-        if (maxbytes >= sizeof(uint32))
+        if( maxbytes >= sizeof( uint32 ) )
         {
             uint32 fileType;
-            memcpy( &fileType, magicNumberPtr, sizeof(uint32) );
-            flipEndian( &fileType, sizeof(uint32) );
+            memcpy( &fileType, magicNumberPtr, sizeof( uint32 ) );
+            flipEndian( &fileType, sizeof( uint32 ) );
 
             if( OITD_MAGIC == fileType )
             {
-                return String("oitd");
+                return String( "oitd" );
             }
         }
 
         return BLANKSTRING;
     }
-}
+}  // namespace Ogre

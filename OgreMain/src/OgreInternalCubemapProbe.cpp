@@ -34,15 +34,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    InternalCubemapProbe::InternalCubemapProbe(
-            IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
+    InternalCubemapProbe::InternalCubemapProbe( IdType id, ObjectMemoryManager *objectMemoryManager,
+                                                SceneManager *manager ) :
         MovableObject( id, objectMemoryManager, manager, ForwardPlusBase::MinCubemapProbeRq )
     {
-        memset( mGpuData, 0, sizeof(mGpuData) );
+        memset( mGpuData, 0, sizeof( mGpuData ) );
 
-        //NOTE: For performance reasons, ForwardClustered::collectLightForSlice ignores
-        //mLocalAabb & mWorldAabb and assumes its local AABB is this aabb we set as
-        //default. To change its shape, use node scaling
+        // NOTE: For performance reasons, ForwardClustered::collectLightForSlice ignores
+        // mLocalAabb & mWorldAabb and assumes its local AABB is this aabb we set as
+        // default. To change its shape, use node scaling
         Aabb aabb( Vector3::ZERO, Vector3::UNIT_SCALE * 0.5f );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
@@ -50,20 +50,18 @@ namespace Ogre
         mObjectData.mLocalRadius[mObjectData.mIndex] = radius;
         mObjectData.mWorldRadius[mObjectData.mIndex] = radius;
 
-        //Disable shadow casting by default. Otherwise it's a waste or resources
+        // Disable shadow casting by default. Otherwise it's a waste or resources
         setCastShadows( false );
     }
     //-----------------------------------------------------------------------------------
-    InternalCubemapProbe::~InternalCubemapProbe()
-    {
-    }
+    InternalCubemapProbe::~InternalCubemapProbe() {}
     //-----------------------------------------------------------------------------------
-    const String& InternalCubemapProbe::getMovableType() const
+    const String &InternalCubemapProbe::getMovableType() const
     {
         return InternalCubemapProbeFactory::FACTORY_TYPE_NAME;
     }
     //-----------------------------------------------------------------------------------
-    void InternalCubemapProbe::setRenderQueueGroup(uint8 queueID)
+    void InternalCubemapProbe::setRenderQueueGroup( uint8 queueID )
     {
         assert( queueID >= ForwardPlusBase::MinCubemapProbeRq &&
                 queueID <= ForwardPlusBase::MaxCubemapProbeRq &&
@@ -75,23 +73,16 @@ namespace Ogre
     //-----------------------------------------------------------------------
     String InternalCubemapProbeFactory::FACTORY_TYPE_NAME = "InternalCubemapProbe";
     //-----------------------------------------------------------------------
-    const String& InternalCubemapProbeFactory::getType() const
-    {
-     return FACTORY_TYPE_NAME;
-    }
+    const String &InternalCubemapProbeFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------
-    MovableObject* InternalCubemapProbeFactory::createInstanceImpl( IdType id,
-                                                  ObjectMemoryManager *objectMemoryManager,
-                                                  SceneManager *manager,
-                                                  const NameValuePairList* params )
+    MovableObject *InternalCubemapProbeFactory::createInstanceImpl(
+        IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+        const NameValuePairList *params )
     {
-        InternalCubemapProbe* internalCubemapProbe =
-                OGRE_NEW InternalCubemapProbe( id, objectMemoryManager, manager );
+        InternalCubemapProbe *internalCubemapProbe =
+            OGRE_NEW InternalCubemapProbe( id, objectMemoryManager, manager );
         return internalCubemapProbe;
     }
     //-----------------------------------------------------------------------
-    void InternalCubemapProbeFactory::destroyInstance( MovableObject* obj)
-    {
-        OGRE_DELETE obj;
-    }
-}
+    void InternalCubemapProbeFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
+}  // namespace Ogre

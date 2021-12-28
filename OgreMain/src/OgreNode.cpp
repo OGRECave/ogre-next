@@ -29,27 +29,28 @@ THE SOFTWARE.
 
 #include "OgreNode.h"
 
+#include "Math/Array/OgreBooleanMask.h"
+#include "Math/Array/OgreNodeMemoryManager.h"
 #include "OgreCamera.h"
 #include "OgreException.h"
 #include "OgreMath.h"
 #include "OgreStringConverter.h"
-#include "Math/Array/OgreNodeMemoryManager.h"
-#include "Math/Array/OgreBooleanMask.h"
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-    #define CACHED_TRANSFORM_OUT_OF_DATE() this->_setCachedTransformOutOfDate()
+#    define CACHED_TRANSFORM_OUT_OF_DATE() this->_setCachedTransformOutOfDate()
 #else
-    #define CACHED_TRANSFORM_OUT_OF_DATE() ((void)0)
+#    define CACHED_TRANSFORM_OUT_OF_DATE() ( (void)0 )
 #endif
 
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
     Node::Node( IdType id, NodeMemoryManager *nodeMemoryManager, Node *parent ) :
         IdObject( id ),
         mDepthLevel( 0 ),
         mIndestructibleByClearScene( false ),
         mParent( parent ),
-		mName( "" ),
+        mName( "" ),
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         mCachedTransformOutOfDate( true ),
 #endif
@@ -61,7 +62,7 @@ namespace Ogre {
         if( mParent )
             mDepthLevel = mParent->mDepthLevel + 1;
 
-        //Will initialize mTransform
+        // Will initialize mTransform
         mNodeMemoryManager->nodeCreated( mTransform, mDepthLevel );
         mTransform.mOwner[mTransform.mIndex] = this;
         if( mParent )
@@ -72,7 +73,7 @@ namespace Ogre {
         IdObject( 0 ),
         mDepthLevel( 0 ),
         mParent( 0 ),
-		mName( "Dummy Node" ),
+        mName( "Dummy Node" ),
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         mCachedTransformOutOfDate( true ),
 #endif
@@ -89,13 +90,13 @@ namespace Ogre {
         // Call listener (note, only called if there's something to do)
         if( mListener )
         {
-            mListener->nodeDestroyed(this);
+            mListener->nodeDestroyed( this );
         }
 
-        //Calling removeAllChildren or mParent->removeChild before nodeDestroyed may
-        //result in an enlargement of the array memory buffer or in a cleanup.
-        //Either way, the memory manager could end up calling a virtual function;
-        //but our vtable is wrong by now. So we destroy our slot first.
+        // Calling removeAllChildren or mParent->removeChild before nodeDestroyed may
+        // result in an enlargement of the array memory buffer or in a cleanup.
+        // Either way, the memory manager could end up calling a virtual function;
+        // but our vtable is wrong by now. So we destroy our slot first.
         if( mNodeMemoryManager )
             mNodeMemoryManager->nodeDestroyed( mTransform, mDepthLevel );
         mDepthLevel = 0;
@@ -104,25 +105,19 @@ namespace Ogre {
         if( mParent )
         {
             Node *parent = mParent;
-            mParent = 0; //We've already called mNodeMemoryManager->nodeDestroyed.
+            mParent = 0;  // We've already called mNodeMemoryManager->nodeDestroyed.
             parent->removeChild( this );
         }
     }
     //-----------------------------------------------------------------------
-    Node* Node::getParent() const
-    {
-        return mParent;
-    }
+    Node *Node::getParent() const { return mParent; }
     //-----------------------------------------------------------------------
     void Node::setIndestructibleByClearScene( bool indestructible )
     {
         mIndestructibleByClearScene = indestructible;
     }
     //-----------------------------------------------------------------------
-    bool Node::getIndestructibleByClearScene() const
-    {
-        return mIndestructibleByClearScene;
-    }
+    bool Node::getIndestructibleByClearScene() const { return mIndestructibleByClearScene; }
     //-----------------------------------------------------------------------
     void Node::migrateTo( NodeMemoryManager *nodeMemoryManager )
     {
@@ -131,7 +126,7 @@ namespace Ogre {
 
         while( itor != endt )
         {
-            (*itor)->migrateTo( nodeMemoryManager );
+            ( *itor )->migrateTo( nodeMemoryManager );
             ++itor;
         }
 
@@ -140,17 +135,14 @@ namespace Ogre {
         _callMemoryChangeListeners();
     }
     //-----------------------------------------------------------------------
-    bool Node::isStatic() const
-    {
-        return mNodeMemoryManager->getMemoryManagerType() == SCENE_STATIC;
-    }
+    bool Node::isStatic() const { return mNodeMemoryManager->getMemoryManagerType() == SCENE_STATIC; }
     //-----------------------------------------------------------------------
     bool Node::setStatic( bool bStatic )
     {
         bool retVal = false;
         if( mNodeMemoryManager->getTwin() &&
-           ((mNodeMemoryManager->getMemoryManagerType() == SCENE_STATIC && !bStatic) ||
-            (mNodeMemoryManager->getMemoryManagerType() == SCENE_DYNAMIC && bStatic)))
+            ( ( mNodeMemoryManager->getMemoryManagerType() == SCENE_STATIC && !bStatic ) ||
+              ( mNodeMemoryManager->getMemoryManagerType() == SCENE_DYNAMIC && bStatic ) ) )
         {
             mNodeMemoryManager->migrateTo( mTransform, mDepthLevel, mNodeMemoryManager->getTwin() );
             mNodeMemoryManager = mNodeMemoryManager->getTwin();
@@ -161,7 +153,7 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void Node::setParent( Node* parent )
+    void Node::setParent( Node *parent )
     {
         if( mParent != parent )
         {
@@ -169,11 +161,11 @@ namespace Ogre {
 
             // Call listener
             if( mListener )
-                mListener->nodeAttached(this);
+                mListener->nodeAttached( this );
 
             size_t oldDepthLevel = mDepthLevel;
 
-            //NodeMemoryManager will set mTransform.mParents to a dummy parent node
+            // NodeMemoryManager will set mTransform.mParents to a dummy parent node
             //(as well as transfering the memory)
             mNodeMemoryManager->nodeDettached( mTransform, mDepthLevel );
 
@@ -195,13 +187,13 @@ namespace Ogre {
 
             if( oldDepthLevel != mDepthLevel || differentNodeMemoryManager )
             {
-                //Propagate the change to our children
+                // Propagate the change to our children
                 NodeVec::const_iterator itor = mChildren.begin();
                 NodeVec::const_iterator endt = mChildren.end();
 
                 while( itor != endt )
                 {
-                    (*itor)->parentDepthLevelChanged();
+                    ( *itor )->parentDepthLevelChanged();
                     ++itor;
                 }
 
@@ -216,12 +208,12 @@ namespace Ogre {
         {
             // Call listener
             if( mListener )
-                mListener->nodeDetached(this);
+                mListener->nodeDetached( this );
 
             mParent = 0;
 
             NodeMemoryManager *defaultNodeMemoryManager =
-                    getDefaultNodeMemoryManager( mNodeMemoryManager->getMemoryManagerType() );
+                getDefaultNodeMemoryManager( mNodeMemoryManager->getMemoryManagerType() );
 
             const bool differentNodeMemoryManager = defaultNodeMemoryManager != mNodeMemoryManager;
 
@@ -233,7 +225,7 @@ namespace Ogre {
             }
             else
             {
-                //NodeMemoryManager will set mTransform.mParents to a dummy parent node
+                // NodeMemoryManager will set mTransform.mParents to a dummy parent node
                 //(as well as transfering the memory)
                 mNodeMemoryManager->nodeDettached( mTransform, mDepthLevel );
             }
@@ -242,13 +234,13 @@ namespace Ogre {
             {
                 mDepthLevel = 0;
 
-                //Propagate the change to our children
+                // Propagate the change to our children
                 NodeVec::const_iterator itor = mChildren.begin();
                 NodeVec::const_iterator endt = mChildren.end();
 
                 while( itor != endt )
                 {
-                    (*itor)->parentDepthLevelChanged();
+                    ( *itor )->parentDepthLevelChanged();
                     ++itor;
                 }
 
@@ -274,13 +266,13 @@ namespace Ogre {
 
         _callMemoryChangeListeners();
 
-        //Keep propagating changes to our children
+        // Keep propagating changes to our children
         NodeVec::const_iterator itor = mChildren.begin();
         NodeVec::const_iterator endt = mChildren.end();
 
         while( itor != endt )
         {
-            (*itor)->parentDepthLevelChanged();
+            ( *itor )->parentDepthLevelChanged();
             ++itor;
         }
     }
@@ -291,7 +283,7 @@ namespace Ogre {
         return mTransform.mDerivedTransform[mTransform.mIndex];
     }*/
     //-----------------------------------------------------------------------
-    const Matrix4& Node::_getFullTransformUpdated()
+    const Matrix4 &Node::_getFullTransformUpdated()
     {
         _updateFromParent();
         return mTransform.mDerivedTransform[mTransform.mIndex];
@@ -302,18 +294,18 @@ namespace Ogre {
         updateFromParentImpl();
 
         // Call listener (note, this method only called if there's something to do)
-        if (mListener)
+        if( mListener )
         {
-            mListener->nodeUpdated(this);
+            mListener->nodeUpdated( this );
         }
-        
-        //Keep propagating changes to our children
+
+        // Keep propagating changes to our children
         NodeVec::iterator itor = mChildren.begin();
         NodeVec::iterator endt = mChildren.end();
 
         while( itor != endt )
         {
-            (*itor)->_updateChildren();
+            ( *itor )->_updateChildren();
             ++itor;
         }
     }
@@ -326,9 +318,9 @@ namespace Ogre {
         updateFromParentImpl();
 
         // Call listener (note, this method only called if there's something to do)
-        if (mListener)
+        if( mListener )
         {
-            mListener->nodeUpdated(this);
+            mListener->nodeUpdated( this );
         }
     }
     //-----------------------------------------------------------------------
@@ -337,52 +329,57 @@ namespace Ogre {
 #if OGRE_NODE_INHERIT_TRANSFORM
         // determine our transform, without parent part
         ArrayMatrix4 trSoA;
-        trSoA.makeTransform(*mTransform.mPosition, *mTransform.mScale, *mTransform.mOrientation);
+        trSoA.makeTransform( *mTransform.mPosition, *mTransform.mScale, *mTransform.mOrientation );
 
-        for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+        for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
-            const Transform& parentTransform = mTransform.mParents[j]->mTransform;
-            const Matrix4& parentFullTransform = parentTransform.mDerivedTransform[parentTransform.mIndex];
+            const Transform &parentTransform = mTransform.mParents[j]->mTransform;
+            const Matrix4 &parentFullTransform =
+                parentTransform.mDerivedTransform[parentTransform.mIndex];
 
             Matrix4 tr;
-            trSoA.getAsMatrix4(tr, j);
+            trSoA.getAsMatrix4( tr, j );
 
-            if(mTransform.mInheritOrientation[j] && mTransform.mInheritScale[j]) // everything is inherited
+            if( mTransform.mInheritOrientation[j] &&
+                mTransform.mInheritScale[j] )  // everything is inherited
             {
                 mTransform.mDerivedTransform[j] = parentFullTransform * tr;
             }
-            else if(!mTransform.mInheritOrientation[j] && !mTransform.mInheritScale[j]) // only position is inherited
+            else if( !mTransform.mInheritOrientation[j] &&
+                     !mTransform.mInheritScale[j] )  // only position is inherited
             {
                 mTransform.mDerivedTransform[j] = tr;
-                mTransform.mDerivedTransform[j].setTrans(tr.getTrans() + parentFullTransform.getTrans());
+                mTransform.mDerivedTransform[j].setTrans( tr.getTrans() +
+                                                          parentFullTransform.getTrans() );
             }
-            else // shear is inherited together with orientation, controlled by mInheritOrientation
+            else  // shear is inherited together with orientation, controlled by mInheritOrientation
             {
                 Ogre::Vector3 parentScale(
-                    parentFullTransform.transformDirectionAffine(Vector3::UNIT_X).length(),
-                    parentFullTransform.transformDirectionAffine(Vector3::UNIT_Y).length(),
-                    parentFullTransform.transformDirectionAffine(Vector3::UNIT_Z).length());
+                    parentFullTransform.transformDirectionAffine( Vector3::UNIT_X ).length(),
+                    parentFullTransform.transformDirectionAffine( Vector3::UNIT_Y ).length(),
+                    parentFullTransform.transformDirectionAffine( Vector3::UNIT_Z ).length() );
 
-                assert(mTransform.mInheritOrientation[j] ^ mTransform.mInheritScale[j]);
-                mTransform.mDerivedTransform[j] = mTransform.mInheritOrientation[j] ?
-                    Matrix4::getScale(1.0f / parentScale) * parentFullTransform * tr :
-                    Matrix4::getScale(parentScale) * tr;
+                assert( mTransform.mInheritOrientation[j] ^ mTransform.mInheritScale[j] );
+                mTransform.mDerivedTransform[j] =
+                    mTransform.mInheritOrientation[j]
+                        ? Matrix4::getScale( 1.0f / parentScale ) * parentFullTransform * tr
+                        : Matrix4::getScale( parentScale ) * tr;
             }
 
             // Decompose full transform to position, orientation and scale, shear is lost here.
             Vector3 pos, scale;
             Quaternion qRot;
-            mTransform.mDerivedTransform[j].decomposition(pos, scale, qRot);
-            mTransform.mDerivedPosition->setFromVector3(pos, j);
-            mTransform.mDerivedScale->setFromVector3(scale, j);
-            mTransform.mDerivedOrientation->setFromQuaternion(qRot, j);
+            mTransform.mDerivedTransform[j].decomposition( pos, scale, qRot );
+            mTransform.mDerivedPosition->setFromVector3( pos, j );
+            mTransform.mDerivedScale->setFromVector3( scale, j );
+            mTransform.mDerivedOrientation->setFromQuaternion( qRot, j );
         }
 #else
-        //Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
+        // Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
         ArrayVector3 parentPos, parentScale;
         ArrayQuaternion parentRot;
 
-        for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+        for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
             Vector3 pos, nodeScale;
             Quaternion qRot;
@@ -398,30 +395,28 @@ namespace Ogre {
 
         parentRot.Cmov4( BooleanMask4::getMask( mTransform.mInheritOrientation ),
                          ArrayQuaternion::IDENTITY );
-        parentScale.Cmov4( BooleanMask4::getMask( mTransform.mInheritScale ),
-                            ArrayVector3::UNIT_SCALE );
+        parentScale.Cmov4( BooleanMask4::getMask( mTransform.mInheritScale ), ArrayVector3::UNIT_SCALE );
 
         // Scale own position by parent scale, NB just combine
         // as equivalent axes, no shearing
-        *mTransform.mDerivedScale = parentScale * (*mTransform.mScale);
+        *mTransform.mDerivedScale = parentScale * ( *mTransform.mScale );
 
         // Combine orientation with that of parent
-        *mTransform.mDerivedOrientation = parentRot * (*mTransform.mOrientation);
+        *mTransform.mDerivedOrientation = parentRot * ( *mTransform.mOrientation );
 
         // Change position vector based on parent's orientation & scale
-        *mTransform.mDerivedPosition = parentRot * (parentScale * (*mTransform.mPosition));
+        *mTransform.mDerivedPosition = parentRot * ( parentScale * ( *mTransform.mPosition ) );
 
         // Add altered position vector to parents
         *mTransform.mDerivedPosition += parentPos;
 
         ArrayMatrix4 derivedTransform;
-        derivedTransform.makeTransform( *mTransform.mDerivedPosition,
-                                         *mTransform.mDerivedScale,
-                                         *mTransform.mDerivedOrientation );
+        derivedTransform.makeTransform( *mTransform.mDerivedPosition, *mTransform.mDerivedScale,
+                                        *mTransform.mDerivedOrientation );
         derivedTransform.storeToAoS( mTransform.mDerivedTransform );
 #endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+        for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
             if( mTransform.mOwner[j] )
                 mTransform.mOwner[j]->mCachedTransformOutOfDate = false;
@@ -432,57 +427,60 @@ namespace Ogre {
     void Node::updateAllTransforms( const size_t numNodes, Transform t )
     {
         ArrayMatrix4 derivedTransform;
-        for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numNodes; i += ARRAY_PACKED_REALS )
         {
 #if OGRE_NODE_INHERIT_TRANSFORM
             // determine our transform, without parent part
             ArrayMatrix4 trSoA;
-            trSoA.makeTransform(*t.mPosition, *t.mScale, *t.mOrientation);
+            trSoA.makeTransform( *t.mPosition, *t.mScale, *t.mOrientation );
 
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
-                const Transform& parentTransform = t.mParents[j]->mTransform;
-                const Matrix4& parentFullTransform = parentTransform.mDerivedTransform[parentTransform.mIndex];
+                const Transform &parentTransform = t.mParents[j]->mTransform;
+                const Matrix4 &parentFullTransform =
+                    parentTransform.mDerivedTransform[parentTransform.mIndex];
 
                 Matrix4 tr;
-                trSoA.getAsMatrix4(tr, j);
+                trSoA.getAsMatrix4( tr, j );
 
-                if(t.mInheritOrientation[j] && t.mInheritScale[j]) // everything is inherited
+                if( t.mInheritOrientation[j] && t.mInheritScale[j] )  // everything is inherited
                 {
                     t.mDerivedTransform[j] = parentFullTransform * tr;
                 }
-                else if(!t.mInheritOrientation[j] && !t.mInheritScale[j]) // only position is inherited
+                else if( !t.mInheritOrientation[j] &&
+                         !t.mInheritScale[j] )  // only position is inherited
                 {
                     t.mDerivedTransform[j] = tr;
-                    t.mDerivedTransform[j].setTrans(tr.getTrans() + parentFullTransform.getTrans());
+                    t.mDerivedTransform[j].setTrans( tr.getTrans() + parentFullTransform.getTrans() );
                 }
-                else // shear is inherited together with orientation, controlled by mInheritOrientation
+                else  // shear is inherited together with orientation, controlled by mInheritOrientation
                 {
                     Ogre::Vector3 parentScale(
-                        parentFullTransform.transformDirectionAffine(Vector3::UNIT_X).length(),
-                        parentFullTransform.transformDirectionAffine(Vector3::UNIT_Y).length(),
-                        parentFullTransform.transformDirectionAffine(Vector3::UNIT_Z).length());
+                        parentFullTransform.transformDirectionAffine( Vector3::UNIT_X ).length(),
+                        parentFullTransform.transformDirectionAffine( Vector3::UNIT_Y ).length(),
+                        parentFullTransform.transformDirectionAffine( Vector3::UNIT_Z ).length() );
 
-                    assert(t.mInheritOrientation[j] ^ t.mInheritScale[j]);
-                    t.mDerivedTransform[j] = t.mInheritOrientation[j] ?
-                        Matrix4::getScale(1.0f / parentScale) * parentFullTransform * tr :
-                        Matrix4::getScale(parentScale) * tr;
+                    assert( t.mInheritOrientation[j] ^ t.mInheritScale[j] );
+                    t.mDerivedTransform[j] =
+                        t.mInheritOrientation[j]
+                            ? Matrix4::getScale( 1.0f / parentScale ) * parentFullTransform * tr
+                            : Matrix4::getScale( parentScale ) * tr;
                 }
 
                 // Decompose full transform to position, orientation and scale, shear is lost here.
                 Vector3 pos, scale;
                 Quaternion qRot;
-                t.mDerivedTransform[j].decomposition(pos, scale, qRot);
-                t.mDerivedPosition->setFromVector3(pos, j);
-                t.mDerivedScale->setFromVector3(scale, j);
-                t.mDerivedOrientation->setFromQuaternion(qRot, j);
+                t.mDerivedTransform[j].decomposition( pos, scale, qRot );
+                t.mDerivedPosition->setFromVector3( pos, j );
+                t.mDerivedScale->setFromVector3( scale, j );
+                t.mDerivedOrientation->setFromQuaternion( qRot, j );
             }
 #else
-            //Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
+            // Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
             ArrayVector3 parentPos, parentScale;
             ArrayQuaternion parentRot;
 
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 Vector3 pos, scale;
                 Quaternion qRot;
@@ -497,28 +495,27 @@ namespace Ogre {
             }
 
             // Change position vector based on parent's orientation & scale
-            *t.mDerivedPosition = parentRot * (parentScale * (*t.mPosition));
+            *t.mDerivedPosition = parentRot * ( parentScale * ( *t.mPosition ) );
 
             // Combine orientation with that of parent
-            *t.mDerivedOrientation = ArrayQuaternion::Cmov4( parentRot * (*t.mOrientation),
-                                                             *t.mOrientation,
-                                                        BooleanMask4::getMask( t.mInheritOrientation ) );
+            *t.mDerivedOrientation =
+                ArrayQuaternion::Cmov4( parentRot * ( *t.mOrientation ), *t.mOrientation,
+                                        BooleanMask4::getMask( t.mInheritOrientation ) );
 
             // Scale own position by parent scale, NB just combine
             // as equivalent axes, no shearing
-            *t.mDerivedScale = ArrayVector3::Cmov4( parentScale * (*t.mScale), *t.mScale,
+            *t.mDerivedScale = ArrayVector3::Cmov4( parentScale * ( *t.mScale ), *t.mScale,
                                                     BooleanMask4::getMask( t.mInheritScale ) );
 
             // Add altered position vector to parents
             *t.mDerivedPosition += parentPos;
 
-            derivedTransform.makeTransform( *t.mDerivedPosition,
-                                            *t.mDerivedScale,
+            derivedTransform.makeTransform( *t.mDerivedPosition, *t.mDerivedScale,
                                             *t.mDerivedOrientation );
             derivedTransform.storeToAoS( t.mDerivedTransform );
 #endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( t.mOwner[j] )
                     t.mOwner[j]->mCachedTransformOutOfDate = false;
@@ -529,42 +526,44 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    Node* Node::createChild( SceneMemoryMgrTypes sceneType,
-                             const Vector3& inTranslate, const Quaternion& inRotate )
+    Node *Node::createChild( SceneMemoryMgrTypes sceneType, const Vector3 &inTranslate,
+                             const Quaternion &inRotate )
     {
-        Node* newNode = createChildImpl( sceneType );
+        Node *newNode = createChildImpl( sceneType );
         newNode->setPosition( inTranslate );
         newNode->setOrientation( inRotate );
 
-        //createChildImpl must have passed us as parent. It's a special
-        //case to improve memory usage (avoid transfering mTransform)
+        // createChildImpl must have passed us as parent. It's a special
+        // case to improve memory usage (avoid transfering mTransform)
         mChildren.push_back( newNode );
         newNode->mParentIndex = mChildren.size() - 1;
 
         return newNode;
     }
     //-----------------------------------------------------------------------
-    void Node::addChild(Node* child)
+    void Node::addChild( Node *child )
     {
         if( child->mParent )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Node ID: " + StringConverter::toString( child->getId() ) + ", named '" +
-                child->getName() + "' already was a child of Node ID: " +
-                StringConverter::toString( child->mParent->getId() ) + ", named '" +
-                child->mParent->getName() + "'.", "Node::addChild");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Node ID: " + StringConverter::toString( child->getId() ) + ", named '" +
+                             child->getName() + "' already was a child of Node ID: " +
+                             StringConverter::toString( child->mParent->getId() ) + ", named '" +
+                             child->mParent->getName() + "'.",
+                         "Node::addChild" );
         }
 
         mChildren.push_back( child );
         child->mParentIndex = mChildren.size() - 1;
-        child->setParent(this);
+        child->setParent( this );
     }
     //-----------------------------------------------------------------------
-    void Node::removeChild( Node* child )
+    void Node::removeChild( Node *child )
     {
-        //child->getParent() can be null if we're calling this
-        //function from the destructor. See ~Node notes.
-        assert( (!child->getParent() || child->getParent() == this) && "Node says it's not our child" );
+        // child->getParent() can be null if we're calling this
+        // function from the destructor. See ~Node notes.
+        assert( ( !child->getParent() || child->getParent() == this ) &&
+                "Node says it's not our child" );
         assert( child->mParentIndex < mChildren.size() && "mParentIndex was out of date!!!" );
 
         if( child->mParentIndex < mChildren.size() )
@@ -579,9 +578,9 @@ namespace Ogre {
                 child->unsetParent();
                 child->mParentIndex = -1;
 
-                //The node that was at the end got swapped and has now a different index
+                // The node that was at the end got swapped and has now a different index
                 if( itor != mChildren.end() )
-                    (*itor)->mParentIndex = itor - mChildren.begin();
+                    ( *itor )->mParentIndex = itor - mChildren.begin();
             }
         }
     }
@@ -593,7 +592,7 @@ namespace Ogre {
 
         while( itor != endt )
         {
-            (*itor)->_notifyStaticDirty();
+            ( *itor )->_notifyStaticDirty();
             ++itor;
         }
     }
@@ -605,7 +604,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Node::setOrientation( Quaternion q )
     {
-        assert(!q.isNaN() && "Invalid orientation supplied as parameter");
+        assert( !q.isNaN() && "Invalid orientation supplied as parameter" );
         q.normalise();
         mTransform.mOrientation->setFromQuaternion( q, mTransform.mIndex );
         CACHED_TRANSFORM_OUT_OF_DATE();
@@ -613,7 +612,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Node::setOrientation( Real w, Real x, Real y, Real z )
     {
-        setOrientation( Quaternion(w, x, y, z) );
+        setOrientation( Quaternion( w, x, y, z ) );
     }
     //-----------------------------------------------------------------------
     void Node::resetOrientation()
@@ -622,22 +621,16 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Node::setPosition(const Vector3& pos)
+    void Node::setPosition( const Vector3 &pos )
     {
-        assert(!pos.isNaN() && "Invalid vector supplied as parameter");
+        assert( !pos.isNaN() && "Invalid vector supplied as parameter" );
         mTransform.mPosition->setFromVector3( pos, mTransform.mIndex );
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    void Node::setPosition(Real x, Real y, Real z)
-    {
-        setPosition( Vector3( x, y, z ) );
-    }
+    void Node::setPosition( Real x, Real y, Real z ) { setPosition( Vector3( x, y, z ) ); }
     //-----------------------------------------------------------------------
-    Vector3 Node::getPosition() const
-    {
-        return mTransform.mPosition->getAsVector3( mTransform.mIndex );
-    }
+    Vector3 Node::getPosition() const { return mTransform.mPosition->getAsVector3( mTransform.mIndex ); }
     //-----------------------------------------------------------------------
     Matrix3 Node::getLocalAxes() const
     {
@@ -659,12 +652,12 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    void Node::translate(const Vector3& d, TransformSpace relativeTo)
+    void Node::translate( const Vector3 &d, TransformSpace relativeTo )
     {
         Vector3 position;
         mTransform.mPosition->getAsVector3( position, mTransform.mIndex );
 
-        switch(relativeTo)
+        switch( relativeTo )
         {
         case TS_LOCAL:
             // position is relative to parent so transform downwards
@@ -672,10 +665,10 @@ namespace Ogre {
             break;
         case TS_WORLD:
             // position is relative to parent so transform upwards
-            if (mParent)
+            if( mParent )
             {
-                position += (mParent->_getDerivedOrientation().Inverse() * d)
-                    / mParent->_getDerivedScale();
+                position +=
+                    ( mParent->_getDerivedOrientation().Inverse() * d ) / mParent->_getDerivedScale();
             }
             else
             {
@@ -691,54 +684,53 @@ namespace Ogre {
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    void Node::translate(Real x, Real y, Real z, TransformSpace relativeTo)
+    void Node::translate( Real x, Real y, Real z, TransformSpace relativeTo )
     {
-        Vector3 v(x,y,z);
-        translate(v, relativeTo);
+        Vector3 v( x, y, z );
+        translate( v, relativeTo );
     }
     //-----------------------------------------------------------------------
-    void Node::translate(const Matrix3& axes, const Vector3& move, TransformSpace relativeTo)
+    void Node::translate( const Matrix3 &axes, const Vector3 &move, TransformSpace relativeTo )
     {
         Vector3 derived = axes * move;
-        translate(derived, relativeTo);
+        translate( derived, relativeTo );
     }
     //-----------------------------------------------------------------------
-    void Node::translate(const Matrix3& axes, Real x, Real y, Real z, TransformSpace relativeTo)
+    void Node::translate( const Matrix3 &axes, Real x, Real y, Real z, TransformSpace relativeTo )
     {
-        Vector3 d(x,y,z);
-        translate(axes,d,relativeTo);
+        Vector3 d( x, y, z );
+        translate( axes, d, relativeTo );
     }
     //-----------------------------------------------------------------------
-    void Node::roll(const Radian& angle, TransformSpace relativeTo)
+    void Node::roll( const Radian &angle, TransformSpace relativeTo )
     {
-        rotate(Vector3::UNIT_Z, angle, relativeTo);
+        rotate( Vector3::UNIT_Z, angle, relativeTo );
     }
     //-----------------------------------------------------------------------
-    void Node::pitch(const Radian& angle, TransformSpace relativeTo)
+    void Node::pitch( const Radian &angle, TransformSpace relativeTo )
     {
-        rotate(Vector3::UNIT_X, angle, relativeTo);
+        rotate( Vector3::UNIT_X, angle, relativeTo );
     }
     //-----------------------------------------------------------------------
-    void Node::yaw(const Radian& angle, TransformSpace relativeTo)
+    void Node::yaw( const Radian &angle, TransformSpace relativeTo )
     {
-        rotate(Vector3::UNIT_Y, angle, relativeTo);
-
+        rotate( Vector3::UNIT_Y, angle, relativeTo );
     }
     //-----------------------------------------------------------------------
-    void Node::rotate(const Vector3& axis, const Radian& angle, TransformSpace relativeTo)
+    void Node::rotate( const Vector3 &axis, const Radian &angle, TransformSpace relativeTo )
     {
         Quaternion q;
-        q.FromAngleAxis(angle,axis);
-        rotate(q, relativeTo);
+        q.FromAngleAxis( angle, axis );
+        rotate( q, relativeTo );
     }
 
     //-----------------------------------------------------------------------
-    void Node::rotate(const Quaternion& q, TransformSpace relativeTo)
+    void Node::rotate( const Quaternion &q, TransformSpace relativeTo )
     {
         Quaternion orientation;
         mTransform.mOrientation->getAsQuaternion( orientation, mTransform.mIndex );
 
-        switch(relativeTo)
+        switch( relativeTo )
         {
         case TS_PARENT:
             // Rotations are normally relative to local axes, transform up
@@ -746,8 +738,8 @@ namespace Ogre {
             break;
         case TS_WORLD:
             // Rotations are normally relative to local axes, transform up
-            orientation = orientation * _getDerivedOrientation().Inverse()
-                * q * _getDerivedOrientation();
+            orientation =
+                orientation * _getDerivedOrientation().Inverse() * q * _getDerivedOrientation();
             break;
         case TS_LOCAL:
             // Note the order of the mult, i.e. q comes after
@@ -762,12 +754,11 @@ namespace Ogre {
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
 
-    
     //-----------------------------------------------------------------------
-    void Node::_setDerivedPosition( const Vector3& pos )
+    void Node::_setDerivedPosition( const Vector3 &pos )
     {
-        //find where the node would end up in parent's local space
-        if(mParent)
+        // find where the node would end up in parent's local space
+        if( mParent )
         {
             setPosition( mParent->convertWorldToLocalPosition( pos ) );
             mTransform.mDerivedPosition->setFromVector3( pos, mTransform.mIndex );
@@ -778,18 +769,18 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void Node::_setDerivedOrientation( const Quaternion& q )
+    void Node::_setDerivedOrientation( const Quaternion &q )
     {
-        //find where the node would end up in parent's local space
-        if(mParent)
+        // find where the node would end up in parent's local space
+        if( mParent )
         {
             setOrientation( mParent->convertWorldToLocalOrientation( q ) );
             mTransform.mDerivedOrientation->setFromQuaternion( q, mTransform.mIndex );
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             mCachedTransformOutOfDate = false;
 #endif
-            mTransform.mDerivedTransform[mTransform.mIndex].makeTransform(
-                        _getDerivedPosition(), _getDerivedScale(), q );
+            mTransform.mDerivedTransform[mTransform.mIndex].makeTransform( _getDerivedPosition(),
+                                                                           _getDerivedScale(), q );
         }
     }
     //-----------------------------------------------------------------------
@@ -833,52 +824,53 @@ namespace Ogre {
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
 #if OGRE_NODE_INHERIT_TRANSFORM
-        return Node::_getFullTransform().inverseAffine().transformAffine(worldPos); // non virt call
-#else 
+        return Node::_getFullTransform().inverseAffine().transformAffine( worldPos );  // non virt call
+#else
         // result is the same as above, but inversion of Quaternion is faster than inversion of Mat3x4
-        return Node::_getDerivedOrientation().Inverse() * (worldPos - Node::_getDerivedPosition()) / Node::_getDerivedScale(); // non virt calls
+        return Node::_getDerivedOrientation().Inverse() * ( worldPos - Node::_getDerivedPosition() ) /
+               Node::_getDerivedScale();  // non virt calls
 #endif
     }
     //-----------------------------------------------------------------------
     Vector3 Node::convertLocalToWorldPosition( const Vector3 &localPos )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return Node::_getFullTransform().transformAffine(localPos); // non virt call
+        return Node::_getFullTransform().transformAffine( localPos );  // non virt call
     }
     //-----------------------------------------------------------------------
     Vector3 Node::convertWorldToLocalDirection( const Vector3 &worldDir, bool useScale )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
 #if OGRE_NODE_INHERIT_TRANSFORM
-        return useScale ? 
-            Node::_getFullTransform().inverseAffine().transformDirectionAffine(worldDir) : // non virt calls
-            Node::_getDerivedOrientation().Inverse() * worldDir;
+        return useScale ? Node::_getFullTransform().inverseAffine().transformDirectionAffine( worldDir )
+                        :  // non virt calls
+                   Node::_getDerivedOrientation().Inverse() * worldDir;
 #else
         // result is the same as above, but inversion of Quaternion is faster than inversion of Mat3x4
-        return useScale ? 
-            Node::_getDerivedOrientation().Inverse() * worldDir / Node::_getDerivedScale() : // non virt calls
-            Node::_getDerivedOrientation().Inverse() * worldDir;
+        return useScale ? Node::_getDerivedOrientation().Inverse() * worldDir / Node::_getDerivedScale()
+                        :  // non virt calls
+                   Node::_getDerivedOrientation().Inverse() * worldDir;
 #endif
     }
     //-----------------------------------------------------------------------
     Vector3 Node::convertLocalToWorldDirection( const Vector3 &localDir, bool useScale )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return useScale ? 
-            Node::_getFullTransform().transformDirectionAffine(localDir) : // non virt calls
-            Node::_getDerivedOrientation() * localDir;
+        return useScale ? Node::_getFullTransform().transformDirectionAffine( localDir )
+                        :  // non virt calls
+                   Node::_getDerivedOrientation() * localDir;
     }
     //-----------------------------------------------------------------------
     Quaternion Node::convertWorldToLocalOrientation( const Quaternion &worldOrientation )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return Node::_getDerivedOrientation().Inverse() * worldOrientation; // non virt call
+        return Node::_getDerivedOrientation().Inverse() * worldOrientation;  // non virt call
     }
     //-----------------------------------------------------------------------
     Quaternion Node::convertLocalToWorldOrientation( const Quaternion &localOrientation )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return Node::_getDerivedOrientation() * localOrientation; // non virt call
+        return Node::_getDerivedOrientation() * localOrientation;  // non virt call
     }
     //-----------------------------------------------------------------------
     void Node::removeAllChildren()
@@ -887,31 +879,25 @@ namespace Ogre {
         NodeVec::iterator endt = mChildren.end();
         while( itor != endt )
         {
-            (*itor)->unsetParent();
-            (*itor)->mParentIndex = -1;
+            ( *itor )->unsetParent();
+            ( *itor )->mParentIndex = -1;
             ++itor;
         }
         mChildren.clear();
     }
     //-----------------------------------------------------------------------
-    void Node::setScale(const Vector3& inScale)
+    void Node::setScale( const Vector3 &inScale )
     {
-        assert(!inScale.isNaN() && "Invalid vector supplied as parameter");
+        assert( !inScale.isNaN() && "Invalid vector supplied as parameter" );
         mTransform.mScale->setFromVector3( inScale, mTransform.mIndex );
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    void Node::setScale(Real x, Real y, Real z)
-    {
-        setScale(Vector3(x, y, z));
-    }
+    void Node::setScale( Real x, Real y, Real z ) { setScale( Vector3( x, y, z ) ); }
     //-----------------------------------------------------------------------
-    Vector3 Node::getScale() const
-    {
-        return mTransform.mScale->getAsVector3( mTransform.mIndex );
-    }
+    Vector3 Node::getScale() const { return mTransform.mScale->getAsVector3( mTransform.mIndex ); }
     //-----------------------------------------------------------------------
-    void Node::setInheritOrientation(bool inherit)
+    void Node::setInheritOrientation( bool inherit )
     {
         mTransform.mInheritOrientation[mTransform.mIndex] = inherit;
         CACHED_TRANSFORM_OUT_OF_DATE();
@@ -922,40 +908,34 @@ namespace Ogre {
         return mTransform.mInheritOrientation[mTransform.mIndex];
     }
     //-----------------------------------------------------------------------
-    void Node::setInheritScale(bool inherit)
+    void Node::setInheritScale( bool inherit )
     {
         mTransform.mInheritScale[mTransform.mIndex] = inherit;
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    bool Node::getInheritScale() const
-    {
-        return mTransform.mInheritScale[mTransform.mIndex];
-    }
+    bool Node::getInheritScale() const { return mTransform.mInheritScale[mTransform.mIndex]; }
     //-----------------------------------------------------------------------
-    void Node::scale(const Vector3& inScale)
+    void Node::scale( const Vector3 &inScale )
     {
-        mTransform.mScale->setFromVector3( mTransform.mScale->getAsVector3( mTransform.mIndex ) *
-                                            inScale, mTransform.mIndex );
+        mTransform.mScale->setFromVector3(
+            mTransform.mScale->getAsVector3( mTransform.mIndex ) * inScale, mTransform.mIndex );
         CACHED_TRANSFORM_OUT_OF_DATE();
     }
     //-----------------------------------------------------------------------
-    void Node::scale(Real x, Real y, Real z)
-    {
-        scale( Vector3( x, y, z ) );
-	}
+    void Node::scale( Real x, Real y, Real z ) { scale( Vector3( x, y, z ) ); }
     //-----------------------------------------------------------------------
     Node::NodeVecIterator Node::getChildIterator()
     {
-        return NodeVecIterator(mChildren.begin(), mChildren.end());
+        return NodeVecIterator( mChildren.begin(), mChildren.end() );
     }
     //-----------------------------------------------------------------------
     Node::ConstNodeVecIterator Node::getChildIterator() const
     {
-        return ConstNodeVecIterator(mChildren.begin(), mChildren.end());
+        return ConstNodeVecIterator( mChildren.begin(), mChildren.end() );
     }
     //-----------------------------------------------------------------------
-    Real Node::getSquaredViewDepth(const Camera* cam) const
+    Real Node::getSquaredViewDepth( const Camera *cam ) const
     {
         Vector3 diff = _getDerivedPosition() - cam->getDerivedPosition();
 
@@ -968,16 +948,16 @@ namespace Ogre {
     {
         mCachedTransformOutOfDate = true;
 
-    #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+#    if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         NodeVec::const_iterator itor = mChildren.begin();
         NodeVec::const_iterator endt = mChildren.end();
 
         while( itor != endt )
         {
-            (*itor)->_setCachedTransformOutOfDate();
+            ( *itor )->_setCachedTransformOutOfDate();
             ++itor;
         }
-    #endif
+#    endif
     }
 #endif
     //---------------------------------------------------------------------
@@ -989,8 +969,8 @@ namespace Ogre {
         mMat = MaterialManager::getSingleton().getByName(matName);
         if (mMat.isNull())
         {
-            mMat = MaterialManager::getSingleton().create(matName, ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME);
-            Pass* p = mMat->getTechnique(0)->getPass(0);
+            mMat = MaterialManager::getSingleton().create(matName,
+    ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME); Pass* p = mMat->getTechnique(0)->getPass(0);
             p->setLightingEnabled(false);
             p->setPolygonModeOverrideable(false);
             p->setVertexColourTracking(TVC_AMBIENT);
@@ -1005,10 +985,10 @@ namespace Ogre {
         {
             ManualObject mo( 0, 0 );
             mo.begin(mMat->getName());*/
-            /* 3 axes, each made up of 2 of these (base plane = XY)
-             *   .------------|\
-             *   '------------|/
-             *//*
+    /* 3 axes, each made up of 2 of these (base plane = XY)
+     *   .------------|\
+     *   '------------|/
+     *//*
             mo.estimateVertexCount(7 * 2 * 3);
             mo.estimateIndexCount(3 * 2 * 3);
             Quaternion quat[6];
@@ -1117,6 +1097,6 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     Node::Listener::~Listener() {}
-}
+}  // namespace Ogre
 
 #undef CACHED_TRANSFORM_OUT_OF_DATE

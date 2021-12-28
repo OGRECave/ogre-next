@@ -30,15 +30,15 @@ THE SOFTWARE.
 
 #include "OgreTextureGpu.h"
 
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreTextureBox.h"
-#include "OgreTextureGpuListener.h"
-#include "OgreLwString.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureBox.h"
+#include "OgreTextureGpuListener.h"
+#include "OgreTextureGpuManager.h"
 
-//Needed by _resolveTo
+// Needed by _resolveTo
 #include "OgreRenderPassDescriptor.h"
 #include "OgreRenderSystem.h"
 
@@ -47,12 +47,11 @@ namespace Ogre
     OrientationMode TextureGpu::msDefaultOrientationMode = OR_DEGREE_0;
 
     const IdString TextureGpu::msFinalTextureBuffer = IdString( "msFinalTextureBuffer" );
-    const IdString TextureGpu::msMsaaTextureBuffer  = IdString( "msMsaaTextureBuffer" );
+    const IdString TextureGpu::msMsaaTextureBuffer = IdString( "msMsaaTextureBuffer" );
 
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                             VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                            TextureTypes::TextureTypes initialType,
-                            TextureGpuManager *textureManager ) :
+                            TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager ) :
         GpuResource( pageOutStrategy, vaoManager, name ),
         mWidth( 0 ),
         mHeight( 0 ),
@@ -70,8 +69,8 @@ namespace Ogre
         mTexturePool( 0 )
     {
         assert( !hasAutomaticBatching() ||
-                (hasAutomaticBatching() && isTexture() && !isRenderToTexture() && !isUav()) );
-        assert( (!hasAutoMipmapAuto() || allowsAutoMipmaps()) &&
+                ( hasAutomaticBatching() && isTexture() && !isRenderToTexture() && !isUav() ) );
+        assert( ( !hasAutoMipmapAuto() || allowsAutoMipmaps() ) &&
                 "AutomipmapsAuto requires AllowAutomipmaps" );
     }
     //-----------------------------------------------------------------------------------
@@ -90,10 +89,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::_resetTextureManager()
-    {
-        mTextureManager = 0;
-    }
+    void TextureGpu::_resetTextureManager() { mTextureManager = 0; }
     //-----------------------------------------------------------------------------------
     String TextureGpu::getNameStr() const
     {
@@ -135,7 +131,7 @@ namespace Ogre
     String TextureGpu::getSettingsDesc() const
     {
         char tmpBuffer[92];
-        LwString desc( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString desc( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
         desc.a( mWidth, "x", mHeight, "x", mDepthOrSlices, " " );
         mSampleDescription.getFsaaDesc( desc );
@@ -146,8 +142,8 @@ namespace Ogre
         return String( desc.c_str() );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
-                                                 Image2 *image, bool autoDeleteImage )
+    void TextureGpu::unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image,
+                                                 bool autoDeleteImage )
     {
         mNextResidencyStatus = nextResidency;
         ++mPendingResidencyChanges;
@@ -155,18 +151,18 @@ namespace Ogre
         if( isManualTexture() )
         {
             OGRE_ASSERT_LOW( !image && "Image pointer must null for manual textures!" );
-            //Transition immediately. There's nothing from file or listener to load.
-            this->_transitionTo( nextResidency, (uint8*)0 );
+            // Transition immediately. There's nothing from file or listener to load.
+            this->_transitionTo( nextResidency, (uint8 *)0 );
         }
         else
         {
-            //Schedule transition, we'll be loading from a worker thread.
+            // Schedule transition, we'll be loading from a worker thread.
             mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage, false );
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
-                                           Image2 *image, bool autoDeleteImage )
+    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency, Image2 *image,
+                                           bool autoDeleteImage )
     {
         if( mNextResidencyStatus != nextResidency )
             unsafeScheduleTransitionTo( nextResidency, image, autoDeleteImage );
@@ -200,35 +196,26 @@ namespace Ogre
             mDepthOrSlices = 6u;
         else
         {
-            assert( (mTextureType != TextureTypes::TypeCubeArray || (mTextureType % 6u) == 0) &&
+            assert( ( mTextureType != TextureTypes::TypeCubeArray || ( mTextureType % 6u ) == 0 ) &&
                     "depthOrSlices must be a multiple of 6 for TypeCubeArray textures!" );
             mDepthOrSlices = depthOrSlices;
         }
     }
     //-----------------------------------------------------------------------------------
-    uint32 TextureGpu::getWidth() const
-    {
-        return mWidth;
-    }
+    uint32 TextureGpu::getWidth() const { return mWidth; }
     //-----------------------------------------------------------------------------------
-    uint32 TextureGpu::getHeight() const
-    {
-        return mHeight;
-    }
+    uint32 TextureGpu::getHeight() const { return mHeight; }
     //-----------------------------------------------------------------------------------
-    uint32 TextureGpu::getDepthOrSlices() const
-    {
-        return mDepthOrSlices;
-    }
+    uint32 TextureGpu::getDepthOrSlices() const { return mDepthOrSlices; }
     //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getDepth() const
     {
-        return (mTextureType != TextureTypes::Type3D) ? 1u : mDepthOrSlices;
+        return ( mTextureType != TextureTypes::Type3D ) ? 1u : mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getNumSlices() const
     {
-        return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
+        return ( mTextureType != TextureTypes::Type3D ) ? mDepthOrSlices : 1u;
     }
     //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getInternalWidth() const
@@ -260,10 +247,7 @@ namespace Ogre
         mNumMipmaps = numMipmaps;
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpu::getNumMipmaps() const
-    {
-        return mNumMipmaps;
-    }
+    uint8 TextureGpu::getNumMipmaps() const { return mNumMipmaps; }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setTextureType( TextureTypes::TextureTypes textureType )
     {
@@ -273,10 +257,7 @@ namespace Ogre
             mDepthOrSlices = 6u;
     }
     //-----------------------------------------------------------------------------------
-    TextureTypes::TextureTypes TextureGpu::getTextureType() const
-    {
-        return mTextureType;
-    }
+    TextureTypes::TextureTypes TextureGpu::getTextureType() const { return mTextureType; }
     //-----------------------------------------------------------------------------------
     TextureTypes::TextureTypes TextureGpu::getInternalTextureType() const
     {
@@ -293,15 +274,9 @@ namespace Ogre
         mPixelFormat = pixelFormat;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu TextureGpu::getPixelFormat() const
-    {
-        return mPixelFormat;
-    }
+    PixelFormatGpu TextureGpu::getPixelFormat() const { return mPixelFormat; }
     //-----------------------------------------------------------------------------------
-    uint32 TextureGpu::getInternalSliceStart() const
-    {
-        return mInternalSliceStart;
-    }
+    uint32 TextureGpu::getInternalSliceStart() const { return mInternalSliceStart; }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setSourceType( uint8 type ) { mSourceType = type; }
     //-----------------------------------------------------------------------------------
@@ -312,7 +287,7 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::OnStorage );
         OGRE_ASSERT_LOW( desc.getColourSamples() > 0u );
         mRequestedSampleDescription = desc;
-        mSampleDescription = desc; // would be validated on transition to Resident state
+        mSampleDescription = desc;  // would be validated on transition to Resident state
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setSampleDescription( SampleDescription requestedSampleDesc,
@@ -322,13 +297,10 @@ namespace Ogre
         OGRE_ASSERT_LOW( requestedSampleDesc.getColourSamples() > 0u );
         OGRE_ASSERT_LOW( validatedSampleDesc.getColourSamples() > 0u );
         mRequestedSampleDescription = requestedSampleDesc;
-        mSampleDescription = validatedSampleDesc; // should be validated by caller
+        mSampleDescription = validatedSampleDesc;  // should be validated by caller
     }
     //-----------------------------------------------------------------------------------
-    SampleDescription TextureGpu::getSampleDescription() const
-    {
-        return mSampleDescription;
-    }
+    SampleDescription TextureGpu::getSampleDescription() const { return mSampleDescription; }
     //-----------------------------------------------------------------------------------
     SampleDescription TextureGpu::getRequestedSampleDescription() const
     {
@@ -341,23 +313,21 @@ namespace Ogre
     {
         assert( this->mResidencyStatus == GpuResidency::OnStorage );
 
-        this->mWidth            = src->mWidth;
-        this->mHeight           = src->mHeight;
-        this->mDepthOrSlices    = src->mDepthOrSlices;
-        this->mNumMipmaps       = src->mNumMipmaps;
-        this->mPixelFormat      = src->mPixelFormat;
-        this->mSampleDescription= src->mSampleDescription;
-        this->mRequestedSampleDescription= src->mRequestedSampleDescription;
-        this->mTextureType      = src->mTextureType;
+        this->mWidth = src->mWidth;
+        this->mHeight = src->mHeight;
+        this->mDepthOrSlices = src->mDepthOrSlices;
+        this->mNumMipmaps = src->mNumMipmaps;
+        this->mPixelFormat = src->mPixelFormat;
+        this->mSampleDescription = src->mSampleDescription;
+        this->mRequestedSampleDescription = src->mRequestedSampleDescription;
+        this->mTextureType = src->mTextureType;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::hasEquivalentParameters( TextureGpu *other ) const
     {
-        return this->mWidth == other->mWidth &&
-               this->mHeight == other->mHeight &&
+        return this->mWidth == other->mWidth && this->mHeight == other->mHeight &&
                this->mDepthOrSlices == other->mDepthOrSlices &&
-               this->mNumMipmaps == other->mNumMipmaps &&
-               this->mPixelFormat == other->mPixelFormat &&
+               this->mNumMipmaps == other->mNumMipmaps && this->mPixelFormat == other->mPixelFormat &&
                this->mSampleDescription == other->mSampleDescription &&
                this->mTextureType == other->mTextureType;
     }
@@ -369,7 +339,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::checkValidSettings()
     {
-        //Make sure depth buffers/textures always have MsaaExplicitResolve set (with or without MSAA).
+        // Make sure depth buffers/textures always have MsaaExplicitResolve set (with or without MSAA).
         if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
             mTextureFlags |= TextureFlags::MsaaExplicitResolve;
         if( mPixelFormat == PFG_NULL && isTexture() )
@@ -377,36 +347,40 @@ namespace Ogre
 
         if( mSampleDescription.isMultisample() )
         {
-            if( (mNumMipmaps > 1u) || (!isRenderToTexture() && !isUav()) )
+            if( ( mNumMipmaps > 1u ) || ( !isRenderToTexture() && !isUav() ) )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture '" + getNameStr() + "': "
-                             "MSAA Textures cannot have mipmaps (use explict resolves for that), "
-                             "and must be either RenderToTexture or Uav",
+                             "Texture '" + getNameStr() +
+                                 "': "
+                                 "MSAA Textures cannot have mipmaps (use explict resolves for that), "
+                                 "and must be either RenderToTexture or Uav",
                              "TextureGpu::checkValidSettings" );
             }
 
             if( mTextureType == TextureTypes::Type2DArray && !hasMsaaExplicitResolves() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture '" + getNameStr() + "': "
-                             "Only explicit resolves support Type2DArray",
+                             "Texture '" + getNameStr() +
+                                 "': "
+                                 "Only explicit resolves support Type2DArray",
                              "TextureGpu::checkValidSettings" );
             }
 
             if( mTextureType != TextureTypes::Type2D && mTextureType != TextureTypes::Type2DArray )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture '" + getNameStr() + "': "
-                             "MSAA can only be used with Type2D or Type2DArray",
+                             "Texture '" + getNameStr() +
+                                 "': "
+                                 "MSAA can only be used with Type2D or Type2DArray",
                              "TextureGpu::checkValidSettings" );
             }
 
             if( hasAutomaticBatching() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture '" + getNameStr() + "': "
-                             "MSAA textures cannot use AutomaticBatching",
+                             "Texture '" + getNameStr() +
+                                 "': "
+                                 "MSAA textures cannot use AutomaticBatching",
                              "TextureGpu::checkValidSettings" );
             }
         }
@@ -414,42 +388,46 @@ namespace Ogre
         if( mTextureType == TextureTypes::Unknown )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Texture '" + getNameStr() + "': "
-                         "TextureType cannot be TextureTypes::Unknown",
+                         "Texture '" + getNameStr() +
+                             "': "
+                             "TextureType cannot be TextureTypes::Unknown",
                          "TextureGpu::checkValidSettings" );
         }
 
         if( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
-            (isRenderToTexture() || isUav()) )
+            ( isRenderToTexture() || isUav() ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Cannot use AlwaysKeepSystemRamCopy with RenderToTexture or Uav",
                          "TextureGpu::checkValidSettings" );
         }
 
-        if( hasAutomaticBatching() && (mTextureType != TextureTypes::Type2D ||
-            isRenderToTexture() || isUav()) )
+        if( hasAutomaticBatching() &&
+            ( mTextureType != TextureTypes::Type2D || isRenderToTexture() || isUav() ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Texture '" + getNameStr() + "': "
-                         "AutomaticBatching can only be used with Type2D textures, "
-                         "and they cannot be RenderToTexture or Uav",
+                         "Texture '" + getNameStr() +
+                             "': "
+                             "AutomaticBatching can only be used with Type2D textures, "
+                             "and they cannot be RenderToTexture or Uav",
                          "TextureGpu::checkValidSettings" );
         }
 
         if( allowsAutoMipmaps() && !isRenderToTexture() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Texture '" + getNameStr() + "': "
-                         "AllowAutomipmaps requires RenderToTexture.",
+                         "Texture '" + getNameStr() +
+                             "': "
+                             "AllowAutomipmaps requires RenderToTexture.",
                          "TextureGpu::checkValidSettings" );
         }
 
         if( mWidth < 1u || mHeight < 1u || mDepthOrSlices < 1u || mPixelFormat == PFG_UNKNOWN )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Texture '" + getNameStr() + "': "
-                         "Invalid settings!",
+                         "Texture '" + getNameStr() +
+                             "': "
+                             "Invalid settings!",
                          "TextureGpu::checkValidSettings" );
         }
 
@@ -477,17 +455,17 @@ namespace Ogre
 
         if( !hasAutomaticBatching() )
         {
-            //At this point we should have all valid settings (pixel format, width, height)
-            //Create our own resource
+            // At this point we should have all valid settings (pixel format, width, height)
+            // Create our own resource
             createInternalResourcesImpl();
         }
         else
         {
-            //Ask the manager for the internal resource.
+            // Ask the manager for the internal resource.
             mTextureManager->_reserveSlotForTexture( this );
         }
 
-        //Delegate to the manager (thread) for loading.
+        // Delegate to the manager (thread) for loading.
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy,
@@ -558,16 +536,17 @@ namespace Ogre
             }
             else
             {
-                OGRE_ASSERT_LOW( ( (mSysRamCopy &&
-                                    mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy) ||
-                                   (!mSysRamCopy &&
-                                    mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy) ) &&
-                                 "We should already have a SysRAM copy if we were "
-                                 "AlwaysKeepSystemRamCopy; or we shouldn't have a"
-                                 "SysRAM copy if we weren't in that strategy." );
+                OGRE_ASSERT_LOW(
+                    ( ( mSysRamCopy &&
+                        mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ) ||
+                      ( !mSysRamCopy &&
+                        mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy ) ) &&
+                    "We should already have a SysRAM copy if we were "
+                    "AlwaysKeepSystemRamCopy; or we shouldn't have a"
+                    "SysRAM copy if we weren't in that strategy." );
 
-                OGRE_ASSERT_LOW( (mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ||
-                                 !sysRamCopy || mSysRamCopy == sysRamCopy) &&
+                OGRE_ASSERT_LOW( ( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ||
+                                   !sysRamCopy || mSysRamCopy == sysRamCopy ) &&
                                  "sysRamCopy must be nullptr or equal to mSysRamCopy when "
                                  "mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
 
@@ -603,7 +582,7 @@ namespace Ogre
         if( allowResidencyChange )
         {
             mResidencyStatus = newResidency;
-            //Decrement mPendingResidencyChanges and prevent underflow
+            // Decrement mPendingResidencyChanges and prevent underflow
             mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
             notifyAllListenersTextureChanged( listenerReason );
         }
@@ -621,9 +600,9 @@ namespace Ogre
         if( !isDataReady() )
         {
             LogManager::getSingleton().logMessage(
-                        "WARNING: TextureGpu::_syncGpuResidentToSystemRam will stall. "
-                        "If you see this often, then probably you're performing too many copyTo "
-                        "calls to an AlwaysKeepSystemRamCopy texture" );
+                "WARNING: TextureGpu::_syncGpuResidentToSystemRam will stall. "
+                "If you see this often, then probably you're performing too many copyTo "
+                "calls to an AlwaysKeepSystemRamCopy texture" );
         }
         waitForData();
         OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::Resident );
@@ -651,12 +630,12 @@ namespace Ogre
         {
             OGRE_ASSERT_LOW( mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
                              "This path should've never been hit as always have the RAM copy!" );
-            OGRE_ASSERT_LOW( mSysRamCopy == (uint8*)0 );
+            OGRE_ASSERT_LOW( mSysRamCopy == (uint8 *)0 );
 
             destroyInternalResourcesImpl();
 
-            mSysRamCopy         = sysRamPtr;
-            mResidencyStatus    = GpuResidency::OnSystemRam;
+            mSysRamCopy = sysRamPtr;
+            mResidencyStatus = GpuResidency::OnSystemRam;
 
             listenerReason = TextureGpuListener::LostResidency;
         }
@@ -664,12 +643,12 @@ namespace Ogre
         {
             OGRE_ASSERT_LOW( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
                              "This path should only hit if we always have the RAM copy!" );
-            OGRE_ASSERT_LOW( mSysRamCopy != (uint8*)0 );
+            OGRE_ASSERT_LOW( mSysRamCopy != (uint8 *)0 );
 
             listenerReason = TextureGpuListener::ResidentToSysRamSync;
         }
 
-        //Decrement mPendingResidencyChanges and prevent underflow
+        // Decrement mPendingResidencyChanges and prevent underflow
         mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
 
         notifyAllListenersTextureChanged( listenerReason );
@@ -741,7 +720,7 @@ namespace Ogre
                          "Source Texture and Resolve texture must have the same pixel formats!",
                          "TextureGpu::_resolveTo" );
         }
-        if( !this->getEmptyBox(0).equalSize( resolveTexture->getEmptyBox(0) ) )
+        if( !this->getEmptyBox( 0 ).equalSize( resolveTexture->getEmptyBox( 0 ) ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Source Texture and Resolve texture must have the same dimensions!",
@@ -765,13 +744,13 @@ namespace Ogre
         renderPassDescriptor->mColour[0].resolveTexture = resolveTexture;
 
         renderPassDescriptor->mColour[0].loadAction = LoadAction::Load;
-        //Set to both, because we don't want to lose the contents from this RTT.
+        // Set to both, because we don't want to lose the contents from this RTT.
         renderPassDescriptor->mColour[0].storeAction = StoreAction::StoreAndMultisampleResolve;
         renderPassDescriptor->entriesModified( RenderPassDescriptor::All );
 
         Vector4 fullVp( 0, 0, 1, 1 );
-        renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this, 0,
-                                                 &fullVp, &fullVp, 1u, false, false );
+        renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this, 0, &fullVp, &fullVp, 1u,
+                                                 false, false );
         renderSystem->executeRenderPassDescriptorDelayedActions();
         renderSystem->endRenderPassDescriptor();
         renderSystem->destroyRenderPassDescriptor( renderPassDescriptor );
@@ -779,80 +758,69 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool TextureGpu::hasAutomaticBatching() const
     {
-        return (mTextureFlags & TextureFlags::AutomaticBatching) != 0;
+        return ( mTextureFlags & TextureFlags::AutomaticBatching ) != 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isTexture() const
-    {
-        return (mTextureFlags & TextureFlags::NotTexture) == 0;
-    }
+    bool TextureGpu::isTexture() const { return ( mTextureFlags & TextureFlags::NotTexture ) == 0; }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isRenderToTexture() const
     {
-        return (mTextureFlags & TextureFlags::RenderToTexture) != 0;
+        return ( mTextureFlags & TextureFlags::RenderToTexture ) != 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isUav() const
-    {
-        return (mTextureFlags & TextureFlags::Uav) != 0;
-    }
+    bool TextureGpu::isUav() const { return ( mTextureFlags & TextureFlags::Uav ) != 0; }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::allowsAutoMipmaps() const
     {
-        return (mTextureFlags & TextureFlags::AllowAutomipmaps) != 0;
+        return ( mTextureFlags & TextureFlags::AllowAutomipmaps ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::hasAutoMipmapAuto() const
     {
-        return (mTextureFlags & TextureFlags::AutomipmapsAuto) != 0;
+        return ( mTextureFlags & TextureFlags::AutomipmapsAuto ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::hasMsaaExplicitResolves() const
     {
-        return (mTextureFlags & TextureFlags::MsaaExplicitResolve) != 0;
+        return ( mTextureFlags & TextureFlags::MsaaExplicitResolve ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isReinterpretable() const
     {
-        return (mTextureFlags & TextureFlags::Reinterpretable) != 0;
+        return ( mTextureFlags & TextureFlags::Reinterpretable ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::prefersLoadingFromFileAsSRGB() const
     {
-        return (mTextureFlags & TextureFlags::PrefersLoadingFromFileAsSRGB) != 0;
+        return ( mTextureFlags & TextureFlags::PrefersLoadingFromFileAsSRGB ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isRenderWindowSpecific() const
     {
-        return (mTextureFlags & TextureFlags::RenderWindowSpecific) != 0;
+        return ( mTextureFlags & TextureFlags::RenderWindowSpecific ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::requiresTextureFlipping() const
     {
-        return (mTextureFlags & TextureFlags::RequiresTextureFlipping) != 0;
+        return ( mTextureFlags & TextureFlags::RequiresTextureFlipping ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::_isManualTextureFlagPresent() const
     {
-        return (mTextureFlags & TextureFlags::ManualTexture) != 0;
+        return ( mTextureFlags & TextureFlags::ManualTexture ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isManualTexture() const
     {
-        return ( mTextureFlags & (TextureFlags::NotTexture |
-                                  TextureFlags::Uav |
-                                  TextureFlags::RenderToTexture |
-                                  TextureFlags::ManualTexture) ) != 0;
+        return ( mTextureFlags & ( TextureFlags::NotTexture | TextureFlags::Uav |
+                                   TextureFlags::RenderToTexture | TextureFlags::ManualTexture ) ) != 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isPoolOwner() const
-    {
-        return (mTextureFlags & TextureFlags::PoolOwner) != 0;
-    }
+    bool TextureGpu::isPoolOwner() const { return ( mTextureFlags & TextureFlags::PoolOwner ) != 0; }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isDiscardableContent() const
     {
-        return (mTextureFlags & TextureFlags::DiscardableContent) != 0;
+        return ( mTextureFlags & TextureFlags::DiscardableContent ) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isOpenGLRenderWindow() const { return false; }
@@ -864,10 +832,7 @@ namespace Ogre
                      "TextureGpu::setOrientationMode" );
     }
     //-----------------------------------------------------------------------------------
-    OrientationMode TextureGpu::getOrientationMode() const
-    {
-        return OR_DEGREE_0;
-    }
+    OrientationMode TextureGpu::getOrientationMode() const { return OR_DEGREE_0; }
     //-----------------------------------------------------------------------------------
     ResourceLayout::Layout TextureGpu::getDefaultLayout( bool bIgnoreDiscardableFlag ) const
     {
@@ -903,15 +868,12 @@ namespace Ogre
         mPoolId = poolId;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::addListener( TextureGpuListener *listener )
-    {
-        mListeners.push_back( listener );
-    }
+    void TextureGpu::addListener( TextureGpuListener *listener ) { mListeners.push_back( listener ); }
     //-----------------------------------------------------------------------------------
     void TextureGpu::removeListener( TextureGpuListener *listener )
     {
-        vector<TextureGpuListener*>::type::iterator itor = std::find( mListeners.begin(),
-                                                                      mListeners.end(), listener );
+        vector<TextureGpuListener *>::type::iterator itor =
+            std::find( mListeners.begin(), mListeners.end(), listener );
         assert( itor != mListeners.end() );
         efficientVectorRemove( mListeners, itor );
     }
@@ -920,14 +882,14 @@ namespace Ogre
     {
         TextureGpuListener::Reason reason = static_cast<TextureGpuListener::Reason>( _reason );
 
-        //Iterate through a copy in case one of the listeners decides to remove itself.
-        vector<TextureGpuListener*>::type listenersVec = mListeners;
-        vector<TextureGpuListener*>::type::iterator itor = listenersVec.begin();
-        vector<TextureGpuListener*>::type::iterator endt = listenersVec.end();
+        // Iterate through a copy in case one of the listeners decides to remove itself.
+        vector<TextureGpuListener *>::type listenersVec = mListeners;
+        vector<TextureGpuListener *>::type::iterator itor = listenersVec.begin();
+        vector<TextureGpuListener *>::type::iterator endt = listenersVec.end();
 
         while( itor != endt )
         {
-            (*itor)->notifyTextureChanged( this, reason, extraData );
+            ( *itor )->notifyTextureChanged( this, reason, extraData );
             ++itor;
         }
 
@@ -935,10 +897,7 @@ namespace Ogre
             mTextureManager->notifyTextureChanged( this, reason, extraData );
     }
     //-----------------------------------------------------------------------------------
-    const vector<TextureGpuListener*>::type& TextureGpu::getListeners() const
-    {
-        return mListeners;
-    }
+    const vector<TextureGpuListener *>::type &TextureGpu::getListeners() const { return mListeners; }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::supportsAsDepthBufferFor( TextureGpu *colourTarget ) const
     {
@@ -956,7 +915,7 @@ namespace Ogre
         return false;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
+    void TextureGpu::writeContentsToFile( const String &filename, uint8 minMip, uint8 maxMip,
                                           bool automaticResolve )
     {
         Image2 image;
@@ -965,24 +924,19 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyContentsToMemory( TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
-        bool automaticResolve )
+                                           bool automaticResolve )
     {
         Image2::copyContentsToMemory( this, src, dst, dstFormat, automaticResolve );
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isTextureGpu() const { return true; }
     //-----------------------------------------------------------------------------------
-    TextureGpuManager* TextureGpu::getTextureManager() const
-    {
-        return mTextureManager;
-    }
+    TextureGpuManager *TextureGpu::getTextureManager() const { return mTextureManager; }
     //-----------------------------------------------------------------------------------
     TextureBox TextureGpu::getEmptyBox( uint8 mipLevel )
     {
-        TextureBox retVal( std::max( 1u, mWidth >> mipLevel ),
-                           std::max( 1u, mHeight >> mipLevel ),
-                           std::max( 1u, getDepth() >> mipLevel ),
-                           getNumSlices(),
+        TextureBox retVal( std::max( 1u, mWidth >> mipLevel ), std::max( 1u, mHeight >> mipLevel ),
+                           std::max( 1u, getDepth() >> mipLevel ), getNumSlices(),
                            PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat ),
                            this->_getSysRamCopyBytesPerRow( mipLevel ),
                            this->_getSysRamCopyBytesPerImage( mipLevel ) );
@@ -1001,17 +955,17 @@ namespace Ogre
 
         waitForPendingSyncs();
 
-        uint32 width            = mWidth;
-        uint32 height           = mHeight;
-        uint32 depth            = getDepth();
-        const uint32 numSlices  = getNumSlices();
+        uint32 width = mWidth;
+        uint32 height = mHeight;
+        uint32 depth = getDepth();
+        const uint32 numSlices = getNumSlices();
         void *data = PixelFormatGpuUtils::advancePointerToMip( mSysRamCopy, width, height, depth,
                                                                numSlices, mipLevel, mPixelFormat );
 
-        TextureBox retVal( std::max( 1u, width >> mipLevel ),
-                           std::max( 1u, height >> mipLevel ),
-                           std::max( 1u, depth >> mipLevel ),
-                           numSlices,
+        TextureBox retVal( std::max( 1u, width >> mipLevel ),   //
+                           std::max( 1u, height >> mipLevel ),  //
+                           std::max( 1u, depth >> mipLevel ),   //
+                           numSlices,                           //
                            PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat ),
                            this->_getSysRamCopyBytesPerRow( mipLevel ),
                            this->_getSysRamCopyBytesPerImage( mipLevel ) );
@@ -1021,7 +975,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    uint8* TextureGpu::_getSysRamCopy( uint8 mipLevel )
+    uint8 *TextureGpu::_getSysRamCopy( uint8 mipLevel )
     {
         if( !mSysRamCopy )
             return 0;
@@ -1030,13 +984,13 @@ namespace Ogre
 
         waitForPendingSyncs();
 
-        uint32 width            = mWidth;
-        uint32 height           = mHeight;
-        uint32 depth            = getDepth();
-        const uint32 numSlices  = getNumSlices();
+        uint32 width = mWidth;
+        uint32 height = mHeight;
+        uint32 depth = getDepth();
+        const uint32 numSlices = getNumSlices();
         void *data = PixelFormatGpuUtils::advancePointerToMip( mSysRamCopy, width, height, depth,
                                                                numSlices, mipLevel, mPixelFormat );
-        return reinterpret_cast<uint8*>( data );
+        return reinterpret_cast<uint8 *>( data );
     }
     //-----------------------------------------------------------------------------------
     size_t TextureGpu::_getSysRamCopyBytesPerRow( uint8 mipLevel )
@@ -1049,7 +1003,7 @@ namespace Ogre
     size_t TextureGpu::_getSysRamCopyBytesPerImage( uint8 mipLevel )
     {
         assert( mipLevel < mNumMipmaps );
-        uint32 width  = std::max( mWidth >> mipLevel, 1u );
+        uint32 width = std::max( mWidth >> mipLevel, 1u );
         uint32 height = std::max( mHeight >> mipLevel, 1u );
         return PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, mPixelFormat, 4u );
     }
@@ -1059,15 +1013,14 @@ namespace Ogre
         if( mResidencyStatus == GpuResidency::OnStorage )
             return 0;
 
-        size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
-                                                                    getNumSlices(),
-                                                                    mPixelFormat, mNumMipmaps, 4u );
+        size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes(
+            mWidth, mHeight, getDepth(), getNumSlices(), mPixelFormat, mNumMipmaps, 4u );
         if( mSampleDescription.isMultisample() )
         {
             if( hasMsaaExplicitResolves() )
                 sizeBytes *= mSampleDescription.getColourSamples();
             else
-                sizeBytes *= (mSampleDescription.getColourSamples() + 1u);
+                sizeBytes *= ( mSampleDescription.getColourSamples() + 1u );
         }
 
         return sizeBytes;
@@ -1075,17 +1028,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isMetadataReady() const
     {
-        return ( (mResidencyStatus == GpuResidency::Resident &&
-                  mNextResidencyStatus == GpuResidency::Resident) ||
-                 (mResidencyStatus == GpuResidency::OnSystemRam &&
-                  mNextResidencyStatus != GpuResidency::OnStorage) ) &&
-                mPendingResidencyChanges == 0;
+        return ( ( mResidencyStatus == GpuResidency::Resident &&
+                   mNextResidencyStatus == GpuResidency::Resident ) ||
+                 ( mResidencyStatus == GpuResidency::OnSystemRam &&
+                   mNextResidencyStatus != GpuResidency::OnStorage ) ) &&
+               mPendingResidencyChanges == 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isDataReady() const
-    {
-        return _isDataReadyImpl() && mPendingResidencyChanges == 0u;
-    }
+    bool TextureGpu::isDataReady() const { return _isDataReadyImpl() && mPendingResidencyChanges == 0u; }
     //-----------------------------------------------------------------------------------
     void TextureGpu::waitForMetadata()
     {
@@ -1104,4 +1054,4 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     TextureGpuListener::~TextureGpuListener() {}
-}
+}  // namespace Ogre

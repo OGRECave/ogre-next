@@ -85,4 +85,4 @@ namespace Ogre
         mV = addressingMode;
         mW = addressingMode;
     }
-}
+}  // namespace Ogre

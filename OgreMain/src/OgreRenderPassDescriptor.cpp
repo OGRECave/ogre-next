@@ -30,29 +30,26 @@ THE SOFTWARE.
 
 #include "OgreRenderPassDescriptor.h"
 
-#include "OgreTextureGpu.h"
+#include "OgreException.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
-#include "OgreException.h"
+#include "OgreTextureGpu.h"
 
 namespace Ogre
 {
-    RenderPassTargetBase::RenderPassTargetBase()
+    RenderPassTargetBase::RenderPassTargetBase() { memset( this, 0, sizeof( *this ) ); }
+    bool RenderPassTargetBase::operator!=( const RenderPassTargetBase &other ) const
     {
-        memset( this, 0, sizeof(*this) );
+        return this->texture != other.texture ||                  //
+               this->resolveTexture != other.resolveTexture ||    //
+               this->mipLevel != other.mipLevel ||                //
+               this->resolveMipLevel != other.resolveMipLevel ||  //
+               this->slice != other.slice ||                      //
+               this->resolveSlice != other.resolveSlice ||        //
+               this->loadAction != other.loadAction ||            //
+               this->storeAction != other.storeAction;
     }
-    bool RenderPassTargetBase::operator != ( const RenderPassTargetBase &other ) const
-    {
-        return  this->texture != other.texture ||
-                this->resolveTexture != other.resolveTexture ||
-                this->mipLevel != other.mipLevel ||
-                this->resolveMipLevel != other.resolveMipLevel ||
-                this->slice != other.slice ||
-                this->resolveSlice != other.resolveSlice ||
-                this->loadAction != other.loadAction ||
-                this->storeAction != other.storeAction;
-    }
-    bool RenderPassTargetBase::operator < ( const RenderPassTargetBase &other ) const
+    bool RenderPassTargetBase::operator<( const RenderPassTargetBase &other ) const
     {
         if( this->texture != other.texture )
             return this->texture < other.texture;
@@ -101,31 +98,29 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    RenderPassDescriptor::~RenderPassDescriptor()
-    {
-    }
+    RenderPassDescriptor::~RenderPassDescriptor() {}
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::checkWarnIfRtvWasFlushed( uint32 entriesToFlush )
     {
         bool mustWarn = false;
 
-        for( size_t i=0; i<mNumColourEntries && !mustWarn; ++i )
+        for( size_t i = 0; i < mNumColourEntries && !mustWarn; ++i )
         {
             if( mColour[i].loadAction == LoadAction::Load &&
-                (entriesToFlush & (RenderPassDescriptor::Colour0 << i)) )
+                ( entriesToFlush & ( RenderPassDescriptor::Colour0 << i ) ) )
             {
                 mustWarn = true;
             }
         }
 
         if( mDepth.loadAction == LoadAction::Load && mDepth.texture &&
-            (entriesToFlush & RenderPassDescriptor::Depth) )
+            ( entriesToFlush & RenderPassDescriptor::Depth ) )
         {
             mustWarn = true;
         }
 
         if( mStencil.loadAction == LoadAction::Load && mStencil.texture &&
-            (entriesToFlush & RenderPassDescriptor::Stencil) )
+            ( entriesToFlush & RenderPassDescriptor::Stencil ) )
         {
             mustWarn = true;
         }
@@ -149,7 +144,7 @@ namespace Ogre
 
         bool bResolvingToNonFlipping = false;
 
-        for( size_t i=0; i<mNumColourEntries && !mRequiresTextureFlipping; ++i )
+        for( size_t i = 0; i < mNumColourEntries && !mRequiresTextureFlipping; ++i )
         {
             TextureGpu *texture = mColour[i].texture;
             mRequiresTextureFlipping = texture->requiresTextureFlipping();
@@ -182,7 +177,7 @@ namespace Ogre
 
             if( colourEntry.texture->isRenderWindowSpecific() )
             {
-                RenderPassColourTarget& colourEntryRW = mColour[mNumColourEntries];
+                RenderPassColourTarget &colourEntryRW = mColour[mNumColourEntries];
                 if( !colourEntry.texture->isMultisample() && colourEntry.resolveTexture )
                 {
                     colourEntryRW.resolveTexture = 0;
@@ -207,17 +202,17 @@ namespace Ogre
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Resolve Texture '" + colourEntry.resolveTexture->getNameStr() +
-                                 "' specified, but texture to render to '" +
-                                 colourEntry.texture->getNameStr() + "' is not MSAA",
+                                     "' specified, but texture to render to '" +
+                                     colourEntry.texture->getNameStr() + "' is not MSAA",
                                  "RenderPassDescriptor::colourEntriesModified" );
                 }
                 if( colourEntry.resolveTexture == colourEntry.texture &&
-                    (colourEntry.mipLevel != 0 || colourEntry.slice != 0) )
+                    ( colourEntry.mipLevel != 0 || colourEntry.slice != 0 ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "MSAA textures can only render to mipLevel 0 and slice 0 "
                                  "unless using explicit resolves. Texture: " +
-                                 colourEntry.texture->getNameStr(),
+                                     colourEntry.texture->getNameStr(),
                                  "RenderPassDescriptor::colourEntriesModified" );
                 }
 
@@ -230,7 +225,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Layered Rendering (i.e. binding 2D array or cubemap) "
                              "only supported if slice = 0. Texture: " +
-                             colourEntry.texture->getNameStr(),
+                                 colourEntry.texture->getNameStr(),
                              "RenderPassDescriptor::colourEntriesModified" );
             }
 
@@ -245,7 +240,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::entriesModified( uint32 entryTypes )
     {
-        assert( (entryTypes & RenderPassDescriptor::All) != 0 );
+        assert( ( entryTypes & RenderPassDescriptor::All ) != 0 );
 
         if( entryTypes & RenderPassDescriptor::Colour )
             colourEntriesModified();
@@ -260,31 +255,32 @@ namespace Ogre
         if( mDepth.texture && !PixelFormatGpuUtils::isDepth( mDepth.texture->getPixelFormat() ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "RenderPassDescriptor depth attachment '" +
-                         mDepth.texture->getNameStr() + "' is not a depth format!",
+                         "RenderPassDescriptor depth attachment '" + mDepth.texture->getNameStr() +
+                             "' is not a depth format!",
                          "RenderPassDescriptor::entriesModified" );
         }
 
         if( mStencil.texture && !PixelFormatGpuUtils::isStencil( mStencil.texture->getPixelFormat() ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "RenderPassDescriptor stencil attachment '" +
-                         mStencil.texture->getNameStr() + "' is not a stencil format!",
+                         "RenderPassDescriptor stencil attachment '" + mStencil.texture->getNameStr() +
+                             "' is not a stencil format!",
                          "RenderPassDescriptor::entriesModified" );
         }
 
         if( mDepth.texture )
         {
-            for( size_t i=0; i<mNumColourEntries; ++i )
+            for( size_t i = 0; i < mNumColourEntries; ++i )
             {
                 if( !mDepth.texture->supportsAsDepthBufferFor( mColour[i].texture ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Manually specified depth buffer '" +
-                                 mDepth.texture->getNameStr() + "' is incompatible with colour RTT #" +
-                                 StringConverter::toString( i ) + "'" + mColour[i].texture->getNameStr()
-                                 + "\nColour: " + mColour[i].texture->getSettingsDesc()
-                                 + "\nDepth: " + mDepth.texture->getSettingsDesc(),
+                                 "Manually specified depth buffer '" + mDepth.texture->getNameStr() +
+                                     "' is incompatible with colour RTT #" +
+                                     StringConverter::toString( i ) + "'" +
+                                     mColour[i].texture->getNameStr() +
+                                     "\nColour: " + mColour[i].texture->getSettingsDesc() +
+                                     "\nDepth: " + mDepth.texture->getSettingsDesc(),
                                  "RenderPassDescriptor::entriesModified" );
                 }
             }
@@ -292,16 +288,17 @@ namespace Ogre
 
         if( mStencil.texture && mStencil.texture != mDepth.texture )
         {
-            for( size_t i=0; i<mNumColourEntries; ++i )
+            for( size_t i = 0; i < mNumColourEntries; ++i )
             {
                 if( !mStencil.texture->supportsAsDepthBufferFor( mColour[i].texture ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Manually specified stencil buffer '" +
-                                 mStencil.texture->getNameStr() + "' is incompatible with colour RTT #" +
-                                 StringConverter::toString( i ) + "'" + mColour[i].texture->getNameStr()
-                                 + "'\nColour: " + mColour[i].texture->getSettingsDesc()
-                                 + "\nStencil: " + mStencil.texture->getSettingsDesc(),
+                                 "Manually specified stencil buffer '" + mStencil.texture->getNameStr() +
+                                     "' is incompatible with colour RTT #" +
+                                     StringConverter::toString( i ) + "'" +
+                                     mColour[i].texture->getNameStr() +
+                                     "'\nColour: " + mColour[i].texture->getSettingsDesc() +
+                                     "\nStencil: " + mStencil.texture->getSettingsDesc(),
                                  "RenderPassDescriptor::entriesModified" );
                 }
             }
@@ -316,10 +313,7 @@ namespace Ogre
         mColour[idx].clearColour = clearColour;
     }
     //-----------------------------------------------------------------------------------
-    void RenderPassDescriptor::setClearDepth( Real clearDepth )
-    {
-        mDepth.clearDepth = clearDepth;
-    }
+    void RenderPassDescriptor::setClearDepth( Real clearDepth ) { mDepth.clearDepth = clearDepth; }
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::setClearStencil( uint32 clearStencil )
     {
@@ -328,7 +322,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::setClearColour( const ColourValue &clearColour )
     {
-        for( uint8 i=0; i<mNumColourEntries; ++i )
+        for( uint8 i = 0; i < mNumColourEntries; ++i )
             setClearColour( i, clearColour );
     }
     //-----------------------------------------------------------------------------------
@@ -340,7 +334,7 @@ namespace Ogre
         if( this->mNumColourEntries != otherPassDesc->mNumColourEntries )
             return false;
 
-        for( size_t i=0; i<this->mNumColourEntries; ++i )
+        for( size_t i = 0; i < this->mNumColourEntries; ++i )
         {
             if( this->mColour[i].texture != otherPassDesc->mColour[i].texture ||
                 this->mColour[i].resolveTexture != otherPassDesc->mColour[i].resolveTexture ||
@@ -365,7 +359,7 @@ namespace Ogre
     bool RenderPassDescriptor::hasAttachment( const TextureGpu *texture ) const
     {
         const size_t numColourEntries = mNumColourEntries;
-        for( size_t i=0; i<numColourEntries; ++i )
+        for( size_t i = 0; i < numColourEntries; ++i )
         {
             if( mColour[i].texture == texture )
                 return true;
@@ -379,8 +373,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool RenderPassDescriptor::hasStencilFormat() const
     {
-        return mStencil.texture || (mDepth.texture &&
-                                    PixelFormatGpuUtils::isStencil( mDepth.texture->getPixelFormat() ));
+        return mStencil.texture ||
+               ( mDepth.texture && PixelFormatGpuUtils::isStencil( mDepth.texture->getPixelFormat() ) );
     }
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::findAnyTexture( TextureGpu **outAnyTargetTexture, uint8 &outAnyMipLevel )
@@ -410,10 +404,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    FrameBufferDescKey::FrameBufferDescKey()
-    {
-        memset( this, 0, sizeof( *this ) );
-    }
+    FrameBufferDescKey::FrameBufferDescKey() { memset( this, 0, sizeof( *this ) ); }
     //-----------------------------------------------------------------------------------
     FrameBufferDescKey::FrameBufferDescKey( const RenderPassDescriptor &desc )
     {
@@ -421,9 +412,9 @@ namespace Ogre
         readyWindowForPresent = desc.mReadyWindowForPresent;
         numColourEntries = desc.getNumColourEntries();
 
-        //Load & Store actions don't matter for generating different FBOs.
+        // Load & Store actions don't matter for generating different FBOs.
 
-        for( size_t i=0; i<numColourEntries; ++i )
+        for( size_t i = 0; i < numColourEntries; ++i )
         {
             colour[i] = desc.mColour[i];
             allLayers[i] = desc.mColour[i].allLayers;
@@ -439,7 +430,7 @@ namespace Ogre
         stencil.storeAction = StoreAction::DontCare;
     }
     //-----------------------------------------------------------------------------------
-    bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const
+    bool FrameBufferDescKey::operator<( const FrameBufferDescKey &other ) const
     {
         if( this->readyWindowForPresent != other.readyWindowForPresent )
             return this->readyWindowForPresent < other.readyWindowForPresent;
@@ -447,7 +438,7 @@ namespace Ogre
         if( this->numColourEntries != other.numColourEntries )
             return this->numColourEntries < other.numColourEntries;
 
-        for( size_t i=0; i<numColourEntries; ++i )
+        for( size_t i = 0; i < numColourEntries; ++i )
         {
             if( this->allLayers[i] != other.allLayers[i] )
                 return this->allLayers[i] < other.allLayers[i];
@@ -462,4 +453,4 @@ namespace Ogre
 
         return false;
     }
-}
+}  // namespace Ogre

@@ -29,13 +29,13 @@ THE SOFTWARE.
 
 #include "OgreRectangle2D2.h"
 
-#include "Vao/OgreStagingBuffer.h"
-#include "Vao/OgreVaoManager.h"
-#include "Vao/OgreVertexArrayObject.h"
-#include "OgreSceneManager.h"
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 namespace Ogre
 {
@@ -361,10 +361,7 @@ namespace Ogre
         mChanged = false;
     }
     //-----------------------------------------------------------------------------------
-    const String &Rectangle2D::getMovableType() const
-    {
-        return Rectangle2DFactory::FACTORY_TYPE_NAME;
-    }
+    const String &Rectangle2D::getMovableType() const { return Rectangle2DFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------------
     const LightList &Rectangle2D::getLights() const
     {

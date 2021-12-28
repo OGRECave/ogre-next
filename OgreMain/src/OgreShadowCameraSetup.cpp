@@ -30,22 +30,22 @@ THE SOFTWARE.
 
 #include "OgreShadowCameraSetup.h"
 
-#include "OgreCommon.h"
-#include "OgreSceneManager.h"
-#include "OgreLight.h"
 #include "OgreCamera.h"
+#include "OgreCommon.h"
+#include "OgreLight.h"
+#include "OgreSceneManager.h"
 #include "OgreViewport.h"
 
-namespace Ogre 
+namespace Ogre
 {
     bool ShadowCameraSetup::mUseEsm = false;
 
     /// Default constructor
-    DefaultShadowCameraSetup::DefaultShadowCameraSetup()  {}
-    
+    DefaultShadowCameraSetup::DefaultShadowCameraSetup() {}
+
     /// Destructor
     DefaultShadowCameraSetup::~DefaultShadowCameraSetup() {}
-    
+
     /// Default shadow camera setup implementation
     void DefaultShadowCameraSetup::getShadowCamera( const SceneManager *sm, const Camera *cam,
                                                     const Light *light, Camera *texCam, size_t iteration,
@@ -54,42 +54,41 @@ namespace Ogre
         Vector3 pos, dir;
 
         // reset custom view / projection matrix in case already set
-        texCam->setCustomViewMatrix(false);
-        texCam->setCustomProjectionMatrix(false);
-        mMinDistance = light->_deriveShadowNearClipDistance(cam);
-        mMaxDistance = light->_deriveShadowFarClipDistance(cam);
+        texCam->setCustomViewMatrix( false );
+        texCam->setCustomProjectionMatrix( false );
+        mMinDistance = light->_deriveShadowNearClipDistance( cam );
+        mMaxDistance = light->_deriveShadowFarClipDistance( cam );
         texCam->setNearClipDistance( mMinDistance );
         texCam->setFarClipDistance( mMaxDistance );
 
         // get the shadow frustum's far distance
         Real shadowDist = light->getShadowFarDistance();
-        if (!shadowDist)
+        if( !shadowDist )
         {
             // need a shadow distance, make one up
             shadowDist = cam->getNearClipDistance() * 300;
         }
-        Real shadowOffset = shadowDist * (sm->getShadowDirLightTextureOffset());
+        Real shadowOffset = shadowDist * ( sm->getShadowDirLightTextureOffset() );
 
-        // Directional lights 
-        if (light->getType() == Light::LT_DIRECTIONAL)
+        // Directional lights
+        if( light->getType() == Light::LT_DIRECTIONAL )
         {
             const AxisAlignedBox &casterBox = sm->getCurrentCastersBox();
             mMaxDistance = casterBox.getMinimum().distance( casterBox.getMaximum() );
 
             // set up the shadow texture
             // Set ortho projection
-            texCam->setProjectionType(PT_ORTHOGRAPHIC);
+            texCam->setProjectionType( PT_ORTHOGRAPHIC );
             // set ortho window so that texture covers far dist
-            texCam->setOrthoWindow(shadowDist * 2, shadowDist * 2);
+            texCam->setOrthoWindow( shadowDist * 2, shadowDist * 2 );
 
             // Calculate look at position
             // We want to look at a spot shadowOffset away from near plane
             // 0.5 is a little too close for angles
-            Vector3 target = cam->getDerivedPosition() + 
-                (cam->getDerivedDirection() * shadowOffset);
+            Vector3 target = cam->getDerivedPosition() + ( cam->getDerivedDirection() * shadowOffset );
 
             // Calculate direction, which same as directional light direction
-            dir = - light->getDerivedDirection(); // backwards since point down -z
+            dir = -light->getDerivedDirection();  // backwards since point down -z
             dir.normalise();
 
             // Calculate position
@@ -104,50 +103,50 @@ namespace Ogre
             //~ pos.x -= std::fmod(pos.x, worldTexelSize);
             //~ pos.y -= std::fmod(pos.y, worldTexelSize);
             //~ pos.z -= std::fmod(pos.z, worldTexelSize);
-            Vector2 worldTexelSize = (shadowDist * 2) / viewportRealSize;
+            Vector2 worldTexelSize = ( shadowDist * 2 ) / viewportRealSize;
 
-             //get texCam orientation
+            // get texCam orientation
 
-             Vector3 up = Vector3::UNIT_Y;
-             // Check it's not coincident with dir
-             if (Math::Abs(up.dotProduct(dir)) >= 1.0f)
-             {
+            Vector3 up = Vector3::UNIT_Y;
+            // Check it's not coincident with dir
+            if( Math::Abs( up.dotProduct( dir ) ) >= 1.0f )
+            {
                 // Use camera up
                 up = Vector3::UNIT_Z;
-             }
-             // cross twice to rederive, only direction is unaltered
-             Vector3 left = dir.crossProduct(up);
-             left.normalise();
-             up = dir.crossProduct(left);
-             up.normalise();
-             // Derive quaternion from axes
-             Quaternion q;
-             q.FromAxes(left, up, dir);
+            }
+            // cross twice to rederive, only direction is unaltered
+            Vector3 left = dir.crossProduct( up );
+            left.normalise();
+            up = dir.crossProduct( left );
+            up.normalise();
+            // Derive quaternion from axes
+            Quaternion q;
+            q.FromAxes( left, up, dir );
 
-             //convert world space camera position into light space
-             Vector3 lightSpacePos = q.Inverse() * pos;
-             
-             //snap to nearest texel
-             lightSpacePos.x -= std::fmod(lightSpacePos.x, worldTexelSize.x);
-             lightSpacePos.y -= std::fmod(lightSpacePos.y, worldTexelSize.y);
+            // convert world space camera position into light space
+            Vector3 lightSpacePos = q.Inverse() * pos;
 
-             //convert back to world space
-             pos = q * lightSpacePos;
+            // snap to nearest texel
+            lightSpacePos.x -= std::fmod( lightSpacePos.x, worldTexelSize.x );
+            lightSpacePos.y -= std::fmod( lightSpacePos.y, worldTexelSize.y );
 
-             // Finally set position
-             texCam->setPosition(pos);
+            // convert back to world space
+            pos = q * lightSpacePos;
+
+            // Finally set position
+            texCam->setPosition( pos );
         }
         // Spotlight
-        else if (light->getType() == Light::LT_SPOTLIGHT)
+        else if( light->getType() == Light::LT_SPOTLIGHT )
         {
             // Set perspective projection
-            texCam->setProjectionType(PT_PERSPECTIVE);
+            texCam->setProjectionType( PT_PERSPECTIVE );
             // set FOV slightly larger than the spotlight range to ensure coverage
-            Radian fovy = light->getSpotlightOuterAngle()*1.2;
+            Radian fovy = light->getSpotlightOuterAngle() * 1.2;
             // limit angle
-            if (fovy.valueDegrees() > 175)
-                fovy = Degree(175);
-            texCam->setFOVy(fovy);
+            if( fovy.valueDegrees() > 175 )
+                fovy = Degree( 175 );
+            texCam->setFOVy( fovy );
 
             // Calculate position, which same as spotlight position
             /*pos = light->getParentNode()->_getDerivedPosition();
@@ -160,11 +159,10 @@ namespace Ogre
         else
         {
             // Set perspective projection
-            texCam->setProjectionType(PT_PERSPECTIVE);
+            texCam->setProjectionType( PT_PERSPECTIVE );
             // Use 90 degree FOV for point light
             texCam->setFOVy( Radian( Math::HALF_PI ) );
         }
     }
 
-
-}
+}  // namespace Ogre

@@ -46,43 +46,40 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     void VertexBufferDownloadHelper::queueDownload(
-            const VertexArrayObject *vao,
-            const VertexElementSemanticFullArray &semanticsToDownload,
-            size_t elementStart, size_t elementCount )
+        const VertexArrayObject *vao, const VertexElementSemanticFullArray &semanticsToDownload,
+        size_t elementStart, size_t elementCount )
     {
         const size_t numSemantics = semanticsToDownload.size();
         mDownloadData.resize( numSemantics );
 
         const VertexBufferPackedVec &vertexBuffers = vao->getVertexBuffers();
 
-        for( size_t i=0; i<numSemantics; ++i )
+        for( size_t i = 0; i < numSemantics; ++i )
         {
-            mDownloadData[i].origElements = vao->findBySemantic( semanticsToDownload[i].semantic,
-                                                                 mDownloadData[i].bufferIdx,
-                                                                 mDownloadData[i].srcOffset,
-                                                                 semanticsToDownload[i].repeat );
+            mDownloadData[i].origElements =
+                vao->findBySemantic( semanticsToDownload[i].semantic, mDownloadData[i].bufferIdx,
+                                     mDownloadData[i].srcOffset, semanticsToDownload[i].repeat );
             if( mDownloadData[i].origElements )
             {
                 mDownloadData[i].srcBytesPerVertex =
-                        vertexBuffers[mDownloadData[i].bufferIdx]->getBytesPerElement();
+                    vertexBuffers[mDownloadData[i].bufferIdx]->getBytesPerElement();
             }
         }
 
         if( elementCount == 0 )
             elementCount = vertexBuffers[0]->getNumElements() - elementStart;
 
-        //Pack all the requests together
-        for( size_t i=0; i<numSemantics; ++i )
+        // Pack all the requests together
+        for( size_t i = 0; i < numSemantics; ++i )
         {
             bool sameBuffer = false;
-            for( size_t j=0; j<i && !sameBuffer; ++j )
+            for( size_t j = 0; j < i && !sameBuffer; ++j )
                 sameBuffer = mDownloadData[j].bufferIdx == mDownloadData[i].bufferIdx;
 
             if( !sameBuffer && mDownloadData[i].origElements )
             {
                 mDownloadData[i].ticket =
-                        vertexBuffers[mDownloadData[i].bufferIdx]->readRequest( elementStart,
-                                                                                elementCount );
+                    vertexBuffers[mDownloadData[i].bufferIdx]->readRequest( elementStart, elementCount );
             }
         }
     }
@@ -91,14 +88,14 @@ namespace Ogre
     {
         const size_t numSemantics = mDownloadData.size();
 
-        //Pack all the maps together
-        for( size_t i=0; i<numSemantics; ++i )
+        // Pack all the maps together
+        for( size_t i = 0; i < numSemantics; ++i )
         {
             outDataPtrs[i] = 0;
 
             if( mDownloadData[i].ticket.isNull() )
             {
-                for( size_t j=0; j<i; ++j )
+                for( size_t j = 0; j < i; ++j )
                 {
                     if( mDownloadData[i].bufferIdx == mDownloadData[j].bufferIdx )
                     {
@@ -109,7 +106,7 @@ namespace Ogre
             }
             else
             {
-                outDataPtrs[i] = reinterpret_cast<const uint8*>( mDownloadData[i].ticket->map() );
+                outDataPtrs[i] = reinterpret_cast<const uint8 *>( mDownloadData[i].ticket->map() );
             }
         }
     }
@@ -117,7 +114,7 @@ namespace Ogre
     void VertexBufferDownloadHelper::unmap()
     {
         const size_t numSemantics = mDownloadData.size();
-        for( size_t i=0; i<numSemantics; ++i )
+        for( size_t i = 0; i < numSemantics; ++i )
         {
             if( !mDownloadData[i].ticket.isNull() )
             {
@@ -126,4 +123,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

@@ -30,15 +30,12 @@ THE SOFTWARE.
 
 #include "Vao/OgreBufferInterface.h"
 
-#include "Vao/OgreVaoManager.h"
 #include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
-    BufferInterface::BufferInterface() :
-        mBuffer( 0 )
-    {
-    }
+    BufferInterface::BufferInterface() : mBuffer( 0 ) {}
     //-----------------------------------------------------------------------------------
     void BufferInterface::upload( const void *data, size_t elementStart, size_t elementCount )
     {
@@ -53,25 +50,21 @@ namespace Ogre
         {
             size_t bytesPerElement = mBuffer->mBytesPerElement;
 
-            //Get a staging buffer
+            // Get a staging buffer
             VaoManager *vaoManager = mBuffer->mVaoManager;
-            StagingBuffer *stagingBuffer = vaoManager->getStagingBuffer( elementCount * bytesPerElement,
-                                                                         true );
+            StagingBuffer *stagingBuffer =
+                vaoManager->getStagingBuffer( elementCount * bytesPerElement, true );
 
-            //Map and memcpy the data (CPU -> GPU)
+            // Map and memcpy the data (CPU -> GPU)
             void *dstData = stagingBuffer->map( elementCount * bytesPerElement );
             memcpy( dstData, data, elementCount * bytesPerElement );
-            //Copy data from Staging to real buffer (GPU -> GPU)
-            stagingBuffer->unmap( StagingBuffer::Destination( mBuffer,
-                                                              elementStart * bytesPerElement,
-                                                              0,
+            // Copy data from Staging to real buffer (GPU -> GPU)
+            stagingBuffer->unmap( StagingBuffer::Destination( mBuffer, elementStart * bytesPerElement, 0,
                                                               elementCount * bytesPerElement ) );
             stagingBuffer->removeReferenceCount();
         }
     }
     //-----------------------------------------------------------------------------------
-    void BufferInterface::_ensureDelayedImmutableBuffersAreReady()
-    {
-    }
+    void BufferInterface::_ensureDelayedImmutableBuffersAreReady() {}
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

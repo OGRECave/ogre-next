@@ -29,19 +29,20 @@ THE SOFTWARE.
 
 #include "OgreSubMesh2.h"
 
-#include "OgreSubMesh.h"
-#include "OgreMesh2.h"
+#include "OgreBitwise.h"
 #include "OgreException.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreLogManager.h"
-#include "OgreBitwise.h"
-#include "Vao/OgreVaoManager.h"
-#include "Vao/OgreAsyncTicket.h"
 #include "OgreMesh.h"
-#include "OgreVertexShadowMapHelper.h"
+#include "OgreMesh2.h"
 #include "OgreStringConverter.h"
+#include "OgreSubMesh.h"
+#include "OgreVertexShadowMapHelper.h"
+#include "Vao/OgreAsyncTicket.h"
+#include "Vao/OgreVaoManager.h"
 
-namespace Ogre {
+namespace Ogre
+{
     //-----------------------------------------------------------------------
     SubMesh::SubMesh() :
         mParent( 0 ),
@@ -57,12 +58,12 @@ namespace Ogre {
     {
         destroyShadowMappingVaos();
         destroyVaos( mVao[VpNormal], mParent->mVaoManager );
-        
+
         if( mPoseTexBuffer )
             mParent->mVaoManager->destroyTexBuffer( mPoseTexBuffer );
     }
     //-----------------------------------------------------------------------
-    void SubMesh::addBoneAssignment(const VertexBoneAssignment& vertBoneAssign)
+    void SubMesh::addBoneAssignment( const VertexBoneAssignment &vertBoneAssign )
     {
         mBoneAssignments.push_back( vertBoneAssign );
         mBoneAssignmentsOutOfDate = true;
@@ -77,21 +78,21 @@ namespace Ogre {
     uint8 SubMesh::rationaliseBoneAssignments()
     {
         // Iterate through, finding the largest # bones per vertex
-        uint8 maxBonesPerVertex         = 0;
-        bool existsNonSkinnedVertices   = false;
+        uint8 maxBonesPerVertex = 0;
+        bool existsNonSkinnedVertices = false;
 
-        //Ensure bone assignments are sorted.
+        // Ensure bone assignments are sorted.
         std::sort( mBoneAssignments.begin(), mBoneAssignments.end() );
 
         const VertexBoneAssignmentVec::const_iterator endt = mBoneAssignments.end();
 
         const uint32 numVertices = mVao[VpNormal][0]->getVertexBuffers()[0]->getNumElements();
 
-        for( uint32 i=0; i<numVertices; ++i )
+        for( uint32 i = 0; i < numVertices; ++i )
         {
             uint8 bonesPerVertex = 0;
-            VertexBoneAssignmentVec::iterator first = std::lower_bound( mBoneAssignments.begin(),
-                                                                        mBoneAssignments.end(), i );
+            VertexBoneAssignmentVec::iterator first =
+                std::lower_bound( mBoneAssignments.begin(), mBoneAssignments.end(), i );
             VertexBoneAssignmentVec::iterator itor = first;
 
             while( itor != endt && itor->vertexIndex == i )
@@ -110,16 +111,16 @@ namespace Ogre {
             {
                 if( bonesPerVertex > OGRE_MAX_BLEND_WEIGHTS )
                 {
-                    //Trim the assignments that exceed limit allowed.
+                    // Trim the assignments that exceed limit allowed.
                     mBoneAssignments.erase( first + OGRE_MAX_BLEND_WEIGHTS, itor );
                     bonesPerVertex = OGRE_MAX_BLEND_WEIGHTS;
                 }
 
-                //Always normalize the weights.
+                // Always normalize the weights.
                 Real totalWeight = 0;
 
                 itor = first;
-                while( itor != endt && (itor - first) < bonesPerVertex )
+                while( itor != endt && ( itor - first ) < bonesPerVertex )
                 {
                     totalWeight += itor->weight;
                     ++itor;
@@ -127,7 +128,7 @@ namespace Ogre {
 
                 totalWeight = 1.0f / totalWeight;
                 itor = first;
-                while( itor != endt && (itor - first) < bonesPerVertex )
+                while( itor != endt && ( itor - first ) < bonesPerVertex )
                 {
                     itor->weight *= totalWeight;
                     ++itor;
@@ -138,14 +139,18 @@ namespace Ogre {
         if( maxBonesPerVertex > OGRE_MAX_BLEND_WEIGHTS )
         {
             // Warn that we've reduced bone assignments
-            LogManager::getSingleton().logMessage("WARNING: the mesh '" + mParent->mName + "' "
-                "includes vertices with up to " + StringConverter::toString( maxBonesPerVertex ) +
-                " bone assignments, which is more than the limit of " +
-                StringConverter::toString(OGRE_MAX_BLEND_WEIGHTS) +
-                "The lowest weighted assignments beyond this limit have been removed, so "
-                "your animation may look slightly different. To eliminate this, reduce "
-                "the number of bone assignments per vertex on your mesh to " +
-                StringConverter::toString(OGRE_MAX_BLEND_WEIGHTS) + ".", LML_CRITICAL);
+            LogManager::getSingleton().logMessage(
+                "WARNING: the mesh '" + mParent->mName +
+                    "' "
+                    "includes vertices with up to " +
+                    StringConverter::toString( maxBonesPerVertex ) +
+                    " bone assignments, which is more than the limit of " +
+                    StringConverter::toString( OGRE_MAX_BLEND_WEIGHTS ) +
+                    "The lowest weighted assignments beyond this limit have been removed, so "
+                    "your animation may look slightly different. To eliminate this, reduce "
+                    "the number of bone assignments per vertex on your mesh to " +
+                    StringConverter::toString( OGRE_MAX_BLEND_WEIGHTS ) + ".",
+                LML_CRITICAL );
 
             // we've adjusted them down to the max
             maxBonesPerVertex = OGRE_MAX_BLEND_WEIGHTS;
@@ -154,11 +159,14 @@ namespace Ogre {
         if( existsNonSkinnedVertices )
         {
             // Warn that we've non-skinned vertices
-            LogManager::getSingleton().logMessage("WARNING: the mesh '" + mParent->mName + "' "
-                "includes vertices without bone assignments. Those vertices will "
-                "transform to wrong position when skeletal animation enabled. "
-                "To eliminate this, assign at least one bone assignment per vertex "
-                "on your mesh.", LML_CRITICAL);
+            LogManager::getSingleton().logMessage(
+                "WARNING: the mesh '" + mParent->mName +
+                    "' "
+                    "includes vertices without bone assignments. Those vertices will "
+                    "transform to wrong position when skeletal animation enabled. "
+                    "To eliminate this, assign at least one bone assignment per vertex "
+                    "on your mesh.",
+                LML_CRITICAL );
         }
 
         return maxBonesPerVertex;
@@ -174,13 +182,13 @@ namespace Ogre {
         {
             _buildBoneIndexMap();
             size_t highestBoneNum = 0;
-            for( size_t i=0; i<mBlendIndexToBoneIndexMap.size(); ++i )
+            for( size_t i = 0; i < mBlendIndexToBoneIndexMap.size(); ++i )
                 highestBoneNum = std::max<size_t>( highestBoneNum, mBlendIndexToBoneIndexMap[i] );
 
             vector<uint16>::type boneToBlend( highestBoneNum + 1u );
-            for( size_t i=0; i<highestBoneNum; ++i )
+            for( size_t i = 0; i < highestBoneNum; ++i )
                 boneToBlend[i] = 0;
-            for( size_t i=0; i<mBlendIndexToBoneIndexMap.size(); ++i )
+            for( size_t i = 0; i < mBlendIndexToBoneIndexMap.size(); ++i )
                 boneToBlend[mBlendIndexToBoneIndexMap[i]] = static_cast<uint16>( i );
 
             const bool hadIndependentVaos = mVao[VpNormal][0] != mVao[VpShadow][0];
@@ -206,8 +214,8 @@ namespace Ogre {
                             itElement->mSemantic != VES_BLEND_WEIGHTS &&
                             itElement->mSemantic != VES_BLEND_WEIGHTS2 )
                         {
-                            readRequests.push_back( VertexArrayObject::ReadRequests(
-                                                        itElement->mSemantic ) );
+                            readRequests.push_back(
+                                VertexArrayObject::ReadRequests( itElement->mSemantic ) );
                             newVertexDeclaration.push_back( *itElement );
                         }
 
@@ -218,19 +226,17 @@ namespace Ogre {
                 }
             }
 
-            const VertexElementType weightsElemType = v1::VertexElement::multiplyTypeCount( VET_FLOAT1,
-                                                                                            maxBones );
+            const VertexElementType weightsElemType =
+                v1::VertexElement::multiplyTypeCount( VET_FLOAT1, maxBones );
             newVertexDeclaration.push_back( VertexElement2( VET_UBYTE4, VES_BLEND_INDICES ) );
             newVertexDeclaration.push_back( VertexElement2( weightsElemType, VES_BLEND_WEIGHTS ) );
 
             const size_t newVertexSize = VaoManager::calculateVertexSize( newVertexDeclaration );
             const size_t numVertices = mVao[VpNormal][0]->getVertexBuffers()[0]->getNumElements();
-            uint8 *newVertexBufData = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD(
-                                                                    numVertices * newVertexSize,
-                                                                    MEMCATEGORY_GEOMETRY ) );
+            uint8 *newVertexBufData = reinterpret_cast<uint8 *>(
+                OGRE_MALLOC_SIMD( numVertices * newVertexSize, MEMCATEGORY_GEOMETRY ) );
             FreeOnDestructor dataPtrContainer( newVertexBufData );
             uint8 *newVertexBufDataStart = newVertexBufData;
-
 
             mVao[VpNormal][0]->readRequests( readRequests );
             mVao[VpNormal][0]->mapAsyncTickets( readRequests );
@@ -238,7 +244,7 @@ namespace Ogre {
             VertexBoneAssignmentVec::const_iterator itBoneAssignments = mBoneAssignments.begin();
             VertexBoneAssignmentVec::const_iterator enBoneAssignments = mBoneAssignments.end();
 
-            for( size_t i=0; i<numVertices; ++i )
+            for( size_t i = 0; i < numVertices; ++i )
             {
                 VertexArrayObject::ReadRequestsArray::const_iterator itor = readRequests.begin();
                 VertexArrayObject::ReadRequestsArray::const_iterator endt = readRequests.end();
@@ -255,26 +261,25 @@ namespace Ogre {
 
                 uint8 lastUsedBoneIdx = 0;
                 uint8 *dstBlendIndex = newVertexBufData;
-                float *dstBlendWeight = reinterpret_cast<float*>( newVertexBufData + 4u );
+                float *dstBlendWeight = reinterpret_cast<float *>( newVertexBufData + 4u );
 
-                while( itBoneAssignments != enBoneAssignments &&
-                       itBoneAssignments->vertexIndex == i )
+                while( itBoneAssignments != enBoneAssignments && itBoneAssignments->vertexIndex == i )
                 {
-                    lastUsedBoneIdx     = (uint8)boneToBlend[itBoneAssignments->boneIndex];
-                    *dstBlendIndex++    = (uint8)boneToBlend[itBoneAssignments->boneIndex];
-                    *dstBlendWeight++   = itBoneAssignments->weight;
+                    lastUsedBoneIdx = (uint8)boneToBlend[itBoneAssignments->boneIndex];
+                    *dstBlendIndex++ = (uint8)boneToBlend[itBoneAssignments->boneIndex];
+                    *dstBlendWeight++ = itBoneAssignments->weight;
                     ++itBoneAssignments;
                 }
 
-                const size_t remainingBoneEntries = maxBones - (dstBlendIndex - newVertexBufData);
+                const size_t remainingBoneEntries = maxBones - ( dstBlendIndex - newVertexBufData );
 
-                for( size_t j=0; j<remainingBoneEntries; ++j )
+                for( size_t j = 0; j < remainingBoneEntries; ++j )
                 {
-                    *dstBlendIndex++    = lastUsedBoneIdx;
-                    *dstBlendWeight++   = 0;
+                    *dstBlendIndex++ = lastUsedBoneIdx;
+                    *dstBlendWeight++ = 0;
                 }
 
-                newVertexBufData = reinterpret_cast<uint8*>( dstBlendWeight );
+                newVertexBufData = reinterpret_cast<uint8 *>( dstBlendWeight );
             }
 
             mVao[VpNormal][0]->unmapAsyncTickets( readRequests );
@@ -282,9 +287,8 @@ namespace Ogre {
             const BufferType bufferType = mVao[VpNormal][0]->getVertexBuffers()[0]->getBufferType();
             const bool keepAsShadow = mVao[VpNormal][0]->getVertexBuffers()[0]->getShadowCopy() != 0;
 
-
             VertexBufferPacked *vertexBuffer = mParent->mVaoManager->createVertexBuffer(
-                        newVertexDeclaration, numVertices, bufferType, newVertexBufDataStart, keepAsShadow );
+                newVertexDeclaration, numVertices, bufferType, newVertexBufDataStart, keepAsShadow );
 
             if( !keepAsShadow )
                 dataPtrContainer.ptr = 0;
@@ -294,9 +298,8 @@ namespace Ogre {
             destroyVaos( mVao[VpNormal], mParent->mVaoManager, false );
 
             VertexBufferPackedVec vertexBuffers( 1u, vertexBuffer );
-            VertexArrayObject *vao = mParent->mVaoManager->createVertexArrayObject( vertexBuffers,
-                                                                                    indexBuffer,
-                                                                                    opType );
+            VertexArrayObject *vao =
+                mParent->mVaoManager->createVertexArrayObject( vertexBuffers, indexBuffer, opType );
             mVao[VpNormal].push_back( vao );
 
             const bool oldValue = Mesh::msOptimizeForShadowMapping;
@@ -324,7 +327,7 @@ namespace Ogre {
         }
 
         {
-            //Fill the index map.
+            // Fill the index map.
             mBlendIndexToBoneIndexMap.clear();
             mBlendIndexToBoneIndexMap.reserve( usedBones.size() );
 
@@ -345,12 +348,10 @@ namespace Ogre {
         size_t weightSource = 0;
         size_t indexOffset = 0;
         size_t weightOffset = 0;
-        const VertexElement2 *indexElement = mVao[VpNormal][0]->findBySemantic( VES_BLEND_INDICES,
-                                                                                indexSource,
-                                                                                indexOffset );
-        const VertexElement2 *weightElement = mVao[VpNormal][0]->findBySemantic( VES_BLEND_WEIGHTS,
-                                                                                 weightSource,
-                                                                                 weightOffset );
+        const VertexElement2 *indexElement =
+            mVao[VpNormal][0]->findBySemantic( VES_BLEND_INDICES, indexSource, indexOffset );
+        const VertexElement2 *weightElement =
+            mVao[VpNormal][0]->findBySemantic( VES_BLEND_WEIGHTS, weightSource, weightOffset );
         if( !indexElement || !weightElement )
             return;
 
@@ -364,7 +365,7 @@ namespace Ogre {
         VertexBufferPacked *vertexBuffer = mVao[VpNormal][0]->getVertexBuffers()[indexSource];
 
         AsyncTicketPtr asyncTicket = vertexBuffer->readRequest( 0, vertexBuffer->getNumElements() );
-        const uint8 *vertexData = static_cast<const uint8*>( asyncTicket->map() );
+        const uint8 *vertexData = static_cast<const uint8 *>( asyncTicket->map() );
         _buildBoneAssignmentsFromVertexData( vertexData );
         asyncTicket->unmap();
     }
@@ -376,12 +377,10 @@ namespace Ogre {
         size_t indexOffset = 0;
         size_t weightOffset = 0;
 
-        const VertexElement2 *indexElement = mVao[VpNormal][0]->findBySemantic( VES_BLEND_INDICES,
-                                                                                indexSource,
-                                                                                indexOffset );
-        const VertexElement2 *weightElement = mVao[VpNormal][0]->findBySemantic( VES_BLEND_WEIGHTS,
-                                                                                 weightSource,
-                                                                                 weightOffset );
+        const VertexElement2 *indexElement =
+            mVao[VpNormal][0]->findBySemantic( VES_BLEND_INDICES, indexSource, indexOffset );
+        const VertexElement2 *weightElement =
+            mVao[VpNormal][0]->findBySemantic( VES_BLEND_WEIGHTS, weightSource, weightOffset );
         if( indexSource != weightSource )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
@@ -399,8 +398,7 @@ namespace Ogre {
 
         if( mBlendIndexToBoneIndexMap.empty() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "mBlendIndexToBoneIndexMap MUST be up to date.",
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "mBlendIndexToBoneIndexMap MUST be up to date.",
                          "SubMesh::mBlendIndexToBoneIndexMap" );
         }
 
@@ -412,17 +410,17 @@ namespace Ogre {
         const uint32 vertexCount = vertexBuffer->getNumElements();
         const VertexElementType weightBaseType = v1::VertexElement::getBaseType( weightElement->mType );
 
-        const float invMaxU16   = 1.0f / 65535.0f;
-        const float invMaxU8    = 1.0f / 255.0f;
+        const float invMaxU16 = 1.0f / 65535.0f;
+        const float invMaxU8 = 1.0f / 255.0f;
 
-        for( uint32 i=0; i<vertexCount; ++i )
+        for( uint32 i = 0; i < vertexCount; ++i )
         {
-            uint8 const *blendIndex = reinterpret_cast<uint8 const *>(vertexData + indexOffset);
+            uint8 const *blendIndex = reinterpret_cast<uint8 const *>( vertexData + indexOffset );
 
             if( weightBaseType == VET_FLOAT1 )
             {
-                float const *blendWeight = reinterpret_cast<float const *>(vertexData + weightOffset);
-                for( uint8 j=0; j<numWeightsPerVertex; ++j )
+                float const *blendWeight = reinterpret_cast<float const *>( vertexData + weightOffset );
+                for( uint8 j = 0; j < numWeightsPerVertex; ++j )
                 {
                     const uint16 boneIndex = mBlendIndexToBoneIndexMap[*blendIndex++];
                     mBoneAssignments.push_back( VertexBoneAssignment( i, boneIndex, *blendWeight++ ) );
@@ -430,8 +428,9 @@ namespace Ogre {
             }
             else if( weightBaseType == VET_USHORT2_NORM )
             {
-                uint16 const *blendWeight = reinterpret_cast<uint16 const *>(vertexData + weightOffset);
-                for( uint8 j=0; j<numWeightsPerVertex; ++j )
+                uint16 const *blendWeight =
+                    reinterpret_cast<uint16 const *>( vertexData + weightOffset );
+                for( uint8 j = 0; j < numWeightsPerVertex; ++j )
                 {
                     const uint16 boneIndex = mBlendIndexToBoneIndexMap[*blendIndex++];
                     const float weight = *blendWeight++ * invMaxU16;
@@ -440,8 +439,8 @@ namespace Ogre {
             }
             else if( weightBaseType == VET_UBYTE4_NORM )
             {
-                uint8 const *blendWeight = reinterpret_cast<uint8 const *>(vertexData + weightOffset);
-                for( uint8 j=0; j<numWeightsPerVertex; ++j )
+                uint8 const *blendWeight = reinterpret_cast<uint8 const *>( vertexData + weightOffset );
+                for( uint8 j = 0; j < numWeightsPerVertex; ++j )
                 {
                     const uint16 boneIndex = mBlendIndexToBoneIndexMap[*blendIndex++];
                     const float weight = *blendWeight++ * invMaxU8;
@@ -456,9 +455,9 @@ namespace Ogre {
         mBoneAssignmentsOutOfDate = false;
     }
     //---------------------------------------------------------------------
-    SubMesh* SubMesh::clone( Mesh *parentMesh, int vertexBufferType, int indexBufferType )
+    SubMesh *SubMesh::clone( Mesh *parentMesh, int vertexBufferType, int indexBufferType )
     {
-        SubMesh* newSub;
+        SubMesh *newSub;
         if( !parentMesh )
             parentMesh = mParent;
 
@@ -466,14 +465,14 @@ namespace Ogre {
 
         newSub->mBlendIndexToBoneIndexMap = mBlendIndexToBoneIndexMap;
         newSub->mMaterialName = mMaterialName;
-        //newSub->mParent = parentMesh; //Not needed, already set
+        // newSub->mParent = parentMesh; //Not needed, already set
         assert( newSub->mParent == parentMesh );
 
-        newSub->mBoneAssignments            = mBoneAssignments;
-        newSub->mBoneAssignmentsOutOfDate   = mBoneAssignmentsOutOfDate;
+        newSub->mBoneAssignments = mBoneAssignments;
+        newSub->mBoneAssignmentsOutOfDate = mBoneAssignmentsOutOfDate;
 
         const uint8 numVaoPasses = mParent->hasIndependentShadowMappingVaos() + 1;
-        for( uint8 i=0; i<numVaoPasses; ++i )
+        for( uint8 i = 0; i < numVaoPasses; ++i )
         {
             newSub->mVao[i].reserve( mVao[i].size() );
 
@@ -483,8 +482,8 @@ namespace Ogre {
 
             while( itor != endt )
             {
-                VertexArrayObject *newVao = (*itor)->clone( parentMesh->mVaoManager, &sharedBuffers,
-                                                            vertexBufferType, indexBufferType );
+                VertexArrayObject *newVao = ( *itor )->clone( parentMesh->mVaoManager, &sharedBuffers,
+                                                              vertexBufferType, indexBufferType );
                 newSub->mVao[i].push_back( newVao );
                 ++itor;
             }
@@ -496,15 +495,15 @@ namespace Ogre {
         return 0;
     }
     //---------------------------------------------------------------------
-    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
-                                bool qTangents, bool halfPose )
+    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
+                                bool halfPose )
     {
         mMaterialName = subMesh->getMaterialName();
 
         if( subMesh->parent->hasSkeleton() )
             subMesh->_compileBoneAssignments();
 
-        const v1::SubMesh::VertexBoneAssignmentList& v1BoneAssignments = subMesh->getBoneAssignments();
+        const v1::SubMesh::VertexBoneAssignmentList &v1BoneAssignments = subMesh->getBoneAssignments();
         mBoneAssignments.reserve( v1BoneAssignments.size() );
 
         {
@@ -526,16 +525,16 @@ namespace Ogre {
 
         assert( subMesh->parent->hasValidShadowMappingBuffers() );
 
-        //Deal with shadow mapping optimized buffers
+        // Deal with shadow mapping optimized buffers
         if( subMesh->vertexData[VpNormal] != subMesh->vertexData[VpShadow] ||
             subMesh->indexData[VpNormal] != subMesh->indexData[VpShadow] )
         {
-            //Use the special version already built for v1
+            // Use the special version already built for v1
             importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, halfPose, 1 );
         }
         else
         {
-            //No special version in the v1 format, let the autogeneration routine decide.
+            // No special version in the v1 format, let the autogeneration routine decide.
             this->_prepareForShadowMapping( false );
         }
     }
@@ -544,25 +543,24 @@ namespace Ogre {
                                        bool qTangents, bool halfPose, size_t vaoPassIdx )
     {
         VertexElement2Vec vertexElements;
-        char *data = _arrangeEfficient( subMesh, halfPos, halfTexCoords, qTangents, &vertexElements,
-                                        vaoPassIdx );
+        char *data =
+            _arrangeEfficient( subMesh, halfPos, halfTexCoords, qTangents, &vertexElements, vaoPassIdx );
 
-        //Wrap the ptrs around these, because the VaoManager's call
-        //can throw thus causing a leak if we don't free them.
+        // Wrap the ptrs around these, because the VaoManager's call
+        // can throw thus causing a leak if we don't free them.
         FreeOnDestructor dataPtrContainer( data );
 
         VaoManager *vaoManager = mParent->mVaoManager;
         VertexBufferPackedVec vertexBuffers;
 
-        //Create the vertex buffer
+        // Create the vertex buffer
         bool keepAsShadow = mParent->mVertexBufferShadowBuffer;
-        VertexBufferPacked *vertexBuffer = vaoManager->createVertexBuffer( vertexElements,
-                                                        subMesh->vertexData[vaoPassIdx]->vertexCount,
-                                                        mParent->mVertexBufferDefaultType,
-                                                        data, keepAsShadow );
+        VertexBufferPacked *vertexBuffer =
+            vaoManager->createVertexBuffer( vertexElements, subMesh->vertexData[vaoPassIdx]->vertexCount,
+                                            mParent->mVertexBufferDefaultType, data, keepAsShadow );
         vertexBuffers.push_back( vertexBuffer );
 
-        if( keepAsShadow ) //Don't free the pointer ourselves
+        if( keepAsShadow )  // Don't free the pointer ourselves
             dataPtrContainer.ptr = 0;
 
         IndexBufferPacked *indexBuffer = importFromV1( subMesh->indexData[vaoPassIdx] );
@@ -573,7 +571,7 @@ namespace Ogre {
             mVao[vaoPassIdx].push_back( vao );
         }
 
-        //Now deal with the automatic LODs
+        // Now deal with the automatic LODs
         v1::SubMesh::LODFaceList::const_iterator itor = subMesh->mLodFaceList[vaoPassIdx].begin();
         v1::SubMesh::LODFaceList::const_iterator endt = subMesh->mLodFaceList[vaoPassIdx].end();
 
@@ -587,24 +585,23 @@ namespace Ogre {
             mVao[vaoPassIdx].push_back( vao );
             ++itor;
         }
-        
+
         importPosesFromV1( subMesh, vertexBuffer, halfPose );
     }
     //---------------------------------------------------------------------
-    IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
+    IndexBufferPacked *SubMesh::importFromV1( v1::IndexData *indexData )
     {
         if( !indexData || indexData->indexBuffer.isNull() )
             return 0;
 
-        //Create & copy the index buffer
+        // Create & copy the index buffer
         const size_t indexSize = indexData->indexBuffer->getIndexSize();
         bool keepAsShadow = mParent->mIndexBufferShadowBuffer;
         VaoManager *vaoManager = mParent->mVaoManager;
-        void *indexDataPtr = OGRE_MALLOC_SIMD( indexData->indexCount * indexSize,
-                                               MEMCATEGORY_GEOMETRY );
+        void *indexDataPtr = OGRE_MALLOC_SIMD( indexData->indexCount * indexSize, MEMCATEGORY_GEOMETRY );
         FreeOnDestructor indexDataPtrContainer( indexDataPtr );
-        IndexBufferPacked::IndexType indexType = static_cast<IndexBufferPacked::IndexType>(
-                                                        indexData->indexBuffer->getType() );
+        IndexBufferPacked::IndexType indexType =
+            static_cast<IndexBufferPacked::IndexType>( indexData->indexBuffer->getType() );
 
         v1::HardwareBufferLockGuard srcIndexLock( indexData->indexBuffer,
                                                   v1::HardwareBuffer::HBL_READ_ONLY );
@@ -617,7 +614,7 @@ namespace Ogre {
                                                                         mParent->mIndexBufferDefaultType,
                                                                         indexDataPtr, keepAsShadow );
 
-        if( keepAsShadow ) //Don't free the pointer ourselves
+        if( keepAsShadow )  // Don't free the pointer ourselves
             indexDataPtrContainer.ptr = 0;
 
         return indexBuffer;
@@ -628,14 +625,15 @@ namespace Ogre {
     {
         // Find the index of this subMesh and only process poses which have this
         // subMesh as their target.
-        v1::Mesh::SubMeshList::const_iterator subMeshBegin =subMesh->parent->getSubMeshIterator().begin();
+        v1::Mesh::SubMeshList::const_iterator subMeshBegin =
+            subMesh->parent->getSubMeshIterator().begin();
         v1::Mesh::SubMeshList::const_iterator subMeshEnd = subMesh->parent->getSubMeshIterator().end();
         v1::Mesh::SubMeshList::const_iterator subMeshIt = std::find( subMeshBegin, subMeshEnd, subMesh );
-        
-        assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh.");
-                
+
+        assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh." );
+
         const size_t subMeshIndex = static_cast<size_t>( subMeshIt - subMeshBegin );
-        
+
         const v1::PoseList &poseListOrig = subMesh->parent->getPoseList();
         v1::PoseList poseList;
         poseList.reserve( poseListOrig.size() );
@@ -645,16 +643,16 @@ namespace Ogre {
 
             while( itor != endt )
             {
-                if( (*itor)->getTarget() == subMeshIndex )
+                if( ( *itor )->getTarget() == subMeshIndex )
                     poseList.push_back( *itor );
                 ++itor;
             }
         }
-        
+
         mNumPoses = static_cast<uint16>( poseList.size() );
         mPoseHalfPrecision = halfPrecision;
-        
-        if( mNumPoses > 0 ) 
+
+        if( mNumPoses > 0 )
         {
             mPoseNormals = poseList[0]->getIncludesNormals();
             size_t numVertices = vertexBuffer->getNumElements();
@@ -662,77 +660,76 @@ namespace Ogre {
             size_t elementsPerVertex = mPoseNormals ? 8 : 4;
             size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
             size_t bufferSize = mNumPoses * singlePoseBufferSize;
-            char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
-                                                                 MEMCATEGORY_GEOMETRY ) );                                
+            char *buffer = static_cast<char *>( OGRE_MALLOC_SIMD( bufferSize, MEMCATEGORY_GEOMETRY ) );
             FreeOnDestructor bufferPtrContainer( buffer );
             memset( buffer, 0, bufferSize );
-            
+
             v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
-            
+
             size_t index = 0u;
-            
+
             while( poseIt.hasMoreElements() )
             {
-                v1::Pose* pose = poseIt.getNext();
+                v1::Pose *pose = poseIt.getNext();
                 v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
                 v1::Pose::NormalsIterator::const_iterator n = pose->getNormalsIterator().begin();
-                
+
                 if( halfPrecision )
                 {
-                    uint16* pHalf = reinterpret_cast<uint16*>( buffer +  index * singlePoseBufferSize );
+                    uint16 *pHalf = reinterpret_cast<uint16 *>( buffer + index * singlePoseBufferSize );
                     while( v != pose->getVertexOffsets().end() )
                     {
                         size_t idx = v->first * elementsPerVertex;
-                        pHalf[idx+0] = Bitwise::floatToHalf( v->second.x );
-                        pHalf[idx+1] = Bitwise::floatToHalf( v->second.y );
-                        pHalf[idx+2] = Bitwise::floatToHalf( v->second.z );
-                        pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
+                        pHalf[idx + 0] = Bitwise::floatToHalf( v->second.x );
+                        pHalf[idx + 1] = Bitwise::floatToHalf( v->second.y );
+                        pHalf[idx + 2] = Bitwise::floatToHalf( v->second.z );
+                        pHalf[idx + 3] = Bitwise::floatToHalf( 0.f );
                         ++v;
 
                         if( mPoseNormals )
                         {
-                            pHalf[idx+4] = Bitwise::floatToHalf( n->second.x );
-                            pHalf[idx+5] = Bitwise::floatToHalf( n->second.y );
-                            pHalf[idx+6] = Bitwise::floatToHalf( n->second.z );
-                            pHalf[idx+7] = Bitwise::floatToHalf( 0.f );
+                            pHalf[idx + 4] = Bitwise::floatToHalf( n->second.x );
+                            pHalf[idx + 5] = Bitwise::floatToHalf( n->second.y );
+                            pHalf[idx + 6] = Bitwise::floatToHalf( n->second.z );
+                            pHalf[idx + 7] = Bitwise::floatToHalf( 0.f );
                             ++n;
                         }
                     }
                 }
                 else
                 {
-                    float* pFloat = reinterpret_cast<float*>( buffer + index * singlePoseBufferSize );
+                    float *pFloat = reinterpret_cast<float *>( buffer + index * singlePoseBufferSize );
                     while( v != pose->getVertexOffsets().end() )
                     {
                         size_t idx = v->first * elementsPerVertex;
-                        pFloat[idx+0] = v->second.x;
-                        pFloat[idx+1] = v->second.y;
-                        pFloat[idx+2] = v->second.z;
-                        pFloat[idx+3] = 0.f;
+                        pFloat[idx + 0] = v->second.x;
+                        pFloat[idx + 1] = v->second.y;
+                        pFloat[idx + 2] = v->second.z;
+                        pFloat[idx + 3] = 0.f;
                         ++v;
 
                         if( mPoseNormals )
                         {
-                            pFloat[idx+4] = n->second.x;
-                            pFloat[idx+5] = n->second.y;
-                            pFloat[idx+6] = n->second.z;
-                            pFloat[idx+7] = 0.f;
+                            pFloat[idx + 4] = n->second.x;
+                            pFloat[idx + 5] = n->second.y;
+                            pFloat[idx + 6] = n->second.z;
+                            pFloat[idx + 7] = 0.f;
                             ++n;
                         }
                     }
                 }
-                
+
                 mPoseIndexMap[pose->getName()] = index++;
             }
-            
+
             PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                     BT_IMMUTABLE, buffer, false );
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::createPoses( const float** positionData, const float** normalData, size_t numPoses, 
-                               size_t numVertices, const String* names, bool halfPrecision )
+    void SubMesh::createPoses( const float **positionData, const float **normalData, size_t numPoses,
+                               size_t numVertices, const String *names, bool halfPrecision )
     {
         mNumPoses = static_cast<uint16>( numPoses );
         mPoseHalfPrecision = halfPrecision;
@@ -741,53 +738,52 @@ namespace Ogre {
         size_t elementsPerVertex = mPoseNormals ? 8 : 4;
         size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
         size_t bufferSize = numPoses * singlePoseBufferSize;
-        char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
-                                                             MEMCATEGORY_GEOMETRY ) );                                
+        char *buffer = static_cast<char *>( OGRE_MALLOC_SIMD( bufferSize, MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor bufferPtrContainer( buffer );
         memset( buffer, 0, bufferSize );
-        
+
         for( size_t poseIndex = 0; poseIndex < numPoses; ++poseIndex )
         {
-            const float* pPosition = positionData[poseIndex];
-            const float* pNormal = normalData ? normalData[poseIndex] : 0;
+            const float *pPosition = positionData[poseIndex];
+            const float *pNormal = normalData ? normalData[poseIndex] : 0;
 
             if( halfPrecision )
             {
-                uint16* pHalf = reinterpret_cast<uint16*>( buffer +  poseIndex * singlePoseBufferSize );
+                uint16 *pHalf = reinterpret_cast<uint16 *>( buffer + poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
                     size_t idx = i * elementsPerVertex;
-                    pHalf[idx+0] = Bitwise::floatToHalf( *pPosition++ );
-                    pHalf[idx+1] = Bitwise::floatToHalf( *pPosition++ );
-                    pHalf[idx+2] = Bitwise::floatToHalf( *pPosition++ );
-                    pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
+                    pHalf[idx + 0] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx + 1] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx + 2] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx + 3] = Bitwise::floatToHalf( 0.f );
 
                     if( pNormal )
                     {
-                        pHalf[idx+4] = Bitwise::floatToHalf( *pNormal++ );
-                        pHalf[idx+5] = Bitwise::floatToHalf( *pNormal++ );
-                        pHalf[idx+6] = Bitwise::floatToHalf( *pNormal++ );
-                        pHalf[idx+7] = Bitwise::floatToHalf( 0.f );
+                        pHalf[idx + 4] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx + 5] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx + 6] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx + 7] = Bitwise::floatToHalf( 0.f );
                     }
                 }
             }
             else
             {
-                float* pFloat = reinterpret_cast<float*>( buffer + poseIndex * singlePoseBufferSize );
+                float *pFloat = reinterpret_cast<float *>( buffer + poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
                     size_t idx = i * elementsPerVertex;
-                    pFloat[idx+0] = *pPosition++;
-                    pFloat[idx+1] = *pPosition++;
-                    pFloat[idx+2] = *pPosition++;
-                    pFloat[idx+3] = 0.f;
+                    pFloat[idx + 0] = *pPosition++;
+                    pFloat[idx + 1] = *pPosition++;
+                    pFloat[idx + 2] = *pPosition++;
+                    pFloat[idx + 3] = 0.f;
 
                     if( pNormal )
                     {
-                        pFloat[idx+4] = *pNormal++;
-                        pFloat[idx+5] = *pNormal++;
-                        pFloat[idx+6] = *pNormal++;
-                        pFloat[idx+7] = 0.f;
+                        pFloat[idx + 4] = *pNormal++;
+                        pFloat[idx + 5] = *pNormal++;
+                        pFloat[idx + 6] = *pNormal++;
+                        pFloat[idx + 7] = 0.f;
                     }
                 }
             }
@@ -797,7 +793,7 @@ namespace Ogre {
                 mPoseIndexMap[names[poseIndex]] = poseIndex;
             }
         }
-        
+
         PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
         mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize, BT_IMMUTABLE,
                                                                 buffer, false );
@@ -807,7 +803,7 @@ namespace Ogre {
     {
         uint8 numVaoPasses = mParent->hasIndependentShadowMappingVaos() + 1;
 
-        for( uint8 vaoPassIdx=0; vaoPassIdx<numVaoPasses; ++vaoPassIdx )
+        for( uint8 vaoPassIdx = 0; vaoPassIdx < numVaoPasses; ++vaoPassIdx )
         {
             VertexArrayObjectArray newVaos;
             newVaos.reserve( mVao[vaoPassIdx].size() );
@@ -823,17 +819,17 @@ namespace Ogre {
             }
 
             mVao[vaoPassIdx].swap( newVaos );
-            //Now 'newVaos' contains the old ones. We need to destroy all of them at
-            //the end because vertex buffers may be shared while we still iterate.
+            // Now 'newVaos' contains the old ones. We need to destroy all of them at
+            // the end because vertex buffers may be shared while we still iterate.
             destroyVaos( newVaos, mParent->mVaoManager, false );
         }
 
-        //If we shared vaos, we need to share the new Vaos (and remove the dangling pointers)
+        // If we shared vaos, we need to share the new Vaos (and remove the dangling pointers)
         if( numVaoPasses == 1 )
             mVao[VpShadow] = mVao[VpNormal];
     }
     //---------------------------------------------------------------------
-    VertexArrayObject* SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents,
+    VertexArrayObject *SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents,
                                                   VertexArrayObject *vao,
                                                   SharedVertexBufferMap &sharedBuffers,
                                                   VaoManager *vaoManager )
@@ -844,7 +840,7 @@ namespace Ogre {
         SharedVertexBufferMap::const_iterator itShared = sharedBuffers.find( vertexBuffers[0] );
         if( itShared != sharedBuffers.end() )
         {
-            //Shared vertex buffer. We've already converted this one. Reuse.
+            // Shared vertex buffer. We've already converted this one. Reuse.
             newVertexBuffer = itShared->second;
         }
         else
@@ -856,15 +852,15 @@ namespace Ogre {
             vector<AsyncTicketPtr>::type asyncTickets;
             FastArray<char const *> srcPtrs;
 
-            for( size_t i=0; i<vertexBuffers.size(); ++i )
+            for( size_t i = 0; i < vertexBuffers.size(); ++i )
             {
-                //Retrieve the data from each buffer
-                AsyncTicketPtr asyncTicket = vertexBuffers[i]->readRequest(
-                                                    0, vertexBuffers[i]->getNumElements() );
+                // Retrieve the data from each buffer
+                AsyncTicketPtr asyncTicket =
+                    vertexBuffers[i]->readRequest( 0, vertexBuffers[i]->getNumElements() );
                 asyncTickets.push_back( asyncTicket );
-                srcPtrs.push_back( reinterpret_cast<const char*>( asyncTicket->map() ) );
+                srcPtrs.push_back( reinterpret_cast<const char *>( asyncTicket->map() ) );
 
-                //Setup the VertexElement array and the srcData for the conversion.
+                // Setup the VertexElement array and the srcData for the conversion.
                 size_t accumOffset = 0, reorderedElements = 0;
                 VertexElement2Vec::const_iterator itor = vertexBuffers[i]->getVertexElements().begin();
                 VertexElement2Vec::const_iterator endt = vertexBuffers[i]->getVertexElements().end();
@@ -874,14 +870,12 @@ namespace Ogre {
                     const VertexElement2 &origElement = *itor;
 
                     const SourceData sourceData( srcPtrs.back() + accumOffset,
-                                                 vertexBuffers[i]->getBytesPerElement(),
-                                                 *itor );
+                                                 vertexBuffers[i]->getBytesPerElement(), *itor );
 
-                    if( origElement.mSemantic == VES_TANGENT ||
-                        origElement.mSemantic == VES_BINORMAL )
+                    if( origElement.mSemantic == VES_TANGENT || origElement.mSemantic == VES_BINORMAL )
                     {
                         hasTangents = true;
-                        //Put VES_TANGENT & VES_BINORMAL at the bottom of the array.
+                        // Put VES_TANGENT & VES_BINORMAL at the bottom of the array.
                         srcData.push_back( sourceData );
                         ++reorderedElements;
                     }
@@ -893,19 +887,19 @@ namespace Ogre {
 
                     accumOffset += v1::VertexElement::getTypeSize( itor->mType );
 
-                    //We can't convert to half if it wasn't in floating point
-                    //Also avoid converting 1 Float ==> 2 Half.
+                    // We can't convert to half if it wasn't in floating point
+                    // Also avoid converting 1 Float ==> 2 Half.
                     if( v1::VertexElement::getBaseType( origElement.mType ) == VET_FLOAT1 &&
                         v1::VertexElement::getTypeCount( origElement.mType ) != 1 )
                     {
-                        if( (origElement.mSemantic == VES_POSITION && halfPos) ||
-                            (origElement.mSemantic == VES_TEXTURE_COORDINATES && halfTexCoords) )
+                        if( ( origElement.mSemantic == VES_POSITION && halfPos ) ||
+                            ( origElement.mSemantic == VES_TEXTURE_COORDINATES && halfTexCoords ) )
                         {
                             VertexElementType type = v1::VertexElement::multiplyTypeCount(
-                                        VET_HALF2, v1::VertexElement::getTypeCount( origElement.mType ) );
+                                VET_HALF2, v1::VertexElement::getTypeCount( origElement.mType ) );
 
-                            VertexElement2 &lastInserted = *(vertexElements.end() -
-                                                             reorderedElements - 1);
+                            VertexElement2 &lastInserted =
+                                *( vertexElements.end() - reorderedElements - 1 );
                             lastInserted.mType = type;
                         }
                     }
@@ -913,34 +907,33 @@ namespace Ogre {
                     ++itor;
                 }
 
-                //If the vertex format has tangents, prepare the normal to hold QTangents.
+                // If the vertex format has tangents, prepare the normal to hold QTangents.
                 if( hasTangents == true && qTangents )
                 {
-                    VertexElement2Vec::iterator it = std::find( vertexElements.begin(),
-                                                                vertexElements.end(),
-                                                                VertexElement2( VET_FLOAT3,
-                                                                                VES_NORMAL ) );
+                    VertexElement2Vec::iterator it =
+                        std::find( vertexElements.begin(), vertexElements.end(),
+                                   VertexElement2( VET_FLOAT3, VES_NORMAL ) );
                     if( it != vertexElements.end() )
                         it->mType = VET_SHORT4_SNORM;
                 }
             }
 
-            char *data = _arrangeEfficient( srcData, vertexElements, vertexBuffers[0]->getNumElements() );
+            char *data =
+                _arrangeEfficient( srcData, vertexElements, vertexBuffers[0]->getNumElements() );
             FreeOnDestructor dataPtrContainer( data );
 
-            //Cleanup the mappings, free some memory.
-            for( size_t i=0; i<asyncTickets.size(); ++i )
+            // Cleanup the mappings, free some memory.
+            for( size_t i = 0; i < asyncTickets.size(); ++i )
                 asyncTickets[i]->unmap();
             asyncTickets.clear();
 
-            //Create the new vertex buffer.
+            // Create the new vertex buffer.
             const bool keepAsShadow = vertexBuffers[0]->getShadowCopy() != 0;
-            newVertexBuffer = vaoManager->createVertexBuffer( vertexElements,
-                                                              vertexBuffers[0]->getNumElements(),
-                                                              vertexBuffers[0]->getBufferType(),
-                                                              data, keepAsShadow );
+            newVertexBuffer =
+                vaoManager->createVertexBuffer( vertexElements, vertexBuffers[0]->getNumElements(),
+                                                vertexBuffers[0]->getBufferType(), data, keepAsShadow );
 
-            if( keepAsShadow ) //Don't free the pointer ourselves
+            if( keepAsShadow )  // Don't free the pointer ourselves
                 dataPtrContainer.ptr = 0;
 
             sharedBuffers[vertexBuffers[0]] = newVertexBuffer;
@@ -965,7 +958,7 @@ namespace Ogre {
         return l.getSemantic() < r.getSemantic();
     }
 
-    char* SubMesh::_arrangeEfficient( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
+    char *SubMesh::_arrangeEfficient( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
                                       bool qTangents, VertexElement2Vec *outVertexElements,
                                       size_t vaoPassIdx )
     {
@@ -978,9 +971,9 @@ namespace Ogre {
         v1::VertexData *vertexData = subMesh->vertexData[vaoPassIdx];
 
         {
-            //Get an AZDO-friendly vertex declaration out of the original declaration.
-            const v1::VertexDeclaration::VertexElementList &origElements = vertexData->
-                                                                vertexDeclaration->getElements();
+            // Get an AZDO-friendly vertex declaration out of the original declaration.
+            const v1::VertexDeclaration::VertexElementList &origElements =
+                vertexData->vertexDeclaration->getElements();
             srcElements.reserve( origElements.size() );
             v1::VertexDeclaration::VertexElementList::const_iterator itor = origElements.begin();
             v1::VertexDeclaration::VertexElementList::const_iterator endt = origElements.end();
@@ -989,31 +982,29 @@ namespace Ogre {
             {
                 const v1::VertexElement &origElement = *itor;
 
-                if( qTangents &&
-                    (origElement.getSemantic() == VES_TANGENT ||
-                    origElement.getSemantic() == VES_BINORMAL) )
+                if( qTangents && ( origElement.getSemantic() == VES_TANGENT ||
+                                   origElement.getSemantic() == VES_BINORMAL ) )
                 {
                     hasTangents = true;
                 }
                 else
                 {
-                    vertexElements.push_back( VertexElement2( origElement.getType(),
-                                                              origElement.getSemantic() ) );
+                    vertexElements.push_back(
+                        VertexElement2( origElement.getType(), origElement.getSemantic() ) );
                 }
 
                 srcElements.push_back( *itor );
 
-                //We can't convert to half if it wasn't in floating point
-                //Also avoid converting 1 Float ==> 2 Half.
+                // We can't convert to half if it wasn't in floating point
+                // Also avoid converting 1 Float ==> 2 Half.
                 if( origElement.getBaseType( origElement.getType() ) == VET_FLOAT1 &&
                     origElement.getTypeCount( origElement.getType() ) != 1 )
                 {
-                    if( (origElement.getSemantic() == VES_POSITION && halfPos) ||
-                        (origElement.getSemantic() == VES_TEXTURE_COORDINATES && halfTexCoords) )
+                    if( ( origElement.getSemantic() == VES_POSITION && halfPos ) ||
+                        ( origElement.getSemantic() == VES_TEXTURE_COORDINATES && halfTexCoords ) )
                     {
                         VertexElementType type = origElement.multiplyTypeCount(
-                                                            VET_HALF2, origElement.getTypeCount(
-                                                                            origElement.getType() ) );
+                            VET_HALF2, origElement.getTypeCount( origElement.getType() ) );
 
                         VertexElement2 &lastInserted = vertexElements.back();
                         lastInserted.mType = type;
@@ -1023,13 +1014,11 @@ namespace Ogre {
                 ++itor;
             }
 
-            //If it has tangents, prepare the normal to hold QTangents.
+            // If it has tangents, prepare the normal to hold QTangents.
             if( hasTangents == true && qTangents )
             {
-                VertexElement2Vec::iterator it = std::find( vertexElements.begin(),
-                                                            vertexElements.end(),
-                                                            VertexElement2( VET_FLOAT3,
-                                                                            VES_NORMAL ) );
+                VertexElement2Vec::iterator it = std::find( vertexElements.begin(), vertexElements.end(),
+                                                            VertexElement2( VET_FLOAT3, VES_NORMAL ) );
                 if( it != vertexElements.end() )
                     it->mType = VET_SHORT4_SNORM;
             }
@@ -1039,7 +1028,7 @@ namespace Ogre {
         std::sort( srcElements.begin(), srcElements.end(), sortVertexElementsBySemantic );
 
         {
-            //Put VES_TANGENT & VES_BINORMAL at the bottom of the array.
+            // Put VES_TANGENT & VES_BINORMAL at the bottom of the array.
             size_t reorderedElements = 0;
             VertexElementArray::iterator itor = srcElements.begin();
             VertexElementArray::iterator endt = srcElements.end();
@@ -1048,7 +1037,7 @@ namespace Ogre {
                 if( itor->getSemantic() == VES_TANGENT || itor->getSemantic() == VES_BINORMAL )
                 {
                     v1::VertexElement element = *itor;
-                    const size_t idx = (itor - srcElements.begin());
+                    const size_t idx = ( itor - srcElements.begin() );
                     ++reorderedElements;
 
                     itor = srcElements.erase( itor );
@@ -1063,18 +1052,18 @@ namespace Ogre {
             }
         }
 
-        //Prepare for the transfer between buffers.
+        // Prepare for the transfer between buffers.
         FastArray<v1::HardwareBufferLockGuard> srcLocks;
-        FastArray<char*> srcPtrs;
+        FastArray<char *> srcPtrs;
         FastArray<size_t> vertexBuffSizes;
         srcLocks.resize( vertexData->vertexBufferBinding->getBufferCount() );
         srcPtrs.reserve( vertexData->vertexBufferBinding->getBufferCount() );
-        for( size_t i=0; i<vertexData->vertexBufferBinding->getBufferCount(); ++i )
+        for( size_t i = 0; i < vertexData->vertexBufferBinding->getBufferCount(); ++i )
         {
-            const v1::HardwareVertexBufferSharedPtr &vBuffer = vertexData->vertexBufferBinding->
-                                                                                getBuffer( i );
+            const v1::HardwareVertexBufferSharedPtr &vBuffer =
+                vertexData->vertexBufferBinding->getBuffer( i );
             srcLocks[i].lock( vBuffer, v1::HardwareBuffer::HBL_READ_ONLY );
-            srcPtrs.push_back( static_cast<char*>( srcLocks[i].pData ) );
+            srcPtrs.push_back( static_cast<char *>( srcLocks[i].pData ) );
             vertexBuffSizes.push_back( vBuffer->getVertexSize() );
         }
 
@@ -1088,18 +1077,17 @@ namespace Ogre {
         {
             const VertexElement2 element( itor->getType(), itor->getSemantic() );
             const SourceData srcData( srcPtrs[itor->getSource()] + itor->getOffset(),
-                                      vertexBuffSizes[itor->getSource()],
-                                      element );
+                                      vertexBuffSizes[itor->getSource()], element );
             sourceData.push_back( srcData );
             ++itor;
         }
 
-        //Perform actual transfer
+        // Perform actual transfer
         char *retVal = _arrangeEfficient( sourceData, vertexElements,
-                                          static_cast<uint32>(vertexData->vertexCount) );
+                                          static_cast<uint32>( vertexData->vertexCount ) );
 
-        //Cleanup
-        for( size_t i=0; i<vertexData->vertexBufferBinding->getBufferCount(); ++i )
+        // Cleanup
+        for( size_t i = 0; i < vertexData->vertexBufferBinding->getBufferCount(); ++i )
             srcLocks[i].unlock();
 
         if( outVertexElements )
@@ -1108,23 +1096,22 @@ namespace Ogre {
         return retVal;
     }
     //---------------------------------------------------------------------
-    char* SubMesh::_arrangeEfficient( SourceDataArray srcData,
-                                      const VertexElement2Vec &vertexElements,
+    char *SubMesh::_arrangeEfficient( SourceDataArray srcData, const VertexElement2Vec &vertexElements,
                                       uint32 vertexCount )
     {
-        //Prepare for the transfer between buffers.
+        // Prepare for the transfer between buffers.
         size_t vertexSize = VaoManager::calculateVertexSize( vertexElements );
-        char *data = static_cast<char*>( OGRE_MALLOC_SIMD( vertexSize * vertexCount,
-                                                           MEMCATEGORY_GEOMETRY ) );
+        char *data =
+            static_cast<char *>( OGRE_MALLOC_SIMD( vertexSize * vertexCount, MEMCATEGORY_GEOMETRY ) );
         char *dstData = data;
 
         SourceData *tangentSrc = 0;
         SourceData *binormalSrc = 0;
 
         {
-            //Find the pointers for tangentSrc & binormalSrc (may both be null) since
-            //we will be merging all three (normal, tangent & binormal) into just one
-            //element.
+            // Find the pointers for tangentSrc & binormalSrc (may both be null) since
+            // we will be merging all three (normal, tangent & binormal) into just one
+            // element.
             bool wantsQTangents = false;
             {
                 VertexElement2Vec::const_iterator itor = vertexElements.begin();
@@ -1148,20 +1135,20 @@ namespace Ogre {
                 {
                     if( itor->element.mSemantic == VES_TANGENT )
                     {
-                        tangentSrc = &(*itor);
+                        tangentSrc = &( *itor );
 
-                        assert( ((size_t)(itor - srcData.begin()) >= srcData.size() - 2u) &&
-                                (srcData.back().element.mSemantic == VES_TANGENT ||
-                                 srcData.back().element.mSemantic == VES_BINORMAL ) &&
+                        assert( ( ( size_t )( itor - srcData.begin() ) >= srcData.size() - 2u ) &&
+                                ( srcData.back().element.mSemantic == VES_TANGENT ||
+                                  srcData.back().element.mSemantic == VES_BINORMAL ) &&
                                 "Tangent element must be at the end of srcData array!" );
                     }
                     else if( itor->element.mSemantic == VES_BINORMAL )
                     {
-                        binormalSrc = &(*itor);
+                        binormalSrc = &( *itor );
 
-                        assert( ((size_t)(itor - srcData.begin()) >= srcData.size() - 2u) &&
-                                (srcData.back().element.mSemantic == VES_TANGENT ||
-                                 srcData.back().element.mSemantic == VES_BINORMAL ) &&
+                        assert( ( ( size_t )( itor - srcData.begin() ) >= srcData.size() - 2u ) &&
+                                ( srcData.back().element.mSemantic == VES_TANGENT ||
+                                  srcData.back().element.mSemantic == VES_BINORMAL ) &&
                                 "Binormal element must be at the end of srcData array!" );
                     }
 
@@ -1170,10 +1157,10 @@ namespace Ogre {
             }
         }
 
-        //Perform the transfer. Note that vertexElements & srcElements do not match.
-        //As vertexElements is modified for smaller types and may include padding
-        //for alignment reasons.
-        for( size_t i=0; i<vertexCount; ++i )
+        // Perform the transfer. Note that vertexElements & srcElements do not match.
+        // As vertexElements is modified for smaller types and may include padding
+        // for alignment reasons.
+        for( size_t i = 0; i < vertexCount; ++i )
         {
             size_t acumOffset = 0;
             VertexElement2Vec::const_iterator itor = vertexElements.begin();
@@ -1187,18 +1174,18 @@ namespace Ogre {
 
                 assert( itor->mSemantic == itSrc->element.mSemantic );
 
-                if( vElement.mSemantic == VES_NORMAL &&
-                    vElement.mType == VET_SHORT4_SNORM && tangentSrc )
+                if( vElement.mSemantic == VES_NORMAL && vElement.mType == VET_SHORT4_SNORM &&
+                    tangentSrc )
                 {
-                    //QTangents
+                    // QTangents
                     const size_t readSize = v1::VertexElement::getTypeSize( itSrc->element.mType );
-                    const size_t tangentSize = v1::VertexElement::getTypeSize( tangentSrc->element.mType );
+                    const size_t tangentSize =
+                        v1::VertexElement::getTypeSize( tangentSrc->element.mType );
 
-                    //Convert TBN matrix (between 6 to 9 floats, 24-36 bytes)
-                    //to a QTangent (4 shorts, 8 bytes)
-                    assert( readSize == sizeof(float) * 3 );
-                    assert( tangentSize <= sizeof(float) * 4 &&
-                            tangentSize >= sizeof(float) * 3 );
+                    // Convert TBN matrix (between 6 to 9 floats, 24-36 bytes)
+                    // to a QTangent (4 shorts, 8 bytes)
+                    assert( readSize == sizeof( float ) * 3 );
+                    assert( tangentSize <= sizeof( float ) * 4 && tangentSize >= sizeof( float ) * 3 );
 
                     float normal[3];
                     float tangent[4];
@@ -1213,16 +1200,16 @@ namespace Ogre {
 
                     if( binormalSrc )
                     {
-                        const size_t binormalSize = v1::VertexElement::getTypeSize( binormalSrc->
-                                                                                    element.mType );
+                        const size_t binormalSize =
+                            v1::VertexElement::getTypeSize( binormalSrc->element.mType );
 
-                        assert( binormalSize == sizeof(float) * 3 );
+                        assert( binormalSize == sizeof( float ) * 3 );
                         float binormal[3];
                         memcpy( binormal, binormalSrc->data, binormalSize );
 
                         Vector3 vBinormal( binormal[0], binormal[1], binormal[2] );
 
-                        //It is reflected.
+                        // It is reflected.
                         Vector3 naturalBinormal = vTangent.crossProduct( vNormal );
                         if( naturalBinormal.dotProduct( vBinormal ) <= 0 )
                             tangent[3] = -1.0f;
@@ -1235,23 +1222,23 @@ namespace Ogre {
                     tbn.SetColumn( 1, vTangent );
                     tbn.SetColumn( 2, vNormal.crossProduct( vTangent ) );
 
-                    //See Spherical Skinning with Dual-Quaternions and QTangents,
-                    //Ivo Zoltan Frey, SIGRAPH 2011 Vancounver.
-                    //http://www.crytek.com/download/izfrey_siggraph2011.ppt
+                    // See Spherical Skinning with Dual-Quaternions and QTangents,
+                    // Ivo Zoltan Frey, SIGRAPH 2011 Vancounver.
+                    // http://www.crytek.com/download/izfrey_siggraph2011.ppt
 
                     Quaternion qTangent( tbn );
                     qTangent.normalise();
 
-                    //Bias = 1 / [2^(bits-1) - 1]
+                    // Bias = 1 / [2^(bits-1) - 1]
                     const Real bias = 1.0f / 32767.0f;
 
-                    //Make sure QTangent is always positive
+                    // Make sure QTangent is always positive
                     if( qTangent.w < 0 )
                         qTangent = -qTangent;
 
-                    //Because '-0' sign information is lost when using integers,
-                    //we need to apply a "bias"; while making sure the Quatenion
-                    //stays normalized.
+                    // Because '-0' sign information is lost when using integers,
+                    // we need to apply a "bias"; while making sure the Quatenion
+                    // stays normalized.
                     // ** Also our shaders assume qTangent.w is never 0. **
                     if( qTangent.w < bias )
                     {
@@ -1262,11 +1249,11 @@ namespace Ogre {
                         qTangent.z *= normFactor;
                     }
 
-                    //Now negate if we require reflection
+                    // Now negate if we require reflection
                     if( tangent[3] < 0 )
                         qTangent = -qTangent;
 
-                    int16 *dstData16 = reinterpret_cast<int16*>(dstData + acumOffset);
+                    int16 *dstData16 = reinterpret_cast<int16 *>( dstData + acumOffset );
 
                     dstData16[0] = Bitwise::floatToSnorm16( qTangent.x );
                     dstData16[1] = Bitwise::floatToSnorm16( qTangent.y );
@@ -1278,24 +1265,24 @@ namespace Ogre {
                 {
                     size_t readSize = v1::VertexElement::getTypeSize( itSrc->element.mType );
 
-                    //Convert float to half.
+                    // Convert float to half.
                     float fpData[4];
                     fpData[0] = fpData[1] = fpData[2] = 0.0f;
                     fpData[3] = 1.0f;
                     memcpy( fpData, itSrc->data, readSize );
 
-                    uint16 *dstData16 = reinterpret_cast<uint16*>(dstData + acumOffset);
+                    uint16 *dstData16 = reinterpret_cast<uint16 *>( dstData + acumOffset );
 
-                    for( size_t j=0; j<v1::VertexElement::getTypeCount( vElement.mType ); ++j )
+                    for( size_t j = 0; j < v1::VertexElement::getTypeCount( vElement.mType ); ++j )
                         dstData16[j] = Bitwise::floatToHalf( fpData[j] );
                 }
                 else
                 {
-                    //Raw. Transfer as is.
-                    memcpy( dstData + acumOffset, itSrc->data, writeSize ); //writeSize = readSize
+                    // Raw. Transfer as is.
+                    memcpy( dstData + acumOffset, itSrc->data, writeSize );  // writeSize = readSize
                 }
 
-                acumOffset  += writeSize;
+                acumOffset += writeSize;
                 itSrc->data += itSrc->bytesPerVertex;
 
                 ++itSrc;
@@ -1314,7 +1301,7 @@ namespace Ogre {
     {
         const uint8 numVaoPasses = mParent->hasIndependentShadowMappingVaos() + 1;
 
-        for( uint8 vaoPassIdx=0; vaoPassIdx<numVaoPasses; ++vaoPassIdx )
+        for( uint8 vaoPassIdx = 0; vaoPassIdx < numVaoPasses; ++vaoPassIdx )
         {
             VertexArrayObjectArray newVaos;
             newVaos.reserve( mVao[vaoPassIdx].size() );
@@ -1329,17 +1316,17 @@ namespace Ogre {
             }
 
             mVao[vaoPassIdx].swap( newVaos );
-            //Now 'newVaos' contains the old ones. We need to destroy all of them at
-            //the end because vertex buffers may be shared while we still iterate.
+            // Now 'newVaos' contains the old ones. We need to destroy all of them at
+            // the end because vertex buffers may be shared while we still iterate.
             destroyVaos( newVaos, mParent->mVaoManager, false );
         }
 
-        //If we shared vaos, we need to share the new Vaos (and remove the dangling pointers)
+        // If we shared vaos, we need to share the new Vaos (and remove the dangling pointers)
         if( numVaoPasses == 1 )
             mVao[VpShadow] = mVao[VpNormal];
     }
     //---------------------------------------------------------------------
-    VertexArrayObject* SubMesh::dearrangeEfficient( const VertexArrayObject *vao,
+    VertexArrayObject *SubMesh::dearrangeEfficient( const VertexArrayObject *vao,
                                                     SharedVertexBufferMap &sharedBuffers,
                                                     VaoManager *vaoManager )
     {
@@ -1356,31 +1343,29 @@ namespace Ogre {
 
         while( itor != endt )
         {
-            AsyncTicketPtr asyncTicket = (*itor)->readRequest( 0, (*itor)->getNumElements() );
+            AsyncTicketPtr asyncTicket = ( *itor )->readRequest( 0, ( *itor )->getNumElements() );
 
             SharedVertexBufferMap::const_iterator itShared = sharedBuffers.find( *itor );
             if( itShared != sharedBuffers.end() )
             {
-                //Shared vertex buffer. We've already converted this one. Reuse.
+                // Shared vertex buffer. We've already converted this one. Reuse.
                 newVertexBuffers.push_back( itShared->second );
             }
             else
             {
                 const void *srcData = asyncTicket->map();
-                char *data = _dearrangeEfficient( reinterpret_cast<const char * RESTRICT_ALIAS>(srcData),
-                                                  (*itor)->getNumElements(), (*itor)->getVertexElements(),
-                                                  &(*itNewElementVec) );
+                char *data = _dearrangeEfficient(
+                    reinterpret_cast<const char * RESTRICT_ALIAS>( srcData ),
+                    ( *itor )->getNumElements(), ( *itor )->getVertexElements(), &( *itNewElementVec ) );
                 asyncTicket->unmap();
 
                 FreeOnDestructor dataPtrContainer( data );
-                const bool keepAsShadow = (*itor)->getShadowCopy() != 0;
+                const bool keepAsShadow = ( *itor )->getShadowCopy() != 0;
                 VertexBufferPacked *newVertexBuffer =
-                        vaoManager->createVertexBuffer( *itNewElementVec,
-                                                        (*itor)->getNumElements(),
-                                                        (*itor)->getBufferType(),
-                                                        data, keepAsShadow );
+                    vaoManager->createVertexBuffer( *itNewElementVec, ( *itor )->getNumElements(),
+                                                    ( *itor )->getBufferType(), data, keepAsShadow );
 
-                if( keepAsShadow ) //Don't free the pointer ourselves
+                if( keepAsShadow )  // Don't free the pointer ourselves
                     dataPtrContainer.ptr = 0;
 
                 sharedBuffers[*itor] = newVertexBuffer;
@@ -1395,7 +1380,7 @@ namespace Ogre {
                                                     vao->getOperationType() );
     }
     //---------------------------------------------------------------------
-    char* SubMesh::_dearrangeEfficient( char const * RESTRICT_ALIAS srcData, uint32 numElements,
+    char *SubMesh::_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, uint32 numElements,
                                         const VertexElement2Vec &vertexElements,
                                         VertexElement2Vec *outVertexElements )
     {
@@ -1410,22 +1395,21 @@ namespace Ogre {
             const VertexElementType baseType = v1::VertexElement::getBaseType( element.mType );
             if( baseType == VET_HALF2 )
             {
-                //Convert from half to float
-                element.mType = v1::VertexElement::multiplyTypeCount( VET_FLOAT1,
-                                                                      v1::VertexElement::
-                                                                      getTypeCount( element.mType ) );
+                // Convert from half to float
+                element.mType = v1::VertexElement::multiplyTypeCount(
+                    VET_FLOAT1, v1::VertexElement::getTypeCount( element.mType ) );
 
                 newVertexElements.push_back( element );
             }
             else if( element.mSemantic == VES_NORMAL && element.mType == VET_SHORT4_SNORM )
             {
-                //Dealing with QTangents.
+                // Dealing with QTangents.
                 newVertexElements.push_back( VertexElement2( VET_FLOAT3, VES_NORMAL ) );
                 newVertexElements.push_back( VertexElement2( VET_FLOAT4, VES_TANGENT ) );
             }
             else
             {
-                //Send through
+                // Send through
                 newVertexElements.push_back( element );
             }
 
@@ -1434,10 +1418,11 @@ namespace Ogre {
 
         const size_t newVertexSize = VaoManager::calculateVertexSize( newVertexElements );
 
-        char *data = static_cast<char*>( OGRE_MALLOC_SIMD( numElements * newVertexSize, MEMCATEGORY_GEOMETRY ) );
+        char *data =
+            static_cast<char *>( OGRE_MALLOC_SIMD( numElements * newVertexSize, MEMCATEGORY_GEOMETRY ) );
         char *dstData = data;
 
-        for( uint32 i=0; i<numElements; ++i )
+        for( uint32 i = 0; i < numElements; ++i )
         {
             itElements = vertexElements.begin();
 
@@ -1448,23 +1433,23 @@ namespace Ogre {
                 const VertexElementType baseType = v1::VertexElement::getBaseType( itElements->mType );
                 if( baseType == VET_HALF2 )
                 {
-                    //Convert half to float.
+                    // Convert half to float.
                     uint16 hfData[4];
                     memcpy( hfData, srcData, readSize );
 
-                    uint32 *dstData32 = reinterpret_cast<uint32*>(dstData);
+                    uint32 *dstData32 = reinterpret_cast<uint32 *>( dstData );
                     const size_t typeCount = v1::VertexElement::getTypeCount( itElements->mType );
 
-                    for( size_t j=0; j<typeCount; ++j )
+                    for( size_t j = 0; j < typeCount; ++j )
                         dstData32[j] = Bitwise::halfToFloatI( hfData[j] );
 
-                    dstData += typeCount * sizeof(uint32);
+                    dstData += typeCount * sizeof( uint32 );
                 }
                 else if( itElements->mSemantic == VES_NORMAL && itElements->mType == VET_SHORT4_SNORM )
                 {
-                    //Dealing with QTangents.
+                    // Dealing with QTangents.
                     Quaternion qTangent;
-                    const int16 *srcData16 = reinterpret_cast<const int16*>( srcData );
+                    const int16 *srcData16 = reinterpret_cast<const int16 *>( srcData );
                     qTangent.x = Bitwise::snorm16ToFloat( srcData16[0] );
                     qTangent.y = Bitwise::snorm16ToFloat( srcData16[1] );
                     qTangent.z = Bitwise::snorm16ToFloat( srcData16[2] );
@@ -1477,7 +1462,7 @@ namespace Ogre {
                     Vector3 vNormal = qTangent.xAxis();
                     Vector3 vTangent = qTangent.yAxis();
 
-                    float *dstDataF32 = reinterpret_cast<float*>(dstData);
+                    float *dstDataF32 = reinterpret_cast<float *>( dstData );
                     dstDataF32[0] = vNormal.x;
                     dstDataF32[1] = vNormal.y;
                     dstDataF32[2] = vNormal.z;
@@ -1486,11 +1471,11 @@ namespace Ogre {
                     dstDataF32[5] = vTangent.z;
                     dstDataF32[6] = reflection;
 
-                    dstData += 7 * sizeof(float);
+                    dstData += 7 * sizeof( float );
                 }
                 else
                 {
-                    //Raw. Transfer as is.
+                    // Raw. Transfer as is.
                     memcpy( dstData, srcData, readSize );
                     dstData += readSize;
                 }
@@ -1508,7 +1493,7 @@ namespace Ogre {
     void SubMesh::destroyVaos( VertexArrayObjectArray &vaos, VaoManager *vaoManager,
                                bool destroyIndexBuffer )
     {
-        typedef set<VertexBufferPacked*>::type VertexBufferPackedSet;
+        typedef set<VertexBufferPacked *>::type VertexBufferPackedSet;
         VertexBufferPackedSet destroyedBuffers;
 
         VertexArrayObjectArray::const_iterator itor = vaos.begin();
@@ -1521,11 +1506,11 @@ namespace Ogre {
             VertexBufferPackedVec::const_iterator itBuffers = vertexBuffers.begin();
             VertexBufferPackedVec::const_iterator enBuffers = vertexBuffers.end();
 
-            //If LOD share the same buffers, we'll try to destroy the buffers only once.
+            // If LOD share the same buffers, we'll try to destroy the buffers only once.
             while( itBuffers != enBuffers )
             {
                 std::pair<VertexBufferPackedSet::iterator, bool> bufferNotSeenYet =
-                                                        destroyedBuffers.insert( *itBuffers );
+                    destroyedBuffers.insert( *itBuffers );
                 if( bufferNotSeenYet.second )
                     vaoManager->destroyVertexBuffer( *itBuffers );
 
@@ -1545,7 +1530,7 @@ namespace Ogre {
     void SubMesh::destroyShadowMappingVaos()
     {
         if( mVao[VpNormal].empty() || mVao[VpShadow].empty() || mVao[VpNormal][0] == mVao[VpShadow][0] )
-            mVao[VpShadow].clear(); //Using the same Vaos for both shadow mapping and regular rendering
+            mVao[VpShadow].clear();  // Using the same Vaos for both shadow mapping and regular rendering
 
         destroyVaos( mVao[VpShadow], mParent->mVaoManager );
 
@@ -1566,4 +1551,4 @@ namespace Ogre {
             VertexShadowMapHelper::useSameVaos( mParent->mVaoManager, mVao[VpNormal], mVao[VpShadow] );
         }
     }
-}
+}  // namespace Ogre

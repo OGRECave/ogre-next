@@ -30,53 +30,50 @@ THE SOFTWARE.
 
 #include "OgreHlmsCompute.h"
 
+#include "CommandBuffer/OgreCommandBuffer.h"
+#include "Compositor/OgreCompositorShadowNode.h"
+#include "Hash/MurmurHash3.h"
+#include "OgreFileSystem.h"
+#include "OgreHighLevelGpuProgram.h"
+#include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreHighLevelGpuProgram.h"
+#include "OgreLogManager.h"
 #include "OgreRootLayout.h"
 #include "OgreSceneManager.h"
-#include "Compositor/OgreCompositorShadowNode.h"
-#include "CommandBuffer/OgreCommandBuffer.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
-#include "OgreFileSystem.h"
-#include "OgreLogManager.h"
-#include "Hash/MurmurHash3.h"
 
 #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-        #define OGRE_HASH128_FUNC MurmurHash3_x86_128
+#    define OGRE_HASH128_FUNC MurmurHash3_x86_128
 #else
-        #define OGRE_HASH128_FUNC MurmurHash3_x64_128
+#    define OGRE_HASH128_FUNC MurmurHash3_x64_128
 #endif
 
 #include <fstream>
 
 namespace Ogre
 {
-    const IdString ComputeProperty::ThreadsPerGroupX    = IdString( "threads_per_group_x" );
-    const IdString ComputeProperty::ThreadsPerGroupY    = IdString( "threads_per_group_y" );
-    const IdString ComputeProperty::ThreadsPerGroupZ    = IdString( "threads_per_group_z" );
-    const IdString ComputeProperty::NumThreadGroupsX    = IdString( "num_thread_groups_x" );
-    const IdString ComputeProperty::NumThreadGroupsY    = IdString( "num_thread_groups_y" );
-    const IdString ComputeProperty::NumThreadGroupsZ    = IdString( "num_thread_groups_z" );
+    const IdString ComputeProperty::ThreadsPerGroupX = IdString( "threads_per_group_x" );
+    const IdString ComputeProperty::ThreadsPerGroupY = IdString( "threads_per_group_y" );
+    const IdString ComputeProperty::ThreadsPerGroupZ = IdString( "threads_per_group_z" );
+    const IdString ComputeProperty::NumThreadGroupsX = IdString( "num_thread_groups_x" );
+    const IdString ComputeProperty::NumThreadGroupsY = IdString( "num_thread_groups_y" );
+    const IdString ComputeProperty::NumThreadGroupsZ = IdString( "num_thread_groups_z" );
 
-    const IdString ComputeProperty::TypedUavLoad        = IdString( "typed_uav_load" );
+    const IdString ComputeProperty::TypedUavLoad = IdString( "typed_uav_load" );
 
-    const IdString ComputeProperty::NumTextureSlots     = IdString( "num_texture_slots" );
-    const IdString ComputeProperty::MaxTextureSlot      = IdString( "max_texture_slot" );
-    const char *ComputeProperty::Texture                = "texture";
+    const IdString ComputeProperty::NumTextureSlots = IdString( "num_texture_slots" );
+    const IdString ComputeProperty::MaxTextureSlot = IdString( "max_texture_slot" );
+    const char *ComputeProperty::Texture = "texture";
 
-    const IdString ComputeProperty::NumUavSlots         = IdString( "num_uav_slots" );
-    const IdString ComputeProperty::MaxUavSlot          = IdString( "max_uav_slot" );
-    const char *ComputeProperty::Uav                    = "uav";
+    const IdString ComputeProperty::NumUavSlots = IdString( "num_uav_slots" );
+    const IdString ComputeProperty::MaxUavSlot = IdString( "max_uav_slot" );
+    const char *ComputeProperty::Uav = "uav";
 
-    //Must be sorted from best to worst
-    const String BestD3DComputeShaderTargets[3] =
-    {
-        "cs_5_0", "cs_4_1", "cs_4_0"
-    };
+    // Must be sorted from best to worst
+    const String BestD3DComputeShaderTargets[3] = { "cs_5_0", "cs_4_1", "cs_4_0" };
 
     HlmsCompute::HlmsCompute( AutoParamDataSource *autoParamDataSource ) :
         Hlms( HLMS_COMPUTE, "compute", 0, 0 ),
@@ -105,7 +102,7 @@ namespace Ogre
 
             if( mShaderProfile == "hlsl" || mShaderProfile == "hlslvk" )
             {
-                for( size_t j=0; j<3 && !mComputeShaderTarget; ++j )
+                for( size_t j = 0; j < 3 && !mComputeShaderTarget; ++j )
                 {
                     if( capabilities->isShaderProfileSupported( BestD3DComputeShaderTargets[j] ) )
                         mComputeShaderTarget = &BestD3DComputeShaderTargets[j];
@@ -125,16 +122,16 @@ namespace Ogre
         {
             String filename = *itor;
 
-            //If it has an explicit extension, only open it if it matches the current
-            //render system's. If it doesn't, then we add it ourselves.
+            // If it has an explicit extension, only open it if it matches the current
+            // render system's. If it doesn't, then we add it ourselves.
             String::size_type pos = filename.find_last_of( '.' );
             if( pos == String::npos ||
-                (filename.compare( pos + 1, String::npos, mShaderFileExt ) != 0 &&
-                 filename.compare( pos + 1, String::npos, "any" ) != 0 &&
-                 filename.compare( pos + 1, String::npos, "metal" ) != 0 &&
-                 filename.compare( pos + 1, String::npos, "glsl" ) != 0 &&
-                 filename.compare( pos + 1, String::npos, "glsles" ) != 0 &&
-                 filename.compare( pos + 1, String::npos, "hlsl" ) != 0) )
+                ( filename.compare( pos + 1, String::npos, mShaderFileExt ) != 0 &&
+                  filename.compare( pos + 1, String::npos, "any" ) != 0 &&
+                  filename.compare( pos + 1, String::npos, "metal" ) != 0 &&
+                  filename.compare( pos + 1, String::npos, "glsl" ) != 0 &&
+                  filename.compare( pos + 1, String::npos, "glsles" ) != 0 &&
+                  filename.compare( pos + 1, String::npos, "hlsl" ) != 0 ) )
             {
                 filename += mShaderFileExt;
             }
@@ -144,19 +141,19 @@ namespace Ogre
             String inString;
             String outString;
 
-            inString.resize(inFile->size());
-            inFile->read(&inString[0], inFile->size());
+            inString.resize( inFile->size() );
+            inFile->read( &inString[0], inFile->size() );
 
-            this->parseMath(inString, outString);
+            this->parseMath( inString, outString );
             while( outString.find( "@foreach" ) != String::npos )
             {
-                this->parseForEach(outString, inString);
+                this->parseForEach( outString, inString );
                 inString.swap( outString );
             }
-            this->parseProperties(outString, inString);
-            this->parseUndefPieces(inString, outString);
-            this->collectPieces(outString, inString);
-            this->parseCounter(inString, outString);
+            this->parseProperties( outString, inString );
+            this->parseUndefPieces( inString, outString );
+            this->collectPieces( outString, inString );
+            this->parseCounter( inString, outString );
 
             ++itor;
         }
@@ -164,10 +161,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsComputePso HlmsCompute::compileShader( HlmsComputeJob *job, uint32 finalHash )
     {
-        //Assumes mSetProperties is already set
-        //mSetProperties.clear();
+        // Assumes mSetProperties is already set
+        // mSetProperties.clear();
         {
-            //Add RenderSystem-specific properties
+            // Add RenderSystem-specific properties
             IdStringVec::const_iterator itor = mRsSpecificExtensions.begin();
             IdStringVec::const_iterator endt = mRsSpecificExtensions.end();
 
@@ -176,12 +173,12 @@ namespace Ogre
         }
 
         GpuProgramPtr shader;
-        //Generate the shader
+        // Generate the shader
 
-        //Collect pieces
+        // Collect pieces
         mPieces.clear();
 
-        //Start with the pieces sent by the user
+        // Start with the pieces sent by the user
         mPieces = job->mPieces;
 
         const String sourceFilename = job->mSourceFilename + mShaderFileExt;
@@ -189,21 +186,20 @@ namespace Ogre
         ResourceGroupManager &resourceGroupMgr = ResourceGroupManager::getSingleton();
         DataStreamPtr inFile = resourceGroupMgr.openResource( sourceFilename );
 
-        if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" ) //TODO: String comparision
+        if( mShaderProfile == "glsl" || mShaderProfile == "glslvk" )  // TODO: String comparision
         {
-            setProperty( HlmsBaseProp::GL3Plus,
-                         mRenderSystem->getNativeShadingLanguageVersion() );
+            setProperty( HlmsBaseProp::GL3Plus, mRenderSystem->getNativeShadingLanguageVersion() );
         }
-        if( mShaderProfile == "glsles" ) //TODO: String comparision
+        if( mShaderProfile == "glsles" )  // TODO: String comparision
             setProperty( HlmsBaseProp::GLES, 300 );
 
-        setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
-        setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
-        setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
-        setProperty( HlmsBaseProp::Glslvk,  HlmsBaseProp::Glslvk.mHash );
-        setProperty( HlmsBaseProp::Hlslvk,  HlmsBaseProp::Hlslvk.mHash );
-        setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
-        setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
+        setProperty( HlmsBaseProp::Syntax, mShaderSyntax.mHash );
+        setProperty( HlmsBaseProp::Hlsl, HlmsBaseProp::Hlsl.mHash );
+        setProperty( HlmsBaseProp::Glsl, HlmsBaseProp::Glsl.mHash );
+        setProperty( HlmsBaseProp::Glslvk, HlmsBaseProp::Glslvk.mHash );
+        setProperty( HlmsBaseProp::Hlslvk, HlmsBaseProp::Hlslvk.mHash );
+        setProperty( HlmsBaseProp::Glsles, HlmsBaseProp::Glsles.mHash );
+        setProperty( HlmsBaseProp::Metal, HlmsBaseProp::Metal.mHash );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         setProperty( HlmsBaseProp::iOS, 1 );
@@ -216,7 +212,7 @@ namespace Ogre
         if( mFastShaderBuildHack )
             setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );
 
-        //Piece files
+        // Piece files
         processPieces( job->mIncludedPieceFiles );
 
         String inString;
@@ -235,8 +231,8 @@ namespace Ogre
         }
         syntaxError |= this->parseProperties( outString, inString );
         syntaxError |= this->parseUndefPieces( inString, outString );
-        while( !syntaxError  && (outString.find( "@piece" ) != String::npos ||
-                                 outString.find( "@insertpiece" ) != String::npos) )
+        while( !syntaxError && ( outString.find( "@piece" ) != String::npos ||
+                                 outString.find( "@insertpiece" ) != String::npos ) )
         {
             syntaxError |= this->collectPieces( outString, inString );
             syntaxError |= this->insertPieces( inString, outString );
@@ -247,8 +243,8 @@ namespace Ogre
 
         if( syntaxError )
         {
-            LogManager::getSingleton().logMessage( "There were HLMS syntax errors while parsing "
-                                                   + StringConverter::toString( finalHash ) +
+            LogManager::getSingleton().logMessage( "There were HLMS syntax errors while parsing " +
+                                                   StringConverter::toString( finalHash ) +
                                                    job->mSourceFilename + mShaderFileExt );
         }
 
@@ -256,21 +252,20 @@ namespace Ogre
 
         if( mDebugOutput )
         {
-            debugFilenameOutput = mOutputPath + "./" +
-                                    StringConverter::toString( finalHash ) +
-                                    job->mSourceFilename + mShaderFileExt;
-            std::ofstream outFile( Ogre::fileSystemPathFromString(debugFilenameOutput).c_str(),
+            debugFilenameOutput = mOutputPath + "./" + StringConverter::toString( finalHash ) +
+                                  job->mSourceFilename + mShaderFileExt;
+            std::ofstream outFile( Ogre::fileSystemPathFromString( debugFilenameOutput ).c_str(),
                                    std::ios::out | std::ios::binary );
             if( mDebugOutputProperties )
                 dumpProperties( outFile );
             outFile.write( &outString[0], outString.size() );
         }
 
-        //Don't create and compile if template requested not to
+        // Don't create and compile if template requested not to
         if( !getProperty( HlmsBaseProp::DisableStage ) )
         {
-            //Very similar to what the GpuProgramManager does with its microcode cache,
-            //but we **need** to know if two Compute Shaders share the same source code.
+            // Very similar to what the GpuProgramManager does with its microcode cache,
+            // but we **need** to know if two Compute Shaders share the same source code.
             Hash hashVal;
             OGRE_HASH128_FUNC( outString.c_str(), outString.size(), IdString::Seed, &hashVal );
 
@@ -298,12 +293,12 @@ namespace Ogre
             else
             {
                 HighLevelGpuProgramManager *gpuProgramManager =
-                        HighLevelGpuProgramManager::getSingletonPtr();
+                    HighLevelGpuProgramManager::getSingletonPtr();
 
                 HighLevelGpuProgramPtr gp = gpuProgramManager->createProgram(
-                            StringConverter::toString( finalHash ) + job->mSourceFilename,
-                            ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
-                            mShaderProfile, GPT_COMPUTE_PROGRAM );
+                    StringConverter::toString( finalHash ) + job->mSourceFilename,
+                    ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME, mShaderProfile,
+                    GPT_COMPUTE_PROGRAM );
                 gp->setSource( outString, debugFilenameOutput );
 
                 {
@@ -317,14 +312,14 @@ namespace Ogre
 
                 if( mComputeShaderTarget )
                 {
-                    //D3D-specific
+                    // D3D-specific
                     gp->setParameter( "target", *mComputeShaderTarget );
                     gp->setParameter( "entry_point", "main" );
                 }
 
                 gp->setSkeletalAnimationIncluded( getProperty( HlmsBaseProp::Skeleton ) != 0 );
                 gp->setMorphAnimationIncluded( false );
-                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0);
+                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0 );
                 gp->setVertexTextureFetchRequired( false );
 
                 gp->load();
@@ -335,7 +330,7 @@ namespace Ogre
             }
         }
 
-        //Reset the disable flag.
+        // Reset the disable flag.
         setProperty( HlmsBaseProp::DisableStage, 0 );
 
         HlmsComputePso pso;
@@ -354,11 +349,12 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          job->getNameStr() +
-                         ": Shader or C++ must set threads_per_group_x, threads_per_group_y & "
-                         "threads_per_group_z and num_thread_groups_x through num_thread_groups_z."
-                         " Otherwise we can't run on Metal. Use @pset( threads_per_group_x, 512 );"
-                         " or read the value using @value( threads_per_group_x ) if you've already"
-                         " set it from C++ or the JSON material", "HlmsCompute::compileShader" );
+                             ": Shader or C++ must set threads_per_group_x, threads_per_group_y & "
+                             "threads_per_group_z and num_thread_groups_x through num_thread_groups_z."
+                             " Otherwise we can't run on Metal. Use @pset( threads_per_group_x, 512 );"
+                             " or read the value using @value( threads_per_group_x ) if you've already"
+                             " set it from C++ or the JSON material",
+                         "HlmsCompute::compileShader" );
         }
 
         ShaderParams *shaderParams = job->_getShaderParams( "default" );
@@ -449,22 +445,21 @@ namespace Ogre
 
         if( job->mPsoCacheHash >= mComputeShaderCache.size() )
         {
-            //Potentially needs to recompile.
+            // Potentially needs to recompile.
             job->_updateAutoProperties();
 
             ComputePsoCache psoCache;
             psoCache.job = job;
-            //To perform the search, temporarily borrow the properties to avoid an allocation & a copy.
+            // To perform the search, temporarily borrow the properties to avoid an allocation & a copy.
             psoCache.setProperties.swap( job->mSetProperties );
-            ComputePsoCacheVec::const_iterator itor = std::find( mComputeShaderCache.begin(),
-                                                                 mComputeShaderCache.end(),
-                                                                 psoCache );
+            ComputePsoCacheVec::const_iterator itor =
+                std::find( mComputeShaderCache.begin(), mComputeShaderCache.end(), psoCache );
             if( itor == mComputeShaderCache.end() )
             {
-                //Needs to recompile.
+                // Needs to recompile.
 
-                //Return back the borrowed properties and make
-                //a hard copy for starting the compilation.
+                // Return back the borrowed properties and make
+                // a hard copy for starting the compilation.
                 psoCache.setProperties.swap( job->mSetProperties );
                 this->mSetProperties = job->mSetProperties;
 
@@ -481,7 +476,7 @@ namespace Ogre
                     mFreeShaderCacheEntries.pop_back();
                 }
 
-                //Compile and add the PSO to the cache.
+                // Compile and add the PSO to the cache.
                 psoCache.pso = compileShader( job, (uint32)newCacheEntryIdx );
 
                 ShaderParams *shaderParams = job->_getShaderParams( "default" );
@@ -492,17 +487,17 @@ namespace Ogre
 
                 mComputeShaderCache[newCacheEntryIdx] = psoCache;
 
-                //The PSO in the cache doesn't have the properties. Make a hard copy.
-                //We can use this->mSetProperties as it may have been modified during
-                //compilerShader by the template.
+                // The PSO in the cache doesn't have the properties. Make a hard copy.
+                // We can use this->mSetProperties as it may have been modified during
+                // compilerShader by the template.
                 mComputeShaderCache[newCacheEntryIdx].setProperties = job->mSetProperties;
 
                 job->mPsoCacheHash = newCacheEntryIdx;
             }
             else
             {
-                //It was already in the cache. Return back the borrowed
-                //properties and set the proper index to the cache.
+                // It was already in the cache. Return back the borrowed
+                // properties and set the proper index to the cache.
                 psoCache.setProperties.swap( job->mSetProperties );
                 job->mPsoCacheHash = static_cast<size_t>( itor - mComputeShaderCache.begin() );
             }
@@ -511,7 +506,7 @@ namespace Ogre
         ComputePsoCache &psoCache = mComputeShaderCache[job->mPsoCacheHash];
 
         {
-            //Update dirty parameters, if necessary
+            // Update dirty parameters, if necessary
             ShaderParams *shaderParams = job->_getShaderParams( "default" );
             if( shaderParams && psoCache.paramsUpdateCounter != shaderParams->getUpdateCounter() )
             {
@@ -548,8 +543,8 @@ namespace Ogre
         mAutoParamDataSource->setCurrentJob( job );
         mAutoParamDataSource->setCurrentCamera( camera );
         mAutoParamDataSource->setCurrentSceneManager( sceneManager );
-        //mAutoParamDataSource->setCurrentShadowNode( shadowNode );
-        //mAutoParamDataSource->setCurrentViewport( sceneManager->getCurrentViewport() );
+        // mAutoParamDataSource->setCurrentShadowNode( shadowNode );
+        // mAutoParamDataSource->setCurrentViewport( sceneManager->getCurrentViewport() );
 
         GpuProgramParametersSharedPtr csParams = psoCache.pso.computeParams;
         csParams->_updateAutoParams( mAutoParamDataSource, GPV_ALL );
@@ -558,7 +553,7 @@ namespace Ogre
         mRenderSystem->_dispatch( psoCache.pso );
     }
     //----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsCompute::createDatablockImpl( IdString datablockName,
+    HlmsDatablock *HlmsCompute::createDatablockImpl( IdString datablockName,
                                                      const HlmsMacroblock *macroblock,
                                                      const HlmsBlendblock *blendblock,
                                                      const HlmsParamVec &paramVec )
@@ -601,20 +596,20 @@ namespace Ogre
         }
     }
     //----------------------------------------------------------------------------------
-    HlmsComputeJob* HlmsCompute::createComputeJob( IdString datablockName, const String &refName,
+    HlmsComputeJob *HlmsCompute::createComputeJob( IdString datablockName, const String &refName,
                                                    const String &sourceFilename,
                                                    const StringVector &includedPieceFiles )
     {
         OGRE_ASSERT_MEDIUM( mComputeJobs.find( datablockName ) == mComputeJobs.end() );
 
-        HlmsComputeJob *retVal = OGRE_NEW HlmsComputeJob( datablockName, this,
-                                                          sourceFilename, includedPieceFiles );
+        HlmsComputeJob *retVal =
+            OGRE_NEW HlmsComputeJob( datablockName, this, sourceFilename, includedPieceFiles );
         mComputeJobs[datablockName] = ComputeJobEntry( retVal, refName );
 
         return retVal;
     }
     //----------------------------------------------------------------------------------
-    HlmsComputeJob* HlmsCompute::findComputeJob( IdString datablockName ) const
+    HlmsComputeJob *HlmsCompute::findComputeJob( IdString datablockName ) const
     {
         HlmsComputeJob *retVal = findComputeJobNoThrow( datablockName );
 
@@ -628,7 +623,7 @@ namespace Ogre
         return retVal;
     }
     //----------------------------------------------------------------------------------
-    HlmsComputeJob* HlmsCompute::findComputeJobNoThrow( IdString datablockName ) const
+    HlmsComputeJob *HlmsCompute::findComputeJobNoThrow( IdString datablockName ) const
     {
         HlmsComputeJob *retVal = 0;
 
@@ -639,7 +634,7 @@ namespace Ogre
         return retVal;
     }
     //----------------------------------------------------------------------------------
-    const String* HlmsCompute::getJobNameStr( IdString name ) const
+    const String *HlmsCompute::getJobNameStr( IdString name ) const
     {
         String const *retVal = 0;
         HlmsComputeJobMap::const_iterator itor = mComputeJobs.find( name );
@@ -649,34 +644,28 @@ namespace Ogre
         return retVal;
     }
     //----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsCompute::createDefaultDatablock()
-    {
-        return 0;
-    }
+    HlmsDatablock *HlmsCompute::createDefaultDatablock() { return 0; }
     //----------------------------------------------------------------------------------
     uint32 HlmsCompute::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                   bool casterPass, uint32 lastCacheHash,
-                                   uint32 lastTextureHash )
+                                        bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "This is a Compute Hlms",
                      "HlmsCompute::fillBuffersFor" );
     }
     uint32 HlmsCompute::fillBuffersForV1( const HlmsCache *cache,
-                                     const QueuedRenderable &queuedRenderable,
-                                     bool casterPass, uint32 lastCacheHash,
-                                     CommandBuffer *commandBuffer )
+                                          const QueuedRenderable &queuedRenderable, bool casterPass,
+                                          uint32 lastCacheHash, CommandBuffer *commandBuffer )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "This is a Compute Hlms",
                      "HlmsCompute::fillBuffersForV1" );
     }
     uint32 HlmsCompute::fillBuffersForV2( const HlmsCache *cache,
-                                     const QueuedRenderable &queuedRenderable,
-                                     bool casterPass, uint32 lastCacheHash,
-                                     CommandBuffer *commandBuffer )
+                                          const QueuedRenderable &queuedRenderable, bool casterPass,
+                                          uint32 lastCacheHash, CommandBuffer *commandBuffer )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "This is a Compute Hlms",
                      "HlmsCompute::fillBuffersForV2" );
     }
-}
+}  // namespace Ogre
 
 #undef OGRE_HASH128_FUNC

@@ -36,9 +36,8 @@ namespace Ogre
 {
     IndirectBufferPacked::IndirectBufferPacked( size_t internalBufStartBytes, size_t numElements,
                                                 uint32 bytesPerElement, uint32 numElementsPadding,
-                                                BufferType bufferType,
-                                                void *initialData, bool keepAsShadow,
-                                                VaoManager *vaoManager,
+                                                BufferType bufferType, void *initialData,
+                                                bool keepAsShadow, VaoManager *vaoManager,
                                                 BufferInterface *bufferInterface ) :
         BufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                       bufferType, initialData, keepAsShadow, vaoManager, bufferInterface ),
@@ -46,8 +45,8 @@ namespace Ogre
     {
         if( !vaoManager->supportsIndirectBuffers() )
         {
-            mSwBuffer = reinterpret_cast<unsigned char*>(
-                            OGRE_MALLOC_SIMD( numElements * bytesPerElement, MEMCATEGORY_RENDERSYS ) );
+            mSwBuffer = reinterpret_cast<unsigned char *>(
+                OGRE_MALLOC_SIMD( numElements * bytesPerElement, MEMCATEGORY_RENDERSYS ) );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -59,4 +58,4 @@ namespace Ogre
             mSwBuffer = 0;
         }
     }
-}
+}  // namespace Ogre

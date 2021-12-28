@@ -40,9 +40,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    ThreadHandle::~ThreadHandle()
-    {
-    }
+    ThreadHandle::~ThreadHandle() {}
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
 
@@ -60,7 +58,7 @@ namespace Ogre
     {
         assert( numThreadHandles < 128 );
 
-        for( size_t i=0; i<numThreadHandles; ++i )
+        for( size_t i = 0; i < numThreadHandles; ++i )
             pthread_join( threadHandles[i]->_getOsHandle(), NULL );
     }
     //-----------------------------------------------------------------------------------
@@ -73,8 +71,8 @@ namespace Ogre
     void Threads::Sleep( uint32 milliseconds )
     {
         timespec timeToSleep;
-        timeToSleep.tv_nsec = (milliseconds % 1000) * 1000000;
-        timeToSleep.tv_sec  = milliseconds / 1000;
+        timeToSleep.tv_nsec = ( milliseconds % 1000 ) * 1000000;
+        timeToSleep.tv_sec = milliseconds / 1000;
         nanosleep( &timeToSleep, 0 );
     }
     //-----------------------------------------------------------------------------------
@@ -87,18 +85,9 @@ namespace Ogre
         return result == 0;
     }
     //-----------------------------------------------------------------------------------
-    void Threads::DestroyTls( TlsHandle tlsHandle )
-    {
-        pthread_key_delete( tlsHandle );
-    }
+    void Threads::DestroyTls( TlsHandle tlsHandle ) { pthread_key_delete( tlsHandle ); }
     //-----------------------------------------------------------------------------------
-    void Threads::SetTls( TlsHandle tlsHandle, void *value )
-    {
-        pthread_setspecific( tlsHandle, value );
-    }
+    void Threads::SetTls( TlsHandle tlsHandle, void *value ) { pthread_setspecific( tlsHandle, value ); }
     //-----------------------------------------------------------------------------------
-    void* Threads::GetTls( TlsHandle tlsHandle )
-    {
-        return pthread_getspecific( tlsHandle );
-    }
-}
+    void *Threads::GetTls( TlsHandle tlsHandle ) { return pthread_getspecific( tlsHandle ); }
+}  // namespace Ogre

@@ -1,9 +1,10 @@
 #include "Android/OgreAPKZipArchive.h"
 
-#include <OgreStringConverter.h>
 #include <OgreLogManager.h>
+#include <OgreStringConverter.h>
 
-namespace Ogre{
+namespace Ogre
+{
     //-----------------------------------------------------------------------
     const String &APKZipArchiveFactory::getType() const
     {
@@ -11,4 +12,4 @@ namespace Ogre{
         return type;
     }
     //-----------------------------------------------------------------------
-}
+}  // namespace Ogre

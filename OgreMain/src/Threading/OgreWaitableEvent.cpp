@@ -31,24 +31,17 @@ THE SOFTWARE.
 #include "Threading/OgreWaitableEvent.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
-    #include <windows.h>
+#    define WIN32_LEAN_AND_MEAN
+#    define NOMINMAX
+#    include <windows.h>
 #endif
 
 namespace Ogre
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    WaitableEvent::WaitableEvent() :
-        mEvent( 0 )
-    {
-        mEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
-    }
+    WaitableEvent::WaitableEvent() : mEvent( 0 ) { mEvent = CreateEvent( NULL, FALSE, FALSE, NULL ); }
     //-----------------------------------------------------------------------------------
-    WaitableEvent::~WaitableEvent()
-    {
-        CloseHandle( mEvent );
-    }
+    WaitableEvent::~WaitableEvent() { CloseHandle( mEvent ); }
     //-----------------------------------------------------------------------------------
     bool WaitableEvent::wait()
     {
@@ -64,8 +57,7 @@ namespace Ogre
         SetEvent( mEvent );
     }
 #else
-    WaitableEvent::WaitableEvent() :
-        mWait( true )
+    WaitableEvent::WaitableEvent() : mWait( true )
     {
         pthread_mutex_init( &mMutex, 0 );
         pthread_cond_init( &mCondition, 0 );
@@ -80,9 +72,9 @@ namespace Ogre
     bool WaitableEvent::wait()
     {
         pthread_mutex_lock( &mMutex );
-            while( mWait )
-                pthread_cond_wait( &mCondition, &mMutex );
-            mWait = true;
+        while( mWait )
+            pthread_cond_wait( &mCondition, &mMutex );
+        mWait = true;
         pthread_mutex_unlock( &mMutex );
         return true;
     }
@@ -90,9 +82,9 @@ namespace Ogre
     void WaitableEvent::wake()
     {
         pthread_mutex_lock( &mMutex );
-            mWait = false;
-            pthread_cond_signal( &mCondition );
+        mWait = false;
+        pthread_cond_signal( &mCondition );
         pthread_mutex_unlock( &mMutex );
     }
 #endif
-}
+}  // namespace Ogre

@@ -30,26 +30,26 @@ THE SOFTWARE.
 
 #include "OgreDescriptorSetTexture.h"
 
-#include "OgreTextureGpu.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "Vao/OgreTexBufferPacked.h"
 #include "OgreException.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpu.h"
+#include "Vao/OgreTexBufferPacked.h"
 
 namespace Ogre
 {
     void DescriptorSetTexture::checkValidity() const
     {
 #if OGRE_DEBUG_MODE
-            size_t totalTexturesUsed = 0u;
+        size_t totalTexturesUsed = 0u;
 
-            for( size_t i=0; i<NumShaderTypes; ++i )
-                totalTexturesUsed += mShaderTypeTexCount[i];
+        for( size_t i = 0; i < NumShaderTypes; ++i )
+            totalTexturesUsed += mShaderTypeTexCount[i];
 
-            assert( totalTexturesUsed > 0 &&
-                    "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
-            assert( totalTexturesUsed == mTextures.size() &&
-                    "This DescriptorSetTexture doesn't use as many textures as it "
-                    "claims to have, or uses more than it has provided" );
+        assert( totalTexturesUsed > 0 &&
+                "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
+        assert( totalTexturesUsed == mTextures.size() &&
+                "This DescriptorSetTexture doesn't use as many textures as it "
+                "claims to have, or uses more than it has provided" );
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -60,11 +60,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool DescriptorSetTexture2::TextureSlot::needsDifferentView() const
     {
-        return formatNeedsReinterpret() ||
-                mipmapLevel != 0 || textureArrayIndex != 0 || numMipmaps != 0 ||
-                (cubemapsAs2DArrays &&
-                 (texture->getTextureType() == TextureTypes::TypeCube ||
-                  texture->getTextureType() == TextureTypes::TypeCubeArray));
+        return formatNeedsReinterpret() || mipmapLevel != 0 || textureArrayIndex != 0 ||
+               numMipmaps != 0 ||
+               ( cubemapsAs2DArrays && ( texture->getTextureType() == TextureTypes::TypeCube ||
+                                         texture->getTextureType() == TextureTypes::TypeCubeArray ) );
     }
     //-----------------------------------------------------------------------------------
     void DescriptorSetTexture2::checkValidity() const
@@ -76,7 +75,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE
         size_t totalTexturesUsed = 0u;
 
-        for( size_t i=0; i<NumShaderTypes; ++i )
+        for( size_t i = 0; i < NumShaderTypes; ++i )
             totalTexturesUsed += mShaderTypeTexCount[i];
 
         assert( totalTexturesUsed > 0 &&
@@ -97,13 +96,14 @@ namespace Ogre
                 const TextureSlot &texSlot = slot.getTexture();
                 if( texSlot.formatNeedsReinterpret() && !texSlot.texture->isReinterpretable() )
                 {
-                    //This warning here is for
+                    // This warning here is for
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "To reinterpret the texture as a different format, "
                                  "you must set the reinterpretable flag "
                                  "(TextureFlags::Reinterpretable) for "
-                                 "texture: '" + texSlot.texture->getNameStr() + "' " +
-                                 texSlot.texture->getSettingsDesc(),
+                                 "texture: '" +
+                                     texSlot.texture->getNameStr() + "' " +
+                                     texSlot.texture->getSettingsDesc(),
                                  "DescriptorSetTexture2::checkValidity" );
                 }
             }
@@ -121,4 +121,4 @@ namespace Ogre
             ++itor;
         }
     }
-}
+}  // namespace Ogre

@@ -30,27 +30,27 @@ THE SOFTWARE.
 
 #include "OgreForwardPlusBase.h"
 
+#include "OgreCamera.h"
+#include "OgreDecal.h"
+#include "OgreHlms.h"
+#include "OgreInternalCubemapProbe.h"
+#include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
-#include "OgreCamera.h"
-#include "Vao/OgreVaoManager.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-#include "OgreHlms.h"
-#include "OgreRoot.h"
-#include "OgreDecal.h"
-#include "OgreInternalCubemapProbe.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
-    //N variables * 4 (vec4 or padded vec3) * 4 (bytes per float)
+    // N variables * 4 (vec4 or padded vec3) * 4 (bytes per float)
     const size_t ForwardPlusBase::MinDecalRq = 0u;
     const size_t ForwardPlusBase::MaxDecalRq = 4u;
     const size_t ForwardPlusBase::MinCubemapProbeRq = 5u;
     const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = c_ForwardPlusNumFloat4PerLight * 4u * 4u;
     const size_t ForwardPlusBase::NumBytesPerDecal = c_ForwardPlusNumFloat4PerDecal * 4u * 4u;
-    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = c_ForwardPlusNumFloat4PerCubemapProbe *
-                                                            4u * 4u;
+    const size_t ForwardPlusBase::NumBytesPerCubemapProbe =
+        c_ForwardPlusNumFloat4PerCubemapProbe * 4u * 4u;
 
     ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled,
                                       bool cubemapProbesEnabled ) :
@@ -61,18 +61,15 @@ namespace Ogre
         mEnableVpls( false ),
         mDecalsEnabled( decalsEnabled ),
         mCubemapProbesEnabled( cubemapProbesEnabled ),
-  #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+#if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         mFineLightMaskGranularity( true ),
-  #endif
+#endif
         mDecalFloat4Offset( 0u ),
         mCubemapProbeFloat4Offset( 0u )
     {
     }
     //-----------------------------------------------------------------------------------
-    ForwardPlusBase::~ForwardPlusBase()
-    {
-        _releaseManualHardwareResources();
-    }
+    ForwardPlusBase::~ForwardPlusBase() { _releaseManualHardwareResources(); }
     //-----------------------------------------------------------------------------------
     void ForwardPlusBase::_releaseManualHardwareResources()
     {
@@ -142,7 +139,7 @@ namespace Ogre
     void ForwardPlusBase::fillGlobalLightListBuffer( Camera *camera,
                                                      TexBufferPacked *globalLightListBuffer )
     {
-        //const LightListInfo &globalLightList = mSceneManager->getGlobalLightList();
+        // const LightListInfo &globalLightList = mSceneManager->getGlobalLightList();
         const size_t numLights = mCurrentLightList.size();
 
         size_t numDecals = 0;
@@ -153,13 +150,13 @@ namespace Ogre
         if( mDecalsEnabled )
         {
             actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
-            for( size_t rqId=MinDecalRq; rqId<=actualMaxDecalRq; ++rqId )
+            for( size_t rqId = MinDecalRq; rqId <= actualMaxDecalRq; ++rqId )
                 numDecals += objsPerRqInThread0[rqId].size();
         }
         if( mCubemapProbesEnabled )
         {
             actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
-            for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
+            for( size_t rqId = MinCubemapProbeRq; rqId <= actualMaxCubemapProbeRq; ++rqId )
                 numCubemapProbes += objsPerRqInThread0[rqId].size();
         }
 
@@ -183,10 +180,9 @@ namespace Ogre
 
         const float invHeightLightProfileTex = Root::getSingleton().getLightProfilesInvHeight();
 
-        float * RESTRICT_ALIAS lightData = reinterpret_cast<float * RESTRICT_ALIAS>(
-                    globalLightListBuffer->map( 0, calculateBytesNeeded( numLights,
-                                                                         numDecals,
-                                                                         numCubemapProbes ) ) );
+        float *RESTRICT_ALIAS lightData =
+            reinterpret_cast<float * RESTRICT_ALIAS>( globalLightListBuffer->map(
+                0, calculateBytesNeeded( numLights, numDecals, numCubemapProbes ) ) );
         LightArray::const_iterator itLights = mCurrentLightList.begin();
         LightArray::const_iterator enLights = mCurrentLightList.end();
 
@@ -197,15 +193,14 @@ namespace Ogre
             Vector3 lightPos = light->getParentNode()->_getDerivedPosition();
             lightPos = viewMatrix * lightPos;
 
-            //vec3 lights[numLights].position
+            // vec3 lights[numLights].position
             *lightData++ = lightPos.x;
             *lightData++ = lightPos.y;
             *lightData++ = lightPos.z;
             *lightData++ = static_cast<float>( light->getType() );
 
-            //vec3 lights[numLights].diffuse
-            ColourValue colour = light->getDiffuseColour() *
-                                 light->getPowerScale();
+            // vec3 lights[numLights].diffuse
+            ColourValue colour = light->getDiffuseColour() * light->getPowerScale();
             *lightData++ = colour.r;
             *lightData++ = colour.g;
             *lightData++ = colour.b;
@@ -214,16 +209,16 @@ namespace Ogre
 #endif
             ++lightData;
 
-            //vec3 lights[numLights].specular
+            // vec3 lights[numLights].specular
             colour = light->getSpecularColour() * light->getPowerScale();
             *lightData++ = colour.r;
             *lightData++ = colour.g;
             *lightData++ = colour.b;
             ++lightData;
 
-            //vec3 lights[numLights].attenuation;
-            Real attenRange     = light->getAttenuationRange();
-            Real attenLinear    = light->getAttenuationLinear();
+            // vec3 lights[numLights].attenuation;
+            Real attenRange = light->getAttenuationRange();
+            Real attenLinear = light->getAttenuationLinear();
             Real attenQuadratic = light->getAttenuationQuadric();
             *lightData++ = attenRange;
             *lightData++ = attenLinear;
@@ -239,11 +234,11 @@ namespace Ogre
             *lightData++ = spotDir.z;
             *lightData++ = ( static_cast<float>( lightProfileIdx ) + 0.5f ) * invHeightLightProfileTex;
 
-            //vec3 lights[numLights].spotParams;
+            // vec3 lights[numLights].spotParams;
             Radian innerAngle = light->getSpotlightInnerAngle();
             Radian outerAngle = light->getSpotlightOuterAngle();
             *lightData++ = 1.0f / ( cosf( innerAngle.valueRadians() * 0.5f ) -
-                                     cosf( outerAngle.valueRadians() * 0.5f ) );
+                                    cosf( outerAngle.valueRadians() * 0.5f ) );
             *lightData++ = cosf( outerAngle.valueRadians() * 0.5f );
             *lightData++ = light->getSpotlightFalloff();
             ++lightData;
@@ -251,31 +246,31 @@ namespace Ogre
             ++itLights;
         }
 
-        //Align to the start of decals
-        //Alignment happens in increments of float4, hence the "<< 2u"
-        lightData += (mDecalFloat4Offset - numLights * c_ForwardPlusNumFloat4PerLight) << 2u;
+        // Align to the start of decals
+        // Alignment happens in increments of float4, hence the "<< 2u"
+        lightData += ( mDecalFloat4Offset - numLights * c_ForwardPlusNumFloat4PerLight ) << 2u;
 
         const Matrix4 viewMat = camera->getViewMatrix();
 
-        for( size_t rqId=MinDecalRq; rqId<=actualMaxDecalRq; ++rqId )
+        for( size_t rqId = MinDecalRq; rqId <= actualMaxDecalRq; ++rqId )
         {
             MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
             MovableObject::MovableObjectArray::const_iterator endt = objsPerRqInThread0[rqId].end();
 
             while( itor != endt )
             {
-                OGRE_ASSERT_HIGH( dynamic_cast<Decal*>( *itor ) );
-                Decal *decal = static_cast<Decal*>( *itor );
+                OGRE_ASSERT_HIGH( dynamic_cast<Decal *>( *itor ) );
+                Decal *decal = static_cast<Decal *>( *itor );
 
                 const Matrix4 worldMat = decal->_getParentNodeFullTransform();
                 Matrix4 invWorldView = viewMat.concatenateAffine( worldMat );
                 invWorldView = invWorldView.inverseAffine();
 
 #if !OGRE_DOUBLE_PRECISION
-                memcpy( lightData, invWorldView[0], sizeof(float) * 12u );
+                memcpy( lightData, invWorldView[0], sizeof( float ) * 12u );
                 lightData += 12u;
 #else
-                for( size_t i=0; i<3u; ++i )
+                for( size_t i = 0; i < 3u; ++i )
                 {
                     *lightData++ = static_cast<float>( invWorldView[i][0] );
                     *lightData++ = static_cast<float>( invWorldView[i][1] );
@@ -283,87 +278,88 @@ namespace Ogre
                     *lightData++ = static_cast<float>( invWorldView[i][3] );
                 }
 #endif
-                memcpy( lightData, &decal->mDiffuseIdx, sizeof(uint32) * 4u );
+                memcpy( lightData, &decal->mDiffuseIdx, sizeof( uint32 ) * 4u );
                 lightData += 4u;
 
                 ++itor;
             }
         }
 
-        //Align to the start of cubemap probes
-        //Alignment happens in increments of float4, hence the "<< 2u"
-        lightData += (mCubemapProbeFloat4Offset - mDecalFloat4Offset -
-                      numDecals * c_ForwardPlusNumFloat4PerDecal) << 2u;
+        // Align to the start of cubemap probes
+        // Alignment happens in increments of float4, hence the "<< 2u"
+        lightData += ( mCubemapProbeFloat4Offset - mDecalFloat4Offset -
+                       numDecals * c_ForwardPlusNumFloat4PerDecal )
+                     << 2u;
 
         viewMatrix = camera->getViewMatrix();
         Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
 
-        for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
+        for( size_t rqId = MinCubemapProbeRq; rqId <= actualMaxCubemapProbeRq; ++rqId )
         {
             MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
             MovableObject::MovableObjectArray::const_iterator endt = objsPerRqInThread0[rqId].end();
 
             while( itor != endt )
             {
-                OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe*>( *itor ) );
-                InternalCubemapProbe *probe = static_cast<InternalCubemapProbe*>( *itor );
+                OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe *>( *itor ) );
+                InternalCubemapProbe *probe = static_cast<InternalCubemapProbe *>( *itor );
 
-                //See ParallaxCorrectedCubemapBase::fillConstBufferData for reference
+                // See ParallaxCorrectedCubemapBase::fillConstBufferData for reference
                 Matrix3 probeInvOrientation(
-                            probe->mGpuData[0][0], probe->mGpuData[0][1], probe->mGpuData[0][2],
-                            probe->mGpuData[1][0], probe->mGpuData[1][1], probe->mGpuData[1][2],
-                            probe->mGpuData[2][0], probe->mGpuData[2][1], probe->mGpuData[2][2] );
+                    probe->mGpuData[0][0], probe->mGpuData[0][1], probe->mGpuData[0][2],
+                    probe->mGpuData[1][0], probe->mGpuData[1][1], probe->mGpuData[1][2],
+                    probe->mGpuData[2][0], probe->mGpuData[2][1], probe->mGpuData[2][2] );
                 const Matrix3 viewSpaceToProbeLocal = probeInvOrientation * invViewMatrix3;
-                const Vector3 probeShapeCenter( probe->mGpuData[0][3],
-                                                probe->mGpuData[1][3], probe->mGpuData[2][3] );
-                Vector3 cubemapPosVS( probe->mGpuData[5][3],
-                                      probe->mGpuData[5][3], probe->mGpuData[5][3] );
+                const Vector3 probeShapeCenter( probe->mGpuData[0][3], probe->mGpuData[1][3],
+                                                probe->mGpuData[2][3] );
+                Vector3 cubemapPosVS( probe->mGpuData[5][3], probe->mGpuData[5][3],
+                                      probe->mGpuData[5][3] );
                 cubemapPosVS = viewMatrix * cubemapPosVS;
                 Vector3 probeShapeCenterVS = viewMatrix * probeShapeCenter;
 
-                //float4 row0_centerX;
+                // float4 row0_centerX;
                 *lightData++ = viewSpaceToProbeLocal[0][0];
                 *lightData++ = viewSpaceToProbeLocal[0][1];
                 *lightData++ = viewSpaceToProbeLocal[0][2];
                 *lightData++ = probeShapeCenterVS.x;
 
-                //float4 row1_centerY;
+                // float4 row1_centerY;
                 *lightData++ = viewSpaceToProbeLocal[0][3];
                 *lightData++ = viewSpaceToProbeLocal[0][4];
                 *lightData++ = viewSpaceToProbeLocal[0][5];
                 *lightData++ = probeShapeCenterVS.y;
 
-                //float4 row2_centerZ;
+                // float4 row2_centerZ;
                 *lightData++ = viewSpaceToProbeLocal[0][6];
                 *lightData++ = viewSpaceToProbeLocal[0][7];
                 *lightData++ = viewSpaceToProbeLocal[0][8];
                 *lightData++ = probeShapeCenterVS.z;
 
-                //float4 halfSize;
+                // float4 halfSize;
                 *lightData++ = probe->mGpuData[3][0];
                 *lightData++ = probe->mGpuData[3][1];
                 *lightData++ = probe->mGpuData[3][2];
                 *lightData++ = probe->mGpuData[3][3];
 
-                //float4 cubemapPosLS;
+                // float4 cubemapPosLS;
                 *lightData++ = probe->mGpuData[4][0];
                 *lightData++ = probe->mGpuData[4][1];
                 *lightData++ = probe->mGpuData[4][2];
                 *lightData++ = probe->mGpuData[4][3];
 
-                //float4 cubemapPosVS;
+                // float4 cubemapPosVS;
                 *lightData++ = cubemapPosVS.x;
                 *lightData++ = cubemapPosVS.y;
                 *lightData++ = cubemapPosVS.z;
                 *lightData++ = probe->mGpuData[5][3];
 
-                //float4 probeInnerRange;
+                // float4 probeInnerRange;
                 *lightData++ = probe->mGpuData[6][0];
                 *lightData++ = probe->mGpuData[6][1];
                 *lightData++ = probe->mGpuData[6][2];
                 *lightData++ = probe->mGpuData[6][3];
 
-                //float4 probeOuterRange;
+                // float4 probeOuterRange;
                 *lightData++ = probe->mGpuData[7][0];
                 *lightData++ = probe->mGpuData[7][1];
                 *lightData++ = probe->mGpuData[7][2];
@@ -387,11 +383,9 @@ namespace Ogre
 
         while( itor != endt )
         {
-            if( itor->camera == camera &&
-                itor->reflection == camera->isReflected() &&
-                Math::Abs(itor->aspectRatio - camera->getAspectRatio()) < 1e-6f &&
-                itor->visibilityMask == visibilityMask &&
-                itor->shadowNode == shadowNode )
+            if( itor->camera == camera && itor->reflection == camera->isReflected() &&
+                Math::Abs( itor->aspectRatio - camera->getAspectRatio() ) < 1e-6f &&
+                itor->visibilityMask == visibilityMask && itor->shadowNode == shadowNode )
             {
                 bool upToDate = itor->lastFrame == mVaoManager->getFrameCount();
                 itor->lastFrame = mVaoManager->getFrameCount();
@@ -401,10 +395,10 @@ namespace Ogre
                     if( itor->lastPos != camera->getDerivedPosition() ||
                         itor->lastRot != camera->getDerivedOrientation() )
                     {
-                        //The Grid Buffers are "up to date" but the camera was moved
+                        // The Grid Buffers are "up to date" but the camera was moved
                         //(e.g. through a listener, or while rendering cubemaps)
-                        //So we need to generate a new buffer for them (we can't map
-                        //the same buffer twice in the same frame)
+                        // So we need to generate a new buffer for them (we can't map
+                        // the same buffer twice in the same frame)
                         ++itor->currentBufIdx;
                         if( itor->currentBufIdx >= itor->gridBuffers.size() )
                             itor->gridBuffers.push_back( CachedGridBuffer() );
@@ -420,11 +414,11 @@ namespace Ogre
                 itor->lastPos = camera->getDerivedPosition();
                 itor->lastRot = camera->getDerivedOrientation();
 
-                *outCachedGrid = &(*itor);
+                *outCachedGrid = &( *itor );
 
-                //Not only this causes bugs see http://www.ogre3d.org/forums/viewtopic.php?f=25&t=88776
-                //as far as I can't tell this is not needed anymore.
-                //if( mSceneManager->isCurrentShadowNodeReused() )
+                // Not only this causes bugs see http://www.ogre3d.org/forums/viewtopic.php?f=25&t=88776
+                // as far as I can't tell this is not needed anymore.
+                // if( mSceneManager->isCurrentShadowNodeReused() )
                 //    upToDate = false; //We can't really be sure the cache is up to date
 
                 return upToDate;
@@ -433,16 +427,16 @@ namespace Ogre
             ++itor;
         }
 
-        //If we end up here, the entry doesn't exist. Create a new one.
+        // If we end up here, the entry doesn't exist. Create a new one.
         CachedGrid cachedGrid;
-        cachedGrid.camera      = camera;
-        cachedGrid.lastPos     = camera->getDerivedPosition();
-        cachedGrid.lastRot     = camera->getDerivedOrientation();
-        cachedGrid.reflection  = camera->isReflected();
+        cachedGrid.camera = camera;
+        cachedGrid.lastPos = camera->getDerivedPosition();
+        cachedGrid.lastRot = camera->getDerivedOrientation();
+        cachedGrid.reflection = camera->isReflected();
         cachedGrid.aspectRatio = camera->getAspectRatio();
         cachedGrid.visibilityMask = visibilityMask;
-        cachedGrid.shadowNode  = mSceneManager->getCurrentShadowNode();
-        cachedGrid.lastFrame   = mVaoManager->getFrameCount();
+        cachedGrid.shadowNode = mSceneManager->getCurrentShadowNode();
+        cachedGrid.lastFrame = mVaoManager->getFrameCount();
         cachedGrid.currentBufIdx = 0;
         cachedGrid.gridBuffers.resize( 1 );
 
@@ -463,9 +457,8 @@ namespace Ogre
 
         while( itor != endt )
         {
-            if( itor->camera == camera &&
-                itor->reflection == camera->isReflected() &&
-                Math::Abs(itor->aspectRatio - camera->getAspectRatio()) < 1e-6f &&
+            if( itor->camera == camera && itor->reflection == camera->isReflected() &&
+                Math::Abs( itor->aspectRatio - camera->getAspectRatio() ) < 1e-6f &&
                 itor->visibilityMask == visibilityMask &&
                 itor->shadowNode == mSceneManager->getCurrentShadowNode() )
             {
@@ -473,7 +466,7 @@ namespace Ogre
                                 itor->lastPos == camera->getDerivedPosition() &&
                                 itor->lastRot == camera->getDerivedOrientation();
 
-                *outCachedGrid = &(*itor);
+                *outCachedGrid = &( *itor );
 
                 return upToDate;
             }
@@ -486,7 +479,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ForwardPlusBase::deleteOldGridBuffers()
     {
-        //Check if some of the caches are really old and delete them
+        // Check if some of the caches are really old and delete them
         CachedGridVec::iterator itor = mCachedGrid.begin();
         CachedGridVec::iterator endt = mCachedGrid.end();
 
@@ -536,7 +529,7 @@ namespace Ogre
         return getCachedGridFor( camera, &outCachedGrid );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* ForwardPlusBase::getGridBuffer( const Camera *camera ) const
+    TexBufferPacked *ForwardPlusBase::getGridBuffer( const Camera *camera ) const
     {
         CachedGrid const *cachedGrid = 0;
 
@@ -550,7 +543,7 @@ namespace Ogre
         return cachedGrid->gridBuffers[cachedGrid->currentBufIdx].gridBuffer;
     }
     //-----------------------------------------------------------------------------------
-    ReadOnlyBufferPacked* ForwardPlusBase::getGlobalLightListBuffer( const Camera *camera ) const
+    ReadOnlyBufferPacked *ForwardPlusBase::getGlobalLightListBuffer( const Camera *camera ) const
     {
         CachedGrid const *cachedGrid = 0;
 
@@ -566,13 +559,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ForwardPlusBase::setHlmsPassProperties( Hlms *hlms )
     {
-        //ForwardPlus should be overriden by derived class to set the method in use.
-        hlms->_setProperty( HlmsBaseProp::ForwardPlus,                  1 );
-        hlms->_setProperty( HlmsBaseProp::ForwardPlusDebug,             mDebugMode );
-        hlms->_setProperty( HlmsBaseProp::ForwardPlusFadeAttenRange,    mFadeAttenuationRange );
+        // ForwardPlus should be overriden by derived class to set the method in use.
+        hlms->_setProperty( HlmsBaseProp::ForwardPlus, 1 );
+        hlms->_setProperty( HlmsBaseProp::ForwardPlusDebug, mDebugMode );
+        hlms->_setProperty( HlmsBaseProp::ForwardPlusFadeAttenRange, mFadeAttenuationRange );
         hlms->_setProperty( HlmsBaseProp::VPos, 1 );
 
-        hlms->_setProperty( HlmsBaseProp::Forward3D,        HlmsBaseProp::Forward3D.mHash );
+        hlms->_setProperty( HlmsBaseProp::Forward3D, HlmsBaseProp::Forward3D.mHash );
         hlms->_setProperty( HlmsBaseProp::ForwardClustered, HlmsBaseProp::ForwardClustered.mHash );
 
         if( mEnableVpls )
@@ -587,4 +580,4 @@ namespace Ogre
             hlms->_setProperty( HlmsBaseProp::ForwardPlusFineLightMask, 1 );
 #endif
     }
-}
+}  // namespace Ogre

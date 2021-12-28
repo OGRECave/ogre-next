@@ -62,19 +62,14 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    GpuResource::~GpuResource()
-    {
-    }
+    GpuResource::~GpuResource() {}
     //-----------------------------------------------------------------------------------
     void GpuResource::_setNextResidencyStatus( GpuResidency::GpuResidency nextResidency )
     {
         mNextResidencyStatus = nextResidency;
     }
     //-----------------------------------------------------------------------------------
-    GpuResidency::GpuResidency GpuResource::getResidencyStatus() const
-    {
-        return mResidencyStatus;
-    }
+    GpuResidency::GpuResidency GpuResource::getResidencyStatus() const { return mResidencyStatus; }
     //-----------------------------------------------------------------------------------
     GpuResidency::GpuResidency GpuResource::getNextResidencyStatus() const
     {
@@ -86,24 +81,15 @@ namespace Ogre
         return mPageOutStrategy;
     }
     //-----------------------------------------------------------------------------------
-    void GpuResource::_addPendingResidencyChanges( uint32 value )
-    {
-        mPendingResidencyChanges += value;
-    }
+    void GpuResource::_addPendingResidencyChanges( uint32 value ) { mPendingResidencyChanges += value; }
     //-----------------------------------------------------------------------------------
-    uint32 GpuResource::getPendingResidencyChanges() const
-    {
-        return mPendingResidencyChanges;
-    }
+    uint32 GpuResource::getPendingResidencyChanges() const { return mPendingResidencyChanges; }
     //-----------------------------------------------------------------------------------
-    IdString GpuResource::getName() const
-    {
-        return mName;
-    }
+    IdString GpuResource::getName() const { return mName; }
     //-----------------------------------------------------------------------------------
     String GpuResource::getNameStr() const
     {
-        //TODO: Get friendly name from manager which will be kept in a std::map
+        // TODO: Get friendly name from manager which will be kept in a std::map
         return mName.getFriendlyText();
     }
-}
+}  // namespace Ogre

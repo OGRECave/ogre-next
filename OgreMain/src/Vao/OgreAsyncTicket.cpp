@@ -30,22 +30,22 @@ THE SOFTWARE.
 
 #include "Vao/OgreAsyncTicket.h"
 
-#include "Vao/OgreStagingBuffer.h"
 #include "OgreProfiler.h"
+#include "Vao/OgreStagingBuffer.h"
 
 namespace Ogre
 {
-    AsyncTicket::AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                              size_t elementStart, size_t elementCount ) :
+    AsyncTicket::AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                              size_t elementCount ) :
         mHasBeenMapped( false ),
         mCreator( creator ),
         mStagingBuffer( stagingBuffer ),
         mElementStart( elementStart ),
         mElementCount( elementCount )
     {
-        mStagingBufferMapOffset = stagingBuffer->_asyncDownload(
-                                        creator, elementStart * creator->getBytesPerElement(),
-                                        elementCount * creator->getBytesPerElement() );
+        mStagingBufferMapOffset =
+            stagingBuffer->_asyncDownload( creator, elementStart * creator->getBytesPerElement(),
+                                           elementCount * creator->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
     AsyncTicket::~AsyncTicket()
@@ -64,7 +64,7 @@ namespace Ogre
         mStagingBuffer = 0;
     }
     //-----------------------------------------------------------------------------------
-    const void* AsyncTicket::map()
+    const void *AsyncTicket::map()
     {
         assert( !mHasBeenMapped );
 
@@ -74,8 +74,5 @@ namespace Ogre
         return mapImpl();
     }
     //-----------------------------------------------------------------------------------
-    void AsyncTicket::unmap()
-    {
-        mStagingBuffer->unmap( 0, 0 );
-    }
-}
+    void AsyncTicket::unmap() { mStagingBuffer->unmap( 0, 0 ); }
+}  // namespace Ogre

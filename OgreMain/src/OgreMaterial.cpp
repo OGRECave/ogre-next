@@ -29,31 +29,32 @@ THE SOFTWARE.
 
 #include "OgreMaterial.h"
 
+#include "OgreLodStrategy.h"
+#include "OgreLodStrategyManager.h"
+#include "OgreLogManager.h"
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
-#include "OgreLogManager.h"
-#include "OgreLodStrategyManager.h"
-#include "OgreLodStrategy.h"
 
 #include <sstream>
 
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    Material::Material(ResourceManager* creator, const String& name, ResourceHandle handle,
-        const String& group, bool isManual, ManualResourceLoader* loader)
-        :Resource(creator, name, handle, group, isManual, loader),
-         mReceiveShadows(true),
-         mTransparencyCastsShadows(false),
-         mCompilationRequired(true)
+    Material::Material( ResourceManager *creator, const String &name, ResourceHandle handle,
+                        const String &group, bool isManual, ManualResourceLoader *loader ) :
+        Resource( creator, name, handle, group, isManual, loader ),
+        mReceiveShadows( true ),
+        mTransparencyCastsShadows( false ),
+        mCompilationRequired( true )
     {
         // Override isManual, not applicable for Material (we always want to call loadImpl)
-        if(isManual)
+        if( isManual )
         {
             mIsManual = false;
-            LogManager::getSingleton().logMessage("Material " + name + 
-                " was requested with isManual=true, but this is not applicable " 
-                "for materials; the flag has been reset to false");
+            LogManager::getSingleton().logMessage(
+                "Material " + name +
+                " was requested with isManual=true, but this is not applicable "
+                "for materials; the flag has been reset to false" );
         }
 
         mLodValues.push_back( LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue() );
@@ -62,10 +63,10 @@ namespace Ogre {
 
         /* For consistency with StringInterface, but we don't add any parameters here
         That's because the Resource implementation of StringInterface is to
-        list all the options that need to be set before loading, of which 
+        list all the options that need to be set before loading, of which
         we have none as such. Full details can be set through scripts.
-        */ 
-        createParamDictionary("Material");
+        */
+        createParamDictionary( "Material" );
     }
     //-----------------------------------------------------------------------
     Material::~Material()
@@ -73,10 +74,10 @@ namespace Ogre {
         removeAllTechniques();
         // have to call this here reather than in Resource destructor
         // since calling virtual methods in base destructors causes crash
-        unload(); 
+        unload();
     }
     //-----------------------------------------------------------------------
-    Material& Material::operator=(const Material& rhs)
+    Material &Material::operator=( const Material &rhs )
     {
         mName = rhs.mName;
         mGroup = rhs.mGroup;
@@ -95,13 +96,13 @@ namespace Ogre {
         this->removeAllTechniques();
         Techniques::const_iterator i, iend;
         iend = rhs.mTechniques.end();
-        for(i = rhs.mTechniques.begin(); i != iend; ++i)
+        for( i = rhs.mTechniques.begin(); i != iend; ++i )
         {
-            Technique* t = this->createTechnique();
-            *t = *(*i);
-            if ((*i)->isSupported())
+            Technique *t = this->createTechnique();
+            *t = *( *i );
+            if( ( *i )->isSupported() )
             {
-                insertSupportedTechnique(t);
+                insertSupportedTechnique( t );
             }
         }
 
@@ -111,25 +112,24 @@ namespace Ogre {
         mCompilationRequired = rhs.mCompilationRequired;
         // illumination passes are not compiled right away so
         // mIsLoaded state should still be the same as the original material
-        assert(isLoaded() == rhs.isLoaded());
+        assert( isLoaded() == rhs.isLoaded() );
 
         return *this;
     }
-
 
     //-----------------------------------------------------------------------
     void Material::prepareImpl()
     {
         // compile if required
-        if (mCompilationRequired)
+        if( mCompilationRequired )
             compile();
 
         // Load all supported techniques
         Techniques::iterator i, iend;
         iend = mSupportedTechniques.end();
-        for (i = mSupportedTechniques.begin(); i != iend; ++i)
+        for( i = mSupportedTechniques.begin(); i != iend; ++i )
         {
-            (*i)->_prepare();
+            ( *i )->_prepare();
         }
     }
     //-----------------------------------------------------------------------
@@ -138,23 +138,21 @@ namespace Ogre {
         // Load all supported techniques
         Techniques::iterator i, iend;
         iend = mSupportedTechniques.end();
-        for (i = mSupportedTechniques.begin(); i != iend; ++i)
+        for( i = mSupportedTechniques.begin(); i != iend; ++i )
         {
-            (*i)->_unprepare();
+            ( *i )->_unprepare();
         }
     }
     //-----------------------------------------------------------------------
     void Material::loadImpl()
     {
-
         // Load all supported techniques
         Techniques::iterator i, iend;
         iend = mSupportedTechniques.end();
-        for (i = mSupportedTechniques.begin(); i != iend; ++i)
+        for( i = mSupportedTechniques.begin(); i != iend; ++i )
         {
-            (*i)->_load();
+            ( *i )->_load();
         }
-
     }
     //-----------------------------------------------------------------------
     void Material::unloadImpl()
@@ -162,9 +160,9 @@ namespace Ogre {
         // Unload all supported techniques
         Techniques::iterator i, iend;
         iend = mSupportedTechniques.end();
-        for (i = mSupportedTechniques.begin(); i != iend; ++i)
+        for( i = mSupportedTechniques.begin(); i != iend; ++i )
         {
-            (*i)->_unload();
+            ( *i )->_unload();
         }
     }
     //-----------------------------------------------------------------------
@@ -175,61 +173,56 @@ namespace Ogre {
         // Tally up techniques
         Techniques::const_iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            memSize += (*i)->calculateSize();
+            memSize += ( *i )->calculateSize();
         }
 
-        memSize += sizeof(bool) * 3;
-        memSize += mUnsupportedReasons.size() * sizeof(char);
-        memSize += sizeof(LodStrategy);
+        memSize += sizeof( bool ) * 3;
+        memSize += mUnsupportedReasons.size() * sizeof( char );
+        memSize += sizeof( LodStrategy );
 
         memSize += Resource::calculateSize();
 
         return memSize;
     }
     //-----------------------------------------------------------------------
-    MaterialPtr Material::clone(const String& newName, bool changeGroup, 
-        const String& newGroup) const
+    MaterialPtr Material::clone( const String &newName, bool changeGroup, const String &newGroup ) const
     {
         MaterialPtr newMat;
-        if (changeGroup)
+        if( changeGroup )
         {
-            newMat = MaterialManager::getSingleton().create(newName, newGroup);
+            newMat = MaterialManager::getSingleton().create( newName, newGroup );
         }
         else
         {
-            newMat = MaterialManager::getSingleton().create(newName, mGroup);
+            newMat = MaterialManager::getSingleton().create( newName, mGroup );
         }
-        
 
         // Keep handle (see below, copy overrides everything)
         ResourceHandle newHandle = newMat->getHandle();
         // Assign values from this
         *newMat = *this;
         // Restore new group if required, will have been overridden by operator
-        if (changeGroup)
+        if( changeGroup )
         {
             newMat->mGroup = newGroup;
         }
-        
+
         // Correct the name & handle, they get copied too
         newMat->mName = newName;
         newMat->mHandle = newHandle;
 
         return newMat;
-
-
-
     }
     //-----------------------------------------------------------------------
-    void Material::copyDetailsTo(MaterialPtr& mat) const
+    void Material::copyDetailsTo( MaterialPtr &mat ) const
     {
         // Keep handle (see below, copy overrides everything)
         ResourceHandle savedHandle = mat->mHandle;
         String savedName = mat->mName;
         String savedGroup = mat->mGroup;
-        ManualResourceLoader* savedLoader = mat->mLoader;
+        ManualResourceLoader *savedLoader = mat->mLoader;
         bool savedManual = mat->mIsManual;
         // Assign values from this
         *mat = *this;
@@ -239,14 +232,13 @@ namespace Ogre {
         mat->mGroup = savedGroup;
         mat->mIsManual = savedManual;
         mat->mLoader = savedLoader;
-
     }
     //-----------------------------------------------------------------------
     void Material::applyDefaults()
     {
         MaterialPtr defaults = MaterialManager::getSingleton().getDefaultSettings();
 
-        if (!defaults.isNull())
+        if( !defaults.isNull() )
         {
             // save name & handle
             String savedName = mName;
@@ -263,35 +255,34 @@ namespace Ogre {
             mIsManual = savedManual;
         }
         mCompilationRequired = true;
-
     }
     //-----------------------------------------------------------------------
-    Technique* Material::createTechnique()
+    Technique *Material::createTechnique()
     {
-        Technique *t = OGRE_NEW Technique(this);
-        mTechniques.push_back(t);
+        Technique *t = OGRE_NEW Technique( this );
+        mTechniques.push_back( t );
         mCompilationRequired = true;
         return t;
     }
     //-----------------------------------------------------------------------
-    Technique* Material::getTechnique(unsigned short index)
+    Technique *Material::getTechnique( unsigned short index )
     {
-        assert (index < mTechniques.size() && "Index out of bounds.");
+        assert( index < mTechniques.size() && "Index out of bounds." );
         return mTechniques[index];
     }
     //-----------------------------------------------------------------------
-    Technique* Material::getTechnique(const String& name)
+    Technique *Material::getTechnique( const String &name )
     {
-        Techniques::iterator i    = mTechniques.begin();
+        Techniques::iterator i = mTechniques.begin();
         Techniques::iterator iend = mTechniques.end();
-        Technique* foundTechnique = 0;
+        Technique *foundTechnique = 0;
 
         // iterate through techniques to find a match
-        while (i != iend)
+        while( i != iend )
         {
-            if ( (*i)->getName() == name )
+            if( ( *i )->getName() == name )
             {
-                foundTechnique = (*i);
+                foundTechnique = ( *i );
                 break;
             }
             ++i;
@@ -299,58 +290,55 @@ namespace Ogre {
 
         return foundTechnique;
     }
-    //-----------------------------------------------------------------------   
+    //-----------------------------------------------------------------------
     unsigned short Material::getNumTechniques() const
     {
-        return static_cast<unsigned short>(mTechniques.size());
+        return static_cast<unsigned short>( mTechniques.size() );
     }
     //-----------------------------------------------------------------------
-    Technique* Material::getSupportedTechnique(unsigned short index)
+    Technique *Material::getSupportedTechnique( unsigned short index )
     {
-        assert (index < mSupportedTechniques.size() && "Index out of bounds.");
+        assert( index < mSupportedTechniques.size() && "Index out of bounds." );
         return mSupportedTechniques[index];
     }
-    //-----------------------------------------------------------------------   
+    //-----------------------------------------------------------------------
     unsigned short Material::getNumSupportedTechniques() const
     {
-        return static_cast<unsigned short>(mSupportedTechniques.size());
+        return static_cast<unsigned short>( mSupportedTechniques.size() );
     }
     //-----------------------------------------------------------------------
-    unsigned short Material::getNumLodLevels(unsigned short schemeIndex) const
+    unsigned short Material::getNumLodLevels( unsigned short schemeIndex ) const
     {
         // Safety check - empty list?
-        if (mBestTechniquesBySchemeList.empty())
+        if( mBestTechniquesBySchemeList.empty() )
             return 0;
 
-        BestTechniquesBySchemeList::const_iterator i = 
-            mBestTechniquesBySchemeList.find(schemeIndex);
-        if (i == mBestTechniquesBySchemeList.end())
+        BestTechniquesBySchemeList::const_iterator i = mBestTechniquesBySchemeList.find( schemeIndex );
+        if( i == mBestTechniquesBySchemeList.end() )
         {
             // get the first item, will be 0 (the default) if default
             // scheme techniques exist, otherwise the earliest defined
             i = mBestTechniquesBySchemeList.begin();
         }
 
-        return static_cast<unsigned short>(i->second->size());
+        return static_cast<unsigned short>( i->second->size() );
     }
     //-----------------------------------------------------------------------
-    unsigned short Material::getNumLodLevels(const String& schemeName) const
+    unsigned short Material::getNumLodLevels( const String &schemeName ) const
     {
-        return getNumLodLevels(
-            MaterialManager::getSingleton()._getSchemeIndex(schemeName));
+        return getNumLodLevels( MaterialManager::getSingleton()._getSchemeIndex( schemeName ) );
     }
     //-----------------------------------------------------------------------
-    void Material::insertSupportedTechnique(Technique* t)
+    void Material::insertSupportedTechnique( Technique *t )
     {
-        mSupportedTechniques.push_back(t);
+        mSupportedTechniques.push_back( t );
         // get scheme
         unsigned short schemeIndex = t->_getSchemeIndex();
-        BestTechniquesBySchemeList::iterator i =
-            mBestTechniquesBySchemeList.find(schemeIndex);
-        LodTechniques* lodtechs = 0;
-        if (i == mBestTechniquesBySchemeList.end())
+        BestTechniquesBySchemeList::iterator i = mBestTechniquesBySchemeList.find( schemeIndex );
+        LodTechniques *lodtechs = 0;
+        if( i == mBestTechniquesBySchemeList.end() )
         {
-            lodtechs = OGRE_NEW_T(LodTechniques, MEMCATEGORY_RESOURCE);
+            lodtechs = OGRE_NEW_T( LodTechniques, MEMCATEGORY_RESOURCE );
             mBestTechniquesBySchemeList[schemeIndex] = lodtechs;
         }
         else
@@ -360,29 +348,28 @@ namespace Ogre {
 
         // Insert won't replace if supported technique for this scheme/lod is
         // already there, which is what we want
-        lodtechs->insert(LodTechniques::value_type(t->getLodIndex(), t));
-
+        lodtechs->insert( LodTechniques::value_type( t->getLodIndex(), t ) );
     }
     //-----------------------------------------------------------------------------
-    Technique* Material::getBestTechnique(unsigned short lodIndex, const Renderable* rend)
+    Technique *Material::getBestTechnique( unsigned short lodIndex, const Renderable *rend )
     {
-        if (mSupportedTechniques.empty())
+        if( mSupportedTechniques.empty() )
         {
             return NULL;
         }
         else
         {
-            Technique* ret = 0;
-            MaterialManager& matMgr = MaterialManager::getSingleton();
+            Technique *ret = 0;
+            MaterialManager &matMgr = MaterialManager::getSingleton();
             // get scheme
-            BestTechniquesBySchemeList::iterator si = 
-                mBestTechniquesBySchemeList.find(matMgr._getActiveSchemeIndex());
+            BestTechniquesBySchemeList::iterator si =
+                mBestTechniquesBySchemeList.find( matMgr._getActiveSchemeIndex() );
             // scheme not found?
-            if (si == mBestTechniquesBySchemeList.end())
+            if( si == mBestTechniquesBySchemeList.end() )
             {
                 // listener specified alternative technique available?
-                ret = matMgr._arbitrateMissingTechniqueForActiveScheme(this, lodIndex, rend);
-                if (ret)
+                ret = matMgr._arbitrateMissingTechniqueForActiveScheme( this, lodIndex, rend );
+                if( ret )
                     return ret;
 
                 // Nope, use default
@@ -392,28 +379,26 @@ namespace Ogre {
             }
 
             // get LOD
-            LodTechniques::iterator li = si->second->find(lodIndex);
-            // LOD not found? 
-            if (li == si->second->end())
+            LodTechniques::iterator li = si->second->find( lodIndex );
+            // LOD not found?
+            if( li == si->second->end() )
             {
                 // Use the next LOD level up
-                for (LodTechniques::reverse_iterator rli = si->second->rbegin(); 
-                    rli != si->second->rend(); ++rli)
+                for( LodTechniques::reverse_iterator rli = si->second->rbegin();
+                     rli != si->second->rend(); ++rli )
                 {
-                    if (rli->second->getLodIndex() < lodIndex)
+                    if( rli->second->getLodIndex() < lodIndex )
                     {
                         ret = rli->second;
                         break;
                     }
-
                 }
-                if (!ret)
+                if( !ret )
                 {
                     // shouldn't ever hit this really, unless user defines no LOD 0
                     // pick the first LOD we have (must be at least one to have a scheme entry)
                     ret = si->second->begin()->second;
                 }
-
             }
             else
             {
@@ -422,16 +407,15 @@ namespace Ogre {
             }
 
             return ret;
-
         }
     }
     //-----------------------------------------------------------------------
-    void Material::removeTechnique(unsigned short index)
+    void Material::removeTechnique( unsigned short index )
     {
-        assert (index < mTechniques.size() && "Index out of bounds.");
+        assert( index < mTechniques.size() && "Index out of bounds." );
         Techniques::iterator i = mTechniques.begin() + index;
-        OGRE_DELETE(*i);
-        mTechniques.erase(i);
+        OGRE_DELETE( *i );
+        mTechniques.erase( i );
         mSupportedTechniques.clear();
         clearBestTechniqueList();
         mCompilationRequired = true;
@@ -441,9 +425,9 @@ namespace Ogre {
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            OGRE_DELETE(*i);
+            OGRE_DELETE( *i );
         }
         mTechniques.clear();
         mSupportedTechniques.clear();
@@ -453,12 +437,12 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Material::TechniqueIterator Material::getTechniqueIterator()
     {
-        return TechniqueIterator(mTechniques.begin(), mTechniques.end());
+        return TechniqueIterator( mTechniques.begin(), mTechniques.end() );
     }
     //-----------------------------------------------------------------------
     Material::TechniqueIterator Material::getSupportedTechniqueIterator()
     {
-        return TechniqueIterator(mSupportedTechniques.begin(), mSupportedTechniques.end());
+        return TechniqueIterator( mSupportedTechniques.begin(), mSupportedTechniques.end() );
     }
     //-----------------------------------------------------------------------
     bool Material::isTransparent() const
@@ -466,41 +450,40 @@ namespace Ogre {
         // Check each technique
         Techniques::const_iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            if ( (*i)->isTransparent() )
+            if( ( *i )->isTransparent() )
                 return true;
         }
         return false;
     }
     //-----------------------------------------------------------------------
-    void Material::compile(bool autoManageTextureUnits)
+    void Material::compile( bool autoManageTextureUnits )
     {
         // Compile each technique, then add it to the list of supported techniques
         mSupportedTechniques.clear();
         clearBestTechniqueList();
         mUnsupportedReasons.clear();
 
-
         Techniques::iterator i, iend;
         iend = mTechniques.end();
         size_t techNo = 0;
-        for (i = mTechniques.begin(); i != iend; ++i, ++techNo)
+        for( i = mTechniques.begin(); i != iend; ++i, ++techNo )
         {
-            String compileMessages = (*i)->_compile(autoManageTextureUnits);
-            if ( (*i)->isSupported() )
+            String compileMessages = ( *i )->_compile( autoManageTextureUnits );
+            if( ( *i )->isSupported() )
             {
-                insertSupportedTechnique(*i);
+                insertSupportedTechnique( *i );
             }
             else
             {
                 // Log informational
                 StringStream str;
                 str << "Material " << mName << " Technique " << techNo;
-                if (!(*i)->getName().empty())
-                    str << "(" << (*i)->getName() << ")";
+                if( !( *i )->getName().empty() )
+                    str << "(" << ( *i )->getName() << ")";
                 str << " is not supported. " << compileMessages;
-                LogManager::getSingleton().logMessage(str.str(), LML_TRIVIAL);
+                LogManager::getSingleton().logMessage( str.str(), LML_TRIVIAL );
                 mUnsupportedReasons += compileMessages;
             }
         }
@@ -508,7 +491,7 @@ namespace Ogre {
         mCompilationRequired = false;
 
         // Did we find any?
-        if (mSupportedTechniques.empty())
+        if( mSupportedTechniques.empty() )
         {
             LogManager::getSingleton().logMessage(
                 "WARNING: material " + mName +
@@ -520,92 +503,91 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Material::clearBestTechniqueList()
     {
-        for (BestTechniquesBySchemeList::iterator i = mBestTechniquesBySchemeList.begin();
-            i != mBestTechniquesBySchemeList.end(); ++i)
+        for( BestTechniquesBySchemeList::iterator i = mBestTechniquesBySchemeList.begin();
+             i != mBestTechniquesBySchemeList.end(); ++i )
         {
-            OGRE_DELETE_T(i->second, LodTechniques, MEMCATEGORY_RESOURCE);
+            OGRE_DELETE_T( i->second, LodTechniques, MEMCATEGORY_RESOURCE );
         }
         mBestTechniquesBySchemeList.clear();
     }
     //-----------------------------------------------------------------------
-    void Material::setPointSize(Real ps)
+    void Material::setPointSize( Real ps )
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setPointSize(ps);
-        }
-
-    }
-    //-----------------------------------------------------------------------
-    void Material::setAmbient(Real red, Real green, Real blue)
-    {
-        setAmbient(ColourValue(red, green, blue));
-    }
-    //-----------------------------------------------------------------------
-    void Material::setAmbient(const ColourValue& ambient)
-    {
-        Techniques::iterator i, iend;
-        iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
-        {
-            (*i)->setAmbient(ambient);
+            ( *i )->setPointSize( ps );
         }
     }
     //-----------------------------------------------------------------------
-    void Material::setDiffuse(Real red, Real green, Real blue, Real alpha)
+    void Material::setAmbient( Real red, Real green, Real blue )
+    {
+        setAmbient( ColourValue( red, green, blue ) );
+    }
+    //-----------------------------------------------------------------------
+    void Material::setAmbient( const ColourValue &ambient )
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setDiffuse(red, green, blue, alpha);
+            ( *i )->setAmbient( ambient );
         }
     }
     //-----------------------------------------------------------------------
-    void Material::setDiffuse(const ColourValue& diffuse)
-    {
-        setDiffuse(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
-    }
-    //-----------------------------------------------------------------------
-    void Material::setSpecular(Real red, Real green, Real blue, Real alpha)
+    void Material::setDiffuse( Real red, Real green, Real blue, Real alpha )
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setSpecular(red, green, blue, alpha);
+            ( *i )->setDiffuse( red, green, blue, alpha );
         }
     }
     //-----------------------------------------------------------------------
-    void Material::setSpecular(const ColourValue& specular)
+    void Material::setDiffuse( const ColourValue &diffuse )
     {
-        setSpecular(specular.r, specular.g, specular.b, specular.a);
+        setDiffuse( diffuse.r, diffuse.g, diffuse.b, diffuse.a );
     }
     //-----------------------------------------------------------------------
-    void Material::setShininess(Real val)
+    void Material::setSpecular( Real red, Real green, Real blue, Real alpha )
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setShininess(val);
+            ( *i )->setSpecular( red, green, blue, alpha );
         }
     }
     //-----------------------------------------------------------------------
-    void Material::setSelfIllumination(Real red, Real green, Real blue)
+    void Material::setSpecular( const ColourValue &specular )
     {
-        setSelfIllumination(ColourValue(red, green, blue));   
+        setSpecular( specular.r, specular.g, specular.b, specular.a );
     }
     //-----------------------------------------------------------------------
-    void Material::setSelfIllumination(const ColourValue& selfIllum)
+    void Material::setShininess( Real val )
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setSelfIllumination(selfIllum);
+            ( *i )->setShininess( val );
+        }
+    }
+    //-----------------------------------------------------------------------
+    void Material::setSelfIllumination( Real red, Real green, Real blue )
+    {
+        setSelfIllumination( ColourValue( red, green, blue ) );
+    }
+    //-----------------------------------------------------------------------
+    void Material::setSelfIllumination( const ColourValue &selfIllum )
+    {
+        Techniques::iterator i, iend;
+        iend = mTechniques.end();
+        for( i = mTechniques.begin(); i != iend; ++i )
+        {
+            ( *i )->setSelfIllumination( selfIllum );
         }
     }
     //-----------------------------------------------------------------------
@@ -613,9 +595,9 @@ namespace Ogre {
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setMacroblock( macroblock );
+            ( *i )->setMacroblock( macroblock );
         }
     }
     // --------------------------------------------------------------------
@@ -623,9 +605,9 @@ namespace Ogre {
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setBlendblock( blendblock );
+            ( *i )->setBlendblock( blendblock );
         }
     }
     //-----------------------------------------------------------------------
@@ -633,20 +615,20 @@ namespace Ogre {
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setShadingMode(mode);
+            ( *i )->setShadingMode( mode );
         }
     }
     //-----------------------------------------------------------------------
-    void Material::setFog(bool overrideScene, FogMode mode, const ColourValue& colour,
-        Real expDensity, Real linearStart, Real linearEnd)
+    void Material::setFog( bool overrideScene, FogMode mode, const ColourValue &colour, Real expDensity,
+                           Real linearStart, Real linearEnd )
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setFog(overrideScene, mode, colour, expDensity, linearStart, linearEnd);
+            ( *i )->setFog( overrideScene, mode, colour, expDensity, linearStart, linearEnd );
         }
     }
     //-----------------------------------------------------------------------
@@ -654,9 +636,9 @@ namespace Ogre {
     {
         Techniques::iterator i, iend;
         iend = mTechniques.end();
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            (*i)->setSamplerblock( samplerblock );
+            ( *i )->setSamplerblock( samplerblock );
         }
     }
     // --------------------------------------------------------------------
@@ -664,11 +646,11 @@ namespace Ogre {
     {
         mCompilationRequired = true;
         // Also need to unload to ensure we loaded any new items
-        if (isLoaded()) // needed to stop this being called in 'loading' state
+        if( isLoaded() )  // needed to stop this being called in 'loading' state
             unload();
     }
     // --------------------------------------------------------------------
-    void Material::setLodLevels(const LodValueArray& lodValues)
+    void Material::setLodLevels( const LodValueArray &lodValues )
     {
         LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getDefaultStrategy();
 
@@ -678,41 +660,41 @@ namespace Ogre {
         // First, clear and add single zero entry
         mLodValues.clear();
         mUserLodValues.clear();
-        mUserLodValues.push_back(0);
-        mLodValues.push_back(LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue());
-        for (i = lodValues.begin(); i != iend; ++i)
+        mUserLodValues.push_back( 0 );
+        mLodValues.push_back( LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue() );
+        for( i = lodValues.begin(); i != iend; ++i )
         {
-            mUserLodValues.push_back(*i);
-            mLodValues.push_back(lodStrategy->transformUserValue(*i));
+            mUserLodValues.push_back( *i );
+            mLodValues.push_back( lodStrategy->transformUserValue( *i ) );
         }
-        
     }
     // --------------------------------------------------------------------
     Material::LodValueIterator Material::getLodValueIterator() const
     {
-        return LodValueIterator(mLodValues.begin(), mLodValues.end());
+        return LodValueIterator( mLodValues.begin(), mLodValues.end() );
     }
     // --------------------------------------------------------------------
     Material::LodValueIterator Material::getUserLodValueIterator() const
     {
-        return LodValueIterator(mUserLodValues.begin(), mUserLodValues.end());
+        return LodValueIterator( mUserLodValues.begin(), mUserLodValues.end() );
     }
 
     //-----------------------------------------------------------------------
-    bool Material::applyTextureAliases(const AliasTextureNamePairList& aliasList, const bool apply) const
+    bool Material::applyTextureAliases( const AliasTextureNamePairList &aliasList,
+                                        const bool apply ) const
     {
         // iterate through all techniques and apply texture aliases
         Techniques::const_iterator i, iend;
         iend = mTechniques.end();
         bool testResult = false;
 
-        for (i = mTechniques.begin(); i != iend; ++i)
+        for( i = mTechniques.begin(); i != iend; ++i )
         {
-            if ((*i)->applyTextureAliases(aliasList, apply))
+            if( ( *i )->applyTextureAliases( aliasList, apply ) )
                 testResult = true;
         }
 
         return testResult;
     }
     //---------------------------------------------------------------------
-}
+}  // namespace Ogre

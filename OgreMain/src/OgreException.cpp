@@ -34,53 +34,50 @@ THE SOFTWARE.
 #include <sstream>
 
 #ifdef __BORLANDC__
-    #include <stdio.h>
+#    include <stdio.h>
 #endif
 
-namespace Ogre {
-
-    Exception::Exception(int num, const String& desc, const String& src) :
+namespace Ogre
+{
+    Exception::Exception( int num, const String &desc, const String &src ) :
         line( 0 ),
         number( num ),
         description( desc ),
         source( src )
     {
         // Log this error - not any more, allow catchers to do it
-        //LogManager::getSingleton().logMessage(this->getFullDescription());
+        // LogManager::getSingleton().logMessage(this->getFullDescription());
     }
 
-    Exception::Exception(int num, const String& desc, const String& src, 
-        const char* typ, const char* fil, long lin) :
+    Exception::Exception( int num, const String &desc, const String &src, const char *typ,
+                          const char *fil, long lin ) :
         line( lin ),
         number( num ),
-        typeName(typ),
+        typeName( typ ),
         description( desc ),
         source( src ),
         file( fil )
     {
         // Log this error, mask it from debug though since it may be caught and ignored
-        if(LogManager::getSingletonPtr())
+        if( LogManager::getSingletonPtr() )
         {
-            LogManager::getSingleton().logMessage(
-                this->getFullDescription(), 
-                LML_CRITICAL, true);
+            LogManager::getSingleton().logMessage( this->getFullDescription(), LML_CRITICAL, true );
         }
-
     }
 
-    Exception::Exception(const Exception& rhs)
-        : line( rhs.line ), 
-        number( rhs.number ), 
-        typeName( rhs.typeName ), 
-        description( rhs.description ), 
-        source( rhs.source ), 
+    Exception::Exception( const Exception &rhs ) :
+        line( rhs.line ),
+        number( rhs.number ),
+        typeName( rhs.typeName ),
+        description( rhs.description ),
+        source( rhs.source ),
         file( rhs.file )
     {
     }
 
     Exception::~Exception() throw() {}
 
-    Exception& Exception::operator = ( const Exception& rhs )
+    Exception &Exception::operator=( const Exception &rhs )
     {
         description = rhs.description;
         number = rhs.number;
@@ -92,16 +89,14 @@ namespace Ogre {
         return *this;
     }
 
-    const String& Exception::getFullDescription() const
+    const String &Exception::getFullDescription() const
     {
-        if (fullDesc.empty())
+        if( fullDesc.empty() )
         {
-
             StringStream desc;
 
-            desc <<  "OGRE EXCEPTION(" << number << ":" << typeName << "): "
-                << description 
-                << " in " << source;
+            desc << "OGRE EXCEPTION(" << number << ":" << typeName << "): " << description << " in "
+                 << source;
 
             if( line > 0 )
             {
@@ -114,10 +109,7 @@ namespace Ogre {
         return fullDesc;
     }
 
-    int Exception::getNumber() const throw()
-    {
-        return number;
-    }
+    int Exception::getNumber() const throw() { return number; }
 
     UnimplementedException::UnimplementedException( int inNumber, const String &inDescription,
                                                     const String &inSource, const char *inFile,
@@ -207,5 +199,4 @@ namespace Ogre {
     }
 
     InvalidCallException::~InvalidCallException() throw() {}
-}
-
+}  // namespace Ogre

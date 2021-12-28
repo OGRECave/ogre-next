@@ -31,46 +31,48 @@ THE SOFTWARE.
 #include "OgreManualObject2.h"
 
 #include "OgreException.h"
-#include "OgreMaterialManager.h"
-#include "OgreSceneManager.h"
 #include "OgreLogManager.h"
-#include "OgreMeshManager2.h"
+#include "OgreMaterialManager.h"
 #include "OgreMesh2.h"
+#include "OgreMeshManager2.h"
+#include "OgreSceneManager.h"
 #include "OgreSubMesh2.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
 #define TEMP_INITIAL_SIZE 50
-#define TEMP_VERTEXSIZE_GUESS sizeof(float) * 12
-#define TEMP_INITIAL_VERTEX_SIZE TEMP_VERTEXSIZE_GUESS * TEMP_INITIAL_SIZE
-#define TEMP_INITIAL_INDEX_SIZE sizeof(uint32) * TEMP_INITIAL_SIZE
+#define TEMP_VERTEXSIZE_GUESS sizeof( float ) * 12
+#define TEMP_INITIAL_VERTEX_SIZE TEMP_VERTEXSIZE_GUESS *TEMP_INITIAL_SIZE
+#define TEMP_INITIAL_INDEX_SIZE sizeof( uint32 ) * TEMP_INITIAL_SIZE
     //-----------------------------------------------------------------------------
     ManualObject::ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 10u ),
-          mCurrentSection(0),
-          mCurrentUpdating(false),
-          mVertices(0), mIndices(0),
-          mEstimatedVertices(0), mEstimatedIndices(0),
-          mTempVertexBuffer(0), mTempVertexBufferSize(TEMP_INITIAL_VERTEX_SIZE),
-          mTempIndexBuffer(0), mTempIndexBufferSize(TEMP_INITIAL_INDEX_SIZE),
-          mVertexBuffer(0), mIndexBuffer(0),
-          mDeclSize(0)
+                                SceneManager *manager ) :
+        MovableObject( id, objectMemoryManager, manager, 10u ),
+        mCurrentSection( 0 ),
+        mCurrentUpdating( false ),
+        mVertices( 0 ),
+        mIndices( 0 ),
+        mEstimatedVertices( 0 ),
+        mEstimatedIndices( 0 ),
+        mTempVertexBuffer( 0 ),
+        mTempVertexBufferSize( TEMP_INITIAL_VERTEX_SIZE ),
+        mTempIndexBuffer( 0 ),
+        mTempIndexBufferSize( TEMP_INITIAL_INDEX_SIZE ),
+        mVertexBuffer( 0 ),
+        mIndexBuffer( 0 ),
+        mDeclSize( 0 )
     {
-        //Start with a null Aabb so that it can grow after calls to position()
+        // Start with a null Aabb so that it can grow after calls to position()
         mObjectData.mLocalAabb->setFromAabb( Aabb::BOX_NULL, mObjectData.mIndex );
     }
     //-----------------------------------------------------------------------------
-    ManualObject::~ManualObject()
-    {
-        clear();
-    }
+    ManualObject::~ManualObject() { clear(); }
     //-----------------------------------------------------------------------------
     void ManualObject::clear()
     {
         resetBuffers();
 
-        for (SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i)
+        for( SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i )
         {
             OGRE_DELETE *i;
         }
@@ -87,22 +89,22 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     void ManualObject::resetBuffers()
     {
-        OGRE_FREE(mTempVertexBuffer, MEMCATEGORY_GEOMETRY);
-        OGRE_FREE(mTempIndexBuffer, MEMCATEGORY_GEOMETRY);
+        OGRE_FREE( mTempVertexBuffer, MEMCATEGORY_GEOMETRY );
+        OGRE_FREE( mTempIndexBuffer, MEMCATEGORY_GEOMETRY );
         mTempVertexBuffer = 0;
         mTempIndexBuffer = 0;
         mTempVertexBufferSize = TEMP_INITIAL_VERTEX_SIZE;
         mTempIndexBufferSize = TEMP_INITIAL_INDEX_SIZE;
-        mVertexBuffer = mVertexBufferCursor  = 0;
+        mVertexBuffer = mVertexBufferCursor = 0;
         mIndexBuffer = mIndexBufferCursor = 0;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::resizeVertexBufferIfNeeded(size_t numVerts)
+    void ManualObject::resizeVertexBufferIfNeeded( size_t numVerts )
     {
         // Calculate byte size
         // Use decl if we know it by now, otherwise default size to pos/norm/texcoord*2
         size_t newSize;
-        if (mVertices > 0)
+        if( mVertices > 0 )
         {
             newSize = mDeclSize * numVerts;
         }
@@ -111,91 +113,91 @@ namespace Ogre {
             // estimate - size checks will deal for subsequent verts
             newSize = TEMP_VERTEXSIZE_GUESS * numVerts;
         }
-        if (newSize > mTempVertexBufferSize || !mTempVertexBuffer)
+        if( newSize > mTempVertexBufferSize || !mTempVertexBuffer )
         {
-            if (!mTempVertexBuffer)
+            if( !mTempVertexBuffer )
             {
                 // init
-                newSize = std::max(newSize, mTempVertexBufferSize);
+                newSize = std::max( newSize, mTempVertexBufferSize );
             }
             else
             {
                 // increase to at least double current
-                newSize = std::max(newSize, mTempVertexBufferSize*2);
+                newSize = std::max( newSize, mTempVertexBufferSize * 2 );
             }
             // copy old data
-            float * tmp = mTempVertexBuffer;
-            mTempVertexBuffer = OGRE_ALLOC_T(float, newSize / sizeof(float), MEMCATEGORY_GEOMETRY);
-            if (tmp)
+            float *tmp = mTempVertexBuffer;
+            mTempVertexBuffer = OGRE_ALLOC_T( float, newSize / sizeof( float ), MEMCATEGORY_GEOMETRY );
+            if( tmp )
             {
-                memcpy(mTempVertexBuffer, tmp, mTempVertexBufferSize);
+                memcpy( mTempVertexBuffer, tmp, mTempVertexBufferSize );
                 // delete old buffer
-                OGRE_FREE(tmp, MEMCATEGORY_GEOMETRY);
+                OGRE_FREE( tmp, MEMCATEGORY_GEOMETRY );
             }
 
             mVertexBuffer = mTempVertexBuffer;
-            mVertexBufferCursor = mVertexBuffer + mVertices * mDeclSize / sizeof(float);
+            mVertexBufferCursor = mVertexBuffer + mVertices * mDeclSize / sizeof( float );
             mTempVertexBufferSize = newSize;
         }
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::resizeIndexBufferIfNeeded(size_t numInds)
+    void ManualObject::resizeIndexBufferIfNeeded( size_t numInds )
     {
-        size_t newSize = numInds * sizeof(uint32);
-        if (newSize > mTempIndexBufferSize || !mTempIndexBuffer)
+        size_t newSize = numInds * sizeof( uint32 );
+        if( newSize > mTempIndexBufferSize || !mTempIndexBuffer )
         {
-            if (!mTempIndexBuffer)
+            if( !mTempIndexBuffer )
             {
                 // init
-                newSize = std::max(newSize, mTempIndexBufferSize);
+                newSize = std::max( newSize, mTempIndexBufferSize );
             }
             else
             {
                 // increase to at least double current
-                newSize = std::max(newSize, mTempIndexBufferSize*2);
+                newSize = std::max( newSize, mTempIndexBufferSize * 2 );
             }
-            char * tmp = mTempIndexBuffer;
-            mTempIndexBuffer = OGRE_ALLOC_T(char, newSize, MEMCATEGORY_GEOMETRY);
-            if (tmp)
+            char *tmp = mTempIndexBuffer;
+            mTempIndexBuffer = OGRE_ALLOC_T( char, newSize, MEMCATEGORY_GEOMETRY );
+            if( tmp )
             {
-                memcpy(mTempIndexBuffer, tmp, mTempIndexBufferSize);
-                OGRE_FREE(tmp, MEMCATEGORY_GEOMETRY);
+                memcpy( mTempIndexBuffer, tmp, mTempIndexBufferSize );
+                OGRE_FREE( tmp, MEMCATEGORY_GEOMETRY );
             }
 
             mIndexBuffer = mTempIndexBuffer;
-            mIndexBufferCursor = mIndexBuffer + mIndices * sizeof(uint32);
+            mIndexBufferCursor = mIndexBuffer + mIndices * sizeof( uint32 );
             mTempIndexBufferSize = newSize;
         }
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::estimateVertexCount(size_t vcount)
+    void ManualObject::estimateVertexCount( size_t vcount )
     {
-        resizeVertexBufferIfNeeded(vcount);
+        resizeVertexBufferIfNeeded( vcount );
         mEstimatedVertices = vcount;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::estimateIndexCount(size_t icount)
+    void ManualObject::estimateIndexCount( size_t icount )
     {
-        resizeIndexBufferIfNeeded(icount);
+        resizeIndexBufferIfNeeded( icount );
         mEstimatedIndices = icount;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::begin(const String & datablockName, OperationType opType)
+    void ManualObject::begin( const String &datablockName, OperationType opType )
     {
-        if (mCurrentSection)
+        if( mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You cannot call begin() again until after you call end()",
-                "ManualObject::begin");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "You cannot call begin() again until after you call end()",
+                         "ManualObject::begin" );
         }
 
-        mCurrentSection = OGRE_NEW ManualObjectSection(this, datablockName, opType);
+        mCurrentSection = OGRE_NEW ManualObjectSection( this, datablockName, opType );
 
         mCurrentSection->mVaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
 
         mCurrentUpdating = false;
 
-        mSectionList.push_back(mCurrentSection);
+        mSectionList.push_back( mCurrentSection );
 
         mCurrentDatablockName = datablockName;
 
@@ -205,27 +207,26 @@ namespace Ogre {
         mIndices = 0;
 
         // Will initialize to default size
-        resizeVertexBufferIfNeeded(mEstimatedVertices);
-        resizeIndexBufferIfNeeded(mEstimatedIndices);
+        resizeVertexBufferIfNeeded( mEstimatedVertices );
+        resizeIndexBufferIfNeeded( mEstimatedIndices );
 
         mVertexBuffer = mVertexBufferCursor = mTempVertexBuffer;
         mIndexBuffer = mIndexBufferCursor = mTempIndexBuffer;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::beginUpdate(size_t sectionIndex)
+    void ManualObject::beginUpdate( size_t sectionIndex )
     {
-        if (mCurrentSection)
+        if( mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You cannot call begin() again until after you call end()",
-                "ManualObject::beginUpdate");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "You cannot call begin() again until after you call end()",
+                         "ManualObject::beginUpdate" );
         }
 
-        if (sectionIndex >= mSectionList.size())
+        if( sectionIndex >= mSectionList.size() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Invalid section index - out of range.",
-                "ManualObject::beginUpdate");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid section index - out of range.",
+                         "ManualObject::beginUpdate" );
         }
 
         mCurrentSection = mSectionList[sectionIndex];
@@ -235,43 +236,41 @@ namespace Ogre {
         mVertices = 0;
         mIndices = 0;
 
-        VertexBufferPacked * vertexBuffer = mCurrentSection->mVao->getVertexBuffers()[0];
-        IndexBufferPacked * indexBuffer = mCurrentSection->mVao->getIndexBuffer();
+        VertexBufferPacked *vertexBuffer = mCurrentSection->mVao->getVertexBuffers()[0];
+        IndexBufferPacked *indexBuffer = mCurrentSection->mVao->getIndexBuffer();
 
-        mVertexBuffer = mVertexBufferCursor = static_cast<float *>(vertexBuffer->map(0, vertexBuffer->getNumElements()));
-        mIndexBuffer = mIndexBufferCursor = static_cast<char *>(indexBuffer->map(0, indexBuffer->getNumElements()));
+        mVertexBuffer = mVertexBufferCursor =
+            static_cast<float *>( vertexBuffer->map( 0, vertexBuffer->getNumElements() ) );
+        mIndexBuffer = mIndexBufferCursor =
+            static_cast<char *>( indexBuffer->map( 0, indexBuffer->getNumElements() ) );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::position(const Vector3& pos)
-    {
-        position(pos.x, pos.y, pos.z);
-    }
+    void ManualObject::position( const Vector3 &pos ) { position( pos.x, pos.y, pos.z ); }
     //-----------------------------------------------------------------------------
-    void ManualObject::position(Real x, Real y, Real z)
+    void ManualObject::position( Real x, Real y, Real z )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::position");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::position" );
         }
 
         // First vertex, update elements and declaration size
         // If updating section, no need to declare elements or resize buffers
-        if (!mCurrentUpdating)
+        if( !mCurrentUpdating )
         {
-            if (mVertices == 0)
+            if( mVertices == 0 )
             {
                 // defining declaration
-                VertexElement2 positionElement(VET_FLOAT3, VES_POSITION);
-                mCurrentSection->mVertexElements.push_back(positionElement);
+                VertexElement2 positionElement( VET_FLOAT3, VES_POSITION );
+                mCurrentSection->mVertexElements.push_back( positionElement );
 
-                mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT3);
+                mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT3 );
             }
             else
             {
                 // Subsequent vertices resize the vertex buffer if needed
-                resizeVertexBufferIfNeeded(mVertices + 1);
+                resizeVertexBufferIfNeeded( mVertices + 1 );
             }
         }
 
@@ -281,32 +280,27 @@ namespace Ogre {
 
         mVertices++;
 
-        mCurrentSection->mAabb.merge(Vector3(x, y, z));
+        mCurrentSection->mAabb.merge( Vector3( x, y, z ) );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::normal(const Vector3& norm)
-    {
-        normal(norm.x, norm.y, norm.z);
-    }
+    void ManualObject::normal( const Vector3 &norm ) { normal( norm.x, norm.y, norm.z ); }
     //-----------------------------------------------------------------------------
-    void ManualObject::normal(Real x, Real y, Real z)
+    void ManualObject::normal( Real x, Real y, Real z )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::normal");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::normal" );
         }
 
         // First time a normal is being added
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 normalElement(VET_FLOAT3, VES_NORMAL);
-            mCurrentSection->mVertexElements.push_back(normalElement);
+            VertexElement2 normalElement( VET_FLOAT3, VES_NORMAL );
+            mCurrentSection->mVertexElements.push_back( normalElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT3);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT3 );
         }
 
         *mVertexBufferCursor++ = x;
@@ -314,29 +308,24 @@ namespace Ogre {
         *mVertexBufferCursor++ = z;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::tangent(const Vector3& tan)
-    {
-        tangent(tan.x, tan.y, tan.z);
-    }
+    void ManualObject::tangent( const Vector3 &tan ) { tangent( tan.x, tan.y, tan.z ); }
     //-----------------------------------------------------------------------------
-    void ManualObject::tangent(Real x, Real y, Real z)
+    void ManualObject::tangent( Real x, Real y, Real z )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::tangent");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::tangent" );
         }
 
         // First time a tangent is being added
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 tangentElement(VET_FLOAT3, VES_TANGENT);
-            mCurrentSection->mVertexElements.push_back(tangentElement);
+            VertexElement2 tangentElement( VET_FLOAT3, VES_TANGENT );
+            mCurrentSection->mVertexElements.push_back( tangentElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT3);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT3 );
         }
 
         *mVertexBufferCursor++ = x;
@@ -344,68 +333,62 @@ namespace Ogre {
         *mVertexBufferCursor++ = z;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::textureCoord(Real u)
+    void ManualObject::textureCoord( Real u )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::textureCoord");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::textureCoord" );
         }
 
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 texCoordElement(VET_FLOAT1, VES_TEXTURE_COORDINATES);
-            mCurrentSection->mVertexElements.push_back(texCoordElement);
+            VertexElement2 texCoordElement( VET_FLOAT1, VES_TEXTURE_COORDINATES );
+            mCurrentSection->mVertexElements.push_back( texCoordElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT1);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT1 );
         }
 
         *mVertexBufferCursor++ = u;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::textureCoord(Real u, Real v)
+    void ManualObject::textureCoord( Real u, Real v )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::textureCoord");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::textureCoord" );
         }
 
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 texCoordElement(VET_FLOAT2, VES_TEXTURE_COORDINATES);
-            mCurrentSection->mVertexElements.push_back(texCoordElement);
+            VertexElement2 texCoordElement( VET_FLOAT2, VES_TEXTURE_COORDINATES );
+            mCurrentSection->mVertexElements.push_back( texCoordElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT2);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT2 );
         }
 
         *mVertexBufferCursor++ = u;
         *mVertexBufferCursor++ = v;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::textureCoord(Real u, Real v, Real w)
+    void ManualObject::textureCoord( Real u, Real v, Real w )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::textureCoord");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::textureCoord" );
         }
 
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 texCoordElement(VET_FLOAT3, VES_TEXTURE_COORDINATES);
-            mCurrentSection->mVertexElements.push_back(texCoordElement);
+            VertexElement2 texCoordElement( VET_FLOAT3, VES_TEXTURE_COORDINATES );
+            mCurrentSection->mVertexElements.push_back( texCoordElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT3);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT3 );
         }
 
         *mVertexBufferCursor++ = u;
@@ -413,23 +396,21 @@ namespace Ogre {
         *mVertexBufferCursor++ = w;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::textureCoord(Real x, Real y, Real z, Real w)
+    void ManualObject::textureCoord( Real x, Real y, Real z, Real w )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::textureCoord");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::textureCoord" );
         }
 
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 texCoordElement(VET_FLOAT4, VES_TEXTURE_COORDINATES);
-            mCurrentSection->mVertexElements.push_back(texCoordElement);
+            VertexElement2 texCoordElement( VET_FLOAT4, VES_TEXTURE_COORDINATES );
+            mCurrentSection->mVertexElements.push_back( texCoordElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT4);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT4 );
         }
 
         *mVertexBufferCursor++ = x;
@@ -438,74 +419,32 @@ namespace Ogre {
         *mVertexBufferCursor++ = w;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::textureCoord(const Vector2& uv)
-    {
-        textureCoord(uv.x, uv.y);
-    }
+    void ManualObject::textureCoord( const Vector2 &uv ) { textureCoord( uv.x, uv.y ); }
     //-----------------------------------------------------------------------------
-    void ManualObject::textureCoord(const Vector3& uvw)
-    {
-        textureCoord(uvw.x, uvw.y, uvw.z);
-    }
+    void ManualObject::textureCoord( const Vector3 &uvw ) { textureCoord( uvw.x, uvw.y, uvw.z ); }
     //---------------------------------------------------------------------
-    void ManualObject::textureCoord(const Vector4& xyzw)
+    void ManualObject::textureCoord( const Vector4 &xyzw )
     {
-        textureCoord(xyzw.x, xyzw.y, xyzw.z, xyzw.w);
+        textureCoord( xyzw.x, xyzw.y, xyzw.z, xyzw.w );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::colour(const ColourValue& col)
-    {
-        colour(col.r, col.g, col.b, col.a);
-    }
+    void ManualObject::colour( const ColourValue &col ) { colour( col.r, col.g, col.b, col.a ); }
     //-----------------------------------------------------------------------------
-    void ManualObject::colour(Real r, Real g, Real b, Real a)
+    void ManualObject::colour( Real r, Real g, Real b, Real a )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::colour");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::colour" );
         }
 
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
             // defining declaration
-            VertexElement2 colorElement(VET_FLOAT4, VES_DIFFUSE);
-            mCurrentSection->mVertexElements.push_back(colorElement);
+            VertexElement2 colorElement( VET_FLOAT4, VES_DIFFUSE );
+            mCurrentSection->mVertexElements.push_back( colorElement );
 
-            mDeclSize += v1::VertexElement::getTypeSize(VET_FLOAT4);
-        }
-
-        *mVertexBufferCursor++ = r;
-        *mVertexBufferCursor++ = g;
-        *mVertexBufferCursor++ = b;
-        *mVertexBufferCursor++ = a;
-
-    }
-    //-----------------------------------------------------------------------------
-    void ManualObject::specular(const ColourValue & col)
-    {
-        specular(col.r, col.g, col.b, col.a);
-    }
-    //-----------------------------------------------------------------------------
-    void ManualObject::specular(Real r, Real g, Real b, Real a)
-    {
-        if (!mCurrentSection)
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::specular");
-        }
-
-        if (mVertices == 1 &&
-            !mCurrentUpdating)
-        {
-            // defining declaration
-            VertexElement2 colorElement(VET_COLOUR, VES_SPECULAR);
-            mCurrentSection->mVertexElements.push_back(colorElement);
-
-            mDeclSize += v1::VertexElement::getTypeSize(VET_COLOUR);
+            mDeclSize += v1::VertexElement::getTypeSize( VET_FLOAT4 );
         }
 
         *mVertexBufferCursor++ = r;
@@ -514,133 +453,152 @@ namespace Ogre {
         *mVertexBufferCursor++ = a;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::index(uint32 idx)
+    void ManualObject::specular( const ColourValue &col ) { specular( col.r, col.g, col.b, col.a ); }
+    //-----------------------------------------------------------------------------
+    void ManualObject::specular( Real r, Real g, Real b, Real a )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::index");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::specular" );
         }
 
-        if (!mCurrentUpdating)
+        if( mVertices == 1 && !mCurrentUpdating )
         {
-            if (idx >= 65536)
+            // defining declaration
+            VertexElement2 colorElement( VET_COLOUR, VES_SPECULAR );
+            mCurrentSection->mVertexElements.push_back( colorElement );
+
+            mDeclSize += v1::VertexElement::getTypeSize( VET_COLOUR );
+        }
+
+        *mVertexBufferCursor++ = r;
+        *mVertexBufferCursor++ = g;
+        *mVertexBufferCursor++ = b;
+        *mVertexBufferCursor++ = a;
+    }
+    //-----------------------------------------------------------------------------
+    void ManualObject::index( uint32 idx )
+    {
+        if( !mCurrentSection )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::index" );
+        }
+
+        if( !mCurrentUpdating )
+        {
+            if( idx >= 65536 )
                 mCurrentSection->m32BitIndices = true;
 
-            resizeIndexBufferIfNeeded(mIndices + 1);
+            resizeIndexBufferIfNeeded( mIndices + 1 );
 
-            *((uint32 *)mIndexBufferCursor) = idx;
-            mIndexBufferCursor += sizeof(uint32);
+            *( (uint32 *)mIndexBufferCursor ) = idx;
+            mIndexBufferCursor += sizeof( uint32 );
         }
-        else if (mCurrentSection->m32BitIndices)
+        else if( mCurrentSection->m32BitIndices )
         {
-            *((uint32 *)mIndexBufferCursor) = idx;
-            mIndexBufferCursor += sizeof(uint32);
+            *( (uint32 *)mIndexBufferCursor ) = idx;
+            mIndexBufferCursor += sizeof( uint32 );
         }
         else
         {
-            *((uint16 *)mIndexBufferCursor) = idx;
-            mIndexBufferCursor += sizeof(uint16);
+            *( (uint16 *)mIndexBufferCursor ) = idx;
+            mIndexBufferCursor += sizeof( uint16 );
         }
 
         mIndices++;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::line(uint32 i1, uint32 i2)
+    void ManualObject::line( uint32 i1, uint32 i2 )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::line");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::line" );
         }
 
-        if (mCurrentSection->mOperationType != OT_LINE_LIST)
+        if( mCurrentSection->mOperationType != OT_LINE_LIST )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "This method is only valid on line lists",
-                "ManualObject::line");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "This method is only valid on line lists",
+                         "ManualObject::line" );
         }
 
-        index(i1);
-        index(i2);
+        index( i1 );
+        index( i2 );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::triangle(uint32 i1, uint32 i2, uint32 i3)
+    void ManualObject::triangle( uint32 i1, uint32 i2, uint32 i3 )
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You must call begin() before this method",
-                "ManualObject::triangle");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must call begin() before this method",
+                         "ManualObject::triangle" );
         }
 
-        if (mCurrentSection->mOperationType != OT_TRIANGLE_LIST)
+        if( mCurrentSection->mOperationType != OT_TRIANGLE_LIST )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "This method is only valid on triangle lists",
-                "ManualObject::triangle");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "This method is only valid on triangle lists",
+                         "ManualObject::triangle" );
         }
 
-        index(i1);
-        index(i2);
-        index(i3);
+        index( i1 );
+        index( i2 );
+        index( i3 );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::quad(uint32 i1, uint32 i2, uint32 i3, uint32 i4)
+    void ManualObject::quad( uint32 i1, uint32 i2, uint32 i3, uint32 i4 )
     {
         // first tri
-        triangle(i1, i2, i3);
+        triangle( i1, i2, i3 );
         // second tri
-        triangle(i3, i4, i1);
+        triangle( i3, i4, i1 );
     }
     //-----------------------------------------------------------------------------
     size_t ManualObject::getCurrentVertexCount() const
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
             return 0;
-        
+
         return mVertices;
     }
     //-----------------------------------------------------------------------------
     size_t ManualObject::getCurrentIndexCount() const
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
             return 0;
 
         return mIndices;
     }
     //-----------------------------------------------------------------------------
-    ManualObject::ManualObjectSection* ManualObject::end()
+    ManualObject::ManualObjectSection *ManualObject::end()
     {
-        if (!mCurrentSection)
+        if( !mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-                "You cannot call end() until after you call begin()",
-                "ManualObject::end");
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "You cannot call end() until after you call begin()", "ManualObject::end" );
         }
 
         // pointer that will be returned
-        ManualObjectSection * result = mCurrentSection;
+        ManualObjectSection *result = mCurrentSection;
 
         // Support calling begin() and end() without defining any geometry
-        if (! mVertices)
+        if( !mVertices )
         {
             mCurrentSection = 0;
             return result;
         }
 
-        if (! mIndices)
+        if( !mIndices )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-                "No indices have been defined in ManualObject. This is not supported.",
-                "ManualObject::end");
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "No indices have been defined in ManualObject. This is not supported.",
+                         "ManualObject::end" );
         }
 
-        if (!mCurrentUpdating)
+        if( !mCurrentUpdating )
         {
-            if (mCurrentSection->mVao)
+            if( mCurrentSection->mVao )
             {
                 mCurrentSection->clear();
             }
@@ -648,56 +606,56 @@ namespace Ogre {
             VaoManager *vaoManager = mCurrentSection->mVaoManager;
             VertexBufferPackedVec vertexBuffers;
 
-            //Create the vertex buffer
-            VertexBufferPacked * vertexBuffer = vaoManager->createVertexBuffer(mCurrentSection->mVertexElements,
-                                                                               mVertices,
-                                                                               BT_DYNAMIC_PERSISTENT_COHERENT,
-                                                                               NULL, false);
-            vertexBuffers.push_back(vertexBuffer);
+            // Create the vertex buffer
+            VertexBufferPacked *vertexBuffer =
+                vaoManager->createVertexBuffer( mCurrentSection->mVertexElements, mVertices,
+                                                BT_DYNAMIC_PERSISTENT_COHERENT, NULL, false );
+            vertexBuffers.push_back( vertexBuffer );
 
-            char * vertexData = static_cast<char *>(vertexBuffer->map(0, vertexBuffer->getNumElements()));
+            char *vertexData =
+                static_cast<char *>( vertexBuffer->map( 0, vertexBuffer->getNumElements() ) );
 
-            assert(vertexData);
+            assert( vertexData );
 
-            memcpy(vertexData, mVertexBuffer, mDeclSize * mVertices);
+            memcpy( vertexData, mVertexBuffer, mDeclSize * mVertices );
 
-            vertexBuffer->unmap(UO_KEEP_PERSISTENT);
+            vertexBuffer->unmap( UO_KEEP_PERSISTENT );
 
-            IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer(mCurrentSection->m32BitIndices ? IndexBufferPacked::IT_32BIT :
-                                                                                                            IndexBufferPacked::IT_16BIT,
-                                                                           mIndices,
-                                                                           BT_DYNAMIC_PERSISTENT_COHERENT,
-                                                                           NULL,
-                                                                           false);
+            IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer(
+                mCurrentSection->m32BitIndices ? IndexBufferPacked::IT_32BIT
+                                               : IndexBufferPacked::IT_16BIT,
+                mIndices, BT_DYNAMIC_PERSISTENT_COHERENT, NULL, false );
 
-            char * indexData = static_cast<char *>(indexBuffer->map(0, indexBuffer->getNumElements()));
+            char *indexData =
+                static_cast<char *>( indexBuffer->map( 0, indexBuffer->getNumElements() ) );
 
-            assert(indexData);
+            assert( indexData );
 
-            if (mCurrentSection->m32BitIndices)
+            if( mCurrentSection->m32BitIndices )
             {
-                memcpy(indexData, mIndexBuffer, mIndices * sizeof(uint32));
+                memcpy( indexData, mIndexBuffer, mIndices * sizeof( uint32 ) );
             }
             else
             {
-                uint32 * l32Buffer = (uint32 *)mIndexBuffer;
+                uint32 *l32Buffer = (uint32 *)mIndexBuffer;
 
-                for (size_t i = 0; i < mIndices; i++)
+                for( size_t i = 0; i < mIndices; i++ )
                 {
-                    *((uint16 *)indexData) = l32Buffer[i];
-                    indexData += sizeof(uint16);
+                    *( (uint16 *)indexData ) = l32Buffer[i];
+                    indexData += sizeof( uint16 );
                 }
             }
 
-            indexBuffer->unmap(UO_KEEP_PERSISTENT);
+            indexBuffer->unmap( UO_KEEP_PERSISTENT );
 
-            mCurrentSection->mVao = vaoManager->createVertexArrayObject(vertexBuffers, indexBuffer, mCurrentSection->mOperationType);
+            mCurrentSection->mVao = vaoManager->createVertexArrayObject(
+                vertexBuffers, indexBuffer, mCurrentSection->mOperationType );
 
-            mCurrentSection->mVaoPerLod[0].push_back(mCurrentSection->mVao);
-            mCurrentSection->mVaoPerLod[1].push_back(mCurrentSection->mVao);
-            mCurrentSection->setDatablock(mCurrentDatablockName);
+            mCurrentSection->mVaoPerLod[0].push_back( mCurrentSection->mVao );
+            mCurrentSection->mVaoPerLod[1].push_back( mCurrentSection->mVao );
+            mCurrentSection->setDatablock( mCurrentDatablockName );
 
-            mRenderables.push_back(mCurrentSection);
+            mRenderables.push_back( mCurrentSection );
 
             resetBuffers();
 
@@ -709,15 +667,15 @@ namespace Ogre {
             VertexBufferPackedVec::const_iterator itBuffers = vertexBuffers.begin();
             VertexBufferPackedVec::const_iterator endBuffers = vertexBuffers.end();
 
-            while (itBuffers != endBuffers)
+            while( itBuffers != endBuffers )
             {
-                VertexBufferPacked * vertexBuffer = *itBuffers;
-                vertexBuffer->unmap(UO_KEEP_PERSISTENT);
+                VertexBufferPacked *vertexBuffer = *itBuffers;
+                vertexBuffer->unmap( UO_KEEP_PERSISTENT );
                 itBuffers++;
             }
 
-            IndexBufferPacked * indexBuffer = mCurrentSection->mVao->getIndexBuffer();
-            indexBuffer->unmap(UO_KEEP_PERSISTENT);
+            IndexBufferPacked *indexBuffer = mCurrentSection->mVao->getIndexBuffer();
+            indexBuffer->unmap( UO_KEEP_PERSISTENT );
 
             mVertexBuffer = mVertexBufferCursor = 0;
             mIndexBuffer = mIndexBufferCursor = 0;
@@ -725,9 +683,9 @@ namespace Ogre {
 
         // update bounds
         Aabb aabb;
-        mObjectData.mLocalAabb->getAsAabb(aabb, mObjectData.mIndex);
-        aabb.merge(mCurrentSection->mAabb);
-        mObjectData.mLocalAabb->setFromAabb(aabb, mObjectData.mIndex);
+        mObjectData.mLocalAabb->getAsAabb( aabb, mObjectData.mIndex );
+        aabb.merge( mCurrentSection->mAabb );
+        mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
 
         mCurrentSection = 0;
@@ -737,71 +695,66 @@ namespace Ogre {
         return result;
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::setDatablock(size_t idx, const String& name)
+    void ManualObject::setDatablock( size_t idx, const String &name )
     {
-        if (idx >= mSectionList.size())
+        if( idx >= mSectionList.size() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Index out of bounds!",
-                "ManualObject::setMaterialName");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds!",
+                         "ManualObject::setMaterialName" );
         }
 
-        mSectionList[idx]->setDatablock(name);
+        mSectionList[idx]->setDatablock( name );
     }
     //-----------------------------------------------------------------------------
-    MeshPtr ManualObject::convertToMesh( const String& meshName, const String& groupName,
+    MeshPtr ManualObject::convertToMesh( const String &meshName, const String &groupName,
                                          bool buildShadowMapBuffers )
     {
-        if (mCurrentSection)
+        if( mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "You cannot call convertToMesh() whilst you are in the middle of "
-                "defining the object; call end() first.",
-                "ManualObject::convertToMesh");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "You cannot call convertToMesh() whilst you are in the middle of "
+                         "defining the object; call end() first.",
+                         "ManualObject::convertToMesh" );
         }
-        if (mSectionList.empty())
+        if( mSectionList.empty() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "No data defined to convert to a mesh.",
-                "ManualObject::convertToMesh");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "No data defined to convert to a mesh.",
+                         "ManualObject::convertToMesh" );
         }
-        MeshPtr m = MeshManager::getSingleton().createManual(meshName, groupName);
+        MeshPtr m = MeshManager::getSingleton().createManual( meshName, groupName );
 
-        for (SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i)
+        for( SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i )
         {
-            ManualObjectSection* sec = *i;
-            SubMesh* sm = m->createSubMesh();
-            sm->setMaterialName(sec->mDatablockName);
+            ManualObjectSection *sec = *i;
+            SubMesh *sm = m->createSubMesh();
+            sm->setMaterialName( sec->mDatablockName );
 
             size_t numVertices = sec->mVao->getBaseVertexBuffer()->getNumElements();
             size_t numIndices = sec->mVao->getIndexBuffer()->getNumElements();
 
-            Ogre::VertexBufferPacked *vertexBuffer = sec->mVaoManager->createVertexBuffer( sec->mVertexElements,
-                                                                                           numVertices,
-                                                                                           Ogre::BT_DEFAULT,
-                                                                                           0, false );
+            Ogre::VertexBufferPacked *vertexBuffer = sec->mVaoManager->createVertexBuffer(
+                sec->mVertexElements, numVertices, Ogre::BT_DEFAULT, 0, false );
 
             sec->mVao->getBaseVertexBuffer()->copyTo( vertexBuffer, 0, 0, numVertices );
 
             Ogre::VertexBufferPackedVec vertexBuffers;
             vertexBuffers.push_back( vertexBuffer );
 
-            Ogre::IndexBufferPacked *indexBuffer = sec->mVaoManager->createIndexBuffer( sec->m32BitIndices ? Ogre::IndexBufferPacked::IT_32BIT :
-                                                                                                             Ogre::IndexBufferPacked::IT_16BIT,
-                                                                                        numIndices,
-                                                                                        Ogre::BT_DEFAULT,
-                                                                                        0, false );
+            Ogre::IndexBufferPacked *indexBuffer = sec->mVaoManager->createIndexBuffer(
+                sec->m32BitIndices ? Ogre::IndexBufferPacked::IT_32BIT
+                                   : Ogre::IndexBufferPacked::IT_16BIT,
+                numIndices, Ogre::BT_DEFAULT, 0, false );
 
             sec->mVao->getIndexBuffer()->copyTo( indexBuffer, 0, 0, numIndices );
 
             Ogre::VertexArrayObject *vao = sec->mVaoManager->createVertexArrayObject(
-                        vertexBuffers, indexBuffer, sec->mOperationType );
+                vertexBuffers, indexBuffer, sec->mOperationType );
 
             sm->mVao[Ogre::VpNormal].push_back( vao );
             sm->mVao[Ogre::VpShadow].push_back( vao );
         }
 
-        Aabb aabb = mObjectData.mLocalAabb->getAsAabb(mObjectData.mIndex);
+        Aabb aabb = mObjectData.mLocalAabb->getAsAabb( mObjectData.mIndex );
         m->_setBounds( aabb );
         m->_setBoundingSphereRadius( mObjectData.mLocalRadius[mObjectData.mIndex] );
 
@@ -812,21 +765,19 @@ namespace Ogre {
         return m;
     }
     //-----------------------------------------------------------------------
-    ManualObject::ManualObjectSection* ManualObject::getSection(unsigned int inIndex) const
+    ManualObject::ManualObjectSection *ManualObject::getSection( unsigned int inIndex ) const
     {
-        if (inIndex >= mSectionList.size())
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-            "Index out of bounds.",
-            "ManualObject::getSection");
+        if( inIndex >= mSectionList.size() )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds.",
+                         "ManualObject::getSection" );
         return mSectionList[inIndex];
     }
     //-----------------------------------------------------------------------
-    ManualObject::ManualObjectSection* ManualObject::getSection(const String & name) const
+    ManualObject::ManualObjectSection *ManualObject::getSection( const String &name ) const
     {
-        for (SectionList::const_iterator i = mSectionList.begin();
-             i != mSectionList.end(); ++i)
+        for( SectionList::const_iterator i = mSectionList.begin(); i != mSectionList.end(); ++i )
         {
-            if ((*i)->mName == name)
+            if( ( *i )->mName == name )
             {
                 return *i;
             }
@@ -837,57 +788,47 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     unsigned int ManualObject::getNumSections() const
     {
-        return static_cast< unsigned int >( mSectionList.size() );
+        return static_cast<unsigned int>( mSectionList.size() );
     }
     //-----------------------------------------------------------------------
-    void ManualObject::removeSection(unsigned int idx)
+    void ManualObject::removeSection( unsigned int idx )
     {
-        if (idx >= mSectionList.size())
+        if( idx >= mSectionList.size() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                "Index out of bounds!",
-                "ManualObject::removeSection");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Index out of bounds!",
+                         "ManualObject::removeSection" );
         }
 
         SectionList::iterator it = mSectionList.begin() + idx;
 
-        if (*it == mCurrentSection)
+        if( *it == mCurrentSection )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-                "Can't remove section while building it's geometry!",
-                "ManualObject::removeSection");
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Can't remove section while building it's geometry!",
+                         "ManualObject::removeSection" );
         }
 
         OGRE_DELETE *it;
 
-        mSectionList.erase(it);
-        mRenderables.erase(mRenderables.begin() + idx);
+        mSectionList.erase( it );
+        mRenderables.erase( mRenderables.begin() + idx );
 
         Aabb aabb;
 
-        for (SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i)
+        for( SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i )
         {
-            aabb.merge((*i)->mAabb);
+            aabb.merge( ( *i )->mAabb );
         }
 
-        mObjectData.mLocalAabb->setFromAabb(aabb, mObjectData.mIndex);
+        mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
         mObjectData.mLocalRadius[mObjectData.mIndex] = aabb.getRadius();
     }
     //-----------------------------------------------------------------------------
-    size_t ManualObject::currentIndexCount()
-    {
-        return mIndices;
-    }
+    size_t ManualObject::currentIndexCount() { return mIndices; }
     //-----------------------------------------------------------------------------
-    size_t ManualObject::currentVertexCount()
-    {
-        return mVertices;
-    }
+    size_t ManualObject::currentVertexCount() { return mVertices; }
     //-----------------------------------------------------------------------------
-    const String& ManualObject::getMovableType() const
-    {
-        return ManualObjectFactory::FACTORY_TYPE_NAME;
-    }
+    const String &ManualObject::getMovableType() const { return ManualObjectFactory::FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
     //-----------------------------------------------------------------------------
@@ -895,7 +836,7 @@ namespace Ogre {
     {
         VertexArrayObject *vao = mVao;
 
-        if (vao)
+        if( vao )
         {
             VaoManager *vaoManager = mVaoManager;
 
@@ -903,33 +844,33 @@ namespace Ogre {
             VertexBufferPackedVec::const_iterator itBuffers = vertexBuffers.begin();
             VertexBufferPackedVec::const_iterator endBuffers = vertexBuffers.end();
 
-            while (itBuffers != endBuffers)
+            while( itBuffers != endBuffers )
             {
-                VertexBufferPacked * vertexBuffer = *itBuffers;
+                VertexBufferPacked *vertexBuffer = *itBuffers;
 
-                if (vertexBuffer->getMappingState() != Ogre::MS_UNMAPPED)
+                if( vertexBuffer->getMappingState() != Ogre::MS_UNMAPPED )
                 {
-                    vertexBuffer->unmap(UO_UNMAP_ALL);
+                    vertexBuffer->unmap( UO_UNMAP_ALL );
                 }
 
-                vaoManager->destroyVertexBuffer(vertexBuffer);
+                vaoManager->destroyVertexBuffer( vertexBuffer );
 
                 ++itBuffers;
             }
 
-            IndexBufferPacked * indexBuffer = vao->getIndexBuffer();
+            IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
 
-            if (indexBuffer)
+            if( indexBuffer )
             {
-                if (indexBuffer->getMappingState() != Ogre::MS_UNMAPPED)
+                if( indexBuffer->getMappingState() != Ogre::MS_UNMAPPED )
                 {
-                    indexBuffer->unmap(UO_UNMAP_ALL);
+                    indexBuffer->unmap( UO_UNMAP_ALL );
                 }
 
-                vaoManager->destroyIndexBuffer(indexBuffer);
+                vaoManager->destroyIndexBuffer( indexBuffer );
             }
 
-            vaoManager->destroyVertexArrayObject(vao);
+            vaoManager->destroyVertexArrayObject( vao );
         }
 
         mVao = 0;
@@ -937,19 +878,21 @@ namespace Ogre {
         mVaoPerLod[1].clear();
     }
     //-----------------------------------------------------------------------------
-    ManualObject::ManualObjectSection::ManualObjectSection(ManualObject* parent,
-        const String& datablockName, OperationType opType)
-        : mParent(parent), mVao(0), mOperationType(opType), m32BitIndices(false), mDatablockName(datablockName)
+    ManualObject::ManualObjectSection::ManualObjectSection( ManualObject *parent,
+                                                            const String &datablockName,
+                                                            OperationType opType ) :
+        mParent( parent ),
+        mVao( 0 ),
+        mOperationType( opType ),
+        m32BitIndices( false ),
+        mDatablockName( datablockName )
     {
-
     }
     //-----------------------------------------------------------------------------
-    ManualObject::ManualObjectSection::~ManualObjectSection()
-    {
-        clear();
-    }
+    ManualObject::ManualObjectSection::~ManualObjectSection() { clear(); }
     //-----------------------------------------------------------------------------
-    void ManualObject::ManualObjectSection::getRenderOperation(v1::RenderOperation& op, bool casterPass)
+    void ManualObject::ManualObjectSection::getRenderOperation( v1::RenderOperation &op,
+                                                                bool casterPass )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "ManualObject does not implement getRenderOperation. "
@@ -957,7 +900,7 @@ namespace Ogre {
                      "ManualObjectSection::getRenderOperation" );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::ManualObjectSection::getWorldTransforms(Matrix4* xform) const
+    void ManualObject::ManualObjectSection::getWorldTransforms( Matrix4 *xform ) const
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "ManualObject does not implement getWorldTransforms. "
@@ -965,45 +908,32 @@ namespace Ogre {
                      "ManualObjectSection::getWorldTransforms" );
     }
     //-----------------------------------------------------------------------------
-    const LightList& ManualObject::ManualObjectSection::getLights() const
+    const LightList &ManualObject::ManualObjectSection::getLights() const
     {
         return mParent->queryLights();
     }
     //-----------------------------------------------------------------------------
     bool ManualObject::ManualObjectSection::getCastsShadows() const
     {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "ManualObject do not implement getCastsShadows.",
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "ManualObject do not implement getCastsShadows.",
                      "ManualObjectSection::getCastsShadows" );
     }
     //-----------------------------------------------------------------------------
-    void ManualObject::ManualObjectSection::setName(const String & name)
-    {
-        mName = name;
-    }
+    void ManualObject::ManualObjectSection::setName( const String &name ) { mName = name; }
     //-----------------------------------------------------------------------------
-    const String &ManualObject::ManualObjectSection::getName()
-    {
-        return mName;
-    }
+    const String &ManualObject::ManualObjectSection::getName() { return mName; }
     //-----------------------------------------------------------------------------
     String ManualObjectFactory::FACTORY_TYPE_NAME = "ManualObject2";
     //-----------------------------------------------------------------------------
-    const String& ManualObjectFactory::getType() const
-    {
-        return FACTORY_TYPE_NAME;
-    }
+    const String &ManualObjectFactory::getType() const { return FACTORY_TYPE_NAME; }
     //-----------------------------------------------------------------------------
-    MovableObject* ManualObjectFactory::createInstanceImpl( IdType id,
+    MovableObject *ManualObjectFactory::createInstanceImpl( IdType id,
                                                             ObjectMemoryManager *objectMemoryManager,
                                                             SceneManager *manager,
-                                                            const NameValuePairList* params )
+                                                            const NameValuePairList *params )
     {
         return OGRE_NEW ManualObject( id, objectMemoryManager, manager );
     }
     //-----------------------------------------------------------------------------
-    void ManualObjectFactory::destroyInstance( MovableObject* obj)
-    {
-        OGRE_DELETE obj;
-    }
-}
+    void ManualObjectFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
+}  // namespace Ogre

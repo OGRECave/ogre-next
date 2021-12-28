@@ -34,20 +34,17 @@ THE SOFTWARE.
 namespace Ogre
 {
     //-----------------------------------------------------------------------
-    template<> DynLibManager* Singleton<DynLibManager>::msSingleton = 0;
-    DynLibManager* DynLibManager::getSingletonPtr()
+    template <>
+    DynLibManager *Singleton<DynLibManager>::msSingleton = 0;
+    DynLibManager *DynLibManager::getSingletonPtr() { return msSingleton; }
+    //-----------------------------------------------------------------------
+    DynLibManager &DynLibManager::getSingleton()
     {
-        return msSingleton;
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
-    DynLibManager& DynLibManager::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
-    }
-    //-----------------------------------------------------------------------
-    DynLibManager::DynLibManager()
-    {
-    }
+    DynLibManager::DynLibManager() {}
     //-----------------------------------------------------------------------
     DynLib *DynLibManager::load( const String &filename, const bool bOptional )
     {
@@ -65,12 +62,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------
-    void DynLibManager::unload(DynLib* lib)
+    void DynLibManager::unload( DynLib *lib )
     {
-        DynLibList::iterator i = mLibList.find(lib->getName());
-        if (i != mLibList.end())
+        DynLibList::iterator i = mLibList.find( lib->getName() );
+        if( i != mLibList.end() )
         {
-            mLibList.erase(i);
+            mLibList.erase( i );
         }
         lib->unload();
         OGRE_DELETE lib;
@@ -88,4 +85,4 @@ namespace Ogre
         // Empty the list
         mLibList.clear();
     }
-}
+}  // namespace Ogre

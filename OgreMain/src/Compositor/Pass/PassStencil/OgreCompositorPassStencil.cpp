@@ -38,10 +38,10 @@ THE SOFTWARE.
 namespace Ogre
 {
     CompositorPassStencilDef::CompositorPassStencilDef( CompositorTargetDef *parentTargetDef ) :
-            CompositorPassDef( PASS_STENCIL, parentTargetDef ),
-            mStencilRef( 0 )
+        CompositorPassDef( PASS_STENCIL, parentTargetDef ),
+        mStencilRef( 0 )
     {
-        //Override default.
+        // Override default.
         mStencilParams.enabled = true;
     }
     //-----------------------------------------------------------------------------------
@@ -51,9 +51,9 @@ namespace Ogre
                                                   const RenderTargetViewDef *rtv,
                                                   CompositorNode *parentNode,
                                                   RenderSystem *renderSystem ) :
-                CompositorPass( definition, parentNode ),
-                mDefinition( definition ),
-                mRenderSystem( renderSystem )
+        CompositorPass( definition, parentNode ),
+        mDefinition( definition ),
+        mRenderSystem( renderSystem )
     {
         initialize( rtv );
     }
@@ -65,7 +65,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassStencil::execute( const Camera *lodCamera )
     {
-        //Execute a limited number of times?
+        // Execute a limited number of times?
         if( mNumPassesLeft != std::numeric_limits<uint32>::max() )
         {
             if( !mNumPassesLeft )
@@ -78,7 +78,7 @@ namespace Ogre
         analyzeBarriers();
         executeResourceTransitions();
 
-        //Fire the listener in case it wants to change anything
+        // Fire the listener in case it wants to change anything
         notifyPassPreExecuteListeners();
 
         setRenderPassDescToCurrent();
@@ -87,4 +87,4 @@ namespace Ogre
 
         notifyPassPosExecuteListeners();
     }
-}
+}  // namespace Ogre

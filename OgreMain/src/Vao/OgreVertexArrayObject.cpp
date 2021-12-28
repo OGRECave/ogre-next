@@ -30,33 +30,32 @@ THE SOFTWARE.
 
 #include "Vao/OgreVertexArrayObject.h"
 
-#include "Vao/OgreIndexBufferPacked.h"
-#include "Vao/OgreAsyncTicket.h"
-#include "Vao/OgreVaoManager.h"
 #include "OgreStringConverter.h"
+#include "Vao/OgreAsyncTicket.h"
+#include "Vao/OgreIndexBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 #include "ogrestd/set.h"
 
 namespace Ogre
 {
-    VertexBufferPacked VertexArrayObject::msDummyVertexBuffer( 0, 0, 1, 0, BT_DEFAULT, 0, false, 0,
-                                                               0, VertexElement2Vec() );
+    VertexBufferPacked VertexArrayObject::msDummyVertexBuffer( 0, 0, 1, 0, BT_DEFAULT, 0, false, 0, 0,
+                                                               VertexElement2Vec() );
 
-    typedef vector<VertexBufferPacked*>::type VertexBufferPackedVec;
+    typedef vector<VertexBufferPacked *>::type VertexBufferPackedVec;
 
     VertexArrayObject::VertexArrayObject( uint32 vaoName, uint32 renderQueueId, uint16 inputLayoutId,
                                           const VertexBufferPackedVec &vertexBuffers,
-                                          IndexBufferPacked *indexBuffer,
-                                          OperationType operationType ) :
-            mVaoName( vaoName ),
-            mRenderQueueId( renderQueueId ),
-            mInputLayoutId( inputLayoutId ),
-            mPrimStart( 0 ),
-            mPrimCount( 0 ),
-            mVertexBuffers( vertexBuffers ),
-            mIndexBuffer( indexBuffer ),
-            mBaseVertexBuffer( 0 ),
-            mOperationType( operationType )
+                                          IndexBufferPacked *indexBuffer, OperationType operationType ) :
+        mVaoName( vaoName ),
+        mRenderQueueId( renderQueueId ),
+        mInputLayoutId( inputLayoutId ),
+        mPrimStart( 0 ),
+        mPrimCount( 0 ),
+        mVertexBuffers( vertexBuffers ),
+        mIndexBuffer( indexBuffer ),
+        mBaseVertexBuffer( 0 ),
+        mOperationType( operationType )
     {
         if( mVertexBuffers.empty() )
             mBaseVertexBuffer = &msDummyVertexBuffer;
@@ -98,24 +97,23 @@ namespace Ogre
         if( primStart > limit )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "primStart must be less or equal than " +
-                         StringConverter::toString( limit ),
+                         "primStart must be less or equal than " + StringConverter::toString( limit ),
                          "VertexArrayObject::setPrimitiveRange" );
         }
 
         if( primStart + primCount > limit )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "primStart + primCount must be less or equal than " +
-                         StringConverter::toString( limit ),
-                         "VertexArrayObject::setPrimitiveRange" );
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "primStart + primCount must be less or equal than " + StringConverter::toString( limit ),
+                "VertexArrayObject::setPrimitiveRange" );
         }
 
         mPrimStart = primStart;
         mPrimCount = primCount;
     }
     //-----------------------------------------------------------------------------------
-    const VertexElement2* VertexArrayObject::findBySemantic( VertexElementSemantic semantic,
+    const VertexElement2 *VertexArrayObject::findBySemantic( VertexElementSemantic semantic,
                                                              size_t &outIndex, size_t &outOffset,
                                                              size_t repeat ) const
     {
@@ -129,7 +127,7 @@ namespace Ogre
         while( itBuffers != enBuffers && !retVal )
         {
             size_t accumOffset = 0;
-            const VertexElement2Vec &elements =  (*itBuffers)->getVertexElements();
+            const VertexElement2Vec &elements = ( *itBuffers )->getVertexElements();
 
             VertexElement2Vec::const_iterator itElements = elements.begin();
             VertexElement2Vec::const_iterator enElements = elements.end();
@@ -149,7 +147,7 @@ namespace Ogre
             {
                 outIndex = itBuffers - mVertexBuffers.begin();
                 outOffset = accumOffset;
-                retVal = &(*itElements);
+                retVal = &( *itElements );
             }
 
             ++itBuffers;
@@ -167,14 +165,15 @@ namespace Ogre
 
         while( itBuffers != enBuffers )
         {
-            retVal.push_back( (*itBuffers)->getVertexElements() );
+            retVal.push_back( ( *itBuffers )->getVertexElements() );
             ++itBuffers;
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    VertexElement2VecVec VertexArrayObject::getVertexDeclaration( const VertexBufferPackedVec &vertexBuffers )
+    VertexElement2VecVec VertexArrayObject::getVertexDeclaration(
+        const VertexBufferPackedVec &vertexBuffers )
     {
         VertexElement2VecVec retVal;
         retVal.reserve( vertexBuffers.size() );
@@ -183,24 +182,21 @@ namespace Ogre
 
         while( itBuffers != enBuffers )
         {
-            retVal.push_back( (*itBuffers)->getVertexElements() );
+            retVal.push_back( ( *itBuffers )->getVertexElements() );
             ++itBuffers;
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    VertexArrayObject* VertexArrayObject::clone( VaoManager *vaoManager,
+    VertexArrayObject *VertexArrayObject::clone( VaoManager *vaoManager,
                                                  SharedVertexBufferMap *sharedBuffers,
-                                                 int vertexBufferType,
-                                                 int indexBufferType ) const
+                                                 int vertexBufferType, int indexBufferType ) const
     {
-        assert( vertexBufferType < 0 ||
-                (vertexBufferType >= BT_IMMUTABLE &&
-                 vertexBufferType <= BT_DYNAMIC_PERSISTENT_COHERENT) );
-        assert( indexBufferType < 0 ||
-                (indexBufferType >= BT_IMMUTABLE &&
-                 indexBufferType <= BT_DYNAMIC_PERSISTENT_COHERENT) );
+        assert( vertexBufferType < 0 || ( vertexBufferType >= BT_IMMUTABLE &&
+                                          vertexBufferType <= BT_DYNAMIC_PERSISTENT_COHERENT ) );
+        assert( indexBufferType < 0 || ( indexBufferType >= BT_IMMUTABLE &&
+                                         indexBufferType <= BT_DYNAMIC_PERSISTENT_COHERENT ) );
 
         VertexBufferPackedVec newVertexBuffers;
         newVertexBuffers.reserve( mVertexBuffers.size() );
@@ -215,48 +211,48 @@ namespace Ogre
                 SharedVertexBufferMap::const_iterator itShared = sharedBuffers->find( *itBuffers );
                 if( itShared != sharedBuffers->end() )
                 {
-                    //This buffer is shared. Reuse the one we created in a previous call.
+                    // This buffer is shared. Reuse the one we created in a previous call.
                     newVertexBuffers.push_back( itShared->second );
                     ++itBuffers;
                     continue;
                 }
             }
 
-            void *dstData = OGRE_MALLOC_SIMD( (*itBuffers)->getTotalSizeBytes(), MEMCATEGORY_GEOMETRY );
+            void *dstData =
+                OGRE_MALLOC_SIMD( ( *itBuffers )->getTotalSizeBytes(), MEMCATEGORY_GEOMETRY );
             FreeOnDestructor dataPtrContainer( dstData );
 
             // only map if there is no shadow buffer
-            if( (*itBuffers)->getShadowCopy() )
+            if( ( *itBuffers )->getShadowCopy() )
             {
-                const void* shadowBuff = ( *itBuffers )->getShadowCopy();
+                const void *shadowBuff = ( *itBuffers )->getShadowCopy();
                 memcpy( dstData, shadowBuff, ( *itBuffers )->getTotalSizeBytes() );
             }
             else
             {
-                AsyncTicketPtr asyncTicket = (*itBuffers)->readRequest( 0,
-                                                                        (*itBuffers)->getNumElements() );
+                AsyncTicketPtr asyncTicket =
+                    ( *itBuffers )->readRequest( 0, ( *itBuffers )->getNumElements() );
                 const void *srcData = asyncTicket->map();
                 memcpy( dstData, srcData, ( *itBuffers )->getTotalSizeBytes() );
                 asyncTicket->unmap();
             }
 
-            const BufferType bufferType = vertexBufferType < 0 ?
-                        (*itBuffers)->getBufferType() : static_cast<BufferType>( vertexBufferType );
+            const BufferType bufferType = vertexBufferType < 0
+                                              ? ( *itBuffers )->getBufferType()
+                                              : static_cast<BufferType>( vertexBufferType );
 
-            const bool keepAsShadow = (*itBuffers)->getShadowCopy() != 0;
+            const bool keepAsShadow = ( *itBuffers )->getShadowCopy() != 0;
             VertexBufferPacked *newVertexBuffer = vaoManager->createVertexBuffer(
-                                                    (*itBuffers)->getVertexElements(),
-                                                    (*itBuffers)->getNumElements(),
-                                                    bufferType,
-                                                    dstData, keepAsShadow );
+                ( *itBuffers )->getVertexElements(), ( *itBuffers )->getNumElements(), bufferType,
+                dstData, keepAsShadow );
 
-            if( keepAsShadow ) //Don't free the pointer ourselves
+            if( keepAsShadow )  // Don't free the pointer ourselves
                 dataPtrContainer.ptr = 0;
 
             newVertexBuffers.push_back( newVertexBuffer );
 
             if( sharedBuffers )
-                (*sharedBuffers)[*itBuffers] = newVertexBuffer;
+                ( *sharedBuffers )[*itBuffers] = newVertexBuffer;
 
             ++itBuffers;
         }
@@ -270,44 +266,43 @@ namespace Ogre
             // only map if there is no shadow buffer
             if( mIndexBuffer->getShadowCopy() )
             {
-                const void* shadowBuff = mIndexBuffer->getShadowCopy();
+                const void *shadowBuff = mIndexBuffer->getShadowCopy();
                 memcpy( dstData, shadowBuff, mIndexBuffer->getTotalSizeBytes() );
             }
             else
             {
-                AsyncTicketPtr asyncTicket = mIndexBuffer->readRequest( 0, mIndexBuffer->getNumElements() );
+                AsyncTicketPtr asyncTicket =
+                    mIndexBuffer->readRequest( 0, mIndexBuffer->getNumElements() );
                 const void *srcData = asyncTicket->map();
                 memcpy( dstData, srcData, mIndexBuffer->getTotalSizeBytes() );
                 asyncTicket->unmap();
             }
 
-            const BufferType bufferType = indexBufferType < 0 ?
-                        mIndexBuffer->getBufferType() : static_cast<BufferType>( indexBufferType );
+            const BufferType bufferType = indexBufferType < 0
+                                              ? mIndexBuffer->getBufferType()
+                                              : static_cast<BufferType>( indexBufferType );
 
             const bool keepAsShadow = mIndexBuffer->getShadowCopy() != 0;
             newIndexBuffer = vaoManager->createIndexBuffer( mIndexBuffer->getIndexType(),
-                                                            mIndexBuffer->getNumElements(),
-                                                            bufferType,
+                                                            mIndexBuffer->getNumElements(), bufferType,
                                                             dstData, keepAsShadow );
 
-            if( keepAsShadow ) //Don't free the pointer ourselves
+            if( keepAsShadow )  // Don't free the pointer ourselves
                 dataPtrContainer.ptr = 0;
         }
 
-        VertexArrayObject *retVal = vaoManager->createVertexArrayObject( newVertexBuffers,
-                                                                         newIndexBuffer,
-                                                                         mOperationType );
+        VertexArrayObject *retVal =
+            vaoManager->createVertexArrayObject( newVertexBuffers, newIndexBuffer, mOperationType );
         retVal->mPrimStart = mPrimStart;
         retVal->mPrimCount = mPrimCount;
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VertexArrayObject::readRequests( ReadRequestsArray &requests,
-                                          size_t elementStart, size_t elementCount,
-                                          bool skipRequestIfBufferHasShadowCopy )
+    void VertexArrayObject::readRequests( ReadRequestsArray &requests, size_t elementStart,
+                                          size_t elementCount, bool skipRequestIfBufferHasShadowCopy )
     {
-        set<VertexBufferPacked*>::type seenBuffers;
+        set<VertexBufferPacked *>::type seenBuffers;
 
         size_t semanticCounts[VES_COUNT];
         memset( semanticCounts, 0, sizeof( semanticCounts ) );
@@ -318,9 +313,9 @@ namespace Ogre
         while( itor != endt )
         {
             size_t bufferIdx, offset;
-            const VertexElement2 *vElement = findBySemantic( itor->semantic, bufferIdx, offset,
-                                                             semanticCounts[itor->semantic-1] );
-            ++semanticCounts[itor->semantic-1];
+            const VertexElement2 *vElement =
+                findBySemantic( itor->semantic, bufferIdx, offset, semanticCounts[itor->semantic - 1] );
+            ++semanticCounts[itor->semantic - 1];
             if( !vElement )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Cannot find semantic in VertexArrayObject",
@@ -338,7 +333,7 @@ namespace Ogre
 
             if( skipRequestIfBufferHasShadowCopy && vertexBuffer->getShadowCopy() )
             {
-                itor->data = reinterpret_cast<const char*>( vertexBuffer->getShadowCopy() );
+                itor->data = reinterpret_cast<const char *>( vertexBuffer->getShadowCopy() );
                 itor->data += offset + elementStart * vertexBuffer->getBytesPerElement();
             }
             else if( seenBuffers.find( vertexBuffer ) == seenBuffers.end() )
@@ -365,21 +360,20 @@ namespace Ogre
         {
             assert( ( !itor->asyncTicket.isNull() ||
                       seenBuffers.find( itor->vertexBuffer ) != seenBuffers.end() ||
-                      (itor->data &&
-                       itor->vertexBuffer->getShadowCopy() &&
-                       itor->asyncTicket.isNull()) )
-                    && "These tickets are invalid or already been unmapped, or you're mapping twice" );
+                      ( itor->data && itor->vertexBuffer->getShadowCopy() &&
+                        itor->asyncTicket.isNull() ) ) &&
+                    "These tickets are invalid or already been unmapped, or you're mapping twice" );
 
             if( !itor->asyncTicket.isNull() )
             {
-                itor->data = reinterpret_cast<const char*>( itor->asyncTicket->map() );
+                itor->data = reinterpret_cast<const char *>( itor->asyncTicket->map() );
                 itor->data += itor->offset;
                 seenBuffers[itor->vertexBuffer] = itor - tickets.begin();
             }
             else if( !itor->data )
             {
-                map<VertexBufferPacked const *, size_t>::type::const_iterator it = seenBuffers.find(
-                                                                                itor->vertexBuffer );
+                map<VertexBufferPacked const *, size_t>::type::const_iterator it =
+                    seenBuffers.find( itor->vertexBuffer );
                 assert( it != seenBuffers.end() &&
                         "These tickets are invalid or already been unmapped" );
 
@@ -407,4 +401,4 @@ namespace Ogre
             ++itor;
         }
     }
-}
+}  // namespace Ogre

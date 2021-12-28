@@ -32,15 +32,15 @@ THE SOFTWARE.
 
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
-#include "OgreStringConverter.h"
 #include "OgreLogManager.h"
-#include "OgreString.h"
 #include "OgrePass.h"
 #include "OgreProfiler.h"
+#include "OgreString.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {
-    extern CompareFunction convertCompareFunction(const String& param);
+    extern CompareFunction convertCompareFunction( const String &param );
 
     BasicBlock::BasicBlock( uint8 blockType ) :
         mRsData( 0 ),
@@ -85,7 +85,7 @@ namespace Ogre
         mSeparateBlend = false;
         Pass::_getBlendFlags( blendType, mSourceBlendFactor, mDestBlendFactor );
         mSourceBlendFactorAlpha = mSourceBlendFactor;
-        mDestBlendFactorAlpha   = mDestBlendFactor;
+        mDestBlendFactorAlpha = mDestBlendFactor;
     }
     //-----------------------------------------------------------------------------------
     void HlmsBlendblock::setBlendType( SceneBlendType colour, SceneBlendType alpha )
@@ -113,8 +113,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     HlmsDatablock::HlmsDatablock( IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
-                                  const HlmsBlendblock *blendblock,
-                                  const HlmsParamVec &params ) :
+                                  const HlmsBlendblock *blendblock, const HlmsParamVec &params ) :
         mCreator( creator ),
         mName( name ),
         mTextureHash( 0 ),
@@ -132,7 +131,7 @@ namespace Ogre
         setMacroblock( macroblock, false );
         setBlendblock( blendblock, false );
 
-        //The two previous calls increased the ref. counts by one more than what we need. Correct.
+        // The two previous calls increased the ref. counts by one more than what we need. Correct.
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         hlmsManager->destroyMacroblock( macroblock );
         hlmsManager->destroyBlendblock( blendblock );
@@ -182,8 +181,8 @@ namespace Ogre
                         else
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                         mName.getFriendlyText() + ": unknown alpha_test cmp function "
-                                         "'" + *itor + "'",
+                                         mName.getFriendlyText() +
+                                             ": unknown alpha_test cmp function '" + *itor + "'",
                                          "HlmsDatablock::HlmsDatablock" );
                         }
                     }
@@ -203,7 +202,7 @@ namespace Ogre
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         if( hlmsManager )
         {
-            for( int i=0; i<2; ++i )
+            for( int i = 0; i < 2; ++i )
             {
                 hlmsManager->destroyMacroblock( mMacroblock[i] );
                 hlmsManager->destroyBlendblock( mBlendblock[i] );
@@ -211,21 +210,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsDatablock::clone( String name ) const
+    HlmsDatablock *HlmsDatablock::clone( String name ) const
     {
         OgreProfileExhaustive( "HlmsDatablock::clone" );
 
-        HlmsDatablock *datablock = mCreator->createDatablock( name, name,
-                                                              HlmsMacroblock(), HlmsBlendblock(),
-                                                              HlmsParamVec() );
+        HlmsDatablock *datablock =
+            mCreator->createDatablock( name, name, HlmsMacroblock(), HlmsBlendblock(), HlmsParamVec() );
 
         // Directly const cast macroblocks to keep their mRefCount consistent
-        datablock->setMacroblock( const_cast<HlmsMacroblock*>( mMacroblock[0] ), false );
-        datablock->setMacroblock( const_cast<HlmsMacroblock*>( mMacroblock[1] ), true );
+        datablock->setMacroblock( const_cast<HlmsMacroblock *>( mMacroblock[0] ), false );
+        datablock->setMacroblock( const_cast<HlmsMacroblock *>( mMacroblock[1] ), true );
 
         // Directly const cast blendblocks to keep their mRefCount consistent
-        datablock->setBlendblock( const_cast<HlmsBlendblock*>( mBlendblock[0] ), false );
-        datablock->setBlendblock( const_cast<HlmsBlendblock*>( mBlendblock[1] ), true );
+        datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[0] ), false );
+        datablock->setBlendblock( const_cast<HlmsBlendblock *>( mBlendblock[1] ), true );
 
         datablock->mAlphaTestCmp = mAlphaTestCmp;
         datablock->mAlphaTestShadowCasterOnly = mAlphaTestShadowCasterOnly;
@@ -262,10 +260,10 @@ namespace Ogre
 
         if( !mIgnoreFlushRenderables )
         {
-            //Force the flush. It's tricky to check if we need this because the new block may
-            //be different but be assigned a different ID (old one's API construct was already
-            //destroyed) or be equal but have a different ID. It's not random or chaotic and
-            //there are guarantees, but it's tricky to get it right and not worth it.
+            // Force the flush. It's tricky to check if we need this because the new block may
+            // be different but be assigned a different ID (old one's API construct was already
+            // destroyed) or be equal but have a different ID. It's not random or chaotic and
+            // there are guarantees, but it's tricky to get it right and not worth it.
             flushRenderables();
         }
     }
@@ -292,10 +290,10 @@ namespace Ogre
 
         if( !mIgnoreFlushRenderables )
         {
-            //Force the flush. It's tricky to check if we need this because the new block may
-            //be different but be assigned a different ID (old one's API construct was already
-            //destroyed) or be equal but have a different ID. It's not random or chaotic and
-            //there are guarantees, but it's tricky to get it right and not worth it.
+            // Force the flush. It's tricky to check if we need this because the new block may
+            // be different but be assigned a different ID (old one's API construct was already
+            // destroyed) or be equal but have a different ID. It's not random or chaotic and
+            // there are guarantees, but it's tricky to get it right and not worth it.
             flushRenderables();
         }
     }
@@ -329,10 +327,10 @@ namespace Ogre
 
         if( !mIgnoreFlushRenderables )
         {
-            //Force the flush. It's tricky to check if we need this because the new block may
-            //be different but be assigned a different ID (old one's API construct was already
-            //destroyed) or be equal but have a different ID. It's not random or chaotic and
-            //there are guarantees, but it's tricky to get it right and not worth it.
+            // Force the flush. It's tricky to check if we need this because the new block may
+            // be different but be assigned a different ID (old one's API construct was already
+            // destroyed) or be equal but have a different ID. It's not random or chaotic and
+            // there are guarantees, but it's tricky to get it right and not worth it.
             flushRenderables();
         }
     }
@@ -365,10 +363,10 @@ namespace Ogre
 
         if( !mIgnoreFlushRenderables )
         {
-            //Force the flush. It's tricky to check if we need this because the new block may
-            //be different but be assigned a different ID (old one's API construct was already
-            //destroyed) or be equal but have a different ID. It's not random or chaotic and
-            //there are guarantees, but it's tricky to get it right and not worth it.
+            // Force the flush. It's tricky to check if we need this because the new block may
+            // be different but be assigned a different ID (old one's API construct was already
+            // destroyed) or be equal but have a different ID. It's not random or chaotic and
+            // there are guarantees, but it's tricky to get it right and not worth it.
             flushRenderables();
         }
     }
@@ -389,23 +387,14 @@ namespace Ogre
         return static_cast<CompareFunction>( mAlphaTestCmp );
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsDatablock::getAlphaTestShadowCasterOnly() const
-    {
-        return mAlphaTestShadowCasterOnly;
-    }
+    bool HlmsDatablock::getAlphaTestShadowCasterOnly() const { return mAlphaTestShadowCasterOnly; }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::setAlphaTestThreshold( float threshold )
-    {
-        mAlphaTestThreshold = threshold;
-    }
+    void HlmsDatablock::setAlphaTestThreshold( float threshold ) { mAlphaTestThreshold = threshold; }
     //-----------------------------------------------------------------------------------
-    const String* HlmsDatablock::getNameStr() const
-    {
-        return mCreator->getNameStr(mName);
-    }
+    const String *HlmsDatablock::getNameStr() const { return mCreator->getNameStr( mName ); }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::getFilenameAndResourceGroup( String const * *outFilename,
-                                                     String const * *outResourceGroup ) const
+    void HlmsDatablock::getFilenameAndResourceGroup( String const **outFilename,
+                                                     String const **outResourceGroup ) const
     {
         return mCreator->getFilenameAndResourceGroup( mName, outFilename, outResourceGroup );
     }
@@ -422,20 +411,21 @@ namespace Ogre
     void HlmsDatablock::_unlinkRenderable( Renderable *renderable )
     {
         if( renderable->mHlmsGlobalIndex >= mLinkedRenderables.size() ||
-            renderable != *(mLinkedRenderables.begin() + renderable->mHlmsGlobalIndex) )
+            renderable != *( mLinkedRenderables.begin() + renderable->mHlmsGlobalIndex ) )
         {
-            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, "A Renderable had it's mHlmsGlobalIndex out of "
-                "date!!! (or the Renderable wasn't being tracked by this datablock)",
-                "HlmsDatablock::_removeRenderable" );
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                         "A Renderable had it's mHlmsGlobalIndex out of "
+                         "date!!! (or the Renderable wasn't being tracked by this datablock)",
+                         "HlmsDatablock::_removeRenderable" );
         }
 
-        vector<Renderable*>::type::iterator itor = mLinkedRenderables.begin() +
-                                                    renderable->mHlmsGlobalIndex;
+        vector<Renderable *>::type::iterator itor =
+            mLinkedRenderables.begin() + renderable->mHlmsGlobalIndex;
         itor = efficientVectorRemove( mLinkedRenderables, itor );
 
-        //The Renderable that was at the end got swapped and has now a different index
+        // The Renderable that was at the end got swapped and has now a different index
         if( itor != mLinkedRenderables.end() )
-            (*itor)->mHlmsGlobalIndex = itor - mLinkedRenderables.begin();
+            ( *itor )->mHlmsGlobalIndex = itor - mLinkedRenderables.begin();
 
         renderable->mHlmsGlobalIndex = ~0;
     }
@@ -449,25 +439,25 @@ namespace Ogre
             macroId = mMacroblock[casterPass]->mId;
         if( mBlendblock[casterPass] )
             blendId = mBlendblock[casterPass]->mId;
-        mMacroblockHash[casterPass] = ((macroId & 0x1F) << 5) | (blendId & 0x1F);
+        mMacroblockHash[casterPass] = ( ( macroId & 0x1F ) << 5 ) | ( blendId & 0x1F );
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::flushRenderables( bool onlyNullHashes )
     {
         OgreProfileExhaustiveAggr( "HlmsDatablock::flushRenderables" );
 
-        vector<Renderable*>::type::const_iterator itor = mLinkedRenderables.begin();
-        vector<Renderable*>::type::const_iterator endt = mLinkedRenderables.end();
+        vector<Renderable *>::type::const_iterator itor = mLinkedRenderables.begin();
+        vector<Renderable *>::type::const_iterator endt = mLinkedRenderables.end();
 
         while( itor != endt )
         {
             try
             {
                 uint32 hash, casterHash;
-                if( !onlyNullHashes || !(*itor)->getHlmsHash() || !(*itor)->getHlmsCasterHash() )
+                if( !onlyNullHashes || !( *itor )->getHlmsHash() || !( *itor )->getHlmsCasterHash() )
                 {
                     mCreator->calculateHashFor( *itor, hash, casterHash );
-                    (*itor)->_setHlmsHashes( hash, casterHash );
+                    ( *itor )->_setHlmsHashes( hash, casterHash );
                 }
                 ++itor;
             }
@@ -475,27 +465,28 @@ namespace Ogre
             {
                 size_t currentIdx = itor - mLinkedRenderables.begin();
                 LogManager::getSingleton().logMessage( e.getFullDescription() );
-                LogManager::getSingleton().logMessage( "Couldn't apply change to datablock '" +
-                                                       mName.getFriendlyText() + "' for "
-                                                       "this renderable. Using default one. Check "
-                                                       "previous log messages to see if there's more "
-                                                       "information.", LML_CRITICAL );
-
+                LogManager::getSingleton().logMessage(
+                    "Couldn't apply change to datablock '" + mName.getFriendlyText() +
+                        "' for "
+                        "this renderable. Using default one. Check "
+                        "previous log messages to see if there's more "
+                        "information.",
+                    LML_CRITICAL );
 
                 if( mType == HLMS_LOW_LEVEL )
                 {
                     HlmsManager *hlmsManager = mCreator->getHlmsManager();
-                    (*itor)->setDatablock( hlmsManager->getDefaultDatablock() );
+                    ( *itor )->setDatablock( hlmsManager->getDefaultDatablock() );
                 }
                 else
                 {
-                    //Try to use the default datablock from the same
-                    //HLMS as the one the user wanted us to apply
-                    (*itor)->setDatablock( mCreator->getDefaultDatablock() );
+                    // Try to use the default datablock from the same
+                    // HLMS as the one the user wanted us to apply
+                    ( *itor )->setDatablock( mCreator->getDefaultDatablock() );
                 }
 
-                //The container was changed with setDatablock change,
-                //the iterators may have been invalidated.
+                // The container was changed with setDatablock change,
+                // the iterators may have been invalidated.
                 itor = mLinkedRenderables.begin() + currentIdx;
                 endt = mLinkedRenderables.end();
             }
@@ -507,29 +498,17 @@ namespace Ogre
         const HlmsMacroblock *macroblock0 = mMacroblock[0];
         const HlmsMacroblock *macroblock1 = mMacroblock[1];
 
-        //Now compare if they're equal
+        // Now compare if they're equal
         return *macroblock0 != *macroblock1;
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsDatablock::getDiffuseColour() const
-    {
-        return ColourValue::White;
-    }
+    ColourValue HlmsDatablock::getDiffuseColour() const { return ColourValue::White; }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsDatablock::getEmissiveColour() const
-    {
-        return ColourValue::Black;
-    }
+    ColourValue HlmsDatablock::getEmissiveColour() const { return ColourValue::Black; }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsDatablock::getDiffuseTexture() const
-    {
-        return 0;
-    }
+    TextureGpu *HlmsDatablock::getDiffuseTexture() const { return 0; }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsDatablock::getEmissiveTexture() const
-    {
-        return 0;
-    }
+    TextureGpu *HlmsDatablock::getEmissiveTexture() const { return 0; }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::saveTextures( const String &folderPath, set<String>::type &savedTextures,
                                       bool saveOitd, bool saveOriginal,
@@ -537,21 +516,20 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    static const char *c_cmpStrings[NUM_COMPARE_FUNCTIONS+1] =
-    {
-        "==",   //CMPF_ALWAYS_FAIL (dummy)
-        "==",   //CMPF_ALWAYS_PASS (dummy)
-        "<",    //CMPF_LESS
-        "<=",   //CMPF_LESS_EQUAL
-        "==",   //CMPF_EQUAL
-        "!=",   //CMPF_NOT_EQUAL
-        ">=",   //CMPF_GREATER_EQUAL
-        ">",    //CMPF_GREATER
-        "==",   //NUM_COMPARE_FUNCTIONS (dummy)
+    static const char *c_cmpStrings[NUM_COMPARE_FUNCTIONS + 1] = {
+        "==",  // CMPF_ALWAYS_FAIL (dummy)
+        "==",  // CMPF_ALWAYS_PASS (dummy)
+        "<",   // CMPF_LESS
+        "<=",  // CMPF_LESS_EQUAL
+        "==",  // CMPF_EQUAL
+        "!=",  // CMPF_NOT_EQUAL
+        ">=",  // CMPF_GREATER_EQUAL
+        ">",   // CMPF_GREATER
+        "==",  // NUM_COMPARE_FUNCTIONS (dummy)
     };
-    const char* HlmsDatablock::getCmpString( CompareFunction compareFunction )
+    const char *HlmsDatablock::getCmpString( CompareFunction compareFunction )
     {
         return c_cmpStrings[compareFunction];
     }
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

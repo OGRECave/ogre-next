@@ -29,49 +29,50 @@ THE SOFTWARE.
 
 #include "OgreArchiveManager.h"
 
-#include "OgreArchiveFactory.h"
 #include "OgreArchive.h"
+#include "OgreArchiveFactory.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
-namespace Ogre {
-    typedef void (*createFunc)( Archive**, const String& );
+namespace Ogre
+{
+    typedef void ( *createFunc )( Archive **, const String & );
 
     //-----------------------------------------------------------------------
-    template<> ArchiveManager* Singleton<ArchiveManager>::msSingleton = 0;
-    ArchiveManager* ArchiveManager::getSingletonPtr()
+    template <>
+    ArchiveManager *Singleton<ArchiveManager>::msSingleton = 0;
+    ArchiveManager *ArchiveManager::getSingletonPtr() { return msSingleton; }
+    ArchiveManager &ArchiveManager::getSingleton()
     {
-        return msSingleton;
-    }
-    ArchiveManager& ArchiveManager::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
-    }
-    //-----------------------------------------------------------------------
-    ArchiveManager::ArchiveManager()
-    {
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
-    Archive* ArchiveManager::load( const String& _filename, const String& archiveType, bool readOnly)
+    ArchiveManager::ArchiveManager() {}
+    //-----------------------------------------------------------------------
+    Archive *ArchiveManager::load( const String &_filename, const String &archiveType, bool readOnly )
     {
-		// Search factories
-		ArchiveFactoryMap::iterator it = mArchFactories.find(archiveType);
-		if( it == mArchFactories.end() )
+        // Search factories
+        ArchiveFactoryMap::iterator it = mArchFactories.find( archiveType );
+        if( it == mArchFactories.end() )
         {
             // Factory not found
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, "Cannot find an archive factory "
-                "to deal with archive of type " + archiveType, "ArchiveManager::load");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Cannot find an archive factory "
+                         "to deal with archive of type " +
+                             archiveType,
+                         "ArchiveManager::load" );
         }
 
-		String filename = _filename;
-		it->second->convertPath( filename );
+        String filename = _filename;
+        it->second->convertPath( filename );
 
-        ArchiveMap::iterator i = mArchives.find(filename);
-        Archive* pArch = 0;
+        ArchiveMap::iterator i = mArchives.find( filename );
+        Archive *pArch = 0;
 
-        if (i == mArchives.end())
+        if( i == mArchives.end() )
         {
-            pArch = it->second->createInstance(filename, readOnly);
+            pArch = it->second->createInstance( filename, readOnly );
             pArch->load();
             mArchives[filename] = pArch;
         }
@@ -82,30 +83,27 @@ namespace Ogre {
         return pArch;
     }
     //-----------------------------------------------------------------------
-    void ArchiveManager::unload(Archive* arch)
-    {
-        unload(arch->getName());
-    }
+    void ArchiveManager::unload( Archive *arch ) { unload( arch->getName() ); }
     //-----------------------------------------------------------------------
-    void ArchiveManager::unload(const String& filename)
+    void ArchiveManager::unload( const String &filename )
     {
-        ArchiveMap::iterator i = mArchives.find(filename);
+        ArchiveMap::iterator i = mArchives.find( filename );
 
-        if (i != mArchives.end())
+        if( i != mArchives.end() )
         {
             i->second->unload();
             // Find factory to destroy. An archive factory created this file, it should still be there!
-            ArchiveFactoryMap::iterator fit = mArchFactories.find(i->second->getType());
-            assert( fit != mArchFactories.end() && "Cannot find an archive factory "
-                    "to deal with archive this type" );
-            fit->second->destroyInstance(i->second);
-            mArchives.erase(i);
+            ArchiveFactoryMap::iterator fit = mArchFactories.find( i->second->getType() );
+            assert( fit != mArchFactories.end() &&
+                    "Cannot find an archive factory to deal with archive this type" );
+            fit->second->destroyInstance( i->second );
+            mArchives.erase( i );
         }
     }
     //-----------------------------------------------------------------------
     ArchiveManager::ArchiveMapIterator ArchiveManager::getArchiveIterator()
     {
-        return ArchiveMapIterator(mArchives.begin(), mArchives.end());
+        return ArchiveMapIterator( mArchives.begin(), mArchives.end() );
     }
     //-----------------------------------------------------------------------
     ArchiveManager::~ArchiveManager()
@@ -117,25 +115,24 @@ namespace Ogre {
         // Unload & delete resources in turn
         for( ArchiveMap::iterator it = mArchives.begin(); it != mArchives.end(); ++it )
         {
-            Archive* arch = it->second;
+            Archive *arch = it->second;
             // Unload
             arch->unload();
             // Find factory to destroy. An archive factory created this file, it should still be there!
-            ArchiveFactoryMap::iterator fit = mArchFactories.find(arch->getType());
-            assert( fit != mArchFactories.end() && "Cannot find an archive factory "
-                    "to deal with archive this type" );
-            fit->second->destroyInstance(arch);
-            
+            ArchiveFactoryMap::iterator fit = mArchFactories.find( arch->getType() );
+            assert( fit != mArchFactories.end() &&
+                    "Cannot find an archive factory to deal with archive this type" );
+            fit->second->destroyInstance( arch );
         }
         // Empty the list
         mArchives.clear();
     }
     //-----------------------------------------------------------------------
-    void ArchiveManager::addArchiveFactory(ArchiveFactory* factory)
-    {        
+    void ArchiveManager::addArchiveFactory( ArchiveFactory *factory )
+    {
         mArchFactories.insert( ArchiveFactoryMap::value_type( factory->getType(), factory ) );
-        LogManager::getSingleton().logMessage("ArchiveFactory for archive type " +     factory->getType() + " registered.");
+        LogManager::getSingleton().logMessage( "ArchiveFactory for archive type " + factory->getType() +
+                                               " registered." );
     }
 
-}
-
+}  // namespace Ogre

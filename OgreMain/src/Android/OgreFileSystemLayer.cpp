@@ -3,19 +3,19 @@
  This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org/
- 
+
  Copyright (c) 2000-2014 Torus Knot Software Ltd
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,36 +29,23 @@
 
 namespace Ogre
 {
-    void FileSystemLayer::getConfigPaths()
+    void FileSystemLayer::getConfigPaths() {}
+    //---------------------------------------------------------------------
+    void FileSystemLayer::prepareUserHome( const Ogre::String &subdir ) {}
+    //---------------------------------------------------------------------
+    bool FileSystemLayer::fileExists( const Ogre::String &path )
     {
+        return access( path.c_str(), 00 ) == 0;
     }
     //---------------------------------------------------------------------
-    void FileSystemLayer::prepareUserHome(const Ogre::String& subdir)
-    {
-    }
+    bool FileSystemLayer::createDirectory( const Ogre::String &path ) { return false; }
     //---------------------------------------------------------------------
-    bool FileSystemLayer::fileExists(const Ogre::String& path)
-    {
-        return access(path.c_str(), 00) == 0;
-    }
+    bool FileSystemLayer::removeDirectory( const Ogre::String &path ) { return false; }
     //---------------------------------------------------------------------
-    bool FileSystemLayer::createDirectory(const Ogre::String& path)
+    bool FileSystemLayer::removeFile( const Ogre::String &path ) { return false; }
+    //---------------------------------------------------------------------
+    bool FileSystemLayer::renameFile( const Ogre::String &oldname, const Ogre::String &newname )
     {
         return false;
     }
-    //---------------------------------------------------------------------
-    bool FileSystemLayer::removeDirectory(const Ogre::String& path)
-    {
-        return false;
-    }
-    //---------------------------------------------------------------------
-    bool FileSystemLayer::removeFile(const Ogre::String& path)
-    {
-        return false;
-    }
-    //---------------------------------------------------------------------
-    bool FileSystemLayer::renameFile(const Ogre::String& oldname, const Ogre::String& newname)
-    {
-        return false;
-    }
-}
+}  // namespace Ogre

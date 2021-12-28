@@ -31,11 +31,11 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 
 #include "OgreHlms.h"
-#include "OgreRenderSystem.h"
 #include "OgreHlmsCompute.h"
 #include "OgreLogManager.h"
+#include "OgreRenderSystem.h"
 #if !OGRE_NO_JSON
-    #include "OgreResourceGroupManager.h"
+#    include "OgreResourceGroupManager.h"
 #endif
 
 #include <fstream>
@@ -46,9 +46,10 @@ namespace Ogre
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
         mDefaultHlmsType( HLMS_PBS )
-  #if !OGRE_NO_JSON
-    ,   mJsonListener( 0 )
-  #endif
+#if !OGRE_NO_JSON
+        ,
+        mJsonListener( 0 )
+#endif
     {
         memset( mRegisteredHlms, 0, sizeof( mRegisteredHlms ) );
         memset( mDeleteRegisteredOnExit, 0, sizeof( mDeleteRegisteredOnExit ) );
@@ -59,38 +60,38 @@ namespace Ogre
 
         mActiveBlocks[BLOCK_MACRO].reserve( OGRE_HLMS_NUM_MACROBLOCKS );
         mFreeBlockIds[BLOCK_MACRO].reserve( OGRE_HLMS_NUM_MACROBLOCKS );
-        for( uint8 i=0; i<OGRE_HLMS_NUM_MACROBLOCKS; ++i )
-            mFreeBlockIds[BLOCK_MACRO].push_back( (OGRE_HLMS_NUM_MACROBLOCKS - 1) - i );
+        for( uint8 i = 0; i < OGRE_HLMS_NUM_MACROBLOCKS; ++i )
+            mFreeBlockIds[BLOCK_MACRO].push_back( ( OGRE_HLMS_NUM_MACROBLOCKS - 1 ) - i );
 
         mActiveBlocks[BLOCK_BLEND].reserve( OGRE_HLMS_NUM_BLENDBLOCKS );
         mFreeBlockIds[BLOCK_BLEND].reserve( OGRE_HLMS_NUM_BLENDBLOCKS );
-        for( uint8 i=0; i<OGRE_HLMS_NUM_BLENDBLOCKS; ++i )
-            mFreeBlockIds[BLOCK_BLEND].push_back( (OGRE_HLMS_NUM_BLENDBLOCKS - 1) - i );
+        for( uint8 i = 0; i < OGRE_HLMS_NUM_BLENDBLOCKS; ++i )
+            mFreeBlockIds[BLOCK_BLEND].push_back( ( OGRE_HLMS_NUM_BLENDBLOCKS - 1 ) - i );
 
         mActiveBlocks[BLOCK_SAMPLER].reserve( OGRE_HLMS_NUM_SAMPLERBLOCKS );
         mFreeBlockIds[BLOCK_SAMPLER].reserve( OGRE_HLMS_NUM_SAMPLERBLOCKS );
-        for( uint8 i=0; i<OGRE_HLMS_NUM_SAMPLERBLOCKS; ++i )
+        for( uint8 i = 0; i < OGRE_HLMS_NUM_SAMPLERBLOCKS; ++i )
         {
             mSamplerblocks[i].mId = i;
             mSamplerblocks[i].mLifetimeId = i;
             mBlocks[BLOCK_SAMPLER][i] = &mSamplerblocks[i];
-            mFreeBlockIds[BLOCK_SAMPLER].push_back( (OGRE_HLMS_NUM_SAMPLERBLOCKS - 1) - i );
+            mFreeBlockIds[BLOCK_SAMPLER].push_back( ( OGRE_HLMS_NUM_SAMPLERBLOCKS - 1 ) - i );
         }
 
 #if !OGRE_NO_JSON
         mScriptPatterns.push_back( "*.material.json" );
-        ResourceGroupManager::getSingleton()._registerScriptLoader(this);
+        ResourceGroupManager::getSingleton()._registerScriptLoader( this );
 #endif
     }
     //-----------------------------------------------------------------------------------
     HlmsManager::~HlmsManager()
     {
 #if !OGRE_NO_JSON
-        ResourceGroupManager::getSingleton()._unregisterScriptLoader(this);
+        ResourceGroupManager::getSingleton()._unregisterScriptLoader( this );
 #endif
         renderSystemDestroyAllBlocks();
 
-        for( size_t i=0; i<HLMS_MAX; ++i )
+        for( size_t i = 0; i < HLMS_MAX; ++i )
         {
             if( mRegisteredHlms[i] )
             {
@@ -104,11 +105,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    Hlms* HlmsManager::getHlms( IdString name )
+    Hlms *HlmsManager::getHlms( IdString name )
     {
-        Hlms* retVal = NULL;
+        Hlms *retVal = NULL;
 
-        for( size_t i=0; i<HLMS_MAX && !retVal; ++i )
+        for( size_t i = 0; i < HLMS_MAX && !retVal; ++i )
         {
             if( mRegisteredHlms[i] && mRegisteredHlms[i]->getTypeName() == name )
             {
@@ -124,8 +125,7 @@ namespace Ogre
         BasicBlock *realBlock = mBlocks[block->mBlockType][block->mId];
         if( realBlock != block )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                         "The block wasn't created with this manager!",
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "The block wasn't created with this manager!",
                          "HlmsManager::addReference" );
         }
 
@@ -138,10 +138,10 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "Can't have more than " +
-                         StringConverter::toString( mActiveBlocks[type].size() ) +
-                         " active blocks! You have too "
-                         "many materials with different rasterizer state, "
-                         "blending state, or sampler state parameters.",
+                             StringConverter::toString( mActiveBlocks[type].size() ) +
+                             " active blocks! You have too "
+                             "many materials with different rasterizer state, "
+                             "blending state, or sampler state parameters.",
                          "HlmsManager::getFreeBasicBlock" );
         }
 
@@ -160,8 +160,7 @@ namespace Ogre
         block->mRsData = 0;
 
         BlockIdxVec::iterator itor = std::find( mActiveBlocks[block->mBlockType].begin(),
-                                                mActiveBlocks[block->mBlockType].end(),
-                                                block->mId );
+                                                mActiveBlocks[block->mBlockType].end(), block->mId );
         assert( itor != mActiveBlocks[block->mBlockType].end() );
         mActiveBlocks[block->mBlockType].erase( itor );
 
@@ -171,7 +170,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     template <typename T, HlmsBasicBlock type, size_t maxLimit>
-    T* HlmsManager::getBasicBlock( typename vector<T>::type &container, const T &baseParams )
+    T *HlmsManager::getBasicBlock( typename vector<T>::type &container, const T &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
         assert( baseParams.mBlockType == type &&
@@ -179,19 +178,19 @@ namespace Ogre
                 "You can ignore this assert,  but it usually indicates memory corruption"
                 "(or you created the block without its default constructor)." );
 
-        typename vector<T>::type::iterator itor = std::find( container.begin(), container.end(),
-                                                             baseParams );
+        typename vector<T>::type::iterator itor =
+            std::find( container.begin(), container.end(), baseParams );
 
         if( itor == container.end() )
         {
             OGRE_ASSERT_LOW( container.size() <= maxLimit &&
                              "Exceeded the max number of blocks that can be created during "
-                             "the lifetime of an application!!!");
+                             "the lifetime of an application!!!" );
             container.push_back( baseParams );
-            container.back().mRefCount   = 0;
-            container.back().mId         = std::numeric_limits<uint16>::max();
+            container.back().mRefCount = 0;
+            container.back().mId = std::numeric_limits<uint16>::max();
             container.back().mLifetimeId = static_cast<uint16>( container.size() - 1u );
-            container.back().mBlockType  = type;
+            container.back().mBlockType = type;
             itor = container.end() - 1u;
         }
 
@@ -202,13 +201,14 @@ namespace Ogre
             itor->mId = static_cast<uint16>( idx );
         }
 
-        return &(*itor);
+        return &( *itor );
     }
     //-----------------------------------------------------------------------------------
-    const HlmsMacroblock* HlmsManager::getMacroblock( const HlmsMacroblock &baseParams )
+    const HlmsMacroblock *HlmsManager::getMacroblock( const HlmsMacroblock &baseParams )
     {
-        HlmsMacroblock *retVal = getBasicBlock<HlmsMacroblock, BLOCK_MACRO,
-                OGRE_HLMS_MAX_LIFETIME_MACROBLOCKS>( mMacroblocks, baseParams );
+        HlmsMacroblock *retVal =
+            getBasicBlock<HlmsMacroblock, BLOCK_MACRO, OGRE_HLMS_MAX_LIFETIME_MACROBLOCKS>( mMacroblocks,
+                                                                                            baseParams );
 
         if( !retVal->mRefCount )
             mRenderSystem->_hlmsMacroblockCreated( retVal );
@@ -229,8 +229,7 @@ namespace Ogre
         }
         if( !mMacroblocks[macroblock->mLifetimeId].mRefCount )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "This macroblock has already been destroyed!",
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "This macroblock has already been destroyed!",
                          "HlmsManager::destroyMacroblock" );
         }
 
@@ -243,10 +242,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const HlmsBlendblock* HlmsManager::getBlendblock( const HlmsBlendblock &baseParams )
+    const HlmsBlendblock *HlmsManager::getBlendblock( const HlmsBlendblock &baseParams )
     {
-        HlmsBlendblock *retVal = getBasicBlock<HlmsBlendblock, BLOCK_BLEND,
-                OGRE_HLMS_MAX_LIFETIME_BLENDBLOCKS>( mBlendblocks, baseParams );
+        HlmsBlendblock *retVal =
+            getBasicBlock<HlmsBlendblock, BLOCK_BLEND, OGRE_HLMS_MAX_LIFETIME_BLENDBLOCKS>( mBlendblocks,
+                                                                                            baseParams );
 
         if( !retVal->mRefCount )
         {
@@ -285,7 +285,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const HlmsSamplerblock* HlmsManager::getSamplerblock( HlmsSamplerblock baseParams )
+    const HlmsSamplerblock *HlmsManager::getSamplerblock( HlmsSamplerblock baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
         assert( baseParams.mBlockType == BLOCK_SAMPLER &&
@@ -305,14 +305,16 @@ namespace Ogre
             baseParams.mMipFilter != FO_ANISOTROPIC && baseParams.mMaxAnisotropy > 1.0f )
         {
             baseParams.mMaxAnisotropy = 1.0f;
-            LogManager::getSingleton().logMessage( "WARNING: Max anisotropy must be 1 if no anisotropic "
-                                                   "filter is used." );
+            LogManager::getSingleton().logMessage(
+                "WARNING: Max anisotropy must be 1 if no anisotropic "
+                "filter is used." );
         }
 
         if( errorsFixed )
         {
-            LogManager::getSingleton().logMessage( "WARNING: Invalid sampler block parameters detected."
-                                                   " They've been corrected." );
+            LogManager::getSingleton().logMessage(
+                "WARNING: Invalid sampler block parameters detected."
+                " They've been corrected." );
         }
 
         BlockIdxVec::iterator itor = mActiveBlocks[BLOCK_SAMPLER].begin();
@@ -324,7 +326,7 @@ namespace Ogre
         HlmsSamplerblock *retVal = 0;
         if( itor != endt )
         {
-            //Already exists
+            // Already exists
             retVal = &mSamplerblocks[*itor];
         }
         else
@@ -332,11 +334,11 @@ namespace Ogre
             size_t idx = getFreeBasicBlock( BLOCK_SAMPLER, 0 );
 
             mSamplerblocks[idx] = baseParams;
-            //Restore the values which has just been overwritten and we need properly set.
-            mSamplerblocks[idx].mRefCount   = 0;
-            mSamplerblocks[idx].mId         = idx;
+            // Restore the values which has just been overwritten and we need properly set.
+            mSamplerblocks[idx].mRefCount = 0;
+            mSamplerblocks[idx].mId = idx;
             mSamplerblocks[idx].mLifetimeId = idx;
-            mSamplerblocks[idx].mBlockType  = BLOCK_SAMPLER;
+            mSamplerblocks[idx].mBlockType = BLOCK_SAMPLER;
             mRenderSystem->_hlmsSamplerblockCreated( &mSamplerblocks[idx] );
 
             retVal = &mSamplerblocks[idx];
@@ -368,39 +370,47 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void createDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetTextureCreated( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetTextureCreated( desc );
     }
     void destroyDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetTextureDestroyed( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetTextureDestroyed( desc );
     }
     void createDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetTexture2Created( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetTexture2Created( desc );
     }
     void destroyDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetTexture2Destroyed( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetTexture2Destroyed( desc );
     }
     void createDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetSamplerCreated( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetSamplerCreated( desc );
     }
     void destroyDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetSamplerDestroyed( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetSamplerDestroyed( desc );
     }
     void createDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetUavCreated( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetUavCreated( desc );
     }
     void destroyDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
     {
-        if( renderSystem ) renderSystem->_descriptorSetUavDestroyed( desc );
+        if( renderSystem )
+            renderSystem->_descriptorSetUavDestroyed( desc );
     }
     template <typename T>
-    const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
-                                            void (*renderSysFunc)(RenderSystem*, T*) )
+    const T *HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
+                                            void ( *renderSysFunc )( RenderSystem *, T * ) )
     {
         typename set<T>::type::iterator itor = container.find( baseParams );
 
@@ -408,48 +418,47 @@ namespace Ogre
         {
             T newDescSet = baseParams;
             newDescSet.mRefCount = 0;
-            (*renderSysFunc)( mRenderSystem, &newDescSet );
-            std::pair<typename set<T>::type::iterator, bool> entry =
-                    container.insert( newDescSet );
+            ( *renderSysFunc )( mRenderSystem, &newDescSet );
+            std::pair<typename set<T>::type::iterator, bool> entry = container.insert( newDescSet );
             itor = entry.first;
         }
 
-        //std::set cannot be modified because the value is the key. However we use
-        //a custom comparison operator in which mRefCount is not included.
-        T *retVal = const_cast<T*>( &(*itor) );
+        // std::set cannot be modified because the value is the key. However we use
+        // a custom comparison operator in which mRefCount is not included.
+        T *retVal = const_cast<T *>( &( *itor ) );
         ++retVal->mRefCount;
         return retVal;
     }
     template <typename T>
     //-----------------------------------------------------------------------------------
     void HlmsManager::destroyDescriptorSet( typename set<T>::type &container, const T *descSet,
-                                            void (*renderSysFunc)( RenderSystem*, T*) )
+                                            void ( *renderSysFunc )( RenderSystem *, T * ) )
     {
         typename set<T>::type::iterator itor = container.find( *descSet );
 
-        if( itor == container.end() || &(*itor) != descSet )
+        if( itor == container.end() || &( *itor ) != descSet )
         {
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "The DescriptorSet wasn't created with this manager!",
                          "HlmsManager::destroyDescriptorSet" );
         }
 
-        //We have to const_cast because std::set protects programmers from altering the
-        //order. However we will only be touching mRefCount & mRsData elements, which
-        //are not used by our sorting operators.
-        T *descSetPtr = const_cast<T*>( &(*itor) );
+        // We have to const_cast because std::set protects programmers from altering the
+        // order. However we will only be touching mRefCount & mRsData elements, which
+        // are not used by our sorting operators.
+        T *descSetPtr = const_cast<T *>( &( *itor ) );
 
         --descSetPtr->mRefCount;
 
         if( !descSetPtr->mRefCount )
         {
-            (*renderSysFunc)( mRenderSystem, descSetPtr );
+            ( *renderSysFunc )( mRenderSystem, descSetPtr );
             container.erase( itor );
         }
     }
     //-----------------------------------------------------------------------------------
-    const DescriptorSetTexture* HlmsManager::getDescriptorSetTexture(
-            const DescriptorSetTexture &baseParams )
+    const DescriptorSetTexture *HlmsManager::getDescriptorSetTexture(
+        const DescriptorSetTexture &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
@@ -459,8 +468,8 @@ namespace Ogre
                 "Recompile Ogre w/ a different OGRE_MAX_TEXTURE_LAYERS value if you "
                 "want to bind more textures (API/HW restrictions may also apply)" );
 
-        const DescriptorSetTexture *retVal = getDescriptorSet( mDescriptorSetTextures, baseParams,
-                                                               createDescriptorSetTextureImpl );
+        const DescriptorSetTexture *retVal =
+            getDescriptorSet( mDescriptorSetTextures, baseParams, createDescriptorSetTextureImpl );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -469,8 +478,8 @@ namespace Ogre
         destroyDescriptorSet( mDescriptorSetTextures, descSet, destroyDescriptorSetTextureImpl );
     }
     //-----------------------------------------------------------------------------------
-    const DescriptorSetTexture2* HlmsManager::getDescriptorSetTexture2(
-            const DescriptorSetTexture2 &baseParams )
+    const DescriptorSetTexture2 *HlmsManager::getDescriptorSetTexture2(
+        const DescriptorSetTexture2 &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
@@ -480,8 +489,8 @@ namespace Ogre
                 "Recompile Ogre w/ a different OGRE_MAX_TEXTURE_LAYERS value if you "
                 "want to bind more textures (API/HW restrictions may also apply)" );
 
-        const DescriptorSetTexture2 *retVal = getDescriptorSet( mDescriptorSetTextures2, baseParams,
-                                                                createDescriptorSetTexture2Impl );
+        const DescriptorSetTexture2 *retVal =
+            getDescriptorSet( mDescriptorSetTextures2, baseParams, createDescriptorSetTexture2Impl );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -490,15 +499,15 @@ namespace Ogre
         destroyDescriptorSet( mDescriptorSetTextures2, descSet, destroyDescriptorSetTexture2Impl );
     }
     //-----------------------------------------------------------------------------------
-    const DescriptorSetSampler* HlmsManager::getDescriptorSetSampler(
-            const DescriptorSetSampler &baseParams )
+    const DescriptorSetSampler *HlmsManager::getDescriptorSetSampler(
+        const DescriptorSetSampler &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
         baseParams.checkValidity();
 
-        const DescriptorSetSampler *retVal = getDescriptorSet( mDescriptorSetSamplers, baseParams,
-                                                               createDescriptorSetSamplerImpl );
+        const DescriptorSetSampler *retVal =
+            getDescriptorSet( mDescriptorSetSamplers, baseParams, createDescriptorSetSamplerImpl );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -507,15 +516,14 @@ namespace Ogre
         destroyDescriptorSet( mDescriptorSetSamplers, descSet, destroyDescriptorSetSamplerImpl );
     }
     //-----------------------------------------------------------------------------------
-    const DescriptorSetUav* HlmsManager::getDescriptorSetUav(
-            const DescriptorSetUav &baseParams )
+    const DescriptorSetUav *HlmsManager::getDescriptorSetUav( const DescriptorSetUav &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
         baseParams.checkValidity();
 
-        const DescriptorSetUav *retVal = getDescriptorSet( mDescriptorSetUavs, baseParams,
-                                                           createDescriptorSetUavImpl );
+        const DescriptorSetUav *retVal =
+            getDescriptorSet( mDescriptorSetUavs, baseParams, createDescriptorSetUavImpl );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -530,23 +538,22 @@ namespace Ogre
         InputLayoutsVec::const_iterator itor = mInputLayouts.begin();
         InputLayoutsVec::const_iterator endt = mInputLayouts.end();
 
-        while( itor != endt &&
-               (itor->vertexElements != vertexElements /*|| itor->opType != opType*/) )
+        while( itor != endt && ( itor->vertexElements != vertexElements /*|| itor->opType != opType*/ ) )
         {
             ++itor;
         }
 
         if( itor == endt )
         {
-            OGRE_ASSERT_LOW( mInputLayouts.size() < (1u << 10u) && "Too many input layouts!!!" );
+            OGRE_ASSERT_LOW( mInputLayouts.size() < ( 1u << 10u ) && "Too many input layouts!!!" );
 
             mInputLayouts.push_back( InputLayouts() );
-//            mInputLayouts.back().opType         = opType;
+            //            mInputLayouts.back().opType         = opType;
             mInputLayouts.back().vertexElements = vertexElements;
             itor = mInputLayouts.end() - 1u;
         }
 
-        //Store the idx in the first 10 bits, store the operation type in the last 6.
+        // Store the idx in the first 10 bits, store the operation type in the last 6.
         uint16 retVal = static_cast<uint16>( itor - mInputLayouts.begin() );
         retVal |= opType << 10u;
 
@@ -558,9 +565,10 @@ namespace Ogre
         IdString datablockName = datablock->getName();
         if( mRegisteredDatablocks.find( datablockName ) != mRegisteredDatablocks.end() )
         {
-            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "HLMS Datablock '" +
-                         datablockName.getFriendlyText() + "' already exists, probably "
-                         "created by another type of HLMS",
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "HLMS Datablock '" + datablockName.getFriendlyText() +
+                             "' already exists, probably "
+                             "created by another type of HLMS",
                          "HlmsManager::_datablockAdded" );
         }
 
@@ -575,20 +583,22 @@ namespace Ogre
 
         if( itor != mRegisteredDatablocks.end() )
         {
-            //We don't delete the pointer, as we don't own it (the Hlms class owns it)
+            // We don't delete the pointer, as we don't own it (the Hlms class owns it)
             mRegisteredDatablocks.erase( itor );
         }
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsManager::getDatablock( IdString name ) const
+    HlmsDatablock *HlmsManager::getDatablock( IdString name ) const
     {
         HlmsDatablock *retVal = getDatablockNoDefault( name );
 
         if( !retVal )
         {
-            LogManager::getSingleton().logMessage( "Can't find HLMS datablock material '" +
-                         name.getFriendlyText() + "'. It may not be visible to this manager, try "
-                         "finding it by retrieving getHlms()->getDatablock()", LML_CRITICAL );
+            LogManager::getSingleton().logMessage(
+                "Can't find HLMS datablock material '" + name.getFriendlyText() +
+                    "'. It may not be visible to this manager, try "
+                    "finding it by retrieving getHlms()->getDatablock()",
+                LML_CRITICAL );
 
             retVal = getDefaultDatablock();
         }
@@ -596,7 +606,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsManager::getDatablockNoDefault( IdString name ) const
+    HlmsDatablock *HlmsManager::getDatablockNoDefault( IdString name ) const
     {
         HlmsDatablock *retVal = 0;
 
@@ -607,7 +617,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsManager::getDefaultDatablock() const
+    HlmsDatablock *HlmsManager::getDefaultDatablock() const
     {
         return mRegisteredHlms[mDefaultHlmsType]->getDefaultDatablock();
     }
@@ -618,8 +628,9 @@ namespace Ogre
 
         if( mRegisteredHlms[type] )
         {
-            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "Provider for HLMS type '" +
-                         StringConverter::toString( type ) + "' has already been set!",
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "Provider for HLMS type '" + StringConverter::toString( type ) +
+                             "' has already been set!",
                          "HlmsManager::registerHlms" );
         }
 
@@ -633,7 +644,7 @@ namespace Ogre
     {
         if( mRegisteredHlms[type] )
         {
-            //TODO: Go through all the MovableObjects and remove the Hlms?
+            // TODO: Go through all the MovableObjects and remove the Hlms?
             mRegisteredHlms[type]->_notifyManager( 0 );
             if( mDeleteRegisteredOnExit[type] )
                 OGRE_DELETE mRegisteredHlms[type];
@@ -645,8 +656,10 @@ namespace Ogre
     {
         if( mComputeHlms )
         {
-            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "Provider for HLMS type 'Compute'"
-                         " has already been set!", "HlmsManager::registerComputeHlms" );
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "Provider for HLMS type 'Compute'"
+                         " has already been set!",
+                         "HlmsManager::registerComputeHlms" );
         }
 
         mComputeHlms = provider;
@@ -667,7 +680,7 @@ namespace Ogre
     {
         if( mRenderSystem )
         {
-            for( size_t i=0; i<HLMS_MAX; ++i )
+            for( size_t i = 0; i < HLMS_MAX; ++i )
             {
                 if( mRegisteredHlms[i] )
                     mRegisteredHlms[i]->_clearShaderCache();
@@ -681,7 +694,7 @@ namespace Ogre
                 BlockIdxVec::const_iterator endt = mActiveBlocks[BLOCK_MACRO].end();
                 while( itor != endt )
                 {
-                    HlmsMacroblock *block = static_cast<HlmsMacroblock*>( mBlocks[BLOCK_MACRO][*itor] );
+                    HlmsMacroblock *block = static_cast<HlmsMacroblock *>( mBlocks[BLOCK_MACRO][*itor] );
                     mRenderSystem->_hlmsMacroblockDestroyed( block );
                     ++itor;
                 }
@@ -690,7 +703,7 @@ namespace Ogre
                 endt = mActiveBlocks[BLOCK_BLEND].end();
                 while( itor != endt )
                 {
-                    HlmsBlendblock *block = static_cast<HlmsBlendblock*>( mBlocks[BLOCK_BLEND][*itor] );
+                    HlmsBlendblock *block = static_cast<HlmsBlendblock *>( mBlocks[BLOCK_BLEND][*itor] );
                     mRenderSystem->_hlmsBlendblockDestroyed( block );
                     ++itor;
                 }
@@ -706,8 +719,8 @@ namespace Ogre
                 DescriptorSetTextureSet::iterator endt = mDescriptorSetTextures.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
-                    DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture *>( &( *itor ) );
                     mRenderSystem->_descriptorSetTextureDestroyed( descSetPtr );
                     ++itor;
                 }
@@ -717,8 +730,9 @@ namespace Ogre
                 DescriptorSetTexture2Set::iterator endt = mDescriptorSetTextures2.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
-                    DescriptorSetTexture2 *descSetPtr = const_cast<DescriptorSetTexture2*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture2 *descSetPtr =
+                        const_cast<DescriptorSetTexture2 *>( &( *itor ) );
                     mRenderSystem->_descriptorSetTexture2Destroyed( descSetPtr );
                     ++itor;
                 }
@@ -728,8 +742,8 @@ namespace Ogre
                 DescriptorSetSamplerSet::iterator endt = mDescriptorSetSamplers.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
-                    DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler *>( &( *itor ) );
                     mRenderSystem->_descriptorSetSamplerDestroyed( descSetPtr );
                     ++itor;
                 }
@@ -739,8 +753,8 @@ namespace Ogre
                 DescriptorSetUavSet::iterator endt = mDescriptorSetUavs.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
-                    DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav *>( &( *itor ) );
                     mRenderSystem->_descriptorSetUavDestroyed( descSetPtr );
                     ++itor;
                 }
@@ -760,7 +774,7 @@ namespace Ogre
                 BlockIdxVec::const_iterator endt = mActiveBlocks[BLOCK_MACRO].end();
                 while( itor != endt )
                 {
-                    HlmsMacroblock *block = static_cast<HlmsMacroblock*>( mBlocks[BLOCK_MACRO][*itor] );
+                    HlmsMacroblock *block = static_cast<HlmsMacroblock *>( mBlocks[BLOCK_MACRO][*itor] );
                     mRenderSystem->_hlmsMacroblockCreated( block );
                     ++itor;
                 }
@@ -769,11 +783,10 @@ namespace Ogre
                 endt = mActiveBlocks[BLOCK_BLEND].end();
                 while( itor != endt )
                 {
-                    HlmsBlendblock *block = static_cast<HlmsBlendblock*>( mBlocks[BLOCK_BLEND][*itor] );
+                    HlmsBlendblock *block = static_cast<HlmsBlendblock *>( mBlocks[BLOCK_BLEND][*itor] );
                     mRenderSystem->_hlmsBlendblockCreated( block );
                     ++itor;
                 }
-
 
                 itor = mActiveBlocks[BLOCK_SAMPLER].begin();
                 endt = mActiveBlocks[BLOCK_SAMPLER].end();
@@ -786,8 +799,8 @@ namespace Ogre
                 DescriptorSetTextureSet::iterator endt = mDescriptorSetTextures.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
-                    DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture *>( &( *itor ) );
                     mRenderSystem->_descriptorSetTextureCreated( descSetPtr );
                     ++itor;
                 }
@@ -797,8 +810,9 @@ namespace Ogre
                 DescriptorSetTexture2Set::iterator endt = mDescriptorSetTextures2.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
-                    DescriptorSetTexture2 *descSetPtr = const_cast<DescriptorSetTexture2*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture2 *descSetPtr =
+                        const_cast<DescriptorSetTexture2 *>( &( *itor ) );
                     mRenderSystem->_descriptorSetTexture2Created( descSetPtr );
                     ++itor;
                 }
@@ -808,8 +822,8 @@ namespace Ogre
                 DescriptorSetSamplerSet::iterator endt = mDescriptorSetSamplers.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetSampler comments
-                    DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetSampler comments
+                    DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler *>( &( *itor ) );
                     mRenderSystem->_descriptorSetSamplerCreated( descSetPtr );
                     ++itor;
                 }
@@ -819,15 +833,15 @@ namespace Ogre
                 DescriptorSetUavSet::iterator endt = mDescriptorSetUavs.end();
                 while( itor != endt )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSetSampler comments
-                    DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav*>( &(*itor) );
+                    // const_cast see HlmsManager::destroyDescriptorSetSampler comments
+                    DescriptorSetUav *descSetPtr = const_cast<DescriptorSetUav *>( &( *itor ) );
                     mRenderSystem->_descriptorSetUavCreated( descSetPtr );
                     ++itor;
                 }
             }
         }
 
-        for( size_t i=0; i<HLMS_MAX; ++i )
+        for( size_t i = 0; i < HLMS_MAX; ++i )
         {
             if( mRegisteredHlms[i] )
                 mRegisteredHlms[i]->_changeRenderSystem( newRs );
@@ -850,7 +864,7 @@ namespace Ogre
         {
             stream->read( &fileData[0], stream->size() );
 
-            //Add null terminator just in case (to prevent bad input)
+            // Add null terminator just in case (to prevent bad input)
             fileData.back() = '\0';
             HlmsJson hlmsJson( this, listener );
             hlmsJson.loadMaterials( stream->getName(), groupName, &fileData[0],
@@ -889,7 +903,7 @@ namespace Ogre
         file.close();
     }
     //-----------------------------------------------------------------------------------
-    void HlmsManager::parseScript(DataStreamPtr& stream, const String& groupName)
+    void HlmsManager::parseScript( DataStreamPtr &stream, const String &groupName )
     {
         vector<char>::type fileData;
         fileData.resize( stream->size() + 1 );
@@ -899,12 +913,12 @@ namespace Ogre
 
             String additionalTextureExtension;
             ResourceToTexExtensionMap::const_iterator itExt =
-                    mAdditionalTextureExtensionsPerGroup.find( groupName );
+                mAdditionalTextureExtensionsPerGroup.find( groupName );
 
             if( itExt != mAdditionalTextureExtensionsPerGroup.end() )
                 additionalTextureExtension = itExt->second;
 
-            //Add null terminator just in case (to prevent bad input)
+            // Add null terminator just in case (to prevent bad input)
             fileData.back() = '\0';
             HlmsJson hlmsJson( this, mJsonListener );
             hlmsJson.loadMaterials( stream->getName(), groupName, &fileData[0],
@@ -912,38 +926,35 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    Real HlmsManager::getLoadingOrder() const
-    {
-        return 100;
-    }
+    Real HlmsManager::getLoadingOrder() const { return 100; }
 #endif
     //-----------------------------------------------------------------------------------
-    const HlmsManager::BlockIdxVec& HlmsManager::_getActiveBlocksIndices(
-            const HlmsBasicBlock &blockType ) const
+    const HlmsManager::BlockIdxVec &HlmsManager::_getActiveBlocksIndices(
+        const HlmsBasicBlock &blockType ) const
     {
         return mActiveBlocks[blockType];
     }
     //-----------------------------------------------------------------------------------
-    BasicBlock const * const * HlmsManager::_getBlocks( const HlmsBasicBlock &blockType ) const
+    BasicBlock const *const *HlmsManager::_getBlocks( const HlmsBasicBlock &blockType ) const
     {
         return mBlocks[blockType];
     }
     //-----------------------------------------------------------------------------------
-    const HlmsMacroblock* HlmsManager::_getMacroblock( uint16 idx ) const
+    const HlmsMacroblock *HlmsManager::_getMacroblock( uint16 idx ) const
     {
         assert( idx < OGRE_HLMS_NUM_MACROBLOCKS );
         return &mMacroblocks[idx];
     }
     //-----------------------------------------------------------------------------------
-    const HlmsBlendblock* HlmsManager::_getBlendblock( uint16 idx ) const
+    const HlmsBlendblock *HlmsManager::_getBlendblock( uint16 idx ) const
     {
         assert( idx < OGRE_HLMS_NUM_BLENDBLOCKS );
         return &mBlendblocks[idx];
     }
     //-----------------------------------------------------------------------------------
-    const HlmsSamplerblock* HlmsManager::_getSamplerblock( uint16 idx ) const
+    const HlmsSamplerblock *HlmsManager::_getSamplerblock( uint16 idx ) const
     {
         assert( idx < OGRE_HLMS_NUM_SAMPLERBLOCKS );
         return &mSamplerblocks[idx];
     }
-}
+}  // namespace Ogre

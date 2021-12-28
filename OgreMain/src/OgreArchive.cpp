@@ -32,20 +32,19 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 
-namespace Ogre {
+namespace Ogre
+{
     //---------------------------------------------------------------------
-    DataStreamPtr Archive::create(const String&)
+    DataStreamPtr Archive::create( const String & )
     {
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
-                    "This archive does not support creation of files.", 
-                    "Archive::create");
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "This archive does not support creation of files.",
+                     "Archive::create" );
     }
     //---------------------------------------------------------------------
-    void Archive::remove(const String&)
+    void Archive::remove( const String & )
     {
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
-                    "This archive does not support removal of files.", 
-                    "Archive::remove");
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "This archive does not support removal of files.",
+                     "Archive::remove" );
     }
     //---------------------------------------------------------------------
-}
+}  // namespace Ogre

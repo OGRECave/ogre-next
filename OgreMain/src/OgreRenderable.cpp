@@ -29,14 +29,14 @@ THE SOFTWARE.
 
 #include "OgreRenderable.h"
 
-#include "OgreHlmsLowLevelDatablock.h"
 #include "OgreHlms.h"
+#include "OgreHlmsLowLevelDatablock.h"
 #include "OgreHlmsManager.h"
-#include "OgreMaterialManager.h"
 #include "OgreLogManager.h"
-#include "OgreTechnique.h"
+#include "OgreMaterialManager.h"
 #include "OgrePass.h"
 #include "OgreRoot.h"
+#include "OgreTechnique.h"
 
 namespace Ogre
 {
@@ -79,9 +79,9 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const String& Renderable::getDatablockOrMaterialName() const
+    const String &Renderable::getDatablockOrMaterialName() const
     {
-        HlmsDatablock* datablock = getDatablock();
+        HlmsDatablock *datablock = getDatablock();
         if( datablock && datablock->getCreator()->getType() != HLMS_LOW_LEVEL )
             if( const String *nameStr = datablock->getNameStr() )  // could be null if leaked
                 return *nameStr;
@@ -94,7 +94,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Renderable::setDatablockOrMaterialName( String materialName, String resourceGroup )
     {
-        //Try first Hlms materials, then the low level ones.
+        // Try first Hlms materials, then the low level ones.
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         HlmsDatablock *datablock = hlmsManager->getDatablockNoDefault( materialName );
 
@@ -130,13 +130,14 @@ namespace Ogre
             catch( Exception &e )
             {
                 LogManager::getSingleton().logMessage( e.getFullDescription() );
-                LogManager::getSingleton().logMessage( "Couldn't apply datablock '" +
-                                                       datablock->getName().getFriendlyText() + "' to "
-                                                       "this renderable. Using default one. Check "
-                                                       "previous log messages to see if there's more "
-                                                       "information.", LML_CRITICAL );
+                LogManager::getSingleton().logMessage(
+                    "Couldn't apply datablock '" + datablock->getName().getFriendlyText() +
+                        "' to "
+                        "this renderable. Using default one. Check "
+                        "previous log messages to see if there's more "
+                        "information.",
+                    LML_CRITICAL );
 
-                
                 if( mHlmsDatablock->mType == HLMS_LOW_LEVEL )
                 {
                     HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
@@ -144,8 +145,8 @@ namespace Ogre
                 }
                 else
                 {
-                    //Try to use the default datablock from the same
-                    //HLMS as the one the user wanted us to apply
+                    // Try to use the default datablock from the same
+                    // HLMS as the one the user wanted us to apply
                     mHlmsDatablock = mHlmsDatablock->getCreator()->getDefaultDatablock();
                 }
 
@@ -165,23 +166,23 @@ namespace Ogre
 
         mMaterial.setNull();
 
-        mHlmsDatablock  = 0;
-        mHlmsHash       = 0;
+        mHlmsDatablock = 0;
+        mHlmsHash = 0;
         mHlmsCasterHash = 0;
     }
     //-----------------------------------------------------------------------------------
     void Renderable::_setHlmsHashes( uint32 hash, uint32 casterHash )
     {
-        mHlmsHash       = hash;
+        mHlmsHash = hash;
         mHlmsCasterHash = casterHash;
 
-        assert( (mHlmsDatablock == 0 || mHlmsDatablock->getAlphaTest() == CMPF_ALWAYS_PASS ||
-                mVaoPerLod[0].empty() || mVaoPerLod[0][0] == mVaoPerLod[1][0])
-                && "v2 objects must overload _setHlmsHashes to disable special "
+        assert( ( mHlmsDatablock == 0 || mHlmsDatablock->getAlphaTest() == CMPF_ALWAYS_PASS ||
+                  mVaoPerLod[0].empty() || mVaoPerLod[0][0] == mVaoPerLod[1][0] ) &&
+                "v2 objects must overload _setHlmsHashes to disable special "
                 "shadow mapping buffers on objects with alpha testing materials" );
     }
     //-----------------------------------------------------------------------------------
-    void Renderable::setMaterialName( const String& name, const String& groupName )
+    void Renderable::setMaterialName( const String &name, const String &groupName )
     {
         MaterialPtr material;
 
@@ -193,9 +194,10 @@ namespace Ogre
             if( !name.empty() )
             {
                 LogManager::getSingleton().logMessage( "Can't assign material " + name +
-                                                       " because this Material does not exist. "
-                                                       "Have you forgotten to define it in a "
-                                                       ".material script?", LML_CRITICAL );
+                                                           " because this Material does not exist. "
+                                                           "Have you forgotten to define it in a "
+                                                           ".material script?",
+                                                       LML_CRITICAL );
             }
 
             HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
@@ -207,83 +209,64 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void Renderable::setMaterial( const MaterialPtr& material )
+    void Renderable::setMaterial( const MaterialPtr &material )
     {
         // Ensure new material loaded (will not load again if already loaded)
         material->load();
         mMaterial = material;
-        setDatablock( material->getTechnique(0)->getPass(0)->_getDatablock() );
+        setDatablock( material->getTechnique( 0 )->getPass( 0 )->_getDatablock() );
         mLodMaterial = material->_getLodValues();
     }
     //-----------------------------------------------------------------------------------
-    MaterialPtr Renderable::getMaterial() const
-    {
-        return mMaterial;
-    }
+    MaterialPtr Renderable::getMaterial() const { return mMaterial; }
     //-----------------------------------------------------------------------------------
-    unsigned short Renderable::getNumPoses() const
-    {
-        return mPoseData ? mPoseData->numPoses : 0;
-    }
+    unsigned short Renderable::getNumPoses() const { return mPoseData ? mPoseData->numPoses : 0; }
     //-----------------------------------------------------------------------------------
     bool Renderable::getPoseHalfPrecision() const
     {
-      return mPoseData ? mPoseData->halfPrecision : false;
+        return mPoseData ? mPoseData->halfPrecision : false;
     }
     //-----------------------------------------------------------------------------------
-    bool Renderable::getPoseNormals() const
+    bool Renderable::getPoseNormals() const { return mPoseData ? mPoseData->hasNormals : false; }
+    //-----------------------------------------------------------------------------------
+    float *Renderable::getPoseWeights() const { return mPoseData ? mPoseData->weights : 0; }
+    //-----------------------------------------------------------------------------------
+    float Renderable::getPoseWeight( size_t index ) const
     {
-      return mPoseData ? mPoseData->hasNormals : false;
+        assert( ( index < OGRE_MAX_POSES ) && "Pose weight index out of bounds" );
+        return mPoseData ? mPoseData->weights[index] : 0;
     }
     //-----------------------------------------------------------------------------------
-    float* Renderable::getPoseWeights() const
-    { 
-        return mPoseData ? mPoseData->weights : 0;
-    }
-    //-----------------------------------------------------------------------------------
-    float Renderable::getPoseWeight(size_t index) const
-    { 
-        assert( (index < OGRE_MAX_POSES) && "Pose weight index out of bounds" );
-        return mPoseData ? mPoseData->weights[index] : 0; 
-    }
-    //-----------------------------------------------------------------------------------
-    void Renderable::setPoseWeight(size_t index, float w)
-    { 
-        if( !mPoseData ) 
-            return;
-        
-        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
-                "Pose weight index out of bounds" );
-        mPoseData->weights[index] = w; 
-    }
-    //-----------------------------------------------------------------------------------
-    void Renderable::addPoseWeight(size_t index, float w)
+    void Renderable::setPoseWeight( size_t index, float w )
     {
-        if( !mPoseData ) 
+        if( !mPoseData )
             return;
 
-        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+        assert( ( index < OGRE_MAX_POSES && index < mPoseData->numPoses ) &&
+                "Pose weight index out of bounds" );
+        mPoseData->weights[index] = w;
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::addPoseWeight( size_t index, float w )
+    {
+        if( !mPoseData )
+            return;
+
+        assert( ( index < OGRE_MAX_POSES && index < mPoseData->numPoses ) &&
                 "Pose weight index out of bounds" );
         mPoseData->weights[index] += w;
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked *Renderable::getPoseTexBuffer() const
-    {
-        return mPoseData ? mPoseData->buffer : 0;
-    }
+    TexBufferPacked *Renderable::getPoseTexBuffer() const { return mPoseData ? mPoseData->buffer : 0; }
     //-----------------------------------------------------------------------------------
-    RenderableAnimated::RenderableAnimated() :
-        Renderable(),
-        mBlendIndexToBoneIndexMap( 0 )
-    {
-    }
+    RenderableAnimated::RenderableAnimated() : Renderable(), mBlendIndexToBoneIndexMap( 0 ) {}
     //-----------------------------------------------------------------------------------
-    Renderable::PoseData::PoseData():
-    numPoses( 0 ),
-    buffer( 0 ),
-    halfPrecision( false ),
-    hasNormals( false )
+    Renderable::PoseData::PoseData() :
+        numPoses( 0 ),
+        buffer( 0 ),
+        halfPrecision( false ),
+        hasNormals( false )
     {
-        memset(weights, 0, OGRE_MAX_POSES * sizeof(float));
+        memset( weights, 0, OGRE_MAX_POSES * sizeof( float ) );
     }
-}
+}  // namespace Ogre

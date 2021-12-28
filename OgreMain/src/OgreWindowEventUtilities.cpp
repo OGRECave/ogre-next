@@ -33,367 +33,373 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreWindow.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
-#include <xcb/xcb.h>
-#include <X11/Xlib.h>
+#    include <X11/Xlib.h>
+#    include <xcb/xcb.h>
 static void GLXProc( Ogre::Window *win, const XEvent &event );
 static void XcbProc( xcb_connection_t *xcbConnection, xcb_generic_event_t *event );
 
-typedef Ogre::map<xcb_window_t, Ogre::Window*>::type XcbWindowMap;
+typedef Ogre::map<xcb_window_t, Ogre::Window *>::type XcbWindowMap;
 static XcbWindowMap gXcbWindowToOgre;
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-#   include "OSX/macUtils.h"
+#    include "OSX/macUtils.h"
 #endif
 
-
-//using namespace Ogre;
+// using namespace Ogre;
 
 Ogre::WindowEventUtilities::WindowEventListeners Ogre::WindowEventUtilities::_msListeners;
 Ogre::WindowList Ogre::WindowEventUtilities::_msWindows;
 
-namespace Ogre {
-//--------------------------------------------------------------------------------//
-void WindowEventUtilities::messagePump()
+namespace Ogre
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    // Windows Message Loop (NULL means check all HWNDs belonging to this context)
-    MSG  msg;
-    while( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) )
+    //--------------------------------------------------------------------------------//
+    void WindowEventUtilities::messagePump()
     {
-        TranslateMessage( &msg );
-        DispatchMessage( &msg );
-    }
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        // Windows Message Loop (NULL means check all HWNDs belonging to this context)
+        MSG msg;
+        while( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) )
+        {
+            TranslateMessage( &msg );
+            DispatchMessage( &msg );
+        }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 #    ifndef OGRE_CONFIG_UNIX_NO_X11
-    //GLX Message Pump
+        // GLX Message Pump
 
-    xcb_connection_t *xcbConnection = 0;
+        xcb_connection_t *xcbConnection = 0;
 
-    if( !_msWindows.empty() )
-        _msWindows.front()->getCustomAttribute( "xcb_connection_t", &xcbConnection );
+        if( !_msWindows.empty() )
+            _msWindows.front()->getCustomAttribute( "xcb_connection_t", &xcbConnection );
 
-    if( !xcbConnection )
-    {
-        // Uses the older Xlib
-        WindowList::iterator win = _msWindows.begin();
-        WindowList::iterator end = _msWindows.end();
-
-        Display *xDisplay = 0;  // same for all windows
-
-        for( ; win != end; win++ )
+        if( !xcbConnection )
         {
-            XID xid;
-            XEvent event;
+            // Uses the older Xlib
+            WindowList::iterator win = _msWindows.begin();
+            WindowList::iterator end = _msWindows.end();
 
-            if( !xDisplay )
-                ( *win )->getCustomAttribute( "XDISPLAY", &xDisplay );
+            Display *xDisplay = 0;  // same for all windows
 
-        (*win)->getCustomAttribute("WINDOW", &xid);
-
-            while( XCheckWindowEvent(
-                       xDisplay, xid, StructureNotifyMask | VisibilityChangeMask | FocusChangeMask, &event ) )
+            for( ; win != end; win++ )
             {
-                GLXProc( *win, event );
-            }
+                XID xid;
+                XEvent event;
 
-            // The ClientMessage event does not appear under any Event Mask
-            while( XCheckTypedWindowEvent( xDisplay, xid, ClientMessage, &event ) )
-            {
-                GLXProc( *win, event );
+                if( !xDisplay )
+                    ( *win )->getCustomAttribute( "XDISPLAY", &xDisplay );
+
+                ( *win )->getCustomAttribute( "WINDOW", &xid );
+
+                while( XCheckWindowEvent( xDisplay, xid,
+                                          StructureNotifyMask | VisibilityChangeMask | FocusChangeMask,
+                                          &event ) )
+                {
+                    GLXProc( *win, event );
+                }
+
+                // The ClientMessage event does not appear under any Event Mask
+                while( XCheckTypedWindowEvent( xDisplay, xid, ClientMessage, &event ) )
+                {
+                    GLXProc( *win, event );
+                }
             }
         }
-    }
-    else
-    {
-        // Uses the newer xcb
-        xcb_generic_event_t *nextEvent = 0;
-
-        nextEvent = xcb_poll_for_event( xcbConnection );
-
-        while( nextEvent )
+        else
         {
-            XcbProc( xcbConnection, nextEvent );
-            free( nextEvent );
+            // Uses the newer xcb
+            xcb_generic_event_t *nextEvent = 0;
+
             nextEvent = xcb_poll_for_event( xcbConnection );
+
+            while( nextEvent )
+            {
+                XcbProc( xcbConnection, nextEvent );
+                free( nextEvent );
+                nextEvent = xcb_poll_for_event( xcbConnection );
+            }
         }
-    }
 #    endif
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE && !defined __OBJC__ && !defined __LP64__
-    // OSX Message Pump
-    EventRef event = NULL;
-    EventTargetRef targetWindow;
-    targetWindow = GetEventDispatcherTarget();
-    
-    // If we are unable to get the target then we no longer care about events.
-    if( !targetWindow ) return;
-    
-    // Grab the next event, process it if it is a window event
-    while( ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &event ) == noErr )
-    {
-        // Dispatch the event
-        SendEventToEventTarget( event, targetWindow );
-        ReleaseEvent( event );
-    }
-#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	mac_dispatchOneEvent();
-#endif
-}
+        // OSX Message Pump
+        EventRef event = NULL;
+        EventTargetRef targetWindow;
+        targetWindow = GetEventDispatcherTarget();
 
-//--------------------------------------------------------------------------------//
-void WindowEventUtilities::addWindowEventListener( Window *window, WindowEventListener* listener )
-{
-    _msListeners.insert(std::make_pair(window, listener));
-}
+        // If we are unable to get the target then we no longer care about events.
+        if( !targetWindow )
+            return;
 
-//--------------------------------------------------------------------------------//
-void WindowEventUtilities::removeWindowEventListener( Window* window, WindowEventListener* listener )
-{
-    WindowEventListeners::iterator i = _msListeners.begin(), e = _msListeners.end();
-
-    for( ; i != e; ++i )
-    {
-        if( i->first == window && i->second == listener )
+        // Grab the next event, process it if it is a window event
+        while( ReceiveNextEvent( 0, NULL, kEventDurationNoWait, true, &event ) == noErr )
         {
-            _msListeners.erase(i);
-            break;
+            // Dispatch the event
+            SendEventToEventTarget( event, targetWindow );
+            ReleaseEvent( event );
+        }
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        mac_dispatchOneEvent();
+#endif
+    }
+
+    //--------------------------------------------------------------------------------//
+    void WindowEventUtilities::addWindowEventListener( Window *window, WindowEventListener *listener )
+    {
+        _msListeners.insert( std::make_pair( window, listener ) );
+    }
+
+    //--------------------------------------------------------------------------------//
+    void WindowEventUtilities::removeWindowEventListener( Window *window, WindowEventListener *listener )
+    {
+        WindowEventListeners::iterator i = _msListeners.begin(), e = _msListeners.end();
+
+        for( ; i != e; ++i )
+        {
+            if( i->first == window && i->second == listener )
+            {
+                _msListeners.erase( i );
+                break;
+            }
         }
     }
-}
 
-//--------------------------------------------------------------------------------//
-void WindowEventUtilities::_addRenderWindow( Window *window )
-{
-    _msWindows.push_back(window);
+    //--------------------------------------------------------------------------------//
+    void WindowEventUtilities::_addRenderWindow( Window *window )
+    {
+        _msWindows.push_back( window );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-    xcb_window_t windowHandle = 0;
-    window->getCustomAttribute( "xcb_window_t", &windowHandle );
-    if( windowHandle )
-        gXcbWindowToOgre[windowHandle] = window;
+        xcb_window_t windowHandle = 0;
+        window->getCustomAttribute( "xcb_window_t", &windowHandle );
+        if( windowHandle )
+            gXcbWindowToOgre[windowHandle] = window;
 #endif
-}
+    }
 
-//--------------------------------------------------------------------------------//
-void WindowEventUtilities::_removeRenderWindow( Window *window )
-{
+    //--------------------------------------------------------------------------------//
+    void WindowEventUtilities::_removeRenderWindow( Window *window )
+    {
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-    xcb_window_t windowHandle = 0;
-    window->getCustomAttribute( "xcb_window_t", &windowHandle );
-    if( windowHandle )
-        gXcbWindowToOgre.erase( windowHandle );
+        xcb_window_t windowHandle = 0;
+        window->getCustomAttribute( "xcb_window_t", &windowHandle );
+        if( windowHandle )
+            gXcbWindowToOgre.erase( windowHandle );
 #endif
 
-    WindowList::iterator i = std::find( _msWindows.begin(), _msWindows.end(), window );
-    if( i != _msWindows.end() )
-        _msWindows.erase( i );
-}
+        WindowList::iterator i = std::find( _msWindows.begin(), _msWindows.end(), window );
+        if( i != _msWindows.end() )
+            _msWindows.erase( i );
+    }
 
-}
+}  // namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 //--------------------------------------------------------------------------------//
-namespace Ogre {
-LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+namespace Ogre
 {
-    if (uMsg == WM_CREATE)
-    {   // Store pointer to Win32Window in user data area
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)(((LPCREATESTRUCT)lParam)->lpCreateParams));
-        return 0;
-    }
-
-    // look up window instance
-    // note: it is possible to get a WM_SIZE before WM_CREATE
-    Window *win = (Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-    if (!win)
-        return DefWindowProc(hWnd, uMsg, wParam, lParam);
-
-    //LogManager* log = LogManager::getSingletonPtr();
-    //Iterator of all listeners registered to this Window
-    WindowEventListeners::iterator index,
-        start = _msListeners.lower_bound(win),
-        end = _msListeners.upper_bound(win);
-
-    switch( uMsg )
+    LRESULT CALLBACK WindowEventUtilities::_WndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
     {
-    case WM_ACTIVATE:
-    {
-        bool active = (LOWORD(wParam) != WA_INACTIVE);
-        win->setFocused( active );
-
-        for( ; start != end; ++start )
-            (start->second)->windowFocusChange(win);
-        break;
-    }
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint( hWnd, &ps );
-        win->_setVisible( !IsRectEmpty( &ps.rcPaint ) );
-        EndPaint( hWnd, &ps );
-        break;
-    }
-    case WM_SYSKEYDOWN:
-        switch( wParam )
-        {
-        case VK_CONTROL:
-        case VK_SHIFT:
-        case VK_MENU: //ALT
-            //return zero to bypass defProc and signal we processed the message
+        if( uMsg == WM_CREATE )
+        {  // Store pointer to Win32Window in user data area
+            SetWindowLongPtr( hWnd, GWLP_USERDATA,
+                              ( LONG_PTR )( ( (LPCREATESTRUCT)lParam )->lpCreateParams ) );
             return 0;
         }
-        break;
-    case WM_SYSKEYUP:
-        switch( wParam )
+
+        // look up window instance
+        // note: it is possible to get a WM_SIZE before WM_CREATE
+        Window *win = (Window *)GetWindowLongPtr( hWnd, GWLP_USERDATA );
+        if( !win )
+            return DefWindowProc( hWnd, uMsg, wParam, lParam );
+
+        // LogManager* log = LogManager::getSingletonPtr();
+        // Iterator of all listeners registered to this Window
+        WindowEventListeners::iterator index, start = _msListeners.lower_bound( win ),
+                                              end = _msListeners.upper_bound( win );
+
+        switch( uMsg )
         {
-        case VK_CONTROL:
-        case VK_SHIFT:
-        case VK_MENU: //ALT
-        case VK_F10:
-            //return zero to bypass defProc and signal we processed the message
+        case WM_ACTIVATE:
+        {
+            bool active = ( LOWORD( wParam ) != WA_INACTIVE );
+            win->setFocused( active );
+
+            for( ; start != end; ++start )
+                ( start->second )->windowFocusChange( win );
+            break;
+        }
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint( hWnd, &ps );
+            win->_setVisible( !IsRectEmpty( &ps.rcPaint ) );
+            EndPaint( hWnd, &ps );
+            break;
+        }
+        case WM_SYSKEYDOWN:
+            switch( wParam )
+            {
+            case VK_CONTROL:
+            case VK_SHIFT:
+            case VK_MENU:  // ALT
+                // return zero to bypass defProc and signal we processed the message
+                return 0;
+            }
+            break;
+        case WM_SYSKEYUP:
+            switch( wParam )
+            {
+            case VK_CONTROL:
+            case VK_SHIFT:
+            case VK_MENU:  // ALT
+            case VK_F10:
+                // return zero to bypass defProc and signal we processed the message
+                return 0;
+            }
+            break;
+        case WM_SYSCHAR:
+            // return zero to bypass defProc and signal we processed the message, unless it's an
+            // ALT-space
+            if( wParam != VK_SPACE )
+                return 0;
+            break;
+        case WM_ENTERSIZEMOVE:
+            // log->logMessage("WM_ENTERSIZEMOVE");
+            break;
+        case WM_EXITSIZEMOVE:
+            // log->logMessage("WM_EXITSIZEMOVE");
+            break;
+        case WM_MOVE:
+            // log->logMessage("WM_MOVE");
+            win->windowMovedOrResized();
+            for( index = start; index != end; ++index )
+                ( index->second )->windowMoved( win );
+            break;
+        case WM_DISPLAYCHANGE:
+            win->windowMovedOrResized();
+            for( index = start; index != end; ++index )
+                ( index->second )->windowResized( win );
+            break;
+        case WM_SIZE:
+            // log->logMessage("WM_SIZE");
+            win->windowMovedOrResized();
+            for( index = start; index != end; ++index )
+                ( index->second )->windowResized( win );
+            break;
+        case WM_GETMINMAXINFO:
+            // Prevent the window from going smaller than some minimu size
+            ( (MINMAXINFO *)lParam )->ptMinTrackSize.x = 100;
+            ( (MINMAXINFO *)lParam )->ptMinTrackSize.y = 100;
+            break;
+        case WM_CLOSE:
+        {
+            // log->logMessage("WM_CLOSE");
+            bool close = true;
+            for( index = start; index != end; ++index )
+            {
+                if( !( index->second )->windowClosing( win ) )
+                    close = false;
+            }
+            if( !close )
+                return 0;
+
+            for( index = _msListeners.lower_bound( win ); index != end; ++index )
+                ( index->second )->windowClosed( win );
+            win->destroy();
             return 0;
         }
-        break;
-    case WM_SYSCHAR:
-        // return zero to bypass defProc and signal we processed the message, unless it's an ALT-space
-        if (wParam != VK_SPACE)
-            return 0;
-        break;
-    case WM_ENTERSIZEMOVE:
-        //log->logMessage("WM_ENTERSIZEMOVE");
-        break;
-    case WM_EXITSIZEMOVE:
-        //log->logMessage("WM_EXITSIZEMOVE");
-        break;
-    case WM_MOVE:
-        //log->logMessage("WM_MOVE");
-        win->windowMovedOrResized();
-        for(index = start; index != end; ++index)
-            (index->second)->windowMoved(win);
-        break;
-    case WM_DISPLAYCHANGE:
-        win->windowMovedOrResized();
-        for(index = start; index != end; ++index)
-            (index->second)->windowResized(win);
-        break;
-    case WM_SIZE:
-        //log->logMessage("WM_SIZE");
-        win->windowMovedOrResized();
-        for(index = start; index != end; ++index)
-            (index->second)->windowResized(win);
-        break;
-    case WM_GETMINMAXINFO:
-        // Prevent the window from going smaller than some minimu size
-        ((MINMAXINFO*)lParam)->ptMinTrackSize.x = 100;
-        ((MINMAXINFO*)lParam)->ptMinTrackSize.y = 100;
-        break;
-    case WM_CLOSE:
-    {
-        //log->logMessage("WM_CLOSE");
-        bool close = true;
-        for(index = start; index != end; ++index)
-        {
-            if (!(index->second)->windowClosing(win))
-                close = false;
         }
-        if (!close) return 0;
 
-        for(index = _msListeners.lower_bound(win); index != end; ++index)
-            (index->second)->windowClosed(win);
-        win->destroy();
-        return 0;
+        return DefWindowProc( hWnd, uMsg, wParam, lParam );
     }
-    }
-
-    return DefWindowProc( hWnd, uMsg, wParam, lParam );
-}
-}
+}  // namespace Ogre
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 //--------------------------------------------------------------------------------//
 void GLXProc( Ogre::Window *win, const XEvent &event )
 {
-    //An iterator for the window listeners
-  Ogre::WindowEventUtilities::WindowEventListeners::iterator index,
-        start = Ogre::WindowEventUtilities::_msListeners.lower_bound(win),
-        end   = Ogre::WindowEventUtilities::_msListeners.upper_bound(win);
+    // An iterator for the window listeners
+    Ogre::WindowEventUtilities::WindowEventListeners::iterator index,
+        start = Ogre::WindowEventUtilities::_msListeners.lower_bound( win ),
+        end = Ogre::WindowEventUtilities::_msListeners.upper_bound( win );
 
-    switch(event.type)
+    switch( event.type )
     {
     case ClientMessage:
     {
         ::Atom atom;
-        win->getCustomAttribute("ATOM", &atom);
-        if(event.xclient.format == 32 && event.xclient.data.l[0] == (long)atom)
-        {   //Window closed by window manager
-            //Send message first, to allow app chance to unregister things that need done before
-            //window is shutdown
+        win->getCustomAttribute( "ATOM", &atom );
+        if( event.xclient.format == 32 && event.xclient.data.l[0] == (long)atom )
+        {  // Window closed by window manager
+            // Send message first, to allow app chance to unregister things that need done before
+            // window is shutdown
             bool close = true;
-            for(index = start ; index != end; ++index)
+            for( index = start; index != end; ++index )
             {
-                if (!(index->second)->windowClosing(win))
+                if( !( index->second )->windowClosing( win ) )
                     close = false;
             }
-            if (!close) return;
+            if( !close )
+                return;
 
-            for(index = start ; index != end; ++index)
-                (index->second)->windowClosed(win);
+            for( index = start; index != end; ++index )
+                ( index->second )->windowClosed( win );
             win->destroy();
         }
         break;
     }
     case DestroyNotify:
     {
-        if (!win->isClosed())
+        if( !win->isClosed() )
         {
             // Window closed without window manager warning.
-            for(index = start ; index != end; ++index)
-                (index->second)->windowClosed(win);
+            for( index = start; index != end; ++index )
+                ( index->second )->windowClosed( win );
             win->destroy();
         }
         break;
     }
     case ConfigureNotify:
-    {    
+    {
         // This could be slightly more efficient if windowMovedOrResized took arguments:
         Ogre::uint32 oldWidth, oldHeight;
         Ogre::int32 oldLeft, oldTop;
-        win->getMetrics(oldWidth, oldHeight, oldLeft, oldTop);
+        win->getMetrics( oldWidth, oldHeight, oldLeft, oldTop );
         win->windowMovedOrResized();
 
         Ogre::uint32 newWidth, newHeight;
         Ogre::int32 newLeft, newTop;
-        win->getMetrics(newWidth, newHeight, newLeft, newTop);
+        win->getMetrics( newWidth, newHeight, newLeft, newTop );
 
         if( newLeft != oldLeft || newTop != oldTop )
         {
             for( index = start; index != end; ++index )
-                (index->second)->windowMoved( win );
+                ( index->second )->windowMoved( win );
         }
 
         if( newWidth != oldWidth || newHeight != oldHeight )
         {
             for( index = start; index != end; ++index )
-                (index->second)->windowResized( win );
+                ( index->second )->windowResized( win );
         }
         break;
     }
-    case FocusIn:     // Gained keyboard focus
-    case FocusOut:    // Lost keyboard focus
+    case FocusIn:   // Gained keyboard focus
+    case FocusOut:  // Lost keyboard focus
         win->setFocused( event.type == FocusIn );
-        for(index = start ; index != end; ++index)
-            (index->second)->windowFocusChange(win);
+        for( index = start; index != end; ++index )
+            ( index->second )->windowFocusChange( win );
         break;
-    case MapNotify:   //Restored
+    case MapNotify:  // Restored
         win->setFocused( true );
-        for(index = start ; index != end; ++index)
-            (index->second)->windowFocusChange(win);
+        for( index = start; index != end; ++index )
+            ( index->second )->windowFocusChange( win );
         break;
-    case UnmapNotify: //Minimised
+    case UnmapNotify:  // Minimised
         win->setFocused( false );
         win->_setVisible( false );
-        for(index = start ; index != end; ++index)
-            (index->second)->windowFocusChange(win);
+        for( index = start; index != end; ++index )
+            ( index->second )->windowFocusChange( win );
         break;
     case VisibilityNotify:
-        switch(event.xvisibility.state)
+        switch( event.xvisibility.state )
         {
         case VisibilityUnobscured:
             win->setFocused( true );
@@ -408,12 +414,12 @@ void GLXProc( Ogre::Window *win, const XEvent &event )
             win->_setVisible( false );
             break;
         }
-        for(index = start ; index != end; ++index)
-            (index->second)->windowFocusChange(win);
+        for( index = start; index != end; ++index )
+            ( index->second )->windowFocusChange( win );
         break;
     default:
         break;
-    } //End switch event.type
+    }  // End switch event.type
 }
 //--------------------------------------------------------------------------------//
 void XcbProc( xcb_connection_t *xcbConnection, xcb_generic_event_t *e )
@@ -599,36 +605,38 @@ void XcbProc( xcb_connection_t *xcbConnection, xcb_generic_event_t *e )
 }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE && !defined __OBJC__ && !defined __LP64__
 //--------------------------------------------------------------------------------//
-namespace Ogre {
-OSStatus WindowEventUtilities::_CarbonWindowHandler(EventHandlerCallRef nextHandler, EventRef event, void* wnd)
+namespace Ogre
 {
-    OSStatus status = noErr;
-
-    // Only events from our window should make it here
-    // This ensures that our user data is our WindowRef
-    Window* curWindow = (Window*)wnd;
-    if(!curWindow) return eventNotHandledErr;
-    
-    //Iterator of all listeners registered to this Window
-    WindowEventListeners::iterator index,
-        start = _msListeners.lower_bound(curWindow),
-        end = _msListeners.upper_bound(curWindow);
-    
-    // We only get called if a window event happens
-    UInt32 eventKind = GetEventKind( event );
-
-    switch( eventKind )
+    OSStatus WindowEventUtilities::_CarbonWindowHandler( EventHandlerCallRef nextHandler, EventRef event,
+                                                         void *wnd )
     {
+        OSStatus status = noErr;
+
+        // Only events from our window should make it here
+        // This ensures that our user data is our WindowRef
+        Window *curWindow = (Window *)wnd;
+        if( !curWindow )
+            return eventNotHandledErr;
+
+        // Iterator of all listeners registered to this Window
+        WindowEventListeners::iterator index, start = _msListeners.lower_bound( curWindow ),
+                                              end = _msListeners.upper_bound( curWindow );
+
+        // We only get called if a window event happens
+        UInt32 eventKind = GetEventKind( event );
+
+        switch( eventKind )
+        {
         case kEventWindowActivated:
             curWindow->setFocused( true );
             for( ; start != end; ++start )
-                (start->second)->windowFocusChange(curWindow);
+                ( start->second )->windowFocusChange( curWindow );
             break;
         case kEventWindowDeactivated:
             curWindow->setFocused( false );
 
             for( ; start != end; ++start )
-                (start->second)->windowFocusChange(curWindow);
+                ( start->second )->windowFocusChange( curWindow );
 
             break;
         case kEventWindowShown:
@@ -636,34 +644,34 @@ OSStatus WindowEventUtilities::_CarbonWindowHandler(EventHandlerCallRef nextHand
             curWindow->setFocused( true );
             curWindow->setVisible( true );
             for( ; start != end; ++start )
-                (start->second)->windowFocusChange(curWindow);
+                ( start->second )->windowFocusChange( curWindow );
             break;
         case kEventWindowHidden:
         case kEventWindowCollapsed:
             curWindow->setFocused( false );
             curWindow->setVisible( false );
             for( ; start != end; ++start )
-                (start->second)->windowFocusChange(curWindow);
-            break;            
+                ( start->second )->windowFocusChange( curWindow );
+            break;
         case kEventWindowDragCompleted:
             curWindow->windowMovedOrResized();
             for( ; start != end; ++start )
-                (start->second)->windowMoved(curWindow);
+                ( start->second )->windowMoved( curWindow );
             break;
         case kEventWindowBoundsChanged:
             curWindow->windowMovedOrResized();
             for( ; start != end; ++start )
-                (start->second)->windowResized(curWindow);
+                ( start->second )->windowResized( curWindow );
             break;
         case kEventWindowClose:
         {
             bool close = true;
             for( ; start != end; ++start )
             {
-                if (!(start->second)->windowClosing(curWindow))
+                if( !( start->second )->windowClosing( curWindow ) )
                     close = false;
             }
-            if (close)
+            if( close )
                 // This will cause event handling to continue on to the standard handler, which calls
                 // DisposeWindow(), which leads to the 'kEventWindowClosed' event
                 status = eventNotHandledErr;
@@ -672,14 +680,14 @@ OSStatus WindowEventUtilities::_CarbonWindowHandler(EventHandlerCallRef nextHand
         case kEventWindowClosed:
             curWindow->destroy();
             for( ; start != end; ++start )
-                (start->second)->windowClosed(curWindow);
+                ( start->second )->windowClosed( curWindow );
             break;
         default:
             status = eventNotHandledErr;
             break;
+        }
+
+        return status;
     }
-    
-    return status;
-}
-}
+}  // namespace Ogre
 #endif

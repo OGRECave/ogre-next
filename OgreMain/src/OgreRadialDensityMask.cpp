@@ -30,18 +30,18 @@ THE SOFTWARE.
 
 #include "OgreRadialDensityMask.h"
 
+#include "OgreHlmsCompute.h"
+#include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 #include "OgreMaterialManager.h"
 #include "OgrePass.h"
 #include "OgreRectangle2D2.h"
 #include "OgreSceneManager.h"
+#include "OgreShaderPrimitives.h"
 #include "OgreTechnique.h"
-#include "OgreHlmsCompute.h"
-#include "OgreHlmsComputeJob.h"
-#include "OgreHlmsManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
-#include "OgreShaderPrimitives.h"
 
 namespace Ogre
 {
@@ -73,7 +73,7 @@ namespace Ogre
         mRectangle->setGeometry( mLeftEyeCenter, mRightEyeCenter );
         mRectangle->initialize(
             BT_IMMUTABLE, Rectangle2D::GeometryFlagStereo | Rectangle2D::GeometryFlagHollowFsRect );
-        mRectangle->setRenderQueueGroup( 0u ); // Render first!
+        mRectangle->setRenderQueueGroup( 0u );  // Render first!
 
         const String baseMatName = "Ogre/VR/RadialDensityMask";
         const String matName = baseMatName + StringConverter::toString( sceneManager->getId() );

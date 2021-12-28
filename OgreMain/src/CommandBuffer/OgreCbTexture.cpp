@@ -45,9 +45,9 @@ namespace Ogre
     {
     }
 
-    void CommandBuffer::execute_setTexture( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    void CommandBuffer::execute_setTexture( CommandBuffer *_this, const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbTexture *cmd = static_cast<const CbTexture*>( _cmd );
+        const CbTexture *cmd = static_cast<const CbTexture *>( _cmd );
         _this->mRenderSystem->_setTexture( cmd->texUnit, cmd->texture, cmd->bDepthReadOnly );
 
         if( cmd->samplerBlock )
@@ -63,9 +63,9 @@ namespace Ogre
     {
     }
 
-    void CommandBuffer::execute_setTextures( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    void CommandBuffer::execute_setTextures( CommandBuffer *_this, const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbTextures *cmd = static_cast<const CbTextures*>( _cmd );
+        const CbTextures *cmd = static_cast<const CbTextures *>( _cmd );
         _this->mRenderSystem->_setTextures( cmd->texUnit, cmd->descSet, cmd->hazardousTexIdx );
     }
 
@@ -76,9 +76,9 @@ namespace Ogre
     {
     }
 
-    void CommandBuffer::execute_setSamplers( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    void CommandBuffer::execute_setSamplers( CommandBuffer *_this, const CbBase *RESTRICT_ALIAS _cmd )
     {
-        const CbSamplers *cmd = static_cast<const CbSamplers*>( _cmd );
+        const CbSamplers *cmd = static_cast<const CbSamplers *>( _cmd );
         _this->mRenderSystem->_setSamplers( cmd->texUnit, cmd->descSet );
     }
-}
+}  // namespace Ogre

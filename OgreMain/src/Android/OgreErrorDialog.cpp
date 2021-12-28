@@ -28,14 +28,13 @@ THE SOFTWARE.
 
 #include "OgreErrorDialog.h"
 
-
 using namespace Ogre;
 
 ErrorDialog::ErrorDialog()
 {
 }
 
-void ErrorDialog::display(const String& errorMessage, String logName)
+void ErrorDialog::display( const String &errorMessage, String logName )
 {
-// TODO: Send out to java perhaps?
+    // TODO: Send out to java perhaps?
 }

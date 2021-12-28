@@ -25,38 +25,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "OgreLogManager.h"
 #include "OgreConfigDialog.h"
+#include "OgreLogManager.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    ConfigDialog *dlg = NULL;
 
-    ConfigDialog* dlg = NULL;
+    ConfigDialog::ConfigDialog() { dlg = this; }
 
-    ConfigDialog::ConfigDialog()
-    {
-        dlg = this;
-    }
-    
-    ConfigDialog::~ConfigDialog()
-    {
-    }
-    
-    void ConfigDialog::initialise()
-    {
-    }
-    
-    void ConfigDialog::run()
-    {
+    ConfigDialog::~ConfigDialog() {}
 
-    }
-    
-    void ConfigDialog::cancel()
-    {
-    }
+    void ConfigDialog::initialise() {}
 
-    bool ConfigDialog::display()
-    {
-        return true;
-    }
+    void ConfigDialog::run() {}
 
-}
+    void ConfigDialog::cancel() {}
+
+    bool ConfigDialog::display() { return true; }
+
+}  // namespace Ogre

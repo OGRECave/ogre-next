@@ -36,19 +36,19 @@ THE SOFTWARE.
 #include "OgreImage2.h"
 #include "OgreLogManager.h"
 
-#define FOURCC(c0, c1, c2, c3) (c0 | (c1 << 8) | (c2 << 16) | (c3 << 24))
-#define PVR_TEXTURE_FLAG_TYPE_MASK  0xff
+#define FOURCC( c0, c1, c2, c3 ) ( c0 | ( c1 << 8 ) | ( c2 << 16 ) | ( c3 << 24 ) )
+#define PVR_TEXTURE_FLAG_TYPE_MASK 0xff
 
-namespace Ogre {
-    
+namespace Ogre
+{
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#pragma pack (push, 1)
+#    pragma pack( push, 1 )
 #else
-#pragma pack (1)
+#    pragma pack( 1 )
 #endif
 
-    const uint32 PVR2_MAGIC = FOURCC('P', 'V', 'R', '!'); 
-    const uint32 PVR3_MAGIC = FOURCC('P', 'V', 'R', 3); 
+    const uint32 PVR2_MAGIC = FOURCC( 'P', 'V', 'R', '!' );
+    const uint32 PVR3_MAGIC = FOURCC( 'P', 'V', 'R', 3 );
 
     enum
     {
@@ -85,18 +85,20 @@ namespace Ogre {
 
     typedef struct _PVRTCTexHeaderV3
     {
-        uint32  version;         //Version of the file header, used to identify it.
-        uint32  flags;           //Various format flags.
-        uint64  pixelFormat;     //The pixel format, 8cc value storing the 4 channel identifiers and their respective sizes.
-        uint32  colourSpace;     //The Colour Space of the texture, currently either linear RGB or sRGB.
-        uint32  channelType;     //Variable type that the channel is stored in. Supports signed/unsigned int/short/byte or float for now.
-        uint32  height;          //Height of the texture.
-        uint32  width;           //Width of the texture.
-        uint32  depth;           //Depth of the texture. (Z-slices)
-        uint32  numSurfaces;     //Number of members in a Texture Array.
-        uint32  numFaces;        //Number of faces in a Cube Map. Maybe be a value other than 6.
-        uint32  mipMapCount;     //Number of MIP Maps in the texture - NB: Includes top level.
-        uint32  metaDataSize;    //Size of the accompanying meta data.
+        uint32 version;       // Version of the file header, used to identify it.
+        uint32 flags;         // Various format flags.
+        uint64 pixelFormat;   // The pixel format, 8cc value storing the 4 channel identifiers and their
+                              // respective sizes.
+        uint32 colourSpace;   // The Colour Space of the texture, currently either linear RGB or sRGB.
+        uint32 channelType;   // Variable type that the channel is stored in. Supports signed/unsigned
+                              // int/short/byte or float for now.
+        uint32 height;        // Height of the texture.
+        uint32 width;         // Width of the texture.
+        uint32 depth;         // Depth of the texture. (Z-slices)
+        uint32 numSurfaces;   // Number of members in a Texture Array.
+        uint32 numFaces;      // Number of faces in a Cube Map. Maybe be a value other than 6.
+        uint32 mipMapCount;   // Number of MIP Maps in the texture - NB: Includes top level.
+        uint32 metaDataSize;  // Size of the accompanying meta data.
     } PVRTCTexHeaderV3;
 
     typedef struct _PVRTCMetaData
@@ -104,114 +106,106 @@ namespace Ogre {
         uint32 DevFOURCC;
         uint32 u32Key;
         uint32 u32DataSize;
-        uint8* Data;
+        uint8 *Data;
     } PVRTCMetadata;
-    
+
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-#pragma pack (pop)
+#    pragma pack( pop )
 #else
-#pragma pack ()
+#    pragma pack()
 #endif
 
     //---------------------------------------------------------------------
-    PVRTCCodec* PVRTCCodec::msInstance = 0;
+    PVRTCCodec *PVRTCCodec::msInstance = 0;
     //---------------------------------------------------------------------
     void PVRTCCodec::startup()
     {
-        if (!msInstance)
+        if( !msInstance )
         {
-            LogManager::getSingleton().logMessage(
-                LML_NORMAL,
-                "PVRTC codec registering");
+            LogManager::getSingleton().logMessage( LML_NORMAL, "PVRTC codec registering" );
 
             msInstance = OGRE_NEW PVRTCCodec();
-            Codec::registerCodec(msInstance);
+            Codec::registerCodec( msInstance );
         }
     }
     //---------------------------------------------------------------------
     void PVRTCCodec::shutdown()
     {
-        if(msInstance)
+        if( msInstance )
         {
-            Codec::unregisterCodec(msInstance);
+            Codec::unregisterCodec( msInstance );
             OGRE_DELETE msInstance;
             msInstance = 0;
         }
     }
     //---------------------------------------------------------------------
-    PVRTCCodec::PVRTCCodec():
-        mType("pvr")
-    { 
-    }
+    PVRTCCodec::PVRTCCodec() : mType( "pvr" ) {}
     //---------------------------------------------------------------------
-    DataStreamPtr PVRTCCodec::encode(MemoryDataStreamPtr& input, Codec::CodecDataPtr& pData) const
-    {        
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "PVRTC encoding not supported",
-                    "PVRTCCodec::encode" ) ;
-    }
-    //---------------------------------------------------------------------
-    void PVRTCCodec::encodeToFile(MemoryDataStreamPtr& input,
-        const String& outFileName, Codec::CodecDataPtr& pData) const
+    DataStreamPtr PVRTCCodec::encode( MemoryDataStreamPtr &input, Codec::CodecDataPtr &pData ) const
     {
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED,
-                    "PVRTC encoding not supported",
-                    "PVRTCCodec::encodeToFile" ) ;
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "PVRTC encoding not supported",
+                     "PVRTCCodec::encode" );
     }
     //---------------------------------------------------------------------
-    Codec::DecodeResult PVRTCCodec::decode(DataStreamPtr& stream) const
+    void PVRTCCodec::encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
+                                   Codec::CodecDataPtr &pData ) const
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "PVRTC encoding not supported",
+                     "PVRTCCodec::encodeToFile" );
+    }
+    //---------------------------------------------------------------------
+    Codec::DecodeResult PVRTCCodec::decode( DataStreamPtr &stream ) const
     {
         // Assume its a pvr 2 header
         PVRTCTexHeaderV2 headerV2;
-        stream->read(&headerV2, sizeof(PVRTCTexHeaderV2));
-        stream->seek(0);
+        stream->read( &headerV2, sizeof( PVRTCTexHeaderV2 ) );
+        stream->seek( 0 );
 
-        if (PVR2_MAGIC == headerV2.pvrTag)
-        {           
-            return decodeV2(stream);
+        if( PVR2_MAGIC == headerV2.pvrTag )
+        {
+            return decodeV2( stream );
         }
 
         // Try it as pvr 3 header
         PVRTCTexHeaderV3 headerV3;
-        stream->read(&headerV3, sizeof(PVRTCTexHeaderV3));
-        stream->seek(0);
+        stream->read( &headerV3, sizeof( PVRTCTexHeaderV3 ) );
+        stream->seek( 0 );
 
-        if (PVR3_MAGIC == headerV3.version)
+        if( PVR3_MAGIC == headerV3.version )
         {
-            return decodeV3(stream);
+            return decodeV3( stream );
         }
 
-        
-        OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "This is not a PVR2 / PVR3 file!", "PVRTCCodec::decode");
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "This is not a PVR2 / PVR3 file!",
+                     "PVRTCCodec::decode" );
     }
-    //---------------------------------------------------------------------    
-    Codec::DecodeResult PVRTCCodec::decodeV2(DataStreamPtr& stream) const
+    //---------------------------------------------------------------------
+    Codec::DecodeResult PVRTCCodec::decodeV2( DataStreamPtr &stream ) const
     {
         PVRTCTexHeaderV2 header;
         uint32 flags = 0, formatFlags = 0;
-        size_t numFaces = 1; // Assume one face until we know otherwise
+        size_t numFaces = 1;  // Assume one face until we know otherwise
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
 
         // Read the PVRTC header
-        stream->read(&header, sizeof(PVRTCTexHeaderV2));
+        stream->read( &header, sizeof( PVRTCTexHeaderV2 ) );
 
         // Get format flags
         flags = header.flags;
-        flipEndian(&flags, sizeof(uint32));
+        flipEndian( &flags, sizeof( uint32 ) );
         formatFlags = flags & PVR_TEXTURE_FLAG_TYPE_MASK;
 
         uint32 bitmaskAlpha = header.bitmaskAlpha;
-        flipEndian(&bitmaskAlpha, sizeof(uint32));
+        flipEndian( &bitmaskAlpha, sizeof( uint32 ) );
 
-        if (formatFlags == kPVRTextureFlagTypePVRTC_4 || formatFlags == kPVRTextureFlagTypePVRTC_2)
+        if( formatFlags == kPVRTextureFlagTypePVRTC_4 || formatFlags == kPVRTextureFlagTypePVRTC_2 )
         {
-            if (formatFlags == kPVRTextureFlagTypePVRTC_4)
+            if( formatFlags == kPVRTextureFlagTypePVRTC_4 )
             {
                 imgData->format = bitmaskAlpha ? PFG_PVRTC_RGBA4 : PFG_PVRTC_RGB4;
             }
-            else if (formatFlags == kPVRTextureFlagTypePVRTC_2)
+            else if( formatFlags == kPVRTextureFlagTypePVRTC_2 )
             {
                 imgData->format = bitmaskAlpha ? PFG_PVRTC_RGBA2 : PFG_PVRTC_RGB2;
             }
@@ -228,12 +222,12 @@ namespace Ogre {
 
         // Calculate total size from number of mipmaps, faces and size
         const uint32 rowAlignment = 4u;
-        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
-                                                                              imgData->box.height,
-                                                                              imgData->box.depth,
-                                                                              imgData->box.numSlices,
-                                                                              imgData->format,
-                                                                              imgData->numMipmaps,
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,      //
+                                                                              imgData->box.height,     //
+                                                                              imgData->box.depth,      //
+                                                                              imgData->box.numSlices,  //
+                                                                              imgData->format,         //
+                                                                              imgData->numMipmaps,     //
                                                                               rowAlignment );
         // Bind output buffer
         imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
@@ -247,51 +241,51 @@ namespace Ogre {
 
         return ret;
     }
-    //---------------------------------------------------------------------    
-    Codec::DecodeResult PVRTCCodec::decodeV3(DataStreamPtr& stream) const
+    //---------------------------------------------------------------------
+    Codec::DecodeResult PVRTCCodec::decodeV3( DataStreamPtr &stream ) const
     {
         PVRTCTexHeaderV3 header;
         PVRTCMetadata metadata;
         uint32 flags = 0;
-        size_t numFaces = 1; // Assume one face until we know otherwise
+        size_t numFaces = 1;  // Assume one face until we know otherwise
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
 
         // Read the PVRTC header
-        stream->read(&header, sizeof(PVRTCTexHeaderV3));
+        stream->read( &header, sizeof( PVRTCTexHeaderV3 ) );
 
         // Read the PVRTC metadata
-        if(header.metaDataSize)
+        if( header.metaDataSize )
         {
-            stream->read(&metadata, sizeof(PVRTCMetadata));
+            stream->read( &metadata, sizeof( PVRTCMetadata ) );
         }
 
         // Identify the pixel format
-        switch (header.pixelFormat)
+        switch( header.pixelFormat )
         {
-            case kPVRTC1_PF_2BPP_RGB:
-                imgData->format = PFG_PVRTC_RGB2;
-                break;
-            case kPVRTC1_PF_2BPP_RGBA:
-                imgData->format = PFG_PVRTC_RGBA2;
-                break;
-            case kPVRTC1_PF_4BPP_RGB:
-                imgData->format = PFG_PVRTC_RGB4;
-                break;
-            case kPVRTC1_PF_4BPP_RGBA:
-                imgData->format = PFG_PVRTC_RGBA4;
-                break;
-            case kPVRTC2_PF_2BPP:
-                imgData->format = PFG_PVRTC2_2BPP;
-                break;
-            case kPVRTC2_PF_4BPP:
-                imgData->format = PFG_PVRTC2_4BPP;
-                break;
+        case kPVRTC1_PF_2BPP_RGB:
+            imgData->format = PFG_PVRTC_RGB2;
+            break;
+        case kPVRTC1_PF_2BPP_RGBA:
+            imgData->format = PFG_PVRTC_RGBA2;
+            break;
+        case kPVRTC1_PF_4BPP_RGB:
+            imgData->format = PFG_PVRTC_RGB4;
+            break;
+        case kPVRTC1_PF_4BPP_RGBA:
+            imgData->format = PFG_PVRTC_RGBA4;
+            break;
+        case kPVRTC2_PF_2BPP:
+            imgData->format = PFG_PVRTC2_2BPP;
+            break;
+        case kPVRTC2_PF_4BPP:
+            imgData->format = PFG_PVRTC2_4BPP;
+            break;
         }
 
         // Get format flags
         flags = header.flags;
-        flipEndian(&flags, sizeof(uint32));
+        flipEndian( &flags, sizeof( uint32 ) );
 
         imgData->box.depth = header.depth;
         imgData->box.numSlices = static_cast<uint32>( header.numSurfaces );
@@ -314,19 +308,19 @@ namespace Ogre {
 
         // Calculate total size from number of mipmaps, faces and size
         const uint32 rowAlignment = 4u;
-        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
-                                                                              imgData->box.height,
-                                                                              imgData->box.depth,
-                                                                              imgData->box.numSlices,
-                                                                              imgData->format,
-                                                                              imgData->numMipmaps,
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,      //
+                                                                              imgData->box.height,     //
+                                                                              imgData->box.depth,      //
+                                                                              imgData->box.numSlices,  //
+                                                                              imgData->format,         //
+                                                                              imgData->numMipmaps,     //
                                                                               rowAlignment );
         // Bind output buffer
         imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
 
         // Now deal with the data
         void *destPtr = imgData->box.data;
-        
+
         uint32 width = imgData->box.width;
         uint32 height = imgData->box.height;
         uint32 depth = imgData->box.depth;
@@ -334,7 +328,7 @@ namespace Ogre {
         // All mips for a surface, then each face
         for( size_t mip = 0; mip <= imgData->numMipmaps; ++mip )
         {
-            //for( size_t surface = 0; surface < header.numSurfaces; ++surface )
+            // for( size_t surface = 0; surface < header.numSurfaces; ++surface )
             size_t depthOrSlices = imgData->box.getDepthOrSlices();
             if( imgData->textureType == TextureTypes::Type3D )
                 depthOrSlices = depth;  // account for mips
@@ -342,7 +336,7 @@ namespace Ogre {
             for( size_t surface = 0; surface < depthOrSlices; ++surface )
             {
                 // Ogre does not support 3D arrays or weird (incompatible) combinaations)
-                //for( size_t i = 0; i < numFaces; ++i )
+                // for( size_t i = 0; i < numFaces; ++i )
                 {
                     // Load directly
                     const size_t pvrSize = PixelFormatGpuUtils::calculateSizeBytes(
@@ -366,40 +360,37 @@ namespace Ogre {
 
         return ret;
     }
-    //---------------------------------------------------------------------    
-    String PVRTCCodec::getType() const 
-    {
-        return mType;
-    }
-    //---------------------------------------------------------------------    
-    void PVRTCCodec::flipEndian(void * pData, size_t size, size_t count)
+    //---------------------------------------------------------------------
+    String PVRTCCodec::getType() const { return mType; }
+    //---------------------------------------------------------------------
+    void PVRTCCodec::flipEndian( void *pData, size_t size, size_t count )
     {
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-		Bitwise::bswapChunks(pData, size, count);
-#endif
-    }
-    //---------------------------------------------------------------------    
-    void PVRTCCodec::flipEndian(void * pData, size_t size)
-    {
-#if OGRE_ENDIAN == OGRE_ENDIAN_BIG
-        Bitwise::bswapBuffer(pData, size);
+        Bitwise::bswapChunks( pData, size, count );
 #endif
     }
     //---------------------------------------------------------------------
-    String PVRTCCodec::magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const
+    void PVRTCCodec::flipEndian( void *pData, size_t size )
     {
-        if (maxbytes >= sizeof(uint32))
+#if OGRE_ENDIAN == OGRE_ENDIAN_BIG
+        Bitwise::bswapBuffer( pData, size );
+#endif
+    }
+    //---------------------------------------------------------------------
+    String PVRTCCodec::magicNumberToFileExt( const char *magicNumberPtr, size_t maxbytes ) const
+    {
+        if( maxbytes >= sizeof( uint32 ) )
         {
             uint32 fileType;
-            memcpy(&fileType, magicNumberPtr, sizeof(uint32));
-			flipEndian(&fileType, sizeof(uint32));
+            memcpy( &fileType, magicNumberPtr, sizeof( uint32 ) );
+            flipEndian( &fileType, sizeof( uint32 ) );
 
-            if (PVR3_MAGIC == fileType || PVR2_MAGIC == fileType)
+            if( PVR3_MAGIC == fileType || PVR2_MAGIC == fileType )
             {
-                return String("pvr");
+                return String( "pvr" );
             }
         }
 
         return BLANKSTRING;
     }
-}
+}  // namespace Ogre

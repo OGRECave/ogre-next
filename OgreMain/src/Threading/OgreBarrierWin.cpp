@@ -35,54 +35,54 @@ THE SOFTWARE.
 #include <windows.h>
 
 #ifndef __MINGW32__
-	#include <intrin.h>
+#    include <intrin.h>
 #else
-    // MinGW needs some extra headers and define MemoryBarrier manually
-	#include <x86intrin.h>
-    #include <winbase.h>
-    #include <windef.h>
+// MinGW needs some extra headers and define MemoryBarrier manually
+#    include <x86intrin.h>
+#    include <winbase.h>
+#    include <windef.h>
 
-    #define MemoryBarrier __sync_synchronize
+#    define MemoryBarrier __sync_synchronize
 #endif
 
 namespace Ogre
 {
     Barrier::Barrier( size_t threadCount ) : mNumThreads( threadCount ), mIndex( 0 ), mLockCount( 0 )
     {
-        for( size_t i=0; i<2; ++i )
+        for( size_t i = 0; i < 2; ++i )
             mSemaphores[i] = CreateSemaphore( NULL, 0, mNumThreads, NULL );
     }
     //-----------------------------------------------------------------------------------
     Barrier::~Barrier()
     {
-        for( size_t i=0; i<2; ++i )
+        for( size_t i = 0; i < 2; ++i )
             CloseHandle( mSemaphores[i] );
     }
     //-----------------------------------------------------------------------------------
     void Barrier::sync()
     {
-        //We need to be absolutely certain we read mIndex before incrementing mLockCount
+        // We need to be absolutely certain we read mIndex before incrementing mLockCount
         volatile size_t idx = mIndex;
         MemoryBarrier();
 
-        #ifndef __MINGW32__
-            LONG oldLockCount = _InterlockedExchangeAdd( &mLockCount, 1 );
-        #else
-            LONG oldLockCount = InterlockedExchangeAdd( &mLockCount, 1 );
-        #endif
+#ifndef __MINGW32__
+        LONG oldLockCount = _InterlockedExchangeAdd( &mLockCount, 1 );
+#else
+        LONG oldLockCount = InterlockedExchangeAdd( &mLockCount, 1 );
+#endif
         if( oldLockCount != mNumThreads - 1 )
         {
             WaitForSingleObject( mSemaphores[idx], INFINITE );
         }
         else
         {
-            //Swap the index to use the other semaphore. Otherwise a thread that runs too fast
-            //gets to the next sync point and enters the semaphore, causing threads from this
-            //one to get stuck in the current sync point (and ultimately, deadlock).
-            mIndex      = !idx;
-            mLockCount  = 0;
+            // Swap the index to use the other semaphore. Otherwise a thread that runs too fast
+            // gets to the next sync point and enters the semaphore, causing threads from this
+            // one to get stuck in the current sync point (and ultimately, deadlock).
+            mIndex = !idx;
+            mLockCount = 0;
             if( mNumThreads > 1 )
                 ReleaseSemaphore( mSemaphores[idx], mNumThreads - 1, NULL );
         }
     }
-}
+}  // namespace Ogre

@@ -36,11 +36,11 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
+#include "OgreCamera.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
 #include "OgreRoot.h"
-#include "OgreCamera.h"
 #include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre

@@ -32,7 +32,7 @@ THE SOFTWARE.
 
   Version 1.0.0, February 7th, 2007
 
-  Copyright (C) 2006-2007 University of Dublin, Trinity College, All Rights 
+  Copyright (C) 2006-2007 University of Dublin, Trinity College, All Rights
   Reserved
 
   This software is provided 'as-is', without any express or implied
@@ -62,29 +62,29 @@ THE SOFTWARE.
 #include "OgreMatrix4.h"
 #include "OgreVector3.h"
 
-namespace Ogre {
-
-    //Based on dqconv.c from http://isg.cs.tcd.ie/projects/DualQuaternions/
+namespace Ogre
+{
+    // Based on dqconv.c from http://isg.cs.tcd.ie/projects/DualQuaternions/
     //-----------------------------------------------------------------------
-    void DualQuaternion::fromRotationTranslation (const Quaternion& q, const Vector3& trans)
+    void DualQuaternion::fromRotationTranslation( const Quaternion &q, const Vector3 &trans )
     {
         // non-dual part (just copy the quaternion):
         w = q.w;
         x = q.x;
         y = q.y;
         z = q.z;
-        
+
         // dual part:
         Real half = 0.5;
-        dw = -half *  (trans.x * x + trans.y * y + trans.z * z ); 
-        dx =  half *  (trans.x * w + trans.y * z - trans.z * y ); 
-        dy =  half * (-trans.x * z + trans.y * w + trans.z * x ); 
-        dz =  half *  (trans.x * y - trans.y * x + trans.z * w ); 
+        dw = -half * ( trans.x * x + trans.y * y + trans.z * z );
+        dx = half * ( trans.x * w + trans.y * z - trans.z * y );
+        dy = half * ( -trans.x * z + trans.y * w + trans.z * x );
+        dz = half * ( trans.x * y - trans.y * x + trans.z * w );
     }
 
-    //Based on dqconv.c from http://isg.cs.tcd.ie/projects/DualQuaternions/
+    // Based on dqconv.c from http://isg.cs.tcd.ie/projects/DualQuaternions/
     //-----------------------------------------------------------------------
-    void DualQuaternion::toRotationTranslation (Quaternion& q, Vector3& translation) const
+    void DualQuaternion::toRotationTranslation( Quaternion &q, Vector3 &translation ) const
     {
         // regular quaternion (just copy the non-dual part):
         q.w = w;
@@ -94,30 +94,30 @@ namespace Ogre {
 
         // translation vector:
         Real doub = 2.0;
-        translation.x = doub * (-dw*x + dx*w - dy*z + dz*y);
-        translation.y = doub * (-dw*y + dx*z + dy*w - dz*x);
-        translation.z = doub * (-dw*z - dx*y + dy*x + dz*w);
+        translation.x = doub * ( -dw * x + dx * w - dy * z + dz * y );
+        translation.y = doub * ( -dw * y + dx * z + dy * w - dz * x );
+        translation.z = doub * ( -dw * z - dx * y + dy * x + dz * w );
     }
 
     //-----------------------------------------------------------------------
-    void DualQuaternion::fromTransformationMatrix (const Matrix4& kTrans)
+    void DualQuaternion::fromTransformationMatrix( const Matrix4 &kTrans )
     {
         Vector3 pos;
         Vector3 scale;
         Quaternion rot;
 
-        kTrans.decomposition(pos, scale, rot);
-        fromRotationTranslation(rot, pos);
+        kTrans.decomposition( pos, scale, rot );
+        fromRotationTranslation( rot, pos );
     }
 
     //-----------------------------------------------------------------------
-    void DualQuaternion::toTransformationMatrix (Matrix4& kTrans) const
+    void DualQuaternion::toTransformationMatrix( Matrix4 &kTrans ) const
     {
         Vector3 pos;
         Quaternion rot;
-        toRotationTranslation(rot, pos);
+        toRotationTranslation( rot, pos );
 
         Vector3 scale = Vector3::UNIT_SCALE;
-        kTrans.makeTransform(pos, scale, rot);
+        kTrans.makeTransform( pos, scale, rot );
     }
-}
+}  // namespace Ogre

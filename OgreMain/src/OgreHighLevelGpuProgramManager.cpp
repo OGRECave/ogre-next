@@ -31,14 +31,14 @@ THE SOFTWARE.
 
 #include "OgreUnifiedHighLevelGpuProgram.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     String sNullLang = "null";
     class NullProgram final : public HighLevelGpuProgram
     {
     protected:
         /** Internal load implementation, must be implemented by subclasses.
-        */
+         */
         void loadFromSource() override {}
         /** Internal method for creating an appropriate low-level program from this
         high-level program, must be implemented by subclasses. */
@@ -46,37 +46,37 @@ namespace Ogre {
         /// Internal unload implementation, must be implemented by subclasses
         void unloadHighLevelImpl() override {}
         /// Populate the passed parameters with name->index map, must be overridden
-        void populateParameterNames(GpuProgramParametersSharedPtr params) override
+        void populateParameterNames( GpuProgramParametersSharedPtr params ) override
         {
             // Skip the normal implementation
             // Ensure we don't complain about missing parameter names
-            params->setIgnoreMissingParams(true);
-
+            params->setIgnoreMissingParams( true );
         }
         void buildConstantDefinitions() const override
         {
             // do nothing
         }
+
     public:
-        NullProgram(ResourceManager* creator, 
-            const String& name, ResourceHandle handle, const String& group, 
-            bool isManual, ManualResourceLoader* loader)
-            : HighLevelGpuProgram(creator, name, handle, group, isManual, loader){}
+        NullProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
+                     const String &group, bool isManual, ManualResourceLoader *loader ) :
+            HighLevelGpuProgram( creator, name, handle, group, isManual, loader )
+        {
+        }
         ~NullProgram() override {}
         /// Overridden from GpuProgram - never supported
         bool isSupported() const override { return false; }
         /// Overridden from GpuProgram
-        const String& getLanguage() const override { return sNullLang; }
+        const String &getLanguage() const override { return sNullLang; }
         size_t calculateSize() const override { return 0; }
 
         /// Overridden from StringInterface
-        bool setParameter(const String& /*name*/, const String& /*value*/) override
+        bool setParameter( const String & /*name*/, const String & /*value*/ ) override
         {
             // always silently ignore all parameters so as not to report errors on
             // unsupported platforms
             return true;
         }
-
     };
     class NullProgramFactory final : public HighLevelGpuProgramFactory
     {
@@ -84,32 +84,23 @@ namespace Ogre {
         NullProgramFactory() {}
         ~NullProgramFactory() override {}
         /// Get the name of the language this factory creates programs for
-        const String& getLanguage() const override
-        { 
-            return sNullLang;
-        }
-        HighLevelGpuProgram* create(ResourceManager* creator, 
-            const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader) override
+        const String &getLanguage() const override { return sNullLang; }
+        HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override
         {
-            return OGRE_NEW NullProgram(creator, name, handle, group, isManual, loader);
+            return OGRE_NEW NullProgram( creator, name, handle, group, isManual, loader );
         }
-        void destroy(HighLevelGpuProgram* prog) override
-        {
-            OGRE_DELETE prog;
-        }
-
+        void destroy( HighLevelGpuProgram *prog ) override { OGRE_DELETE prog; }
     };
     //-----------------------------------------------------------------------
-    template<> HighLevelGpuProgramManager* 
-    Singleton<HighLevelGpuProgramManager>::msSingleton = 0;
-    HighLevelGpuProgramManager* HighLevelGpuProgramManager::getSingletonPtr()
+    template <>
+    HighLevelGpuProgramManager *Singleton<HighLevelGpuProgramManager>::msSingleton = 0;
+    HighLevelGpuProgramManager *HighLevelGpuProgramManager::getSingletonPtr() { return msSingleton; }
+    HighLevelGpuProgramManager &HighLevelGpuProgramManager::getSingleton()
     {
-        return msSingleton;
-    }
-    HighLevelGpuProgramManager& HighLevelGpuProgramManager::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
     HighLevelGpuProgramManager::HighLevelGpuProgramManager()
@@ -119,99 +110,97 @@ namespace Ogre {
         // Resource type
         mResourceType = "HighLevelGpuProgram";
 
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);    
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
 
         mNullFactory = OGRE_NEW NullProgramFactory();
-        addFactory(mNullFactory);
+        addFactory( mNullFactory );
         mUnifiedFactory = OGRE_NEW UnifiedHighLevelGpuProgramFactory();
-        addFactory(mUnifiedFactory);
+        addFactory( mUnifiedFactory );
     }
     //-----------------------------------------------------------------------
     HighLevelGpuProgramManager::~HighLevelGpuProgramManager()
     {
         OGRE_DELETE mUnifiedFactory;
         OGRE_DELETE mNullFactory;
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);    
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
     }
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgramManager::addFactory(HighLevelGpuProgramFactory* factory)
+    void HighLevelGpuProgramManager::addFactory( HighLevelGpuProgramFactory *factory )
     {
         // deliberately allow later plugins to override earlier ones
         mFactories[factory->getLanguage()] = factory;
     }
     //---------------------------------------------------------------------------
-    void HighLevelGpuProgramManager::removeFactory(HighLevelGpuProgramFactory* factory)
+    void HighLevelGpuProgramManager::removeFactory( HighLevelGpuProgramFactory *factory )
     {
         // Remove only if equal to registered one, since it might overridden
         // by other plugins
-        FactoryMap::iterator it = mFactories.find(factory->getLanguage());
-        if (it != mFactories.end() && it->second == factory)
+        FactoryMap::iterator it = mFactories.find( factory->getLanguage() );
+        if( it != mFactories.end() && it->second == factory )
         {
-            mFactories.erase(it);
+            mFactories.erase( it );
         }
     }
     //---------------------------------------------------------------------------
-    HighLevelGpuProgramFactory* HighLevelGpuProgramManager::getFactory(const String& language)
+    HighLevelGpuProgramFactory *HighLevelGpuProgramManager::getFactory( const String &language )
     {
-        FactoryMap::iterator i = mFactories.find(language);
+        FactoryMap::iterator i = mFactories.find( language );
 
-        if (i == mFactories.end())
+        if( i == mFactories.end() )
         {
             // use the null factory to create programs that will never be supported
-            i = mFactories.find(sNullLang);
+            i = mFactories.find( sNullLang );
         }
         return i->second;
     }
     //---------------------------------------------------------------------
-    bool HighLevelGpuProgramManager::isLanguageSupported(const String& lang)
+    bool HighLevelGpuProgramManager::isLanguageSupported( const String &lang )
     {
-        FactoryMap::iterator i = mFactories.find(lang);
+        FactoryMap::iterator i = mFactories.find( lang );
 
         return i != mFactories.end();
-
     }
     //---------------------------------------------------------------------------
-    Resource* HighLevelGpuProgramManager::createImpl(const String& name, ResourceHandle handle, 
-        const String& group, bool isManual, ManualResourceLoader* loader,
-        const NameValuePairList* params)
+    Resource *HighLevelGpuProgramManager::createImpl( const String &name, ResourceHandle handle,
+                                                      const String &group, bool isManual,
+                                                      ManualResourceLoader *loader,
+                                                      const NameValuePairList *params )
     {
         NameValuePairList::const_iterator paramIt;
 
-        if (!params || (paramIt = params->find("language")) == params->end())
+        if( !params || ( paramIt = params->find( "language" ) ) == params->end() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, 
-                "You must supply a 'language' parameter",
-                "HighLevelGpuProgramManager::createImpl");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must supply a 'language' parameter",
+                         "HighLevelGpuProgramManager::createImpl" );
         }
 
-        return getFactory(paramIt->second)->create(this, name, getNextHandle(), 
-            group, isManual, loader);
+        return getFactory( paramIt->second )
+            ->create( this, name, getNextHandle(), group, isManual, loader );
     }
     //-----------------------------------------------------------------------
-    HighLevelGpuProgramPtr HighLevelGpuProgramManager::getByName(const String& name, const String& groupName)
+    HighLevelGpuProgramPtr HighLevelGpuProgramManager::getByName( const String &name,
+                                                                  const String &groupName )
     {
-        return getResourceByName(name, groupName).staticCast<HighLevelGpuProgram>();
+        return getResourceByName( name, groupName ).staticCast<HighLevelGpuProgram>();
     }
     //---------------------------------------------------------------------------
-    HighLevelGpuProgramPtr HighLevelGpuProgramManager::createProgram(
-            const String& name, const String& groupName, 
-            const String& language, GpuProgramType gptype)
+    HighLevelGpuProgramPtr HighLevelGpuProgramManager::createProgram( const String &name,
+                                                                      const String &groupName,
+                                                                      const String &language,
+                                                                      GpuProgramType gptype )
     {
         ResourcePtr ret = ResourcePtr(
-            getFactory(language)->create(this, name, getNextHandle(), 
-            groupName, false, 0));
+            getFactory( language )->create( this, name, getNextHandle(), groupName, false, 0 ) );
 
         HighLevelGpuProgramPtr prg = ret.staticCast<HighLevelGpuProgram>();
-        prg->setType(gptype);
-        prg->setSyntaxCode(language);
+        prg->setType( gptype );
+        prg->setSyntaxCode( language );
 
-        addImpl(ret);
+        addImpl( ret );
         // Tell resource group manager
-        ResourceGroupManager::getSingleton()._notifyResourceCreated(ret);
+        ResourceGroupManager::getSingleton()._notifyResourceCreated( ret );
         return prg;
     }
     //---------------------------------------------------------------------------
-    HighLevelGpuProgramFactory::~HighLevelGpuProgramFactory() 
-    {
-    }
-}
+    HighLevelGpuProgramFactory::~HighLevelGpuProgramFactory() {}
+}  // namespace Ogre

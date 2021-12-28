@@ -29,11 +29,11 @@ THE SOFTWARE.
 
 #include "OgreSimpleSpline.h"
 
-#include "OgreVector4.h"
 #include "OgreMatrix4.h"
+#include "OgreVector4.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     //---------------------------------------------------------------------
     SimpleSpline::SimpleSpline()
     {
@@ -59,56 +59,50 @@ namespace Ogre {
         mAutoCalc = true;
     }
     //---------------------------------------------------------------------
-    SimpleSpline::~SimpleSpline()
-    {
-    }
+    SimpleSpline::~SimpleSpline() {}
     //---------------------------------------------------------------------
-    void SimpleSpline::addPoint(const Vector3& p)
+    void SimpleSpline::addPoint( const Vector3 &p )
     {
-        mPoints.push_back(p);
-        if (mAutoCalc)
+        mPoints.push_back( p );
+        if( mAutoCalc )
         {
             recalcTangents();
         }
     }
     //---------------------------------------------------------------------
-    Vector3 SimpleSpline::interpolate(Real t) const
+    Vector3 SimpleSpline::interpolate( Real t ) const
     {
         // Currently assumes points are evenly spaced, will cause velocity
         // change where this is not the case
         // TODO: base on arclength?
 
-        
         // Work out which segment this is in
-        Real fSeg = t * (mPoints.size() - 1);
+        Real fSeg = t * ( mPoints.size() - 1 );
         unsigned int segIdx = (unsigned int)fSeg;
-        // Apportion t 
+        // Apportion t
         t = fSeg - segIdx;
 
-        return interpolate(segIdx, t);
-
+        return interpolate( segIdx, t );
     }
     //---------------------------------------------------------------------
-    Vector3 SimpleSpline::interpolate(unsigned int fromIndex, Real t) const
+    Vector3 SimpleSpline::interpolate( unsigned int fromIndex, Real t ) const
     {
         // Bounds check
-        assert (fromIndex < mPoints.size() &&
-            "fromIndex out of bounds");
+        assert( fromIndex < mPoints.size() && "fromIndex out of bounds" );
 
-        if ((fromIndex + 1) == mPoints.size())
+        if( ( fromIndex + 1 ) == mPoints.size() )
         {
             // Duff request, cannot blend to nothing
             // Just return source
             return mPoints[fromIndex];
-
         }
 
         // Fast special cases
-        if (t == 0.0f)
+        if( t == 0.0f )
         {
             return mPoints[fromIndex];
         }
-        else if(t == 1.0f)
+        else if( t == 1.0f )
         {
             return mPoints[fromIndex + 1];
         }
@@ -118,14 +112,13 @@ namespace Ogre {
         Real t2, t3;
         t2 = t * t;
         t3 = t2 * t;
-        Vector4 powers(t3, t2, t, 1);
-
+        Vector4 powers( t3, t2, t, 1 );
 
         // Algorithm is ret = powers * mCoeffs * Matrix4(point1, point2, tangent1, tangent2)
-        const Vector3& point1 = mPoints[fromIndex];
-        const Vector3& point2 = mPoints[fromIndex+1];
-        const Vector3& tan1 = mTangents[fromIndex];
-        const Vector3& tan2 = mTangents[fromIndex+1];
+        const Vector3 &point1 = mPoints[fromIndex];
+        const Vector3 &point2 = mPoints[fromIndex + 1];
+        const Vector3 &tan1 = mTangents[fromIndex];
+        const Vector3 &tan2 = mTangents[fromIndex + 1];
         Matrix4 pt;
 
         pt[0][0] = point1.x;
@@ -147,18 +140,13 @@ namespace Ogre {
 
         Vector4 ret = powers * mCoeffs * pt;
 
-
-        return Vector3(ret.x, ret.y, ret.z);
-
-
-
-
+        return Vector3( ret.x, ret.y, ret.z );
     }
     //---------------------------------------------------------------------
     void SimpleSpline::recalcTangents()
     {
         // Catmull-Rom approach
-        // 
+        //
         // tangent[i] = 0.5 * (point[i+1] - point[i-1])
         //
         // Assume endpoint tangents are parallel with line with neighbour
@@ -167,14 +155,14 @@ namespace Ogre {
         bool isClosed;
 
         numPoints = mPoints.size();
-        if (numPoints < 2)
+        if( numPoints < 2 )
         {
             // Can't do anything yet
             return;
         }
 
         // Closed or open?
-        if (mPoints[0] == mPoints[numPoints-1])
+        if( mPoints[0] == mPoints[numPoints - 1] )
         {
             isClosed = true;
         }
@@ -183,60 +171,51 @@ namespace Ogre {
             isClosed = false;
         }
 
-        mTangents.resize(numPoints);
+        mTangents.resize( numPoints );
 
-
-
-        for(i = 0; i < numPoints; ++i)
+        for( i = 0; i < numPoints; ++i )
         {
-            if (i ==0)
+            if( i == 0 )
             {
                 // Special case start
-                if (isClosed)
+                if( isClosed )
                 {
                     // Use numPoints-2 since numPoints-1 is the last point and == [0]
-                    mTangents[i] = 0.5 * (mPoints[1] - mPoints[numPoints-2]);
+                    mTangents[i] = 0.5 * ( mPoints[1] - mPoints[numPoints - 2] );
                 }
                 else
                 {
-                    mTangents[i] = 0.5 * (mPoints[1] - mPoints[0]);
+                    mTangents[i] = 0.5 * ( mPoints[1] - mPoints[0] );
                 }
             }
-            else if (i == numPoints-1)
+            else if( i == numPoints - 1 )
             {
                 // Special case end
-                if (isClosed)
+                if( isClosed )
                 {
                     // Use same tangent as already calculated for [0]
                     mTangents[i] = mTangents[0];
                 }
                 else
                 {
-                    mTangents[i] = 0.5 * (mPoints[i] - mPoints[i-1]);
+                    mTangents[i] = 0.5 * ( mPoints[i] - mPoints[i - 1] );
                 }
             }
             else
             {
-                mTangents[i] = 0.5 * (mPoints[i+1] - mPoints[i-1]);
+                mTangents[i] = 0.5 * ( mPoints[i + 1] - mPoints[i - 1] );
             }
-            
         }
-
-
-
     }
     //---------------------------------------------------------------------
-    const Vector3& SimpleSpline::getPoint(unsigned short index) const
+    const Vector3 &SimpleSpline::getPoint( unsigned short index ) const
     {
-        assert (index < mPoints.size() && "Point index is out of bounds!!");
+        assert( index < mPoints.size() && "Point index is out of bounds!!" );
 
         return mPoints[index];
     }
     //---------------------------------------------------------------------
-    unsigned short SimpleSpline::getNumPoints() const
-    {
-        return (unsigned short)mPoints.size();
-    }
+    unsigned short SimpleSpline::getNumPoints() const { return (unsigned short)mPoints.size(); }
     //---------------------------------------------------------------------
     void SimpleSpline::clear()
     {
@@ -244,27 +223,17 @@ namespace Ogre {
         mTangents.clear();
     }
     //---------------------------------------------------------------------
-    void SimpleSpline::updatePoint(unsigned short index, const Vector3& value)
+    void SimpleSpline::updatePoint( unsigned short index, const Vector3 &value )
     {
-        assert (index < mPoints.size() && "Point index is out of bounds!!");
+        assert( index < mPoints.size() && "Point index is out of bounds!!" );
 
         mPoints[index] = value;
-        if (mAutoCalc)
+        if( mAutoCalc )
         {
             recalcTangents();
         }
     }
     //---------------------------------------------------------------------
-    void SimpleSpline::setAutoCalculate(bool autoCalc)
-    {
-        mAutoCalc = autoCalc;
-    }
+    void SimpleSpline::setAutoCalculate( bool autoCalc ) { mAutoCalc = autoCalc; }
 
-
-
-
-}
-
-
-
-
+}  // namespace Ogre

@@ -32,28 +32,25 @@ THE SOFTWARE.
 
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreTextureGpu.h"
-#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
-    ComputeTools::ComputeTools( HlmsCompute *hlmsCompute ) :
-        mHlmsCompute( hlmsCompute )
-    {
-    }
+    ComputeTools::ComputeTools( HlmsCompute *hlmsCompute ) : mHlmsCompute( hlmsCompute ) {}
     //-------------------------------------------------------------------------
     void ComputeTools::prepareForUavClear( ResourceTransitionArray &resourceTransitions,
                                            TextureGpu *texture )
     {
-        RenderSystem*renderSystem = mHlmsCompute->getRenderSystem();
-        BarrierSolver &barrierSolver=renderSystem->getBarrierSolver();
+        RenderSystem *renderSystem = mHlmsCompute->getRenderSystem();
+        BarrierSolver &barrierSolver = renderSystem->getBarrierSolver();
 
         barrierSolver.resolveTransition( resourceTransitions, texture, ResourceLayout::Uav,
                                          ResourceAccess::Write, 1u << GPT_COMPUTE_PROGRAM );
     }
     //-------------------------------------------------------------------------
-    void ComputeTools::clearUav(TextureGpu *texture, const uint32 clearValue[4] )
+    void ComputeTools::clearUav( TextureGpu *texture, const uint32 clearValue[4] )
     {
         const bool bIsInteger = PixelFormatGpuUtils::isInteger( texture->getPixelFormat() );
         const bool bIsSigned = PixelFormatGpuUtils::isSigned( texture->getPixelFormat() );
@@ -83,19 +80,19 @@ namespace Ogre
         if( !bIsInteger )
         {
             param.name = "fClearValue";
-            param.setManualValue( reinterpret_cast<const float*>( clearValue ), 4u );
+            param.setManualValue( reinterpret_cast<const float *>( clearValue ), 4u );
         }
         else
         {
             if( !bIsSigned )
             {
                 param.name = "uClearValue";
-                param.setManualValue( reinterpret_cast<const uint32*>( clearValue ), 4u );
+                param.setManualValue( reinterpret_cast<const uint32 *>( clearValue ), 4u );
             }
             else
             {
                 param.name = "iClearValue";
-                param.setManualValue( reinterpret_cast<const int32*>( clearValue ), 4u );
+                param.setManualValue( reinterpret_cast<const int32 *>( clearValue ), 4u );
             }
         }
         shaderParams.mParams.push_back( param );
@@ -105,18 +102,24 @@ namespace Ogre
         switch( texture->getTextureType() )
         {
         case TextureTypes::Type1D:
-            threadsPerGroup[0] = 64u;   threadsPerGroup[1] = 1u;    threadsPerGroup[2] = 1u;
+            threadsPerGroup[0] = 64u;
+            threadsPerGroup[1] = 1u;
+            threadsPerGroup[2] = 1u;
             break;
         case TextureTypes::Unknown:
         case TextureTypes::Type1DArray:
         case TextureTypes::Type2D:
-            threadsPerGroup[0] = 8u;    threadsPerGroup[1] = 8u;    threadsPerGroup[2] = 1u;
+            threadsPerGroup[0] = 8u;
+            threadsPerGroup[1] = 8u;
+            threadsPerGroup[2] = 1u;
             break;
         case TextureTypes::Type2DArray:
         case TextureTypes::TypeCube:
         case TextureTypes::TypeCubeArray:
         case TextureTypes::Type3D:
-            threadsPerGroup[0] = 4u;    threadsPerGroup[1] = 4u;    threadsPerGroup[2] = 4u;
+            threadsPerGroup[0] = 4u;
+            threadsPerGroup[1] = 4u;
+            threadsPerGroup[2] = 4u;
             break;
         }
         job->setThreadsPerGroup( threadsPerGroup[0], threadsPerGroup[1], threadsPerGroup[2] );
@@ -127,7 +130,7 @@ namespace Ogre
     void ComputeTools::clearUavFloat( TextureGpu *texture, const float clearValue[4] )
     {
         OGRE_ASSERT_LOW( !PixelFormatGpuUtils::isInteger( texture->getPixelFormat() ) );
-        clearUav( texture, reinterpret_cast<const uint32*>( clearValue ) );
+        clearUav( texture, reinterpret_cast<const uint32 *>( clearValue ) );
     }
     //-------------------------------------------------------------------------
     void ComputeTools::clearUavUint( TextureGpu *texture, const uint32 clearValue[4] )
@@ -135,4 +138,4 @@ namespace Ogre
         OGRE_ASSERT_LOW( PixelFormatGpuUtils::isInteger( texture->getPixelFormat() ) );
         clearUav( texture, clearValue );
     }
-}
+}  // namespace Ogre

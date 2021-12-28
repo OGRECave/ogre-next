@@ -31,25 +31,18 @@ THE SOFTWARE.
 
 #include "OgreParticle.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    ParticleIterator::ParticleIterator(list<Particle*>::type::iterator start, 
-        list<Particle*>::type::iterator last)
+    ParticleIterator::ParticleIterator( list<Particle *>::type::iterator start,
+                                        list<Particle *>::type::iterator last )
     {
         mStart = mPos = start;
         mEnd = last;
     }
     //-----------------------------------------------------------------------
-    bool ParticleIterator::end()
-    {
-        return (mPos == mEnd);
-    }
+    bool ParticleIterator::end() { return ( mPos == mEnd ); }
     //-----------------------------------------------------------------------
-    Particle* ParticleIterator::getNext()
-    {
-        return static_cast<Particle*>(*mPos++);
-    }
+    Particle *ParticleIterator::getNext() { return static_cast<Particle *>( *mPos++ ); }
 
-
-}
+}  // namespace Ogre
