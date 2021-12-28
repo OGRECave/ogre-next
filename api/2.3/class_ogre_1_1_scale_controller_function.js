@@ -1,7 +1,7 @@
 var class_ogre_1_1_scale_controller_function =
 [
     [ "ScaleControllerFunction", "class_ogre_1_1_scale_controller_function.html#a3e6000bf99e2f0ebd5fbbf3cb4c74338", null ],
-    [ "calculate", "class_ogre_1_1_scale_controller_function.html#a7c920fe250fc003fb45e819ed058c824", null ],
+    [ "calculate", "class_ogre_1_1_scale_controller_function.html#a2451312f5bcc2a2d0cd3278c56016614", null ],
     [ "operator delete", "class_ogre_1_1_scale_controller_function.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_scale_controller_function.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_scale_controller_function.html#a1c727e879a260c37b00ce5505fe8e144", null ],

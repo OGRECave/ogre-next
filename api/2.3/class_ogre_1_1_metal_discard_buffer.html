@@ -108,23 +108,23 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_metal_discard_buffer.ht
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a353865cac81742d6be7a070a8bb4ec19"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a353865cac81742d6be7a070a8bb4ec19">MetalDiscardBuffer</a> (size_t bufferSize, <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> alignment, <a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoManager, <a class="el" href="class_ogre_1_1_metal_discard_buffer_manager.html">MetalDiscardBufferManager</a> *owner)</td></tr>
 <tr class="separator:a353865cac81742d6be7a070a8bb4ec19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a910ba95a57b2a48bce4924f1e256e628"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a910ba95a57b2a48bce4924f1e256e628">getAlignment</a> (void) const</td></tr>
-<tr class="separator:a910ba95a57b2a48bce4924f1e256e628"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab7b0b1fc6e3245aedc436353e906305"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#aab7b0b1fc6e3245aedc436353e906305">getBlockSize</a> (void) const</td></tr>
-<tr class="separator:aab7b0b1fc6e3245aedc436353e906305"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4051916151e6583bbe11cecb25659b4"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#aa4051916151e6583bbe11cecb25659b4">getBlockStart</a> (void) const</td></tr>
-<tr class="memdesc:aa4051916151e6583bbe11cecb25659b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">For internal use by <a class="el" href="class_ogre_1_1_metal_discard_buffer_manager.html" title="Metal doesn&#39;t support &quot;DISCARD&quot; like D3D9/D3D11 (and OpenGL but often it&#39;s broken) where we requested...">MetalDiscardBufferManager</a>.  <a href="class_ogre_1_1_metal_discard_buffer.html#aa4051916151e6583bbe11cecb25659b4">More...</a><br /></td></tr>
-<tr class="separator:aa4051916151e6583bbe11cecb25659b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0f73378f5c8c2036c62f1c2fb77e788"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#ac0f73378f5c8c2036c62f1c2fb77e788">getAlignment</a> () const</td></tr>
+<tr class="separator:ac0f73378f5c8c2036c62f1c2fb77e788"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a5cd3f704c2ecd5c97795299c79021b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a7a5cd3f704c2ecd5c97795299c79021b">getBlockSize</a> () const</td></tr>
+<tr class="separator:a7a5cd3f704c2ecd5c97795299c79021b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea56bba13ebb74114406e028637747e9"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#aea56bba13ebb74114406e028637747e9">getBlockStart</a> () const</td></tr>
+<tr class="memdesc:aea56bba13ebb74114406e028637747e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">For internal use by <a class="el" href="class_ogre_1_1_metal_discard_buffer_manager.html" title="Metal doesn&#39;t support &quot;DISCARD&quot; like D3D9/D3D11 (and OpenGL but often it&#39;s broken) where we requested...">MetalDiscardBufferManager</a>.  <a href="class_ogre_1_1_metal_discard_buffer.html#aea56bba13ebb74114406e028637747e9">More...</a><br /></td></tr>
+<tr class="separator:aea56bba13ebb74114406e028637747e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a529844ceb48e669d94c87e1c186c8c31"><td class="memItemLeft" align="right" valign="top">id&lt; MTLBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a529844ceb48e669d94c87e1c186c8c31">getBufferName</a> (size_t &amp;outOffset)</td></tr>
 <tr class="memdesc:a529844ceb48e669d94c87e1c186c8c31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the actual API buffer, but first sets mLastFrameUsed as we assume you're calling this function to use the buffer in the GPU.  <a href="class_ogre_1_1_metal_discard_buffer.html#a529844ceb48e669d94c87e1c186c8c31">More...</a><br /></td></tr>
 <tr class="separator:a529844ceb48e669d94c87e1c186c8c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6fc7368d2dc0d93200a5b901c1a0434"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#ac6fc7368d2dc0d93200a5b901c1a0434">getOffset</a> (void) const</td></tr>
-<tr class="separator:ac6fc7368d2dc0d93200a5b901c1a0434"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e11a733df15fff3c605a408fb491f92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_metal_discard_buffer_manager.html">MetalDiscardBufferManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a0e11a733df15fff3c605a408fb491f92">getOwner</a> (void)</td></tr>
-<tr class="separator:a0e11a733df15fff3c605a408fb491f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49cbe9b6f6f7fb418c6161ba66ba144c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a49cbe9b6f6f7fb418c6161ba66ba144c">getSizeBytes</a> (void) const</td></tr>
-<tr class="memdesc:a49cbe9b6f6f7fb418c6161ba66ba144c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the buffer, may be bigger than requested due to 4-byte alignment required by Metal.  <a href="class_ogre_1_1_metal_discard_buffer.html#a49cbe9b6f6f7fb418c6161ba66ba144c">More...</a><br /></td></tr>
-<tr class="separator:a49cbe9b6f6f7fb418c6161ba66ba144c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3dc26657233228234b6d8fc4147324c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#af3dc26657233228234b6d8fc4147324c">getOffset</a> () const</td></tr>
+<tr class="separator:af3dc26657233228234b6d8fc4147324c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2417daa0578c2ff8134fd80a12586714"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_metal_discard_buffer_manager.html">MetalDiscardBufferManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a2417daa0578c2ff8134fd80a12586714">getOwner</a> ()</td></tr>
+<tr class="separator:a2417daa0578c2ff8134fd80a12586714"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f02d36bf01e142ba678383e5c5fcebe"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a8f02d36bf01e142ba678383e5c5fcebe">getSizeBytes</a> () const</td></tr>
+<tr class="memdesc:a8f02d36bf01e142ba678383e5c5fcebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the buffer, may be bigger than requested due to 4-byte alignment required by Metal.  <a href="class_ogre_1_1_metal_discard_buffer.html#a8f02d36bf01e142ba678383e5c5fcebe">More...</a><br /></td></tr>
+<tr class="separator:a8f02d36bf01e142ba678383e5c5fcebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb87678d9288fa5dd55fb3669b7228be"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#adb87678d9288fa5dd55fb3669b7228be">map</a> (bool noOverwrite)</td></tr>
 <tr class="memdesc:adb87678d9288fa5dd55fb3669b7228be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer that maps to the beginning of this buffer to begin writing.  <a href="class_ogre_1_1_metal_discard_buffer.html#adb87678d9288fa5dd55fb3669b7228be">More...</a><br /></td></tr>
 <tr class="separator:adb87678d9288fa5dd55fb3669b7228be"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,8 +151,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4be37baef81876985aa1071ad5acc6dd"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:a4be37baef81876985aa1071ad5acc6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">More...</a><br /></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f3e5d36acc1db27317078522260b666"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#a2f3e5d36acc1db27317078522260b666">unmap</a> (void)</td></tr>
-<tr class="separator:a2f3e5d36acc1db27317078522260b666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae6660b06ea3ab71352ba4e1f5bda11c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_discard_buffer.html#aae6660b06ea3ab71352ba4e1f5bda11c">unmap</a> ()</td></tr>
+<tr class="separator:aae6660b06ea3ab71352ba4e1f5bda11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -201,8 +201,8 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a910ba95a57b2a48bce4924f1e256e628"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a910ba95a57b2a48bce4924f1e256e628">&#9670;&nbsp;</a></span>getAlignment()</h2>
+<a id="ac0f73378f5c8c2036c62f1c2fb77e788"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0f73378f5c8c2036c62f1c2fb77e788">&#9670;&nbsp;</a></span>getAlignment()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -213,7 +213,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> Ogre::MetalDiscardBuffer::getAlignment </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -227,8 +226,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="aab7b0b1fc6e3245aedc436353e906305"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab7b0b1fc6e3245aedc436353e906305">&#9670;&nbsp;</a></span>getBlockSize()</h2>
+<a id="a7a5cd3f704c2ecd5c97795299c79021b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a5cd3f704c2ecd5c97795299c79021b">&#9670;&nbsp;</a></span>getBlockSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,7 +238,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">size_t Ogre::MetalDiscardBuffer::getBlockSize </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -253,8 +251,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="aa4051916151e6583bbe11cecb25659b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4051916151e6583bbe11cecb25659b4">&#9670;&nbsp;</a></span>getBlockStart()</h2>
+<a id="aea56bba13ebb74114406e028637747e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea56bba13ebb74114406e028637747e9">&#9670;&nbsp;</a></span>getBlockStart()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,7 +263,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">size_t Ogre::MetalDiscardBuffer::getBlockStart </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -308,8 +305,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ac6fc7368d2dc0d93200a5b901c1a0434"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6fc7368d2dc0d93200a5b901c1a0434">&#9670;&nbsp;</a></span>getOffset()</h2>
+<a id="af3dc26657233228234b6d8fc4147324c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3dc26657233228234b6d8fc4147324c">&#9670;&nbsp;</a></span>getOffset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -320,7 +317,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">size_t Ogre::MetalDiscardBuffer::getOffset </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -334,8 +330,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a0e11a733df15fff3c605a408fb491f92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e11a733df15fff3c605a408fb491f92">&#9670;&nbsp;</a></span>getOwner()</h2>
+<a id="a2417daa0578c2ff8134fd80a12586714"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2417daa0578c2ff8134fd80a12586714">&#9670;&nbsp;</a></span>getOwner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,7 +342,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="class_ogre_1_1_metal_discard_buffer_manager.html">MetalDiscardBufferManager</a>* Ogre::MetalDiscardBuffer::getOwner </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -360,8 +355,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a49cbe9b6f6f7fb418c6161ba66ba144c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49cbe9b6f6f7fb418c6161ba66ba144c">&#9670;&nbsp;</a></span>getSizeBytes()</h2>
+<a id="a8f02d36bf01e142ba678383e5c5fcebe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f02d36bf01e142ba678383e5c5fcebe">&#9670;&nbsp;</a></span>getSizeBytes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +367,6 @@ Friends</h2></td></tr>
         <tr>
           <td class="memname">size_t Ogre::MetalDiscardBuffer::getSizeBytes </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -809,8 +803,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a2f3e5d36acc1db27317078522260b666"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f3e5d36acc1db27317078522260b666">&#9670;&nbsp;</a></span>unmap()</h2>
+<a id="aae6660b06ea3ab71352ba4e1f5bda11c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae6660b06ea3ab71352ba4e1f5bda11c">&#9670;&nbsp;</a></span>unmap()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -818,7 +812,6 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">void Ogre::MetalDiscardBuffer::unmap </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>

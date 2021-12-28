@@ -1,5 +1,5 @@
 var class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_type =
 [
-    [ "doGet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_type.html#a01960c6944a579bdbac1565d09ca04b8", null ],
-    [ "doSet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_type.html#a822396aedca26ebeeeb66753df9b5ffc", null ]
+    [ "doGet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_type.html#a232e00c75158ca35d75182c46ae61185", null ],
+    [ "doSet", "class_ogre_1_1v1_1_1_billboard_particle_renderer_1_1_cmd_billboard_type.html#a436dd31582552bbdb700e2fae9507b30", null ]
 ];

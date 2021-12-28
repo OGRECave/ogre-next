@@ -127,48 +127,48 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4318c5efdb38bce717e93d848e84cece"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a4318c5efdb38bce717e93d848e84cece">_threadMain</a> ()=0</td></tr>
 <tr class="memdesc:a4318c5efdb38bce717e93d848e84cece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main function for each thread spawned.  <a href="class_ogre_1_1_default_work_queue_base.html#a4318c5efdb38bce717e93d848e84cece">More...</a><br /></td></tr>
 <tr class="separator:a4318c5efdb38bce717e93d848e84cece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c50d7ab19de75a3e378ba46aa8fbf9c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a0c50d7ab19de75a3e378ba46aa8fbf9c">abortAllRequests</a> ()</td></tr>
-<tr class="memdesc:a0c50d7ab19de75a3e378ba46aa8fbf9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort all previously issued requests.  <a href="class_ogre_1_1_default_work_queue_base.html#a0c50d7ab19de75a3e378ba46aa8fbf9c">More...</a><br /></td></tr>
-<tr class="separator:a0c50d7ab19de75a3e378ba46aa8fbf9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac79ce136b644d7b44b55f4e6ec2542a2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#ac79ce136b644d7b44b55f4e6ec2542a2">abortPendingRequestsByChannel</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel)</td></tr>
-<tr class="memdesc:ac79ce136b644d7b44b55f4e6ec2542a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort all previously issued requests in a given channel.  <a href="class_ogre_1_1_default_work_queue_base.html#ac79ce136b644d7b44b55f4e6ec2542a2">More...</a><br /></td></tr>
-<tr class="separator:ac79ce136b644d7b44b55f4e6ec2542a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a634fdd65c89267fc6aeca8e8f6cf5446"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a634fdd65c89267fc6aeca8e8f6cf5446">abortRequest</a> (<a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a> id)</td></tr>
-<tr class="memdesc:a634fdd65c89267fc6aeca8e8f6cf5446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort a previously issued request.  <a href="class_ogre_1_1_default_work_queue_base.html#a634fdd65c89267fc6aeca8e8f6cf5446">More...</a><br /></td></tr>
-<tr class="separator:a634fdd65c89267fc6aeca8e8f6cf5446"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8cf46d021a09310d1ab96aa1a2c0d08"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#ae8cf46d021a09310d1ab96aa1a2c0d08">abortRequestsByChannel</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel)</td></tr>
-<tr class="memdesc:ae8cf46d021a09310d1ab96aa1a2c0d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort all previously issued requests in a given channel.  <a href="class_ogre_1_1_default_work_queue_base.html#ae8cf46d021a09310d1ab96aa1a2c0d08">More...</a><br /></td></tr>
-<tr class="separator:ae8cf46d021a09310d1ab96aa1a2c0d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca9fadb9513b1c44286aeb857615a18f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#aca9fadb9513b1c44286aeb857615a18f">addRequest</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> requestType, const <a class="el" href="class_ogre_1_1_any.html">Any</a> &amp;rData, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> retryCount=0, bool forceSynchronous=false, bool idleThread=false)</td></tr>
-<tr class="memdesc:aca9fadb9513b1c44286aeb857615a18f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new request to the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#aca9fadb9513b1c44286aeb857615a18f">More...</a><br /></td></tr>
-<tr class="separator:aca9fadb9513b1c44286aeb857615a18f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fc21f1afa5edb2a919f8ba2febfb1a3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a7fc21f1afa5edb2a919f8ba2febfb1a3">addRequestHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html">RequestHandler</a> *rh)</td></tr>
-<tr class="memdesc:a7fc21f1afa5edb2a919f8ba2febfb1a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a request handler instance to the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a7fc21f1afa5edb2a919f8ba2febfb1a3">More...</a><br /></td></tr>
-<tr class="separator:a7fc21f1afa5edb2a919f8ba2febfb1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e338627cd72591048b9de5a5f4f9770"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a9e338627cd72591048b9de5a5f4f9770">addResponseHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html">ResponseHandler</a> *rh)</td></tr>
-<tr class="memdesc:a9e338627cd72591048b9de5a5f4f9770"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a response handler instance to the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a9e338627cd72591048b9de5a5f4f9770">More...</a><br /></td></tr>
-<tr class="separator:a9e338627cd72591048b9de5a5f4f9770"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01b19f8972e5863fa093bd3378056198"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a01b19f8972e5863fa093bd3378056198">abortAllRequests</a> () override</td></tr>
+<tr class="memdesc:a01b19f8972e5863fa093bd3378056198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort all previously issued requests.  <a href="class_ogre_1_1_default_work_queue_base.html#a01b19f8972e5863fa093bd3378056198">More...</a><br /></td></tr>
+<tr class="separator:a01b19f8972e5863fa093bd3378056198"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc92b9301c2e10dd45ad40f1188bc401"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#afc92b9301c2e10dd45ad40f1188bc401">abortPendingRequestsByChannel</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel) override</td></tr>
+<tr class="memdesc:afc92b9301c2e10dd45ad40f1188bc401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort all previously issued requests in a given channel.  <a href="class_ogre_1_1_default_work_queue_base.html#afc92b9301c2e10dd45ad40f1188bc401">More...</a><br /></td></tr>
+<tr class="separator:afc92b9301c2e10dd45ad40f1188bc401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34b3b4efaea69d971c47625482a62e28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a34b3b4efaea69d971c47625482a62e28">abortRequest</a> (<a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a> id) override</td></tr>
+<tr class="memdesc:a34b3b4efaea69d971c47625482a62e28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort a previously issued request.  <a href="class_ogre_1_1_default_work_queue_base.html#a34b3b4efaea69d971c47625482a62e28">More...</a><br /></td></tr>
+<tr class="separator:a34b3b4efaea69d971c47625482a62e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dd85ea51bedd7225b1a284e3e3a4378"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a2dd85ea51bedd7225b1a284e3e3a4378">abortRequestsByChannel</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel) override</td></tr>
+<tr class="memdesc:a2dd85ea51bedd7225b1a284e3e3a4378"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abort all previously issued requests in a given channel.  <a href="class_ogre_1_1_default_work_queue_base.html#a2dd85ea51bedd7225b1a284e3e3a4378">More...</a><br /></td></tr>
+<tr class="separator:a2dd85ea51bedd7225b1a284e3e3a4378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15f5effebeec30f3d30926a66ca9871a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a15f5effebeec30f3d30926a66ca9871a">addRequest</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> requestType, const <a class="el" href="class_ogre_1_1_any.html">Any</a> &amp;rData, <a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> retryCount=0, bool forceSynchronous=false, bool idleThread=false) override</td></tr>
+<tr class="memdesc:a15f5effebeec30f3d30926a66ca9871a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new request to the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a15f5effebeec30f3d30926a66ca9871a">More...</a><br /></td></tr>
+<tr class="separator:a15f5effebeec30f3d30926a66ca9871a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b0a7e54f7982743a60c06f56f86aa63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a3b0a7e54f7982743a60c06f56f86aa63">addRequestHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html">RequestHandler</a> *rh) override</td></tr>
+<tr class="memdesc:a3b0a7e54f7982743a60c06f56f86aa63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a request handler instance to the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a3b0a7e54f7982743a60c06f56f86aa63">More...</a><br /></td></tr>
+<tr class="separator:a3b0a7e54f7982743a60c06f56f86aa63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67763faa933aff479056a72814e148d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a67763faa933aff479056a72814e148d8">addResponseHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html">ResponseHandler</a> *rh) override</td></tr>
+<tr class="memdesc:a67763faa933aff479056a72814e148d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a response handler instance to the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a67763faa933aff479056a72814e148d8">More...</a><br /></td></tr>
+<tr class="separator:a67763faa933aff479056a72814e148d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a550b2e870c3cf2fb7dc6732ceed3e5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_work_queue.html#a9a550b2e870c3cf2fb7dc6732ceed3e5">getChannel</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;channelName)</td></tr>
 <tr class="memdesc:a9a550b2e870c3cf2fb7dc6732ceed3e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a channel ID for a given channel name.  <a href="class_ogre_1_1_work_queue.html#a9a550b2e870c3cf2fb7dc6732ceed3e5">More...</a><br /></td></tr>
 <tr class="separator:a9a550b2e870c3cf2fb7dc6732ceed3e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21e659d67e6c2512c78e0fcb987d6d3c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a21e659d67e6c2512c78e0fcb987d6d3c">getName</a> () const</td></tr>
 <tr class="memdesc:a21e659d67e6c2512c78e0fcb987d6d3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the work queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a21e659d67e6c2512c78e0fcb987d6d3c">More...</a><br /></td></tr>
 <tr class="separator:a21e659d67e6c2512c78e0fcb987d6d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab49caa9d2a8b18cfb2e9beccd41bdd22"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#ab49caa9d2a8b18cfb2e9beccd41bdd22">getRequestsAccepted</a> () const</td></tr>
-<tr class="memdesc:ab49caa9d2a8b18cfb2e9beccd41bdd22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether requests are being accepted right now.  <a href="class_ogre_1_1_default_work_queue_base.html#ab49caa9d2a8b18cfb2e9beccd41bdd22">More...</a><br /></td></tr>
-<tr class="separator:ab49caa9d2a8b18cfb2e9beccd41bdd22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92bfbc2f99623e8df8dd2d611afda1ae"><td class="memItemLeft" align="right" valign="top">virtual unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a92bfbc2f99623e8df8dd2d611afda1ae">getResponseProcessingTimeLimit</a> () const</td></tr>
-<tr class="memdesc:a92bfbc2f99623e8df8dd2d611afda1ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time limit imposed on the processing of responses in a single frame, in milliseconds (0 indicates no limit).  <a href="class_ogre_1_1_default_work_queue_base.html#a92bfbc2f99623e8df8dd2d611afda1ae">More...</a><br /></td></tr>
-<tr class="separator:a92bfbc2f99623e8df8dd2d611afda1ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89d7c1d6659662f3d6317a2234e3cf1a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a89d7c1d6659662f3d6317a2234e3cf1a">getRequestsAccepted</a> () const override</td></tr>
+<tr class="memdesc:a89d7c1d6659662f3d6317a2234e3cf1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether requests are being accepted right now.  <a href="class_ogre_1_1_default_work_queue_base.html#a89d7c1d6659662f3d6317a2234e3cf1a">More...</a><br /></td></tr>
+<tr class="separator:a89d7c1d6659662f3d6317a2234e3cf1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e37fee918294527bdc90819a371d625"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a4e37fee918294527bdc90819a371d625">getResponseProcessingTimeLimit</a> () const override</td></tr>
+<tr class="memdesc:a4e37fee918294527bdc90819a371d625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time limit imposed on the processing of responses in a single frame, in milliseconds (0 indicates no limit).  <a href="class_ogre_1_1_default_work_queue_base.html#a4e37fee918294527bdc90819a371d625">More...</a><br /></td></tr>
+<tr class="separator:a4e37fee918294527bdc90819a371d625"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc3c6f7c29d30bb833a94c516560016c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#abc3c6f7c29d30bb833a94c516560016c">getWorkersCanAccessRenderSystem</a> () const</td></tr>
 <tr class="memdesc:abc3c6f7c29d30bb833a94c516560016c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get whether worker threads will be allowed to access render system resources.  <a href="class_ogre_1_1_default_work_queue_base.html#abc3c6f7c29d30bb833a94c516560016c">More...</a><br /></td></tr>
 <tr class="separator:abc3c6f7c29d30bb833a94c516560016c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0573403767b65a85dc8b13279fc3375"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#ac0573403767b65a85dc8b13279fc3375">getWorkerThreadCount</a> () const</td></tr>
 <tr class="memdesc:ac0573403767b65a85dc8b13279fc3375"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of worker threads that this queue will start when <a class="el" href="class_ogre_1_1_work_queue.html#ad6d7aeeb4b1e4e8eed931cb17d63add3" title="Start up the queue with the options that have been set.">startup()</a> is called.  <a href="class_ogre_1_1_default_work_queue_base.html#ac0573403767b65a85dc8b13279fc3375">More...</a><br /></td></tr>
 <tr class="separator:ac0573403767b65a85dc8b13279fc3375"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8530de81120f7820964029b8de88972"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#aa8530de81120f7820964029b8de88972">isPaused</a> () const</td></tr>
-<tr class="memdesc:aa8530de81120f7820964029b8de88972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the queue is paused ie not sending more work to workers.  <a href="class_ogre_1_1_default_work_queue_base.html#aa8530de81120f7820964029b8de88972">More...</a><br /></td></tr>
-<tr class="separator:aa8530de81120f7820964029b8de88972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a019ffbcfbe1774fc7e7b24423d0b7ed7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a019ffbcfbe1774fc7e7b24423d0b7ed7">isPaused</a> () const override</td></tr>
+<tr class="memdesc:a019ffbcfbe1774fc7e7b24423d0b7ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether the queue is paused ie not sending more work to workers.  <a href="class_ogre_1_1_default_work_queue_base.html#a019ffbcfbe1774fc7e7b24423d0b7ed7">More...</a><br /></td></tr>
+<tr class="separator:a019ffbcfbe1774fc7e7b24423d0b7ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1654469715e0e622018a07bb7d82e998"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a1654469715e0e622018a07bb7d82e998">isShuttingDown</a> () const</td></tr>
 <tr class="memdesc:a1654469715e0e622018a07bb7d82e998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the queue is trying to shut down.  <a href="class_ogre_1_1_default_work_queue_base.html#a1654469715e0e622018a07bb7d82e998">More...</a><br /></td></tr>
 <tr class="separator:a1654469715e0e622018a07bb7d82e998"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,24 +195,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4be37baef81876985aa1071ad5acc6dd"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:a4be37baef81876985aa1071ad5acc6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">More...</a><br /></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09a2d91f22689b5aad7967cfb799c63e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a09a2d91f22689b5aad7967cfb799c63e">processResponses</a> ()</td></tr>
-<tr class="memdesc:a09a2d91f22689b5aad7967cfb799c63e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the responses in the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#a09a2d91f22689b5aad7967cfb799c63e">More...</a><br /></td></tr>
-<tr class="separator:a09a2d91f22689b5aad7967cfb799c63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f0847f5d8a4f9e4703a390acacfaa84"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a1f0847f5d8a4f9e4703a390acacfaa84">removeRequestHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html">RequestHandler</a> *rh)</td></tr>
-<tr class="memdesc:a1f0847f5d8a4f9e4703a390acacfaa84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a request handler.  <a href="class_ogre_1_1_default_work_queue_base.html#a1f0847f5d8a4f9e4703a390acacfaa84">More...</a><br /></td></tr>
-<tr class="separator:a1f0847f5d8a4f9e4703a390acacfaa84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8b1cec781199a65accf0024acc2c18a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#ad8b1cec781199a65accf0024acc2c18a">removeResponseHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html">ResponseHandler</a> *rh)</td></tr>
-<tr class="memdesc:ad8b1cec781199a65accf0024acc2c18a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a Response handler.  <a href="class_ogre_1_1_default_work_queue_base.html#ad8b1cec781199a65accf0024acc2c18a">More...</a><br /></td></tr>
-<tr class="separator:ad8b1cec781199a65accf0024acc2c18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f471c07b8f0fdd002d6c299750a1578"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a7f471c07b8f0fdd002d6c299750a1578">setPaused</a> (bool pause)</td></tr>
-<tr class="memdesc:a7f471c07b8f0fdd002d6c299750a1578"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether to pause further processing of any requests.  <a href="class_ogre_1_1_default_work_queue_base.html#a7f471c07b8f0fdd002d6c299750a1578">More...</a><br /></td></tr>
-<tr class="separator:a7f471c07b8f0fdd002d6c299750a1578"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a291e7c92efb374ec208c680375edd2ce"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a291e7c92efb374ec208c680375edd2ce">setRequestsAccepted</a> (bool accept)</td></tr>
-<tr class="memdesc:a291e7c92efb374ec208c680375edd2ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether to accept new requests or not.  <a href="class_ogre_1_1_default_work_queue_base.html#a291e7c92efb374ec208c680375edd2ce">More...</a><br /></td></tr>
-<tr class="separator:a291e7c92efb374ec208c680375edd2ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b7a4119647b82187af2341d96f51e3b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a7b7a4119647b82187af2341d96f51e3b">setResponseProcessingTimeLimit</a> (unsigned long ms)</td></tr>
-<tr class="memdesc:a7b7a4119647b82187af2341d96f51e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the time limit imposed on the processing of responses in a single frame, in milliseconds (0 indicates no limit).  <a href="class_ogre_1_1_default_work_queue_base.html#a7b7a4119647b82187af2341d96f51e3b">More...</a><br /></td></tr>
-<tr class="separator:a7b7a4119647b82187af2341d96f51e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0d03b02f052c970d21a8aefdd04e60a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#ac0d03b02f052c970d21a8aefdd04e60a">processResponses</a> () override</td></tr>
+<tr class="memdesc:ac0d03b02f052c970d21a8aefdd04e60a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the responses in the queue.  <a href="class_ogre_1_1_default_work_queue_base.html#ac0d03b02f052c970d21a8aefdd04e60a">More...</a><br /></td></tr>
+<tr class="separator:ac0d03b02f052c970d21a8aefdd04e60a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a8e6d759f17f283aec248d83e7f8f6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a1a8e6d759f17f283aec248d83e7f8f6d">removeRequestHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_request_handler.html">RequestHandler</a> *rh) override</td></tr>
+<tr class="memdesc:a1a8e6d759f17f283aec248d83e7f8f6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a request handler.  <a href="class_ogre_1_1_default_work_queue_base.html#a1a8e6d759f17f283aec248d83e7f8f6d">More...</a><br /></td></tr>
+<tr class="separator:a1a8e6d759f17f283aec248d83e7f8f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d1cbce9cf4014fe44546720027a0d9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a6d1cbce9cf4014fe44546720027a0d9b">removeResponseHandler</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> channel, <a class="el" href="class_ogre_1_1_work_queue_1_1_response_handler.html">ResponseHandler</a> *rh) override</td></tr>
+<tr class="memdesc:a6d1cbce9cf4014fe44546720027a0d9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a Response handler.  <a href="class_ogre_1_1_default_work_queue_base.html#a6d1cbce9cf4014fe44546720027a0d9b">More...</a><br /></td></tr>
+<tr class="separator:a6d1cbce9cf4014fe44546720027a0d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f496354a29aa1bb7be66b5018025ff0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a3f496354a29aa1bb7be66b5018025ff0">setPaused</a> (bool pause) override</td></tr>
+<tr class="memdesc:a3f496354a29aa1bb7be66b5018025ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether to pause further processing of any requests.  <a href="class_ogre_1_1_default_work_queue_base.html#a3f496354a29aa1bb7be66b5018025ff0">More...</a><br /></td></tr>
+<tr class="separator:a3f496354a29aa1bb7be66b5018025ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbbd75670752ea4740fc72a5894480d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#adbbd75670752ea4740fc72a5894480d1">setRequestsAccepted</a> (bool accept) override</td></tr>
+<tr class="memdesc:adbbd75670752ea4740fc72a5894480d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether to accept new requests or not.  <a href="class_ogre_1_1_default_work_queue_base.html#adbbd75670752ea4740fc72a5894480d1">More...</a><br /></td></tr>
+<tr class="separator:adbbd75670752ea4740fc72a5894480d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77b6c97d0c34e3ffbd2dd47e2ee0cdd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a77b6c97d0c34e3ffbd2dd47e2ee0cdd4">setResponseProcessingTimeLimit</a> (unsigned long ms) override</td></tr>
+<tr class="memdesc:a77b6c97d0c34e3ffbd2dd47e2ee0cdd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the time limit imposed on the processing of responses in a single frame, in milliseconds (0 indicates no limit).  <a href="class_ogre_1_1_default_work_queue_base.html#a77b6c97d0c34e3ffbd2dd47e2ee0cdd4">More...</a><br /></td></tr>
+<tr class="separator:a77b6c97d0c34e3ffbd2dd47e2ee0cdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59458ab8807c99c478fe0a62c750c31d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_work_queue_base.html#a59458ab8807c99c478fe0a62c750c31d">setWorkersCanAccessRenderSystem</a> (bool access)</td></tr>
 <tr class="memdesc:a59458ab8807c99c478fe0a62c750c31d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether worker threads will be allowed to access render system resources.  <a href="class_ogre_1_1_default_work_queue_base.html#a59458ab8807c99c478fe0a62c750c31d">More...</a><br /></td></tr>
 <tr class="separator:a59458ab8807c99c478fe0a62c750c31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -359,12 +359,12 @@ Public Member Functions</h2></td></tr>
 
 <p>Main function for each thread spawned. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_default_work_queue.html#a087a56b1cd59c19193e8012a8dbcd3b3">Ogre::DefaultWorkQueue</a>, and <a class="el" href="class_ogre_1_1_default_work_queue.html#a087a56b1cd59c19193e8012a8dbcd3b3">Ogre::DefaultWorkQueue</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_default_work_queue.html#ad78e6bebd4280b2bd8c430291925d381">Ogre::DefaultWorkQueue</a>, and <a class="el" href="class_ogre_1_1_default_work_queue.html#a087a56b1cd59c19193e8012a8dbcd3b3">Ogre::DefaultWorkQueue</a>.</p>
 
 </div>
 </div>
-<a id="a0c50d7ab19de75a3e378ba46aa8fbf9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c50d7ab19de75a3e378ba46aa8fbf9c">&#9670;&nbsp;</a></span>abortAllRequests()</h2>
+<a id="a01b19f8972e5863fa093bd3378056198"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01b19f8972e5863fa093bd3378056198">&#9670;&nbsp;</a></span>abortAllRequests()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -373,7 +373,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::abortAllRequests </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::abortAllRequests </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -381,7 +381,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -393,8 +393,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac79ce136b644d7b44b55f4e6ec2542a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac79ce136b644d7b44b55f4e6ec2542a2">&#9670;&nbsp;</a></span>abortPendingRequestsByChannel()</h2>
+<a id="afc92b9301c2e10dd45ad40f1188bc401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc92b9301c2e10dd45ad40f1188bc401">&#9670;&nbsp;</a></span>abortPendingRequestsByChannel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -403,7 +403,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::abortPendingRequestsByChannel </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::abortPendingRequestsByChannel </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em></td><td>)</td>
@@ -412,7 +412,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -429,8 +429,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a634fdd65c89267fc6aeca8e8f6cf5446"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a634fdd65c89267fc6aeca8e8f6cf5446">&#9670;&nbsp;</a></span>abortRequest()</h2>
+<a id="a34b3b4efaea69d971c47625482a62e28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34b3b4efaea69d971c47625482a62e28">&#9670;&nbsp;</a></span>abortRequest()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -439,7 +439,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::abortRequest </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::abortRequest </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a>&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
@@ -448,7 +448,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -465,8 +465,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae8cf46d021a09310d1ab96aa1a2c0d08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8cf46d021a09310d1ab96aa1a2c0d08">&#9670;&nbsp;</a></span>abortRequestsByChannel()</h2>
+<a id="a2dd85ea51bedd7225b1a284e3e3a4378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dd85ea51bedd7225b1a284e3e3a4378">&#9670;&nbsp;</a></span>abortRequestsByChannel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -475,7 +475,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::abortRequestsByChannel </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::abortRequestsByChannel </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em></td><td>)</td>
@@ -484,7 +484,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -501,8 +501,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aca9fadb9513b1c44286aeb857615a18f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca9fadb9513b1c44286aeb857615a18f">&#9670;&nbsp;</a></span>addRequest()</h2>
+<a id="a15f5effebeec30f3d30926a66ca9871a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15f5effebeec30f3d30926a66ca9871a">&#9670;&nbsp;</a></span>addRequest()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -511,7 +511,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a> Ogre::DefaultWorkQueueBase::addRequest </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1_work_queue.html#a1908257e726af6caa80f1a6cd5682d76">RequestID</a> Ogre::DefaultWorkQueueBase::addRequest </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em>, </td>
@@ -554,7 +554,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -582,8 +582,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7fc21f1afa5edb2a919f8ba2febfb1a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7fc21f1afa5edb2a919f8ba2febfb1a3">&#9670;&nbsp;</a></span>addRequestHandler()</h2>
+<a id="a3b0a7e54f7982743a60c06f56f86aa63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b0a7e54f7982743a60c06f56f86aa63">&#9670;&nbsp;</a></span>addRequestHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -592,7 +592,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::addRequestHandler </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::addRequestHandler </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em>, </td>
@@ -611,7 +611,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -630,8 +630,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9e338627cd72591048b9de5a5f4f9770"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e338627cd72591048b9de5a5f4f9770">&#9670;&nbsp;</a></span>addResponseHandler()</h2>
+<a id="a67763faa933aff479056a72814e148d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67763faa933aff479056a72814e148d8">&#9670;&nbsp;</a></span>addResponseHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -640,7 +640,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::addResponseHandler </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::addResponseHandler </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em>, </td>
@@ -659,7 +659,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -726,8 +726,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab49caa9d2a8b18cfb2e9beccd41bdd22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab49caa9d2a8b18cfb2e9beccd41bdd22">&#9670;&nbsp;</a></span>getRequestsAccepted()</h2>
+<a id="a89d7c1d6659662f3d6317a2234e3cf1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89d7c1d6659662f3d6317a2234e3cf1a">&#9670;&nbsp;</a></span>getRequestsAccepted()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -736,7 +736,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Ogre::DefaultWorkQueueBase::getRequestsAccepted </td>
+          <td class="memname">bool Ogre::DefaultWorkQueueBase::getRequestsAccepted </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -744,7 +744,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -755,8 +755,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a92bfbc2f99623e8df8dd2d611afda1ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92bfbc2f99623e8df8dd2d611afda1ae">&#9670;&nbsp;</a></span>getResponseProcessingTimeLimit()</h2>
+<a id="a4e37fee918294527bdc90819a371d625"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e37fee918294527bdc90819a371d625">&#9670;&nbsp;</a></span>getResponseProcessingTimeLimit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -765,7 +765,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual unsigned long Ogre::DefaultWorkQueueBase::getResponseProcessingTimeLimit </td>
+          <td class="memname">unsigned long Ogre::DefaultWorkQueueBase::getResponseProcessingTimeLimit </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -773,7 +773,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -839,8 +839,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa8530de81120f7820964029b8de88972"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8530de81120f7820964029b8de88972">&#9670;&nbsp;</a></span>isPaused()</h2>
+<a id="a019ffbcfbe1774fc7e7b24423d0b7ed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a019ffbcfbe1774fc7e7b24423d0b7ed7">&#9670;&nbsp;</a></span>isPaused()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -849,7 +849,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Ogre::DefaultWorkQueueBase::isPaused </td>
+          <td class="memname">bool Ogre::DefaultWorkQueueBase::isPaused </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -857,7 +857,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1289,8 +1289,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a09a2d91f22689b5aad7967cfb799c63e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09a2d91f22689b5aad7967cfb799c63e">&#9670;&nbsp;</a></span>processResponses()</h2>
+<a id="ac0d03b02f052c970d21a8aefdd04e60a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0d03b02f052c970d21a8aefdd04e60a">&#9670;&nbsp;</a></span>processResponses()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1299,7 +1299,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::processResponses </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::processResponses </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1307,7 +1307,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1319,8 +1319,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a1f0847f5d8a4f9e4703a390acacfaa84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f0847f5d8a4f9e4703a390acacfaa84">&#9670;&nbsp;</a></span>removeRequestHandler()</h2>
+<a id="a1a8e6d759f17f283aec248d83e7f8f6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a8e6d759f17f283aec248d83e7f8f6d">&#9670;&nbsp;</a></span>removeRequestHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1329,7 +1329,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::removeRequestHandler </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::removeRequestHandler </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em>, </td>
@@ -1348,7 +1348,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1359,8 +1359,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="ad8b1cec781199a65accf0024acc2c18a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8b1cec781199a65accf0024acc2c18a">&#9670;&nbsp;</a></span>removeResponseHandler()</h2>
+<a id="a6d1cbce9cf4014fe44546720027a0d9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d1cbce9cf4014fe44546720027a0d9b">&#9670;&nbsp;</a></span>removeResponseHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1369,7 +1369,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::removeResponseHandler </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::removeResponseHandler </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td>
           <td class="paramname"><em>channel</em>, </td>
@@ -1388,7 +1388,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1399,8 +1399,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a7f471c07b8f0fdd002d6c299750a1578"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f471c07b8f0fdd002d6c299750a1578">&#9670;&nbsp;</a></span>setPaused()</h2>
+<a id="a3f496354a29aa1bb7be66b5018025ff0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f496354a29aa1bb7be66b5018025ff0">&#9670;&nbsp;</a></span>setPaused()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1409,7 +1409,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::setPaused </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::setPaused </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>pause</em></td><td>)</td>
@@ -1418,7 +1418,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1430,8 +1430,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a291e7c92efb374ec208c680375edd2ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a291e7c92efb374ec208c680375edd2ce">&#9670;&nbsp;</a></span>setRequestsAccepted()</h2>
+<a id="adbbd75670752ea4740fc72a5894480d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbbd75670752ea4740fc72a5894480d1">&#9670;&nbsp;</a></span>setRequestsAccepted()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1440,7 +1440,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::setRequestsAccepted </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::setRequestsAccepted </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>accept</em></td><td>)</td>
@@ -1449,7 +1449,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1461,8 +1461,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a7b7a4119647b82187af2341d96f51e3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b7a4119647b82187af2341d96f51e3b">&#9670;&nbsp;</a></span>setResponseProcessingTimeLimit()</h2>
+<a id="a77b6c97d0c34e3ffbd2dd47e2ee0cdd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77b6c97d0c34e3ffbd2dd47e2ee0cdd4">&#9670;&nbsp;</a></span>setResponseProcessingTimeLimit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1471,7 +1471,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultWorkQueueBase::setResponseProcessingTimeLimit </td>
+          <td class="memname">void Ogre::DefaultWorkQueueBase::setResponseProcessingTimeLimit </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
           <td class="paramname"><em>ms</em></td><td>)</td>
@@ -1480,13 +1480,13 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Set the time limit imposed on the processing of responses in a single frame, in milliseconds (0 indicates no limit). </p>
-<p>This sets the maximum time that will be spent in <a class="el" href="class_ogre_1_1_default_work_queue_base.html#a09a2d91f22689b5aad7967cfb799c63e" title="Process the responses in the queue.">processResponses()</a> in a single frame. The default is 8ms. </p>
+<p>This sets the maximum time that will be spent in <a class="el" href="class_ogre_1_1_default_work_queue_base.html#ac0d03b02f052c970d21a8aefdd04e60a" title="Process the responses in the queue.">processResponses()</a> in a single frame. The default is 8ms. </p>
 
 <p>Implements <a class="el" href="class_ogre_1_1_work_queue.html#a9b631e09dcaafb4a341eff307f00feca">Ogre::WorkQueue</a>.</p>
 
@@ -1575,7 +1575,7 @@ template&lt;class Alloc &gt; </div>
 
 <p>Shut down the queue. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_default_work_queue.html#a74aec1a66a9d5a5639a62ed33747eb76">Ogre::DefaultWorkQueue</a>, and <a class="el" href="class_ogre_1_1_default_work_queue.html#a74aec1a66a9d5a5639a62ed33747eb76">Ogre::DefaultWorkQueue</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_default_work_queue.html#adb40c9e0a8a0b6f27b0373675806c949">Ogre::DefaultWorkQueue</a>, and <a class="el" href="class_ogre_1_1_default_work_queue.html#a74aec1a66a9d5a5639a62ed33747eb76">Ogre::DefaultWorkQueue</a>.</p>
 
 </div>
 </div>
@@ -1611,7 +1611,7 @@ template&lt;class Alloc &gt; </div>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_default_work_queue.html#a1a0f33724027da3501c0c8b8182480cf">Ogre::DefaultWorkQueue</a>, and <a class="el" href="class_ogre_1_1_default_work_queue.html#a1a0f33724027da3501c0c8b8182480cf">Ogre::DefaultWorkQueue</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_default_work_queue.html#a69931a18893e3986474e7822b572d9e6">Ogre::DefaultWorkQueue</a>, and <a class="el" href="class_ogre_1_1_default_work_queue.html#a1a0f33724027da3501c0c8b8182480cf">Ogre::DefaultWorkQueue</a>.</p>
 
 </div>
 </div>

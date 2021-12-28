@@ -1,17 +1,17 @@
 var class_ogre_1_1_compositor_pass_stencil =
 [
     [ "CompositorPassStencil", "class_ogre_1_1_compositor_pass_stencil.html#a16704c18033351daf553055113309e44", null ],
-    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_stencil.html#ab4c2d313eeaadec2dbef3ca92e411357", null ],
+    [ "_getResourceTransitionsNonConst", "class_ogre_1_1_compositor_pass_stencil.html#acf20656b05a6ca6698f0e58e9a1bea1f", null ],
     [ "analyzeBarriers", "class_ogre_1_1_compositor_pass_stencil.html#af0d628f807e0bcb2ef5c2782e6245ac3", null ],
-    [ "execute", "class_ogre_1_1_compositor_pass_stencil.html#a88a90cd8524ca4838ba402598452ec01", null ],
-    [ "getActualDimensions", "class_ogre_1_1_compositor_pass_stencil.html#ad4d394f598a677c18b4b653cde572957", null ],
-    [ "getDefinition", "class_ogre_1_1_compositor_pass_stencil.html#ae980ee6ed32e7cb59addeb213dc15f4d", null ],
-    [ "getParentNode", "class_ogre_1_1_compositor_pass_stencil.html#a2eedb01d342205286e9d8d87513bad20", null ],
-    [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass_stencil.html#aa8f5b48afbb18756b3dbcc28b080fda0", null ],
-    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass_stencil.html#a24976b937f4c62d9b95fc176c8d1f576", null ],
-    [ "getTextureDependencies", "class_ogre_1_1_compositor_pass_stencil.html#a280e7b34575c7554487b1f66a1ea8f5a", null ],
+    [ "execute", "class_ogre_1_1_compositor_pass_stencil.html#abccc697c0ab1268db72e75f9e66cb7c7", null ],
+    [ "getActualDimensions", "class_ogre_1_1_compositor_pass_stencil.html#ae40f4defcc8f4847f8b80c70992efc09", null ],
+    [ "getDefinition", "class_ogre_1_1_compositor_pass_stencil.html#a123ad972ffeab36c66f31c26a2b639e4", null ],
+    [ "getParentNode", "class_ogre_1_1_compositor_pass_stencil.html#a1fcf0351919f3f8fa422dae558bbf64b", null ],
+    [ "getRenderPassDesc", "class_ogre_1_1_compositor_pass_stencil.html#a792590a3c8a0fefc9c22fab8ec5bd66a", null ],
+    [ "getResourceTransitions", "class_ogre_1_1_compositor_pass_stencil.html#a36ef70d62728a03303e5177aaaa2ebab", null ],
+    [ "getTextureDependencies", "class_ogre_1_1_compositor_pass_stencil.html#a381a332e8993148250a558dcd5a5e716", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_stencil.html#a220924c4a37f7cf458646522bc5cc72f", null ],
-    [ "notifyCleared", "class_ogre_1_1_compositor_pass_stencil.html#a4837e8afd093a37f67d708c64b793b4d", null ],
+    [ "notifyCleared", "class_ogre_1_1_compositor_pass_stencil.html#a6f43846a1bb675c3ba19a8d3f41c6510", null ],
     [ "notifyDestroyed", "class_ogre_1_1_compositor_pass_stencil.html#a109f49cb2e6f8a9c0e1377817bcb9e6d", null ],
     [ "notifyDestroyed", "class_ogre_1_1_compositor_pass_stencil.html#a9f7ab3e159808c63ff31ac799e476c66", null ],
     [ "notifyRecreated", "class_ogre_1_1_compositor_pass_stencil.html#a0234978d9674bb285541bb7a3d244c55", null ],
@@ -26,7 +26,7 @@ var class_ogre_1_1_compositor_pass_stencil =
     [ "operator new", "class_ogre_1_1_compositor_pass_stencil.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_pass_stencil.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_pass_stencil.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "profilingBegin", "class_ogre_1_1_compositor_pass_stencil.html#ad9e0b79d8ca75e75cc94e0f00608e692", null ],
-    [ "profilingEnd", "class_ogre_1_1_compositor_pass_stencil.html#a3d94bb7e758731f7160eb7dedae69ed7", null ],
-    [ "resetNumPassesLeft", "class_ogre_1_1_compositor_pass_stencil.html#afe6a90034aeaa2ed38e32d9f344e38c3", null ]
+    [ "profilingBegin", "class_ogre_1_1_compositor_pass_stencil.html#a1e4efabc75d3bf1210c8ec39dece8f05", null ],
+    [ "profilingEnd", "class_ogre_1_1_compositor_pass_stencil.html#aa27ade5fa223d3d3e92fdea2a00bfdd6", null ],
+    [ "resetNumPassesLeft", "class_ogre_1_1_compositor_pass_stencil.html#af3e4a21f5b27620ab25007d9ae87b0a6", null ]
 ];

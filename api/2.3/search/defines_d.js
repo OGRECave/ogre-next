@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['restrict_5falias_34518',['RESTRICT_ALIAS',['../_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154',1,'OgrePlatform.h']]],
-  ['restrict_5falias_5freturn_34519',['RESTRICT_ALIAS_RETURN',['../_ogre_platform_8h.html#a59a62dcc672b5775f3bd2a8d08bb60a4',1,'OgrePlatform.h']]]
+  ['thread_5fdeclare_29662',['THREAD_DECLARE',['../_ogre_threads_8h.html#a9351c49b867fae9e2a0488bf653d8887',1,'OgreThreads.h']]],
+  ['thread_5fget_29663',['THREAD_GET',['../_ogre_threads_8h.html#a0524284264a13ff1f7bbc64c85a02540',1,'OgreThreads.h']]]
 ];

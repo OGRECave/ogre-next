@@ -85,7 +85,7 @@ var _ogre_render_system_capabilities_8h =
       [ "RSC_GL1_5_NOHWOCCLUSION", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aee26b76a540923853ae3e72d8cfc9c35", null ],
       [ "RSC_POINT_EXTENDED_PARAMETERS_ARB", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a10d8a58880a7e9cd28108f45e671dc9d", null ],
       [ "RSC_POINT_EXTENDED_PARAMETERS_EXT", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7ad9a6d84955c31986ec228e745eda8c71", null ],
-      [ "RSC_SEPARATE_SHADER_OBJECTS", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a6110f385e2cb3e6dff9403379a9eaf23", null ],
+      [ "RSC_SEPARATE_UNUSED", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7abe20a37abea202be5ddd8796a2a8ac90", null ],
       [ "RSC_VAO", "_ogre_render_system_capabilities_8h.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a1a32a54a3b00630209a22204bbf8e38a", null ]
     ] ],
     [ "CapabilitiesCategory", "_ogre_render_system_capabilities_8h.html#gaafd4c573704bd74fac9ec9c02071ad08", [

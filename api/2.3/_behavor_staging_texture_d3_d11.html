@@ -90,9 +90,9 @@ $(document).ready(function(){initNavTree('_behavor_staging_texture_d3_d11.html',
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md6">Attempting to be contiguous</a></li>
-<li class="level1"><a href="#autotoc_md7">Slicing in 3</a></li>
-<li class="level1"><a href="#autotoc_md8">Slicing in the middle</a></li>
+<ul><li class="level1"><a href="#autotoc_md4">Attempting to be contiguous</a></li>
+<li class="level1"><a href="#autotoc_md5">Slicing in 3</a></li>
+<li class="level1"><a href="#autotoc_md6">Slicing in the middle</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_Docs_src_manual_BehaviorOfStagingTexturesD3D11"></a> <b>Note:</b> this article is intended for developers who want to understand or modify <a class="el" href="namespace_ogre.html">Ogre</a>.</p>
@@ -104,13 +104,13 @@ $(document).ready(function(){initNavTree('_behavor_staging_texture_d3_d11.html',
 <p>This problem is essentially the same faced by sprite packers when generating an atlas.</p>
 <p>Furthermore an RGBA8 and a RG16_FLOAT cannot be placed in the same StagingTexture.</p>
 <p>Because the implementation details of D3D11StagingTexture are complicated, they are explained here.</p>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
 Attempting to be contiguous</h1>
 <p>It was our goal that array textures could be mapped contiguously, e.g. mapping a 1024x1024x6 array texture could be done with one mapRegion() call.</p>
 <p>Unfortunately Direct3D only allows mapping one slice at a time.</p>
 <p>Fortunately, Direct3D allows copying from a 3D Staging Texture into an array texture. Meaning we can use 3D volume staging textures instead.</p>
 <p>But unfortunately (again), 3D volume staging textures cannot exceed 2048x2048 in resolution, and thus the implementation will fallback to array staging textures (which can only be mapped one slice at a time) if the texture exceeds that resolution. GL &amp; Metal artificially follow these same restrictions for the sake of consistency and finding out these problems sooner rather than later.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md5"></a>
 Slicing in 3</h1>
 <p>Every time a region is requested (by calling StagingTexture::mapRegion), D3D11StagingTexture will look at the smallest entry in their list of free boxes and use that one. Any available space is further subdivided in 2 more boxes and added back to the free list, like in the picture:</p>
 <p><img src="D3D11StagingTexture01.png" alt="" class="inline"/></p>
@@ -123,7 +123,7 @@ Slicing in 3</h1>
 <p><img src="D3D11StagingTexture04.png" alt="" class="inline"/></p>
 <p>If no available region can satisfy the requirements, then we return failure, returning 0 in TextureBox::data.</p>
 <p>The relevant code in charge of this is in D3D11StagingTexture::shrinkRecords</p>
-<h1><a class="anchor" id="autotoc_md8"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Slicing in the middle</h1>
 <p>When mapRegion tries to map multiple slices (and width, height and depth are all &lt;= 2048) we may end up mapping a region that is in the middle of slice 0:</p>
 <p><img src="D3D11StagingTexture04.png" alt="" class="inline"/></p>

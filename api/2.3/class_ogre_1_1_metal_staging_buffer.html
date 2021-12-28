@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_metal_staging_buffer.ht
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_ogre_1_1_metal_staging_buffer-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Ogre::MetalStagingBuffer Class Reference</div>  </div>
+<div class="title">Ogre::MetalStagingBuffer Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -117,51 +117,51 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5841760c78a96721dd5728e96de0b604"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a5841760c78a96721dd5728e96de0b604">MetalStagingBuffer</a> (size_t internalBufferStart, size_t sizeBytes, <a class="el" href="class_ogre_1_1_vao_manager.html">VaoManager</a> *vaoManager, bool uploadOnly, id&lt; MTLBuffer &gt; vboName, <a class="el" href="struct_ogre_1_1_metal_device.html">MetalDevice</a> *device)</td></tr>
 <tr class="separator:a5841760c78a96721dd5728e96de0b604"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7651b7ed0115951d4b38bcef9b3a8ea5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a7651b7ed0115951d4b38bcef9b3a8ea5">~MetalStagingBuffer</a> ()</td></tr>
-<tr class="separator:a7651b7ed0115951d4b38bcef9b3a8ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae41bfebb124f220f7f5a170ac101ce59"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ae41bfebb124f220f7f5a170ac101ce59">_asyncDownload</a> (<a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> *source, size_t srcOffset, size_t srcLength)</td></tr>
-<tr class="memdesc:ae41bfebb124f220f7f5a170ac101ce59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the GPU data in <a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> so that it can be later read by the CPU using an <a class="el" href="class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.">AsyncTicket</a>.  <a href="class_ogre_1_1_metal_staging_buffer.html#ae41bfebb124f220f7f5a170ac101ce59">More...</a><br /></td></tr>
-<tr class="separator:ae41bfebb124f220f7f5a170ac101ce59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c28caa8b6d7010e5e9bf5b258df3964"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a4c28caa8b6d7010e5e9bf5b258df3964">_asyncDownloadV1</a> (<a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_buffer_common.html">v1::MetalHardwareBufferCommon</a> *source, size_t srcOffset, size_t srcLength)</td></tr>
-<tr class="separator:a4c28caa8b6d7010e5e9bf5b258df3964"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4ad5fe671c29396b3e44f500e4e1a6a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ab4ad5fe671c29396b3e44f500e4e1a6a">_cancelDownload</a> (size_t offset, size_t sizeBytes)</td></tr>
-<tr class="memdesc:ab4ad5fe671c29396b3e44f500e4e1a6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases memory assigned to a download that hasn't been mapped yet, to make space for another _asyncDownload call.  <a href="class_ogre_1_1_metal_staging_buffer.html#ab4ad5fe671c29396b3e44f500e4e1a6a">More...</a><br /></td></tr>
-<tr class="separator:ab4ad5fe671c29396b3e44f500e4e1a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ed88ef87bcfbb383fd6e8e5e8773c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ae3ed88ef87bcfbb383fd6e8e5e8773c3">~MetalStagingBuffer</a> () override</td></tr>
+<tr class="separator:ae3ed88ef87bcfbb383fd6e8e5e8773c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc36598d53b7aca2178b7ea3c97e608"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a0bc36598d53b7aca2178b7ea3c97e608">_asyncDownload</a> (<a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> *source, size_t srcOffset, size_t srcLength) override</td></tr>
+<tr class="memdesc:a0bc36598d53b7aca2178b7ea3c97e608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the GPU data in <a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> so that it can be later read by the CPU using an <a class="el" href="class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.">AsyncTicket</a>.  <a href="class_ogre_1_1_metal_staging_buffer.html#a0bc36598d53b7aca2178b7ea3c97e608">More...</a><br /></td></tr>
+<tr class="separator:a0bc36598d53b7aca2178b7ea3c97e608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f2833c9c0043bafd9dcfdd05a7da69b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a1f2833c9c0043bafd9dcfdd05a7da69b">_asyncDownloadV1</a> (<a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_buffer_common.html">v1::MetalHardwareBufferCommon</a> *source, size_t srcOffset, size_t srcLength)</td></tr>
+<tr class="separator:a1f2833c9c0043bafd9dcfdd05a7da69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd53cf9891a5952d2fb35654565c1940"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#abd53cf9891a5952d2fb35654565c1940">_cancelDownload</a> (size_t offset, size_t sizeBytes) override</td></tr>
+<tr class="memdesc:abd53cf9891a5952d2fb35654565c1940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases memory assigned to a download that hasn't been mapped yet, to make space for another _asyncDownload call.  <a href="class_ogre_1_1_metal_staging_buffer.html#abd53cf9891a5952d2fb35654565c1940">More...</a><br /></td></tr>
+<tr class="separator:abd53cf9891a5952d2fb35654565c1940"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf6789c54909d4f248cb69a3a8a04f3e"><td class="memItemLeft" align="right" valign="top">const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#abf6789c54909d4f248cb69a3a8a04f3e">_mapForRead</a> (size_t offset, size_t sizeBytes)</td></tr>
 <tr class="memdesc:abf6789c54909d4f248cb69a3a8a04f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps the buffer for read acces for the CPU.  <a href="class_ogre_1_1_staging_buffer.html#abf6789c54909d4f248cb69a3a8a04f3e">More...</a><br /></td></tr>
 <tr class="separator:abf6789c54909d4f248cb69a3a8a04f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ff58a77b03cb4f65028ebdd1cfb565d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a2ff58a77b03cb4f65028ebdd1cfb565d">_notifyDeviceStalled</a> (void)</td></tr>
-<tr class="separator:a2ff58a77b03cb4f65028ebdd1cfb565d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf777255fd02876433387f2eb731a3d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#acf777255fd02876433387f2eb731a3d8">_notifyDeviceStalled</a> ()</td></tr>
+<tr class="separator:acf777255fd02876433387f2eb731a3d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c30d062d8acf7485f7b5c273f839dc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a1c30d062d8acf7485f7b5c273f839dc3">_unmapToV1</a> (<a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_buffer_common.html">v1::MetalHardwareBufferCommon</a> *hwBuffer, size_t lockStart, size_t lockSize)</td></tr>
 <tr class="separator:a1c30d062d8acf7485f7b5c273f839dc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10b28de5293c036bf7f23e87bef00de6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a10b28de5293c036bf7f23e87bef00de6">addReferenceCount</a> (void)</td></tr>
-<tr class="memdesc:a10b28de5293c036bf7f23e87bef00de6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a reference count to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a>. @See removeReferenceCount.  <a href="class_ogre_1_1_staging_buffer.html#a10b28de5293c036bf7f23e87bef00de6">More...</a><br /></td></tr>
-<tr class="separator:a10b28de5293c036bf7f23e87bef00de6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2d7dbe292ec9d93f9c41da437a7429b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ac2d7dbe292ec9d93f9c41da437a7429b">canDownload</a> (size_t length) const</td></tr>
-<tr class="memdesc:ac2d7dbe292ec9d93f9c41da437a7429b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if this staging buffer has enough free space to use _asyncDownload.  <a href="class_ogre_1_1_metal_staging_buffer.html#ac2d7dbe292ec9d93f9c41da437a7429b">More...</a><br /></td></tr>
-<tr class="separator:ac2d7dbe292ec9d93f9c41da437a7429b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2b8517a2fb41ba09bb276ccf84c84b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#aa2b8517a2fb41ba09bb276ccf84c84b7">cleanUnfencedHazards</a> (void)</td></tr>
-<tr class="separator:aa2b8517a2fb41ba09bb276ccf84c84b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79ed6f0bb912a058006603dc6f03db74"><td class="memItemLeft" align="right" valign="top">id&lt; MTLBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a79ed6f0bb912a058006603dc6f03db74">getBufferName</a> (void) const</td></tr>
-<tr class="separator:a79ed6f0bb912a058006603dc6f03db74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bb62ecc6017c1d0b86a80d8b54c6150"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a1bb62ecc6017c1d0b86a80d8b54c6150">getLastUsedTimestamp</a> (void) const</td></tr>
-<tr class="memdesc:a1bb62ecc6017c1d0b86a80d8b54c6150"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in millisecond when the ref. count became 0.  <a href="class_ogre_1_1_staging_buffer.html#a1bb62ecc6017c1d0b86a80d8b54c6150">More...</a><br /></td></tr>
-<tr class="separator:a1bb62ecc6017c1d0b86a80d8b54c6150"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06dfed7c83a6aa991b0bceef76743550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a06dfed7c83a6aa991b0bceef76743550">getLifetimeThreshold</a> (void) const</td></tr>
-<tr class="memdesc:a06dfed7c83a6aa991b0bceef76743550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should live with a reference count of 0 before being deleted.  <a href="class_ogre_1_1_staging_buffer.html#a06dfed7c83a6aa991b0bceef76743550">More...</a><br /></td></tr>
-<tr class="separator:a06dfed7c83a6aa991b0bceef76743550"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0512e57da9c9f75e7666133a10883126"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a447e51d7625af79716667cebcfa6da57">MappingState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a0512e57da9c9f75e7666133a10883126">getMappingState</a> (void) const</td></tr>
-<tr class="separator:a0512e57da9c9f75e7666133a10883126"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a765f26f80115c9341308fc86330ec9c2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a765f26f80115c9341308fc86330ec9c2">getMaxSize</a> (void)</td></tr>
-<tr class="separator:a765f26f80115c9341308fc86330ec9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a897e0ef920699d059b273eed1fe71d4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a626dceff763286830a1ef619f5468ab0">int16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a897e0ef920699d059b273eed1fe71d4d">getReferenceCount</a> (void) const</td></tr>
-<tr class="separator:a897e0ef920699d059b273eed1fe71d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53adbd5b91819a0e58c9d2c010eba469"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a53adbd5b91819a0e58c9d2c010eba469">getUnfencedTimeThreshold</a> (void) const</td></tr>
-<tr class="memdesc:a53adbd5b91819a0e58c9d2c010eba469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should hazards unfenced while with a reference count of 0.  <a href="class_ogre_1_1_staging_buffer.html#a53adbd5b91819a0e58c9d2c010eba469">More...</a><br /></td></tr>
-<tr class="separator:a53adbd5b91819a0e58c9d2c010eba469"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0661bd8e72511fe7e946991db7fee5d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a0661bd8e72511fe7e946991db7fee5d6">getUploadOnly</a> (void) const</td></tr>
-<tr class="memdesc:a0661bd8e72511fe7e946991db7fee5d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, this buffer can only be used for uploading to GPU.  <a href="class_ogre_1_1_staging_buffer.html#a0661bd8e72511fe7e946991db7fee5d6">More...</a><br /></td></tr>
-<tr class="separator:a0661bd8e72511fe7e946991db7fee5d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1facd7ade881eff937cd4ccfa998b83c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a1facd7ade881eff937cd4ccfa998b83c">addReferenceCount</a> ()</td></tr>
+<tr class="memdesc:a1facd7ade881eff937cd4ccfa998b83c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a reference count to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a>. @See removeReferenceCount.  <a href="class_ogre_1_1_staging_buffer.html#a1facd7ade881eff937cd4ccfa998b83c">More...</a><br /></td></tr>
+<tr class="separator:a1facd7ade881eff937cd4ccfa998b83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78ad96178baf9c41b67d8451a7a23743"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a78ad96178baf9c41b67d8451a7a23743">canDownload</a> (size_t length) const override</td></tr>
+<tr class="memdesc:a78ad96178baf9c41b67d8451a7a23743"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if this staging buffer has enough free space to use _asyncDownload.  <a href="class_ogre_1_1_metal_staging_buffer.html#a78ad96178baf9c41b67d8451a7a23743">More...</a><br /></td></tr>
+<tr class="separator:a78ad96178baf9c41b67d8451a7a23743"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa75b9fc24827d5cd83283de7254bc13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#afa75b9fc24827d5cd83283de7254bc13">cleanUnfencedHazards</a> ()</td></tr>
+<tr class="separator:afa75b9fc24827d5cd83283de7254bc13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6668e8d33438bdae98b75b7069a7945a"><td class="memItemLeft" align="right" valign="top">id&lt; MTLBuffer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6668e8d33438bdae98b75b7069a7945a">getBufferName</a> () const</td></tr>
+<tr class="separator:a6668e8d33438bdae98b75b7069a7945a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55fde7ac828db275c0554d39f52adb7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a55fde7ac828db275c0554d39f52adb7c">getLastUsedTimestamp</a> () const</td></tr>
+<tr class="memdesc:a55fde7ac828db275c0554d39f52adb7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in millisecond when the ref. count became 0.  <a href="class_ogre_1_1_staging_buffer.html#a55fde7ac828db275c0554d39f52adb7c">More...</a><br /></td></tr>
+<tr class="separator:a55fde7ac828db275c0554d39f52adb7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdf4e13a8a6544f8bb063a3cc8471000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#afdf4e13a8a6544f8bb063a3cc8471000">getLifetimeThreshold</a> () const</td></tr>
+<tr class="memdesc:afdf4e13a8a6544f8bb063a3cc8471000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should live with a reference count of 0 before being deleted.  <a href="class_ogre_1_1_staging_buffer.html#afdf4e13a8a6544f8bb063a3cc8471000">More...</a><br /></td></tr>
+<tr class="separator:afdf4e13a8a6544f8bb063a3cc8471000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72e2d619a61b234feefbb4401fae83f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a447e51d7625af79716667cebcfa6da57">MappingState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a72e2d619a61b234feefbb4401fae83f5">getMappingState</a> () const</td></tr>
+<tr class="separator:a72e2d619a61b234feefbb4401fae83f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6558ff3b1a53431ffa195b647be7a2a8"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize</a> ()</td></tr>
+<tr class="separator:a6558ff3b1a53431ffa195b647be7a2a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3341e6c04dbb18e3e1e55868e15d3e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a626dceff763286830a1ef619f5468ab0">int16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ac3341e6c04dbb18e3e1e55868e15d3e6">getReferenceCount</a> () const</td></tr>
+<tr class="separator:ac3341e6c04dbb18e3e1e55868e15d3e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e34a37e28c0e54502ada87450743ad0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a3e34a37e28c0e54502ada87450743ad0">getUnfencedTimeThreshold</a> () const</td></tr>
+<tr class="memdesc:a3e34a37e28c0e54502ada87450743ad0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should hazards unfenced while with a reference count of 0.  <a href="class_ogre_1_1_staging_buffer.html#a3e34a37e28c0e54502ada87450743ad0">More...</a><br /></td></tr>
+<tr class="separator:a3e34a37e28c0e54502ada87450743ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae05b671b655e0119ce740a06d20b4170"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ae05b671b655e0119ce740a06d20b4170">getUploadOnly</a> () const</td></tr>
+<tr class="memdesc:ae05b671b655e0119ce740a06d20b4170"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, this buffer can only be used for uploading to GPU.  <a href="class_ogre_1_1_staging_buffer.html#ae05b671b655e0119ce740a06d20b4170">More...</a><br /></td></tr>
+<tr class="separator:ae05b671b655e0119ce740a06d20b4170"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab58661498c6fd0e054a0c261ebb3bbcf"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#ab58661498c6fd0e054a0c261ebb3bbcf">map</a> (size_t sizeBytes)</td></tr>
 <tr class="memdesc:ab58661498c6fd0e054a0c261ebb3bbcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maps the given amount of bytes.  <a href="class_ogre_1_1_staging_buffer.html#ab58661498c6fd0e054a0c261ebb3bbcf">More...</a><br /></td></tr>
 <tr class="separator:ab58661498c6fd0e054a0c261ebb3bbcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -188,9 +188,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4be37baef81876985aa1071ad5acc6dd"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:a4be37baef81876985aa1071ad5acc6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">More...</a><br /></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29313389dacd812a8d238df458f9e979"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a29313389dacd812a8d238df458f9e979">removeReferenceCount</a> (void)</td></tr>
-<tr class="memdesc:a29313389dacd812a8d238df458f9e979"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decreases the reference count by one.  <a href="class_ogre_1_1_staging_buffer.html#a29313389dacd812a8d238df458f9e979">More...</a><br /></td></tr>
-<tr class="separator:a29313389dacd812a8d238df458f9e979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d425e7d85804eaa45c01f6476ec204a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a">removeReferenceCount</a> ()</td></tr>
+<tr class="memdesc:a9d425e7d85804eaa45c01f6476ec204a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decreases the reference count by one.  <a href="class_ogre_1_1_staging_buffer.html#a9d425e7d85804eaa45c01f6476ec204a">More...</a><br /></td></tr>
+<tr class="separator:a9d425e7d85804eaa45c01f6476ec204a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a438d82f09b5f657be30c30d7d1c0801d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#a438d82f09b5f657be30c30d7d1c0801d">unmap</a> (const <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a> &amp;destination)</td></tr>
 <tr class="memdesc:a438d82f09b5f657be30c30d7d1c0801d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmaps the mapped region and copies the data to the given region. @See <a class="el" href="struct_ogre_1_1_staging_buffer_1_1_destination.html">Destination</a>.  <a href="class_ogre_1_1_staging_buffer.html#a438d82f09b5f657be30c30d7d1c0801d">More...</a><br /></td></tr>
 <tr class="separator:a438d82f09b5f657be30c30d7d1c0801d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,9 +199,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afe091313c974edab09f0f9daabf8034d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_staging_buffer.html#afe091313c974edab09f0f9daabf8034d">unmap</a> (const <a class="el" href="class_ogre_1_1_staging_buffer.html#ae90c8303a85284ef6801919bfc4fdfd0">DestinationVec</a> &amp;destinations)</td></tr>
 <tr class="memdesc:afe091313c974edab09f0f9daabf8034d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmaps the mapped region and copies the data to multiple buffers.  <a href="class_ogre_1_1_staging_buffer.html#afe091313c974edab09f0f9daabf8034d">More...</a><br /></td></tr>
 <tr class="separator:afe091313c974edab09f0f9daabf8034d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ee0032ef0fe4c1200eb07f7fb052a1b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af48b48d39914b067541a62b674b80935">StagingStallType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b">uploadWillStall</a> (size_t sizeBytes)</td></tr>
-<tr class="memdesc:a6ee0032ef0fe4c1200eb07f7fb052a1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if our next call to @map() with the same parameters will stall.  <a href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b">More...</a><br /></td></tr>
-<tr class="separator:a6ee0032ef0fe4c1200eb07f7fb052a1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ffe5c09f2fdb06aa864f7af28d101ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af48b48d39914b067541a62b674b80935">StagingStallType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a7ffe5c09f2fdb06aa864f7af28d101ce">uploadWillStall</a> (size_t sizeBytes) override</td></tr>
+<tr class="memdesc:a7ffe5c09f2fdb06aa864f7af28d101ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if our next call to @map() with the same parameters will stall.  <a href="class_ogre_1_1_metal_staging_buffer.html#a7ffe5c09f2fdb06aa864f7af28d101ce">More...</a><br /></td></tr>
+<tr class="separator:a7ffe5c09f2fdb06aa864f7af28d101ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However the access in both cases is limited. </p>
@@ -282,8 +282,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7651b7ed0115951d4b38bcef9b3a8ea5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7651b7ed0115951d4b38bcef9b3a8ea5">&#9670;&nbsp;</a></span>~MetalStagingBuffer()</h2>
+<a id="ae3ed88ef87bcfbb383fd6e8e5e8773c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3ed88ef87bcfbb383fd6e8e5e8773c3">&#9670;&nbsp;</a></span>~MetalStagingBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -292,7 +292,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Ogre::MetalStagingBuffer::~MetalStagingBuffer </td>
+          <td class="memname">Ogre::MetalStagingBuffer::~MetalStagingBuffer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -300,7 +300,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -308,8 +308,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae41bfebb124f220f7f5a170ac101ce59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae41bfebb124f220f7f5a170ac101ce59">&#9670;&nbsp;</a></span>_asyncDownload()</h2>
+<a id="a0bc36598d53b7aca2178b7ea3c97e608"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bc36598d53b7aca2178b7ea3c97e608">&#9670;&nbsp;</a></span>_asyncDownload()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,7 +318,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual size_t Ogre::MetalStagingBuffer::_asyncDownload </td>
+          <td class="memname">size_t Ogre::MetalStagingBuffer::_asyncDownload </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> *&#160;</td>
           <td class="paramname"><em>source</em>, </td>
@@ -343,7 +343,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -351,7 +351,7 @@ Public Member Functions</h2></td></tr>
 <p>Copies the GPU data in <a class="el" href="class_ogre_1_1_buffer_packed.html">BufferPacked</a> to the <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> so that it can be later read by the CPU using an <a class="el" href="class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.">AsyncTicket</a>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_async_ticket.html" title="In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.">AsyncTicket</a>. </dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>For internal use. May throw if it can't handle the request (i.e. requested size is too big, or too many _asyncDownload operations are pending until calling _mapForRead) </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ac2d7dbe292ec9d93f9c41da437a7429b" title="Checks if this staging buffer has enough free space to use _asyncDownload.">canDownload</a> mUploadOnly must be true. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a78ad96178baf9c41b67d8451a7a23743" title="Checks if this staging buffer has enough free space to use _asyncDownload.">canDownload</a> mUploadOnly must be true. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">source</td><td>The buffer to copy from. </td></tr>
@@ -367,17 +367,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4c28caa8b6d7010e5e9bf5b258df3964"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c28caa8b6d7010e5e9bf5b258df3964">&#9670;&nbsp;</a></span>_asyncDownloadV1()</h2>
+<a id="a1f2833c9c0043bafd9dcfdd05a7da69b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f2833c9c0043bafd9dcfdd05a7da69b">&#9670;&nbsp;</a></span>_asyncDownloadV1()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual size_t Ogre::MetalStagingBuffer::_asyncDownloadV1 </td>
+          <td class="memname">size_t Ogre::MetalStagingBuffer::_asyncDownloadV1 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_metal_hardware_buffer_common.html">v1::MetalHardwareBufferCommon</a> *&#160;</td>
           <td class="paramname"><em>source</em>, </td>
@@ -400,17 +397,12 @@ Public Member Functions</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ab4ad5fe671c29396b3e44f500e4e1a6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4ad5fe671c29396b3e44f500e4e1a6a">&#9670;&nbsp;</a></span>_cancelDownload()</h2>
+<a id="abd53cf9891a5952d2fb35654565c1940"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd53cf9891a5952d2fb35654565c1940">&#9670;&nbsp;</a></span>_cancelDownload()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,7 +411,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::MetalStagingBuffer::_cancelDownload </td>
+          <td class="memname">void Ogre::MetalStagingBuffer::_cancelDownload </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>offset</em>, </td>
@@ -438,7 +430,7 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -497,8 +489,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2ff58a77b03cb4f65028ebdd1cfb565d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ff58a77b03cb4f65028ebdd1cfb565d">&#9670;&nbsp;</a></span>_notifyDeviceStalled()</h2>
+<a id="acf777255fd02876433387f2eb731a3d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf777255fd02876433387f2eb731a3d8">&#9670;&nbsp;</a></span>_notifyDeviceStalled()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -506,7 +498,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::MetalStagingBuffer::_notifyDeviceStalled </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -549,8 +540,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a10b28de5293c036bf7f23e87bef00de6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10b28de5293c036bf7f23e87bef00de6">&#9670;&nbsp;</a></span>addReferenceCount()</h2>
+<a id="a1facd7ade881eff937cd4ccfa998b83c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1facd7ade881eff937cd4ccfa998b83c">&#9670;&nbsp;</a></span>addReferenceCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -561,7 +552,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::StagingBuffer::addReferenceCount </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -577,8 +567,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac2d7dbe292ec9d93f9c41da437a7429b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2d7dbe292ec9d93f9c41da437a7429b">&#9670;&nbsp;</a></span>canDownload()</h2>
+<a id="a78ad96178baf9c41b67d8451a7a23743"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78ad96178baf9c41b67d8451a7a23743">&#9670;&nbsp;</a></span>canDownload()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -587,7 +577,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Ogre::MetalStagingBuffer::canDownload </td>
+          <td class="memname">bool Ogre::MetalStagingBuffer::canDownload </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>length</em></td><td>)</td>
@@ -596,14 +586,14 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Checks if this staging buffer has enough free space to use _asyncDownload. </p>
 <p>Otherwise such function would raise an exception. </p><dl class="section remark"><dt>Remarks</dt><dd>mUploadOnly must be true. It is the counter side of </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a6ee0032ef0fe4c1200eb07f7fb052a1b" title="Returns true if our next call to @map() with the same parameters will stall.">uploadWillStall</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a7ffe5c09f2fdb06aa864f7af28d101ce" title="Returns true if our next call to @map() with the same parameters will stall.">uploadWillStall</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">length</td><td>The size in bytes that need to be downloaded. </td></tr>
@@ -615,8 +605,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa2b8517a2fb41ba09bb276ccf84c84b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2b8517a2fb41ba09bb276ccf84c84b7">&#9670;&nbsp;</a></span>cleanUnfencedHazards()</h2>
+<a id="afa75b9fc24827d5cd83283de7254bc13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa75b9fc24827d5cd83283de7254bc13">&#9670;&nbsp;</a></span>cleanUnfencedHazards()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -624,7 +614,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::MetalStagingBuffer::cleanUnfencedHazards </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -633,8 +622,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a79ed6f0bb912a058006603dc6f03db74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79ed6f0bb912a058006603dc6f03db74">&#9670;&nbsp;</a></span>getBufferName()</h2>
+<a id="a6668e8d33438bdae98b75b7069a7945a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6668e8d33438bdae98b75b7069a7945a">&#9670;&nbsp;</a></span>getBufferName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -645,7 +634,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">id&lt;MTLBuffer&gt; Ogre::MetalStagingBuffer::getBufferName </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -659,8 +647,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1bb62ecc6017c1d0b86a80d8b54c6150"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bb62ecc6017c1d0b86a80d8b54c6150">&#9670;&nbsp;</a></span>getLastUsedTimestamp()</h2>
+<a id="a55fde7ac828db275c0554d39f52adb7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55fde7ac828db275c0554d39f52adb7c">&#9670;&nbsp;</a></span>getLastUsedTimestamp()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -671,7 +659,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> Ogre::StagingBuffer::getLastUsedTimestamp </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -687,8 +674,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a06dfed7c83a6aa991b0bceef76743550"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06dfed7c83a6aa991b0bceef76743550">&#9670;&nbsp;</a></span>getLifetimeThreshold()</h2>
+<a id="afdf4e13a8a6544f8bb063a3cc8471000"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdf4e13a8a6544f8bb063a3cc8471000">&#9670;&nbsp;</a></span>getLifetimeThreshold()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -699,7 +686,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> Ogre::StagingBuffer::getLifetimeThreshold </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -715,8 +701,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0512e57da9c9f75e7666133a10883126"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0512e57da9c9f75e7666133a10883126">&#9670;&nbsp;</a></span>getMappingState()</h2>
+<a id="a72e2d619a61b234feefbb4401fae83f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72e2d619a61b234feefbb4401fae83f5">&#9670;&nbsp;</a></span>getMappingState()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -727,7 +713,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a447e51d7625af79716667cebcfa6da57">MappingState</a> Ogre::StagingBuffer::getMappingState </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -741,8 +726,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a765f26f80115c9341308fc86330ec9c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a765f26f80115c9341308fc86330ec9c2">&#9670;&nbsp;</a></span>getMaxSize()</h2>
+<a id="a6558ff3b1a53431ffa195b647be7a2a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6558ff3b1a53431ffa195b647be7a2a8">&#9670;&nbsp;</a></span>getMaxSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -753,7 +738,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">size_t Ogre::StagingBuffer::getMaxSize </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -767,8 +751,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a897e0ef920699d059b273eed1fe71d4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a897e0ef920699d059b273eed1fe71d4d">&#9670;&nbsp;</a></span>getReferenceCount()</h2>
+<a id="ac3341e6c04dbb18e3e1e55868e15d3e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3341e6c04dbb18e3e1e55868e15d3e6">&#9670;&nbsp;</a></span>getReferenceCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -779,7 +763,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a626dceff763286830a1ef619f5468ab0">int16</a> Ogre::StagingBuffer::getReferenceCount </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -793,8 +776,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a53adbd5b91819a0e58c9d2c010eba469"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53adbd5b91819a0e58c9d2c010eba469">&#9670;&nbsp;</a></span>getUnfencedTimeThreshold()</h2>
+<a id="a3e34a37e28c0e54502ada87450743ad0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e34a37e28c0e54502ada87450743ad0">&#9670;&nbsp;</a></span>getUnfencedTimeThreshold()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -805,7 +788,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> Ogre::StagingBuffer::getUnfencedTimeThreshold </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -818,12 +800,12 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the time in milliseconds in which a <a class="el" href="class_ogre_1_1_staging_buffer.html" title="A staging buffer is a buffer that resides on the GPU and be written to/from both CPU &amp; GPU However th...">StagingBuffer</a> should hazards unfenced while with a reference count of 0. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#a06dfed7c83a6aa991b0bceef76743550" title="Returns the time in milliseconds in which a StagingBuffer should live with a reference count of 0 bef...">getLifetimeThreshold</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_staging_buffer.html#afdf4e13a8a6544f8bb063a3cc8471000" title="Returns the time in milliseconds in which a StagingBuffer should live with a reference count of 0 bef...">getLifetimeThreshold</a> </dd></dl>
 
 </div>
 </div>
-<a id="a0661bd8e72511fe7e946991db7fee5d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0661bd8e72511fe7e946991db7fee5d6">&#9670;&nbsp;</a></span>getUploadOnly()</h2>
+<a id="ae05b671b655e0119ce740a06d20b4170"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae05b671b655e0119ce740a06d20b4170">&#9670;&nbsp;</a></span>getUploadOnly()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -834,7 +816,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">bool Ogre::StagingBuffer::getUploadOnly </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -876,7 +857,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Maps the given amount of bytes. </p>
-<p>May block if not ready. @See uploadWillStall if you wish to know. </p><dl class="section remark"><dt>Remarks</dt><dd>Will throw if sizeBytes &gt; this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a765f26f80115c9341308fc86330ec9c2">getMaxSize()</a> </dd></dl>
+<p>May block if not ready. @See uploadWillStall if you wish to know. </p><dl class="section remark"><dt>Remarks</dt><dd>Will throw if sizeBytes &gt; this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize()</a> </dd></dl>
 
 </div>
 </div>
@@ -1274,8 +1255,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a29313389dacd812a8d238df458f9e979"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29313389dacd812a8d238df458f9e979">&#9670;&nbsp;</a></span>removeReferenceCount()</h2>
+<a id="a9d425e7d85804eaa45c01f6476ec204a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d425e7d85804eaa45c01f6476ec204a">&#9670;&nbsp;</a></span>removeReferenceCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1286,7 +1267,6 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">void Ogre::StagingBuffer::removeReferenceCount </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1402,8 +1382,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a6ee0032ef0fe4c1200eb07f7fb052a1b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ee0032ef0fe4c1200eb07f7fb052a1b">&#9670;&nbsp;</a></span>uploadWillStall()</h2>
+<a id="a7ffe5c09f2fdb06aa864f7af28d101ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ffe5c09f2fdb06aa864f7af28d101ce">&#9670;&nbsp;</a></span>uploadWillStall()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1412,7 +1392,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespace_ogre.html#af48b48d39914b067541a62b674b80935">StagingStallType</a> Ogre::MetalStagingBuffer::uploadWillStall </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#af48b48d39914b067541a62b674b80935">StagingStallType</a> Ogre::MetalStagingBuffer::uploadWillStall </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>sizeBytes</em></td><td>)</td>
@@ -1421,14 +1401,14 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Returns true if our next call to @map() with the same parameters will stall. </p>
-<p>@See StagingStallType </p><dl class="section remark"><dt>Remarks</dt><dd>Not all RenderSystems can accurately give this information and will always return STALL_PARTIAL (i.e. GLES2) The chances of getting a STALL_FULL get higher as sizeBytes gets closer to this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a765f26f80115c9341308fc86330ec9c2">getMaxSize()</a> mUploadOnly must be false. It is the counter side of </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#ac2d7dbe292ec9d93f9c41da437a7429b" title="Checks if this staging buffer has enough free space to use _asyncDownload.">canDownload</a> </dd></dl>
+<p>@See StagingStallType </p><dl class="section remark"><dt>Remarks</dt><dd>Not all RenderSystems can accurately give this information and will always return STALL_PARTIAL (i.e. GLES2) The chances of getting a STALL_FULL get higher as sizeBytes gets closer to this-&gt;<a class="el" href="class_ogre_1_1_staging_buffer.html#a6558ff3b1a53431ffa195b647be7a2a8">getMaxSize()</a> mUploadOnly must be false. It is the counter side of </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_metal_staging_buffer.html#a78ad96178baf9c41b67d8451a7a23743" title="Checks if this staging buffer has enough free space to use _asyncDownload.">canDownload</a> </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_ogre_1_1_staging_buffer.html#ababb860ddfb4ecdf054766f145848465">Ogre::StagingBuffer</a>.</p>
 

@@ -10,5 +10,5 @@ var class_ogre_1_1_hlms_translator =
     [ "operator new", "class_ogre_1_1_hlms_translator.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_hlms_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "translate", "class_ogre_1_1_hlms_translator.html#abc67442126167d0821259f33084c624b", null ]
+    [ "translate", "class_ogre_1_1_hlms_translator.html#a90ebc4e74e833458b73200b8a397c26c", null ]
 ];

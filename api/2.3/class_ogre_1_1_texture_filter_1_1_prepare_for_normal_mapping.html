@@ -109,9 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a19c0b119d8138f02f25c13dc22a357d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_filter_1_1_filter_base.html#a19c0b119d8138f02f25c13dc22a357d4">_executeSerial</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="memdesc:a19c0b119d8138f02f25c13dc22a357d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets executed after the <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> is fully resident and fully loaded.  <a href="class_ogre_1_1_texture_filter_1_1_filter_base.html#a19c0b119d8138f02f25c13dc22a357d4">More...</a><br /></td></tr>
 <tr class="separator:a19c0b119d8138f02f25c13dc22a357d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4673aa30d4742e73f093d4f3f1280e4d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html#a4673aa30d4742e73f093d4f3f1280e4d">_executeStreaming</a> (<a class="el" href="class_ogre_1_1_image2.html">Image2</a> &amp;image, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
-<tr class="memdesc:a4673aa30d4742e73f093d4f3f1280e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets executed from worker thread, right after the Image was loaded from file and we're done setting the metadata to the Texture.  <a href="class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html#a4673aa30d4742e73f093d4f3f1280e4d">More...</a><br /></td></tr>
-<tr class="separator:a4673aa30d4742e73f093d4f3f1280e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37b53c85e0aa0c5f3d81d6b188aac7d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html#a37b53c85e0aa0c5f3d81d6b188aac7d7">_executeStreaming</a> (<a class="el" href="class_ogre_1_1_image2.html">Image2</a> &amp;image, <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture) override</td></tr>
+<tr class="memdesc:a37b53c85e0aa0c5f3d81d6b188aac7d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets executed from worker thread, right after the Image was loaded from file and we're done setting the metadata to the Texture.  <a href="class_ogre_1_1_texture_filter_1_1_prepare_for_normal_mapping.html#a37b53c85e0aa0c5f3d81d6b188aac7d7">More...</a><br /></td></tr>
+<tr class="separator:a37b53c85e0aa0c5f3d81d6b188aac7d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -176,12 +176,12 @@ Static Public Member Functions</h2></td></tr>
 <p>Gets executed after the <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> is fully resident and fully loaded. </p>
 <p>(except for the steps this filter is supposed to do) </p>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#a6f93b5d571d91c00586be8e3abb8d4c7">Ogre::TextureFilter::GenerateHwMipmaps</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_texture_filter_1_1_generate_hw_mipmaps.html#a34a918d39ba3fcf50d386de1139257e4">Ogre::TextureFilter::GenerateHwMipmaps</a>.</p>
 
 </div>
 </div>
-<a id="a4673aa30d4742e73f093d4f3f1280e4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4673aa30d4742e73f093d4f3f1280e4d">&#9670;&nbsp;</a></span>_executeStreaming()</h2>
+<a id="a37b53c85e0aa0c5f3d81d6b188aac7d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37b53c85e0aa0c5f3d81d6b188aac7d7">&#9670;&nbsp;</a></span>_executeStreaming()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,7 +190,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::TextureFilter::PrepareForNormalMapping::_executeStreaming </td>
+          <td class="memname">void Ogre::TextureFilter::PrepareForNormalMapping::_executeStreaming </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_image2.html">Image2</a> &amp;&#160;</td>
           <td class="paramname"><em>image</em>, </td>
@@ -209,7 +209,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

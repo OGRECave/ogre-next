@@ -1,9 +1,9 @@
 var class_ogre_1_1_vulkan_plugin =
 [
     [ "VulkanPlugin", "class_ogre_1_1_vulkan_plugin.html#ade0fe63e9df49c9c62a16834b47dcf98", null ],
-    [ "getName", "class_ogre_1_1_vulkan_plugin.html#a8fe18a9d47144803a874d5f390e3bbd6", null ],
-    [ "initialise", "class_ogre_1_1_vulkan_plugin.html#a436226261d9f3be9133f030918429581", null ],
-    [ "install", "class_ogre_1_1_vulkan_plugin.html#ac253a49234edeb85c34bb24401f24f08", null ],
+    [ "getName", "class_ogre_1_1_vulkan_plugin.html#a5c11c277e4ad69f137c458dd106ffcf5", null ],
+    [ "initialise", "class_ogre_1_1_vulkan_plugin.html#ab92114af325be7bc6e5f3d44fa52f7b7", null ],
+    [ "install", "class_ogre_1_1_vulkan_plugin.html#ae5aa44675992e99775d0e42d955442aa", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_plugin.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_plugin.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_vulkan_plugin.html#a1c727e879a260c37b00ce5505fe8e144", null ],
@@ -14,6 +14,6 @@ var class_ogre_1_1_vulkan_plugin =
     [ "operator new", "class_ogre_1_1_vulkan_plugin.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_vulkan_plugin.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_vulkan_plugin.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "shutdown", "class_ogre_1_1_vulkan_plugin.html#aa1fa734cd2be6c99185e0664a233faef", null ],
-    [ "uninstall", "class_ogre_1_1_vulkan_plugin.html#a9f9d00059273e60d2b80babc2c4e3c57", null ]
+    [ "shutdown", "class_ogre_1_1_vulkan_plugin.html#ac879be1d542fe91e1d5b1eb5eda856b4", null ],
+    [ "uninstall", "class_ogre_1_1_vulkan_plugin.html#a0882327a6739a48e079c2d29c510c84e", null ]
 ];

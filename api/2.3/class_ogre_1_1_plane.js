@@ -15,7 +15,7 @@ var class_ogre_1_1_plane =
     [ "getSide", "class_ogre_1_1_plane.html#a115540f9bb7a88c0f22dcbc0ca087a68", null ],
     [ "getSide", "class_ogre_1_1_plane.html#a1f4b68ae4354cd7b0cc63374497461cb", null ],
     [ "getSide", "class_ogre_1_1_plane.html#a519225d752a20f3459d2f0cc20346468", null ],
-    [ "normalise", "class_ogre_1_1_plane.html#a090aae792b4fecc6e8b1b5810f029edf", null ],
+    [ "normalise", "class_ogre_1_1_plane.html#a3048103cd264ee435113323b85e6b590", null ],
     [ "operator!=", "class_ogre_1_1_plane.html#a699e7fd73bffd447e971c97ca38fe3b0", null ],
     [ "operator-", "class_ogre_1_1_plane.html#ada033b7c48e8628d4e9be5039ffa4278", null ],
     [ "operator==", "class_ogre_1_1_plane.html#a1f5ace6a3a4bedc91a283895fb77a6a8", null ],

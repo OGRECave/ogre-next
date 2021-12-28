@@ -9,8 +9,8 @@ var class_ogre_1_1_scene_format_exporter =
     [ "~SceneFormatExporter", "class_ogre_1_1_scene_format_exporter.html#af006d88789b4f4a55970568d1b1081e2", null ],
     [ "exportScene", "class_ogre_1_1_scene_format_exporter.html#a18990410f3a816925fc836f7acf48565", null ],
     [ "exportSceneToFile", "class_ogre_1_1_scene_format_exporter.html#a3ecfa100bdc853f8fb1d6e5f4eb4ece6", null ],
-    [ "getPbs", "class_ogre_1_1_scene_format_exporter.html#a0cc8f3103cad4d98da5b6fcf47cdaa03", null ],
-    [ "getUseBinaryFloatingPoint", "class_ogre_1_1_scene_format_exporter.html#a9deee0b068a45d522345263d32206a19", null ],
+    [ "getPbs", "class_ogre_1_1_scene_format_exporter.html#ae4777b8b449d61b03e4547f495781cde", null ],
+    [ "getUseBinaryFloatingPoint", "class_ogre_1_1_scene_format_exporter.html#a648a0e2e84f8a867c11646b6986ea752", null ],
     [ "setListener", "class_ogre_1_1_scene_format_exporter.html#aab928add268f22f38acadf2c78b748b7", null ],
     [ "setUseBinaryFloatingPoint", "class_ogre_1_1_scene_format_exporter.html#a42ec363fde35023674633704f2ecbdfa", null ]
 ];

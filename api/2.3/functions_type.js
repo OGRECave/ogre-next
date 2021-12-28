@@ -15,12 +15,10 @@ var functions_type =
     [ "n", "functions_type_n.html", null ],
     [ "o", "functions_type_o.html", null ],
     [ "p", "functions_type_p.html", null ],
-    [ "q", "functions_type_q.html", null ],
     [ "r", "functions_type_r.html", null ],
     [ "s", "functions_type_s.html", null ],
     [ "t", "functions_type_t.html", null ],
     [ "u", "functions_type_u.html", null ],
     [ "v", "functions_type_v.html", null ],
-    [ "w", "functions_type_w.html", null ],
-    [ "z", "functions_type_z.html", null ]
+    [ "w", "functions_type_w.html", null ]
 ];

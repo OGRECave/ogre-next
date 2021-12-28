@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['xcb_5fatom_5ft_31300',['xcb_atom_t',['../_ogre_vulkan_xcb_window_8h.html#af104564586dfa708714de89edf001e50',1,'OgreVulkanXcbWindow.h']]],
-  ['xcb_5fwindow_5ft_31301',['xcb_window_t',['../_ogre_vulkan_xcb_window_8h.html#a7fe9aa645eac478c46746c5c415fc0f1',1,'OgreVulkanXcbWindow.h']]],
-  ['xerrorhandler_31302',['XErrorHandler',['../_ogre_x11_e_g_l_support_8h.html#a327b62fca89cd009f290ac61d67d8d4d',1,'OgreX11EGLSupport.h']]]
+  ['z_5fstream_26922',['z_stream',['../_ogre_deflate_8h.html#aa4751fbf6d882976fb300ea9815f5010',1,'OgreDeflate.h']]],
+  ['zzip_5fdir_26923',['ZZIP_DIR',['../_ogre_zip_8h.html#a8cee87e0d5584ff66b56196eec9758c4',1,'OgreZip.h']]],
+  ['zzip_5ffile_26924',['ZZIP_FILE',['../_ogre_zip_8h.html#a83aee2653632d452e58ac776fde409ea',1,'OgreZip.h']]],
+  ['zzip_5fplugin_5fio_5fhandlers_26925',['zzip_plugin_io_handlers',['../_ogre_zip_8h.html#aca6c71c876a785a50b45f36e29b27c09',1,'OgreZip.h']]]
 ];

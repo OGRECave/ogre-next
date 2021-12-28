@@ -1,18 +1,18 @@
 var class_ogre_1_1_metal_buffer_interface =
 [
     [ "MetalBufferInterface", "class_ogre_1_1_metal_buffer_interface.html#a331c47eb088de8ec09d8d3279b1923bf", null ],
-    [ "~MetalBufferInterface", "class_ogre_1_1_metal_buffer_interface.html#a33e45dcd726d80755b6608db0d55ad14", null ],
-    [ "_ensureDelayedImmutableBuffersAreReady", "class_ogre_1_1_metal_buffer_interface.html#a5c09cb3fa711e2eadaa031f7826dd13d", null ],
+    [ "~MetalBufferInterface", "class_ogre_1_1_metal_buffer_interface.html#a35a5f1088d944af1a9257871075a3ae2", null ],
+    [ "_ensureDelayedImmutableBuffersAreReady", "class_ogre_1_1_metal_buffer_interface.html#a793cc8c376e7fe3a6d6585ff4d8d324a", null ],
     [ "_firstUpload", "class_ogre_1_1_metal_buffer_interface.html#a5041f427ba9740d7692c7b2c9a568125", null ],
     [ "_notifyBuffer", "class_ogre_1_1_metal_buffer_interface.html#a1b7b1f47a858a1b14ac3c7b0e8bb9007", null ],
     [ "_setVboPoolIndex", "class_ogre_1_1_metal_buffer_interface.html#a8198b7da02fa993d002961111ba88321", null ],
-    [ "advanceFrame", "class_ogre_1_1_metal_buffer_interface.html#abf9a12612da91c48eb1d051bc2357f32", null ],
-    [ "copyTo", "class_ogre_1_1_metal_buffer_interface.html#ae0510661ff6f003b3dfa0a7413073ae8", null ],
-    [ "getBufferPacked", "class_ogre_1_1_metal_buffer_interface.html#a082d141dfd21868dbf9d213967144ec4", null ],
-    [ "getVboName", "class_ogre_1_1_metal_buffer_interface.html#a73405290dc922cb4d015d86c808c049a", null ],
-    [ "getVboPoolIndex", "class_ogre_1_1_metal_buffer_interface.html#a31ba97853b49d00dca8a9dd20263daa8", null ],
-    [ "map", "class_ogre_1_1_metal_buffer_interface.html#abe156f1a97a4da9a3df954d22251dc19", null ],
-    [ "regressFrame", "class_ogre_1_1_metal_buffer_interface.html#a45535a953631ce1b0da0560f7d3485bc", null ],
-    [ "unmap", "class_ogre_1_1_metal_buffer_interface.html#a122e9bbd15ae7c2001723a5be181e87e", null ],
+    [ "advanceFrame", "class_ogre_1_1_metal_buffer_interface.html#aa02eee4511e0c58602dfb7bb318ca0cc", null ],
+    [ "copyTo", "class_ogre_1_1_metal_buffer_interface.html#a78e1a8edcbb80b9f901c6f15d92d30e4", null ],
+    [ "getBufferPacked", "class_ogre_1_1_metal_buffer_interface.html#a1fe48ad2a980930497c2532825f873a8", null ],
+    [ "getVboName", "class_ogre_1_1_metal_buffer_interface.html#a4b76e44f17d136d3f8f379f3ff66ef7e", null ],
+    [ "getVboPoolIndex", "class_ogre_1_1_metal_buffer_interface.html#a6760a294b42f3f5348e5882f48b9ac1c", null ],
+    [ "map", "class_ogre_1_1_metal_buffer_interface.html#a0d7479fcb7cc1148eaff088de8a1ec5e", null ],
+    [ "regressFrame", "class_ogre_1_1_metal_buffer_interface.html#aaa6367a958c8942950f6d3f79c10e4d4", null ],
+    [ "unmap", "class_ogre_1_1_metal_buffer_interface.html#af75c8ccf266201fb2572500ad965bd05", null ],
     [ "upload", "class_ogre_1_1_metal_buffer_interface.html#abc183c59ca908d4dc53149add87a0237", null ]
 ];

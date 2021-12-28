@@ -2,7 +2,7 @@ var class_ogre_1_1v1_1_1_text_area_overlay_element_factory =
 [
     [ "createOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#afbb6a6b5fdf011203d5383df6a0c52f5", null ],
     [ "destroyOverlayElement", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a8c367ce3e3962f091b1d112e4036fae0", null ],
-    [ "getTypeName", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a0262b2572bb57986595a25cd74ffe967", null ],
+    [ "getTypeName", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a9f547478e0a45fac411bffb518d17e6e", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1v1_1_1_text_area_overlay_element_factory.html#a1c727e879a260c37b00ce5505fe8e144", null ],

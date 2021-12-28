@@ -1,7 +1,7 @@
 var class_ogre_1_1_controller_value =
 [
     [ "~ControllerValue", "class_ogre_1_1_controller_value.html#a3f27d2383b9e994be2ee5cb71fc603fd", null ],
-    [ "getValue", "class_ogre_1_1_controller_value.html#a745741bba579264e57d797683d3feacd", null ],
+    [ "getValue", "class_ogre_1_1_controller_value.html#a3d4fe7d828e96ed3b08ac3b40c5ceaa3", null ],
     [ "operator delete", "class_ogre_1_1_controller_value.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_controller_value.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_controller_value.html#a1c727e879a260c37b00ce5505fe8e144", null ],

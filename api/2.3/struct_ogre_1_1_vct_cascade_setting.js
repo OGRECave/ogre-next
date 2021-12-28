@@ -1,7 +1,7 @@
 var struct_ogre_1_1_vct_cascade_setting =
 [
     [ "VctCascadeSetting", "struct_ogre_1_1_vct_cascade_setting.html#a0b2c8fd04b9f5e321f7b335cd171a7b6", null ],
-    [ "getVoxelCellSize", "struct_ogre_1_1_vct_cascade_setting.html#a6174985825ce8ba003a38367a25ef5b4", null ],
+    [ "getVoxelCellSize", "struct_ogre_1_1_vct_cascade_setting.html#ab49852e0c3b523fd866572cc834b787e", null ],
     [ "setOctantSubdivision", "struct_ogre_1_1_vct_cascade_setting.html#afbfc7af951a572da7eccff17d63c6a5f", null ],
     [ "setResolution", "struct_ogre_1_1_vct_cascade_setting.html#a6aa0f58e6a7a8dbecb6dbd93369c606f", null ],
     [ "areaHalfSize", "struct_ogre_1_1_vct_cascade_setting.html#a4e783a331272b950a3ce42e0da971818", null ],

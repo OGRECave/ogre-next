@@ -2,7 +2,6 @@ var group___optional =
 [
     [ "Paging", "group___paging.html", "group___paging" ],
     [ "Property", "group___property.html", "group___property" ],
-    [ "Terrain", "group___terrain.html", "group___terrain" ],
     [ "OgrePageFileFormats.h", "_ogre_page_file_formats_8h.html", null ],
     [ "Grid3DPageStrategy", "class_ogre_1_1_grid3_d_page_strategy.html", [
       [ "Grid3DPageStrategy", "group___optional.html#gae6874dc60fa86f45dc04e28f69685833", null ],

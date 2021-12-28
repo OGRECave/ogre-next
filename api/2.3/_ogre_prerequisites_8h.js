@@ -1,11 +1,7 @@
 var _ogre_prerequisites_8h =
 [
-    [ "OGRE_HASH_NAMESPACE", "_ogre_prerequisites_8h.html#a266997eb0cdd41a9e1b8adad4a6d7e98", null ],
-    [ "OGRE_HASHMAP_NAME", "_ogre_prerequisites_8h.html#ac14a77500f5306fda1076bbdeda9f9c9", null ],
-    [ "OGRE_HASHMULTIMAP_NAME", "_ogre_prerequisites_8h.html#a982e9d8afe37c311262e21c4b5d5d84f", null ],
-    [ "OGRE_HASHMULTISET_NAME", "_ogre_prerequisites_8h.html#ad182cf62717f4cbeeccdc415cb4df42a", null ],
-    [ "OGRE_HASHSET_NAME", "_ogre_prerequisites_8h.html#a6217abb18e41678597a339ac5075b7da", null ],
     [ "OGRE_MEMORY_TRACKER", "_ogre_prerequisites_8h.html#a7087d2ed9eb4e1f820fd300d85df375d", null ],
+    [ "OGRE_UNUSED_VAR", "_ogre_prerequisites_8h.html#a0a4a25196c102869505a54bc533455c6", null ],
     [ "OGRE_VERSION", "_ogre_prerequisites_8h.html#a3f631403da0a255c201870bfd068f8c5", null ],
     [ "OGRE_VERSION_MAJOR", "_ogre_prerequisites_8h.html#ae5b524dcaad06fe829b6a1952cc6f7cf", null ],
     [ "OGRE_VERSION_MINOR", "_ogre_prerequisites_8h.html#a151f60246acece3e651a8f1d0999f85b", null ],

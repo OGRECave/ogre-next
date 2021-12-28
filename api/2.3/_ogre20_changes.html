@@ -168,7 +168,7 @@ How to debug MovableObjects' (and Nodes) data</h1>
 <div class="line">    <span class="comment">/* ... */</span></div>
 <div class="line">    <span class="keywordtype">bool</span>    * <a class="code" href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a> mInheritOrientation;</div>
 <div class="line">};</div>
-<div class="ttc" id="a_ogre_platform_8h_html_a6decd303d90f9cd75d6bb79d51ea2154"><div class="ttname"><a href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a></div><div class="ttdeci">#define RESTRICT_ALIAS</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:564</div></div>
+<div class="ttc" id="a_ogre_platform_8h_html_a6decd303d90f9cd75d6bb79d51ea2154"><div class="ttname"><a href="_ogre_platform_8h.html#a6decd303d90f9cd75d6bb79d51ea2154">RESTRICT_ALIAS</a></div><div class="ttdeci">#define RESTRICT_ALIAS</div><div class="ttdef"><b>Definition:</b> OgrePlatform.h:534</div></div>
 </div><!-- fragment --><p>When <code>ARRAY_PACKED_REALS</code> = 4 (i.e. SSE builds), though not strictly correct, we could say <code>mParents</code> is declared as:</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span>Transform</div>
 <div class="line">{</div>
@@ -406,8 +406,8 @@ My scene looks too dark or dull!</h1>
 </div><!-- fragment --><p>If you're manually creating the <code>RenderWindow</code>, then you need this snippet:</p>
 <div class="fragment"><div class="line"><a class="code" href="class_ogre_1_1_std_map.html">Ogre::NameValuePairList</a> params;</div>
 <div class="line">params.insert( std::make_pair(<span class="stringliteral">&quot;gamma&quot;</span>, <span class="stringliteral">&quot;true&quot;</span>) );</div>
-<div class="line">mRenderWindow = <a class="code" href="class_ogre_1_1_root.html#a6c8959a647a86d6732a8a32f57b6a6ee">Ogre::Root::getSingleton</a>().<a class="code" href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">createRenderWindow</a>( windowTitle, width, height, fullscreen, &amp;params );</div>
-<div class="ttc" id="aclass_ogre_1_1_root_html_a6c8959a647a86d6732a8a32f57b6a6ee"><div class="ttname"><a href="class_ogre_1_1_root.html#a6c8959a647a86d6732a8a32f57b6a6ee">Ogre::Root::getSingleton</a></div><div class="ttdeci">static Root &amp; getSingleton(void)</div><div class="ttdoc">Override standard Singleton retrieval.</div></div>
+<div class="line">mRenderWindow = <a class="code" href="class_ogre_1_1_root.html#a66e7e23db535f804e0101bf6eec71e4a">Ogre::Root::getSingleton</a>().<a class="code" href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">createRenderWindow</a>( windowTitle, width, height, fullscreen, &amp;params );</div>
+<div class="ttc" id="aclass_ogre_1_1_root_html_a66e7e23db535f804e0101bf6eec71e4a"><div class="ttname"><a href="class_ogre_1_1_root.html#a66e7e23db535f804e0101bf6eec71e4a">Ogre::Root::getSingleton</a></div><div class="ttdeci">static Root &amp; getSingleton()</div><div class="ttdoc">Override standard Singleton retrieval.</div></div>
 <div class="ttc" id="aclass_ogre_1_1_root_html_ae1c38392ce62547652f39b9a899fb20a"><div class="ttname"><a href="class_ogre_1_1_root.html#ae1c38392ce62547652f39b9a899fb20a">Ogre::Root::createRenderWindow</a></div><div class="ttdeci">Window * createRenderWindow(const String &amp;name, uint32 width, uint32 height, bool fullScreen, const NameValuePairList *miscParams=0)</div><div class="ttdoc">Creates a new rendering window.</div></div>
 <div class="ttc" id="aclass_ogre_1_1_std_map_html"><div class="ttname"><a href="class_ogre_1_1_std_map.html">Ogre::StdMap&lt; String, String &gt;</a></div></div>
 </div><!-- fragment --><p>PBS expects gamma correction, otherwise it won't look right.</p>

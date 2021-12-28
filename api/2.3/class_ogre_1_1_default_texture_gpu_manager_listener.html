@@ -133,12 +133,12 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae16e3450868d702f4a9d65035bf926f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#ae16e3450868d702f4a9d65035bf926f3">DefaultTextureGpuManagerListener</a> ()</td></tr>
 <tr class="separator:ae16e3450868d702f4a9d65035bf926f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1481a146fb95328ef24c37360113b7a9"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a1481a146fb95328ef24c37360113b7a9">getNumSlicesFor</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_manager.html">TextureGpuManager</a> *textureManager)</td></tr>
-<tr class="memdesc:a1481a146fb95328ef24c37360113b7a9"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html">Ogre</a> normally puts Textures into pools (a Type2DArray texture) for efficient rendering Note that only textures of the same resolution and format can be put together in the same pool.  <a href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a1481a146fb95328ef24c37360113b7a9">More...</a><br /></td></tr>
-<tr class="separator:a1481a146fb95328ef24c37360113b7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3db2bc04b98d831355854e2f9f761225"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a3db2bc04b98d831355854e2f9f761225">notifyTextureChanged</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, void *extraData)</td></tr>
-<tr class="memdesc:a3db2bc04b98d831355854e2f9f761225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed:  <a href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a3db2bc04b98d831355854e2f9f761225">More...</a><br /></td></tr>
-<tr class="separator:a3db2bc04b98d831355854e2f9f761225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6947566c623e6b83eebf4635360c81fe"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe">getNumSlicesFor</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_manager.html">TextureGpuManager</a> *textureManager) override</td></tr>
+<tr class="memdesc:a6947566c623e6b83eebf4635360c81fe"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_ogre.html">Ogre</a> normally puts Textures into pools (a Type2DArray texture) for efficient rendering Note that only textures of the same resolution and format can be put together in the same pool.  <a href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe">More...</a><br /></td></tr>
+<tr class="separator:a6947566c623e6b83eebf4635360c81fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31427c39cf92266f2b9ff4e3fc75ba87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a31427c39cf92266f2b9ff4e3fc75ba87">notifyTextureChanged</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, void *extraData) override</td></tr>
+<tr class="memdesc:a31427c39cf92266f2b9ff4e3fc75ba87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed:  <a href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a31427c39cf92266f2b9ff4e3fc75ba87">More...</a><br /></td></tr>
+<tr class="separator:a31427c39cf92266f2b9ff4e3fc75ba87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1427f0b635a4186cd6083a9bab879fa2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">shouldStayLoaded</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture)</td></tr>
 <tr class="memdesc:a1427f0b635a4186cd6083a9bab879fa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if this <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> should likely stay loaded or else graphical changes could occur.  <a href="class_ogre_1_1_texture_gpu_listener.html#a1427f0b635a4186cd6083a9bab879fa2">More...</a><br /></td></tr>
 <tr class="separator:a1427f0b635a4186cd6083a9bab879fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,7 +206,7 @@ Public Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p>Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
 <p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
+<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
 <p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
@@ -233,8 +233,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1481a146fb95328ef24c37360113b7a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1481a146fb95328ef24c37360113b7a9">&#9670;&nbsp;</a></span>getNumSlicesFor()</h2>
+<a id="a6947566c623e6b83eebf4635360c81fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6947566c623e6b83eebf4635360c81fe">&#9670;&nbsp;</a></span>getNumSlicesFor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -243,7 +243,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual size_t Ogre::DefaultTextureGpuManagerListener::getNumSlicesFor </td>
+          <td class="memname">size_t Ogre::DefaultTextureGpuManagerListener::getNumSlicesFor </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
           <td class="paramname"><em>texture</em>, </td>
@@ -262,7 +262,7 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -281,8 +281,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3db2bc04b98d831355854e2f9f761225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3db2bc04b98d831355854e2f9f761225">&#9670;&nbsp;</a></span>notifyTextureChanged()</h2>
+<a id="a31427c39cf92266f2b9ff4e3fc75ba87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31427c39cf92266f2b9ff4e3fc75ba87">&#9670;&nbsp;</a></span>notifyTextureChanged()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -291,7 +291,7 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::DefaultTextureGpuManagerListener::notifyTextureChanged </td>
+          <td class="memname">void Ogre::DefaultTextureGpuManagerListener::notifyTextureChanged </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
           <td class="paramname"><em>texture</em>, </td>
@@ -316,14 +316,14 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed: </p>
 <ol type="1">
-<li><a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> got called (texture is ready to be displayed)</li>
+<li><a class="el" href="class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> got called (texture is ready to be displayed)</li>
 <li>Texture changed residency status.</li>
 <li>Texture is being deleted. It won't be a valid pointer after this call. </li>
 </ol>

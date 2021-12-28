@@ -1,6 +1,5 @@
 var _ogre_com_ptr_8h =
 [
-    [ "SafeBoolHelper", "struct_ogre_1_1_com_ptr_1_1_safe_bool_helper.html", "struct_ogre_1_1_com_ptr_1_1_safe_bool_helper" ],
     [ "ASSUME_NOEXCEPT", "_ogre_com_ptr_8h.html#aab7a3e30a0294c44ce9f1ab0701b37ee", null ],
     [ "operator!=", "_ogre_com_ptr_8h.html#ga80a53685c54f25a002db54a9368e02c6", null ],
     [ "operator<", "_ogre_com_ptr_8h.html#ga675a4dbbd77978f9498570697c0f6dbf", null ],

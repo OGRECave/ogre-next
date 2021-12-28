@@ -116,9 +116,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aca44ea0e26e1cb2a3767717278bb96bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#aca44ea0e26e1cb2a3767717278bb96bd">_boneMemoryRebased</a> (const <a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; size_t &gt; &amp;oldSlotStarts)</td></tr>
 <tr class="memdesc:aca44ea0e26e1cb2a3767717278bb96bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shifts the values of mBoneWeights to new locations because the bones' mIndex may have changed.  <a href="class_ogre_1_1_skeleton_animation.html#aca44ea0e26e1cb2a3767717278bb96bd">More...</a><br /></td></tr>
 <tr class="separator:aca44ea0e26e1cb2a3767717278bb96bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a971aea47aeabacdd17086bc7a8f5271c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a971aea47aeabacdd17086bc7a8f5271c">_initialize</a> (void)</td></tr>
-<tr class="memdesc:a971aea47aeabacdd17086bc7a8f5271c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function that initializes a lot of structures that can't be done in the constructor due to how <a class="el" href="class_ogre_1_1_skeleton_instance.html" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations...">SkeletonInstance</a> is created/pushed in a vector.  <a href="class_ogre_1_1_skeleton_animation.html#a971aea47aeabacdd17086bc7a8f5271c">More...</a><br /></td></tr>
-<tr class="separator:a971aea47aeabacdd17086bc7a8f5271c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe278a55976d8fd237feb7aa31ec87ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#abe278a55976d8fd237feb7aa31ec87ab">_initialize</a> ()</td></tr>
+<tr class="memdesc:abe278a55976d8fd237feb7aa31ec87ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal function that initializes a lot of structures that can't be done in the constructor due to how <a class="el" href="class_ogre_1_1_skeleton_instance.html" title="Instance of a Skeleton, main external interface for retrieving bone positions and applying animations...">SkeletonInstance</a> is created/pushed in a vector.  <a href="class_ogre_1_1_skeleton_animation.html#abe278a55976d8fd237feb7aa31ec87ab">More...</a><br /></td></tr>
+<tr class="separator:abe278a55976d8fd237feb7aa31ec87ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8cf2d3fbf6147e93400ae5ea048ad45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#ac8cf2d3fbf6147e93400ae5ea048ad45">_swapBoneWeightsUniquePtr</a> (<a class="el" href="class_ogre_1_1_raw_simd_unique_ptr.html">RawSimdUniquePtr</a>&lt; <a class="el" href="namespace_ogre.html#aac03185a5fd1c914eec2116588790352">ArrayReal</a>, <a class="el" href="group___memory.html#gga830fab51be174d6f2849857cb1abb36aa24267bedbd1115a8f208e4ee355693e4">MEMCATEGORY_ANIMATION</a> &gt; &amp;inOutBoneWeights)</td></tr>
 <tr class="separator:ac8cf2d3fbf6147e93400ae5ea048ad45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b02df604af00400d934ef4c2dda42ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a5b02df604af00400d934ef4c2dda42ac">addFrame</a> (<a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> frames)</td></tr>
@@ -133,27 +133,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a557b05edf17a786f491fb99f42f51d95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a557b05edf17a786f491fb99f42f51d95">getBoneWeightPtr</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> boneName)</td></tr>
 <tr class="memdesc:a557b05edf17a786f491fb99f42f51d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer current per-bone weight of a particular bone.  <a href="class_ogre_1_1_skeleton_animation.html#a557b05edf17a786f491fb99f42f51d95">More...</a><br /></td></tr>
 <tr class="separator:a557b05edf17a786f491fb99f42f51d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3997672f30a64a665c719ea26bae5169"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a3997672f30a64a665c719ea26bae5169">getCurrentFrame</a> (void) const</td></tr>
-<tr class="memdesc:a3997672f30a64a665c719ea26bae5169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current animation frame, in frames.  <a href="class_ogre_1_1_skeleton_animation.html#a3997672f30a64a665c719ea26bae5169">More...</a><br /></td></tr>
-<tr class="separator:a3997672f30a64a665c719ea26bae5169"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5ff645b998a81d67cbdae8a14d505b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#ab5ff645b998a81d67cbdae8a14d505b9">getCurrentTime</a> (void) const</td></tr>
-<tr class="memdesc:ab5ff645b998a81d67cbdae8a14d505b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current animation time, in seconds. Prefer using getCurrentFrame.  <a href="class_ogre_1_1_skeleton_animation.html#ab5ff645b998a81d67cbdae8a14d505b9">More...</a><br /></td></tr>
-<tr class="separator:ab5ff645b998a81d67cbdae8a14d505b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9356bb3cdd3d8e81127f539b206955d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_skeleton_animation_def.html">SkeletonAnimationDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#af9356bb3cdd3d8e81127f539b206955d">getDefinition</a> (void) const</td></tr>
-<tr class="separator:af9356bb3cdd3d8e81127f539b206955d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e5000e0d69a2399f908205797036f29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a4e5000e0d69a2399f908205797036f29">getDuration</a> (void) const</td></tr>
-<tr class="memdesc:a4e5000e0d69a2399f908205797036f29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets animation length, in seconds.  <a href="class_ogre_1_1_skeleton_animation.html#a4e5000e0d69a2399f908205797036f29">More...</a><br /></td></tr>
-<tr class="separator:a4e5000e0d69a2399f908205797036f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd7e2839b58ffe16889054e3730a3c4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#afd7e2839b58ffe16889054e3730a3c4f">getEnabled</a> (void) const</td></tr>
-<tr class="separator:afd7e2839b58ffe16889054e3730a3c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5151c1de8a1f4df21bdd30194c87c63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#ac5151c1de8a1f4df21bdd30194c87c63">getLoop</a> (void) const</td></tr>
-<tr class="memdesc:ac5151c1de8a1f4df21bdd30194c87c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current loop setting.  <a href="class_ogre_1_1_skeleton_animation.html#ac5151c1de8a1f4df21bdd30194c87c63">More...</a><br /></td></tr>
-<tr class="separator:ac5151c1de8a1f4df21bdd30194c87c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49db04dcd1616fb9965eb269e7300368"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a49db04dcd1616fb9965eb269e7300368">getName</a> (void) const</td></tr>
-<tr class="separator:a49db04dcd1616fb9965eb269e7300368"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f8a462d206566a36ffd422ddd6aa300"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a6f8a462d206566a36ffd422ddd6aa300">getNumFrames</a> (void) const</td></tr>
-<tr class="memdesc:a6f8a462d206566a36ffd422ddd6aa300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the frame count.  <a href="class_ogre_1_1_skeleton_animation.html#a6f8a462d206566a36ffd422ddd6aa300">More...</a><br /></td></tr>
-<tr class="separator:a6f8a462d206566a36ffd422ddd6aa300"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2addc08b33add771f20a88970264ea07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a2addc08b33add771f20a88970264ea07">getCurrentFrame</a> () const</td></tr>
+<tr class="memdesc:a2addc08b33add771f20a88970264ea07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current animation frame, in frames.  <a href="class_ogre_1_1_skeleton_animation.html#a2addc08b33add771f20a88970264ea07">More...</a><br /></td></tr>
+<tr class="separator:a2addc08b33add771f20a88970264ea07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada6e90ad57bbddd2f5c2699b6280a839"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#ada6e90ad57bbddd2f5c2699b6280a839">getCurrentTime</a> () const</td></tr>
+<tr class="memdesc:ada6e90ad57bbddd2f5c2699b6280a839"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current animation time, in seconds. Prefer using getCurrentFrame.  <a href="class_ogre_1_1_skeleton_animation.html#ada6e90ad57bbddd2f5c2699b6280a839">More...</a><br /></td></tr>
+<tr class="separator:ada6e90ad57bbddd2f5c2699b6280a839"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c58ed9c3127051571665dc42b81cacb"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_skeleton_animation_def.html">SkeletonAnimationDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a4c58ed9c3127051571665dc42b81cacb">getDefinition</a> () const</td></tr>
+<tr class="separator:a4c58ed9c3127051571665dc42b81cacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eeff2ce5e80e9659867ee0bbd817a31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a5eeff2ce5e80e9659867ee0bbd817a31">getDuration</a> () const</td></tr>
+<tr class="memdesc:a5eeff2ce5e80e9659867ee0bbd817a31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets animation length, in seconds.  <a href="class_ogre_1_1_skeleton_animation.html#a5eeff2ce5e80e9659867ee0bbd817a31">More...</a><br /></td></tr>
+<tr class="separator:a5eeff2ce5e80e9659867ee0bbd817a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46c6c78e0d534a515c976b4fa597c5d0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a46c6c78e0d534a515c976b4fa597c5d0">getEnabled</a> () const</td></tr>
+<tr class="separator:a46c6c78e0d534a515c976b4fa597c5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c8a403eb9d563e16333c99629117a91"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a5c8a403eb9d563e16333c99629117a91">getLoop</a> () const</td></tr>
+<tr class="memdesc:a5c8a403eb9d563e16333c99629117a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns current loop setting.  <a href="class_ogre_1_1_skeleton_animation.html#a5c8a403eb9d563e16333c99629117a91">More...</a><br /></td></tr>
+<tr class="separator:a5c8a403eb9d563e16333c99629117a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14844408c339d1e6ecf26e8a2175cdbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#a14844408c339d1e6ecf26e8a2175cdbf">getName</a> () const</td></tr>
+<tr class="separator:a14844408c339d1e6ecf26e8a2175cdbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeee0b8b405c4f7cdc7dbf701fcc838bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_skeleton_animation.html#aeee0b8b405c4f7cdc7dbf701fcc838bc">getNumFrames</a> () const</td></tr>
+<tr class="memdesc:aeee0b8b405c4f7cdc7dbf701fcc838bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the frame count.  <a href="class_ogre_1_1_skeleton_animation.html#aeee0b8b405c4f7cdc7dbf701fcc838bc">More...</a><br /></td></tr>
+<tr class="separator:aeee0b8b405c4f7cdc7dbf701fcc838bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -295,8 +295,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a971aea47aeabacdd17086bc7a8f5271c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a971aea47aeabacdd17086bc7a8f5271c">&#9670;&nbsp;</a></span>_initialize()</h2>
+<a id="abe278a55976d8fd237feb7aa31ec87ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe278a55976d8fd237feb7aa31ec87ab">&#9670;&nbsp;</a></span>_initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -304,7 +304,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::SkeletonAnimation::_initialize </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -449,8 +448,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3997672f30a64a665c719ea26bae5169"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3997672f30a64a665c719ea26bae5169">&#9670;&nbsp;</a></span>getCurrentFrame()</h2>
+<a id="a2addc08b33add771f20a88970264ea07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2addc08b33add771f20a88970264ea07">&#9670;&nbsp;</a></span>getCurrentFrame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -461,7 +460,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> Ogre::SkeletonAnimation::getCurrentFrame </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -477,8 +475,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5ff645b998a81d67cbdae8a14d505b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5ff645b998a81d67cbdae8a14d505b9">&#9670;&nbsp;</a></span>getCurrentTime()</h2>
+<a id="ada6e90ad57bbddd2f5c2699b6280a839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada6e90ad57bbddd2f5c2699b6280a839">&#9670;&nbsp;</a></span>getCurrentTime()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -489,7 +487,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> Ogre::SkeletonAnimation::getCurrentTime </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -505,8 +502,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af9356bb3cdd3d8e81127f539b206955d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9356bb3cdd3d8e81127f539b206955d">&#9670;&nbsp;</a></span>getDefinition()</h2>
+<a id="a4c58ed9c3127051571665dc42b81cacb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c58ed9c3127051571665dc42b81cacb">&#9670;&nbsp;</a></span>getDefinition()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -517,7 +514,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">const <a class="el" href="class_ogre_1_1_skeleton_animation_def.html">SkeletonAnimationDef</a>* Ogre::SkeletonAnimation::getDefinition </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -531,8 +527,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4e5000e0d69a2399f908205797036f29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e5000e0d69a2399f908205797036f29">&#9670;&nbsp;</a></span>getDuration()</h2>
+<a id="a5eeff2ce5e80e9659867ee0bbd817a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eeff2ce5e80e9659867ee0bbd817a31">&#9670;&nbsp;</a></span>getDuration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -540,7 +536,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> Ogre::SkeletonAnimation::getDuration </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -551,8 +546,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afd7e2839b58ffe16889054e3730a3c4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd7e2839b58ffe16889054e3730a3c4f">&#9670;&nbsp;</a></span>getEnabled()</h2>
+<a id="a46c6c78e0d534a515c976b4fa597c5d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46c6c78e0d534a515c976b4fa597c5d0">&#9670;&nbsp;</a></span>getEnabled()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -563,7 +558,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool Ogre::SkeletonAnimation::getEnabled </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -577,8 +571,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac5151c1de8a1f4df21bdd30194c87c63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5151c1de8a1f4df21bdd30194c87c63">&#9670;&nbsp;</a></span>getLoop()</h2>
+<a id="a5c8a403eb9d563e16333c99629117a91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c8a403eb9d563e16333c99629117a91">&#9670;&nbsp;</a></span>getLoop()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -589,7 +583,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool Ogre::SkeletonAnimation::getLoop </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -606,8 +599,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a49db04dcd1616fb9965eb269e7300368"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49db04dcd1616fb9965eb269e7300368">&#9670;&nbsp;</a></span>getName()</h2>
+<a id="a14844408c339d1e6ecf26e8a2175cdbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14844408c339d1e6ecf26e8a2175cdbf">&#9670;&nbsp;</a></span>getName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -618,7 +611,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> Ogre::SkeletonAnimation::getName </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -632,8 +624,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6f8a462d206566a36ffd422ddd6aa300"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6f8a462d206566a36ffd422ddd6aa300">&#9670;&nbsp;</a></span>getNumFrames()</h2>
+<a id="aeee0b8b405c4f7cdc7dbf701fcc838bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeee0b8b405c4f7cdc7dbf701fcc838bc">&#9670;&nbsp;</a></span>getNumFrames()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -641,7 +633,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a> Ogre::SkeletonAnimation::getNumFrames </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>

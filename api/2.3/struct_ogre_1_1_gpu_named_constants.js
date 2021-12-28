@@ -1,7 +1,7 @@
 var struct_ogre_1_1_gpu_named_constants =
 [
     [ "GpuNamedConstants", "struct_ogre_1_1_gpu_named_constants.html#ac0e05654af490172ac33e0248198c5fb", null ],
-    [ "calculateSize", "struct_ogre_1_1_gpu_named_constants.html#a8ea5fa125ab0e44fdf04b6261d938835", null ],
+    [ "calculateSize", "struct_ogre_1_1_gpu_named_constants.html#a7a81abfb7366fdc851f150719a8f01a6", null ],
     [ "generateConstantDefinitionArrayEntries", "struct_ogre_1_1_gpu_named_constants.html#ad1a16f8fe55b903b77c62a5d28387d21", null ],
     [ "getGenerateAllConstantDefinitionArrayEntries", "struct_ogre_1_1_gpu_named_constants.html#a3e1e7178a176a8e12e9e7491187885de", null ],
     [ "load", "struct_ogre_1_1_gpu_named_constants.html#a8c49c555a0e99a99dee1e99d0450578b", null ],

@@ -103,8 +103,8 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_vct_cascade_setting.ht
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0b2c8fd04b9f5e321f7b335cd171a7b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#a0b2c8fd04b9f5e321f7b335cd171a7b6">VctCascadeSetting</a> ()</td></tr>
 <tr class="separator:a0b2c8fd04b9f5e321f7b335cd171a7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6174985825ce8ba003a38367a25ef5b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#a6174985825ce8ba003a38367a25ef5b4">getVoxelCellSize</a> (void) const</td></tr>
-<tr class="separator:a6174985825ce8ba003a38367a25ef5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab49852e0c3b523fd866572cc834b787e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#ab49852e0c3b523fd866572cc834b787e">getVoxelCellSize</a> () const</td></tr>
+<tr class="separator:ab49852e0c3b523fd866572cc834b787e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbfc7af951a572da7eccff17d63c6a5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#afbfc7af951a572da7eccff17d63c6a5f">setOctantSubdivision</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> subdiv)</td></tr>
 <tr class="separator:afbfc7af951a572da7eccff17d63c6a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6aa0f58e6a7a8dbecb6dbd93369c606f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#a6aa0f58e6a7a8dbecb6dbd93369c606f">setResolution</a> (<a class="el" href="namespace_ogre.html#a5a7c15d68e8c7d585c410bc5a93682f4">uint32</a> res)</td></tr>
@@ -162,8 +162,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6174985825ce8ba003a38367a25ef5b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6174985825ce8ba003a38367a25ef5b4">&#9670;&nbsp;</a></span>getVoxelCellSize()</h2>
+<a id="ab49852e0c3b523fd866572cc834b787e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab49852e0c3b523fd866572cc834b787e">&#9670;&nbsp;</a></span>getVoxelCellSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -171,7 +171,6 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="class_ogre_1_1_vector3.html">Vector3</a> Ogre::VctCascadeSetting::getVoxelCellSize </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -294,7 +293,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>How much we let the camera move before updating the cascade Value is in range [1; inf) <a class="el" href="class_ogre_1_1_camera.html" title="A viewpoint from which the scene will be rendered.">Camera</a> is evaluated in quantized steps. </p>
-<p>i.e. stepSize = cameraStepSize * 2.0 * areaHalfSize / resolution stepSize = cameraStepSize * <a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#a6174985825ce8ba003a38367a25ef5b4">getVoxelCellSize()</a></p>
+<p>i.e. stepSize = cameraStepSize * 2.0 * areaHalfSize / resolution stepSize = cameraStepSize * <a class="el" href="struct_ogre_1_1_vct_cascade_setting.html#ab49852e0c3b523fd866572cc834b787e">getVoxelCellSize()</a></p>
 <p>If cameraStepSize = 1, after the camera moves stepSize, we will move the cascades If cameraStepSize = 2, after the camera moves 2 * stepSize, we will move the cascades</p>
 <p>Small step sizes may cause too much brightness jumping as VCT may not be stable Very big step sizes may cause periodic performance spikes or sudden changes in brightness </p>
 

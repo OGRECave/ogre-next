@@ -187,7 +187,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dae3eb70053cbf5401f22893cdb47f81a7"></a>FsaaSettingAlteredByApi&#160;</td><td class="fielddoc"><p>Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus the setting had to be downgraded. </p>
 <p>Note this may happen on device lost, and a new GPU became in use; thus it's possible for a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> to initially support certain FSAA but later change. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
+<tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dad4d9c6e3b7755f38d8d5f003be100257"></a>ReadyForRendering&#160;</td><td class="fielddoc"><p>This Reason is called when <a class="el" href="class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> is called. </p>
 <p>This normally means worker thread is done loading texture from file and uploading it to GPU; and can now be used for rendering. It does NOT mean that <a class="el" href="namespace_ogre.html">Ogre</a> has finished issueing rendering commands to a RenderTexture and is now ready to be presented to the monitor. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e"></a>Deleted&#160;</td><td class="fielddoc"></td></tr>
@@ -266,7 +266,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>How many entries the pool should be able to hold. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a1481a146fb95328ef24c37360113b7a9">Ogre::DefaultTextureGpuManagerListener</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe">Ogre::DefaultTextureGpuManagerListener</a>.</p>
 
 </div>
 </div>
@@ -312,12 +312,12 @@ Public Member Functions</h2></td></tr>
 
 <p>Called when a <a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> changed in a way that affects how it is displayed: </p>
 <ol type="1">
-<li><a class="el" href="class_ogre_1_1_texture_gpu.html#abe10b3ea1bc20e616134af7b7f567446" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> got called (texture is ready to be displayed)</li>
+<li><a class="el" href="class_ogre_1_1_texture_gpu.html#a73d480691663c93439835ff7d11f7739" title="Notifies it is safe to use the real data. Everything has been uploaded.">TextureGpu::notifyDataIsReady</a> got called (texture is ready to be displayed)</li>
 <li>Texture changed residency status.</li>
 <li>Texture is being deleted. It won't be a valid pointer after this call. </li>
 </ol>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a3db2bc04b98d831355854e2f9f761225">Ogre::DefaultTextureGpuManagerListener</a>, <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ab2012775609f389c5f205ee089a0c8b8">Ogre::TextureGpuManager</a>, <a class="el" href="class_ogre_1_1_light.html#a074b1b671ccfcd0883155be8ab439b17">Ogre::Light</a>, <a class="el" href="class_ogre_1_1_hlms_compute_job.html#afa56777d0419bdd6c0953b8756188cd9">Ogre::HlmsComputeJob</a>, <a class="el" href="class_ogre_1_1_decal.html#a090ed9460fa373f8f76fd21c2c744039">Ogre::Decal</a>, <a class="el" href="class_ogre_1_1_async_texture_ticket.html#ae66dea98ae68cf03567d07f651a3352a">Ogre::AsyncTextureTicket</a>, <a class="el" href="class_ogre_1_1_compositor_pass_uav.html#af0d78fbad8a273629f28f7202968750a">Ogre::CompositorPassUav</a>, <a class="el" href="class_ogre_1_1_font.html#a63f5f3db8ce1149d42a061efd6c1e82d">Ogre::Font</a>, <a class="el" href="class_ogre_1_1_vct_lighting.html#aa764dce11aae628b1efc414ce3ee74ba">Ogre::VctLighting</a>, and <a class="el" href="group___resources.html#ga74f8ac3ae7cac2859ad39a7319182185">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_default_texture_gpu_manager_listener.html#a31427c39cf92266f2b9ff4e3fc75ba87">Ogre::DefaultTextureGpuManagerListener</a>, <a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a251ca6ba922c656400b1c7ac7cac0fcd">Ogre::TextureGpuManager</a>, <a class="el" href="class_ogre_1_1_light.html#a10cc35a3cd6ef162958a0f517a3cf080">Ogre::Light</a>, <a class="el" href="class_ogre_1_1_hlms_compute_job.html#ad3d1dd1de771108b16db3e28d6cce844">Ogre::HlmsComputeJob</a>, <a class="el" href="class_ogre_1_1_decal.html#aa467a18fae0f7bc76735c27759658e57">Ogre::Decal</a>, <a class="el" href="class_ogre_1_1_async_texture_ticket.html#a2f9656a094622a7cd75c46a8f3714069">Ogre::AsyncTextureTicket</a>, <a class="el" href="class_ogre_1_1_compositor_pass_uav.html#a63cb14e3ffc5dbd7e9022489f6df682e">Ogre::CompositorPassUav</a>, <a class="el" href="class_ogre_1_1_font.html#a63f5f3db8ce1149d42a061efd6c1e82d">Ogre::Font</a>, <a class="el" href="class_ogre_1_1_vct_lighting.html#aa764dce11aae628b1efc414ce3ee74ba">Ogre::VctLighting</a>, and <a class="el" href="group___resources.html#ga74f8ac3ae7cac2859ad39a7319182185">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>.</p>
 
 </div>
 </div>

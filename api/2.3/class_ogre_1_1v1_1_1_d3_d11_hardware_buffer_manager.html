@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1v1_1_1_d3_d11_hardware_b
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Ogre::v1::D3D11HardwareBufferManager Class Reference</div>  </div>
+<div class="title">Ogre::v1::D3D11HardwareBufferManager Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -119,59 +119,46 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9bc8ca31484db834bfe682a660fca9e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#a9bc8ca31484db834bfe682a660fca9e3">D3D11HardwareBufferManager</a> (<a class="el" href="class_ogre_1_1_d3_d11_device.html">D3D11Device</a> &amp;device)</td></tr>
 <tr class="separator:a9bc8ca31484db834bfe682a660fca9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6a13e00bf053d0b74d327b7abc04f41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#ab6a13e00bf053d0b74d327b7abc04f41">~D3D11HardwareBufferManager</a> ()</td></tr>
-<tr class="separator:ab6a13e00bf053d0b74d327b7abc04f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad31a801ac5e410a06a20706f437cdebd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ad31a801ac5e410a06a20706f437cdebd">_forceReleaseBufferCopies</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;sourceBuffer)</td></tr>
-<tr class="memdesc:ad31a801ac5e410a06a20706f437cdebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method that forces the release of copies of a given buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ad31a801ac5e410a06a20706f437cdebd">More...</a><br /></td></tr>
-<tr class="separator:ad31a801ac5e410a06a20706f437cdebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab89c749b1de0d07abf2d10cdde39d457"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab89c749b1de0d07abf2d10cdde39d457">_forceReleaseBufferCopies</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer.html">HardwareVertexBuffer</a> *sourceBuffer)</td></tr>
-<tr class="memdesc:ab89c749b1de0d07abf2d10cdde39d457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method that forces the release of copies of a given buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab89c749b1de0d07abf2d10cdde39d457">More...</a><br /></td></tr>
-<tr class="separator:ab89c749b1de0d07abf2d10cdde39d457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefebeab1dc9817a749f72d6c6a66c07f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#aefebeab1dc9817a749f72d6c6a66c07f">_freeUnusedBufferCopies</a> (void)</td></tr>
-<tr class="memdesc:aefebeab1dc9817a749f72d6c6a66c07f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free all unused vertex buffer copies.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#aefebeab1dc9817a749f72d6c6a66c07f">More...</a><br /></td></tr>
-<tr class="separator:aefebeab1dc9817a749f72d6c6a66c07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af806a0585b212d4b179e77770b22eaef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#af806a0585b212d4b179e77770b22eaef">_notifyConterBufferDestroyed</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_counter_buffer.html">HardwareCounterBuffer</a> *buf)</td></tr>
-<tr class="separator:af806a0585b212d4b179e77770b22eaef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1a0ad696cd4a4a56f31ed5a2d954351"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ad1a0ad696cd4a4a56f31ed5a2d954351">_notifyCounterBufferDestroyed</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_counter_buffer.html">HardwareCounterBuffer</a> *buf)</td></tr>
-<tr class="memdesc:ad1a0ad696cd4a4a56f31ed5a2d954351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notification that at hardware counter buffer has been destroyed.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ad1a0ad696cd4a4a56f31ed5a2d954351">More...</a><br /></td></tr>
-<tr class="separator:ad1a0ad696cd4a4a56f31ed5a2d954351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bce33105c98a27bf13c537f17456aa3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager.html#a4bce33105c98a27bf13c537f17456aa3">~D3D11HardwareBufferManager</a> () override</td></tr>
+<tr class="separator:a4bce33105c98a27bf13c537f17456aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a704f13dfbb251f877235107f05bd7658"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658">_forceReleaseBufferCopies</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;sourceBuffer) override</td></tr>
+<tr class="memdesc:a704f13dfbb251f877235107f05bd7658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method that forces the release of copies of a given buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658">More...</a><br /></td></tr>
+<tr class="separator:a704f13dfbb251f877235107f05bd7658"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceaae052b526bb9949439e6e8b0c7807"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#aceaae052b526bb9949439e6e8b0c7807">_forceReleaseBufferCopies</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer.html">HardwareVertexBuffer</a> *sourceBuffer) override</td></tr>
+<tr class="memdesc:aceaae052b526bb9949439e6e8b0c7807"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method that forces the release of copies of a given buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#aceaae052b526bb9949439e6e8b0c7807">More...</a><br /></td></tr>
+<tr class="separator:aceaae052b526bb9949439e6e8b0c7807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e51104afd032ec36b7174540ccc7bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a75e51104afd032ec36b7174540ccc7bb">_freeUnusedBufferCopies</a> () override</td></tr>
+<tr class="memdesc:a75e51104afd032ec36b7174540ccc7bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free all unused vertex buffer copies.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a75e51104afd032ec36b7174540ccc7bb">More...</a><br /></td></tr>
+<tr class="separator:a75e51104afd032ec36b7174540ccc7bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affc9ded1625ecbd07556ba24a15b6429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#affc9ded1625ecbd07556ba24a15b6429">_notifyIndexBufferDestroyed</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer.html">HardwareIndexBuffer</a> *buf)</td></tr>
 <tr class="memdesc:affc9ded1625ecbd07556ba24a15b6429"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notification that a hardware index buffer has been destroyed.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#affc9ded1625ecbd07556ba24a15b6429">More...</a><br /></td></tr>
 <tr class="separator:affc9ded1625ecbd07556ba24a15b6429"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95108cb8cebac0fae72bc4439fdd6e65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a95108cb8cebac0fae72bc4439fdd6e65">_notifyUniformBufferDestroyed</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_uniform_buffer.html">HardwareUniformBuffer</a> *buf)</td></tr>
-<tr class="separator:a95108cb8cebac0fae72bc4439fdd6e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3fc128d148ce3954e184a505199e0d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab3fc128d148ce3954e184a505199e0d2">_notifyVertexBufferDestroyed</a> (<a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer.html">HardwareVertexBuffer</a> *buf)</td></tr>
 <tr class="memdesc:ab3fc128d148ce3954e184a505199e0d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notification that a hardware vertex buffer has been destroyed.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab3fc128d148ce3954e184a505199e0d2">More...</a><br /></td></tr>
 <tr class="separator:ab3fc128d148ce3954e184a505199e0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a837b8d79883d0776fde7a0ccc3a4c905"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a837b8d79883d0776fde7a0ccc3a4c905">_releaseBufferCopies</a> (bool forceFreeUnused=false)</td></tr>
-<tr class="memdesc:a837b8d79883d0776fde7a0ccc3a4c905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method for releasing all temporary buffers which have been allocated using BLT_AUTOMATIC_RELEASE; is called by OGRE.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a837b8d79883d0776fde7a0ccc3a4c905">More...</a><br /></td></tr>
-<tr class="separator:a837b8d79883d0776fde7a0ccc3a4c905"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cbf1bd5a5a6a7665ae98a7cfca4e225"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a9cbf1bd5a5a6a7665ae98a7cfca4e225">allocateVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;sourceBuffer, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31eb">BufferLicenseType</a> licenseType, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_licensee.html">HardwareBufferLicensee</a> *licensee, bool copyData=false)</td></tr>
-<tr class="memdesc:a9cbf1bd5a5a6a7665ae98a7cfca4e225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a copy of a given vertex buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a9cbf1bd5a5a6a7665ae98a7cfca4e225">More...</a><br /></td></tr>
-<tr class="separator:a9cbf1bd5a5a6a7665ae98a7cfca4e225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4568b7f182a39d73002b8750a02d5d6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_counter_buffer_shared_ptr.html">HardwareCounterBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4568b7f182a39d73002b8750a02d5d6a">createCounterBuffer</a> (size_t sizeBytes, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage, bool useShadowBuffer, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a4568b7f182a39d73002b8750a02d5d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create counter buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4568b7f182a39d73002b8750a02d5d6a">More...</a><br /></td></tr>
-<tr class="separator:a4568b7f182a39d73002b8750a02d5d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab11718cef3f0b0ee27b3de9ce147328a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html">HardwareIndexBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab11718cef3f0b0ee27b3de9ce147328a">createIndexBuffer</a> (<a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">HardwareIndexBuffer::IndexType</a> itype, size_t numIndexes, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage, bool useShadowBuffer=false)</td></tr>
-<tr class="memdesc:ab11718cef3f0b0ee27b3de9ce147328a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a hardware index buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ab11718cef3f0b0ee27b3de9ce147328a">More...</a><br /></td></tr>
-<tr class="separator:ab11718cef3f0b0ee27b3de9ce147328a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76b2f5feb458d7de2e8f79a1900b3124"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html">HardwareUniformBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a76b2f5feb458d7de2e8f79a1900b3124">createUniformBuffer</a> (size_t sizeBytes, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage, bool useShadowBuffer, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a76b2f5feb458d7de2e8f79a1900b3124"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create uniform buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a76b2f5feb458d7de2e8f79a1900b3124">More...</a><br /></td></tr>
-<tr class="separator:a76b2f5feb458d7de2e8f79a1900b3124"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a616686687f3ebc57f10abef0c634dd20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a616686687f3ebc57f10abef0c634dd20">createVertexBuffer</a> (size_t vertexSize, size_t numVerts, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage, bool useShadowBuffer=false)</td></tr>
-<tr class="memdesc:a616686687f3ebc57f10abef0c634dd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a hardware vertex buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a616686687f3ebc57f10abef0c634dd20">More...</a><br /></td></tr>
-<tr class="separator:a616686687f3ebc57f10abef0c634dd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e2232c4f8180cc54500da6f713a09d4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6e2232c4f8180cc54500da6f713a09d4">createVertexBufferBinding</a> (void)</td></tr>
-<tr class="memdesc:a6e2232c4f8180cc54500da6f713a09d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html" title="Records the state of all the vertex buffer bindings required to provide a vertex declaration with the...">VertexBufferBinding</a>.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6e2232c4f8180cc54500da6f713a09d4">More...</a><br /></td></tr>
-<tr class="separator:a6e2232c4f8180cc54500da6f713a09d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0370d0d0efb138cd4aa4e4f69b294cdb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a0370d0d0efb138cd4aa4e4f69b294cdb">createVertexDeclaration</a> (void)</td></tr>
-<tr class="separator:a0370d0d0efb138cd4aa4e4f69b294cdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15077ee295a2fa1e0673b55b1ad7f944"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a15077ee295a2fa1e0673b55b1ad7f944">destroyVertexBufferBinding</a> (<a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a> *binding)</td></tr>
-<tr class="memdesc:a15077ee295a2fa1e0673b55b1ad7f944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html" title="Records the state of all the vertex buffer bindings required to provide a vertex declaration with the...">VertexBufferBinding</a>.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a15077ee295a2fa1e0673b55b1ad7f944">More...</a><br /></td></tr>
-<tr class="separator:a15077ee295a2fa1e0673b55b1ad7f944"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afae0e3c4fb95f96b60147cde62b0bacb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#afae0e3c4fb95f96b60147cde62b0bacb">destroyVertexDeclaration</a> (<a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a> *decl)</td></tr>
-<tr class="memdesc:afae0e3c4fb95f96b60147cde62b0bacb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a vertex declaration.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#afae0e3c4fb95f96b60147cde62b0bacb">More...</a><br /></td></tr>
-<tr class="separator:afae0e3c4fb95f96b60147cde62b0bacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5985f14c02e9045bbb6cc88c99c86d5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a5985f14c02e9045bbb6cc88c99c86d5f">_releaseBufferCopies</a> (bool forceFreeUnused=false) override</td></tr>
+<tr class="memdesc:a5985f14c02e9045bbb6cc88c99c86d5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method for releasing all temporary buffers which have been allocated using BLT_AUTOMATIC_RELEASE; is called by OGRE.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a5985f14c02e9045bbb6cc88c99c86d5f">More...</a><br /></td></tr>
+<tr class="separator:a5985f14c02e9045bbb6cc88c99c86d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4290b1d29059b40215b0833ce7a54d53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4290b1d29059b40215b0833ce7a54d53">allocateVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;sourceBuffer, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a73af0e384fffafd30ec13438507d31eb">BufferLicenseType</a> licenseType, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_licensee.html">HardwareBufferLicensee</a> *licensee, bool copyData=false) override</td></tr>
+<tr class="memdesc:a4290b1d29059b40215b0833ce7a54d53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a copy of a given vertex buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4290b1d29059b40215b0833ce7a54d53">More...</a><br /></td></tr>
+<tr class="separator:a4290b1d29059b40215b0833ce7a54d53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4227ab96dd7e88be580a4c73a89e8bae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html">HardwareIndexBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4227ab96dd7e88be580a4c73a89e8bae">createIndexBuffer</a> (<a class="el" href="group___general.html#ga496e620c45a7855770e490d92611ad19">HardwareIndexBuffer::IndexType</a> itype, size_t numIndexes, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage, bool useShadowBuffer=false) override</td></tr>
+<tr class="memdesc:a4227ab96dd7e88be580a4c73a89e8bae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a hardware index buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4227ab96dd7e88be580a4c73a89e8bae">More...</a><br /></td></tr>
+<tr class="separator:a4227ab96dd7e88be580a4c73a89e8bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b8fb4c4d0794a796c846fa41389f117"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4b8fb4c4d0794a796c846fa41389f117">createVertexBuffer</a> (size_t vertexSize, size_t numVerts, <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a> usage, bool useShadowBuffer=false) override</td></tr>
+<tr class="memdesc:a4b8fb4c4d0794a796c846fa41389f117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a hardware vertex buffer.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a4b8fb4c4d0794a796c846fa41389f117">More...</a><br /></td></tr>
+<tr class="separator:a4b8fb4c4d0794a796c846fa41389f117"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b24559242d55d724b58310db24d68eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6b24559242d55d724b58310db24d68eb">createVertexBufferBinding</a> () override</td></tr>
+<tr class="memdesc:a6b24559242d55d724b58310db24d68eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html" title="Records the state of all the vertex buffer bindings required to provide a vertex declaration with the...">VertexBufferBinding</a>.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6b24559242d55d724b58310db24d68eb">More...</a><br /></td></tr>
+<tr class="separator:a6b24559242d55d724b58310db24d68eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69f191c7c974672474c846fccfb95508"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a69f191c7c974672474c846fccfb95508">createVertexDeclaration</a> () override</td></tr>
+<tr class="separator:a69f191c7c974672474c846fccfb95508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36c38ab3d9eb1fbc6c4e8e14618e7582"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a36c38ab3d9eb1fbc6c4e8e14618e7582">destroyVertexBufferBinding</a> (<a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a> *binding) override</td></tr>
+<tr class="memdesc:a36c38ab3d9eb1fbc6c4e8e14618e7582"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html" title="Records the state of all the vertex buffer bindings required to provide a vertex declaration with the...">VertexBufferBinding</a>.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a36c38ab3d9eb1fbc6c4e8e14618e7582">More...</a><br /></td></tr>
+<tr class="separator:a36c38ab3d9eb1fbc6c4e8e14618e7582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42dbc0c949a4c097717e48590c02aa2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a42dbc0c949a4c097717e48590c02aa2c">destroyVertexDeclaration</a> (<a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a> *decl) override</td></tr>
+<tr class="memdesc:a42dbc0c949a4c097717e48590c02aa2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a vertex declaration.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a42dbc0c949a4c097717e48590c02aa2c">More...</a><br /></td></tr>
+<tr class="separator:a42dbc0c949a4c097717e48590c02aa2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -195,24 +182,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4be37baef81876985aa1071ad5acc6dd"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:a4be37baef81876985aa1071ad5acc6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">More...</a><br /></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78d100749d4bc2d491fa77ab3b92d5b7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a78d100749d4bc2d491fa77ab3b92d5b7">registerVertexBufferSourceAndCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;sourceBuffer, const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;copy)</td></tr>
-<tr class="memdesc:a78d100749d4bc2d491fa77ab3b92d5b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a vertex buffer as a copy of another.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a78d100749d4bc2d491fa77ab3b92d5b7">More...</a><br /></td></tr>
-<tr class="separator:a78d100749d4bc2d491fa77ab3b92d5b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf84c58415d8da16909c212929dbf825"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#acf84c58415d8da16909c212929dbf825">releaseVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;bufferCopy)</td></tr>
-<tr class="memdesc:acf84c58415d8da16909c212929dbf825"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually release a vertex buffer copy for others to subsequently use.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#acf84c58415d8da16909c212929dbf825">More...</a><br /></td></tr>
-<tr class="separator:acf84c58415d8da16909c212929dbf825"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3e26b4572d8f07a6a393f4d04dea36c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ae3e26b4572d8f07a6a393f4d04dea36c">touchVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;bufferCopy)</td></tr>
-<tr class="memdesc:ae3e26b4572d8f07a6a393f4d04dea36c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell engine that the vertex buffer copy intent to reuse.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#ae3e26b4572d8f07a6a393f4d04dea36c">More...</a><br /></td></tr>
-<tr class="separator:ae3e26b4572d8f07a6a393f4d04dea36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9ee8d3dbb9824f9d496192e36bd9d38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#af9ee8d3dbb9824f9d496192e36bd9d38">registerVertexBufferSourceAndCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;sourceBuffer, const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;copy) override</td></tr>
+<tr class="memdesc:af9ee8d3dbb9824f9d496192e36bd9d38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a vertex buffer as a copy of another.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#af9ee8d3dbb9824f9d496192e36bd9d38">More...</a><br /></td></tr>
+<tr class="separator:af9ee8d3dbb9824f9d496192e36bd9d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7835f603973c41a9602a5dac80edfa08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a7835f603973c41a9602a5dac80edfa08">releaseVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;bufferCopy) override</td></tr>
+<tr class="memdesc:a7835f603973c41a9602a5dac80edfa08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually release a vertex buffer copy for others to subsequently use.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a7835f603973c41a9602a5dac80edfa08">More...</a><br /></td></tr>
+<tr class="separator:a7835f603973c41a9602a5dac80edfa08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a587815d85f94e9a7bc50e1c0834a7f10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a587815d85f94e9a7bc50e1c0834a7f10">touchVertexBufferCopy</a> (const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;bufferCopy) override</td></tr>
+<tr class="memdesc:a587815d85f94e9a7bc50e1c0834a7f10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell engine that the vertex buffer copy intent to reuse.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a587815d85f94e9a7bc50e1c0834a7f10">More...</a><br /></td></tr>
+<tr class="separator:a587815d85f94e9a7bc50e1c0834a7f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a6717ccc1b2544d276a9aff141ffaab8d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html">HardwareBufferManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6717ccc1b2544d276a9aff141ffaab8d">getSingleton</a> (void)</td></tr>
-<tr class="memdesc:a6717ccc1b2544d276a9aff141ffaab8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a6717ccc1b2544d276a9aff141ffaab8d">More...</a><br /></td></tr>
-<tr class="separator:a6717ccc1b2544d276a9aff141ffaab8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd78b0409b701a55e4bcc0d787d692b1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html">HardwareBufferManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#acd78b0409b701a55e4bcc0d787d692b1">getSingletonPtr</a> (void)</td></tr>
-<tr class="memdesc:acd78b0409b701a55e4bcc0d787d692b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#acd78b0409b701a55e4bcc0d787d692b1">More...</a><br /></td></tr>
-<tr class="separator:acd78b0409b701a55e4bcc0d787d692b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24fd77dd27bec8df69d57a32827e0943"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html">HardwareBufferManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a24fd77dd27bec8df69d57a32827e0943">getSingleton</a> ()</td></tr>
+<tr class="memdesc:a24fd77dd27bec8df69d57a32827e0943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a24fd77dd27bec8df69d57a32827e0943">More...</a><br /></td></tr>
+<tr class="separator:a24fd77dd27bec8df69d57a32827e0943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25f30589709c3ce24990965aa4efcfa0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html">HardwareBufferManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a25f30589709c3ce24990965aa4efcfa0">getSingletonPtr</a> ()</td></tr>
+<tr class="memdesc:a25f30589709c3ce24990965aa4efcfa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#a25f30589709c3ce24990965aa4efcfa0">More...</a><br /></td></tr>
+<tr class="separator:a25f30589709c3ce24990965aa4efcfa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_ogre_1_1v1_1_1_d3_d11_hardware_buffer_manager_base.html" title="Implementation of HardwareBufferManager for D3D11.">D3D11HardwareBufferManagerBase</a> as a <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a>. </p>
@@ -272,8 +259,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab6a13e00bf053d0b74d327b7abc04f41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6a13e00bf053d0b74d327b7abc04f41">&#9670;&nbsp;</a></span>~D3D11HardwareBufferManager()</h2>
+<a id="a4bce33105c98a27bf13c537f17456aa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bce33105c98a27bf13c537f17456aa3">&#9670;&nbsp;</a></span>~D3D11HardwareBufferManager()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -290,7 +277,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -300,8 +287,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad31a801ac5e410a06a20706f437cdebd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad31a801ac5e410a06a20706f437cdebd">&#9670;&nbsp;</a></span>_forceReleaseBufferCopies() <span class="overload">[1/2]</span></h2>
+<a id="a704f13dfbb251f877235107f05bd7658"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a704f13dfbb251f877235107f05bd7658">&#9670;&nbsp;</a></span>_forceReleaseBufferCopies() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -310,7 +297,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::_forceReleaseBufferCopies </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::_forceReleaseBufferCopies </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>sourceBuffer</em></td><td>)</td>
@@ -319,7 +306,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -339,8 +326,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab89c749b1de0d07abf2d10cdde39d457"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab89c749b1de0d07abf2d10cdde39d457">&#9670;&nbsp;</a></span>_forceReleaseBufferCopies() <span class="overload">[2/2]</span></h2>
+<a id="aceaae052b526bb9949439e6e8b0c7807"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aceaae052b526bb9949439e6e8b0c7807">&#9670;&nbsp;</a></span>_forceReleaseBufferCopies() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -349,7 +336,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::_forceReleaseBufferCopies </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::_forceReleaseBufferCopies </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer.html">HardwareVertexBuffer</a> *&#160;</td>
           <td class="paramname"><em>sourceBuffer</em></td><td>)</td>
@@ -358,7 +345,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -378,8 +365,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aefebeab1dc9817a749f72d6c6a66c07f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefebeab1dc9817a749f72d6c6a66c07f">&#9670;&nbsp;</a></span>_freeUnusedBufferCopies()</h2>
+<a id="a75e51104afd032ec36b7174540ccc7bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75e51104afd032ec36b7174540ccc7bb">&#9670;&nbsp;</a></span>_freeUnusedBufferCopies()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -388,16 +375,15 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::_freeUnusedBufferCopies </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::_freeUnusedBufferCopies </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -405,69 +391,9 @@ Static Public Member Functions</h2></td></tr>
 <p>Free all unused vertex buffer copies. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>This method free all temporary vertex buffers that not in used. In normally, temporary vertex buffers are subsequently stored and can be made available for other purposes later without incurring the cost of construction / destruction. But in some cases you want to free them to save hardware memory (e.g. application was runs in a long time, you might free temporary buffers periodically to avoid memory overload). </dd></dl>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a79513a524782fcac13a6d91e68013ad7">Ogre::v1::HardwareBufferManagerBase</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a43be732cdf436d59911b8804cb26e3eb">Ogre::v1::HardwareBufferManagerBase</a>.</p>
 
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a79513a524782fcac13a6d91e68013ad7">Ogre::v1::HardwareBufferManagerBase::_freeUnusedBufferCopies()</a>.</p>
-
-</div>
-</div>
-<a id="af806a0585b212d4b179e77770b22eaef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af806a0585b212d4b179e77770b22eaef">&#9670;&nbsp;</a></span>_notifyConterBufferDestroyed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::v1::HardwareBufferManager::_notifyConterBufferDestroyed </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_counter_buffer.html">HardwareCounterBuffer</a> *&#160;</td>
-          <td class="paramname"><em>buf</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p></p>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ad1a0ad696cd4a4a56f31ed5a2d954351">Ogre::v1::HardwareBufferManagerBase::_notifyCounterBufferDestroyed()</a>.</p>
-
-</div>
-</div>
-<a id="ad1a0ad696cd4a4a56f31ed5a2d954351"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1a0ad696cd4a4a56f31ed5a2d954351">&#9670;&nbsp;</a></span>_notifyCounterBufferDestroyed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::v1::HardwareBufferManagerBase::_notifyCounterBufferDestroyed </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_counter_buffer.html">HardwareCounterBuffer</a> *&#160;</td>
-          <td class="paramname"><em>buf</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Notification that at hardware counter buffer has been destroyed. </p>
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html#af806a0585b212d4b179e77770b22eaef">Ogre::v1::HardwareBufferManager::_notifyConterBufferDestroyed()</a>.</p>
+<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a43be732cdf436d59911b8804cb26e3eb">Ogre::v1::HardwareBufferManagerBase::_freeUnusedBufferCopies()</a>.</p>
 
 </div>
 </div>
@@ -501,36 +427,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a95108cb8cebac0fae72bc4439fdd6e65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95108cb8cebac0fae72bc4439fdd6e65">&#9670;&nbsp;</a></span>_notifyUniformBufferDestroyed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::v1::HardwareBufferManager::_notifyUniformBufferDestroyed </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_uniform_buffer.html">HardwareUniformBuffer</a> *&#160;</td>
-          <td class="paramname"><em>buf</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p></p>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ad7858c87b21a22eb251aef043bf04285">Ogre::v1::HardwareBufferManagerBase::_notifyUniformBufferDestroyed()</a>.</p>
-
-</div>
-</div>
 <a id="ab3fc128d148ce3954e184a505199e0d2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab3fc128d148ce3954e184a505199e0d2">&#9670;&nbsp;</a></span>_notifyVertexBufferDestroyed()</h2>
 
@@ -561,8 +457,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a837b8d79883d0776fde7a0ccc3a4c905"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a837b8d79883d0776fde7a0ccc3a4c905">&#9670;&nbsp;</a></span>_releaseBufferCopies()</h2>
+<a id="a5985f14c02e9045bbb6cc88c99c86d5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5985f14c02e9045bbb6cc88c99c86d5f">&#9670;&nbsp;</a></span>_releaseBufferCopies()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -571,7 +467,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::_releaseBufferCopies </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::_releaseBufferCopies </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>forceFreeUnused</em> = <code>false</code></td><td>)</td>
@@ -580,7 +476,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -599,8 +495,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9cbf1bd5a5a6a7665ae98a7cfca4e225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cbf1bd5a5a6a7665ae98a7cfca4e225">&#9670;&nbsp;</a></span>allocateVertexBufferCopy()</h2>
+<a id="a4290b1d29059b40215b0833ce7a54d53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4290b1d29059b40215b0833ce7a54d53">&#9670;&nbsp;</a></span>allocateVertexBufferCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -609,7 +505,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> Ogre::v1::HardwareBufferManager::allocateVertexBufferCopy </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> Ogre::v1::HardwareBufferManager::allocateVertexBufferCopy </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>sourceBuffer</em>, </td>
@@ -640,7 +536,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -663,63 +559,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4568b7f182a39d73002b8750a02d5d6a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4568b7f182a39d73002b8750a02d5d6a">&#9670;&nbsp;</a></span>createCounterBuffer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_hardware_counter_buffer_shared_ptr.html">HardwareCounterBufferSharedPtr</a> Ogre::v1::HardwareBufferManager::createCounterBuffer </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>sizeBytes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a>&#160;</td>
-          <td class="paramname"><em>usage</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useShadowBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>name</em> = <code>&quot;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create counter buffer. </p>
-<p>The update shall be triggered by <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram.">GpuProgramParameters</a>, if is dirty </p>
-
-<p>Implements <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a9abe2acaada6227d323763be810646c7">Ogre::v1::HardwareBufferManagerBase</a>.</p>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a9abe2acaada6227d323763be810646c7">Ogre::v1::HardwareBufferManagerBase::createCounterBuffer()</a>.</p>
-
-</div>
-</div>
-<a id="ab11718cef3f0b0ee27b3de9ce147328a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab11718cef3f0b0ee27b3de9ce147328a">&#9670;&nbsp;</a></span>createIndexBuffer()</h2>
+<a id="a4227ab96dd7e88be580a4c73a89e8bae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4227ab96dd7e88be580a4c73a89e8bae">&#9670;&nbsp;</a></span>createIndexBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -759,7 +600,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -782,65 +623,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a76b2f5feb458d7de2e8f79a1900b3124"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76b2f5feb458d7de2e8f79a1900b3124">&#9670;&nbsp;</a></span>createUniformBuffer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_hardware_uniform_buffer_shared_ptr.html">HardwareUniformBufferSharedPtr</a> Ogre::v1::HardwareBufferManager::createUniformBuffer </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>sizeBytes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer.html#a87632db14ce9c10e113f1966c6a97c6d">HardwareBuffer::Usage</a>&#160;</td>
-          <td class="paramname"><em>usage</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useShadowBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>name</em> = <code>&quot;&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Create uniform buffer. </p>
-<p>This type of buffer allows the upload of shader constants once, and sharing between shader stages or even shaders from another materials. The update shall be triggered by <a class="el" href="class_ogre_1_1_gpu_program_parameters.html" title="Collects together the program parameters used for a GpuProgram.">GpuProgramParameters</a>, if is dirty </p>
-
-<p>Implements <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a20c21daf3a0922fc1f9329882a85ba6e">Ogre::v1::HardwareBufferManagerBase</a>.</p>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1v1_1_1_g_l_e_s2_default_hardware_buffer_manager.html#a05b048cb86b74dca56afbbd2240d21f2">Ogre::v1::GLES2DefaultHardwareBufferManager</a>.</p>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a20c21daf3a0922fc1f9329882a85ba6e">Ogre::v1::HardwareBufferManagerBase::createUniformBuffer()</a>.</p>
-
-</div>
-</div>
-<a id="a616686687f3ebc57f10abef0c634dd20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a616686687f3ebc57f10abef0c634dd20">&#9670;&nbsp;</a></span>createVertexBuffer()</h2>
+<a id="a4b8fb4c4d0794a796c846fa41389f117"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b8fb4c4d0794a796c846fa41389f117">&#9670;&nbsp;</a></span>createVertexBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -880,7 +664,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -905,8 +689,8 @@ Note that because vertex buffers can be shared, they are reference counted so yo
 
 </div>
 </div>
-<a id="a6e2232c4f8180cc54500da6f713a09d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e2232c4f8180cc54500da6f713a09d4">&#9670;&nbsp;</a></span>createVertexBufferBinding()</h2>
+<a id="a6b24559242d55d724b58310db24d68eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b24559242d55d724b58310db24d68eb">&#9670;&nbsp;</a></span>createVertexBufferBinding()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -915,30 +699,29 @@ Note that because vertex buffers can be shared, they are reference counted so yo
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a>* Ogre::v1::HardwareBufferManager::createVertexBufferBinding </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a>* Ogre::v1::HardwareBufferManager::createVertexBufferBinding </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Creates a new <a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html" title="Records the state of all the vertex buffer bindings required to provide a vertex declaration with the...">VertexBufferBinding</a>. </p>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a22bab93b88c2f774a037a782522e5f0e">Ogre::v1::HardwareBufferManagerBase</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a48ff7b530f2fc1ba6c578867555e84f7">Ogre::v1::HardwareBufferManagerBase</a>.</p>
 
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a22bab93b88c2f774a037a782522e5f0e">Ogre::v1::HardwareBufferManagerBase::createVertexBufferBinding()</a>.</p>
+<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a48ff7b530f2fc1ba6c578867555e84f7">Ogre::v1::HardwareBufferManagerBase::createVertexBufferBinding()</a>.</p>
 
 </div>
 </div>
-<a id="a0370d0d0efb138cd4aa4e4f69b294cdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0370d0d0efb138cd4aa4e4f69b294cdb">&#9670;&nbsp;</a></span>createVertexDeclaration()</h2>
+<a id="a69f191c7c974672474c846fccfb95508"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69f191c7c974672474c846fccfb95508">&#9670;&nbsp;</a></span>createVertexDeclaration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -947,30 +730,29 @@ Note that because vertex buffers can be shared, they are reference counted so yo
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a>* Ogre::v1::HardwareBufferManager::createVertexDeclaration </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a>* Ogre::v1::HardwareBufferManager::createVertexDeclaration </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p></p>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a38caf2e7a1c887b1d5e4d6748dffe893">Ogre::v1::HardwareBufferManagerBase</a>.</p>
+<p>Reimplemented from <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ac4ea716c4aac87496faf2904a4fffd4e">Ogre::v1::HardwareBufferManagerBase</a>.</p>
 
-<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#a38caf2e7a1c887b1d5e4d6748dffe893">Ogre::v1::HardwareBufferManagerBase::createVertexDeclaration()</a>.</p>
+<p class="reference">References <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager_base.html#ac4ea716c4aac87496faf2904a4fffd4e">Ogre::v1::HardwareBufferManagerBase::createVertexDeclaration()</a>.</p>
 
 </div>
 </div>
-<a id="a15077ee295a2fa1e0673b55b1ad7f944"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15077ee295a2fa1e0673b55b1ad7f944">&#9670;&nbsp;</a></span>destroyVertexBufferBinding()</h2>
+<a id="a36c38ab3d9eb1fbc6c4e8e14618e7582"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36c38ab3d9eb1fbc6c4e8e14618e7582">&#9670;&nbsp;</a></span>destroyVertexBufferBinding()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -979,7 +761,7 @@ Note that because vertex buffers can be shared, they are reference counted so yo
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::destroyVertexBufferBinding </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::destroyVertexBufferBinding </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_vertex_buffer_binding.html">VertexBufferBinding</a> *&#160;</td>
           <td class="paramname"><em>binding</em></td><td>)</td>
@@ -988,7 +770,7 @@ Note that because vertex buffers can be shared, they are reference counted so yo
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1001,8 +783,8 @@ Note that because vertex buffers can be shared, they are reference counted so yo
 
 </div>
 </div>
-<a id="afae0e3c4fb95f96b60147cde62b0bacb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afae0e3c4fb95f96b60147cde62b0bacb">&#9670;&nbsp;</a></span>destroyVertexDeclaration()</h2>
+<a id="a42dbc0c949a4c097717e48590c02aa2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42dbc0c949a4c097717e48590c02aa2c">&#9670;&nbsp;</a></span>destroyVertexDeclaration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1011,7 +793,7 @@ Note that because vertex buffers can be shared, they are reference counted so yo
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::destroyVertexDeclaration </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::destroyVertexDeclaration </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_ogre_1_1v1_1_1_vertex_declaration.html">VertexDeclaration</a> *&#160;</td>
           <td class="paramname"><em>decl</em></td><td>)</td>
@@ -1020,7 +802,7 @@ Note that because vertex buffers can be shared, they are reference counted so yo
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1033,8 +815,8 @@ Note that because vertex buffers can be shared, they are reference counted so yo
 
 </div>
 </div>
-<a id="a6717ccc1b2544d276a9aff141ffaab8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6717ccc1b2544d276a9aff141ffaab8d">&#9670;&nbsp;</a></span>getSingleton()</h2>
+<a id="a24fd77dd27bec8df69d57a32827e0943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24fd77dd27bec8df69d57a32827e0943">&#9670;&nbsp;</a></span>getSingleton()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1045,7 +827,6 @@ Note that because vertex buffers can be shared, they are reference counted so yo
         <tr>
           <td class="memname">static <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html">HardwareBufferManager</a>&amp; Ogre::v1::HardwareBufferManager::getSingleton </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1063,8 +844,8 @@ Note that because vertex buffers can be shared, they are reference counted so yo
 
 </div>
 </div>
-<a id="acd78b0409b701a55e4bcc0d787d692b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acd78b0409b701a55e4bcc0d787d692b1">&#9670;&nbsp;</a></span>getSingletonPtr()</h2>
+<a id="a25f30589709c3ce24990965aa4efcfa0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25f30589709c3ce24990965aa4efcfa0">&#9670;&nbsp;</a></span>getSingletonPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1075,7 +856,6 @@ Note that because vertex buffers can be shared, they are reference counted so yo
         <tr>
           <td class="memname">static <a class="el" href="class_ogre_1_1v1_1_1_hardware_buffer_manager.html">HardwareBufferManager</a>* Ogre::v1::HardwareBufferManager::getSingletonPtr </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1487,8 +1267,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a78d100749d4bc2d491fa77ab3b92d5b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78d100749d4bc2d491fa77ab3b92d5b7">&#9670;&nbsp;</a></span>registerVertexBufferSourceAndCopy()</h2>
+<a id="af9ee8d3dbb9824f9d496192e36bd9d38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9ee8d3dbb9824f9d496192e36bd9d38">&#9670;&nbsp;</a></span>registerVertexBufferSourceAndCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1497,7 +1277,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::registerVertexBufferSourceAndCopy </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::registerVertexBufferSourceAndCopy </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>sourceBuffer</em>, </td>
@@ -1516,7 +1296,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1530,8 +1310,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="acf84c58415d8da16909c212929dbf825"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf84c58415d8da16909c212929dbf825">&#9670;&nbsp;</a></span>releaseVertexBufferCopy()</h2>
+<a id="a7835f603973c41a9602a5dac80edfa08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7835f603973c41a9602a5dac80edfa08">&#9670;&nbsp;</a></span>releaseVertexBufferCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1540,7 +1320,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::releaseVertexBufferCopy </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::releaseVertexBufferCopy </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>bufferCopy</em></td><td>)</td>
@@ -1549,7 +1329,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1569,8 +1349,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="ae3e26b4572d8f07a6a393f4d04dea36c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3e26b4572d8f07a6a393f4d04dea36c">&#9670;&nbsp;</a></span>touchVertexBufferCopy()</h2>
+<a id="a587815d85f94e9a7bc50e1c0834a7f10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a587815d85f94e9a7bc50e1c0834a7f10">&#9670;&nbsp;</a></span>touchVertexBufferCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1579,7 +1359,7 @@ template&lt;class Alloc &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::v1::HardwareBufferManager::touchVertexBufferCopy </td>
+          <td class="memname">void Ogre::v1::HardwareBufferManager::touchVertexBufferCopy </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html">HardwareVertexBufferSharedPtr</a> &amp;&#160;</td>
           <td class="paramname"><em>bufferCopy</em></td><td>)</td>
@@ -1588,7 +1368,7 @@ template&lt;class Alloc &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['neighbourindex_31434',['NeighbourIndex',['../class_ogre_1_1_terrain.html#a2d0c6e14298e6a196148388ca2ffa9e2',1,'Ogre::Terrain']]],
-  ['node_5flist_5ftype_31435',['NODE_LIST_TYPE',['../class_ogre_1_1_p_c_zone.html#a56cfd6d3c1d59fe4b05e6755dcab51c9',1,'Ogre::PCZone']]],
-  ['normalmapspace_31436',['NormalMapSpace',['../class_ogre_1_1_r_t_shader_1_1_normal_map_lighting.html#adc6b4bdd1ea31c2232336599d2b30b60',1,'Ogre::RTShader::NormalMapLighting']]]
+  ['operationtype_27034',['OperationType',['../group___general.html#ga0ef99399e9e670e7bb69dc373968a666',1,'Ogre']]],
+  ['optimizationstrategy_27035',['OptimizationStrategy',['../class_ogre_1_1_const_buffer_pool.html#a7b0944b993468357cdd0c2e1de6e50ba',1,'Ogre::ConstBufferPool']]],
+  ['orientationmode_27036',['OrientationMode',['../group___general.html#ga86b4672dfa02cea53b10a52bd6344305',1,'Ogre']]]
 ];

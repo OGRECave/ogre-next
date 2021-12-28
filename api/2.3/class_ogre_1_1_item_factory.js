@@ -1,10 +1,10 @@
 var class_ogre_1_1_item_factory =
 [
     [ "ItemFactory", "class_ogre_1_1_item_factory.html#a9452dc469d5f5033fcf521cb0396965d", null ],
-    [ "~ItemFactory", "class_ogre_1_1_item_factory.html#a2e4439f53814a6240f6f0f0b5dafc093", null ],
+    [ "~ItemFactory", "class_ogre_1_1_item_factory.html#af80121607c3af57f7684a613f688d1cc", null ],
     [ "createInstance", "class_ogre_1_1_item_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62", null ],
-    [ "destroyInstance", "class_ogre_1_1_item_factory.html#aca198eadfec72fe515490277b0d81723", null ],
-    [ "getType", "class_ogre_1_1_item_factory.html#a0f59d2d98abc1e8ae4d1211862b7617e", null ],
+    [ "destroyInstance", "class_ogre_1_1_item_factory.html#a3c521ececb06787b2f9cbc336090d48b", null ],
+    [ "getType", "class_ogre_1_1_item_factory.html#aedb40f9ea7c085d9454fb780d42da8b7", null ],
     [ "operator delete", "class_ogre_1_1_item_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_item_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_item_factory.html#a1c727e879a260c37b00ce5505fe8e144", null ],

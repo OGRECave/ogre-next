@@ -5,7 +5,7 @@ var class_ogre_1_1_vulkan_support =
     [ "addConfig", "class_ogre_1_1_vulkan_support.html#afc956785bff8c4a1446bc768b372999b", null ],
     [ "getConfigOptions", "class_ogre_1_1_vulkan_support.html#a5282878b83e076c0cc13796b4640ee1a", null ],
     [ "getDisplayMonitorCount", "class_ogre_1_1_vulkan_support.html#ae031d6dfdd4b3f304d76a43d1ba2aae9", null ],
-    [ "getSelectedDeviceIdx", "class_ogre_1_1_vulkan_support.html#a86bef7a792e9c3450da2fd697ff766c4", null ],
+    [ "getSelectedDeviceIdx", "class_ogre_1_1_vulkan_support.html#ae65aba81861bb3b9dcf0ec053d0f1abf", null ],
     [ "setConfigOption", "class_ogre_1_1_vulkan_support.html#a8fe7e04815023b25d4be5454386f6ac2", null ],
-    [ "validateConfigOptions", "class_ogre_1_1_vulkan_support.html#a86746d239ebe765693db1f1b46f55fd7", null ]
+    [ "validateConfigOptions", "class_ogre_1_1_vulkan_support.html#a5ad509fd0f747d2ae0b07e3d83a0d1ab", null ]
 ];

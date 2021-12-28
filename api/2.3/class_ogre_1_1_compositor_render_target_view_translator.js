@@ -11,5 +11,5 @@ var class_ogre_1_1_compositor_render_target_view_translator =
     [ "operator new", "class_ogre_1_1_compositor_render_target_view_translator.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_render_target_view_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_render_target_view_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "translate", "class_ogre_1_1_compositor_render_target_view_translator.html#a416ceb9fdaef230b91ece40b7e298bd6", null ]
+    [ "translate", "class_ogre_1_1_compositor_render_target_view_translator.html#a55f1c3c7e41548a47b6d155cf4f7b6aa", null ]
 ];

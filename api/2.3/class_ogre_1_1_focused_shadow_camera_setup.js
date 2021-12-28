@@ -1,10 +1,10 @@
 var class_ogre_1_1_focused_shadow_camera_setup =
 [
-    [ "FocusedShadowCameraSetup", "class_ogre_1_1_focused_shadow_camera_setup.html#af4fec2364b3404a7738e9b5ede0710e7", null ],
-    [ "~FocusedShadowCameraSetup", "class_ogre_1_1_focused_shadow_camera_setup.html#aa37dc46bc1cc5a65359c66fdb539b74c", null ],
+    [ "FocusedShadowCameraSetup", "class_ogre_1_1_focused_shadow_camera_setup.html#addd8f399731c4868d147ae308d521da8", null ],
+    [ "~FocusedShadowCameraSetup", "class_ogre_1_1_focused_shadow_camera_setup.html#af5baf9c76ea94d13635c8ff2f73038cf", null ],
     [ "getMaxDistance", "class_ogre_1_1_focused_shadow_camera_setup.html#a5fca5ac3db0ec963d468a050a597e81b", null ],
     [ "getMinDistance", "class_ogre_1_1_focused_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19", null ],
-    [ "getShadowCamera", "class_ogre_1_1_focused_shadow_camera_setup.html#a8bee96cb5317cad79772e26a77ace1c4", null ],
+    [ "getShadowCamera", "class_ogre_1_1_focused_shadow_camera_setup.html#aa3e7a42aacd956cea329f9104eb8a713", null ],
     [ "getXYPadding", "class_ogre_1_1_focused_shadow_camera_setup.html#a75ffe6687f710f915d610777b1d15ecf", null ],
     [ "operator delete", "class_ogre_1_1_focused_shadow_camera_setup.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_focused_shadow_camera_setup.html#acb46d4b0a597156d9ba5abc39d127792", null ],

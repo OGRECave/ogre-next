@@ -17,7 +17,6 @@ var class_ogre_1_1_s_t_l_allocator =
     [ "address", "class_ogre_1_1_s_t_l_allocator.html#abbf348ef209c5e0e1f00ca1a8645c969", null ],
     [ "address", "class_ogre_1_1_s_t_l_allocator.html#a6612f5f0613e94729e714bda4b8bec93", null ],
     [ "allocate", "class_ogre_1_1_s_t_l_allocator.html#a219db3b3227be55452bf297cdb7bea89", null ],
-    [ "construct", "class_ogre_1_1_s_t_l_allocator.html#a04d59556081dfe8d64d660b336b6fc28", null ],
     [ "construct", "class_ogre_1_1_s_t_l_allocator.html#ad6ebf2ce6e910595ef613fc955e6df10", null ],
     [ "deallocate", "class_ogre_1_1_s_t_l_allocator.html#afc5b83dfdc2263f0c6dbebe62c4681a9", null ],
     [ "destroy", "class_ogre_1_1_s_t_l_allocator.html#ad4101ccdcdc6c5336a2ebd5169c55ff9", null ],

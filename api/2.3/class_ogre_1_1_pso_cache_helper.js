@@ -2,10 +2,10 @@ var class_ogre_1_1_pso_cache_helper =
 [
     [ "PsoCacheHelper", "class_ogre_1_1_pso_cache_helper.html#a2cf5647fb77ed43b8246af90ed80665b", null ],
     [ "~PsoCacheHelper", "class_ogre_1_1_pso_cache_helper.html#a2e6c46d268ae457843aa10aac3a2fa1f", null ],
-    [ "clearState", "class_ogre_1_1_pso_cache_helper.html#adf9e2127cf6d10e5fa9fb4e58aac5772", null ],
+    [ "clearState", "class_ogre_1_1_pso_cache_helper.html#a457666e62277abc364179e399c2c1391", null ],
+    [ "getPso", "class_ogre_1_1_pso_cache_helper.html#ab2a01697d82312a526e3ddf0ca1a48a2", null ],
     [ "getPso", "class_ogre_1_1_pso_cache_helper.html#abda6bd5da10a22535bcb552c5b81328c", null ],
-    [ "getPso", "class_ogre_1_1_pso_cache_helper.html#a3ec27b1a0bfc0300cfb5ae353cf4f7e3", null ],
-    [ "getRenderableHash", "class_ogre_1_1_pso_cache_helper.html#a230f6e2e4d1421258c32cf6366c0608e", null ],
+    [ "getRenderableHash", "class_ogre_1_1_pso_cache_helper.html#a7bf12fa0ee660d9b12afd903c63e6db0", null ],
     [ "operator delete", "class_ogre_1_1_pso_cache_helper.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_pso_cache_helper.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_pso_cache_helper.html#a1c727e879a260c37b00ce5505fe8e144", null ],

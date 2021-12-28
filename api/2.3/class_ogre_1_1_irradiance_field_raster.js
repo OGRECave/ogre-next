@@ -2,8 +2,8 @@ var class_ogre_1_1_irradiance_field_raster =
 [
     [ "IrradianceFieldRaster", "class_ogre_1_1_irradiance_field_raster.html#af71648239fe1481ea84339d6f6fc825e", null ],
     [ "~IrradianceFieldRaster", "class_ogre_1_1_irradiance_field_raster.html#a69085ac8c0566e39f1babe4a937311d1", null ],
-    [ "createWorkspace", "class_ogre_1_1_irradiance_field_raster.html#a0bf7e92c3f503e982acfb91e61ed404a", null ],
-    [ "destroyWorkspace", "class_ogre_1_1_irradiance_field_raster.html#afee5f8deb09844cfbab069cfd3a3d7f4", null ],
+    [ "createWorkspace", "class_ogre_1_1_irradiance_field_raster.html#abea550f7a9047395d5c3b9d75f52397e", null ],
+    [ "destroyWorkspace", "class_ogre_1_1_irradiance_field_raster.html#a120c9bb6024c187aadda204bdbfb7717", null ],
     [ "operator delete", "class_ogre_1_1_irradiance_field_raster.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_irradiance_field_raster.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_irradiance_field_raster.html#a1c727e879a260c37b00ce5505fe8e144", null ],

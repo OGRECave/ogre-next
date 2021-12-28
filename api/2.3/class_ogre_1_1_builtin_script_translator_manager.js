@@ -1,8 +1,8 @@
 var class_ogre_1_1_builtin_script_translator_manager =
 [
     [ "BuiltinScriptTranslatorManager", "class_ogre_1_1_builtin_script_translator_manager.html#aebe6c1766a7f7075b51df6c2ca3c1bae", null ],
-    [ "getNumTranslators", "class_ogre_1_1_builtin_script_translator_manager.html#ad88035249e777cdc695ca1d0a3fc4f90", null ],
-    [ "getTranslator", "class_ogre_1_1_builtin_script_translator_manager.html#a65ab67d68211961033aaeeec65f29754", null ],
+    [ "getNumTranslators", "class_ogre_1_1_builtin_script_translator_manager.html#a7a29aea3650f02b8f631ead39e780b4c", null ],
+    [ "getTranslator", "class_ogre_1_1_builtin_script_translator_manager.html#abff85cd9feb02fe6cca42d5719ee16a9", null ],
     [ "operator delete", "class_ogre_1_1_builtin_script_translator_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_builtin_script_translator_manager.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_builtin_script_translator_manager.html#a1c727e879a260c37b00ce5505fe8e144", null ],

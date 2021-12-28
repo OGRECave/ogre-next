@@ -34,7 +34,7 @@ var class_ogre_1_1_math =
     [ "Floor", "class_ogre_1_1_math.html#af362f19574a389ad79fbdd628010daad", null ],
     [ "gaussianDistribution", "class_ogre_1_1_math.html#a572d6fed0aa293aa6129e3db3605e97c", null ],
     [ "gcd", "class_ogre_1_1_math.html#a1c555e58b32e96ae82866b9215551ed0", null ],
-    [ "getAngleUnit", "class_ogre_1_1_math.html#a15efa0bc6eff509b83e61bc6f2465dfa", null ],
+    [ "getAngleUnit", "class_ogre_1_1_math.html#aa24663bf2138572491d88f20c9a5bc5f", null ],
     [ "IAbs", "class_ogre_1_1_math.html#ad9885e718c5559a7acf9f7bb297f41c2", null ],
     [ "ICeil", "class_ogre_1_1_math.html#a9adb00fe453393f48e3c58c993a93e4d", null ],
     [ "IFloor", "class_ogre_1_1_math.html#aece40785651ff1ffa963627fb6da64a6", null ],

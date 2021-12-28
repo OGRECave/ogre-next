@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_hardware_occlusion_quer
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_hardware_occlusion_query__inherit__graph.svg" width="647" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_hardware_occlusion_query__inherit__graph.svg" width="467" height="202"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -123,9 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad1c71c786e262908a3aa805287b815e3"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hardware_occlusion_query.html#ad1c71c786e262908a3aa805287b815e3">getLastQuerysPixelcount</a> () const</td></tr>
 <tr class="memdesc:ad1c71c786e262908a3aa805287b815e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let's you get the last pixel count with out doing the hardware occlusion test.  <a href="class_ogre_1_1_hardware_occlusion_query.html#ad1c71c786e262908a3aa805287b815e3">More...</a><br /></td></tr>
 <tr class="separator:ad1c71c786e262908a3aa805287b815e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc85b8e78de55492c8d2d730150e08d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hardware_occlusion_query.html#abdc85b8e78de55492c8d2d730150e08d">isStillOutstanding</a> (void)=0</td></tr>
-<tr class="memdesc:abdc85b8e78de55492c8d2d730150e08d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lets you know when query is done, or still be processed by the Hardware.  <a href="class_ogre_1_1_hardware_occlusion_query.html#abdc85b8e78de55492c8d2d730150e08d">More...</a><br /></td></tr>
-<tr class="separator:abdc85b8e78de55492c8d2d730150e08d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8709ecea26514056be6d7ad0444bc4ed"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hardware_occlusion_query.html#a8709ecea26514056be6d7ad0444bc4ed">isStillOutstanding</a> ()=0</td></tr>
+<tr class="memdesc:a8709ecea26514056be6d7ad0444bc4ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lets you know when query is done, or still be processed by the Hardware.  <a href="class_ogre_1_1_hardware_occlusion_query.html#a8709ecea26514056be6d7ad0444bc4ed">More...</a><br /></td></tr>
+<tr class="separator:a8709ecea26514056be6d7ad0444bc4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -232,7 +232,7 @@ Public Member Functions</h2></td></tr>
 <dl class="section remark"><dt>Remarks</dt><dd>Simple usage: Create one or more OcclusionQuery object one per outstanding query or one per tested object OcclusionQuery* mOcclusionQuery; createOcclusionQuery( &amp;mOcclusionQuery ); In the rendering loop: Draw all occluders mOcclusionQuery-&gt;startOcclusionQuery(); Draw the polygons to be tested mOcclusionQuery-&gt;<a class="el" href="class_ogre_1_1_hardware_occlusion_query.html#aae324a11ce1f97199024d1ee38a297c2" title="Ends the hardware occlusion test.">endOcclusionQuery()</a>;</dd></dl>
 <p>Results must be pulled using: UINT mNumberOfPixelsVisable; pullOcclusionQuery( &amp;mNumberOfPixelsVisable ); </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#a90e4db6abed3e081e18d4aa792eb972d">Ogre::GL3PlusHardwareOcclusionQuery</a>, <a class="el" href="class_ogre_1_1_d3_d9_hardware_occlusion_query.html#acea9a09b582738af4f7497b79181ab71">Ogre::D3D9HardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a25eadd4b2ad1c9c04c4827ee98b52aa2">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#a4129fe402696840a8130b25afcfc8a85">Ogre::GL3PlusHardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#aa3c111dae5d73c6732db8aaa8c626f8a">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
 
 </div>
 </div>
@@ -261,7 +261,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Ends the hardware occlusion test. </p>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#a8e37376c1e2ed4d1f05d2cf974c4ed14">Ogre::GL3PlusHardwareOcclusionQuery</a>, <a class="el" href="class_ogre_1_1_d3_d9_hardware_occlusion_query.html#aab645a1644bc652b7843d9b6459a7dbb">Ogre::D3D9HardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a058005d6ae302bf8fe312cbfe31c3aae">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#a125c9c90ec7da4506d5d16c6c5dbd354">Ogre::GL3PlusHardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a28807e76d3a658b19f1728aac5b97bdd">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
 
 </div>
 </div>
@@ -293,8 +293,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abdc85b8e78de55492c8d2d730150e08d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdc85b8e78de55492c8d2d730150e08d">&#9670;&nbsp;</a></span>isStillOutstanding()</h2>
+<a id="a8709ecea26514056be6d7ad0444bc4ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8709ecea26514056be6d7ad0444bc4ed">&#9670;&nbsp;</a></span>isStillOutstanding()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -305,7 +305,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ogre::HardwareOcclusionQuery::isStillOutstanding </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -320,7 +319,7 @@ Public Member Functions</h2></td></tr>
 <p>Lets you know when query is done, or still be processed by the Hardware. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if query isn't finished. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#aaf2b4fe42b7a709b5838f1c120f3dce7">Ogre::GL3PlusHardwareOcclusionQuery</a>, <a class="el" href="class_ogre_1_1_d3_d9_hardware_occlusion_query.html#ae49db96481f5d845767dcfcc7b076d20">Ogre::D3D9HardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a1d5f33f82af884851ab3e29b7c5cca0c">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#a43f15c6a7a725de335fc768b3c3e4392">Ogre::GL3PlusHardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a6c8b1de9c318c1d95d58a87b43feb14e">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
 
 </div>
 </div>
@@ -752,7 +751,7 @@ template&lt;class Alloc &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if success or false if not. </dd></dl>
 
-<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#a8fc4a01690a7cbe8b41f4d05b83dd7e4">Ogre::GL3PlusHardwareOcclusionQuery</a>, <a class="el" href="class_ogre_1_1_d3_d9_hardware_occlusion_query.html#a46f3aaeae35802f03beaa0979ce71699">Ogre::D3D9HardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a21e4304da998fbaa791d9b343b03f294">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
+<p>Implemented in <a class="el" href="class_ogre_1_1_g_l3_plus_hardware_occlusion_query.html#ad35dbf90ab2d4da8eb20f8f97fa20cab">Ogre::GL3PlusHardwareOcclusionQuery</a>, and <a class="el" href="class_ogre_1_1_d3_d11_hardware_occlusion_query.html#a917636a56d29fef2b89b912d2115177a">Ogre::D3D11HardwareOcclusionQuery</a>.</p>
 
 </div>
 </div>

@@ -133,9 +133,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2d0d216deb1aca91d356d665c3fde88f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a2d0d216deb1aca91d356d665c3fde88f">encodeToFile</a> (<a class="el" href="namespace_ogre.html#af8656a2c0ef06642f70c4b3745ee80a2">MemoryDataStreamPtr</a> &amp;input, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outFileName, <a class="el" href="class_ogre_1_1_codec.html#a29e31ad112b08ea7fb648b63f426ff1f">CodecDataPtr</a> &amp;pData) const</td></tr>
 <tr class="memdesc:a2d0d216deb1aca91d356d665c3fde88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Codes the data in the input chunk and saves the result in the output filename provided.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a2d0d216deb1aca91d356d665c3fde88f">More...</a><br /></td></tr>
 <tr class="separator:a2d0d216deb1aca91d356d665c3fde88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37968d655c2950f0420bbaa3eeaa0f60"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image_codec2.html#a37968d655c2950f0420bbaa3eeaa0f60">getDataType</a> () const</td></tr>
-<tr class="memdesc:a37968d655c2950f0420bbaa3eeaa0f60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the data that supported by this codec as a String.  <a href="class_ogre_1_1_image_codec2.html#a37968d655c2950f0420bbaa3eeaa0f60">More...</a><br /></td></tr>
-<tr class="separator:a37968d655c2950f0420bbaa3eeaa0f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa97f56ecfa6549b0bfef04671e58f6a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_image_codec2.html#aa97f56ecfa6549b0bfef04671e58f6a9">getDataType</a> () const override</td></tr>
+<tr class="memdesc:aa97f56ecfa6549b0bfef04671e58f6a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the data that supported by this codec as a String.  <a href="class_ogre_1_1_image_codec2.html#aa97f56ecfa6549b0bfef04671e58f6a9">More...</a><br /></td></tr>
+<tr class="separator:aa97f56ecfa6549b0bfef04671e58f6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1763365ccd236b49d56e9c8b60f16844"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a1763365ccd236b49d56e9c8b60f16844">getType</a> () const</td></tr>
 <tr class="memdesc:a1763365ccd236b49d56e9c8b60f16844"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the codec as a String.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a1763365ccd236b49d56e9c8b60f16844">More...</a><br /></td></tr>
 <tr class="separator:a1763365ccd236b49d56e9c8b60f16844"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -177,24 +177,24 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:acc4ee751f92b6e54051393e74e0a2884"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_codec.html">Codec</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#acc4ee751f92b6e54051393e74e0a2884">getCodec</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;extension)</td></tr>
 <tr class="memdesc:acc4ee751f92b6e54051393e74e0a2884"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the codec registered for the passed in file extension.  <a href="class_ogre_1_1_codec.html#acc4ee751f92b6e54051393e74e0a2884">More...</a><br /></td></tr>
 <tr class="separator:acc4ee751f92b6e54051393e74e0a2884"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55bf1d49e91958f8e412a583666bbd58"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_codec.html#a21f4b8a16d070793d576f827c9fee218">CodecIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a55bf1d49e91958f8e412a583666bbd58">getCodecIterator</a> (void)</td></tr>
-<tr class="memdesc:a55bf1d49e91958f8e412a583666bbd58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the iterator for the registered codecs.  <a href="class_ogre_1_1_codec.html#a55bf1d49e91958f8e412a583666bbd58">More...</a><br /></td></tr>
-<tr class="separator:a55bf1d49e91958f8e412a583666bbd58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6092324fd74dd0221f7c63ca8bec4fc1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a6092324fd74dd0221f7c63ca8bec4fc1">getExtensions</a> (void)</td></tr>
-<tr class="memdesc:a6092324fd74dd0221f7c63ca8bec4fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the file extension list for the registered codecs.  <a href="class_ogre_1_1_codec.html#a6092324fd74dd0221f7c63ca8bec4fc1">More...</a><br /></td></tr>
-<tr class="separator:a6092324fd74dd0221f7c63ca8bec4fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa2f9aa6414221133bfbf901b34cdf1d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_codec.html#a21f4b8a16d070793d576f827c9fee218">CodecIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#afa2f9aa6414221133bfbf901b34cdf1d">getCodecIterator</a> ()</td></tr>
+<tr class="memdesc:afa2f9aa6414221133bfbf901b34cdf1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the iterator for the registered codecs.  <a href="class_ogre_1_1_codec.html#afa2f9aa6414221133bfbf901b34cdf1d">More...</a><br /></td></tr>
+<tr class="separator:afa2f9aa6414221133bfbf901b34cdf1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ffaaceb0a3eefb23dd9e5688469438d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a3ffaaceb0a3eefb23dd9e5688469438d">getExtensions</a> ()</td></tr>
+<tr class="memdesc:a3ffaaceb0a3eefb23dd9e5688469438d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the file extension list for the registered codecs.  <a href="class_ogre_1_1_codec.html#a3ffaaceb0a3eefb23dd9e5688469438d">More...</a><br /></td></tr>
+<tr class="separator:a3ffaaceb0a3eefb23dd9e5688469438d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5b74cfd0cb797a2ac139b4adb7ac557"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#ae5b74cfd0cb797a2ac139b4adb7ac557">isCodecRegistered</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;codecType)</td></tr>
 <tr class="memdesc:ae5b74cfd0cb797a2ac139b4adb7ac557"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return whether a codec is registered already.  <a href="class_ogre_1_1_codec.html#ae5b74cfd0cb797a2ac139b4adb7ac557">More...</a><br /></td></tr>
 <tr class="separator:ae5b74cfd0cb797a2ac139b4adb7ac557"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60f445cc6919df56af6611fd14eec47d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a60f445cc6919df56af6611fd14eec47d">registerCodec</a> (<a class="el" href="class_ogre_1_1_codec.html">Codec</a> *pCodec)</td></tr>
 <tr class="memdesc:a60f445cc6919df56af6611fd14eec47d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a new codec in the database.  <a href="class_ogre_1_1_codec.html#a60f445cc6919df56af6611fd14eec47d">More...</a><br /></td></tr>
 <tr class="separator:a60f445cc6919df56af6611fd14eec47d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade92b0c1d4190cb67a9328b23890c6e7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#ade92b0c1d4190cb67a9328b23890c6e7">shutdown</a> (void)</td></tr>
-<tr class="memdesc:ade92b0c1d4190cb67a9328b23890c6e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static method to shutdown FreeImage and unregister the FreeImage codecs.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#ade92b0c1d4190cb67a9328b23890c6e7">More...</a><br /></td></tr>
-<tr class="separator:ade92b0c1d4190cb67a9328b23890c6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a824b3deaf85c16aef76acc6b470b2777"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a824b3deaf85c16aef76acc6b470b2777">startup</a> (void)</td></tr>
-<tr class="memdesc:a824b3deaf85c16aef76acc6b470b2777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static method to startup FreeImage and register the FreeImage codecs.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a824b3deaf85c16aef76acc6b470b2777">More...</a><br /></td></tr>
-<tr class="separator:a824b3deaf85c16aef76acc6b470b2777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27c0551c3f517086e7b25d5b0c3299e3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a27c0551c3f517086e7b25d5b0c3299e3">shutdown</a> ()</td></tr>
+<tr class="memdesc:a27c0551c3f517086e7b25d5b0c3299e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static method to shutdown FreeImage and unregister the FreeImage codecs.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a27c0551c3f517086e7b25d5b0c3299e3">More...</a><br /></td></tr>
+<tr class="separator:a27c0551c3f517086e7b25d5b0c3299e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f4a77f1701bafc609982ba7822ea34b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_s_t_b_i_image_codec.html#a0f4a77f1701bafc609982ba7822ea34b">startup</a> ()</td></tr>
+<tr class="memdesc:a0f4a77f1701bafc609982ba7822ea34b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static method to startup FreeImage and register the FreeImage codecs.  <a href="class_ogre_1_1_s_t_b_i_image_codec.html#a0f4a77f1701bafc609982ba7822ea34b">More...</a><br /></td></tr>
+<tr class="separator:a0f4a77f1701bafc609982ba7822ea34b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aa2599cd9db05e590fb7f7786076852"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_codec.html#a7aa2599cd9db05e590fb7f7786076852">unregisterCodec</a> (<a class="el" href="class_ogre_1_1_codec.html">Codec</a> *pCodec)</td></tr>
 <tr class="memdesc:a7aa2599cd9db05e590fb7f7786076852"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregisters a codec from the database.  <a href="class_ogre_1_1_codec.html#a7aa2599cd9db05e590fb7f7786076852">More...</a><br /></td></tr>
 <tr class="separator:a7aa2599cd9db05e590fb7f7786076852"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -519,8 +519,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a55bf1d49e91958f8e412a583666bbd58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55bf1d49e91958f8e412a583666bbd58">&#9670;&nbsp;</a></span>getCodecIterator()</h2>
+<a id="afa2f9aa6414221133bfbf901b34cdf1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa2f9aa6414221133bfbf901b34cdf1d">&#9670;&nbsp;</a></span>getCodecIterator()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -531,7 +531,6 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static <a class="el" href="class_ogre_1_1_codec.html#a21f4b8a16d070793d576f827c9fee218">CodecIterator</a> Ogre::Codec::getCodecIterator </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -547,8 +546,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a37968d655c2950f0420bbaa3eeaa0f60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37968d655c2950f0420bbaa3eeaa0f60">&#9670;&nbsp;</a></span>getDataType()</h2>
+<a id="aa97f56ecfa6549b0bfef04671e58f6a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa97f56ecfa6549b0bfef04671e58f6a9">&#9670;&nbsp;</a></span>getDataType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -557,7 +556,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::ImageCodec2::getDataType </td>
+          <td class="memname"><a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::ImageCodec2::getDataType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -565,7 +564,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -576,8 +575,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6092324fd74dd0221f7c63ca8bec4fc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6092324fd74dd0221f7c63ca8bec4fc1">&#9670;&nbsp;</a></span>getExtensions()</h2>
+<a id="a3ffaaceb0a3eefb23dd9e5688469438d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ffaaceb0a3eefb23dd9e5688469438d">&#9670;&nbsp;</a></span>getExtensions()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -588,7 +587,6 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">static <a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> Ogre::Codec::getExtensions </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1178,8 +1176,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="ade92b0c1d4190cb67a9328b23890c6e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade92b0c1d4190cb67a9328b23890c6e7">&#9670;&nbsp;</a></span>shutdown()</h2>
+<a id="a27c0551c3f517086e7b25d5b0c3299e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27c0551c3f517086e7b25d5b0c3299e3">&#9670;&nbsp;</a></span>shutdown()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1190,7 +1188,6 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">static void Ogre::STBIImageCodec::shutdown </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1206,8 +1203,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a824b3deaf85c16aef76acc6b470b2777"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a824b3deaf85c16aef76acc6b470b2777">&#9670;&nbsp;</a></span>startup()</h2>
+<a id="a0f4a77f1701bafc609982ba7822ea34b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f4a77f1701bafc609982ba7822ea34b">&#9670;&nbsp;</a></span>startup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1218,7 +1215,6 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">static void Ogre::STBIImageCodec::startup </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>

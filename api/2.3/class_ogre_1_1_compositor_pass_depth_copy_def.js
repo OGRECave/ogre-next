@@ -2,8 +2,8 @@ var class_ogre_1_1_compositor_pass_depth_copy_def =
 [
     [ "UavDependencyVec", "class_ogre_1_1_compositor_pass_depth_copy_def.html#a114c9c278a29353ebe78cc7d7e3fce6f", null ],
     [ "CompositorPassDepthCopyDef", "class_ogre_1_1_compositor_pass_depth_copy_def.html#af8dce88fce2b1540d453ff2fa212163e", null ],
-    [ "getParentTargetDef", "class_ogre_1_1_compositor_pass_depth_copy_def.html#ae60a3c68c0b8e960042c7e15cd83e8e3", null ],
-    [ "getRtIndex", "class_ogre_1_1_compositor_pass_depth_copy_def.html#a822b8d01cd97e35e420cd254cea54fe9", null ],
+    [ "getParentTargetDef", "class_ogre_1_1_compositor_pass_depth_copy_def.html#af09d744e9444c6c56094d9bd5cd0bd4f", null ],
+    [ "getRtIndex", "class_ogre_1_1_compositor_pass_depth_copy_def.html#a59e9bca410727e2b8b891dd9a1f0c1ad", null ],
     [ "getType", "class_ogre_1_1_compositor_pass_depth_copy_def.html#a5044b7066a60cf46d506e1247b3a58fd", null ],
     [ "operator delete", "class_ogre_1_1_compositor_pass_depth_copy_def.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_compositor_pass_depth_copy_def.html#acb46d4b0a597156d9ba5abc39d127792", null ],

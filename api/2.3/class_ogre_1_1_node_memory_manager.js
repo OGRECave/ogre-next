@@ -2,11 +2,11 @@ var class_ogre_1_1_node_memory_manager =
 [
     [ "NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html#a9e9d52de89e6efa2e55b5f61cb294452", null ],
     [ "~NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html#ac9c59bce25d96c7768bf3629e6f1ed30", null ],
-    [ "_getDummyNode", "class_ogre_1_1_node_memory_manager.html#a5642c42abaf41ea4b35492a61ac06f20", null ],
+    [ "_getDummyNode", "class_ogre_1_1_node_memory_manager.html#a46a0db9a7a97980cd5b0c81982de3a65", null ],
     [ "_setTwin", "class_ogre_1_1_node_memory_manager.html#a57055b26b6143047324615ab6bd3dae5", null ],
-    [ "applyRebase", "class_ogre_1_1_node_memory_manager.html#a26f857eb9a9d9a6dc9219e6bc3286d81", null ],
-    [ "buildDiffList", "class_ogre_1_1_node_memory_manager.html#af744a89c4b441d790945cd5bf36691b0", null ],
-    [ "defragment", "class_ogre_1_1_node_memory_manager.html#a950dffdcf577432988a0383405c25365", null ],
+    [ "applyRebase", "class_ogre_1_1_node_memory_manager.html#aa20a53d831e60d71b68aee7943193b37", null ],
+    [ "buildDiffList", "class_ogre_1_1_node_memory_manager.html#a20b94d34a5d7adca205bac9e4adecd9e", null ],
+    [ "defragment", "class_ogre_1_1_node_memory_manager.html#ae8a5414ed854ed4f3d3b7d55b2e068d1", null ],
     [ "getFirstNode", "class_ogre_1_1_node_memory_manager.html#afdfc8edff9c1cdee4a3a0aa87386a737", null ],
     [ "getMemoryManagerType", "class_ogre_1_1_node_memory_manager.html#a553b5879adf0c61bd251deeba8500ff9", null ],
     [ "getNumDepths", "class_ogre_1_1_node_memory_manager.html#a08a80e0d43c9243fd3f0541e84d95c02", null ],
@@ -20,6 +20,6 @@ var class_ogre_1_1_node_memory_manager =
     [ "nodeDestroyed", "class_ogre_1_1_node_memory_manager.html#ab55ba5e4a967cdf32b9de5e062d26582", null ],
     [ "nodeDettached", "class_ogre_1_1_node_memory_manager.html#ae2c25fec55b41ebf48d30617d2fb1102", null ],
     [ "nodeMoved", "class_ogre_1_1_node_memory_manager.html#aac63416f2b447710543c3b4a10d1766e", null ],
-    [ "performCleanup", "class_ogre_1_1_node_memory_manager.html#ac93aa2be3aea6ffb668ea69bc0297fb4", null ],
-    [ "shrinkToFit", "class_ogre_1_1_node_memory_manager.html#a4daf838c5f9969d53c7ebbf0a8dc38fc", null ]
+    [ "performCleanup", "class_ogre_1_1_node_memory_manager.html#a7ceae32e071b4ee2433e8463504ed398", null ],
+    [ "shrinkToFit", "class_ogre_1_1_node_memory_manager.html#adb199d18bd2c249d44fc89c2dbfdedaf", null ]
 ];

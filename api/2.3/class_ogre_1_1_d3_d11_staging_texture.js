@@ -1,11 +1,11 @@
 var class_ogre_1_1_d3_d11_staging_texture =
 [
     [ "D3D11StagingTexture", "class_ogre_1_1_d3_d11_staging_texture.html#a35fe3320f0e314209e718071ece9de74", null ],
-    [ "~D3D11StagingTexture", "class_ogre_1_1_d3_d11_staging_texture.html#a6ef2e709b1261acf83b75fe831e8065a", null ],
-    [ "_getSizeBytes", "class_ogre_1_1_d3_d11_staging_texture.html#aa084e98a2dbab039ea8b025f6d2aedee", null ],
-    [ "getFormatFamily", "class_ogre_1_1_d3_d11_staging_texture.html#a63e494e2f4ba1c65ff3ea79e25bfbfc6", null ],
-    [ "getLastFrameUsed", "class_ogre_1_1_d3_d11_staging_texture.html#af880dfa4d3f849a20ffb03a4c248d997", null ],
-    [ "isSmallerThan", "class_ogre_1_1_d3_d11_staging_texture.html#a2f6d9e9345a93aa1ffe31523f8b9047b", null ],
+    [ "~D3D11StagingTexture", "class_ogre_1_1_d3_d11_staging_texture.html#a84e23a8785f0e387e1ebe746e002515d", null ],
+    [ "_getSizeBytes", "class_ogre_1_1_d3_d11_staging_texture.html#a57364f5b8524a794a4a0847a5be52f8f", null ],
+    [ "getFormatFamily", "class_ogre_1_1_d3_d11_staging_texture.html#a78b8938d61a62eb3c88df9f5d8c21185", null ],
+    [ "getLastFrameUsed", "class_ogre_1_1_d3_d11_staging_texture.html#a3fe93b933ced83f7467ef8c6040a2236", null ],
+    [ "isSmallerThan", "class_ogre_1_1_d3_d11_staging_texture.html#ae6144acde0c2668cfaca32f9fb2b73f9", null ],
     [ "mapRegion", "class_ogre_1_1_d3_d11_staging_texture.html#adf5cc3adc54a4ab2ea4e83cde01b3398", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_staging_texture.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_d3_d11_staging_texture.html#acb46d4b0a597156d9ba5abc39d127792", null ],
@@ -17,9 +17,9 @@ var class_ogre_1_1_d3_d11_staging_texture =
     [ "operator new", "class_ogre_1_1_d3_d11_staging_texture.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_d3_d11_staging_texture.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_d3_d11_staging_texture.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "startMapRegion", "class_ogre_1_1_d3_d11_staging_texture.html#a75ce0eab6f117f78dd45d5d259fedb3c", null ],
-    [ "stopMapRegion", "class_ogre_1_1_d3_d11_staging_texture.html#a32b114f0ba5ccc87e1f3d6e18d990e38", null ],
-    [ "supportsFormat", "class_ogre_1_1_d3_d11_staging_texture.html#a380dff53ad0425e4790b4d181b11126f", null ],
-    [ "upload", "class_ogre_1_1_d3_d11_staging_texture.html#add456455d0c2f094afe75cc60d60f273", null ],
-    [ "uploadWillStall", "class_ogre_1_1_d3_d11_staging_texture.html#a8996efde036324ee9c422d11d91a6215", null ]
+    [ "startMapRegion", "class_ogre_1_1_d3_d11_staging_texture.html#ad6bb2b8856e79260d691991fbccd0d1b", null ],
+    [ "stopMapRegion", "class_ogre_1_1_d3_d11_staging_texture.html#a2f6407f45a232f30920e8ce9c70265a5", null ],
+    [ "supportsFormat", "class_ogre_1_1_d3_d11_staging_texture.html#ade1f544ee2421c1aeea6069b84bfb974", null ],
+    [ "upload", "class_ogre_1_1_d3_d11_staging_texture.html#afa222859113b1ed8d68ff8c0ca19da37", null ],
+    [ "uploadWillStall", "class_ogre_1_1_d3_d11_staging_texture.html#a803494151c79852ce3afaaa8a76059f3", null ]
 ];

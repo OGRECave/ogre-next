@@ -12,6 +12,6 @@ var class_ogre_1_1_shared_params_translator =
     [ "operator new[]", "class_ogre_1_1_shared_params_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_shared_params_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "parseParameter", "class_ogre_1_1_shared_params_translator.html#aed4c9cad665d86022ceb7a38d0bb4414", null ],
-    [ "translate", "class_ogre_1_1_shared_params_translator.html#a108166f43efb74710a0f3d449ed1428e", null ],
+    [ "translate", "class_ogre_1_1_shared_params_translator.html#af82a2af4bf08dc48c9ffba454d09b442", null ],
     [ "translateSharedParamNamed", "class_ogre_1_1_shared_params_translator.html#a784693b5685a488930c625227a55d6d0", null ]
 ];

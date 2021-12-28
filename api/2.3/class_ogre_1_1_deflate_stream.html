@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_deflate_stream.html',''
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_ogre_1_1_deflate_stream-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Ogre::DeflateStream Class Reference</div>  </div>
+<div class="title">Ogre::DeflateStream Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -132,26 +132,26 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a90494a018545804a60686ad179555822"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a90494a018545804a60686ad179555822">DeflateStream</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a> &amp;compressedStream, <a class="el" href="class_ogre_1_1_deflate_stream.html#aa0d681e30262c74b6c1f2ecacc85908c">StreamType</a> streamType, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;tmpFileName=&quot;&quot;, size_t avail_in=0)</td></tr>
 <tr class="memdesc:a90494a018545804a60686ad179555822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for creating named stream wrapping another stream.  <a href="class_ogre_1_1_deflate_stream.html#a90494a018545804a60686ad179555822">More...</a><br /></td></tr>
 <tr class="separator:a90494a018545804a60686ad179555822"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ab66addcbf428322b1caea1d9c88cea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a7ab66addcbf428322b1caea1d9c88cea">~DeflateStream</a> ()</td></tr>
-<tr class="separator:a7ab66addcbf428322b1caea1d9c88cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd205aacbca957108898ce799603bf3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#afd205aacbca957108898ce799603bf3f">close</a> (void)</td></tr>
-<tr class="memdesc:afd205aacbca957108898ce799603bf3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close the stream; this makes further operations invalid.  <a href="class_ogre_1_1_deflate_stream.html#afd205aacbca957108898ce799603bf3f">More...</a><br /></td></tr>
-<tr class="separator:afd205aacbca957108898ce799603bf3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76b15d2fcdfe255aefb0c28c444cfde0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a76b15d2fcdfe255aefb0c28c444cfde0">eof</a> (void) const</td></tr>
-<tr class="memdesc:a76b15d2fcdfe255aefb0c28c444cfde0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the stream has reached the end.  <a href="class_ogre_1_1_deflate_stream.html#a76b15d2fcdfe255aefb0c28c444cfde0">More...</a><br /></td></tr>
-<tr class="separator:a76b15d2fcdfe255aefb0c28c444cfde0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeadc550c492afc94492bc7f65a26c4f8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#aeadc550c492afc94492bc7f65a26c4f8">~DeflateStream</a> () override</td></tr>
+<tr class="separator:aeadc550c492afc94492bc7f65a26c4f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a35cef4384773b224326883e8f6f723"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a0a35cef4384773b224326883e8f6f723">close</a> () override</td></tr>
+<tr class="memdesc:a0a35cef4384773b224326883e8f6f723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close the stream; this makes further operations invalid.  <a href="class_ogre_1_1_deflate_stream.html#a0a35cef4384773b224326883e8f6f723">More...</a><br /></td></tr>
+<tr class="separator:a0a35cef4384773b224326883e8f6f723"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7677926553089db6a5e6350dace120c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a7677926553089db6a5e6350dace120c3">eof</a> () const override</td></tr>
+<tr class="memdesc:a7677926553089db6a5e6350dace120c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the stream has reached the end.  <a href="class_ogre_1_1_deflate_stream.html#a7677926553089db6a5e6350dace120c3">More...</a><br /></td></tr>
+<tr class="separator:a7677926553089db6a5e6350dace120c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a560b07ced4d47d31315d8d7f51638a8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a560b07ced4d47d31315d8d7f51638a8f">getAccessMode</a> () const</td></tr>
 <tr class="memdesc:a560b07ced4d47d31315d8d7f51638a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the access mode of the stream.  <a href="class_ogre_1_1_data_stream.html#a560b07ced4d47d31315d8d7f51638a8f">More...</a><br /></td></tr>
 <tr class="separator:a560b07ced4d47d31315d8d7f51638a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a022f49c9313deffc5da4383d59d1f32d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a022f49c9313deffc5da4383d59d1f32d">getAsString</a> (void)</td></tr>
-<tr class="memdesc:a022f49c9313deffc5da4383d59d1f32d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a String containing the entire stream.  <a href="class_ogre_1_1_data_stream.html#a022f49c9313deffc5da4383d59d1f32d">More...</a><br /></td></tr>
-<tr class="separator:a022f49c9313deffc5da4383d59d1f32d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a4153b89107aed97f8dad4b4c15f88"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a57a4153b89107aed97f8dad4b4c15f88">getAsString</a> ()</td></tr>
+<tr class="memdesc:a57a4153b89107aed97f8dad4b4c15f88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a String containing the entire stream.  <a href="class_ogre_1_1_data_stream.html#a57a4153b89107aed97f8dad4b4c15f88">More...</a><br /></td></tr>
+<tr class="separator:a57a4153b89107aed97f8dad4b4c15f88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d2ff5dff63ce4b689dd1d486d3243f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a86d2ff5dff63ce4b689dd1d486d3243f">getLine</a> (bool trimAfter=true)</td></tr>
 <tr class="memdesc:a86d2ff5dff63ce4b689dd1d486d3243f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a String containing the next line of data, optionally trimmed for whitespace.  <a href="class_ogre_1_1_data_stream.html#a86d2ff5dff63ce4b689dd1d486d3243f">More...</a><br /></td></tr>
 <tr class="separator:a86d2ff5dff63ce4b689dd1d486d3243f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ebd86825f86b7114024d168e9751395"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a7ebd86825f86b7114024d168e9751395">getName</a> (void)</td></tr>
-<tr class="memdesc:a7ebd86825f86b7114024d168e9751395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the stream, if it has one.  <a href="class_ogre_1_1_data_stream.html#a7ebd86825f86b7114024d168e9751395">More...</a><br /></td></tr>
-<tr class="separator:a7ebd86825f86b7114024d168e9751395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac55bec3a420c5c929739f67508952547"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#ac55bec3a420c5c929739f67508952547">getName</a> ()</td></tr>
+<tr class="memdesc:ac55bec3a420c5c929739f67508952547"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the stream, if it has one.  <a href="class_ogre_1_1_data_stream.html#ac55bec3a420c5c929739f67508952547">More...</a><br /></td></tr>
+<tr class="separator:ac55bec3a420c5c929739f67508952547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ba171261e6c5d8c2f2880e99ca5c141"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a5ba171261e6c5d8c2f2880e99ca5c141">isCompressedStreamValid</a> () const</td></tr>
 <tr class="memdesc:a5ba171261e6c5d8c2f2880e99ca5c141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the compressed stream is valid deflated data.  <a href="class_ogre_1_1_deflate_stream.html#a5ba171261e6c5d8c2f2880e99ca5c141">More...</a><br /></td></tr>
 <tr class="separator:a5ba171261e6c5d8c2f2880e99ca5c141"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,30 +187,30 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a49bfe5809b50735b5ce49e7df9615e5a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a49bfe5809b50735b5ce49e7df9615e5a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_data_stream.html">DataStream</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a49bfe5809b50735b5ce49e7df9615e5a">operator&gt;&gt;</a> (T &amp;val)</td></tr>
 <tr class="separator:a49bfe5809b50735b5ce49e7df9615e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f6e5c9b9e494733cc80f691de787362"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a9f6e5c9b9e494733cc80f691de787362">read</a> (void *buf, size_t count)</td></tr>
-<tr class="memdesc:a9f6e5c9b9e494733cc80f691de787362"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the requisite number of bytes from the stream, stopping at the end of the file.  <a href="class_ogre_1_1_deflate_stream.html#a9f6e5c9b9e494733cc80f691de787362">More...</a><br /></td></tr>
-<tr class="separator:a9f6e5c9b9e494733cc80f691de787362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e29bee00d7357fd2597c20ab0d371f7"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a5e29bee00d7357fd2597c20ab0d371f7">read</a> (void *buf, size_t count) override</td></tr>
+<tr class="memdesc:a5e29bee00d7357fd2597c20ab0d371f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the requisite number of bytes from the stream, stopping at the end of the file.  <a href="class_ogre_1_1_deflate_stream.html#a5e29bee00d7357fd2597c20ab0d371f7">More...</a><br /></td></tr>
+<tr class="separator:a5e29bee00d7357fd2597c20ab0d371f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedc53a8cff5334563283a4557d423b25"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#aedc53a8cff5334563283a4557d423b25">readLine</a> (char *buf, size_t maxCount, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;delim=&quot;\n&quot;)</td></tr>
 <tr class="memdesc:aedc53a8cff5334563283a4557d423b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a single line from the stream.  <a href="class_ogre_1_1_data_stream.html#aedc53a8cff5334563283a4557d423b25">More...</a><br /></td></tr>
 <tr class="separator:aedc53a8cff5334563283a4557d423b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf00e810593e4c47647f3565ab06a849"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#aaf00e810593e4c47647f3565ab06a849">seek</a> (size_t pos)</td></tr>
-<tr class="memdesc:aaf00e810593e4c47647f3565ab06a849"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repositions the read point to a specified byte.  <a href="class_ogre_1_1_deflate_stream.html#aaf00e810593e4c47647f3565ab06a849">More...</a><br /></td></tr>
-<tr class="separator:aaf00e810593e4c47647f3565ab06a849"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d5b5224e17b9fc9d9756d8156a77a5c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a9d5b5224e17b9fc9d9756d8156a77a5c">size</a> (void) const</td></tr>
-<tr class="memdesc:a9d5b5224e17b9fc9d9756d8156a77a5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total size of the data to be read from the stream, or 0 if this is indeterminate for this stream.  <a href="class_ogre_1_1_data_stream.html#a9d5b5224e17b9fc9d9756d8156a77a5c">More...</a><br /></td></tr>
-<tr class="separator:a9d5b5224e17b9fc9d9756d8156a77a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af142a9dab933b2ff36a12ae5016d59c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#af142a9dab933b2ff36a12ae5016d59c8">skip</a> (long count)</td></tr>
-<tr class="memdesc:af142a9dab933b2ff36a12ae5016d59c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skip a defined number of bytes.  <a href="class_ogre_1_1_deflate_stream.html#af142a9dab933b2ff36a12ae5016d59c8">More...</a><br /></td></tr>
-<tr class="separator:af142a9dab933b2ff36a12ae5016d59c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cb0344e3c96a247f78863e62ea8b945"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a7cb0344e3c96a247f78863e62ea8b945">seek</a> (size_t pos) override</td></tr>
+<tr class="memdesc:a7cb0344e3c96a247f78863e62ea8b945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repositions the read point to a specified byte.  <a href="class_ogre_1_1_deflate_stream.html#a7cb0344e3c96a247f78863e62ea8b945">More...</a><br /></td></tr>
+<tr class="separator:a7cb0344e3c96a247f78863e62ea8b945"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc0ddd3d7e9e002fddde093c7981e016"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#abc0ddd3d7e9e002fddde093c7981e016">size</a> () const</td></tr>
+<tr class="memdesc:abc0ddd3d7e9e002fddde093c7981e016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total size of the data to be read from the stream, or 0 if this is indeterminate for this stream.  <a href="class_ogre_1_1_data_stream.html#abc0ddd3d7e9e002fddde093c7981e016">More...</a><br /></td></tr>
+<tr class="separator:abc0ddd3d7e9e002fddde093c7981e016"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a156bf8921ddb2502ce845f0042da6f5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a156bf8921ddb2502ce845f0042da6f5d">skip</a> (long count) override</td></tr>
+<tr class="memdesc:a156bf8921ddb2502ce845f0042da6f5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skip a defined number of bytes.  <a href="class_ogre_1_1_deflate_stream.html#a156bf8921ddb2502ce845f0042da6f5d">More...</a><br /></td></tr>
+<tr class="separator:a156bf8921ddb2502ce845f0042da6f5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32966ad5a814f8c72fe0affbefcc6f55"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_data_stream.html#a32966ad5a814f8c72fe0affbefcc6f55">skipLine</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;delim=&quot;\n&quot;)</td></tr>
 <tr class="memdesc:a32966ad5a814f8c72fe0affbefcc6f55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skip a single line from the stream.  <a href="class_ogre_1_1_data_stream.html#a32966ad5a814f8c72fe0affbefcc6f55">More...</a><br /></td></tr>
 <tr class="separator:a32966ad5a814f8c72fe0affbefcc6f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4486e6a49b36dc62ea4a948214e6d6f2"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a4486e6a49b36dc62ea4a948214e6d6f2">tell</a> (void) const</td></tr>
-<tr class="memdesc:a4486e6a49b36dc62ea4a948214e6d6f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current byte offset from beginning.  <a href="class_ogre_1_1_deflate_stream.html#a4486e6a49b36dc62ea4a948214e6d6f2">More...</a><br /></td></tr>
-<tr class="separator:a4486e6a49b36dc62ea4a948214e6d6f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0006ee4213a6af6e0aae98f59332d1d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#aa0006ee4213a6af6e0aae98f59332d1d">write</a> (const void *buf, size_t count)</td></tr>
-<tr class="memdesc:aa0006ee4213a6af6e0aae98f59332d1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the requisite number of bytes from the stream (only applicable to streams that are not read-only)  <a href="class_ogre_1_1_deflate_stream.html#aa0006ee4213a6af6e0aae98f59332d1d">More...</a><br /></td></tr>
-<tr class="separator:aa0006ee4213a6af6e0aae98f59332d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7e9f5f2e04d788bb5e3dc733e4ccea3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#af7e9f5f2e04d788bb5e3dc733e4ccea3">tell</a> () const override</td></tr>
+<tr class="memdesc:af7e9f5f2e04d788bb5e3dc733e4ccea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the current byte offset from beginning.  <a href="class_ogre_1_1_deflate_stream.html#af7e9f5f2e04d788bb5e3dc733e4ccea3">More...</a><br /></td></tr>
+<tr class="separator:af7e9f5f2e04d788bb5e3dc733e4ccea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ef0f2e0bf0395ace3e29a059401d2cf"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_deflate_stream.html#a2ef0f2e0bf0395ace3e29a059401d2cf">write</a> (const void *buf, size_t count) override</td></tr>
+<tr class="memdesc:a2ef0f2e0bf0395ace3e29a059401d2cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the requisite number of bytes from the stream (only applicable to streams that are not read-only)  <a href="class_ogre_1_1_deflate_stream.html#a2ef0f2e0bf0395ace3e29a059401d2cf">More...</a><br /></td></tr>
+<tr class="separator:a2ef0f2e0bf0395ace3e29a059401d2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Stream which compresses / uncompresses data using the 'deflate' compression algorithm. </p>
@@ -423,11 +423,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7ab66addcbf428322b1caea1d9c88cea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ab66addcbf428322b1caea1d9c88cea">&#9670;&nbsp;</a></span>~DeflateStream()</h2>
+<a id="aeadc550c492afc94492bc7f65a26c4f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeadc550c492afc94492bc7f65a26c4f8">&#9670;&nbsp;</a></span>~DeflateStream()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">Ogre::DeflateStream::~DeflateStream </td>
@@ -436,13 +439,18 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="afd205aacbca957108898ce799603bf3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd205aacbca957108898ce799603bf3f">&#9670;&nbsp;</a></span>close()</h2>
+<a id="a0a35cef4384773b224326883e8f6f723"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a35cef4384773b224326883e8f6f723">&#9670;&nbsp;</a></span>close()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -453,26 +461,25 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Ogre::DeflateStream::close </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Close the stream; this makes further operations invalid. </p>
 
-<p>Implements <a class="el" href="class_ogre_1_1_data_stream.html#ace95bf415101e195a0c79838fdcb7e7d">Ogre::DataStream</a>.</p>
+<p>Implements <a class="el" href="class_ogre_1_1_data_stream.html#a42612f576a7603f871b2871ecd6e6af7">Ogre::DataStream</a>.</p>
 
 </div>
 </div>
-<a id="a76b15d2fcdfe255aefb0c28c444cfde0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76b15d2fcdfe255aefb0c28c444cfde0">&#9670;&nbsp;</a></span>eof()</h2>
+<a id="a7677926553089db6a5e6350dace120c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7677926553089db6a5e6350dace120c3">&#9670;&nbsp;</a></span>eof()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -483,21 +490,20 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">bool Ogre::DeflateStream::eof </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Returns true if the stream has reached the end. </p>
 
-<p>Implements <a class="el" href="class_ogre_1_1_data_stream.html#a81d740638618913333324663b2edb519">Ogre::DataStream</a>.</p>
+<p>Implements <a class="el" href="class_ogre_1_1_data_stream.html#a54cc2700ccbf0628da8e0a432be72843">Ogre::DataStream</a>.</p>
 
 </div>
 </div>
@@ -528,8 +534,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a022f49c9313deffc5da4383d59d1f32d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a022f49c9313deffc5da4383d59d1f32d">&#9670;&nbsp;</a></span>getAsString()</h2>
+<a id="a57a4153b89107aed97f8dad4b4c15f88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57a4153b89107aed97f8dad4b4c15f88">&#9670;&nbsp;</a></span>getAsString()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -540,7 +546,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> Ogre::DataStream::getAsString </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -593,8 +598,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7ebd86825f86b7114024d168e9751395"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ebd86825f86b7114024d168e9751395">&#9670;&nbsp;</a></span>getName()</h2>
+<a id="ac55bec3a420c5c929739f67508952547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac55bec3a420c5c929739f67508952547">&#9670;&nbsp;</a></span>getName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -605,7 +610,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&amp; Ogre::DataStream::getName </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1125,8 +1129,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a9f6e5c9b9e494733cc80f691de787362"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f6e5c9b9e494733cc80f691de787362">&#9670;&nbsp;</a></span>read()</h2>
+<a id="a5e29bee00d7357fd2597c20ab0d371f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e29bee00d7357fd2597c20ab0d371f7">&#9670;&nbsp;</a></span>read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1154,7 +1158,7 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1226,12 +1230,12 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes read, excluding the terminating character </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_file_stream_data_stream.html#af09667bef9ac4b514602baca8d08f007">Ogre::FileStreamDataStream</a>, and <a class="el" href="class_ogre_1_1_memory_data_stream.html#a398aa1ba9f58276dc868d2c3968953c4">Ogre::MemoryDataStream</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_file_stream_data_stream.html#ad3a630e313bd60e09074abcef3fd0b83">Ogre::FileStreamDataStream</a>, and <a class="el" href="class_ogre_1_1_memory_data_stream.html#a6f66875a7920022a6efb33ea46073813">Ogre::MemoryDataStream</a>.</p>
 
 </div>
 </div>
-<a id="aaf00e810593e4c47647f3565ab06a849"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf00e810593e4c47647f3565ab06a849">&#9670;&nbsp;</a></span>seek()</h2>
+<a id="a7cb0344e3c96a247f78863e62ea8b945"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cb0344e3c96a247f78863e62ea8b945">&#9670;&nbsp;</a></span>seek()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1249,7 +1253,7 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1260,8 +1264,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a9d5b5224e17b9fc9d9756d8156a77a5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d5b5224e17b9fc9d9756d8156a77a5c">&#9670;&nbsp;</a></span>size()</h2>
+<a id="abc0ddd3d7e9e002fddde093c7981e016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc0ddd3d7e9e002fddde093c7981e016">&#9670;&nbsp;</a></span>size()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1272,7 +1276,6 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">size_t Ogre::DataStream::size </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1288,8 +1291,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="af142a9dab933b2ff36a12ae5016d59c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af142a9dab933b2ff36a12ae5016d59c8">&#9670;&nbsp;</a></span>skip()</h2>
+<a id="a156bf8921ddb2502ce845f0042da6f5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a156bf8921ddb2502ce845f0042da6f5d">&#9670;&nbsp;</a></span>skip()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1307,7 +1310,7 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1353,12 +1356,12 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of bytes skipped </dd></dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_memory_data_stream.html#a581ccd32944288808f7602b29a0218e9">Ogre::MemoryDataStream</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_memory_data_stream.html#af8706f1ad0a678ddb434a5318071630d">Ogre::MemoryDataStream</a>.</p>
 
 </div>
 </div>
-<a id="a4486e6a49b36dc62ea4a948214e6d6f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4486e6a49b36dc62ea4a948214e6d6f2">&#9670;&nbsp;</a></span>tell()</h2>
+<a id="af7e9f5f2e04d788bb5e3dc733e4ccea3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7e9f5f2e04d788bb5e3dc733e4ccea3">&#9670;&nbsp;</a></span>tell()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1369,26 +1372,25 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">size_t Ogre::DeflateStream::tell </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Returns the current byte offset from beginning. </p>
 
-<p>Implements <a class="el" href="class_ogre_1_1_data_stream.html#a2d9100f4e9167116fe280a7e7a1b6219">Ogre::DataStream</a>.</p>
+<p>Implements <a class="el" href="class_ogre_1_1_data_stream.html#a6c87860942066f54089ac48d8cf65197">Ogre::DataStream</a>.</p>
 
 </div>
 </div>
-<a id="aa0006ee4213a6af6e0aae98f59332d1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0006ee4213a6af6e0aae98f59332d1d">&#9670;&nbsp;</a></span>write()</h2>
+<a id="a2ef0f2e0bf0395ace3e29a059401d2cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ef0f2e0bf0395ace3e29a059401d2cf">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1416,7 +1418,7 @@ template&lt;typename T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

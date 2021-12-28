@@ -1,10 +1,10 @@
 var class_ogre_1_1_light_factory =
 [
     [ "LightFactory", "class_ogre_1_1_light_factory.html#a7cce44bd71877c5bc68bce055171380f", null ],
-    [ "~LightFactory", "class_ogre_1_1_light_factory.html#ad4e5a3107760c39b3742113c336bff8d", null ],
+    [ "~LightFactory", "class_ogre_1_1_light_factory.html#a843aab84cde350dafd361c099442aafe", null ],
     [ "createInstance", "class_ogre_1_1_light_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62", null ],
-    [ "destroyInstance", "class_ogre_1_1_light_factory.html#ab128c82ed2e160d4c870baca1c041add", null ],
-    [ "getType", "class_ogre_1_1_light_factory.html#a08255f7d58203fe0d7f6802fa6a29d5c", null ],
+    [ "destroyInstance", "class_ogre_1_1_light_factory.html#a248b905b3d5eb60b478769eb68d1b0af", null ],
+    [ "getType", "class_ogre_1_1_light_factory.html#a6b96b2647858a5a1e374c830b81d7c8f", null ],
     [ "operator delete", "class_ogre_1_1_light_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_light_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_light_factory.html#a1c727e879a260c37b00ce5505fe8e144", null ],

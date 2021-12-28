@@ -1,7 +1,5 @@
 var class_ogre_1_1_com_ptr =
 [
-    [ "SafeBoolHelper", "struct_ogre_1_1_com_ptr_1_1_safe_bool_helper.html", "struct_ogre_1_1_com_ptr_1_1_safe_bool_helper" ],
-    [ "SafeBoolType", "class_ogre_1_1_com_ptr.html#a1cb5413c581370dfaf0dde6313d7ef40", null ],
     [ "Type", "class_ogre_1_1_com_ptr.html#acea4812003c2493f333bd710a077a32a", null ],
     [ "ComPtr", "class_ogre_1_1_com_ptr.html#ab66cb01a9d6afcad5b0111480d33b701", null ],
     [ "ComPtr", "class_ogre_1_1_com_ptr.html#a81d9482c2f0db380fd2f00bbaef2c97d", null ],
@@ -13,7 +11,7 @@ var class_ogre_1_1_com_ptr =
     [ "Detach", "class_ogre_1_1_com_ptr.html#a935435ca43e846e35a5d429f4a53d491", null ],
     [ "Get", "class_ogre_1_1_com_ptr.html#a0cb2c3f1260aa73847bc20b75469bdc1", null ],
     [ "GetAddressOf", "class_ogre_1_1_com_ptr.html#af9258549925c41e326f49292e486a385", null ],
-    [ "operator SafeBoolType", "class_ogre_1_1_com_ptr.html#a73442d91ab98e8e4af3a642bbb7e2501", null ],
+    [ "operator bool", "class_ogre_1_1_com_ptr.html#aea47d54db73212366370637dcb58748b", null ],
     [ "operator->", "class_ogre_1_1_com_ptr.html#a19b4cc3f7c306c833fa1c02be2884a9d", null ],
     [ "operator=", "class_ogre_1_1_com_ptr.html#a7964d374f2a252a3196718d61083fa66", null ],
     [ "operator=", "class_ogre_1_1_com_ptr.html#a1fbe3b12b3e6d318989dba45f48892ca", null ],

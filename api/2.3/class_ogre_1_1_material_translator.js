@@ -11,5 +11,5 @@ var class_ogre_1_1_material_translator =
     [ "operator new", "class_ogre_1_1_material_translator.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_material_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_material_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "translate", "class_ogre_1_1_material_translator.html#ae3b9967831a0f99b8d649eb7673c1fbb", null ]
+    [ "translate", "class_ogre_1_1_material_translator.html#ad6779ffc94cd87ad2a2e407e33001d3e", null ]
 ];

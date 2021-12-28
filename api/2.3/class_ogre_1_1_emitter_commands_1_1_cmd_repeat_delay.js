@@ -1,5 +1,5 @@
 var class_ogre_1_1_emitter_commands_1_1_cmd_repeat_delay =
 [
-    [ "doGet", "class_ogre_1_1_emitter_commands_1_1_cmd_repeat_delay.html#ade9f2e216c0452f7444115440f659455", null ],
-    [ "doSet", "class_ogre_1_1_emitter_commands_1_1_cmd_repeat_delay.html#a034e5bda1f3c5b85fcaa965fdd6ee65d", null ]
+    [ "doGet", "class_ogre_1_1_emitter_commands_1_1_cmd_repeat_delay.html#ae2301a8794908a95bd8cd56388359e1c", null ],
+    [ "doSet", "class_ogre_1_1_emitter_commands_1_1_cmd_repeat_delay.html#a1ca2b5d5b06dc9011bcf9e569483453b", null ]
 ];

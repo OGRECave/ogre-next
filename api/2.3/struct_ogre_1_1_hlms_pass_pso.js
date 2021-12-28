@@ -6,7 +6,7 @@ var struct_ogre_1_1_hlms_pass_pso =
       [ "NoDepthBuffer", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214ba1b3808a230b60328a8f173dab5038c91", null ],
       [ "ForceDepthClamp", "struct_ogre_1_1_hlms_pass_pso.html#af263ff6f0b338cd6c9e1bfa968a7214bade67d3843f7d123fa303d129c1e79234", null ]
     ] ],
-    [ "hasStrongMacroblock", "struct_ogre_1_1_hlms_pass_pso.html#a9b81b28296baf5d32c06ef3686883339", null ],
+    [ "hasStrongMacroblock", "struct_ogre_1_1_hlms_pass_pso.html#ab59f852b38aedc7730776079706d05a5", null ],
     [ "operator!=", "struct_ogre_1_1_hlms_pass_pso.html#ae1ae72c43d27ce38b055ec96a2f8b40f", null ],
     [ "operator<", "struct_ogre_1_1_hlms_pass_pso.html#ac0a8ef4ecbe4fe6014cde50d1e180057", null ],
     [ "operator==", "struct_ogre_1_1_hlms_pass_pso.html#afc4dc599d934e99703dc504c9afaee14", null ],

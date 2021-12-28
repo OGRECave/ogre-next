@@ -2,7 +2,7 @@ var class_ogre_1_1_controller_manager =
 [
     [ "ControllerManager", "class_ogre_1_1_controller_manager.html#a10f4bb90f05406d2a2aba8da2dc8b747", null ],
     [ "~ControllerManager", "class_ogre_1_1_controller_manager.html#ac22a262e1100162f5f9280f59e47cdbb", null ],
-    [ "clearControllers", "class_ogre_1_1_controller_manager.html#af2e310f231acf0c16e49606c067de5fb", null ],
+    [ "clearControllers", "class_ogre_1_1_controller_manager.html#a825fc636a9977a0fc2f9e409f9526426", null ],
     [ "createController", "class_ogre_1_1_controller_manager.html#a9f3982cde857fa24a943d006055fc683", null ],
     [ "createFrameTimePassthroughController", "class_ogre_1_1_controller_manager.html#aee6987d8cf3b28e404ddaf7305746093", null ],
     [ "createGpuProgramTimerParam", "class_ogre_1_1_controller_manager.html#ad1e4dcf6097ff3dc2a0fba4983ab43ce", null ],
@@ -13,13 +13,13 @@ var class_ogre_1_1_controller_manager =
     [ "createTextureVScroller", "class_ogre_1_1_controller_manager.html#ab7eceb56b8f88d6711bb92b89edac320", null ],
     [ "createTextureWaveTransformer", "class_ogre_1_1_controller_manager.html#adb7c1830d90168a153f230bf9185d983", null ],
     [ "destroyController", "class_ogre_1_1_controller_manager.html#a8101005e37057a9e2b4830f8294d76ad", null ],
-    [ "getElapsedTime", "class_ogre_1_1_controller_manager.html#a80c9aeadfbcb321c6e5b40418d56eaf0", null ],
-    [ "getFrameDelay", "class_ogre_1_1_controller_manager.html#a7b79a98488abcfcfa82bc6ccf923b080", null ],
-    [ "getFrameTimeSource", "class_ogre_1_1_controller_manager.html#acb7f3c3c30389b3ef398321ac708e189", null ],
-    [ "getPassthroughControllerFunction", "class_ogre_1_1_controller_manager.html#a4db55de7a081212b55cf6998d0e1c7ca", null ],
-    [ "getSingleton", "class_ogre_1_1_controller_manager.html#a68fb107a5e1b3470c7381c0c1fdd36c7", null ],
-    [ "getSingletonPtr", "class_ogre_1_1_controller_manager.html#afc3e91410cbc2f77cfff9f9b09ef60f7", null ],
-    [ "getTimeFactor", "class_ogre_1_1_controller_manager.html#afd271128973bb76d54f0cf212f9f8e0e", null ],
+    [ "getElapsedTime", "class_ogre_1_1_controller_manager.html#a451ec7fb0914de8559bbdbcf02a712e9", null ],
+    [ "getFrameDelay", "class_ogre_1_1_controller_manager.html#ab1b90b4e61b622076f12433bb84ca326", null ],
+    [ "getFrameTimeSource", "class_ogre_1_1_controller_manager.html#ac5fc5250e9e3f116bb243056eab49c13", null ],
+    [ "getPassthroughControllerFunction", "class_ogre_1_1_controller_manager.html#abe10ea6aeb0240734428807d8b0cb03d", null ],
+    [ "getSingleton", "class_ogre_1_1_controller_manager.html#a8a8a7e11303d5f5e0ed2d00128540209", null ],
+    [ "getSingletonPtr", "class_ogre_1_1_controller_manager.html#aaca2781e57ea495a32e318a1f15ad994", null ],
+    [ "getTimeFactor", "class_ogre_1_1_controller_manager.html#a6a3c9dfcd3bceca753ae8f90d576956b", null ],
     [ "operator delete", "class_ogre_1_1_controller_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_controller_manager.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_controller_manager.html#a1c727e879a260c37b00ce5505fe8e144", null ],
@@ -33,5 +33,5 @@ var class_ogre_1_1_controller_manager =
     [ "setElapsedTime", "class_ogre_1_1_controller_manager.html#aeae665419e95a8b9a250254462297786", null ],
     [ "setFrameDelay", "class_ogre_1_1_controller_manager.html#aa27ced49b9021563ef663cebdd320191", null ],
     [ "setTimeFactor", "class_ogre_1_1_controller_manager.html#ac254afaf3a4086f0b1f4fb5391d48446", null ],
-    [ "updateAllControllers", "class_ogre_1_1_controller_manager.html#adec63ad5547225a6d1023f127205a558", null ]
+    [ "updateAllControllers", "class_ogre_1_1_controller_manager.html#a0caf4655261eef2cd1afc896ccaaaab5", null ]
 ];

@@ -119,9 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5fca5ac3db0ec963d468a050a597e81b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada64716374ef5839054ebb8b9d5ecd19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#aa3a7b6dfb905e6572d62f0dfa3d4274d">Real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shadow_camera_setup.html#ada64716374ef5839054ebb8b9d5ecd19">getMinDistance</a> () const</td></tr>
 <tr class="separator:ada64716374ef5839054ebb8b9d5ecd19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4711539f8fe2386bfdeb18bda84862ee"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a4711539f8fe2386bfdeb18bda84862ee">getShadowCamera</a> (const <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sm, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam, const <a class="el" href="class_ogre_1_1_light.html">Light</a> *light, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *texCam, size_t iteration, const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;viewportRealSize) const</td></tr>
-<tr class="memdesc:a4711539f8fe2386bfdeb18bda84862ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns shadow camera configured to get 1-1 homography between screen and shadow map when restricted to plane.  <a href="class_ogre_1_1_plane_optimal_shadow_camera_setup.html#a4711539f8fe2386bfdeb18bda84862ee">More...</a><br /></td></tr>
-<tr class="separator:a4711539f8fe2386bfdeb18bda84862ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee02a57c7cffd824a6fd6367cc8c1ab2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_plane_optimal_shadow_camera_setup.html#aee02a57c7cffd824a6fd6367cc8c1ab2">getShadowCamera</a> (const <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sm, const <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *cam, const <a class="el" href="class_ogre_1_1_light.html">Light</a> *light, <a class="el" href="class_ogre_1_1_camera.html">Camera</a> *texCam, size_t iteration, const <a class="el" href="class_ogre_1_1_vector2.html">Vector2</a> &amp;viewportRealSize) const override</td></tr>
+<tr class="memdesc:aee02a57c7cffd824a6fd6367cc8c1ab2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns shadow camera configured to get 1-1 homography between screen and shadow map when restricted to plane.  <a href="class_ogre_1_1_plane_optimal_shadow_camera_setup.html#aee02a57c7cffd824a6fd6367cc8c1ab2">More...</a><br /></td></tr>
+<tr class="separator:aee02a57c7cffd824a6fd6367cc8c1ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a8357fe4fb4849772b94baa4bf47c7ded">operator delete</a> (void *ptr)</td></tr>
 <tr class="separator:a8357fe4fb4849772b94baa4bf47c7ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46d4b0a597156d9ba5abc39d127792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#acb46d4b0a597156d9ba5abc39d127792">operator delete</a> (void *ptr, const char *, int, const char *)</td></tr>
@@ -256,8 +256,8 @@ Second important note: this projection also only works for lights with a finite 
 
 </div>
 </div>
-<a id="a4711539f8fe2386bfdeb18bda84862ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4711539f8fe2386bfdeb18bda84862ee">&#9670;&nbsp;</a></span>getShadowCamera()</h2>
+<a id="aee02a57c7cffd824a6fd6367cc8c1ab2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee02a57c7cffd824a6fd6367cc8c1ab2">&#9670;&nbsp;</a></span>getShadowCamera()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -266,7 +266,7 @@ Second important note: this projection also only works for lights with a finite 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ogre::PlaneOptimalShadowCameraSetup::getShadowCamera </td>
+          <td class="memname">void Ogre::PlaneOptimalShadowCameraSetup::getShadowCamera </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *&#160;</td>
           <td class="paramname"><em>sm</em>, </td>
@@ -309,7 +309,7 @@ Second important note: this projection also only works for lights with a finite 
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

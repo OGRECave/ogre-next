@@ -8,7 +8,7 @@ var class_ogre_1_1_hlms_disk_cache =
     [ "HlmsDiskCache", "class_ogre_1_1_hlms_disk_cache.html#a50047d59e56d978a4374faf8c01cadc8", null ],
     [ "~HlmsDiskCache", "class_ogre_1_1_hlms_disk_cache.html#aff7bf04d41d41e9b1a96b3236da1fcbc", null ],
     [ "applyTo", "class_ogre_1_1_hlms_disk_cache.html#a730367b3c5eae7a21ae42a632d79932f", null ],
-    [ "clearCache", "class_ogre_1_1_hlms_disk_cache.html#ac7b6291730e572d527fc71aa38ddfa71", null ],
+    [ "clearCache", "class_ogre_1_1_hlms_disk_cache.html#a0fad253e5fab5577a12ee44a825a4e9e", null ],
     [ "copyFrom", "class_ogre_1_1_hlms_disk_cache.html#abfa0c18337b3b7e59a9e28ae7375bf4a", null ],
     [ "load", "class_ogre_1_1_hlms_disk_cache.html#a213cec23c928050df22266c795a1fd37", null ],
     [ "load", "class_ogre_1_1_hlms_disk_cache.html#a3ae306b4173531e0d36c4fd780f328f2", null ],

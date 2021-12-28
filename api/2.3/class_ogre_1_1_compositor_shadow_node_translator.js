@@ -11,5 +11,5 @@ var class_ogre_1_1_compositor_shadow_node_translator =
     [ "operator new", "class_ogre_1_1_compositor_shadow_node_translator.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_shadow_node_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_compositor_shadow_node_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "translate", "class_ogre_1_1_compositor_shadow_node_translator.html#a957d37324c3cf4c8860b8bdfb17d5f8e", null ]
+    [ "translate", "class_ogre_1_1_compositor_shadow_node_translator.html#af188c9016e58fccf5efd807705725415", null ]
 ];

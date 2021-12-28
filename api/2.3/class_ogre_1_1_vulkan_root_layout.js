@@ -5,7 +5,7 @@ var class_ogre_1_1_vulkan_root_layout =
     [ "bind", "class_ogre_1_1_vulkan_root_layout.html#a916a788bbf6b7d28d82a7a55c40bdef2", null ],
     [ "copyFrom", "class_ogre_1_1_vulkan_root_layout.html#aef40f58e9a630efbd881f99a5b81e7df", null ],
     [ "copyTo", "class_ogre_1_1_vulkan_root_layout.html#a79f0e0981e96957aa9a39719b8e70444", null ],
-    [ "createVulkanHandles", "class_ogre_1_1_vulkan_root_layout.html#a3ef67efe4ad643c10b343e3232b34a9d", null ],
+    [ "createVulkanHandles", "class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2", null ],
     [ "dump", "class_ogre_1_1_vulkan_root_layout.html#aa948ba479d75b0920922eb309a1e7a27", null ],
     [ "findBest", "class_ogre_1_1_vulkan_root_layout.html#a0add7953cde4b4f11bfe94ac111388f1", null ],
     [ "findBindingIndex", "class_ogre_1_1_vulkan_root_layout.html#a6e51554ba393692d98e24c6146a29bf3", null ],

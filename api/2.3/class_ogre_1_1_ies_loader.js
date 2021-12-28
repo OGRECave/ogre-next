@@ -2,8 +2,8 @@ var class_ogre_1_1_ies_loader =
 [
     [ "IesLoader", "class_ogre_1_1_ies_loader.html#a316e8a0ec07c67d2ad8c2f1ef03de5dc", null ],
     [ "convertToImage1D", "class_ogre_1_1_ies_loader.html#a81f6f66e99fec3d707b4a2f415bc2138", null ],
-    [ "getName", "class_ogre_1_1_ies_loader.html#a506c7b2b8a2016bb48865e0a8ce07ac0", null ],
-    [ "getSuggestedTexWidth", "class_ogre_1_1_ies_loader.html#ad0bfdecfed62cc9a5fc3b3f3baf360b8", null ],
+    [ "getName", "class_ogre_1_1_ies_loader.html#ac457589b716bb022ba02171a45d6eea7", null ],
+    [ "getSuggestedTexWidth", "class_ogre_1_1_ies_loader.html#acffa3731e16fde527d46766901bd60af", null ],
     [ "operator delete", "class_ogre_1_1_ies_loader.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_ies_loader.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_ies_loader.html#a1c727e879a260c37b00ce5505fe8e144", null ],

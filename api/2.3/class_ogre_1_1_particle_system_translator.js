@@ -11,5 +11,5 @@ var class_ogre_1_1_particle_system_translator =
     [ "operator new", "class_ogre_1_1_particle_system_translator.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_particle_system_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_particle_system_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "translate", "class_ogre_1_1_particle_system_translator.html#a3c58d9ae5dfbb4089dab04c0cc7eea45", null ]
+    [ "translate", "class_ogre_1_1_particle_system_translator.html#a2c7474ff556061ae772eb4a9ef7bf685", null ]
 ];

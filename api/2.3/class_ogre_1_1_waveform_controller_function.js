@@ -1,7 +1,7 @@
 var class_ogre_1_1_waveform_controller_function =
 [
     [ "WaveformControllerFunction", "class_ogre_1_1_waveform_controller_function.html#a1b83f439aae8d785f1db065ac7e59139", null ],
-    [ "calculate", "class_ogre_1_1_waveform_controller_function.html#aec4afc09add54fd7872f78e299e1d276", null ],
+    [ "calculate", "class_ogre_1_1_waveform_controller_function.html#a468a2b0b3936162c7961ae25488043ce", null ],
     [ "operator delete", "class_ogre_1_1_waveform_controller_function.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_waveform_controller_function.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_waveform_controller_function.html#a1c727e879a260c37b00ce5505fe8e144", null ],

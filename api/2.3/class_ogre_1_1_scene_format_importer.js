@@ -9,7 +9,7 @@ var class_ogre_1_1_scene_format_importer =
     [ "~SceneFormatImporter", "class_ogre_1_1_scene_format_importer.html#a940ebd91992a7507fbfbb752041dcfa8", null ],
     [ "getInstantRadiosity", "class_ogre_1_1_scene_format_importer.html#ad759609d1cff68207164fa83d717b28f", null ],
     [ "getParallaxCorrectedCubemap", "class_ogre_1_1_scene_format_importer.html#a140c4c48430933a056f2de65ede1d08c", null ],
-    [ "getPbs", "class_ogre_1_1_scene_format_importer.html#a0cc8f3103cad4d98da5b6fcf47cdaa03", null ],
+    [ "getPbs", "class_ogre_1_1_scene_format_importer.html#ae4777b8b449d61b03e4547f495781cde", null ],
     [ "importScene", "class_ogre_1_1_scene_format_importer.html#acc14554ad9f46c65f38c51cd33662b6e", null ],
     [ "importSceneFromFile", "class_ogre_1_1_scene_format_importer.html#ada6165f80c3ad111cf70b36e151f389a", null ],
     [ "setListener", "class_ogre_1_1_scene_format_importer.html#aab928add268f22f38acadf2c78b748b7", null ],

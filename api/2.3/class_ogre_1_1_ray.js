@@ -2,8 +2,8 @@ var class_ogre_1_1_ray =
 [
     [ "Ray", "class_ogre_1_1_ray.html#ae06168a69567ec6ede584cfa8ced9979", null ],
     [ "Ray", "class_ogre_1_1_ray.html#a7da08421bf78a27884c5a381cda60dc2", null ],
-    [ "getDirection", "class_ogre_1_1_ray.html#a169a3be0bc679a7519343abcb4df7e3f", null ],
-    [ "getOrigin", "class_ogre_1_1_ray.html#a44feae0f616a3b3a456f94a9ea273859", null ],
+    [ "getDirection", "class_ogre_1_1_ray.html#a93112febef423bb359c72af2f462cb27", null ],
+    [ "getOrigin", "class_ogre_1_1_ray.html#af4fec53e02390c0c5337c87a10154f4c", null ],
     [ "getPoint", "class_ogre_1_1_ray.html#a81a7ec16f410cedf5c279152230bf67b", null ],
     [ "intersects", "class_ogre_1_1_ray.html#a9a1148c8194b78a3b6d6b0c0aea5181f", null ],
     [ "intersects", "class_ogre_1_1_ray.html#a86730586582f0c93d42ab79e6ba23409", null ],

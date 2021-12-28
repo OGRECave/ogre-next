@@ -1,10 +1,10 @@
 var class_ogre_1_1_decal_factory =
 [
     [ "DecalFactory", "class_ogre_1_1_decal_factory.html#a09bad51d94e39f9609259e0359a82ef7", null ],
-    [ "~DecalFactory", "class_ogre_1_1_decal_factory.html#a8bef1f92b1cbd96ecbc52dda24f34f41", null ],
+    [ "~DecalFactory", "class_ogre_1_1_decal_factory.html#a3f7a9ba3a559219aed08b7da8eef1d4e", null ],
     [ "createInstance", "class_ogre_1_1_decal_factory.html#a0fbd15da3201007d58dcaf2eddc9ea62", null ],
-    [ "destroyInstance", "class_ogre_1_1_decal_factory.html#ad4781eb094b3e81ab4adaae9bbaa4780", null ],
-    [ "getType", "class_ogre_1_1_decal_factory.html#a686fd4cd8d1a45c84a4047904530e7d6", null ],
+    [ "destroyInstance", "class_ogre_1_1_decal_factory.html#a908d575f513dea3fecb36e4e60e88ca7", null ],
+    [ "getType", "class_ogre_1_1_decal_factory.html#af7c627a85e0b647e73492df339256546", null ],
     [ "operator delete", "class_ogre_1_1_decal_factory.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_decal_factory.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_decal_factory.html#a1c727e879a260c37b00ce5505fe8e144", null ],

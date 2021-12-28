@@ -2,8 +2,8 @@ var class_ogre_1_1_object_abstract_node =
 [
     [ "ObjectAbstractNode", "class_ogre_1_1_object_abstract_node.html#abc4d448f3f2373b4cfc1b6896701dcf3", null ],
     [ "addVariable", "class_ogre_1_1_object_abstract_node.html#a6cacbaee5c8fe20a2696d16c937c2651", null ],
-    [ "clone", "class_ogre_1_1_object_abstract_node.html#a760fcfbd9f32aff9c642754d344933f1", null ],
-    [ "getValue", "class_ogre_1_1_object_abstract_node.html#a4b21002e841c4c742b7429ea9e519e66", null ],
+    [ "clone", "class_ogre_1_1_object_abstract_node.html#a1f0cc7a79e4bc5097acb78810281436f", null ],
+    [ "getValue", "class_ogre_1_1_object_abstract_node.html#a8a7cc34b0246734496dd31870f80a34c", null ],
     [ "getVariable", "class_ogre_1_1_object_abstract_node.html#a285cc7808f7c97a9be77c100ad9601df", null ],
     [ "getVariables", "class_ogre_1_1_object_abstract_node.html#a7b76d421e250472cecc1fda14b32a87c", null ],
     [ "operator delete", "class_ogre_1_1_object_abstract_node.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],

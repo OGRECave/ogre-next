@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="class_ogre_1_1_planar_reflections.html" target="_top" xlink:title="Planar Reflections can be used with both Unlit and PBS, but they&#39;re setup differently.">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_rendering_metrics.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-19.5 118,-19.5 118,-0.5 0,-0.5"/>
-<text text-anchor="middle" x="59" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::PlanarReflections</text>
+<text text-anchor="middle" x="59" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::RenderingMetrics</text>
 </a>
 </g>
 </g>

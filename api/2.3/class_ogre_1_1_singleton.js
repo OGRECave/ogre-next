@@ -1,7 +1,7 @@
 var class_ogre_1_1_singleton =
 [
-    [ "Singleton", "class_ogre_1_1_singleton.html#a2b0622a1223ac3a0c6b9c53e787b8d93", null ],
-    [ "~Singleton", "class_ogre_1_1_singleton.html#a9bc0518bb06d12629e287149cdcc4b5d", null ],
-    [ "getSingleton", "class_ogre_1_1_singleton.html#a7757bd7ac3702c144502e53ad6491888", null ],
-    [ "getSingletonPtr", "class_ogre_1_1_singleton.html#a7ab51c46521b89723d6186a52a7e0d7b", null ]
+    [ "Singleton", "class_ogre_1_1_singleton.html#a8f7665258d41ee04a429fb8b83862e18", null ],
+    [ "~Singleton", "class_ogre_1_1_singleton.html#a1add6c73d73ca409b0febfc6775f47ee", null ],
+    [ "getSingleton", "class_ogre_1_1_singleton.html#a35a245eddfbdc09276b1c1468a89c4c9", null ],
+    [ "getSingletonPtr", "class_ogre_1_1_singleton.html#a3ab5d6b71d37b3e345d3f5ee181a9cad", null ]
 ];

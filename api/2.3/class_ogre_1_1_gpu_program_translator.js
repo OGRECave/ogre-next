@@ -11,6 +11,6 @@ var class_ogre_1_1_gpu_program_translator =
     [ "operator new", "class_ogre_1_1_gpu_program_translator.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1_gpu_program_translator.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_gpu_program_translator.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "translate", "class_ogre_1_1_gpu_program_translator.html#a54766bf2af10da312c1bba3c63130e08", null ],
+    [ "translate", "class_ogre_1_1_gpu_program_translator.html#a4902dcc3cda9d06240ade741ef33e0d1", null ],
     [ "translateProgramParameters", "class_ogre_1_1_gpu_program_translator.html#a571cfeb6714865e07c224b904ebc9cd1", null ]
 ];

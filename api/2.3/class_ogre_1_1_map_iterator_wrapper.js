@@ -13,7 +13,7 @@ var class_ogre_1_1_map_iterator_wrapper =
     [ "getNext", "class_ogre_1_1_map_iterator_wrapper.html#a2bef2d340ae00274856261b3ad3dcdbc", null ],
     [ "hasMoreElements", "class_ogre_1_1_map_iterator_wrapper.html#abd1f3f1f5143828a6296347d5b0b9d04", null ],
     [ "moveNext", "class_ogre_1_1_map_iterator_wrapper.html#aaf01f897bea391797dc2bb9fb8374a5f", null ],
-    [ "peekNextKey", "class_ogre_1_1_map_iterator_wrapper.html#a1ab2dc537e2e04c6163f5901b791e9fc", null ],
+    [ "peekNextKey", "class_ogre_1_1_map_iterator_wrapper.html#ae13850d39e197c286588c2abae498968", null ],
     [ "peekNextValue", "class_ogre_1_1_map_iterator_wrapper.html#aae9d34883001f20e7b977fcf2bbaa38c", null ],
     [ "peekNextValuePtr", "class_ogre_1_1_map_iterator_wrapper.html#aad79b04aa34d0901590bc5229b196c92", null ]
 ];

@@ -5,10 +5,10 @@ var class_ogre_1_1_object_memory_manager =
     [ "_getDummyNode", "class_ogre_1_1_object_memory_manager.html#ab8b3386b902554aac974ae646000e411", null ],
     [ "_getTotalRenderQueues", "class_ogre_1_1_object_memory_manager.html#ad6c0d3a0c920dd3890e2606b4bc8627b", null ],
     [ "_setTwin", "class_ogre_1_1_object_memory_manager.html#ada9ae13f4b0cc10d7dee8e8d15a02313", null ],
-    [ "applyRebase", "class_ogre_1_1_object_memory_manager.html#a0b745fa9ad3f3b67e99ad691338b6bac", null ],
-    [ "buildDiffList", "class_ogre_1_1_object_memory_manager.html#aa1d94b69514c23e720a686ad7e9750b7", null ],
+    [ "applyRebase", "class_ogre_1_1_object_memory_manager.html#ae08ed3ab4ea707b14f9ddeff2296e54b", null ],
+    [ "buildDiffList", "class_ogre_1_1_object_memory_manager.html#a5ef5eb570db358e45e9e9a7969e14788", null ],
     [ "calculateTotalNumObjectDataIncludingFragmentedSlots", "class_ogre_1_1_object_memory_manager.html#a346cede27716fbf7136b1ca934532e65", null ],
-    [ "defragment", "class_ogre_1_1_object_memory_manager.html#a50ca7dc577c00125e64d616332ad10a2", null ],
+    [ "defragment", "class_ogre_1_1_object_memory_manager.html#a4d5bcff087383d2a8e57a953b9d6d66a", null ],
     [ "getFirstObjectData", "class_ogre_1_1_object_memory_manager.html#a5a3205860c2fded5b34bb8f0802526af", null ],
     [ "getMemoryManagerType", "class_ogre_1_1_object_memory_manager.html#a032c23b281a75f46db6eeda9f6827b3d", null ],
     [ "getNumRenderQueues", "class_ogre_1_1_object_memory_manager.html#aacc3f26a856c2e4f9b463d3fed7825f4", null ],
@@ -18,6 +18,6 @@ var class_ogre_1_1_object_memory_manager =
     [ "objectCreated", "class_ogre_1_1_object_memory_manager.html#a30c9f2fecf984b7045f656517b931849", null ],
     [ "objectDestroyed", "class_ogre_1_1_object_memory_manager.html#aae2e6b8ba5fbcabd6765f23e4d228e36", null ],
     [ "objectMoved", "class_ogre_1_1_object_memory_manager.html#a3ba0525c6ea5c99223df05d5593822ac", null ],
-    [ "performCleanup", "class_ogre_1_1_object_memory_manager.html#aa19abbe93c68d689153baa39041841b0", null ],
-    [ "shrinkToFit", "class_ogre_1_1_object_memory_manager.html#a726aa96878859ecc3ca9837c88073933", null ]
+    [ "performCleanup", "class_ogre_1_1_object_memory_manager.html#a6a9f7f049d953a3fb4fe4ae5bc2ce225", null ],
+    [ "shrinkToFit", "class_ogre_1_1_object_memory_manager.html#a653f6a2a1b0deba78eb242e9d09538ef", null ]
 ];

@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_vulkan_root_layout.html
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="class_ogre_1_1_vulkan_root_layout-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Ogre::VulkanRootLayout Class Reference</div>  </div>
+<div class="title">Ogre::VulkanRootLayout Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -119,9 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a79f0e0981e96957aa9a39719b8e70444"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a79f0e0981e96957aa9a39719b8e70444">copyTo</a> (<a class="el" href="class_ogre_1_1_root_layout.html">RootLayout</a> &amp;outRootLayout, bool bIncludeArrayBindings)</td></tr>
 <tr class="memdesc:a79f0e0981e96957aa9a39719b8e70444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs outRootLayout.copyFrom( this ) This function is necessary because <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> is a protected base class.  <a href="class_ogre_1_1_vulkan_root_layout.html#a79f0e0981e96957aa9a39719b8e70444">More...</a><br /></td></tr>
 <tr class="separator:a79f0e0981e96957aa9a39719b8e70444"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ef67efe4ad643c10b343e3232b34a9d"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a3ef67efe4ad643c10b343e3232b34a9d">createVulkanHandles</a> (void)</td></tr>
-<tr class="memdesc:a3ef67efe4ad643c10b343e3232b34a9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates most of our Vulkan handles required to build a PSO.  <a href="class_ogre_1_1_vulkan_root_layout.html#a3ef67efe4ad643c10b343e3232b34a9d">More...</a><br /></td></tr>
-<tr class="separator:a3ef67efe4ad643c10b343e3232b34a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdece0a0a4fde3e1666003e10293d4e2"><td class="memItemLeft" align="right" valign="top">VkPipelineLayout&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2">createVulkanHandles</a> ()</td></tr>
+<tr class="memdesc:afdece0a0a4fde3e1666003e10293d4e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates most of our Vulkan handles required to build a PSO.  <a href="class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2">More...</a><br /></td></tr>
+<tr class="separator:afdece0a0a4fde3e1666003e10293d4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa948ba479d75b0920922eb309a1e7a27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_root_layout.html#aa948ba479d75b0920922eb309a1e7a27">dump</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outJson) const</td></tr>
 <tr class="memdesc:aa948ba479d75b0920922eb309a1e7a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dumps the current <a class="el" href="class_ogre_1_1_root_layout.html" title="The RootLayout class.">RootLayout</a> to a JSON string.  <a href="class_ogre_1_1_vulkan_root_layout.html#aa948ba479d75b0920922eb309a1e7a27">More...</a><br /></td></tr>
 <tr class="separator:aa948ba479d75b0920922eb309a1e7a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -328,8 +328,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3ef67efe4ad643c10b343e3232b34a9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ef67efe4ad643c10b343e3232b34a9d">&#9670;&nbsp;</a></span>createVulkanHandles()</h2>
+<a id="afdece0a0a4fde3e1666003e10293d4e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdece0a0a4fde3e1666003e10293d4e2">&#9670;&nbsp;</a></span>createVulkanHandles()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -337,7 +337,6 @@ Private Member Functions</h2></td></tr>
         <tr>
           <td class="memname">VkPipelineLayout Ogre::VulkanRootLayout::createVulkanHandles </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -345,7 +344,7 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates most of our Vulkan handles required to build a PSO. </p>
-<p>This function is not called by parseRootLayout because if two <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> Layouts are identical, then after calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c">parseRootLayout()</a>, instead of calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#a3ef67efe4ad643c10b343e3232b34a9d" title="Creates most of our Vulkan handles required to build a PSO.">createVulkanHandles()</a> we first must look for an already existing <a class="el" href="class_ogre_1_1_vulkan_root_layout.html">VulkanRootLayout</a> and reuse it. </p><dl class="section return"><dt>Returns</dt><dd>VkPipelineLayout handle for building the PSO. </dd></dl>
+<p>This function is not called by parseRootLayout because if two <a class="el" href="class_ogre_1_1_root.html" title="The root class of the Ogre system.">Root</a> Layouts are identical, then after calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#abf9d8c87c8aefe908e3214d60a2d7d9c">parseRootLayout()</a>, instead of calling a-&gt;<a class="el" href="class_ogre_1_1_vulkan_root_layout.html#afdece0a0a4fde3e1666003e10293d4e2" title="Creates most of our Vulkan handles required to build a PSO.">createVulkanHandles()</a> we first must look for an already existing <a class="el" href="class_ogre_1_1_vulkan_root_layout.html">VulkanRootLayout</a> and reuse it. </p><dl class="section return"><dt>Returns</dt><dd>VkPipelineLayout handle for building the PSO. </dd></dl>
 
 </div>
 </div>

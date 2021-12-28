@@ -13,7 +13,7 @@ var class_ogre_1_1v1_1_1_index_data =
     [ "operator new", "class_ogre_1_1v1_1_1_index_data.html#ab78a921e54419be677839cdf15d1f0b8", null ],
     [ "operator new[]", "class_ogre_1_1v1_1_1_index_data.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1v1_1_1_index_data.html#a4be37baef81876985aa1071ad5acc6dd", null ],
-    [ "optimiseVertexCacheTriList", "class_ogre_1_1v1_1_1_index_data.html#adfe5a85c6a459d6d41cef8dbe56447e1", null ],
+    [ "optimiseVertexCacheTriList", "class_ogre_1_1v1_1_1_index_data.html#aa9eb5dc0be2adccc8cf43e01e307202c", null ],
     [ "indexBuffer", "class_ogre_1_1v1_1_1_index_data.html#a96412912fec8b88655565ffa0d705291", null ],
     [ "indexCount", "class_ogre_1_1v1_1_1_index_data.html#a4f15b149de17b175d698750ea8d27fd9", null ],
     [ "indexStart", "class_ogre_1_1v1_1_1_index_data.html#a08d6d7ea17e072f2349510405f1b8749", null ]

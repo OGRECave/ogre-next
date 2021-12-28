@@ -1,7 +1,7 @@
 var struct_ogre_1_1_vulkan_global_binding_table =
 [
-    [ "reset", "struct_ogre_1_1_vulkan_global_binding_table.html#a6bcca443d781c1b60f62ba36d76685b1", null ],
-    [ "setAllDirty", "struct_ogre_1_1_vulkan_global_binding_table.html#acba2d2a462d262fdefc830eab21e8322", null ],
+    [ "reset", "struct_ogre_1_1_vulkan_global_binding_table.html#a2bf99f41b1e362d9cb82c417f3cad4f3", null ],
+    [ "setAllDirty", "struct_ogre_1_1_vulkan_global_binding_table.html#acaab6443f64193bc1efa90bd44c6ea0e", null ],
     [ "bakedDescriptorSets", "struct_ogre_1_1_vulkan_global_binding_table.html#a35c02ca6caf94d46d05893276267f5e6", null ],
     [ "constBuffers", "struct_ogre_1_1_vulkan_global_binding_table.html#a614b148a20ac8187632f2ef85cfbf599", null ],
     [ "dirtyBakedSamplers", "struct_ogre_1_1_vulkan_global_binding_table.html#a60040b23faf1b0975d6e08ee866ff3d6", null ],

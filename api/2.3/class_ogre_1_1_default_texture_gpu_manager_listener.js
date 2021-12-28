@@ -15,8 +15,8 @@ var class_ogre_1_1_default_texture_gpu_manager_listener =
       [ "Deleted", "class_ogre_1_1_default_texture_gpu_manager_listener.html#afe11bd546cf7315f4526488e7078cc7dabb2a61a0002ccca6afbde7588787e58e", null ]
     ] ],
     [ "DefaultTextureGpuManagerListener", "class_ogre_1_1_default_texture_gpu_manager_listener.html#ae16e3450868d702f4a9d65035bf926f3", null ],
-    [ "getNumSlicesFor", "class_ogre_1_1_default_texture_gpu_manager_listener.html#a1481a146fb95328ef24c37360113b7a9", null ],
-    [ "notifyTextureChanged", "class_ogre_1_1_default_texture_gpu_manager_listener.html#a3db2bc04b98d831355854e2f9f761225", null ],
+    [ "getNumSlicesFor", "class_ogre_1_1_default_texture_gpu_manager_listener.html#a6947566c623e6b83eebf4635360c81fe", null ],
+    [ "notifyTextureChanged", "class_ogre_1_1_default_texture_gpu_manager_listener.html#a31427c39cf92266f2b9ff4e3fc75ba87", null ],
     [ "shouldStayLoaded", "class_ogre_1_1_default_texture_gpu_manager_listener.html#a1427f0b635a4186cd6083a9bab879fa2", null ],
     [ "mMaxResolutionToApplyMinSlices", "class_ogre_1_1_default_texture_gpu_manager_listener.html#a43bc8ed3f0b0d3a3d9942f7c98e1e8a0", null ],
     [ "mMinSlicesPerPool", "class_ogre_1_1_default_texture_gpu_manager_listener.html#af272849328fbbdd2cce8e2b21879839d", null ],

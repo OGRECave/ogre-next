@@ -9,7 +9,6 @@ var group___core =
     [ "Math", "group___math.html", "group___math" ],
     [ "Memory", "group___memory.html", "group___memory" ],
     [ "Overlays", "group___overlays.html", "group___overlays" ],
-    [ "RTShader", "group___r_t_shader.html", "group___r_t_shader" ],
     [ "RenderSystem", "group___render_system.html", "group___render_system" ],
     [ "Resources", "group___resources.html", "group___resources" ],
     [ "Scene", "group___scene.html", "group___scene" ],

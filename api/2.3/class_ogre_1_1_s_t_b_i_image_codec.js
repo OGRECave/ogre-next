@@ -10,9 +10,9 @@ var class_ogre_1_1_s_t_b_i_image_codec =
     [ "encodeToFile", "class_ogre_1_1_s_t_b_i_image_codec.html#a2d0d216deb1aca91d356d665c3fde88f", null ],
     [ "getCodec", "class_ogre_1_1_s_t_b_i_image_codec.html#ac8775b1052fb8ba72abdfb55df20a6af", null ],
     [ "getCodec", "class_ogre_1_1_s_t_b_i_image_codec.html#acc4ee751f92b6e54051393e74e0a2884", null ],
-    [ "getCodecIterator", "class_ogre_1_1_s_t_b_i_image_codec.html#a55bf1d49e91958f8e412a583666bbd58", null ],
-    [ "getDataType", "class_ogre_1_1_s_t_b_i_image_codec.html#a37968d655c2950f0420bbaa3eeaa0f60", null ],
-    [ "getExtensions", "class_ogre_1_1_s_t_b_i_image_codec.html#a6092324fd74dd0221f7c63ca8bec4fc1", null ],
+    [ "getCodecIterator", "class_ogre_1_1_s_t_b_i_image_codec.html#afa2f9aa6414221133bfbf901b34cdf1d", null ],
+    [ "getDataType", "class_ogre_1_1_s_t_b_i_image_codec.html#aa97f56ecfa6549b0bfef04671e58f6a9", null ],
+    [ "getExtensions", "class_ogre_1_1_s_t_b_i_image_codec.html#a3ffaaceb0a3eefb23dd9e5688469438d", null ],
     [ "getType", "class_ogre_1_1_s_t_b_i_image_codec.html#a1763365ccd236b49d56e9c8b60f16844", null ],
     [ "isCodecRegistered", "class_ogre_1_1_s_t_b_i_image_codec.html#ae5b74cfd0cb797a2ac139b4adb7ac557", null ],
     [ "magicNumberMatch", "class_ogre_1_1_s_t_b_i_image_codec.html#a270be35471eb9ef28fdbd4b7dced21b9", null ],
@@ -28,7 +28,7 @@ var class_ogre_1_1_s_t_b_i_image_codec =
     [ "operator new[]", "class_ogre_1_1_s_t_b_i_image_codec.html#afa2943846ba6a2b5824a12857139cf5e", null ],
     [ "operator new[]", "class_ogre_1_1_s_t_b_i_image_codec.html#a4be37baef81876985aa1071ad5acc6dd", null ],
     [ "registerCodec", "class_ogre_1_1_s_t_b_i_image_codec.html#a60f445cc6919df56af6611fd14eec47d", null ],
-    [ "shutdown", "class_ogre_1_1_s_t_b_i_image_codec.html#ade92b0c1d4190cb67a9328b23890c6e7", null ],
-    [ "startup", "class_ogre_1_1_s_t_b_i_image_codec.html#a824b3deaf85c16aef76acc6b470b2777", null ],
+    [ "shutdown", "class_ogre_1_1_s_t_b_i_image_codec.html#a27c0551c3f517086e7b25d5b0c3299e3", null ],
+    [ "startup", "class_ogre_1_1_s_t_b_i_image_codec.html#a0f4a77f1701bafc609982ba7822ea34b", null ],
     [ "unregisterCodec", "class_ogre_1_1_s_t_b_i_image_codec.html#a7aa2599cd9db05e590fb7f7786076852", null ]
 ];

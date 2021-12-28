@@ -159,12 +159,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5f73f01e949bf95d4827331b654560b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a5f73f01e949bf95d4827331b654560b8">_notifyResourceRemoved</a> (const <a class="el" href="namespace_ogre.html#a4697cc0c72aef3b488c7e058adf734ed">ResourcePtr</a> &amp;res)</td></tr>
 <tr class="memdesc:a5f73f01e949bf95d4827331b654560b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method called by <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a> when a resource is removed.  <a href="class_ogre_1_1_resource_group_manager.html#a5f73f01e949bf95d4827331b654560b8">More...</a><br /></td></tr>
 <tr class="separator:a5f73f01e949bf95d4827331b654560b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbf9af3ad2cbc12a8c0b5eba9211fce7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#abbf9af3ad2cbc12a8c0b5eba9211fce7">_notifyWorldGeometryStageEnded</a> (void)</td></tr>
-<tr class="memdesc:abbf9af3ad2cbc12a8c0b5eba9211fce7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify this manager that one stage of world geometry loading has been completed.  <a href="class_ogre_1_1_resource_group_manager.html#abbf9af3ad2cbc12a8c0b5eba9211fce7">More...</a><br /></td></tr>
-<tr class="separator:abbf9af3ad2cbc12a8c0b5eba9211fce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71733c340057f8f7fbfdfbbfcc4a1f7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a71733c340057f8f7fbfdfbbfcc4a1f7c">_notifyWorldGeometryStageStarted</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;description)</td></tr>
-<tr class="memdesc:a71733c340057f8f7fbfdfbbfcc4a1f7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify this manager that one stage of world geometry loading has been started.  <a href="class_ogre_1_1_resource_group_manager.html#a71733c340057f8f7fbfdfbbfcc4a1f7c">More...</a><br /></td></tr>
-<tr class="separator:a71733c340057f8f7fbfdfbbfcc4a1f7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a791bfb9582a3ce16425371e66b899128"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a791bfb9582a3ce16425371e66b899128">_registerResourceManager</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceType, <a class="el" href="class_ogre_1_1_resource_manager.html">ResourceManager</a> *rm)</td></tr>
 <tr class="memdesc:a791bfb9582a3ce16425371e66b899128"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal method for registering a <a class="el" href="class_ogre_1_1_resource_manager.html" title="Defines a generic resource handler.">ResourceManager</a> (which should be a singleton).  <a href="class_ogre_1_1_resource_group_manager.html#a791bfb9582a3ce16425371e66b899128">More...</a><br /></td></tr>
 <tr class="separator:a791bfb9582a3ce16425371e66b899128"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -225,18 +219,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1cbbb7f25666562589d9428ae9cc3706"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a995494b3213135be428eef21990744e5">ResourceDeclarationList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a1cbbb7f25666562589d9428ae9cc3706">getResourceDeclarationList</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName)</td></tr>
 <tr class="memdesc:a1cbbb7f25666562589d9428ae9cc3706"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of resource declarations for the specified group name.  <a href="class_ogre_1_1_resource_group_manager.html#a1cbbb7f25666562589d9428ae9cc3706">More...</a><br /></td></tr>
 <tr class="separator:a1cbbb7f25666562589d9428ae9cc3706"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a286f7b3fb982c0980e9bc4de237aa593"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a286f7b3fb982c0980e9bc4de237aa593">getResourceGroups</a> (void)</td></tr>
-<tr class="memdesc:a286f7b3fb982c0980e9bc4de237aa593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of the currently defined resource groups.  <a href="class_ogre_1_1_resource_group_manager.html#a286f7b3fb982c0980e9bc4de237aa593">More...</a><br /></td></tr>
-<tr class="separator:a286f7b3fb982c0980e9bc4de237aa593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac45ec0019ae6d2b02bda81051a06ddb0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#ac45ec0019ae6d2b02bda81051a06ddb0">getResourceGroups</a> ()</td></tr>
+<tr class="memdesc:ac45ec0019ae6d2b02bda81051a06ddb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of the currently defined resource groups.  <a href="class_ogre_1_1_resource_group_manager.html#ac45ec0019ae6d2b02bda81051a06ddb0">More...</a><br /></td></tr>
+<tr class="separator:ac45ec0019ae6d2b02bda81051a06ddb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abddbc7cc054bfcd703aceb4ed4aa515f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_ogre_1_1_resource_group_manager.html#a039c42be59f29534c5883888c969a1c2">LocationList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#abddbc7cc054bfcd703aceb4ed4aa515f">getResourceLocationList</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName)</td></tr>
 <tr class="memdesc:abddbc7cc054bfcd703aceb4ed4aa515f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of resource locations for the specified group name.  <a href="class_ogre_1_1_resource_group_manager.html#abddbc7cc054bfcd703aceb4ed4aa515f">More...</a><br /></td></tr>
 <tr class="separator:abddbc7cc054bfcd703aceb4ed4aa515f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e64ea1228280465675f0b1438d21e4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_resource_group_manager.html#af875db11dc5aba6ab72ec40296af9a5c">ResourceManagerIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a7e64ea1228280465675f0b1438d21e4a">getResourceManagerIterator</a> ()</td></tr>
 <tr class="memdesc:a7e64ea1228280465675f0b1438d21e4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get an iterator over the registered resource managers.  <a href="class_ogre_1_1_resource_group_manager.html#a7e64ea1228280465675f0b1438d21e4a">More...</a><br /></td></tr>
 <tr class="separator:a7e64ea1228280465675f0b1438d21e4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53a403981769caf6c9357aa8dddde90f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a53a403981769caf6c9357aa8dddde90f">getWorldResourceGroupName</a> (void) const</td></tr>
-<tr class="memdesc:a53a403981769caf6c9357aa8dddde90f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the resource group that 'world' resources will use.  <a href="class_ogre_1_1_resource_group_manager.html#a53a403981769caf6c9357aa8dddde90f">More...</a><br /></td></tr>
-<tr class="separator:a53a403981769caf6c9357aa8dddde90f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50fa6b7967f935c6d03894bb3a4facc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a50fa6b7967f935c6d03894bb3a4facc1">initialiseAllResourceGroups</a> (bool changeLocaleTemporarily)</td></tr>
 <tr class="memdesc:a50fa6b7967f935c6d03894bb3a4facc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise all resource groups which are yet to be initialised.  <a href="class_ogre_1_1_resource_group_manager.html#a50fa6b7967f935c6d03894bb3a4facc1">More...</a><br /></td></tr>
 <tr class="separator:a50fa6b7967f935c6d03894bb3a4facc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -252,9 +243,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0525ebdab7b1e77acabd883d9e262a07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a0525ebdab7b1e77acabd883d9e262a07">isResourceGroupLoaded</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
 <tr class="memdesc:a0525ebdab7b1e77acabd883d9e262a07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the status of a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a0525ebdab7b1e77acabd883d9e262a07">More...</a><br /></td></tr>
 <tr class="separator:a0525ebdab7b1e77acabd883d9e262a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a632b4b36f47b6c6f88df62cca7e3d7b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a632b4b36f47b6c6f88df62cca7e3d7b4">linkWorldGeometryToResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;group, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;worldGeometry, <a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *sceneManager)</td></tr>
-<tr class="memdesc:a632b4b36f47b6c6f88df62cca7e3d7b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Associates some world geometry with a resource group, causing it to be loaded / unloaded with the resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a632b4b36f47b6c6f88df62cca7e3d7b4">More...</a><br /></td></tr>
-<tr class="separator:a632b4b36f47b6c6f88df62cca7e3d7b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0e7e504bbf763125cef2d725606328b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#ga98a851530d714bac278ff907738ac643">FileInfoListPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#ad0e7e504bbf763125cef2d725606328b">listResourceFileInfo</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName, bool dirs=false)</td></tr>
 <tr class="memdesc:ad0e7e504bbf763125cef2d725606328b"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all files in a resource group with accompanying information.  <a href="class_ogre_1_1_resource_group_manager.html#ad0e7e504bbf763125cef2d725606328b">More...</a><br /></td></tr>
 <tr class="separator:ad0e7e504bbf763125cef2d725606328b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -264,9 +252,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab9f554bc463de7fd116b2ce59879fb11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___general.html#gae6b84ceebcdcc285f37bf9fba216697d">StringVectorPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#ab9f554bc463de7fd116b2ce59879fb11">listResourceNames</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName, bool dirs=false)</td></tr>
 <tr class="memdesc:ab9f554bc463de7fd116b2ce59879fb11"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all file or directory names in a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#ab9f554bc463de7fd116b2ce59879fb11">More...</a><br /></td></tr>
 <tr class="separator:ab9f554bc463de7fd116b2ce59879fb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b1d27ae4ff8fe5b9ac48f6325b727e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a3b1d27ae4ff8fe5b9ac48f6325b727e9">loadResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool loadMainResources=true, bool loadWorldGeom=true)</td></tr>
-<tr class="memdesc:a3b1d27ae4ff8fe5b9ac48f6325b727e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a3b1d27ae4ff8fe5b9ac48f6325b727e9">More...</a><br /></td></tr>
-<tr class="separator:a3b1d27ae4ff8fe5b9ac48f6325b727e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace352d6a537213e63922fab69f414903"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#ace352d6a537213e63922fab69f414903">loadResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool loadMainResources=true)</td></tr>
+<tr class="memdesc:ace352d6a537213e63922fab69f414903"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#ace352d6a537213e63922fab69f414903">More...</a><br /></td></tr>
+<tr class="separator:ace352d6a537213e63922fab69f414903"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59383aca4ce35694ebce498d43283567"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_ogre.html#a8a2a961b4205aacff9c01e81e08d7781">DataStreamPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a59383aca4ce35694ebce498d43283567">openResource</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;resourceName, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName=<a class="el" href="class_ogre_1_1_resource_group_manager.html#a813da407fd91dc1afee86103d3a4f5cc">DEFAULT_RESOURCE_GROUP_NAME</a>, bool searchGroupsIfNotFound=true, <a class="el" href="class_ogre_1_1_resource.html">Resource</a> *resourceBeingLoaded=0)</td></tr>
 <tr class="memdesc:a59383aca4ce35694ebce498d43283567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open a single resource by name and return a <a class="el" href="class_ogre_1_1_data_stream.html" title="General purpose class used for encapsulating the reading and writing of data.">DataStream</a> pointing at the source of the data.  <a href="class_ogre_1_1_resource_group_manager.html#a59383aca4ce35694ebce498d43283567">More...</a><br /></td></tr>
 <tr class="separator:a59383aca4ce35694ebce498d43283567"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -296,9 +284,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4be37baef81876985aa1071ad5acc6dd"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:a4be37baef81876985aa1071ad5acc6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#a4be37baef81876985aa1071ad5acc6dd">More...</a><br /></td></tr>
 <tr class="separator:a4be37baef81876985aa1071ad5acc6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a393b8f97afc33fa4404e03a6f6ef9b36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a393b8f97afc33fa4404e03a6f6ef9b36">prepareResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool prepareMainResources=true, bool prepareWorldGeom=true)</td></tr>
-<tr class="memdesc:a393b8f97afc33fa4404e03a6f6ef9b36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a393b8f97afc33fa4404e03a6f6ef9b36">More...</a><br /></td></tr>
-<tr class="separator:a393b8f97afc33fa4404e03a6f6ef9b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10ca7ddb6b2492f678a7821230779237"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a10ca7ddb6b2492f678a7821230779237">prepareResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool prepareMainResources=true)</td></tr>
+<tr class="memdesc:a10ca7ddb6b2492f678a7821230779237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a10ca7ddb6b2492f678a7821230779237">More...</a><br /></td></tr>
+<tr class="separator:a10ca7ddb6b2492f678a7821230779237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e7c5dfc9905d1eee64289d9dc0fa6a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a9e7c5dfc9905d1eee64289d9dc0fa6a5">removeResourceGroupListener</a> (<a class="el" href="class_ogre_1_1_resource_group_listener.html">ResourceGroupListener</a> *l)</td></tr>
 <tr class="memdesc:a9e7c5dfc9905d1eee64289d9dc0fa6a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a <a class="el" href="class_ogre_1_1_resource_group_listener.html" title="This abstract class defines an interface which is called back during resource group loading to indica...">ResourceGroupListener</a>.  <a href="class_ogre_1_1_resource_group_manager.html#a9e7c5dfc9905d1eee64289d9dc0fa6a5">More...</a><br /></td></tr>
 <tr class="separator:a9e7c5dfc9905d1eee64289d9dc0fa6a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -322,18 +310,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acd4fe53cc4f0ab2800d7675fc4cba9b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#acd4fe53cc4f0ab2800d7675fc4cba9b2">setLoadingListener</a> (<a class="el" href="class_ogre_1_1_resource_loading_listener.html">ResourceLoadingListener</a> *listener)</td></tr>
 <tr class="memdesc:acd4fe53cc4f0ab2800d7675fc4cba9b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new loading listener.  <a href="class_ogre_1_1_resource_group_manager.html#acd4fe53cc4f0ab2800d7675fc4cba9b2">More...</a><br /></td></tr>
 <tr class="separator:acd4fe53cc4f0ab2800d7675fc4cba9b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a407415b99c1df3b275e2609e16e8b39f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a407415b99c1df3b275e2609e16e8b39f">setWorldResourceGroupName</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName)</td></tr>
-<tr class="memdesc:a407415b99c1df3b275e2609e16e8b39f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the resource group that 'world' resources will use.  <a href="class_ogre_1_1_resource_group_manager.html#a407415b99c1df3b275e2609e16e8b39f">More...</a><br /></td></tr>
-<tr class="separator:a407415b99c1df3b275e2609e16e8b39f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb9bf6a75143b0ce49a0af7d05b213fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#acb9bf6a75143b0ce49a0af7d05b213fe">shutdownAll</a> (void)</td></tr>
-<tr class="memdesc:acb9bf6a75143b0ce49a0af7d05b213fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shutdown all ResourceManagers, performed as part of clean-up.  <a href="class_ogre_1_1_resource_group_manager.html#acb9bf6a75143b0ce49a0af7d05b213fe">More...</a><br /></td></tr>
-<tr class="separator:acb9bf6a75143b0ce49a0af7d05b213fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0ea49257162ee8866f3d4f8ec6780de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#ad0ea49257162ee8866f3d4f8ec6780de">shutdownAll</a> ()</td></tr>
+<tr class="memdesc:ad0ea49257162ee8866f3d4f8ec6780de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shutdown all ResourceManagers, performed as part of clean-up.  <a href="class_ogre_1_1_resource_group_manager.html#ad0ea49257162ee8866f3d4f8ec6780de">More...</a><br /></td></tr>
+<tr class="separator:ad0ea49257162ee8866f3d4f8ec6780de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90bbba7b33448bb46a58f0759faa657a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a90bbba7b33448bb46a58f0759faa657a">undeclareResource</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;groupName)</td></tr>
 <tr class="memdesc:a90bbba7b33448bb46a58f0759faa657a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undeclare a resource.  <a href="class_ogre_1_1_resource_group_manager.html#a90bbba7b33448bb46a58f0759faa657a">More...</a><br /></td></tr>
 <tr class="separator:a90bbba7b33448bb46a58f0759faa657a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a365755132ea7380ea97cc2da51bb5651"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a365755132ea7380ea97cc2da51bb5651">unlinkWorldGeometryFromResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;group)</td></tr>
-<tr class="memdesc:a365755132ea7380ea97cc2da51bb5651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear any link to world geometry from a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a365755132ea7380ea97cc2da51bb5651">More...</a><br /></td></tr>
-<tr class="separator:a365755132ea7380ea97cc2da51bb5651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01166a19f261e9b4fd2908c94c829d08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a01166a19f261e9b4fd2908c94c829d08">unloadResourceGroup</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name, bool reloadableOnly=true)</td></tr>
 <tr class="memdesc:a01166a19f261e9b4fd2908c94c829d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a resource group.  <a href="class_ogre_1_1_resource_group_manager.html#a01166a19f261e9b4fd2908c94c829d08">More...</a><br /></td></tr>
 <tr class="separator:a01166a19f261e9b4fd2908c94c829d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -343,12 +325,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a45101333f0f9ff132fc381dd5c4a1d60"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_resource_group_manager.html">ResourceGroupManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a45101333f0f9ff132fc381dd5c4a1d60">getSingleton</a> (void)</td></tr>
-<tr class="memdesc:a45101333f0f9ff132fc381dd5c4a1d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1_resource_group_manager.html#a45101333f0f9ff132fc381dd5c4a1d60">More...</a><br /></td></tr>
-<tr class="separator:a45101333f0f9ff132fc381dd5c4a1d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a375aaff7929cfb5560d69b0056363aa0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_resource_group_manager.html">ResourceGroupManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a375aaff7929cfb5560d69b0056363aa0">getSingletonPtr</a> (void)</td></tr>
-<tr class="memdesc:a375aaff7929cfb5560d69b0056363aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1_resource_group_manager.html#a375aaff7929cfb5560d69b0056363aa0">More...</a><br /></td></tr>
-<tr class="separator:a375aaff7929cfb5560d69b0056363aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8de66b57de09f4da3bca51f330edf06"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_resource_group_manager.html">ResourceGroupManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#ae8de66b57de09f4da3bca51f330edf06">getSingleton</a> ()</td></tr>
+<tr class="memdesc:ae8de66b57de09f4da3bca51f330edf06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1_resource_group_manager.html#ae8de66b57de09f4da3bca51f330edf06">More...</a><br /></td></tr>
+<tr class="separator:ae8de66b57de09f4da3bca51f330edf06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c55be6baaa5ea5702e836d9ca7aeb9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="class_ogre_1_1_resource_group_manager.html">ResourceGroupManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_resource_group_manager.html#a33c55be6baaa5ea5702e836d9ca7aeb9">getSingletonPtr</a> ()</td></tr>
+<tr class="memdesc:a33c55be6baaa5ea5702e836d9ca7aeb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval.  <a href="class_ogre_1_1_resource_group_manager.html#a33c55be6baaa5ea5702e836d9ca7aeb9">More...</a><br /></td></tr>
+<tr class="separator:a33c55be6baaa5ea5702e836d9ca7aeb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -379,7 +361,7 @@ Static Public Attributes</h2></td></tr>
 <li>
 <b>Declared</b>. <a class="el" href="namespace_ogre.html">Ogre</a> has some forewarning of this resource, either through calling <a class="el" href="class_ogre_1_1_resource_group_manager.html#a1c684fc288dcdeeeeee7c10971c3af43" title="Declares a resource to be a part of a resource group, allowing you to load and unload it as part of t...">ResourceGroupManager::declareResource</a>, or by declaring the resource in a script file which is on one of the resource locations which has been defined for a group. There is still no instance of <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a>, but <a class="el" href="namespace_ogre.html">Ogre</a> will know to create this resource when <a class="el" href="class_ogre_1_1_resource_group_manager.html#a47aa88807d595d000c740df234152790" title="Initialises a resource group.">ResourceGroupManager::initialiseResourceGroup</a> is called (which is automatic if you declare the resource group before <a class="el" href="class_ogre_1_1_root.html#a2ab63e661beec8b891480a5cffcb5ac5" title="Initialises the renderer.">Root::initialise</a>). </li>
 <li>
-<b>Unloaded</b>. There is now a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> instance for this resource, although it is not loaded. This means that code which looks for this named resource will find it, but the <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> is not using a lot of memory because it is in an unloaded state. A <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> can get into this state by having just been created by <a class="el" href="class_ogre_1_1_resource_group_manager.html#a47aa88807d595d000c740df234152790" title="Initialises a resource group.">ResourceGroupManager::initialiseResourceGroup</a> (either from a script, or from a call to declareResource), by being created directly from code (ResourceManager::create), or it may have previously been loaded and has been unloaded, either individually through <a class="el" href="class_ogre_1_1_resource.html#aa31bef1bfaa87731622e56f11b548e27" title="Unloads the resource; this is not permanent, the resource can be reloaded later if required.">Resource::unload</a>, or as a group through <a class="el" href="class_ogre_1_1_resource_group_manager.html#a01166a19f261e9b4fd2908c94c829d08" title="Unloads a resource group.">ResourceGroupManager::unloadResourceGroup</a>. </li>
+<b>Unloaded</b>. There is now a <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> instance for this resource, although it is not loaded. This means that code which looks for this named resource will find it, but the <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> is not using a lot of memory because it is in an unloaded state. A <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> can get into this state by having just been created by <a class="el" href="class_ogre_1_1_resource_group_manager.html#a47aa88807d595d000c740df234152790" title="Initialises a resource group.">ResourceGroupManager::initialiseResourceGroup</a> (either from a script, or from a call to declareResource), by being created directly from code (ResourceManager::create), or it may have previously been loaded and has been unloaded, either individually through <a class="el" href="class_ogre_1_1_resource.html#a8660b706f82f66ed7939da460e204e55" title="Unloads the resource; this is not permanent, the resource can be reloaded later if required.">Resource::unload</a>, or as a group through <a class="el" href="class_ogre_1_1_resource_group_manager.html#a01166a19f261e9b4fd2908c94c829d08" title="Unloads a resource group.">ResourceGroupManager::unloadResourceGroup</a>. </li>
 <li>
 <b>Loaded</b>The <a class="el" href="class_ogre_1_1_resource.html" title="Abstract class representing a loadable resource (e.g.">Resource</a> instance is fully loaded. This may have happened implicitly because something used it, or it may have been loaded as part of a group. </li>
 </ol>
@@ -388,7 +370,7 @@ Static Public Attributes</h2></td></tr>
 <dd>
 <a class="el" href="class_ogre_1_1_resource_group_manager.html#a47aa88807d595d000c740df234152790" title="Initialises a resource group.">ResourceGroupManager::initialiseResourceGroup</a> </dd>
 <dd>
-<a class="el" href="class_ogre_1_1_resource_group_manager.html#a3b1d27ae4ff8fe5b9ac48f6325b727e9" title="Loads a resource group.">ResourceGroupManager::loadResourceGroup</a> </dd>
+<a class="el" href="class_ogre_1_1_resource_group_manager.html#ace352d6a537213e63922fab69f414903" title="Loads a resource group.">ResourceGroupManager::loadResourceGroup</a> </dd>
 <dd>
 <a class="el" href="class_ogre_1_1_resource_group_manager.html#a01166a19f261e9b4fd2908c94c829d08" title="Unloads a resource group.">ResourceGroupManager::unloadResourceGroup</a> </dd>
 <dd>
@@ -689,48 +671,6 @@ Static Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="abbf9af3ad2cbc12a8c0b5eba9211fce7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbf9af3ad2cbc12a8c0b5eba9211fce7">&#9670;&nbsp;</a></span>_notifyWorldGeometryStageEnded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ResourceGroupManager::_notifyWorldGeometryStageEnded </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Notify this manager that one stage of world geometry loading has been completed. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Custom SceneManagers which load custom world geometry should call this method the number of times equal to the value they return from <a class="el" href="class_ogre_1_1_scene_manager.html#a1257fd328d54908eeb45398b3191f92b" title="Estimate the number of loading stages required to load the named world geometry.">SceneManager::estimateWorldGeometry</a> while loading their geometry. </dd></dl>
-
-</div>
-</div>
-<a id="a71733c340057f8f7fbfdfbbfcc4a1f7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71733c340057f8f7fbfdfbbfcc4a1f7c">&#9670;&nbsp;</a></span>_notifyWorldGeometryStageStarted()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ResourceGroupManager::_notifyWorldGeometryStageStarted </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>description</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Notify this manager that one stage of world geometry loading has been started. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Custom SceneManagers which load custom world geometry should call this method the number of times equal to the value they return from <a class="el" href="class_ogre_1_1_scene_manager.html#a1257fd328d54908eeb45398b3191f92b" title="Estimate the number of loading stages required to load the named world geometry.">SceneManager::estimateWorldGeometry</a> while loading their geometry. </dd></dl>
 
 </div>
 </div>
@@ -1526,8 +1466,8 @@ Texture </li>
 
 </div>
 </div>
-<a id="a286f7b3fb982c0980e9bc4de237aa593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a286f7b3fb982c0980e9bc4de237aa593">&#9670;&nbsp;</a></span>getResourceGroups()</h2>
+<a id="ac45ec0019ae6d2b02bda81051a06ddb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac45ec0019ae6d2b02bda81051a06ddb0">&#9670;&nbsp;</a></span>getResourceGroups()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1535,7 +1475,6 @@ Texture </li>
         <tr>
           <td class="memname"><a class="el" href="group___general.html#ga0899c03496d3c25c6555889aa76a78db">StringVector</a> Ogre::ResourceGroupManager::getResourceGroups </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1602,8 +1541,8 @@ Texture </li>
 
 </div>
 </div>
-<a id="a45101333f0f9ff132fc381dd5c4a1d60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45101333f0f9ff132fc381dd5c4a1d60">&#9670;&nbsp;</a></span>getSingleton()</h2>
+<a id="ae8de66b57de09f4da3bca51f330edf06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8de66b57de09f4da3bca51f330edf06">&#9670;&nbsp;</a></span>getSingleton()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1614,7 +1553,6 @@ Texture </li>
         <tr>
           <td class="memname">static <a class="el" href="class_ogre_1_1_resource_group_manager.html">ResourceGroupManager</a>&amp; Ogre::ResourceGroupManager::getSingleton </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1632,8 +1570,8 @@ Texture </li>
 
 </div>
 </div>
-<a id="a375aaff7929cfb5560d69b0056363aa0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a375aaff7929cfb5560d69b0056363aa0">&#9670;&nbsp;</a></span>getSingletonPtr()</h2>
+<a id="a33c55be6baaa5ea5702e836d9ca7aeb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33c55be6baaa5ea5702e836d9ca7aeb9">&#9670;&nbsp;</a></span>getSingletonPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1644,7 +1582,6 @@ Texture </li>
         <tr>
           <td class="memname">static <a class="el" href="class_ogre_1_1_resource_group_manager.html">ResourceGroupManager</a>* Ogre::ResourceGroupManager::getSingletonPtr </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -1659,34 +1596,6 @@ Texture </li>
 <p>Override standard <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> retrieval. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Why do we do this? Well, it's because the <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> implementation is in a .h file, which means it gets compiled into anybody who includes it. This is needed for the <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a> template to work, but we actually only want it compiled into the implementation of the class based on the <a class="el" href="class_ogre_1_1_singleton.html" title="Template class for creating single-instance global classes.">Singleton</a>, not all of them. If we don't change this, we get link errors when trying to use the Singleton-based class from an outside dll. </dd></dl>
 <dl class="section user"><dt></dt><dd>This method just delegates to the template version anyway, but the implementation stays in this single compilation unit, preventing link errors. </dd></dl>
-
-</div>
-</div>
-<a id="a53a403981769caf6c9357aa8dddde90f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53a403981769caf6c9357aa8dddde90f">&#9670;&nbsp;</a></span>getWorldResourceGroupName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a>&amp; Ogre::ResourceGroupManager::getWorldResourceGroupName </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets the resource group that 'world' resources will use. </p>
 
 </div>
 </div>
@@ -1838,51 +1747,6 @@ So what this essentially does is create a bunch of unloaded <a class="el" href="
 
 </div>
 </div>
-<a id="a632b4b36f47b6c6f88df62cca7e3d7b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a632b4b36f47b6c6f88df62cca7e3d7b4">&#9670;&nbsp;</a></span>linkWorldGeometryToResourceGroup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ResourceGroupManager::linkWorldGeometryToResourceGroup </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>group</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>worldGeometry</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_scene_manager.html">SceneManager</a> *&#160;</td>
-          <td class="paramname"><em>sceneManager</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Associates some world geometry with a resource group, causing it to be loaded / unloaded with the resource group. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>You would use this method to essentially defer a call to <a class="el" href="class_ogre_1_1_scene_manager.html#accb0fdfbd1f61aa4d3d6e1f4625e1f9c" title="Sets the source of the &#39;world&#39; geometry, i.e.">SceneManager::setWorldGeometry</a> to the time when the resource group is loaded. The advantage of this is that compatible scene managers will include the estimate of the number of loading stages for that world geometry when the resource group begins loading, allowing you to include that in a loading progress report. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">group</td><td>The name of the resource group </td></tr>
-    <tr><td class="paramname">worldGeometry</td><td>The parameter which should be passed to setWorldGeometry </td></tr>
-    <tr><td class="paramname">sceneManager</td><td>The <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a> which should be called </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="ad0e7e504bbf763125cef2d725606328b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad0e7e504bbf763125cef2d725606328b">&#9670;&nbsp;</a></span>listResourceFileInfo()</h2>
 
@@ -1987,8 +1851,8 @@ So what this essentially does is create a bunch of unloaded <a class="el" href="
 
 </div>
 </div>
-<a id="a3b1d27ae4ff8fe5b9ac48f6325b727e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b1d27ae4ff8fe5b9ac48f6325b727e9">&#9670;&nbsp;</a></span>loadResourceGroup()</h2>
+<a id="ace352d6a537213e63922fab69f414903"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace352d6a537213e63922fab69f414903">&#9670;&nbsp;</a></span>loadResourceGroup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2003,13 +1867,7 @@ So what this essentially does is create a bunch of unloaded <a class="el" href="
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>loadMainResources</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>loadWorldGeom</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>loadMainResources</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2025,11 +1883,9 @@ So what this essentially does is create a bunch of unloaded <a class="el" href="
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the resource group to load. </td></tr>
     <tr><td class="paramname">loadMainResources</td><td>If true, loads normal resources associated with the group (you might want to set this to false if you wanted to just load world geometry in bulk) </td></tr>
-    <tr><td class="paramname">loadWorldGeom</td><td>If true, loads any linked world geometry </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource_group_manager.html#a632b4b36f47b6c6f88df62cca7e3d7b4" title="Associates some world geometry with a resource group, causing it to be loaded / unloaded with the res...">ResourceGroupManager::linkWorldGeometryToResourceGroup</a> </dd></dl>
 
 </div>
 </div>
@@ -2517,8 +2373,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a393b8f97afc33fa4404e03a6f6ef9b36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a393b8f97afc33fa4404e03a6f6ef9b36">&#9670;&nbsp;</a></span>prepareResourceGroup()</h2>
+<a id="a10ca7ddb6b2492f678a7821230779237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10ca7ddb6b2492f678a7821230779237">&#9670;&nbsp;</a></span>prepareResourceGroup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2533,13 +2389,7 @@ template&lt;class Alloc &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>prepareMainResources</em> = <code>true</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>prepareWorldGeom</em> = <code>true</code>&#160;</td>
+          <td class="paramname"><em>prepareMainResources</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2555,11 +2405,9 @@ template&lt;class Alloc &gt; </div>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the resource group to prepare. </td></tr>
     <tr><td class="paramname">prepareMainResources</td><td>If true, prepares normal resources associated with the group (you might want to set this to false if you wanted to just prepare world geometry in bulk) </td></tr>
-    <tr><td class="paramname">prepareWorldGeom</td><td>If true, prepares any linked world geometry </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource_group_manager.html#a632b4b36f47b6c6f88df62cca7e3d7b4" title="Associates some world geometry with a resource group, causing it to be loaded / unloaded with the res...">ResourceGroupManager::linkWorldGeometryToResourceGroup</a> </dd></dl>
 
 </div>
 </div>
@@ -2774,37 +2622,8 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a407415b99c1df3b275e2609e16e8b39f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a407415b99c1df3b275e2609e16e8b39f">&#9670;&nbsp;</a></span>setWorldResourceGroupName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ResourceGroupManager::setWorldResourceGroupName </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>groupName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the resource group that 'world' resources will use. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This is the group which should be used by SceneManagers implementing world geometry when looking for their resources. Defaults to the DEFAULT_RESOURCE_GROUP_NAME but this can be altered. </dd></dl>
-
-</div>
-</div>
-<a id="acb9bf6a75143b0ce49a0af7d05b213fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb9bf6a75143b0ce49a0af7d05b213fe">&#9670;&nbsp;</a></span>shutdownAll()</h2>
+<a id="ad0ea49257162ee8866f3d4f8ec6780de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0ea49257162ee8866f3d4f8ec6780de">&#9670;&nbsp;</a></span>shutdownAll()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2812,7 +2631,6 @@ template&lt;class Alloc &gt; </div>
         <tr>
           <td class="memname">void Ogre::ResourceGroupManager::shutdownAll </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -2861,27 +2679,6 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a365755132ea7380ea97cc2da51bb5651"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a365755132ea7380ea97cc2da51bb5651">&#9670;&nbsp;</a></span>unlinkWorldGeometryFromResourceGroup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::ResourceGroupManager::unlinkWorldGeometryFromResourceGroup </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;&#160;</td>
-          <td class="paramname"><em>group</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Clear any link to world geometry from a resource group. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Basically undoes a previous call to linkWorldGeometryToResourceGroup. </dd></dl>
-
-</div>
-</div>
 <a id="a01166a19f261e9b4fd2908c94c829d08"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01166a19f261e9b4fd2908c94c829d08">&#9670;&nbsp;</a></span>unloadResourceGroup()</h2>
 
@@ -2917,7 +2714,7 @@ template&lt;class Alloc &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#a8eb34a9034aab62fd537c021a79e3366" title="Returns true if the Resource is reloadable, false otherwise.">Resource::isReloadable</a> for resource is reloadable. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_resource.html#adc6228e09d3cf335aa52444973139145" title="Returns true if the Resource is reloadable, false otherwise.">Resource::isReloadable</a> for resource is reloadable. </dd></dl>
 
 </div>
 </div>

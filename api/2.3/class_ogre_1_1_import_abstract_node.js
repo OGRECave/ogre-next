@@ -1,8 +1,8 @@
 var class_ogre_1_1_import_abstract_node =
 [
     [ "ImportAbstractNode", "class_ogre_1_1_import_abstract_node.html#a44e8ff802eb8c81bfbd9e8805781e4e2", null ],
-    [ "clone", "class_ogre_1_1_import_abstract_node.html#a773adaccd37af231bb7d0bd46ce0ac93", null ],
-    [ "getValue", "class_ogre_1_1_import_abstract_node.html#a0649360363828cc6fca08a0b32d03b5a", null ],
+    [ "clone", "class_ogre_1_1_import_abstract_node.html#a33dd87d6361ee18d2a3392f953c37371", null ],
+    [ "getValue", "class_ogre_1_1_import_abstract_node.html#a8ae1f4223f040636de4e66b1a33af6fa", null ],
     [ "operator delete", "class_ogre_1_1_import_abstract_node.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
     [ "operator delete", "class_ogre_1_1_import_abstract_node.html#acb46d4b0a597156d9ba5abc39d127792", null ],
     [ "operator delete", "class_ogre_1_1_import_abstract_node.html#a1c727e879a260c37b00ce5505fe8e144", null ],

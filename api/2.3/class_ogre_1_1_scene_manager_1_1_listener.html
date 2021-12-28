@@ -97,14 +97,6 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_scene_manager_1_1_liste
  <a href="class_ogre_1_1_scene_manager_1_1_listener.html#details">More...</a></p>
 
 <p><code>#include &lt;OgreSceneManager.h&gt;</code></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ogre::SceneManager::Listener:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_scene_manager_1_1_listener__inherit__graph.svg" width="154" height="127"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -146,7 +138,6 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">Ogre::SceneManager::Listener::Listener </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -290,8 +281,6 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_terrain.html#ad9bd9a0fbdb32cb5571cca586f21e811">Ogre::Terrain</a>.</p>
-
 </div>
 </div>
 <a id="a9d5463252458a8852b0011935e6f5bb5"></a>
@@ -319,8 +308,6 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Event notifying the listener of the <a class="el" href="class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e.">SceneManager</a>'s destruction. </p>
-
-<p>Reimplemented in <a class="el" href="class_ogre_1_1_terrain.html#a09baa91af04f211ee9e8e8f60d9e6c39">Ogre::Terrain</a>.</p>
 
 </div>
 </div>
@@ -440,7 +427,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Hook to allow the listener to override the ordering of lights for the entire frustum. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>Whilst ordinarily lights are sorted per rendered object (</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a4fbc0296b902a113376688aff724d02d" title="Gets a list of lights, ordered relative to how close they are to this movable object.">MovableObject::queryLights</a>), texture shadows adds another issue in that, given there is a finite number of shadow textures, we must choose which lights to render texture shadows from based on the entire frustum. These lights should always be listed first in every objects own list, followed by any other lights which will not cast texture shadows (either because they have shadow casting off, or there aren't enough shadow textures to service them). </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_ogre_1_1_movable_object.html#a8b935ae7a4ae21b5c8a6493db4a03ff5" title="Gets a list of lights, ordered relative to how close they are to this movable object.">MovableObject::queryLights</a>), texture shadows adds another issue in that, given there is a finite number of shadow textures, we must choose which lights to render texture shadows from based on the entire frustum. These lights should always be listed first in every objects own list, followed by any other lights which will not cast texture shadows (either because they have shadow casting off, or there aren't enough shadow textures to service them). </dd></dl>
 <dl class="section user"><dt></dt><dd>This hook allows you to override the detailed ordering of the lights per frustum. The default ordering is shadow casters first (which you must also respect if you override this method), and ordered by distance from the camera within those 2 groups. Obviously the closest lights with shadow casting enabled will be listed first. Only lights within the range of the frustum will be in the list. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
