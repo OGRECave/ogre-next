@@ -46,8 +46,6 @@ namespace v1 {
         OGRE_MUTEX(mScratchMutex);
         size_t mMapBufferThreshold;
 
-        UniformBufferList mShaderStorageBuffers;
-
     public:
         GL3PlusHardwareBufferManagerBase();
         ~GL3PlusHardwareBufferManagerBase() override;
@@ -58,25 +56,6 @@ namespace v1 {
         HardwareIndexBufferSharedPtr createIndexBuffer(
             HardwareIndexBuffer::IndexType itype, size_t numIndexes,
             HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
-        /// Create a uniform buffer
-        HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                           bool useShadowBuffer, const String& name = "") override;
-        /// Create a uniform buffer
-        HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                           bool useShadowBuffer, size_t binding, const String& name = "");
-
-        /// Create a shader storage buffer.
-        HardwareUniformBufferSharedPtr createShaderStorageBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                                 bool useShadowBuffer, const String& name = "");
-        /// Create a shader storage buffer.
-        HardwareUniformBufferSharedPtr createShaderStorageBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                                 bool useShadowBuffer, size_t binding, const String& name = "");
-        /// Create a counter buffer
-        HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                           bool useShadowBuffer, const String& name = "") override;
-        /// Create a counter buffer
-        HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                           bool useShadowBuffer, size_t binding, const String& name = "");
 
         /// Utility function to get the correct GL usage based on HBU's
         static GLenum getGLUsage(unsigned int usage);
@@ -156,14 +135,6 @@ namespace v1 {
         {
             static_cast<GL3PlusHardwareBufferManagerBase*>(mImpl)->setGLMapBufferThreshold(value);
         }
-
-        /// Create a shader storage buffer.
-        HardwareUniformBufferSharedPtr createShaderStorageBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
-                                                                 bool useShadowBuffer, const String& name = "")
-        {
-            return static_cast<GL3PlusHardwareBufferManagerBase*>(mImpl)->createShaderStorageBuffer(sizeBytes, usage, useShadowBuffer, name);
-        }
-
     };
 }
 }

@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 #include "OgreD3D11DeviceResource.h"
 #include "OgreHighLevelGpuProgram.h"
-#include "OgreHardwareUniformBuffer.h"
 #include "Vao/OgreVertexBufferPacked.h"
 #include "OgreString.h"
 
@@ -161,22 +160,20 @@ namespace Ogre {
             static _StringHash mHash;
             unsigned int mIdx;
             String mName;
-            mutable v1::HardwareUniformBufferSharedPtr mUniformBuffer;
+            ComPtr<ID3D11Buffer> mConstBuffer;
             mutable ShaderVars mShaderVars;
                 
             // Default constructor
-            BufferInfo() : mIdx(0), mName("") { mUniformBuffer.setNull(); }
+            BufferInfo() : mIdx(0), mName("") {}
             BufferInfo(unsigned int index, const String& name)
                 : mIdx(index), mName(name)
             {
-                mUniformBuffer.setNull();
             }
             
             // Copy constructor
             BufferInfo(const BufferInfo& info) 
                 : mIdx(info.mIdx)
                 , mName(info.mName)
-                , mUniformBuffer(info.mUniformBuffer)
                 , mShaderVars(info.mShaderVars)
             {
 
@@ -187,7 +184,6 @@ namespace Ogre {
             {
                 this->mIdx = info.mIdx;
                 this->mName = info.mName;
-                mUniformBuffer = info.mUniformBuffer;
                 mShaderVars = info.mShaderVars;
                 return *this;
             }

@@ -73,8 +73,6 @@ namespace v1 {
         // unnecessary work, and we'll destroy everything here.
         mVertexBuffers.clear();
         mIndexBuffers.clear();
-        mUniformBuffers.clear();
-        mCounterBuffers.clear();
 
         // Destroy everything
         destroyAllDeclarations();
@@ -418,14 +416,6 @@ namespace v1 {
         {
             mIndexBuffers.erase(i);
         }
-    }
-    //-----------------------------------------------------------------------
-    void HardwareBufferManagerBase::_notifyUniformBufferDestroyed(HardwareUniformBuffer* buf)
-    {
-    }
-    //-----------------------------------------------------------------------
-    void HardwareBufferManagerBase::_notifyCounterBufferDestroyed(HardwareCounterBuffer* buf)
-    {
     }
     //-----------------------------------------------------------------------
     HardwareVertexBufferSharedPtr 

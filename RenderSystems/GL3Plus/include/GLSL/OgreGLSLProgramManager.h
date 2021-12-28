@@ -82,18 +82,7 @@ namespace Ogre {
             const GpuConstantDefinitionMap* fragmentConstantDefs,
             const GpuConstantDefinitionMap* computeConstantDefs,
             GLUniformReference& refToUpdate);
-        /** Find the data source definition for a given atomic counter
-            uniform name and reference. Return true if found and pair
-            the reference with its data source. */
-        bool findAtomicCounterDataSource(
-            const String& paramName,
-            const GpuConstantDefinitionMap* vertexConstantDefs,
-            const GpuConstantDefinitionMap* hullConstantDefs,
-            const GpuConstantDefinitionMap* domainConstantDefs,
-            const GpuConstantDefinitionMap* geometryConstantDefs,
-            const GpuConstantDefinitionMap* fragmentConstantDefs,
-            const GpuConstantDefinitionMap* computeConstantDefs,
-            GLAtomicCounterReference& refToUpdate);
+
         /** Parse an individual uniform from a GLSL source file and
             store it in a GpuNamedConstant. */
         void parseGLSLUniform(
@@ -124,12 +113,8 @@ namespace Ogre {
             const GpuConstantDefinitionMap* geometryConstantDefs,
             const GpuConstantDefinitionMap* fragmentConstantDefs,
             const GpuConstantDefinitionMap* computeConstantDefs,
-            GLUniformReferenceList& uniformList,
-            GLAtomicCounterReferenceList& counterList,
-            GLUniformBufferList& uniformBufferList,
-            SharedParamsBufferMap& sharedParamsBufferMap,
-            //GLShaderStorageBufferList& shaderStorageBufferList,
-            GLCounterBufferList& counterBufferList);
+            GLUniformReferenceList& uniformList);
+
         /** Populate a list of uniforms based on GLSL source and store
             them in GpuNamedConstants.  
             @param src Reference to the source code.

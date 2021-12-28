@@ -59,12 +59,11 @@ namespace v1 {
         else
         {
             mDesc.Usage = D3D11Mappings::_getUsage(mUsage);
-            mDesc.BindFlags = btype == VERTEX_BUFFER ? D3D11_BIND_VERTEX_BUFFER : 
-                              btype == INDEX_BUFFER  ? D3D11_BIND_INDEX_BUFFER  :
-                                                       D3D11_BIND_CONSTANT_BUFFER;
+            mDesc.BindFlags =
+                btype == VERTEX_BUFFER ? D3D11_BIND_VERTEX_BUFFER : D3D11_BIND_INDEX_BUFFER;
         }
         // Better check of stream out flag
-        if (streamOut && btype != CONSTANT_BUFFER)
+        if (streamOut)
         {
             mDesc.BindFlags |= D3D11_BIND_STREAM_OUTPUT;
         }

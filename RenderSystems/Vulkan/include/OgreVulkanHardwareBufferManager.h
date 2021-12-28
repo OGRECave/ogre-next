@@ -56,14 +56,6 @@ namespace Ogre
                                                             size_t numIndexes,
                                                             HardwareBuffer::Usage usage,
                                                             bool useShadowBuffer ) override;
-            HardwareUniformBufferSharedPtr createUniformBuffer( size_t sizeBytes,
-                                                                HardwareBuffer::Usage usage,
-                                                                bool useShadowBuffer,
-                                                                const String &name ) override;
-            HardwareCounterBufferSharedPtr createCounterBuffer( size_t sizeBytes,
-                                                                HardwareBuffer::Usage usage,
-                                                                bool useShadowBuffer,
-                                                                const String &name ) override;
         };
 
         class _OgreVulkanExport VulkanHardwareBufferManager final : public HardwareBufferManager

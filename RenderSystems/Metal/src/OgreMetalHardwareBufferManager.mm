@@ -108,20 +108,5 @@ namespace Ogre
             }
             return HardwareIndexBufferSharedPtr( buf );
         }
-        //-----------------------------------------------------------------------------------
-        HardwareUniformBufferSharedPtr MetalHardwareBufferManagerBase::createUniformBuffer(
-            size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String &name )
-        {
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                         "MetalHardwareBufferManagerBase::createUniformBuffer" );
-            return HardwareUniformBufferSharedPtr();
-        }
-        //-----------------------------------------------------------------------------------
-        HardwareCounterBufferSharedPtr MetalHardwareBufferManagerBase::createCounterBuffer(
-            size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String &name )
-        {
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                         "MetalHardwareBufferManagerBase::createCounterBuffer" );
-        }
     }
 }

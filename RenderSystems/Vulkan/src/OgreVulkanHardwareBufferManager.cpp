@@ -107,20 +107,5 @@ namespace v1
         }
         return HardwareIndexBufferSharedPtr( buf );
     }
-    //-----------------------------------------------------------------------------------
-    HardwareUniformBufferSharedPtr VulkanHardwareBufferManagerBase::createUniformBuffer(
-        size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String &name )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                     "VulkanHardwareBufferManagerBase::createUniformBuffer" );
-        return HardwareUniformBufferSharedPtr();
-    }
-    //-----------------------------------------------------------------------------------
-    HardwareCounterBufferSharedPtr VulkanHardwareBufferManagerBase::createCounterBuffer(
-        size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String &name )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                     "VulkanHardwareBufferManagerBase::createCounterBuffer" );
-    }
 }  // namespace v1
 }  // namespace Ogre

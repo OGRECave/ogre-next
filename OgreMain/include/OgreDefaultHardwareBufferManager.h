@@ -31,9 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreHardwareBufferManager.h"
-#include "OgreHardwareCounterBuffer.h"
 #include "OgreHardwareIndexBuffer.h"
-#include "OgreHardwareUniformBuffer.h"
 #include "OgreHardwareVertexBuffer.h"
 
 namespace Ogre {
@@ -96,58 +94,6 @@ namespace v1 {
 
     };
 
-    /// Specialisation of HardwareUniformBuffer for emulation
-    class _OgreExport DefaultHardwareUniformBuffer : public HardwareUniformBuffer
-    {
-    protected:
-        unsigned char* mData;
-        /** See HardwareBuffer. */
-        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
-        /** See HardwareBuffer. */
-        void unlockImpl() override;
-        /**  */
-        //bool updateStructure(const Any& renderSystemInfo);
-
-    public:
-        DefaultHardwareUniformBuffer(HardwareBufferManagerBase* mgr, size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer = false, const String& name = "");
-        ~DefaultHardwareUniformBuffer() override;
-        /** See HardwareBuffer. */
-        void readData(size_t offset, size_t length, void* pDest) override;
-        /** See HardwareBuffer. */
-        void writeData(size_t offset, size_t length, const void* pSource,
-                bool discardWholeBuffer = false) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock() override;
-    };
-
-    /// Specialisation of HardwareCounterBuffer for emulation
-    class _OgreExport DefaultHardwareCounterBuffer : public HardwareCounterBuffer
-    {
-    protected:
-        unsigned char* mData;
-        /** See HardwareBuffer. */
-        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
-        /** See HardwareBuffer. */
-        void unlockImpl() override;
-        /**  */
-        //bool updateStructure(const Any& renderSystemInfo);
-
-    public:
-        DefaultHardwareCounterBuffer(HardwareBufferManagerBase* mgr, size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer = false, const String& name = "");
-        ~DefaultHardwareCounterBuffer() override;
-        /** See HardwareBuffer. */
-        void readData(size_t offset, size_t length, void* pDest) override;
-        /** See HardwareBuffer. */
-        void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock() override;
-    };
-
     /** Specialisation of HardwareBufferManagerBase to emulate hardware buffers.
     @remarks
         You might want to instantiate this class if you want to utilise
@@ -168,14 +114,6 @@ namespace v1 {
         HardwareIndexBufferSharedPtr 
             createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, 
                 HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
-        /// Create a hardware uniform buffer
-        HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, 
-                                    HardwareBuffer::Usage usage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, 
-                                    bool useShadowBuffer = false, const String& name = "") override;
-        /// Create a hardware counter buffer
-        HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes,
-                                                           HardwareBuffer::Usage usage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE,
-                                                           bool useShadowBuffer = false, const String& name = "") override;
     };
 
     /// DefaultHardwareBufferManager as a Singleton

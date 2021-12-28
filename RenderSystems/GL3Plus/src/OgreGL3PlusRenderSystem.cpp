@@ -32,9 +32,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreStringConverter.h"
 #include "OgreLight.h"
 #include "OgreCamera.h"
-#include "OgreGL3PlusHardwareCounterBuffer.h"
-#include "OgreGL3PlusHardwareUniformBuffer.h"
-#include "OgreGL3PlusHardwareShaderStorageBuffer.h"
 #include "OgreGL3PlusHardwareVertexBuffer.h"
 #include "OgreGL3PlusHardwareIndexBuffer.h"
 #include "OgreGL3PlusDefaultHardwareBufferManager.h"
@@ -3443,38 +3440,6 @@ namespace Ogre {
         {
         case GPT_VERTEX_PROGRAM:
             mActiveVertexGpuProgramParameters = params;
-            mPso->vertexShader->bindSharedParameters(params, mask);
-            break;
-        case GPT_FRAGMENT_PROGRAM:
-            mActiveFragmentGpuProgramParameters = params;
-            mPso->pixelShader->bindSharedParameters(params, mask);
-            break;
-        case GPT_GEOMETRY_PROGRAM:
-            mActiveGeometryGpuProgramParameters = params;
-            mPso->geometryShader->bindSharedParameters(params, mask);
-            break;
-        case GPT_HULL_PROGRAM:
-            mActiveTessellationHullGpuProgramParameters = params;
-            mPso->hullShader->bindSharedParameters(params, mask);
-            break;
-        case GPT_DOMAIN_PROGRAM:
-            mActiveTessellationDomainGpuProgramParameters = params;
-            mPso->domainShader->bindSharedParameters(params, mask);
-            break;
-        case GPT_COMPUTE_PROGRAM:
-            mActiveComputeGpuProgramParameters = params;
-            mCurrentComputeShader->bindSharedParameters(params, mask);
-            break;
-        default:
-            break;
-        }
-        //              }
-        //        else
-        //        {
-        switch (gptype)
-        {
-        case GPT_VERTEX_PROGRAM:
-            mActiveVertexGpuProgramParameters = params;
             mPso->vertexShader->bindParameters(params, mask);
             break;
         case GPT_FRAGMENT_PROGRAM:
@@ -3497,14 +3462,7 @@ namespace Ogre {
             mActiveComputeGpuProgramParameters = params;
             mCurrentComputeShader->bindParameters(params, mask);
             break;
-        default:
-            break;
         }
-        //        }
-
-        //FIXME This needs to be moved somewhere texture specific.
-        // Update image bindings for image load/store
-        // static_cast<GL3PlusTextureManager*>(mTextureManager)->bindImages();
     }
 
     void GL3PlusRenderSystem::bindGpuProgramPassIterationParameters(GpuProgramType gptype)

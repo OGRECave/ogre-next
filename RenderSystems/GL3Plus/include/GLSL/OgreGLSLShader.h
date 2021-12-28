@@ -190,8 +190,6 @@ namespace Ogre {
         void bindParameters(GpuProgramParametersSharedPtr params, uint16 mask);
         /// Execute the pass iteration param binding functions for this shader.
         void bindPassIterationParameters(GpuProgramParametersSharedPtr params);
-        /// Execute the shared param binding functions for this shader.
-        void bindSharedParameters(GpuProgramParametersSharedPtr params, uint16 mask);
 
 
         /** Return the shader link status.

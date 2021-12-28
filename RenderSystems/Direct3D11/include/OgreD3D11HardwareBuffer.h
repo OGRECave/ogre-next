@@ -45,8 +45,7 @@ namespace v1 {
         enum BufferType
         {
             VERTEX_BUFFER,
-            INDEX_BUFFER,
-            CONSTANT_BUFFER
+            INDEX_BUFFER
         };
     protected:
         ComPtr<ID3D11Buffer> mlpD3DBuffer;

@@ -27,10 +27,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreGL3PlusHardwareBufferManager.h"
-#include "OgreGL3PlusHardwareCounterBuffer.h"
 #include "OgreGL3PlusHardwareIndexBuffer.h"
-#include "OgreGL3PlusHardwareUniformBuffer.h"
-#include "OgreGL3PlusHardwareShaderStorageBuffer.h"
 #include "OgreGL3PlusHardwareVertexBuffer.h"
 #include "OgreRoot.h"
 
@@ -74,8 +71,6 @@ namespace v1 {
 
     GL3PlusHardwareBufferManagerBase::~GL3PlusHardwareBufferManagerBase()
     {
-        mShaderStorageBuffers.clear();
-
         destroyAllDeclarations();
         destroyAllBindings();
 
@@ -109,39 +104,6 @@ namespace v1 {
             mIndexBuffers.insert(buf);
         }
         return HardwareIndexBufferSharedPtr(buf);
-    }
-
-    HardwareUniformBufferSharedPtr GL3PlusHardwareBufferManagerBase::createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name)
-    {
-        GL3PlusHardwareUniformBuffer* buf =
-            new GL3PlusHardwareUniformBuffer(this, sizeBytes, usage, useShadowBuffer, name);
-        {
-            OGRE_LOCK_MUTEX(mUniformBuffersMutex);
-            mUniformBuffers.insert(buf);
-        }
-        return HardwareUniformBufferSharedPtr(buf);
-    }
-
-    HardwareUniformBufferSharedPtr GL3PlusHardwareBufferManagerBase::createShaderStorageBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name)
-    {
-        GL3PlusHardwareShaderStorageBuffer* buf =
-            new GL3PlusHardwareShaderStorageBuffer(this, sizeBytes, usage, useShadowBuffer, name);
-        {
-            OGRE_LOCK_MUTEX(mUniformBuffersMutex);
-            mShaderStorageBuffers.insert(buf);
-        }
-        return HardwareUniformBufferSharedPtr(buf);
-    }
-
-    HardwareCounterBufferSharedPtr GL3PlusHardwareBufferManagerBase::createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name)
-    {
-        GL3PlusHardwareCounterBuffer* buf =
-            new GL3PlusHardwareCounterBuffer(this, name);
-        {
-            OGRE_LOCK_MUTEX(mCounterBuffersMutex);
-            mCounterBuffers.insert(buf);
-        }
-        return HardwareCounterBufferSharedPtr(buf);
     }
 
     GLenum GL3PlusHardwareBufferManagerBase::getGLUsage(unsigned int usage)

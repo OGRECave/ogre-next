@@ -829,24 +829,6 @@ namespace Ogre {
         monolithicProgram->updatePassIterationUniforms( params );
     }
 
-
-    void GLSLShader::bindSharedParameters(GpuProgramParametersSharedPtr params, uint16 mask)
-    {
-        // Link can throw exceptions, ignore them at this point.
-        try
-        {
-            // Activate the link program object.
-            GLSLMonolithicProgram *monolithicProgram =
-                GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
-            // Pass on parameters from params to program object uniforms.
-            monolithicProgram->updateUniformBlocks( params, mask, mType );
-        }
-        catch( Exception & )
-        {
-        }
-    }
-
-
     size_t GLSLShader::calculateSize() const
     {
         size_t memSize = 0;

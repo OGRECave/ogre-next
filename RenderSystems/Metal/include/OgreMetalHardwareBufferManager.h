@@ -60,17 +60,6 @@ namespace Ogre
                                                             size_t                         numIndexes,
                                                             HardwareBuffer::Usage          usage,
                                                             bool useShadowBuffer = false ) override;
-
-            /// Create a uniform buffer
-            HardwareUniformBufferSharedPtr createUniformBuffer( size_t                sizeBytes,
-                                                                HardwareBuffer::Usage usage,
-                                                                bool                  useShadowBuffer,
-                                                                const String &name = "" ) override;
-            /// Create a counter buffer
-            HardwareCounterBufferSharedPtr createCounterBuffer( size_t                sizeBytes,
-                                                                HardwareBuffer::Usage usage,
-                                                                bool                  useShadowBuffer,
-                                                                const String &name = "" ) override;
         };
 
         /// MetalHardwareBufferManagerBase as a Singleton

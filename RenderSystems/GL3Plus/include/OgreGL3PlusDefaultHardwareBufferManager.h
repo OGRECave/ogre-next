@@ -31,9 +31,7 @@ THE SOFTWARE.
 
 #include "OgreGL3PlusPrerequisites.h"
 #include "OgreHardwareBufferManager.h"
-#include "OgreHardwareCounterBuffer.h"
 #include "OgreHardwareIndexBuffer.h"
-#include "OgreHardwareUniformBuffer.h"
 #include "OgreHardwareVertexBuffer.h"
 
 namespace Ogre {
@@ -92,61 +90,6 @@ namespace v1 {
         void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
     };
 
-    /// Specialisation of HardwareUniformBuffer for emulation
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareUniformBuffer final : public HardwareUniformBuffer
-    {
-    protected:
-        unsigned char* mData;
-        /// @copydoc HardwareBuffer::lock
-        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
-        /// @copydoc HardwareBuffer::unlock
-        void unlockImpl() override;
-
-    public:
-        GL3PlusDefaultHardwareUniformBuffer(size_t bufferSize, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name);
-        GL3PlusDefaultHardwareUniformBuffer(HardwareBufferManagerBase* mgr, size_t bufferSize,
-                                            HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name);
-        ~GL3PlusDefaultHardwareUniformBuffer() override;
-        /// @copydoc HardwareBuffer::readData
-        void readData(size_t offset, size_t length, void* pDest) override;
-        /// @copydoc HardwareBuffer::writeData
-        void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock() override;
-
-        void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
-    };
-
-    /// Specialisation of HardwareCounterBuffer for emulation
-    class _OgreGL3PlusExport GL3PlusDefaultHardwareCounterBuffer final : public HardwareCounterBuffer
-    {
-    protected:
-        unsigned char* mData;
-        /// @copydoc HardwareBuffer::lock
-        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
-        /// @copydoc HardwareBuffer::unlock
-        void unlockImpl() override;
-
-    public:
-        GL3PlusDefaultHardwareCounterBuffer(const String& name);
-        GL3PlusDefaultHardwareCounterBuffer(HardwareBufferManagerBase* mgr, const String& name);
-        ~GL3PlusDefaultHardwareCounterBuffer() override;
-        /// @copydoc HardwareBuffer::readData
-        void readData(size_t offset, size_t length, void* pDest) override;
-        /// @copydoc HardwareBuffer::writeData
-        void writeData(size_t offset, size_t length, const void* pSource,
-                       bool discardWholeBuffer = false) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options) override;
-        /** Override HardwareBuffer to turn off all shadowing. */
-        void unlock() override;
-
-        void* getDataPtr(size_t offset) const { return (void*)(mData + offset); }
-    };
-
     /** Specialisation of HardwareBufferManager to emulate hardware buffers.
         @remarks
         You might want to instantiate this class if you want to utilise
@@ -168,12 +111,6 @@ namespace v1 {
         HardwareIndexBufferSharedPtr
             createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes,
                               HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
-        /// Create a uniform buffer
-        HardwareUniformBufferSharedPtr
-            createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "") override;
-        /// Create a counter buffer
-        HardwareCounterBufferSharedPtr
-            createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "") override;
     };
 
     /// GL3PlusDefaultHardwareBufferManagerBase as a Singleton

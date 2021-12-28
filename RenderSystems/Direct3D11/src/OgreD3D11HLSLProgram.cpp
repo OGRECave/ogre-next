@@ -35,7 +35,6 @@ THE SOFTWARE.
 #include "OgreD3D11Mappings.h"
 #include "OgreGpuProgramManager.h"
 #include "OgreHardwareBufferManager.h"
-#include "OgreD3D11HardwareUniformBuffer.h"
 #include "OgreD3D11RenderSystem.h"
 #include "OgreStringConverter.h"
 
@@ -1163,15 +1162,32 @@ namespace Ogre {
                     BufferInfo *it = &mDefaultBuffers[bufferType];
 
                     // Guard to create uniform buffer only once
-                    if (it->mUniformBuffer.isNull())
+                    if (!it->mConstBuffer)
                     {
-                        v1::HardwareUniformBufferSharedPtr uBuffer = v1::HardwareBufferManager::getSingleton().createUniformBuffer(
-                                    mD3d11ShaderBufferDescs[b].Size, v1::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, false);
-                        it->mUniformBuffer = v1::HardwareUniformBufferSharedPtr(uBuffer);
+                        D3D11_BUFFER_DESC desc;
+                        memset( &desc, 0, sizeof( desc ) );
+                        desc.ByteWidth = mD3d11ShaderBufferDescs[b].Size;
+                        desc.Usage = D3D11_USAGE_DYNAMIC;
+                        desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+                        desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+                        const HRESULT hr = mDevice->CreateBuffer(
+                            &desc, NULL, it->mConstBuffer.ReleaseAndGetAddressOf() );
+                        if( FAILED( hr ) || mDevice.isError() )
+                        {
+                            String msg = mDevice.getErrorDescription( hr );
+                            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                            "Cannot create D3D11 buffer: " + msg,
+                                            "D3D11HLSLProgram::analizeMicrocode" );
+                        }
                     }
                     else
                     {
-                        assert (it->mUniformBuffer->getSizeInBytes() == mD3d11ShaderBufferDescs[b].Size);
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+                        D3D11_BUFFER_DESC desc;
+                        it->mConstBuffer->GetDesc(&desc);
+                        OGRE_ASSERT( desc.ByteWidth == mD3d11ShaderBufferDescs[b].Size );
+#endif
                     }
 
                     // Now, parse variables for this buffer
@@ -1223,8 +1239,7 @@ namespace Ogre {
                                     it->mShaderVars.push_back(newVar);
                                 }
                                 break;
-                            };
-
+                            }
                         }
                     }
                 }
@@ -2090,41 +2105,49 @@ namespace Ogre {
         for( size_t i=0; i<NumDefaultBufferTypes; ++i )
         {
             BufferInfo *it = &mDefaultBuffers[i];
-            if (!it->mUniformBuffer.isNull())
+            if (it->mConstBuffer)
             {
-                v1::HardwareBufferLockGuard uniformLock(it->mUniformBuffer, v1::HardwareBuffer::HBL_DISCARD);
+                D3D11_MAPPED_SUBRESOURCE mappedSubres;
+                const HRESULT hr = mDevice.GetImmediateContext()->Map(
+                    it->mConstBuffer.Get(), 0u, D3D11_MAP_WRITE_DISCARD, 0u, &mappedSubres );
+
+                if( FAILED( hr ) || mDevice.isError() )
+                {
+                    String msg = mDevice.getErrorDescription( hr );
+                    OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Error calling Map: " + msg,
+                                    "D3D11HLSLProgram::getConstantBuffers" );
+                }
 
                 // Only iterate through parsed variables (getting size of list)
                 void* src = 0;
                 ShaderVarWithPosInBuf* iter = &(it->mShaderVars[0]);
-                unsigned int lSize = it->mShaderVars.size();
-                for (size_t i = 0 ; i < lSize; i++, iter++)
+                const size_t lSize = it->mShaderVars.size();
+                for( size_t i = 0; i < lSize; i++, iter++ )
                 {
-                    const GpuConstantDefinition& def = params->getConstantDefinition(iter->name);
-                    // Since we are mapping with write discard, contents of the buffer are undefined.
-                    // We must set every variable, even if it has not changed.
-                    //if (def.variability & variabilityMask)
+                    const GpuConstantDefinition &def = params->getConstantDefinition( iter->name );
+                    if( def.isFloat() )
                     {
-                        if(def.isFloat())
-                        {
-                            src = (void *)&(*(params->getFloatConstantList().begin() + def.physicalIndex));
-                        }
-                        else if( def.isUnsignedInt() )
-                        {
-                            src = (void *)&(*(params->getUnsignedIntConstantList().begin() + def.physicalIndex));
-                        }
-                        else
-                        {
-                            src = (void *)&(*(params->getIntConstantList().begin() + def.physicalIndex));
-                        }
-
-                        memcpy( &(((char *)(uniformLock.pData))[iter->startOffset]), src , iter->size);
+                        src =
+                            (void *)&( *( params->getFloatConstantList().begin() + def.physicalIndex ) );
                     }
+                    else if( def.isUnsignedInt() )
+                    {
+                        src = (void *)&(
+                            *( params->getUnsignedIntConstantList().begin() + def.physicalIndex ) );
+                    }
+                    else
+                    {
+                        src = (void *)&( *( params->getIntConstantList().begin() + def.physicalIndex ) );
+                    }
+
+                    memcpy( &( ( (char *)( mappedSubres.pData ) )[iter->startOffset] ), src,
+                            iter->size );
                 }
 
+                mDevice.GetImmediateContext()->Unmap( it->mConstBuffer.Get(), 0u );
+
                 // Add buffer to list
-                buffers[numBuffers] = static_cast<v1::D3D11HardwareUniformBuffer*>(
-                            it->mUniformBuffer.get())->getD3DConstantBuffer();
+                buffers[numBuffers] = it->mConstBuffer.Get();
                 // Increment number of buffers
                 ++numBuffers;
             }

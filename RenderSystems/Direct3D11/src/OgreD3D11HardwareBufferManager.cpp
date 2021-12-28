@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
-#include "OgreD3D11HardwareUniformBuffer.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 #include "OgreD3D11Device.h"
@@ -91,52 +90,6 @@ namespace v1 {
 		}
 		return HardwareIndexBufferSharedPtr(idx);
 
-    }
-	//-----------------------------------------------------------------------
-	HardwareUniformBufferSharedPtr
-		D3D11HardwareBufferManagerBase::createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name)
-	{
-		assert(sizeBytes > 0);
-		D3D11HardwareUniformBuffer* uni = 0;
-		/*
-		if (name != "")
-		{
-			SharedUniformBufferMap::iterator it = mSharedUniformBuffers.find(name);
-			if (it != mSharedUniformBuffers.end())
-			{
-				uni = static_cast<D3D11HardwareUniformBuffer*>(it->second);
-				assert (uni->getSizeInBytes() == sizeBytes);
-				assert (uni->getUsage() == usage);
-			}
-			else
-			{
-				uni = new D3D11HardwareUniformBuffer(this, sizeBytes, usage, useShadowBuffer, name, mlpD3DDevice);
-				{
-					OGRE_LOCK_MUTEX(mUniformBuffersMutex)
-					mUniformBuffers.insert(uni);
-					//mSharedUniformBuffers.insert(std::make_pair(name, uni));
-				}
-			}
-		}
-		else
-		{*/
-			uni = new D3D11HardwareUniformBuffer(this, sizeBytes, usage, useShadowBuffer, name, mlpD3DDevice);
-			{
-				OGRE_LOCK_MUTEX(mUniformBuffersMutex);
-				mUniformBuffers.insert(uni);
-			}
-		//}
-
-		return HardwareUniformBufferSharedPtr(uni);
-	}
-	//-----------------------------------------------------------------------
-	HardwareCounterBufferSharedPtr
-		D3D11HardwareBufferManagerBase::createCounterBuffer(size_t sizeBytes,
-		HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name)
-	{
-		OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-			"*** not implemented ***",
-			"D3D11HardwareBufferManagerBase::createCounterBuffer");
     }
 }
 }
