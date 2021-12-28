@@ -184,72 +184,6 @@ if( Remotery_LIBRARIES )
     endif()
 endif()
 
-# Find Boost
-# Searching for Boost is a very time consuming process, and can significantly slowdown build in Android Studio if
-# Ogre's CMakeList.txt is directly included into the main CMakeList.txt. OGRE_SKIP_BOOST_SEARCHING can be used to
-# skip this step. Note, that in Ogre 2.4 we will replace Boost with a facilities from the C++11 standard libraries.
-if(NOT OGRE_SKIP_BOOST_SEARCHING)
-# Prefer static linking in all cases
-if (WIN32 OR APPLE)
-	set(Boost_USE_STATIC_LIBS TRUE)
-else ()
-	# Statically linking boost to a dynamic Ogre build doesn't work on Linux 64bit
-	set(Boost_USE_STATIC_LIBS ${OGRE_STATIC})
-endif ()
-if (APPLE AND OGRE_BUILD_PLATFORM_APPLE_IOS)
-    set(Boost_USE_MULTITHREADED OFF)
-endif()
-
-if(ANDROID)
-    # FindBoost needs extra hint on android 
-    set(Boost_COMPILER -gcc)
-endif()
-
-set(Boost_ADDITIONAL_VERSIONS "1.57" "1.57.0" "1.56" "1.56.0" "1.55" "1.55.0" "1.54" "1.54.0" "1.53" "1.53.0" "1.52" "1.52.0" "1.51" "1.51.0" "1.50" "1.50.0" "1.49" "1.49.0" "1.48" "1.48.0" "1.47" "1.47.0" "1.46" "1.46.0" "1.45" "1.45.0" "1.44" "1.44.0" "1.42" "1.42.0" "1.41.0" "1.41" "1.40.0" "1.40")
-# Components that need linking (NB does not include header-only components like bind)
-set(OGRE_BOOST_COMPONENTS thread date_time)
-find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-if (NOT Boost_FOUND)
-	# Try again with the other type of libs
-	if(Boost_USE_STATIC_LIBS)
-		set(Boost_USE_STATIC_LIBS OFF)
-	else()
-		set(Boost_USE_STATIC_LIBS ON)
-	endif()
-	find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-endif()
-
-if(Boost_FOUND AND Boost_VERSION GREATER 104900)
-    if(Boost_VERSION GREATER 105300)
-        set(OGRE_BOOST_COMPONENTS thread date_time system atomic chrono)
-    else()
-        set(OGRE_BOOST_COMPONENTS thread date_time system chrono)
-    endif()
-    find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-endif()
-
-if(Boost_VERSION GREATER 105200)
-	# Use boost threading version 4 for boost 1.53 and above
-	add_definitions( -DBOOST_THREAD_VERSION=4 )
-endif()
-
-if(Boost_FOUND AND NOT WIN32)
-  list(REMOVE_DUPLICATES Boost_LIBRARIES)
-endif()
-
-# Optional Boost libs (Boost_${COMPONENT}_FOUND
-macro_log_feature(Boost_FOUND "boost" "Boost (general)" "http://boost.org" FALSE "" "")
-macro_log_feature(Boost_THREAD_FOUND "boost-thread" "Used for threading support" "http://boost.org" FALSE "" "")
-macro_log_feature(Boost_DATE_TIME_FOUND "boost-date_time" "Used for threading support" "http://boost.org" FALSE "" "")
-if(Boost_VERSION GREATER 104900)
-    macro_log_feature(Boost_SYSTEM_FOUND "boost-system" "Used for threading support" "http://boost.org" FALSE "" "")
-    macro_log_feature(Boost_CHRONO_FOUND "boost-chrono" "Used for threading support" "http://boost.org" FALSE "" "")
-	if(Boost_VERSION GREATER 105300)
-		macro_log_feature(Boost_ATOMIC_FOUND "boost-atomic" "Used for threading support" "http://boost.org" FALSE "" "")
-	endif()
-endif()
-endif()
-
 # POCO
 find_package(POCO)
 macro_log_feature(POCO_FOUND "POCO" "POCO framework" "http://pocoproject.org/" FALSE "" "")
@@ -343,8 +277,3 @@ link_directories(
   ${DirectX_LIBRARY_DIRS}
   ${CppUnit_LIBRARY_DIRS}
 )
-
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  link_directories(${Boost_LIBRARY_DIRS})
-endif ()

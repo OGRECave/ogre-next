@@ -30,9 +30,7 @@ THE SOFTWARE
 #   define NOMINMAX // required to stop windows.h messing up std::min
 #endif
 
-#if OGRE_THREAD_PROVIDER == 1
-    #include "OgreThreadHeadersBoost.h"
-#elif OGRE_THREAD_PROVIDER == 2
+#if OGRE_THREAD_PROVIDER == 2
     #include "OgreThreadHeadersPoco.h"
 #elif OGRE_THREAD_PROVIDER == 3
     #include "OgreThreadHeadersTBB.h"

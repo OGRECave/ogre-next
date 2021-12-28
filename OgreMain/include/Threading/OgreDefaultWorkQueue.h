@@ -28,8 +28,6 @@ THE SOFTWARE
 
 #if OGRE_THREAD_PROVIDER == 0
     #include "OgreDefaultWorkQueueStandard.h"
-#elif OGRE_THREAD_PROVIDER == 1
-    #include "OgreDefaultWorkQueueStandard.h"
 #elif OGRE_THREAD_PROVIDER == 2
     #include "OgreDefaultWorkQueueStandard.h"
 #elif OGRE_THREAD_PROVIDER == 3

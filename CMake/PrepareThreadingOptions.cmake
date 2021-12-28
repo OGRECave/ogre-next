@@ -17,16 +17,6 @@ set(OGRE_THREAD_SUPPORT_AVAILABLE TRUE)
 set(OGRE_THREAD_DEFAULT_PROVIDER "none")
 set(OGRE_THREAD_TYPE "0")
 
-if (Boost_THREAD_FOUND AND Boost_DATE_TIME_FOUND)
-	set(Boost_THREADING TRUE)
-endif ()
-
-if (Boost_THREADING AND NOT OGRE_THREAD_SUPPORT_AVAILABLE)
-	#set(OGRE_THREAD_SUPPORT_AVAILABLE TRUE)
-	set(OGRE_THREAD_DEFAULT_PROVIDER "boost")
-	set(OGRE_THREAD_TYPE "2")
-endif ()
-
 if (POCO_FOUND AND NOT OGRE_THREAD_SUPPORT_AVAILABLE)
 	#set(OGRE_THREAD_SUPPORT_AVAILABLE TRUE)
 	set(OGRE_THREAD_DEFAULT_PROVIDER "poco")
@@ -53,7 +43,6 @@ if (OGRE_THREAD_SUPPORT_AVAILABLE)
 	)
 	set(OGRE_CONFIG_THREAD_PROVIDER ${OGRE_THREAD_DEFAULT_PROVIDER} CACHE STRING
 		"Select the library to use for thread support. Possible values:
-		boost - Boost thread library.
 		poco  - Poco thread library.
 		tbb   - ThreadingBuildingBlocks library.
 		std   - STL thread library (requires compiler support)."
@@ -69,12 +58,7 @@ if (NOT OGRE_CONFIG_THREADS)
 	set(OGRE_CONFIG_THREAD_PROVIDER "none")
 	include_directories(${OGRE_SOURCE_DIR}/OgreMain/include/Threading)
 else ()
-	if (OGRE_CONFIG_THREAD_PROVIDER STREQUAL "boost")
-		if (NOT Boost_THREADING)
-			message(STATUS "Warning: boost-thread is not available. Using ${OGRE_THREAD_DEFAULT_PROVIDER} as thread provider.")
-			set(OGRE_CONFIG_THREAD_PROVIDER ${OGRE_THREAD_DEFAULT_PROVIDER})
-		endif ()
-	elseif (OGRE_CONFIG_THREAD_PROVIDER STREQUAL "poco")
+    if (OGRE_CONFIG_THREAD_PROVIDER STREQUAL "poco")
 		if (NOT POCO_FOUND)
 			message(STATUS "Warning: poco is not available. Using ${OGRE_THREAD_DEFAULT_PROVIDER} as thread provider.")
 			set(OGRE_CONFIG_THREAD_PROVIDER ${OGRE_THREAD_DEFAULT_PROVIDER})

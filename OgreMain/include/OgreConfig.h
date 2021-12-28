@@ -156,7 +156,7 @@ OGRE_THREAD_SUPPORT = 2
 OGRE_THREAD_PROVIDER = 0
     No support for threading.
 OGRE_THREAD_PROVIDER = 1
-    Boost libraries provide threading functionality.
+    Used to belong to Boost. Removed.
 OGRE_THREAD_PROVIDER = 2
     Poco libraries provide threading functionality.
 OGRE_THREAD_PROVIDER = 3

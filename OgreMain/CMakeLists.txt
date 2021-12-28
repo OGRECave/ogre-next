@@ -291,15 +291,6 @@ if (OGRE_THREAD_PROVIDER EQUAL 0)
 	list(APPEND THREAD_SOURCE_FILES
 		src/Threading/OgreDefaultWorkQueueStandard.cpp
 	)
-elseif (OGRE_THREAD_PROVIDER EQUAL 1)
-	list(APPEND THREAD_HEADER_FILES
-		include/Threading/OgreThreadDefinesBoost.h
-		include/Threading/OgreThreadHeadersBoost.h
-		include/Threading/OgreDefaultWorkQueueStandard.h
-	)
-	list(APPEND THREAD_SOURCE_FILES
-		src/Threading/OgreDefaultWorkQueueStandard.cpp
-	)
 elseif (OGRE_THREAD_PROVIDER EQUAL 2)
 	list(APPEND THREAD_HEADER_FILES
 		include/Threading/OgreThreadDefinesPoco.h
