@@ -1735,6 +1735,7 @@ namespace Ogre
 
         bool isPssmBlend = getProperty( HlmsBaseProp::PssmBlend ) != 0;
         bool isPssmFade = getProperty( HlmsBaseProp::PssmFade ) != 0;
+        bool isStaticBranchShadowMapLights = getProperty( HlmsBaseProp::StaticBranchShadowMapLights )!=0;
 
         bool isShadowCastingPointLight = false;
 
@@ -1854,6 +1855,12 @@ namespace Ogre
             {
                 //float pssmFadePoint.
                 mapSize += 4;
+            }
+            if (isStaticBranchShadowMapLights)
+            {
+                //float num_shadow_map_point_lights;
+                //float num_shadow_map_spot_lights;
+                mapSize += 4 + 4;
             }
 
             mapSize = alignToNextMultiple( mapSize, 16 );
@@ -2309,6 +2316,16 @@ namespace Ogre
 
                 //float pssmFadePoint
                 *passBufferPtr++ = *shadowNode->getPssmFade(0);
+            }
+            if (isStaticBranchShadowMapLights)
+            {
+                //float num_shadow_map_point_lights;
+                //float num_shadow_map_spot_lights;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = mRealShadowMapPointLights;
+                passBufferPtr++;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = mRealShadowMapSpotLights;
+                passBufferPtr++;
+                numPssmBlendsAndFade += 2;
             }
 
             passBufferPtr += alignToNextMultiple( numPssmSplits + numPssmBlendsAndFade, 4 ) -
@@ -3610,6 +3627,13 @@ namespace Ogre
     {
         HlmsBufferManager::frameEnded();
         mCurrentPassBuffer  = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setMaxShadowMapLights ( uint16 maxShadowMapLights )
+    {
+        if(maxShadowMapLights>0)
+            setShadowReceiversInPixelShader(true); //make sure we calculate light positions in pixel shaders
+        Hlms::setMaxShadowMapLights(maxShadowMapLights);
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::resetIblSpecMipmap( uint8 numMipmaps )

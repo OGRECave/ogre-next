@@ -207,10 +207,13 @@ namespace Ogre
 
         LightGatheringMode  mLightGatheringMode;
         uint16              mNumLightsLimit;
+        uint16              mNumShadowMapLightsLimit;
         uint16              mNumAreaApproxLightsLimit;
         uint16              mNumAreaLtcLightsLimit;
         uint32              mAreaLightsGlobalLightListStart;
         uint32              mRealNumDirectionalLights;
+        uint32              mRealShadowMapPointLights;
+        uint32              mRealShadowMapSpotLights;
         uint32              mRealNumAreaApproxLightsWithMask;
         uint32              mRealNumAreaApproxLights;
         uint32              mRealNumAreaLtcLights;
@@ -518,6 +521,24 @@ namespace Ogre
         void setMaxNonCasterDirectionalLights( uint16 maxLights );
         uint16 getMaxNonCasterDirectionalLights(void) const     { return mNumLightsLimit; }
 
+        /** By default shadow-caster spot and point lights are hardcoded into shaders. This means that if you
+            have 8 spot/point lights and then you add a 9th one, a whole new set of shaders
+            will be created. Even more if you have a combination of 3 spot and 5 point lights and the combination has changed to 4 spot and 4 point lights then you'll get the next set of shaders
+
+            This setting allows you to tremendously reduce the amount of shader permutations
+            by forcing Ogre to switching to static branching with an upper limit to the max
+            number of shadow-casting spot or point lights.
+
+            @see    setAreaLightForwardSettings
+        @param maxShadowMapLights
+            Maximum number of shadow-caster spot and point lights. 0 to allow unlimited number of lights,
+            at the cost of shader recompilations when spot or point  lights are added or removed or their combination are changed.
+
+            Default value is 0.
+         */
+        virtual void setMaxShadowMapLights ( uint16 maxShadowMapLights );
+        uint16 getMaxShadowMapLights(void) const    { return mNumShadowMapLightsLimit; }
+        
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit
             Maximum number of area approx lights that will be considered by the shader.
@@ -878,6 +899,7 @@ namespace Ogre
         static const IdString DualParaboloidMapping;
         static const IdString InstancedStereo;
         static const IdString StaticBranchLights;
+        static const IdString StaticBranchShadowMapLights;
         static const IdString NumShadowMapLights;
         static const IdString NumShadowMapTextures;
         static const IdString PssmSplits;
