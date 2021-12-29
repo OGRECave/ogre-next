@@ -34,368 +34,368 @@ THE SOFTWARE.
 
 #import "OgreException.h"
 #import "OgreLogManager.h"
-#import "OgreStringConverter.h"
 #import "OgreRoot.h"
+#import "OgreStringConverter.h"
 
-#import "macUtils.h"
 #import <dlfcn.h>
+#import "macUtils.h"
 
-#import <OpenGL/OpenGL.h>
 #import <AppKit/NSScreen.h>
+#import <OpenGL/OpenGL.h>
 
-namespace Ogre {
-
-//-----------------------------------------------------------------------
-OSXGL3PlusSupport::OSXGL3PlusSupport()
+namespace Ogre
 {
-}
+    //-----------------------------------------------------------------------
+    OSXGL3PlusSupport::OSXGL3PlusSupport() {}
 
-//-----------------------------------------------------------------------
-OSXGL3PlusSupport::~OSXGL3PlusSupport()
-{
-}
+    //-----------------------------------------------------------------------
+    OSXGL3PlusSupport::~OSXGL3PlusSupport() {}
 
-//-----------------------------------------------------------------------
-void OSXGL3PlusSupport::addConfig()
-{
-    ConfigOption optFullScreen;
-	ConfigOption optVideoMode;
-	ConfigOption optBitDepth;
-	ConfigOption optFSAA;
-	ConfigOption optRTTMode;
-	ConfigOption optHiddenWindow;
-	ConfigOption optVsync;
-	ConfigOption optSRGB;
-    ConfigOption optContentScalingFactor;
+    //-----------------------------------------------------------------------
+    void OSXGL3PlusSupport::addConfig()
+    {
+        ConfigOption optFullScreen;
+        ConfigOption optVideoMode;
+        ConfigOption optBitDepth;
+        ConfigOption optFSAA;
+        ConfigOption optRTTMode;
+        ConfigOption optHiddenWindow;
+        ConfigOption optVsync;
+        ConfigOption optSRGB;
+        ConfigOption optContentScalingFactor;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-	ConfigOption optStereoMode;
+        ConfigOption optStereoMode;
 #endif
 
-	// FS setting possibilities
-	optFullScreen.name = "Full Screen";
-	optFullScreen.possibleValues.push_back( "Yes" );
-	optFullScreen.possibleValues.push_back( "No" );
-	optFullScreen.currentValue = "No";
-	optFullScreen.immutable = false;
+        // FS setting possibilities
+        optFullScreen.name = "Full Screen";
+        optFullScreen.possibleValues.push_back( "Yes" );
+        optFullScreen.possibleValues.push_back( "No" );
+        optFullScreen.currentValue = "No";
+        optFullScreen.immutable = false;
 
-    // Hidden window setting possibilities
-	optHiddenWindow.name = "hidden";
-	optHiddenWindow.possibleValues.push_back( "Yes" );
-	optHiddenWindow.possibleValues.push_back( "No" );
-	optHiddenWindow.currentValue = "No";
-	optHiddenWindow.immutable = false;
+        // Hidden window setting possibilities
+        optHiddenWindow.name = "hidden";
+        optHiddenWindow.possibleValues.push_back( "Yes" );
+        optHiddenWindow.possibleValues.push_back( "No" );
+        optHiddenWindow.currentValue = "No";
+        optHiddenWindow.immutable = false;
 
-    // FS setting possibilities
-	optVsync.name = "vsync";
-	optVsync.possibleValues.push_back( "Yes" );
-	optVsync.possibleValues.push_back( "No" );
-	optVsync.currentValue = "No";
-	optVsync.immutable = false;
+        // FS setting possibilities
+        optVsync.name = "vsync";
+        optVsync.possibleValues.push_back( "Yes" );
+        optVsync.possibleValues.push_back( "No" );
+        optVsync.currentValue = "No";
+        optVsync.immutable = false;
 
-	optBitDepth.name = "Colour Depth";
-	optBitDepth.possibleValues.push_back( "32" );
-	optBitDepth.possibleValues.push_back( "16" );
-	optBitDepth.currentValue = "32";
-	optBitDepth.immutable = false;
+        optBitDepth.name = "Colour Depth";
+        optBitDepth.possibleValues.push_back( "32" );
+        optBitDepth.possibleValues.push_back( "16" );
+        optBitDepth.currentValue = "32";
+        optBitDepth.immutable = false;
 
-    optRTTMode.name = "RTT Preferred Mode";
-	optRTTMode.possibleValues.push_back( "FBO" );
-	optRTTMode.possibleValues.push_back( "PBuffer" );
-	optRTTMode.possibleValues.push_back( "Copy" );
-	optRTTMode.currentValue = "FBO";
-	optRTTMode.immutable = false;
+        optRTTMode.name = "RTT Preferred Mode";
+        optRTTMode.possibleValues.push_back( "FBO" );
+        optRTTMode.possibleValues.push_back( "PBuffer" );
+        optRTTMode.possibleValues.push_back( "Copy" );
+        optRTTMode.currentValue = "FBO";
+        optRTTMode.immutable = false;
 
-	// SRGB on auto window
-	optSRGB.name = "sRGB Gamma Conversion";
-	optSRGB.possibleValues.push_back("Yes");
-	optSRGB.possibleValues.push_back("No");
-	optSRGB.currentValue = "Yes";
-	optSRGB.immutable = false;
+        // SRGB on auto window
+        optSRGB.name = "sRGB Gamma Conversion";
+        optSRGB.possibleValues.push_back( "Yes" );
+        optSRGB.possibleValues.push_back( "No" );
+        optSRGB.currentValue = "Yes";
+        optSRGB.immutable = false;
 
-    optContentScalingFactor.name = "Content Scaling Factor";
-    optContentScalingFactor.possibleValues.push_back( "1.0" );
-    optContentScalingFactor.possibleValues.push_back( "1.33" );
-    optContentScalingFactor.possibleValues.push_back( "1.5" );
-    optContentScalingFactor.possibleValues.push_back( "2.0" );
-    optContentScalingFactor.currentValue = StringConverter::toString((float)[NSScreen mainScreen].backingScaleFactor);
-    optContentScalingFactor.immutable = false;
+        optContentScalingFactor.name = "Content Scaling Factor";
+        optContentScalingFactor.possibleValues.push_back( "1.0" );
+        optContentScalingFactor.possibleValues.push_back( "1.33" );
+        optContentScalingFactor.possibleValues.push_back( "1.5" );
+        optContentScalingFactor.possibleValues.push_back( "2.0" );
+        optContentScalingFactor.currentValue =
+            StringConverter::toString( (float)[NSScreen mainScreen].backingScaleFactor );
+        optContentScalingFactor.immutable = false;
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-	optStereoMode.name = "Stereo Mode";
-	optStereoMode.possibleValues.push_back(StringConverter::toString(SMT_NONE));
-	optStereoMode.possibleValues.push_back(StringConverter::toString(SMT_FRAME_SEQUENTIAL));
-	optStereoMode.currentValue = optStereoMode.possibleValues[0];
-	optStereoMode.immutable = false;
+        optStereoMode.name = "Stereo Mode";
+        optStereoMode.possibleValues.push_back( StringConverter::toString( SMT_NONE ) );
+        optStereoMode.possibleValues.push_back( StringConverter::toString( SMT_FRAME_SEQUENTIAL ) );
+        optStereoMode.currentValue = optStereoMode.possibleValues[0];
+        optStereoMode.immutable = false;
 #endif
 
-    mOptions[ optFullScreen.name ] = optFullScreen;
-	mOptions[ optBitDepth.name ] = optBitDepth;
-    mOptions[ optContentScalingFactor.name ] = optContentScalingFactor;
+        mOptions[optFullScreen.name] = optFullScreen;
+        mOptions[optBitDepth.name] = optBitDepth;
+        mOptions[optContentScalingFactor.name] = optContentScalingFactor;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-	mOptions[ optStereoMode.name ] = optStereoMode;
+        mOptions[optStereoMode.name] = optStereoMode;
 #endif
 
-	CGLRendererInfoObj rend;
-	GLint nrend = 0, maxSamples = 0;
+        CGLRendererInfoObj rend;
+        GLint nrend = 0, maxSamples = 0;
 
-	CGLQueryRendererInfo(CGDisplayIDToOpenGLDisplayMask(kCGDirectMainDisplay), &rend, &nrend);
-	CGLDescribeRenderer(rend, 0, kCGLRPMaxSamples, &maxSamples);
-    CGLDestroyRendererInfo(rend);
+        CGLQueryRendererInfo( CGDisplayIDToOpenGLDisplayMask( kCGDirectMainDisplay ), &rend, &nrend );
+        CGLDescribeRenderer( rend, 0, kCGLRPMaxSamples, &maxSamples );
+        CGLDestroyRendererInfo( rend );
 
-    // FSAA possibilities
-    optFSAA.name = "FSAA";
-    optFSAA.possibleValues.push_back( "0" );
+        // FSAA possibilities
+        optFSAA.name = "FSAA";
+        optFSAA.possibleValues.push_back( "0" );
 
-    for(int i = 0; i <= maxSamples; i += 2)
-        optFSAA.possibleValues.push_back( StringConverter::toString(i) );
+        for( int i = 0; i <= maxSamples; i += 2 )
+            optFSAA.possibleValues.push_back( StringConverter::toString( i ) );
 
-    optFSAA.currentValue = "0";
-    optFSAA.immutable = false;
+        optFSAA.currentValue = "0";
+        optFSAA.immutable = false;
 
-    mOptions[ optFSAA.name ] = optFSAA;
+        mOptions[optFSAA.name] = optFSAA;
 
-	// Video mode possibilities
-	optVideoMode.name = "Video Mode";
-	optVideoMode.immutable = false;
-	CFArrayRef displayModes = CGDisplayCopyAllDisplayModes(CGMainDisplayID(), NULL);
-	CFIndex numModes = CFArrayGetCount(displayModes);
-	CFMutableArrayRef goodModes = NULL;
-	goodModes = CFArrayCreateMutable(kCFAllocatorDefault, numModes, NULL);
-	
-	// Grab all the available display modes, then weed out duplicates...
-	for(int i = 0; i < numModes; ++i)
-	{
-		CGDisplayModeRef modeInfo = (CGDisplayModeRef)CFArrayGetValueAtIndex(displayModes, i);
+        // Video mode possibilities
+        optVideoMode.name = "Video Mode";
+        optVideoMode.immutable = false;
+        CFArrayRef displayModes = CGDisplayCopyAllDisplayModes( CGMainDisplayID(), NULL );
+        CFIndex numModes = CFArrayGetCount( displayModes );
+        CFMutableArrayRef goodModes = NULL;
+        goodModes = CFArrayCreateMutable( kCFAllocatorDefault, numModes, NULL );
 
-        // Get IOKit flags for the display mode
-        uint32_t ioFlags = CGDisplayModeGetIOFlags(modeInfo);
+        // Grab all the available display modes, then weed out duplicates...
+        for( int i = 0; i < numModes; ++i )
+        {
+            CGDisplayModeRef modeInfo = (CGDisplayModeRef)CFArrayGetValueAtIndex( displayModes, i );
 
-        bool safeForHardware = ioFlags & kDisplayModeSafetyFlags ? true : false;
-		bool stretched = ioFlags & kDisplayModeStretchedFlag ? true : false;
-		bool skipped = false;
-		
-		if((safeForHardware) || (!stretched))
-		{
-			size_t width  = CGDisplayModeGetWidth(modeInfo);
-			size_t height = CGDisplayModeGetHeight(modeInfo); 
-			
-			for(CFIndex j = 0; j < CFArrayGetCount(goodModes); ++j)
-			{
-				CGDisplayModeRef otherMode = (CGDisplayModeRef)CFArrayGetValueAtIndex(goodModes, j);
-                
-				size_t otherWidth  = CGDisplayModeGetWidth(otherMode);
-				size_t otherHeight = CGDisplayModeGetHeight(otherMode);
-				
-				// If we find a duplicate then skip this mode
-				if((otherWidth == width) && (otherHeight == height))
-					skipped = true;
-			}
-			
-			// This is a new mode, so add it to our goodModes array
-			if(!skipped)
-				CFArrayAppendValue(goodModes, modeInfo);
-		}
-	}
-	
-    // Release memory
-    CFRelease(displayModes);
+            // Get IOKit flags for the display mode
+            uint32_t ioFlags = CGDisplayModeGetIOFlags( modeInfo );
 
-	// Sort the modes...
-	CFArraySortValues(goodModes, CFRangeMake(0, CFArrayGetCount(goodModes)), 
-					  (CFComparatorFunction)_compareModes, NULL);
-					  
-	// Now pull the modes out and put them into optVideoModes
-	for(int i = 0; i < CFArrayGetCount(goodModes); ++i)
-	{
-		CGDisplayModeRef resolution = (CGDisplayModeRef)CFArrayGetValueAtIndex(goodModes, i);
-		
-		size_t fWidth  = CGDisplayModeGetWidth(resolution);
-		size_t fHeight = CGDisplayModeGetHeight(resolution);
-		String resoString = StringConverter::toString(fWidth) + " x " + StringConverter::toString(fHeight);
-		optVideoMode.possibleValues.push_back(resoString);
+            bool safeForHardware = ioFlags & kDisplayModeSafetyFlags ? true : false;
+            bool stretched = ioFlags & kDisplayModeStretchedFlag ? true : false;
+            bool skipped = false;
+
+            if( ( safeForHardware ) || ( !stretched ) )
+            {
+                size_t width = CGDisplayModeGetWidth( modeInfo );
+                size_t height = CGDisplayModeGetHeight( modeInfo );
+
+                for( CFIndex j = 0; j < CFArrayGetCount( goodModes ); ++j )
+                {
+                    CGDisplayModeRef otherMode =
+                        (CGDisplayModeRef)CFArrayGetValueAtIndex( goodModes, j );
+
+                    size_t otherWidth = CGDisplayModeGetWidth( otherMode );
+                    size_t otherHeight = CGDisplayModeGetHeight( otherMode );
+
+                    // If we find a duplicate then skip this mode
+                    if( ( otherWidth == width ) && ( otherHeight == height ) )
+                        skipped = true;
+                }
+
+                // This is a new mode, so add it to our goodModes array
+                if( !skipped )
+                    CFArrayAppendValue( goodModes, modeInfo );
+            }
+        }
+
+        // Release memory
+        CFRelease( displayModes );
+
+        // Sort the modes...
+        CFArraySortValues( goodModes, CFRangeMake( 0, CFArrayGetCount( goodModes ) ),
+                           (CFComparatorFunction)_compareModes, NULL );
+
+        // Now pull the modes out and put them into optVideoModes
+        for( int i = 0; i < CFArrayGetCount( goodModes ); ++i )
+        {
+            CGDisplayModeRef resolution = (CGDisplayModeRef)CFArrayGetValueAtIndex( goodModes, i );
+
+            size_t fWidth = CGDisplayModeGetWidth( resolution );
+            size_t fHeight = CGDisplayModeGetHeight( resolution );
+            String resoString =
+                StringConverter::toString( fWidth ) + " x " + StringConverter::toString( fHeight );
+            optVideoMode.possibleValues.push_back( resoString );
+        }
+        optVideoMode.currentValue = optVideoMode.possibleValues[0];
+
+        // Release memory
+        CFRelease( goodModes );
+
+        optRTTMode.name = "RTT Preferred Mode";
+        optRTTMode.possibleValues.push_back( "FBO" );
+        optRTTMode.possibleValues.push_back( "PBuffer" );
+        optRTTMode.possibleValues.push_back( "Copy" );
+        optRTTMode.currentValue = "FBO";
+        optRTTMode.immutable = false;
+
+        mOptions[optFullScreen.name] = optFullScreen;
+        mOptions[optVideoMode.name] = optVideoMode;
+        mOptions[optFSAA.name] = optFSAA;
+        mOptions[optRTTMode.name] = optRTTMode;
+        mOptions[optHiddenWindow.name] = optHiddenWindow;
+        mOptions[optVsync.name] = optVsync;
+        mOptions[optSRGB.name] = optSRGB;
+
+        setShaderCachePath( Ogre::macCachePath() + "/org.ogre3d.RTShaderCache" );
+
+        // Set the shader library path
+        setShaderLibraryPath( Ogre::macBundlePath() + "/Contents/Resources/RTShaderLib/GLSL150" );
     }
-    optVideoMode.currentValue = optVideoMode.possibleValues[0];
 
-    // Release memory
-    CFRelease(goodModes);
+    //-----------------------------------------------------------------------
+    String OSXGL3PlusSupport::validateConfig() { return String( "" ); }
 
-    optRTTMode.name = "RTT Preferred Mode";
-	optRTTMode.possibleValues.push_back( "FBO" );
-	optRTTMode.possibleValues.push_back( "PBuffer" );
-	optRTTMode.possibleValues.push_back( "Copy" );
-	optRTTMode.currentValue = "FBO";
-	optRTTMode.immutable = false;
-
-	mOptions[optFullScreen.name] = optFullScreen;
-	mOptions[optVideoMode.name] = optVideoMode;
-    mOptions[optFSAA.name] = optFSAA;
-	mOptions[optRTTMode.name] = optRTTMode;
-	mOptions[optHiddenWindow.name] = optHiddenWindow;
-	mOptions[optVsync.name] = optVsync;
-	mOptions[optSRGB.name] = optSRGB;
-
-    setShaderCachePath(Ogre::macCachePath() + "/org.ogre3d.RTShaderCache");
-    
-    // Set the shader library path
-    setShaderLibraryPath(Ogre::macBundlePath() + "/Contents/Resources/RTShaderLib/GLSL150");
-}
-
-//-----------------------------------------------------------------------
-String OSXGL3PlusSupport::validateConfig()
-{
-	return String( "" );
-}
-
-//-----------------------------------------------------------------------
-Window* OSXGL3PlusSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle ) 
-{
-	if( autoCreateWindow )
-	{
-		ConfigOptionMap::iterator opt = mOptions.find( "Full Screen" );
-		if( opt == mOptions.end() )
-			OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Can't find full screen options!", "OSXGL3PlusSupport::createWindow" );
-		bool fullscreen = ( opt->second.currentValue == "Yes" );
-		opt = mOptions.find( "Video Mode" );
-		if( opt == mOptions.end() )
-			OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Can't find video mode options!", "OSXGL3PlusSupport::createWindow" );
-		String val = opt->second.currentValue;
-		String::size_type pos = val.find( 'x' );
-		if( pos == String::npos )
-			OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Invalid Video Mode provided", "OSXGL3PlusSupport::createWindow" );
-
-		unsigned int w = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
-		unsigned int h = StringConverter::parseUnsignedInt( val.substr( pos + 1 ) );
-
-        // Parse FSAA config
-		NameValuePairList winOptions;
-		winOptions[ "title" ] = windowTitle;
-        opt = mOptions.find( "FSAA" );
-        if( opt != mOptions.end() )
+    //-----------------------------------------------------------------------
+    Window *OSXGL3PlusSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+                                             const String &windowTitle )
+    {
+        if( autoCreateWindow )
         {
-			winOptions[ "FSAA" ] = opt->second.currentValue;
-        }
+            ConfigOptionMap::iterator opt = mOptions.find( "Full Screen" );
+            if( opt == mOptions.end() )
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Can't find full screen options!",
+                             "OSXGL3PlusSupport::createWindow" );
+            bool fullscreen = ( opt->second.currentValue == "Yes" );
+            opt = mOptions.find( "Video Mode" );
+            if( opt == mOptions.end() )
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Can't find video mode options!",
+                             "OSXGL3PlusSupport::createWindow" );
+            String val = opt->second.currentValue;
+            String::size_type pos = val.find( 'x' );
+            if( pos == String::npos )
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Invalid Video Mode provided",
+                             "OSXGL3PlusSupport::createWindow" );
 
-        opt = mOptions.find( "hidden" );
-        if( opt != mOptions.end() )
-        {
-            winOptions[ "hidden" ] = opt->second.currentValue;
-        }
+            unsigned int w = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
+            unsigned int h = StringConverter::parseUnsignedInt( val.substr( pos + 1 ) );
 
-        opt = mOptions.find( "vsync" );
-        if( opt != mOptions.end() )
-        {
-            winOptions[ "vsync" ] = opt->second.currentValue;
-        }
+            // Parse FSAA config
+            NameValuePairList winOptions;
+            winOptions["title"] = windowTitle;
+            opt = mOptions.find( "FSAA" );
+            if( opt != mOptions.end() )
+            {
+                winOptions["FSAA"] = opt->second.currentValue;
+            }
 
-        opt = mOptions.find( "Content Scaling Factor" );
-        if( opt != mOptions.end() )
-        {
-            winOptions["contentScalingFactor"] = opt->second.currentValue;
-        }
+            opt = mOptions.find( "hidden" );
+            if( opt != mOptions.end() )
+            {
+                winOptions["hidden"] = opt->second.currentValue;
+            }
 
-        opt = mOptions.find( "sRGB Gamma Conversion" );
-        if( opt != mOptions.end() )
-            winOptions["gamma"] = opt->second.currentValue;
+            opt = mOptions.find( "vsync" );
+            if( opt != mOptions.end() )
+            {
+                winOptions["vsync"] = opt->second.currentValue;
+            }
+
+            opt = mOptions.find( "Content Scaling Factor" );
+            if( opt != mOptions.end() )
+            {
+                winOptions["contentScalingFactor"] = opt->second.currentValue;
+            }
+
+            opt = mOptions.find( "sRGB Gamma Conversion" );
+            if( opt != mOptions.end() )
+                winOptions["gamma"] = opt->second.currentValue;
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		opt = mOptions.find("Stereo Mode");
-		if (opt == mOptions.end())
-			OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Can't find stereo enabled options!", "OSXGLSupport::createWindow");
-		winOptions["stereoMode"] = opt->second.currentValue;
+            opt = mOptions.find( "Stereo Mode" );
+            if( opt == mOptions.end() )
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Can't find stereo enabled options!",
+                             "OSXGLSupport::createWindow" );
+            winOptions["stereoMode"] = opt->second.currentValue;
 #endif
 
-		return renderSystem->_createRenderWindow( windowTitle, w, h, fullscreen, &winOptions );
-	}
-	else
-	{
-		// XXX What is the else?
-		return NULL;
-	}
-}
+            return renderSystem->_createRenderWindow( windowTitle, w, h, fullscreen, &winOptions );
+        }
+        else
+        {
+            // XXX What is the else?
+            return NULL;
+        }
+    }
 
-//-----------------------------------------------------------------------
-Window* OSXGL3PlusSupport::newWindow( const String &name, unsigned int width, unsigned int height, 
-	bool fullScreen, const NameValuePairList *miscParams )
-{
-	// Create the window, if Cocoa return a Cocoa window
-    LogManager::getSingleton().logMessage("Creating a Cocoa Compatible Render System");
-    CocoaWindow *window = OGRE_NEW CocoaWindow(name, width, height, fullScreen);
-    window->create(name, width, height, fullScreen, miscParams);
+    //-----------------------------------------------------------------------
+    Window *OSXGL3PlusSupport::newWindow( const String &name, unsigned int width, unsigned int height,
+                                          bool fullScreen, const NameValuePairList *miscParams )
+    {
+        // Create the window, if Cocoa return a Cocoa window
+        LogManager::getSingleton().logMessage( "Creating a Cocoa Compatible Render System" );
+        CocoaWindow *window = OGRE_NEW CocoaWindow( name, width, height, fullScreen );
+        window->create( name, width, height, fullScreen, miscParams );
 
-    return window;
-}
+        return window;
+    }
 
-//-----------------------------------------------------------------------
-void OSXGL3PlusSupport::start()
-{
-	LogManager::getSingleton().logMessage(
-			"***********************************************\n"
-			"***  Starting Mac OS X OpenGL 3+ Subsystem  ***\n"
-			"***********************************************");
-}
+    //-----------------------------------------------------------------------
+    void OSXGL3PlusSupport::start()
+    {
+        LogManager::getSingleton().logMessage( "***********************************************\n"
+                                               "***  Starting Mac OS X OpenGL 3+ Subsystem  ***\n"
+                                               "***********************************************" );
+    }
 
-//-----------------------------------------------------------------------
-void OSXGL3PlusSupport::stop()
-{
-	LogManager::getSingleton().logMessage(
-			"***********************************************\n"
-			"***  Stopping Mac OS X OpenGL 3+ Subsystem  ***\n"
-			"***********************************************");
-}
+    //-----------------------------------------------------------------------
+    void OSXGL3PlusSupport::stop()
+    {
+        LogManager::getSingleton().logMessage( "***********************************************\n"
+                                               "***  Stopping Mac OS X OpenGL 3+ Subsystem  ***\n"
+                                               "***********************************************" );
+    }
 
-//-----------------------------------------------------------------------
-void* OSXGL3PlusSupport::getProcAddress(const char* procname) const
-{
-    return dlsym (RTLD_DEFAULT, procname);
-}
+    //-----------------------------------------------------------------------
+    void *OSXGL3PlusSupport::getProcAddress( const char *procname ) const
+    {
+        return dlsym( RTLD_DEFAULT, procname );
+    }
 
-//-----------------------------------------------------------------------
-CFComparisonResult OSXGL3PlusSupport::_compareModes (const void *val1, const void *val2, void *context)
-{
-	// These are the values we will be interested in...
-	/*
-	CGDisplayModeGetWidth
-	CGDisplayModeGetHeight
-	CGDisplayModeGetRefreshRate
-	CGDisplayModeGetIOFlags((mode), kDisplayModeStretchedFlag)
-	CGDisplayModeGetIOFlags((mode), kDisplayModeSafetyFlags)
-	*/
-	
-	// CFArray comparison callback for sorting display modes.
-	#pragma unused(context)
-	CGDisplayModeRef thisMode = (CGDisplayModeRef)val1;
-	CGDisplayModeRef otherMode = (CGDisplayModeRef)val2;
-	
-	size_t width = CGDisplayModeGetWidth(thisMode);
-	size_t otherWidth = CGDisplayModeGetWidth(otherMode);
-	
-	size_t height = CGDisplayModeGetHeight(thisMode);
-	size_t otherHeight = CGDisplayModeGetHeight(otherMode);
+    //-----------------------------------------------------------------------
+    CFComparisonResult OSXGL3PlusSupport::_compareModes( const void *val1, const void *val2,
+                                                         void *context )
+    {
+// These are the values we will be interested in...
+/*
+CGDisplayModeGetWidth
+CGDisplayModeGetHeight
+CGDisplayModeGetRefreshRate
+CGDisplayModeGetIOFlags((mode), kDisplayModeStretchedFlag)
+CGDisplayModeGetIOFlags((mode), kDisplayModeSafetyFlags)
+*/
 
-	// Sort modes in screen size order
-	if (width * height < otherWidth * otherHeight)
-	{
-		return kCFCompareLessThan;
-	}
-	else if (width * height > otherWidth * otherHeight)
-	{
-		return kCFCompareGreaterThan;
-	}
+// CFArray comparison callback for sorting display modes.
+#pragma unused( context )
+        CGDisplayModeRef thisMode = (CGDisplayModeRef)val1;
+        CGDisplayModeRef otherMode = (CGDisplayModeRef)val2;
 
-	// Sort modes by refresh rate.
-	double refreshRate = CGDisplayModeGetRefreshRate(thisMode);
-	double otherRefreshRate = CGDisplayModeGetRefreshRate(otherMode);
+        size_t width = CGDisplayModeGetWidth( thisMode );
+        size_t otherWidth = CGDisplayModeGetWidth( otherMode );
 
-	if (refreshRate < otherRefreshRate)
-	{
-		return kCFCompareLessThan;
-	}
-	else if (refreshRate > otherRefreshRate)
-	{
-		return kCFCompareGreaterThan;
-	}
+        size_t height = CGDisplayModeGetHeight( thisMode );
+        size_t otherHeight = CGDisplayModeGetHeight( otherMode );
 
-	return kCFCompareEqualTo;
-}
+        // Sort modes in screen size order
+        if( width * height < otherWidth * otherHeight )
+        {
+            return kCFCompareLessThan;
+        }
+        else if( width * height > otherWidth * otherHeight )
+        {
+            return kCFCompareGreaterThan;
+        }
 
-} // namespace Ogre
+        // Sort modes by refresh rate.
+        double refreshRate = CGDisplayModeGetRefreshRate( thisMode );
+        double otherRefreshRate = CGDisplayModeGetRefreshRate( otherMode );
+
+        if( refreshRate < otherRefreshRate )
+        {
+            return kCFCompareLessThan;
+        }
+        else if( refreshRate > otherRefreshRate )
+        {
+            return kCFCompareGreaterThan;
+        }
+
+        return kCFCompareEqualTo;
+    }
+
+}  // namespace Ogre

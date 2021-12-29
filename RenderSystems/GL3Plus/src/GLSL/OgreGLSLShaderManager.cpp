@@ -30,116 +30,104 @@
 #include "OgreGLSLShader.h"
 #include "OgreLogManager.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     GLSLShaderManager::GLSLShaderManager()
     {
         // Superclass sets up members
 
         // Register with resource group manager
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
     }
-
 
     GLSLShaderManager::~GLSLShaderManager()
     {
         // Unregister with resource group manager
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
     }
 
-
-    bool GLSLShaderManager::registerShaderFactory(const String& syntaxCode,
-                                                     CreateGpuProgramCallback createFn)
+    bool GLSLShaderManager::registerShaderFactory( const String &syntaxCode,
+                                                   CreateGpuProgramCallback createFn )
     {
-        return mShaderMap.insert(ShaderMap::value_type(syntaxCode, createFn)).second;
+        return mShaderMap.insert( ShaderMap::value_type( syntaxCode, createFn ) ).second;
     }
 
-
-    bool GLSLShaderManager::unregisterShaderFactory(const String& syntaxCode)
+    bool GLSLShaderManager::unregisterShaderFactory( const String &syntaxCode )
     {
-        return mShaderMap.erase(syntaxCode) != 0;
+        return mShaderMap.erase( syntaxCode ) != 0;
     }
 
-
-    Resource* GLSLShaderManager::createImpl(const String& name,
-                                               ResourceHandle handle,
-                                               const String& group, bool isManual,
-                                               ManualResourceLoader* loader,
-                                               const NameValuePairList* params)
+    Resource *GLSLShaderManager::createImpl( const String &name, ResourceHandle handle,
+                                             const String &group, bool isManual,
+                                             ManualResourceLoader *loader,
+                                             const NameValuePairList *params )
     {
         NameValuePairList::const_iterator paramSyntax, paramType;
 
-        if (!params ||
-            (paramSyntax = params->find("syntax")) == params->end() ||
-            (paramType = params->find("type")) == params->end())
+        if( !params || ( paramSyntax = params->find( "syntax" ) ) == params->end() ||
+            ( paramType = params->find( "type" ) ) == params->end() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "You must supply 'syntax' and 'type' parameters",
-                        "GLSLShaderManager::createImpl");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must supply 'syntax' and 'type' parameters",
+                         "GLSLShaderManager::createImpl" );
         }
 
-        ShaderMap::const_iterator iter = mShaderMap.find(paramSyntax->second);
-        if(iter == mShaderMap.end())
+        ShaderMap::const_iterator iter = mShaderMap.find( paramSyntax->second );
+        if( iter == mShaderMap.end() )
         {
             // No factory, this is an unsupported syntax code, probably for another rendersystem
             // Create a basic one, it doesn't matter what it is since it won't be used
-            return new GLSLShader(this, name, handle, group, isManual, loader);
+            return new GLSLShader( this, name, handle, group, isManual, loader );
         }
 
         GpuProgramType gpt;
-        if (paramType->second == "vertex_program")
+        if( paramType->second == "vertex_program" )
         {
             gpt = GPT_VERTEX_PROGRAM;
         }
-        else if (paramType->second == "tessellation_hull_program")
+        else if( paramType->second == "tessellation_hull_program" )
         {
             gpt = GPT_HULL_PROGRAM;
         }
-        else if (paramType->second == "tessellation_domain_program")
+        else if( paramType->second == "tessellation_domain_program" )
         {
             gpt = GPT_DOMAIN_PROGRAM;
         }
-        else if (paramType->second == "geometry_program")
+        else if( paramType->second == "geometry_program" )
         {
             gpt = GPT_GEOMETRY_PROGRAM;
         }
-        else if (paramType->second == "fragment_program")
+        else if( paramType->second == "fragment_program" )
         {
             gpt = GPT_FRAGMENT_PROGRAM;
         }
-        else if (paramType->second == "compute_program")
+        else if( paramType->second == "compute_program" )
         {
             gpt = GPT_COMPUTE_PROGRAM;
         }
         else
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Unknown or unimplemented program type " + paramType->second,
-                        "GLSLShaderManager::createImpl");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Unknown or unimplemented program type " + paramType->second,
+                         "GLSLShaderManager::createImpl" );
         }
 
-        return (iter->second)(this, name, handle, group, isManual,
-                              loader, gpt, paramSyntax->second);
+        return ( iter->second )( this, name, handle, group, isManual, loader, gpt, paramSyntax->second );
     }
 
-
-    Resource* GLSLShaderManager::createImpl(const String& name,
-                                               ResourceHandle handle,
-                                               const String& group, bool isManual,
-                                               ManualResourceLoader* loader,
-                                               GpuProgramType gptype,
-                                               const String& syntaxCode)
+    Resource *GLSLShaderManager::createImpl( const String &name, ResourceHandle handle,
+                                             const String &group, bool isManual,
+                                             ManualResourceLoader *loader, GpuProgramType gptype,
+                                             const String &syntaxCode )
     {
-        ShaderMap::const_iterator iter = mShaderMap.find(syntaxCode);
-        if (iter == mShaderMap.end())
+        ShaderMap::const_iterator iter = mShaderMap.find( syntaxCode );
+        if( iter == mShaderMap.end() )
         {
             // No factory, this is an unsupported syntax code, probably for another rendersystem
             // Create a basic one, it doesn't matter what it is since it won't be used
-            return new GLSLShader(this, name, handle, group, isManual, loader);
+            return new GLSLShader( this, name, handle, group, isManual, loader );
         }
 
-        return (iter->second)(this, name, handle, group, isManual, loader, gptype, syntaxCode);
+        return ( iter->second )( this, name, handle, group, isManual, loader, gptype, syntaxCode );
     }
 
-
-}
+}  // namespace Ogre

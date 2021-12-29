@@ -33,22 +33,15 @@ namespace Ogre
 {
     const String sPluginName = "GL 3+ RenderSystem";
     //---------------------------------------------------------------------
-    GL3PlusPlugin::GL3PlusPlugin()
-        : mRenderSystem(0)
-    {
-
-    }
+    GL3PlusPlugin::GL3PlusPlugin() : mRenderSystem( 0 ) {}
     //---------------------------------------------------------------------
-    const String& GL3PlusPlugin::getName() const
-    {
-        return sPluginName;
-    }
+    const String &GL3PlusPlugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
     void GL3PlusPlugin::install()
     {
         mRenderSystem = OGRE_NEW GL3PlusRenderSystem();
 
-        Root::getSingleton().addRenderSystem(mRenderSystem);
+        Root::getSingleton().addRenderSystem( mRenderSystem );
     }
     //---------------------------------------------------------------------
     void GL3PlusPlugin::initialise()
@@ -65,8 +58,6 @@ namespace Ogre
     {
         OGRE_DELETE mRenderSystem;
         mRenderSystem = 0;
-
     }
 
-
-}
+}  // namespace Ogre

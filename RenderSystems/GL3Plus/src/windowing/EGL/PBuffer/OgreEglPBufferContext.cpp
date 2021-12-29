@@ -57,8 +57,5 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void EglPBufferContext::endCurrent() { eglMakeCurrent( mDeviceData->eglDisplay, 0, 0, 0 ); }
     //-------------------------------------------------------------------------
-    GL3PlusContext *EglPBufferContext::clone() const
-    {
-        return new EglPBufferContext( mGLSupport );
-    }
+    GL3PlusContext *EglPBufferContext::clone() const { return new EglPBufferContext( mGLSupport ); }
 }  // namespace Ogre

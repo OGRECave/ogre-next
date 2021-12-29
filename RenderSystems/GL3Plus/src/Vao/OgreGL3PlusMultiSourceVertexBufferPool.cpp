@@ -29,18 +29,15 @@ THE SOFTWARE.
 #include "OgreGL3PlusPrerequisites.h"
 
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreGL3PlusMultiSourceVertexBufferPool.h"
-#include "Vao/OgreGL3PlusBufferInterface.h"
-#include "Vao/OgreVertexBufferPacked.h"
+#    include "Vao/OgreGL3PlusBufferInterface.h"
+#    include "Vao/OgreGL3PlusMultiSourceVertexBufferPool.h"
+#    include "Vao/OgreVertexBufferPacked.h"
 
 namespace Ogre
 {
     GL3PlusMultiSourceVertexBufferPool::GL3PlusMultiSourceVertexBufferPool(
-                                                size_t vboPoolIndex, GLuint vboName,
-                                                const VertexElement2VecVec &vertexElementsBySource,
-                                                size_t maxVertices, BufferType bufferType,
-                                                size_t internalBufferStart,
-                                                VaoManager *vaoManager ) :
+        size_t vboPoolIndex, GLuint vboName, const VertexElement2VecVec &vertexElementsBySource,
+        size_t maxVertices, BufferType bufferType, size_t internalBufferStart, VaoManager *vaoManager ) :
         MultiSourceVertexBufferPool( vertexElementsBySource, maxVertices, bufferType,
                                      internalBufferStart, vaoManager ),
         mVboPoolIndex( vboPoolIndex ),
@@ -48,12 +45,9 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    GL3PlusMultiSourceVertexBufferPool::~GL3PlusMultiSourceVertexBufferPool()
-    {
-    }
+    GL3PlusMultiSourceVertexBufferPool::~GL3PlusMultiSourceVertexBufferPool() {}
     //-----------------------------------------------------------------------------------
-    void GL3PlusMultiSourceVertexBufferPool::allocateVbo( size_t numVertices,
-                                                          size_t &outBufferOffset )
+    void GL3PlusMultiSourceVertexBufferPool::allocateVbo( size_t numVertices, size_t &outBufferOffset )
     {
         if( mBufferType >= BT_DYNAMIC_DEFAULT )
             numVertices *= mVaoManager->getDynamicBufferMultiplier();
@@ -68,11 +62,11 @@ namespace Ogre
         {
             GL3PlusVaoManager::Block &bestBlock = *blockIt;
 
-            //Tell caller the offset
+            // Tell caller the offset
             outBufferOffset = bestBlock.offset;
 
-            //Shrink our records about available data.
-            bestBlock.size   -= numVertices;
+            // Shrink our records about available data.
+            bestBlock.size -= numVertices;
             bestBlock.offset += numVertices;
 
             if( bestBlock.size == 0 )
@@ -89,48 +83,48 @@ namespace Ogre
         if( mBufferType >= BT_DYNAMIC_DEFAULT )
             numVertices *= mVaoManager->getDynamicBufferMultiplier();
 
-        //See if we're contiguous to a free block and make that block grow.
+        // See if we're contiguous to a free block and make that block grow.
         mFreeBlocks.push_back( GL3PlusVaoManager::Block( bufferOffset, numVertices ) );
         GL3PlusVaoManager::mergeContiguousBlocks( mFreeBlocks.end() - 1, mFreeBlocks );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusMultiSourceVertexBufferPool::createVertexBuffers(
-                                                    VertexBufferPackedVec &outVertexBuffers,
-                                                    size_t numVertices,
-                                                    void * const *initialData, bool keepAsShadow )
+        VertexBufferPackedVec &outVertexBuffers, size_t numVertices, void *const *initialData,
+        bool keepAsShadow )
     {
         size_t vertexOffset;
         allocateVbo( numVertices, vertexOffset );
 
         if( vertexOffset == mMaxVertices )
         {
-            for( size_t i=0; i<mVertexElementsBySource.size(); ++i )
+            for( size_t i = 0; i < mVertexElementsBySource.size(); ++i )
             {
-                GL3PlusBufferInterface *bufferInterface = new GL3PlusBufferInterface( 0, mVboName, 0 /*TODO*/ );
+                GL3PlusBufferInterface *bufferInterface =
+                    new GL3PlusBufferInterface( 0, mVboName, 0 /*TODO*/ );
                 void *_initialData = 0;
                 if( initialData )
                     _initialData = initialData[i];
 
-                outVertexBuffers.push_back(
-                    OGRE_NEW VertexBufferPacked( mInternalBufferStart + vertexOffset + mSourceOffset[i],
-                                                 numVertices, mBytesPerVertexPerSource[i], 0,
-                                                 mBufferType, _initialData, keepAsShadow, mVaoManager,
-                                                 bufferInterface, mVertexElementsBySource[i],
-                                                 vertexOffset, this, i ) );
+                outVertexBuffers.push_back( OGRE_NEW VertexBufferPacked(
+                    mInternalBufferStart + vertexOffset + mSourceOffset[i], numVertices,
+                    mBytesPerVertexPerSource[i], 0, mBufferType, _initialData, keepAsShadow, mVaoManager,
+                    bufferInterface, mVertexElementsBySource[i], vertexOffset, this, i ) );
             }
         }
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusMultiSourceVertexBufferPool::destroyVertexBuffersImpl(
-                                                    VertexBufferPackedVec &inOutVertexBuffers )
+        VertexBufferPackedVec &inOutVertexBuffers )
     {
-        //Any of the vertex buffers will do (base class already checked they're all from the same group).
+        // Any of the vertex buffers will do (base class already checked they're all from the same
+        // group).
         VertexBufferPacked *vertexBuffer = inOutVertexBuffers[0];
         uint32 numVertices = vertexBuffer->getNumElements();
 
         deallocateVbo( vertexBuffer->_getInternalBufferStart() - mInternalBufferStart -
-                       mSourceOffset[vertexBuffer->_getSourceIndex()], numVertices );
+                           mSourceOffset[vertexBuffer->_getSourceIndex()],
+                       numVertices );
     }
-}
+}  // namespace Ogre
 
 #endif

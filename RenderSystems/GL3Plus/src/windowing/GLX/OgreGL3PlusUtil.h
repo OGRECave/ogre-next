@@ -31,13 +31,10 @@
 
 #include "OgreGLXGLSupport.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    inline GL3PlusSupport *getGLSupport() { return new GLXGLSupport(); }
 
-    inline GL3PlusSupport* getGLSupport()
-    {
-        return new GLXGLSupport();
-    }
+}  // namespace Ogre
 
-}
-
-#endif // INCL_OGRE_GLUTIL_H
+#endif  // INCL_OGRE_GLUTIL_H

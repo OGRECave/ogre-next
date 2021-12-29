@@ -31,52 +31,38 @@
 #include "OgreGLSLShader.h"
 #include "OgreRoot.h"
 
-namespace Ogre 
+namespace Ogre
 {
+    GLSLMonolithicProgramManager *GLSLShaderFactory::mMonolithicProgramManager = NULL;
 
-    GLSLMonolithicProgramManager* GLSLShaderFactory::mMonolithicProgramManager = NULL;
-    
     String GLSLShaderFactory::mLanguageName = "glsl";
-    
 
-    GLSLShaderFactory::GLSLShaderFactory(const GL3PlusSupport& support)
+    GLSLShaderFactory::GLSLShaderFactory( const GL3PlusSupport &support )
     {
-        if (mMonolithicProgramManager == NULL)
+        if( mMonolithicProgramManager == NULL )
         {
-            mMonolithicProgramManager = new GLSLMonolithicProgramManager(support);
+            mMonolithicProgramManager = new GLSLMonolithicProgramManager( support );
         }
     }
-    
 
     GLSLShaderFactory::~GLSLShaderFactory()
     {
-        if (mMonolithicProgramManager)
+        if( mMonolithicProgramManager )
         {
             delete mMonolithicProgramManager;
             mMonolithicProgramManager = NULL;
         }
     }
-    
 
-    const String& GLSLShaderFactory::getLanguage() const
+    const String &GLSLShaderFactory::getLanguage() const { return mLanguageName; }
+
+    HighLevelGpuProgram *GLSLShaderFactory::create( ResourceManager *creator, const String &name,
+                                                    ResourceHandle handle, const String &group,
+                                                    bool isManual, ManualResourceLoader *loader )
     {
-        return mLanguageName;
+        return OGRE_NEW GLSLShader( creator, name, handle, group, isManual, loader );
     }
-    
 
-    HighLevelGpuProgram* GLSLShaderFactory::create(
-        ResourceManager* creator,
-        const String& name, ResourceHandle handle,
-        const String& group, bool isManual, ManualResourceLoader* loader)
-    {
-        return OGRE_NEW GLSLShader(creator, name, handle, group, isManual, loader);
-    }
-    
+    void GLSLShaderFactory::destroy( HighLevelGpuProgram *prog ) { OGRE_DELETE prog; }
 
-    void GLSLShaderFactory::destroy(HighLevelGpuProgram* prog)
-    {
-        OGRE_DELETE prog;
-    }
-    
-
-}
+}  // namespace Ogre

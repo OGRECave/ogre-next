@@ -49,53 +49,48 @@ namespace Ogre
         mInternalFormat = GL3PlusMappings::get( pf );
     }
     //-----------------------------------------------------------------------------------
-    GL3PlusTexBufferPacked::~GL3PlusTexBufferPacked()
-    {
-        OCGE( glDeleteTextures( 1, &mTexName ) );
-    }
+    GL3PlusTexBufferPacked::~GL3PlusTexBufferPacked() { OCGE( glDeleteTextures( 1, &mTexName ) ); }
     //-----------------------------------------------------------------------------------
     inline void GL3PlusTexBufferPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
-        assert( offset < (mNumElements * mBytesPerElement - 1) );
-        assert( (offset + sizeBytes) <= mNumElements * mBytesPerElement );
+        assert( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
+        assert( offset < ( mNumElements * mBytesPerElement - 1 ) );
+        assert( ( offset + sizeBytes ) <= mNumElements * mBytesPerElement );
 
-        sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
 
-        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                                      mBufferInterface );
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
         OCGE( glActiveTexture( GL_TEXTURE0 + slot ) );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
-        OCGE(
-          glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
-                            mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+        OCGE( glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
+                                mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
 
-        //TODO: Get rid of this nonsense of restoring the active texture.
-        //RenderSystem is always restores to 0 after using,
-        //plus activateGLTextureUnit won't see our changes otherwise.
+        // TODO: Get rid of this nonsense of restoring the active texture.
+        // RenderSystem is always restores to 0 after using,
+        // plus activateGLTextureUnit won't see our changes otherwise.
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferPacked::_bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
-        assert( offset < (mNumElements * mBytesPerElement - 1) );
-        assert( (offset + sizeBytes) <= mNumElements * mBytesPerElement );
+        assert( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
+        assert( offset < ( mNumElements * mBytesPerElement - 1 ) );
+        assert( ( offset + sizeBytes ) <= mNumElements * mBytesPerElement );
 
-        sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
 
-        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
-                                                                      mBufferInterface );
+        GL3PlusBufferInterface *bufferInterface =
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
-        OCGE(
-          glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
-                            mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+        OCGE( glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
+                                mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        bindBuffer( slot, offset, sizeBytes);
+        bindBuffer( slot, offset, sizeBytes );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )

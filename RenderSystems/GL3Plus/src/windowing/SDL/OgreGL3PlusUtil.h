@@ -31,13 +31,10 @@
 
 #include "OgreSDLGLSupport.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    inline GL3PlusSupport *getGLSupport() { return new SDLGLSupport(); }
 
-    inline GL3PlusSupport* getGLSupport()
-    {
-        return new SDLGLSupport();
-    }
+};  // namespace Ogre
 
-};
-
-#endif // INCL_OGRE_GLUTIL_H
+#endif  // INCL_OGRE_GLUTIL_H

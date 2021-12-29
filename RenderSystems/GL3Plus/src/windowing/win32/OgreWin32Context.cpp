@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0502
+#    define _WIN32_WINNT 0x0502
 #endif
 #include "OgreWin32Context.h"
 #include "OgreException.h"
@@ -35,51 +35,50 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "windowing/win32/OgreWin32GLSupport.h"
 
-namespace Ogre {
-
-    Win32Context::Win32Context( HDC hdc, HGLRC glrc,
-                                uint32 contexMajorVersion, uint32 contexMinorVersion ) :
+namespace Ogre
+{
+    Win32Context::Win32Context( HDC hdc, HGLRC glrc, uint32 contexMajorVersion,
+                                uint32 contexMinorVersion ) :
         mHDC( hdc ),
         mGlrc( glrc ),
         mContexMajorVersion( contexMajorVersion ),
         mContexMinorVersion( contexMinorVersion )
     {
     }
-    
+
     Win32Context::~Win32Context()
     {
         // NB have to do this is subclass to ensure any methods called back
         // are on this subclass and not half-destructed superclass
-        GL3PlusRenderSystem *rs = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
-        rs->_unregisterContext(this);
-    }
-        
-    void Win32Context::setCurrent()
-    {
-         wglMakeCurrent(mHDC, mGlrc);      
-    }
-    void Win32Context::endCurrent()
-    {
-        wglMakeCurrent(NULL, NULL);
+        GL3PlusRenderSystem *rs =
+            static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
+        rs->_unregisterContext( this );
     }
 
-    GL3PlusContext* Win32Context::clone() const
+    void Win32Context::setCurrent() { wglMakeCurrent( mHDC, mGlrc ); }
+    void Win32Context::endCurrent() { wglMakeCurrent( NULL, NULL ); }
+
+    GL3PlusContext *Win32Context::clone() const
     {
-        const int attribList[] =
-        {
-            WGL_CONTEXT_MAJOR_VERSION_ARB, static_cast<int>( mContexMajorVersion ),
-            WGL_CONTEXT_MINOR_VERSION_ARB, static_cast<int>( mContexMinorVersion ),
-        #if OGRE_DEBUG_MODE
-            WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
-        #endif
-            WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-            0, 0
+        const int attribList[] = {
+            WGL_CONTEXT_MAJOR_VERSION_ARB,
+            static_cast<int>( mContexMajorVersion ),
+            WGL_CONTEXT_MINOR_VERSION_ARB,
+            static_cast<int>( mContexMinorVersion ),
+#if OGRE_DEBUG_MODE
+            WGL_CONTEXT_FLAGS_ARB,
+            WGL_CONTEXT_DEBUG_BIT_ARB,
+#endif
+            WGL_CONTEXT_PROFILE_MASK_ARB,
+            WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+            0,
+            0
         };
 
         // Create new context based on own HDC (shared with ours)
         HGLRC newCtx = wglCreateContextAttribsARB( mHDC, mGlrc, attribList );
-        
-        if (!newCtx)
+
+        if( !newCtx )
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "Error calling wglCreateContextAttribsARB: " + translateWGLError(),
@@ -91,11 +90,11 @@ namespace Ogre {
 
     void Win32Context::releaseContext()
     {
-        if (mGlrc != NULL)
+        if( mGlrc != NULL )
         {
-            wglDeleteContext(mGlrc);
+            wglDeleteContext( mGlrc );
             mGlrc = NULL;
-            mHDC  = NULL;
-        }       
+            mHDC = NULL;
+        }
     }
-}
+}  // namespace Ogre

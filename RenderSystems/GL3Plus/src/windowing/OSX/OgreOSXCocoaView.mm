@@ -31,51 +31,44 @@ THE SOFTWARE.
 
 @implementation OgreGL3PlusView
 
-- (id)initWithFrame:(NSRect)frameRect
-{
-	  if((self = [super initWithFrame:frameRect]))
+- (id)initWithFrame:(NSRect)frameRect {
+    if( ( self = [super initWithFrame:frameRect] ) )
     {
         NSApplicationLoad();
-        
+
         ogreWindow = NULL;
     }
-	  return self;
+    return self;
 }
 
-- (void)setOgreWindow:(Ogre::Window*)newWindow
-{
-	  ogreWindow = newWindow;
+- (void)setOgreWindow:(Ogre::Window *)newWindow {
+    ogreWindow = newWindow;
 }
 
-- (Ogre::Window*)ogreWindow
-{
-	  return ogreWindow;
+- (Ogre::Window *)ogreWindow {
+    return ogreWindow;
 }
 
-- (void)setFrameSize:(NSSize)newSize
-{
-  	[super setFrameSize:newSize];
-    if (ogreWindow)
+- (void)setFrameSize:(NSSize)newSize {
+    [super setFrameSize:newSize];
+    if( ogreWindow )
     {
         ogreWindow->windowMovedOrResized();
     }
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    if(ogreWindow)
+- (void)drawRect:(NSRect)dirtyRect {
+    if( ogreWindow )
     {
         ogreWindow->swapBuffers();
     }
 }
 
-- (BOOL)acceptsFirstResponder
-{
+- (BOOL)acceptsFirstResponder {
     return NO;
 }
 
-- (BOOL)canBecomeKeyView
-{
+- (BOOL)canBecomeKeyView {
     return NO;
 }
 

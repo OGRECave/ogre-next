@@ -31,13 +31,10 @@ THE SOFTWARE.
 
 #include "OgreWin32GLSupport.h"
 
-namespace Ogre {
-    
-inline GL3PlusSupport* getGLSupport()
+namespace Ogre
 {
-    return new Win32GLSupport();
-}
+    inline GL3PlusSupport *getGLSupport() { return new Win32GLSupport(); }
 
-};
+};  // namespace Ogre
 
-#endif // INCL_OGRE_GLUTIL_H
+#endif  // INCL_OGRE_GLUTIL_H

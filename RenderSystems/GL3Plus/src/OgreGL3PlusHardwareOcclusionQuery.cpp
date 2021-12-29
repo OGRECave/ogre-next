@@ -29,63 +29,64 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusHardwareOcclusionQuery.h"
 #include "OgreLogManager.h"
 
-namespace Ogre {
-
-/**
-  * This is a class that is the base class of the query class for 
-  * hardware occlusion testing.
-  *
-  * @author Lee Sandberg email: lee@abcmedia.se
-  *
-  * Updated on 12/7/2004 by Chris McGuirk
-  * - Implemented ARB_occlusion_query
-  * Updated on 13/9/2005 by Tuan Kuranes email: tuan.kuranes@free.fr
-  * Updated on 19/3/2012 by David Rogers to ARB_occlusion_query2 
-  */
-//------------------------------------------------------------------
-/**
-  * Default object constructor
-  * 
-  */
-GL3PlusHardwareOcclusionQuery::GL3PlusHardwareOcclusionQuery() 
-{ 
-    // Check for hardware occlusion support
-    OGRE_CHECK_GL_ERROR(glGenQueries(1, &mQueryID ));
-}
-//------------------------------------------------------------------
-/**
-  * Object destructor
-  */
-GL3PlusHardwareOcclusionQuery::~GL3PlusHardwareOcclusionQuery() 
-{ 
-    OGRE_CHECK_GL_ERROR(glDeleteQueries(1, &mQueryID));
-}
-//------------------------------------------------------------------
-void GL3PlusHardwareOcclusionQuery::beginOcclusionQuery() 
-{ 
-    OGRE_CHECK_GL_ERROR(glBeginQuery(GL_ANY_SAMPLES_PASSED, mQueryID));
-}
-//------------------------------------------------------------------
-void GL3PlusHardwareOcclusionQuery::endOcclusionQuery() 
-{ 
-    OGRE_CHECK_GL_ERROR(glEndQuery(GL_ANY_SAMPLES_PASSED));
-}
-//------------------------------------------------------------------
-bool GL3PlusHardwareOcclusionQuery::pullOcclusionQuery( unsigned int* NumOfFragments ) 
+namespace Ogre
 {
-    OGRE_CHECK_GL_ERROR(glGetQueryObjectuiv(mQueryID, GL_QUERY_RESULT, (GLuint*)NumOfFragments));
-    mPixelCount = *NumOfFragments;
-    return true;
-}
-//------------------------------------------------------------------
-bool GL3PlusHardwareOcclusionQuery::isStillOutstanding()
-{    
-    GLuint available = GL_FALSE;
+    /**
+     * This is a class that is the base class of the query class for
+     * hardware occlusion testing.
+     *
+     * @author Lee Sandberg email: lee@abcmedia.se
+     *
+     * Updated on 12/7/2004 by Chris McGuirk
+     * - Implemented ARB_occlusion_query
+     * Updated on 13/9/2005 by Tuan Kuranes email: tuan.kuranes@free.fr
+     * Updated on 19/3/2012 by David Rogers to ARB_occlusion_query2
+     */
+    //------------------------------------------------------------------
+    /**
+     * Default object constructor
+     *
+     */
+    GL3PlusHardwareOcclusionQuery::GL3PlusHardwareOcclusionQuery()
+    {
+        // Check for hardware occlusion support
+        OGRE_CHECK_GL_ERROR( glGenQueries( 1, &mQueryID ) );
+    }
+    //------------------------------------------------------------------
+    /**
+     * Object destructor
+     */
+    GL3PlusHardwareOcclusionQuery::~GL3PlusHardwareOcclusionQuery()
+    {
+        OGRE_CHECK_GL_ERROR( glDeleteQueries( 1, &mQueryID ) );
+    }
+    //------------------------------------------------------------------
+    void GL3PlusHardwareOcclusionQuery::beginOcclusionQuery()
+    {
+        OGRE_CHECK_GL_ERROR( glBeginQuery( GL_ANY_SAMPLES_PASSED, mQueryID ) );
+    }
+    //------------------------------------------------------------------
+    void GL3PlusHardwareOcclusionQuery::endOcclusionQuery()
+    {
+        OGRE_CHECK_GL_ERROR( glEndQuery( GL_ANY_SAMPLES_PASSED ) );
+    }
+    //------------------------------------------------------------------
+    bool GL3PlusHardwareOcclusionQuery::pullOcclusionQuery( unsigned int *NumOfFragments )
+    {
+        OGRE_CHECK_GL_ERROR(
+            glGetQueryObjectuiv( mQueryID, GL_QUERY_RESULT, (GLuint *)NumOfFragments ) );
+        mPixelCount = *NumOfFragments;
+        return true;
+    }
+    //------------------------------------------------------------------
+    bool GL3PlusHardwareOcclusionQuery::isStillOutstanding()
+    {
+        GLuint available = GL_FALSE;
 
-        OGRE_CHECK_GL_ERROR(glGetQueryObjectuiv(mQueryID, GL_QUERY_RESULT_AVAILABLE, &available));
+        OGRE_CHECK_GL_ERROR( glGetQueryObjectuiv( mQueryID, GL_QUERY_RESULT_AVAILABLE, &available ) );
 
         // GL_TRUE means a wait would occur
-        return !(available == GL_TRUE);
+        return !( available == GL_TRUE );
     }
 
-}
+}  // namespace Ogre

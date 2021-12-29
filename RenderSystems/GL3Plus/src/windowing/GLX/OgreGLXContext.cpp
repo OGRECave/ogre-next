@@ -27,63 +27,66 @@
 */
 
 #include "OgreGL3PlusRenderSystem.h"
-#include "OgreRoot.h"
+
 #include "OgreGLXContext.h"
-#include "OgreGLXUtils.h"
 #include "OgreGLXGLSupport.h"
+#include "OgreGLXUtils.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
-    GLXContext::GLXContext(GLXGLSupport* glsupport, ::GLXFBConfig fbconfig, ::GLXDrawable drawable, ::GLXContext context) :
-        mDrawable(drawable), mContext(0), mFBConfig(fbconfig), mGLSupport(glsupport), mExternalContext(false)
+    GLXContext::GLXContext( GLXGLSupport *glsupport, ::GLXFBConfig fbconfig, ::GLXDrawable drawable,
+                            ::GLXContext context ) :
+        mDrawable( drawable ),
+        mContext( 0 ),
+        mFBConfig( fbconfig ),
+        mGLSupport( glsupport ),
+        mExternalContext( false )
     {
-        GL3PlusRenderSystem *renderSystem = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
-        GLXContext* mainContext = static_cast<GLXContext*>(renderSystem->_getMainContext());
+        GL3PlusRenderSystem *renderSystem =
+            static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
+        GLXContext *mainContext = static_cast<GLXContext *>( renderSystem->_getMainContext() );
         ::GLXContext shareContext = 0;
 
-        if (mainContext)
+        if( mainContext )
         {
             shareContext = mainContext->mContext;
         }
 
-        if (context)
+        if( context )
         {
             mContext = context;
             mExternalContext = true;
         }
         else
         {
-            mContext = mGLSupport->createNewContext(mFBConfig, GLX_RGBA_TYPE, shareContext, GL_TRUE);
+            mContext = mGLSupport->createNewContext( mFBConfig, GLX_RGBA_TYPE, shareContext, GL_TRUE );
         }
 
-        if (! mContext)
+        if( !mContext )
         {
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Unable to create a suitable GLXContext", "GLXContext::GLXContext");
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Unable to create a suitable GLXContext",
+                         "GLXContext::GLXContext" );
         }
     }
 
     GLXContext::~GLXContext()
     {
-        GL3PlusRenderSystem *rs = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
+        GL3PlusRenderSystem *rs =
+            static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
 
-        if (!mExternalContext)
-            glXDestroyContext(mGLSupport->getGLDisplay(), mContext);
+        if( !mExternalContext )
+            glXDestroyContext( mGLSupport->getGLDisplay(), mContext );
 
-        rs->_unregisterContext(this);
+        rs->_unregisterContext( this );
     }
 
-    void GLXContext::setCurrent()
+    void GLXContext::setCurrent() { glXMakeCurrent( mGLSupport->getGLDisplay(), mDrawable, mContext ); }
+
+    void GLXContext::endCurrent() { glXMakeCurrent( mGLSupport->getGLDisplay(), None, None ); }
+
+    GL3PlusContext *GLXContext::clone() const
     {
-        glXMakeCurrent(mGLSupport->getGLDisplay(), mDrawable, mContext);
+        return new GLXContext( mGLSupport, mFBConfig, mDrawable );
     }
-
-    void GLXContext::endCurrent()
-    {
-        glXMakeCurrent(mGLSupport->getGLDisplay(), None, None);
-    }
-
-    GL3PlusContext* GLXContext::clone() const
-    {
-        return new GLXContext(mGLSupport, mFBConfig, mDrawable);
-    }
-}
+}  // namespace Ogre

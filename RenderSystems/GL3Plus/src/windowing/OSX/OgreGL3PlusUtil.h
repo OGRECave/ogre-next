@@ -31,13 +31,10 @@ THE SOFTWARE.
 
 #include "OgreOSXGL3PlusSupport.h"
 
-namespace Ogre {
-    
-inline GL3PlusSupport* getGLSupport()
+namespace Ogre
 {
-    return new OSXGL3PlusSupport();
-}
+    inline GL3PlusSupport *getGLSupport() { return new OSXGL3PlusSupport(); }
 
-}
+}  // namespace Ogre
 
-#endif // INCL_OGRE_GL3PlusUTIL_H
+#endif  // INCL_OGRE_GL3PlusUTIL_H

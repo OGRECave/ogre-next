@@ -29,29 +29,27 @@ THE SOFTWARE.
 #include "OgreGTKGLSupport.h"
 #include "OgreGTKWindow.h"
 
-#include "OgreLogManager.h"
 #include "OgreException.h"
+#include "OgreLogManager.h"
 #include "OgreStringConverter.h"
-
-
 
 using namespace Ogre;
 
-template<> GTKGLSupport* Singleton<GTKGLSupport>::ms_Singleton = 0;
-GTKGLSupport* GTKGLSupport::getSingletonPtr()
+template <>
+GTKGLSupport *Singleton<GTKGLSupport>::ms_Singleton = 0;
+GTKGLSupport *GTKGLSupport::getSingletonPtr()
 {
     return ms_Singleton;
 }
-GTKGLSupport& GTKGLSupport::getSingleton()
-{  
-    assert( ms_Singleton );  return ( *ms_Singleton );  
+GTKGLSupport &GTKGLSupport::getSingleton()
+{
+    assert( ms_Singleton );
+    return ( *ms_Singleton );
 }
 
-GTKGLSupport::GTKGLSupport() : 
-    _kit(0, NULL),
-    _context_ref(0)
+GTKGLSupport::GTKGLSupport() : _kit( 0, NULL ), _context_ref( 0 )
 {
-    Gtk::GL::init(0, NULL);
+    Gtk::GL::init( 0, NULL );
     _main_context = 0;
     _main_window = 0;
     //_ogre_widget = 0;
@@ -62,81 +60,82 @@ void GTKGLSupport::addConfig()
     ConfigOption optFullScreen;
     ConfigOption optVideoMode;
 
-     // FS setting possibilities
+    // FS setting possibilities
     optFullScreen.name = "Full Screen";
-    optFullScreen.possibleValues.push_back("Yes");
-    optFullScreen.possibleValues.push_back("No");
+    optFullScreen.possibleValues.push_back( "Yes" );
+    optFullScreen.possibleValues.push_back( "No" );
     optFullScreen.currentValue = "No";
     optFullScreen.immutable = false;
- 
+
     // Video mode possibilities
     // XXX Actually do this
     optVideoMode.name = "Video Mode";
     optVideoMode.immutable = false;
-    optVideoMode.possibleValues.push_back("640 x 480");
-    optVideoMode.possibleValues.push_back("800 x 600");
-    optVideoMode.possibleValues.push_back("1024 x 768");
-    optVideoMode.possibleValues.push_back("1280 x 1024");
+    optVideoMode.possibleValues.push_back( "640 x 480" );
+    optVideoMode.possibleValues.push_back( "800 x 600" );
+    optVideoMode.possibleValues.push_back( "1024 x 768" );
+    optVideoMode.possibleValues.push_back( "1280 x 1024" );
 
     optVideoMode.currentValue = "800 x 600";
 
     mOptions[optFullScreen.name] = optFullScreen;
     mOptions[optVideoMode.name] = optVideoMode;
 }
-    
+
 String GTKGLSupport::validateConfig()
 {
-    return String("");
+    return String( "" );
 }
 
-RenderWindow* GTKGLSupport::createWindow(bool autoCreateWindow, 
-                                         GL3PlusRenderSystem* renderSystem, 
-                     const String& windowTitle)
+RenderWindow *GTKGLSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+                                          const String &windowTitle )
 {
-    if (autoCreateWindow)
+    if( autoCreateWindow )
     {
-        ConfigOptionMap::iterator opt = mOptions.find("Full Screen");
-        if (opt == mOptions.end())
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Can't find full screen options!", "GTKGLSupport::createWindow");
-        bool fullscreen = (opt->second.currentValue == "Yes");
- 
-        opt = mOptions.find("Video Mode");
-        if (opt == mOptions.end())
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Can't find video mode options!", "GTKGLSupport::createWindow");
+        ConfigOptionMap::iterator opt = mOptions.find( "Full Screen" );
+        if( opt == mOptions.end() )
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Can't find full screen options!",
+                         "GTKGLSupport::createWindow" );
+        bool fullscreen = ( opt->second.currentValue == "Yes" );
+
+        opt = mOptions.find( "Video Mode" );
+        if( opt == mOptions.end() )
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Can't find video mode options!",
+                         "GTKGLSupport::createWindow" );
         String val = opt->second.currentValue;
-        String::size_type pos = val.find('x');
-        if (pos == String::npos)
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Invalid Video Mode provided", "GTKGLSupport::createWindow");
- 
-        unsigned int w = StringConverter::parseUnsignedInt(val.substr(0, pos));
-        unsigned int h = StringConverter::parseUnsignedInt(val.substr(pos + 1));
- 
-        return renderSystem->createRenderWindow(windowTitle, w, h, 32,
-fullscreen);
+        String::size_type pos = val.find( 'x' );
+        if( pos == String::npos )
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Invalid Video Mode provided",
+                         "GTKGLSupport::createWindow" );
+
+        unsigned int w = StringConverter::parseUnsignedInt( val.substr( 0, pos ) );
+        unsigned int h = StringConverter::parseUnsignedInt( val.substr( pos + 1 ) );
+
+        return renderSystem->createRenderWindow( windowTitle, w, h, 32, fullscreen );
     }
     else
     {
         // XXX What is the else?
-                return NULL;
+        return NULL;
     }
 }
 
-RenderWindow* GTKGLSupport::newWindow(const String& name, unsigned int width, 
-        unsigned int height, unsigned int colourDepth, bool fullScreen, int left, int top,
-        bool depthBuffer, RenderWindow* parentWindowHandle, bool vsync)
+RenderWindow *GTKGLSupport::newWindow( const String &name, unsigned int width, unsigned int height,
+                                       unsigned int colourDepth, bool fullScreen, int left, int top,
+                                       bool depthBuffer, RenderWindow *parentWindowHandle, bool vsync )
 {
-    GTKWindow* window = new GTKWindow();
-    window->create(name, width, height, colourDepth, fullScreen, left, top,
-                   depthBuffer, parentWindowHandle);
+    GTKWindow *window = new GTKWindow();
+    window->create( name, width, height, colourDepth, fullScreen, left, top, depthBuffer,
+                    parentWindowHandle );
 
-    //if(!_ogre_widget)
+    // if(!_ogre_widget)
     //  _ogre_widget = window->get_ogre_widget();
 
     // Copy some important information for future reference, for example
     // for when the context is needed
-    if(!_main_context)
+    if( !_main_context )
         _main_context = window->get_ogre_widget()->get_gl_context();
-    if(!_main_window)
+    if( !_main_window )
         _main_window = window->get_ogre_widget()->get_gl_window();
 
     return window;
@@ -147,84 +146,88 @@ void GTKGLSupport::start()
     LogManager::getSingleton().logMessage(
         "******************************\n"
         "*** Starting GTK Subsystem ***\n"
-        "******************************");
-
+        "******************************" );
 }
- 
+
 void GTKGLSupport::stop()
 {
     LogManager::getSingleton().logMessage(
         "******************************\n"
         "*** Stopping GTK Subsystem ***\n"
-        "******************************");
+        "******************************" );
 }
 
-void GTKGLSupport::begin_context(RenderTarget *_target)
+void GTKGLSupport::begin_context( RenderTarget *_target )
 {
     // Support nested contexts, in which case.. nothing happens
-        ++_context_ref;
-        if (_context_ref == 1) {
-        if(_target) {
+    ++_context_ref;
+    if( _context_ref == 1 )
+    {
+        if( _target )
+        {
             // Begin a specific context
-            OGREWidget *_ogre_widget = static_cast<GTKWindow*>(_target)->get_ogre_widget();
+            OGREWidget *_ogre_widget = static_cast<GTKWindow *>( _target )->get_ogre_widget();
 
-                _ogre_widget->get_gl_window()->gl_begin(_ogre_widget->get_gl_context());
-        } else {
+            _ogre_widget->get_gl_window()->gl_begin( _ogre_widget->get_gl_context() );
+        }
+        else
+        {
             // Begin a generic main context
-            _main_window->gl_begin(_main_context);
+            _main_window->gl_begin( _main_context );
         }
-        }
+    }
 }
 
 void GTKGLSupport::end_context()
 {
-        --_context_ref;
-        if(_context_ref < 0)
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Too many contexts destroyed!", "GTKGLSupport::end_context");
-        if (_context_ref == 0)
-        {
+    --_context_ref;
+    if( _context_ref < 0 )
+        OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Too many contexts destroyed!",
+                     "GTKGLSupport::end_context" );
+    if( _context_ref == 0 )
+    {
         // XX is this enough? (_main_window might not be the current window,
-        // but we can never be sure the previous rendering window 
+        // but we can never be sure the previous rendering window
         // even still exists)
         _main_window->gl_end();
-        }
+    }
 }
- 
+
 void GTKGLSupport::initialiseExtensions()
 {
     // XXX anythign to actually do here?
 }
 
-bool GTKGLSupport::checkMinGLVersion(const String& v) const
+bool GTKGLSupport::checkMinGLVersion( const String &v ) const
 {
     int major, minor;
-    Gdk::GL::query_version(major, minor);
+    Gdk::GL::query_version( major, minor );
 
-    std::string::size_type pos = v.find(".");
-    int cmaj = atoi(v.substr(0, pos).c_str());
-    int cmin = atoi(v.substr(pos + 1).c_str());
+    std::string::size_type pos = v.find( "." );
+    int cmaj = atoi( v.substr( 0, pos ).c_str() );
+    int cmin = atoi( v.substr( pos + 1 ).c_str() );
 
-    return ( (major >= cmaj) && (minor >= cmin) );
+    return ( ( major >= cmaj ) && ( minor >= cmin ) );
 }
 
-bool GTKGLSupport::checkExtension(const String& ext) const
+bool GTKGLSupport::checkExtension( const String &ext ) const
 {
     // query_gl_extension needs an active context, doesn't matter which one
-    if (_context_ref == 0)
-        _main_window->gl_begin(_main_context);
+    if( _context_ref == 0 )
+        _main_window->gl_begin( _main_context );
 
-    bool result = Gdk::GL::query_gl_extension(ext.c_str());
+    bool result = Gdk::GL::query_gl_extension( ext.c_str() );
 
-    if (_context_ref == 0)
+    if( _context_ref == 0 )
         _main_window->gl_end();
 }
 
-void* GTKGLSupport::getProcAddress(const char* procname) const
+void *GTKGLSupport::getProcAddress( const char *procname ) const
 {
-    return (void*)Gdk::GL::get_proc_address(procname);
+    return (void *)Gdk::GL::get_proc_address( procname );
 }
 
-Glib::RefPtr<const Gdk::GL::Context> GTKGLSupport::getMainContext() const {
+Glib::RefPtr<const Gdk::GL::Context> GTKGLSupport::getMainContext() const
+{
     return _main_context;
 }
-

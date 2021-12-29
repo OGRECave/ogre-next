@@ -33,11 +33,11 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 namespace Ogre
 {
-    const char* GL3PlusPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
+    const char *GL3PlusPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
     {
         switch( pixelFormat )
         {
-        //UNORM formats
+        // UNORM formats
         case PFG_R8_UNORM:
         case PFG_A8_UNORM:
             return "r8";
@@ -59,7 +59,7 @@ namespace Ogre
         case PFG_RGBA16_UNORM:
             return "rgba16";
 
-        //SNORM formats
+        // SNORM formats
         case PFG_R8_SNORM:
             return "r8_snorm";
         case PFG_R16_SNORM:
@@ -73,7 +73,7 @@ namespace Ogre
         case PFG_RGBA16_SNORM:
             return "rgba16_snorm";
 
-        //SINT formats
+        // SINT formats
         case PFG_R8_SINT:
             return "r8i";
         case PFG_R16_SINT:
@@ -94,7 +94,7 @@ namespace Ogre
         case PFG_RGBA32_SINT:
             return "rgba32i";
 
-        //UINT formats
+        // UINT formats
         case PFG_R8_UINT:
             return "r8ui";
         case PFG_R16_UINT:
@@ -117,7 +117,7 @@ namespace Ogre
         case PFG_RGBA32_UINT:
             return "rgba32ui";
 
-        //FLOAT formats
+        // FLOAT formats
         case PFG_R16_FLOAT:
             return "r16f";
         case PFG_R32_FLOAT:
@@ -140,10 +140,9 @@ namespace Ogre
         return 0;
     }
     //-------------------------------------------------------------------------
-    const char* GL3PlusPixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
-                                                             uint32 _textureType, bool isMsaa,
-                                                             ResourceAccess::
-                                                             ResourceAccess access ) const
+    const char *GL3PlusPixelFormatToShaderType::getDataType(
+        PixelFormatGpu pixelFormat, uint32 _textureType, bool isMsaa,
+        ResourceAccess::ResourceAccess access ) const
     {
         const bool bIsInteger = PixelFormatGpuUtils::isInteger( pixelFormat );
         TextureTypes::TextureTypes textureType = static_cast<TextureTypes::TextureTypes>( _textureType );
@@ -218,4 +217,4 @@ namespace Ogre
 
         return 0;
     }
-}
+}  // namespace Ogre

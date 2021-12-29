@@ -31,12 +31,9 @@
 
 #include "OgreGTKGLSupport.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    inline GL3PlusSupport *getGLSupport() { return new GTKGLSupport(); }
 
-    inline GL3PlusSupport* getGLSupport()
-    {
-        return new GTKGLSupport();
-    }
-
-};
-#endif // INCL_OGRE_GLUTIL_H
+};      // namespace Ogre
+#endif  // INCL_OGRE_GLUTIL_H

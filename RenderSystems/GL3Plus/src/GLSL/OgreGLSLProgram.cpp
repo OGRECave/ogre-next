@@ -29,99 +29,93 @@
 #include "OgreGLSLProgram.h"
 #include "OgreGLSLShader.h"
 #include "OgreGpuProgramManager.h"
-#include "OgreGLSLShader.h"
-#include "OgreRoot.h"
 #include "OgreProfiler.h"
+#include "OgreRoot.h"
 #include "OgreString.h"
 
 #include "Vao/OgreGL3PlusVaoManager.h"
 
-namespace Ogre {
-
-    GLSLProgram::GLSLProgram(GLSLShader* vertexShader,
-                             GLSLShader* hullShader,
-                             GLSLShader* domainShader,
-                             GLSLShader* geometryShader,
-                             GLSLShader* fragmentShader,
-                             GLSLShader* computeShader)
-        : mBaseInstanceLocation( GL_INVALID_INDEX )
-        , mVertexShader(vertexShader)
-        , mHullShader(hullShader)
-        , mDomainShader(domainShader)
-        , mGeometryShader(geometryShader)
-        , mFragmentShader(fragmentShader)
-        , mComputeShader(computeShader)
-        , mVertexArrayObject(0)
-        , mUniformRefsBuilt(false)
-        , mLinked(false)
-        , mTriedToLinkAndFailed(false)
-        , mSkeletalAnimation(false)
+namespace Ogre
+{
+    GLSLProgram::GLSLProgram( GLSLShader *vertexShader, GLSLShader *hullShader, GLSLShader *domainShader,
+                              GLSLShader *geometryShader, GLSLShader *fragmentShader,
+                              GLSLShader *computeShader ) :
+        mBaseInstanceLocation( GL_INVALID_INDEX ),
+        mVertexShader( vertexShader ),
+        mHullShader( hullShader ),
+        mDomainShader( domainShader ),
+        mGeometryShader( geometryShader ),
+        mFragmentShader( fragmentShader ),
+        mComputeShader( computeShader ),
+        mVertexArrayObject( 0 ),
+        mUniformRefsBuilt( false ),
+        mLinked( false ),
+        mTriedToLinkAndFailed( false ),
+        mSkeletalAnimation( false )
     {
         // init mCustomAttributesIndexes
-        for (size_t i = 0; i < VES_COUNT; i++)
+        for( size_t i = 0; i < VES_COUNT; i++ )
         {
-            for (size_t j = 0; j < OGRE_MAX_TEXTURE_COORD_SETS; j++)
+            for( size_t j = 0; j < OGRE_MAX_TEXTURE_COORD_SETS; j++ )
             {
                 mCustomAttributesIndexes[i][j] = NULL_CUSTOM_ATTRIBUTES_INDEX;
             }
         }
 
         // Initialize the attribute to semantic map
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("vertex", VES_POSITION));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("blendWeights", VES_BLEND_WEIGHTS));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("normal", VES_NORMAL));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("colour", VES_DIFFUSE));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("secondary_colour", VES_SPECULAR));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("blendIndices", VES_BLEND_INDICES));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("tangent", VES_TANGENT));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("binormal", VES_BINORMAL));
-        mSemanticTypeMap.insert(SemanticToStringMap::value_type("uv", VES_TEXTURE_COORDINATES));
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "vertex", VES_POSITION ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "blendWeights", VES_BLEND_WEIGHTS ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "normal", VES_NORMAL ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "colour", VES_DIFFUSE ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "secondary_colour", VES_SPECULAR ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "blendIndices", VES_BLEND_INDICES ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "tangent", VES_TANGENT ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "binormal", VES_BINORMAL ) );
+        mSemanticTypeMap.insert( SemanticToStringMap::value_type( "uv", VES_TEXTURE_COORDINATES ) );
     }
-
 
     GLSLProgram::~GLSLProgram()
     {
-        OGRE_CHECK_GL_ERROR(glDeleteProgram(mGLProgramHandle));
+        OGRE_CHECK_GL_ERROR( glDeleteProgram( mGLProgramHandle ) );
 
         delete mVertexArrayObject;
         mVertexArrayObject = 0;
     }
 
-
     Ogre::String GLSLProgram::getCombinedName()
     {
         String name;
-        if (mVertexShader)
+        if( mVertexShader )
         {
             name += "Vertex Shader: ";
             name += mVertexShader->getName();
             name += "\n";
         }
-        if (mHullShader)
+        if( mHullShader )
         {
             name += "Tessellation Control Shader: ";
             name += mHullShader->getName();
             name += "\n";
         }
-        if (mDomainShader)
+        if( mDomainShader )
         {
             name += "Tessellation Evaluation Shader: ";
             name += mDomainShader->getName();
             name += "\n";
         }
-        if (mGeometryShader)
+        if( mGeometryShader )
         {
             name += "Geometry Shader: ";
             name += mGeometryShader->getName();
             name += "\n";
         }
-        if (mFragmentShader)
+        if( mFragmentShader )
         {
             name += "Fragment Shader: ";
             name += mFragmentShader->getName();
             name += "\n";
         }
-        if (mComputeShader)
+        if( mComputeShader )
         {
             name += "Compute Shader: ";
             name += mComputeShader->getName();
@@ -167,93 +161,89 @@ namespace Ogre {
         return retVal;
     }
 
-    VertexElementSemantic GLSLProgram::getAttributeSemanticEnum(String type)
+    VertexElementSemantic GLSLProgram::getAttributeSemanticEnum( String type )
     {
         VertexElementSemantic semantic = mSemanticTypeMap[type];
-        if (semantic > 0)
+        if( semantic > 0 )
         {
             return semantic;
         }
         else
         {
-            assert(false && "Missing attribute!");
+            assert( false && "Missing attribute!" );
             return (VertexElementSemantic)1;
         }
     }
 
-
-    const char * GLSLProgram::getAttributeSemanticString(VertexElementSemantic semantic)
+    const char *GLSLProgram::getAttributeSemanticString( VertexElementSemantic semantic )
     {
-        for (SemanticToStringMap::iterator i = mSemanticTypeMap.begin(); i != mSemanticTypeMap.end(); ++i)
+        for( SemanticToStringMap::iterator i = mSemanticTypeMap.begin(); i != mSemanticTypeMap.end();
+             ++i )
         {
-            if ((*i).second == semantic)
-                return (*i).first.c_str();
+            if( ( *i ).second == semantic )
+                return ( *i ).first.c_str();
         }
 
-        assert(false && "Missing attribute!");
+        assert( false && "Missing attribute!" );
         return 0;
     }
 
-
-    GLint GLSLProgram::getAttributeIndex(VertexElementSemantic semantic, uint index)
+    GLint GLSLProgram::getAttributeIndex( VertexElementSemantic semantic, uint index )
     {
-        GLint res = mCustomAttributesIndexes[semantic-1][index];
-        if (res == NULL_CUSTOM_ATTRIBUTES_INDEX)
+        GLint res = mCustomAttributesIndexes[semantic - 1][index];
+        if( res == NULL_CUSTOM_ATTRIBUTES_INDEX )
         {
-            const char * attString = getAttributeSemanticString(semantic);
+            const char *attString = getAttributeSemanticString( semantic );
             GLint attrib;
-            OGRE_CHECK_GL_ERROR(attrib = glGetAttribLocation(mGLProgramHandle, attString));
+            OGRE_CHECK_GL_ERROR( attrib = glGetAttribLocation( mGLProgramHandle, attString ) );
 
             // Sadly position is a special case.
-            if (attrib == NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX && semantic == VES_POSITION)
+            if( attrib == NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX && semantic == VES_POSITION )
             {
-                OGRE_CHECK_GL_ERROR(attrib = glGetAttribLocation(mGLProgramHandle, "position"));
+                OGRE_CHECK_GL_ERROR( attrib = glGetAttribLocation( mGLProgramHandle, "position" ) );
             }
 
             // For uv and other case the index is a part of the name.
-            if (attrib == NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX)
+            if( attrib == NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX )
             {
-                String attStringWithSemantic = String(attString) + StringConverter::toString(index);
-                OGRE_CHECK_GL_ERROR(attrib = glGetAttribLocation(mGLProgramHandle, attStringWithSemantic.c_str()));
+                String attStringWithSemantic = String( attString ) + StringConverter::toString( index );
+                OGRE_CHECK_GL_ERROR(
+                    attrib = glGetAttribLocation( mGLProgramHandle, attStringWithSemantic.c_str() ) );
             }
 
             // Update mCustomAttributesIndexes with the index we found (or didn't find).
-            mCustomAttributesIndexes[semantic-1][index] = attrib;
+            mCustomAttributesIndexes[semantic - 1][index] = attrib;
             res = attrib;
         }
         return res;
     }
 
-
-    bool GLSLProgram::isAttributeValid(VertexElementSemantic semantic, uint index)
+    bool GLSLProgram::isAttributeValid( VertexElementSemantic semantic, uint index )
     {
-        return getAttributeIndex(semantic, index) != NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX;
+        return getAttributeIndex( semantic, index ) != NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX;
     }
-
 
     void GLSLProgram::getMicrocodeFromCache()
     {
         GpuProgramManager::Microcode cacheMicrocode =
-            GpuProgramManager::getSingleton().getMicrocodeFromCache(getCombinedSource());
+            GpuProgramManager::getSingleton().getMicrocodeFromCache( getCombinedSource() );
 
-        cacheMicrocode->seek(0);
+        cacheMicrocode->seek( 0 );
 
         // Turns out we need this param when loading.
         GLenum binaryFormat = 0;
-        cacheMicrocode->read(&binaryFormat, sizeof(GLenum));
+        cacheMicrocode->read( &binaryFormat, sizeof( GLenum ) );
 
         // Get size of binary.
-        GLint binaryLength = static_cast<GLint>(cacheMicrocode->size() - sizeof(GLenum));
+        GLint binaryLength = static_cast<GLint>( cacheMicrocode->size() - sizeof( GLenum ) );
 
         // Load binary.
-        OGRE_CHECK_GL_ERROR(glProgramBinary(mGLProgramHandle,
-                                            binaryFormat,
-                                            cacheMicrocode->getCurrentPtr(),
-                                            binaryLength));
+        OGRE_CHECK_GL_ERROR( glProgramBinary( mGLProgramHandle, binaryFormat,
+                                              cacheMicrocode->getCurrentPtr(), binaryLength ) );
 
         GLint success = 0;
-        OGRE_CHECK_GL_ERROR(glGetProgramiv(mGLProgramHandle, GL_LINK_STATUS, &success));
-        if (!success)
+        OGRE_CHECK_GL_ERROR( glGetProgramiv( mGLProgramHandle, GL_LINK_STATUS, &success ) );
+        if( !success )
         {
             // Something must have changed since the program binaries
             // were cached away. Fallback to source shader loading path,
@@ -269,7 +259,6 @@ namespace Ogre {
         }
     }
 
-
     void GLSLProgram::extractLayoutQualifiers()
     {
         OgreProfileExhaustive( "GLSLProgram::extractLayoutQualifiers" );
@@ -277,44 +266,44 @@ namespace Ogre {
         // Format is:
         //      layout(location = 0) attribute vec4 vertex;
 
-        if (mVertexShader)
+        if( mVertexShader )
         {
             String shaderSource = mVertexShader->getSource();
-            String::size_type currPos = shaderSource.find("layout");
-            while (currPos != String::npos)
+            String::size_type currPos = shaderSource.find( "layout" );
+            while( currPos != String::npos )
             {
                 VertexElementSemantic semantic;
                 GLint index = 0;
 
-                String::size_type endPos = shaderSource.find(";", currPos);
-                if (endPos == String::npos)
+                String::size_type endPos = shaderSource.find( ";", currPos );
+                if( endPos == String::npos )
                 {
                     // Problem, missing semicolon, abort.
                     break;
                 }
 
-                String line = shaderSource.substr(currPos, endPos - currPos);
+                String line = shaderSource.substr( currPos, endPos - currPos );
 
                 // Skip over 'layout'.
                 currPos += 6;
 
                 // Skip until '='.
-                String::size_type eqPos = line.find("=");
-                String::size_type parenPos = line.find(")");
+                String::size_type eqPos = line.find( "=" );
+                String::size_type parenPos = line.find( ")" );
 
                 // Skip past '=' up to a ')' which contains an integer(the position).
-                //TODO This could be a definition, does the preprocessor do replacement?
-                String attrLocation = line.substr(eqPos + 1, parenPos - eqPos - 1);
-                StringUtil::trim(attrLocation);
-                GLint attrib = StringConverter::parseInt(attrLocation);
+                // TODO This could be a definition, does the preprocessor do replacement?
+                String attrLocation = line.substr( eqPos + 1, parenPos - eqPos - 1 );
+                StringUtil::trim( attrLocation );
+                GLint attrib = StringConverter::parseInt( attrLocation );
 
                 // The rest of the line is a standard attribute definition.
                 // Erase up to it then split the remainder by spaces.
-                line.erase (0, parenPos + 1);
-                StringUtil::trim(line);
-                StringVector parts = StringUtil::split(line, " ");
+                line.erase( 0, parenPos + 1 );
+                StringUtil::trim( line );
+                StringVector parts = StringUtil::split( line, " " );
 
-                if (parts.size() < 3)
+                if( parts.size() < 3 )
                 {
                     // This is a malformed attribute.
                     // It should contain 3 parts, i.e. "attribute vec4 vertex".
@@ -324,22 +313,22 @@ namespace Ogre {
                 String attrName = parts[2];
 
                 // Special case for attribute named position.
-                if (attrName == "position")
-                    semantic = getAttributeSemanticEnum("vertex");
+                if( attrName == "position" )
+                    semantic = getAttributeSemanticEnum( "vertex" );
                 else
-                    semantic = getAttributeSemanticEnum(attrName);
+                    semantic = getAttributeSemanticEnum( attrName );
 
                 // Find the texture unit index.
-                String::size_type uvPos = attrName.find("uv");
-                if (uvPos != String::npos)
+                String::size_type uvPos = attrName.find( "uv" );
+                if( uvPos != String::npos )
                 {
-                    String uvIndex = attrName.substr(uvPos + 2, attrName.length() - 2);
-                    index = StringConverter::parseInt(uvIndex);
+                    String uvIndex = attrName.substr( uvPos + 2, attrName.length() - 2 );
+                    index = StringConverter::parseInt( uvIndex );
                 }
 
-                mCustomAttributesIndexes[semantic-1][index] = attrib;
+                mCustomAttributesIndexes[semantic - 1][index] = attrib;
 
-                currPos = shaderSource.find("layout", currPos);
+                currPos = shaderSource.find( "layout", currPos );
             }
         }
     }
@@ -353,46 +342,42 @@ namespace Ogre {
         };
 
 #define OGRE_NUM_SEMANTICS 12
-        static const SemanticNameTable attributesTable[OGRE_NUM_SEMANTICS] =
-        {
-            { "vertex",         VES_POSITION },
-            { "blendWeights",   VES_BLEND_WEIGHTS },
-            { "blendIndices",   VES_BLEND_INDICES },
-            { "normal",         VES_NORMAL },
-            { "colour",         VES_DIFFUSE },
-            { "secondary_colour",VES_SPECULAR },
-            { "tangent",        VES_TANGENT },
-            { "binormal",       VES_BINORMAL },
-            { "qtangent",       VES_NORMAL },
-            { "blendWeights2",  VES_BLEND_WEIGHTS2 },
-            { "blendIndices2",  VES_BLEND_INDICES2 },
-            { "uv",             VES_TEXTURE_COORDINATES },
+        static const SemanticNameTable attributesTable[OGRE_NUM_SEMANTICS] = {
+            { "vertex", VES_POSITION },
+            { "blendWeights", VES_BLEND_WEIGHTS },
+            { "blendIndices", VES_BLEND_INDICES },
+            { "normal", VES_NORMAL },
+            { "colour", VES_DIFFUSE },
+            { "secondary_colour", VES_SPECULAR },
+            { "tangent", VES_TANGENT },
+            { "binormal", VES_BINORMAL },
+            { "qtangent", VES_NORMAL },
+            { "blendWeights2", VES_BLEND_WEIGHTS2 },
+            { "blendIndices2", VES_BLEND_INDICES2 },
+            { "uv", VES_TEXTURE_COORDINATES },
         };
 
         VaoManager *vaoManagerBase = Root::getSingleton().getRenderSystem()->getVaoManager();
-        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( vaoManagerBase );
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager *>( vaoManagerBase );
 
         const GLint maxVertexAttribs = vaoManager->getMaxVertexAttribs();
 
-        for( size_t i=0; i<OGRE_NUM_SEMANTICS - 1; ++i )
+        for( size_t i = 0; i < OGRE_NUM_SEMANTICS - 1; ++i )
         {
             const SemanticNameTable &entry = attributesTable[i];
             GLint attrIdx = GL3PlusVaoManager::getAttributeIndexFor( entry.semantic );
             if( attrIdx < maxVertexAttribs )
             {
-                OCGE( glBindAttribLocation( programName,
-                                            attrIdx,
-                                            entry.semanticName ) );
+                OCGE( glBindAttribLocation( programName, attrIdx, entry.semanticName ) );
             }
         }
 
-        for( size_t i=0; i<8; ++i )
+        for( size_t i = 0; i < 8; ++i )
         {
-            //UVs are a special case.
-            OCGE( glBindAttribLocation( programName,
-                                        GL3PlusVaoManager::getAttributeIndexFor(
-                                                    VES_TEXTURE_COORDINATES ) + i,
-                                        ("uv" + StringConverter::toString( i )).c_str() ) );
+            // UVs are a special case.
+            OCGE( glBindAttribLocation(
+                programName, GL3PlusVaoManager::getAttributeIndexFor( VES_TEXTURE_COORDINATES ) + i,
+                ( "uv" + StringConverter::toString( i ) ).c_str() ) );
         }
 
         if( vaoManager->supportsBaseInstance() )
@@ -406,4 +391,4 @@ namespace Ogre {
             mBaseInstanceLocation = glGetUniformLocation( programName, "baseInstance" );
     }
 
-} // namespace Ogre
+}  // namespace Ogre

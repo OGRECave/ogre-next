@@ -3,19 +3,19 @@
  This source file is part of OGRE-Next
  (Object-oriented Graphics Rendering Engine)
  For the latest info, see http://www.ogre3d.org
- 
+
  Copyright (c) 2000-2014 Torus Knot Software Ltd
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,50 +34,48 @@ using namespace Ogre;
 
 @implementation CocoaWindowDelegate
 
-
--(id)initWithNSWindow:(NSWindow*)nswin ogreWindow:(Window*)ogrewin
-{
-    if ((self = [super init]))
+- (id)initWithNSWindow:(NSWindow *)nswin ogreWindow:(Window *)ogrewin {
+    if( ( self = [super init] ) )
     {
-		window = nswin;
-		ogreWindow = ogrewin;
-		
+        window = nswin;
+        ogreWindow = ogrewin;
+
         // Register ourselves for several window event notifications
-		// Note that
+        // Note that
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowDidResize:)
-                                                     name:NSWindowDidResizeNotification 
-												   object:window];
+                                                 selector:@selector( windowDidResize: )
+                                                     name:NSWindowDidResizeNotification
+                                                   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowDidMove:)
+                                                 selector:@selector( windowDidMove: )
                                                      name:NSWindowDidMoveNotification
-												   object:window];
+                                                   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowWillClose:)
+                                                 selector:@selector( windowWillClose: )
                                                      name:NSWindowWillCloseNotification
-												   object:window];
+                                                   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowDidBecomeKey:)
-                                                     name:NSWindowDidBecomeKeyNotification 
-												   object:window];
+                                                 selector:@selector( windowDidBecomeKey: )
+                                                     name:NSWindowDidBecomeKeyNotification
+                                                   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowDidResignKey:)
+                                                 selector:@selector( windowDidResignKey: )
                                                      name:NSWindowDidResignKeyNotification
-												   object:window];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowDidMiniaturize:)
-                                                     name:NSWindowDidMiniaturizeNotification 
-												   object:window];
+                                                   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowDidDeminiaturize:)
-                                                     name:NSWindowDidDeminiaturizeNotification 
-												   object:window];
+                                                 selector:@selector( windowDidMiniaturize: )
+                                                     name:NSWindowDidMiniaturizeNotification
+                                                   object:window];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector( windowDidDeminiaturize: )
+                                                     name:NSWindowDidDeminiaturizeNotification
+                                                   object:window];
     }
     return self;
 }
@@ -87,103 +85,95 @@ using namespace Ogre;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)windowDidResize:(NSNotification *)notification
-{
-	// Update the Ogre window
-	CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
-	WindowEventUtilities::WindowEventListeners::iterator
-	start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-	end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
-	
-	curWindow->windowMovedOrResized();
-	
-	for( ; start != end; ++start )
-		(start->second)->windowResized(curWindow);
-		
+- (void)windowDidResize:(NSNotification *)notification {
+    // Update the Ogre window
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
+    WindowEventUtilities::WindowEventListeners::iterator
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
+
+    curWindow->windowMovedOrResized();
+
+    for( ; start != end; ++start )
+        ( start->second )->windowResized( curWindow );
 }
 
-- (void)windowDidMove:(NSNotification *)notification
-{
-    CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
+- (void)windowDidMove:(NSNotification *)notification {
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
-        start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-        end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
-    
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
+
     curWindow->windowMovedOrResized();
     for( ; start != end; ++start )
-        (start->second)->windowMoved(curWindow);
+        ( start->second )->windowMoved( curWindow );
 }
 
-- (void)windowWillClose:(NSNotification *)notification
-{
-    CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
+- (void)windowWillClose:(NSNotification *)notification {
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
-    start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-    end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
 
     for( ; start != end; ++start )
     {
-        (start->second)->windowClosing(curWindow);
+        ( start->second )->windowClosing( curWindow );
     }
 }
 
-- (void)windowDidBecomeKey:(NSNotification *)notification
-{
-    CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
-    
+- (void)windowDidBecomeKey:(NSNotification *)notification {
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
+
     WindowEventUtilities::WindowEventListeners::iterator
-    start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-    end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
-    
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
+
     curWindow->setActive( true );
     for( ; start != end; ++start )
-        (start->second)->windowFocusChange(curWindow);
+        ( start->second )->windowFocusChange( curWindow );
 }
 
-- (void)windowDidResignKey:(NSNotification *)notification
-{
-    CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
-    
+- (void)windowDidResignKey:(NSNotification *)notification {
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
+
     WindowEventUtilities::WindowEventListeners::iterator
-    start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-    end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
-    
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
+
     if( curWindow->isDeactivatedOnFocusChange() )
     {
         curWindow->setActive( false );
     }
-    
+
     for( ; start != end; ++start )
-        (start->second)->windowFocusChange(curWindow);
+        ( start->second )->windowFocusChange( curWindow );
 }
 
-- (void)windowDidMiniaturize:(NSNotification *)notification
-{
-    CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
-    
+- (void)windowDidMiniaturize:(NSNotification *)notification {
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
+
     WindowEventUtilities::WindowEventListeners::iterator
-    start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-    end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
-    
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
+
     curWindow->setActive( false );
     curWindow->setVisible( false );
     for( ; start != end; ++start )
-        (start->second)->windowFocusChange(curWindow);
+        ( start->second )->windowFocusChange( curWindow );
 }
 
-- (void)windowDidDeminiaturize:(NSNotification *)notification
-{
-    CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
-    
+- (void)windowDidDeminiaturize:(NSNotification *)notification {
+    CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
+
     WindowEventUtilities::WindowEventListeners::iterator
-    start = WindowEventUtilities::_msListeners.lower_bound(curWindow),
-    end = WindowEventUtilities::_msListeners.upper_bound(curWindow);
-    
+        start = WindowEventUtilities::_msListeners.lower_bound( curWindow ),
+        end = WindowEventUtilities::_msListeners.upper_bound( curWindow );
+
     curWindow->setActive( true );
     curWindow->setVisible( true );
     for( ; start != end; ++start )
-        (start->second)->windowFocusChange(curWindow);
+        ( start->second )->windowFocusChange( curWindow );
 }
 @end

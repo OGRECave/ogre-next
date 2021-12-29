@@ -27,23 +27,23 @@ THE SOFTWARE.
 */
 
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0502
+#    define _WIN32_WINNT 0x0502
 #endif
 #include "OgreWin32Window.h"
-#include "OgreGL3PlusTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreRoot.h"
-#include "OgreViewport.h"
-#include "OgreLogManager.h"
-#include "OgreRenderSystem.h"
-#include "OgreStringConverter.h"
-#include "OgreException.h"
-#include "OgreWin32GLSupport.h"
-#include "OgreWin32Context.h"
-#include "OgreWindowEventUtilities.h"
 #include "OgreDepthBuffer.h"
-#include "OgreTextureGpuListener.h"
+#include "OgreException.h"
+#include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreLogManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreProfiler.h"
+#include "OgreRenderSystem.h"
+#include "OgreRoot.h"
+#include "OgreStringConverter.h"
+#include "OgreTextureGpuListener.h"
+#include "OgreViewport.h"
+#include "OgreWin32Context.h"
+#include "OgreWin32GLSupport.h"
+#include "OgreWindowEventUtilities.h"
 
 #include <sstream>
 
@@ -51,7 +51,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    #define _MAX_CLASS_NAME_ 128
+#define _MAX_CLASS_NAME_ 128
     bool Win32Window::mClassRegistered = false;
 
     Win32Window::Win32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
@@ -79,10 +79,7 @@ namespace Ogre
         create( depthStencilFormat, miscParams );
     }
     //-----------------------------------------------------------------------------------
-    Win32Window::~Win32Window()
-    {
-        destroy();
-    }
+    Win32Window::~Win32Window() { destroy(); }
     //-----------------------------------------------------------------------------------
     void Win32Window::updateWindowRect()
     {
@@ -111,21 +108,21 @@ namespace Ogre
         uint32 height = static_cast<uint32>( rc.bottom - rc.top );
         if( width != getWidth() || height != getHeight() )
         {
-            mRequestedWidth  = static_cast<uint32>( rc.right - rc.left );
+            mRequestedWidth = static_cast<uint32>( rc.right - rc.left );
             mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
             setFinalResolution( mRequestedWidth, mRequestedHeight );
             notifyResolutionChanged();
         }
     }
     //-----------------------------------------------------------------------------------
-    void Win32Window::adjustWindow( uint32 clientWidth, uint32 clientHeight,
-                                    uint32 *outDrawableWidth, uint32 *outDrawableHeight )
+    void Win32Window::adjustWindow( uint32 clientWidth, uint32 clientHeight, uint32 *outDrawableWidth,
+                                    uint32 *outDrawableHeight )
     {
         RECT rc;
         SetRect( &rc, 0, 0, clientWidth, clientHeight );
-        AdjustWindowRect( &rc, getWindowStyle(mRequestedFullscreenMode), false );
-        *outDrawableWidth   = rc.right - rc.left;
-        *outDrawableHeight  = rc.bottom - rc.top;
+        AdjustWindowRect( &rc, getWindowStyle( mRequestedFullscreenMode ), false );
+        *outDrawableWidth = rc.right - rc.left;
+        *outDrawableHeight = rc.bottom - rc.top;
     }
     //-----------------------------------------------------------------------------------
     DWORD Win32Window::getWindowStyle( bool fullScreen ) const
@@ -133,10 +130,7 @@ namespace Ogre
         return fullScreen ? mFullscreenWinStyle : mWindowedWinStyle;
     }
     //-----------------------------------------------------------------------------------
-    void Win32Window::notifyResolutionChanged()
-    {
-        TODO_notify_listeners;
-    }
+    void Win32Window::notifyResolutionChanged() { TODO_notify_listeners; }
     //-----------------------------------------------------------------------------------
     void Win32Window::create( PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams )
     {
@@ -145,9 +139,9 @@ namespace Ogre
             destroy();
 
         mClosed = false;
-        mColourDepth = mRequestedFullscreenMode ? 32 : GetDeviceCaps( GetDC(0), BITSPIXEL );
-        int left = -1; // Defaults to screen center
-        int top = -1; // Defaults to screen center
+        mColourDepth = mRequestedFullscreenMode ? 32 : GetDeviceCaps( GetDC( 0 ), BITSPIXEL );
+        int left = -1;  // Defaults to screen center
+        int top = -1;   // Defaults to screen center
         HWND parentHwnd = 0;
         bool hidden = false;
         String border;
@@ -163,63 +157,63 @@ namespace Ogre
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
 
-            opt = miscParams->find("title");
+            opt = miscParams->find( "title" );
             if( opt != end )
                 mTitle = opt->second;
-            opt = miscParams->find("left");
+            opt = miscParams->find( "left" );
             if( opt != end )
-                left = StringConverter::parseInt(opt->second);
-            opt = miscParams->find("top");
+                left = StringConverter::parseInt( opt->second );
+            opt = miscParams->find( "top" );
             if( opt != end )
-                top = StringConverter::parseInt(opt->second);
-            opt = miscParams->find("vsync");
+                top = StringConverter::parseInt( opt->second );
+            opt = miscParams->find( "vsync" );
             if( opt != end )
-                mVSync = StringConverter::parseBool(opt->second);
-            opt = miscParams->find("hidden");
+                mVSync = StringConverter::parseBool( opt->second );
+            opt = miscParams->find( "hidden" );
             if( opt != end )
-                hidden = StringConverter::parseBool(opt->second);
-            opt = miscParams->find("vsyncInterval");
+                hidden = StringConverter::parseBool( opt->second );
+            opt = miscParams->find( "vsyncInterval" );
             if( opt != end )
-                mVSyncInterval = StringConverter::parseUnsignedInt(opt->second);
-            opt = miscParams->find("FSAA");
+                mVSyncInterval = StringConverter::parseUnsignedInt( opt->second );
+            opt = miscParams->find( "FSAA" );
             if( opt != end )
-                mRequestedSampleDescription.parseString(opt->second);
-            opt = miscParams->find("gamma");
+                mRequestedSampleDescription.parseString( opt->second );
+            opt = miscParams->find( "gamma" );
             if( opt != end )
-                mHwGamma = StringConverter::parseBool(opt->second);
+                mHwGamma = StringConverter::parseBool( opt->second );
 
-            #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-            opt = miscParams->find("stereoMode");
+#if OGRE_NO_QUAD_BUFFER_STEREO == 0
+            opt = miscParams->find( "stereoMode" );
             if( opt != end )
             {
-                StereoModeType stereoMode = StringConverter::parseStereoMode(opt->second);
+                StereoModeType stereoMode = StringConverter::parseStereoMode( opt->second );
                 if( SMT_NONE != stereoMode )
                     mStereoEnabled = true;
             }
-            #endif
-            opt = miscParams->find("externalWindowHandle");
+#endif
+            opt = miscParams->find( "externalWindowHandle" );
             if( opt != end )
             {
-                mHwnd = (HWND)StringConverter::parseSizeT(opt->second);
+                mHwnd = (HWND)StringConverter::parseSizeT( opt->second );
 
-                if( IsWindow(mHwnd) && mHwnd )
+                if( IsWindow( mHwnd ) && mHwnd )
                 {
                     mIsExternal = true;
                     mRequestedFullscreenMode = false;
                 }
 
-                opt = miscParams->find("externalGLControl");
+                opt = miscParams->find( "externalGLControl" );
                 if( opt != end )
-                    mIsExternalGLControl = StringConverter::parseBool(opt->second);
+                    mIsExternalGLControl = StringConverter::parseBool( opt->second );
             }
-            opt = miscParams->find("currentGLContext");
+            opt = miscParams->find( "currentGLContext" );
             if( opt != end )
             {
-                if( StringConverter::parseBool(opt->second) )
+                if( StringConverter::parseBool( opt->second ) )
                 {
                     mGlrc = wglGetCurrentContext();
 
-                    if ( mGlrc )
+                    if( mGlrc )
                     {
                         mOwnsGLContext = false;
                     }
@@ -232,10 +226,10 @@ namespace Ogre
                 }
             }
 
-            opt = miscParams->find("externalGLContext");
+            opt = miscParams->find( "externalGLContext" );
             if( opt != end )
             {
-                mGlrc = (HGLRC)StringConverter::parseSizeT(opt->second);
+                mGlrc = (HGLRC)StringConverter::parseSizeT( opt->second );
 
                 if( mGlrc )
                 {
@@ -243,64 +237,65 @@ namespace Ogre
                 }
                 else
                 {
-                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                                 "parsing the value of 'externalGLContext' failed: " +
-                                 translateWGLError(), "Win32Window::create" );
+                    OGRE_EXCEPT(
+                        Exception::ERR_RENDERINGAPI_ERROR,
+                        "parsing the value of 'externalGLContext' failed: " + translateWGLError(),
+                        "Win32Window::create" );
                 }
             }
 
             // window border style
-            opt = miscParams->find("border");
-            if(opt != miscParams->end())
+            opt = miscParams->find( "border" );
+            if( opt != miscParams->end() )
                 border = opt->second;
             // set outer dimensions?
-            opt = miscParams->find("outerDimensions");
-            if(opt != miscParams->end())
-                outerSize = StringConverter::parseBool(opt->second);
+            opt = miscParams->find( "outerDimensions" );
+            if( opt != miscParams->end() )
+                outerSize = StringConverter::parseBool( opt->second );
 
             // only available with fullscreen
-            opt = miscParams->find("displayFrequency");
+            opt = miscParams->find( "displayFrequency" );
             if( opt != end )
-                mFrequencyNumerator = StringConverter::parseUnsignedInt(opt->second);
+                mFrequencyNumerator = StringConverter::parseUnsignedInt( opt->second );
 
-            opt = miscParams->find("colourDepth");
+            opt = miscParams->find( "colourDepth" );
             if( opt != end )
             {
-                mColourDepth = StringConverter::parseUnsignedInt(opt->second);
+                mColourDepth = StringConverter::parseUnsignedInt( opt->second );
                 if( !mRequestedFullscreenMode )
                 {
                     // make sure we don't exceed desktop colour depth
-                    if( (int)mColourDepth > GetDeviceCaps( GetDC(0), BITSPIXEL ) )
-                        mColourDepth = GetDeviceCaps( GetDC(0), BITSPIXEL );
+                    if( (int)mColourDepth > GetDeviceCaps( GetDC( 0 ), BITSPIXEL ) )
+                        mColourDepth = GetDeviceCaps( GetDC( 0 ), BITSPIXEL );
                 }
             }
 
             // incompatible with fullscreen
-            opt = miscParams->find("parentWindowHandle");
+            opt = miscParams->find( "parentWindowHandle" );
             if( opt != end )
-                parentHwnd = (HWND)StringConverter::parseSizeT(opt->second);
+                parentHwnd = (HWND)StringConverter::parseSizeT( opt->second );
 
             // monitor index
-            opt = miscParams->find("monitorIndex");
+            opt = miscParams->find( "monitorIndex" );
             if( opt != end )
-                monitorIndex = StringConverter::parseInt(opt->second);
+                monitorIndex = StringConverter::parseInt( opt->second );
 
             // monitor handle
-            opt = miscParams->find("monitorHandle");
+            opt = miscParams->find( "monitorHandle" );
             if( opt != end )
-                hMonitor = (HMONITOR)StringConverter::parseInt(opt->second);
+                hMonitor = (HMONITOR)StringConverter::parseInt( opt->second );
 
             // enable double click messages
-            opt = miscParams->find("enableDoubleClick");
+            opt = miscParams->find( "enableDoubleClick" );
             if( opt != end )
-                enableDoubleClick = StringConverter::parseBool(opt->second);
+                enableDoubleClick = StringConverter::parseBool( opt->second );
         }
 
         if( !mIsExternal )
-        {           
-            DWORD         dwStyleEx = 0;                    
+        {
+            DWORD dwStyleEx = 0;
             MONITORINFOEX monitorInfoEx;
-            
+
             // If we didn't specified the adapter index, or if it didn't find it
             if( hMonitor == NULL )
             {
@@ -314,9 +309,9 @@ namespace Ogre
                 hMonitor = MonitorFromPoint( windowAnchorPoint, MONITOR_DEFAULTTOPRIMARY );
             }
 
-            // Get the target monitor info      
-            memset( &monitorInfoEx, 0, sizeof(MONITORINFOEX) );
-            monitorInfoEx.cbSize = sizeof(MONITORINFOEX);
+            // Get the target monitor info
+            memset( &monitorInfoEx, 0, sizeof( MONITORINFOEX ) );
+            monitorInfoEx.cbSize = sizeof( MONITORINFOEX );
             GetMonitorInfo( hMonitor, &monitorInfoEx );
 
             size_t devNameLen = strlen( monitorInfoEx.szDevice );
@@ -325,39 +320,39 @@ namespace Ogre
             strcpy( mDeviceName, monitorInfoEx.szDevice );
 
             // Update window style flags.
-            mFullscreenWinStyle = (hidden ? 0 : WS_VISIBLE) | WS_CLIPCHILDREN | WS_POPUP;
-            mWindowedWinStyle   = (hidden ? 0 : WS_VISIBLE) | WS_CLIPCHILDREN;
-            
+            mFullscreenWinStyle = ( hidden ? 0 : WS_VISIBLE ) | WS_CLIPCHILDREN | WS_POPUP;
+            mWindowedWinStyle = ( hidden ? 0 : WS_VISIBLE ) | WS_CLIPCHILDREN;
+
             if( parentHwnd )
             {
                 mWindowedWinStyle |= WS_CHILD;
             }
             else
             {
-                if (border == "none")
+                if( border == "none" )
                     mWindowedWinStyle |= WS_POPUP;
-                else if (border == "fixed")
-                    mWindowedWinStyle |= WS_OVERLAPPED | WS_BORDER | WS_CAPTION |
-                    WS_SYSMENU | WS_MINIMIZEBOX;
+                else if( border == "fixed" )
+                    mWindowedWinStyle |=
+                        WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
                 else
                     mWindowedWinStyle |= WS_OVERLAPPEDWINDOW;
             }
 
             uint32 winWidth, winHeight;
-            winWidth    = mRequestedWidth;
-            winHeight   = mRequestedHeight;
+            winWidth = mRequestedWidth;
+            winHeight = mRequestedHeight;
             {
-                //Center window horizontally and/or vertically, on the right monitor.
-                uint32 screenw = monitorInfoEx.rcWork.right  - monitorInfoEx.rcWork.left;
+                // Center window horizontally and/or vertically, on the right monitor.
+                uint32 screenw = monitorInfoEx.rcWork.right - monitorInfoEx.rcWork.left;
                 uint32 screenh = monitorInfoEx.rcWork.bottom - monitorInfoEx.rcWork.top;
-                uint32 outerw = (winWidth < screenw) ? winWidth : screenw;
-                uint32 outerh = (winHeight < screenh) ? winHeight : screenh;
+                uint32 outerw = ( winWidth < screenw ) ? winWidth : screenw;
+                uint32 outerh = ( winHeight < screenh ) ? winHeight : screenh;
                 if( left == INT_MAX )
-                    left = monitorInfoEx.rcWork.left + (screenw - outerw) / 2;
+                    left = monitorInfoEx.rcWork.left + ( screenw - outerw ) / 2;
                 else if( monitorIndex != -1 )
                     left += monitorInfoEx.rcWork.left;
                 if( top == INT_MAX )
-                    top = monitorInfoEx.rcWork.top + (screenh - outerh) / 2;
+                    top = monitorInfoEx.rcWork.top + ( screenh - outerh ) / 2;
                 else if( monitorIndex != -1 )
                     top += monitorInfoEx.rcWork.top;
             }
@@ -377,66 +372,66 @@ namespace Ogre
                 SetRect( &rc, mLeft, mTop, mRequestedWidth, mRequestedHeight );
                 if( !outerSize )
                 {
-                    //User requested "client resolution", we need to grow the rect
-                    //for the window's resolution (which is always bigger).
-                    AdjustWindowRect( &rc, getWindowStyle(mRequestedFullscreenMode), false );
+                    // User requested "client resolution", we need to grow the rect
+                    // for the window's resolution (which is always bigger).
+                    AdjustWindowRect( &rc, getWindowStyle( mRequestedFullscreenMode ), false );
                 }
 
-                //Clamp to current monitor's size
+                // Clamp to current monitor's size
                 if( rc.left < monitorInfoEx.rcWork.left )
                 {
-                    rc.right    += monitorInfoEx.rcWork.left - rc.left;
-                    rc.left     = monitorInfoEx.rcWork.left;
+                    rc.right += monitorInfoEx.rcWork.left - rc.left;
+                    rc.left = monitorInfoEx.rcWork.left;
                 }
                 if( rc.top < monitorInfoEx.rcWork.top )
                 {
-                    rc.bottom   += monitorInfoEx.rcWork.top - rc.top;
-                    rc.top      = monitorInfoEx.rcWork.top;
+                    rc.bottom += monitorInfoEx.rcWork.top - rc.top;
+                    rc.top = monitorInfoEx.rcWork.top;
                 }
                 if( rc.right > monitorInfoEx.rcWork.right )
                     rc.right = monitorInfoEx.rcWork.right;
                 if( rc.bottom > monitorInfoEx.rcWork.bottom )
                     rc.bottom = monitorInfoEx.rcWork.bottom;
 
-                mLeft           = rc.left;
-                mTop            = rc.top;
+                mLeft = rc.left;
+                mTop = rc.top;
                 mRequestedWidth = rc.right - rc.left;
-                mRequestedHeight= rc.bottom - rc.top;
+                mRequestedHeight = rc.bottom - rc.top;
             }
 
-            //Grab the HINSTANCE by asking the OS what's the hinstance at an address in this process
+            // Grab the HINSTANCE by asking the OS what's the hinstance at an address in this process
             HINSTANCE hInstance = NULL;
-            #ifdef __MINGW32__
-                #ifdef OGRE_STATIC_LIB
-                    hInstance = GetModuleHandle( NULL );
-                #else
-                    #if OGRE_DEBUG_MODE == 1
-                        hInstance = GetModuleHandle("RenderSystem_GL3Plus_d.dll");
-                    #else
-                        hInstance = GetModuleHandle("RenderSystem_GL3Plus.dll");
-                    #endif
-                #endif
-            #else
-                static const TCHAR staticVar;
-                GetModuleHandleEx( GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-                                   GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                                   &staticVar, &hInstance );
-            #endif
- 
+#ifdef __MINGW32__
+#    ifdef OGRE_STATIC_LIB
+            hInstance = GetModuleHandle( NULL );
+#    else
+#        if OGRE_DEBUG_MODE == 1
+            hInstance = GetModuleHandle( "RenderSystem_GL3Plus_d.dll" );
+#        else
+            hInstance = GetModuleHandle( "RenderSystem_GL3Plus.dll" );
+#        endif
+#    endif
+#else
+            static const TCHAR staticVar;
+            GetModuleHandleEx(
+                GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                &staticVar, &hInstance );
+#endif
+
             // register class and create window
             WNDCLASSEX wcex;
-            wcex.cbSize         = sizeof( WNDCLASSEX );
-            wcex.style          = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-            wcex.lpfnWndProc    = WindowEventUtilities::_WndProc;
-            wcex.cbClsExtra     = 0;
-            wcex.cbWndExtra     = 0;
-            wcex.hInstance      = hInstance;
-            wcex.hIcon          = LoadIcon( (HINSTANCE)0, (LPCTSTR)IDI_APPLICATION );
-            wcex.hCursor        = LoadCursor( (HINSTANCE)0, IDC_ARROW );
-            wcex.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
-            wcex.lpszMenuName   = 0;
-            wcex.lpszClassName  = "OgreGLWindow";
-            wcex.hIconSm        = 0;
+            wcex.cbSize = sizeof( WNDCLASSEX );
+            wcex.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
+            wcex.lpfnWndProc = WindowEventUtilities::_WndProc;
+            wcex.cbClsExtra = 0;
+            wcex.cbWndExtra = 0;
+            wcex.hInstance = hInstance;
+            wcex.hIcon = LoadIcon( (HINSTANCE)0, (LPCTSTR)IDI_APPLICATION );
+            wcex.hCursor = LoadCursor( (HINSTANCE)0, IDC_ARROW );
+            wcex.hbrBackground = (HBRUSH)GetStockObject( BLACK_BRUSH );
+            wcex.lpszMenuName = 0;
+            wcex.lpszClassName = "OgreGLWindow";
+            wcex.hIconSm = 0;
 
             if( enableDoubleClick )
                 wcex.style |= CS_DBLCLKS;
@@ -446,8 +441,7 @@ namespace Ogre
                 if( !RegisterClassEx( &wcex ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                                 "RegisterClassEx failed! Cannot create window",
-                                 "Win32Window::create" );
+                                 "RegisterClassEx failed! Cannot create window", "Win32Window::create" );
                 }
                 mClassRegistered = true;
             }
@@ -456,8 +450,8 @@ namespace Ogre
             {
                 DEVMODE displayDeviceMode;
 
-                memset(&displayDeviceMode, 0, sizeof(displayDeviceMode));
-                displayDeviceMode.dmSize = sizeof(DEVMODE);
+                memset( &displayDeviceMode, 0, sizeof( displayDeviceMode ) );
+                displayDeviceMode.dmSize = sizeof( DEVMODE );
                 displayDeviceMode.dmBitsPerPel = mColourDepth;
                 displayDeviceMode.dmPelsWidth = mRequestedWidth;
                 displayDeviceMode.dmPelsHeight = mRequestedHeight;
@@ -467,13 +461,12 @@ namespace Ogre
                 {
                     displayDeviceMode.dmDisplayFrequency = mFrequencyNumerator;
                     displayDeviceMode.dmFields |= DM_DISPLAYFREQUENCY;
-                    LONG displayChangeResult = ChangeDisplaySettingsEx( mDeviceName, &displayDeviceMode,
-                                                                        NULL, CDS_FULLSCREEN | CDS_TEST,
-                                                                        NULL );
+                    LONG displayChangeResult = ChangeDisplaySettingsEx(
+                        mDeviceName, &displayDeviceMode, NULL, CDS_FULLSCREEN | CDS_TEST, NULL );
                     if( displayChangeResult != DISP_CHANGE_SUCCESSFUL )
                     {
                         LogManager::getSingleton().logMessage(
-                                    "ChangeDisplaySettings with user display frequency failed" );
+                            "ChangeDisplaySettings with user display frequency failed" );
                         displayDeviceMode.dmFields ^= DM_DISPLAYFREQUENCY;
                     }
                 }
@@ -490,24 +483,23 @@ namespace Ogre
 
             // Pass pointer to self as WM_CREATE parameter
             mHwnd = CreateWindowEx( dwStyleEx, "OgreGLWindow", mTitle.c_str(),
-                                    getWindowStyle(mRequestedFullscreenMode), mLeft, mTop,
+                                    getWindowStyle( mRequestedFullscreenMode ), mLeft, mTop,
                                     mRequestedWidth, mRequestedHeight, parentHwnd, 0, hInstance, this );
 
-            WindowEventUtilities::_addRenderWindow(this);
+            WindowEventUtilities::_addRenderWindow( this );
 
             LogManager::getSingleton().stream()
-                << "Created Win32Window '"
-                << mTitle << "' : " << mRequestedWidth << "x" << mRequestedHeight
-                << ", " << mColourDepth << "bpp";
+                << "Created Win32Window '" << mTitle << "' : " << mRequestedWidth << "x"
+                << mRequestedHeight << ", " << mColourDepth << "bpp";
         }
 
-        HDC oldHdc         = wglGetCurrentDC();
-        HGLRC oldContext   = wglGetCurrentContext();
+        HDC oldHdc = wglGetCurrentDC();
+        HGLRC oldContext = wglGetCurrentContext();
 
         RECT rc;
         // top and left represent outer window coordinates
         GetWindowRect( mHwnd, &rc );
-        mTop  = rc.top;
+        mTop = rc.top;
         mLeft = rc.left;
         // width and height represent interior drawable area
         GetClientRect( mHwnd, &rc );
@@ -553,8 +545,7 @@ namespace Ogre
 
                 if( !formatOk )
                 {
-                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                                 "selectPixelFormat failed",
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "selectPixelFormat failed",
                                  "Win32Window::create" );
                 }
             }
@@ -570,20 +561,22 @@ namespace Ogre
 
         if( mOwnsGLContext )
         {
-            int attribList[] =
-            {
-                WGL_CONTEXT_MAJOR_VERSION_ARB, contextMajor,
-                WGL_CONTEXT_MINOR_VERSION_ARB, contextMinor,
-            #if OGRE_DEBUG_MODE
-				WGL_CONTEXT_FLAGS_ARB,  WGL_CONTEXT_DEBUG_BIT_ARB,
-            #endif
-                WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-                0, 0
+            int attribList[] = {
+                WGL_CONTEXT_MAJOR_VERSION_ARB,
+                contextMajor,
+                WGL_CONTEXT_MINOR_VERSION_ARB,
+                contextMinor,
+#if OGRE_DEBUG_MODE
+                WGL_CONTEXT_FLAGS_ARB,
+                WGL_CONTEXT_DEBUG_BIT_ARB,
+#endif
+                WGL_CONTEXT_PROFILE_MASK_ARB,
+                WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+                0,
+                0
             };
 
-            while( !mGlrc &&
-                   (attribList[1] > 3 ||
-                    (attribList[1] == 3 && attribList[3] >= 3)) )
+            while( !mGlrc && ( attribList[1] > 3 || ( attribList[1] == 3 && attribList[3] >= 3 ) ) )
             {
                 // New context is shared with previous one
                 mGlrc = wglCreateContextAttribsARB( mHDC, oldContext, attribList );
@@ -613,15 +606,14 @@ namespace Ogre
             }
 
             LogManager::getSingleton().logMessage(
-                        "Created GL " + StringConverter::toString(contextMajor) + "." +
-                        StringConverter::toString(contextMinor) + " context" );
+                "Created GL " + StringConverter::toString( contextMajor ) + "." +
+                StringConverter::toString( contextMinor ) + " context" );
         }
 
         if( !wglMakeCurrent( mHDC, mGlrc ) )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "wglMakeCurrent failed: " + translateWGLError(),
-                         "Win32Window::create" );
+                         "wglMakeCurrent failed: " + translateWGLError(), "Win32Window::create" );
         }
 
         // Do not change vsync if the external window has the OpenGL control
@@ -631,7 +623,7 @@ namespace Ogre
             PFNWGLSWAPINTERVALEXTPROC _wglSwapIntervalEXT =
                 (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
             if( _wglSwapIntervalEXT )
-                _wglSwapIntervalEXT( mVSync? mVSyncInterval : 0 );
+                _wglSwapIntervalEXT( mVSync ? mVSyncInterval : 0 );
         }
 
         if( oldContext && oldContext != mGlrc )
@@ -639,14 +631,13 @@ namespace Ogre
             // Restore old context
             if( !wglMakeCurrent( oldHdc, oldContext ) )
             {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "wglMakeCurrent() failed", "Win32Window::create" );
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "wglMakeCurrent() failed",
+                             "Win32Window::create" );
             }
         }
 
         // Create RenderSystem context
-        mContext = new Win32Context( mHDC, mGlrc,
-                                     static_cast<uint32>( contextMajor ),
+        mContext = new Win32Context( mHDC, mGlrc, static_cast<uint32>( contextMajor ),
                                      static_cast<uint32>( contextMinor ) );
 
         mFullscreenMode = mRequestedFullscreenMode;
@@ -655,10 +646,10 @@ namespace Ogre
     void Win32Window::_initialize( TextureGpuManager *textureGpuManager )
     {
         GL3PlusTextureGpuManager *textureManager =
-                static_cast<GL3PlusTextureGpuManager*>( textureGpuManager );
+            static_cast<GL3PlusTextureGpuManager *>( textureGpuManager );
 
-        mTexture        = textureManager->createTextureGpuWindow( mContext, this );
-        mDepthBuffer    = textureManager->createTextureGpuWindow( mContext, this );
+        mTexture = textureManager->createTextureGpuWindow( mContext, this );
+        mDepthBuffer = textureManager->createTextureGpuWindow( mContext, this );
 
         if( mColourDepth == 16u )
             mTexture->setPixelFormat( PFG_B5G5R5A1_UNORM );
@@ -677,17 +668,17 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE,
-                                               false, mDepthBuffer->getPixelFormat() );
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+                                               mDepthBuffer->getPixelFormat() );
         }
         else
         {
             mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
         }
 
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         if( mDepthBuffer )
-            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         setHidden( mHidden );
     }
@@ -707,8 +698,8 @@ namespace Ogre
             mDepthBuffer = 0;
         }
 
-        //Depth & Stencil buffers are the same pointer
-        //OGRE_DELETE mStencilBuffer;
+        // Depth & Stencil buffers are the same pointer
+        // OGRE_DELETE mStencilBuffer;
         mStencilBuffer = 0;
 
         if( !mHwnd )
@@ -725,7 +716,7 @@ namespace Ogre
         }
         if( !mIsExternal )
         {
-            WindowEventUtilities::_removeRenderWindow(this);
+            WindowEventUtilities::_removeRenderWindow( this );
 
             if( mFullscreenMode )
                 ChangeDisplaySettingsEx( mDeviceName, NULL, NULL, 0, NULL );
@@ -739,10 +730,10 @@ namespace Ogre
 
         mFocused = false;
         mClosed = true;
-        mHDC = 0; // no release thanks to CS_OWNDC wndclass style
+        mHDC = 0;  // no release thanks to CS_OWNDC wndclass style
         mHwnd = 0;
 
-        if (mDeviceName != NULL)
+        if( mDeviceName != NULL )
         {
             delete[] mDeviceName;
             mDeviceName = NULL;
@@ -753,8 +744,7 @@ namespace Ogre
     {
         if( mHwnd && !mRequestedFullscreenMode )
         {
-            SetWindowPos( mHwnd, 0, left, top, 0, 0,
-                          SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+            SetWindowPos( mHwnd, 0, left, top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -775,37 +765,36 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void Win32Window::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                               uint32 width, uint32 height,
-                                               uint32 frequencyNumerator, uint32 frequencyDenominator )
+                                               uint32 width, uint32 height, uint32 frequencyNumerator,
+                                               uint32 frequencyDenominator )
     {
-        if( goFullscreen != mRequestedFullscreenMode ||
-            width != mRequestedWidth || height != mRequestedHeight )
+        if( goFullscreen != mRequestedFullscreenMode || width != mRequestedWidth ||
+            height != mRequestedHeight )
         {
             mRequestedFullscreenMode = goFullscreen;
             mFrequencyNumerator = frequencyNumerator;
-            
+
             if( mRequestedFullscreenMode )
             {
                 DEVMODE displayDeviceMode;
 
-                memset( &displayDeviceMode, 0, sizeof(displayDeviceMode) );
-                displayDeviceMode.dmSize = sizeof(DEVMODE);
-                displayDeviceMode.dmBitsPerPel  = mColourDepth;
-                displayDeviceMode.dmPelsWidth   = width;
-                displayDeviceMode.dmPelsHeight  = height;
+                memset( &displayDeviceMode, 0, sizeof( displayDeviceMode ) );
+                displayDeviceMode.dmSize = sizeof( DEVMODE );
+                displayDeviceMode.dmBitsPerPel = mColourDepth;
+                displayDeviceMode.dmPelsWidth = width;
+                displayDeviceMode.dmPelsHeight = height;
                 displayDeviceMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
                 if( mFrequencyNumerator )
                 {
                     displayDeviceMode.dmDisplayFrequency = mFrequencyNumerator;
                     displayDeviceMode.dmFields |= DM_DISPLAYFREQUENCY;
 
-                    LONG displayChangeResult = ChangeDisplaySettingsEx( mDeviceName, &displayDeviceMode,
-                                                                        NULL, CDS_FULLSCREEN | CDS_TEST,
-                                                                        NULL );
+                    LONG displayChangeResult = ChangeDisplaySettingsEx(
+                        mDeviceName, &displayDeviceMode, NULL, CDS_FULLSCREEN | CDS_TEST, NULL );
                     if( displayChangeResult != DISP_CHANGE_SUCCESSFUL )
                     {
                         LogManager::getSingleton().logMessage(
-                                    "ChangeDisplaySettings with user display frequency failed" );
+                            "ChangeDisplaySettings with user display frequency failed" );
                         displayDeviceMode.dmFields ^= DM_DISPLAYFREQUENCY;
                     }
                 }
@@ -814,24 +803,21 @@ namespace Ogre
                     // try a few
                     displayDeviceMode.dmDisplayFrequency = 100;
                     displayDeviceMode.dmFields |= DM_DISPLAYFREQUENCY;
-                    LONG displayChangeResult = ChangeDisplaySettingsEx( mDeviceName, &displayDeviceMode,
-                                                                        NULL, CDS_FULLSCREEN | CDS_TEST,
-                                                                        NULL );
+                    LONG displayChangeResult = ChangeDisplaySettingsEx(
+                        mDeviceName, &displayDeviceMode, NULL, CDS_FULLSCREEN | CDS_TEST, NULL );
                     if( displayChangeResult != DISP_CHANGE_SUCCESSFUL )
                     {
                         displayDeviceMode.dmDisplayFrequency = 75;
-                        displayChangeResult = ChangeDisplaySettingsEx( mDeviceName, &displayDeviceMode,
-                                                                       NULL, CDS_FULLSCREEN | CDS_TEST,
-                                                                       NULL );
+                        displayChangeResult = ChangeDisplaySettingsEx(
+                            mDeviceName, &displayDeviceMode, NULL, CDS_FULLSCREEN | CDS_TEST, NULL );
                         if( displayChangeResult != DISP_CHANGE_SUCCESSFUL )
                             displayDeviceMode.dmFields ^= DM_DISPLAYFREQUENCY;
                     }
-
                 }
 
                 // move window to 0,0 before display switch
-                SetWindowPos( mHwnd, HWND_TOPMOST, 0, 0,
-                              mRequestedWidth, mRequestedHeight, SWP_NOACTIVATE );
+                SetWindowPos( mHwnd, HWND_TOPMOST, 0, 0, mRequestedWidth, mRequestedHeight,
+                              SWP_NOACTIVATE );
 
                 LONG displayChangeResult = ChangeDisplaySettingsEx( mDeviceName, &displayDeviceMode,
                                                                     NULL, CDS_FULLSCREEN, NULL );
@@ -846,22 +832,22 @@ namespace Ogre
                 // Get the nearest monitor to this window.
                 HMONITOR hMonitor = MonitorFromWindow( mHwnd, MONITOR_DEFAULTTONEAREST );
 
-                // Get monitor info 
+                // Get monitor info
                 MONITORINFO monitorInfo;
 
-                memset( &monitorInfo, 0, sizeof(MONITORINFO) );
-                monitorInfo.cbSize = sizeof(MONITORINFO);
+                memset( &monitorInfo, 0, sizeof( MONITORINFO ) );
+                monitorInfo.cbSize = sizeof( MONITORINFO );
                 GetMonitorInfo( hMonitor, &monitorInfo );
 
                 mTop = monitorInfo.rcMonitor.top;
                 mLeft = monitorInfo.rcMonitor.left;
 
-                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle(mRequestedFullscreenMode) );
+                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
                 SetWindowPos( mHwnd, HWND_TOPMOST, mLeft, mTop, width, height, SWP_NOACTIVATE );
                 setFinalResolution( width, height );
             }
             else
-            {               
+            {
                 // drop out of fullscreen
                 ChangeDisplaySettingsEx( mDeviceName, NULL, NULL, 0, NULL );
 
@@ -870,19 +856,19 @@ namespace Ogre
                 adjustWindow( width, height, &winWidth, &winHeight );
 
                 // deal with centering when switching down to smaller resolution
-                HMONITOR hMonitor = MonitorFromWindow(mHwnd, MONITOR_DEFAULTTONEAREST);
+                HMONITOR hMonitor = MonitorFromWindow( mHwnd, MONITOR_DEFAULTTONEAREST );
                 MONITORINFO monitorInfo;
-                memset( &monitorInfo, 0, sizeof(MONITORINFO) );
-                monitorInfo.cbSize = sizeof(MONITORINFO);
+                memset( &monitorInfo, 0, sizeof( MONITORINFO ) );
+                monitorInfo.cbSize = sizeof( MONITORINFO );
                 GetMonitorInfo( hMonitor, &monitorInfo );
 
-                LONG screenw = monitorInfo.rcWork.right  - monitorInfo.rcWork.left;
+                LONG screenw = monitorInfo.rcWork.right - monitorInfo.rcWork.left;
                 LONG screenh = monitorInfo.rcWork.bottom - monitorInfo.rcWork.top;
 
-                int left = (screenw > (int)winWidth) ? ((screenw - (int)winWidth) / 2) : 0;
-                int top = (screenh > (int)winHeight) ? ((screenh - (int)winHeight) / 2) : 0;
+                int left = ( screenw > (int)winWidth ) ? ( ( screenw - (int)winWidth ) / 2 ) : 0;
+                int top = ( screenh > (int)winHeight ) ? ( ( screenh - (int)winHeight ) / 2 ) : 0;
 
-                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle(mRequestedFullscreenMode) );
+                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
                 SetWindowPos( mHwnd, HWND_NOTOPMOST, left, top, winWidth, winHeight,
                               SWP_DRAWFRAME | SWP_FRAMECHANGED | SWP_NOACTIVATE );
                 mLeft = left;
@@ -898,39 +884,33 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Win32Window::windowMovedOrResized()
     {
-        if( !mHwnd || IsIconic(mHwnd) )
+        if( !mHwnd || IsIconic( mHwnd ) )
             return;
 
         updateWindowRect();
     }
     //-----------------------------------------------------------------------------------
-    bool Win32Window::isClosed() const
-    {
-        return mClosed;
-    }
+    bool Win32Window::isClosed() const { return mClosed; }
     //-----------------------------------------------------------------------------------
-    void Win32Window::_setVisible( bool visible )
-    {
-        mVisible = visible;
-    }
+    void Win32Window::_setVisible( bool visible ) { mVisible = visible; }
     //-----------------------------------------------------------------------------------
     bool Win32Window::isVisible() const
     {
         bool visible = mVisible && !mHidden;
 
-        //Window minimized or fully obscured (we got notified via _setVisible/WM_PAINT messages)
+        // Window minimized or fully obscured (we got notified via _setVisible/WM_PAINT messages)
         if( !visible )
             return visible;
 
         {
             HWND currentWindowHandle = mHwnd;
-            while( (visible = (IsIconic(currentWindowHandle) == false)) &&
-                   (GetWindowLong(currentWindowHandle, GWL_STYLE) & WS_CHILD) != 0)
+            while( ( visible = ( IsIconic( currentWindowHandle ) == false ) ) &&
+                   ( GetWindowLong( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
             {
                 currentWindowHandle = GetParent( currentWindowHandle );
             }
 
-            //Window is minimized
+            // Window is minimized
             if( !visible )
                 return visible;
         }
@@ -993,22 +973,18 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool Win32Window::isHidden() const
-    {
-        return mHidden;
-    }
+    bool Win32Window::isHidden() const { return mHidden; }
     //-----------------------------------------------------------------------------------
     void Win32Window::setVSync( bool vSync, uint32 vSyncInterval )
     {
         Window::setVSync( vSync, vSyncInterval );
 
-        HDC oldHdc          = wglGetCurrentDC();
-        HGLRC oldContext    = wglGetCurrentContext();
+        HDC oldHdc = wglGetCurrentDC();
+        HGLRC oldContext = wglGetCurrentContext();
         if( !wglMakeCurrent( mHDC, mGlrc ) )
         {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "wglMakeCurrent",
-                         "Win32Window::setVSyncEnabled");
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "wglMakeCurrent",
+                         "Win32Window::setVSyncEnabled" );
         }
 
         // Do not change vsync if the external window has the OpenGL control
@@ -1016,7 +992,7 @@ namespace Ogre
         {
             // Don't use wglew as if this is the first window, we won't have initialised yet
             PFNWGLSWAPINTERVALEXTPROC _wglSwapIntervalEXT =
-                (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+                (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
             if( _wglSwapIntervalEXT )
                 _wglSwapIntervalEXT( mVSync ? mVSyncInterval : 0 );
         }
@@ -1024,10 +1000,9 @@ namespace Ogre
         if( oldContext && oldContext != mGlrc )
         {
             // Restore old context
-            if( !wglMakeCurrent(oldHdc, oldContext) )
+            if( !wglMakeCurrent( oldHdc, oldContext ) )
             {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "wglMakeCurrent() failed",
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "wglMakeCurrent() failed",
                              "Win32Window::setVSyncEnabled" );
             }
         }
@@ -1037,9 +1012,9 @@ namespace Ogre
     {
         if( !mIsExternalGLControl )
         {
-            OgreProfileBeginDynamic( ("SwapBuffers: " + mTitle).c_str() );
+            OgreProfileBeginDynamic( ( "SwapBuffers: " + mTitle ).c_str() );
             OgreProfileGpuBeginDynamic( "SwapBuffers: " + mTitle );
-            SwapBuffers(mHDC);
+            SwapBuffers( mHDC );
             OgreProfileEnd( "SwapBuffers: " + mTitle );
             OgreProfileGpuEnd( "SwapBuffers: " + mTitle );
         }
@@ -1053,10 +1028,10 @@ namespace Ogre
             char classNameSrc[_MAX_CLASS_NAME_ + 1];
             char classNameDst[_MAX_CLASS_NAME_ + 1];
 
-            GetClassName(mHwnd, classNameSrc, _MAX_CLASS_NAME_);
-            GetClassName(hActiveWindow, classNameDst, _MAX_CLASS_NAME_);
+            GetClassName( mHwnd, classNameSrc, _MAX_CLASS_NAME_ );
+            GetClassName( hActiveWindow, classNameDst, _MAX_CLASS_NAME_ );
 
-            if( strcmp(classNameDst, classNameSrc) == 0 )
+            if( strcmp( classNameDst, classNameSrc ) == 0 )
             {
                 focused = true;
             }
@@ -1067,12 +1042,12 @@ namespace Ogre
         if( mRequestedFullscreenMode )
         {
             if( focused == false )
-            {   //Restore Desktop
+            {  // Restore Desktop
                 ChangeDisplaySettingsEx( mDeviceName, NULL, NULL, 0, NULL );
                 ShowWindow( mHwnd, SW_SHOWMINNOACTIVE );
             }
             else
-            {   //Restore App
+            {  // Restore App
                 ShowWindow( mHwnd, SW_SHOWNORMAL );
 
                 mRequestedFullscreenMode = false;
@@ -1086,19 +1061,19 @@ namespace Ogre
     {
         if( name == "GLCONTEXT" )
         {
-            *static_cast<GL3PlusContext**>(pData) = mContext;
+            *static_cast<GL3PlusContext **>( pData ) = mContext;
             return;
         }
         else if( name == "WINDOW" || name == "RENDERDOC_WINDOW" )
         {
-            HWND *pHwnd = (HWND*)pData;
+            HWND *pHwnd = (HWND *)pData;
             *pHwnd = getWindowHandle();
             return;
         }
         else if( name == "RENDERDOC_DEVICE" )
         {
-            *static_cast<HGLRC*>(pData) = mContext->getHGLRC();
+            *static_cast<HGLRC *>( pData ) = mContext->getHGLRC();
             return;
         }
     }
-}
+}  // namespace Ogre

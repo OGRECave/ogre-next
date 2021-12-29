@@ -31,13 +31,10 @@
 
 #include "windowing/OgreGlSwitchableSupport.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    inline GL3PlusSupport *getGLSupport() { return new GlSwitchableSupport(); }
 
-    inline GL3PlusSupport* getGLSupport()
-    {
-		return new GlSwitchableSupport();
-    }
+}  // namespace Ogre
 
-}
-
-#endif // INCL_OGRE_GLUTIL_H
+#endif  // INCL_OGRE_GLUTIL_H

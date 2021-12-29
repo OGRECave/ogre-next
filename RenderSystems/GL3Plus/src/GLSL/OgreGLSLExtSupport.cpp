@@ -30,72 +30,71 @@
 #include "OgreLogManager.h"
 #include "OgreRoot.h"
 
-namespace Ogre {
-
-    String logObjectInfo(const String& msg, const GLuint obj)
+namespace Ogre
+{
+    String logObjectInfo( const String &msg, const GLuint obj )
     {
         String logMessage = msg;
 
         // Invalid object.
-        if (obj <= 0)
+        if( obj <= 0 )
         {
             return logMessage;
         }
 
         GLint infologLength = 0;
 
-        GLboolean isShader = glIsShader(obj);
-        GLboolean isProgram = glIsProgram(obj);
+        GLboolean isShader = glIsShader( obj );
+        GLboolean isProgram = glIsProgram( obj );
 
-        if (isShader)
+        if( isShader )
         {
-            OGRE_CHECK_GL_ERROR(glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
+            OGRE_CHECK_GL_ERROR( glGetShaderiv( obj, GL_INFO_LOG_LENGTH, &infologLength ) );
         }
-        else if (isProgram)
+        else if( isProgram )
         {
-            OGRE_CHECK_GL_ERROR(glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &infologLength));
+            OGRE_CHECK_GL_ERROR( glGetProgramiv( obj, GL_INFO_LOG_LENGTH, &infologLength ) );
         }
 
         // No info log available.
         // if (infologLength <= 1)
-        if (infologLength < 1)
+        if( infologLength < 1 )
         {
             return logMessage;
         }
 
-        GLint charsWritten  = 0;
+        GLint charsWritten = 0;
 
-        char * infoLog = new char [infologLength];
+        char *infoLog = new char[infologLength];
         infoLog[0] = 0;
 
-        if (isShader)
+        if( isShader )
         {
-            OGRE_CHECK_GL_ERROR(glGetShaderInfoLog(obj, infologLength, &charsWritten, infoLog));
+            OGRE_CHECK_GL_ERROR( glGetShaderInfoLog( obj, infologLength, &charsWritten, infoLog ) );
         }
-        else if (isProgram)
+        else if( isProgram )
         {
-            OGRE_CHECK_GL_ERROR(glGetProgramInfoLog(obj, infologLength, &charsWritten, infoLog));
-        }
-
-        if (strlen(infoLog) > 0)
-        {
-            logMessage += "\n" + String(infoLog);
+            OGRE_CHECK_GL_ERROR( glGetProgramInfoLog( obj, infologLength, &charsWritten, infoLog ) );
         }
 
-        delete [] infoLog;
+        if( strlen( infoLog ) > 0 )
+        {
+            logMessage += "\n" + String( infoLog );
+        }
 
-        if (logMessage.size() > 0)
+        delete[] infoLog;
+
+        if( logMessage.size() > 0 )
         {
             // Remove empty lines from the end of the log.
-            while (logMessage[logMessage.size() - 1] == '\n')
+            while( logMessage[logMessage.size() - 1] == '\n' )
             {
-                logMessage.erase(logMessage.size() - 1, 1);
+                logMessage.erase( logMessage.size() - 1, 1 );
             }
-            LogManager::getSingleton().logMessage(logMessage);
+            LogManager::getSingleton().logMessage( logMessage );
         }
 
         return logMessage;
     }
 
-
-}
+}  // namespace Ogre

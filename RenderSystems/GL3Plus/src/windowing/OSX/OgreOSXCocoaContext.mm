@@ -32,43 +32,32 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-
-    CocoaContext::CocoaContext(NSOpenGLContext *context, NSOpenGLPixelFormat *pixelFormat)
-      : mNSGLContext(context), mNSGLPixelFormat(pixelFormat)
-	{
-	}
-
-	CocoaContext::~CocoaContext()
-	{
-		GL3PlusRenderSystem *rs = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
-		rs->_unregisterContext(this);
+    CocoaContext::CocoaContext( NSOpenGLContext *context, NSOpenGLPixelFormat *pixelFormat ) :
+        mNSGLContext( context ),
+        mNSGLPixelFormat( pixelFormat )
+    {
     }
 
-    void CocoaContext::setCurrent()
-	{
-		[mNSGLContext makeCurrentContext];
+    CocoaContext::~CocoaContext()
+    {
+        GL3PlusRenderSystem *rs =
+            static_cast<GL3PlusRenderSystem *>( Root::getSingleton().getRenderSystem() );
+        rs->_unregisterContext( this );
     }
 
-	void CocoaContext::endCurrent()
-	{
-        [NSOpenGLContext clearCurrentContext]; 
-	}
+    void CocoaContext::setCurrent() { [mNSGLContext makeCurrentContext]; }
 
-	GL3PlusContext* CocoaContext::clone() const
-	{
-		NSOpenGLContext *cloneCtx = [[NSOpenGLContext alloc] initWithFormat:mNSGLPixelFormat shareContext:mNSGLContext];
-		[cloneCtx copyAttributesFromContext:mNSGLContext withMask:0];
-		return new CocoaContext(cloneCtx, mNSGLPixelFormat);
-	}
+    void CocoaContext::endCurrent() { [NSOpenGLContext clearCurrentContext]; }
 
-	NSOpenGLContext* CocoaContext::getContext()
-	{
-		return mNSGLContext;
+    GL3PlusContext *CocoaContext::clone() const
+    {
+        NSOpenGLContext *cloneCtx = [[NSOpenGLContext alloc] initWithFormat:mNSGLPixelFormat
+                                                               shareContext:mNSGLContext];
+        [cloneCtx copyAttributesFromContext:mNSGLContext withMask:0];
+        return new CocoaContext( cloneCtx, mNSGLPixelFormat );
     }
 
-	NSOpenGLPixelFormat* CocoaContext::getPixelFormat()
-	{
-		return mNSGLPixelFormat;
-	}
+    NSOpenGLContext *CocoaContext::getContext() { return mNSGLContext; }
+
+    NSOpenGLPixelFormat *CocoaContext::getPixelFormat() { return mNSGLPixelFormat; }
 }
-

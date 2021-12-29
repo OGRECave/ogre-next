@@ -55,7 +55,7 @@ namespace Ogre
             return GL_TEXTURE_3D;
         }
 
-        //Satisfy some compiler warnings
+        // Satisfy some compiler warnings
         return GL_TEXTURE_2D;
     }
     //-----------------------------------------------------------------------------------
@@ -63,6 +63,7 @@ namespace Ogre
     {
         switch( pf )
         {
+            // clang-format off
         case PFG_UNKNOWN:                       return GL_NONE;
         case PFG_NULL:                          return GL_NONE;
 
@@ -247,6 +248,7 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_10X10_sRGB:    return GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR;
         case PFG_ASTC_RGBA_UNORM_12X10_sRGB:    return GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR;
         case PFG_ASTC_RGBA_UNORM_12X12_sRGB:    return GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR;
+            // clang-format on
 
         default:
             return GL_NONE;
@@ -362,7 +364,7 @@ namespace Ogre
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Unsupported by OpenGL or unimplemented pixel format: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
         case PFG_BC1_UNORM:
@@ -405,6 +407,7 @@ namespace Ogre
         case PFG_ATC_RGB:
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+            // clang-format off
         case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
         case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
         case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
@@ -419,11 +422,12 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            // clang-format on
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "This should never happen. Compressed formats must use "
                          "GL3PlusMappings::get instead. PixelFormat: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
 
@@ -447,7 +451,7 @@ namespace Ogre
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "PixelFormat invalid or not initialized. PixelFormat: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
         }
@@ -544,7 +548,7 @@ namespace Ogre
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Unsupported by OpenGL or unimplemented pixel format: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
 
@@ -593,7 +597,7 @@ namespace Ogre
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Unsupported by OpenGL or unimplemented pixel format: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
         case PFG_BC1_UNORM:
@@ -636,6 +640,7 @@ namespace Ogre
         case PFG_ATC_RGB:
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+            // clang-format off
         case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
         case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
         case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
@@ -650,11 +655,12 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            // clang-format on
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "This should never happen. Compressed formats must use "
                          "GL3PlusMappings::get instead. PixelFormat: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
         case PFG_RGB8_UNORM:
@@ -676,9 +682,9 @@ namespace Ogre
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "PixelFormat invalid or not initialized. PixelFormat: " +
-                         String( PixelFormatGpuUtils::toString( pixelFormat ) ),
+                             String( PixelFormatGpuUtils::toString( pixelFormat ) ),
                          "GL3PlusMappings::getFormatAndType" );
             break;
         }
     }
-}
+}  // namespace Ogre

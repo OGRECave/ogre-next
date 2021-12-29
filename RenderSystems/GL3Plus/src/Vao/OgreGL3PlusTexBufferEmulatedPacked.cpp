@@ -49,7 +49,7 @@ namespace Ogre
         mInternalNumElements( 0 )
     {
         OCGE( glGenTextures( 1, &mTexName ) );
-        
+
         mInternalFormat = GL3PlusMappings::get( pf );
 
         OCGE( glBindTexture( GL_TEXTURE_2D, mTexName ) );
@@ -62,9 +62,9 @@ namespace Ogre
 
         mInternalNumElements = numElements / mInternalNumElemBytes;
 
-        size_t width = std::min( mMaxTexSize,  mInternalNumElements);
+        size_t width = std::min( mMaxTexSize, mInternalNumElements );
 
-        size_t texHeight = (mInternalNumElements + mMaxTexSize - 1) / mMaxTexSize;
+        size_t texHeight = ( mInternalNumElements + mMaxTexSize - 1 ) / mMaxTexSize;
 
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0 ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0 ) );
@@ -72,8 +72,8 @@ namespace Ogre
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
-        OCGE( glTexImage2D( GL_TEXTURE_2D, 0, mInternalFormat, width, texHeight,
-                            0, mOriginFormat, mOriginDataType, NULL ) );
+        OCGE( glTexImage2D( GL_TEXTURE_2D, 0, mInternalFormat, width, texHeight, 0, mOriginFormat,
+                            mOriginDataType, NULL ) );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusTexBufferEmulatedPacked::~GL3PlusTexBufferEmulatedPacked()
@@ -83,21 +83,21 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline void GL3PlusTexBufferEmulatedPacked::bindBuffer( size_t offset, size_t sizeBytes )
     {
-        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
-        assert( offset < (mNumElements * mBytesPerElement - 1) );
-        assert( (offset + sizeBytes) <= mNumElements * mBytesPerElement );
+        assert( dynamic_cast<GL3PlusBufferInterface *>( mBufferInterface ) );
+        assert( offset < ( mNumElements * mBytesPerElement - 1 ) );
+        assert( ( offset + sizeBytes ) <= mNumElements * mBytesPerElement );
 
-        sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
+        sizeBytes = !sizeBytes ? ( mNumElements * mBytesPerElement - offset ) : sizeBytes;
 
         GL3PlusBufferInterface *bufferInterface =
-                static_cast<GL3PlusBufferInterface*>( mBufferInterface );
+            static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
         size_t numModifiedElements = sizeBytes / mInternalNumElemBytes;
         assert( sizeBytes % mInternalNumElemBytes == 0 );
         size_t texWidth = std::min( numModifiedElements, std::min( mMaxTexSize, mInternalNumElements ) );
         size_t texHeight = ( numModifiedElements + mMaxTexSize - 1 ) / mMaxTexSize;
 
-        if( (mBytesPerElement & 4) != 4 )
+        if( ( mBytesPerElement & 4 ) != 4 )
         {
             // Standard alignment of 4 is not right for some formats.
             OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 1 ) );
@@ -105,24 +105,25 @@ namespace Ogre
 
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, bufferInterface->getVboName() ) );
         OCGE( glBindTexture( GL_TEXTURE_2D, mTexName ) );
-        OCGE( glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight,
-                               mOriginFormat, mOriginDataType, reinterpret_cast<void*>(
-                                   mFinalBufferStart * mBytesPerElement + offset ) ) );
+        OCGE( glTexSubImage2D(
+            GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight, mOriginFormat, mOriginDataType,
+            reinterpret_cast<void *>( mFinalBufferStart * mBytesPerElement + offset ) ) );
 
         // Restore alignment.
-        if ((mBytesPerElement & 4) != 4)
+        if( ( mBytesPerElement & 4 ) != 4 )
         {
             OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );
         }
     }
     //-----------------------------------------------------------------------------------
-    inline void GL3PlusTexBufferEmulatedPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
+    inline void GL3PlusTexBufferEmulatedPacked::bindBuffer( uint16 slot, size_t offset,
+                                                            size_t sizeBytes )
     {
         OCGE( glActiveTexture( GL_TEXTURE0 + slot ) );
         bindBuffer( offset, sizeBytes );
-        //TODO: Get rid of this nonsense of restoring the active texture.
-        //RenderSystem is always restores to 0 after using,
-        //plus activateGLTextureUnit won't see our changes otherwise.
+        // TODO: Get rid of this nonsense of restoring the active texture.
+        // RenderSystem is always restores to 0 after using,
+        // plus activateGLTextureUnit won't see our changes otherwise.
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
     }
     //-----------------------------------------------------------------------------------
@@ -134,7 +135,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferEmulatedPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
-        bindBuffer( slot, offset, sizeBytes);
+        bindBuffer( slot, offset, sizeBytes );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferEmulatedPacked::bindBufferPS( uint16 slot, size_t offset, size_t sizeBytes )
