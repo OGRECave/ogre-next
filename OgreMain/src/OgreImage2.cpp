@@ -1123,19 +1123,24 @@ namespace Ogre
                 for( size_t j = 0; j < 6; ++j )
                 {
                     uint8 *downFace = reinterpret_cast<uint8 *>( box1.at( 0, 0, j ) );
-                    ( *downsamplerCubeFunc )( reinterpret_cast<uint8 *>( downFace ), upFaces, dstWidth,
-                                              dstHeight, box1.bytesPerRow, srcWidth, srcHeight,
-                                              box0.bytesPerRow, chosenFilter.kernel,
-                                              chosenFilter.kernelStartX, chosenFilter.kernelEndX,
-                                              chosenFilter.kernelStartY, chosenFilter.kernelEndY, j );
+                    ( *downsamplerCubeFunc )(
+                        reinterpret_cast<uint8 *>( downFace ), upFaces, static_cast<int32>( dstWidth ),
+                        static_cast<int32>( dstHeight ), static_cast<int32>( box1.bytesPerRow ),
+                        static_cast<int32>( srcWidth ), static_cast<int32>( srcHeight ),
+                        static_cast<int32>( box0.bytesPerRow ), chosenFilter.kernel,
+                        chosenFilter.kernelStartX, chosenFilter.kernelEndX, chosenFilter.kernelStartY,
+                        chosenFilter.kernelEndY, static_cast<uint8>( j ) );
                 }
             }
             else if( mTextureType == TextureTypes::Type3D )
             {
-                ( *downsampler3DFunc )( reinterpret_cast<uint8 *>( box1.data ),
-                                        reinterpret_cast<uint8 *>( box0.data ), dstWidth, dstHeight,
-                                        dstDepth, box1.bytesPerRow, box1.bytesPerImage, srcWidth,
-                                        srcHeight, box0.bytesPerRow, box0.bytesPerImage );
+                ( *downsampler3DFunc )(
+                    reinterpret_cast<uint8 *>( box1.data ), reinterpret_cast<uint8 *>( box0.data ),
+                    static_cast<int32>( dstWidth ), static_cast<int32>( dstHeight ),
+                    static_cast<int32>( dstDepth ), static_cast<int32>( box1.bytesPerRow ),
+                    static_cast<int32>( box1.bytesPerImage ), static_cast<int32>( srcWidth ),
+                    static_cast<int32>( srcHeight ), static_cast<int32>( box0.bytesPerRow ),
+                    static_cast<int32>( box0.bytesPerImage ) );
             }
             else
             {
@@ -1143,9 +1148,11 @@ namespace Ogre
                 {
                     ( *downsampler2DFunc )(
                         reinterpret_cast<uint8 *>( box1.data ), reinterpret_cast<uint8 *>( box0.data ),
-                        dstWidth, dstHeight, box1.bytesPerRow, srcWidth, box0.bytesPerRow,
-                        chosenFilter.kernel, chosenFilter.kernelStartX, chosenFilter.kernelEndX,
-                        chosenFilter.kernelStartY, chosenFilter.kernelEndY );
+                        static_cast<int32>( dstWidth ), static_cast<int32>( dstHeight ),
+                        static_cast<int32>( box1.bytesPerRow ), static_cast<int32>( srcWidth ),
+                        static_cast<int32>( box0.bytesPerRow ), chosenFilter.kernel,
+                        chosenFilter.kernelStartX, chosenFilter.kernelEndX, chosenFilter.kernelStartY,
+                        chosenFilter.kernelEndY );
                 }
                 else
                 {
@@ -1159,23 +1166,26 @@ namespace Ogre
                     // The image right now is in both box0 and tmpImage0. We can't touch box0,
                     // So we blur tmpImage0, and use tmpBuffer1 to store intermediate results
                     const FilterSeparableKernel &separableKernel = c_filterSeparableKernels[0];
-                    ( *separableBlur2DFunc )( tmpBuffer1, reinterpret_cast<uint8 *>( tmpImage0.mBuffer ),
-                                              srcWidth, srcHeight, box0.bytesPerRow,
-                                              separableKernel.kernel, separableKernel.kernelStart,
-                                              separableKernel.kernelEnd );
+                    ( *separableBlur2DFunc )(
+                        tmpBuffer1, reinterpret_cast<uint8 *>( tmpImage0.mBuffer ),
+                        static_cast<int32>( srcWidth ), static_cast<int32>( srcHeight ),
+                        static_cast<int32>( box0.bytesPerRow ), separableKernel.kernel,
+                        separableKernel.kernelStart, separableKernel.kernelEnd );
                     // Filter again...
                     ( *separableBlur2DFunc )( tmpBuffer1, reinterpret_cast<uint8 *>( tmpImage0.mBuffer ),
-                                              srcWidth, srcHeight, box0.bytesPerRow,
+                                              static_cast<int32>( srcWidth ),
+                                              static_cast<int32>( srcHeight ), box0.bytesPerRow,
                                               separableKernel.kernel, separableKernel.kernelStart,
                                               separableKernel.kernelEnd );
 
                     // Now that tmpImage0 is blurred, bilinear downsample its contents into box1.
-                    ( *downsampler2DFunc )( reinterpret_cast<uint8 *>( box1.data ),
-                                            reinterpret_cast<uint8 *>( tmpImage0.mBuffer ), dstWidth,
-                                            dstHeight, box1.bytesPerRow, srcWidth, box0.bytesPerRow,
-                                            chosenFilter.kernel, chosenFilter.kernelStartX,
-                                            chosenFilter.kernelEndX, chosenFilter.kernelStartY,
-                                            chosenFilter.kernelEndY );
+                    ( *downsampler2DFunc )(
+                        reinterpret_cast<uint8 *>( box1.data ),
+                        reinterpret_cast<uint8 *>( tmpImage0.mBuffer ), static_cast<int32>( dstWidth ),
+                        static_cast<int32>( dstHeight ), static_cast<int32>( box1.bytesPerRow ),
+                        static_cast<int32>( srcWidth ), static_cast<int32>( box0.bytesPerRow ),
+                        chosenFilter.kernel, chosenFilter.kernelStartX, chosenFilter.kernelEndX,
+                        chosenFilter.kernelStartY, chosenFilter.kernelEndY );
                 }
             }
         }

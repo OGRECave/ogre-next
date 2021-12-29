@@ -196,7 +196,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t ObjectMemoryManager::getNumRenderQueues() const
     {
-        size_t retVal = -1;
+        size_t retVal = std::numeric_limits<size_t>::max();
         ArrayMemoryManagerVec::const_iterator begin = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
@@ -204,7 +204,7 @@ namespace Ogre
         while( itor != endt )
         {
             if( itor->getUsedMemory() )
-                retVal = itor - begin;
+                retVal = static_cast<size_t>( itor - begin );
             ++itor;
         }
 
@@ -213,7 +213,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t ObjectMemoryManager::calculateTotalNumObjectDataIncludingFragmentedSlots() const
     {
-        size_t retVal = 0;
+        size_t retVal = 0u;
 
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();

@@ -833,7 +833,8 @@ namespace Ogre
                 inFile->read( &fileData[0], fileData.size() );
                 std::ofstream outFile( ( folderPath + "/" + savingFilename ).c_str(),
                                        std::ios::binary | std::ios::out );
-                outFile.write( (const char *)&fileData[0], fileData.size() );
+                outFile.write( (const char *)&fileData[0],
+                               static_cast<std::streamsize>( fileData.size() ) );
                 outFile.close();
             }
         }
@@ -2983,8 +2984,9 @@ namespace Ogre
             wakeUpMainThread = true;
         }
 
-        workerData.loadRequests.erase( workerData.loadRequests.begin(),
-                                       workerData.loadRequests.begin() + entriesProcessed );
+        workerData.loadRequests.erase(
+            workerData.loadRequests.begin(),
+            workerData.loadRequests.begin() + static_cast<ptrdiff_t>( entriesProcessed ) );
         mergeUsageStatsIntoPrevStats();
         mMutex.unlock();
 

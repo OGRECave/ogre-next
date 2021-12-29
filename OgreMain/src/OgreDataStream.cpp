@@ -61,7 +61,7 @@ namespace Ogre
             if( p != 0 )
             {
                 // Reposition backwards
-                skip( (long)( p + 1 - tmpBuf - readCount ) );
+                skip( (long)( p + 1 - tmpBuf - static_cast<ptrdiff_t>( readCount ) ) );
                 *p = '\0';
             }
 
@@ -348,7 +348,7 @@ namespace Ogre
         size_t cnt = count;
         // Read over end of memory?
         if( mPos + cnt > mEnd )
-            cnt = mEnd - mPos;
+            cnt = static_cast<size_t>( mEnd - mPos );
         if( cnt == 0 )
             return 0;
 
@@ -368,7 +368,7 @@ namespace Ogre
             // we only allow writing within the extents of allocated memory
             // check for buffer overrun & disallow
             if( mPos + written > mEnd )
-                written = mEnd - mPos;
+                written = static_cast<size_t>( mEnd - mPos );
             if( written == 0 )
                 return 0;
 
@@ -392,7 +392,7 @@ namespace Ogre
         // Make sure pos can never go past the end of the data
         while( pos < maxCount && mPos < mEnd )
         {
-            if( delim.find( *mPos ) != String::npos )
+            if( delim.find( static_cast<char>( *mPos ) ) != String::npos )
             {
                 // Trim off trailing CR if this was a CR/LF entry
                 if( trimCR && pos && buf[pos - 1] == '\r' )
@@ -406,7 +406,7 @@ namespace Ogre
                 break;
             }
 
-            buf[pos++] = *mPos++;
+            buf[pos++] = static_cast<char>( *mPos++ );
         }
 
         // terminate
@@ -423,7 +423,7 @@ namespace Ogre
         while( mPos < mEnd )
         {
             ++pos;
-            if( delim.find( *mPos++ ) != String::npos )
+            if( delim.find( static_cast<char>( *mPos++ ) ) != String::npos )
             {
                 // Found terminator, break out
                 break;
@@ -450,7 +450,7 @@ namespace Ogre
     size_t MemoryDataStream::tell() const
     {
         // mData is start, mPos is current location
-        return mPos - mData;
+        return static_cast<size_t>( mPos - mData );
     }
     //-----------------------------------------------------------------------
     bool MemoryDataStream::eof() const { return mPos >= mEnd; }
@@ -714,7 +714,7 @@ namespace Ogre
     {
         // Determine size
         fseek( mFileHandle, 0, SEEK_END );
-        mSize = ftell( mFileHandle );
+        mSize = static_cast<size_t>( ftell( mFileHandle ) );
         fseek( mFileHandle, 0, SEEK_SET );
     }
     //-----------------------------------------------------------------------
@@ -724,7 +724,7 @@ namespace Ogre
     {
         // Determine size
         fseek( mFileHandle, 0, SEEK_END );
-        mSize = ftell( mFileHandle );
+        mSize = static_cast<size_t>( ftell( mFileHandle ) );
         fseek( mFileHandle, 0, SEEK_SET );
     }
     //-----------------------------------------------------------------------
@@ -751,7 +751,7 @@ namespace Ogre
         fseek( mFileHandle, static_cast<long>( pos ), SEEK_SET );
     }
     //-----------------------------------------------------------------------
-    size_t FileHandleDataStream::tell() const { return ftell( mFileHandle ); }
+    size_t FileHandleDataStream::tell() const { return static_cast<size_t>( ftell( mFileHandle ) ); }
     //-----------------------------------------------------------------------
     bool FileHandleDataStream::eof() const { return feof( mFileHandle ) != 0; }
     //-----------------------------------------------------------------------

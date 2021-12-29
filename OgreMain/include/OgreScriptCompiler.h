@@ -203,9 +203,9 @@ namespace Ogre
         // The container for errors
         struct Error : public ScriptCompilerAlloc
         {
-            String file, message;
-            int    line;
-            uint32 code;
+            String       file, message;
+            unsigned int line;
+            uint32       code;
         };
         typedef SharedPtr<Error>     ErrorPtr;
         typedef list<ErrorPtr>::type ErrorList;
@@ -250,7 +250,7 @@ namespace Ogre
         bool _compile( AbstractNodeListPtr nodes, const String &group, bool doImports = true,
                        bool doObjects = true, bool doVariables = true );
         /// Adds the given error to the compiler's list of errors
-        void addError( uint32 code, const String &file, int line, const String &msg = "" );
+        void addError( uint32 code, const String &file, unsigned int line, const String &msg = "" );
         /// Sets the listener used by the compiler
         void setListener( ScriptCompilerListener *listener );
         /// Returns the currently set listener
@@ -399,8 +399,8 @@ namespace Ogre
          */
         virtual bool postConversion( ScriptCompiler *compiler, const AbstractNodeListPtr & );
         /// Called when an error occurred
-        virtual void handleError( ScriptCompiler *compiler, uint32 code, const String &file, int line,
-                                  const String &msg );
+        virtual void handleError( ScriptCompiler *compiler, uint32 code, const String &file,
+                                  unsigned int line, const String &msg );
         /// Called when an event occurs during translation, return true if handled
         /**
          @remarks   This function is called from the translators when an event occurs that

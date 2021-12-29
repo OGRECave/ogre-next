@@ -167,7 +167,8 @@ namespace Ogre
         {
             // Zero out POD part including padding bytes.
             memset( &operationType, 0,
-                    (const uint8 *)this + sizeof( HlmsPso ) - (const uint8 *)&this->operationType );
+                    static_cast<size_t>( (const uint8 *)this + sizeof( HlmsPso ) -
+                                         (const uint8 *)&this->operationType ) );
             operationType = OT_POINT_LIST;
         }
 
@@ -183,7 +184,8 @@ namespace Ogre
 
             // Copy POD part including padding bytes.
             memcpy( &operationType, &_r.operationType,
-                    (const uint8 *)this + sizeof( HlmsPso ) - (const uint8 *)&this->operationType );
+                    static_cast<size_t>( (const uint8 *)this + sizeof( HlmsPso ) -
+                                         (const uint8 *)&this->operationType ) );
             return *this;
         }
 
@@ -232,7 +234,8 @@ namespace Ogre
             return equalNonPod( _r ) &&
                    // POD datatypes
                    memcmp( &this->operationType, &_r.operationType,
-                           (const uint8 *)&this->sampleMask - (const uint8 *)&this->operationType ) == 0;
+                           static_cast<size_t>( (const uint8 *)&this->sampleMask -
+                                                (const uint8 *)&this->operationType ) ) == 0;
         }
         /// Compares if this <= _r. See equalExcludePassData
         bool lessThanExcludePassData( const HlmsPso &_r ) const
@@ -244,7 +247,8 @@ namespace Ogre
 
             // POD datatypes
             return memcmp( &this->operationType, &_r.operationType,
-                           (const uint8 *)&this->sampleMask - (const uint8 *)&this->operationType ) < 0;
+                           static_cast<size_t>( (const uint8 *)&this->sampleMask -
+                                                (const uint8 *)&this->operationType ) ) < 0;
         }
     };
 

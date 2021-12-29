@@ -183,11 +183,12 @@ namespace Ogre
 
         iterator insert( iterator where, const T &val )
         {
-            size_t idx = ( where - mData );
+            const ptrdiff_t idx = ( where - mData );
 
             growToFit( 1 );
 
-            memmove( mData + idx + 1, mData + idx, ( mSize - idx ) * sizeof( T ) );
+            memmove( mData + idx + 1, mData + idx,
+                     ( mSize - static_cast<size_t>( idx ) ) * sizeof( T ) );
             new( &mData[idx] ) T( val );
             ++mSize;
 
@@ -197,7 +198,7 @@ namespace Ogre
         /// otherBegin & otherEnd must not overlap with this->begin() and this->end()
         iterator insertPOD( iterator where, const_iterator otherBegin, const_iterator otherEnd )
         {
-            size_t idx = ( where - mData );
+            const ptrdiff_t idx = ( where - mData );
 
             const size_t otherSize = otherEnd - otherBegin;
 
@@ -227,17 +228,19 @@ namespace Ogre
 
         void appendPOD( const_iterator otherBegin, const_iterator otherEnd )
         {
-            growToFit( otherEnd - otherBegin );
+            growToFit( static_cast<size_t>( otherEnd - otherBegin ) );
 
-            memcpy( mData + mSize, otherBegin, ( otherEnd - otherBegin ) * sizeof( T ) );
-            mSize += otherEnd - otherBegin;
+            memcpy( mData + mSize, otherBegin,
+                    static_cast<size_t>( otherEnd - otherBegin ) * sizeof( T ) );
+            mSize += static_cast<size_t>( otherEnd - otherBegin );
         }
 
         iterator erase( iterator toErase )
         {
-            size_t idx = ( toErase - mData );
+            const ptrdiff_t idx = ( toErase - mData );
             toErase->~T();
-            memmove( mData + idx, mData + idx + 1, ( mSize - idx - 1 ) * sizeof( T ) );
+            memmove( mData + idx, mData + idx + 1,
+                     ( mSize - static_cast<size_t>( idx ) - 1u ) * sizeof( T ) );
             --mSize;
 
             return mData + idx;
@@ -247,8 +250,8 @@ namespace Ogre
         {
             assert( first <= last && last <= end() );
 
-            size_t idx = ( first - mData );
-            size_t idxNext = ( last - mData );
+            const ptrdiff_t idx = ( first - mData );
+            const ptrdiff_t idxNext = ( last - mData );
             if( first != last )
             {
                 while( first != last )
@@ -267,8 +270,8 @@ namespace Ogre
         {
             assert( first <= last && last <= end() );
 
-            size_t idx = ( first - mData );
-            size_t idxNext = ( last - mData );
+            const ptrdiff_t idx = ( first - mData );
+            const ptrdiff_t idxNext = ( last - mData );
             if( first != last )
             {
                 memmove( mData + idx, mData + idxNext, ( mSize - idxNext ) * sizeof( T ) );

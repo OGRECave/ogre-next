@@ -71,8 +71,8 @@ namespace Ogre
         mListener( 0 ),
         mSkeletonInstance( 0 ),
         mObjectMemoryManager( objectMemoryManager ),
-        mGlobalIndex( -1 ),
-        mParentIndex( -1 )
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
+        mParentIndex( std::numeric_limits<size_t>::max() )
     {
         assert( renderQueueId <= 254 );
 
@@ -95,8 +95,8 @@ namespace Ogre
         mListener( 0 ),
         mSkeletonInstance( 0 ),
         mObjectMemoryManager( 0 ),
-        mGlobalIndex( -1 ),
-        mParentIndex( -1 )
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
+        mParentIndex( std::numeric_limits<size_t>::max() )
     {
         if( Root::getSingletonPtr() )
             mMinPixelSize = Root::getSingleton().getDefaultMinPixelSize();
@@ -480,8 +480,9 @@ namespace Ogre
         const Camera::CameraSortMode cameraSortMode = frustum->mSortMode;
 
         // Flip the bit from shadow caster, and leave only that in "includeNonCasters"
-        Ogre::uint32 includeNonCastersTest =
-            ( ( ( sceneVisibilityFlags & LAYER_SHADOW_CASTER ) ^ -1 ) & LAYER_SHADOW_CASTER );
+        const uint32 includeNonCastersTest =
+            ( ( ( sceneVisibilityFlags & LAYER_SHADOW_CASTER ) ^ std::numeric_limits<uint32>::max() ) &
+              LAYER_SHADOW_CASTER );
 
         ArrayInt includeNonCasters = Mathlib::SetAll( includeNonCastersTest );
 

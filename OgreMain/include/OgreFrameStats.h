@@ -78,7 +78,8 @@ namespace Ogre
             {
                 // idx is first in the range [(mNextFrame - mFramesSampled); mNextFrame),
                 // but then warped around mNextFrame
-                size_t idx = ( i + mNextFrame + ( mFramesSampled * 2 - 1 ) ) % mFramesSampled;
+                size_t idx = ( i + static_cast<size_t>( mNextFrame ) + ( mFramesSampled * 2u - 1u ) ) %
+                             mFramesSampled;
                 avg += mFrameTimes[idx];
             }
 

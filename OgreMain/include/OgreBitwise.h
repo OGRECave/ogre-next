@@ -402,9 +402,9 @@ namespace Ogre
          */
         static inline uint32 halfToFloatI( uint16 y )
         {
-            register int s = ( y >> 15 ) & 0x00000001;
-            register int e = ( y >> 10 ) & 0x0000001f;
-            register int m = y & 0x000003ff;
+            const uint32 s = ( y >> 15 ) & 0x00000001;
+            uint32       e = ( y >> 10 ) & 0x0000001f;
+            uint32       m = y & 0x000003ff;
 
             if( e == 0 )
             {
@@ -421,18 +421,18 @@ namespace Ogre
                     }
 
                     e += 1;
-                    m &= ~0x00000400;
+                    m &= ~0x00000400u;
                 }
             }
             else if( e == 31 )
             {
                 if( m == 0 )  // Inf
                 {
-                    return ( s << 31 ) | 0x7f800000;
+                    return ( s << 31u ) | 0x7f800000u;
                 }
                 else  // NaN
                 {
-                    return ( s << 31 ) | 0x7f800000 | ( m << 13 );
+                    return ( s << 31u ) | 0x7f800000u | ( m << 13u );
                 }
             }
 
@@ -484,7 +484,7 @@ namespace Ogre
             _BitScanForward( &trailingZero, value );
             return trailingZero;
 #else
-            return __builtin_ctz( value );
+            return static_cast<uint32>( __builtin_ctz( value ) );
 #endif
         }
 
@@ -498,7 +498,7 @@ namespace Ogre
             _BitScanReverse( &lastBitSet, value );
             return 31u - lastBitSet;
 #else
-            return __builtin_clz( value );
+            return static_cast<uint32>( __builtin_clz( value ) );
 #endif
         }
 

@@ -74,7 +74,7 @@ namespace Ogre
 
         SubStringRef( const String *original, String::const_iterator _start ) :
             mOriginal( original ),
-            mStart( _start - original->begin() ),
+            mStart( static_cast<size_t>( _start - original->begin() ) ),
             mEnd( original->size() )
         {
         }
@@ -115,7 +115,7 @@ namespace Ogre
         bool matchEqual( const char *stringCompare ) const
         {
             const char *origStr = mOriginal->c_str() + mStart;
-            ptrdiff_t   length = mEnd - mStart;
+            size_t      length = mEnd - mStart;
             while( *origStr == *stringCompare && *origStr && --length )
             {
                 ++origStr;
@@ -141,9 +141,15 @@ namespace Ogre
         size_t getStart() const { return mStart; }
         size_t getEnd() const { return mEnd; }
         size_t getSize() const { return mEnd - mStart; }
-        String::const_iterator begin() const { return mOriginal->begin() + mStart; }
-        String::const_iterator end() const { return mOriginal->begin() + mEnd; }
-        const String &         getOriginalBuffer() const { return *mOriginal; }
+        String::const_iterator begin() const
+        {
+            return mOriginal->begin() + static_cast<ptrdiff_t>( mStart );
+        }
+        String::const_iterator end() const
+        {
+            return mOriginal->begin() + static_cast<ptrdiff_t>( mEnd );
+        }
+        const String &getOriginalBuffer() const { return *mOriginal; }
     };
 
     struct _OgreExport HlmsProperty

@@ -165,7 +165,7 @@ namespace Ogre
 
         uint32                       mAssignedSlot;
         ConstBufferPool::BufferPool *mAssignedPool;
-        size_t                       mGlobalIndex;
+        ptrdiff_t                    mGlobalIndex;
         // ConstBufferPool             *mPoolOwner;
         uint8 mDirtyFlags;
 

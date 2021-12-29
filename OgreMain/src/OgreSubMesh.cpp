@@ -310,7 +310,7 @@ namespace Ogre
                 }
             }
 
-            Cluster split( int split_axis, const VertexElement *poselem, uint8 *vdata, size_t vsz )
+            Cluster split( size_t split_axis, const VertexElement *poselem, uint8 *vdata, size_t vsz )
             {
                 Real r = ( mMin[split_axis] + mMax[split_axis] ) * 0.5f;
                 Cluster newbox;
@@ -376,7 +376,7 @@ namespace Ogre
 
                 for( size_t i = 0; i < indexData[VpNormal]->indexCount; i++ )
                 {
-                    int idx = ( elsz == 2 ) ? ( (uint16 *)idata )[i] : ( (uint32 *)idata )[i];
+                    size_t idx = ( elsz == 2u ) ? ( (uint16 *)idata )[i] : ( (uint32 *)idata )[i];
                     boxes[0].mIndices.insert( idx );
                 }
                 indexData[VpNormal]->indexBuffer->unlock();
@@ -387,7 +387,7 @@ namespace Ogre
                 for( size_t i = vertexData[VpNormal]->vertexStart; i < vertexData[VpNormal]->vertexCount;
                      i++ )
                 {
-                    boxes[0].mIndices.insert( static_cast<int>( i ) );
+                    boxes[0].mIndices.insert( static_cast<uint32>( i ) );
                 }
             }
 
@@ -419,9 +419,9 @@ namespace Ogre
                     break;
 
                 // Find the coordinate axis to split the box into two
-                int split_axis = 0;
+                size_t split_axis = 0u;
                 Real split_length = split_box->mMax.x - split_box->mMin.x;
-                for( int i = 1; i < 3; i++ )
+                for( size_t i = 1u; i < 3u; i++ )
                 {
                     Real l = split_box->mMax[i] - split_box->mMin[i];
                     if( l > split_length )

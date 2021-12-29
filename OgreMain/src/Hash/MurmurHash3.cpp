@@ -52,6 +52,14 @@ inline uint64_t rotl64 ( uint64_t x, int8_t r )
 
 #endif // !defined(_MSC_VER)
 
+#if defined( __clang__ )
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wsign-conversion"
+#elif defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 namespace Ogre
 {
 //-----------------------------------------------------------------------------
@@ -339,3 +347,9 @@ void _OgreExport MurmurHash3_x64_128 ( const void * key, const int len,
 
 //-----------------------------------------------------------------------------
 }
+
+#if defined( __clang__ )
+#    pragma clang diagnostic pop
+#elif defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif

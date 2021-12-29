@@ -56,8 +56,8 @@ namespace Ogre
         mShadowCopy( 0 )
 #if OGRE_DEBUG_MODE
         ,
-        mLastFrameMapped( ~0 ),
-        mLastFrameMappedAndAdvanced( ~0 )
+        mLastFrameMapped( std::numeric_limits<uint32>::max() ),
+        mLastFrameMappedAndAdvanced( std::numeric_limits<uint32>::max() )
 #endif
     {
         assert( !( internalBufferStartBytes % bytesPerElement ) );

@@ -52,7 +52,7 @@ namespace Ogre
         while( itor.hasMoreElements() )
         {
             v1::OldBone *bone = itor.getNext();
-            size_t parentIndex = -1;
+            size_t parentIndex = std::numeric_limits<size_t>::max();
             if( bone->getParent() )
             {
                 assert( !bone->getParent() || dynamic_cast<v1::OldBone *>( bone->getParent() ) );
@@ -329,7 +329,8 @@ namespace Ogre
         size_t numBlocks = 0;
 
         DepthLevelInfoVec::const_iterator itor = mDepthLevelInfoVec.begin();
-        DepthLevelInfoVec::const_iterator endt = mDepthLevelInfoVec.begin() + numLevels;
+        DepthLevelInfoVec::const_iterator endt =
+            mDepthLevelInfoVec.begin() + static_cast<ptrdiff_t>( numLevels );
 
         while( itor != endt )
         {

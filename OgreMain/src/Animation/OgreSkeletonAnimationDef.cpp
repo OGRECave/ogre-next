@@ -148,8 +148,9 @@ namespace Ogre
                     uint32 blockIdx = SkeletonDef::slotToBlockIdx( slotIdx );
 
                     TimestampsPerBlock::iterator itKeyframes = timestampsByBlock.find( blockIdx );
-                    size_t trackDiff = std::distance( timestampsByBlock.begin(), itKeyframes );
-                    mBoneToWeights[skeleton->getBone( boneIdx )->getName()] =
+                    const size_t trackDiff =
+                        static_cast<size_t>( std::distance( timestampsByBlock.begin(), itKeyframes ) );
+                    mBoneToWeights[skeleton->getBone( static_cast<uint16>( boneIdx ) )->getName()] =
                         ( slotIdx & 0xFF000000 ) | ( ( trackDiff * ARRAY_PACKED_REALS +
                                                        ( slotIdx & 0x00FFFFFF ) % ARRAY_PACKED_REALS ) );
                 }
@@ -180,7 +181,7 @@ namespace Ogre
                 {
                     uint32 slotIdx = slotStart + i;
 
-                    uint32 boneIdx = -1;
+                    uint32 boneIdx = std::numeric_limits<uint32>::max();
                     map<uint32, uint32>::type::const_iterator it = slotToBone.find( slotIdx );
                     if( it != slotToBone.end() )
                         boneIdx = it->second;
@@ -271,7 +272,8 @@ namespace Ogre
         }
 
         mKfTransformMemoryManager = new KfTransformArrayMemoryManager(
-            0, numKeyFrames * ARRAY_PACKED_REALS, -1, numKeyFrames * ARRAY_PACKED_REALS );
+            0, numKeyFrames * ARRAY_PACKED_REALS, std::numeric_limits<size_t>::max(),
+            numKeyFrames * ARRAY_PACKED_REALS );
         mKfTransformMemoryManager->initialize();
 
         mTracks.reserve( timestampsByBlock.size() );

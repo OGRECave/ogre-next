@@ -70,11 +70,11 @@ namespace Ogre
     Math::Math( unsigned int trigTableSize )
     {
         msAngleUnit = AU_DEGREE;
-        mTrigTableSize = trigTableSize;
+        mTrigTableSize = static_cast<int>( trigTableSize );
         mTrigTableFactor = mTrigTableSize / Math::TWO_PI;
 
-        mSinTable = OGRE_ALLOC_T( Real, mTrigTableSize, MEMCATEGORY_GENERAL );
-        mTanTable = OGRE_ALLOC_T( Real, mTrigTableSize, MEMCATEGORY_GENERAL );
+        mSinTable = OGRE_ALLOC_T( Real, trigTableSize, MEMCATEGORY_GENERAL );
+        mTanTable = OGRE_ALLOC_T( Real, trigTableSize, MEMCATEGORY_GENERAL );
 
         buildTrigTables();
     }
@@ -620,7 +620,7 @@ namespace Ogre
         absDir[2] = Math::Abs( raydir[2] );
 
         // Sort the axis, ensure check minimise floating error axis first
-        int imax = 0, imid = 1, imin = 2;
+        size_t imax = 0u, imid = 1u, imin = 2u;
         if( absDir[0] < absDir[2] )
         {
             imax = 2;

@@ -1155,7 +1155,7 @@ namespace Ogre
     inline UTFString::size_type operator-( const UTFString::_const_fwd_iterator &left,
                                            const UTFString::_const_fwd_iterator &right )
     {
-        return ( left.mIter - right.mIter );
+        return static_cast<UTFString::size_type>( left.mIter - right.mIter );
     }
     inline bool operator==( const UTFString::_const_fwd_iterator &left,
                             const UTFString::_const_fwd_iterator &right )
@@ -1194,7 +1194,7 @@ namespace Ogre
     inline UTFString::size_type operator-( const UTFString::_const_rev_iterator &left,
                                            const UTFString::_const_rev_iterator &right )
     {
-        return ( right.mIter - left.mIter );
+        return static_cast<UTFString::size_type>( right.mIter - left.mIter );
     }
     inline bool operator==( const UTFString::_const_rev_iterator &left,
                             const UTFString::_const_rev_iterator &right )

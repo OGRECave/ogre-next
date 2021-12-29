@@ -635,20 +635,20 @@ namespace Ogre
             break;
         case PFG_R10G10B10A2_UNORM:
         {
-            const uint16 ir = static_cast<uint16>( Math::saturate( rgbaPtr[0] ) * 1023.0f + 0.5f );
-            const uint16 ig = static_cast<uint16>( Math::saturate( rgbaPtr[1] ) * 1023.0f + 0.5f );
-            const uint16 ib = static_cast<uint16>( Math::saturate( rgbaPtr[2] ) * 1023.0f + 0.5f );
-            const uint16 ia = static_cast<uint16>( Math::saturate( rgbaPtr[3] ) * 3.0f + 0.5f );
+            const uint32 ir = static_cast<uint16>( Math::saturate( rgbaPtr[0] ) * 1023.0f + 0.5f );
+            const uint32 ig = static_cast<uint16>( Math::saturate( rgbaPtr[1] ) * 1023.0f + 0.5f );
+            const uint32 ib = static_cast<uint16>( Math::saturate( rgbaPtr[2] ) * 1023.0f + 0.5f );
+            const uint32 ia = static_cast<uint16>( Math::saturate( rgbaPtr[3] ) * 3.0f + 0.5f );
 
             ( (uint32 *)dstPtr )[0] = ( ia << 30u ) | ( ib << 20u ) | ( ig << 10u ) | ( ir );
             break;
         }
         case PFG_R10G10B10A2_UINT:
         {
-            const uint16 ir = static_cast<uint16>( Math::Clamp( rgbaPtr[0], 0.0f, 1023.0f ) );
-            const uint16 ig = static_cast<uint16>( Math::Clamp( rgbaPtr[1], 0.0f, 1023.0f ) );
-            const uint16 ib = static_cast<uint16>( Math::Clamp( rgbaPtr[2], 0.0f, 1023.0f ) );
-            const uint16 ia = static_cast<uint16>( Math::Clamp( rgbaPtr[3], 0.0f, 3.0f ) );
+            const uint32 ir = static_cast<uint16>( Math::Clamp( rgbaPtr[0], 0.0f, 1023.0f ) );
+            const uint32 ig = static_cast<uint16>( Math::Clamp( rgbaPtr[1], 0.0f, 1023.0f ) );
+            const uint32 ib = static_cast<uint16>( Math::Clamp( rgbaPtr[2], 0.0f, 1023.0f ) );
+            const uint32 ia = static_cast<uint16>( Math::Clamp( rgbaPtr[3], 0.0f, 3.0f ) );
 
             ( (uint32 *)dstPtr )[0] = ( ia << 30u ) | ( ib << 20u ) | ( ig << 10u ) | ( ir );
             break;
@@ -656,7 +656,6 @@ namespace Ogre
         case PFG_R11G11B10_FLOAT:
             OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "PFG_R11G11B10_FLOAT",
                          "PixelFormatGpuUtils::packColour" );
-            break;
         case PFG_RGBA8_UNORM:
             convertFromFloat<uint8>( rgbaPtr, dstPtr, 4u, flags );
             break;
@@ -1271,8 +1270,8 @@ namespace Ogre
             {
                 uint8 const *RESTRICT_ALIAS srcPtr = reinterpret_cast<const uint8 * RESTRICT_ALIAS>(
                     src.atFromOffsettedOrigin( 0, y, z ) );
-                uint8 *RESTRICT_ALIAS dstPtr =
-                    reinterpret_cast<uint8 * RESTRICT_ALIAS>( dst.atFromOffsettedOrigin( 0, y, z ) );
+                int8 *RESTRICT_ALIAS dstPtr =
+                    reinterpret_cast<int8 * RESTRICT_ALIAS>( dst.atFromOffsettedOrigin( 0, y, z ) );
 
                 for( size_t x = 0; x < src.width; ++x )
                 {

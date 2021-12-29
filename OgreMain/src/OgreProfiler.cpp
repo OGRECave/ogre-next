@@ -95,7 +95,7 @@ namespace Ogre
         mRemotery( 0 )
 #endif
     {
-        mRoot.hierarchicalLvl = 0 - 1;
+        mRoot.hierarchicalLvl = std::numeric_limits<uint>::max();
     }
     //-----------------------------------------------------------------------
     ProfileInstance::ProfileInstance() :

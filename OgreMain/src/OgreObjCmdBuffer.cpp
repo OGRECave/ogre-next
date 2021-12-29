@@ -63,7 +63,7 @@ namespace Ogre
 
             while( itor != endt )
             {
-                const uintptr_t ptrDiff = reinterpret_cast<uint8 *>( *itor ) - prevBuffStart;
+                const intptr_t ptrDiff = reinterpret_cast<uint8 *>( *itor ) - prevBuffStart;
                 *itor = reinterpret_cast<Cmd *>( newBuffStart + ptrDiff );
                 ++itor;
             }

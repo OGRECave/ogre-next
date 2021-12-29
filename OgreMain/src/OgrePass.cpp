@@ -637,7 +637,7 @@ namespace Ogre
             mShadowContentTypeLookup.begin(), mShadowContentTypeLookup.end(), textureUnitIndex );
         if( itor != mShadowContentTypeLookup.end() && *itor == textureUnitIndex )
         {
-            const size_t idx = itor - mShadowContentTypeLookup.begin();
+            const ptrdiff_t idx = itor - mShadowContentTypeLookup.begin();
             mShadowContentTypeLookup.erase( itor );
             itor = mShadowContentTypeLookup.begin() + idx;
         }

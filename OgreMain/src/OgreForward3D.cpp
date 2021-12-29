@@ -473,7 +473,8 @@ namespace Ogre
     {
         ForwardPlusBase::setHlmsPassProperties( hlms );
 
-        hlms->_setProperty( HlmsBaseProp::ForwardPlus, HlmsBaseProp::Forward3D.mHash );
-        hlms->_setProperty( HlmsBaseProp::Forward3DNumSlices, mNumSlices );
+        hlms->_setProperty( HlmsBaseProp::ForwardPlus,
+                            static_cast<int32>( HlmsBaseProp::Forward3D.mHash ) );
+        hlms->_setProperty( HlmsBaseProp::Forward3DNumSlices, static_cast<int32>( mNumSlices ) );
     }
 }  // namespace Ogre

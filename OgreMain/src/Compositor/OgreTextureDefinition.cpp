@@ -134,7 +134,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::removeTexture( IdString name )
     {
-        size_t index = -1;
+        size_t index = std::numeric_limits<size_t>::max();
         TextureSource textureSource = NUM_TEXTURES_SOURCES;
         {
             NameToChannelMap::iterator it = mNameToChannelMap.find( name );
@@ -152,7 +152,7 @@ namespace Ogre
         if( textureSource == mDefaultLocalTextureSource )
         {
             // Try to keep order (don't use efficientVectorRemove)
-            mLocalTextureDefs.erase( mLocalTextureDefs.begin() + index );
+            mLocalTextureDefs.erase( mLocalTextureDefs.begin() + static_cast<ptrdiff_t>( index ) );
 
             // Update the references
             NameToChannelMap::iterator itor = mNameToChannelMap.begin();
@@ -181,7 +181,7 @@ namespace Ogre
                          "TextureDefinitionBase::renameTexture" );
         }
 
-        size_t index = -1;
+        size_t index = std::numeric_limits<size_t>::max();
         TextureSource textureSource = NUM_TEXTURES_SOURCES;
         decodeTexSource( it->second, index, textureSource );
 

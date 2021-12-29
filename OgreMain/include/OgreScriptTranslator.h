@@ -103,21 +103,21 @@ namespace Ogre
         static bool getMatrix4( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
                                 Matrix4 *m );
         /// Converts the range of nodes to an array of ints and returns true if successful
-        static bool getInts( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
-                             int *vals, int count );
+        static bool getInts(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                             int *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getFloats( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
-                               float *vals, int count );
+        static bool getFloats(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                               float *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getDoubles( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
-                                double *vals, int count );
+        static bool getDoubles(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                                double *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getUInts( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
-                              uint *vals, int count );
+        static bool getUInts(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+                              uint *vals, uint32 count );
         /// Converts the range of nodes to an array of uint-stored boolean values and returns true if
         /// successful
-        static bool getBooleans( AbstractNodeList::const_iterator i,
-                                 AbstractNodeList::const_iterator end, uint *vals, int count );
+        static bool getBooleans(AbstractNodeList::const_iterator i,
+                                 AbstractNodeList::const_iterator end, uint *vals, uint32 count );
         /// Converts the node to a StencilOperation enum and returns true if successful
         static bool getStencilOp( const AbstractNodePtr &node, StencilOperation *op );
         /// Converts the node to a GpuConstantType enum and returns true if successful

@@ -73,7 +73,7 @@ namespace Ogre
         _BitScanForward( &trailingZero, value );
         return trailingZero;
 #else
-        return __builtin_ctz( value );
+        return static_cast<uint32>( __builtin_ctz( value ) );
 #endif
     }
 
@@ -83,7 +83,7 @@ namespace Ogre
         CompositorNode( id, definition->getName(), definition, workspace, renderSys, finalTarget ),
         mDefinition( definition ),
         mLastCamera( 0 ),
-        mLastFrame( -1 ),
+        mLastFrame( std::numeric_limits<size_t>::max() ),
         mNumActiveShadowMapCastingLights( 0 )
     {
         mShadowMapCameras.reserve( definition->mShadowMapTexDefinitions.size() );
@@ -120,7 +120,8 @@ namespace Ogre
         while( itor != endt )
         {
             // One map, one camera
-            const size_t shadowMapIdx = itor - definition->mShadowMapTexDefinitions.begin();
+            const size_t shadowMapIdx =
+                static_cast<size_t>( itor - definition->mShadowMapTexDefinitions.begin() );
             ShadowMapCamera shadowMapCamera;
             shadowMapCamera.camera =
                 sceneManager->createCamera( "ShadowNode Camera ID " + StringConverter::toString( id ) +
@@ -372,7 +373,7 @@ namespace Ogre
                 if( ( *visibilityMask & combinedVisibilityFlags ) &&
                     ( *visibilityMask & VisibilityFlags::LAYER_SHADOW_CASTER ) )
                 {
-                    const size_t listIdx = itor - globalLightList.lights.begin();
+                    const size_t listIdx = static_cast<size_t>( itor - globalLightList.lights.begin() );
                     mAffectedLights[listIdx] = true;
                     mShadowMapCastingLights[nxtEmptyLightIdx] = LightClosest( *itor, listIdx, 0 );
                     findNextEmptyShadowCastingLightEntry( 1u << Light::LT_DIRECTIONAL, &begEmptyLightIdx,
@@ -388,7 +389,7 @@ namespace Ogre
             while( itor != endt && ( *itor )->getType() == Light::LT_DIRECTIONAL )
                 ++itor;
 
-            startIndex = itor - globalLightList.lights.begin();
+            startIndex = static_cast<size_t>( itor - globalLightList.lights.begin() );
         }
 
         const Vector3 &camPos( newCamera->getDerivedPosition() );
@@ -396,7 +397,7 @@ namespace Ogre
         const size_t numTmpSortedLights = std::min( mShadowMapCastingLights.size() - begEmptyLightIdx,
                                                     globalLightList.lights.size() - startIndex );
 
-        mTmpSortedIndexes.resize( numTmpSortedLights, ~0 );
+        mTmpSortedIndexes.resize( numTmpSortedLights, std::numeric_limits<size_t>::max() );
         std::partial_sort_copy(
             MemoryLessInputIterator( startIndex ),
             MemoryLessInputIterator( globalLightList.lights.size() ), mTmpSortedIndexes.begin(),
@@ -498,7 +499,7 @@ namespace Ogre
 
                 if( it != globalLightList.lights.end() )
                 {
-                    itor->globalIndex = it - globalLightList.lights.begin();
+                    itor->globalIndex = static_cast<size_t>( it - globalLightList.lights.begin() );
                     mAffectedLights[itor->globalIndex] = true;
 
                     // Force this light to "not cast shadow" to fool buildClosestLightList
@@ -724,9 +725,11 @@ namespace Ogre
 
         // Now again, but push non-shadow casting lights (if there's room left)
         {
-            size_t slotsToSkip = std::max<ptrdiff_t>( startLight - mCurrentLightList.size(), 0 );
-            size_t slotsLeft =
-                std::max<ptrdiff_t>( lightsPerPass - ( shadowMapEnd - shadowMapStart ), 0 );
+            ptrdiff_t slotsToSkip = std::max<ptrdiff_t>(
+                static_cast<ptrdiff_t>( startLight - mCurrentLightList.size() ), 0 );
+            ptrdiff_t slotsLeft = std::max<ptrdiff_t>(
+                static_cast<ptrdiff_t>( lightsPerPass - ( shadowMapEnd - shadowMapStart ) ), 0 );
+
             LightList::const_iterator itor = renderableLights.begin();
             LightList::const_iterator endt = renderableLights.end();
             while( itor != endt && slotsLeft > 0 )
@@ -755,7 +758,7 @@ namespace Ogre
 
             size_t shadowIdx = 0;
             CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItor =
-                mDefinition->mShadowMapTexDefinitions.begin() + shadowMapStart;
+                mDefinition->mShadowMapTexDefinitions.begin() + static_cast<ptrdiff_t>( shadowMapStart );
             CompositorShadowNodeDef::ShadowMapTexDefVec::const_iterator shadowTexItorEnd =
                 mDefinition->mShadowMapTexDefinitions.end();
             while( shadowTexItor != shadowTexItorEnd && shadowIdx < pass->getNumShadowContentTextures() )
@@ -1331,7 +1334,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            const size_t lightIdx = itor - shadowParams.begin();
+            const size_t lightIdx = static_cast<size_t>( itor - shadowParams.begin() );
             const ShadowParam &shadowParam = *itor;
 
             const Resolution &texResolution = atlasResolutions[shadowParam.atlasId];

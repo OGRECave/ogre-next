@@ -46,8 +46,9 @@ namespace Ogre
             char *resolved = 0;
             do
             {
-                char *buf = OGRE_ALLOC_T( char, bufsize, Ogre::MEMCATEGORY_GENERAL );
-                ssize_t retval = readlink( symlink.c_str(), buf, bufsize );
+                char *buf =
+                    OGRE_ALLOC_T( char, static_cast<size_t>( bufsize ), Ogre::MEMCATEGORY_GENERAL );
+                ssize_t retval = readlink( symlink.c_str(), buf, static_cast<size_t>( bufsize ) );
                 if( retval == -1 )
                 {
                     OGRE_FREE( buf, Ogre::MEMCATEGORY_GENERAL );

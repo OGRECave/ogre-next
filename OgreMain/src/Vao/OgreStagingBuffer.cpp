@@ -218,7 +218,7 @@ namespace Ogre
             ++itor;
         }
 
-        size_t retVal = -1;
+        size_t retVal = std::numeric_limits<size_t>::max();
 
         if( itLowest != endt )
         {
@@ -244,11 +244,11 @@ namespace Ogre
             if( itor->end == blockToMerge->start )
             {
                 itor->end = blockToMerge->end;
-                size_t idx = itor - blocks.begin();
+                ptrdiff_t idx = itor - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( idx == static_cast<ptrdiff_t>( blocks.size() - 1 ) )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
@@ -260,11 +260,11 @@ namespace Ogre
             else if( blockToMerge->end == itor->start )
             {
                 blockToMerge->end = itor->end;
-                size_t idx = blockToMerge - blocks.begin();
+                ptrdiff_t idx = blockToMerge - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( idx == static_cast<ptrdiff_t>( blocks.size() - 1 ) )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );

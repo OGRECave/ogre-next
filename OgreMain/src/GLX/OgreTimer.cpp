@@ -48,8 +48,8 @@ namespace Ogre
     {
         struct timeval now;
         gettimeofday( &now, NULL );
-        return ( now.tv_sec - start.tv_sec ) * 1000ul +
-               (unsigned long)( ( now.tv_usec - start.tv_usec ) / 1000l );
+        return static_cast<uint64>( now.tv_sec - start.tv_sec ) * 1000ul +
+               static_cast<uint64>( ( now.tv_usec - start.tv_usec ) / 1000l );
     }
 
     //--------------------------------------------------------------------------------//
@@ -57,7 +57,8 @@ namespace Ogre
     {
         struct timeval now;
         gettimeofday( &now, NULL );
-        return ( now.tv_sec - start.tv_sec ) * 1000000ul + ( now.tv_usec - start.tv_usec );
+        return static_cast<uint64>( now.tv_sec - start.tv_sec ) * 1000000ul +
+               static_cast<uint64>( now.tv_usec - start.tv_usec );
     }
 
     //-- Common Across All Timers ----------------------------------------------------//

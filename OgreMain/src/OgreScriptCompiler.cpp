@@ -204,7 +204,7 @@ namespace Ogre
     }
 
     void ScriptCompilerListener::handleError( ScriptCompiler *compiler, uint32 code, const String &file,
-                                              int line, const String &msg )
+                                              unsigned int line, const String &msg )
     {
         Ogre::String str = "Compiler error: ";
         str = str + ScriptCompiler::formatErrorCode( code ) + " in " + file + "(" +
@@ -427,7 +427,8 @@ namespace Ogre
         return mErrors.empty();
     }
 
-    void ScriptCompiler::addError( uint32 code, const Ogre::String &file, int line, const String &msg )
+    void ScriptCompiler::addError( uint32 code, const Ogre::String &file, unsigned int line,
+                                   const String &msg )
     {
         ErrorPtr err( OGRE_NEW Error() );
         err->code = code;

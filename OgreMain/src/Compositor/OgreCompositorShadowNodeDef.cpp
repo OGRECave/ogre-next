@@ -279,13 +279,15 @@ namespace Ogre
                             it1->numSplits = it2->numSplits;
                         }
 
-                        it1->_setSharesSetupWithIdx( it2 - mShadowMapTexDefinitions.begin() );
+                        it1->_setSharesSetupWithIdx(
+                            static_cast<size_t>( it2 - mShadowMapTexDefinitions.begin() ) );
                         bShared = true;
                     }
                 }
                 else if( it2->shadowMapTechnique == it1->shadowMapTechnique )
                 {
-                    it1->_setSharesSetupWithIdx( it2 - mShadowMapTexDefinitions.begin() );
+                    it1->_setSharesSetupWithIdx(
+                        static_cast<size_t>( it2 - mShadowMapTexDefinitions.begin() ) );
                     bShared = true;
                 }
                 ++it2;

@@ -126,7 +126,7 @@ namespace Ogre
         /**
          * Create backdrop image, and return it as a Pixmap.
          */
-        virtual Pixmap CreateBackdrop( ::Window rootWindow, int depth );
+        virtual Pixmap CreateBackdrop( ::Window rootWindow, uint32 depth );
         /**
          * Called after window initialisation.
          */
@@ -264,11 +264,11 @@ namespace Ogre
                 for( int i = 0; i < screenXRR->ncrtc; ++i )
                 {
                     XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo( mDisplay, screenXRR, screenXRR->crtcs[i] );
-                    if( crtcInfo->x <= mouseX && mouseX < (int)( crtcInfo->x + crtcInfo->width ) &&
-                        crtcInfo->y <= mouseY && mouseY < (int)( crtcInfo->y + crtcInfo->height ) )
+                    if( crtcInfo->x <= mouseX && mouseX < crtcInfo->x + (int)( crtcInfo->width ) &&
+                        crtcInfo->y <= mouseY && mouseY < crtcInfo->y + (int)( crtcInfo->height ) )
                     {
-                        outCenterW = crtcInfo->x + crtcInfo->width / 2;
-                        outCenterH = crtcInfo->y + crtcInfo->height / 2;
+                        outCenterW = crtcInfo->x + static_cast<int>( crtcInfo->width / 2u );
+                        outCenterH = crtcInfo->y + static_cast<int>( crtcInfo->height / 2u );
                         XRRFreeCrtcInfo( crtcInfo );
                         XRRFreeScreenResources( screenXRR );
                         return;
@@ -309,7 +309,8 @@ namespace Ogre
         XtVaSetValues( toplevel, XtNx, centerX - mWidth / 2, XtNy, centerY - mHeight / 2, 0, NULL );
 
         /* Backdrop stuff */
-        mBackDrop = CreateBackdrop( rootWindow, DefaultDepth( mDisplay, screen ) );
+        mBackDrop =
+            CreateBackdrop( rootWindow, static_cast<uint32>( DefaultDepth( mDisplay, screen ) ) );
 
         /* Create toplevel */
         box = XtVaCreateManagedWidget( "box", formWidgetClass, toplevel, XtNbackgroundPixmap, mBackDrop,
@@ -372,9 +373,9 @@ namespace Ogre
         return true;
     }
 
-    Pixmap GLXConfigurator::CreateBackdrop( ::Window rootWindow, int depth )
+    Pixmap GLXConfigurator::CreateBackdrop( ::Window rootWindow, uint32 depth )
     {
-        int bpl;
+        uint32 bpl;
         /* Find out number of bytes per pixel */
         switch( depth )
         {
@@ -393,6 +394,9 @@ namespace Ogre
         }
         /* Create background pixmap */
         unsigned char *data = 0;  // Must be allocated with malloc
+
+        const uint32 uWidth = static_cast<uint32>( mWidth );
+        const uint32 uHeight = static_cast<uint32>( mHeight );
 
         try
         {
@@ -414,28 +418,28 @@ namespace Ogre
             TextureBox dstBox(
                 srcBox.width, srcBox.height, 1u, 1u,
                 PixelFormatGpuUtils::getBytesPerPixel( intermediateFormat ),
-                PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, intermediateFormat, 1u ),
-                PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, intermediateFormat, 1u ) );
-            dstBox.x = ( mWidth - srcBox.width ) >> 1u;
+                PixelFormatGpuUtils::getSizeBytes( uWidth, 1u, 1u, 1u, intermediateFormat, 1u ),
+                PixelFormatGpuUtils::getSizeBytes( uWidth, uHeight, 1u, 1u, intermediateFormat, 1u ) );
+            dstBox.x = ( uWidth - srcBox.width ) >> 1u;
             dstBox.y = 12u;
-            dstBox.data = (unsigned char *)malloc( mWidth * mHeight * 4u );
-            memset( dstBox.data, 0, mWidth * mHeight * 4u );
+            dstBox.data = (unsigned char *)malloc( uWidth * uHeight * 4u );
+            memset( dstBox.data, 0, uWidth * uHeight * 4u );
 
             PixelFormatGpuUtils::bulkPixelConversion( srcBox, img.getPixelFormat(), dstBox,
                                                       intermediateFormat );
 
             dstBox.x = 0u;
             dstBox.y = 0u;
-            dstBox.width = mWidth;
-            dstBox.height = mHeight;
+            dstBox.width = uWidth;
+            dstBox.height = uHeight;
 
             // Blend a gradient into the final image (and use alpha blending)
-            data = (unsigned char *)malloc( mWidth * mHeight * bpl );  // Must be allocated with malloc
+            data = (unsigned char *)malloc( uWidth * uHeight * bpl );  // Must be allocated with malloc
             const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_BGRA8_UNORM;
             TextureBox finalBox(
-                mWidth, mHeight, 1u, 1u, PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
-                PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, dstFormat, 1u ),
-                PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, dstFormat, 1u ) );
+                uWidth, uHeight, 1u, 1u, PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
+                PixelFormatGpuUtils::getSizeBytes( uWidth, 1u, 1u, 1u, dstFormat, 1u ),
+                PixelFormatGpuUtils::getSizeBytes( uWidth, uHeight, 1u, 1u, dstFormat, 1u ) );
             finalBox.data = data;
 
             const size_t height = (size_t)mHeight;
@@ -465,8 +469,8 @@ namespace Ogre
         GC context = XCreateGC( mDisplay, rootWindow, 0, NULL );
 
         /* put my pixmap data into the client side X image data structure */
-        XImage *image = XCreateImage( mDisplay, NULL, depth, ZPixmap, 0, (char *)data, mWidth, mHeight,
-                                      8, mWidth * bpl );
+        XImage *image = XCreateImage( mDisplay, NULL, depth, ZPixmap, 0, (char *)data, uWidth, uHeight,
+                                      8, mWidth * static_cast<int>( bpl ) );
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
         image->byte_order = MSBFirst;
 #else
@@ -474,10 +478,10 @@ namespace Ogre
 #endif
 
         /* tell server to start managing my pixmap */
-        Pixmap rv = XCreatePixmap( mDisplay, rootWindow, mWidth, mHeight, depth );
+        Pixmap rv = XCreatePixmap( mDisplay, rootWindow, uWidth, uHeight, depth );
 
         /* copy from client to server */
-        XPutImage( mDisplay, rv, context, image, 0, 0, 0, 0, mWidth, mHeight );
+        XPutImage( mDisplay, rv, context, image, 0, 0, 0, 0, uWidth, uHeight );
 
         /* free up the client side pixmap data area */
         XDestroyImage( image );  // also cleans data

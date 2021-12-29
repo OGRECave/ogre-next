@@ -436,7 +436,7 @@ namespace Ogre
                 void *dstPtr = dstBox.at( 0, 0, face );
                 stream->read( dstPtr, imageSize );
                 if( padding > 0u )
-                    stream->skip( padding );
+                    stream->skip( static_cast<long>( padding ) );
             }
         }
 

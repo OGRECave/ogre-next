@@ -425,9 +425,9 @@ namespace Ogre
 
         // The Renderable that was at the end got swapped and has now a different index
         if( itor != mLinkedRenderables.end() )
-            ( *itor )->mHlmsGlobalIndex = itor - mLinkedRenderables.begin();
+            ( *itor )->mHlmsGlobalIndex = static_cast<uint32>( itor - mLinkedRenderables.begin() );
 
-        renderable->mHlmsGlobalIndex = ~0;
+        renderable->mHlmsGlobalIndex = std::numeric_limits<uint32>::max();
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::updateMacroblockHash( bool casterPass )
@@ -463,7 +463,7 @@ namespace Ogre
             }
             catch( Exception &e )
             {
-                size_t currentIdx = itor - mLinkedRenderables.begin();
+                const ptrdiff_t currentIdx = itor - mLinkedRenderables.begin();
                 LogManager::getSingleton().logMessage( e.getFullDescription() );
                 LogManager::getSingleton().logMessage(
                     "Couldn't apply change to datablock '" + mName.getFriendlyText() +

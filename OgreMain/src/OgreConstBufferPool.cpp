@@ -286,7 +286,7 @@ namespace Ogre
         BufferPool *pool = *itor;
         user->mAssignedSlot = pool->freeSlots.back();
         user->mAssignedPool = pool;
-        user->mGlobalIndex = mUsers.size();
+        user->mGlobalIndex = static_cast<ptrdiff_t>( mUsers.size() );
         // user->mPoolOwner    = this;
 
         // If this assert triggers, you need to be consistent between your hashes
@@ -325,7 +325,8 @@ namespace Ogre
         // user->mPoolOwner    = 0;
         user->mDirtyFlags = DirtyNone;
 
-        assert( user->mGlobalIndex < mUsers.size() && user == *( mUsers.begin() + user->mGlobalIndex ) &&
+        assert( user->mGlobalIndex < static_cast<ptrdiff_t>( mUsers.size() ) &&
+                user == *( mUsers.begin() + user->mGlobalIndex ) &&
                 "mGlobalIndex out of date or argument doesn't belong to this pool manager" );
         ConstBufferPoolUserVec::iterator itor = mUsers.begin() + user->mGlobalIndex;
         itor = efficientVectorRemove( mUsers, itor );
@@ -358,7 +359,7 @@ namespace Ogre
         const BufferPoolVec &poolVec = itor->second;
         BufferPoolVec::const_iterator it = std::find( poolVec.begin(), poolVec.end(), pool );
 
-        return it - poolVec.begin();
+        return static_cast<size_t>( it - poolVec.begin() );
     }
     //-----------------------------------------------------------------------------------
     struct OldUserRecord

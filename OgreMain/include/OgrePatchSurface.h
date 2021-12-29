@@ -109,8 +109,8 @@ namespace Ogre
             */
             void defineSurface( void *controlPointBuffer, v1::VertexDeclaration *declaration,
                                 size_t width, size_t height, PatchSurfaceType pType = PST_BEZIER,
-                                size_t      uMaxSubdivisionLevel = AUTO_LEVEL,
-                                size_t      vMaxSubdivisionLevel = AUTO_LEVEL,
+                                size_t      uMaxSubdivisionLevel = (size_t)AUTO_LEVEL,
+                                size_t      vMaxSubdivisionLevel = (size_t)AUTO_LEVEL,
                                 VisibleSide visibleSide = VS_FRONT );
 
             /** Based on a previous call to defineSurface, establishes the number of vertices required

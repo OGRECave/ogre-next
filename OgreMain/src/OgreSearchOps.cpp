@@ -59,8 +59,8 @@ intptr_t _findfirst( const char *pattern, struct _finddata_t *data )
     {
         fs->dirlen = static_cast<int>( mask - pattern );
         mask++;
-        fs->directory = (char *)malloc( fs->dirlen + 1 );
-        memcpy( fs->directory, pattern, fs->dirlen );
+        fs->directory = (char *)malloc( static_cast<size_t>( fs->dirlen ) + 1u );
+        memcpy( fs->directory, pattern, static_cast<size_t>( fs->dirlen ) );
         fs->directory[fs->dirlen] = 0;
     }
     else
@@ -113,7 +113,7 @@ int _findnext( intptr_t id, struct _finddata_t *data )
     data->name = fs->curfn = strdup( entry->d_name );
 
     size_t namelen = strlen( entry->d_name );
-    char *xfn = new char[fs->dirlen + 1 + namelen + 1];
+    char *xfn = new char[static_cast<size_t>( fs->dirlen ) + 1 + namelen + 1];
     sprintf( xfn, "%s/%s", fs->directory, entry->d_name );
 
     /* stat the file to get if it's a subdir and to find its length */

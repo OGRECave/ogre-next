@@ -55,7 +55,7 @@ namespace Ogre
         mSupportsBaseInstance( true ),
         mDynamicBufferMultiplier( 3 ),
         mDynamicBufferCurrentFrame( 0 ),
-        mNextStagingBufferTimestampCheckpoint( ~0 ),
+        mNextStagingBufferTimestampCheckpoint( std::numeric_limits<uint64>::max() ),
         mFrameCount( 0 ),
         mNumGeneratedVaos( 0 ),
         mConstBufferAlignment( 256 ),

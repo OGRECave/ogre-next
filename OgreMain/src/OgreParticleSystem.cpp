@@ -336,7 +336,8 @@ namespace Ogre
         {
             // Check whether it's been more than one frame (update is ahead of
             // camera notification by one frame because of the ordering)
-            long frameDiff = Root::getSingleton().getNextFrameNumber() - mLastVisibleFrame;
+            const long frameDiff =
+                static_cast<long>( Root::getSingleton().getNextFrameNumber() - mLastVisibleFrame );
             if( frameDiff > 1 || frameDiff < 0 )  // < 0 if wrap only
             {
                 mTimeSinceLastVisible += timeElapsed;

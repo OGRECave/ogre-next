@@ -77,7 +77,9 @@ namespace Ogre
         {
             size_t firstBoneIndex;
             size_t numBonesInLevel;
-            DepthLevelInfo() : firstBoneIndex( -1 ), numBonesInLevel( 0 ) {}
+            DepthLevelInfo() : firstBoneIndex( std::numeric_limits<size_t>::max() ), numBonesInLevel( 0 )
+            {
+            }
         };
 
         typedef vector<DepthLevelInfo>::type DepthLevelInfoVec;

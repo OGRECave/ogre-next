@@ -145,7 +145,7 @@ namespace Ogre
 
         // copy basic members (int's, real's)
         memcpy( &mCurrentFrame, &oth.mCurrentFrame,
-                (const uchar *)( &mFrames ) - (const uchar *)( &mCurrentFrame ) );
+                static_cast<size_t>( (const uchar *)( &mFrames ) - (const uchar *)( &mCurrentFrame ) ) );
         // copy complex members
         mFrames = oth.mFrames;
         mFramePtrs = oth.mFramePtrs;
@@ -428,8 +428,8 @@ namespace Ogre
             if( mFramePtrs[frameNumber] )
                 mFramePtrs[frameNumber]->removeListener( this );
 
-            mFrames.erase( mFrames.begin() + frameNumber );
-            mFramePtrs.erase( mFramePtrs.begin() + frameNumber );
+            mFrames.erase( mFrames.begin() + static_cast<ptrdiff_t>( frameNumber ) );
+            mFramePtrs.erase( mFramePtrs.begin() + static_cast<ptrdiff_t>( frameNumber ) );
 
             if( isLoaded() )
             {

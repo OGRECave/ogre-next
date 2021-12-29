@@ -318,14 +318,16 @@ namespace Ogre
         if( !fullPathPerFrame.empty() )
         {
             std::ofstream outFile( fullPathPerFrame.c_str(), std::ios::binary | std::ios::out );
-            outFile.write( (const char *)&csvStringPerFrame[0], csvStringPerFrame.size() );
+            outFile.write( (const char *)&csvStringPerFrame[0],
+                           static_cast<std::streamsize>( csvStringPerFrame.size() ) );
             outFile.close();
         }
 
         if( !fullPathAccum.empty() )
         {
             std::ofstream outFile( fullPathAccum.c_str(), std::ios::binary | std::ios::out );
-            outFile.write( (const char *)&csvStringAccum[0], csvStringAccum.size() );
+            outFile.write( (const char *)&csvStringAccum[0],
+                           static_cast<std::streamsize>( csvStringAccum.size() ) );
             outFile.close();
         }
     }

@@ -123,7 +123,7 @@ namespace Ogre
                 // the dedicated codec!
                 if( !Codec::isCodecRegistered( *v ) )
                 {
-                    ImageCodec2 *codec = OGRE_NEW FreeImageCodec2( *v, i );
+                    ImageCodec2 *codec = OGRE_NEW FreeImageCodec2( *v, static_cast<unsigned int>( i ) );
                     msCodecList.push_back( codec );
                     Codec::registerCodec( codec );
                 }

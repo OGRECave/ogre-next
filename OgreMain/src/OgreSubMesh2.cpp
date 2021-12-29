@@ -271,7 +271,8 @@ namespace Ogre
                     ++itBoneAssignments;
                 }
 
-                const size_t remainingBoneEntries = maxBones - ( dstBlendIndex - newVertexBufData );
+                const size_t remainingBoneEntries =
+                    maxBones - static_cast<size_t>( dstBlendIndex - newVertexBufData );
 
                 for( size_t j = 0; j < remainingBoneEntries; ++j )
                 {
@@ -861,7 +862,8 @@ namespace Ogre
                 srcPtrs.push_back( reinterpret_cast<const char *>( asyncTicket->map() ) );
 
                 // Setup the VertexElement array and the srcData for the conversion.
-                size_t accumOffset = 0, reorderedElements = 0;
+                size_t accumOffset = 0;
+                ptrdiff_t reorderedElements = 0;
                 VertexElement2Vec::const_iterator itor = vertexBuffers[i]->getVertexElements().begin();
                 VertexElement2Vec::const_iterator endt = vertexBuffers[i]->getVertexElements().end();
 
@@ -1037,7 +1039,7 @@ namespace Ogre
                 if( itor->getSemantic() == VES_TANGENT || itor->getSemantic() == VES_BINORMAL )
                 {
                     v1::VertexElement element = *itor;
-                    const size_t idx = ( itor - srcElements.begin() );
+                    const ptrdiff_t idx = ( itor - srcElements.begin() );
                     ++reorderedElements;
 
                     itor = srcElements.erase( itor );

@@ -145,7 +145,7 @@ namespace Ogre
 
             if( itElements != enElements )
             {
-                outIndex = itBuffers - mVertexBuffers.begin();
+                outIndex = static_cast<size_t>( itBuffers - mVertexBuffers.begin() );
                 outOffset = accumOffset;
                 retVal = &( *itElements );
             }
@@ -368,7 +368,7 @@ namespace Ogre
             {
                 itor->data = reinterpret_cast<const char *>( itor->asyncTicket->map() );
                 itor->data += itor->offset;
-                seenBuffers[itor->vertexBuffer] = itor - tickets.begin();
+                seenBuffers[itor->vertexBuffer] = static_cast<size_t>( itor - tickets.begin() );
             }
             else if( !itor->data )
             {

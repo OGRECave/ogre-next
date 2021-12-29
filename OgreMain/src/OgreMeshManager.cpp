@@ -145,8 +145,8 @@ namespace Ogre
         }
         //-----------------------------------------------------------------------
         MeshPtr MeshManager::createPlane( const String &name, const String &groupName,
-                                          const Plane &plane, Real width, Real height, int xsegments,
-                                          int ysegments, bool normals, unsigned short numTexCoordSets,
+                                          const Plane &plane, Real width, Real height, uint32 xsegments,
+                                          uint32 ysegments, bool normals, unsigned short numTexCoordSets,
                                           Real xTile, Real yTile, const Vector3 &upVector,
                                           HardwareBuffer::Usage vertexBufferUsage,
                                           HardwareBuffer::Usage indexBufferUsage,
@@ -184,7 +184,7 @@ namespace Ogre
         //-----------------------------------------------------------------------
         MeshPtr MeshManager::createCurvedPlane(
             const String &name, const String &groupName, const Plane &plane, Real width, Real height,
-            Real bow, int xsegments, int ysegments, bool normals, unsigned short numTexCoordSets,
+            Real bow, uint32 xsegments, uint32 ysegments, bool normals, unsigned short numTexCoordSets,
             Real xTile, Real yTile, const Vector3 &upVector, HardwareBuffer::Usage vertexBufferUsage,
             HardwareBuffer::Usage indexBufferUsage, bool vertexShadowBuffer, bool indexShadowBuffer )
         {
@@ -220,10 +220,11 @@ namespace Ogre
         //-----------------------------------------------------------------------
         MeshPtr MeshManager::createCurvedIllusionPlane(
             const String &name, const String &groupName, const Plane &plane, Real width, Real height,
-            Real curvature, int xsegments, int ysegments, bool normals, unsigned short numTexCoordSets,
-            Real uTile, Real vTile, const Vector3 &upVector, const Quaternion &orientation,
-            HardwareBuffer::Usage vertexBufferUsage, HardwareBuffer::Usage indexBufferUsage,
-            bool vertexShadowBuffer, bool indexShadowBuffer, int ySegmentsToKeep )
+            Real curvature, uint32 xsegments, uint32 ysegments, bool normals,
+            unsigned short numTexCoordSets, Real uTile, Real vTile, const Vector3 &upVector,
+            const Quaternion &orientation, HardwareBuffer::Usage vertexBufferUsage,
+            HardwareBuffer::Usage indexBufferUsage, bool vertexShadowBuffer, bool indexShadowBuffer,
+            uint32 ySegmentsToKeep )
         {
             // Create manual mesh which calls back self to load
             MeshPtr pMesh = createManual( name, groupName, this );
@@ -507,9 +508,9 @@ namespace Ogre
             Real maxSquaredLength = 0;
             bool firstTime = true;
 
-            for( int y = 0; y < params.ysegments + 1; ++y )
+            for( uint32 y = 0u; y < params.ysegments + 1u; ++y )
             {
-                for( int x = 0; x < params.xsegments + 1; ++x )
+                for( uint32 x = 0u; x < params.xsegments + 1u; ++x )
                 {
                     // Work out centered on origin
                     vec.x = ( x * xSpace ) - halfWidth;
@@ -654,19 +655,19 @@ namespace Ogre
 
             Real diff_x, diff_y, dist;
 
-            for( int y = 0; y < params.ysegments + 1; ++y )
+            for( uint32 y = 0u; y < params.ysegments + 1; ++y )
             {
-                for( int x = 0; x < params.xsegments + 1; ++x )
+                for( uint32 x = 0u; x < params.xsegments + 1; ++x )
                 {
                     // Work out centered on origin
                     vec.x = ( x * xSpace ) - halfWidth;
                     vec.y = ( y * ySpace ) - halfHeight;
 
                     // Here's where curved plane is different from standard plane.  Amazing, I know.
-                    diff_x =
-                        ( x - ( ( params.xsegments ) / 2 ) ) / static_cast<Real>( ( params.xsegments ) );
-                    diff_y =
-                        ( y - ( ( params.ysegments ) / 2 ) ) / static_cast<Real>( ( params.ysegments ) );
+                    diff_x = ( x - ( ( params.xsegments ) / 2u ) ) /
+                             static_cast<Real>( ( params.xsegments ) );
+                    diff_y = ( y - ( ( params.ysegments ) / 2u ) ) /
+                             static_cast<Real>( ( params.ysegments ) );
                     dist = std::sqrt( diff_x * diff_x + diff_y * diff_y );
                     vec.z = ( -std::sin( ( 1 - dist ) * ( Math::PI / 2 ) ) * params.curvature ) +
                             params.curvature;
@@ -730,13 +731,15 @@ namespace Ogre
         //-----------------------------------------------------------------------
         void MeshManager::loadManualCurvedIllusionPlane( Mesh *pMesh, MeshBuildParams &params )
         {
-            if( params.ySegmentsToKeep == -1 )
+            if( params.ySegmentsToKeep == std::numeric_limits<uint32>::max() )
                 params.ySegmentsToKeep = params.ysegments;
 
-            if( ( params.xsegments + 1 ) * ( params.ySegmentsToKeep + 1 ) > 65536 )
+            if( ( params.xsegments + 1u ) * ( params.ySegmentsToKeep + 1u ) > 65536u )
+            {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Plane tessellation is too high, must generate max 65536 vertices",
                              __FUNCTION__ );
+            }
             SubMesh *pSub = pMesh->createSubMesh();
 
             // Set up vertex data
@@ -763,7 +766,7 @@ namespace Ogre
                 currOffset += VertexElement::getTypeSize( VET_FLOAT2 );
             }
 
-            vertexData->vertexCount = ( params.xsegments + 1 ) * ( params.ySegmentsToKeep + 1 );
+            vertexData->vertexCount = ( params.xsegments + 1u ) * ( params.ySegmentsToKeep + 1u );
 
             // Allocate vertex buffer
             HardwareVertexBufferSharedPtr vbuf = pMesh->getHardwareBufferManager()->createVertexBuffer(
@@ -837,9 +840,9 @@ namespace Ogre
             Real maxSquaredLength = 0;
             bool firstTime = true;
 
-            for( int y = params.ysegments - params.ySegmentsToKeep; y < params.ysegments + 1; ++y )
+            for( uint32 y = params.ysegments - params.ySegmentsToKeep; y < params.ysegments + 1; ++y )
             {
-                for( int x = 0; x < params.xsegments + 1; ++x )
+                for( uint32 x = 0; x < params.xsegments + 1u; ++x )
                 {
                     // Work out centered on origin
                     vec.x = ( x * xSpace ) - halfWidth;

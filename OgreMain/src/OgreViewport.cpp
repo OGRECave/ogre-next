@@ -41,7 +41,7 @@ namespace Ogre
 {
     //---------------------------------------------------------------------
     Viewport::Viewport( Real left, Real top, Real width, Real height ) :
-        mGlobalIndex( -1 ),
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
         mRelLeft( left ),
         mRelTop( top ),
         mRelWidth( width ),

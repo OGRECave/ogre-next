@@ -220,7 +220,7 @@ namespace Ogre
             */
             MeshPtr createPlane(
                 const String &name, const String &groupName, const Plane &plane, Real width, Real height,
-                int xsegments = 1, int ysegments = 1, bool normals = true,
+                uint32 xsegments = 1, uint32 ysegments = 1, bool normals = true,
                 unsigned short numTexCoordSets = 1, Real uTile = 1.0f, Real vTile = 1.0f,
                 const Vector3 &       upVector = Vector3::UNIT_Y,
                 HardwareBuffer::Usage vertexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
@@ -279,14 +279,14 @@ namespace Ogre
             */
             MeshPtr createCurvedIllusionPlane(
                 const String &name, const String &groupName, const Plane &plane, Real width, Real height,
-                Real curvature, int xsegments = 1, int ysegments = 1, bool normals = true,
+                Real curvature, uint32 xsegments = 1, uint32 ysegments = 1, bool normals = true,
                 unsigned short numTexCoordSets = 1, Real uTile = 1.0f, Real vTile = 1.0f,
                 const Vector3 &       upVector = Vector3::UNIT_Y,
                 const Quaternion &    orientation = Quaternion::IDENTITY,
                 HardwareBuffer::Usage vertexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 bool vertexShadowBuffer = true, bool indexShadowBuffer = true,
-                int ySegmentsToKeep = -1 );
+                uint32 ysegmentsToKeep = std::numeric_limits<uint32>::max() );
 
             /** Creates a genuinely curved plane, by default majoring on the x/y axes facing positive Z.
                 @param name
@@ -331,7 +331,7 @@ namespace Ogre
             */
             MeshPtr createCurvedPlane(
                 const String &name, const String &groupName, const Plane &plane, Real width, Real height,
-                Real bow = 0.5f, int xsegments = 1, int ysegments = 1, bool normals = false,
+                Real bow = 0.5f, uint32 xsegments = 1, uint32 ysegments = 1, bool normals = false,
                 unsigned short numTexCoordSets = 1, Real uTile = 1.0f, Real vTile = 1.0f,
                 const Vector3 &       upVector = Vector3::UNIT_Y,
                 HardwareBuffer::Usage vertexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
@@ -378,8 +378,8 @@ namespace Ogre
             PatchMeshPtr createBezierPatch(
                 const String &name, const String &groupName, void *controlPointBuffer,
                 VertexDeclaration *declaration, size_t width, size_t height,
-                size_t                    uMaxSubdivisionLevel = PatchSurface::AUTO_LEVEL,
-                size_t                    vMaxSubdivisionLevel = PatchSurface::AUTO_LEVEL,
+                size_t                    uMaxSubdivisionLevel = (size_t)PatchSurface::AUTO_LEVEL,
+                size_t                    vMaxSubdivisionLevel = (size_t)PatchSurface::AUTO_LEVEL,
                 PatchSurface::VisibleSide visibleSide = PatchSurface::VS_FRONT,
                 HardwareBuffer::Usage     vbUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 HardwareBuffer::Usage     ibUsage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY,
@@ -483,8 +483,8 @@ namespace Ogre
                 Real                  width;
                 Real                  height;
                 Real                  curvature;
-                int                   xsegments;
-                int                   ysegments;
+                uint32                xsegments;
+                uint32                ysegments;
                 bool                  normals;
                 unsigned short        numTexCoordSets;
                 Real                  xTile;
@@ -495,7 +495,7 @@ namespace Ogre
                 HardwareBuffer::Usage indexBufferUsage;
                 bool                  vertexShadowBuffer;
                 bool                  indexShadowBuffer;
-                int                   ySegmentsToKeep;
+                uint32                ySegmentsToKeep;
             };
             /** Map from resource pointer to parameter set */
             typedef map<Resource *, MeshBuildParams>::type MeshBuildParamsMap;

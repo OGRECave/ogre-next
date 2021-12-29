@@ -184,7 +184,7 @@ namespace Ogre
         outFile.open( outFileName.c_str(), std::ios_base::binary | std::ios_base::out );
         outFile.write( (const char *)&oitdMagic, sizeof( uint32 ) );
         outFile.write( (const char *)&oitdHeader, sizeof( OITDHeader ) );
-        outFile.write( (const char *)pImgData->box.data, requiredBytes );
+        outFile.write( (const char *)pImgData->box.data, static_cast<std::streamsize>( requiredBytes ) );
         outFile.close();
     }
     //---------------------------------------------------------------------

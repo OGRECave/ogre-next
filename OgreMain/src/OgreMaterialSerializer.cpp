@@ -957,9 +957,9 @@ namespace Ogre
             {
                 writeAttribute( 4, "transform" );
                 const Matrix4 &xform = pTex->getTextureTransform();
-                for( int row = 0; row < 4; ++row )
+                for( size_t row = 0; row < 4; ++row )
                 {
-                    for( int col = 0; col < 4; ++col )
+                    for( size_t col = 0; col < 4; ++col )
                     {
                         writeValue( StringConverter::toString( xform[row][col] ) );
                     }

@@ -58,8 +58,8 @@ namespace Ogre
         mParent( 0 ),
         mName( "@Dummy Bone" ),
         mBoneMemoryManager( 0 ),
-        mGlobalIndex( -1 ),
-        mParentIndex( -1 )
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
+        mParentIndex( std::numeric_limits<size_t>::max() )
     {
     }
     //-----------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace Ogre
         while( itor != endt )
         {
             ( *itor )->_unsetParentBone();
-            ( *itor )->mParentIndex = -1;
+            ( *itor )->mParentIndex = std::numeric_limits<size_t>::max();
             ++itor;
         }
 
@@ -193,7 +193,8 @@ namespace Ogre
 
         if( child->mParentIndex < mTagPointChildren.size() )
         {
-            TagPointVec::iterator itor = mTagPointChildren.begin() + child->mParentIndex;
+            TagPointVec::iterator itor =
+                mTagPointChildren.begin() + static_cast<ptrdiff_t>( child->mParentIndex );
 
             assert( child == *itor && "mParentIndex was out of date!!!" );
 
@@ -201,11 +202,11 @@ namespace Ogre
             {
                 itor = efficientVectorRemove( mTagPointChildren, itor );
                 child->_unsetParentBone();
-                child->mParentIndex = -1;
+                child->mParentIndex = std::numeric_limits<size_t>::max();
 
                 // The node that was at the end got swapped and has now a different index
                 if( itor != mTagPointChildren.end() )
-                    ( *itor )->mParentIndex = itor - mTagPointChildren.begin();
+                    ( *itor )->mParentIndex = static_cast<size_t>( itor - mTagPointChildren.begin() );
             }
         }
     }
@@ -386,18 +387,18 @@ namespace Ogre
 
         if( child->mParentIndex < mChildren.size() )
         {
-            BoneVec::iterator itor = mChildren.begin() + child->mParentIndex;
+            BoneVec::iterator itor = mChildren.begin() + static_cast<ptrdiff_t>( child->mParentIndex );
 
             assert( child == *itor && "mParentIndex was out of date!!!" );
 
             if( child == *itor )
             {
                 itor = efficientVectorRemove( mChildren, itor );
-                child->mParentIndex = -1;
+                child->mParentIndex = std::numeric_limits<size_t>::max();
 
                 // The node that was at the end got swapped and has now a different index
                 if( itor != mChildren.end() )
-                    ( *itor )->mParentIndex = itor - mChildren.begin();
+                    ( *itor )->mParentIndex = static_cast<size_t>( itor - mChildren.begin() );
             }
         }
     }

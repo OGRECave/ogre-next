@@ -98,10 +98,10 @@ namespace Ogre
     {
         assert( code.length() <= 4 && "Characters after the 4th are being ignored" );
         uint32 ret = 0;
-        size_t c = std::min( (size_t)4, code.length() );
-        for( size_t i = 0; i < c; ++i )
+        uint32 c = static_cast<uint32>( std::min<size_t>( 4u, code.length() ) );
+        for( uint32 i = 0; i < c; ++i )
         {
-            ret += ( code.at( i ) << ( i * 8 ) );
+            ret += static_cast<uint32>( code.at( i ) << ( i * 8u ) );
         }
         return ret;
     }

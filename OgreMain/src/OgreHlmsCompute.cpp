@@ -193,13 +193,13 @@ namespace Ogre
         if( mShaderProfile == "glsles" )  // TODO: String comparision
             setProperty( HlmsBaseProp::GLES, 300 );
 
-        setProperty( HlmsBaseProp::Syntax, mShaderSyntax.mHash );
-        setProperty( HlmsBaseProp::Hlsl, HlmsBaseProp::Hlsl.mHash );
-        setProperty( HlmsBaseProp::Glsl, HlmsBaseProp::Glsl.mHash );
-        setProperty( HlmsBaseProp::Glslvk, HlmsBaseProp::Glslvk.mHash );
-        setProperty( HlmsBaseProp::Hlslvk, HlmsBaseProp::Hlslvk.mHash );
-        setProperty( HlmsBaseProp::Glsles, HlmsBaseProp::Glsles.mHash );
-        setProperty( HlmsBaseProp::Metal, HlmsBaseProp::Metal.mHash );
+        setProperty( HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.mHash ) );
+        setProperty( HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.mHash ) );
+        setProperty( HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.mHash ) );
+        setProperty( HlmsBaseProp::Glslvk, static_cast<int32>( HlmsBaseProp::Glslvk.mHash ) );
+        setProperty( HlmsBaseProp::Hlslvk, static_cast<int32>( HlmsBaseProp::Hlslvk.mHash ) );
+        setProperty( HlmsBaseProp::Glsles, static_cast<int32>( HlmsBaseProp::Glsles.mHash ) );
+        setProperty( HlmsBaseProp::Metal, static_cast<int32>( HlmsBaseProp::Metal.mHash ) );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         setProperty( HlmsBaseProp::iOS, 1 );
@@ -258,7 +258,7 @@ namespace Ogre
                                    std::ios::out | std::ios::binary );
             if( mDebugOutputProperties )
                 dumpProperties( outFile );
-            outFile.write( &outString[0], outString.size() );
+            outFile.write( &outString[0], static_cast<std::streamsize>( outString.size() ) );
         }
 
         // Don't create and compile if template requested not to
@@ -267,7 +267,8 @@ namespace Ogre
             // Very similar to what the GpuProgramManager does with its microcode cache,
             // but we **need** to know if two Compute Shaders share the same source code.
             Hash hashVal;
-            OGRE_HASH128_FUNC( outString.c_str(), outString.size(), IdString::Seed, &hashVal );
+            OGRE_HASH128_FUNC( outString.c_str(), static_cast<int>( outString.size() ), IdString::Seed,
+                               &hashVal );
 
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
 
@@ -337,12 +338,12 @@ namespace Ogre
         pso.initialize();
         pso.computeShader = shader;
         pso.computeParams = shader->createParameters();
-        pso.mThreadsPerGroup[0] = getProperty( ComputeProperty::ThreadsPerGroupX );
-        pso.mThreadsPerGroup[1] = getProperty( ComputeProperty::ThreadsPerGroupY );
-        pso.mThreadsPerGroup[2] = getProperty( ComputeProperty::ThreadsPerGroupZ );
-        pso.mNumThreadGroups[0] = getProperty( ComputeProperty::NumThreadGroupsX );
-        pso.mNumThreadGroups[1] = getProperty( ComputeProperty::NumThreadGroupsY );
-        pso.mNumThreadGroups[2] = getProperty( ComputeProperty::NumThreadGroupsZ );
+        pso.mThreadsPerGroup[0] = ( uint32 )( getProperty( ComputeProperty::ThreadsPerGroupX ) );
+        pso.mThreadsPerGroup[1] = ( uint32 )( getProperty( ComputeProperty::ThreadsPerGroupY ) );
+        pso.mThreadsPerGroup[2] = ( uint32 )( getProperty( ComputeProperty::ThreadsPerGroupZ ) );
+        pso.mNumThreadGroups[0] = ( uint32 )( getProperty( ComputeProperty::NumThreadGroupsX ) );
+        pso.mNumThreadGroups[1] = ( uint32 )( getProperty( ComputeProperty::NumThreadGroupsY ) );
+        pso.mNumThreadGroups[2] = ( uint32 )( getProperty( ComputeProperty::NumThreadGroupsZ ) );
 
         if( pso.mThreadsPerGroup[0] * pso.mThreadsPerGroup[1] * pso.mThreadsPerGroup[2] == 0u ||
             pso.mNumThreadGroups[0] * pso.mNumThreadGroups[1] * pso.mNumThreadGroups[2] == 0u )
@@ -428,7 +429,7 @@ namespace Ogre
             if( itor->job )
             {
                 mRenderSystem->_hlmsComputePipelineStateObjectDestroyed( &itor->pso );
-                itor->job->mPsoCacheHash = -1;
+                itor->job->mPsoCacheHash = std::numeric_limits<size_t>::max();
             }
             ++itor;
         }

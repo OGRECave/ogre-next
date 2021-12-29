@@ -85,7 +85,7 @@ namespace Ogre
         if( itor == mPassCache.end() || itor->passKey != entry.passKey )
         {
             entry.hashToMainCache = mPassHashCounter++;
-            const size_t idx = itor - mPassCache.begin();
+            const ptrdiff_t idx = itor - mPassCache.begin();
             mPassCache.insert( itor, 1u, entry );
             itor = mPassCache.begin() + idx;
         }
@@ -104,7 +104,7 @@ namespace Ogre
             !itor->psoRenderableKey.equalExcludePassData( entry.psoRenderableKey ) )
         {
             entry.hashToMainCache = mRenderableHashCounter++;
-            const size_t idx = itor - mRenderableCache.begin();
+            const ptrdiff_t idx = itor - mRenderableCache.begin();
             mRenderableCache.insert( itor, 1u, entry );
             itor = mRenderableCache.begin() + idx;
         }
@@ -244,7 +244,7 @@ namespace Ogre
                 PsoCacheEntry entry;
                 entry.hash = finalHash;
                 entry.pso = mCurrentState;
-                const size_t idx = itor - mPsoCache.begin();
+                const ptrdiff_t idx = itor - mPsoCache.begin();
                 mPsoCache.insert( itor, 1u, entry );
                 itor = mPsoCache.begin() + idx;
 

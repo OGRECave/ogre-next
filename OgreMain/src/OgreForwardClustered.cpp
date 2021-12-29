@@ -931,11 +931,14 @@ namespace Ogre
     {
         ForwardPlusBase::setHlmsPassProperties( hlms );
 
-        hlms->_setProperty( HlmsBaseProp::ForwardPlus, HlmsBaseProp::ForwardClustered.mHash );
+        hlms->_setProperty( HlmsBaseProp::ForwardPlus,
+                            static_cast<int32>( HlmsBaseProp::ForwardClustered.mHash ) );
 
-        hlms->_setProperty( HlmsBaseProp::FwdClusteredWidthxHeight, mWidth * mHeight );
-        hlms->_setProperty( HlmsBaseProp::FwdClusteredWidth, mWidth );
-        hlms->_setProperty( HlmsBaseProp::FwdClusteredLightsPerCell, mObjsPerCell );
+        hlms->_setProperty( HlmsBaseProp::FwdClusteredWidthxHeight,
+                            static_cast<int32>( mWidth * mHeight ) );
+        hlms->_setProperty( HlmsBaseProp::FwdClusteredWidth, static_cast<int32>( mWidth ) );
+        hlms->_setProperty( HlmsBaseProp::FwdClusteredLightsPerCell,
+                            static_cast<int32>( mObjsPerCell ) );
 
         if( mDecalsEnabled )
         {

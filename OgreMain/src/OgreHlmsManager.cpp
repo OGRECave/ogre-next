@@ -885,7 +885,7 @@ namespace Ogre
 
         std::ofstream file( filename.c_str(), std::ios::binary | std::ios::out );
         if( file.is_open() )
-            file.write( jsonString.c_str(), jsonString.size() );
+            file.write( jsonString.c_str(), static_cast<std::streamsize>( jsonString.size() ) );
         file.close();
     }
     //-----------------------------------------------------------------------------------
@@ -899,7 +899,7 @@ namespace Ogre
 
         std::ofstream file( filename.c_str(), std::ios::binary | std::ios::out );
         if( file.is_open() )
-            file.write( jsonString.c_str(), jsonString.size() );
+            file.write( jsonString.c_str(), static_cast<std::streamsize>( jsonString.size() ) );
         file.close();
     }
     //-----------------------------------------------------------------------------------

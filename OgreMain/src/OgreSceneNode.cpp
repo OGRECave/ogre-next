@@ -191,7 +191,7 @@ namespace Ogre
                          "SceneNode::detachObject" );
         }
         else if( obj->mParentIndex >= mAttachments.size() ||
-                 obj != *( mAttachments.begin() + obj->mParentIndex ) )
+                 obj != *( mAttachments.begin() + static_cast<ptrdiff_t>( obj->mParentIndex ) ) )
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "MovableObject ID: " + StringConverter::toString( obj->getId() ) + ", named '" +
@@ -201,7 +201,7 @@ namespace Ogre
                          "SceneNode::detachObject" );
         }
 
-        ObjectVec::iterator itor = mAttachments.begin() + obj->mParentIndex;
+        ObjectVec::iterator itor = mAttachments.begin() + static_cast<ptrdiff_t>( obj->mParentIndex );
 
         ( *itor )->_notifyAttached( (SceneNode *)0 );
         itor = efficientVectorRemove( mAttachments, itor );
@@ -209,7 +209,7 @@ namespace Ogre
         if( itor != mAttachments.end() )
         {
             // The object that was at the end got swapped and has now a different index
-            ( *itor )->mParentIndex = itor - mAttachments.begin();
+            ( *itor )->mParentIndex = static_cast<size_t>( itor - mAttachments.begin() );
         }
     }
     //-----------------------------------------------------------------------

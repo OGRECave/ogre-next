@@ -365,14 +365,14 @@ namespace Ogre
         IdString camName( cam->getName() );
 
         // Find in list
-        CameraList::iterator itor = mCameras.begin() + cam->mGlobalIndex;
+        CameraList::iterator itor = mCameras.begin() + static_cast<ptrdiff_t>( cam->mGlobalIndex );
         itor = efficientVectorRemove( mCameras, itor );
         OGRE_DELETE cam;
         cam = 0;
 
         // The node that was at the end got swapped and has now a different index
         if( itor != mCameras.end() )
-            ( *itor )->mGlobalIndex = itor - mCameras.begin();
+            ( *itor )->mGlobalIndex = static_cast<size_t>( itor - mCameras.begin() );
 
         CameraMap::iterator itorMap = mCamerasByName.find( camName );
         if( itorMap == mCamerasByName.end() )
@@ -395,9 +395,9 @@ namespace Ogre
 
         while( camIt != camEnd )
         {
-            const size_t oldIdx = camIt - mCameras.begin();
+            const size_t oldIdx = static_cast<size_t>( camIt - mCameras.begin() );
             destroyCamera( *camIt );
-            camIt = mCameras.begin() + oldIdx;
+            camIt = mCameras.begin() + static_cast<ptrdiff_t>( oldIdx );
             camEnd = mCameras.end();
         }
     }
@@ -648,7 +648,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneManager::_removeCompositorTextures( size_t from )
     {
-        mCompositorTextures.erase( mCompositorTextures.begin() + from, mCompositorTextures.end() );
+        mCompositorTextures.erase( mCompositorTextures.begin() + static_cast<ptrdiff_t>( from ),
+                                   mCompositorTextures.end() );
     }
     //-----------------------------------------------------------------------
     SkeletonInstance *SceneManager::createSkeletonInstance( const SkeletonDef *skeletonDef )
@@ -854,7 +855,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void SceneManager::destroySceneNode( SceneNode *sn )
     {
-        if( sn->mGlobalIndex >= mSceneNodes.size() || sn != *( mSceneNodes.begin() + sn->mGlobalIndex ) )
+        if( sn->mGlobalIndex >= mSceneNodes.size() ||
+            sn != *( mSceneNodes.begin() + static_cast<ptrdiff_t>( sn->mGlobalIndex ) ) )
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "SceneNode ID: " + StringConverter::toString( sn->getId() ) + ", named '" +
@@ -884,7 +886,7 @@ namespace Ogre
             }
         }
 
-        SceneNodeList::iterator itor = mSceneNodes.begin() + sn->mGlobalIndex;
+        SceneNodeList::iterator itor = mSceneNodes.begin() + static_cast<ptrdiff_t>( sn->mGlobalIndex );
 
         // detach from parent (don't do this in destructor since bulk destruction
         // behaves differently)
@@ -899,7 +901,7 @@ namespace Ogre
 
         // The node that was at the end got swapped and has now a different index
         if( itor != mSceneNodes.end() )
-            ( *itor )->mGlobalIndex = itor - mSceneNodes.begin();
+            ( *itor )->mGlobalIndex = static_cast<size_t>( itor - mSceneNodes.begin() );
     }
     //-----------------------------------------------------------------------
     SceneNode *SceneManager::getRootSceneNode( SceneMemoryMgrTypes sceneType )
@@ -1618,8 +1620,9 @@ namespace Ogre
 
             for( size_t i = 0; i < firstTransforms.size(); ++i )
             {
-                size_t numNodes = lastTransforms[i].mOwner - firstTransforms[i].mOwner +
-                                  lastTransforms[i].mIndex + depthLevelInfo[i].numBonesInLevel;
+                const size_t numNodes =
+                    static_cast<size_t>( lastTransforms[i].mOwner - firstTransforms[i].mOwner ) +
+                    lastTransforms[i].mIndex + depthLevelInfo[i].numBonesInLevel;
                 assert( numNodes <=
                         bySkeletonDef.boneMemoryManager.getFirstNode( _hiddenTransform, i ) );
 
@@ -3883,7 +3886,8 @@ namespace Ogre
     void SceneManager::checkMovableObjectIntegrity( const typename vector<T *>::type &container,
                                                     const T *mo ) const
     {
-        if( mo->mGlobalIndex >= container.size() || mo != *( container.begin() + mo->mGlobalIndex ) )
+        if( mo->mGlobalIndex >= container.size() ||
+            mo != *( container.begin() + static_cast<ptrdiff_t>( mo->mGlobalIndex ) ) )
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "MovableObject ID: " + StringConverter::toString( mo->getId() ) + ", named '" +
@@ -4060,7 +4064,8 @@ namespace Ogre
                          "SceneManager::hasMovableObject" );
 
         MovableObjectVec objects = getMovableObjectCollection( m->getMovableType() )->movableObjects;
-        return ( m->mGlobalIndex < objects.size() && m == *( objects.begin() + m->mGlobalIndex ) );
+        return ( m->mGlobalIndex < objects.size() &&
+                 m == *( objects.begin() + static_cast<ptrdiff_t>( m->mGlobalIndex ) ) );
     }
     //---------------------------------------------------------------------
     void SceneManager::destroyMovableObject( MovableObject *m, const String &typeName )
@@ -4099,7 +4104,8 @@ namespace Ogre
 
             checkMovableObjectIntegrity( objectMap->movableObjects, m );
 
-            MovableObjectVec::iterator itor = objectMap->movableObjects.begin() + m->mGlobalIndex;
+            MovableObjectVec::iterator itor =
+                objectMap->movableObjects.begin() + static_cast<ptrdiff_t>( m->mGlobalIndex );
 
             // If itor is invalid then something is terribly wrong (deleting a ptr twice may be?)
             itor = efficientVectorRemove( objectMap->movableObjects, itor );
@@ -4108,7 +4114,10 @@ namespace Ogre
 
             // The MovableObject that was at the end got swapped and has now a different index
             if( itor != objectMap->movableObjects.end() )
-                ( *itor )->mGlobalIndex = itor - objectMap->movableObjects.begin();
+            {
+                ( *itor )->mGlobalIndex =
+                    static_cast<size_t>( itor - objectMap->movableObjects.begin() );
+            }
         }
     }
     //---------------------------------------------------------------------
@@ -4139,7 +4148,10 @@ namespace Ogre
 
                     // The node that was at the end got swapped and has now a different index
                     if( itor != endt )
-                        ( *itor )->mGlobalIndex = itor - objectMap->movableObjects.begin();
+                    {
+                        ( *itor )->mGlobalIndex =
+                            static_cast<size_t>( itor - objectMap->movableObjects.begin() );
+                    }
                 }
                 else
                 {
@@ -4183,7 +4195,10 @@ namespace Ogre
 
                         // The node that was at the end got swapped and has now a different index
                         if( itor != endt )
-                            ( *itor )->mGlobalIndex = itor - coll->movableObjects.begin();
+                        {
+                            ( *itor )->mGlobalIndex =
+                                static_cast<size_t>( itor - coll->movableObjects.begin() );
+                        }
                     }
                     else
                     {
@@ -4229,13 +4244,17 @@ namespace Ogre
             OGRE_LOCK_MUTEX( objectMap->mutex );
 
             checkMovableObjectIntegrity( objectMap->movableObjects, m );
-            MovableObjectVec::iterator itor = objectMap->movableObjects.begin() + m->mGlobalIndex;
+            MovableObjectVec::iterator itor =
+                objectMap->movableObjects.begin() + static_cast<ptrdiff_t>( m->mGlobalIndex );
 
             // no delete
             itor = efficientVectorRemove( objectMap->movableObjects, itor );
             // The node that was at the end got swapped and has now a different index
             if( itor != objectMap->movableObjects.end() )
-                ( *itor )->mGlobalIndex = itor - objectMap->movableObjects.begin();
+            {
+                ( *itor )->mGlobalIndex =
+                    static_cast<size_t>( itor - objectMap->movableObjects.begin() );
+            }
         }
     }
     //---------------------------------------------------------------------

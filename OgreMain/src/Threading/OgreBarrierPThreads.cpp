@@ -95,7 +95,7 @@ namespace Ogre
     Barrier::Barrier( size_t threadCount )
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
-        pthread_barrier_init( &mBarrier, 0, static_cast<int>( threadCount ) );
+        pthread_barrier_init( &mBarrier, 0, static_cast<unsigned int>( threadCount ) );
 #endif
     }
     //-----------------------------------------------------------------------------------

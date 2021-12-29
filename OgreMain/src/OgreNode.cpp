@@ -56,8 +56,8 @@ namespace Ogre
 #endif
         mListener( 0 ),
         mNodeMemoryManager( nodeMemoryManager ),
-        mGlobalIndex( -1 ),
-        mParentIndex( -1 )
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
+        mParentIndex( std::numeric_limits<size_t>::max() )
     {
         if( mParent )
             mDepthLevel = mParent->mDepthLevel + 1;
@@ -79,8 +79,8 @@ namespace Ogre
 #endif
         mListener( 0 ),
         mNodeMemoryManager( 0 ),
-        mGlobalIndex( -1 ),
-        mParentIndex( -1 )
+        mGlobalIndex( std::numeric_limits<size_t>::max() ),
+        mParentIndex( std::numeric_limits<size_t>::max() )
     {
         mTransform = transformPtrs;
     }
@@ -568,7 +568,7 @@ namespace Ogre
 
         if( child->mParentIndex < mChildren.size() )
         {
-            NodeVec::iterator itor = mChildren.begin() + child->mParentIndex;
+            NodeVec::iterator itor = mChildren.begin() + static_cast<ptrdiff_t>( child->mParentIndex );
 
             assert( child == *itor && "mParentIndex was out of date!!!" );
 
@@ -576,11 +576,11 @@ namespace Ogre
             {
                 itor = efficientVectorRemove( mChildren, itor );
                 child->unsetParent();
-                child->mParentIndex = -1;
+                child->mParentIndex = std::numeric_limits<size_t>::max();
 
                 // The node that was at the end got swapped and has now a different index
                 if( itor != mChildren.end() )
-                    ( *itor )->mParentIndex = itor - mChildren.begin();
+                    ( *itor )->mParentIndex = static_cast<size_t>( itor - mChildren.begin() );
             }
         }
     }
@@ -880,7 +880,7 @@ namespace Ogre
         while( itor != endt )
         {
             ( *itor )->unsetParent();
-            ( *itor )->mParentIndex = -1;
+            ( *itor )->mParentIndex = std::numeric_limits<size_t>::max();
             ++itor;
         }
         mChildren.clear();

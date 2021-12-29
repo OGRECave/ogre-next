@@ -65,8 +65,8 @@ namespace Ogre
                          PatchSurface::VisibleSide visibleSide );
             /// Define the patch, as defined in MeshManager::createBezierPatch
             void define( void *controlPointBuffer, VertexDeclaration *declaration, size_t width,
-                         size_t height, size_t uMaxSubdivisionLevel = PatchSurface::AUTO_LEVEL,
-                         size_t                    vMaxSubdivisionLevel = PatchSurface::AUTO_LEVEL,
+                         size_t height, size_t uMaxSubdivisionLevel = (size_t)PatchSurface::AUTO_LEVEL,
+                         size_t vMaxSubdivisionLevel = (size_t)PatchSurface::AUTO_LEVEL,
                          PatchSurface::VisibleSide visibleSide = PatchSurface::VS_FRONT,
                          HardwareBuffer::Usage     vbUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                          HardwareBuffer::Usage     ibUsage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY,

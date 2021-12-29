@@ -1274,7 +1274,7 @@ namespace Ogre
             const IndexData *indexData = submesh->mLodFaceList[casterPass][lodNum - 1];
             HardwareIndexBufferSharedPtr ibuf = indexData->indexBuffer;
             assert( !ibuf.isNull() );
-            unsigned int bufferIndex = -1;
+            unsigned int bufferIndex = std::numeric_limits<unsigned int>::max();
             for( ushort i = 1; i < lodNum; i++ )
             {
                 // it will check any previous Lod levels for the same buffer.
@@ -1386,7 +1386,7 @@ namespace Ogre
             const IndexData *indexData = submesh->mLodFaceList[casterPass][lodNum - 1];
             HardwareIndexBufferSharedPtr ibuf = indexData->indexBuffer;
             assert( !ibuf.isNull() );
-            unsigned int bufferIndex = -1;
+            unsigned int bufferIndex = std::numeric_limits<unsigned int>::max();
             for( ushort i = 1; i < lodNum; i++ )
             {
                 // it will check any previous Lod levels for the same buffer.
@@ -1552,7 +1552,7 @@ namespace Ogre
             for( uint8 j = 0; j < mNumBufferPasses; ++j )
             {
                 // lodID=0 is the original mesh. We need to skip it.
-                for( int lodID = 1; lodID < pMesh->mNumLods; lodID++ )
+                for( size_t lodID = 1; lodID < pMesh->mNumLods; lodID++ )
                 {
                     // Read depth
                     MeshLodUsage &usage = pMesh->mMeshLodUsageList[lodID];
@@ -1561,10 +1561,11 @@ namespace Ogre
                     switch( streamID )
                     {
                     case M_MESH_LOD_MANUAL:
-                        readMeshLodUsageManual( stream, pMesh, lodID, usage );
+                        readMeshLodUsageManual( stream, pMesh, static_cast<uint16>( lodID ), usage );
                         break;
                     case M_MESH_LOD_GENERATED:
-                        readMeshLodUsageGenerated( stream, pMesh, lodID, usage, j );
+                        readMeshLodUsageGenerated( stream, pMesh, static_cast<uint16>( lodID ), usage,
+                                                   j );
                         break;
                     default:
                         OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -2734,15 +2735,16 @@ namespace Ogre
 
             SubMesh *sm = pMesh->getSubMesh( idx );
 
-            int n_floats = ( mCurrentstreamLen - MSTREAM_OVERHEAD_SIZE - sizeof( unsigned short ) ) /
-                           sizeof( float );
+            const size_t n_floats =
+                ( mCurrentstreamLen - MSTREAM_OVERHEAD_SIZE - sizeof( unsigned short ) ) /
+                sizeof( float );
 
             assert( ( n_floats % 3 ) == 0 );
 
             float *vert = OGRE_ALLOC_T( float, n_floats, MEMCATEGORY_GEOMETRY );
             readFloats( stream, vert, n_floats );
 
-            for( int i = 0; i < n_floats; i += 3 )
+            for( size_t i = 0; i < n_floats; i += 3u )
                 sm->extremityPoints.push_back( Vector3( vert[i], vert[i + 1], vert[i + 2] ) );
 
             OGRE_FREE( vert, MEMCATEGORY_GEOMETRY );

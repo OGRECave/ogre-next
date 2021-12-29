@@ -315,7 +315,8 @@ namespace Ogre
                     {
                         if( !*itChannels )
                         {
-                            const size_t channelIdx = itChannels - inputChannels.begin();
+                            const size_t channelIdx =
+                                static_cast<size_t>( itChannels - inputChannels.begin() );
                             LogManager::getSingleton().logMessage(
                                 "\t\t\t Channel # " + StringConverter::toString( channelIdx ) );
                         }

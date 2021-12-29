@@ -58,7 +58,8 @@ namespace Ogre
         {
             // Disable cleanups if we fall here (use _growToDepth instead)
             mMemoryManagers.push_back( BoneArrayMemoryManager(
-                mMemoryManagers.size(), 100, -1, ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
+                static_cast<uint16>( mMemoryManagers.size() ), 100u, std::numeric_limits<size_t>::max(),
+                ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
             mMemoryManagers.back().initialize();
         }
     }
@@ -156,7 +157,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t BoneMemoryManager::getNumDepths() const
     {
-        size_t retVal = -1;
+        size_t retVal = std::numeric_limits<size_t>::max();
         ArrayMemoryManagerVec::const_iterator begin = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator itor = mMemoryManagers.begin();
         ArrayMemoryManagerVec::const_iterator endt = mMemoryManagers.end();
@@ -164,11 +165,11 @@ namespace Ogre
         while( itor != endt )
         {
             if( itor->getUsedMemory() )
-                retVal = itor - begin;
+                retVal = static_cast<size_t>( itor - begin );
             ++itor;
         }
 
-        return retVal + 1;
+        return retVal + 1u;
     }
     //-----------------------------------------------------------------------------------
     size_t BoneMemoryManager::getFirstNode( BoneTransform &outTransform, size_t depth )

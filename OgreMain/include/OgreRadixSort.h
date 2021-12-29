@@ -128,21 +128,22 @@ namespace Ogre
             }
 
             // Sort pass
-            for( int i = 0; i < mSortSize; ++i )
+            const size_t sortSize = static_cast<size_t>( mSortSize );
+            for( size_t i = 0; i < sortSize; ++i )
             {
                 unsigned char byteVal = getByte( byteIndex, ( *mSrc )[i].key );
-                ( *mDest )[mOffsets[byteVal]++] = ( *mSrc )[i];
+                ( *mDest )[static_cast<size_t>( mOffsets[byteVal]++ )] = ( *mSrc )[i];
             }
         }
         template <typename T>
-        void finalPass( int byteIndex, T val )
+        void finalPass( int byteIndex, T /*val*/ )
         {
             // default is to do normal pass
             sortPass( byteIndex );
         }
 
         // special case signed int
-        void finalPass( int byteIndex, int val )
+        void finalPass( int byteIndex, int /*val*/ )
         {
             int numNeg = 0;
             // all negative values are in entries 128+ in most significant byte
@@ -174,7 +175,7 @@ namespace Ogre
         }
 
         // special case float
-        void finalPass( int byteIndex, float val )
+        void finalPass( int byteIndex, float /*val*/ )
         {
             // floats need to be special cased since negative numbers will come
             // after positives (high bit = sign) and will be in reverse order
@@ -204,18 +205,19 @@ namespace Ogre
             }
 
             // Sort pass
-            for( int i = 0; i < mSortSize; ++i )
+            const size_t sortSize = static_cast<size_t>( mSortSize );
+            for( size_t i = 0; i < sortSize; ++i )
             {
                 unsigned char byteVal = getByte( byteIndex, ( *mSrc )[i].key );
                 if( byteVal > 127 )
                 {
                     // -ve; pre-decrement since offsets set to count
-                    ( *mDest )[--mOffsets[byteVal]] = ( *mSrc )[i];
+                    ( *mDest )[static_cast<size_t>( --mOffsets[byteVal] )] = ( *mSrc )[i];
                 }
                 else
                 {
                     // +ve
-                    ( *mDest )[mOffsets[byteVal]++] = ( *mSrc )[i];
+                    ( *mDest )[static_cast<size_t>( mOffsets[byteVal]++ )] = ( *mSrc )[i];
                 }
             }
         }
@@ -265,7 +267,7 @@ namespace Ogre
             TCompValueType prevValue = func.operator()( *i );
 
             bool needsSorting = false;
-            for( int u = 0; i != mTmpContainer.end(); ++i, ++u )
+            for( size_t u = 0; i != mTmpContainer.end(); ++i, ++u )
             {
                 // get sort value
                 TCompValueType val = func.operator()( *i );
@@ -307,7 +309,7 @@ namespace Ogre
             finalPass( p, prevValue );
 
             // Copy everything back
-            int c = 0;
+            size_t c = 0u;
             for( i = container.begin(); i != container.end(); ++i, ++c )
             {
                 *i = *( ( *mDest )[c].iter );

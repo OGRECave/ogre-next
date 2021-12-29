@@ -271,8 +271,8 @@ namespace Ogre
     String StringUtil::normalizeFilePath( const String &init, bool makeLowerCase )
     {
         const char *bufferSrc = init.c_str();
-        int pathLen = (int)init.size();
-        int indexSrc = 0;
+        const size_t pathLen = init.size();
+        size_t indexSrc = 0;
         int indexDst = 0;
         int metaPathArea = 0;
 
@@ -284,7 +284,7 @@ namespace Ogre
             // if source path is to long ensure we don't do a buffer overrun by allocating some
             // new memory
             isDestAllocated = true;
-            bufferDst = new char[pathLen + 1];
+            bufferDst = new char[pathLen + 1u];
         }
 
         // The outer loop loops over directories

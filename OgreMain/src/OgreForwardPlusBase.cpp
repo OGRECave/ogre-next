@@ -565,8 +565,10 @@ namespace Ogre
         hlms->_setProperty( HlmsBaseProp::ForwardPlusFadeAttenRange, mFadeAttenuationRange );
         hlms->_setProperty( HlmsBaseProp::VPos, 1 );
 
-        hlms->_setProperty( HlmsBaseProp::Forward3D, HlmsBaseProp::Forward3D.mHash );
-        hlms->_setProperty( HlmsBaseProp::ForwardClustered, HlmsBaseProp::ForwardClustered.mHash );
+        hlms->_setProperty( HlmsBaseProp::Forward3D,
+                            static_cast<int32>( HlmsBaseProp::Forward3D.mHash ) );
+        hlms->_setProperty( HlmsBaseProp::ForwardClustered,
+                            static_cast<int32>( HlmsBaseProp::ForwardClustered.mHash ) );
 
         if( mEnableVpls )
             hlms->_setProperty( HlmsBaseProp::EnableVpls, 1 );

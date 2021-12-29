@@ -118,6 +118,14 @@ namespace Ogre
         sincos_ps( x, &outSin, &outCos );
     }
 
+#    if defined( __clang__ )
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wsign-conversion"
+#    elif defined( __GNUC__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wsign-conversion"
+#    endif
+
     const ArrayReal BooleanMask4::mMasks[NUM_MASKS] = {
         _mm_castsi128_ps(
             _mm_set_epi32( 0x00000000, 0x00000000, 0x00000000, 0x00000000 ) ),  // MASK_NONE
@@ -137,5 +145,11 @@ namespace Ogre
         _mm_castsi128_ps( _mm_set_epi32( 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000 ) ),  // MASK_YZW
         _mm_castsi128_ps( _mm_set_epi32( 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff ) )  // MASK_XYZW
     };
+
+#    if defined( __clang__ )
+#        pragma clang diagnostic pop
+#    elif defined( __GNUC__ )
+#        pragma GCC diagnostic pop
+#    endif
 }  // namespace Ogre
 #endif

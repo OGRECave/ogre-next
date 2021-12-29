@@ -60,7 +60,7 @@ namespace Ogre
         // matrix element to be 1.0 (and thereby fix the scale).
 
         Matrix4 ret;
-        int i;
+        size_t i;
         bool incrPrecision = false; // use to control numerical solving
 
         if(fpoint.size() < 4 || constraint.size() < 4) {
@@ -87,7 +87,7 @@ namespace Ogre
 
         // we choose a nonzero element of the last row to set to the arbitrary
         // constant 1.0.
-        int nzind = 3;
+        size_t nzind = 3u;
         PreciseReal col[11];
         PreciseReal backcol[11];
 
@@ -128,7 +128,7 @@ namespace Ogre
         int row=3;
         for(i=0; i<4; i++)
         {
-            int j;
+            size_t j;
             larr[0] = fpoint[i].x;
             larr[1] = fpoint[i].y;
             larr[2] = fpoint[i].z;
@@ -228,7 +228,7 @@ namespace Ogre
         // the world plane of interest
         // NOTE: recall we perturbed the last fpoint off the plane, so we'll again modify
         // this one since we want 3 points on the plane = far plane, and 1 on the near plane
-        int nearind = 3;
+        size_t nearind = 3u;
         for(i=0; i<3; i++)
         {
             mat[i][0] = fpoint[i].x;
@@ -317,8 +317,8 @@ namespace Ogre
         // make sure the last point is a finite point (not point at infinity)
         if (vhull[3].w == 0.0)
         {
-            int finiteIndex = -1;
-            for (uint loopIndex = 0; loopIndex < vhull.size(); loopIndex++)
+            size_t finiteIndex = std::numeric_limits<size_t>::max();
+            for (size_t loopIndex = 0; loopIndex < vhull.size(); loopIndex++)
             {
                 if (vhull[loopIndex].w != 0.0)
                 {
@@ -326,7 +326,7 @@ namespace Ogre
                     break;
                 }
             }
-            if (finiteIndex == -1)
+            if (finiteIndex == std::numeric_limits<size_t>::max())
             {
                 // there are no finite points, which means camera doesn't see plane of interest.
                 // so we don't care what the shadow map matrix is
@@ -346,11 +346,11 @@ namespace Ogre
 
         // get the post-projective coordinate constraints
         vector<Vector2>::type constraint;
-        for (int i=0; i<4; i++)
+        for( size_t i = 0; i < 4u; i++ )
         {
             Vector4 postProjPt = camProjection * vhull[i];
-            postProjPt *= 1.0 / postProjPt.w;
-            constraint.push_back(Vector2(postProjPt.x, postProjPt.y));
+            postProjPt *= Real( 1.0 ) / postProjPt.w;
+            constraint.push_back( Vector2( postProjPt.x, postProjPt.y ) );
         }
 
         // perturb one point so we don't have coplanarity
@@ -369,7 +369,7 @@ namespace Ogre
             Vector4 displacement = oldPt - pinhole;
             Vector3 displace3    = Vector3(displacement.x, displacement.y, displacement.z);
             Real dotProd = std::abs(displace3.dotProduct(worldPlane.normal));
-            static const Real NEAR_FACTOR = 0.05;
+            static const Real NEAR_FACTOR = Real( 0.05 );
             newPt = pinhole + (displacement * (cam->getNearClipDistance() * NEAR_FACTOR / dotProd));
         }
         vhull.back() = newPt;

@@ -152,8 +152,10 @@ namespace Ogre {
 
     //---------------------------------------------------------------------
     // Performs CPUID instruction with 'query', fill the results, and return value of eax.
-    static uint _performCpuid(int query, CpuidResult& result)
+    static uint _performCpuid(uint32 _query, CpuidResult& result)
     {
+        int32 query;
+        memcpy( &query, &_query, sizeof( query ) );
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
     #if _MSC_VER >= 1400 
         int CPUInfo[4];
@@ -300,9 +302,9 @@ namespace Ogre {
 #define CPUID_EXT_FAMILY_ID_MASK    0x0F00000   // EAX[23:20] - Bit 23 thru 20 contains extended family processor id
 #define CPUID_PENTIUM4_ID           0x0F00      // Pentium 4 family processor id
 
-#define CPUID_EXT_3DNOW             (1<<31)
-#define CPUID_EXT_AMD_3DNOWEXT      (1<<30)
-#define CPUID_EXT_AMD_MMXEXT        (1<<22)
+#define CPUID_EXT_3DNOW             (1u<<31u)
+#define CPUID_EXT_AMD_3DNOWEXT      (1u<<30u)
+#define CPUID_EXT_AMD_MMXEXT        (1u<<22u)
 
         uint features = 0;
 
@@ -661,7 +663,7 @@ namespace Ogre {
         uint32 numLogicalCores = 0;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
-        int logicalCores = (uint)sysconf( _SC_NPROCESSORS_ONLN );
+        int logicalCores = (int)sysconf( _SC_NPROCESSORS_ONLN );
 
         if( logicalCores > 0 )
             numLogicalCores = (uint32)logicalCores;

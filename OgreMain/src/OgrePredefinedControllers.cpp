@@ -107,14 +107,14 @@ namespace Ogre
     //-----------------------------------------------------------------------
     Real TextureFrameControllerValue::getValue() const
     {
-        int numFrames = mTextureLayer->getNumFrames();
+        const unsigned int numFrames = mTextureLayer->getNumFrames();
         return ( (Real)mTextureLayer->getCurrentFrame() / (Real)numFrames );
     }
     //-----------------------------------------------------------------------
     void TextureFrameControllerValue::setValue( Real value )
     {
-        int numFrames = mTextureLayer->getNumFrames();
-        mTextureLayer->setCurrentFrame( (int)( value * numFrames ) % numFrames );
+        const unsigned int numFrames = mTextureLayer->getNumFrames();
+        mTextureLayer->setCurrentFrame( static_cast<unsigned int>( value * numFrames ) % numFrames );
     }
     //-----------------------------------------------------------------------
     // TexCoordModifierControllerValue
@@ -347,7 +347,7 @@ namespace Ogre
         Real input = getAdjustedInput( source * mFrequency );
 
         std::vector<Real>::iterator ifirst = std::lower_bound( mKeys.begin(), mKeys.end(), input );
-        size_t idx = ifirst - mKeys.begin() - 1;
+        const size_t idx = static_cast<size_t>( ifirst - mKeys.begin() ) - 1u;
 
         assert( ifirst != mKeys.end() );
 

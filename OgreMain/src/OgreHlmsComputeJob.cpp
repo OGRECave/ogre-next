@@ -70,7 +70,7 @@ namespace Ogre
         mInformHlmsOfTextureData( false ),
         mMaxTexUnitReached( 0 ),
         mMaxUavUnitReached( 0 ),
-        mPsoCacheHash( -1 )
+        mPsoCacheHash( std::numeric_limits<size_t>::max() )
     {
         memset( mThreadsPerGroup, 0, sizeof( mThreadsPerGroup ) );
         memset( mNumThreadGroups, 0, sizeof( mNumThreadGroups ) );
@@ -202,15 +202,15 @@ namespace Ogre
         const size_t texturePropSize = propName.size();
 
         propName.a( "_width" );  // texture0_width
-        setProperty( propName.c_str(), texture->getWidth() );
+        setProperty( propName.c_str(), static_cast<int32>( texture->getWidth() ) );
         propName.resize( texturePropSize );
 
         propName.a( "_height" );  // texture0_height
-        setProperty( propName.c_str(), texture->getHeight() );
+        setProperty( propName.c_str(), static_cast<int32>( texture->getHeight() ) );
         propName.resize( texturePropSize );
 
         propName.a( "_depth" );  // texture0_depth
-        setProperty( propName.c_str(), texture->getDepthOrSlices() );
+        setProperty( propName.c_str(), static_cast<int32>( texture->getDepthOrSlices() ) );
         propName.resize( texturePropSize );
 
         propName.a( "_mipmaps" );  // texture0_mipmaps
@@ -226,7 +226,9 @@ namespace Ogre
         propName.resize( texturePropSize );
 
         propName.a( "_texture_type" );  //_texture_type
-        setProperty( propName.c_str(), c_textureTypesProps[texture->getInternalTextureType()].mHash );
+        setProperty(
+            propName.c_str(),
+            static_cast<int32>( c_textureTypesProps[texture->getInternalTextureType()].mHash ) );
         propName.resize( texturePropSize );
 
         propName.a( "_pf_type" );  // uav0_pf_type
@@ -501,12 +503,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_updateAutoProperties()
     {
-        setProperty( ComputeProperty::ThreadsPerGroupX, mThreadsPerGroup[0] );
-        setProperty( ComputeProperty::ThreadsPerGroupY, mThreadsPerGroup[1] );
-        setProperty( ComputeProperty::ThreadsPerGroupZ, mThreadsPerGroup[2] );
-        setProperty( ComputeProperty::NumThreadGroupsX, mNumThreadGroups[0] );
-        setProperty( ComputeProperty::NumThreadGroupsY, mNumThreadGroups[1] );
-        setProperty( ComputeProperty::NumThreadGroupsZ, mNumThreadGroups[2] );
+        setProperty( ComputeProperty::ThreadsPerGroupX, static_cast<int32>( mThreadsPerGroup[0] ) );
+        setProperty( ComputeProperty::ThreadsPerGroupY, static_cast<int32>( mThreadsPerGroup[1] ) );
+        setProperty( ComputeProperty::ThreadsPerGroupZ, static_cast<int32>( mThreadsPerGroup[2] ) );
+        setProperty( ComputeProperty::NumThreadGroupsX, static_cast<int32>( mNumThreadGroups[0] ) );
+        setProperty( ComputeProperty::NumThreadGroupsY, static_cast<int32>( mNumThreadGroups[1] ) );
+        setProperty( ComputeProperty::NumThreadGroupsZ, static_cast<int32>( mNumThreadGroups[2] ) );
 
         RenderSystem *renderSystem = mCreator->getRenderSystem();
         const bool typedUavs = renderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
@@ -531,7 +533,8 @@ namespace Ogre
             for( size_t i = 0; i < sizeof( c_textureTypesProps ) / sizeof( c_textureTypesProps[0] );
                  ++i )
             {
-                setProperty( c_textureTypesProps[i], c_textureTypesProps[i].mHash );
+                setProperty( c_textureTypesProps[i],
+                             static_cast<int32>( c_textureTypesProps[i].mHash ) );
             }
 
             const PixelFormatToShaderType *toShaderType = renderSystem->getPixelFormatToShaderType();
@@ -602,7 +605,7 @@ namespace Ogre
 
                 while( itor != endt )
                 {
-                    const size_t slotIdx = itor - begin;
+                    const size_t slotIdx = static_cast<size_t>( itor - begin );
                     propName.resize( texturePropNameSize );
                     propName.a( static_cast<uint32>( slotIdx ) );  // uav0
                     const size_t texturePropSize = propName.size();
@@ -623,12 +626,14 @@ namespace Ogre
 
                         propName.a( "_width_with_lod" );  // uav0_width_with_lod
                         setProperty( propName.c_str(),
-                                     std::max( texture->getWidth() >> (uint32)mipLevel, 1u ) );
+                                     static_cast<int32>(
+                                         std::max( texture->getWidth() >> (uint32)mipLevel, 1u ) ) );
                         propName.resize( texturePropSize );
 
                         propName.a( "_height_with_lod" );  // uav0_height_with_lod
                         setProperty( propName.c_str(),
-                                     std::max( texture->getHeight() >> (uint32)mipLevel, 1u ) );
+                                     static_cast<int32>(
+                                         std::max( texture->getHeight() >> (uint32)mipLevel, 1u ) ) );
                         propName.resize( texturePropSize );
                     }
                     else if( itor->isBuffer() && itor->getBuffer().buffer )
@@ -649,7 +654,7 @@ namespace Ogre
     void HlmsComputeJob::setInformHlmsOfTextureData( bool bInformHlms )
     {
         mInformHlmsOfTextureData = bInformHlms;
-        mPsoCacheHash = -1;
+        mPsoCacheHash = std::numeric_limits<size_t>::max();
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setThreadsPerGroup( uint32 threadsPerGroupX, uint32 threadsPerGroupY,
@@ -662,7 +667,7 @@ namespace Ogre
             mThreadsPerGroup[0] = threadsPerGroupX;
             mThreadsPerGroup[1] = threadsPerGroupY;
             mThreadsPerGroup[2] = threadsPerGroupZ;
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -676,7 +681,7 @@ namespace Ogre
             mNumThreadGroups[0] = numThreadGroupsX;
             mNumThreadGroups[1] = numThreadGroupsY;
             mNumThreadGroups[2] = numThreadGroupsZ;
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -750,7 +755,7 @@ namespace Ogre
         }
 
         if( hasChanged )
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
 
         if( !mUavsDescSet && !mUavSlots.empty() )
         {
@@ -924,7 +929,7 @@ namespace Ogre
         mSamplerSlots.resize( numSlots );
         mTexSlots.resize( numSlots );
         if( mInformHlmsOfTextureData )
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::removeTexUnit( uint8 slotIdx )
@@ -942,7 +947,7 @@ namespace Ogre
         mSamplerSlots.erase( mSamplerSlots.begin() + slotIdx );
         mTexSlots.erase( mTexSlots.begin() + slotIdx );
         if( mInformHlmsOfTextureData )
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *HlmsComputeJob::getTexture( uint8 slotIdx ) const
@@ -964,7 +969,7 @@ namespace Ogre
 
         mUavSlots.resize( numSlots );
         if( mInformHlmsOfTextureData )
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::removeUavUnit( uint8 slotIdx )
@@ -973,7 +978,7 @@ namespace Ogre
         removeListenerFromTextures( mUavSlots, slotIdx, slotIdx + 1u );
         mUavSlots.erase( mUavSlots.begin() + slotIdx );
         if( mInformHlmsOfTextureData )
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *HlmsComputeJob::getUavTexture( uint8 slotIdx ) const
@@ -1006,7 +1011,7 @@ namespace Ogre
 
         mSamplerSlots.resize( numSlots );
         if( mInformHlmsOfTextureData )
-            mPsoCacheHash = -1;
+            mPsoCacheHash = std::numeric_limits<size_t>::max();
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setGlTexSlotStart( uint8 texSlotStart ) { mGlTexSlotStart = texSlotStart; }
@@ -1030,7 +1035,7 @@ namespace Ogre
             if( mInformHlmsOfTextureData && slot.slotType == DescriptorSetTexture2::SlotTypeTexture &&
                 slot.getTexture().texture )
             {
-                mPsoCacheHash = -1;
+                mPsoCacheHash = std::numeric_limits<size_t>::max();
             }
 
             slot.slotType = DescriptorSetTexture2::SlotTypeBuffer;
@@ -1067,7 +1072,7 @@ namespace Ogre
                 ( !texSlot.texture || !newSlot.texture ||
                   !texSlot.texture->hasEquivalentParameters( newSlot.texture ) ) )
             {
-                mPsoCacheHash = -1;
+                mPsoCacheHash = std::numeric_limits<size_t>::max();
             }
 
             if( texSlot.texture )
@@ -1143,7 +1148,7 @@ namespace Ogre
             if( mInformHlmsOfTextureData && slot.slotType == DescriptorSetUav::SlotTypeTexture &&
                 slot.getTexture().texture )
             {
-                mPsoCacheHash = -1;
+                mPsoCacheHash = std::numeric_limits<size_t>::max();
             }
 
             slot.slotType = DescriptorSetUav::SlotTypeBuffer;
@@ -1168,7 +1173,7 @@ namespace Ogre
                 ( !texSlot.texture || !newSlot.texture ||
                   !texSlot.texture->hasEquivalentParameters( newSlot.texture ) ) )
             {
-                mPsoCacheHash = -1;
+                mPsoCacheHash = std::numeric_limits<size_t>::max();
             }
 
             if( texSlot.texture )

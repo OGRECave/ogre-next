@@ -358,7 +358,7 @@ namespace Ogre
         long was_avail = static_cast<long>( mCache.avail() );
         if( count > 0 )
         {
-            if( !mCache.ff( count ) )
+            if( !mCache.ff( static_cast<size_t>( count ) ) )
                 zzip_seek( mZzipFile, static_cast<zzip_off_t>( count - was_avail ), SEEK_CUR );
         }
         else if( count < 0 )
@@ -453,7 +453,7 @@ namespace Ogre
     // get file date by index
     EmbeddedFileData &getEmbeddedFileDataByIndex( int fd )
     {
-        return ( *EmbeddedZipArchiveFactory_mEmbbedFileDataList )[fd - 1];
+        return ( *EmbeddedZipArchiveFactory_mEmbbedFileDataList )[static_cast<size_t>( fd ) - 1u];
     }
     //-----------------------------------------------------------------------
     // opens the file
@@ -541,7 +541,7 @@ namespace Ogre
         // move the cursor to the new pos
         curEmbeddedFileData.curPos += len;
 
-        return len;
+        return static_cast<zzip_ssize_t>( len );
     }
     //-----------------------------------------------------------------------
     // Moves file pointer.
@@ -553,16 +553,16 @@ namespace Ogre
             return -1;
         }
 
-        zzip_size_t newPos = -1;
+        zzip_size_t newPos = std::numeric_limits<zzip_size_t>::max();
         // get the current buffer in file;
         EmbeddedFileData &curEmbeddedFileData = getEmbeddedFileDataByIndex( fd );
         switch( whence )
         {
         case SEEK_CUR:
-            newPos = ( zzip_size_t )( curEmbeddedFileData.curPos + offset );
+            newPos = ( zzip_size_t )( static_cast<int64>( curEmbeddedFileData.curPos ) + offset );
             break;
         case SEEK_END:
-            newPos = ( zzip_size_t )( curEmbeddedFileData.fileSize - offset );
+            newPos = ( zzip_size_t )( static_cast<int64>( curEmbeddedFileData.fileSize ) - offset );
             break;
         case SEEK_SET:
             newPos = (zzip_size_t)offset;
@@ -570,8 +570,7 @@ namespace Ogre
         default:
             // bad whence - return an error - nonzero value.
             return -1;
-            break;
-        };
+        }
         if( newPos >= curEmbeddedFileData.fileSize )
         {
             // bad whence - return an error - nonzero value.
@@ -579,7 +578,7 @@ namespace Ogre
         }
 
         curEmbeddedFileData.curPos = newPos;
-        return newPos;
+        return static_cast<zzip_off_t>( newPos );
     }
     //-----------------------------------------------------------------------
     // returns the file size
@@ -592,7 +591,7 @@ namespace Ogre
         }
         // get the current buffer in file;
         EmbeddedFileData &curEmbeddedFileData = getEmbeddedFileDataByIndex( fd );
-        return curEmbeddedFileData.fileSize;
+        return static_cast<zzip_off_t>( curEmbeddedFileData.fileSize );
     }
     //-----------------------------------------------------------------------
     // writes data to the file

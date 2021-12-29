@@ -149,7 +149,8 @@ namespace Ogre
             }
 
             mOutChannelMapping.erase(
-                mOutChannelMapping.begin() + ( mOutChannelMapping.size() - mappingsToRemove ),
+                mOutChannelMapping.begin() +
+                    static_cast<ptrdiff_t>( mOutChannelMapping.size() - mappingsToRemove ),
                 mOutChannelMapping.end() );
         }
 
@@ -206,6 +207,6 @@ namespace Ogre
             ++itor;
         }
 
-        return -1;
+        return std::numeric_limits<size_t>::max();
     }
 }  // namespace Ogre

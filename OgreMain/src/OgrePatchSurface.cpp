@@ -101,7 +101,7 @@ namespace Ogre
 
             // Calculate number of required vertices / indexes at max resolution
             mRequiredVertexCount = mMeshWidth * mMeshHeight;
-            int iterations = ( mVSide == VS_BOTH ) ? 2 : 1;
+            const size_t iterations = ( mVSide == VS_BOTH ) ? 2u : 1u;
             mRequiredIndexCount = ( mMeshWidth - 1 ) * ( mMeshHeight - 1 ) * 2 * iterations * 3;
 
             // Calculate bounds based on control points
@@ -483,27 +483,27 @@ namespace Ogre
             // which step over the vertices we don't need for this level of detail.
 
             // Calculate steps
-            int vStep = 1 << ( mMaxVLevel - mVLevel );
-            int uStep = 1 << ( mMaxULevel - mULevel );
+            const size_t vStep = 1u << ( mMaxVLevel - mVLevel );
+            const size_t uStep = 1u << ( mMaxULevel - mULevel );
             size_t currWidth = ( LEVEL_WIDTH( mULevel ) - 1 ) * ( ( mCtlWidth - 1 ) / 2 ) + 1;
             size_t currHeight = ( LEVEL_WIDTH( mVLevel ) - 1 ) * ( ( mCtlHeight - 1 ) / 2 ) + 1;
 
             bool use32bitindexes = ( mIndexBuffer->getType() == HardwareIndexBuffer::IT_32BIT );
 
             // The mesh is built, just make a list of indexes to spit out the triangles
-            int vInc;
+            size_t vInc;
 
             size_t uCount, v, iterations;
 
             if( mVSide == VS_BOTH )
             {
-                iterations = 2;
+                iterations = 2u;
                 vInc = vStep;
                 v = 0;  // Start with front
             }
             else
             {
-                iterations = 1;
+                iterations = 1u;
                 if( mVSide == VS_FRONT )
                 {
                     vInc = vStep;
@@ -531,7 +531,7 @@ namespace Ogre
             {
                 // Make tris in a zigzag pattern (compatible with strips)
                 size_t u = 0;
-                int uInc = uStep;  // Start with moving +u
+                const size_t uInc = uStep;  // Start with moving +u
 
                 size_t vCount = currHeight - 1;
                 while( vCount-- )

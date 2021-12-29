@@ -375,12 +375,12 @@ namespace Ogre {
         GPUVendor ret = GPU_UNKNOWN;
         String cmpString = vendorString;
         StringUtil::toLowerCase(cmpString);
-        for (int i = 0; i < GPU_VENDOR_COUNT; ++i)
+        for( size_t i = 0; i < GPU_VENDOR_COUNT; ++i )
         {
             // case insensitive (lower case)
-            if (msGPUVendorStrings[i] == cmpString)
+            if( msGPUVendorStrings[i] == cmpString )
             {
-                ret = static_cast<GPUVendor>(i);
+                ret = static_cast<GPUVendor>( i );
                 break;
             }
         }

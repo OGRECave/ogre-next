@@ -331,7 +331,7 @@ namespace Ogre
             }
             else
             {
-                for( int iRow = 0; iRow < 3; iRow++ )
+                for( size_t iRow = 0; iRow < 3u; iRow++ )
                 {
                     Real fTmp0 = kL[iRow][1];
                     Real fTmp1 = kL[iRow][2];
@@ -598,7 +598,7 @@ namespace Ogre
             for( iCol = 0; iCol < 3; iCol++ )
             {
                 m[iRow][iCol] = 0.0;
-                for( int iMid = 0; iMid < 3; iMid++ )
+                for( size_t iMid = 0; iMid < 3u; iMid++ )
                     m[iRow][iCol] += kL[iRow][iMid] * kTmp[iMid][iCol];
             }
         }

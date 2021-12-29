@@ -65,7 +65,7 @@ namespace Ogre
                 OGRE_UINT32 accumA = 0;
 #endif
 
-                uint32 divisor = 0;
+                OGRE_UINT32 divisor = 0;
 
                 for( int k_y = kStartY; k_y <= kEndY; ++k_y )
                 {
@@ -74,7 +74,7 @@ namespace Ogre
 
                     for( int k_x = kStartX; k_x <= kEndX; ++k_x )
                     {
-                        uint32 kernelVal = kernel[k_y + 2][k_x + 2];
+                        OGRE_UINT32 kernelVal = kernel[k_y + 2][k_x + 2];
 
 #ifdef OGRE_DOWNSAMPLE_R
                         OGRE_UINT32 r =
@@ -119,7 +119,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
-                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                 dstPtr += OGRE_TOTAL_SIZE;
@@ -171,7 +171,7 @@ namespace Ogre
 #ifdef OGRE_DOWNSAMPLE_A
                     OGRE_UINT32 accumA = 0;
 #endif
-                    uint32 divisor = 0u;
+                    OGRE_UINT32 divisor = 0;
 
                     const int kEndX = std::min<int>( dstWidth - 1 - x, 1 );
 
@@ -222,7 +222,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                     dstPtr[OGRE_DOWNSAMPLE_A] =
-                        static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                        static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                     dstPtr += OGRE_TOTAL_SIZE;
@@ -297,7 +297,7 @@ namespace Ogre
                 OGRE_UINT32 accumA = 0;
 #endif
 
-                uint32 divisor = 0;
+                OGRE_UINT32 divisor = 0;
 
                 Vector3 vForwardSample( ( x * 2 + 0.5f ) * invSrcWidth * 2.0f - 1.0f,
                                         ( y * 2 + 0.5f ) * invSrcHeight * -2.0f + 1.0f, 1.0f );
@@ -306,7 +306,7 @@ namespace Ogre
                 {
                     for( int k_x = kernelStartX; k_x <= kernelEndX; ++k_x )
                     {
-                        uint32 kernelVal = kernel[k_y + 2][k_x + 2];
+                        OGRE_UINT32 kernelVal = kernel[k_y + 2][k_x + 2];
 
                         Vector3 tmp = kRotations[k_y + 2][k_x + 2] * vForwardSample;
 
@@ -363,7 +363,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
-                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                 dstPtr += OGRE_TOTAL_SIZE;
@@ -400,14 +400,14 @@ namespace Ogre
                 OGRE_UINT32 accumA = 0;
 #endif
 
-                uint32 divisor = 0;
+                OGRE_UINT32 divisor = 0;
 
                 int kStartX = std::max<int>( -x, kernelStart );
                 int kEndX = std::min<int>( width - 1 - x, kernelEnd );
 
                 for( int k_x = kStartX; k_x <= kEndX; ++k_x )
                 {
-                    uint32 kernelVal = kernel[k_x + 2];
+                    OGRE_UINT32 kernelVal = kernel[k_x + 2];
 
 #ifdef OGRE_DOWNSAMPLE_R
                     OGRE_UINT32 r = srcPtr[k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
@@ -447,7 +447,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
-                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                 dstPtr += OGRE_TOTAL_SIZE;
@@ -478,14 +478,14 @@ namespace Ogre
                 OGRE_UINT32 accumA = 0;
 #endif
 
-                uint32 divisor = 0;
+                OGRE_UINT32 divisor = 0;
 
                 int kStartY = std::max<int>( -y, kernelStart );
                 int kEndY = std::min<int>( height - y - 1, kernelEnd );
 
                 for( int k_y = kStartY; k_y <= kEndY; ++k_y )
                 {
-                    uint32 kernelVal = kernel[k_y + 2];
+                    OGRE_UINT32 kernelVal = kernel[k_y + 2];
 
 #ifdef OGRE_DOWNSAMPLE_R
                     OGRE_UINT32 r = srcPtr[k_y * bytesPerRow + OGRE_DOWNSAMPLE_R];
@@ -525,7 +525,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
-                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                 dstPtr += OGRE_TOTAL_SIZE;
@@ -543,7 +543,7 @@ namespace Ogre
         OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8 *>( _tmpPtr );
         OGRE_UINT8 const *srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _srcDstPtr );
 
-        const size_t bytesPerRow = width * OGRE_TOTAL_SIZE;
+        const ptrdiff_t bytesPerRow = static_cast<ptrdiff_t>( width ) * OGRE_TOTAL_SIZE;
 
         for( int32 y = 0; y < height; ++y )
         {
@@ -562,14 +562,14 @@ namespace Ogre
                 OGRE_UINT32 accumA = 0;
 #endif
 
-                uint32 divisor = 0;
+                OGRE_UINT32 divisor = 0;
 
                 int kStartX = std::max<int>( -x, kernelStart );
                 int kEndX = std::min<int>( width - 1 - x, kernelEnd );
 
                 for( int k_x = kStartX; k_x <= kEndX; ++k_x )
                 {
-                    uint32 kernelVal = kernel[k_x + 2];
+                    OGRE_UINT32 kernelVal = kernel[k_x + 2];
 
 #ifdef OGRE_DOWNSAMPLE_R
                     OGRE_UINT32 r = srcPtr[k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
@@ -609,7 +609,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
-                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                 dstPtr += OGRE_TOTAL_SIZE;
@@ -637,14 +637,14 @@ namespace Ogre
                 OGRE_UINT32 accumA = 0;
 #endif
 
-                uint32 divisor = 0;
+                OGRE_UINT32 divisor = 0;
 
                 int kStartY = std::max<int>( -y, kernelStart );
                 int kEndY = std::min<int>( height - y - 1, kernelEnd );
 
                 for( int k_y = kStartY; k_y <= kEndY; ++k_y )
                 {
-                    uint32 kernelVal = kernel[k_y + 2];
+                    OGRE_UINT32 kernelVal = kernel[k_y + 2];
 
 #ifdef OGRE_DOWNSAMPLE_R
                     OGRE_UINT32 r = srcPtr[k_y * bytesPerRow + OGRE_DOWNSAMPLE_R];
@@ -684,7 +684,7 @@ namespace Ogre
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
-                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1u ) / divisor );
+                    static_cast<OGRE_UINT8>( ( accumA + divisor - 1 ) / divisor );
 #endif
 
                 dstPtr += OGRE_TOTAL_SIZE;

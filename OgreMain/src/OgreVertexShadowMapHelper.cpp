@@ -73,7 +73,7 @@ namespace Ogre
         while( itor != endt )
         {
             VertexArrayObject *vao = *itor;
-            const size_t currentVaoIdx = itor - inVao.begin();
+            const size_t currentVaoIdx = static_cast<size_t>( itor - inVao.begin() );
 
             VertexBufferPacked *shadowVertexBuffer = 0;
             const VertexBufferPackedVec &origVertexBuffers = vao->getVertexBuffers();
@@ -374,8 +374,8 @@ namespace Ogre
             {
                 if( *itBuffers == vertexBuffer )
                 {
-                    outVaoIdx = itor - vao.begin();
-                    outVertexBufferIdx = itBuffers - vertexBuffers.begin();
+                    outVaoIdx = static_cast<size_t>( itor - vao.begin() );
+                    outVertexBufferIdx = static_cast<size_t>( itBuffers - vertexBuffers.begin() );
                     bFound = true;
                 }
 
@@ -431,7 +431,7 @@ namespace Ogre
             while( itor != endt )
             {
                 const Geometry &geom = *itor;
-                const size_t currentVaoIdx = itor - inGeom.begin();
+                const size_t currentVaoIdx = static_cast<size_t>( itor - inGeom.begin() );
                 HardwareBufferManagerBase *mgr = geom.vertexData->_getHardwareBufferManager();
 
                 VertexData *shadowVertexBuffer = 0;
@@ -644,7 +644,7 @@ namespace Ogre
             {
                 if( itor->vertexData == vertexBuffer )
                 {
-                    outVaoIdx = itor - geom.begin();
+                    outVaoIdx = static_cast<size_t>( itor - geom.begin() );
                     bFound = true;
                 }
 

@@ -119,8 +119,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t CommandBuffer::getCommandOffset( CbBase *cmd ) const
     {
-        return reinterpret_cast<FastArray<unsigned char>::const_iterator>( cmd ) -
-               mCommandBuffer.begin();
+        return static_cast<size_t>( reinterpret_cast<FastArray<unsigned char>::const_iterator>( cmd ) -
+                                    mCommandBuffer.begin() );
     }
     //-----------------------------------------------------------------------------------
     CbBase *CommandBuffer::getCommandFromOffset( size_t offset )

@@ -84,7 +84,7 @@ namespace Ogre
         sub->mParent = this;
 
         index = std::min( index, mSubMeshes.size() );
-        mSubMeshes.insert( mSubMeshes.begin() + index, sub );
+        mSubMeshes.insert( mSubMeshes.begin() + static_cast<ptrdiff_t>( index ), sub );
 
         if( isLoaded() )
             _dirtyState();

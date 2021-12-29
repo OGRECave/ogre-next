@@ -85,7 +85,7 @@ namespace Ogre
         {
             // If there's no listener to rebase, we can't later grow the memory pool or perform cleanups.
             mMaxHardLimit = mMaxMemory;
-            mCleanupThreshold = -1;
+            mCleanupThreshold = std::numeric_limits<size_t>::max();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -228,7 +228,8 @@ namespace Ogre
     {
         const char *basePtr = ptrToFirstElement;
 
-        const size_t slot = ( basePtr - mMemoryPools[0] ) / mElementsMemSizes[0] + index;
+        const size_t slot =
+            static_cast<size_t>( basePtr - mMemoryPools[0] ) / mElementsMemSizes[0] + index;
 
         assert( slot < mMaxMemory && "This slot does not belong to this ArrayMemoryManager" );
 
@@ -294,7 +295,7 @@ namespace Ogre
             mRebaseListener->performCleanup( mLevel, mMemoryPools, mElementsMemSizes,
                                              ( newEnd - lastRange ), lastRange );
 
-            itor += lastRange;
+            itor += static_cast<ptrdiff_t>( lastRange );
         }
 
         mAvailableSlots.clear();

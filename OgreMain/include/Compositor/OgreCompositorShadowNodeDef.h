@@ -122,7 +122,7 @@ namespace Ogre
             numStableSplits( 0u ),
             texName( texRefName ),
             texNameStr( texRefName ),
-            sharesSetupWith( -1 )
+            sharesSetupWith( std::numeric_limits<size_t>::max() )
         {
         }
 
@@ -171,7 +171,7 @@ namespace Ogre
             CompositorNodeDef( name, compositorManager ),
             mDefaultTechnique( SHADOWMAP_UNIFORM ),
             mNumLights( 0 ),
-            mMinRq( ~0 ),
+            mMinRq( std::numeric_limits<size_t>::max() ),
             mMaxRq( 0 )
         {
         }

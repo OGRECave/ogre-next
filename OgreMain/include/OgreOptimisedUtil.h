@@ -204,6 +204,18 @@ namespace Ogre
         return (T *)( (char *)( ptr ) + offset );
     }
 
+    template <class T>
+    static FORCEINLINE T *rawOffsetPointer( T *ptr, size_t offset )
+    {
+        return (T *)( (char *)( ptr ) + static_cast<ptrdiff_t>( offset ) );
+    }
+
+    template <class T>
+    static FORCEINLINE const T *rawOffsetPointer( const T *ptr, size_t offset )
+    {
+        return (const T *)( (const char *)( ptr ) + static_cast<ptrdiff_t>( offset ) );
+    }
+
     /** Advance the pointer with raw offset.
     @note
         The offset are in bytes, no matter what type of the pointer.
@@ -218,6 +230,12 @@ namespace Ogre
     static FORCEINLINE void advanceRawPointer( T *&ptr, ptrdiff_t offset )
     {
         ptr = rawOffsetPointer( ptr, offset );
+    }
+
+    template <class T>
+    static FORCEINLINE void advanceRawPointer( T *&ptr, size_t offset )
+    {
+        ptr = rawOffsetPointer( ptr, static_cast<ptrdiff_t>( offset ) );
     }
     /** @} */
     /** @} */

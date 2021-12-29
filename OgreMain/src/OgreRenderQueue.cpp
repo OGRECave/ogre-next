@@ -228,7 +228,7 @@ namespace Ogre
 
         // Flip the float to deal with negative & positive numbers
 #if OGRE_DOUBLE_PRECISION == 0
-        RealAsUint mask = -int( depth >> 31 ) | 0x80000000;
+        RealAsUint mask = static_cast<uint32>( -int( depth >> 31 ) ) | 0x80000000;
         depth = ( depth ^ mask );
 #else
         RealAsUint mask = -int64( depth >> 63 ) | 0x8000000000000000;
@@ -617,8 +617,9 @@ namespace Ogre
                     lastVaoName = vao->getVaoName();
                 }
 
-                void *offset = reinterpret_cast<void *>( indirectBuffer->_getFinalBufferStart() +
-                                                         ( indirectDraw - startIndirectDraw ) );
+                void *offset = reinterpret_cast<void *>(
+                    static_cast<ptrdiff_t>( indirectBuffer->_getFinalBufferStart() ) +
+                    ( indirectDraw - startIndirectDraw ) );
 
                 if( vao->getIndexBuffer() )
                 {

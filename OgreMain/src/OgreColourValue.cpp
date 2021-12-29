@@ -47,7 +47,7 @@ namespace Ogre
     RGBA ColourValue::getAsRGBA() const
 #endif
     {
-        uint8 val8;
+        uint32 val8;
         uint32 val32 = 0;
 
         // Convert to 32bit pattern
@@ -55,7 +55,7 @@ namespace Ogre
 
         // Red
         val8 = static_cast<uint8>( r * 255 );
-        val32 = val8 << 24;
+        val32 = val8 << 24u;
 
         // Green
         val8 = static_cast<uint8>( g * 255 );
@@ -78,7 +78,7 @@ namespace Ogre
     ARGB ColourValue::getAsARGB() const
 #endif
     {
-        uint8 val8;
+        uint32 val8;
         uint32 val32 = 0;
 
         // Convert to 32bit pattern
@@ -86,15 +86,15 @@ namespace Ogre
 
         // Alpha
         val8 = static_cast<uint8>( a * 255 );
-        val32 = val8 << 24;
+        val32 = val8 << 24u;
 
         // Red
         val8 = static_cast<uint8>( r * 255 );
-        val32 += val8 << 16;
+        val32 += val8 << 16u;
 
         // Green
         val8 = static_cast<uint8>( g * 255 );
-        val32 += val8 << 8;
+        val32 += val8 << 8u;
 
         // Blue
         val8 = static_cast<uint8>( b * 255 );
@@ -109,7 +109,7 @@ namespace Ogre
     BGRA ColourValue::getAsBGRA() const
 #endif
     {
-        uint8 val8;
+        uint32 val8;
         uint32 val32 = 0;
 
         // Convert to 32bit pattern
@@ -117,15 +117,15 @@ namespace Ogre
 
         // Blue
         val8 = static_cast<uint8>( b * 255 );
-        val32 = val8 << 24;
+        val32 = val8 << 24u;
 
         // Green
         val8 = static_cast<uint8>( g * 255 );
-        val32 += val8 << 16;
+        val32 += val8 << 16u;
 
         // Red
         val8 = static_cast<uint8>( r * 255 );
-        val32 += val8 << 8;
+        val32 += val8 << 8u;
 
         // Alpha
         val8 = static_cast<uint8>( a * 255 );
@@ -140,7 +140,7 @@ namespace Ogre
     ABGR ColourValue::getAsABGR() const
 #endif
     {
-        uint8 val8;
+        uint32 val8;
         uint32 val32 = 0;
 
         // Convert to 32bit pattern
@@ -148,15 +148,15 @@ namespace Ogre
 
         // Alpha
         val8 = static_cast<uint8>( a * 255 );
-        val32 = val8 << 24;
+        val32 = val8 << 24u;
 
         // Blue
         val8 = static_cast<uint8>( b * 255 );
-        val32 += val8 << 16;
+        val32 += val8 << 16u;
 
         // Green
         val8 = static_cast<uint8>( g * 255 );
-        val32 += val8 << 8;
+        val32 += val8 << 8u;
 
         // Red
         val8 = static_cast<uint8>( r * 255 );

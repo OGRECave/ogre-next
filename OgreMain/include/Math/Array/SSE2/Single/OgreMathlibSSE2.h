@@ -207,7 +207,7 @@ namespace Ogre
         */
         static inline __m128i And( __m128i a, uint32 b )
         {
-            return _mm_and_si128( a, _mm_set1_epi32( b ) );
+            return _mm_and_si128( a, _mm_set1_epi32( static_cast<int>( b ) ) );
         }
 
         /** Test if "a AND b" will result in non-zero, returning 0xffffffff on those cases
@@ -266,7 +266,7 @@ namespace Ogre
 
         static inline ArrayReal SetAll( Real val ) { return _mm_set_ps1( val ); }
 
-        static inline ArrayInt SetAll( uint32 val ) { return _mm_set1_epi32( val ); }
+        static inline ArrayInt SetAll( uint32 val ) { return _mm_set1_epi32( static_cast<int>( val ) ); }
 
         static inline void Set( ArrayReal &_dst, Real val, size_t index )
         {

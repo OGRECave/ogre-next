@@ -687,12 +687,14 @@ namespace Ogre
         }
 
         // Ok, now we've built the reference values, process the indexes
-        uint32 dw = block.indexes[0] | ( block.indexes[1] << 8u ) | ( block.indexes[2] << 16u );
+        uint32 dw = static_cast<uint32>( block.indexes[0] | ( block.indexes[1] << 8u ) |
+                                         ( block.indexes[2] << 16u ) );
 
         for( size_t i = 0; i < 8; ++i, dw >>= 3u )
             pCol[i].a = derivedAlphas[dw & 0x7];
 
-        dw = block.indexes[3] | ( block.indexes[4] << 8u ) | ( block.indexes[5] << 16u );
+        dw = static_cast<uint32>( block.indexes[3] | ( block.indexes[4] << 8u ) |
+                                  ( block.indexes[5] << 16u ) );
 
         for( size_t i = 8; i < 16; ++i, dw >>= 3u )
             pCol[i].a = derivedAlphas[dw & 0x7];

@@ -812,8 +812,8 @@ namespace Ogre
             for( size_t v = 0; v < vertexCount; ++v )
             {
                 // Get number of entries for this vertex
-                short currBones = static_cast<unsigned short>( assignments.count( v ) );
-                if( currBones <= 0 )
+                const uint16 currBones = static_cast<uint16>( assignments.count( v ) );
+                if( currBones == 0 )
                     existsNonSkinnedVertices = true;
 
                 // Deal with max bones update
