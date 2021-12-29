@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "Vao/OgreVulkanConstBufferPacked.h"
 #include "Vao/OgreVulkanDynamicBuffer.h"
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
+#    include "Vao/OgreVulkanMultiSourceVertexBufferPool.h"
 #endif
 #include "Vao/OgreVulkanReadOnlyBufferPacked.h"
 #include "Vao/OgreVulkanStagingBuffer.h"
@@ -792,7 +792,7 @@ namespace Ogre
         // blocks that have a matching stride (the current offset is a multiple of
         // bytesPerElement) in order to minimize the amount of memory padding.
         size_t bestVboIdx   = (size_t)-1;
-        size_t bestBlockIdx = (size_t)-1;
+        ptrdiff_t bestBlockIdx = -1;
         bool foundMatchingStride = false;
         // clang-format on
 
@@ -816,7 +816,7 @@ namespace Ogre
                     {
                         // clang-format off
                         bestVboIdx      = static_cast<size_t>( itor - vboVec.begin());
-                        bestBlockIdx    = static_cast<size_t>( blockIt - itor->freeBlocks.begin() );
+                        bestBlockIdx    = blockIt - itor->freeBlocks.begin();
                         // clang-format on
 
                         if( newOffset == block.offset )
@@ -830,7 +830,7 @@ namespace Ogre
             ++itor;
         }
 
-        if( bestBlockIdx == (size_t)-1 )
+        if( bestBlockIdx == -1 )
         {
             // clang-format off
             bestVboIdx      = vboVec.size();
@@ -1015,7 +1015,7 @@ namespace Ogre
 
         // clang-format off
         Vbo &bestVbo        = vboVec[bestVboIdx];
-        Block &bestBlock    = bestVbo.freeBlocks[bestBlockIdx];
+        Block &bestBlock    = bestVbo.freeBlocks[static_cast<size_t>(bestBlockIdx)];
         // clang-format on
 
         size_t newOffset = ( ( bestBlock.offset + alignment - 1 ) / alignment ) * alignment;
@@ -1157,11 +1157,11 @@ namespace Ogre
             if( itor->offset + itor->size == blockToMerge->offset )
             {
                 itor->size += blockToMerge->size;
-                size_t idx = itor - blocks.begin();
+                ptrdiff_t idx = itor - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1u )
+                if( idx == static_cast<ptrdiff_t>( blocks.size() - 1u ) )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
@@ -1173,11 +1173,11 @@ namespace Ogre
             else if( blockToMerge->offset + blockToMerge->size == itor->offset )
             {
                 blockToMerge->size += itor->size;
-                size_t idx = blockToMerge - blocks.begin();
+                ptrdiff_t idx = blockToMerge - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1u )
+                if( idx == static_cast<ptrdiff_t>( blocks.size() - 1u ) )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );
@@ -1210,9 +1210,9 @@ namespace Ogre
         VulkanBufferInterface *bufferInterface =
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
-        VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
-            bufferOffset, numElements, bytesPerElement, 0, bufferType, initialData, keepAsShadow, this,
-            bufferInterface, vElements );
+        VertexBufferPacked *retVal =
+            OGRE_NEW VertexBufferPacked( bufferOffset, numElements, bytesPerElement, 0, bufferType,
+                                         initialData, keepAsShadow, this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -1626,7 +1626,7 @@ namespace Ogre
         {
             vao.vaoName = createVao();
             mVaos.push_back( vao );
-            itor = mVaos.begin() + mVaos.size() - 1u;
+            itor = mVaos.begin() + static_cast<ptrdiff_t>( mVaos.size() - 1u );
         }
 
         ++itor->refCount;

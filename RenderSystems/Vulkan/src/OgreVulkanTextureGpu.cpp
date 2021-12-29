@@ -491,9 +491,9 @@ namespace Ogre
         region.dstSubresource.baseArrayLayer = destinationSlice;
         region.dstSubresource.layerCount = numSlices;
 
-        region.dstOffset.x = dstBox.x;
-        region.dstOffset.y = dstBox.y;
-        region.dstOffset.z = dstBox.z;
+        region.dstOffset.x = static_cast<int32_t>( dstBox.x );
+        region.dstOffset.y = static_cast<int32_t>( dstBox.y );
+        region.dstOffset.z = static_cast<int32_t>( dstBox.z );
 
         region.extent.width = srcBox.width;
         region.extent.height = srcBox.height;
@@ -881,15 +881,9 @@ namespace Ogre
         mDesiredDepthBufferFormat = desiredDepthBufferFormat;
     }
     //-----------------------------------------------------------------------------------
-    uint16 VulkanTextureGpuRenderTarget::getDepthBufferPoolId() const
-    {
-        return mDepthBufferPoolId;
-    }
+    uint16 VulkanTextureGpuRenderTarget::getDepthBufferPoolId() const { return mDepthBufferPoolId; }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuRenderTarget::getPreferDepthTexture() const
-    {
-        return mPreferDepthTexture;
-    }
+    bool VulkanTextureGpuRenderTarget::getPreferDepthTexture() const { return mPreferDepthTexture; }
     //-----------------------------------------------------------------------------------
     PixelFormatGpu VulkanTextureGpuRenderTarget::getDesiredDepthBufferFormat() const
     {
@@ -988,9 +982,6 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
-    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode() const
-    {
-        return mOrientationMode;
-    }
+    OrientationMode VulkanTextureGpuRenderTarget::getOrientationMode() const { return mOrientationMode; }
 #endif
 }  // namespace Ogre

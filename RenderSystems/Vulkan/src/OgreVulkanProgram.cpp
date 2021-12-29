@@ -1309,11 +1309,20 @@ namespace Ogre
 
             void *RESTRICT_ALIAS src;
             if( def.isFloat() )
-                src = (void *)&( *( params->getFloatConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void *)&( *( params->getFloatConstantList().begin() +
+                                    static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
             else if( def.isUnsignedInt() )
-                src = (void *)&( *( params->getUnsignedIntConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void *)&( *( params->getUnsignedIntConstantList().begin() +
+                                    static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
             else
-                src = (void *)&( *( params->getIntConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void *)&( *( params->getIntConstantList().begin() +
+                                    static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
 
             memcpy( &dstData[def.logicalIndex], src, def.elementSize * def.arraySize * sizeof( float ) );
 

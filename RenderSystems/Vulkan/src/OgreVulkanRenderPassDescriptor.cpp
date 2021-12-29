@@ -919,7 +919,7 @@ namespace Ogre
             static bool warnedOnce = false;
             if( !warnedOnce || cannotInterrupt )
             {
-                mNumCallstackEntries = backtrace( mCallstackBacktrace, 32 );
+                mNumCallstackEntries = static_cast<size_t>( backtrace( mCallstackBacktrace, 32 ) );
                 warnedOnce = true;
             }
 #endif

@@ -250,8 +250,8 @@ namespace Ogre
         {
             assert( first <= last && last <= end() );
 
-            const ptrdiff_t idx = ( first - mData );
-            const ptrdiff_t idxNext = ( last - mData );
+            const size_t idx = static_cast<size_t>( first - mData );
+            const size_t idxNext = static_cast<size_t>( last - mData );
             if( first != last )
             {
                 while( first != last )
@@ -270,8 +270,8 @@ namespace Ogre
         {
             assert( first <= last && last <= end() );
 
-            const ptrdiff_t idx = ( first - mData );
-            const ptrdiff_t idxNext = ( last - mData );
+            const size_t idx = static_cast<size_t>( first - mData );
+            const size_t idxNext = static_cast<size_t>( last - mData );
             if( first != last )
             {
                 memmove( mData + idx, mData + idxNext, ( mSize - idxNext ) * sizeof( T ) );
