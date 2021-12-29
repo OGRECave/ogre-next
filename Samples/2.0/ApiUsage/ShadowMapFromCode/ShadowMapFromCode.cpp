@@ -11,10 +11,14 @@
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+#include "OgreHlmsManager.h"
+#include "OgreHlmsPbs.h"
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
+
+#define USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS 1
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -63,20 +67,21 @@ namespace Demo
             shadowParams.push_back( shadowParam );
 
             //Second light, directional, spot or point
+            shadowParam.atlasId = 1;
             shadowParam.technique = Ogre::SHADOWMAP_FOCUSED;
             shadowParam.resolution[0].x = 2048u;
             shadowParam.resolution[0].y = 2048u;
             shadowParam.atlasStart[0].x = 0u;
-            shadowParam.atlasStart[0].y = 2048u + 1024u;
+            shadowParam.atlasStart[0].y = 0u;
 
             shadowParam.supportedLightTypes = 0u;
-            shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
+            //shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
             shadowParam.addLightType( Ogre::Light::LT_POINT );
             shadowParam.addLightType( Ogre::Light::LT_SPOTLIGHT );
             shadowParams.push_back( shadowParam );
 
             //Third light, directional, spot or point
-            shadowParam.atlasStart[0].y = 2048u + 1024u + 2048u;
+            shadowParam.atlasStart[0].y = 2048u;
             shadowParams.push_back( shadowParam );
 
             Ogre::ShadowNodeHelper::createShadowNodeWithSettings( compositorManager,
@@ -184,6 +189,19 @@ namespace Demo
                                                           mCamera, "ShadowMapFromCodeWorkspace", true );
             return mWorkspace;
         }
+        
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+        virtual void registerHlms(void)
+        {
+            GraphicsSystem::registerHlms();
+            Ogre::Root *root = getRoot();
+            Ogre::Hlms *hlms = root->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
+            assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
+            Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs*>( hlms );
+            if(pbs)
+                pbs->setMaxShadowMapLights(2);
+        }
+#endif
 
     public:
         ShadowMapFromCodeGraphicsSystem( GameState *gameState ) :
