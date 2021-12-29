@@ -292,13 +292,14 @@ namespace Ogre
     {
         size_t idx = mVertexArrayObjects.size();
 
-        const int bitsOpType = 3;
-        const int bitsVaoGl = 2;
+        const uint32 bitsOpType = 3;
+        const uint32 bitsVaoGl = 2;
         const uint32 maskOpType = OGRE_RQ_MAKE_MASK( bitsOpType );
         const uint32 maskVaoGl = OGRE_RQ_MAKE_MASK( bitsVaoGl );
-        const uint32 maskVao = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsOpType - bitsVaoGl );
+        const uint32 maskVao =
+            OGRE_RQ_MAKE_MASK( static_cast<uint32>( RqBits::MeshBits ) - bitsOpType - bitsVaoGl );
 
-        const uint32 shiftOpType = RqBits::MeshBits - bitsOpType;
+        const uint32 shiftOpType = static_cast<uint32>( RqBits::MeshBits ) - bitsOpType;
         const uint32 shiftVaoGl = shiftOpType - bitsVaoGl;
 
         uint32 renderQueueId = ( ( opType & maskOpType ) << shiftOpType ) |

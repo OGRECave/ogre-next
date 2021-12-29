@@ -99,7 +99,7 @@ namespace Ogre
                                                  size_t srcLength )
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
-        size_t errorCode = -1; // dodge comile error about signed/unsigned compare
+        size_t errorCode = std::numeric_limits<size_t>::max();
 
         if( freeRegionOffset == errorCode )
         {
