@@ -30,8 +30,9 @@ THE SOFTWARE.
 #define _Ogre_GL3PlusVaoManager_H_
 
 #include "OgreGL3PlusPrerequisites.h"
-#include "Vao/OgreVaoManager.h"
+
 #include "OgrePixelFormatGpu.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
@@ -62,34 +63,37 @@ namespace Ogre
 
             StrideChanger() : offsetAfterPadding( 0 ), paddedBytes( 0 ) {}
             StrideChanger( size_t _offsetAfterPadding, size_t _paddedBytes ) :
-                offsetAfterPadding( _offsetAfterPadding ), paddedBytes( _paddedBytes ) {}
+                offsetAfterPadding( _offsetAfterPadding ),
+                paddedBytes( _paddedBytes )
+            {
+            }
 
-            bool operator () ( const StrideChanger &left, size_t right ) const
+            bool operator()( const StrideChanger &left, size_t right ) const
             {
                 return left.offsetAfterPadding < right;
             }
-            bool operator () ( size_t left, const StrideChanger &right ) const
+            bool operator()( size_t left, const StrideChanger &right ) const
             {
                 return left < right.offsetAfterPadding;
             }
-            bool operator () ( const StrideChanger &left, const StrideChanger &right ) const
+            bool operator()( const StrideChanger &left, const StrideChanger &right ) const
             {
                 return left.offsetAfterPadding < right.offsetAfterPadding;
             }
         };
 
-        typedef vector<Block>::type BlockVec;
+        typedef vector<Block>::type         BlockVec;
         typedef vector<StrideChanger>::type StrideChangerVec;
 
     protected:
         struct Vbo
         {
-            GLuint vboName;
-            size_t sizeBytes;
-            GL3PlusDynamicBuffer *dynamicBuffer; //Null for CPU_INACCESSIBLE BOs.
+            GLuint                vboName;
+            size_t                sizeBytes;
+            GL3PlusDynamicBuffer *dynamicBuffer;  // Null for CPU_INACCESSIBLE BOs.
 
-            BlockVec            freeBlocks;
-            StrideChangerVec    strideChangers;
+            BlockVec         freeBlocks;
+            StrideChangerVec strideChangers;
         };
 
         struct Vao
@@ -98,22 +102,22 @@ namespace Ogre
 
             struct VertexBinding
             {
-                GLuint              vertexBufferVbo;
-                VertexElement2Vec   vertexElements;
-                GLsizei             stride;
-                size_t              offset;
+                GLuint            vertexBufferVbo;
+                VertexElement2Vec vertexElements;
+                GLsizei           stride;
+                size_t            offset;
 
-                //OpenGL supports this parameter per attribute, but
-                //we're a bit more conservative and do it per buffer
-                GLuint              instancingDivisor;
+                // OpenGL supports this parameter per attribute, but
+                // we're a bit more conservative and do it per buffer
+                GLuint instancingDivisor;
 
-                bool operator == ( const VertexBinding &_r ) const
+                bool operator==( const VertexBinding &_r ) const
                 {
-                    return vertexBufferVbo == _r.vertexBufferVbo &&
-                            vertexElements == _r.vertexElements &&
-                            stride == _r.stride &&
-                            offset == _r.offset &&
-                            instancingDivisor == _r.instancingDivisor;
+                    return vertexBufferVbo == _r.vertexBufferVbo &&  //
+                           vertexElements == _r.vertexElements &&    //
+                           stride == _r.stride &&                    //
+                           offset == _r.offset &&                    //
+                           instancingDivisor == _r.instancingDivisor;
                 }
             };
 
@@ -122,32 +126,32 @@ namespace Ogre
             /// Strictly speaking the opType is not part of a GL's "VAO", however
             /// we need to generate a different VAO to perform correct rendering
             /// by the RenderQueue (and also satisfy Direct3D 11)
-            OperationType operationType;
-            VertexBindingVec    vertexBuffers;
-            GLuint              indexBufferVbo;
+            OperationType                operationType;
+            VertexBindingVec             vertexBuffers;
+            GLuint                       indexBufferVbo;
             IndexBufferPacked::IndexType indexType;
-            uint32              refCount;
+            uint32                       refCount;
         };
 
-        typedef vector<Vbo>::type VboVec;
-        typedef vector<Vao>::type VaoVec;
+        typedef vector<Vbo>::type    VboVec;
+        typedef vector<Vao>::type    VaoVec;
         typedef vector<GLsync>::type GLSyncVec;
 
-        VboVec  mVbos[MAX_VBO_FLAG];
-        size_t  mDefaultPoolSize[MAX_VBO_FLAG];
+        VboVec mVbos[MAX_VBO_FLAG];
+        size_t mDefaultPoolSize[MAX_VBO_FLAG];
 
-        VaoVec  mVaos;
+        VaoVec mVaos;
 
         GLSyncVec mFrameSyncVec;
 
         /// True if ARB_buffer_storage is supported (Persistent Mapping and immutable buffers)
-        bool    mArbBufferStorage;
-        bool    mEmulateTexBuffers;
+        bool mArbBufferStorage;
+        bool mEmulateTexBuffers;
 
-        GLint   mMaxVertexAttribs;
+        GLint mMaxVertexAttribs;
 
         static const GLuint VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
-        VertexBufferPacked  *mDrawId;
+        VertexBufferPacked *mDrawId;
 
         /** Asks for allocating buffer space in a VBO (Vertex Buffer Object).
             If the VBO doesn't exist, all VBOs are full or can't fit this request,
@@ -166,8 +170,8 @@ namespace Ogre
         @param outBufferOffset [out]
             The offset in bytes at which the buffer data should be placed.
         */
-        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
-                          size_t &outVboIdx, size_t &outBufferOffset );
+        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, size_t &outVboIdx,
+                          size_t &outBufferOffset );
 
         /** Deallocates a buffer allocated with @allocateVbo.
         @remarks
@@ -187,22 +191,20 @@ namespace Ogre
 
     public:
         /// @see StagingBuffer::mergeContiguousBlocks
-        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge,
-                                           BlockVec &blocks );
+        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
     protected:
         VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                     BufferType bufferType, void *initialData,
-                                                    bool keepAsShadow,
+                                                    bool                     keepAsShadow,
                                                     const VertexElement2Vec &vertexElements ) override;
 
         void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) override;
 
 #ifdef _OGRE_MULTISOURCE_VBO
-        MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
-                                            const VertexElement2VecVec &vertexElementsBySource,
-                                            size_t maxNumVertices, size_t totalBytesPerVertex,
-                                            BufferType bufferType ) override;
+        MultiSourceVertexBufferPool *createMultiSourceVertexBufferPoolImpl(
+            const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
+            size_t totalBytesPerVertex, BufferType bufferType ) override;
 #endif
 
         IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
@@ -213,32 +215,32 @@ namespace Ogre
 
         ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                   void *initialData, bool keepAsShadow ) override;
-        void destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
+        void               destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
 
         TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                               BufferType bufferType, void *initialData,
                                               bool keepAsShadow ) override;
-        void destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
+        void             destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
 
         ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                         BufferType bufferType, void *initialData,
                                                         bool keepAsShadow ) override;
-        void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
+        void                  destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
 
         UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
                                               uint32 bindFlags, void *initialData,
                                               bool keepAsShadow ) override;
-        void destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
+        void             destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
 
         IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                         void *initialData, bool keepAsShadow ) override;
-        void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
+        void                  destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
 
         GLuint createVao( const Vao &vaoRef );
 
         VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *indexBuffer,
-                                                        OperationType opType ) override;
+                                                        IndexBufferPacked *          indexBuffer,
+                                                        OperationType                opType ) override;
 
         void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;
 
@@ -253,8 +255,7 @@ namespace Ogre
 
     public:
         GL3PlusVaoManager( bool supportsArbBufferStorage, bool emulateTexBuffers,
-                           bool supportsIndirectBuffers, bool _supportsBaseInstance,
-                           bool supportsSsbo,
+                           bool supportsIndirectBuffers, bool _supportsBaseInstance, bool supportsSsbo,
                            const NameValuePairList *params );
         ~GL3PlusVaoManager() override;
 
@@ -266,8 +267,8 @@ namespace Ogre
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId();
 
-        bool supportsArbBufferStorage() const       { return mArbBufferStorage; }
-        GLint getMaxVertexAttribs() const           { return mMaxVertexAttribs; }
+        bool  supportsArbBufferStorage() const { return mArbBufferStorage; }
+        GLint getMaxVertexAttribs() const { return mMaxVertexAttribs; }
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -284,7 +285,7 @@ namespace Ogre
         /// buffer with CPU access. However we won't track them, so it's the TextureManager's
         /// job to call destroyStagingTexture before the VaoManager gets deleted.
         /// This case is more of an exception because of D3D11.
-        GL3PlusStagingTexture* createStagingTexture( PixelFormatGpu formatFamily, size_t sizeBytes );
+        GL3PlusStagingTexture *createStagingTexture( PixelFormatGpu formatFamily, size_t sizeBytes );
         /// Important: Does not delete the stagingTexture. The TextureManager should do that.
         /// Caller is also responsible for ensuring it is safe to destroy stagingTexture
         /// (i.e. no hazards).
@@ -313,6 +314,6 @@ namespace Ogre
 
         static GLuint getAttributeIndexFor( VertexElementSemantic semantic );
     };
-}
+}  // namespace Ogre
 
 #endif

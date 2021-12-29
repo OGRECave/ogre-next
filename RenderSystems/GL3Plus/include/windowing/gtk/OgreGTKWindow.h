@@ -31,70 +31,71 @@ THE SOFTWARE.
 
 #include "OgreRenderWindow.h"
 
+#include <gtkglmm.h>
 #include <gtkmm/main.h>
 #include <gtkmm/window.h>
-#include <gtkglmm.h>
 
 #include <GL/gl.h>
 
-namespace Ogre {
-
-class OGREWidget : public Gtk::GL::DrawingArea
+namespace Ogre
 {
-public:
-    OGREWidget(bool useDepthBuffer);
-};
-    
-class GTKWindow : public RenderWindow, public SigC::Object
-{
-public:
-    GTKWindow();
-    ~GTKWindow();
+    class OGREWidget : public Gtk::GL::DrawingArea
+    {
+    public:
+        OGREWidget( bool useDepthBuffer );
+    };
 
-    /**
-    * Pump the main loop to actually generate events
-    * @returns false when there are no events left to pump
-    */
-    bool pump_events();
+    class GTKWindow : public RenderWindow, public SigC::Object
+    {
+    public:
+        GTKWindow();
+        ~GTKWindow();
 
-    /**
-    * Get the actual widget that is housing OGRE's GL view.
-    */
-    OGREWidget* get_ogre_widget();
+        /**
+         * Pump the main loop to actually generate events
+         * @returns false when there are no events left to pump
+         */
+        bool pump_events();
 
-    void create(const String& name, unsigned int width, unsigned int height, unsigned int colourDepth,
-                bool fullScreen, int left, int top, bool depthBuffer, 
-                void* miscParam, ...);
+        /**
+         * Get the actual widget that is housing OGRE's GL view.
+         */
+        OGREWidget *get_ogre_widget();
 
-    void setFullscreen(bool fullScreen, unsigned int width, unsigned int height);
-    void destroy();
-    bool isActive() const;
-    bool isClosed() const;
-    void reposition(int left, int top);
-    void resize(unsigned int width, unsigned int height);
-    void swapBuffers();
-    void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer);
+        void create( const String &name, unsigned int width, unsigned int height,
+                     unsigned int colourDepth, bool fullScreen, int left, int top, bool depthBuffer,
+                     void *miscParam, ... );
 
-    bool requiresTextureFlipping() const { return false; }
+        void setFullscreen( bool fullScreen, unsigned int width, unsigned int height );
+        void destroy();
+        bool isActive() const;
+        bool isClosed() const;
+        void reposition( int left, int top );
+        void resize( unsigned int width, unsigned int height );
+        void swapBuffers();
+        void copyContentsToMemory( const Box &src, const PixelBox &dst, FrameBuffer buffer );
 
-    /**
-     * Get a custom, GTK specific attribute. The specific attributes
-     * are:
-     * GTKMMWINDOW      The Gtk::Window instance (Rendering window)
-     * GTKGLMMWIDGET    The Gtk::GL::DrawingArea instance (Ogre widget)
-     */
-    void getCustomAttribute( const String& name, void* pData );
-protected:
-    // Signal handlers
-    bool on_delete_event(GdkEventAny* event);
-    bool on_expose_event(GdkEventExpose* event);
-    // bool SimpleGLScene::on_configure_event(GdkEventConfigure* event) 
-private:
-    //Gtk::Main* kit;
-    Gtk::Window *mGtkWindow;
-    OGREWidget* ogre;
-}; // class GTKWindow
+        bool requiresTextureFlipping() const { return false; }
 
-}; // namespace Ogre
+        /**
+         * Get a custom, GTK specific attribute. The specific attributes
+         * are:
+         * GTKMMWINDOW      The Gtk::Window instance (Rendering window)
+         * GTKGLMMWIDGET    The Gtk::GL::DrawingArea instance (Ogre widget)
+         */
+        void getCustomAttribute( const String &name, void *pData );
 
-#endif // INCL_OGRE_GTKWINDOW_H
+    protected:
+        // Signal handlers
+        bool on_delete_event( GdkEventAny *event );
+        bool on_expose_event( GdkEventExpose *event );
+        // bool SimpleGLScene::on_configure_event(GdkEventConfigure* event)
+    private:
+        // Gtk::Main* kit;
+        Gtk::Window *mGtkWindow;
+        OGREWidget * ogre;
+    };  // class GTKWindow
+
+};  // namespace Ogre
+
+#endif  // INCL_OGRE_GTKWINDOW_H

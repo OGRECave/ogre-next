@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_GL3PlusTexBufferEmulatedPacked_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "Vao/OgreTexBufferPacked.h"
 
 namespace Ogre
@@ -53,21 +54,20 @@ namespace Ogre
     public:
         GL3PlusTexBufferEmulatedPacked( size_t internalBufStartBytes, size_t numElements,
                                         uint32 bytesPerElement, uint32 numElementsPadding,
-                                        BufferType bufferType,
-                                        void *initialData, bool keepAsShadow,
+                                        BufferType bufferType, void *initialData, bool keepAsShadow,
                                         VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface,
                                         PixelFormatGpu pf );
         ~GL3PlusTexBufferEmulatedPacked() override;
 
         void _bindBufferDirectly( uint16 slot, size_t offset, size_t sizeBytes ) override;
 
-        void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
-        void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
-        void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
-        void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
-        void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
-        void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override;
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

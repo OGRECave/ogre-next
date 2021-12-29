@@ -29,30 +29,31 @@ THE SOFTWARE.
 #ifndef __SDLWindow_H__
 #define __SDLWindow_H__
 
-#include "OgreSDLPrerequisites.h"
 #include "OgreRenderWindow.h"
+#include "OgreSDLPrerequisites.h"
 
-namespace Ogre {
+namespace Ogre
+{
     class _OgrePrivate SDLWindow : public RenderWindow
     {
     private:
-        SDL_Surface* mScreen;
-        bool mActive;
-        bool mClosed;
-        bool mVSync;
+        SDL_Surface *mScreen;
+        bool         mActive;
+        bool         mClosed;
+        bool         mVSync;
 
         // Process pending events
         void processEvents();
 
-        int (*glXGetVideoSyncSGI) (unsigned int *);
-        int (*glXWaitVideoSyncSGI) (int, int, unsigned int *);
+        int ( *glXGetVideoSyncSGI )( unsigned int * );
+        int ( *glXWaitVideoSyncSGI )( int, int, unsigned int * );
 
     public:
         SDLWindow();
         ~SDLWindow();
 
-        void create(const String& name, unsigned int width, unsigned int height,
-                bool fullScreen, const NameValuePairList *miscParams);
+        void create( const String &name, unsigned int width, unsigned int height, bool fullScreen,
+                     const NameValuePairList *miscParams );
         /** Overridden - see RenderWindow */
         void destroy();
         /** Overridden - see RenderWindow */
@@ -60,35 +61,31 @@ namespace Ogre {
         /** Overridden - see RenderWindow */
         bool isClosed() const;
         /** Overridden - see RenderWindow */
-        void reposition(int left, int top);
+        void reposition( int left, int top );
         /** Overridden - see RenderWindow */
-        void resize(unsigned int width, unsigned int height);
+        void resize( unsigned int width, unsigned int height );
         /** Overridden - see RenderWindow */
         void swapBuffers();
 
         /** Overridden - see RenderTarget. */
-        void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer);
+        void copyContentsToMemory( const Box &src, const PixelBox &dst, FrameBuffer buffer );
 
         /** @copydoc see RenderWindow::setVSyncEnabled */
-        void setVSyncEnabled(bool vsync);
+        void setVSyncEnabled( bool vsync );
         /** @copydoc see RenderWindow::isVSyncEnabled */
         bool isVSyncEnabled() const;
 
         /** Overridden - see RenderTarget.
-        */
-        void getCustomAttribute( const String& name, void* pData )
+         */
+        void getCustomAttribute( const String &name, void *pData )
         {
             // NOOP
         }
 
         bool requiresTextureFlipping() const { return false; }
 
-        bool isFullScreen() const
-        {
-            return ( mScreen->flags & SDL_FULLSCREEN ) == SDL_FULLSCREEN;
-        }
+        bool isFullScreen() const { return ( mScreen->flags & SDL_FULLSCREEN ) == SDL_FULLSCREEN; }
     };
-}
+}  // namespace Ogre
 
 #endif
-

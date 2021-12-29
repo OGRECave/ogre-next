@@ -49,9 +49,9 @@ namespace Ogre
         bool mIsExternalGLControl;
 
         EGLGLSupport *mGLSupport;
-        EGLContext *mContext;
+        EGLContext *  mContext;
 
-        EGLConfig mEglConfig;
+        EGLConfig  mEglConfig;
         EGLSurface mEglSurface;
 
         void switchFullScreen( bool fullscreen );

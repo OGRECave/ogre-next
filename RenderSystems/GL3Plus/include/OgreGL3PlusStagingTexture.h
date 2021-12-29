@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGL3PlusStagingTexture_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreStagingTextureBufferImpl.h"
 
 #include "Vao/OgreGL3PlusDynamicBuffer.h"
@@ -40,22 +41,21 @@ namespace Ogre
 {
     class _OgreGL3PlusExport GL3PlusStagingTexture final : public StagingTextureBufferImpl
     {
-        GL3PlusDynamicBuffer    *mDynamicBuffer;
-        size_t                  mUnmapTicket;
-        void                    *mMappedPtr;
-        void                    *mLastMappedPtr;
+        GL3PlusDynamicBuffer *mDynamicBuffer;
+        size_t                mUnmapTicket;
+        void *                mMappedPtr;
+        void *                mLastMappedPtr;
 
-        bool belongsToUs( const TextureBox &box ) override;
-        void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
+        bool  belongsToUs( const TextureBox &box ) override;
+        void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
-        void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
-                            uint8 mipLevel, GLenum format, GLenum type,
-                            GLint xPos, GLint yPos, GLint slicePos,
+        void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat, uint8 mipLevel,
+                            GLenum format, GLenum type, GLint xPos, GLint yPos, GLint slicePos,
                             GLsizei width, GLsizei height, GLsizei numSlices );
 
     public:
-        GL3PlusStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
-                               size_t size, size_t internalBufferStart, size_t vboPoolIdx,
+        GL3PlusStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size,
+                               size_t internalBufferStart, size_t vboPoolIdx,
                                GL3PlusDynamicBuffer *dynamicBuffer );
         ~GL3PlusStagingTexture() override;
 
@@ -68,10 +68,11 @@ namespace Ogre
                      const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
                      bool skipSysRamCopy = false ) override;
 
-        GL3PlusDynamicBuffer* _getDynamicBuffer()           { return mDynamicBuffer; }
-        void _resetDynamicBuffer()                          { mDynamicBuffer = 0; }
+        GL3PlusDynamicBuffer *_getDynamicBuffer() { return mDynamicBuffer; }
+
+        void _resetDynamicBuffer() { mDynamicBuffer = 0; }
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -34,42 +34,43 @@ THE SOFTWARE.
 namespace Ogre
 {
     class GL3PlusPBuffer;
-    
-class OSXGL3PlusSupport : public GL3PlusSupport
-{
-public:
-    OSXGL3PlusSupport();
 
-    virtual ~OSXGL3PlusSupport();
+    class OSXGL3PlusSupport : public GL3PlusSupport
+    {
+    public:
+        OSXGL3PlusSupport();
 
-    /// @copydoc GL3PlusSupport::addConfig
-    void addConfig() override;
+        virtual ~OSXGL3PlusSupport();
 
-    /// @copydoc GL3PlusSupport::validateConfig
-    String validateConfig() override;
+        /// @copydoc GL3PlusSupport::addConfig
+        void addConfig() override;
 
-    /// @copydoc GL3PlusSupport::createWindow
-    Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle ) override;
+        /// @copydoc GL3PlusSupport::validateConfig
+        String validateConfig() override;
 
-    /// @copydoc GL3PlusSupport::newWindow
-    virtual Window* newWindow( const String &name, unsigned int width, unsigned int height, 
-        bool fullScreen, const NameValuePairList *miscParams = 0 ) override;
-    
-    /// @copydoc GL3PlusSupport::start
-    void start() override;
+        /// @copydoc GL3PlusSupport::createWindow
+        Window *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+                              const String &windowTitle ) override;
 
-    /// @copydoc GL3PlusSupport::stop
-    void stop() override;
+        /// @copydoc GL3PlusSupport::newWindow
+        virtual Window *newWindow( const String &name, unsigned int width, unsigned int height,
+                                   bool fullScreen, const NameValuePairList *miscParams = 0 ) override;
 
-    /// @copydoc GL3PlusSupport::getProcAddress
-    void* getProcAddress(const char *procname) const override;
+        /// @copydoc GL3PlusSupport::start
+        void start() override;
 
-private:
-    // Core Foundation Array callback function for sorting, must be static for the function ptr
-    static CFComparisonResult _compareModes(const void *val1, const void *val2, void *context);
+        /// @copydoc GL3PlusSupport::stop
+        void stop() override;
 
-}; // class OSXGL3PlusSupport
+        /// @copydoc GL3PlusSupport::getProcAddress
+        void *getProcAddress( const char *procname ) const override;
 
-} // namespace Ogre
+    private:
+        // Core Foundation Array callback function for sorting, must be static for the function ptr
+        static CFComparisonResult _compareModes( const void *val1, const void *val2, void *context );
 
-#endif // OGRE_OSXGLSupport_H
+    };  // class OSXGL3PlusSupport
+
+}  // namespace Ogre
+
+#endif  // OGRE_OSXGLSupport_H

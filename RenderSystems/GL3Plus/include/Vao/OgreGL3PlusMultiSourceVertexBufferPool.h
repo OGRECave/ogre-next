@@ -32,8 +32,8 @@ THE SOFTWARE.
 #include "OgreGL3PlusPrerequisites.h"
 
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreGL3PlusVaoManager.h"
+#    include "Vao/OgreGL3PlusVaoManager.h"
+#    include "Vao/OgreMultiSourceVertexBufferPool.h"
 
 namespace Ogre
 {
@@ -65,14 +65,13 @@ namespace Ogre
         GL3PlusMultiSourceVertexBufferPool( size_t vboPoolIndex, GLuint vboName,
                                             const VertexElement2VecVec &vertexElementsBySource,
                                             size_t maxVertices, BufferType bufferType,
-                                            size_t internalBufferStart,
-                                            VaoManager *vaoManager );
+                                            size_t internalBufferStart, VaoManager *vaoManager );
         virtual ~GL3PlusMultiSourceVertexBufferPool();
 
         void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
-                                  void * const *initialData, bool keepAsShadow );
+                                  void *const *initialData, bool keepAsShadow );
     };
-}
+}  // namespace Ogre
 
 #endif
 #endif

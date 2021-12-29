@@ -36,11 +36,11 @@ namespace Ogre
 {
     class _OgrePrivate EGLContext : public GL3PlusContext
     {
-        EGLConfig mConfig;
+        EGLConfig     mConfig;
         EGLGLSupport *mGLSupport;
-        EGLDisplay mEglDisplay;
-        ::EGLContext mContext;
-        bool mExternalContext;
+        EGLDisplay    mEglDisplay;
+        ::EGLContext  mContext;
+        bool          mExternalContext;
 
     public:
         EGLSurface mDrawable;

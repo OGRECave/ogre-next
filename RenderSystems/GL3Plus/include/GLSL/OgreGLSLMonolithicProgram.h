@@ -29,17 +29,18 @@
 #define __GLSLMonolithicProgram_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
+#include "OgreGLSLProgram.h"
 #include "OgreGpuProgram.h"
 #include "OgreHardwareVertexBuffer.h"
-#include "OgreGLSLProgram.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     class GLSLShader;
 
     /** Model of OpenGL program object created using the glLinkProgram
         method of linking.
-        
+
         Linking using glLinkProgram is supported by OpenGL 2.0 and up,
         but does not allow hot-swapping shaders without recompiling
         the program object like GLSLSeparableProgram can. Hence the name
@@ -57,12 +58,9 @@ namespace Ogre {
 
     public:
         /// Constructor should only be used by GLSLMonolithicProgramManager
-        GLSLMonolithicProgram(GLSLShader* vertexProgram,
-                              GLSLShader* hullProgram,
-                              GLSLShader* domainProgram,
-                              GLSLShader* geometryProgram,
-                              GLSLShader* fragmentProgram,
-                              GLSLShader* computeProgram);
+        GLSLMonolithicProgram( GLSLShader *vertexProgram, GLSLShader *hullProgram,
+                               GLSLShader *domainProgram, GLSLShader *geometryProgram,
+                               GLSLShader *fragmentProgram, GLSLShader *computeProgram );
         ~GLSLMonolithicProgram();
 
         /** Makes a program object active by making sure it is linked
@@ -75,16 +73,17 @@ namespace Ogre {
             GLSLShader::bindParameters() just before rendering
             occurs.
         */
-        void updateUniforms(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) override;
+        void updateUniforms( GpuProgramParametersSharedPtr params, uint16 mask,
+                             GpuProgramType fromProgType ) override;
 
         /** Updates program object uniforms using data from pass
             iteration GpuProgramParameters.  normally called by
             GLSLShader::bindMultiPassParameters() just before multi
             pass rendering occurs.
         */
-        void updatePassIterationUniforms(GpuProgramParametersSharedPtr params) override;
+        void updatePassIterationUniforms( GpuProgramParametersSharedPtr params ) override;
     };
 
-}
+}  // namespace Ogre
 
-#endif // __GLSLMonolithicProgram_H__
+#endif  // __GLSLMonolithicProgram_H__

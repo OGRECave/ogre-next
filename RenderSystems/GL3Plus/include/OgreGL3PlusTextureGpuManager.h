@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGL3PlusTextureGpuManager_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreTextureGpuManager.h"
 
 #include "OgreTextureGpu.h"
@@ -53,15 +54,15 @@ namespace Ogre
 
         const GL3PlusSupport &mSupport;
 
-        TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                       IdString name, uint32 textureFlags,
-                                       TextureTypes::TextureTypes initialType ) override;
+        TextureGpu *    createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                           IdString name, uint32 textureFlags,
+                                           TextureTypes::TextureTypes initialType ) override;
         StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
                                                   uint32 slices, PixelFormatGpu pixelFormat ) override;
-        void destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
+        void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
         AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
-                                                          uint32 depthOrSlices,
+                                                          uint32                     depthOrSlices,
                                                           TextureTypes::TextureTypes textureType,
                                                           PixelFormatGpu pixelFormatFamily ) override;
 

@@ -30,6 +30,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #define _OgreGL3PlusPixelFormatToShaderType_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgrePixelFormatGpu.h"
 
 namespace Ogre

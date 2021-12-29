@@ -29,13 +29,14 @@
 #define __GLSLProgramManager_H__
 
 #include "OgreGL3PlusPrerequisites.h"
-#include "OgreSingleton.h"
-#include "OgreGLSLShader.h"
-#include "OgreGLSLProgram.h"
+
 #include "OgreGLSLExtSupport.h"
+#include "OgreGLSLProgram.h"
+#include "OgreGLSLShader.h"
+#include "OgreSingleton.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Ogre assumes that there are separate programs to deal with but
         GLSL has one program object that represents the active shader
         objects during a rendering state.  GLSL shader objects are
@@ -53,46 +54,41 @@ namespace Ogre {
     {
     protected:
         /// Active shader objects defining the active program object.
-        GLSLShader* mActiveVertexShader;
-        GLSLShader* mActiveHullShader;
-        GLSLShader* mActiveDomainShader;
-        GLSLShader* mActiveGeometryShader;
-        GLSLShader* mActiveFragmentShader;
-        GLSLShader* mActiveComputeShader;
+        GLSLShader *mActiveVertexShader;
+        GLSLShader *mActiveHullShader;
+        GLSLShader *mActiveDomainShader;
+        GLSLShader *mActiveGeometryShader;
+        GLSLShader *mActiveFragmentShader;
+        GLSLShader *mActiveComputeShader;
 
-        const GL3PlusSupport& mGLSupport;
+        const GL3PlusSupport &mGLSupport;
 
         typedef map<String, GLenum>::type StringToEnumMap;
-        /// 
+        ///
         StringToEnumMap mTypeEnumMap;
 
         /**  Convert GL uniform size and type to OGRE constant types
              and associate uniform definitions together. */
-        void convertGLUniformtoOgreType(GLenum gltype, 
-                                        GpuConstantDefinition& defToUpdate);
+        void convertGLUniformtoOgreType( GLenum gltype, GpuConstantDefinition &defToUpdate );
         /** Find the data source definition for a given uniform name
             and reference. Return true if found and pair the reference
             with its data source. */
-        bool findUniformDataSource(
-            const String& paramName,
-            const GpuConstantDefinitionMap* vertexConstantDefs,
-            const GpuConstantDefinitionMap* hullConstantDefs,
-            const GpuConstantDefinitionMap* domainConstantDefs,
-            const GpuConstantDefinitionMap* geometryConstantDefs,
-            const GpuConstantDefinitionMap* fragmentConstantDefs,
-            const GpuConstantDefinitionMap* computeConstantDefs,
-            GLUniformReference& refToUpdate);
+        bool findUniformDataSource( const String &                  paramName,
+                                    const GpuConstantDefinitionMap *vertexConstantDefs,
+                                    const GpuConstantDefinitionMap *hullConstantDefs,
+                                    const GpuConstantDefinitionMap *domainConstantDefs,
+                                    const GpuConstantDefinitionMap *geometryConstantDefs,
+                                    const GpuConstantDefinitionMap *fragmentConstantDefs,
+                                    const GpuConstantDefinitionMap *computeConstantDefs,
+                                    GLUniformReference &            refToUpdate );
 
         /** Parse an individual uniform from a GLSL source file and
             store it in a GpuNamedConstant. */
-        void parseGLSLUniform(
-            const String& src, GpuNamedConstants& defs,
-            String::size_type currPos,
-            const String& filename, GpuSharedParametersPtr sharedParams);
+        void parseGLSLUniform( const String &src, GpuNamedConstants &defs, String::size_type currPos,
+                               const String &filename, GpuSharedParametersPtr sharedParams );
 
     public:
-
-        GLSLProgramManager(const GL3PlusSupport& support);
+        GLSLProgramManager( const GL3PlusSupport &support );
 
         /** Populate a list of uniforms based on an OpenGL program object.
             @param programObject Handle to the program object to query.
@@ -105,28 +101,27 @@ namespace Ogre {
             @param list The list to populate (will not be cleared before adding, clear
             it yourself before calling this if that's what you want).
         */
-        void extractUniformsFromProgram(
-            GLuint programObject,
-            const GpuConstantDefinitionMap* vertexConstantDefs,
-            const GpuConstantDefinitionMap* hullConstantDefs,
-            const GpuConstantDefinitionMap* domainConstantDefs,
-            const GpuConstantDefinitionMap* geometryConstantDefs,
-            const GpuConstantDefinitionMap* fragmentConstantDefs,
-            const GpuConstantDefinitionMap* computeConstantDefs,
-            GLUniformReferenceList& uniformList);
+        void extractUniformsFromProgram( GLuint                          programObject,
+                                         const GpuConstantDefinitionMap *vertexConstantDefs,
+                                         const GpuConstantDefinitionMap *hullConstantDefs,
+                                         const GpuConstantDefinitionMap *domainConstantDefs,
+                                         const GpuConstantDefinitionMap *geometryConstantDefs,
+                                         const GpuConstantDefinitionMap *fragmentConstantDefs,
+                                         const GpuConstantDefinitionMap *computeConstantDefs,
+                                         GLUniformReferenceList &        uniformList );
 
         /** Populate a list of uniforms based on GLSL source and store
-            them in GpuNamedConstants.  
+            them in GpuNamedConstants.
             @param src Reference to the source code.
             @param constantDefs The defs to populate (will
             not be cleared before adding, clear it yourself before
-            calling this if that's what you want).  
+            calling this if that's what you want).
             @param filename The file name this came from, for logging errors.
         */
-        void extractUniformsFromGLSL(
-            const String& src, GpuNamedConstants& constantDefs, const String& filename);
+        void extractUniformsFromGLSL( const String &src, GpuNamedConstants &constantDefs,
+                                      const String &filename );
     };
 
-}
+}  // namespace Ogre
 
-#endif // __GLSLProgramManager_H__
+#endif  // __GLSLProgramManager_H__

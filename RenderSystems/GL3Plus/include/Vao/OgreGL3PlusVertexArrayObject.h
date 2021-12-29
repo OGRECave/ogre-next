@@ -37,12 +37,11 @@ namespace Ogre
 {
     struct _OgreGL3PlusExport GL3PlusVertexArrayObject : public VertexArrayObject
     {
-        GLint   mPrimType[2];
+        GLint mPrimType[2];
 
         GL3PlusVertexArrayObject( GLuint vaoName, uint32 renderQueueId,
                                   const VertexBufferPackedVec &vertexBuffers,
-                                  IndexBufferPacked *indexBuffer,
-                                  OperationType opType ) :
+                                  IndexBufferPacked *indexBuffer, OperationType opType ) :
             VertexArrayObject( vaoName, renderQueueId, 0, vertexBuffers, indexBuffer, opType )
         {
             switch( opType )
@@ -75,6 +74,6 @@ namespace Ogre
             }
         }
     };
-}
+}  // namespace Ogre
 
 #endif

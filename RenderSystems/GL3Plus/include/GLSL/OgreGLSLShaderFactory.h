@@ -29,8 +29,9 @@
 #ifndef __GLSLShaderFactory_H__
 #define __GLSLShaderFactory_H__
 
-#include "OgreHighLevelGpuProgramManager.h"
 #include "OgreGLSLExtSupport.h"
+
+#include "OgreHighLevelGpuProgramManager.h"
 
 namespace Ogre
 {
@@ -42,19 +43,21 @@ namespace Ogre
         static String mLanguageName;
 
     public:
-        GLSLShaderFactory(const GL3PlusSupport& support);
+        GLSLShaderFactory( const GL3PlusSupport &support );
         ~GLSLShaderFactory() override;
         /// Get the name of the language this factory creates shaders for.
-        const String& getLanguage() const override;
+        const String &getLanguage() const override;
+
         /// Create an instance of GLSLProgram.
         HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
                                      const String &group, bool isManual,
                                      ManualResourceLoader *loader ) override;
+
         void destroy( HighLevelGpuProgram *prog ) override;
 
     private:
-        static GLSLMonolithicProgramManager* mMonolithicProgramManager;
+        static GLSLMonolithicProgramManager *mMonolithicProgramManager;
     };
-}
+}  // namespace Ogre
 
-#endif // __GLSLShaderFactory_H__
+#endif  // __GLSLShaderFactory_H__

@@ -47,8 +47,8 @@ namespace Ogre
     protected:
         /// mVboName is not deleted by us (the VaoManager does) as we may have
         /// only been assigned a chunk of the buffer, not the whole thing.
-        GLuint  mVboName;
-        void    *mMappedPtr;
+        GLuint mVboName;
+        void * mMappedPtr;
 
         /** How many bytes between the last fence and our current offset do we need to let
             through before we place another fence?
@@ -56,28 +56,25 @@ namespace Ogre
             When the ring buffer wraps around, a fence is always put.
             A threshold of zero means to put a fence after every unmap operation.
         */
-        size_t  mFenceThreshold;
+        size_t mFenceThreshold;
 
         struct GLFence : Fence
         {
-            GLsync  fenceName;
+            GLsync fenceName;
 
-            GLFence( size_t _start, size_t _end ) :
-                Fence( _start , _end ), fenceName( 0 )
-            {
-            }
+            GLFence( size_t _start, size_t _end ) : Fence( _start, _end ), fenceName( 0 ) {}
         };
 
         //------------------------------------
         // Begin used for uploads
         //------------------------------------
         typedef vector<GLFence>::type GLFenceVec;
-        GLFenceVec mFences;
+        GLFenceVec                    mFences;
 
         /// Regions of memory that were unmapped but haven't
         /// been fenced due to not passing the threshold yet.
         GLFenceVec mUnfencedHazards;
-        size_t mUnfencedBytes;
+        size_t     mUnfencedBytes;
         //------------------------------------
         // End used for uploads
         //------------------------------------
@@ -102,14 +99,14 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        void* mapImpl( size_t sizeBytes ) override;
-        void unmapImpl( const Destination *destinations, size_t numDestinations ) override;
+        void *mapImpl( size_t sizeBytes ) override;
+        void  unmapImpl( const Destination *destinations, size_t numDestinations ) override;
 
-        const void* _mapForReadImpl( size_t offset, size_t sizeBytes ) override;
+        const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
     public:
-        GL3PlusStagingBuffer( size_t internalBufferStart, size_t sizeBytes,
-                              VaoManager *vaoManager, bool uploadOnly, GLuint vboName );
+        GL3PlusStagingBuffer( size_t internalBufferStart, size_t sizeBytes, VaoManager *vaoManager,
+                              bool uploadOnly, GLuint vboName );
         ~GL3PlusStagingBuffer() override;
 
         StagingStallType uploadWillStall( size_t sizeBytes ) override;
@@ -118,8 +115,8 @@ namespace Ogre
 
         size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
 
-        GLuint getBufferName() const           { return mVboName; }
+        GLuint getBufferName() const { return mVboName; }
     };
-}
+}  // namespace Ogre
 
 #endif

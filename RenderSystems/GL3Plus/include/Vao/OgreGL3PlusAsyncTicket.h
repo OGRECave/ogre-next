@@ -38,17 +38,17 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusAsyncTicket : public AsyncTicket
     {
     protected:
-        GLsync  mFenceName;
+        GLsync mFenceName;
 
-        const void* mapImpl() override;
+        const void *mapImpl() override;
 
     public:
-        GL3PlusAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                            size_t elementStart, size_t elementCount );
+        GL3PlusAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer, size_t elementStart,
+                            size_t elementCount );
         ~GL3PlusAsyncTicket() override;
 
         bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

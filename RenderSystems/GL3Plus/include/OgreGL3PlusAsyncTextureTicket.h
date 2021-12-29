@@ -30,47 +30,48 @@ THE SOFTWARE.
 #define _OgreGL3PlusAsyncTextureTicket_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreAsyncTextureTicket.h"
+
 #include "OgreTextureBox.h"
 
 namespace Ogre
 {
     /** See AsyncTextureTicket
-    */
+     */
     class _OgreGL3PlusExport GL3PlusAsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
-        GLuint      mVboName;
+        GLuint mVboName;
         /// In case GL_ARB_get_texture_sub_image / GL 4.5 is not available and
         /// user requested to only download a subregion of the texture.
-        GLuint      mTmpVboName;
-        TextureBox  mSubregion;
+        GLuint     mTmpVboName;
+        TextureBox mSubregion;
 
-        uint32      mDownloadFrame;
-        GLsync      mAccurateFence;
-        GL3PlusVaoManager   *mVaoManager;
-        bool                mSupportsGetTextureSubImage;
+        uint32             mDownloadFrame;
+        GLsync             mAccurateFence;
+        GL3PlusVaoManager *mVaoManager;
+        bool               mSupportsGetTextureSubImage;
 
         GLuint createBuffer( uint32 width, uint32 height, uint32 depthOrSlices );
 
         TextureBox mapImpl( uint32 slice ) override;
-        void unmapImpl() override;
+        void       unmapImpl() override;
 
         void waitForDownloadToFinish();
 
-        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
-                                      bool accurateTracking, TextureBox *srcBox=0 ) override;
+        void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel, bool accurateTracking,
+                              TextureBox *srcBox = 0 ) override;
 
     public:
         GL3PlusAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                    TextureTypes::TextureTypes textureType,
-                                   PixelFormatGpu pixelFormatFamily,
-                                   GL3PlusVaoManager *vaoManager,
+                                   PixelFormatGpu pixelFormatFamily, GL3PlusVaoManager *vaoManager,
                                    bool supportsGetTextureSubImage );
         ~GL3PlusAsyncTextureTicket() override;
 
         bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

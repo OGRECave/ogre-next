@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_GL3PlusConstBufferPacked_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "Vao/OgreConstBufferPacked.h"
 
 namespace Ogre
@@ -52,6 +53,6 @@ namespace Ogre
         void bindBufferDS( uint16 slot ) override;
         void bindBufferCS( uint16 slot ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

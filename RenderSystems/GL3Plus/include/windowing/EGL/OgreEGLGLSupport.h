@@ -37,7 +37,7 @@ namespace Ogre
 {
     class _OgrePrivate EGLGLSupport : public GL3PlusSupport
     {
-        FastArray<String> mDeviceNames;
+        FastArray<String>       mDeviceNames;
         FastArray<EGLDeviceEXT> mDevices;
 
         EGLDisplay mEglDisplay;

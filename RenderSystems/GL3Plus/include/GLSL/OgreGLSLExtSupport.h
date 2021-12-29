@@ -26,8 +26,6 @@
   -----------------------------------------------------------------------------
 */
 
-
-
 #ifndef __GLSLExtSupport_H__
 #define __GLSLExtSupport_H__
 
@@ -38,7 +36,7 @@
 //
 namespace Ogre
 {
-    //TODO Get rid of any unneeded forward declarations.
+    // TODO Get rid of any unneeded forward declarations.
     // forward declarations
     class GLSLShader;
     class GLSLMonolithicProgram;
@@ -49,8 +47,8 @@ namespace Ogre
         @param msg The info log message string is appended to this string
         @param obj The GL object that is used to retrieve the info log
     */
-    String logObjectInfo(const String& msg, const GLuint obj);
+    String logObjectInfo( const String &msg, const GLuint obj );
 
-} // namespace Ogre
+}  // namespace Ogre
 
-#endif // __GLSLExtSupport_H__
+#endif  // __GLSLExtSupport_H__

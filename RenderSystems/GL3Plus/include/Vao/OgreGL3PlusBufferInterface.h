@@ -41,11 +41,11 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusBufferInterface : public BufferInterface
     {
     protected:
-        size_t  mVboPoolIdx;
-        GLuint  mVboName;
-        void    *mMappedPtr;
+        size_t mVboPoolIdx;
+        GLuint mVboName;
+        void * mMappedPtr;
 
-        size_t  mUnmapTicket;
+        size_t                mUnmapTicket;
         GL3PlusDynamicBuffer *mDynamicBuffer;
 
         /** @see BufferPacked::map.
@@ -60,21 +60,21 @@ namespace Ogre
         size_t advanceFrame( bool bAdvanceFrame );
 
     public:
-        GL3PlusBufferInterface( size_t vboPoolIdx, GLuint vboName,
-                                GL3PlusDynamicBuffer *dynamicBuffer );
+        GL3PlusBufferInterface( size_t vboPoolIdx, GLuint vboName, GL3PlusDynamicBuffer *dynamicBuffer );
         ~GL3PlusBufferInterface() override;
 
-        size_t getVboPoolIndex()                { return mVboPoolIdx; }
-        GLuint getVboName() const               { return mVboName; }
+        size_t getVboPoolIndex() { return mVboPoolIdx; }
+        GLuint getVboName() const { return mVboName; }
 
-        void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }
+        void _setVboPoolIndex( size_t newVboPool ) { mVboPoolIdx = newVboPool; }
 
         /// Only use this function for the first upload
         void _firstUpload( void *data, size_t elementStart, size_t elementCount );
 
         void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
                                          MappingState prevMappingState,
-                                         bool advanceFrame = true ) override;
+                                         bool         advanceFrame = true ) override;
+
         void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
                     size_t flushSizeElem = 0 ) override;
         void advanceFrame() override;
@@ -83,6 +83,6 @@ namespace Ogre
         void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
                      size_t sizeBytes ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

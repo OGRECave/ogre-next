@@ -44,12 +44,12 @@ namespace Ogre
     public:
         struct DeviceData
         {
-            String name;
+            String                       name;
             FastArray<SampleDescription> fsaa;
 
-            EGLDisplay eglDisplay;
-            EGLConfig eglCfg;
-            EGLSurface eglSurf;
+            EGLDisplay   eglDisplay;
+            EGLConfig    eglCfg;
+            EGLSurface   eglSurf;
             ::EGLContext eglCtx;
 
             DeviceData() : eglDisplay( 0 ), eglCfg( 0 ), eglSurf( 0 ), eglCtx( 0 ) {}
@@ -58,7 +58,7 @@ namespace Ogre
         };
 
     protected:
-        FastArray<DeviceData> mDeviceData;
+        FastArray<DeviceData>   mDeviceData;
         FastArray<EGLDeviceEXT> mDevices;
 
         /**

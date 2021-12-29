@@ -37,8 +37,8 @@ namespace Ogre
 {
     class _OgreGL3PlusExport GL3PlusTextureGpuWindow final : public GL3PlusTextureGpuRenderTarget
     {
-        GL3PlusContext  *mContext;
-        Window          *mWindow;
+        GL3PlusContext *mContext;
+        Window *        mWindow;
 
         void createInternalResourcesImpl() override;
         void destroyInternalResourcesImpl() override;
@@ -47,8 +47,8 @@ namespace Ogre
         GL3PlusTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                  VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                  TextureTypes::TextureTypes initialType,
-                                 TextureGpuManager *textureManager,
-                                 GL3PlusContext *context, Window *window );
+                                 TextureGpuManager *textureManager, GL3PlusContext *context,
+                                 Window *window );
         ~GL3PlusTextureGpuWindow() override;
 
         void setTextureType( TextureTypes::TextureTypes textureType ) override;
@@ -71,7 +71,7 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusTextureGpuHeadlessWindow final : public GL3PlusTextureGpuRenderTarget
     {
         GL3PlusContext *mContext;
-        Window *mWindow;
+        Window *        mWindow;
 
     public:
         GL3PlusTextureGpuHeadlessWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -91,7 +91,7 @@ namespace Ogre
 
         void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

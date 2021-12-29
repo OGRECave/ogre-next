@@ -72,7 +72,7 @@ namespace Ogre
         EglPBufferSupport *mGLSupport;
         EglPBufferContext *mContext;
 
-        EGLConfig mEglConfig;
+        EGLConfig  mEglConfig;
         EGLSurface mEglSurface;
 
         void create( const NameValuePairList *miscParams );

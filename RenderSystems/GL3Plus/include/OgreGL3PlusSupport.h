@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define __GL3PlusSupport_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreConfigOptionMap.h"
 #include "OgreRenderSystemCapabilities.h"
 
@@ -39,133 +40,112 @@ namespace Ogre
 
     class _OgreGL3PlusExport GL3PlusSupport
     {
-        public:
-            GL3PlusSupport() { }
-            virtual ~GL3PlusSupport() { }
+    public:
+        GL3PlusSupport() {}
+        virtual ~GL3PlusSupport() {}
 
-            /**
-            * Add any special config values to the system.
-            * Must have a "Full Screen" value that is a bool and a "Video Mode" value
-            * that is a string in the form of wxh
-            */
-            virtual void addConfig() = 0;
-            virtual void setConfigOption(const String &name, const String &value);
+        /**
+         * Add any special config values to the system.
+         * Must have a "Full Screen" value that is a bool and a "Video Mode" value
+         * that is a string in the form of wxh
+         */
+        virtual void addConfig() = 0;
+        virtual void setConfigOption( const String &name, const String &value );
 
-            virtual const char* getPriorityConfigOption( size_t idx ) const;
+        virtual const char *getPriorityConfigOption( size_t idx ) const;
 
-            virtual size_t getNumPriorityConfigOptions() const;
+        virtual size_t getNumPriorityConfigOptions() const;
 
-           /**
-            * Make sure all the extra options are valid
-            * @return string with error message
-            */
-            virtual String validateConfig() = 0;
-            virtual ConfigOptionMap& getConfigOptions();
-            virtual Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
-                                          const String& windowTitle ) = 0;
+        /**
+         * Make sure all the extra options are valid
+         * @return string with error message
+         */
+        virtual String           validateConfig() = 0;
+        virtual ConfigOptionMap &getConfigOptions();
+        virtual Window *         createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+                                               const String &windowTitle ) = 0;
 
-            /// @copydoc RenderSystem::_createRenderWindow
-            virtual Window* newWindow( const String &name, uint32 width, uint32 height,
-                                       bool fullScreen, const NameValuePairList *miscParams = 0 ) = 0;
+        /// @copydoc RenderSystem::_createRenderWindow
+        virtual Window *newWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
+                                   const NameValuePairList *miscParams = 0 ) = 0;
 
-            /**
-            * Get vendor information
-            */
-            const String& getGLVendor() const
-            {
-                return mVendor;
-            }
+        /**
+         * Get vendor information
+         */
+        const String &getGLVendor() const { return mVendor; }
 
-            /**
-            * Get version information
-            */
-            const DriverVersion& getGLVersion() const
-            {
-                return mVersion;
-            }
+        /**
+         * Get version information
+         */
+        const DriverVersion &getGLVersion() const { return mVersion; }
 
-            /**
-            * Get shader cache path
-            */
-            const String& getShaderCachePath() const
-            {
-                return mShaderCachePath;
-            }
+        /**
+         * Get shader cache path
+         */
+        const String &getShaderCachePath() const { return mShaderCachePath; }
 
-            /**
-            * Get shader library path
-            */
-            const String& getShaderLibraryPath() const
-            {
-                return mShaderLibraryPath;
-            }
+        /**
+         * Get shader library path
+         */
+        const String &getShaderLibraryPath() const { return mShaderLibraryPath; }
 
-            /**
-            * Set shader cache path
-            */
-            void setShaderCachePath(String path)
-            {
-                mShaderCachePath = path;
-            }
+        /**
+         * Set shader cache path
+         */
+        void setShaderCachePath( String path ) { mShaderCachePath = path; }
 
-            /**
-            * Set shader library path
-            */
-            void setShaderLibraryPath(String path)
-            {
-                mShaderLibraryPath = path;
-            }
+        /**
+         * Set shader library path
+         */
+        void setShaderLibraryPath( String path ) { mShaderLibraryPath = path; }
 
-            /**
-            * Check if GL Version is supported
-            */
-            bool hasMinGLVersion(int major, int minor) const;
+        /**
+         * Check if GL Version is supported
+         */
+        bool hasMinGLVersion( int major, int minor ) const;
 
-            /**
-            * Get the address of a function
-            */
-            virtual void *getProcAddress(const char* procname) const = 0;
+        /**
+         * Get the address of a function
+         */
+        virtual void *getProcAddress( const char *procname ) const = 0;
 
-            /** Initialises GL extensions, must be done AFTER the GL context has been
-               established.
-            */
-            virtual void initialiseExtensions();
+        /** Initialises GL extensions, must be done AFTER the GL context has been
+           established.
+        */
+        virtual void initialiseExtensions();
 
-            /**
-            * Check if an extension is available
-            */
-            virtual bool checkExtension(const String& ext) const;
+        /**
+         * Check if an extension is available
+         */
+        virtual bool checkExtension( const String &ext ) const;
 
-            /// @copydoc RenderSystem::getDisplayMonitorCount
-            virtual unsigned int getDisplayMonitorCount() const
-            {
-                return 1;
-            }
+        /// @copydoc RenderSystem::getDisplayMonitorCount
+        virtual unsigned int getDisplayMonitorCount() const { return 1; }
 
-            /**
-            * Start anything special
-            */
-            virtual void start() = 0;
-            /**
-            * Stop anything special
-            */
-            virtual void stop() = 0;
+        /**
+         * Start anything special
+         */
+        virtual void start() = 0;
+        /**
+         * Stop anything special
+         */
+        virtual void stop() = 0;
 
-        private:
-            DriverVersion mVersion;
+    private:
+        DriverVersion mVersion;
 
-            String mVendor;
-            String mShaderCachePath;
-            String mShaderLibraryPath;
+        String mVendor;
+        String mShaderCachePath;
+        String mShaderLibraryPath;
 
-        protected:
-            // Stored options
-            ConfigOptionMap mOptions;
+    protected:
+        // Stored options
+        ConfigOptionMap mOptions;
 
-            // This contains the complete list of supported extensions
-            set<String>::type extensionList;
+        // This contains the complete list of supported extensions
+        set<String>::type extensionList;
     };
 
-}
+}  // namespace Ogre
 
 #endif

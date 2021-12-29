@@ -29,10 +29,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define __GL3PlusOldVertexArrayObject_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreHardwareVertexBuffer.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Specialisation of VertexDeclaration for OpenGL Vertex Array Object usage */
     class GL3PlusOldVertexArrayObject
     {
@@ -48,9 +49,9 @@ namespace Ogre {
         /// Bind a VAO
         void bind();
         bool isInitialised() { return mInitialised; }
-        void setInitialised(bool flag) { mInitialised = flag; }
+        void setInitialised( bool flag ) { mInitialised = flag; }
     };
 
-}
+}  // namespace Ogre
 
 #endif

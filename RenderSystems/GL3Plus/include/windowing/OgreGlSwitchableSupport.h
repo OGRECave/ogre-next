@@ -42,7 +42,7 @@ namespace Ogre
 
         struct Interface
         {
-            InterfaceType type;
+            InterfaceType   type;
             GL3PlusSupport *support;
 
             Interface( InterfaceType _type, GL3PlusSupport *_support ) :
@@ -52,8 +52,8 @@ namespace Ogre
             }
         };
 
-        uint8 mSelectedInterface;
-        bool mInterfaceSelected;
+        uint8                mSelectedInterface;
+        bool                 mInterfaceSelected;
         FastArray<Interface> mAvailableInterfaces;
 
         static const char *getInterfaceName( InterfaceType interface );
@@ -77,7 +77,7 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value );
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
-        virtual const char* getPriorityConfigOption( size_t idx ) const;
+        virtual const char *getPriorityConfigOption( size_t idx ) const;
 
         /// @copydoc see RenderSystem::getPriorityConfigOption
         virtual size_t getNumPriorityConfigOptions() const;

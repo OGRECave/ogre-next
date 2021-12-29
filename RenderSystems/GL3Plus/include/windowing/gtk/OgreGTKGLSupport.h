@@ -31,84 +31,84 @@ THE SOFTWARE.
 
 #include "OgreGL3PlusSupport.h"
 
-#include <gtkmm/main.h>
 #include <gtkglmm.h>
+#include <gtkmm/main.h>
 
-namespace Ogre {
-
-class OGREWidget;
-
-/**
- * GL support in a GTK window.
- *
- * I made this a Singleton, so that the main context can be queried by
- * GTKWindows.
- */
-class GTKGLSupport : public GL3PlusSupport, public Singleton<GTKGLSupport>
+namespace Ogre
 {
-public:
-    GTKGLSupport();
-    void addConfig();
-    void setConfigOptions(const String& name, const String& value);
-    String validateConfig();
-    RenderWindow* createWindow(bool autoCreateWindow, 
-                               GL3PlusRenderSystem* renderSystem, const String& windowTitle);
-    RenderWindow* newWindow(const String& name, unsigned int width, unsigned int height, 
-                            unsigned int colourDepth, bool fullScreen, int left, int top,
-                            bool depthBuffer, RenderWindow* parentWindowHandle,
-                            bool vsync);
-    void start();
-    void stop();
-    void begin_context(RenderTarget *_target = 0);
-    void end_context();
-    void initialiseExtensions();
-    bool checkMinGLVersion(const String& v) const;
-    bool checkExtension(const String& ext) const;
-    void* getProcAddress(const char* procname) const;
+    class OGREWidget;
 
-    Glib::RefPtr<const Gdk::GL::Context> getMainContext() const; 
+    /**
+     * GL support in a GTK window.
+     *
+     * I made this a Singleton, so that the main context can be queried by
+     * GTKWindows.
+     */
+    class GTKGLSupport : public GL3PlusSupport, public Singleton<GTKGLSupport>
+    {
+    public:
+        GTKGLSupport();
+        void          addConfig();
+        void          setConfigOptions( const String &name, const String &value );
+        String        validateConfig();
+        RenderWindow *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+                                    const String &windowTitle );
+        RenderWindow *newWindow( const String &name, unsigned int width, unsigned int height,
+                                 unsigned int colourDepth, bool fullScreen, int left, int top,
+                                 bool depthBuffer, RenderWindow *parentWindowHandle, bool vsync );
+        void          start();
+        void          stop();
+        void          begin_context( RenderTarget *_target = 0 );
+        void          end_context();
+        void          initialiseExtensions();
+        bool          checkMinGLVersion( const String &v ) const;
+        bool          checkExtension( const String &ext ) const;
+        void *        getProcAddress( const char *procname ) const;
 
-    /** Override standard Singleton retrieval.
-    @remarks
-    Why do we do this? Well, it's because the Singleton
-    implementation is in a .h file, which means it gets compiled
-    into anybody who includes it. This is needed for the
-    Singleton template to work, but we actually only want it
-    compiled into the implementation of the class based on the
-    Singleton, not all of them. If we don't change this, we get
-    link errors when trying to use the Singleton-based class from
-    an outside dll.
-    @par
-    This method just delegates to the template version anyway,
-    but the implementation stays in this single compilation unit,
-    preventing link errors.
-    */
-    static GTKGLSupport& getSingleton();
-    /** Override standard Singleton retrieval.
-    @remarks
-    Why do we do this? Well, it's because the Singleton
-    implementation is in a .h file, which means it gets compiled
-    into anybody who includes it. This is needed for the
-    Singleton template to work, but we actually only want it
-    compiled into the implementation of the class based on the
-    Singleton, not all of them. If we don't change this, we get
-    link errors when trying to use the Singleton-based class from
-    an outside dll.
-    @par
-    This method just delegates to the template version anyway,
-    but the implementation stays in this single compilation unit,
-    preventing link errors.
-    */
-    static GTKGLSupport* getSingletonPtr();
-private:
-    int _context_ref;
-    Gtk::Main _kit;
-    //OGREWidget* _ogre_widget;
+        Glib::RefPtr<const Gdk::GL::Context> getMainContext() const;
 
-    Glib::RefPtr<Gdk::GL::Context> _main_context;
-    Glib::RefPtr<Gdk::GL::Window> _main_window;
-}; // class GTKGLSupport
+        /** Override standard Singleton retrieval.
+        @remarks
+        Why do we do this? Well, it's because the Singleton
+        implementation is in a .h file, which means it gets compiled
+        into anybody who includes it. This is needed for the
+        Singleton template to work, but we actually only want it
+        compiled into the implementation of the class based on the
+        Singleton, not all of them. If we don't change this, we get
+        link errors when trying to use the Singleton-based class from
+        an outside dll.
+        @par
+        This method just delegates to the template version anyway,
+        but the implementation stays in this single compilation unit,
+        preventing link errors.
+        */
+        static GTKGLSupport &getSingleton();
+        /** Override standard Singleton retrieval.
+        @remarks
+        Why do we do this? Well, it's because the Singleton
+        implementation is in a .h file, which means it gets compiled
+        into anybody who includes it. This is needed for the
+        Singleton template to work, but we actually only want it
+        compiled into the implementation of the class based on the
+        Singleton, not all of them. If we don't change this, we get
+        link errors when trying to use the Singleton-based class from
+        an outside dll.
+        @par
+        This method just delegates to the template version anyway,
+        but the implementation stays in this single compilation unit,
+        preventing link errors.
+        */
+        static GTKGLSupport *getSingletonPtr();
 
-}; // namespace Ogre
+    private:
+        int       _context_ref;
+        Gtk::Main _kit;
+        // OGREWidget* _ogre_widget;
 
-#endif // INCL_OGRE_GTKGLSUPPORT_H
+        Glib::RefPtr<Gdk::GL::Context> _main_context;
+        Glib::RefPtr<Gdk::GL::Window>  _main_window;
+    };  // class GTKGLSupport
+
+};  // namespace Ogre
+
+#endif  // INCL_OGRE_GTKGLSUPPORT_H

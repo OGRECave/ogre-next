@@ -31,47 +31,48 @@ THE SOFTWARE.
 
 #include "OgreGL3PlusPrerequisites.h"
 
-namespace Ogre {
+namespace Ogre
+{
     /**
-     * Class that encapsulates an GL context. (IE a window/pbuffer). This is a 
+     * Class that encapsulates an GL context. (IE a window/pbuffer). This is a
      * virtual base class which should be implemented in a GL3PlusSupport.
      * This object can also be used to cache renderstate if we decide to do so
      * in the future.
      */
     class _OgreGL3PlusExport GL3PlusContext
     {
-        public:
-            GL3PlusContext();
-            virtual ~GL3PlusContext();
-
-            /**
-             * Enable the context. All subsequent rendering commands will go here.
-             */
-            virtual void setCurrent() = 0;
-
-            /**
-             * This is called before another context is made current. By default,
-             * nothing is done here.
-             */
-            virtual void endCurrent() = 0;
-
-            bool getInitialized() { return initialized; };
-            void setInitialized() { initialized = true; };
-
-            /** Create a new context based on the same window/pbuffer as this
-                context - mostly useful for additional threads.
-            @note The caller is responsible for deleting the returned context.
-            */
-            virtual GL3PlusContext* clone() const = 0;
+    public:
+        GL3PlusContext();
+        virtual ~GL3PlusContext();
 
         /**
-        * Release the render context.
+         * Enable the context. All subsequent rendering commands will go here.
+         */
+        virtual void setCurrent() = 0;
+
+        /**
+         * This is called before another context is made current. By default,
+         * nothing is done here.
+         */
+        virtual void endCurrent() = 0;
+
+        bool getInitialized() { return initialized; };
+        void setInitialized() { initialized = true; };
+
+        /** Create a new context based on the same window/pbuffer as this
+            context - mostly useful for additional threads.
+        @note The caller is responsible for deleting the returned context.
         */
+        virtual GL3PlusContext *clone() const = 0;
+
+        /**
+         * Release the render context.
+         */
         virtual void releaseContext() {}
 
-        protected:
-            bool initialized;
+    protected:
+        bool initialized;
     };
-}
+}  // namespace Ogre
 
 #endif

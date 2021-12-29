@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGL3PlusTextureGpu_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
@@ -46,8 +47,8 @@ namespace Ogre
         ///     * A 4x4 dummy texture (now owned by us).
         ///     * A 64x64 mipmapped texture of us (but now owned by us).
         ///     * A GL texture not owned by us, but contains the final information.
-        GLuint  mDisplayTextureName;
-        GLenum  mGlTextureTarget;
+        GLuint mDisplayTextureName;
+        GLenum mGlTextureTarget;
 
         /// When we're transitioning to GpuResidency::Resident but we're not there yet,
         /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
@@ -60,10 +61,10 @@ namespace Ogre
         ///     3. An msaa texture (hasMsaaExplicitResolves == true)
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
         /// This value may be a renderbuffer instead of a texture if isRenderbuffer() returns true.
-        GLuint  mFinalTextureName;
+        GLuint mFinalTextureName;
         /// Only used when hasMsaaExplicitResolves() == false.
         /// This value is always an FBO.
-        GLuint  mMsaaFramebufferName;
+        GLuint mMsaaFramebufferName;
 
         void createInternalResourcesImpl() override;
         void destroyInternalResourcesImpl() override;
@@ -109,7 +110,7 @@ namespace Ogre
         /// Once notifyDataIsReady, getDisplayTextureName should be the same as
         /// getFinalTextureName. In other words, getDisplayTextureName may change its
         /// returned value based on the texture's status
-        GLuint getDisplayTextureName() const    { return mDisplayTextureName; }
+        GLuint getDisplayTextureName() const { return mDisplayTextureName; }
 
         /// Always returns the internal handle that belongs to this texture.
         /// Note that for TextureFlags::AutomaticBatching textures, this will be the
@@ -120,17 +121,17 @@ namespace Ogre
         ///
         /// If TextureFlags::MsaaExplicitResolve is set, it returns the handle
         /// to the MSAA texture, since there is no resolve texture.
-        GLuint getFinalTextureName() const      { return mFinalTextureName; }
+        GLuint getFinalTextureName() const { return mFinalTextureName; }
 
         /// If MSAA > 1u and TextureFlags::MsaaExplicitResolve is not set, this
         /// returns the handle to the temporary MSAA renderbuffer used for rendering,
         /// which will later be resolved into the resolve texture.
         ///
         /// Otherwise it returns null.
-        GLuint getMsaaFramebufferName() const   { return mMsaaFramebufferName; }
+        GLuint getMsaaFramebufferName() const { return mMsaaFramebufferName; }
 
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
-        GLenum getGlTextureTarget() const       { return mGlTextureTarget; }
+        GLenum getGlTextureTarget() const { return mGlTextureTarget; }
 
         void getCustomAttribute( IdString name, void *pData ) override;
     };
@@ -138,9 +139,9 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusTextureGpuRenderTarget : public GL3PlusTextureGpu
     {
     protected:
-        uint16          mDepthBufferPoolId;
-        bool            mPreferDepthTexture;
-        PixelFormatGpu  mDesiredDepthBufferFormat;
+        uint16         mDepthBufferPoolId;
+        bool           mPreferDepthTexture;
+        PixelFormatGpu mDesiredDepthBufferFormat;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         OrientationMode mOrientationMode;
 #endif
@@ -151,13 +152,13 @@ namespace Ogre
         GL3PlusTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                        VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                        TextureTypes::TextureTypes initialType,
-                                       TextureGpuManager *textureManager );
+                                       TextureGpuManager *        textureManager );
         ~GL3PlusTextureGpuRenderTarget() override;
 
-        void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat ) override;
-        uint16 getDepthBufferPoolId() const override;
-        bool getPreferDepthTexture() const override;
+        void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16         getDepthBufferPoolId() const override;
+        bool           getPreferDepthTexture() const override;
         PixelFormatGpu getDesiredDepthBufferFormat() const override;
 
         void setOrientationMode( OrientationMode orientationMode ) override;
@@ -165,7 +166,7 @@ namespace Ogre
         OrientationMode getOrientationMode() const override;
 #endif
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreGL3PlusRenderPassDescriptor_H_
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreRenderPassDescriptor.h"
 
 #include "OgreHeaderPrefix.h"
@@ -37,16 +38,16 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     struct GL3PlusFrameBufferDescValue
     {
-        GLuint  fboName;
-        uint16  refCount;
+        GLuint fboName;
+        uint16 refCount;
         GL3PlusFrameBufferDescValue();
     };
 
@@ -59,12 +60,12 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
-        GLuint  mFboName;
-        GLuint  mFboMsaaResolve;
-        bool    mAllClearColoursSetAndIdentical;
-        bool    mAnyColourLoadActionsSetToClear;
-        bool    mHasRenderWindow;
-        bool    mHasSRGB;
+        GLuint mFboName;
+        GLuint mFboMsaaResolve;
+        bool   mAllClearColoursSetAndIdentical;
+        bool   mAnyColourLoadActionsSetToClear;
+        bool   mHasRenderWindow;
+        bool   mHasSRGB;
 
         GL3PlusFrameBufferDescMap::iterator mSharedFboItor;
 
@@ -91,7 +92,7 @@ namespace Ogre
         GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
         ~GL3PlusRenderPassDescriptor() override;
 
-        GLuint getFboName() const       { return mFboName; }
+        GLuint getFboName() const { return mFboName; }
 
         void entriesModified( uint32 entryTypes ) override;
 
@@ -107,7 +108,7 @@ namespace Ogre
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

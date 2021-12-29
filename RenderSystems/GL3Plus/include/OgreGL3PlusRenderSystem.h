@@ -31,15 +31,16 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreGL3PlusPrerequisites.h"
 
-#include "OgreMaterialManager.h"
-#include "OgreRenderSystem.h"
-#include "OgreHlmsSamplerblock.h"
 #include "OgreDescriptorSetUav.h"
-#include "OgreGLSLShader.h"
 #include "OgreGL3PlusPixelFormatToShaderType.h"
 #include "OgreGL3PlusRenderPassDescriptor.h"
+#include "OgreGLSLShader.h"
+#include "OgreHlmsSamplerblock.h"
+#include "OgreMaterialManager.h"
+#include "OgreRenderSystem.h"
 
-namespace Ogre {
+namespace Ogre
+{
     class GL3PlusContext;
     class GL3PlusSupport;
     class GLSLShaderManager;
@@ -111,25 +112,25 @@ namespace Ogre {
         /* The current GL context  - main thread only */
         GL3PlusContext *mCurrentContext;
 
-        typedef list<GL3PlusContext*>::type GL3PlusContextList;
+        typedef list<GL3PlusContext *>::type GL3PlusContextList;
         /// List of background thread contexts
         GL3PlusContextList mBackgroundContextList;
 
         /// For rendering legacy objects.
-        GLuint  mGlobalVao;
-        v1::VertexData  *mCurrentVertexBuffer;
-        v1::IndexData   *mCurrentIndexBuffer;
+        GLuint          mGlobalVao;
+        v1::VertexData *mCurrentVertexBuffer;
+        v1::IndexData * mCurrentIndexBuffer;
         GLenum          mCurrentPolygonMode;
 
-        GLSLShaderManager *mShaderManager;
-        GLSLShaderFactory* mGLSLShaderFactory;
-        v1::HardwareBufferManager* mHardwareBufferManager;
+        GLSLShaderManager *        mShaderManager;
+        GLSLShaderFactory *        mGLSLShaderFactory;
+        v1::HardwareBufferManager *mHardwareBufferManager;
 
         /** These variables are used for caching RenderSystem state.
             They are cached because OpenGL state changes can be quite expensive,
             which is especially important on mobile or embedded systems.
         */
-        GLenum mActiveTextureUnit;
+        GLenum        mActiveTextureUnit;
         BindBufferMap mActiveBufferMap;
 
         /// Check if the GL system has already been initialised
@@ -148,15 +149,15 @@ namespace Ogre {
 
         GLint getCombinedMinMipFilter() const;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		/// @copydoc RenderSystem::setDrawBuffer
-        bool setDrawBuffer(ColourBufferType colourBuffer) override;
+        /// @copydoc RenderSystem::setDrawBuffer
+        bool setDrawBuffer( ColourBufferType colourBuffer ) override;
 #endif
 
         /// @copydoc RenderSystem::checkExtension
         bool checkExtension( const String &ext ) const override;
 
         /// @copydoc RenderSystem::getPixelFormatToShaderType
-        const PixelFormatToShaderType* getPixelFormatToShaderType() const override;
+        const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
 
         void _clearStateAndFlushCommandBuffer() override;
 
@@ -164,30 +165,28 @@ namespace Ogre {
 
         unsigned char *mSwIndirectBufferPtr;
 
-        uint8   mFirstUavBoundSlot;
-        uint8   mLastUavBoundPlusOne;
+        uint8 mFirstUavBoundSlot;
+        uint8 mLastUavBoundPlusOne;
 
-        uint8                   mClipDistances;
-        GL3PlusHlmsPso const    *mPso;
-        GLSLShader *mCurrentComputeShader;
+        uint8                 mClipDistances;
+        GL3PlusHlmsPso const *mPso;
+        GLSLShader *          mCurrentComputeShader;
 
-        GLuint  mNullColourFramebuffer;
+        GLuint mNullColourFramebuffer;
 
         GL3PlusPixelFormatToShaderType mPixelFormatToShaderType;
 
         GL3PlusFrameBufferDescMap mFrameBufferDescMap;
 
-        GLint getTextureAddressingMode(TextureAddressingMode tam) const;
-        static GLenum getBlendMode(SceneBlendFactor ogreBlend);
+        GLint         getTextureAddressingMode( TextureAddressingMode tam ) const;
+        static GLenum getBlendMode( SceneBlendFactor ogreBlend );
         static GLenum getBlendOperation( SceneBlendOperation op );
 
-        bool activateGLTextureUnit(size_t unit);
-        void bindVertexElementToGpu( const v1::VertexElement &elem,
+        bool activateGLTextureUnit( size_t unit );
+        void bindVertexElementToGpu( const v1::VertexElement &         elem,
                                      v1::HardwareVertexBufferSharedPtr vertexBuffer,
-                                     const size_t vertexStart,
-                                     vector<GLuint>::type &attribsBound,
-                                     vector<GLuint>::type &instanceAttribsBound,
-                                     bool updateVAO);
+                                     const size_t vertexStart, vector<GLuint>::type &attribsBound,
+                                     vector<GLuint>::type &instanceAttribsBound, bool updateVAO );
 
         void transformViewportCoords( int x, int &y, int width, int height );
 
@@ -204,21 +203,21 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        const String& getName() const override;
+        const String &getName() const override;
         /** See
             RenderSystem
         */
-            const String& getFriendlyName() const override;
+        const String &getFriendlyName() const override;
         /** See
             RenderSystem
         */
-        ConfigOptionMap& getConfigOptions() override;
+        ConfigOptionMap &getConfigOptions() override;
         /** See
             RenderSystem
         */
-        void setConfigOption(const String &name, const String &value) override;
+        void setConfigOption( const String &name, const String &value ) override;
 
-        const char* getPriorityConfigOption( size_t idx ) const override;
+        const char *getPriorityConfigOption( size_t idx ) const override;
 
         size_t getNumPriorityConfigOptions() const override;
 
@@ -229,20 +228,21 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        Window* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window" ) override;
+        Window *_initialise( bool          autoCreateWindow,
+                             const String &windowTitle = "OGRE Render Window" ) override;
         /** See
             RenderSystem
         */
-        RenderSystemCapabilities* createRenderSystemCapabilities() const override;
+        RenderSystemCapabilities *createRenderSystemCapabilities() const override;
         /** See
             RenderSystem
         */
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                     Window *primary ) override;
+                                                     Window *                  primary ) override;
         /** See
             RenderSystem
         */
-        void reinitialise() override; // Used if settings changed mid-rendering
+        void reinitialise() override;  // Used if settings changed mid-rendering
         /** See
             RenderSystem
         */
@@ -254,27 +254,24 @@ namespace Ogre {
 
         /// @copydoc RenderSystem::_createRenderWindows
         bool _createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
-                                   WindowList &createdWindows ) override;
+                                   WindowList &                       createdWindows ) override;
 
-        void _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
-        GL3PlusFrameBufferDescMap& _getFrameBufferDescMap() { return mFrameBufferDescMap; }
-        RenderPassDescriptor* createRenderPassDescriptor() override;
-        void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 *viewportSizes,
-                                                const Vector4 *scissors,
-                                                uint32 numViewports,
-                                                bool overlaysEnabled,
-                                                bool warnIfRtvWasFlushed ) override;
+        void                       _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
+        GL3PlusFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
+        RenderPassDescriptor *     createRenderPassDescriptor() override;
+        void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                        uint8 mipLevel, const Vector4 *viewportSizes,
+                                        const Vector4 *scissors, uint32 numViewports,
+                                        bool overlaysEnabled, bool warnIfRtvWasFlushed ) override;
         void endRenderPassDescriptor() override;
 
-        TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+        TextureGpu *createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                           PixelFormatGpu depthBufferFormat, uint16 poolId ) override;
 
         /** See
             RenderSystem
         */
-        String getErrorDescription(long errorNumber) const override;
+        String getErrorDescription( long errorNumber ) const override;
         /** See
             RenderSystem
         */
@@ -295,22 +292,23 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setWorldMatrix(const Matrix4 &m) override;
+        void _setWorldMatrix( const Matrix4 &m ) override;
         /** See
             RenderSystem
         */
-        void _setViewMatrix(const Matrix4 &m) override;
+        void _setViewMatrix( const Matrix4 &m ) override;
         /** See
             RenderSystem
         */
-        void _setProjectionMatrix(const Matrix4 &m) override;
+        void _setProjectionMatrix( const Matrix4 &m ) override;
         /** See
             RenderSystem
         */
-        void _setSurfaceParams(const ColourValue &ambient,
-                               const ColourValue &diffuse, const ColourValue &specular,
-                               const ColourValue &emissive, Real shininess,
-                               TrackVertexColourType tracking) override {}
+        void _setSurfaceParams( const ColourValue &ambient, const ColourValue &diffuse,
+                                const ColourValue &specular, const ColourValue &emissive, Real shininess,
+                                TrackVertexColourType tracking ) override
+        {
+        }
         /** See
             RenderSystem
         */
@@ -319,35 +317,36 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setPointSpritesEnabled(bool enabled) override;
+        void _setPointSpritesEnabled( bool enabled ) override;
         /** See
          RenderSystem
          */
-        void _setVertexTexture(size_t unit, TextureGpu *tex) override;
+        void _setVertexTexture( size_t unit, TextureGpu *tex ) override;
         /** See
          RenderSystem
          */
-        void _setGeometryTexture(size_t unit, TextureGpu *tex) override;
+        void _setGeometryTexture( size_t unit, TextureGpu *tex ) override;
         /** See
          RenderSystem
          */
-        void _setTessellationHullTexture(size_t unit, TextureGpu *tex) override;
+        void _setTessellationHullTexture( size_t unit, TextureGpu *tex ) override;
         /** See
          RenderSystem
          */
-        void _setTessellationDomainTexture(size_t unit, TextureGpu *tex) override;
+        void _setTessellationDomainTexture( size_t unit, TextureGpu *tex ) override;
         /** See
             RenderSystem
         */
         void _setTexture( size_t unit, TextureGpu *tex, bool bDepthReadOnly ) override;
         /// See RenderSystem
         void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
-                                   uint32 hazardousTexIdx ) override;
+                           uint32 hazardousTexIdx ) override;
         void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
         void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) override;
         void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) override;
         void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) override;
         void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) override;
+
     protected:
         void setBufferUavCS( uint32 slot, const DescriptorSetUav::BufferSlot &bufferSlot );
         void setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot,
@@ -358,16 +357,19 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setTextureCoordCalculation(size_t stage, TexCoordCalcMethod m,
-                                         const Frustum* frustum = 0) override { }   // Not supported
+        void _setTextureCoordCalculation( size_t stage, TexCoordCalcMethod m,
+                                          const Frustum *frustum = 0 ) override
+        {
+        }  // Not supported
         /** See
             RenderSystem
         */
-        void _setTextureBlendMode(size_t stage, const LayerBlendModeEx& bm) override { }   // Not supported
+        void _setTextureBlendMode( size_t stage, const LayerBlendModeEx &bm ) override {
+        }  // Not supported
         /** See
             RenderSystem
         */
-        void _setTextureMatrix(size_t stage, const Matrix4& xform) override { };   // Not supported
+        void _setTextureMatrix( size_t stage, const Matrix4 &xform ) override{};  // Not supported
 
         void flushUAVs();
 
@@ -406,24 +408,23 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setDepthBias(float constantBias, float slopeScaleBias);
-        void _makeRsProjectionMatrix( const Matrix4& matrix,
-                                              Matrix4& dest, Real nearPlane,
-                                              Real farPlane, ProjectionType projectionType ) override;
+        void _setDepthBias( float constantBias, float slopeScaleBias );
+        void _makeRsProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest, Real nearPlane,
+                                      Real farPlane, ProjectionType projectionType ) override;
         /** See
             RenderSystem
         */
-        void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest) override;
-        void _convertOpenVrProjectionMatrix(const Matrix4& matrix, Matrix4& dest) override;
+        void _convertProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) override;
+        void _convertOpenVrProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) override;
         Real getRSDepthRange() const override;
         /** See
             RenderSystem
         */
-        void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
+        void setClipPlane( ushort index, Real A, Real B, Real C, Real D );
         /** See
             RenderSystem
         */
-        void enableClipPlane (ushort index, bool enable);
+        void enableClipPlane( ushort index, bool enable );
         /** See
             RenderSystem.
         */
@@ -431,7 +432,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _render(const v1::RenderOperation& op) override;
+        void _render( const v1::RenderOperation &op ) override;
 
         void _dispatch( const HlmsComputePso &pso ) override;
 
@@ -450,25 +451,25 @@ namespace Ogre {
         void _renderNoBaseInstance( const v1::CbDrawCallIndexed *cmd ) override;
         void _renderNoBaseInstance( const v1::CbDrawCallStrip *cmd ) override;
 
-        void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                       TextureGpu *anyTarget, uint8 mipLevel ) override;
-        HardwareOcclusionQuery* createHardwareOcclusionQuery() override;
-        Real getHorizontalTexelOffset() override { return 0.0; }               // No offset in GL
-        Real getVerticalTexelOffset() override { return 0.0; }                 // No offset in GL
-        Real getMinimumDepthInputValue() override;
-        Real getMaximumDepthInputValue() override;
-        OGRE_MUTEX(mThreadInitMutex);
+        void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
+                               uint8 mipLevel ) override;
+        HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
+        Real                    getHorizontalTexelOffset() override { return 0.0; }  // No offset in GL
+        Real                    getVerticalTexelOffset() override { return 0.0; }    // No offset in GL
+        Real                    getMinimumDepthInputValue() override;
+        Real                    getMaximumDepthInputValue() override;
+        OGRE_MUTEX( mThreadInitMutex );
         void registerThread() override;
         void unregisterThread() override;
         void preExtraThreadsStarted() override;
         void postExtraThreadsStarted() override;
-        void setClipPlanesImpl(const Ogre::PlaneList& planeList) override;
+        void setClipPlanesImpl( const Ogre::PlaneList &planeList ) override;
 
         // ----------------------------------
         // GL3PlusRenderSystem specific members
         // ----------------------------------
         /** Returns the main context */
-        GL3PlusContext* _getMainContext() { return mMainContext; }
+        GL3PlusContext *_getMainContext() { return mMainContext; }
         /** Unregister a render target->context mapping. If the context of target
             is the current context, change the context to the main context so it
             can be destroyed safely.
@@ -476,38 +477,43 @@ namespace Ogre {
             @note This is automatically called by the destructor of
             GL3PlusContext.
         */
-        void _unregisterContext(GL3PlusContext *context);
+        void _unregisterContext( GL3PlusContext *context );
         /** Switch GL context, dealing with involved internal cached states too
          */
-        void _switchContext(GL3PlusContext *context);
+        void _switchContext( GL3PlusContext *context );
         /** One time initialization for the RenderState of a context. Things that
             only need to be set once, like the LightingModel can be defined here.
         */
         void _oneTimeContextInitialization();
         void initialiseContext( Window *primary );
 
-        GLint convertCompareFunction(CompareFunction func) const;
-        GLint convertStencilOp(StencilOperation op) const;
+        GLint convertCompareFunction( CompareFunction func ) const;
+        GLint convertStencilOp( StencilOperation op ) const;
 
         bool supportsTargetIndependentRasterization() const
         {
             return mSupportsTargetIndependentRasterization;
         }
 
-        const GL3PlusSupport* getGLSupport() const { return mGLSupport; }
+        const GL3PlusSupport *getGLSupport() const { return mGLSupport; }
 
-        void bindGpuProgramParameters(GpuProgramType gptype, GpuProgramParametersSharedPtr params, uint16 mask) override;
-        void bindGpuProgramPassIterationParameters(GpuProgramType gptype) override;
+        void bindGpuProgramParameters( GpuProgramType gptype, GpuProgramParametersSharedPtr params,
+                                       uint16 mask ) override;
+        void bindGpuProgramPassIterationParameters( GpuProgramType gptype ) override;
 
         /// @copydoc RenderSystem::_setSceneBlending
-        void _setSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor, SceneBlendOperation op );
+        void _setSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor,
+                                SceneBlendOperation op );
         /// @copydoc RenderSystem::_setSeparateSceneBlending
-        void _setSeparateSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor, SceneBlendFactor sourceFactorAlpha, SceneBlendFactor destFactorAlpha, SceneBlendOperation op, SceneBlendOperation alphaOp );
+        void _setSeparateSceneBlending( SceneBlendFactor sourceFactor, SceneBlendFactor destFactor,
+                                        SceneBlendFactor sourceFactorAlpha,
+                                        SceneBlendFactor destFactorAlpha, SceneBlendOperation op,
+                                        SceneBlendOperation alphaOp );
         /// @copydoc RenderSystem::getDisplayMonitorCount
         unsigned int getDisplayMonitorCount() const override;
 
-        void _setSceneBlendingOperation(SceneBlendOperation op);
-        void _setSeparateSceneBlendingOperation(SceneBlendOperation op, SceneBlendOperation alphaOp);
+        void _setSceneBlendingOperation( SceneBlendOperation op );
+        void _setSeparateSceneBlendingOperation( SceneBlendOperation op, SceneBlendOperation alphaOp );
         /// @copydoc RenderSystem::hasAnisotropicMipMapFilter
         bool hasAnisotropicMipMapFilter() const override { return false; }
 
@@ -528,6 +534,6 @@ namespace Ogre {
         void beginGPUSampleProfile( const String &name, uint32 *hashCache ) override;
         void endGPUSampleProfile( const String &name ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

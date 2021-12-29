@@ -30,45 +30,48 @@ THE SOFTWARE.
 #define __GL3PlusHardwareIndexBuffer_H__
 
 #include "OgreGL3PlusPrerequisites.h"
+
 #include "OgreHardwareIndexBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-    class _OgreGL3PlusExport GL3PlusHardwareIndexBuffer final : public HardwareIndexBuffer
+namespace Ogre
+{
+    namespace v1
     {
+        class _OgreGL3PlusExport GL3PlusHardwareIndexBuffer final : public HardwareIndexBuffer
+        {
         private:
             GLuint mBufferId;
             // Scratch buffer handling
-            bool mLockedToScratch;
+            bool   mLockedToScratch;
             size_t mScratchOffset;
             size_t mScratchSize;
-            void* mScratchPtr;
-            bool mScratchUploadOnUnlock;
+            void * mScratchPtr;
+            bool   mScratchUploadOnUnlock;
 
         protected:
             /** See HardwareBuffer. */
-            void* lockImpl(size_t offset, size_t length, LockOptions options) override;
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
             /** See HardwareBuffer. */
             void unlockImpl() override;
 
         public:
-            GL3PlusHardwareIndexBuffer(HardwareBufferManagerBase* mgr, IndexType idxType, size_t numIndexes,
-                                  HardwareBuffer::Usage usage,
-                                  bool useShadowBuffer);
+            GL3PlusHardwareIndexBuffer( HardwareBufferManagerBase *mgr, IndexType idxType,
+                                        size_t numIndexes, HardwareBuffer::Usage usage,
+                                        bool useShadowBuffer );
             ~GL3PlusHardwareIndexBuffer() override;
             /** See HardwareBuffer. */
-            void readData(size_t offset, size_t length, void* pDest) override;
+            void readData( size_t offset, size_t length, void *pDest ) override;
             /** See HardwareBuffer. */
-            void writeData(size_t offset, size_t length, 
-                const void* pSource, bool discardWholeBuffer = false) override;
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
             /** See HardwareBuffer. */
-            void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
-                  size_t dstOffset, size_t length, bool discardWholeBuffer = false) override;
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
             /** See HardwareBuffer. */
             void _updateFromShadow() override;
 
             GLuint getGLBufferId() const { return mBufferId; }
-    };
-}
-}
-#endif // __GL3PlusHARDWAREINDEXBUFFER_H__
+        };
+    }  // namespace v1
+}  // namespace Ogre
+#endif  // __GL3PlusHARDWAREINDEXBUFFER_H__

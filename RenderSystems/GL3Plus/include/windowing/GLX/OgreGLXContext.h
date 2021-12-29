@@ -53,12 +53,12 @@ namespace Ogre
         ::GLXFBConfig _getFbConfig() const { return mFBConfig; }
 
         ::GLXDrawable mDrawable;
-        ::GLXContext mContext;
+        ::GLXContext  mContext;
 
     private:
         ::GLXFBConfig mFBConfig;
         GLXGLSupport *mGLSupport;
-        bool mExternalContext;
+        bool          mExternalContext;
     };
 }  // namespace Ogre
 

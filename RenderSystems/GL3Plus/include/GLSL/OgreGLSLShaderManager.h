@@ -29,25 +29,27 @@
 #ifndef __GLSLShaderManager_H__
 #define __GLSLShaderManager_H__
 
-#include "OgreGpuProgramManager.h"
 #include "OgreGL3PlusPrerequisites.h"
 
-namespace Ogre {
+#include "OgreGpuProgramManager.h"
 
-    //TODO A brief description of what purpose this class serves in GL3+.
+namespace Ogre
+{
+    // TODO A brief description of what purpose this class serves in GL3+.
     // Seems to primarily serve the purpose of creating GpuProgram's based
     // on material script programs. Also handles cache creation.
     class _OgreGL3PlusExport GLSLShaderManager final : public GpuProgramManager
     {
     public:
-        typedef GpuProgram* (*CreateGpuProgramCallback)(ResourceManager* creator,
-                                                        const String& name, ResourceHandle handle,
-                                                        const String& group, bool isManual, ManualResourceLoader* loader,
-                                                        GpuProgramType gptype, const String& syntaxCode);
+        typedef GpuProgram *( *CreateGpuProgramCallback )( ResourceManager *creator, const String &name,
+                                                           ResourceHandle handle, const String &group,
+                                                           bool isManual, ManualResourceLoader *loader,
+                                                           GpuProgramType gptype,
+                                                           const String & syntaxCode );
 
     private:
         typedef map<String, CreateGpuProgramCallback>::type ShaderMap;
-        ShaderMap mShaderMap;
+        ShaderMap                                           mShaderMap;
 
     protected:
         /// @copydoc ResourceManager::createImpl
@@ -63,10 +65,10 @@ namespace Ogre {
         GLSLShaderManager();
         ~GLSLShaderManager() override;
 
-        bool registerShaderFactory(const String& syntaxCode, CreateGpuProgramCallback createFn);
-        bool unregisterShaderFactory(const String& syntaxCode);
+        bool registerShaderFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
+        bool unregisterShaderFactory( const String &syntaxCode );
     };
 
-}
+}  // namespace Ogre
 
 #endif

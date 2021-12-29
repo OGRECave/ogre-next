@@ -29,11 +29,11 @@
 #ifndef __OGRE_CPREPROCESSOR_H__
 #define __OGRE_CPREPROCESSOR_H__
 
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-namespace Ogre {
-
+namespace Ogre
+{
     /**
      * This is a simplistic C/C++-like preprocessor.
      * It takes an non-zero-terminated string on input and outputs a
@@ -107,64 +107,70 @@ namespace Ogre {
             /// Token length in bytes
             size_t Length;
 
-            Token () : Allocated (0), String (NULL)
-            { }
+            Token() : Allocated( 0 ), String( NULL ) {}
 
-            Token (Kind iType) : Type (iType), Allocated (0), String (NULL)
-            { }
+            Token( Kind iType ) : Type( iType ), Allocated( 0 ), String( NULL ) {}
 
-            Token (Kind iType, const char *iString, size_t iLength) :
-            Type (iType), Allocated (0), String (iString), Length (iLength)
-            { }
+            Token( Kind iType, const char *iString, size_t iLength ) :
+                Type( iType ),
+                Allocated( 0 ),
+                String( iString ),
+                Length( iLength )
+            {
+            }
 
-            Token (const Token &iOther)
+            Token( const Token &iOther )
             {
                 Type = iOther.Type;
                 Allocated = iOther.Allocated;
-                iOther.Allocated = 0; // !!! not quite correct but effective
+                iOther.Allocated = 0;  // !!! not quite correct but effective
                 String = iOther.String;
                 Length = iOther.Length;
             }
 
-            ~Token ()
-            { if (Allocated) free (Buffer); }
+            ~Token()
+            {
+                if( Allocated )
+                    free( Buffer );
+            }
 
             /// Assignment operator
-            Token &operator = (const Token &iOther)
-                {
-                    if (Allocated) free (Buffer);
-                    Type = iOther.Type;
-                    Allocated = iOther.Allocated;
-                    iOther.Allocated = 0; // !!! not quite correct but effective
-                    String = iOther.String;
-                    Length = iOther.Length;
-                    return *this;
-                }
+            Token &operator=( const Token &iOther )
+            {
+                if( Allocated )
+                    free( Buffer );
+                Type = iOther.Type;
+                Allocated = iOther.Allocated;
+                iOther.Allocated = 0;  // !!! not quite correct but effective
+                String = iOther.String;
+                Length = iOther.Length;
+                return *this;
+            }
 
             /// Append a string to this token
-            void Append (const char *iString, size_t iLength);
+            void Append( const char *iString, size_t iLength );
 
             /// Append a token to this token
-            void Append (const Token &iOther);
+            void Append( const Token &iOther );
 
             /// Append given number of newlines to this token
-            void AppendNL (int iCount);
+            void AppendNL( int iCount );
 
             /// Count number of newlines in this token
-            int CountNL ();
+            int CountNL();
 
             /// Get the numeric value of the token
-            bool GetValue (long &oValue) const;
+            bool GetValue( long &oValue ) const;
 
             /// Set the numeric value of the token
-            void SetValue (long iValue);
+            void SetValue( long iValue );
 
             /// Test two tokens for equality
-            bool operator == (const Token &iOther)
+            bool operator==( const Token &iOther )
             {
-                if (iOther.Length != Length)
+                if( iOther.Length != Length )
                     return false;
-                return (memcmp (String, iOther.String, Length) == 0);
+                return ( memcmp( String, iOther.String, Length ) == 0 );
             }
         };
 
@@ -185,20 +191,28 @@ namespace Ogre {
             /// Next macro in chained list
             Macro *Next;
             /// A pointer to function implementation (if macro is really a func)
-            Token (*ExpandFunc) (CPreprocessor *iParent, int iNumArgs, Token *iArgs);
+            Token ( *ExpandFunc )( CPreprocessor *iParent, int iNumArgs, Token *iArgs );
             /// true if macro expansion is in progress
             bool Expanding;
 
-            Macro (const Token &iName) :
-            Name (iName), NumArgs (0), Args (NULL), Next (NULL),
-                ExpandFunc (NULL), Expanding (false)
-            { }
+            Macro( const Token &iName ) :
+                Name( iName ),
+                NumArgs( 0 ),
+                Args( NULL ),
+                Next( NULL ),
+                ExpandFunc( NULL ),
+                Expanding( false )
+            {
+            }
 
-            ~Macro ()
-            { delete [] Args; delete Next; }
+            ~Macro()
+            {
+                delete[] Args;
+                delete Next;
+            }
 
             /// Expand the macro value (will not work for functions)
-            Token Expand (int iNumArgs, Token *iArgs, Macro *iMacros);
+            Token Expand( int iNumArgs, Token *iArgs, Macro *iMacros );
         };
 
         friend class CPreprocessor::Macro;
@@ -220,7 +234,7 @@ namespace Ogre {
         /**
          * Private constructor to re-parse a single token.
          */
-        CPreprocessor (const Token &iToken, int iLine);
+        CPreprocessor( const Token &iToken, int iLine );
 
         /**
          * Stateless tokenizer: Parse the input text and return the next token.
@@ -229,7 +243,7 @@ namespace Ogre {
          * @return
          *     The next token from the input stream
          */
-        Token GetToken (bool iExpand);
+        Token GetToken( bool iExpand );
 
         /**
          * Handle a preprocessor directive.
@@ -240,7 +254,7 @@ namespace Ogre {
          * @return
          *     The last input token that was not proceeded.
          */
-        Token HandleDirective (Token &iToken, int iLine);
+        Token HandleDirective( Token &iToken, int iLine );
 
         /**
          * Handle a #define directive.
@@ -252,7 +266,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleDefine (Token &iBody, int iLine);
+        bool HandleDefine( Token &iBody, int iLine );
 
         /**
          * Undefine a previously defined macro
@@ -264,7 +278,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleUnDef (Token &iBody, int iLine);
+        bool HandleUnDef( Token &iBody, int iLine );
 
         /**
          * Handle an #ifdef directive.
@@ -276,7 +290,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleIfDef (Token &iBody, int iLine);
+        bool HandleIfDef( Token &iBody, int iLine );
 
         /**
          * Handle an #if directive.
@@ -288,7 +302,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleIf (Token &iBody, int iLine);
+        bool HandleIf( Token &iBody, int iLine );
 
         /**
          * Handle an #elif directive.
@@ -300,7 +314,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleElif (Token &iBody, int iLine);
+        bool HandleElif( Token &iBody, int iLine );
 
         /**
          * Handle an #else directive.
@@ -312,7 +326,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleElse (Token &iBody, int iLine);
+        bool HandleElse( Token &iBody, int iLine );
 
         /**
          * Handle an #endif directive.
@@ -324,7 +338,7 @@ namespace Ogre {
          * @return
          *     true if everything went ok, false if not
          */
-        bool HandleEndIf (Token &iBody, int iLine);
+        bool HandleEndIf( Token &iBody, int iLine );
 
         /**
          * Get a single function argument until next ',' or ')'.
@@ -341,7 +355,7 @@ namespace Ogre {
          * @return
          *     The first unhandled token after argument.
          */
-        Token GetArgument (Token &oArg, bool iExpand, bool shouldAppendArg);
+        Token GetArgument( Token &oArg, bool iExpand, bool shouldAppendArg );
 
         /**
          * Get all the arguments of a macro: '(' arg1 { ',' arg2 { ',' ... }} ')'
@@ -355,7 +369,7 @@ namespace Ogre {
          *     If false, parameters are not expanded and no expressions are
          *     allowed; only a single keyword is expected per argument.
          */
-        Token GetArguments (int &oNumArgs, Token *&oArgs, bool iExpand, bool shouldAppendArg);
+        Token GetArguments( int &oNumArgs, Token *&oArgs, bool iExpand, bool shouldAppendArg );
 
         /**
          * Parse an expression, compute it and return the result.
@@ -370,7 +384,7 @@ namespace Ogre {
          * @return
          *     The last unhandled token after the expression
          */
-        Token GetExpression (Token &oResult, int iLine, int iOpPriority = 0);
+        Token GetExpression( Token &oResult, int iLine, int iOpPriority = 0 );
 
         /**
          * Get the numeric value of a token.
@@ -387,7 +401,7 @@ namespace Ogre {
          * @return
          *     true if ok, false if not
          */
-        bool GetValue (const Token &iToken, long &oValue, int iLine);
+        bool GetValue( const Token &iToken, long &oValue, int iLine );
 
         /**
          * Expand the given macro, if it exists.
@@ -397,7 +411,7 @@ namespace Ogre {
          * @return
          *     The expanded token or iToken if it is not a macro
          */
-        Token ExpandMacro (const Token &iToken);
+        Token ExpandMacro( const Token &iToken );
 
         /**
          * Check if a macro is defined, and if so, return it
@@ -406,7 +420,7 @@ namespace Ogre {
          * @return
          *     The macro object or NULL if a macro with this name does not exist
          */
-        Macro *IsDefined (const Token &iToken);
+        Macro *IsDefined( const Token &iToken );
 
         /**
          * The implementation of the defined() preprocessor function
@@ -419,7 +433,7 @@ namespace Ogre {
          * @return
          *     The return value encapsulated in a token
          */
-        static Token ExpandDefined (CPreprocessor *iParent, int iNumArgs, Token *iArgs);
+        static Token ExpandDefined( CPreprocessor *iParent, int iNumArgs, Token *iArgs );
 
         /**
          * Parse the input string and return a token containing the whole output.
@@ -428,7 +442,7 @@ namespace Ogre {
          * @return
          *     The output text enclosed in a token
          */
-        Token Parse (const Token &iSource);
+        Token Parse( const Token &iSource );
 
         /**
          * Call the error handler
@@ -439,14 +453,14 @@ namespace Ogre {
          * @param iToken
          *     If not NULL contains the erroneous token
          */
-        void Error (int iLine, const char *iError, const Token *iToken = NULL);
+        void Error( int iLine, const char *iError, const Token *iToken = NULL );
 
     public:
         /// Create an empty preprocessor object
-        CPreprocessor ();
+        CPreprocessor();
 
         /// Destroy the preprocessor object
-        virtual ~CPreprocessor ();
+        virtual ~CPreprocessor();
 
         /**
          * Define a macro without parameters.
@@ -459,8 +473,8 @@ namespace Ogre {
          * @param iMacroValueLen
          *     The length of the value of the defined macro
          */
-        void Define (const char *iMacroName, size_t iMacroNameLen,
-                     const char *iMacroValue, size_t iMacroValueLen);
+        void Define( const char *iMacroName, size_t iMacroNameLen, const char *iMacroValue,
+                     size_t iMacroValueLen );
 
         /**
          * Define a numerical macro.
@@ -471,7 +485,7 @@ namespace Ogre {
          * @param iMacroValue
          *     The value of the defined macro
          */
-        void Define (const char *iMacroName, size_t iMacroNameLen, long iMacroValue);
+        void Define( const char *iMacroName, size_t iMacroNameLen, long iMacroValue );
 
         /**
          * Undefine a macro.
@@ -482,7 +496,7 @@ namespace Ogre {
          * @return
          *     true if the macro has been undefined, false if macro doesn't exist
          */
-        bool Undef (const char *iMacroName, size_t iMacroNameLen);
+        bool Undef( const char *iMacroName, size_t iMacroNameLen );
 
         /**
          * Parse the input string and return a newly-allocated output string.
@@ -506,7 +520,7 @@ namespace Ogre {
          *     that's *inside* the source buffer. You must free() the result
          *     string only if the returned address is not inside the source text.
          */
-        char *Parse (const char *iSource, size_t iLength, size_t &oLength);
+        char *Parse( const char *iSource, size_t iLength, size_t &oLength );
 
         /**
          * An error handler function type.
@@ -523,9 +537,8 @@ namespace Ogre {
          * @param iTokenLen
          *     The length of iToken. iToken is never zero-terminated!
          */
-        typedef void (*ErrorHandlerFunc) (
-            void *iData, int iLine, const char *iError,
-            const char *iToken, size_t iTokenLen);
+        typedef void ( *ErrorHandlerFunc )( void *iData, int iLine, const char *iError,
+                                            const char *iToken, size_t iTokenLen );
 
         /**
          * A pointer to the preprocessor's error handler.
@@ -538,6 +551,6 @@ namespace Ogre {
         void *ErrorData;
     };
 
-} // namespace Ogre
+}  // namespace Ogre
 
-#endif // __OGRE_CPREPROCESSOR_H__
+#endif  // __OGRE_CPREPROCESSOR_H__
