@@ -42,11 +42,11 @@
 namespace Ogre
 {
     // memory implementations
-    void *OgreZalloc( void *opaque, unsigned int items, unsigned int size )
+    void *OgreZalloc( void * /*opaque*/, unsigned int items, unsigned int size )
     {
         return OGRE_MALLOC( items * size, MEMCATEGORY_GENERAL );
     }
-    void OgreZfree( void *opaque, void *address ) { OGRE_FREE( address, MEMCATEGORY_GENERAL ); }
+    void OgreZfree( void * /*opaque*/, void *address ) { OGRE_FREE( address, MEMCATEGORY_GENERAL ); }
 #    define OGRE_DEFLATE_TMP_SIZE 16384
     //---------------------------------------------------------------------
     DeflateStream::DeflateStream( const DataStreamPtr &compressedStream, const String &tmpFileName,
@@ -177,8 +177,10 @@ namespace Ogre
 #    else
                 char tmpname[L_tmpnam];
                 if( !tmpnam( tmpname ) )
+                {
                     OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Temporary file name generation failed.",
                                  "DeflateStream::init" );
+                }
 
                 mTempFileName = tmpname;
 #    endif
@@ -239,9 +241,9 @@ namespace Ogre
 
                     if( mZStream->avail_in )
                     {
-                        int availpre = mZStream->avail_out;
-                        int status = inflate( mZStream, Z_SYNC_FLUSH );
-                        size_t readUncompressed = availpre - mZStream->avail_out;
+                        const uint32 availpre = mZStream->avail_out;
+                        const int status = inflate( mZStream, Z_SYNC_FLUSH );
+                        const size_t readUncompressed = availpre - mZStream->avail_out;
                         newReadUncompressed += readUncompressed;
                         if( status != Z_OK )
                         {
@@ -363,7 +365,7 @@ namespace Ogre
         {
             if( count > 0 )
             {
-                if( !mReadCache.ff( count ) )
+                if( !mReadCache.ff( static_cast<size_t>( count ) ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                  "You can only skip within the cache range in a deflate stream.",
@@ -408,7 +410,7 @@ namespace Ogre
             }
             else
             {
-                skip( pos - tell() );
+                skip( static_cast<long>( pos - tell() ) );
             }
         }
     }

@@ -52,6 +52,9 @@ namespace Ogre
         */
         class _OgreExport OldBone : public OldNode
         {
+        private:
+            using OldNode::createChild;
+
         public:
             /** Constructor, not to be used directly (use OldBone::createChild or Skeleton::createBone)
              */
@@ -59,7 +62,7 @@ namespace Ogre
             /** Constructor, not to be used directly (use OldBone::createChild or Skeleton::createBone)
              */
             OldBone( const String &name, unsigned short handle, Skeleton *creator );
-            ~OldBone();
+            ~OldBone() override;
 
             /** Creates a new OldBone as a child of this bone.
             @remarks

@@ -806,7 +806,7 @@ namespace Ogre
         return shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size();
     }
     //-----------------------------------------------------------------------------------
-    bool CompositorShadowNode::isShadowMapIdxActive( uint32 shadowMapIdx ) const
+    bool CompositorShadowNode::isShadowMapIdxActive( size_t shadowMapIdx ) const
     {
         if( shadowMapIdx < mDefinition->mShadowMapTexDefinitions.size() )
         {

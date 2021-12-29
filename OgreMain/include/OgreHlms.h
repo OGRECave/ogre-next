@@ -347,7 +347,7 @@ namespace Ogre
         @return
             The index to the cache entry.
         */
-        size_t addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
+        uint32 addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
                                    const PiecesMap *      pieces );
 
         /// Retrieves a cache entry using the returned value from @addRenderableCache

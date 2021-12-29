@@ -39,8 +39,10 @@ namespace Demo
     /// Utility class to load plugins statically
     class AndroidSystems
     {
+#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
         android_app *mAndroidApp;
         ANativeWindow *mNativeWindow;
+#endif
 
     public:
         AndroidSystems();

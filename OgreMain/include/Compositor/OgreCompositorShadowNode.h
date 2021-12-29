@@ -209,7 +209,7 @@ namespace Ogre
         /// Returns true if the shadow map index is not active. For example:
         ///     * There are 3 shadow maps, but only 2 shadow casting lights
         ///     * There are 3 directional maps for directional PSSM, but no directional light.
-        bool isShadowMapIdxActive( uint32 shadowMapIdx ) const;
+        bool isShadowMapIdxActive( size_t shadowMapIdx ) const;
 
         bool _shouldUpdateShadowMapIdx( uint32 shadowMapIdx ) const;
 

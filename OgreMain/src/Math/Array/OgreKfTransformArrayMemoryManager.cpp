@@ -48,7 +48,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    void KfTransformArrayMemoryManager::createNewNode( KfTransform **outTransform )
+    void KfTransformArrayMemoryManager::createNewNode( KfTransform *RESTRICT_ALIAS *outTransform )
     {
         const size_t nextSlot = createNewSlot();
         for( size_t i = 0; i < ARRAY_PACKED_REALS - 1; ++i )
@@ -58,7 +58,7 @@ namespace Ogre
         const size_t nextSlotBase = nextSlot - nextSlotIdx;
 
         // Set memory ptrs
-        *outTransform = reinterpret_cast<KfTransform *>(
+        *outTransform = reinterpret_cast<KfTransform * RESTRICT_ALIAS>(
             mMemoryPools[KfTransformType] + nextSlotBase * mElementsMemSizes[KfTransformType] );
 
         // Set default values

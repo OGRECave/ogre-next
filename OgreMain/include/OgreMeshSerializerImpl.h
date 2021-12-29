@@ -190,6 +190,9 @@ namespace Ogre
             virtual void readPoseKeyFrame( DataStreamPtr &stream, VertexAnimationTrack *track );
             virtual void readExtremes( DataStreamPtr &stream, Mesh *pMesh );
 
+            using Serializer::flipFromLittleEndian;
+            using Serializer::flipToLittleEndian;
+
             /// Flip an entire vertex buffer from little endian
             virtual void flipFromLittleEndian( void *pData, size_t vertexCount, size_t vertexSize,
                                                const VertexDeclaration::VertexElementList &elems );
@@ -266,6 +269,9 @@ namespace Ogre
          */
         class _OgrePrivate MeshSerializerImpl_v1_41 : public MeshSerializerImpl_v1_8
         {
+        private:
+            using MeshSerializerImpl_v1_8::calcPoseVertexSize;
+
         public:
             MeshSerializerImpl_v1_41();
             ~MeshSerializerImpl_v1_41() override;

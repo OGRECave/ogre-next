@@ -326,7 +326,8 @@ namespace Ogre
         uint64 hashResult[2];
         memset( hashResult, 0, sizeof( hashResult ) );
         inFile->read( fileContents.begin() + sizeof( uint64 ) * 2u, fileSize );
-        OGRE_HASH128_FUNC( fileContents.begin(), fileContents.size(), IdString::Seed, hashResult );
+        OGRE_HASH128_FUNC( fileContents.begin(), static_cast<int>( fileContents.size() ), IdString::Seed,
+                           hashResult );
         memcpy( fileContents.begin(), hashResult, sizeof( uint64 ) * 2u );
     }
     //-----------------------------------------------------------------------------------
@@ -625,7 +626,8 @@ namespace Ogre
                             bool startBlock = subString.startWith( blockNames[i] );
                             if( startBlock )
                             {
-                                it = subString.begin() + strlen( blockNames[i] );
+                                it = subString.begin() +
+                                     static_cast<ptrdiff_t>( strlen( blockNames[i] ) );
                                 if( i == 3 )
                                 {
                                     // Do not increase 'nesting' for "@else"
@@ -656,7 +658,8 @@ namespace Ogre
         if( it != en && nesting < 0 )
         {
             int keywordLength = ( isElse ? sizeof( "else" ) : sizeof( "end" ) ) - 1;
-            outSubString.setEnd( it - outSubString.getOriginalBuffer().begin() - keywordLength );
+            outSubString.setEnd(
+                static_cast<size_t>( it - outSubString.getOriginalBuffer().begin() - keywordLength ) );
         }
         else
         {
@@ -886,7 +889,7 @@ namespace Ogre
             if( exp.type == EXPR_VAR )
             {
                 char *endPtr;
-                exp.result = strtol( exp.value.c_str(), &endPtr, 10 );
+                exp.result = static_cast<int32>( strtol( exp.value.c_str(), &endPtr, 10 ) );
                 if( exp.value.c_str() == endPtr )
                 {
                     // This isn't a number. Let's try if it's a variable
@@ -981,7 +984,7 @@ namespace Ogre
         size_t retVal = String::npos;
         if( it != en && nesting < 0 )
         {
-            retVal = it - outSubString.begin() - 1;
+            retVal = static_cast<size_t>( it - outSubString.begin() - 1u );
         }
         else
         {
@@ -1062,14 +1065,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::copy( String &outBuffer, const SubStringRef &inSubString, size_t length )
     {
-        outBuffer.append( inSubString.begin(), inSubString.begin() + length );
+        outBuffer.append( inSubString.begin(), inSubString.begin() + static_cast<ptrdiff_t>( length ) );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::repeat( String &outBuffer, const SubStringRef &inSubString, size_t length, size_t passNum,
                        const String &counterVar )
     {
         String::const_iterator itor = inSubString.begin();
-        String::const_iterator endt = inSubString.begin() + length;
+        String::const_iterator endt = inSubString.begin() + static_cast<ptrdiff_t>( length );
 
         while( itor != endt )
         {
@@ -1081,7 +1084,7 @@ namespace Ogre
                     char tmp[16];
                     sprintf( tmp, "%lu", (unsigned long)passNum );
                     outBuffer += tmp;
-                    itor += counterVar.size() + 1;
+                    itor += static_cast<ptrdiff_t>( counterVar.size() + 1u );
                 }
                 else
                 {
@@ -1095,7 +1098,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    int setOp( int op1, int op2 ) { return op2; }
+    int setOp( int /*op1*/, int op2 ) { return op2; }
     int addOp( int op1, int op2 ) { return op1 + op2; }
     int subOp( int op1, int op2 ) { return op1 - op2; }
     int mulOp( int op1, int op2 ) { return op1 * op2; }
@@ -1146,22 +1149,22 @@ namespace Ogre
 
         size_t pos;
         pos = subString.find( "@" );
-        size_t keyword = ~0;
+        size_t keyword = std::numeric_limits<size_t>::max();
 
-        while( pos != String::npos && keyword == (size_t)~0 )
+        while( pos != String::npos && keyword == std::numeric_limits<size_t>::max() )
         {
             size_t maxSize = subString.findFirstOf( " \t(", pos + 1 );
             maxSize = maxSize == String::npos ? subString.getSize() : maxSize;
             SubStringRef keywordStr( &inBuffer, subString.getStart() + pos + 1,
                                      subString.getStart() + maxSize );
 
-            for( size_t i = 0; i < 8 && keyword == (size_t)~0; ++i )
+            for( size_t i = 0; i < 8 && keyword == std::numeric_limits<size_t>::max(); ++i )
             {
                 if( keywordStr.matchEqual( c_operations[i].opName ) )
                     keyword = i;
             }
 
-            if( keyword == (size_t)~0 )
+            if( keyword == std::numeric_limits<size_t>::max() )
                 pos = subString.find( "@", pos + 1 );
         }
 
@@ -1203,22 +1206,22 @@ namespace Ogre
             }
 
             pos = subString.find( "@" );
-            keyword = ~0;
+            keyword = std::numeric_limits<size_t>::max();
 
-            while( pos != String::npos && keyword == (size_t)~0 )
+            while( pos != String::npos && keyword == std::numeric_limits<size_t>::max() )
             {
                 size_t maxSize = subString.findFirstOf( " \t(", pos + 1 );
                 maxSize = maxSize == String::npos ? subString.getSize() : maxSize;
                 SubStringRef keywordStr( &inBuffer, subString.getStart() + pos + 1,
                                          subString.getStart() + maxSize );
 
-                for( size_t i = 0; i < 8 && keyword == (size_t)~0; ++i )
+                for( size_t i = 0; i < 8 && keyword == std::numeric_limits<size_t>::max(); ++i )
                 {
                     if( keywordStr.matchEqual( c_operations[i].opName ) )
                         keyword = i;
                 }
 
-                if( keyword == (size_t)~0 )
+                if( keyword == std::numeric_limits<size_t>::max() )
                     pos = subString.find( "@", pos + 1 );
             }
         }
@@ -1253,7 +1256,7 @@ namespace Ogre
             if( !syntaxError )
             {
                 char *endPtr;
-                int count = strtol( argValues[0].c_str(), &endPtr, 10 );
+                int32 count = static_cast<int32>( strtol( argValues[0].c_str(), &endPtr, 10 ) );
                 if( argValues[0].c_str() == endPtr )
                 {
                     // This isn't a number. Let's try if it's a variable
@@ -1274,14 +1277,14 @@ namespace Ogre
                 if( argValues.size() > 1 )
                     counterVar = argValues[1];
 
-                int start = 0;
+                int32 start = 0;
                 if( argValues.size() > 2 )
                 {
-                    start = strtol( argValues[2].c_str(), &endPtr, 10 );
+                    start = static_cast<int32>( strtol( argValues[2].c_str(), &endPtr, 10 ) );
                     if( argValues[2].c_str() == endPtr )
                     {
                         // This isn't a number. Let's try if it's a variable
-                        start = getProperty( argValues[2], -1 );
+                        start = static_cast<int32>( getProperty( argValues[2], -1 ) );
                     }
 
                     if( start < 0 )
@@ -1296,8 +1299,11 @@ namespace Ogre
                     }
                 }
 
-                for( int i = start; i < count; ++i )
-                    repeat( outBuffer, blockSubString, blockSubString.getSize(), i, counterVar );
+                for( int32 i = start; i < count; ++i )
+                {
+                    repeat( outBuffer, blockSubString, blockSubString.getSize(),
+                            static_cast<size_t>( i ), counterVar );
+                }
             }
 
             subString.setStart( blockSubString.getEnd() + sizeof( "@end" ) );
@@ -1520,7 +1526,7 @@ namespace Ogre
 
         size_t pos;
         pos = subString.find( "@" );
-        size_t keyword = ~0;
+        size_t keyword = std::numeric_limits<size_t>::max();
 
         if( pos != String::npos )
         {
@@ -1529,13 +1535,13 @@ namespace Ogre
             SubStringRef keywordStr( &inBuffer, subString.getStart() + pos + 1,
                                      subString.getStart() + maxSize );
 
-            for( size_t i = 0; i < 10 && keyword == (size_t)~0; ++i )
+            for( size_t i = 0; i < 10 && keyword == std::numeric_limits<size_t>::max(); ++i )
             {
                 if( keywordStr.matchEqual( c_counterOperations[i].opName ) )
                     keyword = i;
             }
 
-            if( keyword == (size_t)~0 )
+            if( keyword == std::numeric_limits<size_t>::max() )
                 pos = String::npos;
         }
 
@@ -1600,7 +1606,7 @@ namespace Ogre
             }
 
             pos = subString.find( "@" );
-            keyword = ~0;
+            keyword = std::numeric_limits<size_t>::max();
 
             if( pos != String::npos )
             {
@@ -1609,13 +1615,13 @@ namespace Ogre
                 SubStringRef keywordStr( &inBuffer, subString.getStart() + pos + 1,
                                          subString.getStart() + maxSize );
 
-                for( size_t i = 0; i < 10 && keyword == (size_t)~0; ++i )
+                for( size_t i = 0; i < 10 && keyword == std::numeric_limits<size_t>::max(); ++i )
                 {
                     if( keywordStr.matchEqual( c_counterOperations[i].opName ) )
                         keyword = i;
                 }
 
-                if( keyword == (size_t)~0 )
+                if( keyword == std::numeric_limits<size_t>::max() )
                     pos = String::npos;
             }
         }
@@ -1634,7 +1640,7 @@ namespace Ogre
         // return parseProperties( inBuffer, outBuffer );
     }
     //-----------------------------------------------------------------------------------
-    size_t Hlms::addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
+    uint32 Hlms::addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
                                      const PiecesMap *pieces )
     {
         assert( mRenderableCache.size() <= HlmsBits::RenderableMask );
@@ -1650,8 +1656,8 @@ namespace Ogre
         }
 
         // 3 bits for mType (see getMaterial)
-        return ( mType << HlmsBits::HlmsTypeShift ) |
-               ( ( it - mRenderableCache.begin() ) << HlmsBits::RenderableShift );
+        return ( static_cast<uint32>( mType ) << HlmsBits::HlmsTypeShift ) |
+               ( static_cast<uint32>( it - mRenderableCache.begin() ) << HlmsBits::RenderableShift );
     }
     //-----------------------------------------------------------------------------------
     const Hlms::RenderableCache &Hlms::getRenderableCache( uint32 hash ) const
@@ -1978,9 +1984,10 @@ namespace Ogre
                 value.a( itor->value );
 
                 outFile.write( "\n\t***\t", sizeof( "\n\t***\t" ) - 1u );
-                outFile.write( friendlyText, strnlen( friendlyText, 32 ) );
+                outFile.write( friendlyText,
+                               static_cast<std::streamsize>( strnlen( friendlyText, 32 ) ) );
                 outFile.write( "\t", sizeof( "\t" ) - 1u );
-                outFile.write( value.c_str(), value.size() );
+                outFile.write( value.c_str(), static_cast<std::streamsize>( value.size() ) );
                 ++itor;
             }
         }
@@ -1995,9 +2002,11 @@ namespace Ogre
             {
                 itor->first.getFriendlyText( friendlyText, 32 );
                 outFile.write( "\n\t***\t", sizeof( "\n\t***\t" ) - 1u );
-                outFile.write( friendlyText, strnlen( friendlyText, 32 ) );
+                outFile.write( friendlyText,
+                               static_cast<std::streamsize>( strnlen( friendlyText, 32 ) ) );
                 outFile.write( "\t", sizeof( "\t" ) - 1u );
-                outFile.write( itor->second.c_str(), itor->second.size() );
+                outFile.write( itor->second.c_str(),
+                               static_cast<std::streamsize>( itor->second.size() ) );
                 ++itor;
             }
         }
@@ -2161,13 +2170,13 @@ namespace Ogre
                     setProperty( HlmsBaseProp::GLES, mRenderSystem->getNativeShadingLanguageVersion() );
                 }
 
-                setProperty( HlmsBaseProp::Syntax, mShaderSyntax.mHash );
-                setProperty( HlmsBaseProp::Hlsl, HlmsBaseProp::Hlsl.mHash );
-                setProperty( HlmsBaseProp::Glsl, HlmsBaseProp::Glsl.mHash );
-                setProperty( HlmsBaseProp::Glsles, HlmsBaseProp::Glsles.mHash );
-                setProperty( HlmsBaseProp::Glslvk, HlmsBaseProp::Glslvk.mHash );
-                setProperty( HlmsBaseProp::Hlslvk, HlmsBaseProp::Hlslvk.mHash );
-                setProperty( HlmsBaseProp::Metal, HlmsBaseProp::Metal.mHash );
+                setProperty( HlmsBaseProp::Syntax, static_cast<int32>( mShaderSyntax.mHash ) );
+                setProperty( HlmsBaseProp::Hlsl, static_cast<int32>( HlmsBaseProp::Hlsl.mHash ) );
+                setProperty( HlmsBaseProp::Glsl, static_cast<int32>( HlmsBaseProp::Glsl.mHash ) );
+                setProperty( HlmsBaseProp::Glsles, static_cast<int32>( HlmsBaseProp::Glsles.mHash ) );
+                setProperty( HlmsBaseProp::Glslvk, static_cast<int32>( HlmsBaseProp::Glslvk.mHash ) );
+                setProperty( HlmsBaseProp::Hlslvk, static_cast<int32>( HlmsBaseProp::Hlslvk.mHash ) );
+                setProperty( HlmsBaseProp::Metal, static_cast<int32>( HlmsBaseProp::Metal.mHash ) );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
                 setProperty( HlmsBaseProp::iOS, 1 );
@@ -2247,7 +2256,10 @@ namespace Ogre
 
                 // Now dump the processed file.
                 if( mDebugOutput )
-                    debugDumpFile.write( &outString[0], outString.size() );
+                {
+                    debugDumpFile.write( &outString[0],
+                                         static_cast<std::streamsize>( outString.size() ) );
+                }
 
                 // Don't create and compile if template requested not to
                 if( !getProperty( HlmsBaseProp::DisableStage ) )
@@ -2346,7 +2358,7 @@ namespace Ogre
         applyStrongMacroblockRules( pso );
 
         const size_t numGlobalClipDistances = (size_t)getProperty( HlmsBaseProp::PsoClipDistances );
-        pso.clipDistances = ( 1u << numGlobalClipDistances ) - 1u;
+        pso.clipDistances = static_cast<uint8>( ( 1u << numGlobalClipDistances ) - 1u );
 
         // TODO: Configurable somehow (likely should be in datablock).
         pso.sampleMask = 0xffffffff;
@@ -2410,7 +2422,7 @@ namespace Ogre
         uint16 inputLayoutId = vertexDecl->_getInputLayoutId( mHlmsManager, op.operationType );
         setProperty( HlmsPsoProp::InputLayoutId, inputLayoutId );
 
-        return numTexCoords;
+        return static_cast<uint16>( numTexCoords );
     }
     //-----------------------------------------------------------------------------------
     uint16 Hlms::calculateHashForV2( Renderable *renderable )
@@ -2444,7 +2456,7 @@ namespace Ogre
         // We do not allow LODs with different operation types or vertex layouts
         setProperty( HlmsPsoProp::InputLayoutId, vao->getInputLayoutId() );
 
-        return numTexCoords;
+        return static_cast<uint16>( numTexCoords );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::calculateHashForSemantic( VertexElementSemantic semantic, VertexElementType type,
@@ -2534,7 +2546,7 @@ namespace Ogre
         }
         calculateHashForPreCreate( renderable, pieces );
 
-        uint32 renderableHash = this->addRenderableCache( mSetProperties, pieces );
+        const uint32 renderableHash = this->addRenderableCache( mSetProperties, pieces );
 
         // For shadow casters, turn normals off. UVs & diffuse also off unless there's alpha testing.
         setProperty( HlmsBaseProp::Normal, 0 );
@@ -2613,8 +2625,10 @@ namespace Ogre
                 numShadowMapLights = shadowNode->getNumActiveShadowCastingLights();
                 if( numPssmSplits )
                     numShadowMapLights += numPssmSplits - 1u;
-                setProperty( HlmsBaseProp::NumShadowMapLights, numShadowMapLights );
-                setProperty( HlmsBaseProp::NumShadowMapTextures, contiguousShadowMapTex.size() );
+                setProperty( HlmsBaseProp::NumShadowMapLights,
+                             static_cast<int32>( numShadowMapLights ) );
+                setProperty( HlmsBaseProp::NumShadowMapTextures,
+                             static_cast<int32>( contiguousShadowMapTex.size() ) );
 
                 {
                     const Ogre::CompositorShadowNodeDef *shadowNodeDef = shadowNode->getDefinition();
@@ -2625,7 +2639,7 @@ namespace Ogre
                     propName = "hlms_shadowmap";
                     const size_t basePropNameSize = propName.size();
 
-                    size_t shadowMapTexIdx = 0;
+                    uint32 shadowMapTexIdx = 0u;
 
                     for( size_t i = 0; i < numShadowMapLights; ++i )
                     {
@@ -2643,7 +2657,8 @@ namespace Ogre
                         const size_t basePropSize = propName.size();
 
                         setProperty( propName.c_str(),
-                                     shadowNode->getIndexToContiguousShadowMapTex( shadowMapTexIdx ) );
+                                     static_cast<int32>( shadowNode->getIndexToContiguousShadowMapTex(
+                                         shadowMapTexIdx ) ) );
 
                         if( shadowTexDef->uvOffset != Vector2::ZERO ||
                             shadowTexDef->uvLength != Vector2::UNIT_SCALE )
@@ -2805,11 +2820,11 @@ namespace Ogre
                 setProperty( HlmsBaseProp::ForwardPlusFlipY, renderPassDesc->requiresTextureFlipping() );
             }
 
-            uint numLightsPerType[Light::NUM_LIGHT_TYPES];
+            int32 numLightsPerType[Light::NUM_LIGHT_TYPES];
             int32 numAreaApproxLightsWithMask = 0;
             memset( numLightsPerType, 0, sizeof( numLightsPerType ) );
 
-            uint shadowCasterDirectional = 0;
+            int32 shadowCasterDirectional = 0;
 
             if( mLightGatheringMode == LightGatherForwardPlus )
             {
@@ -2849,23 +2864,24 @@ namespace Ogre
                             ++numLightsPerType[Light::LT_DIRECTIONAL];
                         else if( lightType == Light::LT_AREA_APPROX )
                         {
-                            mAreaLightsGlobalLightListStart =
-                                std::min<uint32>( mAreaLightsGlobalLightListStart, itor - begin );
+                            mAreaLightsGlobalLightListStart = std::min<uint32>(
+                                mAreaLightsGlobalLightListStart, static_cast<uint32>( itor - begin ) );
                             ++numLightsPerType[Light::LT_AREA_APPROX];
                             if( ( *itor )->mTextureLightMaskIdx != std::numeric_limits<uint16>::max() )
                                 ++numAreaApproxLightsWithMask;
                         }
                         else if( lightType == Light::LT_AREA_LTC )
                         {
-                            mAreaLightsGlobalLightListStart =
-                                std::min<uint32>( mAreaLightsGlobalLightListStart, itor - begin );
+                            mAreaLightsGlobalLightListStart = std::min<uint32>(
+                                mAreaLightsGlobalLightListStart, static_cast<uint32>( itor - begin ) );
                             ++numLightsPerType[Light::LT_AREA_LTC];
                         }
                         ++itor;
                     }
                 }
 
-                mRealNumDirectionalLights = numLightsPerType[Light::LT_DIRECTIONAL];
+                mRealNumDirectionalLights =
+                    static_cast<uint32>( numLightsPerType[Light::LT_DIRECTIONAL] );
 
                 if( mNumLightsLimit > 0 &&
                     numLightsPerType[Light::LT_DIRECTIONAL] > shadowCasterDirectional )
@@ -2923,20 +2939,21 @@ namespace Ogre
             // We need to limit the number of area lights before and after rounding
             {
                 // Approx area lights
-                numLightsPerType[Light::LT_AREA_APPROX] = std::min<uint16>(
+                numLightsPerType[Light::LT_AREA_APPROX] = std::min<int32>(
                     numLightsPerType[Light::LT_AREA_APPROX], mNumAreaApproxLightsLimit );
-                mRealNumAreaApproxLights = numLightsPerType[Light::LT_AREA_APPROX];
-                mRealNumAreaApproxLightsWithMask = numAreaApproxLightsWithMask;
-                numLightsPerType[Light::LT_AREA_APPROX] = std::min<uint16>(
+                mRealNumAreaApproxLights =
+                    static_cast<uint32>( numLightsPerType[Light::LT_AREA_APPROX] );
+                mRealNumAreaApproxLightsWithMask = static_cast<uint32>( numAreaApproxLightsWithMask );
+                numLightsPerType[Light::LT_AREA_APPROX] = std::min<int32>(
                     numLightsPerType[Light::LT_AREA_APPROX], mNumAreaApproxLightsLimit );
             }
             {
                 // LTC area lights
                 numLightsPerType[Light::LT_AREA_LTC] =
-                    std::min<uint16>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLtcLightsLimit );
-                mRealNumAreaLtcLights = numLightsPerType[Light::LT_AREA_LTC];
+                    std::min<int32>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLtcLightsLimit );
+                mRealNumAreaLtcLights = static_cast<uint32>( numLightsPerType[Light::LT_AREA_LTC] );
                 numLightsPerType[Light::LT_AREA_LTC] =
-                    std::min<uint16>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLtcLightsLimit );
+                    std::min<int32>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLtcLightsLimit );
             }
 
             // The value is cummulative for each type (order: Directional, point, spot)
@@ -2970,7 +2987,7 @@ namespace Ogre
                     // Deal with first directional light (which may be PSSM)
                     size_t numFirstDirSplits = numPssmSplits;
                     if( numFirstDirSplits == 0u )
-                        numFirstDirSplits = shadowCasterDirectional > 0u ? 1u : 0u;
+                        numFirstDirSplits = shadowCasterDirectional > 0 ? 1 : 0;
 
                     for( size_t i = 0u; i < numFirstDirSplits; ++i )
                     {
@@ -2985,7 +3002,7 @@ namespace Ogre
                 }
                 {
                     // Deal with rest of caster directional lights
-                    for( size_t i = 1u; i < shadowCasterDirectional; ++i )
+                    for( int32 i = 1; i < shadowCasterDirectional; ++i )
                     {
                         propName.resize( basePropNameSize );
                         propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
@@ -2999,8 +3016,8 @@ namespace Ogre
                 shadowMapLightIdx += numLightsPerType[Light::LT_DIRECTIONAL] - shadowCasterDirectional;
 
                 // Deal with the rest of the casting lights (point & spot)
-                const size_t numLights = numLightsPerType[Light::LT_SPOTLIGHT];
-                for( size_t i = numLightsPerType[Light::LT_DIRECTIONAL]; i < numLights; ++i )
+                const int32 numLights = numLightsPerType[Light::LT_SPOTLIGHT];
+                for( int32 i = numLightsPerType[Light::LT_DIRECTIONAL]; i < numLights; ++i )
                 {
                     propName.resize( basePropNameSize );
                     propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
@@ -3018,7 +3035,7 @@ namespace Ogre
 
             if( pass )
             {
-                const uint8 shadowMapIdx = pass->getDefinition()->mShadowMapIdx;
+                const uint32 shadowMapIdx = pass->getDefinition()->mShadowMapIdx;
                 const Light *light = shadowNode->getLightAssociatedWith( shadowMapIdx );
                 if( light->getType() == Light::LT_DIRECTIONAL )
                     setProperty( HlmsBaseProp::ShadowCasterDirectional, 1 );
@@ -3105,7 +3122,7 @@ namespace Ogre
             it = mPassCache.end() - 1;
         }
 
-        const uint32 hash = ( it - mPassCache.begin() ) << HlmsBits::PassShift;
+        const uint32 hash = static_cast<uint32>( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
         HlmsCache retVal( hash, mType, HlmsPso() );
         retVal.setProperties = mSetProperties;
@@ -3219,8 +3236,8 @@ namespace Ogre
 
                     const int texUnitStart = itor->texUnit;
                     const int numTexUnits = itor->numTexUnits;
-                    for( int i = 0u; i < numTexUnits; ++i )
-                        texUnits[i] = texUnitStart + i;
+                    for( int j = 0u; j < numTexUnits; ++j )
+                        texUnits[j] = texUnitStart + j;
                     params->setNamedConstant( paramName, texUnits, static_cast<size_t>( numTexUnits ),
                                               1u );
                     ++itor;
@@ -3409,7 +3426,7 @@ namespace Ogre
     unsigned long Hlms::calculateLineCount( const String &buffer, size_t idx )
     {
         String::const_iterator itor = buffer.begin();
-        String::const_iterator endt = buffer.begin() + idx;
+        String::const_iterator endt = buffer.begin() + static_cast<ptrdiff_t>( idx );
 
         unsigned long lineCount = 0;
 

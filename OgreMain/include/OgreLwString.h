@@ -153,7 +153,7 @@ namespace Ogre
         void setToSubstr( const LwConstString &source, char *_start, char *_end )
         {
             assert( _start >= source.begin() && _start <= source.end() );
-            this->setToSubstr( source, _start - source.mStrPtr, _end - _start );
+            this->setToSubstr( source, _start - source.mStrPtr, static_cast<size_t>( _end - _start ) );
         }
 
         void clear()
@@ -413,7 +413,8 @@ namespace Ogre
 
             mStrPtr[mCapacity - 1] = '\0';
             assert( ( written >= 0 ) && ( (unsigned)written < mCapacity ) );
-            mSize = std::min<size_t>( mSize + std::max( written, 0 ), mCapacity - 1 );
+            mSize = std::min<size_t>( static_cast<size_t>( mSize + std::max( written, 0 ) ),
+                                      mCapacity - 1u );
             return *this;
         }
 

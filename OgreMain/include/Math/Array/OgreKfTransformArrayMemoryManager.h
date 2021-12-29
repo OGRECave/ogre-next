@@ -68,7 +68,7 @@ namespace Ogre
         @param outTransform
             Out: The transform with filled memory pointers
         */
-        void createNewNode( KfTransform **outTransform );
+        void createNewNode( KfTransform *RESTRICT_ALIAS *outTransform );
     };
 
     /** @} */

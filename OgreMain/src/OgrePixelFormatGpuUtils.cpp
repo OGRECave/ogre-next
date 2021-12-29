@@ -2128,7 +2128,7 @@ namespace Ogre
         {"PFG_ASTC_RGBA_UNORM_12X10_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
         {"PFG_ASTC_RGBA_UNORM_12X12_sRGB",		4u, 0,			PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
 
-        {"PFG_COUNT", 1u, 0, 0 },
+        {"PFG_COUNT", 1u, 0, 0, 0 },
     };
     // clang-format on
 }  // namespace Ogre

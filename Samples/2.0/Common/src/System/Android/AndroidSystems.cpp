@@ -43,8 +43,8 @@ namespace Demo
     static AndroidSystems g_andrSystem;
 #endif
 
-    AndroidSystems::AndroidSystems() : mAndroidApp( 0 ), mNativeWindow( 0 ) {}
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+    AndroidSystems::AndroidSystems() : mAndroidApp( 0 ), mNativeWindow( 0 ) {}
     //-------------------------------------------------------------------------
     void AndroidSystems::setAndroidApp( android_app *androidApp )
     {
@@ -87,8 +87,9 @@ namespace Demo
     bool AndroidSystems::isAndroid() { return true; }
 #else
     //-------------------------------------------------------------------------
-    void AndroidSystems::setAndroidApp( android_app *androidApp ) {}
-    void AndroidSystems::setNativeWindow( ANativeWindow *nativeWindow ) {}
+    AndroidSystems::AndroidSystems() {}
+    void AndroidSystems::setAndroidApp( android_app * ) {}
+    void AndroidSystems::setNativeWindow( ANativeWindow * ) {}
     ANativeWindow *AndroidSystems::getNativeWindow() { return 0; }
     bool AndroidSystems::isAndroid() { return false; }
     void AndroidSystems::registerArchiveFactories() {}
