@@ -79,10 +79,10 @@ namespace Ogre
 
         uint8 mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
-        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+        void cloneImpl( HlmsDatablock *datablock ) const override;
 
-        virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
-        virtual void uploadToExtraBuffer( char *dstPtr );
+        void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags ) override;
+        void uploadToExtraBuffer( char *dstPtr ) override;
 
     public:
         /** Valid parameters in params:
@@ -136,7 +136,7 @@ namespace Ogre
         */
         HlmsUnlitDatablock( IdString name, HlmsUnlit *creator, const HlmsMacroblock *macroblock,
                             const HlmsBlendblock *blendblock, const HlmsParamVec &params );
-        virtual ~HlmsUnlitDatablock();
+        ~HlmsUnlitDatablock() override;
 
         /// Controls whether the value in @see setColour is used.
         /// Calling this function implies calling see HlmsDatablock::flushRenderables.
@@ -225,11 +225,11 @@ namespace Ogre
         void setEnablePlanarReflection( uint8 textureUnit, bool bEnable );
         bool getEnablePlanarReflection( uint8 textureUnit ) const;
 
-        virtual ColourValue getDiffuseColour() const;
-        virtual ColourValue getEmissiveColour() const;
-        virtual TextureGpu *getEmissiveTexture() const;
+        ColourValue getDiffuseColour() const override;
+        ColourValue getEmissiveColour() const override;
+        TextureGpu *getEmissiveTexture() const override;
 
-        virtual void calculateHash();
+        void calculateHash() override;
 
         static const size_t MaterialSizeInGpu;
         static const size_t MaterialSizeInGpuAligned;

@@ -47,9 +47,9 @@ namespace Ogre
         */
         TextureAnimationControllerValue( Ogre::HlmsDatablock *datablock, Ogre::uint8 textureUnit );
 
-        Ogre::Real getValue() const;
+        Ogre::Real getValue() const override;
 
-        void setValue( Ogre::Real value );
+        void setValue( Ogre::Real value ) override;
 
         /** scaleAnimation.
         @param scaleU

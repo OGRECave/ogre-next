@@ -96,18 +96,17 @@ namespace Ogre
         /// Expects caller to call flushRenderables if we return true.
         bool bakeSamplers();
 
-        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+        void cloneImpl( HlmsDatablock *datablock ) const override;
 
     public:
         OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator,
                                       const HlmsMacroblock *macroblock,
                                       const HlmsBlendblock *blendblock,
                                       const HlmsParamVec &params );
-        virtual ~OGRE_HLMS_TEXTURE_BASE_CLASS();
+        ~OGRE_HLMS_TEXTURE_BASE_CLASS() override;
 
-        virtual void saveTextures( const String &folderPath, set<String>::type &savedTextures,
-                                   bool saveOitd, bool saveOriginal,
-                                   HlmsTextureExportListener *listener );
+        void saveTextures( const String &folderPath, set<String>::type &savedTextures, bool saveOitd,
+                           bool saveOriginal, HlmsTextureExportListener *listener ) override;
 
         /** Sets a new texture for rendering. Calling this function may trigger an
             HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
@@ -162,9 +161,9 @@ namespace Ogre
         /// instead. Same complexity as getIndexToDescriptorTexture
         uint8 getIndexToDescriptorSampler( uint8 texType );
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
-        virtual bool shouldStayLoaded( TextureGpu *texture );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
+        bool shouldStayLoaded( TextureGpu *texture ) override;
 
         void loadAllTextures();
     };
