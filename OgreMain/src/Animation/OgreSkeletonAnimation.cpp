@@ -33,6 +33,11 @@ THE SOFTWARE.
 #include "Animation/OgreSkeletonAnimationDef.h"
 #include "Animation/OgreSkeletonInstance.h"
 
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
 namespace Ogre
 {
     SkeletonAnimation::SkeletonAnimation( const SkeletonAnimationDef *definition,
@@ -328,3 +333,6 @@ namespace Ogre
         inOutBoneWeights.swap( mBoneWeights );
     }
 }  // namespace Ogre
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif

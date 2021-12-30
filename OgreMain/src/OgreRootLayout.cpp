@@ -36,8 +36,15 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 #include "OgreStringConverter.h"
 
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif
 
 #define TODO_limit_NUM_BIND_TEXTURES  // and co.
 

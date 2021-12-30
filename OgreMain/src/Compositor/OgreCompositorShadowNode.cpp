@@ -1005,7 +1005,7 @@ namespace Ogre
                 fAutoConstantBiasScale = 1.0f + autoFactor * shadowMapDef.autoNormalOffsetBiasScale;
             }
         }
-        return shadowMapDef.normalOffsetBias;
+        return shadowMapDef.normalOffsetBias * fAutoConstantBiasScale;
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNode::setLightFixedToShadowMap( size_t shadowMapIdx, Light *light )

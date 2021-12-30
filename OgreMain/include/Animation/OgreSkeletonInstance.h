@@ -35,6 +35,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
     class SkeletonDef;
     typedef vector<SkeletonAnimation>::type   SkeletonAnimationVec;
     typedef vector<SkeletonAnimation *>::type ActiveAnimationsVec;
@@ -232,6 +237,10 @@ namespace Ogre
 
     /** @} */
     /** @} */
+
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif
 }  // namespace Ogre
 
 #endif

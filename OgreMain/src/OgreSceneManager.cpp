@@ -2490,6 +2490,7 @@ namespace Ogre
                 ++unit;
             }
 
+#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
             // Sort out negative scaling
             // Assume first world matrix representative
             if( mFlipCullingOnNegativeScale )
@@ -2511,13 +2512,12 @@ namespace Ogre
                     };
                 }
 
-#ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
                 // this also copes with returning from negative scale in previous render op
                 // for same pass
                 if( cullMode != mDestRenderSystem->_getCullingMode() )
                     mDestRenderSystem->_setCullingMode( cullMode );
-#endif
             }
+#endif
 
             if( doLightIteration )
             {

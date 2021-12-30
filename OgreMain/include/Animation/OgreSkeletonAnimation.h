@@ -38,6 +38,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
     class SkeletonAnimationDef;
     class SkeletonInstance;
 
@@ -56,8 +61,8 @@ namespace Ogre
         SkeletonAnimationDef const *mDefinition;
 
     protected:
-        RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mBoneWeights;
-        Real                                               mCurrentFrame;
+        RawSimdUniquePtr<__m128, MEMCATEGORY_ANIMATION> mBoneWeights;
+        Real                                            mCurrentFrame;
 
     public:
         Real                     mFrameRate;  // Playback framerate
@@ -274,6 +279,10 @@ namespace Ogre
 
     /** @} */
     /** @} */
+
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif
 }  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"

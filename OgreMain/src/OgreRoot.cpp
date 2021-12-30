@@ -1179,7 +1179,7 @@ namespace Ogre
         {
             cfg.load( pluginsfile );
         }
-        catch( Exception )
+        catch( Exception & )
         {
             LogManager::getSingleton().logMessage( pluginsfile +
                                                    " not found, automatic plugin loading disabled." );

@@ -1154,6 +1154,8 @@ namespace Ogre
     }
 }  // namespace Ogre
 
+#include "OgreSilentMemory.h"
+
 #include "OgreHeaderSuffix.h"
 
 #endif

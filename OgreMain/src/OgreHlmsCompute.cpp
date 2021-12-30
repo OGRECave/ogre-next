@@ -277,7 +277,6 @@ namespace Ogre
                 // If two shaders have the exact same source code but different
                 // Root Layout, we should treat them differently
                 RootLayout rootLayout;
-                memset( &rootLayout, 0, sizeof( rootLayout ) );
                 rootLayout.mCompute = true;
                 job->setupRootLayout( rootLayout );
 

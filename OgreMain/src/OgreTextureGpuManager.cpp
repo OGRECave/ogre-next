@@ -57,8 +57,16 @@ THE SOFTWARE.
 
 #if !OGRE_NO_JSON
 #    include "OgreStringConverter.h"
+#
+#    if defined( __GNUC__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wclass-memaccess"
+#    endif
 #    include "rapidjson/document.h"
 #    include "rapidjson/error/en.h"
+#    if defined( __GNUC__ )
+#        pragma GCC diagnostic pop
+#    endif
 #endif
 
 //#define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1

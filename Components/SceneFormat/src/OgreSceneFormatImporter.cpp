@@ -56,8 +56,15 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif
 
 namespace Ogre
 {

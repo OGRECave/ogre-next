@@ -244,9 +244,9 @@ namespace Ogre
                 if( value == 0 )
                     value = 0;
                 else if( value == ( static_cast<unsigned int>( 1 ) << n ) - 1 )
-                    value = ( 1 << p ) - 1;
+                    value = ( 1u << p ) - 1u;
                 else
-                    value = value * ( 1 << p ) / ( ( 1 << n ) - 1 );
+                    value = value * ( 1u << p ) / ( ( 1u << n ) - 1u );
             }
             return value;
         }
@@ -260,7 +260,7 @@ namespace Ogre
             if( value <= 0.0f )
                 return 0;
             else if( value >= 1.0f )
-                return ( 1 << bits ) - 1;
+                return ( 1u << bits ) - 1u;
             else
                 return (unsigned int)( value * ( 1 << bits ) );
         }
@@ -346,9 +346,9 @@ namespace Ogre
          */
         static inline uint16 floatToHalfI( uint32 i )
         {
-            register int s = ( i >> 16 ) & 0x00008000;
-            register int e = ( ( i >> 23 ) & 0x000000ff ) - ( 127 - 15 );
-            register int m = i & 0x007fffff;
+            const int s = ( i >> 16 ) & 0x00008000;
+            const int e = static_cast<int>( ( i >> 23 ) & 0x000000ff ) - ( 127 - 15 );
+            int       m = i & 0x007fffff;
 
             if( e <= 0 )
             {

@@ -29,6 +29,8 @@ THE SOFTWARE.
 #ifndef __OgreFastArray__
 #define __OgreFastArray__
 
+#include "OgreSilentMemory.h"
+
 namespace Ogre
 {
     /** Lightweight implementation of std::vector
@@ -86,7 +88,7 @@ namespace Ogre
                 T *data = (T *)::operator new( mCapacity * sizeof( T ) );
                 if( mData )
                 {
-                    memcpy( data, mData, mSize * sizeof( T ) );
+                    silent_memcpy( data, mData, mSize * sizeof( T ) );
                     ::operator delete( mData );
                 }
                 mData = data;
@@ -187,8 +189,8 @@ namespace Ogre
 
             growToFit( 1 );
 
-            memmove( mData + idx + 1, mData + idx,
-                     ( mSize - static_cast<size_t>( idx ) ) * sizeof( T ) );
+            silent_memmove( mData + idx + 1, mData + idx,
+                            ( mSize - static_cast<size_t>( idx ) ) * sizeof( T ) );
             new( &mData[idx] ) T( val );
             ++mSize;
 
@@ -239,8 +241,8 @@ namespace Ogre
         {
             const ptrdiff_t idx = ( toErase - mData );
             toErase->~T();
-            memmove( mData + idx, mData + idx + 1,
-                     ( mSize - static_cast<size_t>( idx ) - 1u ) * sizeof( T ) );
+            silent_memmove( mData + idx, mData + idx + 1,
+                            ( mSize - static_cast<size_t>( idx ) - 1u ) * sizeof( T ) );
             --mSize;
 
             return mData + idx;
@@ -259,7 +261,7 @@ namespace Ogre
                     first->~T();
                     ++first;
                 }
-                memmove( mData + idx, mData + idxNext, ( mSize - idxNext ) * sizeof( T ) );
+                silent_memmove( mData + idx, mData + idxNext, ( mSize - idxNext ) * sizeof( T ) );
                 mSize -= idxNext - idx;
             }
 
@@ -298,7 +300,7 @@ namespace Ogre
                 // which is not the desire when calling reserve() explicitly
                 mCapacity = reserveAmount;
                 T *data = (T *)::operator new( mCapacity * sizeof( T ) );
-                memcpy( data, mData, mSize * sizeof( T ) );
+                silent_memcpy( data, mData, mSize * sizeof( T ) );
                 ::operator delete( mData );
                 mData = data;
             }

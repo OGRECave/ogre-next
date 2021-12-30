@@ -40,8 +40,8 @@ THE SOFTWARE.
 
 #include "OgreException.h"
 
-#define TODO_use_StagingTexture_with_GPU_GPU_visibility 1
-#define TODO_sw_fallback 1
+#define TODO_use_StagingTexture_with_GPU_GPU_visibility
+#define TODO_sw_fallback
 
 namespace Ogre
 {

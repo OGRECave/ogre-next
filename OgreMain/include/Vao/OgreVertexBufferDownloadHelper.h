@@ -90,9 +90,9 @@ namespace Ogre
         };
 
     protected:
-        typedef FastArray<DownloadData> DownloadDataArray;
+        typedef vector<DownloadData>::type DownloadDataVec;
 
-        DownloadDataArray mDownloadData;
+        DownloadDataVec mDownloadData;
 
     public:
         /** Creates AsyncTickets to download GPU -> CPU the requested VertexElementSemantics
@@ -181,9 +181,12 @@ namespace Ogre
                 qTangent.z = Bitwise::snorm16ToFloat( srcData16[2] );
                 qTangent.w = Bitwise::snorm16ToFloat( srcData16[3] );
 
+#if 0
+                // Reflection is only needed to flip qTangent.zAxis()
                 float reflection = 1.0f;
                 if( qTangent.w < 0 )
                     reflection = -1.0f;
+#endif
 
                 retVal = qTangent.xAxis();
             }
@@ -199,7 +202,7 @@ namespace Ogre
             return retVal;
         }
 
-        const DownloadDataArray &getDownloadData() const { return mDownloadData; }
+        const DownloadDataVec &getDownloadData() const { return mDownloadData; }
     };
 
     /** @} */

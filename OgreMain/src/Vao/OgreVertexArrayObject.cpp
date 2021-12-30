@@ -299,7 +299,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VertexArrayObject::readRequests( ReadRequestsArray &requests, size_t elementStart,
+    void VertexArrayObject::readRequests( ReadRequestsVec &requests, size_t elementStart,
                                           size_t elementCount, bool skipRequestIfBufferHasShadowCopy )
     {
         set<VertexBufferPacked *>::type seenBuffers;
@@ -307,8 +307,8 @@ namespace Ogre
         size_t semanticCounts[VES_COUNT];
         memset( semanticCounts, 0, sizeof( semanticCounts ) );
 
-        ReadRequestsArray::iterator itor = requests.begin();
-        ReadRequestsArray::iterator endt = requests.end();
+        ReadRequestsVec::iterator itor = requests.begin();
+        ReadRequestsVec::iterator endt = requests.end();
 
         while( itor != endt )
         {
@@ -349,12 +349,12 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VertexArrayObject::mapAsyncTickets( ReadRequestsArray &tickets )
+    void VertexArrayObject::mapAsyncTickets( ReadRequestsVec &tickets )
     {
         map<VertexBufferPacked const *, size_t>::type seenBuffers;
 
-        ReadRequestsArray::iterator itor = tickets.begin();
-        ReadRequestsArray::iterator endt = tickets.end();
+        ReadRequestsVec::iterator itor = tickets.begin();
+        ReadRequestsVec::iterator endt = tickets.end();
 
         while( itor != endt )
         {
@@ -384,10 +384,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void VertexArrayObject::unmapAsyncTickets( ReadRequestsArray &tickets )
+    void VertexArrayObject::unmapAsyncTickets( ReadRequestsVec &tickets )
     {
-        ReadRequestsArray::iterator itor = tickets.begin();
-        ReadRequestsArray::iterator endt = tickets.end();
+        ReadRequestsVec::iterator itor = tickets.begin();
+        ReadRequestsVec::iterator endt = tickets.end();
 
         while( itor != endt )
         {

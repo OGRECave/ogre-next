@@ -819,6 +819,7 @@ namespace Ogre
             {
             case Token::TK_EOS:
                 Error( Line, "Unfinished list of arguments" );
+                // fallthrough
             case Token::TK_ERROR:
                 return Token( Token::TK_ERROR );
             case Token::TK_PUNCTUATION:
@@ -923,6 +924,7 @@ namespace Ogre
             {
             case Token::TK_EOS:
                 Error( Line, "Unfinished list of arguments" );
+                // fallthrough
             case Token::TK_ERROR:
                 return Token( Token::TK_ERROR );
 
@@ -1404,9 +1406,9 @@ namespace Ogre
                         output.AppendNL( empty_lines );
                     empty_lines = 0;
                 }
-                // Fallthrough to default
+                // Fallthrough
             case Token::TK_WHITESPACE:
-                // Fallthrough to default
+                // Fallthrough
             default:
                 // Passthrough all other tokens
                 if( output_enabled )

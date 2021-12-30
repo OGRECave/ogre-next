@@ -441,6 +441,8 @@ namespace Ogre
             OGRE_ASSERT_MEDIUM( false && "Unimplemented. How are you here?" );
             return ResourceLayout::RenderTargetReadOnly;
         }
+
+        return ResourceLayout::Undefined;
     }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::setTextureType( TextureTypes::TextureTypes textureType )

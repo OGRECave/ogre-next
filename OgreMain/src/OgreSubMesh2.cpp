@@ -195,7 +195,7 @@ namespace Ogre
             destroyShadowMappingVaos();
 
             VertexElement2Vec newVertexDeclaration;
-            VertexArrayObject::ReadRequestsArray readRequests;
+            VertexArrayObject::ReadRequestsVec readRequests;
 
             {
                 VertexElement2VecVec vertexDeclaration = mVao[VpNormal][0]->getVertexDeclaration();
@@ -246,8 +246,8 @@ namespace Ogre
 
             for( size_t i = 0; i < numVertices; ++i )
             {
-                VertexArrayObject::ReadRequestsArray::const_iterator itor = readRequests.begin();
-                VertexArrayObject::ReadRequestsArray::const_iterator endt = readRequests.end();
+                VertexArrayObject::ReadRequestsVec::const_iterator itor = readRequests.begin();
+                VertexArrayObject::ReadRequestsVec::const_iterator endt = readRequests.end();
 
                 while( itor != endt )
                 {

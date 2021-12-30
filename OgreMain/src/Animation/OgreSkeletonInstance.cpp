@@ -38,6 +38,11 @@ THE SOFTWARE.
 #include "OgreSceneNode.h"
 #include "OgreSkeleton.h"
 
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wignored-attributes"
+#endif
+
 namespace Ogre
 {
     SkeletonInstance::SkeletonInstance( const SkeletonDef *skeletonDef,
@@ -574,3 +579,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     uint16 SkeletonInstance::_getRefCount() const { return mRefCount; }
 }  // namespace Ogre
+
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif

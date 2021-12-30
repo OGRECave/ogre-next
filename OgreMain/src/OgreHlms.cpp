@@ -3138,7 +3138,7 @@ namespace Ogre
         HlmsPassPso passPso;
 
         // Needed so that memcmp in HlmsPassPso::operator == works correctly
-        memset( &passPso, 0, sizeof( HlmsPassPso ) );
+        silent_memset( &passPso, 0, sizeof( HlmsPassPso ) );
 
         passPso.stencilParams = mRenderSystem->getStencilBufferParams();
 

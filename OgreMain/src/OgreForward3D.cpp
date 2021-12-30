@@ -219,7 +219,7 @@ namespace Ogre
         uint16 *RESTRICT_ALIAS gridBuffer = reinterpret_cast<uint16 * RESTRICT_ALIAS>(
             gridBuffers.gridBuffer->map( 0, gridBuffers.gridBuffer->getNumElements() ) );
 
-        memset( mLightCountInCell.begin(), 0, mLightCountInCell.size() * sizeof( LightCount ) );
+        silent_memset( mLightCountInCell.begin(), 0, mLightCountInCell.size() * sizeof( LightCount ) );
 
         Matrix4 viewMat = camera->getViewMatrix();
         Matrix4 projMatrix = camera->getProjectionMatrix();

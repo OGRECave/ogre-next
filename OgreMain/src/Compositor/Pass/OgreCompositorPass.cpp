@@ -514,10 +514,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::executeResourceTransitions()
     {
-        OGRE_ASSERT_MEDIUM( mResourceTransitions.empty() ||
-                            !mDefinition->mSkipLoadStoreSemantics &&
-                                "Cannot set mSkipLoadStoreSemantics if there will be resource "
-                                "transitions. Try englobing all affected passes in a barrier pass" );
+        OGRE_ASSERT_MEDIUM( ( mResourceTransitions.empty() || !mDefinition->mSkipLoadStoreSemantics ) &&
+                            "Cannot set mSkipLoadStoreSemantics if there will be resource "
+                            "transitions. Try englobing all affected passes in a barrier pass" );
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->executeResourceTransition( mResourceTransitions );
     }

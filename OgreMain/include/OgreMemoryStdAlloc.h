@@ -106,9 +106,17 @@ namespace Ogre
     class StdAlignedAllocPolicy
     {
     public:
+#    if defined( __GNUC__ )
+#        pragma GCC diagnostic push
+#        pragma GCC diagnostic ignored "-Wsign-conversion"
+#    endif
         // compile-time check alignment is available.
         typedef int
-            IsValidAlignment[Alignment <= 128 && ( ( Alignment & ( Alignment - 1 ) ) == 0 ) ? +1 : -1];
+            IsValidAlignment[( Alignment <= 128u && ( ( Alignment & ( Alignment - 1u ) ) == 0u ) ) ? +1
+                                                                                                   : -1];
+#    if defined( __GNUC__ )
+#        pragma GCC diagnostic pop
+#    endif
 
         static inline DECL_MALLOC void *allocateBytes( size_t count,
 #    if OGRE_MEMORY_TRACKER

@@ -25,40 +25,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef _OgreCbTexture_H_
-#define _OgreCbTexture_H_
 
-#include "CommandBuffer/OgreCbCommon.h"
+#ifndef OgreSilentMemory_H_
+#define OgreSilentMemory_H_
 
+// Define silent_memset, a memset that doesn't warn on GCC when we're overriding non-POD structs
+// Same with memcpy
+
+#include <string.h>
+
+#if defined( __GNUC__ )
 namespace Ogre
 {
-    struct _OgreExport CbTexture : public CbBase
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wclass-memaccess"
+
+    inline void *silent_memset( void *a, int b, size_t c ) noexcept __nonnull( ( 1 ) );
+    inline void *silent_memset( void *a, int b, size_t c ) noexcept { return memset( a, b, c ); }
+
+    inline void *silent_memcpy( void *__restrict __dest, const void *__restrict __src,
+                                size_t __n ) noexcept __nonnull( ( 1, 2 ) );
+    inline void *silent_memcpy( void *__restrict a, const void *__restrict b, size_t c ) noexcept
     {
-        uint16                  texUnit;
-        bool                    bDepthReadOnly;
-        TextureGpu *            texture;
-        HlmsSamplerblock const *samplerBlock;
+        return memcpy( a, b, c );
+    }
 
-        CbTexture( uint16 _texUnit, TextureGpu *_texture, const HlmsSamplerblock *_samplerBlock = 0,
-                   bool _bDepthReadOnly = false );
-    };
-
-    struct _OgreExport CbTextures : public CbBase
+    __fortify_function void *__NTH( silent_memmove( void *a, const void *b, size_t c ) )
     {
-        uint16                      texUnit;
-        uint16                      hazardousTexIdx;
-        const DescriptorSetTexture *descSet;
+        return memmove( a, b, c );
+    }
 
-        CbTextures( uint16 _texUnit, uint16 _hazardousTexIdx, const DescriptorSetTexture *_descSet );
-    };
-
-    struct _OgreExport CbSamplers : public CbBase
-    {
-        uint16                      texUnit;
-        const DescriptorSetSampler *descSet;
-
-        CbSamplers( uint16 _texUnit, const DescriptorSetSampler *_descSet );
-    };
+#    pragma GCC diagnostic pop
 }  // namespace Ogre
+#else
+#    define silent_memset( a, b, c ) memset( a, b, c )
+#    define silent_memcpy( a, b, c ) memcpy( a, b, c )
+#    define silent_memmove( a, b, c ) memmove( a, b, c )
+#endif
 
 #endif

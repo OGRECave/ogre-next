@@ -388,8 +388,8 @@ namespace Ogre
         const size_t numPackedFrustumsPerSlice = ( mWidth / ARRAY_PACKED_REALS ) * mHeight;
 
         // Initialize light counts to 0
-        memset( mLightCountInCell.begin() + frustumStartIdx * ARRAY_PACKED_REALS, 0,
-                numPackedFrustumsPerSlice * ARRAY_PACKED_REALS * sizeof( LightCount ) );
+        silent_memset( mLightCountInCell.begin() + frustumStartIdx * ARRAY_PACKED_REALS, 0,
+                       numPackedFrustumsPerSlice * ARRAY_PACKED_REALS * sizeof( LightCount ) );
 
         const size_t numLights = mCurrentLightList.size();
         LightArray::const_iterator itLight = mCurrentLightList.begin();

@@ -279,7 +279,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void MovableObject::setRenderQueueGroup( uint8 queueID )
     {
-        assert( queueID >= 0 && queueID <= 254 );
+        assert( queueID <= 254 );
 
         if( mRenderQueueID != queueID )
             mObjectMemoryManager->objectMoved( mObjectData, mRenderQueueID, queueID );

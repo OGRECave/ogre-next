@@ -199,14 +199,14 @@ namespace Ogre
             }
         };
 
-        typedef FastArray<ReadRequests> ReadRequestsArray;
+        typedef vector<ReadRequests>::type ReadRequestsVec;
 
         /** Utility to get multiple pointers & read specific elements of the vertex,
             even if they're in separate buffers.
             When two elements share the same buffer, only one ticket is created.
 
             Example usage:
-                VertexArrayObject::ReadRequestsArray requests;
+                VertexArrayObject::ReadRequestsVec requests;
                 requests.push_back( VertexArrayObject::ReadRequests( VES_POSITION ) );
                 requests.push_back( VertexArrayObject::ReadRequests( VES_NORMALS ) );
                 vao->readRequests( requests );
@@ -232,14 +232,14 @@ namespace Ogre
             The 'data' variable will be filled immediately if there's a shadow copy available,
             and mapAsyncTickets can be safely called even if skipRequestIfBufferHasShadowCopy=true
         */
-        void readRequests( ReadRequestsArray &requests, size_t elementStart = 0, size_t elementCount = 0,
+        void readRequests( ReadRequestsVec &requests, size_t elementStart = 0, size_t elementCount = 0,
                            bool skipRequestIfBufferHasShadowCopy = false );
 
         /// Maps the buffers requested via @see readRequests
-        static void mapAsyncTickets( ReadRequestsArray &tickets );
+        static void mapAsyncTickets( ReadRequestsVec &tickets );
 
         /// Unmaps the buffers mapped via @see mapAsyncTickets
-        static void unmapAsyncTickets( ReadRequestsArray &tickets );
+        static void unmapAsyncTickets( ReadRequestsVec &tickets );
 
         /// When a Vao doesn't have a vertex buffer, a dummy one is assigned for performance
         /// reasons (avoid checking if pointer is null, avoid crashing inside Ogre)

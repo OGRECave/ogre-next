@@ -122,10 +122,13 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
   endif ()
   # This is a set of sensible warnings that provide meaningful output
   set(OGRE_WARNING_FLAGS
-	  "-Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wno-unused-parameter -Wshadow")
+      "-Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wno-unused-parameter -Wshadow")
 
   if( CMAKE_COMPILER_IS_GNUCXX )
+    # On GCC Wsign-conversion has too many false positives. See https://stackoverflow.com/a/64542771
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} -Wsuggest-override" )
+  else()
+    set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} -Wcomma -Wsign-conversion" )
   endif()
 
   if (EMSCRIPTEN)

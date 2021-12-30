@@ -145,6 +145,7 @@ namespace Ogre
                 {
                     state = WORD;
                 }
+                // fallthrough
             case WORD:
                 if( isNewline( c ) )
                 {

@@ -2687,7 +2687,7 @@ namespace Ogre{
                                             mPass->setIteratePerLight(true, false);
                                         }
                                     }
-                                    else if(ID_PER_N_LIGHTS)
+                                    else if(atom->id == ID_PER_N_LIGHTS)
                                     {
                                         AbstractNodeList::const_iterator i2 = getNodeAt(prop->values, 2);
                                         if(i2 != prop->values.end() && (*i2)->type == ANT_ATOM)
@@ -3256,6 +3256,7 @@ namespace Ogre{
                                                 break;
                                             }
                                         }
+                                        // fallthrough
                                     case ID_2D:
                                         texType = TextureTypes::Type2D;
                                         break;
@@ -7875,6 +7876,7 @@ namespace Ogre{
                 {
                     compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                 }
+                break;
             }
             case ID_ALL_LAYERS:
             {
@@ -10286,6 +10288,7 @@ namespace Ogre{
                                     {
                                     case ID_READ:
                                         access |= ResourceAccess::Read;
+                                        break;
                                     case ID_WRITE:
                                         access |= ResourceAccess::Write;
                                         break;
@@ -10387,6 +10390,7 @@ namespace Ogre{
                                     {
                                     case ID_READ:
                                         access |= ResourceAccess::Read;
+                                        break;
                                     case ID_WRITE:
                                         access |= ResourceAccess::Write;
                                         break;
@@ -10581,6 +10585,7 @@ namespace Ogre{
                                     {
                                     case ID_READ:
                                         access |= ResourceAccess::Read;
+                                        break;
                                     case ID_WRITE:
                                         access |= ResourceAccess::Write;
                                         break;
@@ -10675,6 +10680,7 @@ namespace Ogre{
                                     {
                                     case ID_READ:
                                         access |= ResourceAccess::Read;
+                                        break;
                                     case ID_WRITE:
                                         access |= ResourceAccess::Write;
                                         break;
@@ -11156,6 +11162,7 @@ namespace Ogre{
                     AbstractNodeList::const_iterator it0 = prop->values.begin();
                     if( !getBoolean( *it0, &mPassDef->mWarnIfRtvWasFlushed ) )
                         compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line );
+                    break;
                 }
                 case ID_VIEWPORT:
                     {
@@ -11391,6 +11398,7 @@ namespace Ogre{
                                 {
                                 case ID_READ:
                                     access |= ResourceAccess::Read;
+                                    break;
                                 case ID_WRITE:
                                     access |= ResourceAccess::Write;
                                     break;

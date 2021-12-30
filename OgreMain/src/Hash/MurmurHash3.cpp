@@ -58,6 +58,7 @@ inline uint64_t rotl64 ( uint64_t x, int8_t r )
 #elif defined( __GNUC__ )
 #    pragma GCC diagnostic push
 #    pragma GCC diagnostic ignored "-Wsign-conversion"
+#    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 namespace Ogre

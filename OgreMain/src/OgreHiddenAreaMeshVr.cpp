@@ -45,7 +45,7 @@ namespace Ogre
                                                                   ConfigFile &configFile )
     {
         HiddenAreaVrSettings retVal;
-        memset( &retVal, 0, sizeof( retVal ) );
+        silent_memset( &retVal, 0, sizeof( retVal ) );
 
         ConfigFile::SectionIterator itor = configFile.getSectionIterator();
 
