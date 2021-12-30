@@ -61,8 +61,8 @@ namespace Ogre
         SkeletonAnimationDef const *mDefinition;
 
     protected:
-        RawSimdUniquePtr<__m128, MEMCATEGORY_ANIMATION> mBoneWeights;
-        Real                                            mCurrentFrame;
+        RawSimdUniquePtr<ArrayReal, MEMCATEGORY_ANIMATION> mBoneWeights;
+        Real                                               mCurrentFrame;
 
     public:
         Real                     mFrameRate;  // Playback framerate
