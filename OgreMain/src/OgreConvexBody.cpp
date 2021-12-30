@@ -777,7 +777,7 @@ namespace Ogre
         OgreAssert( pdata != NULL, "Polygon is NULL" );
 
         PolygonList::iterator it = mPolygons.begin();
-        std::advance( it, poly );
+        std::advance( it, static_cast<ptrdiff_t>( poly ) );
 
         mPolygons.insert( it, pdata );
     }
@@ -808,7 +808,7 @@ namespace Ogre
         OgreAssert( poly < getPolygonCount(), "Search position out of range" );
 
         PolygonList::iterator it = mPolygons.begin();
-        std::advance( it, poly );
+        std::advance( it, static_cast<ptrdiff_t>( poly ) );
 
         freePolygon( *it );
         mPolygons.erase( it );
@@ -819,7 +819,7 @@ namespace Ogre
         OgreAssert( poly < getPolygonCount(), "Search position out of range" );
 
         PolygonList::iterator it = mPolygons.begin();
-        std::advance( it, poly );
+        std::advance( it, static_cast<ptrdiff_t>( poly ) );
 
         // safe address
         Polygon *pRet = *it;

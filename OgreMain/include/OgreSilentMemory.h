@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 #include <string.h>
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( __clang__ )
 namespace Ogre
 {
 #    pragma GCC diagnostic push

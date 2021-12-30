@@ -133,7 +133,7 @@ namespace Ogre
             if( i != mNodeList.end() )
             {
                 // also get matching chain segment
-                size_t index = static_cast<size_t>( std::distance( mNodeList.begin(), i ) );
+                const ptrdiff_t index = std::distance( mNodeList.begin(), i );
                 IndexVector::iterator mi = mNodeToChainSegment.begin();
                 std::advance( mi, index );
                 size_t chainIndex = *mi;

@@ -252,7 +252,7 @@ namespace Ogre
                     if( res->getGroup() != name )
                     {
                         l = oi->second->begin();
-                        std::advance( l, n );
+                        std::advance( l, static_cast<ptrdiff_t>( n ) );
                     }
                     else
                     {
@@ -331,7 +331,7 @@ namespace Ogre
                     if( res->getGroup() != name )
                     {
                         l = oi->second->begin();
-                        std::advance( l, n );
+                        std::advance( l, static_cast<ptrdiff_t>( n ) );
                     }
                     else
                     {

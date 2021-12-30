@@ -59,8 +59,8 @@ namespace Ogre
             if( asset )
             {
                 EmbeddedZipArchiveFactory::addEmbbeddedFile(
-                    apkName, (const Ogre::uint8 *)AAsset_getBuffer( asset ), AAsset_getLength( asset ),
-                    0 );
+                    apkName, (const Ogre::uint8 *)AAsset_getBuffer( asset ),
+                    static_cast<size_t>( AAsset_getLength( asset ) ), 0 );
             }
 
             ZipArchive *resZipArchive = OGRE_NEW ZipArchive( apkName, "APKZip", mPluginIo );

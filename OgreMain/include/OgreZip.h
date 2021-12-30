@@ -129,7 +129,7 @@ namespace Ogre
     };
 
     /** Specialisation of ZipArchiveFactory for embedded Zip files. */
-    class _OgreExport EmbeddedZipArchiveFactory final : public ZipArchiveFactory
+    class _OgreExport EmbeddedZipArchiveFactory : public ZipArchiveFactory
     {
     protected:
         /// A static pointer to file io alternative implementation for the embedded files

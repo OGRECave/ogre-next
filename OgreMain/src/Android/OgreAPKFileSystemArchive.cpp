@@ -68,7 +68,7 @@ namespace Ogre
             AAssetManager_open( mAssetMgr, ( mPathPreFix + filename ).c_str(), AASSET_MODE_BUFFER );
         if( asset )
         {
-            off_t length = AAsset_getLength( asset );
+            const size_t length = static_cast<size_t>( AAsset_getLength( asset ) );
             void *membuf = OGRE_MALLOC( length, Ogre::MEMCATEGORY_GENERAL );
             memcpy( membuf, AAsset_getBuffer( asset ), length );
             AAsset_close( asset );
@@ -113,7 +113,7 @@ namespace Ogre
                 info.filename = fileList[i];
                 info.path = mName;
                 info.basename = fileList[i];
-                info.compressedSize = AAsset_getLength( asset );
+                info.compressedSize = static_cast<size_t>( AAsset_getLength( asset ) );
                 info.uncompressedSize = info.compressedSize;
                 files->push_back( info );
                 AAsset_close( asset );
@@ -154,7 +154,7 @@ namespace Ogre
                     info.filename = fileList[i];
                     info.path = mName;
                     info.basename = fileList[i];
-                    info.compressedSize = AAsset_getLength( asset );
+                    info.compressedSize = static_cast<size_t>( AAsset_getLength( asset ) );
                     info.uncompressedSize = info.compressedSize;
                     files->push_back( info );
                     AAsset_close( asset );

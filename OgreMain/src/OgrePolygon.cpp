@@ -62,7 +62,7 @@ namespace Ogre
 
         VertexList::iterator it = mVertexList.begin();
 
-        std::advance( it, vertex );
+        std::advance( it, static_cast<ptrdiff_t>( vertex ) );
         mVertexList.insert( it, vdata );
     }
     //-----------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace Ogre
         OgreAssert( vertex < getVertexCount(), "Search position out of range" );
 
         VertexList::iterator it = mVertexList.begin();
-        std::advance( it, vertex );
+        std::advance( it, static_cast<ptrdiff_t>( vertex ) );
 
         mVertexList.erase( it );
     }

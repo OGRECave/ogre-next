@@ -650,7 +650,7 @@ namespace Ogre
     {
         assert( index < mActiveParticles.size() && "Index out of bounds!" );
         ActiveParticleList::iterator i = mActiveParticles.begin();
-        std::advance( i, index );
+        std::advance( i, static_cast<ptrdiff_t>( index ) );
         return *i;
     }
     //-----------------------------------------------------------------------
@@ -1062,8 +1062,8 @@ namespace Ogre
     {
         ParticlePool::iterator i = mParticlePool.begin();
         ParticlePool::iterator iend = mParticlePool.begin();
-        std::advance( i, poolstart );
-        std::advance( iend, poolend );
+        std::advance( i, static_cast<ptrdiff_t>( poolstart ) );
+        std::advance( iend, static_cast<ptrdiff_t>( poolend ) );
         for( ; i != iend; ++i )
         {
             ( *i )->_notifyVisualData( mRenderer->_createVisualData() );
@@ -1074,8 +1074,8 @@ namespace Ogre
     {
         ParticlePool::iterator i = mParticlePool.begin();
         ParticlePool::iterator iend = mParticlePool.begin();
-        std::advance( i, poolstart );
-        std::advance( iend, poolend );
+        std::advance( i, static_cast<ptrdiff_t>( poolstart ) );
+        std::advance( iend, static_cast<ptrdiff_t>( poolend ) );
         for( ; i != iend; ++i )
         {
             mRenderer->_destroyVisualData( ( *i )->getVisualData() );

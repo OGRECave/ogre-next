@@ -459,7 +459,7 @@ namespace Ogre
         {
             GpuConstantDefinition &def = i->second;
             bool isFloat = def.isFloat();  // TODO does a double check belong here too?
-            size_t numElems = def.elementSize * def.arraySize;
+            const size_t numElems = def.elementSize * def.arraySize;
 
             for( GpuConstantDefinitionMap::iterator j = mNamedConstants.map.begin();
                  j != mNamedConstants.map.end(); ++j )
@@ -481,9 +481,9 @@ namespace Ogre
                 mNamedConstants.floatBufferSize -= numElems;
 
                 FloatConstantList::iterator beg = mFloatConstants.begin();
-                std::advance( beg, def.physicalIndex );
+                std::advance( beg, static_cast<ptrdiff_t>( def.physicalIndex ) );
                 FloatConstantList::iterator en = beg;
-                std::advance( en, numElems );
+                std::advance( en, static_cast<ptrdiff_t>( numElems ) );
                 mFloatConstants.erase( beg, en );
             }
             else if( def.isInt() || def.isSampler() || def.isSubroutine() )
@@ -491,9 +491,9 @@ namespace Ogre
                 mNamedConstants.intBufferSize -= numElems;
 
                 IntConstantList::iterator beg = mIntConstants.begin();
-                std::advance( beg, def.physicalIndex );
+                std::advance( beg, static_cast<ptrdiff_t>( def.physicalIndex ) );
                 IntConstantList::iterator en = beg;
-                std::advance( en, numElems );
+                std::advance( en, static_cast<ptrdiff_t>( numElems ) );
                 mIntConstants.erase( beg, en );
             }
             else if( def.isUnsignedInt() || def.isBool() )
@@ -501,9 +501,9 @@ namespace Ogre
                 mNamedConstants.uintBufferSize -= numElems;
 
                 UnsignedIntConstantList::iterator beg = mUnsignedIntConstants.begin();
-                std::advance( beg, def.physicalIndex );
+                std::advance( beg, static_cast<ptrdiff_t>( def.physicalIndex ) );
                 UnsignedIntConstantList::iterator en = beg;
-                std::advance( en, numElems );
+                std::advance( en, static_cast<ptrdiff_t>( numElems ) );
                 mUnsignedIntConstants.erase( beg, en );
             }
             else
@@ -1572,7 +1572,7 @@ namespace Ogre
                 // until first actual runtime use e.g. world matrix array
                 size_t insertCount = requestedSize - logi->second.currentSize;
                 FloatConstantList::iterator insertPos = mFloatConstants.begin();
-                std::advance( insertPos, physicalIndex );
+                std::advance( insertPos, static_cast<ptrdiff_t>( physicalIndex ) );
                 mFloatConstants.insert( insertPos, insertCount, 0.0f );
                 // shift all physical positions after this one
                 for( GpuLogicalIndexUseMap::iterator i = mFloatLogicalToPhysical->map.begin();
@@ -1679,7 +1679,7 @@ namespace Ogre
                 // until first actual runtime use e.g. world matrix array
                 size_t insertCount = requestedSize - logi->second.currentSize;
                 DoubleConstantList::iterator insertPos = mDoubleConstants.begin();
-                std::advance( insertPos, physicalIndex );
+                std::advance( insertPos, static_cast<ptrdiff_t>( physicalIndex ) );
                 mDoubleConstants.insert( insertPos, insertCount, 0.0f );
                 // shift all physical positions after this one
                 for( GpuLogicalIndexUseMap::iterator i = mDoubleLogicalToPhysical->map.begin();
@@ -1786,7 +1786,7 @@ namespace Ogre
                 // until first actual runtime use e.g. world matrix array
                 size_t insertCount = requestedSize - logi->second.currentSize;
                 IntConstantList::iterator insertPos = mIntConstants.begin();
-                std::advance( insertPos, physicalIndex );
+                std::advance( insertPos, static_cast<ptrdiff_t>( physicalIndex ) );
                 mIntConstants.insert( insertPos, insertCount, 0 );
                 // shift all physical positions after this one
                 for( GpuLogicalIndexUseMap::iterator i = mIntLogicalToPhysical->map.begin();
@@ -1893,7 +1893,7 @@ namespace Ogre
                 // until first actual runtime use e.g. world matrix array
                 size_t insertCount = requestedSize - logi->second.currentSize;
                 UnsignedIntConstantList::iterator insertPos = mUnsignedIntConstants.begin();
-                std::advance( insertPos, physicalIndex );
+                std::advance( insertPos, static_cast<ptrdiff_t>( physicalIndex ) );
                 mUnsignedIntConstants.insert( insertPos, insertCount, 0 );
                 // shift all physical positions after this one
                 for( GpuLogicalIndexUseMap::iterator i = mUnsignedIntLogicalToPhysical->map.begin();
