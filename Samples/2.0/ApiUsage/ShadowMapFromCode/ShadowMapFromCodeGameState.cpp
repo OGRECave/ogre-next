@@ -143,6 +143,7 @@ namespace Demo
 
         mLightNodes[2] = lightNode;
         
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
@@ -168,6 +169,7 @@ namespace Demo
         light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
 
         mLightNodes[4] = lightNode;
+#endif
         
 
         mCameraController = new CameraController( mGraphicsSystem, false );
