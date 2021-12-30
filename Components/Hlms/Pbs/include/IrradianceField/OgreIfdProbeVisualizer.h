@@ -51,9 +51,9 @@ namespace Ogre
 
         // Overrides from Renderable
         virtual const LightList &getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4 *xform ) const;
-        virtual bool getCastsShadows() const;
+        virtual void             getRenderOperation( v1::RenderOperation &op, bool casterPass );
+        virtual void             getWorldTransforms( Matrix4 *xform ) const;
+        virtual bool             getCastsShadows() const;
     };
 }  // namespace Ogre
 

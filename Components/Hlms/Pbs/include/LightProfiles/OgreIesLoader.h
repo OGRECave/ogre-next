@@ -67,7 +67,7 @@ namespace Ogre
         float mBallastFactor;
         float mBallastLampPhotometricFactor;
 
-        LampConeType::LampConeType mLampConeType;
+        LampConeType::LampConeType   mLampConeType;
         LampHorizType::LampHorizType mLampHorizType;
 
         FastArray<float> mAngleData;

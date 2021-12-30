@@ -29,22 +29,23 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsPbsDatablock.h"
-#include "OgreHlmsPbs.h"
+
+#include "Cubemaps/OgreCubemapProbe.h"
 #include "OgreHlmsManager.h"
+#include "OgreHlmsPbs.h"
 #include "OgreLogManager.h"
+#include "OgreProfiler.h"
+#include "OgreRenderSystem.h"
+#include "OgreString.h"
+#include "OgreTextureFilters.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
-#include "OgreRenderSystem.h"
-#include "OgreTextureFilters.h"
-#include "Cubemaps/OgreCubemapProbe.h"
-#include "OgreProfiler.h"
-#include "OgreString.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsPbsExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
 #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_PBSM_TEXTURE_TYPES
 #define OGRE_HLMS_CREATOR_CLASS HlmsPbs
-    #include "OgreHlmsTextureBaseClass.inl"
+#include "OgreHlmsTextureBaseClass.inl"
 #undef _OgreHlmsTextureBaseClassExport
 #undef OGRE_HLMS_TEXTURE_BASE_CLASS
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
@@ -55,23 +56,19 @@ THE SOFTWARE.
 namespace Ogre
 {
     extern const String c_pbsBlendModes[];
-    const String c_pbsBlendModes[] =
-    {
-        "NormalNonPremul", "NormalPremul", "Add", "Subtract", "Multiply",
-        "Multiply2x", "Screen", "Overlay", "Lighten", "Darken", "GrainExtract",
-        "GrainMerge", "Difference"
-    };
+    const String c_pbsBlendModes[] = { "NormalNonPremul", "NormalPremul", "Add",          "Subtract",
+                                       "Multiply",        "Multiply2x",   "Screen",       "Overlay",
+                                       "Lighten",         "Darken",       "GrainExtract", "GrainMerge",
+                                       "Difference" };
 
-    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
-    const size_t HlmsPbsDatablock::MaterialSizeInGpuAligned   = alignToNextMultiple(
-                                                                    HlmsPbsDatablock::MaterialSizeInGpu,
-                                                                    4 * 4 );
+    const size_t HlmsPbsDatablock::MaterialSizeInGpu = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
+    const size_t HlmsPbsDatablock::MaterialSizeInGpuAligned =
+        alignToNextMultiple( HlmsPbsDatablock::MaterialSizeInGpu, 4 * 4 );
 
     //-----------------------------------------------------------------------------------
     HlmsPbsDatablock::HlmsPbsDatablock( IdString name, HlmsPbs *creator,
                                         const HlmsMacroblock *macroblock,
-                                        const HlmsBlendblock *blendblock,
-                                        const HlmsParamVec &params ) :
+                                        const HlmsBlendblock *blendblock, const HlmsParamVec &params ) :
         HlmsPbsBaseTextureDatablock( name, creator, macroblock, blendblock, params ),
         mFresnelTypeSizeBytes( 4 ),
         mTwoSided( false ),
@@ -82,11 +79,17 @@ namespace Ogre
         mUseEmissiveAsLightmap( false ),
         mUseDiffuseMapAsGrayscale( false ),
         mTransparencyMode( None ),
-        mkDr( 0.318309886f ), mkDg( 0.318309886f ), mkDb( 0.318309886f ), //Max Diffuse = 1 / PI
+        mkDr( 0.318309886f ),
+        mkDg( 0.318309886f ),
+        mkDb( 0.318309886f ),  // Max Diffuse = 1 / PI
         _padding0( 1 ),
-        mkSr( 1 ), mkSg( 1 ), mkSb( 1 ),
+        mkSr( 1 ),
+        mkSg( 1 ),
+        mkSb( 1 ),
         mRoughness( 1.0f ),
-        mFresnelR( 0.818f ), mFresnelG( 0.818f ), mFresnelB( 0.818f ),
+        mFresnelR( 0.818f ),
+        mFresnelG( 0.818f ),
+        mFresnelB( 0.818f ),
         mTransparencyValue( 1.0f ),
         mNormalMapWeight( 1.0f ),
         mRefractionStrength( 0.075f ),
@@ -105,7 +108,7 @@ namespace Ogre
         mDetailNormalWeight[0] = mDetailNormalWeight[1] = 1.0f;
         mDetailNormalWeight[2] = mDetailNormalWeight[3] = 1.0f;
         mDetailWeight[0] = mDetailWeight[1] = mDetailWeight[2] = mDetailWeight[3] = 1.0f;
-        for( size_t i=0; i<4; ++i )
+        for( size_t i = 0; i < 4; ++i )
         {
             mDetailsOffsetScale[i][0] = 0;
             mDetailsOffsetScale[i][1] = 0;
@@ -144,7 +147,8 @@ namespace Ogre
             if( mRoughness <= 1e-6f )
             {
                 LogManager::getSingleton().logMessage( "WARNING: PBS Datablock '" +
-                            name.getFriendlyText() + "' Very low roughness values can "
+                                                       name.getFriendlyText() +
+                                                       "' Very low roughness values can "
                                                        "cause NaNs in the pixel shader!" );
             }
         }
@@ -220,30 +224,27 @@ namespace Ogre
             setTextureUvSource( PBSM_ROUGHNESS, StringConverter::parseUnsignedInt( paramVal ) );
         if( Hlms::findParamInVec( params, "uv_detail_weight_map", paramVal ) )
         {
-            setTextureUvSource( PBSM_DETAIL_WEIGHT,
-                                StringConverter::parseUnsignedInt( paramVal ) );
+            setTextureUvSource( PBSM_DETAIL_WEIGHT, StringConverter::parseUnsignedInt( paramVal ) );
         }
 
-        //Detail maps default to wrap mode.
+        // Detail maps default to wrap mode.
         HlmsSamplerblock detailSamplerRef;
         detailSamplerRef.mU = TAM_WRAP;
         detailSamplerRef.mV = TAM_WRAP;
         detailSamplerRef.mW = TAM_WRAP;
 
         String key;
-        for( size_t i=0; i<4; ++i )
+        for( size_t i = 0; i < 4; ++i )
         {
             key.assign( "detail_map" ).push_back( '0' + i );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 TextureGpu *texture;
                 texture = textureManager->createOrRetrieveTexture(
-                              paramVal, GpuPageOutStrategy::Discard,
-                              TextureFlags::AutomaticBatching |
-                              TextureFlags::PrefersLoadingFromFileAsSRGB,
-                              TextureTypes::Type2D,
-                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                              TextureFilter::TypeGenerateDefaultMipmaps );
+                    paramVal, GpuPageOutStrategy::Discard,
+                    TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
+                    TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    TextureFilter::TypeGenerateDefaultMipmaps );
                 setTexture( PBSM_DETAIL0 + i, texture, &detailSamplerRef );
             }
 
@@ -252,18 +253,17 @@ namespace Ogre
             {
                 TextureGpu *texture;
                 texture = textureManager->createOrRetrieveTexture(
-                              paramVal, GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
-                              TextureTypes::Type2D,
-                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                              TextureFilter::TypeGenerateDefaultMipmaps |
-                              TextureFilter::TypePrepareForNormalMapping );
+                    paramVal, GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
+                    TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    TextureFilter::TypeGenerateDefaultMipmaps |
+                        TextureFilter::TypePrepareForNormalMapping );
                 setTexture( PBSM_DETAIL0_NM + i, texture, &detailSamplerRef );
             }
 
             key.assign( "detail_blend_mode" ).push_back( '0' + i );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
-                for( size_t j=0; j<NUM_PBSM_BLEND_MODES; ++j )
+                for( size_t j = 0; j < NUM_PBSM_BLEND_MODES; ++j )
                 {
                     String blendModeLowerCase;
                     blendModeLowerCase.resize( c_pbsBlendModes[j].size() );
@@ -278,8 +278,8 @@ namespace Ogre
             key.assign( "detail_offset_scale" ).push_back( '0' + i );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
-                Vector4 offsetScale = StringConverter::parseVector4( paramVal,
-                                                                     getDetailMapOffsetScale( i ) );
+                Vector4 offsetScale =
+                    StringConverter::parseVector4( paramVal, getDetailMapOffsetScale( i ) );
                 mDetailsOffsetScale[i][0] = static_cast<float>( offsetScale[0] );
                 mDetailsOffsetScale[i][1] = static_cast<float>( offsetScale[1] );
                 mDetailsOffsetScale[i][2] = static_cast<float>( offsetScale[2] );
@@ -328,8 +328,7 @@ namespace Ogre
             }
             else
             {
-                LogManager::getSingleton().logMessage(
-                    "ERROR: unknown transparency_mode: " + paramVal);
+                LogManager::getSingleton().logMessage( "ERROR: unknown transparency_mode: " + paramVal );
             }
 
             applyTransparency = true;
@@ -337,22 +336,22 @@ namespace Ogre
 
         if( Hlms::findParamInVec( params, "alpha_from_textures", paramVal ) )
         {
-            transparencyAlphaFromTextures = StringConverter::parseBool( paramVal,
-                transparencyAlphaFromTextures );
+            transparencyAlphaFromTextures =
+                StringConverter::parseBool( paramVal, transparencyAlphaFromTextures );
             applyTransparency = true;
         }
 
         if( applyTransparency )
             setTransparency( transparency, transparencyMode, transparencyAlphaFromTextures );
 
-        creator->requestSlot( /*mTextureHash*/0, this, false );
+        creator->requestSlot( /*mTextureHash*/ 0, this, false );
         calculateHash();
     }
     //-----------------------------------------------------------------------------------
     HlmsPbsDatablock::~HlmsPbsDatablock()
     {
         if( mAssignedPool )
-            static_cast<HlmsPbs*>(mCreator)->releaseSlot( this );
+            static_cast<HlmsPbs *>( mCreator )->releaseSlot( this );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::calculateHash()
@@ -361,46 +360,47 @@ namespace Ogre
 
         if( mTexturesDescSet )
         {
-            FastArray<const TextureGpu*>::const_iterator itor = mTexturesDescSet->mTextures.begin();
-            FastArray<const TextureGpu*>::const_iterator end  = mTexturesDescSet->mTextures.end();
+            FastArray<const TextureGpu *>::const_iterator itor = mTexturesDescSet->mTextures.begin();
+            FastArray<const TextureGpu *>::const_iterator end = mTexturesDescSet->mTextures.end();
             while( itor != end )
             {
-                hash += (*itor)->getName();
+                hash += ( *itor )->getName();
                 ++itor;
             }
         }
         if( mSamplersDescSet )
         {
-            FastArray<const HlmsSamplerblock*>::const_iterator itor= mSamplersDescSet->mSamplers.begin();
-            FastArray<const HlmsSamplerblock*>::const_iterator end = mSamplersDescSet->mSamplers.end();
+            FastArray<const HlmsSamplerblock *>::const_iterator itor =
+                mSamplersDescSet->mSamplers.begin();
+            FastArray<const HlmsSamplerblock *>::const_iterator end = mSamplersDescSet->mSamplers.end();
             while( itor != end )
             {
-                hash += IdString( (*itor)->mId );
+                hash += IdString( ( *itor )->mId );
                 ++itor;
             }
         }
 
         const uint32 oldTexHash = mTextureHash;
 
-        if( static_cast<HlmsPbs*>(mCreator)->getOptimizationStrategy() == HlmsPbs::LowerGpuOverhead )
+        if( static_cast<HlmsPbs *>( mCreator )->getOptimizationStrategy() == HlmsPbs::LowerGpuOverhead )
         {
-            const size_t poolIdx = static_cast<HlmsPbs*>(mCreator)->getPoolIndex( this );
-            const uint32 finalHash = (hash.mHash & 0xFFFFFE00) | (poolIdx & 0x000001FF);
+            const size_t poolIdx = static_cast<HlmsPbs *>( mCreator )->getPoolIndex( this );
+            const uint32 finalHash = ( hash.mHash & 0xFFFFFE00 ) | ( poolIdx & 0x000001FF );
             mTextureHash = finalHash;
         }
         else
         {
-            const size_t poolIdx = static_cast<HlmsPbs*>(mCreator)->getPoolIndex( this );
-            const uint32 finalHash = (hash.mHash & 0xFFFFFFF0) | (poolIdx & 0x0000000F);
+            const size_t poolIdx = static_cast<HlmsPbs *>( mCreator )->getPoolIndex( this );
+            const uint32 finalHash = ( hash.mHash & 0xFFFFFFF0 ) | ( poolIdx & 0x0000000F );
             mTextureHash = finalHash;
         }
 
-        //When ParallaxCorrectedCubemaps are used, we set a const buffer with the
-        //probe's information. Thus we need to keep them in different pools
+        // When ParallaxCorrectedCubemaps are used, we set a const buffer with the
+        // probe's information. Thus we need to keep them in different pools
         if( oldTexHash != mTextureHash && mCubemapProbe )
         {
             IdString probeHash( mCubemapProbe->getInternalTexture()->getName() );
-            static_cast<HlmsPbs*>(mCreator)->requestSlot( probeHash.mHash, this, false );
+            static_cast<HlmsPbs *>( mCreator )->requestSlot( probeHash.mHash, this, false );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -413,16 +413,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::scheduleConstBufferUpdate()
     {
-        static_cast<HlmsPbs*>(mCreator)->scheduleForUpdate( this );
+        static_cast<HlmsPbs *>( mCreator )->scheduleForUpdate( this );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
-        if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
+        if( dirtyFlags & ( ConstBufferPool::DirtyTextures | ConstBufferPool::DirtySamplers ) )
         {
-            //Must be called first so mTexIndices[i] gets updated before uploading to GPU.
-            updateDescriptorSets( (dirtyFlags & ConstBufferPool::DirtyTextures) != 0,
-                                  (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
+            // Must be called first so mTexIndices[i] gets updated before uploading to GPU.
+            updateDescriptorSets( ( dirtyFlags & ConstBufferPool::DirtyTextures ) != 0,
+                                  ( dirtyFlags & ConstBufferPool::DirtySamplers ) != 0 );
         }
 
         _padding0 = mAlphaTestThreshold;
@@ -436,7 +436,7 @@ namespace Ogre
 
         if( mTransparencyMode == Transparent || mTransparencyMode == Refractive )
         {
-            //Precompute the transparency CPU-side.
+            // Precompute the transparency CPU-side.
             if( mWorkflow != MetallicWorkflow )
             {
                 mFresnelR *= mTransparencyValue;
@@ -449,13 +449,13 @@ namespace Ogre
         }
 
         uint16 texIndices[OGRE_NumTexIndices];
-        for( size_t i=0; i<OGRE_NumTexIndices; ++i )
+        for( size_t i = 0; i < OGRE_NumTexIndices; ++i )
             texIndices[i] = mTexIndices[i] & ~ManualTexIndexBit;
 
-        memcpy( dstPtr, &mBgDiffuse[0], MaterialSizeInGpu - sizeof(mTexIndices) );
-        dstPtr += MaterialSizeInGpu - sizeof(mTexIndices);
-        memcpy( dstPtr, texIndices, sizeof(texIndices) );
-        dstPtr += sizeof(texIndices);
+        memcpy( dstPtr, &mBgDiffuse[0], MaterialSizeInGpu - sizeof( mTexIndices ) );
+        dstPtr += MaterialSizeInGpu - sizeof( mTexIndices );
+        memcpy( dstPtr, texIndices, sizeof( texIndices ) );
+        dstPtr += sizeof( texIndices );
 
         mkDr = oldkDr;
         mkDg = oldkDg;
@@ -466,10 +466,7 @@ namespace Ogre
         mFresnelB = oldFresnelB;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::notifyOptimizationStrategyChanged()
-    {
-        calculateHash();
-    }
+    void HlmsPbsDatablock::notifyOptimizationStrategyChanged() { calculateHash(); }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setBackgroundDiffuse( const ColourValue &bgDiffuse )
     {
@@ -522,9 +519,9 @@ namespace Ogre
         mRoughness = roughness;
         if( mRoughness <= 1e-6f )
         {
-            LogManager::getSingleton().logMessage( "WARNING: PBS Datablock '" +
-                        mName.getFriendlyText() + "' Very low roughness values can "
-                                                  "cause NaNs in the pixel shader!" );
+            LogManager::getSingleton().logMessage( "WARNING: PBS Datablock '" + mName.getFriendlyText() +
+                                                   "' Very low roughness values can "
+                                                   "cause NaNs in the pixel shader!" );
         }
         scheduleConstBufferUpdate();
     }
@@ -549,7 +546,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::hasEmissiveConstant() const
     {
-        return  mEmissive[0] != 0 || mEmissive[1] != 0 || mEmissive[2] != 0;
+        return mEmissive[0] != 0 || mEmissive[1] != 0 || mEmissive[2] != 0;
     }
     //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::_hasEmissive() const
@@ -557,10 +554,7 @@ namespace Ogre
         return hasEmissiveConstant() || mTextures[PBSM_EMISSIVE] != 0;
     }
     //-----------------------------------------------------------------------------------
-    float HlmsPbsDatablock::getRoughness() const
-    {
-        return mRoughness;
-    }
+    float HlmsPbsDatablock::getRoughness() const { return mRoughness; }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setWorkflow( Workflows workflow )
     {
@@ -583,16 +577,12 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    float HlmsPbsDatablock::getMetalness() const
-    {
-        return mFresnelR;
-    }
+    float HlmsPbsDatablock::getMetalness() const { return mFresnelR; }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::setIndexOfRefraction( const Vector3 &refractionIdx,
-                                                       bool separateFresnel )
+    void HlmsPbsDatablock::setIndexOfRefraction( const Vector3 &refractionIdx, bool separateFresnel )
     {
         assert( mWorkflow != MetallicWorkflow );
-        Vector3 fresnel = (1.0f - refractionIdx) / (1.0f + refractionIdx);
+        Vector3 fresnel = ( 1.0f - refractionIdx ) / ( 1.0f + refractionIdx );
         fresnel = fresnel * fresnel;
         setFresnel( fresnel, separateFresnel );
     }
@@ -620,15 +610,9 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Vector3 HlmsPbsDatablock::getFresnel() const
-    {
-        return Vector3( mFresnelR, mFresnelG, mFresnelB );
-    }
+    Vector3 HlmsPbsDatablock::getFresnel() const { return Vector3( mFresnelR, mFresnelG, mFresnelB ); }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::hasSeparateFresnel() const
-    {
-        return mFresnelTypeSizeBytes != 4;
-    }
+    bool HlmsPbsDatablock::hasSeparateFresnel() const { return mFresnelTypeSizeBytes != 4; }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setTexture( PbsTextureTypes texUnit, const String &name,
                                        const HlmsSamplerblock *refParams )
@@ -651,11 +635,9 @@ namespace Ogre
         TextureGpu *texture = 0;
         if( !name.empty() )
         {
-            texture = textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
-                                                               textureFlags, textureType,
-                                                               ResourceGroupManager::
-                                                               AUTODETECT_RESOURCE_GROUP_NAME,
-                                                               filters );
+            texture = textureManager->createOrRetrieveTexture(
+                name, GpuPageOutStrategy::Discard, textureFlags, textureType,
+                ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, filters );
         }
         setTexture( texUnit, texture, refParams );
     }
@@ -711,7 +693,7 @@ namespace Ogre
         bool wasOne = mDetailNormalWeight[detailNormalMapIdx] == 1.0f;
         mDetailNormalWeight[detailNormalMapIdx] = weight;
 
-        if( wasOne != (mDetailNormalWeight[detailNormalMapIdx] == 1.0f) )
+        if( wasOne != ( mDetailNormalWeight[detailNormalMapIdx] == 1.0f ) )
             flushRenderables();
         scheduleConstBufferUpdate();
     }
@@ -727,15 +709,12 @@ namespace Ogre
         bool wasDisabled = mNormalMapWeight == 1.0f;
         mNormalMapWeight = weight;
 
-        if( wasDisabled != (mNormalMapWeight == 1.0f) )
+        if( wasDisabled != ( mNormalMapWeight == 1.0f ) )
             flushRenderables();
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    Real HlmsPbsDatablock::getNormalMapWeight() const
-    {
-        return mNormalMapWeight;
-    }
+    Real HlmsPbsDatablock::getNormalMapWeight() const { return mNormalMapWeight; }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setDetailMapWeight( uint8 detailMap, Real weight )
     {
@@ -744,7 +723,7 @@ namespace Ogre
 
         mDetailWeight[detailMap] = weight;
 
-        if( wasDisabled != (mDetailWeight[detailMap] == 1.0f) )
+        if( wasDisabled != ( mDetailWeight[detailMap] == 1.0f ) )
             flushRenderables();
 
         scheduleConstBufferUpdate();
@@ -766,7 +745,7 @@ namespace Ogre
         mDetailsOffsetScale[detailMap][2] = static_cast<float>( offsetScale[2] );
         mDetailsOffsetScale[detailMap][3] = static_cast<float>( offsetScale[3] );
 
-        if( wasDisabled != (getDetailMapOffsetScale( detailMap ) == Vector4( 0, 0, 1, 1 )) )
+        if( wasDisabled != ( getDetailMapOffsetScale( detailMap ) == Vector4( 0, 0, 1, 1 ) ) )
         {
             flushRenderables();
         }
@@ -802,19 +781,15 @@ namespace Ogre
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getTwoSidedLighting() const
-    {
-        return mTwoSided;
-    }
+    bool HlmsPbsDatablock::getTwoSidedLighting() const { return mTwoSided; }
     //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::hasCustomShadowMacroblock() const
     {
         if( mTwoSided &&
-            (mMacroblock[0]->mCullMode != CULL_NONE ||
-             mMacroblock[1]->mCullMode != CULL_NONE) )
+            ( mMacroblock[0]->mCullMode != CULL_NONE || mMacroblock[1]->mCullMode != CULL_NONE ) )
         {
-            //Since we may have ignored what HlmsManager::setShadowMappingUseBackFaces
-            //says, we need to treat them as custom.
+            // Since we may have ignored what HlmsManager::setShadowMappingUseBackFaces
+            // says, we need to treat them as custom.
             return true;
         }
 
@@ -843,7 +818,7 @@ namespace Ogre
     {
         bool mustFlush = false;
 
-        mTransparencyValue      = transparency;
+        mTransparencyValue = transparency;
 
         if( mUseAlphaFromTextures != useAlphaFromTextures || mTransparencyMode != mode )
         {
@@ -858,20 +833,20 @@ namespace Ogre
 
             if( mTransparencyMode == None || mTransparencyMode == Refractive )
             {
-                newBlendblock.mSourceBlendFactor    = SBF_ONE;
-                newBlendblock.mDestBlendFactor      = SBF_ZERO;
+                newBlendblock.mSourceBlendFactor = SBF_ONE;
+                newBlendblock.mDestBlendFactor = SBF_ZERO;
                 if( mTransparencyMode == Refractive )
                     newBlendblock.setForceTransparentRenderOrder( true );
             }
             else if( mTransparencyMode == Transparent )
             {
-                newBlendblock.mSourceBlendFactor    = SBF_ONE;
-                newBlendblock.mDestBlendFactor      = SBF_ONE_MINUS_SOURCE_ALPHA;
+                newBlendblock.mSourceBlendFactor = SBF_ONE;
+                newBlendblock.mDestBlendFactor = SBF_ONE_MINUS_SOURCE_ALPHA;
             }
             else if( mTransparencyMode == Fade )
             {
-                newBlendblock.mSourceBlendFactor    = SBF_SOURCE_ALPHA;
-                newBlendblock.mDestBlendFactor      = SBF_ONE_MINUS_SOURCE_ALPHA;
+                newBlendblock.mSourceBlendFactor = SBF_SOURCE_ALPHA;
+                newBlendblock.mDestBlendFactor = SBF_ONE_MINUS_SOURCE_ALPHA;
             }
 
             if( newBlendblock != *mBlendblock[0] )
@@ -890,16 +865,16 @@ namespace Ogre
             if( mTransparencyMode == None && mBlendblock[0]->mIsTransparent )
             {
                 LogManager::getSingleton().logMessage(
-                            "WARNING: PBS Datablock '" + *getNameStr() +
-                            "' disabling transparency but forcing a blendblock to"
-                            " keep using alpha blending. Performance will be affected." );
+                    "WARNING: PBS Datablock '" + *getNameStr() +
+                    "' disabling transparency but forcing a blendblock to"
+                    " keep using alpha blending. Performance will be affected." );
             }
             else if( mTransparencyMode != None && !mBlendblock[0]->mIsTransparent )
             {
                 LogManager::getSingleton().logMessage(
-                            "WARNING: PBS Datablock '" + *getNameStr() +
-                            "' enabling transparency but forcing a blendblock to avoid"
-                            " alpha blending. Results may not look as expected." );
+                    "WARNING: PBS Datablock '" + *getNameStr() +
+                    "' enabling transparency but forcing a blendblock to avoid"
+                    " alpha blending. Results may not look as expected." );
             }
         }
 
@@ -961,10 +936,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getUseEmissiveAsLightmap() const
-    {
-        return mUseEmissiveAsLightmap;
-    }
+    bool HlmsPbsDatablock::getUseEmissiveAsLightmap() const { return mUseEmissiveAsLightmap; }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setUseDiffuseMapAsGrayscale( bool bUseDiffuseMapAsGrayscale )
     {
@@ -975,28 +947,22 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getUseDiffuseMapAsGrayscale() const
-    {
-        return mUseDiffuseMapAsGrayscale;
-    }
+    bool HlmsPbsDatablock::getUseDiffuseMapAsGrayscale() const { return mUseDiffuseMapAsGrayscale; }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::getReceiveShadows() const
-    {
-        return mReceiveShadows;
-    }
+    bool HlmsPbsDatablock::getReceiveShadows() const { return mReceiveShadows; }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::setUserValue(uint8 userValueIdx, const Vector4 &value)
+    void HlmsPbsDatablock::setUserValue( uint8 userValueIdx, const Vector4 &value )
     {
-        assert(userValueIdx < 3);
+        assert( userValueIdx < 3 );
         mUserValue[userValueIdx][0] = value.x;
         mUserValue[userValueIdx][1] = value.y;
         mUserValue[userValueIdx][2] = value.z;
         mUserValue[userValueIdx][3] = value.w;
     }
     //-----------------------------------------------------------------------------------
-    Vector4 HlmsPbsDatablock::getUserValue(uint8 userValueIdx) const
+    Vector4 HlmsPbsDatablock::getUserValue( uint8 userValueIdx ) const
     {
-        assert(userValueIdx < 3);
+        assert( userValueIdx < 3 );
         return Vector4( mUserValue[userValueIdx][0], mUserValue[userValueIdx][1],
                         mUserValue[userValueIdx][2], mUserValue[userValueIdx][3] );
     }
@@ -1016,15 +982,12 @@ namespace Ogre
             }
             else
             {
-                setTexture( PBSM_REFLECTION, (TextureGpu*)0, 0 );
+                setTexture( PBSM_REFLECTION, (TextureGpu *)0, 0 );
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    CubemapProbe* HlmsPbsDatablock::getCubemapProbe() const
-    {
-        return mCubemapProbe;
-    }
+    CubemapProbe *HlmsPbsDatablock::getCubemapProbe() const { return mCubemapProbe; }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setBrdf( PbsBrdf::PbsBrdf brdf )
     {
@@ -1034,13 +997,14 @@ namespace Ogre
             const PbsBrdf::PbsBrdf newBrdf = brdf;
             mBrdf = brdf;
 
-            //BlinnPhongFullLegacy expects diffuse in range [0; 1]; we have it in range [0; 1 / PI]
+            // BlinnPhongFullLegacy expects diffuse in range [0; 1]; we have it in range [0; 1 / PI]
             if( oldBrdf == PbsBrdf::BlinnPhongFullLegacy && newBrdf != PbsBrdf::BlinnPhongFullLegacy )
-                setDiffuse( Vector3( mkDr, mkDg, mkDb ) ); //Will be divided by PI.
+                setDiffuse( Vector3( mkDr, mkDg, mkDb ) );  // Will be divided by PI.
             if( oldBrdf != PbsBrdf::BlinnPhongFullLegacy && newBrdf == PbsBrdf::BlinnPhongFullLegacy )
-                setDiffuse( Vector3( mkDr, mkDg, mkDb ) * Math::PI ); //Increase by PI, won't be divided.
+                setDiffuse( Vector3( mkDr, mkDg, mkDb ) *
+                            Math::PI );  // Increase by PI, won't be divided.
 
-            //BlinnPhongLegacyMath expects specular in range [0; 1 / PI]; we have it in range [0; 1]
+            // BlinnPhongLegacyMath expects specular in range [0; 1 / PI]; we have it in range [0; 1]
             if( oldBrdf == PbsBrdf::BlinnPhongLegacyMath && newBrdf != PbsBrdf::BlinnPhongLegacyMath )
                 setSpecular( Vector3( mkSr, mkSg, mkSb ) * Math::PI );
             if( oldBrdf != PbsBrdf::BlinnPhongLegacyMath && newBrdf == PbsBrdf::BlinnPhongLegacyMath )
@@ -1050,17 +1014,14 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsPbsDatablock::getBrdf() const
-    {
-        return mBrdf;
-    }
+    uint32 HlmsPbsDatablock::getBrdf() const { return mBrdf; }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::importUnity( const Vector3 &diffuse, const Vector3 &specular,
-                                        Real roughness, bool changeBrdf )
+    void HlmsPbsDatablock::importUnity( const Vector3 &diffuse, const Vector3 &specular, Real roughness,
+                                        bool changeBrdf )
     {
         if( changeBrdf )
         {
-            //Set the BRDF that matches Unity the closest.
+            // Set the BRDF that matches Unity the closest.
             setBrdf( PbsBrdf::DefaultUncorrelated );
         }
 
@@ -1068,8 +1029,8 @@ namespace Ogre
 
         setDiffuse( diffuse );
 
-        //Unity uses coloured fresnel as if it were specular. So we need to
-        //set our kS to white and use the fresnel for colouring instead.
+        // Unity uses coloured fresnel as if it were specular. So we need to
+        // set our kS to white and use the fresnel for colouring instead.
         setSpecular( Vector3::UNIT_SCALE );
         bool separateFresnel = false;
         if( Math::Abs( specular.x - specular.y ) <= 1e-5f &&
@@ -1082,12 +1043,12 @@ namespace Ogre
         setRoughness( roughness );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::importUnity( const Vector3 &colour, Real metallic,
-                                        Real roughness, bool changeBrdf )
+    void HlmsPbsDatablock::importUnity( const Vector3 &colour, Real metallic, Real roughness,
+                                        bool changeBrdf )
     {
         if( changeBrdf )
         {
-            //Set the BRDF that matches Unity the closest.
+            // Set the BRDF that matches Unity the closest.
             setBrdf( PbsBrdf::DefaultUncorrelated );
         }
 
@@ -1104,7 +1065,7 @@ namespace Ogre
     bool HlmsPbsDatablock::suggestUsingSRGB( PbsTextureTypes type ) const
     {
         if( type == PBSM_NORMAL || type == PBSM_ROUGHNESS || type == PBSM_DETAIL_WEIGHT ||
-            (type >= PBSM_DETAIL0_NM && type <= PBSM_DETAIL3_NM) )
+            ( type >= PBSM_DETAIL0_NM && type <= PBSM_DETAIL3_NM ) )
         {
             return false;
         }
@@ -1153,19 +1114,12 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsPbsDatablock::getDiffuseTexture() const
-    {
-        return getTexture( PBSM_DIFFUSE );
-    }
+    TextureGpu *HlmsPbsDatablock::getDiffuseTexture() const { return getTexture( PBSM_DIFFUSE ); }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsPbsDatablock::getEmissiveTexture() const
-    {
-        return getTexture( PBSM_EMISSIVE );
-    }
+    TextureGpu *HlmsPbsDatablock::getEmissiveTexture() const { return getTexture( PBSM_EMISSIVE ); }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::notifyTextureChanged( TextureGpu *texture,
-                                                             TextureGpuListener::Reason reason,
-                                                             void *extraData )
+    void HlmsPbsDatablock::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                                 void *extraData )
     {
         HlmsPbsBaseTextureDatablock::notifyTextureChanged( texture, reason, extraData );
         if( texture == mTextures[PBSM_REFLECTION] )
@@ -1177,4 +1131,4 @@ namespace Ogre
             }
         }
     }
-}
+}  // namespace Ogre

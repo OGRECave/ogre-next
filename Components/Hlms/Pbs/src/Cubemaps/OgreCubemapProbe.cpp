@@ -30,18 +30,18 @@ THE SOFTWARE.
 
 #include "Cubemaps/OgreCubemapProbe.h"
 
-#include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
-#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
-#include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreLogManager.h"
-#include "OgreLwString.h"
-#include "OgreId.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 #include "OgreCamera.h"
-#include "OgreSceneManager.h"
+#include "OgreId.h"
 #include "OgreInternalCubemapProbe.h"
+#include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreSceneManager.h"
+#include "OgreTextureGpuManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -98,13 +98,12 @@ namespace Ogre
     {
         if( mNumDatablockUsers && !mConstBufferForManualProbes )
         {
-            OGRE_ASSERT_LOW(!mCreator->getAutomaticMode());
+            OGRE_ASSERT_LOW( !mCreator->getAutomaticMode() );
 
             SceneManager *sceneManager = mCreator->getSceneManager();
             VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
             mConstBufferForManualProbes = vaoManager->createConstBuffer(
-                        ParallaxCorrectedCubemap::getConstBufferSizeStatic(),
-                        BT_DEFAULT, 0, false );
+                ParallaxCorrectedCubemap::getConstBufferSizeStatic(), BT_DEFAULT, 0, false );
             mCreator->_addManuallyActiveProbe( this );
         }
         mDirty = true;
@@ -145,7 +144,7 @@ namespace Ogre
         if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage &&
             !mCreator->getAutomaticMode() )
         {
-            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         }
 
         if( mCamera )
@@ -167,7 +166,7 @@ namespace Ogre
             {
                 SceneManager *sceneManager = mCreator->getSceneManager();
                 TextureGpuManager *textureManager =
-                        sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                    sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 textureManager->destroyTexture( mTexture );
             }
             mTexture = 0;
@@ -188,9 +187,10 @@ namespace Ogre
         }
         else
         {
-            LogManager::getSingleton().logMessage( "Warning: CubemapProbe::acquireTextureAuto failed. "
-                                                   "You ran out of slots in the cubemap array. "
-                                                   "Disabling this probe" );
+            LogManager::getSingleton().logMessage(
+                "Warning: CubemapProbe::acquireTextureAuto failed. "
+                "You ran out of slots in the cubemap array. "
+                "Disabling this probe" );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ namespace Ogre
         mInternalProbe = sceneManager->_createCubemapProbe( sceneType );
 
         SceneNode *sceneNode =
-                sceneManager->getRootSceneNode( sceneType )->createChildSceneNode( sceneType );
+            sceneManager->getRootSceneNode( sceneType )->createChildSceneNode( sceneType );
         sceneNode->attachObject( mInternalProbe );
         sceneNode->setIndestructibleByClearScene( true );
 
@@ -247,8 +247,8 @@ namespace Ogre
             sceneNode->setStatic( mStatic );
 
             SceneManager *sceneManager = mCreator->getSceneManager();
-            SceneNode *rootNode = sceneManager->getRootSceneNode( mStatic ? SCENE_STATIC :
-                                                                            SCENE_DYNAMIC );
+            SceneNode *rootNode =
+                sceneManager->getRootSceneNode( mStatic ? SCENE_STATIC : SCENE_DYNAMIC );
             rootNode->addChild( sceneNode );
         }
     }
@@ -270,12 +270,12 @@ namespace Ogre
         sceneNode->setOrientation( qRot );
 
         mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,
-                                       reinterpret_cast<float*>( mInternalProbe->mGpuData ) );
+                                       reinterpret_cast<float *>( mInternalProbe->mGpuData ) );
 
-        uint32 finalValue = uint32(mPriority << 16u) | mCubemapArrayIdx;
+        uint32 finalValue = uint32( mPriority << 16u ) | mCubemapArrayIdx;
         memcpy( &mInternalProbe->mGpuData[3][3], &finalValue, sizeof( finalValue ) );
 
-        Vector3 probeToAreaCenterOffsetLS = mInvOrientation * (mArea.mCenter - mProbeShape.mCenter);
+        Vector3 probeToAreaCenterOffsetLS = mInvOrientation * ( mArea.mCenter - mProbeShape.mCenter );
         mInternalProbe->mGpuData[4][3] = probeToAreaCenterOffsetLS.x;
         mInternalProbe->mGpuData[5][3] = probeToAreaCenterOffsetLS.y;
         mInternalProbe->mGpuData[6][3] = probeToAreaCenterOffsetLS.z;
@@ -308,8 +308,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,
-                                         PixelFormatGpu pf, bool isStatic, SampleDescription sampleDesc )
+    void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual, PixelFormatGpu pf,
+                                         bool isStatic, SampleDescription sampleDesc )
     {
         if( !mCreator->getAutomaticMode() )
         {
@@ -327,7 +327,7 @@ namespace Ogre
             destroyTexture();
 
             char tmpBuffer[64];
-            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             texName.a( "CubemapProbe_", Id::generateNewId<CubemapProbe>() );
 
             uint32 flags = TextureFlags::RenderToTexture;
@@ -344,7 +344,7 @@ namespace Ogre
 
             SceneManager *sceneManager = mCreator->getSceneManager();
             TextureGpuManager *textureManager =
-                    sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
             mTexture = textureManager->createTexture( texName.c_str(), GpuPageOutStrategy::Discard,
                                                       flags, TextureTypes::TypeCube );
             mTexture->setResolution( width, height );
@@ -367,18 +367,17 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar,
-                                      IdString workspaceDefOverride,
+    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride,
                                       const CompositorChannelVec &additionalChannels,
                                       uint8 executionMask )
     {
-        assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
+        assert( ( mTexture != 0 || mCreator->getAutomaticMode() ) && "Call setTextureParams first!" );
 
         destroyWorkspace();
         acquireTextureAuto();
 
         if( !mTexture )
-            return; //acquireTextureAuto failed. There are no available slots
+            return;  // acquireTextureAuto failed. There are no available slots
 
         CompositorWorkspaceDef const *workspaceDef = mCreator->getDefaultWorkspaceDef();
         CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
@@ -388,12 +387,11 @@ namespace Ogre
 
         mWorkspaceDefName = workspaceDef->getName();
         SceneManager *sceneManager = mCreator->getSceneManager();
-        mCamera = sceneManager->createCamera( mTexture->getNameStr() +
-                                              StringConverter::toString( mCubemapArrayIdx ),
-                                              true, true );
-        mCamera->setFOVy( Degree(90) );
+        mCamera = sceneManager->createCamera(
+            mTexture->getNameStr() + StringConverter::toString( mCubemapArrayIdx ), true, true );
+        mCamera->setFOVy( Degree( 90 ) );
         mCamera->setAspectRatio( 1 );
-        mCamera->setFixedYawAxis(false);
+        mCamera->setFixedYawAxis( false );
         mCamera->setNearClipDistance( cameraNear );
         mCamera->setFarClipDistance( cameraFar );
 
@@ -414,7 +412,7 @@ namespace Ogre
 
         if( mStatic )
         {
-            //Set camera to skip light culling (efficiency)
+            // Set camera to skip light culling (efficiency)
             mCamera->setLightCullingVisibility( false, false );
         }
         else
@@ -423,7 +421,7 @@ namespace Ogre
         }
 
         if( !mCreator->getAutomaticMode() )
-            mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         CompositorChannelVec channels;
         channels.reserve( 2u + additionalChannels.size() );
@@ -437,30 +435,25 @@ namespace Ogre
 
         if( !mStatic && !mCreator->getAutomaticMode() )
         {
-            mClearWorkspace =
-                    compositorManager->addWorkspace( sceneManager, channels,
-                                                     mCamera,
-                                                     "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
-                                                     false );
+            mClearWorkspace = compositorManager->addWorkspace(
+                sceneManager, channels, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
+                false );
         }
     }
     //-----------------------------------------------------------------------------------
-    bool CubemapProbe::isInitialized() const
-    {
-        return mWorkspace != 0;
-    }
+    bool CubemapProbe::isInitialized() const { return mWorkspace != 0; }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::set( const Vector3 &cameraPos, const Aabb &area, const Vector3 &areaInnerRegion,
                             const Matrix3 &orientation, const Aabb &probeShape )
     {
-        mProbeCameraPos     = cameraPos;
-        mArea               = area;
-        mAreaInnerRegion    = areaInnerRegion;
-        mOrientation        = orientation;
-        mInvOrientation     = mOrientation.Inverse();
-        mProbeShape         = probeShape;
+        mProbeCameraPos = cameraPos;
+        mArea = area;
+        mAreaInnerRegion = areaInnerRegion;
+        mOrientation = orientation;
+        mInvOrientation = mOrientation.Inverse();
+        mProbeShape = probeShape;
 
-        //Add some padding.
+        // Add some padding.
         Real padding = 1.005f;
         mArea.mHalfSize *= padding;
         mProbeShape.mHalfSize *= padding;
@@ -473,20 +466,20 @@ namespace Ogre
         areaLocalToShape.mCenter = mInvOrientation * areaLocalToShape.mCenter;
         areaLocalToShape.mCenter += mProbeShape.mCenter;
 
-        if( (!mProbeShape.contains( mArea ) && !mCreator->getAutomaticMode()) ||
-            (!mProbeShape.intersects( mArea ) && mCreator->getAutomaticMode()) )
+        if( ( !mProbeShape.contains( mArea ) && !mCreator->getAutomaticMode() ) ||
+            ( !mProbeShape.intersects( mArea ) && mCreator->getAutomaticMode() ) )
         {
             if( !mCreator->getAutomaticMode() )
             {
                 LogManager::getSingleton().logMessage(
-                            "WARNING: Area must be fully inside probe's shape otherwise "
-                            "artifacts appear. Forcing area to be inside probe" );
+                    "WARNING: Area must be fully inside probe's shape otherwise "
+                    "artifacts appear. Forcing area to be inside probe" );
             }
             else
             {
                 LogManager::getSingleton().logMessage(
-                            "WARNING: Area must intersect with the probe's shape otherwise "
-                            "PCC will not have any effect. Forcing intersection" );
+                    "WARNING: Area must intersect with the probe's shape otherwise "
+                    "PCC will not have any effect. Forcing intersection" );
             }
             Vector3 vMin = mArea.getMinimum() * 0.98f;
             Vector3 vMax = mArea.getMaximum() * 0.98f;
@@ -510,7 +503,7 @@ namespace Ogre
         }
         else
         {
-            //We're not initialized yet, but still save the intention...
+            // We're not initialized yet, but still save the intention...
             mStatic = isStatic;
         }
     }
@@ -526,14 +519,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint16_t CubemapProbe::getPriority() const
-    {
-        return mPriority;
-    }
+    uint16_t CubemapProbe::getPriority() const { return mPriority; }
     //-----------------------------------------------------------------------------------
     Real CubemapProbe::getNDF( const Vector3 &posLS ) const
     {
-        //Work in the upper left corner of the box. (Like Aabb::distance)
+        // Work in the upper left corner of the box. (Like Aabb::distance)
         Vector3 dist;
         dist.x = Math::Abs( posLS.x );
         dist.y = Math::Abs( posLS.y );
@@ -542,8 +532,8 @@ namespace Ogre
         const Vector3 innerRange = mArea.mHalfSize * mAreaInnerRegion;
         const Vector3 outerRange = mArea.mHalfSize;
 
-        //1e-6f avoids division by zero.
-        Vector3 ndf = (dist - innerRange) / (outerRange - innerRange + Real(1e-6f));
+        // 1e-6f avoids division by zero.
+        Vector3 ndf = ( dist - innerRange ) / ( outerRange - innerRange + Real( 1e-6f ) );
 
         return std::max( std::max( ndf.x, ndf.y ), ndf.z );
     }
@@ -568,11 +558,9 @@ namespace Ogre
 
             SceneManager *sceneManager = mCreator->getSceneManager();
             CompositorChannelVec channels( mWorkspace->getExternalRenderTargets() );
-            mClearWorkspace =
-                    compositorManager->addWorkspace( sceneManager, channels,
-                                                     mCamera,
-                                                     "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
-                                                     false );
+            mClearWorkspace = compositorManager->addWorkspace(
+                sceneManager, channels, mCamera, "AutoGen_ParallaxCorrectedCubemapClear_Workspace",
+                false );
         }
 
         mClearWorkspace->_update();
@@ -618,8 +606,7 @@ namespace Ogre
             SceneManager *sceneManager = mCreator->getSceneManager();
             VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
             mConstBufferForManualProbes = vaoManager->createConstBuffer(
-                        ParallaxCorrectedCubemap::getConstBufferSizeStatic(),
-                        BT_DEFAULT, 0, false );
+                ParallaxCorrectedCubemap::getConstBufferSizeStatic(), BT_DEFAULT, 0, false );
             mCreator->_addManuallyActiveProbe( this );
         }
     }
@@ -643,11 +630,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const SceneNode* CubemapProbe::getInternalCubemapProbeSceneNode() const
+    const SceneNode *CubemapProbe::getInternalCubemapProbeSceneNode() const
     {
         SceneNode const *retVal = 0;
         if( mInternalProbe )
             retVal = mInternalProbe->getParentSceneNode();
         return retVal;
     }
-}
+}  // namespace Ogre

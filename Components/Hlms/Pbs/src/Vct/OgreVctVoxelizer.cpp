@@ -29,41 +29,32 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Vct/OgreVctVoxelizer.h"
+
 #include "Vct/OgreVctMaterial.h"
 #include "Vct/OgreVoxelVisualizer.h"
 
+#include "Compute/OgreComputeTools.h"
+#include "OgreHlmsCompute.h"
+#include "OgreHlmsComputeJob.h"
+#include "OgreItem.h"
+#include "OgreLwString.h"
+#include "OgreMaterial.h"
+#include "OgreMaterialManager.h"
+#include "OgreMesh2.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreProfiler.h"
 #include "OgreRenderSystem.h"
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
-
-#include "OgreItem.h"
-#include "OgreMesh2.h"
+#include "OgreStringConverter.h"
 #include "OgreSubMesh2.h"
-
-#include "OgreMaterialManager.h"
-#include "OgreMaterial.h"
-
-#include "Vao/OgreVertexArrayObject.h"
-
+#include "OgreTextureGpuManager.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-#include "Vao/OgreUavBufferPacked.h"
-
-#include "Vao/OgreVaoManager.h"
-
 #include "Vao/OgreStagingBuffer.h"
-
-#include "Compute/OgreComputeTools.h"
-
-#include "OgreHlmsCompute.h"
-#include "OgreHlmsComputeJob.h"
-#include "OgreLwString.h"
-
-#include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreStringConverter.h"
-
-#include "OgreProfiler.h"
+#include "Vao/OgreUavBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #define TODO_deal_no_index_buffer
 
@@ -79,16 +70,15 @@ namespace Ogre
         static const IdString Index32bit;
         static const IdString CompressedVertexFormat;
 
-        static const IdString* AllProps[c_numVctProperties];
+        static const IdString *AllProps[c_numVctProperties];
     };
 
-    const IdString VctVoxelizerProp::HasDiffuseTex          = IdString( "has_diffuse_tex" );
-    const IdString VctVoxelizerProp::HasEmissiveTex         = IdString( "has_emissive_tex" );
-    const IdString VctVoxelizerProp::Index32bit             = IdString( "index_32bit" );
+    const IdString VctVoxelizerProp::HasDiffuseTex = IdString( "has_diffuse_tex" );
+    const IdString VctVoxelizerProp::HasEmissiveTex = IdString( "has_emissive_tex" );
+    const IdString VctVoxelizerProp::Index32bit = IdString( "index_32bit" );
     const IdString VctVoxelizerProp::CompressedVertexFormat = IdString( "compressed_vertex_format" );
 
-    const IdString* VctVoxelizerProp::AllProps[c_numVctProperties] =
-    {
+    const IdString *VctVoxelizerProp::AllProps[c_numVctProperties] = {
         &VctVoxelizerProp::Index32bit,
         &VctVoxelizerProp::CompressedVertexFormat,
         &VctVoxelizerProp::HasDiffuseTex,
@@ -128,8 +118,8 @@ namespace Ogre
         mAutoRegion( true ),
         mMaxRegion( Aabb::BOX_INFINITE )
     {
-        memset( mComputeJobs, 0, sizeof(mComputeJobs) );
-        memset( mAabbCalculator, 0, sizeof(mAabbCalculator) );
+        memset( mComputeJobs, 0, sizeof( mComputeJobs ) );
+        memset( mAabbCalculator, 0, sizeof( mAabbCalculator ) );
         createComputeJobs();
     }
     //-------------------------------------------------------------------------
@@ -185,9 +175,9 @@ namespace Ogre
         size_t numVariants = 1u << c_numVctProperties;
 
         char tmpBuffer[128];
-        LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-        for( size_t variant=0u; variant<numVariants; ++variant )
+        for( size_t variant = 0u; variant < numVariants; ++variant )
         {
             jobName.clear();
             jobName.a( "VCT/Voxelizer/", static_cast<uint32>( variant ) );
@@ -201,7 +191,8 @@ namespace Ogre
                 ShaderParams &glslShaderParams = mComputeJobs[variant]->getShaderParams( "glsl" );
 
                 uint8 numTexUnits = 1u;
-                if( variant & (VoxelizerJobSetting::HasDiffuseTex|VoxelizerJobSetting::HasEmissiveTex) )
+                if( variant &
+                    ( VoxelizerJobSetting::HasDiffuseTex | VoxelizerJobSetting::HasEmissiveTex ) )
                 {
                     ShaderParams::Param param;
                     param.name = "texturePool";
@@ -213,9 +204,9 @@ namespace Ogre
                 }
                 mComputeJobs[variant]->setNumTexUnits( numTexUnits );
 
-                for( size_t property=0; property<c_numVctProperties; ++property )
+                for( size_t property = 0; property < c_numVctProperties; ++property )
                 {
-                    const int32 propValue = variant & (1u << property) ? 1 : 0;
+                    const int32 propValue = variant & ( 1u << property ) ? 1 : 0;
                     mComputeJobs[variant]->setProperty( *VctVoxelizerProp::AllProps[property],
                                                         propValue );
                 }
@@ -228,7 +219,7 @@ namespace Ogre
         aabbCalc->setThreadsPerGroup( caps->getMaxThreadsPerThreadgroupAxis()[0], 1u, 1u );
 
         numVariants = 1u << c_numAabCalcProperties;
-        for( size_t variant=0u; variant<numVariants; ++variant )
+        for( size_t variant = 0u; variant < numVariants; ++variant )
         {
             jobName.clear();
             jobName.a( "VCT/AabbCalculator/", static_cast<uint32>( variant ) );
@@ -239,9 +230,9 @@ namespace Ogre
             {
                 mAabbCalculator[variant] = aabbCalc->clone( jobName.c_str() );
 
-                for( size_t property=0; property<c_numAabCalcProperties; ++property )
+                for( size_t property = 0; property < c_numAabCalcProperties; ++property )
                 {
-                    const int32 propValue = variant & (1u << property) ? 1 : 0;
+                    const int32 propValue = variant & ( 1u << property ) ? 1 : 0;
                     mAabbCalculator[variant]->setProperty( *VctVoxelizerProp::AllProps[property],
                                                            propValue );
                 }
@@ -253,11 +244,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::clearComputeJobResources( bool calculatorDataOnly )
     {
-        //Do not leave dangling pointers when destroying buffers, even if we later set them
-        //with a new pointer (if malloc reuses an address and the jobs weren't cleared, we're screwed)
+        // Do not leave dangling pointers when destroying buffers, even if we later set them
+        // with a new pointer (if malloc reuses an address and the jobs weren't cleared, we're screwed)
         if( !calculatorDataOnly )
         {
-            for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
+            for( size_t i = 0; i < sizeof( mComputeJobs ) / sizeof( mComputeJobs[0] ); ++i )
             {
                 mComputeJobs[i]->clearUavBuffers();
                 mComputeJobs[i]->clearTexBuffers();
@@ -267,7 +258,7 @@ namespace Ogre
         {
             const size_t numVariants = 1u << c_numAabCalcProperties;
 
-            for( size_t i=0; i<numVariants; ++i )
+            for( size_t i = 0; i < numVariants; ++i )
             {
                 mAabbCalculator[i]->clearUavBuffers();
                 mAabbCalculator[i]->clearTexBuffers();
@@ -286,17 +277,17 @@ namespace Ogre
         uint32 totalNumIndices16 = 0u;
         uint32 totalNumIndices32 = 0u;
 
-        for( unsigned subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
+        for( unsigned subMeshIdx = 0; subMeshIdx < numSubmeshes; ++subMeshIdx )
         {
             SubMesh *subMesh = mesh->getSubMesh( subMeshIdx );
             VertexArrayObject *vao = subMesh->mVao[VpNormal].front();
 
-            //Count the total number of indices and vertices
+            // Count the total number of indices and vertices
             size_t vertexStart = 0u;
             size_t numVertices = vao->getBaseVertexBuffer()->getNumElements();
 
-            uint32 vbOffset = totalNumVertices + (queuedMesh.bCompressed ? mNumVerticesCompressed :
-                                                                           mNumVerticesUncompressed);
+            uint32 vbOffset = totalNumVertices + ( queuedMesh.bCompressed ? mNumVerticesCompressed
+                                                                          : mNumVerticesUncompressed );
             uint32 ibOffset = 0;
             uint32 numIndices = 0;
 
@@ -314,13 +305,13 @@ namespace Ogre
                     ibOffset = mNumIndices16 + totalNumIndices16;
                     totalNumIndices16 += alignToNextMultiple( numIndices, 4u );
 
-                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes16 :
-                                                              &mNumUncompressedPartSubMeshes16;
+                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes16
+                                                            : &mNumUncompressedPartSubMeshes16;
                 }
                 else
                 {
-                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes32 :
-                                                              &mNumUncompressedPartSubMeshes32;
+                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes32
+                                                            : &mNumUncompressedPartSubMeshes32;
                     ibOffset = mNumIndices32 + totalNumIndices32;
                     totalNumIndices32 += numIndices;
                 }
@@ -331,27 +322,29 @@ namespace Ogre
             {
                 vertexStart = vao->getPrimitiveStart();
                 numVertices = vao->getPrimitiveCount();
-                numIndices = 0; TODO_deal_no_index_buffer;
+                numIndices = 0;
+                TODO_deal_no_index_buffer;
 
                 totalNumVertices += vao->getPrimitiveCount();
             }
 
             TODO_deal_no_index_buffer;
 
-            //If the mesh has a lot of triangles, the voxelizer will test N triangles for every WxHxD
-            //voxel, which can be very inefficient. By partitioning the submeshes and calculating
-            //their AABBs, we can perform broadphase culling and skip a lot of triangles
+            // If the mesh has a lot of triangles, the voxelizer will test N triangles for every WxHxD
+            // voxel, which can be very inefficient. By partitioning the submeshes and calculating
+            // their AABBs, we can perform broadphase culling and skip a lot of triangles
             const uint32 numPartitions =
-                    queuedMesh.indexCountSplit == std::numeric_limits<uint32>::max() ?
-                        1u : static_cast<uint32>( alignToNextMultiple( numIndices,
-                                                                       queuedMesh.indexCountSplit ) /
-                                                  queuedMesh.indexCountSplit );
+                queuedMesh.indexCountSplit == std::numeric_limits<uint32>::max()
+                    ? 1u
+                    : static_cast<uint32>(
+                          alignToNextMultiple( numIndices, queuedMesh.indexCountSplit ) /
+                          queuedMesh.indexCountSplit );
             queuedMesh.submeshes[subMeshIdx].partSubMeshes.resize( numPartitions );
 
-            for( uint32 partition=0u; partition<numPartitions; ++partition )
+            for( uint32 partition = 0u; partition < numPartitions; ++partition )
             {
                 PartitionedSubMesh &partSubMesh =
-                        queuedMesh.submeshes[subMeshIdx].partSubMeshes[partition];
+                    queuedMesh.submeshes[subMeshIdx].partSubMeshes[partition];
                 partSubMesh.vbOffset = vbOffset;
                 partSubMesh.ibOffset = ibOffset + queuedMesh.indexCountSplit * partition;
                 partSubMesh.numIndices = std::min( numIndices - queuedMesh.indexCountSplit * partition,
@@ -361,7 +354,7 @@ namespace Ogre
             }
 
 #ifdef STREAM_DOWNLOAD
-            //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
+            // Request to download the vertex buffer(s) to CPU (it will be mapped soon)
             VertexElementSemanticFullArray semanticsToDownload;
             semanticsToDownload.push_back( VES_POSITION );
             semanticsToDownload.push_back( VES_NORMAL );
@@ -388,53 +381,46 @@ namespace Ogre
         OgreProfile( "VctVoxelizer::prepareAabbCalculatorMeshData" );
 
         destroyAabbCalculatorMeshData();
-        const size_t totalNumMeshes = mNumUncompressedPartSubMeshes16 +
-                                      mNumUncompressedPartSubMeshes32 +
-                                      mNumCompressedPartSubMeshes16 +
-                                      mNumCompressedPartSubMeshes32;
-        mMeshAabb = mVaoManager->createUavBuffer( totalNumMeshes, sizeof(float) * 4u * 2u,
+        const size_t totalNumMeshes = mNumUncompressedPartSubMeshes16 + mNumUncompressedPartSubMeshes32 +
+                                      mNumCompressedPartSubMeshes16 + mNumCompressedPartSubMeshes32;
+        mMeshAabb = mVaoManager->createUavBuffer( totalNumMeshes, sizeof( float ) * 4u * 2u,
                                                   BB_FLAG_READONLY, 0, false );
 
-        PartitionedSubMesh *partitionedSubMeshGpu =
-                reinterpret_cast<PartitionedSubMesh*>(
-                    OGRE_MALLOC_SIMD( totalNumMeshes * sizeof(PartitionedSubMesh),
-                                      MEMCATEGORY_GEOMETRY ) );
+        PartitionedSubMesh *partitionedSubMeshGpu = reinterpret_cast<PartitionedSubMesh *>(
+            OGRE_MALLOC_SIMD( totalNumMeshes * sizeof( PartitionedSubMesh ), MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor partitionedSubMeshGpuPtr( partitionedSubMeshGpu );
 
         const size_t numVariants = 1u << c_numAabCalcProperties;
 
         size_t submeshStarts[numVariants];
-        submeshStarts[0] = 0u;                                                  //16-bit uncompressed
-        submeshStarts[1] = submeshStarts[0] + mNumUncompressedPartSubMeshes16;  //32-bit uncompressed
-        submeshStarts[2] = submeshStarts[1] + mNumUncompressedPartSubMeshes32;  //16-bit compressed
-        submeshStarts[3] = submeshStarts[2] + mNumCompressedPartSubMeshes16;    //32-bit compressed
+        submeshStarts[0] = 0u;                                                  // 16-bit uncompressed
+        submeshStarts[1] = submeshStarts[0] + mNumUncompressedPartSubMeshes16;  // 32-bit uncompressed
+        submeshStarts[2] = submeshStarts[1] + mNumUncompressedPartSubMeshes32;  // 16-bit compressed
+        submeshStarts[3] = submeshStarts[2] + mNumCompressedPartSubMeshes16;    // 32-bit compressed
 
-        PartitionedSubMesh *partitionedSubMeshGpuPtrs[numVariants] =
-        {
-            partitionedSubMeshGpu + submeshStarts[0],
-            partitionedSubMeshGpu + submeshStarts[1],
-            partitionedSubMeshGpu + submeshStarts[2],
-            partitionedSubMeshGpu + submeshStarts[3]
+        PartitionedSubMesh *partitionedSubMeshGpuPtrs[numVariants] = {
+            partitionedSubMeshGpu + submeshStarts[0], partitionedSubMeshGpu + submeshStarts[1],
+            partitionedSubMeshGpu + submeshStarts[2], partitionedSubMeshGpu + submeshStarts[3]
         };
 
         MeshPtrMap::iterator itor = mMeshesV2.begin();
-        MeshPtrMap::iterator end  = mMeshesV2.end();
+        MeshPtrMap::iterator end = mMeshesV2.end();
 
         while( itor != end )
         {
             const Mesh *mesh = itor->first.get();
             QueuedMesh &queuedMesh = itor->second;
             const size_t numSubMeshes = queuedMesh.submeshes.size();
-            for( size_t i=0u; i<numSubMeshes; ++i )
+            for( size_t i = 0u; i < numSubMeshes; ++i )
             {
-                VertexArrayObject *vao = mesh->getSubMesh( (uint16)(i) )->mVao[VpNormal].front();
+                VertexArrayObject *vao = mesh->getSubMesh( ( uint16 )( i ) )->mVao[VpNormal].front();
                 IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
                 const bool is16bit = indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT;
 
                 FastArray<PartitionedSubMesh>::iterator itPartSub =
-                        queuedMesh.submeshes[i].partSubMeshes.begin();
+                    queuedMesh.submeshes[i].partSubMeshes.begin();
                 FastArray<PartitionedSubMesh>::iterator enPartSub =
-                        queuedMesh.submeshes[i].partSubMeshes.end();
+                    queuedMesh.submeshes[i].partSubMeshes.end();
 
                 while( itPartSub != enPartSub )
                 {
@@ -447,44 +433,41 @@ namespace Ogre
                     partitionedSubMeshGpuPtrs[variantIdx]->vbOffset = itPartSub->vbOffset;
                     partitionedSubMeshGpuPtrs[variantIdx]->ibOffset = itPartSub->ibOffset;
                     partitionedSubMeshGpuPtrs[variantIdx]->numIndices = itPartSub->numIndices;
-                    //VCT/AabbWorldSpace compute shader needs to read aabbSubMeshIdx from
-                    //InstanceBuffer::meshData.w & ~0x80000000u; not from inMeshAabb which is
-                    //what we're filling right now. So set it to 0 to avoid confussion
+                    // VCT/AabbWorldSpace compute shader needs to read aabbSubMeshIdx from
+                    // InstanceBuffer::meshData.w & ~0x80000000u; not from inMeshAabb which is
+                    // what we're filling right now. So set it to 0 to avoid confussion
                     partitionedSubMeshGpuPtrs[variantIdx]->aabbSubMeshIdx = 0;
 
-//                    const bool needsAabbCalc = numSubMeshes != 1u ||
-//                                               queuedMesh.submeshes[i].partSubMeshes.size() != 1u;
-//                    if( needsAabbCalc )
-//                        partitionedSubMeshGpu->numIndices |= 0x80000000;
+                    // const bool needsAabbCalc = numSubMeshes != 1u ||
+                    //                           queuedMesh.submeshes[i].partSubMeshes.size()
+                    //                           != 1u;
+                    // if( needsAabbCalc )
+                    //    partitionedSubMeshGpu->numIndices |= 0x80000000;
 
                     ++itPartSub;
                     ++partitionedSubMeshGpuPtrs[variantIdx];
                 }
-
             }
             ++itor;
         }
 
-        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[0] -
-                         partitionedSubMeshGpu) == mNumUncompressedPartSubMeshes16 );
-        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[1] -
-                         partitionedSubMeshGpuPtrs[0]) == mNumUncompressedPartSubMeshes32 );
-        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[2] -
-                         partitionedSubMeshGpuPtrs[1]) == mNumCompressedPartSubMeshes16 );
-        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[3] -
-                         partitionedSubMeshGpuPtrs[2] ) == mNumCompressedPartSubMeshes32 );
+        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[0] - partitionedSubMeshGpu ) ==
+                         mNumUncompressedPartSubMeshes16 );
+        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[1] - partitionedSubMeshGpuPtrs[0] ) ==
+                         mNumUncompressedPartSubMeshes32 );
+        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[2] - partitionedSubMeshGpuPtrs[1] ) ==
+                         mNumCompressedPartSubMeshes16 );
+        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[3] - partitionedSubMeshGpuPtrs[2] ) ==
+                         mNumCompressedPartSubMeshes32 );
 
-        mGpuPartitionedSubMeshes = mVaoManager->createTexBuffer( PFG_RGBA32_UINT,
-                                                                 totalNumMeshes *
-                                                                 sizeof(PartitionedSubMesh),
-                                                                 BT_DEFAULT,
-                                                                 partitionedSubMeshGpuPtr.ptr,
-                                                                 false );
+        mGpuPartitionedSubMeshes =
+            mVaoManager->createTexBuffer( PFG_RGBA32_UINT, totalNumMeshes * sizeof( PartitionedSubMesh ),
+                                          BT_DEFAULT, partitionedSubMeshGpuPtr.ptr, false );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::destroyAabbCalculatorMeshData()
     {
-        //if( mGpuMeshDataDirty )
+        // if( mGpuMeshDataDirty )
         if( mGpuPartitionedSubMeshes )
         {
             mVaoManager->destroyTexBuffer( mGpuPartitionedSubMeshes );
@@ -506,7 +489,7 @@ namespace Ogre
 
         const unsigned numSubmeshes = mesh->getNumSubMeshes();
 
-        for( unsigned subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
+        for( unsigned subMeshIdx = 0; subMeshIdx < numSubmeshes; ++subMeshIdx )
         {
             SubMesh *subMesh = mesh->getSubMesh( subMeshIdx );
             VertexArrayObject *vao = subMesh->mVao[VpNormal].front();
@@ -521,17 +504,14 @@ namespace Ogre
                 {
                     uint32 indexStart = vao->getPrimitiveStart();
                     uint32 numIndices = vao->getPrimitiveCount();
-                    indexBuffer->copyTo( mIndexBuffer16,
-                                         mappedBuffers.index16BufferOffset >> 1u,
+                    indexBuffer->copyTo( mIndexBuffer16, mappedBuffers.index16BufferOffset >> 1u,
                                          indexStart, numIndices );
                     mappedBuffers.index16BufferOffset += alignToNextMultiple( numIndices, 4u );
                 }
                 else
                 {
-                    indexBuffer->copyTo( mIndexBuffer32,
-                                         mappedBuffers.index32BufferOffset,
-                                         vao->getPrimitiveStart(),
-                                         vao->getPrimitiveCount() );
+                    indexBuffer->copyTo( mIndexBuffer32, mappedBuffers.index32BufferOffset,
+                                         vao->getPrimitiveStart(), vao->getPrimitiveCount() );
                     mappedBuffers.index32BufferOffset += vao->getPrimitiveCount();
                 }
             }
@@ -541,7 +521,7 @@ namespace Ogre
                 numVertices = vao->getPrimitiveCount();
             }
 
-            float * RESTRICT_ALIAS uncVertexBuffer = mappedBuffers.uncompressedVertexBuffer;
+            float *RESTRICT_ALIAS uncVertexBuffer = mappedBuffers.uncompressedVertexBuffer;
 
 #ifdef STREAM_DOWNLOAD
             VertexBufferDownloadHelper &downloadHelper = queuedMesh.submeshes[subMeshIdx].downloadHelper;
@@ -559,24 +539,23 @@ namespace Ogre
             }
 #endif
             const VertexBufferDownloadHelper::DownloadData *downloadData =
-                    downloadHelper.getDownloadData().begin();
+                downloadHelper.getDownloadData().begin();
 
             VertexElement2 dummy( VET_FLOAT1, VES_TEXTURE_COORDINATES );
-            VertexElement2 origElements[3] =
-            {
+            VertexElement2 origElements[3] = {
                 downloadData[0].origElements ? *downloadData[0].origElements : dummy,
                 downloadData[1].origElements ? *downloadData[1].origElements : dummy,
                 downloadData[2].origElements ? *downloadData[2].origElements : dummy,
             };
 
-            //Map the buffers we started downloading in countBuffersSize
-            uint8 const * srcData[3];
+            // Map the buffers we started downloading in countBuffersSize
+            uint8 const *srcData[3];
             downloadHelper.map( srcData );
 
-            for( size_t vertexIdx=0; vertexIdx<numVertices; ++vertexIdx )
+            for( size_t vertexIdx = 0; vertexIdx < numVertices; ++vertexIdx )
             {
-                Vector4 pos = downloadHelper.getVector4( srcData[0] + downloadData[0].srcOffset,
-                                                         origElements[0] );
+                Vector4 pos =
+                    downloadHelper.getVector4( srcData[0] + downloadData[0].srcOffset, origElements[0] );
                 Vector3 normal( Vector3::UNIT_Y );
                 Vector2 uv( Vector2::ZERO );
 
@@ -587,8 +566,9 @@ namespace Ogre
                 }
                 if( srcData[2] )
                 {
-                    uv = downloadHelper.getVector4( srcData[2] + downloadData[2].srcOffset,
-                                                    origElements[2] ).xy();
+                    uv = downloadHelper
+                             .getVector4( srcData[2] + downloadData[2].srcOffset, origElements[2] )
+                             .xy();
                 }
 
                 *uncVertexBuffer++ = static_cast<float>( pos.x );
@@ -627,9 +607,9 @@ namespace Ogre
         if( !bCompressed )
         {
             const bool isNewEntry = itor == mMeshesV2.end();
-            //Force no compression, even if the entry was already there
+            // Force no compression, even if the entry was already there
             QueuedMesh &queuedMesh = mMeshesV2[mesh];
-            //const bool wasCompressed = queuedMesh.bCompressed;
+            // const bool wasCompressed = queuedMesh.bCompressed;
             queuedMesh.bCompressed = false;
 
             if( isNewEntry )
@@ -643,7 +623,7 @@ namespace Ogre
         }
         else
         {
-            //We can only request with compression if the entry wasn't already there
+            // We can only request with compression if the entry wasn't already there
             if( itor == mMeshesV2.end() )
             {
                 QueuedMesh queuedMesh;
@@ -693,27 +673,26 @@ namespace Ogre
     void VctVoxelizer::freeBuffers( bool bForceFree )
     {
         if( mIndexBuffer16 &&
-            (bForceFree || mIndexBuffer16->getNumElements() != (mNumIndices16 + 1u) >> 1u) )
+            ( bForceFree || mIndexBuffer16->getNumElements() != ( mNumIndices16 + 1u ) >> 1u ) )
         {
             mVaoManager->destroyUavBuffer( mIndexBuffer16 );
             mIndexBuffer16 = 0;
         }
-        if( mIndexBuffer32 &&
-            (bForceFree || mIndexBuffer32->getNumElements() != mNumIndices32) )
+        if( mIndexBuffer32 && ( bForceFree || mIndexBuffer32->getNumElements() != mNumIndices32 ) )
         {
             mVaoManager->destroyUavBuffer( mIndexBuffer32 );
             mIndexBuffer32 = 0;
         }
 
         if( mVertexBufferCompressed &&
-            (bForceFree || mVertexBufferCompressed->getNumElements() != mNumVerticesCompressed) )
+            ( bForceFree || mVertexBufferCompressed->getNumElements() != mNumVerticesCompressed ) )
         {
             mVaoManager->destroyUavBuffer( mVertexBufferCompressed );
             mVertexBufferCompressed = 0;
         }
 
         if( mVertexBufferUncompressed &&
-            (bForceFree || mVertexBufferUncompressed->getNumElements() != mNumVerticesUncompressed) )
+            ( bForceFree || mVertexBufferUncompressed->getNumElements() != mNumVerticesUncompressed ) )
         {
             mVaoManager->destroyUavBuffer( mVertexBufferUncompressed );
             mVertexBufferUncompressed = 0;
@@ -729,20 +708,20 @@ namespace Ogre
     {
         OgreProfile( "VctVoxelizer::buildMeshBuffers" );
 
-        mNumVerticesCompressed      = 0;
-        mNumVerticesUncompressed    = 0;
+        mNumVerticesCompressed = 0;
+        mNumVerticesUncompressed = 0;
         mNumIndices16 = 0;
         mNumIndices32 = 0;
 
         mNumUncompressedPartSubMeshes16 = 0;
         mNumUncompressedPartSubMeshes32 = 0;
-        mNumCompressedPartSubMeshes16   = 0;
-        mNumCompressedPartSubMeshes32   = 0;
+        mNumCompressedPartSubMeshes16 = 0;
+        mNumCompressedPartSubMeshes32 = 0;
 
         {
             OgreProfile( "VctVoxelizer::countBuffersSize aggregated" );
             MeshPtrMap::iterator itor = mMeshesV2.begin();
-            MeshPtrMap::iterator end  = mMeshesV2.end();
+            MeshPtrMap::iterator end = mMeshesV2.end();
 
             while( itor != end )
             {
@@ -755,21 +734,21 @@ namespace Ogre
 
         if( mNumIndices16 && !mIndexBuffer16 )
         {
-            //D3D11 does not support 2-byte strides, so we create 4-byte buffers
-            //and halve the number of indices (rounding up)
-            mIndexBuffer16 = mVaoManager->createUavBuffer( (mNumIndices16 + 1u) >> 1u,
-                                                           sizeof(uint32), 0, 0, false );
+            // D3D11 does not support 2-byte strides, so we create 4-byte buffers
+            // and halve the number of indices (rounding up)
+            mIndexBuffer16 = mVaoManager->createUavBuffer( ( mNumIndices16 + 1u ) >> 1u,
+                                                           sizeof( uint32 ), 0, 0, false );
         }
         if( mNumIndices32 && !mIndexBuffer32 )
-            mIndexBuffer32 = mVaoManager->createUavBuffer( mNumIndices32, sizeof(uint32), 0, 0, false );
+            mIndexBuffer32 =
+                mVaoManager->createUavBuffer( mNumIndices32, sizeof( uint32 ), 0, 0, false );
 
         StagingBuffer *vbUncomprStagingBuffer =
-                mVaoManager->getStagingBuffer( mNumVerticesUncompressed * sizeof(float) * 8u, true );
+            mVaoManager->getStagingBuffer( mNumVerticesUncompressed * sizeof( float ) * 8u, true );
 
         MappedBuffers mappedBuffers;
-        mappedBuffers.uncompressedVertexBuffer =
-                reinterpret_cast<float*>( vbUncomprStagingBuffer->map( mNumVerticesUncompressed *
-                                                                       sizeof(float) * 8u ) );
+        mappedBuffers.uncompressedVertexBuffer = reinterpret_cast<float *>(
+            vbUncomprStagingBuffer->map( mNumVerticesUncompressed * sizeof( float ) * 8u ) );
         mappedBuffers.index16BufferOffset = 0u;
         mappedBuffers.index32BufferOffset = 0u;
 
@@ -780,7 +759,7 @@ namespace Ogre
         {
             OgreProfile( "VctVoxelizer::convertMeshUncompressed aggregated" );
             MeshPtrMap::iterator itor = mMeshesV2.begin();
-            MeshPtrMap::iterator end  = mMeshesV2.end();
+            MeshPtrMap::iterator end = mMeshesV2.end();
 
             while( itor != end )
             {
@@ -789,19 +768,17 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( (size_t)(mappedBuffers.uncompressedVertexBuffer -
-                                  uncompressedVertexBufferStart) <=
-                         mNumVerticesUncompressed * sizeof(float) * 8u );
+        OGRE_ASSERT_LOW(
+            ( size_t )( mappedBuffers.uncompressedVertexBuffer - uncompressedVertexBufferStart ) <=
+            mNumVerticesUncompressed * sizeof( float ) * 8u );
 
         if( mNumVerticesUncompressed && !mVertexBufferUncompressed )
         {
-            mVertexBufferUncompressed = mVaoManager->createUavBuffer( mNumVerticesUncompressed,
-                                                                      sizeof(float) * 8u,
-                                                                      0, 0, false );
+            mVertexBufferUncompressed = mVaoManager->createUavBuffer(
+                mNumVerticesUncompressed, sizeof( float ) * 8u, 0, 0, false );
         }
         vbUncomprStagingBuffer->unmap( StagingBuffer::Destination(
-                                           mVertexBufferUncompressed, 0u, 0u,
-                                           mVertexBufferUncompressed->getTotalSizeBytes() ) );
+            mVertexBufferUncompressed, 0u, 0u, mVertexBufferUncompressed->getTotalSizeBytes() ) );
 
         vbUncomprStagingBuffer->removeReferenceCount();
 
@@ -810,9 +787,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::createVoxelTextures()
     {
-        if( mAlbedoVox &&
-            mAlbedoVox->getWidth() == mWidth &&
-            mAlbedoVox->getHeight() == mHeight &&
+        if( mAlbedoVox && mAlbedoVox->getWidth() == mWidth && mAlbedoVox->getHeight() == mHeight &&
             mAlbedoVox->getDepth() == mDepth )
         {
             mAccumValVox->scheduleTransitionTo( GpuResidency::Resident );
@@ -830,38 +805,29 @@ namespace Ogre
             if( mNeedsAlbedoMipmaps || mNeedsAllMipmaps )
                 texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
-            mAlbedoVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
-                                                            StringConverter::toString( getId() ) +
-                                                            "/Albedo",
-                                                            GpuPageOutStrategy::Discard,
-                                                            texFlags, TextureTypes::Type3D );
+            mAlbedoVox = mTextureGpuManager->createTexture(
+                "VctVoxelizer" + StringConverter::toString( getId() ) + "/Albedo",
+                GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
 
             if( !mNeedsAllMipmaps )
                 texFlags &= ~uint32( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
-            mEmissiveVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
-                                                              StringConverter::toString( getId() ) +
-                                                              "/Emissive",
-                                                              GpuPageOutStrategy::Discard,
-                                                              texFlags, TextureTypes::Type3D );
-            mNormalVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
-                                                            StringConverter::toString( getId() ) +
-                                                            "/Normal",
-                                                            GpuPageOutStrategy::Discard,
-                                                            texFlags, TextureTypes::Type3D );
+            mEmissiveVox = mTextureGpuManager->createTexture(
+                "VctVoxelizer" + StringConverter::toString( getId() ) + "/Emissive",
+                GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
+            mNormalVox = mTextureGpuManager->createTexture(
+                "VctVoxelizer" + StringConverter::toString( getId() ) + "/Normal",
+                GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
 
             texFlags &= ~uint32( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
-            mAccumValVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
-                                                              StringConverter::toString( getId() ) +
-                                                              "/AccumVal",
-                                                              GpuPageOutStrategy::Discard,
-                                                              TextureFlags::NotTexture|texFlags,
-                                                              TextureTypes::Type3D );
+            mAccumValVox = mTextureGpuManager->createTexture(
+                "VctVoxelizer" + StringConverter::toString( getId() ) + "/AccumVal",
+                GpuPageOutStrategy::Discard, TextureFlags::NotTexture | texFlags, TextureTypes::Type3D );
         }
 
         TextureGpu *textures[4] = { mAlbedoVox, mEmissiveVox, mNormalVox, mAccumValVox };
-        for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
+        for( size_t i = 0; i < sizeof( textures ) / sizeof( textures[0] ); ++i )
             textures[i]->scheduleTransitionTo( GpuResidency::OnStorage );
 
         mAlbedoVox->setPixelFormat( PFG_RGBA8_UNORM );
@@ -874,7 +840,7 @@ namespace Ogre
 
         const uint8 numMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( mWidth, mHeight, mDepth );
 
-        for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
+        for( size_t i = 0; i < sizeof( textures ) / sizeof( textures[0] ); ++i )
         {
             if( textures[i] != mAccumValVox || hasTypedUavs )
                 textures[i]->setResolution( mWidth, mHeight, mDepth );
@@ -910,7 +876,7 @@ namespace Ogre
         mRegionToVoxelize = Aabb::BOX_NULL;
 
         ItemArray::const_iterator itor = mItems.begin();
-        ItemArray::const_iterator end  = mItems.end();
+        ItemArray::const_iterator end = mItems.end();
 
         while( itor != end )
         {
@@ -935,7 +901,7 @@ namespace Ogre
         mBuckets.clear();
 
         ItemArray::const_iterator itor = mItems.begin();
-        ItemArray::const_iterator end  = mItems.end();
+        ItemArray::const_iterator end = mItems.end();
 
         while( itor != end )
         {
@@ -943,7 +909,7 @@ namespace Ogre
             MeshPtrMap::const_iterator itMesh = mMeshesV2.find( item->getMesh() );
 
             const size_t numSubItems = item->getNumSubItems();
-            for( size_t i=0; i<numSubItems; ++i )
+            for( size_t i = 0; i < numSubItems; ++i )
             {
                 VoxelizerBucket bucket;
                 uint32 variant = 0;
@@ -965,34 +931,34 @@ namespace Ogre
 
                 HlmsDatablock *datablock = subItem->getDatablock();
                 VctMaterial::DatablockConversionResult convResult =
-                        mVctMaterial->addDatablock( datablock );
+                    mVctMaterial->addDatablock( datablock );
 
                 if( convResult.hasDiffuseTex() )
                     variant |= VoxelizerJobSetting::HasDiffuseTex;
                 if( convResult.hasEmissiveTex() )
                     variant |= VoxelizerJobSetting::HasEmissiveTex;
 
-                bucket.job              = mComputeJobs[variant];
-                bucket.materialBuffer   = convResult.constBuffer;
-                bucket.needsTexPool     = convResult.hasDiffuseTex() || convResult.hasEmissiveTex();
-                bucket.vertexBuffer     = itMesh->second.bCompressed ? mVertexBufferCompressed :
-                                                                       mVertexBufferUncompressed;
-                bucket.indexBuffer      = (variant & VoxelizerJobSetting::Index32bit) ? mIndexBuffer32 :
-                                                                                        mIndexBuffer16;
+                bucket.job = mComputeJobs[variant];
+                bucket.materialBuffer = convResult.constBuffer;
+                bucket.needsTexPool = convResult.hasDiffuseTex() || convResult.hasEmissiveTex();
+                bucket.vertexBuffer =
+                    itMesh->second.bCompressed ? mVertexBufferCompressed : mVertexBufferUncompressed;
+                bucket.indexBuffer =
+                    ( variant & VoxelizerJobSetting::Index32bit ) ? mIndexBuffer32 : mIndexBuffer16;
 
                 QueuedInstance queuedInstance;
-                queuedInstance.movableObject    = item;
-                queuedInstance.materialIdx      = convResult.slotIdx;
+                queuedInstance.movableObject = item;
+                queuedInstance.materialIdx = convResult.slotIdx;
 
                 const size_t numPartitions = itMesh->second.submeshes[i].partSubMeshes.size();
-                for( size_t j=0u; j<numPartitions; ++j )
+                for( size_t j = 0u; j < numPartitions; ++j )
                 {
                     const PartitionedSubMesh &partSubMesh = itMesh->second.submeshes[i].partSubMeshes[j];
-                    queuedInstance.vertexBufferStart    = partSubMesh.vbOffset;
-                    queuedInstance.indexBufferStart     = partSubMesh.ibOffset;
-                    queuedInstance.numIndices           = partSubMesh.numIndices;
-                    queuedInstance.aabbSubMeshIdx       = partSubMesh.aabbSubMeshIdx;
-                    queuedInstance.needsAabbUpdate      = numPartitions != 1u || numSubItems != 1u;
+                    queuedInstance.vertexBufferStart = partSubMesh.vbOffset;
+                    queuedInstance.indexBufferStart = partSubMesh.ibOffset;
+                    queuedInstance.numIndices = partSubMesh.numIndices;
+                    queuedInstance.aabbSubMeshIdx = partSubMesh.aabbSubMeshIdx;
+                    queuedInstance.needsAabbUpdate = numPartitions != 1u || numSubItems != 1u;
                     mBuckets[bucket].queuedInst.push_back( queuedInstance );
                 }
             }
@@ -1008,7 +974,7 @@ namespace Ogre
         OGRE_ASSERT_MEDIUM( itMesh != mMeshesV2.end() );
 
         QueuedSubMeshArray::const_iterator itor = itMesh->second.submeshes.begin();
-        QueuedSubMeshArray::const_iterator end  = itMesh->second.submeshes.end();
+        QueuedSubMeshArray::const_iterator end = itMesh->second.submeshes.end();
 
         while( itor != end )
         {
@@ -1023,7 +989,7 @@ namespace Ogre
     {
         size_t instanceCount = 0;
         ItemArray::const_iterator itor = mItems.begin();
-        ItemArray::const_iterator end  = mItems.end();
+        ItemArray::const_iterator end = mItems.end();
 
         while( itor != end )
         {
@@ -1031,7 +997,7 @@ namespace Ogre
             ++itor;
         }
 
-        const size_t structStride = sizeof(float) * 4u * 6u;
+        const size_t structStride = sizeof( float ) * 4u * 6u;
         const size_t elementCount = alignToNextMultiple( instanceCount * mOctants.size(),
                                                          mAabbWorldSpaceJob->getThreadsPerGroupX() );
 
@@ -1039,9 +1005,9 @@ namespace Ogre
         {
             destroyInstanceBuffers();
             mInstanceBuffer = mVaoManager->createUavBuffer( elementCount, structStride,
-                                                            BB_FLAG_UAV|BB_FLAG_READONLY, 0, false );
-            mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( elementCount * structStride,
-                                                                             MEMCATEGORY_GENERAL ) );
+                                                            BB_FLAG_UAV | BB_FLAG_READONLY, 0, false );
+            mCpuInstanceBuffer = reinterpret_cast<float *>(
+                OGRE_MALLOC_SIMD( elementCount * structStride, MEMCATEGORY_GENERAL ) );
             mInstanceBufferAsTex = mInstanceBuffer->getAsReadOnlyBufferView();
         }
     }
@@ -1067,13 +1033,14 @@ namespace Ogre
 
         createInstanceBuffers();
 
-//        float * RESTRICT_ALIAS instanceBuffer =
-//                reinterpret_cast<float*>( mInstanceBuffer->map( 0, mInstanceBuffer->getNumElements() ) );
-        float * RESTRICT_ALIAS instanceBuffer = reinterpret_cast<float*>( mCpuInstanceBuffer );
+        //        float * RESTRICT_ALIAS instanceBuffer =
+        //                reinterpret_cast<float*>( mInstanceBuffer->map( 0,
+        //                mInstanceBuffer->getNumElements() ) );
+        float *RESTRICT_ALIAS instanceBuffer = reinterpret_cast<float *>( mCpuInstanceBuffer );
         const float *instanceBufferStart = instanceBuffer;
         const FastArray<Octant>::const_iterator begin = mOctants.begin();
         FastArray<Octant>::const_iterator itor = begin;
-        FastArray<Octant>::const_iterator end  = mOctants.end();
+        FastArray<Octant>::const_iterator end = mOctants.end();
 
         while( itor != end )
         {
@@ -1085,21 +1052,21 @@ namespace Ogre
             {
                 uint32 numInstancesAfterCulling = 0u;
                 FastArray<QueuedInstance>::const_iterator itQueuedInst =
-                        itBucket->second.queuedInst.begin();
+                    itBucket->second.queuedInst.begin();
                 FastArray<QueuedInstance>::const_iterator enQueuedInst =
-                        itBucket->second.queuedInst.end();
+                    itBucket->second.queuedInst.end();
 
                 while( itQueuedInst != enQueuedInst )
                 {
                     const QueuedInstance &instance = *itQueuedInst;
                     Aabb worldAabb = instance.movableObject->getWorldAabb();
 
-                    //Perform culling against this octant.
+                    // Perform culling against this octant.
                     if( octantAabb.intersects( worldAabb ) )
                     {
                         const Matrix4 &fullTransform =
-                                instance.movableObject->_getParentNodeFullTransform();
-                        for( size_t i=0; i<12u; ++i )
+                            instance.movableObject->_getParentNodeFullTransform();
+                        for( size_t i = 0; i < 12u; ++i )
                             *instanceBuffer++ = static_cast<float>( fullTransform[0][i] );
 
                         *instanceBuffer++ = worldAabb.mCenter.x;
@@ -1107,23 +1074,28 @@ namespace Ogre
                         *instanceBuffer++ = worldAabb.mCenter.z;
                         *instanceBuffer++ = 0.0f;
 
-                        #define AS_U32PTR( x ) reinterpret_cast<uint32*RESTRICT_ALIAS>(x)
+#define AS_U32PTR( x ) reinterpret_cast<uint32 * RESTRICT_ALIAS>( x )
 
                         *instanceBuffer++ = worldAabb.mHalfSize.x;
                         *instanceBuffer++ = worldAabb.mHalfSize.y;
                         *instanceBuffer++ = worldAabb.mHalfSize.z;
-                        *AS_U32PTR( instanceBuffer ) = instance.materialIdx;        ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = instance.materialIdx;
+                        ++instanceBuffer;
 
                         uint32 aabbSubMeshIdx = instance.aabbSubMeshIdx;
                         if( instance.needsAabbUpdate )
                             aabbSubMeshIdx |= 0x80000000;
 
-                        *AS_U32PTR( instanceBuffer ) = instance.vertexBufferStart;  ++instanceBuffer;
-                        *AS_U32PTR( instanceBuffer ) = instance.indexBufferStart;   ++instanceBuffer;
-                        *AS_U32PTR( instanceBuffer ) = instance.numIndices;         ++instanceBuffer;
-                        *AS_U32PTR( instanceBuffer ) = aabbSubMeshIdx;              ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = instance.vertexBufferStart;
+                        ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = instance.indexBufferStart;
+                        ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = instance.numIndices;
+                        ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = aabbSubMeshIdx;
+                        ++instanceBuffer;
 
-                        #undef AS_U32PTR
+#undef AS_U32PTR
 
                         ++numInstancesAfterCulling;
                     }
@@ -1143,16 +1115,17 @@ namespace Ogre
             ++itor;
         }
 
-        OGRE_ASSERT_LOW( (size_t)(instanceBuffer - instanceBufferStart) * sizeof(float) <=
+        OGRE_ASSERT_LOW( ( size_t )( instanceBuffer - instanceBufferStart ) * sizeof( float ) <=
                          mInstanceBuffer->getTotalSizeBytes() );
 
-        mTotalNumInstances = static_cast<uint32>( (instanceBuffer - instanceBufferStart) /
-                                                  (4u * (3u + 3u)) );
+        mTotalNumInstances =
+            static_cast<uint32>( ( instanceBuffer - instanceBufferStart ) / ( 4u * ( 3u + 3u ) ) );
 
-        //Fill the remaining bytes with 0 so that mAabbWorldSpaceJob ignores those
-        memset( instanceBuffer, 0, mInstanceBuffer->getTotalSizeBytes() -
-                (static_cast<size_t>(instanceBuffer - instanceBufferStart) * sizeof(float)) );
-//        mInstanceBuffer->unmap( UO_UNMAP_ALL );
+        // Fill the remaining bytes with 0 so that mAabbWorldSpaceJob ignores those
+        memset( instanceBuffer, 0,
+                mInstanceBuffer->getTotalSizeBytes() -
+                    ( static_cast<size_t>( instanceBuffer - instanceBufferStart ) * sizeof( float ) ) );
+        //        mInstanceBuffer->unmap( UO_UNMAP_ALL );
         mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
     }
     //-------------------------------------------------------------------------
@@ -1163,30 +1136,27 @@ namespace Ogre
 
         const size_t numVariants = 1u << c_numAabCalcProperties;
 
-        OGRE_STATIC_ASSERT( sizeof(mAabbCalculator) / sizeof(mAabbCalculator[0]) == numVariants );
+        OGRE_STATIC_ASSERT( sizeof( mAabbCalculator ) / sizeof( mAabbCalculator[0] ) == numVariants );
 
-        const uint32 numMeshes[numVariants] =
-        {
-            mNumUncompressedPartSubMeshes16,
-            mNumUncompressedPartSubMeshes32,
-            mNumCompressedPartSubMeshes16,
-            mNumCompressedPartSubMeshes32
-        };
+        const uint32 numMeshes[numVariants] = { mNumUncompressedPartSubMeshes16,
+                                                mNumUncompressedPartSubMeshes32,
+                                                mNumCompressedPartSubMeshes16,
+                                                mNumCompressedPartSubMeshes32 };
 
         ShaderParams::Param paramMeshRange;
-        paramMeshRange.name	= "meshStart_meshEnd";
+        paramMeshRange.name = "meshStart_meshEnd";
 
         uint32 meshStart = 0u;
 
         OgreProfileGpuBegin( "VCT Mesh AABB calculation" );
 
-        for( size_t i=0; i<numVariants; ++i )
+        for( size_t i = 0; i < numVariants; ++i )
         {
             if( numMeshes[i] == 0u )
                 continue;
 
-            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
-            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
+            const bool compressedVf = ( i & VoxelizerJobSetting::CompressedVertexFormat ) != 0;
+            const bool hasIndices32 = ( i & VoxelizerJobSetting::Index32bit ) != 0;
 
             DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
             bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
@@ -1199,7 +1169,8 @@ namespace Ogre
             bufferSlot.access = ResourceAccess::Write;
             mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
 
-            DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+            DescriptorSetTexture2::BufferSlot texBufSlot(
+                DescriptorSetTexture2::BufferSlot::makeEmpty() );
             texBufSlot.buffer = mGpuPartitionedSubMeshes;
             mAabbCalculator[i]->setTexBuffer( 0, texBufSlot );
 
@@ -1225,13 +1196,13 @@ namespace Ogre
         bufferSlot.access = ResourceAccess::ReadWrite;
         mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
 
-        DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+        DescriptorSetTexture2::BufferSlot texBufSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
         texBufSlot.buffer = mMeshAabb->getAsReadOnlyBufferView();
         mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
 
         const uint32 threadsPerGroupX = mAabbWorldSpaceJob->getThreadsPerGroupX();
-        mAabbWorldSpaceJob->setNumThreadGroups( (mTotalNumInstances + threadsPerGroupX - 1u) /
-                                                threadsPerGroupX, 1u, 1u );
+        mAabbWorldSpaceJob->setNumThreadGroups(
+            ( mTotalNumInstances + threadsPerGroupX - 1u ) / threadsPerGroupX, 1u, 1u );
 
         OgreProfileGpuBegin( "VCT AABB local to world space conversion" );
         mAabbWorldSpaceJob->analyzeBarriers( mResourceTransitions );
@@ -1250,15 +1221,15 @@ namespace Ogre
         OGRE_ASSERT_LOW( mDepth % numOctantsZ == 0 );
 
         Octant octant;
-        octant.width    = mWidth / numOctantsX;
-        octant.height   = mHeight / numOctantsY;
-        octant.depth    = mDepth / numOctantsZ;
+        octant.width = mWidth / numOctantsX;
+        octant.height = mHeight / numOctantsY;
+        octant.depth = mDepth / numOctantsZ;
 
         const Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
-        const Vector3 voxelCellSize = mRegionToVoxelize.getSize() /
-                                      Vector3( numOctantsX, numOctantsY, numOctantsZ );
+        const Vector3 voxelCellSize =
+            mRegionToVoxelize.getSize() / Vector3( numOctantsX, numOctantsY, numOctantsZ );
 
-        for( uint32 x=0u; x<numOctantsX; ++x )
+        for( uint32 x = 0u; x < numOctantsX; ++x )
         {
             octant.x = x * octant.width;
             for( uint32 y = 0u; y < numOctantsY; ++y )
@@ -1283,8 +1254,8 @@ namespace Ogre
         float fClearValue[4];
         uint32 uClearValue[4];
         float fClearNormals[4];
-        memset( fClearValue, 0, sizeof(fClearValue) );
-        memset( uClearValue, 0, sizeof(uClearValue) );
+        memset( fClearValue, 0, sizeof( fClearValue ) );
+        memset( uClearValue, 0, sizeof( uClearValue ) );
         fClearNormals[0] = 0.5f;
         fClearNormals[1] = 0.5f;
         fClearNormals[2] = 0.5f;
@@ -1307,9 +1278,9 @@ namespace Ogre
     void VctVoxelizer::setResolution( uint32 width, uint32 height, uint32 depth )
     {
         destroyVoxelTextures();
-        mWidth  = width;
+        mWidth = width;
         mHeight = height;
-        mDepth  = depth;
+        mDepth = depth;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::build( SceneManager *sceneManager )
@@ -1341,10 +1312,10 @@ namespace Ogre
 
         const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
 
-        for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
+        for( size_t i = 0; i < sizeof( mComputeJobs ) / sizeof( mComputeJobs[0] ); ++i )
         {
-            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
-            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
+            const bool compressedVf = ( i & VoxelizerJobSetting::CompressedVertexFormat ) != 0;
+            const bool hasIndices32 = ( i & VoxelizerJobSetting::Index32bit ) != 0;
 
             DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
             bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
@@ -1357,7 +1328,7 @@ namespace Ogre
             DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
             uavSlot.access = ResourceAccess::ReadWrite;
 
-            uavSlot.texture     = mAlbedoVox;
+            uavSlot.texture = mAlbedoVox;
             if( hasTypedUavs )
                 uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
             else
@@ -1365,7 +1336,7 @@ namespace Ogre
             uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 2, uavSlot );
 
-            uavSlot.texture     = mNormalVox;
+            uavSlot.texture = mNormalVox;
             if( hasTypedUavs )
                 uavSlot.pixelFormat = mNormalVox->getPixelFormat();
             else
@@ -1373,7 +1344,7 @@ namespace Ogre
             uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 3, uavSlot );
 
-            uavSlot.texture     = mEmissiveVox;
+            uavSlot.texture = mEmissiveVox;
             if( hasTypedUavs )
                 uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
             else
@@ -1381,12 +1352,13 @@ namespace Ogre
             uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 4, uavSlot );
 
-            uavSlot.texture     = mAccumValVox;
+            uavSlot.texture = mAccumValVox;
             uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
             uavSlot.access = ResourceAccess::ReadWrite;
             mComputeJobs[i]->_setUavTexture( 5, uavSlot );
 
-            DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+            DescriptorSetTexture2::BufferSlot texBufSlot(
+                DescriptorSetTexture2::BufferSlot::makeEmpty() );
             texBufSlot.buffer = mInstanceBufferAsTex;
             mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
         }
@@ -1401,10 +1373,10 @@ namespace Ogre
         ShaderParams::Param paramVoxelCellSize;
         ShaderParams::Param paramVoxelPixelOrigin;
 
-        paramInstanceRange.name	= "instanceStart_instanceEnd";
-        paramVoxelOrigin.name	= "voxelOrigin";
-        paramVoxelCellSize.name	= "voxelCellSize";
-        paramVoxelPixelOrigin.name="voxelPixelOrigin";
+        paramInstanceRange.name = "instanceStart_instanceEnd";
+        paramVoxelOrigin.name = "voxelOrigin";
+        paramVoxelCellSize.name = "voxelCellSize";
+        paramVoxelPixelOrigin.name = "voxelPixelOrigin";
 
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
@@ -1414,7 +1386,7 @@ namespace Ogre
 
         const FastArray<Octant>::const_iterator begin = mOctants.begin();
         FastArray<Octant>::const_iterator itor = begin;
-        FastArray<Octant>::const_iterator end  = mOctants.end();
+        FastArray<Octant>::const_iterator end = mOctants.end();
 
         while( itor != end )
         {
@@ -1482,7 +1454,7 @@ namespace Ogre
 
         OgreProfileGpuEnd( "VCT Voxelization Jobs" );
 
-        //This texture is no longer needed, it's not used for the injection phase. Save memory.
+        // This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
         if( mNeedsAlbedoMipmaps || mNeedsAllMipmaps )
@@ -1495,4 +1467,4 @@ namespace Ogre
 
         OgreProfileGpuEnd( "VCT build" );
     }
-}
+}  // namespace Ogre

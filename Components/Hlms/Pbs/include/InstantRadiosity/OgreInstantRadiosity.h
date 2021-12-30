@@ -29,23 +29,25 @@ THE SOFTWARE.
 #define _OgreInstantRadiosity_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
-#include "OgreHlmsBufferManager.h"
-#include "OgreConstBufferPool.h"
-#include "OgreRay.h"
-#include "OgreRawPtr.h"
-#include "OgreVector2.h"
+
 #include "Math/Array/OgreArrayRay.h"
+#include "OgreConstBufferPool.h"
+#include "OgreHlmsBufferManager.h"
+#include "OgreRawPtr.h"
+#include "OgreRay.h"
 #include "OgreTextureBox.h"
+#include "OgreVector2.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class RandomNumberGenerator;
     class IrradianceVolume;
@@ -54,49 +56,50 @@ namespace Ogre
     {
         struct MeshData
         {
-            float * RESTRICT_ALIAS vertexData;
+            float *RESTRICT_ALIAS vertexData;
             /// Index data may be directly pointing to IndexBufferPacked's shadow copy.
             /// Don't free the memory in that case!
             union
             {
-                uint8 * RESTRICT_ALIAS indexData;
-                uint8 const * RESTRICT_ALIAS indexDataConst;
+                uint8 *RESTRICT_ALIAS indexData;
+                uint8 const *RESTRICT_ALIAS indexDataConst;
             };
-            size_t  numVertices;
-            size_t  numIndices;
-            bool    useIndices16bit;
+            size_t numVertices;
+            size_t numIndices;
+            bool   useIndices16bit;
 
-            float* getUvStart( uint8_t uvSet ) const;
+            float *getUvStart( uint8_t uvSet ) const;
         };
 
         struct MaterialData
         {
-            Vector3     diffuse;
-            bool        needsUv;
-            //TODO: missing translate & scale
-            Image2 const*image[5]; //1 for diffuse, 4 for the detail maps.
-            TextureBox  box[5];
-            uint8       uvSet[5];
+            Vector3 diffuse;
+            bool    needsUv;
+            // TODO: missing translate & scale
+            Image2 const *image[5];  // 1 for diffuse, 4 for the detail maps.
+            TextureBox    box[5];
+            uint8         uvSet[5];
         };
 
         struct RayHit
         {
-            Real    distance;
-            Real    accumDistance;
-            Ray ray;
-            //Vector3 pointOnTri;
+            Real distance;
+            Real accumDistance;
+            Ray  ray;
+            // Vector3 pointOnTri;
             MaterialData material;
+
             Vector3 triVerts[3];
             Vector3 triNormal;
-            Vector2 triUVs[5][3]; //Up to 5 UVs (one per material image)
+            Vector2 triUVs[5][3];  // Up to 5 UVs (one per material image)
         };
         struct Vpl
         {
-            Light *light;
+            Light * light;
             Vector3 diffuse;
             Vector3 position;
             Vector3 normal;
-            Vector3 dirDiffuse[6]; /// Directional diffuse
+            Vector3 dirDiffuse[6];  /// Directional diffuse
             Real    numMergedVpls;
         };
 
@@ -108,56 +111,56 @@ namespace Ogre
             Vector3 dirDiffuse[6];
 
             SparseCluster();
-            SparseCluster( int32 blockX, int32 blockY, int32 blockZ,
-                           const Vector3 &_diffuse, const Vector3 &dir,
-                           const Vector3 _dirDiffuse[6] );
+            SparseCluster( int32 blockX, int32 blockY, int32 blockZ, const Vector3 &_diffuse,
+                           const Vector3 &dir, const Vector3 _dirDiffuse[6] );
             SparseCluster( int32 _blockHash[3] );
 
-            bool operator () ( const SparseCluster &_l, int32 _r[3] ) const;
-            bool operator () ( int32 _l[3], const SparseCluster &_r ) const;
-            bool operator () ( const SparseCluster &_l, const SparseCluster &_r ) const;
+            bool operator()( const SparseCluster &_l, int32 _r[3] ) const;
+            bool operator()( int32 _l[3], const SparseCluster &_r ) const;
+            bool operator()( const SparseCluster &_l, const SparseCluster &_r ) const;
         };
 
-        typedef vector<RayHit>::type RayHitVec;
-        typedef vector<Vpl>::type VplVec;
+        typedef vector<RayHit>::type                    RayHitVec;
+        typedef vector<Vpl>::type                       VplVec;
         typedef set<SparseCluster, SparseCluster>::type SparseClusterSet;
 
         struct OrderRenderOperation
         {
-            bool operator () ( const v1::RenderOperation &_l, const v1::RenderOperation &_r ) const;
+            bool operator()( const v1::RenderOperation &_l, const v1::RenderOperation &_r ) const;
         };
 
-        SceneManager    *mSceneManager;
-        HlmsManager     *mHlmsManager;
+        SceneManager *mSceneManager;
+        HlmsManager * mHlmsManager;
+
     public:
-        uint8           mFirstRq;
-        uint8           mLastRq;
-        uint32          mVisibilityMask;
-        uint32          mLightMask;
+        uint8  mFirstRq;
+        uint8  mLastRq;
+        uint32 mVisibilityMask;
+        uint32 mLightMask;
 
         /// Number of rays to trace. More usually results in more accuracy. Sometimes really
         /// low values (e.g. 32 rays) may achieve convincing results with high performance, while
         /// high large values (e.g. 10000) achieve more accurate results.
-        size_t          mNumRays;
+        size_t mNumRays;
         /// In range [0; inf). Controls how many bounces we'll generate.
         /// Increases the total number of rays (i.e. more than mNumRays).
-        size_t          mNumRayBounces;
+        size_t mNumRayBounces;
         /// In range (0; 1]; how many rays that fired in the previous bounce should survive
         /// for a next round of bounces.
-        Real            mSurvivingRayFraction;
+        Real mSurvivingRayFraction;
         /// Controls how we cluster multiple VPLs into one averaged VPL. Smaller values generate
         /// more VPLs (reducing performance but improving quality). Bigger values result in less
         /// VPLs (higher performance, less quality)
-        Real            mCellSize;
+        Real mCellSize;
         /// Value ideally in range (0; 1]
         /// When 1, the VPL is placed at exactly the location where the light ray hits the triangle.
         /// At 0.99 it will be placed at 99% the distance from light to the location (i.e. moves away
         /// from the triangle). Using Bias can help with light bleeding, and also allows reducing
         /// mVplMaxRange (thus increasing performance) at the cost of lower accuracy but still
         /// "looking good".
-        Real            mBias;
-        uint32          mNumSpreadIterations;
-        Real            mSpreadThreshold;
+        Real   mBias;
+        uint32 mNumSpreadIterations;
+        Real   mSpreadThreshold;
 
         /// Areas of Interest are defined by both AABB and distance (can be 0). AoIs serve two purposes:
         ///     1. Define where to shoot the rays (i.e. windows, holes, etc)
@@ -181,10 +184,13 @@ namespace Ogre
         /// entire house)
         struct AreaOfInterest
         {
-            Aabb    aabb;
-            Real    sphereRadius;
+            Aabb aabb;
+            Real sphereRadius;
             AreaOfInterest( const Aabb &_aabb, Real _sphereRadius ) :
-                aabb( _aabb ), sphereRadius( _sphereRadius ) {}
+                aabb( _aabb ),
+                sphereRadius( _sphereRadius )
+            {
+            }
         };
 
         /// Areas of interest. Only used for directional lights. Normally you don't want to
@@ -194,54 +200,56 @@ namespace Ogre
         /// If left unfilled, the system will auto-calculate one (not recommended).
         /// See AreaOfInterest
         typedef vector<AreaOfInterest>::type AreaOfInterestVec;
-        AreaOfInterestVec   mAoI;
+        AreaOfInterestVec                    mAoI;
 
         /// ANY CHANGE TO A mVpl* variable will take effect after calling updateExistingVpls
         /// (or calling build)
         /// How big each VPL should be. Larger ranges leak light more but also are more accurate
         /// in the sections they lit correctly, but they are also get more expensive.
-        Real            mVplMaxRange;
-        Real            mVplConstAtten;
-        Real            mVplLinearAtten;
-        Real            mVplQuadAtten;
+        Real mVplMaxRange;
+        Real mVplConstAtten;
+        Real mVplLinearAtten;
+        Real mVplQuadAtten;
         /// If all three components of the diffuse colour of a VPL light is below this threshold,
         /// the VPL is removed (useful for improving performance for VPLs that barely contribute
         /// to the scene).
-        Real            mVplThreshold;
+        Real mVplThreshold;
         /// Tweaks how strong VPL lights should be.
         /// In range (0; inf)
-        Real            mVplPowerBoost;
+        Real mVplPowerBoost;
 
         /// When true, mVplIntensityRangeMultiplier will be used and each VPL will have
         /// a dynamic max range (can't exceed mVplMaxRange though), based on its
         /// intensity (smaller VPLs = shorter ranges, powerful VPLs = larger ranges)
-        bool            mVplUseIntensityForMaxRange;
-        double          mVplIntensityRangeMultiplier;
+        bool   mVplUseIntensityForMaxRange;
+        double mVplIntensityRangeMultiplier;
 
-        uint32          mMipmapBias;
+        uint32 mMipmapBias;
+
     private:
-        size_t          mTotalNumRays; /// Includes bounces. Autogenerated.
-        VplVec          mVpls;
-        RayHitVec       mRayHits;
+        size_t    mTotalNumRays;  /// Includes bounces. Autogenerated.
+        VplVec    mVpls;
+        RayHitVec mRayHits;
         RawSimdUniquePtr<ArrayRay, MEMCATEGORY_GENERAL> mArrayRays;
 
         FastArray<size_t> mTmpRaysThatHitObject[ARRAY_PACKED_REALS];
         SparseClusterSet  mTmpSparseClusters[3];
 
-        typedef map<VertexArrayObject*, MeshData>::type MeshDataMapV2;
+        typedef map<VertexArrayObject *, MeshData>::type                       MeshDataMapV2;
         typedef map<v1::RenderOperation, MeshData, OrderRenderOperation>::type MeshDataMapV1;
-        MeshDataMapV2   mMeshDataMapV2;
-        MeshDataMapV1   mMeshDataMapV1;
 
-        typedef map<TextureGpu*, Image2>::type ImageMap;
-        ImageMap        mImageMap;
+        MeshDataMapV2 mMeshDataMapV2;
+        MeshDataMapV1 mMeshDataMapV1;
 
-        vector<Item*>::type mDebugMarkers;
-        bool                mEnableDebugMarkers;
+        typedef map<TextureGpu *, Image2>::type ImageMap;
+        ImageMap                                mImageMap;
 
-        bool                mUseTextures;
+        vector<Item *>::type mDebugMarkers;
+        bool                 mEnableDebugMarkers;
 
-        bool                mUseIrradianceVolume;
+        bool mUseTextures;
+
+        bool mUseIrradianceVolume;
 
         /**
         @param lightPos
@@ -256,35 +264,33 @@ namespace Ogre
         @param areaOfInterest
             Only used for directional light types. See mAoI
         */
-        void processLight( Vector3 lightPos, const Quaternion &lightRot, uint8 lightType,
-                           Radian angle, Vector3 lightColour, Real lightRange,
-                           Real attenConst, Real attenLinear, Real attenQuad,
-                           const AreaOfInterest &areaOfInterest );
+        void processLight( Vector3 lightPos, const Quaternion &lightRot, uint8 lightType, Radian angle,
+                           Vector3 lightColour, Real lightRange, Real attenConst, Real attenLinear,
+                           Real attenQuad, const AreaOfInterest &areaOfInterest );
 
         /// Generates the ray bounces based on mRayHits[raySrcStart] through
         /// mRayHits[raySrcStart+raySrcCount-1]; generating up to 'raysToGenerate' rays
         /// Returns the number of actually generated rays (which is <= raysToGenerate)
         /// The generated rays are stored between mRayHits[raySrcStart+raySrcCount] &
         /// mRayHits[raySrcStart+raySrcCount+returnValue]
-        size_t generateRayBounces( size_t raySrcStart, size_t raySrcCount,
-                                   size_t raysToGenerate, RandomNumberGenerator &rng);
+        size_t generateRayBounces( size_t raySrcStart, size_t raySrcCount, size_t raysToGenerate,
+                                   RandomNumberGenerator &rng );
 
-        const MeshData* downloadVao( VertexArrayObject *vao );
-        const MeshData* downloadRenderOp( const v1::RenderOperation &renderOp );
-        const Image2& downloadTexture( TextureGpu *texture );
+        const MeshData *downloadVao( VertexArrayObject *vao );
+        const MeshData *downloadRenderOp( const v1::RenderOperation &renderOp );
+        const Image2 &  downloadTexture( TextureGpu *texture );
 
-        void testLightVsAllObjects( uint8 lightType, Real lightRange,
-                                    ObjectData objData, size_t numNodes,
-                                    const AreaOfInterest &areaOfInterest,
+        void testLightVsAllObjects( uint8 lightType, Real lightRange, ObjectData objData,
+                                    size_t numNodes, const AreaOfInterest &areaOfInterest,
                                     size_t rayStart, size_t numRays );
-        void raycastLightRayVsMesh( Real lightRange, const MeshData meshData,
-                                    Matrix4 worldMatrix, const MaterialData &material,
+        void raycastLightRayVsMesh( Real lightRange, const MeshData meshData, Matrix4 worldMatrix,
+                                    const MaterialData &     material,
                                     const FastArray<size_t> &raysThatHitObj );
 
         Vpl convertToVpl( Vector3 lightColour, Vector3 pointOnTri, const RayHit &hit );
         /// Generates the VPLs from a particular lights, and clusters them.
-        void generateAndClusterVpls( Vector3 lightColour, Real attenConst,
-                                     Real attenLinear, Real attenQuad );
+        void generateAndClusterVpls( Vector3 lightColour, Real attenConst, Real attenLinear,
+                                     Real attenQuad );
         void spreadSparseClusters( const SparseClusterSet &grid0, SparseClusterSet &inOutGrid1 );
         void createVplsFromSpreadClusters( const SparseClusterSet &spreadCluster );
         /// Clusters the VPL from all lights (these VPLs may have been clustered with other
@@ -321,7 +327,7 @@ namespace Ogre
         void freeMemory();
 
         void setEnableDebugMarkers( bool bEnable );
-        bool getEnableDebugMarkers() const      { return mEnableDebugMarkers; }
+        bool getEnableDebugMarkers() const { return mEnableDebugMarkers; }
 
         /** Whether to evaluate diffuse & detail map textures.
             Disabling textures can speed up build() time and significantly reduce
@@ -333,14 +339,14 @@ namespace Ogre
             Whether to enable or disable using diffuse textures (and detail maps).
         */
         void setUseTextures( bool bUseTextures );
-        bool getUseTextures() const             { return mUseTextures; }
+        bool getUseTextures() const { return mUseTextures; }
 
         /** Whether to use Irradiance Volume instead of VPLs.
         @param bUseIrradianceVolume
             Whether to use Irradiance Volume.
         */
-        void setUseIrradianceVolume(bool bUseIrradianceVolume);
-        bool getUseIrradianceVolume() const             { return mUseIrradianceVolume; }
+        void setUseIrradianceVolume( bool bUseIrradianceVolume );
+        bool getUseIrradianceVolume() const { return mUseIrradianceVolume; }
 
         /** Outputs suggested parameters for a volumetric texture that will encompass all
             VPLs. They are suggestions, you don't have to follow them.
@@ -367,12 +373,9 @@ namespace Ogre
             The suggested depth for the volume texture times. Volume's depth in units will be:
                 outVolumeOrigin.z + mCellSize * outNumBlocksZ;
         */
-        void suggestIrradianceVolumeParameters( const Vector3 &inCellSize,
-                                                Vector3 &outVolumeOrigin,
-                                                Real &outLightMaxPower,
-                                                uint32 &outNumBlocksX,
-                                                uint32 &outNumBlocksY,
-                                                uint32 &outNumBlocksZ );
+        void suggestIrradianceVolumeParameters( const Vector3 &inCellSize, Vector3 &outVolumeOrigin,
+                                                Real &outLightMaxPower, uint32 &outNumBlocksX,
+                                                uint32 &outNumBlocksY, uint32 &outNumBlocksZ );
 
         /**
         @param volume
@@ -383,15 +386,14 @@ namespace Ogre
             Whether to fade the attenuation with distance (not physically based).
             See ForwardPlusBase::setFadeAttenuationRange
         */
-        void fillIrradianceVolume( IrradianceVolume *volume,
-                                   Vector3 cellSize, Vector3 volumeOrigin, Real lightMaxPower,
-                                   bool fadeAttenuationOverDistance );
+        void fillIrradianceVolume( IrradianceVolume *volume, Vector3 cellSize, Vector3 volumeOrigin,
+                                   Real lightMaxPower, bool fadeAttenuationOverDistance );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

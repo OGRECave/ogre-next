@@ -29,88 +29,60 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "InstantRadiosity/OgreInstantRadiosity.h"
-#include "OgreIrradianceVolume.h"
-#include "OgreHlmsPbsDatablock.h"
-#include "OgreHlmsPbs.h"
-#include "OgreHlmsManager.h"
 
-#include "OgreRay.h"
+#include "Math/Array/OgreBooleanMask.h"
+#include "OgreBitwise.h"
+#include "OgreHlmsManager.h"
+#include "OgreHlmsPbs.h"
+#include "OgreHlmsPbsDatablock.h"
+#include "OgreImage2.h"
+#include "OgreIrradianceVolume.h"
+#include "OgreItem.h"
 #include "OgreLight.h"
+#include "OgreLwString.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreRay.h"
 #include "OgreSceneManager.h"
+#include "OgreTextureGpu.h"
 #include "Vao/OgreAsyncTicket.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreVertexArrayObject.h"
 
-#include "Math/Array/OgreBooleanMask.h"
-
-#include "OgreItem.h"
-#include "OgreLwString.h"
-
-#include "OgreBitwise.h"
-#include "OgreTextureGpu.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreImage2.h"
-
-#if (OGRE_COMPILER == OGRE_COMPILER_MSVC ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_ANDROID ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD)
-    #include <random>
-#else
-    #include <tr1/random>
-#endif
+#include <random>
 
 namespace Ogre
 {
     class RandomNumberGenerator
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS ||\
-    ( OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER >= 1910 ) ||\
-    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
-        std::mt19937        mRng;
-#else
-        std::tr1::mt19937   mRng;
-#endif
+        std::mt19937 mRng;
 
     public:
-        uint32 rand()       { return mRng(); }
+        uint32 rand() { return mRng(); }
 
         /// Returns value in range [0; 1]
-        Real saturatedRand()
-        {
-            return rand() / (Real)mRng.max();
-        }
+        Real saturatedRand() { return rand() / (Real)mRng.max(); }
 
         /// Returns value in range [-1; 1]
-        Real boxRand()
-        {
-            return saturatedRand() * Real(2.0) - Real(1.0);
-        }
+        Real boxRand() { return saturatedRand() * Real( 2.0 ) - Real( 1.0 ); }
 
-        Real rangeRand( Real min, Real max )
-        {
-            return saturatedRand() * (max - min) + min;
-        }
+        Real rangeRand( Real min, Real max ) { return saturatedRand() * ( max - min ) + min; }
 
         Vector3 getRandomDir()
         {
-            const Real theta= Real(2.0) * Math::PI * saturatedRand();
-            const Real z    = boxRand();
+            const Real theta = Real( 2.0 ) * Math::PI * saturatedRand();
+            const Real z = boxRand();
 
-            const Real sharedTerm = Math::Sqrt( Real(1.0) - z * z );
+            const Real sharedTerm = Math::Sqrt( Real( 1.0 ) - z * z );
 
             Vector3 retVal;
             retVal.x = sharedTerm * Math::Cos( theta );
             retVal.y = sharedTerm * Math::Sin( theta );
             retVal.z = z;
-//            Vector3 retVal;
-//            retVal.x = boxRand();
-//            retVal.y = boxRand();
-//            retVal.z = boxRand();
-//            retVal.normalise();
+            // Vector3 retVal;
+            // retVal.x = boxRand();
+            // retVal.y = boxRand();
+            // retVal.z = boxRand();
+            // retVal.normalise();
 
             return retVal;
         }
@@ -118,8 +90,8 @@ namespace Ogre
         /// Returns values in range [-1; 1] both XY, inside a circle of radius 1.
         Vector2 getRandomPointInCircle()
         {
-            const Real theta= Real(2.0) * Math::PI * saturatedRand();
-            const Real r    = saturatedRand();
+            const Real theta = Real( 2.0 ) * Math::PI * saturatedRand();
+            const Real r = saturatedRand();
 
             const Real sqrtR = Math::Sqrt( r );
 
@@ -132,10 +104,10 @@ namespace Ogre
 
         Vector3 getRandomDirInRange( Radian angle )
         {
-            const Real theta= Real(2.0) * Math::PI * saturatedRand();
-            const Real z    = rangeRand( Math::Cos( angle ), 1.0f );
+            const Real theta = Real( 2.0 ) * Math::PI * saturatedRand();
+            const Real z = rangeRand( Math::Cos( angle ), 1.0f );
 
-            const Real sharedTerm = Math::Sqrt( Real(1.0) - z * z );
+            const Real sharedTerm = Math::Sqrt( Real( 1.0 ) - z * z );
 
             Vector3 retVal;
             retVal.x = sharedTerm * Math::Cos( theta );
@@ -165,14 +137,14 @@ namespace Ogre
         mLastRq( 255 ),
         mVisibilityMask( 0xffffffff ),
         mLightMask( 0xffffffff ),
-        //mNumRays( 10000 ),
+        // mNumRays( 10000 ),
         mNumRays( 128 ),
         mNumRayBounces( 1 ),
         mSurvivingRayFraction( 0.5f ),
         mCellSize( 3 ),
         mBias( 0.982f ),
         mNumSpreadIterations( 1 ),
-        mSpreadThreshold( 0.0004 ),
+        mSpreadThreshold( Real( 0.0004 ) ),
         mVplMaxRange( 8 ),
         mVplConstAtten( 0.5 ),
         mVplLinearAtten( 0.5 ),
@@ -195,54 +167,53 @@ namespace Ogre
         clear();
     }
     //-----------------------------------------------------------------------------------
-    bool InstantRadiosity::OrderRenderOperation::operator () ( const v1::RenderOperation &_l,
-                                                               const v1::RenderOperation &_r ) const
+    bool InstantRadiosity::OrderRenderOperation::operator()( const v1::RenderOperation &_l,
+                                                             const v1::RenderOperation &_r ) const
     {
-        return  _l.vertexData < _r.vertexData &&
-                _l.operationType < _r.operationType &&
-                _l.useIndexes < _r.useIndexes &&
-                _l.indexData < _r.indexData;
+        return _l.vertexData < _r.vertexData && _l.operationType < _r.operationType &&
+               _l.useIndexes < _r.useIndexes && _l.indexData < _r.indexData;
     }
     //-----------------------------------------------------------------------------------
-    InstantRadiosity::Vpl InstantRadiosity::convertToVpl( Vector3 lightColour,
-                                                          Vector3 pointOnTri,
+    InstantRadiosity::Vpl InstantRadiosity::convertToVpl( Vector3 lightColour, Vector3 pointOnTri,
                                                           const RayHit &hit )
     {
-        //const Real NdotL = hit.triNormal.dotProduct( -hit.rayDir );
+        // const Real NdotL = hit.triNormal.dotProduct( -hit.rayDir );
 
-        //materialDiffuse is already divided by PI
+        // materialDiffuse is already divided by PI
         Vector3 diffuseTerm = /*NdotL **/ hit.material.diffuse * lightColour;
 
         if( hit.material.needsUv )
         {
-            const Real invTriArea = Real(1.0) / ( (hit.triVerts[0] - hit.triVerts[1]).
-                    crossProduct( hit.triVerts[0] - hit.triVerts[2] ).length() );
+            const Real invTriArea =
+                Real( 1.0 ) / ( ( hit.triVerts[0] - hit.triVerts[1] )
+                                    .crossProduct( hit.triVerts[0] - hit.triVerts[2] )
+                                    .length() );
 
-            //Calculate barycentric coordinates (only works if point is inside tri)
-            //Calculate vectors from point to vertices p0, p1 and p2:
+            // Calculate barycentric coordinates (only works if point is inside tri)
+            // Calculate vectors from point to vertices p0, p1 and p2:
             const Vector3 f0 = hit.triVerts[0] - pointOnTri;
             const Vector3 f1 = hit.triVerts[1] - pointOnTri;
             const Vector3 f2 = hit.triVerts[2] - pointOnTri;
 
-            //Calculate the areas and factors (order of parameters doesn't matter):
-            //a0 = p0's triangle area / tri_area
+            // Calculate the areas and factors (order of parameters doesn't matter):
+            // a0 = p0's triangle area / tri_area
             const Real a0 = f1.crossProduct( f2 ).length() * invTriArea;
             const Real a1 = f2.crossProduct( f0 ).length() * invTriArea;
             const Real a2 = f0.crossProduct( f1 ).length() * invTriArea;
 
-            for( int i=0; i<5 && hit.material.image[i]; ++i )
+            for( int i = 0; i < 5 && hit.material.image[i]; ++i )
             {
                 const uint8 uvSet = hit.material.uvSet[i];
-                const Vector2 * RESTRICT_ALIAS uv = hit.triUVs[uvSet];
+                const Vector2 *RESTRICT_ALIAS uv = hit.triUVs[uvSet];
                 Vector2 interpUV = uv[0] * a0 + uv[1] * a1 + uv[2] * a2;
 
-                const Real texWidth  = hit.material.image[i]->getWidth();
+                const Real texWidth = hit.material.image[i]->getWidth();
                 const Real texHeight = hit.material.image[i]->getHeight();
 
-                //The texel centers are in the middle of the pixel, so we need to subtract
-                //0.5; but later we need to add 0.5 to do correct rounding. So they negate
-                interpUV.x = interpUV.x * texWidth/* - 0.5f*/;
-                interpUV.y = interpUV.y * texHeight/* - 0.5f*/;
+                // The texel centers are in the middle of the pixel, so we need to subtract
+                // 0.5; but later we need to add 0.5 to do correct rounding. So they negate
+                interpUV.x = interpUV.x * texWidth /* - 0.5f*/;
+                interpUV.y = interpUV.y * texHeight /* - 0.5f*/;
 
                 interpUV.x = std::fmod( interpUV.x, texWidth );
                 interpUV.y = std::fmod( interpUV.y, texHeight );
@@ -251,13 +222,12 @@ namespace Ogre
                 if( interpUV.y < 0 )
                     interpUV.y += texHeight;
 
-                //TODO: Do blending modes
+                // TODO: Do blending modes
                 ColourValue colourVal;
-                PixelFormatGpuUtils::unpackColour( &colourVal, hit.material.image[i]->getPixelFormat(),
-                                                   hit.material.box[i].at(
-                                                       static_cast<size_t>(interpUV.x),
-                                                       static_cast<size_t>(interpUV.y),
-                                                       0u ) );
+                PixelFormatGpuUtils::unpackColour(
+                    &colourVal, hit.material.image[i]->getPixelFormat(),
+                    hit.material.box[i].at( static_cast<size_t>( interpUV.x ),
+                                            static_cast<size_t>( interpUV.y ), 0u ) );
                 diffuseTerm.x *= colourVal.r;
                 diffuseTerm.y *= colourVal.g;
                 diffuseTerm.z *= colourVal.b;
@@ -271,7 +241,7 @@ namespace Ogre
         vpl.position = pointOnTri;
         vpl.numMergedVpls = 1.0f;
 
-        memset( vpl.dirDiffuse, 0, sizeof(vpl.dirDiffuse) );
+        memset( vpl.dirDiffuse, 0, sizeof( vpl.dirDiffuse ) );
         mergeDirectionalDiffuse( diffuseTerm, hit.triNormal, vpl.dirDiffuse );
 
         return vpl;
@@ -282,7 +252,7 @@ namespace Ogre
     {
         assert( mCellSize > 0 );
 
-        const Real cellSize = Real(1.0) / mCellSize;
+        const Real cellSize = Real( 1.0 ) / mCellSize;
         const Real bias = mBias;
 
         mTmpSparseClusters[0].clear();
@@ -302,9 +272,9 @@ namespace Ogre
 
             const Real accumDistance = hit.accumDistance + hit.distance;
 
-            Real atten = Real(1.0f) /
-                    (attenConst + (attenLinear + attenQuad * accumDistance) * accumDistance);
-            atten = std::min( Real(1.0f), atten );
+            Real atten = Real( 1.0f ) /
+                         ( attenConst + ( attenLinear + attenQuad * accumDistance ) * accumDistance );
+            atten = std::min( Real( 1.0f ), atten );
 
             const Vector3 pointOnTri = hit.ray.getPoint( hit.distance * bias );
 
@@ -314,14 +284,14 @@ namespace Ogre
 
             Vpl vpl = convertToVpl( lightColour, pointOnTri, hit );
             vpl.diffuse *= atten;
-            for( int i=0; i<6; ++i )
+            for( int i = 0; i < 6; ++i )
                 vpl.dirDiffuse[i] *= atten;
 
             Real numCollectedVpls = 1.0f;
 
-            //Merge the lights (simple average) that lie in the same cluster.
+            // Merge the lights (simple average) that lie in the same cluster.
             RayHitVec::iterator itor = mRayHits.begin() + 1u;
-            RayHitVec::iterator end  = mRayHits.end();
+            RayHitVec::iterator end = mRayHits.end();
 
             while( itor != end )
             {
@@ -330,15 +300,15 @@ namespace Ogre
                 if( alikeHit.distance >= std::numeric_limits<Real>::max() )
                 {
                     itor = efficientVectorRemove( mRayHits, itor );
-                    end  = mRayHits.end();
+                    end = mRayHits.end();
                     continue;
                 }
 
                 const Real alikeAccumDistance = alikeHit.accumDistance + alikeHit.distance;
-                Real alikeAtten = Real(1.0f) /
-                        (attenConst + (attenLinear +
-                                       attenQuad * alikeAccumDistance) * alikeAccumDistance);
-                alikeAtten = std::min( Real(1.0f), alikeAtten );
+                Real alikeAtten =
+                    Real( 1.0f ) / ( attenConst + ( attenLinear + attenQuad * alikeAccumDistance ) *
+                                                      alikeAccumDistance );
+                alikeAtten = std::min( Real( 1.0f ), alikeAtten );
 
                 const Vector3 pointOnTri02 = alikeHit.ray.getPoint( alikeHit.distance * bias );
 
@@ -350,16 +320,16 @@ namespace Ogre
                 {
                     Vpl alikeVpl = convertToVpl( lightColour, pointOnTri02, alikeHit );
                     vpl.diffuse += alikeVpl.diffuse * alikeAtten;
-                    vpl.normal  += alikeVpl.normal;
-                    vpl.position+= alikeVpl.position;
+                    vpl.normal += alikeVpl.normal;
+                    vpl.position += alikeVpl.position;
 
-                    for( int i=0; i<6; ++i )
+                    for( int i = 0; i < 6; ++i )
                         vpl.dirDiffuse[i] += alikeVpl.dirDiffuse[i] * alikeAtten;
 
                     ++numCollectedVpls;
 
                     itor = efficientVectorRemove( mRayHits, itor );
-                    end  = mRayHits.end();
+                    end = mRayHits.end();
                 }
                 else
                 {
@@ -367,19 +337,19 @@ namespace Ogre
                 }
             }
 
-            //vpl.diffuse /= numCollectedVpls;
+            // vpl.diffuse /= numCollectedVpls;
             vpl.diffuse /= mTotalNumRays;
-            vpl.position/= numCollectedVpls;
+            vpl.position /= numCollectedVpls;
             vpl.normal.normalise();
             vpl.numMergedVpls = numCollectedVpls;
 
-            for( int i=0; i<6; ++i )
+            for( int i = 0; i < 6; ++i )
                 vpl.dirDiffuse[i] /= mTotalNumRays;
 
             mVpls.push_back( vpl );
 
-            mTmpSparseClusters[0].insert( SparseCluster( blockX, blockY, blockZ,
-                                                         vpl.diffuse, vpl.normal, vpl.dirDiffuse ) );
+            mTmpSparseClusters[0].insert(
+                SparseCluster( blockX, blockY, blockZ, vpl.diffuse, vpl.normal, vpl.dirDiffuse ) );
 
             RayHitVec::iterator itRay = mRayHits.begin();
             efficientVectorRemove( mRayHits, itRay );
@@ -389,7 +359,7 @@ namespace Ogre
         {
             mTmpSparseClusters[1] = mTmpSparseClusters[0];
 
-            for( int i=mNumSpreadIterations; --i; )
+            for( int i = mNumSpreadIterations; --i; )
             {
                 spreadSparseClusters( mTmpSparseClusters[0], mTmpSparseClusters[1] );
                 mTmpSparseClusters[0] = mTmpSparseClusters[1];
@@ -405,59 +375,58 @@ namespace Ogre
         SparseClusterSet grid1;
         grid1.swap( inOutGrid1 );
 
-        const int32 c_directions[6][3] =
-        {
+        const int32 c_directions[6][3] = {
+            // clang-format off
             {  0,  0, -1 },
             { -1,  0,  0 },
             {  1,  0,  0 },
             {  0, -1,  0 },
             {  0,  1,  0 },
             {  0,  0,  1 }
+            // clang-format on
         };
 
         Vector3 vDirs[6][9];
-        for( int i=0; i<6; ++i )
+        for( int i = 0; i < 6; ++i )
         {
-            Vector3 clusterCorner = Vector3( c_directions[i][0],
-                                             c_directions[i][1],
-                                             c_directions[i][2] );
+            Vector3 clusterCorner =
+                Vector3( c_directions[i][0], c_directions[i][1], c_directions[i][2] );
             vDirs[i][0] = clusterCorner;
             vDirs[i][1] = clusterCorner + Vector3( -0.5f, -0.5f, -0.5f );
-            vDirs[i][2] = clusterCorner + Vector3(  0.5f, -0.5f, -0.5f );
-            vDirs[i][3] = clusterCorner + Vector3( -0.5f,  0.5f, -0.5f );
-            vDirs[i][4] = clusterCorner + Vector3(  0.5f,  0.5f, -0.5f );
-            vDirs[i][5] = clusterCorner + Vector3( -0.5f, -0.5f,  0.5f );
-            vDirs[i][6] = clusterCorner + Vector3(  0.5f, -0.5f,  0.5f );
-            vDirs[i][7] = clusterCorner + Vector3( -0.5f,  0.5f,  0.5f );
-            vDirs[i][8] = clusterCorner + Vector3(  0.5f,  0.5f,  0.5f );
+            vDirs[i][2] = clusterCorner + Vector3( 0.5f, -0.5f, -0.5f );
+            vDirs[i][3] = clusterCorner + Vector3( -0.5f, 0.5f, -0.5f );
+            vDirs[i][4] = clusterCorner + Vector3( 0.5f, 0.5f, -0.5f );
+            vDirs[i][5] = clusterCorner + Vector3( -0.5f, -0.5f, 0.5f );
+            vDirs[i][6] = clusterCorner + Vector3( 0.5f, -0.5f, 0.5f );
+            vDirs[i][7] = clusterCorner + Vector3( -0.5f, 0.5f, 0.5f );
+            vDirs[i][8] = clusterCorner + Vector3( 0.5f, 0.5f, 0.5f );
 
-            for( int j=0; j<9; ++j )
+            for( int j = 0; j < 9; ++j )
                 vDirs[i][j].normalise();
         }
 
-        const Real invNumSpreadIterations = Real(1.0f) / mNumSpreadIterations;
+        const Real invNumSpreadIterations = Real( 1.0f ) / mNumSpreadIterations;
 
         SparseClusterSet::const_iterator itor = grid0.begin();
-        SparseClusterSet::const_iterator end  = grid0.end();
+        SparseClusterSet::const_iterator end = grid0.end();
 
         while( itor != end )
         {
             const Vector3 lightDir = itor->direction.normalisedCopy();
 
-            //Spread into all 6 directions. We don't do diagonals because it
-            //would be prohibitively expensive (26 directions). We hope doing
-            //this multiple times ends up spreading into all directions.
-            for( int i=0; i<6; ++i )
+            // Spread into all 6 directions. We don't do diagonals because it
+            // would be prohibitively expensive (26 directions). We hope doing
+            // this multiple times ends up spreading into all directions.
+            for( int i = 0; i < 6; ++i )
             {
                 Real NdotL = 0;
-                for( int j=0; j<9; ++j )
+                for( int j = 0; j < 9; ++j )
                     NdotL += std::max( lightDir.dotProduct( vDirs[i][j] ), Real( 0.0f ) );
                 NdotL /= 9.0f;
 
                 const Vector3 diffuseCol = NdotL * itor->diffuse;
 
-                if( diffuseCol.x >= mSpreadThreshold ||
-                    diffuseCol.y >= mSpreadThreshold ||
+                if( diffuseCol.x >= mSpreadThreshold || diffuseCol.y >= mSpreadThreshold ||
                     diffuseCol.z >= mSpreadThreshold )
                 {
                     int32 newBlockHash[3];
@@ -465,20 +434,21 @@ namespace Ogre
                     newBlockHash[1] = itor->blockHash[1] + c_directions[i][1];
                     newBlockHash[2] = itor->blockHash[2] + c_directions[i][2];
 
-                    SparseClusterSet::iterator gridCluster = grid1.find( (int32*)newBlockHash );
+                    SparseClusterSet::iterator gridCluster = grid1.find( (int32 *)newBlockHash );
 
                     if( gridCluster == grid1.end() )
                     {
                         grid1.insert( SparseCluster( newBlockHash ) );
-                        gridCluster = grid1.find( (int32*)newBlockHash );
+                        gridCluster = grid1.find( (int32 *)newBlockHash );
                     }
 
-                    //We guarantee we won't change the order of the iterators.
-                    SparseCluster *gridClusterNonConst = const_cast<SparseCluster*>( &(*gridCluster) );
+                    // We guarantee we won't change the order of the iterators.
+                    SparseCluster *gridClusterNonConst =
+                        const_cast<SparseCluster *>( &( *gridCluster ) );
 
-                    //TODO: Consider attenuation.
-                    gridClusterNonConst->diffuse    += diffuseCol * invNumSpreadIterations;
-                    gridClusterNonConst->direction  += itor->direction;
+                    // TODO: Consider attenuation.
+                    gridClusterNonConst->diffuse += diffuseCol * invNumSpreadIterations;
+                    gridClusterNonConst->direction += itor->direction;
                 }
             }
 
@@ -493,12 +463,12 @@ namespace Ogre
         const Real cellSize = mCellSize;
 
         SparseClusterSet::const_iterator itor = spreadCluster.begin();
-        SparseClusterSet::const_iterator end  = spreadCluster.end();
+        SparseClusterSet::const_iterator end = spreadCluster.end();
 
         while( itor != end )
         {
             Vector3 vClusterCenter( itor->blockHash[0], itor->blockHash[1], itor->blockHash[2] );
-            vClusterCenter = (vClusterCenter + 0.5f) * cellSize;
+            vClusterCenter = ( vClusterCenter + 0.5f ) * cellSize;
 
             Vpl vpl;
             vpl.light = 0;
@@ -507,7 +477,7 @@ namespace Ogre
             vpl.position = vClusterCenter;
             vpl.numMergedVpls = 1.0f;
 
-            memcpy( vpl.dirDiffuse, itor->dirDiffuse, sizeof(vpl.dirDiffuse) );
+            memcpy( vpl.dirDiffuse, itor->dirDiffuse, sizeof( vpl.dirDiffuse ) );
 
             mVpls.push_back( vpl );
 
@@ -519,14 +489,14 @@ namespace Ogre
     {
         assert( mCellSize > 0 );
 
-        const Real cellSize = Real(1.0) / mCellSize;
+        const Real cellSize = Real( 1.0 ) / mCellSize;
 
         VplVec::iterator itor = mVpls.begin();
-        VplVec::iterator end  = mVpls.end();
+        VplVec::iterator end = mVpls.end();
 
         while( itor != end )
         {
-            Vpl vpl = *itor; //Hard copy!
+            Vpl vpl = *itor;  // Hard copy!
 
             const size_t idx = itor - mVpls.begin();
 
@@ -534,12 +504,12 @@ namespace Ogre
             const int32 blockY = static_cast<int32>( Math::Floor( vpl.position.y * cellSize ) );
             const int32 blockZ = static_cast<int32>( Math::Floor( vpl.position.z * cellSize ) );
 
-            vpl.normal  *= vpl.numMergedVpls;
-            vpl.position*= vpl.numMergedVpls;
+            vpl.normal *= vpl.numMergedVpls;
+            vpl.position *= vpl.numMergedVpls;
 
             Real numCollectedVpls = vpl.numMergedVpls;
 
-            //Merge the lights (simple average) that lie in the same cluster.
+            // Merge the lights (simple average) that lie in the same cluster.
             VplVec::iterator itAlike = itor + 1;
 
             while( itAlike != end )
@@ -555,18 +525,18 @@ namespace Ogre
                 if( blockX == alikeBlockX && blockY == alikeBlockY && blockZ == alikeBlockZ )
                 {
                     vpl.diffuse += alikeVpl.diffuse;
-                    vpl.normal  += alikeVpl.normal * alikeVpl.numMergedVpls;
-                    vpl.position+= alikeVpl.position * alikeVpl.numMergedVpls;
+                    vpl.normal += alikeVpl.normal * alikeVpl.numMergedVpls;
+                    vpl.position += alikeVpl.position * alikeVpl.numMergedVpls;
 
-                    for( int i=0; i<6; ++i )
+                    for( int i = 0; i < 6; ++i )
                         vpl.dirDiffuse[i] += alikeVpl.dirDiffuse[i];
 
                     numCollectedVpls += alikeVpl.numMergedVpls;
 
-                    //Iterators get invalidated!
+                    // Iterators get invalidated!
                     itAlike = efficientVectorRemove( mVpls, itAlike );
-                    itor    = mVpls.begin() + idx;
-                    end     = mVpls.end();
+                    itor = mVpls.begin() + idx;
+                    end = mVpls.end();
                 }
                 else
                 {
@@ -576,7 +546,7 @@ namespace Ogre
 
             if( numCollectedVpls > vpl.numMergedVpls )
             {
-                vpl.position/= numCollectedVpls;
+                vpl.position /= numCollectedVpls;
                 vpl.normal.normalise();
                 vpl.numMergedVpls = numCollectedVpls;
                 *itor = vpl;
@@ -589,25 +559,24 @@ namespace Ogre
     void InstantRadiosity::autogenerateAreaOfInterest()
     {
         AxisAlignedBox areaOfInterest;
-        for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+        for( size_t i = 0; i < NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         {
-            ObjectMemoryManager &memoryManager = mSceneManager->_getEntityMemoryManager(
-                        static_cast<SceneMemoryMgrTypes>(i) );
+            ObjectMemoryManager &memoryManager =
+                mSceneManager->_getEntityMemoryManager( static_cast<SceneMemoryMgrTypes>( i ) );
 
             const size_t numRenderQueues = memoryManager.getNumRenderQueues();
 
             size_t firstRq = std::min<size_t>( mFirstRq, numRenderQueues );
-            size_t lastRq  = std::min<size_t>( mLastRq,  numRenderQueues );
+            size_t lastRq = std::min<size_t>( mLastRq, numRenderQueues );
 
-            for( size_t j=firstRq; j<lastRq; ++j )
+            for( size_t j = firstRq; j < lastRq; ++j )
             {
                 AxisAlignedBox tmpBox;
                 ObjectData objData;
                 const size_t totalObjs = memoryManager.getFirstObjectData( objData, j );
-                MovableObject::calculateCastersBox( totalObjs, objData,
-                                                    mVisibilityMask &
-                                                    VisibilityFlags::RESERVED_VISIBILITY_FLAGS,
-                                                    &tmpBox );
+                MovableObject::calculateCastersBox(
+                    totalObjs, objData, mVisibilityMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS,
+                    &tmpBox );
                 areaOfInterest.merge( tmpBox );
             }
         }
@@ -628,13 +597,13 @@ namespace Ogre
             rotatedAoI.transformAffine( rotMatrix );
         }
 
-        //Same RNG/seed for every object & triangle
+        // Same RNG/seed for every object & triangle
         RandomNumberGenerator rng;
         mRayHits.resize( mTotalNumRays );
 
-        ArrayRay * RESTRICT_ALIAS arrayRays = mArrayRays.get();
+        ArrayRay *RESTRICT_ALIAS arrayRays = mArrayRays.get();
 
-        for( size_t i=0; i<mNumRays; ++i )
+        for( size_t i = 0; i < mNumRays; ++i )
         {
             mRayHits[i].distance = std::numeric_limits<Real>::max();
             mRayHits[i].accumDistance = 0;
@@ -646,7 +615,7 @@ namespace Ogre
             }
             else if( lightType == Light::LT_SPOTLIGHT )
             {
-                assert( angle < Degree(180) );
+                assert( angle < Degree( 180 ) );
                 Vector2 pointInCircle = rng.getRandomPointInCircle();
                 pointInCircle *= Math::Tan( angle * 0.5f );
                 Vector3 rayDir = Vector3( pointInCircle.x, pointInCircle.y, -1.0f );
@@ -672,37 +641,37 @@ namespace Ogre
             ++arrayRays;
         }
 
-        //Initialize all other rays (some rays may not be initialized
-        //at all when not all bounced rays end up hitting something)
-        for( size_t i=mNumRays; i<mTotalNumRays; ++i )
+        // Initialize all other rays (some rays may not be initialized
+        // at all when not all bounced rays end up hitting something)
+        for( size_t i = mNumRays; i < mTotalNumRays; ++i )
             mRayHits[i].distance = std::numeric_limits<Real>::max();
 
         size_t rayStart = 0;
         size_t numRays = mNumRays;
 
-        for( size_t k=0; k<mNumRayBounces + 1u; ++k )
+        for( size_t k = 0; k < mNumRayBounces + 1u; ++k )
         {
-            for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+            for( size_t i = 0; i < NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
             {
-                ObjectMemoryManager &memoryManager = mSceneManager->_getEntityMemoryManager(
-                            static_cast<SceneMemoryMgrTypes>(i) );
+                ObjectMemoryManager &memoryManager =
+                    mSceneManager->_getEntityMemoryManager( static_cast<SceneMemoryMgrTypes>( i ) );
 
                 const size_t numRenderQueues = memoryManager.getNumRenderQueues();
 
                 size_t firstRq = std::min<size_t>( mFirstRq, numRenderQueues );
-                size_t lastRq  = std::min<size_t>( mLastRq,  numRenderQueues );
+                size_t lastRq = std::min<size_t>( mLastRq, numRenderQueues );
 
-                for( size_t j=firstRq; j<lastRq; ++j )
+                for( size_t j = firstRq; j < lastRq; ++j )
                 {
                     ObjectData objData;
                     const size_t totalObjs = memoryManager.getFirstObjectData( objData, j );
-                    testLightVsAllObjects( lightType, lightRange, objData, totalObjs,
-                                           areaOfInterest, rayStart, numRays );
+                    testLightVsAllObjects( lightType, lightRange, objData, totalObjs, areaOfInterest,
+                                           rayStart, numRays );
                 }
             }
 
-            const size_t oldRayStart    = rayStart;
-            const size_t oldNumRays     = numRays;
+            const size_t oldRayStart = rayStart;
+            const size_t oldNumRays = numRays;
 
             rayStart += numRays;
             numRays = static_cast<size_t>( mNumRays * powf( mSurvivingRayFraction, k + 1 ) );
@@ -715,8 +684,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     size_t InstantRadiosity::generateRayBounces( size_t raySrcStart, size_t raySrcCount,
-                                                 size_t raysToGenerate,
-                                                 RandomNumberGenerator &rng )
+                                                 size_t raysToGenerate, RandomNumberGenerator &rng )
     {
         size_t rayIdx = raySrcStart;
         size_t raysRemaining = raysToGenerate;
@@ -725,7 +693,7 @@ namespace Ogre
 
         const Real bias = mBias;
 
-        ArrayRay * RESTRICT_ALIAS arrayRays = mArrayRays.get();
+        ArrayRay *RESTRICT_ALIAS arrayRays = mArrayRays.get();
 
         while( rayIdx < raySrcLimit && raysRemaining > 0 )
         {
@@ -744,7 +712,8 @@ namespace Ogre
                 mRayHits[i].distance = std::numeric_limits<Real>::max();
                 mRayHits[i].accumDistance = hit.accumDistance + hit.distance;
                 mRayHits[i].ray.setOrigin( pointOnTri );
-                mRayHits[i].ray.setDirection( rng.randomizeDirAroundCone( hit.triNormal, Degree( 90.0f ) ) );
+                mRayHits[i].ray.setDirection(
+                    rng.randomizeDirAroundCone( hit.triNormal, Degree( 90.0f ) ) );
                 arrayRays[i].mOrigin.setAll( mRayHits[i].ray.getOrigin() );
                 arrayRays[i].mDirection.setAll( mRayHits[i].ray.getDirection() );
 
@@ -756,7 +725,7 @@ namespace Ogre
         return raysToGenerate - raysRemaining;
     }
     //-----------------------------------------------------------------------------------
-    const InstantRadiosity::MeshData* InstantRadiosity::downloadVao( VertexArrayObject *vao )
+    const InstantRadiosity::MeshData *InstantRadiosity::downloadVao( VertexArrayObject *vao )
     {
         MeshDataMapV2::const_iterator itor = mMeshDataMapV2.find( vao );
         if( itor != mMeshDataMapV2.end() )
@@ -765,17 +734,17 @@ namespace Ogre
         IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
 
         MeshData meshData;
-        memset( &meshData, 0, sizeof(meshData) );
+        memset( &meshData, 0, sizeof( meshData ) );
 
-        //Issue all async requests now.
+        // Issue all async requests now.
         VertexArrayObject::ReadRequestsArray readRequests;
         AsyncTicketPtr indexTicket;
 
         {
-            //Request to read VES_POSITION (must be present) and all of its UVs
+            // Request to read VES_POSITION (must be present) and all of its UVs
             readRequests.push_back( VES_POSITION );
 
-            //Avoid downloading UVs if not needed
+            // Avoid downloading UVs if not needed
             if( mUseTextures )
             {
                 VertexElement2VecVec vertexDeclaration = vao->getVertexDeclaration();
@@ -806,8 +775,7 @@ namespace Ogre
 
         if( indexBuffer && !indexBuffer->getShadowCopy() )
         {
-            indexTicket = indexBuffer->readRequest( vao->getPrimitiveStart(),
-                                                    vao->getPrimitiveCount() );
+            indexTicket = indexBuffer->readRequest( vao->getPrimitiveStart(), vao->getPrimitiveCount() );
         }
 
         if( indexBuffer )
@@ -817,10 +785,9 @@ namespace Ogre
             meshData.numIndices = vao->getPrimitiveCount();
             if( !indexBuffer->getShadowCopy() )
             {
-                meshData.indexData = reinterpret_cast<uint8*>(
-                            OGRE_MALLOC_SIMD( vao->getPrimitiveCount() *
-                                              indexBuffer->getBytesPerElement(),
-                                              MEMCATEGORY_GEOMETRY ) );
+                meshData.indexData = reinterpret_cast<uint8 *>(
+                    OGRE_MALLOC_SIMD( vao->getPrimitiveCount() * indexBuffer->getBytesPerElement(),
+                                      MEMCATEGORY_GEOMETRY ) );
             }
         }
         else
@@ -830,57 +797,57 @@ namespace Ogre
 
         const size_t numVertexElements = readRequests.size();
 
-        meshData.vertexData = reinterpret_cast<float*>(
-                    OGRE_MALLOC_SIMD( meshData.numVertices * (sizeof(float) * 3u +
-                                      sizeof(float) * 2u * (numVertexElements - 1u)),
-                                      MEMCATEGORY_GEOMETRY ) );
+        meshData.vertexData = reinterpret_cast<float *>( OGRE_MALLOC_SIMD(
+            meshData.numVertices *
+                ( sizeof( float ) * 3u + sizeof( float ) * 2u * ( numVertexElements - 1u ) ),
+            MEMCATEGORY_GEOMETRY ) );
 
-        //Copy position + UVs
+        // Copy position + UVs
         bool isHalf[9];
-        for( size_t j=0; j<numVertexElements; ++j )
+        for( size_t j = 0; j < numVertexElements; ++j )
             isHalf[j] = v1::VertexElement::getBaseType( readRequests[j].type ) == VET_HALF2;
 
         vao->mapAsyncTickets( readRequests );
 
-        for( size_t i=0; i<meshData.numVertices; ++i )
+        for( size_t i = 0; i < meshData.numVertices; ++i )
         {
-            //Copy position
+            // Copy position
             if( isHalf[0] )
             {
-                uint16 const * RESTRICT_ALIAS bufferF16 =
-                        reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[0].data );
-                meshData.vertexData[i*3u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
-                meshData.vertexData[i*3u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
-                meshData.vertexData[i*3u + 2u] = Bitwise::halfToFloat( bufferF16[2] );
+                uint16 const *RESTRICT_ALIAS bufferF16 =
+                    reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[0].data );
+                meshData.vertexData[i * 3u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
+                meshData.vertexData[i * 3u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
+                meshData.vertexData[i * 3u + 2u] = Bitwise::halfToFloat( bufferF16[2] );
             }
             else
             {
-                float const * RESTRICT_ALIAS bufferF32 =
-                        reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[0].data );
-                meshData.vertexData[i*3u + 0u] = bufferF32[0];
-                meshData.vertexData[i*3u + 1u] = bufferF32[1];
-                meshData.vertexData[i*3u + 2u] = bufferF32[2];
+                float const *RESTRICT_ALIAS bufferF32 =
+                    reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[0].data );
+                meshData.vertexData[i * 3u + 0u] = bufferF32[0];
+                meshData.vertexData[i * 3u + 1u] = bufferF32[1];
+                meshData.vertexData[i * 3u + 2u] = bufferF32[2];
             }
 
             readRequests[0].data += readRequests[0].vertexBuffer->getBytesPerElement();
 
-            //Copy UVs
-            for( size_t j=1; j<numVertexElements; ++j )
+            // Copy UVs
+            for( size_t j = 1; j < numVertexElements; ++j )
             {
-                float * RESTRICT_ALIAS uvDst = meshData.getUvStart( j - 1u );
+                float *RESTRICT_ALIAS uvDst = meshData.getUvStart( j - 1u );
                 if( isHalf[j] )
                 {
-                    uint16 const * RESTRICT_ALIAS bufferF16 =
-                            reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[j].data );
-                    uvDst[i*2u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
-                    uvDst[i*2u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
+                    uint16 const *RESTRICT_ALIAS bufferF16 =
+                        reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[j].data );
+                    uvDst[i * 2u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
+                    uvDst[i * 2u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
                 }
                 else
                 {
-                    float const * RESTRICT_ALIAS bufferF32 =
-                            reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[j].data );
-                    uvDst[i*2u + 0u] = bufferF32[0];
-                    uvDst[i*2u + 1u] = bufferF32[1];
+                    float const *RESTRICT_ALIAS bufferF32 =
+                        reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[j].data );
+                    uvDst[i * 2u + 0u] = bufferF32[0];
+                    uvDst[i * 2u + 1u] = bufferF32[1];
                 }
 
                 readRequests[j].data += readRequests[j].vertexBuffer->getBytesPerElement();
@@ -889,7 +856,7 @@ namespace Ogre
 
         vao->unmapAsyncTickets( readRequests );
 
-        //Copy index buffer
+        // Copy index buffer
         if( indexBuffer )
         {
             if( !indexBuffer->getShadowCopy() )
@@ -902,8 +869,8 @@ namespace Ogre
             else
             {
                 meshData.indexDataConst =
-                        reinterpret_cast<const uint8*>( indexBuffer->getShadowCopy() ) +
-                        vao->getPrimitiveStart();
+                    reinterpret_cast<const uint8 *>( indexBuffer->getShadowCopy() ) +
+                    vao->getPrimitiveStart();
             }
         }
 
@@ -912,8 +879,8 @@ namespace Ogre
         return &mMeshDataMapV2[vao];
     }
     //-----------------------------------------------------------------------------------
-    const InstantRadiosity::MeshData* InstantRadiosity::downloadRenderOp(
-            const v1::RenderOperation &renderOp )
+    const InstantRadiosity::MeshData *InstantRadiosity::downloadRenderOp(
+        const v1::RenderOperation &renderOp )
     {
         MeshDataMapV1::const_iterator itor = mMeshDataMapV1.find( renderOp );
         if( itor != mMeshDataMapV1.end() )
@@ -922,14 +889,14 @@ namespace Ogre
         v1::VertexData::ReadRequestsArray readRequests;
 
         {
-            //Request to read VES_POSITION (must be present) and all of its UVs
+            // Request to read VES_POSITION (must be present) and all of its UVs
             readRequests.push_back( VES_POSITION );
 
-            //Avoid downloading UVs if not needed
+            // Avoid downloading UVs if not needed
             if( mUseTextures )
             {
                 const v1::VertexDeclaration::VertexElementList &vertexElements =
-                        renderOp.vertexData->vertexDeclaration->getElements();
+                    renderOp.vertexData->vertexDeclaration->getElements();
                 v1::VertexDeclaration::VertexElementList::const_iterator it0 = vertexElements.begin();
                 v1::VertexDeclaration::VertexElementList::const_iterator en0 = vertexElements.end();
 
@@ -946,76 +913,75 @@ namespace Ogre
         renderOp.vertexData->lockMultipleElements( readRequests, v1::HardwareBuffer::HBL_READ_ONLY );
 
         MeshData meshData;
-        memset( &meshData, 0, sizeof(meshData) );
+        memset( &meshData, 0, sizeof( meshData ) );
 
         meshData.numVertices = renderOp.vertexData->vertexCount;
-        meshData.vertexData = reinterpret_cast<float*>(
-                    OGRE_MALLOC_SIMD( meshData.numVertices * (sizeof(float) * 3u +
-                                      sizeof(float) * 2u * (numVertexElements - 1u)),
-                                      MEMCATEGORY_GEOMETRY ) );
+        meshData.vertexData = reinterpret_cast<float *>( OGRE_MALLOC_SIMD(
+            meshData.numVertices *
+                ( sizeof( float ) * 3u + sizeof( float ) * 2u * ( numVertexElements - 1u ) ),
+            MEMCATEGORY_GEOMETRY ) );
         if( renderOp.useIndexes )
         {
-            meshData.useIndices16bit = renderOp.indexData->indexBuffer->getType() ==
-                    v1::HardwareIndexBuffer::IT_16BIT;
+            meshData.useIndices16bit =
+                renderOp.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT;
             meshData.numIndices = renderOp.indexData->indexCount;
-            meshData.indexData = reinterpret_cast<uint8*>(
-                        OGRE_MALLOC_SIMD( meshData.numIndices *
-                                          renderOp.indexData->indexBuffer->getIndexSize(),
-                                          MEMCATEGORY_GEOMETRY ) );
+            meshData.indexData = reinterpret_cast<uint8 *>(
+                OGRE_MALLOC_SIMD( meshData.numIndices * renderOp.indexData->indexBuffer->getIndexSize(),
+                                  MEMCATEGORY_GEOMETRY ) );
         }
 
-        //Copy position + UVs
+        // Copy position + UVs
         bool isHalf[9];
-        for( size_t j=0; j<numVertexElements; ++j )
+        for( size_t j = 0; j < numVertexElements; ++j )
         {
             isHalf[j] = v1::VertexElement::getBaseType( readRequests[j].type ) == VET_HALF2;
 
             if( !renderOp.useIndexes )
             {
-                readRequests[j].data += renderOp.vertexData->vertexStart *
-                        readRequests[j].vertexBuffer->getVertexSize();
+                readRequests[j].data +=
+                    renderOp.vertexData->vertexStart * readRequests[j].vertexBuffer->getVertexSize();
             }
         }
 
-        for( size_t i=0; i<meshData.numVertices; ++i )
+        for( size_t i = 0; i < meshData.numVertices; ++i )
         {
-            //Copy position
+            // Copy position
             if( isHalf[0] )
             {
-                uint16 const * RESTRICT_ALIAS bufferF16 =
-                        reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[0].data );
-                meshData.vertexData[i*3u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
-                meshData.vertexData[i*3u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
-                meshData.vertexData[i*3u + 2u] = Bitwise::halfToFloat( bufferF16[2] );
+                uint16 const *RESTRICT_ALIAS bufferF16 =
+                    reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[0].data );
+                meshData.vertexData[i * 3u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
+                meshData.vertexData[i * 3u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
+                meshData.vertexData[i * 3u + 2u] = Bitwise::halfToFloat( bufferF16[2] );
             }
             else
             {
-                float const * RESTRICT_ALIAS bufferF32 =
-                        reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[0].data );
-                meshData.vertexData[i*3u + 0u] = bufferF32[0];
-                meshData.vertexData[i*3u + 1u] = bufferF32[1];
-                meshData.vertexData[i*3u + 2u] = bufferF32[2];
+                float const *RESTRICT_ALIAS bufferF32 =
+                    reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[0].data );
+                meshData.vertexData[i * 3u + 0u] = bufferF32[0];
+                meshData.vertexData[i * 3u + 1u] = bufferF32[1];
+                meshData.vertexData[i * 3u + 2u] = bufferF32[2];
             }
 
             readRequests[0].data += readRequests[0].vertexBuffer->getVertexSize();
 
-            //Copy UVs
-            for( size_t j=1; j<numVertexElements; ++j )
+            // Copy UVs
+            for( size_t j = 1; j < numVertexElements; ++j )
             {
-                float * RESTRICT_ALIAS uvDst = meshData.getUvStart( j - 1u );
+                float *RESTRICT_ALIAS uvDst = meshData.getUvStart( j - 1u );
                 if( isHalf[j] )
                 {
-                    uint16 const * RESTRICT_ALIAS bufferF16 =
-                            reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[j].data );
-                    uvDst[i*2u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
-                    uvDst[i*2u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
+                    uint16 const *RESTRICT_ALIAS bufferF16 =
+                        reinterpret_cast<uint16 const * RESTRICT_ALIAS>( readRequests[j].data );
+                    uvDst[i * 2u + 0u] = Bitwise::halfToFloat( bufferF16[0] );
+                    uvDst[i * 2u + 1u] = Bitwise::halfToFloat( bufferF16[1] );
                 }
                 else
                 {
-                    float const * RESTRICT_ALIAS bufferF32 =
-                            reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[j].data );
-                    uvDst[i*2u + 0u] = bufferF32[0];
-                    uvDst[i*2u + 1u] = bufferF32[1];
+                    float const *RESTRICT_ALIAS bufferF32 =
+                        reinterpret_cast<float const * RESTRICT_ALIAS>( readRequests[j].data );
+                    uvDst[i * 2u + 0u] = bufferF32[0];
+                    uvDst[i * 2u + 1u] = bufferF32[1];
                 }
 
                 readRequests[j].data += readRequests[j].vertexBuffer->getVertexSize();
@@ -1024,16 +990,14 @@ namespace Ogre
 
         renderOp.vertexData->unlockMultipleElements( readRequests );
 
-        //Copy index buffer
+        // Copy index buffer
         if( renderOp.useIndexes )
         {
-            v1::HardwareBufferLockGuard indexLock( renderOp.indexData->indexBuffer,
-                        renderOp.indexData->indexStart,
-                        renderOp.indexData->indexCount,
-                        v1::HardwareBuffer::HBL_READ_ONLY );
+            v1::HardwareBufferLockGuard indexLock(
+                renderOp.indexData->indexBuffer, renderOp.indexData->indexStart,
+                renderOp.indexData->indexCount, v1::HardwareBuffer::HBL_READ_ONLY );
             memcpy( meshData.indexData, indexLock.pData,
-                    renderOp.indexData->indexCount *
-                    renderOp.indexData->indexBuffer->getIndexSize() );
+                    renderOp.indexData->indexCount * renderOp.indexData->indexBuffer->getIndexSize() );
         }
 
         mMeshDataMapV1[renderOp] = meshData;
@@ -1054,55 +1018,55 @@ namespace Ogre
         return itor->second;
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::testLightVsAllObjects( uint8 lightType, Real lightRange,
-                                                  ObjectData objData, size_t numNodes,
+    void InstantRadiosity::testLightVsAllObjects( uint8 lightType, Real lightRange, ObjectData objData,
+                                                  size_t numNodes,
                                                   const AreaOfInterest &scalarAreaOfInterest,
                                                   size_t rayStart, size_t numRays )
     {
         Aabb biggestAoI = scalarAreaOfInterest.aabb;
         biggestAoI.merge( Aabb( biggestAoI.mCenter, Vector3( scalarAreaOfInterest.sphereRadius ) ) );
 
-        const ArrayInt sceneFlags = Mathlib::SetAll( mVisibilityMask &
-                                                     VisibilityFlags::RESERVED_VISIBILITY_FLAGS );
+        const ArrayInt sceneFlags =
+            Mathlib::SetAll( mVisibilityMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS );
         ArrayAabb areaOfInterest( ArrayVector3::ZERO, ArrayVector3::ZERO );
         areaOfInterest.setAll( biggestAoI );
 
-        for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numNodes; i += ARRAY_PACKED_REALS )
         {
-            ArrayInt * RESTRICT_ALIAS visibilityFlags = reinterpret_cast<ArrayInt*RESTRICT_ALIAS>
-                                                                        (objData.mVisibilityFlags);
+            ArrayInt *RESTRICT_ALIAS visibilityFlags =
+                reinterpret_cast<ArrayInt * RESTRICT_ALIAS>( objData.mVisibilityFlags );
 
-            //isObjectHitByRays = isVisble;
-            ArrayMaskI isObjectHitByRays = Mathlib::TestFlags4( *visibilityFlags,
-                                               Mathlib::SetAll( VisibilityFlags::LAYER_VISIBILITY ) );
-            //isObjectHitByRays = isVisble & (sceneFlags & visibilityFlags);
-            isObjectHitByRays = Mathlib::And( isObjectHitByRays,
-                                              Mathlib::TestFlags4( sceneFlags, *visibilityFlags ) );
+            // isObjectHitByRays = isVisble;
+            ArrayMaskI isObjectHitByRays = Mathlib::TestFlags4(
+                *visibilityFlags, Mathlib::SetAll( VisibilityFlags::LAYER_VISIBILITY ) );
+            // isObjectHitByRays = isVisble & (sceneFlags & visibilityFlags);
+            isObjectHitByRays =
+                Mathlib::And( isObjectHitByRays, Mathlib::TestFlags4( sceneFlags, *visibilityFlags ) );
 
             if( lightType == Light::LT_DIRECTIONAL )
             {
-                //Check if obj is in area of interest for directional lights
+                // Check if obj is in area of interest for directional lights
                 ArrayMaskI hitMask = CastRealToInt( areaOfInterest.intersects( *objData.mWorldAabb ) );
                 isObjectHitByRays = Mathlib::And( isObjectHitByRays, hitMask );
             }
 
             if( BooleanMask4::getScalarMask( isObjectHitByRays ) == 0 )
             {
-                //None of these objects are visible. Early out.
+                // None of these objects are visible. Early out.
                 objData.advancePack();
                 continue;
             }
 
-            for( size_t k=0; k<ARRAY_PACKED_REALS; ++k )
+            for( size_t k = 0; k < ARRAY_PACKED_REALS; ++k )
                 mTmpRaysThatHitObject[k].clear();
 
-            //Make a list of rays that hit these objects (i.e. broadphase)
-            ArrayRay * RESTRICT_ALIAS arrayRays = mArrayRays.get() + rayStart;
-            for( size_t j=0; j<numRays; ++j )
+            // Make a list of rays that hit these objects (i.e. broadphase)
+            ArrayRay *RESTRICT_ALIAS arrayRays = mArrayRays.get() + rayStart;
+            for( size_t j = 0; j < numRays; ++j )
             {
                 ArrayMaskR rayHits = arrayRays->intersects( *objData.mWorldAabb );
                 uint32 scalarRayHits = BooleanMask4::getScalarMask( rayHits );
-                for( size_t k=0; k<ARRAY_PACKED_REALS; ++k )
+                for( size_t k = 0; k < ARRAY_PACKED_REALS; ++k )
                 {
                     if( IS_BIT_SET( k, scalarRayHits ) )
                         mTmpRaysThatHitObject[k].push_back( j + rayStart );
@@ -1111,48 +1075,48 @@ namespace Ogre
                 ++arrayRays;
             }
 
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
-                //Convert isObjectHitByRays into something smaller we can work with.
+                // Convert isObjectHitByRays into something smaller we can work with.
                 uint32 scalarIsObjectHitByRays = BooleanMask4::getScalarMask( isObjectHitByRays );
 
-                if( !mTmpRaysThatHitObject[j].empty() &&
-                    IS_BIT_SET( j, scalarIsObjectHitByRays ) )
+                if( !mTmpRaysThatHitObject[j].empty() && IS_BIT_SET( j, scalarIsObjectHitByRays ) )
                 {
                     MovableObject *movableObject = objData.mOwner[j];
 
                     const Matrix4 &worldMatrix = movableObject->_getParentNodeFullTransform();
                     RenderableArray::const_iterator itor = movableObject->mRenderables.begin();
-                    RenderableArray::const_iterator end  = movableObject->mRenderables.end();
+                    RenderableArray::const_iterator end = movableObject->mRenderables.end();
 
                     while( itor != end )
                     {
-                        const VertexArrayObjectArray &vaos = (*itor)->getVaos( VpNormal );
+                        const VertexArrayObjectArray &vaos = ( *itor )->getVaos( VpNormal );
                         MeshData const *meshData = 0;
                         if( !vaos.empty() )
                         {
-                            //v2 object
-                            VertexArrayObject *vao = vaos[0]; //TODO Allow picking a LOD.
+                            // v2 object
+                            VertexArrayObject *vao = vaos[0];  // TODO Allow picking a LOD.
                             meshData = downloadVao( vao );
                         }
                         else
                         {
-                            //v1 object
+                            // v1 object
                             v1::RenderOperation renderOp;
-                            (*itor)->getRenderOperation( renderOp, false );
+                            ( *itor )->getRenderOperation( renderOp, false );
                             meshData = downloadRenderOp( renderOp );
                         }
 
-                        HlmsDatablock *datablock = (*itor)->getDatablock();
+                        HlmsDatablock *datablock = ( *itor )->getDatablock();
 
                         if( datablock->mType == HLMS_PBS )
                         {
                             MaterialData material;
-                            memset( &material, 0, sizeof(material) );
+                            memset( &material, 0, sizeof( material ) );
                             int imageIdx = 0;
 
-                            HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>( datablock );
-                            //TODO: Should we account fresnel here? What about metalness?
+                            HlmsPbsDatablock *pbsDatablock =
+                                static_cast<HlmsPbsDatablock *>( datablock );
+                            // TODO: Should we account fresnel here? What about metalness?
                             material.diffuse = pbsDatablock->getDiffuse();
                             TextureGpu *diffuseTex = pbsDatablock->getTexture( PBSM_DIFFUSE );
                             if( diffuseTex )
@@ -1168,38 +1132,36 @@ namespace Ogre
                             else if( mUseTextures )
                             {
                                 material.image[imageIdx] = &downloadTexture( diffuseTex );
-                                material.box[imageIdx]   = material.image[imageIdx]->getData(0);
+                                material.box[imageIdx] = material.image[imageIdx]->getData( 0 );
                                 material.uvSet[imageIdx] =
-                                        pbsDatablock->getTextureUvSource( PBSM_DIFFUSE );
+                                    pbsDatablock->getTextureUvSource( PBSM_DIFFUSE );
                                 material.needsUv = true;
                                 ++imageIdx;
                             }
 
                             if( mUseTextures )
                             {
-                                for( int k=0; k<4; ++k )
+                                for( int k = 0; k < 4; ++k )
                                 {
-                                    const PbsTextureTypes texType = static_cast<PbsTextureTypes>(
-                                                                                PBSM_DETAIL0 + k );
+                                    const PbsTextureTypes texType =
+                                        static_cast<PbsTextureTypes>( PBSM_DETAIL0 + k );
                                     TextureGpu *detailTex = pbsDatablock->getTexture( texType );
                                     if( detailTex )
                                         detailTex->waitForMetadata();
-                                    if( detailTex &&
-                                        !PixelFormatGpuUtils::isCompressed(
-                                            detailTex->getPixelFormat() ) )
+                                    if( detailTex && !PixelFormatGpuUtils::isCompressed(
+                                                         detailTex->getPixelFormat() ) )
                                     {
                                         material.image[imageIdx] = &downloadTexture( detailTex );
-                                        material.box[imageIdx]   = material.image[imageIdx]->getData(0);
+                                        material.box[imageIdx] = material.image[imageIdx]->getData( 0 );
                                         material.uvSet[imageIdx] =
-                                                pbsDatablock->getTextureUvSource( texType );
+                                            pbsDatablock->getTextureUvSource( texType );
                                         material.needsUv = true;
                                         ++imageIdx;
                                     }
                                 }
                             }
 
-                            raycastLightRayVsMesh( lightRange, *meshData,
-                                                   worldMatrix, material,
+                            raycastLightRayVsMesh( lightRange, *meshData, worldMatrix, material,
                                                    mTmpRaysThatHitObject[j] );
                         }
 
@@ -1218,12 +1180,12 @@ namespace Ogre
     {
         const size_t numElements = meshData.indexData ? meshData.numIndices : meshData.numVertices;
 
-        const uint16 * RESTRICT_ALIAS indexData16 = reinterpret_cast<const uint16 * RESTRICT_ALIAS>(
-                    meshData.indexData );
-        const uint32 * RESTRICT_ALIAS indexData32 = reinterpret_cast<const uint32 * RESTRICT_ALIAS>(
-                    meshData.indexData );
+        const uint16 *RESTRICT_ALIAS indexData16 =
+            reinterpret_cast<const uint16 * RESTRICT_ALIAS>( meshData.indexData );
+        const uint32 *RESTRICT_ALIAS indexData32 =
+            reinterpret_cast<const uint32 * RESTRICT_ALIAS>( meshData.indexData );
 
-        for( size_t i=0; i<numElements; i += 3 )
+        for( size_t i = 0; i < numElements; i += 3 )
         {
             Vector3 triVerts[3];
 
@@ -1233,22 +1195,22 @@ namespace Ogre
             {
                 if( meshData.useIndices16bit )
                 {
-                    vertexIdx[0] = indexData16[i+0];
-                    vertexIdx[1] = indexData16[i+1];
-                    vertexIdx[2] = indexData16[i+2];
+                    vertexIdx[0] = indexData16[i + 0];
+                    vertexIdx[1] = indexData16[i + 1];
+                    vertexIdx[2] = indexData16[i + 2];
                 }
                 else
                 {
-                    vertexIdx[0] = indexData32[i+0];
-                    vertexIdx[1] = indexData32[i+1];
-                    vertexIdx[2] = indexData32[i+2];
+                    vertexIdx[0] = indexData32[i + 0];
+                    vertexIdx[1] = indexData32[i + 1];
+                    vertexIdx[2] = indexData32[i + 2];
                 }
             }
             else
             {
-                vertexIdx[0] = i+0;
-                vertexIdx[1] = i+1;
-                vertexIdx[2] = i+2;
+                vertexIdx[0] = i + 0;
+                vertexIdx[1] = i + 1;
+                vertexIdx[2] = i + 2;
             }
 
             triVerts[0].x = meshData.vertexData[vertexIdx[0] * 3u + 0];
@@ -1265,8 +1227,8 @@ namespace Ogre
             triVerts[1] = worldMatrix * triVerts[1];
             triVerts[2] = worldMatrix * triVerts[2];
 
-            Vector3 triNormal = Math::calculateBasicFaceNormalWithoutNormalize(
-                        triVerts[0], triVerts[1], triVerts[2] );
+            Vector3 triNormal =
+                Math::calculateBasicFaceNormalWithoutNormalize( triVerts[0], triVerts[1], triVerts[2] );
             triNormal.normalise();
 
             FastArray<size_t>::const_iterator itRayIdx = raysThatHitObj.begin();
@@ -1276,13 +1238,12 @@ namespace Ogre
                 Ray ray = mRayHits[*itRayIdx].ray;
 
                 const std::pair<bool, Real> inters = Math::intersects(
-                            ray, triVerts[0], triVerts[1], triVerts[2], triNormal, true, false );
+                    ray, triVerts[0], triVerts[1], triVerts[2], triNormal, true, false );
 
                 if( inters.first )
                 {
                     RayHit &rayHit = mRayHits[*itRayIdx];
-                    if( inters.second < rayHit.distance &&
-                        inters.second <= lightRange )
+                    if( inters.second < rayHit.distance && inters.second <= lightRange )
                     {
                         rayHit.distance = inters.second;
                         rayHit.material = material;
@@ -1291,10 +1252,10 @@ namespace Ogre
                         rayHit.triVerts[2] = triVerts[2];
                         rayHit.triNormal = triNormal;
 
-                        for( int j=0; j<5 && material.image[j]; ++j )
+                        for( int j = 0; j < 5 && material.image[j]; ++j )
                         {
                             const uint8 uvSet = material.uvSet[j];
-                            const float * RESTRICT_ALIAS uvPtr = meshData.getUvStart( uvSet );
+                            const float *RESTRICT_ALIAS uvPtr = meshData.getUvStart( uvSet );
                             rayHit.triUVs[j][0].x = uvPtr[vertexIdx[0] * 2u + 0];
                             rayHit.triUVs[j][0].y = uvPtr[vertexIdx[0] * 2u + 1];
 
@@ -1317,16 +1278,15 @@ namespace Ogre
         SceneNode *rootNode = mSceneManager->getRootSceneNode( SCENE_DYNAMIC );
 
         VplVec::iterator itor = mVpls.begin();
-        VplVec::iterator end  = mVpls.end();
+        VplVec::iterator end = mVpls.end();
 
         while( itor != end )
         {
             Vpl &vpl = *itor;
             Vector3 diffuseCol = vpl.diffuse * mVplPowerBoost;
-            if( (diffuseCol.x > mVplThreshold ||
-                 diffuseCol.y > mVplThreshold ||
-                 diffuseCol.z > mVplThreshold) &&
-                 !mUseIrradianceVolume)
+            if( ( diffuseCol.x > mVplThreshold || diffuseCol.y > mVplThreshold ||
+                  diffuseCol.z > mVplThreshold ) &&
+                !mUseIrradianceVolume )
             {
                 if( !vpl.light )
                 {
@@ -1352,7 +1312,7 @@ namespace Ogre
                     if( mVplQuadAtten != 0 )
                         intensity *= 1e-6 / mVplQuadAtten;
                     double rangeInMeters = std::sqrt( intensity );
-                    range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
+                    range = (float)( rangeInMeters * mVplIntensityRangeMultiplier );
                 }
 
                 vpl.light->setDiffuseColour( colour );
@@ -1378,7 +1338,7 @@ namespace Ogre
     void InstantRadiosity::clear()
     {
         VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end  = mVpls.end();
+        VplVec::const_iterator end = mVpls.end();
 
         while( itor != end )
         {
@@ -1402,32 +1362,32 @@ namespace Ogre
     {
         clear();
 
-        if( mNumRayBounces > 0 && (mSurvivingRayFraction <= 0 || mSurvivingRayFraction > 1.0f) )
+        if( mNumRayBounces > 0 && ( mSurvivingRayFraction <= 0 || mSurvivingRayFraction > 1.0f ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "For multiple bounces, mSurvivingRayFraction must be in range (0; 1]",
                          "InstantRadiosity::build" );
         }
 
-        //Sum of the first n terms of a geometric series
-        //mNumRays + mNumRays * mSurvivingRayFraction + mNumRays * mSurvivingRayFraction^2 + ...
+        // Sum of the first n terms of a geometric series
+        // mNumRays + mNumRays * mSurvivingRayFraction + mNumRays * mSurvivingRayFraction^2 + ...
         if( mSurvivingRayFraction != 1.0f )
         {
-            mTotalNumRays = static_cast<size_t>( mNumRays *
-                        (1.0f - powf( mSurvivingRayFraction, mNumRayBounces + 1u )) /
-                        (1.0f - mSurvivingRayFraction) );
+            mTotalNumRays = static_cast<size_t>(
+                mNumRays * ( 1.0f - powf( mSurvivingRayFraction, mNumRayBounces + 1u ) ) /
+                ( 1.0f - mSurvivingRayFraction ) );
         }
         else
         {
-            mTotalNumRays = mNumRays * (mNumRayBounces + 1u);
+            mTotalNumRays = mNumRays * ( mNumRayBounces + 1u );
         }
 
-        //Ensure position & AABB data is up to date.
+        // Ensure position & AABB data is up to date.
         mSceneManager->updateSceneGraph();
         mSceneManager->clearFrameData();
 
         Hlms *hlms = mHlmsManager->getHlms( HLMS_PBS );
-        if( !dynamic_cast<HlmsPbs*>( hlms ) )
+        if( !dynamic_cast<HlmsPbs *>( hlms ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "This InstantRadiosity is designed to downcast HlmsDatablock into "
@@ -1450,21 +1410,21 @@ namespace Ogre
             aoiAutogenerated = true;
         }
 
-        for( size_t i=0; i<numRenderQueues; ++i )
+        for( size_t i = 0; i < numRenderQueues; ++i )
         {
             ObjectData objData;
             const size_t totalObjs = memoryManager.getFirstObjectData( objData, i );
 
-            for( size_t j=0; j<totalObjs; j += ARRAY_PACKED_REALS )
+            for( size_t j = 0; j < totalObjs; j += ARRAY_PACKED_REALS )
             {
-                for( size_t k=0; k<ARRAY_PACKED_REALS; ++k )
+                for( size_t k = 0; k < ARRAY_PACKED_REALS; ++k )
                 {
-                    uint32 * RESTRICT_ALIAS visibilityFlags = objData.mVisibilityFlags;
+                    uint32 *RESTRICT_ALIAS visibilityFlags = objData.mVisibilityFlags;
 
                     if( visibilityFlags[k] & VisibilityFlags::LAYER_VISIBILITY &&
                         visibilityFlags[k] & lightMask )
                     {
-                        Light *light = static_cast<Light*>( objData.mOwner[k] );
+                        Light *light = static_cast<Light *>( objData.mOwner[k] );
                         if( light->getType() != Light::LT_VPL )
                         {
                             Node *lightNode = light->getParentNode();
@@ -1483,23 +1443,19 @@ namespace Ogre
                             if( light->getType() != Light::LT_DIRECTIONAL )
                                 numAoI = 1;
 
-                            for( size_t l=0; l<numAoI; ++l )
+                            for( size_t l = 0; l < numAoI; ++l )
                             {
                                 const AreaOfInterest &areaOfInterest = mAoI[l];
                                 processLight( lightNode->_getDerivedPosition(),
-                                              lightNode->_getDerivedOrientation(),
-                                              light->getType(),
-                                              light->getSpotlightOuterAngle(),
-                                              diffuseCol,
-                                              lightRange,
+                                              lightNode->_getDerivedOrientation(), light->getType(),
+                                              light->getSpotlightOuterAngle(), diffuseCol, lightRange,
                                               light->getAttenuationConstant(),
                                               light->getAttenuationLinear(),
-                                              light->getAttenuationQuadric(),
-                                              areaOfInterest );
+                                              light->getAttenuationQuadric(), areaOfInterest );
                             }
 
-                            //light->setPowerScale( Math::PI * 4 );
-                            //light->setPowerScale( 0 );
+                            // light->setPowerScale( Math::PI * 4 );
+                            // light->setPowerScale( 0 );
                         }
                     }
                 }
@@ -1512,7 +1468,7 @@ namespace Ogre
 
         updateExistingVpls();
 
-        //Free memory
+        // Free memory
         mArrayRays = RawSimdUniquePtr<ArrayRay, MEMCATEGORY_GENERAL>();
 
         if( aoiAutogenerated )
@@ -1523,7 +1479,7 @@ namespace Ogre
     {
         {
             MeshDataMapV2::iterator itor = mMeshDataMapV2.begin();
-            MeshDataMapV2::iterator end  = mMeshDataMapV2.end();
+            MeshDataMapV2::iterator end = mMeshDataMapV2.end();
 
             while( itor != end )
             {
@@ -1542,7 +1498,7 @@ namespace Ogre
         }
         {
             MeshDataMapV1::iterator itor = mMeshDataMapV1.begin();
-            MeshDataMapV1::iterator end  = mMeshDataMapV1.end();
+            MeshDataMapV1::iterator end = mMeshDataMapV1.end();
 
             while( itor != end )
             {
@@ -1566,18 +1522,12 @@ namespace Ogre
     void InstantRadiosity::mergeDirectionalDiffuse( const Vector3 &diffuse, const Vector3 &lightDir,
                                                     Vector3 *inOutDirDiffuse )
     {
-        const Vector3 directions[6] =
-        {
-            Vector3(  1,  0,  0 ),
-            Vector3( -1,  0,  0 ),
-            Vector3(  0,  1,  0 ),
-            Vector3(  0, -1,  0 ),
-            Vector3(  0,  0,  1 ),
-            Vector3(  0,  0, -1 )
-        };
+        const Vector3 directions[6] = { Vector3( 1, 0, 0 ),  Vector3( -1, 0, 0 ), Vector3( 0, 1, 0 ),
+                                        Vector3( 0, -1, 0 ), Vector3( 0, 0, 1 ),  Vector3( 0, 0, -1 ) };
 
-        for( int i=0; i<6; ++i )
-            inOutDirDiffuse[i] += std::max( lightDir.dotProduct( directions[i] ), Real( 0.0f ) ) * diffuse;
+        for( int i = 0; i < 6; ++i )
+            inOutDirDiffuse[i] +=
+                std::max( lightDir.dotProduct( directions[i] ), Real( 0.0f ) ) * diffuse;
     }
     //-----------------------------------------------------------------------------------
     void InstantRadiosity::createDebugMarkers()
@@ -1589,7 +1539,7 @@ namespace Ogre
         Hlms *hlms = mHlmsManager->getHlms( HLMS_UNLIT );
 
         VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end  = mVpls.end();
+        VplVec::const_iterator end = mVpls.end();
 
         char tmpBuffer[128];
         while( itor != end )
@@ -1602,25 +1552,24 @@ namespace Ogre
                 sceneNode->setScale( Vector3( mCellSize * 0.05f ) );
 
                 ColourValue colour = vpl.light->getDiffuseColour();
-                //Prevent very dark VPLs from being almost invisible
-                colour = colour * ColourValue( 0.95f, 0.95f, 0.95f ) +
-                        ColourValue( 0.05f, 0.05f, 0.05f );
+                // Prevent very dark VPLs from being almost invisible
+                colour =
+                    colour * ColourValue( 0.95f, 0.95f, 0.95f ) + ColourValue( 0.05f, 0.05f, 0.05f );
 
-                LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+                LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
                 texName.a( colour.r, " ", colour.g, " ", colour.b );
                 HlmsParamVec params;
                 params.push_back( std::pair<IdString, String>( "diffuse", texName.c_str() ) );
 
-                String datablockName = "InstantRadiosity_DebugMarker_" +
-                        StringConverter::toString( Id::generateNewId<InstantRadiosity>() );
-                HlmsDatablock *datablock = hlms->createDatablock( datablockName, datablockName,
-                                                                  HlmsMacroblock(), HlmsBlendblock(),
-                                                                  params, false );
+                String datablockName =
+                    "InstantRadiosity_DebugMarker_" +
+                    StringConverter::toString( Id::generateNewId<InstantRadiosity>() );
+                HlmsDatablock *datablock = hlms->createDatablock(
+                    datablockName, datablockName, HlmsMacroblock(), HlmsBlendblock(), params, false );
 
-                Item *item = mSceneManager->createItem( "Sphere1000.mesh",
-                                                        Ogre::ResourceGroupManager::
-                                                        AUTODETECT_RESOURCE_GROUP_NAME,
-                                                        Ogre::SCENE_STATIC );
+                Item *item = mSceneManager->createItem(
+                    "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    Ogre::SCENE_STATIC );
                 item->setCastShadows( false );
                 sceneNode->attachObject( item );
                 item->setDatablock( datablock );
@@ -1635,14 +1584,14 @@ namespace Ogre
     {
         Hlms *hlms = mHlmsManager->getHlms( HLMS_UNLIT );
 
-        vector<Item*>::type::const_iterator itor = mDebugMarkers.begin();
-        vector<Item*>::type::const_iterator end  = mDebugMarkers.end();
+        vector<Item *>::type::const_iterator itor = mDebugMarkers.begin();
+        vector<Item *>::type::const_iterator end = mDebugMarkers.end();
 
         while( itor != end )
         {
-            SceneNode *sceneNode = (*itor)->getParentSceneNode();
+            SceneNode *sceneNode = ( *itor )->getParentSceneNode();
             sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
-            HlmsDatablock *datablock = (*itor)->getSubItem(0)->getDatablock();
+            HlmsDatablock *datablock = ( *itor )->getSubItem( 0 )->getDatablock();
             mSceneManager->destroyItem( *itor );
 
             hlms->destroyDatablock( datablock->getName() );
@@ -1671,23 +1620,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::setUseIrradianceVolume(bool bUseIrradianceVolume)
+    void InstantRadiosity::setUseIrradianceVolume( bool bUseIrradianceVolume )
     {
-        if (bUseIrradianceVolume != mUseIrradianceVolume)
+        if( bUseIrradianceVolume != mUseIrradianceVolume )
         {
             mUseIrradianceVolume = bUseIrradianceVolume;
             updateExistingVpls();
         }
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::suggestIrradianceVolumeParameters( const Vector3 &cellSize,
-                                                              Vector3 &outVolumeOrigin,
-                                                              Real &outLightMaxPower,
-                                                              uint32 &outNumBlocksX,
-                                                              uint32 &outNumBlocksY,
-                                                              uint32 &outNumBlocksZ)
+    void InstantRadiosity::suggestIrradianceVolumeParameters(
+        const Vector3 &cellSize, Vector3 &outVolumeOrigin, Real &outLightMaxPower, uint32 &outNumBlocksX,
+        uint32 &outNumBlocksY, uint32 &outNumBlocksZ )
     {
-        const Vector3 invCellSize = Real(1.0) / cellSize;
+        const Vector3 invCellSize = Real( 1.0 ) / cellSize;
 
         int32 minBlockX = std::numeric_limits<int32>::max();
         int32 minBlockY = std::numeric_limits<int32>::max();
@@ -1700,7 +1646,7 @@ namespace Ogre
         Real lightMaxPower = 0.0f;
 
         VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end  = mVpls.end();
+        VplVec::const_iterator end = mVpls.end();
 
         while( itor != end )
         {
@@ -1716,7 +1662,7 @@ namespace Ogre
                 /*if( mVplQuadAtten != 0 )
                     intensity *= 1e-6 / mVplQuadAtten;*/
                 double rangeInMeters = std::sqrt( intensity );
-                range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
+                range = (float)( rangeInMeters * mVplIntensityRangeMultiplier );
             }
 
             range = std::min( range, mVplMaxRange );
@@ -1736,7 +1682,7 @@ namespace Ogre
             maxBlockY = std::max( maxBlockY, blockY + yRange );
             maxBlockZ = std::max( maxBlockZ, blockZ + zRange );
 
-            for( int i=0; i<6; ++i )
+            for( int i = 0; i < 6; ++i )
             {
                 lightMaxPower = std::max( lightMaxPower, vpl.dirDiffuse[i].x );
                 lightMaxPower = std::max( lightMaxPower, vpl.dirDiffuse[i].y );
@@ -1757,15 +1703,16 @@ namespace Ogre
         outLightMaxPower = lightMaxPower;
     }
     //-----------------------------------------------------------------------------------
-    void InstantRadiosity::fillIrradianceVolume( IrradianceVolume *volume,
-                                                 Vector3 cellSize, Vector3 volumeOrigin,
-                                                 Real lightMaxPower, bool fadeAttenuationOverDistance )
+    void InstantRadiosity::fillIrradianceVolume( IrradianceVolume *volume, Vector3 cellSize,
+                                                 Vector3 volumeOrigin, Real lightMaxPower,
+                                                 bool fadeAttenuationOverDistance )
     {
-        if (!volume) return;
+        if( !volume )
+            return;
 
-        const Vector3 invCellSize  = Real(1.0) / cellSize;
+        const Vector3 invCellSize = Real( 1.0 ) / cellSize;
 
-        //Quantize volumeCenter.
+        // Quantize volumeCenter.
         volumeOrigin.x = static_cast<int32>( Math::Floor( volumeOrigin.x * invCellSize.x ) );
         volumeOrigin.y = static_cast<int32>( Math::Floor( volumeOrigin.y * invCellSize.y ) );
         volumeOrigin.z = static_cast<int32>( Math::Floor( volumeOrigin.z * invCellSize.z ) );
@@ -1787,18 +1734,13 @@ namespace Ogre
         const int32 numBlocksZ = volume->getNumBlocksZ();
 
         VplVec::const_iterator itor = mVpls.begin();
-        VplVec::const_iterator end  = mVpls.end();
+        VplVec::const_iterator end = mVpls.end();
 
         volume->clearVolumeData();
 
-        const Vector3 c_directions[6] =
-        {
-            Vector3(  1,  0,  0 ),
-            Vector3( -1,  0,  0 ),
-            Vector3(  0,  1,  0 ),
-            Vector3(  0, -1,  0 ),
-            Vector3(  0,  0,  1 ),
-            Vector3(  0,  0, -1 )
+        const Vector3 c_directions[6] = {
+            Vector3( 1, 0, 0 ),  Vector3( -1, 0, 0 ), Vector3( 0, 1, 0 ),
+            Vector3( 0, -1, 0 ), Vector3( 0, 0, 1 ),  Vector3( 0, 0, -1 )
         };
 
         while( itor != end )
@@ -1815,7 +1757,7 @@ namespace Ogre
                 /*if( mVplQuadAtten != 0 )
                     intensity *= 1e-6 / mVplQuadAtten;*/
                 double rangeInMeters = std::sqrt( intensity );
-                range = (float)(rangeInMeters * mVplIntensityRangeMultiplier);
+                range = (float)( rangeInMeters * mVplIntensityRangeMultiplier );
             }
 
             range = std::min( range, mVplMaxRange );
@@ -1837,18 +1779,17 @@ namespace Ogre
             const int32 minBlockZ = std::max( 0, blockZ - zRange );
 
             const int32 maxBlockX = std::min( numBlocksX - 1, blockX + xRange );
-            const int32 maxBlockY = std::min( numBlocksY - 1, blockY + yRange);
-            const int32 maxBlockZ = std::min( numBlocksZ - 1, blockZ + zRange);
+            const int32 maxBlockY = std::min( numBlocksY - 1, blockY + yRange );
+            const int32 maxBlockZ = std::min( numBlocksZ - 1, blockZ + zRange );
 
-            if (maxBlockX >= 0 && minBlockX < numBlocksX &&
-                maxBlockY >= 0 && minBlockY < numBlocksY &&
-                maxBlockZ >= 0 && minBlockZ < numBlocksZ)
+            if( maxBlockX >= 0 && minBlockX < numBlocksX && maxBlockY >= 0 && minBlockY < numBlocksY &&
+                maxBlockZ >= 0 && minBlockZ < numBlocksZ )
             {
-                for( int32 z=minBlockZ; z<=maxBlockZ; ++z )
+                for( int32 z = minBlockZ; z <= maxBlockZ; ++z )
                 {
-                    for( int32 y=minBlockY; y<=maxBlockY; ++y )
+                    for( int32 y = minBlockY; y <= maxBlockY; ++y )
                     {
-                        for( int32 x=minBlockX; x<=maxBlockX; ++x )
+                        for( int32 x = minBlockX; x <= maxBlockX; ++x )
                         {
                             Vector3 vplToCell = Vector3( x - blockX, y - blockY, z - blockZ );
                             vplToCell *= cellSize;
@@ -1856,26 +1797,28 @@ namespace Ogre
                             if( vplToCell.dotProduct( vpl.normal ) < 0 )
                                 continue;
 
-                            Real atten = Real(1.0f) /
-                                    (mVplConstAtten + (mVplLinearAtten +
-                                                       mVplQuadAtten * distance) * distance);
-                            atten = std::min( Real(1.0f), atten );
+                            Real atten = Real( 1.0f ) /
+                                         ( mVplConstAtten +
+                                           ( mVplLinearAtten + mVplQuadAtten * distance ) * distance );
+                            atten = std::min( Real( 1.0f ), atten );
                             if( fadeAttenuationOverDistance )
-                                atten *= std::max( (range - distance) / range, Ogre::Real( 0.0f ) );
+                                atten *= std::max( ( range - distance ) / range, Ogre::Real( 0.0f ) );
 
                             const Vector3 diffuseCol = vpl.diffuse * invMaxPower * atten;
-                            for( int i=0; i<6; ++i )
+                            for( int i = 0; i < 6; ++i )
                             {
                                 if( x != blockX || y != blockY || z != blockZ )
                                 {
-                                    Vector3 finalCol = std::max(
-                                                -vplToCell.dotProduct( c_directions[i] ),
-                                                Real( 0.0f ) ) * diffuseCol;
+                                    Vector3 finalCol =
+                                        std::max( -vplToCell.dotProduct( c_directions[i] ),
+                                                  Real( 0.0f ) ) *
+                                        diffuseCol;
                                     volume->changeVolumeData( x, y, z, i, finalCol );
                                 }
                                 else
                                 {
-                                    volume->changeVolumeData( x, y, z, i, vpl.dirDiffuse[i] * invMaxPower );
+                                    volume->changeVolumeData( x, y, z, i,
+                                                              vpl.dirDiffuse[i] * invMaxPower );
                                 }
                             }
                         }
@@ -1896,43 +1839,45 @@ namespace Ogre
     InstantRadiosity::SparseCluster::SparseCluster( int32 blockX, int32 blockY, int32 blockZ,
                                                     const Vector3 &_diffuse, const Vector3 &dir,
                                                     const Vector3 _dirDiffuse[6] ) :
-        diffuse( _diffuse ), direction( dir )
+        diffuse( _diffuse ),
+        direction( dir )
     {
         blockHash[0] = blockX;
         blockHash[1] = blockY;
         blockHash[2] = blockZ;
 
-        memcpy( dirDiffuse, _dirDiffuse, sizeof(dirDiffuse) );
+        memcpy( dirDiffuse, _dirDiffuse, sizeof( dirDiffuse ) );
     }
     //-----------------------------------------------------------------------------------
     InstantRadiosity::SparseCluster::SparseCluster( int32 _blockHash[3] ) :
-        diffuse( Vector3::ZERO ), direction( Vector3::ZERO )
+        diffuse( Vector3::ZERO ),
+        direction( Vector3::ZERO )
     {
         blockHash[0] = _blockHash[0];
         blockHash[1] = _blockHash[1];
         blockHash[2] = _blockHash[2];
 
-        memset( dirDiffuse, 0, sizeof(dirDiffuse) );
+        memset( dirDiffuse, 0, sizeof( dirDiffuse ) );
     }
     //-----------------------------------------------------------------------------------
-    bool InstantRadiosity::SparseCluster::operator () ( const SparseCluster &_l, int32 _r[3] ) const
+    bool InstantRadiosity::SparseCluster::operator()( const SparseCluster &_l, int32 _r[3] ) const
     {
         return memcmp( _l.blockHash, _r, sizeof( blockHash ) ) < 0;
     }
-    bool InstantRadiosity::SparseCluster::operator () ( int32 _l[3], const SparseCluster &_r ) const
+    bool InstantRadiosity::SparseCluster::operator()( int32 _l[3], const SparseCluster &_r ) const
     {
         return memcmp( _l, _r.blockHash, sizeof( blockHash ) ) < 0;
     }
-    bool InstantRadiosity::SparseCluster::operator () ( const SparseCluster &_l,
-                                                         const SparseCluster &_r ) const
+    bool InstantRadiosity::SparseCluster::operator()( const SparseCluster &_l,
+                                                      const SparseCluster &_r ) const
     {
         return memcmp( _l.blockHash, _r.blockHash, sizeof( blockHash ) ) < 0;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    float* InstantRadiosity::MeshData::getUvStart( uint8_t uvSet ) const
+    float *InstantRadiosity::MeshData::getUvStart( uint8_t uvSet ) const
     {
         return vertexData + numVertices * 3u + uvSet * 2u;
     }
-}
+}  // namespace Ogre

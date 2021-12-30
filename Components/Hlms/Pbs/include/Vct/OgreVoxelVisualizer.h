@@ -16,22 +16,22 @@ namespace Ogre
         void createBuffers();
 
     public:
-        VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager,
-                         SceneManager* manager, uint8 renderQueueId );
+        VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+                         uint8 renderQueueId );
         virtual ~VoxelVisualizer();
 
         void setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture, bool anyColour );
 
-        //Overrides from MovableObject
-        virtual const String& getMovableType() const;
+        // Overrides from MovableObject
+        virtual const String &getMovableType() const;
 
-        //Overrides from Renderable
-        virtual const LightList& getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
-        virtual bool getCastsShadows() const;
+        // Overrides from Renderable
+        virtual const LightList &getLights() const;
+        virtual void             getRenderOperation( v1::RenderOperation &op, bool casterPass );
+        virtual void             getWorldTransforms( Matrix4 *xform ) const;
+        virtual bool             getCastsShadows() const;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

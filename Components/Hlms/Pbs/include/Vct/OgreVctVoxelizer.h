@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "Vao/OgreVertexBufferDownloadHelper.h"
 
 #ifdef OGRE_FORCE_VCT_VOXELIZER_DETERMINISTIC
-    #include "OgreMesh2.h"
+#    include "OgreMesh2.h"
 #endif
 
 #include "OgreHeaderPrefix.h"
@@ -46,22 +46,22 @@ namespace Ogre
     {
         enum VoxelizerJobSetting
         {
-            Index32bit              = 1u << 0u,
-            CompressedVertexFormat  = 1u << 1u,
-            HasDiffuseTex           = 1u << 2u,
-            HasEmissiveTex          = 1u << 3u,
+            Index32bit = 1u << 0u,
+            CompressedVertexFormat = 1u << 1u,
+            HasDiffuseTex = 1u << 2u,
+            HasEmissiveTex = 1u << 3u,
         };
     }
 
     struct VoxelizerBucket
     {
-        HlmsComputeJob      *job;
-        ConstBufferPacked   *materialBuffer;
-        UavBufferPacked     *vertexBuffer;
-        UavBufferPacked     *indexBuffer;
-        bool                needsTexPool;
+        HlmsComputeJob *   job;
+        ConstBufferPacked *materialBuffer;
+        UavBufferPacked *  vertexBuffer;
+        UavBufferPacked *  indexBuffer;
+        bool               needsTexPool;
 
-        bool operator < ( const VoxelizerBucket &other ) const
+        bool operator<( const VoxelizerBucket &other ) const
         {
             if( this->job != other.job )
                 return this->job < other.job;
@@ -115,35 +115,35 @@ namespace Ogre
     protected:
         struct MappedBuffers
         {
-            float * RESTRICT_ALIAS uncompressedVertexBuffer;
-            size_t index16BufferOffset;
-            size_t index32BufferOffset;
+            float *RESTRICT_ALIAS uncompressedVertexBuffer;
+            size_t                index16BufferOffset;
+            size_t                index32BufferOffset;
         };
 
         struct PartitionedSubMesh
         {
-            uint32  vbOffset;
-            uint32  ibOffset;
-            uint32  numIndices;
-            uint32  aabbSubMeshIdx;
+            uint32 vbOffset;
+            uint32 ibOffset;
+            uint32 numIndices;
+            uint32 aabbSubMeshIdx;
         };
 
         struct QueuedSubMesh
         {
-            //Due to an infrastructure bug, we're commenting out the 'STREAM_DOWNLOAD' path
-            //The goal was to queue up several transfer GPU -> staging area, then map
-            //the staging area. However this backfired as each AsyncTicket will hold its own
-            //StagingBuffer (and each one is at least 4MB) instead of sharing it. This balloons
-            //memory consumption and still needs to map staging buffers a lot, defeating part of
-            //its purpose.
-            //Since fixing it would take a lot of time, it has been ifdef'ed out and instead
-            //we download the data and immediately map it. This causes more stalls but is
-            //far more memory friendly.
+            // Due to an infrastructure bug, we're commenting out the 'STREAM_DOWNLOAD' path
+            // The goal was to queue up several transfer GPU -> staging area, then map
+            // the staging area. However this backfired as each AsyncTicket will hold its own
+            // StagingBuffer (and each one is at least 4MB) instead of sharing it. This balloons
+            // memory consumption and still needs to map staging buffers a lot, defeating part of
+            // its purpose.
+            // Since fixing it would take a lot of time, it has been ifdef'ed out and instead
+            // we download the data and immediately map it. This causes more stalls but is
+            // far more memory friendly.
 #ifdef STREAM_DOWNLOAD
             VertexBufferDownloadHelper downloadHelper;
 #else
-            size_t  downloadVertexStart;
-            size_t  downloadNumVertices;
+            size_t downloadVertexStart;
+            size_t downloadNumVertices;
 #endif
             FastArray<PartitionedSubMesh> partSubMeshes;
         };
@@ -152,10 +152,10 @@ namespace Ogre
 
         struct QueuedMesh
         {
-            bool                bCompressed;
-            uint32              numItems;
-            uint32              indexCountSplit;
-            QueuedSubMeshArray  submeshes;
+            bool               bCompressed;
+            uint32             numItems;
+            uint32             indexCountSplit;
+            QueuedSubMeshArray submeshes;
         };
 
         typedef map<v1::MeshPtr, bool>::type v1MeshPtrMap;
@@ -164,40 +164,40 @@ namespace Ogre
 #else
         typedef map<MeshPtr, QueuedMesh>::type MeshPtrMap;
 #endif
-        typedef FastArray<Item*> ItemArray;
+        typedef FastArray<Item *> ItemArray;
 
-        v1MeshPtrMap    mMeshesV1;
-        MeshPtrMap      mMeshesV2;
+        v1MeshPtrMap mMeshesV1;
+        MeshPtrMap   mMeshesV2;
 
-        ItemArray       mItems;
+        ItemArray mItems;
 
         /// HlmsComputeJob have internal caches, thus we could dynamically change properties
         /// and let the internal cache handle whether a compute job needs to be compiled.
         ///
         /// However the way we will be using may abuse the cache too much, thus we pre-set
         /// all variants as long as the number of variants is manageable.
-        HlmsComputeJob  *mComputeJobs[1u<<4u];
-        HlmsComputeJob  *mAabbCalculator[1u<<2u];
-        HlmsComputeJob  *mAabbWorldSpaceJob;
+        HlmsComputeJob *mComputeJobs[1u << 4u];
+        HlmsComputeJob *mAabbCalculator[1u << 2u];
+        HlmsComputeJob *mAabbWorldSpaceJob;
 
-        uint32			mTotalNumInstances;
-        float           *mCpuInstanceBuffer;
-        UavBufferPacked *mInstanceBuffer;
+        uint32                mTotalNumInstances;
+        float *               mCpuInstanceBuffer;
+        UavBufferPacked *     mInstanceBuffer;
         ReadOnlyBufferPacked *mInstanceBufferAsTex;
-        UavBufferPacked *mVertexBufferCompressed;
-        UavBufferPacked *mVertexBufferUncompressed;
-        UavBufferPacked *mIndexBuffer16;
-        UavBufferPacked *mIndexBuffer32;
-        //Aabb Calculator
-        uint32			mNumUncompressedPartSubMeshes16;
-        uint32			mNumUncompressedPartSubMeshes32;
-        uint32			mNumCompressedPartSubMeshes16;
-        uint32			mNumCompressedPartSubMeshes32;
+        UavBufferPacked *     mVertexBufferCompressed;
+        UavBufferPacked *     mVertexBufferUncompressed;
+        UavBufferPacked *     mIndexBuffer16;
+        UavBufferPacked *     mIndexBuffer32;
+        // Aabb Calculator
+        uint32           mNumUncompressedPartSubMeshes16;
+        uint32           mNumUncompressedPartSubMeshes32;
+        uint32           mNumCompressedPartSubMeshes16;
+        uint32           mNumCompressedPartSubMeshes32;
         TexBufferPacked *mGpuPartitionedSubMeshes;
         UavBufferPacked *mMeshAabb;
 
-        bool    mNeedsAlbedoMipmaps;
-        bool    mNeedsAllMipmaps;
+        bool mNeedsAlbedoMipmaps;
+        bool mNeedsAllMipmaps;
 
         uint32 mNumVerticesCompressed;
         uint32 mNumVerticesUncompressed;
@@ -210,36 +210,36 @@ namespace Ogre
 
         struct QueuedInstance
         {
-            MovableObject   *movableObject;
-            uint32          vertexBufferStart;
-            uint32          indexBufferStart;
-            uint32          numIndices;
-            uint32          aabbSubMeshIdx;
-            uint32          materialIdx;
-            bool            needsAabbUpdate;
+            MovableObject *movableObject;
+            uint32         vertexBufferStart;
+            uint32         indexBufferStart;
+            uint32         numIndices;
+            uint32         aabbSubMeshIdx;
+            uint32         materialIdx;
+            bool           needsAabbUpdate;
         };
         struct BucketData
         {
             typedef map<uint32, uint32>::type InstancesPerOctantIdxMap;
 
-            FastArray<QueuedInstance>   queuedInst;
-            InstancesPerOctantIdxMap    numInstancesAfterCulling;
+            FastArray<QueuedInstance> queuedInst;
+            InstancesPerOctantIdxMap  numInstancesAfterCulling;
         };
-        typedef map< VoxelizerBucket, BucketData >::type VoxelizerBucketMap;
-        VoxelizerBucketMap mBuckets;
+        typedef map<VoxelizerBucket, BucketData>::type VoxelizerBucketMap;
+        VoxelizerBucketMap                             mBuckets;
 
         VctMaterial *mVctMaterial;
 
         /// Whether mRegionToVoxelize is manually set or autocalculated
-        bool    mAutoRegion;
+        bool mAutoRegion;
         /// Limit to mRegionToVoxelize in case mAutoRegion is true
-        Aabb    mMaxRegion;
+        Aabb mMaxRegion;
 
         struct Octant
         {
             uint32 x, y, z;
             uint32 width, height, depth;
-            Aabb region;
+            Aabb   region;
         };
 
         FastArray<Octant> mOctants;
@@ -268,11 +268,11 @@ namespace Ogre
         void buildMeshBuffers();
         void createVoxelTextures();
 
-        void placeItemsInBuckets();
+        void   placeItemsInBuckets();
         size_t countSubMeshPartitionsIn( Item *item ) const;
-        void createInstanceBuffers();
-        void destroyInstanceBuffers();
-        void fillInstanceBuffers();
+        void   createInstanceBuffers();
+        void   destroyInstanceBuffers();
+        void   fillInstanceBuffers();
 
         void computeMeshAabbs();
 
@@ -301,7 +301,7 @@ namespace Ogre
 
             Use std::numeric_limits<uint32>::max to avoid partitioning at all.
         */
-        void addItem( Item *item, bool bCompressed, uint32 indexCountSplit=0u );
+        void addItem( Item *item, bool bCompressed, uint32 indexCountSplit = 0u );
 
         /** Removes an item added via VctVoxelizer::addItem
         @remarks
@@ -328,9 +328,8 @@ namespace Ogre
         @param maxRegion
             Maximum size of the regions are allowed to cover (mostly useful when autoRegion = true)
         */
-        void setRegionToVoxelize( bool autoRegion,
-                                  const Aabb &regionToVoxelize,
-                                  const Aabb &maxRegion=Aabb::BOX_INFINITE );
+        void setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,
+                                  const Aabb &maxRegion = Aabb::BOX_INFINITE );
 
         /// Does nothing if VctVoxelizer::setRegionToVoxelize( false, ... ) was called.
         void autoCalculateRegion();
@@ -347,7 +346,7 @@ namespace Ogre
 
         void build( SceneManager *sceneManager );
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -27,43 +27,44 @@ THE SOFTWARE.
 */
 
 #if !OGRE_NO_JSON
-#ifndef _OgreHlmsJsonPbs_H_
-#define _OgreHlmsJsonPbs_H_
+#    ifndef _OgreHlmsJsonPbs_H_
+#        define _OgreHlmsJsonPbs_H_
 
-#include "OgreHlmsPbsPrerequisites.h"
-#include "OgreHlmsJson.h"
-#include "OgreHlmsPbsDatablock.h"
-#include "OgreHeaderPrefix.h"
+#        include "OgreHlmsPbsPrerequisites.h"
+
+#        include "OgreHlmsJson.h"
+#        include "OgreHlmsPbsDatablock.h"
+
+#        include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreHlmsPbsExport HlmsJsonPbs
     {
-        HlmsManager         *mHlmsManager;
-        TextureGpuManager   *mTextureManager;
-        HlmsJsonListener *mListener;
-        String mAdditionalExtension;
+        HlmsManager *      mHlmsManager;
+        TextureGpuManager *mTextureManager;
+        HlmsJsonListener * mListener;
+        String             mAdditionalExtension;
 
-        static HlmsPbsDatablock::Workflows parseWorkflow( const char *value );
-        static PbsBrdf::PbsBrdf parseBrdf( const char *value );
+        static HlmsPbsDatablock::Workflows         parseWorkflow( const char *value );
+        static PbsBrdf::PbsBrdf                    parseBrdf( const char *value );
         static HlmsPbsDatablock::TransparencyModes parseTransparencyMode( const char *value );
-        static PbsBlendModes parseBlendMode( const char *value );
+        static PbsBlendModes                       parseBlendMode( const char *value );
         static void parseFresnelMode( const char *value, bool &outIsColoured, bool &outUseIOR );
         static void parseOffset( const rapidjson::Value &jsonArray, Vector4 &offsetScale );
         static void parseScale( const rapidjson::Value &jsonArray, Vector4 &offsetScale );
 
-        static inline Vector3 parseVector3Array( const rapidjson::Value &jsonArray );
-        static inline Vector4 parseVector4Array( const rapidjson::Value &jsonArray );
+        static inline Vector3     parseVector3Array( const rapidjson::Value &jsonArray );
+        static inline Vector4     parseVector4Array( const rapidjson::Value &jsonArray );
         static inline ColourValue parseColourValueArray(
-                const rapidjson::Value &jsonArray,
-                const ColourValue &defaultValue = ColourValue::White );
+            const rapidjson::Value &jsonArray, const ColourValue &defaultValue = ColourValue::White );
 
         void loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                           PbsTextureTypes textureType, HlmsPbsDatablock *datablock,
@@ -74,23 +75,19 @@ namespace Ogre
         static void toQuotedStr( HlmsPbsDatablock::TransparencyModes value, String &outString );
 
         void saveFresnel( const HlmsPbsDatablock *datablock, String &outString );
-        void saveTexture( const char *blockName,
-                          PbsTextureTypes textureType,
+        void saveTexture( const char *blockName, PbsTextureTypes textureType,
                           const HlmsPbsDatablock *datablock, String &outString,
-                          bool writeTexture=true );
-        void saveTexture( float value, const char *blockName,
-                          PbsTextureTypes textureType,
+                          bool writeTexture = true );
+        void saveTexture( float value, const char *blockName, PbsTextureTypes textureType,
                           const HlmsPbsDatablock *datablock, String &outString,
-                          bool writeTexture=true );
-        void saveTexture( const Vector3 &value, const char *blockName,
-                          PbsTextureTypes textureType,
-                          const HlmsPbsDatablock *datablock, String &outString,
-                          bool writeTexture=true, const ColourValue &bgColour=ColourValue::ZERO );
+                          bool writeTexture = true );
+        void saveTexture( const Vector3 &value, const char *blockName, PbsTextureTypes textureType,
+                          const HlmsPbsDatablock *datablock, String &outString, bool writeTexture = true,
+                          const ColourValue &bgColour = ColourValue::ZERO );
 
         void saveTexture( const Vector3 &value, const ColourValue &bgDiffuse, const char *blockName,
-                          PbsTextureTypes textureType,
-                          bool writeValue, bool writeBgDiffuse, bool scalarValue,
-                          bool isFresnel, bool writeTexture,
+                          PbsTextureTypes textureType, bool writeValue, bool writeBgDiffuse,
+                          bool scalarValue, bool isFresnel, bool writeTexture,
                           const HlmsPbsDatablock *datablock, String &outString );
 
     public:
@@ -101,17 +98,17 @@ namespace Ogre
                            HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
-        static void collectSamplerblocks( const HlmsDatablock *datablock,
-                                          set<const HlmsSamplerblock*>::type &outSamplerblocks );
+        static void collectSamplerblocks( const HlmsDatablock *                datablock,
+                                          set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
-#include "OgreHeaderSuffix.h"
+#        include "OgreHeaderSuffix.h"
 
-#endif
+#    endif
 
 #endif

@@ -31,31 +31,31 @@ THE SOFTWARE.
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 
 #include "Compositor/OgreCompositorManager2.h"
-#include "Compositor/OgreCompositorWorkspaceDef.h"
-#include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorNodeDef.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+#include "Compositor/OgreCompositorWorkspaceDef.h"
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
-#include "OgreRoot.h"
 #include "OgreCamera.h"
+#include "OgreDepthBuffer.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreHlmsManager.h"
-#include "OgreHlms.h"
-#include "OgreDepthBuffer.h"
 
+#include "OgreLwString.h"
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
-#include "OgreLwString.h"
 
-#include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
-#include "OgreSubMesh2.h"
 #include "OgreItem.h"
+#include "OgreMesh2.h"
+#include "OgreMeshManager2.h"
+#include "OgreSubMesh2.h"
 
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreStagingBuffer.h"
@@ -63,8 +63,8 @@ THE SOFTWARE.
 namespace Ogre
 {
     ParallaxCorrectedCubemapBase::ParallaxCorrectedCubemapBase(
-            IdType id, Root *root, SceneManager *sceneManager,
-            const CompositorWorkspaceDef *probeWorkspcDef, bool automaticMode ) :
+        IdType id, Root *root, SceneManager *sceneManager, const CompositorWorkspaceDef *probeWorkspcDef,
+        bool automaticMode ) :
         IdObject( id ),
         mBindTexture( 0 ),
         mSamplerblockTrilinear( 0 ),
@@ -84,9 +84,8 @@ namespace Ogre
         samplerblock.mMipFilter = FO_LINEAR;
         mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
 
-        MaterialPtr depthCompressor =
-                MaterialManager::getSingleton().getByName(
-                    "PCC/DepthCompressor", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+        MaterialPtr depthCompressor = MaterialManager::getSingleton().getByName(
+            "PCC/DepthCompressor", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
         if( depthCompressor )
         {
             depthCompressor->load();
@@ -110,13 +109,13 @@ namespace Ogre
     void ParallaxCorrectedCubemapBase::_releaseManualHardwareResources()
     {
         for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
-            (*it)->_releaseManualHardwareResources();
+            ( *it )->_releaseManualHardwareResources();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::_restoreManualHardwareResources()
     {
         for( CubemapProbeVec::iterator it = mProbes.begin(), end = mProbes.end(); it != end; ++it )
-            (*it)->_restoreManualHardwareResources();
+            ( *it )->_restoreManualHardwareResources();
 
         updateAllDirtyProbes();
     }
@@ -146,7 +145,7 @@ namespace Ogre
         return numMipmaps;
     }
     //-----------------------------------------------------------------------------------
-    CubemapProbe* ParallaxCorrectedCubemapBase::createProbe()
+    CubemapProbe *ParallaxCorrectedCubemapBase::createProbe()
     {
         CubemapProbe *probe = OGRE_NEW CubemapProbe( this );
         mProbes.push_back( probe );
@@ -170,7 +169,7 @@ namespace Ogre
     void ParallaxCorrectedCubemapBase::destroyAllProbes()
     {
         CubemapProbeVec::iterator itor = mProbes.begin();
-        CubemapProbeVec::iterator end  = mProbes.end();
+        CubemapProbeVec::iterator end = mProbes.end();
 
         while( itor != end )
         {
@@ -181,79 +180,72 @@ namespace Ogre
         mProbes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapBase::prepareForClearScene()
-    {
-    }
+    void ParallaxCorrectedCubemapBase::prepareForClearScene() {}
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::restoreFromClearScene()
     {
         SceneNode *rootNode = mSceneManager->getRootSceneNode();
         CubemapProbeVec::iterator itor = mProbes.begin();
-        CubemapProbeVec::iterator end  = mProbes.end();
+        CubemapProbeVec::iterator end = mProbes.end();
         while( itor != end )
         {
-            (*itor)->restoreFromClearScene( rootNode );
+            ( *itor )->restoreFromClearScene( rootNode );
             ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapBase::_notifyPreparePassHash( const Matrix4 &viewMatrix )
-    {
-    }
+    void ParallaxCorrectedCubemapBase::_notifyPreparePassHash( const Matrix4 &viewMatrix ) {}
     //-----------------------------------------------------------------------------------
-    size_t ParallaxCorrectedCubemapBase::getConstBufferSize()
-    {
-        return 0;
-    }
+    size_t ParallaxCorrectedCubemapBase::getConstBufferSize() { return 0; }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::fillConstBufferData( const Matrix4 &viewMatrix,
-                                                            float * RESTRICT_ALIAS passBufferPtr ) const
+                                                            float *RESTRICT_ALIAS passBufferPtr ) const
     {
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::fillConstBufferData( const CubemapProbe &probe,
                                                             const Matrix4 &viewMatrix,
                                                             const Matrix3 &invViewMat3,
-                                                            float * RESTRICT_ALIAS passBufferPtr )
+                                                            float *RESTRICT_ALIAS passBufferPtr )
     {
         const Matrix3 viewSpaceToProbeLocal = probe.mInvOrientation * invViewMat3;
 
         const Aabb &probeShape = probe.getProbeShape();
-        Vector3 probeShapeCenterVS = viewMatrix * probeShape.mCenter; //View-space
+        Vector3 probeShapeCenterVS = viewMatrix * probeShape.mCenter;  // View-space
 
-        //float4 row0_centerX;
+        // float4 row0_centerX;
         *passBufferPtr++ = viewSpaceToProbeLocal[0][0];
         *passBufferPtr++ = viewSpaceToProbeLocal[0][1];
         *passBufferPtr++ = viewSpaceToProbeLocal[0][2];
         *passBufferPtr++ = probeShapeCenterVS.x;
 
-        //float4 row1_centerY;
+        // float4 row1_centerY;
         *passBufferPtr++ = viewSpaceToProbeLocal[0][3];
         *passBufferPtr++ = viewSpaceToProbeLocal[0][4];
         *passBufferPtr++ = viewSpaceToProbeLocal[0][5];
         *passBufferPtr++ = probeShapeCenterVS.y;
 
-        //float4 row2_centerZ;
+        // float4 row2_centerZ;
         *passBufferPtr++ = viewSpaceToProbeLocal[0][6];
         *passBufferPtr++ = viewSpaceToProbeLocal[0][7];
         *passBufferPtr++ = viewSpaceToProbeLocal[0][8];
         *passBufferPtr++ = probeShapeCenterVS.z;
 
-        //float4 halfSize;
+        // float4 halfSize;
         *passBufferPtr++ = probeShape.mHalfSize.x;
         *passBufferPtr++ = probeShape.mHalfSize.y;
         *passBufferPtr++ = probeShape.mHalfSize.z;
         *passBufferPtr++ = 1.0f;
 
-        //float4 cubemapPosLS;
-        const Vector3 cubemapPos    = probe.mProbeCameraPos - probeShape.mCenter;
-        const Vector3 cubemapPosLS  = probe.mInvOrientation * cubemapPos;
+        // float4 cubemapPosLS;
+        const Vector3 cubemapPos = probe.mProbeCameraPos - probeShape.mCenter;
+        const Vector3 cubemapPosLS = probe.mInvOrientation * cubemapPos;
         *passBufferPtr++ = cubemapPosLS.x;
         *passBufferPtr++ = cubemapPosLS.y;
         *passBufferPtr++ = cubemapPosLS.z;
         *passBufferPtr++ = 1.0f;
 
-        //float4 cubemapPosVS;
+        // float4 cubemapPosVS;
         const Vector3 cubemapPosVS = viewMatrix * cubemapPos;
         *passBufferPtr++ = cubemapPosVS.x;
         *passBufferPtr++ = cubemapPosVS.y;
@@ -261,7 +253,7 @@ namespace Ogre
         *passBufferPtr++ = 1.0f;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* ParallaxCorrectedCubemapBase::findTmpRtt( const TextureGpu *baseParams )
+    TextureGpu *ParallaxCorrectedCubemapBase::findTmpRtt( const TextureGpu *baseParams )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
         return 0;
@@ -282,11 +274,9 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapBase::_copyRenderTargetToCubemap( uint32 cubemapArrayIdx )
-    {
-    }
+    void ParallaxCorrectedCubemapBase::_copyRenderTargetToCubemap( uint32 cubemapArrayIdx ) {}
     //-----------------------------------------------------------------------------------
-    TextureGpu* ParallaxCorrectedCubemapBase::_acquireTextureSlot( uint16 &outTexSlot )
+    TextureGpu *ParallaxCorrectedCubemapBase::_acquireTextureSlot( uint16 &outTexSlot )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
         outTexSlot = 0;
@@ -308,12 +298,9 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
     }
     //-----------------------------------------------------------------------------------
-    SceneManager* ParallaxCorrectedCubemapBase::getSceneManager() const
-    {
-        return mSceneManager;
-    }
+    SceneManager *ParallaxCorrectedCubemapBase::getSceneManager() const { return mSceneManager; }
     //-----------------------------------------------------------------------------------
-    const CompositorWorkspaceDef* ParallaxCorrectedCubemapBase::getDefaultWorkspaceDef() const
+    const CompositorWorkspaceDef *ParallaxCorrectedCubemapBase::getDefaultWorkspaceDef() const
     {
         return mDefaultWorkspaceDef;
     }
@@ -324,15 +311,15 @@ namespace Ogre
         if( passDef->getType() != PASS_QUAD )
             return;
 
-        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassQuad*>( pass ) );
-        CompositorPassQuad *passQuad = static_cast<CompositorPassQuad*>( pass );
+        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassQuad *>( pass ) );
+        CompositorPassQuad *passQuad = static_cast<CompositorPassQuad *>( pass );
         if( passQuad->getPass() == mPccCompressorPass )
         {
             GpuProgramParametersSharedPtr psParams = mPccCompressorPass->getFragmentProgramParameters();
 
             Ogre::Camera *camera = passQuad->getCamera();
             Ogre::Vector2 projectionAB = camera->getProjectionParamsAB();
-            //The division will keep "linearDepth" in the shader in the [0; 1] range.
+            // The division will keep "linearDepth" in the shader in the [0; 1] range.
             projectionAB.y /= camera->getFarClipDistance();
             psParams->setNamedConstant( "projectionParams", projectionAB );
 
@@ -355,11 +342,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::eventOccurred( const String &eventName,
-                                                  const NameValuePairList *parameters )
+                                                      const NameValuePairList *parameters )
     {
         if( eventName == "DeviceLost" )
             _releaseManualHardwareResources();
         else if( eventName == "DeviceRestored" )
             _restoreManualHardwareResources();
     }
-}
+}  // namespace Ogre

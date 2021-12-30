@@ -70,10 +70,10 @@ namespace Ogre
         struct Batch
         {
             FastArray<BatchInstances> instances;  // one per octant
-            FastArray<TextureGpu *> textures;
+            FastArray<TextureGpu *>   textures;
         };
 
-        typedef FastArray<Batch> BatchArray;
+        typedef FastArray<Batch>  BatchArray;
         typedef FastArray<Item *> ItemArray;
 
         VoxelizedMeshCache *mMeshCache;
@@ -88,10 +88,10 @@ namespace Ogre
         /// On other API/GPUs we may need to split the dispatch into multiple
         /// ones; the worst case scenario we'll have 1 batch per mesh in scene.
         BatchArray mBatches;
-        ItemArray mItems;
-        bool mItemOrderDirty;
+        ItemArray  mItems;
+        bool       mItemOrderDirty;
 
-        uint32 mTexMeshesPerBatch;  // 3 * meshes per batch
+        uint32          mTexMeshesPerBatch;  // 3 * meshes per batch
         HlmsComputeJob *mImageVoxelizerJob;
         HlmsComputeJob *mPartialClearJob;
 
@@ -109,10 +109,10 @@ namespace Ogre
         {
             uint32 x, y, z;
             uint32 width, height, depth;
-            Aabb region;
+            Aabb   region;
 
             float *RESTRICT_ALIAS instanceBuffer;  // Temporary
-            uint32 diffAxis;                       // Used in buildRelative
+            uint32                diffAxis;        // Used in buildRelative
         };
 
         FastArray<Octant> mOctants;
@@ -145,6 +145,7 @@ namespace Ogre
         void createVoxelTextures();
         void createAltVoxelTextures();
         void setVoxelTexturesToJobs();
+
         virtual void destroyVoxelTextures();
 
         void createInstanceBuffers();

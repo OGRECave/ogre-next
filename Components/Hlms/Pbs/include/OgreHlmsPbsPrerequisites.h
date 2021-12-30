@@ -31,28 +31,28 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-#   if defined( OGRE_STATIC_LIB ) || defined( OGRE_PBS__STATIC_LIB )
-#       define _OgreHlmsPbsExport
-#   else
-#       if defined( OgreHlmsPbs_EXPORTS )
-#           define _OgreHlmsPbsExport __declspec( dllexport )
-#       else
-#           if defined( __MINGW32__ )
-#               define _OgreHlmsPbsExport
-#           else
-#               define _OgreHlmsPbsExport __declspec( dllimport )
-#           endif
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   if !defined( OGRE_STATIC_LIB )
-#       define _OgreHlmsPbsExport __attribute__ ((visibility("default")))
-#   else
-#       define _OgreHlmsPbsExport __attribute__ ((visibility("hidden")))
-#   endif
+#    if defined( OGRE_STATIC_LIB ) || defined( OGRE_PBS__STATIC_LIB )
+#        define _OgreHlmsPbsExport
+#    else
+#        if defined( OgreHlmsPbs_EXPORTS )
+#            define _OgreHlmsPbsExport __declspec( dllexport )
+#        else
+#            if defined( __MINGW32__ )
+#                define _OgreHlmsPbsExport
+#            else
+#                define _OgreHlmsPbsExport __declspec( dllimport )
+#            endif
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreHlmsPbsExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreHlmsPbsExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
-#   define _OgreHlmsPbsExport
-#endif 
+#    define _OgreHlmsPbsExport
+#endif
 
 namespace Ogre
 {
@@ -108,6 +108,6 @@ namespace Ogre
     class ParallaxCorrectedCubemapAuto;
     class ParallaxCorrectedCubemapBase;
     class VctLighting;
-}
+}  // namespace Ogre
 
 #endif

@@ -50,10 +50,10 @@ namespace Ogre
         /// performance)
         bool bCorrectAreaLightShadows;
 
-        bool bAutoMultiplier;     /// @see VctLighting::update
-        float thinWallCounter;    /// @see VctLighting::update
-        float rayMarchStepScale;  /// @see VctLighting::update
-        uint32 lightMask;         /// @see VctLighting::update
+        bool   bAutoMultiplier;    /// @see VctLighting::update
+        float  thinWallCounter;    /// @see VctLighting::update
+        float  rayMarchStepScale;  /// @see VctLighting::update
+        uint32 lightMask;          /// @see VctLighting::update
 
         /// The resolution to set to voxelizer
         uint32 resolution[3];
@@ -116,17 +116,17 @@ namespace Ogre
     {
     protected:
         FastArray<VctCascadeSetting> mCascadeSettings;
-        FastArray<VctLighting *> mCascades;
+        FastArray<VctLighting *>     mCascades;
 
         Vector3 mCameraPosition;
 
         VoxelizedMeshCache *mMeshCache;
 
-        SceneManager *mSceneManager;
+        SceneManager *      mSceneManager;
         CompositorManager2 *mCompositorManager;
 
-        uint32 mNumBounces;  /// @see VctLighting::update
-        bool mAnisotropic;   /// @see VctLighting::update
+        uint32 mNumBounces;   /// @see VctLighting::update
+        bool   mAnisotropic;  /// @see VctLighting::update
 
         bool mFirstBuild;
         bool mConsistentCascadeSteps;
@@ -153,7 +153,7 @@ namespace Ogre
         /// automatically
         void autoCalculateStepSizes( const Vector3 stepSize );
 
-        size_t getNumCascades() const { return mCascadeSettings.size(); }
+        size_t             getNumCascades() const { return mCascadeSettings.size(); }
         VctCascadeSetting &getCascade( size_t idx ) { return mCascadeSettings[idx]; }
 
         /** Selects how we determine when we need to (partially) rebuild the voxels
@@ -264,7 +264,7 @@ namespace Ogre
         /// CompositorWorkspaceListener override
         virtual void allWorkspacesBeforeBeginUpdate();
 
-        void setCameraPosition( const Vector3 &cameraPosition );
+        void           setCameraPosition( const Vector3 &cameraPosition );
         const Vector3 &getCameraPosition() const { return mCameraPosition; }
 
         VctLighting *getVctLighting( size_t idx ) { return mCascades[idx]; }

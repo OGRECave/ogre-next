@@ -31,9 +31,8 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 
-#include "OgreId.h"
-
 #include "Math/Simple/OgreAabb.h"
+#include "OgreId.h"
 #include "OgreIdString.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreShaderPrimitives.h"
@@ -49,10 +48,10 @@ namespace Ogre
 
     struct _OgreHlmsPbsExport RasterParams
     {
-        IdString mWorkspaceName;
+        IdString       mWorkspaceName;
         PixelFormatGpu mPixelFormat;
-        float mCameraNear;
-        float mCameraFar;
+        float          mCameraNear;
+        float          mCameraFar;
 
         RasterParams();
     };
@@ -104,6 +103,7 @@ namespace Ogre
         void createSubsamples();
 
         uint32 getTotalNumProbes() const;
+
         void getDepthProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
         void getIrradProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
 
@@ -152,15 +152,15 @@ namespace Ogre
     protected:
         struct IrradianceFieldGenParams
         {
-            float invNumRaysPerPixel;
-            float invNumRaysPerIrradiancePixel;
-            float unused0;
+            float  invNumRaysPerPixel;
+            float  invNumRaysPerIrradiancePixel;
+            float  unused0;
             uint32 probesPerRow;  // Used by integration CS
 
-            float coneAngleTan;
+            float  coneAngleTan;
             uint32 numProcessedProbes;
-            float vctStartBias;
-            float vctInvStartBias;
+            float  vctStartBias;
+            float  vctInvStartBias;
 
             // float invFieldResolution;
             uint4 numProbes_threadsPerRow;
@@ -197,37 +197,37 @@ namespace Ogre
         TextureGpu *mDepthVarianceTex;
 
         CompositorWorkspace *mGenerationWorkspace;
-        HlmsComputeJob *mGenerationJob;
-        HlmsComputeJob *mDepthIntegrationJob;
-        HlmsComputeJob *mColourIntegrationJob;
-        HlmsComputeJob *mDepthMirrorBorderJob;
-        HlmsComputeJob *mColourMirrorBorderJob;
+        HlmsComputeJob *     mGenerationJob;
+        HlmsComputeJob *     mDepthIntegrationJob;
+        HlmsComputeJob *     mColourIntegrationJob;
+        HlmsComputeJob *     mDepthMirrorBorderJob;
+        HlmsComputeJob *     mColourMirrorBorderJob;
 
         IrradianceFieldGenParams mIfGenParams;
-        ConstBufferPacked *mIfGenParamsBuffer;
-        TexBufferPacked *mDirectionsBuffer;
-        TexBufferPacked *mDepthTapsIntegrationBuffer;
-        TexBufferPacked *mColourTapsIntegrationBuffer;
-        ConstBufferPacked *mIfdDepthBorderMirrorParamsBuffer;
-        ConstBufferPacked *mIfdColourBorderMirrorParamsBuffer;
+        ConstBufferPacked *      mIfGenParamsBuffer;
+        TexBufferPacked *        mDirectionsBuffer;
+        TexBufferPacked *        mDepthTapsIntegrationBuffer;
+        TexBufferPacked *        mColourTapsIntegrationBuffer;
+        ConstBufferPacked *      mIfdDepthBorderMirrorParamsBuffer;
+        ConstBufferPacked *      mIfdColourBorderMirrorParamsBuffer;
 
         IrradianceFieldRaster *mIfRaster;
 
         DebugVisualizationMode mDebugVisualizationMode;
-        uint8 mDebugTessellation;
-        IfdProbeVisualizer *mDebugIfdProbeVisualizer;
+        uint8                  mDebugTessellation;
+        IfdProbeVisualizer *   mDebugIfdProbeVisualizer;
 
-        Root *mRoot;
+        Root *        mRoot;
         SceneManager *mSceneManager;
-        bool mAlreadyWarned;
+        bool          mAlreadyWarned;
 
         void fillDirections( float *RESTRICT_ALIAS outBuffer );
 
         static TexBufferPacked *setupIntegrationTaps( VaoManager *vaoManager, uint32 probeRes,
                                                       uint32 fullWidth, HlmsComputeJob *integrationJob,
                                                       ConstBufferPacked *ifGenParamsBuffer,
-                                                      uint32 &outMaxIntegrationTapsPerPixel );
-        static uint32 countNumIntegrationTaps( uint32 probeRes );
+                                                      uint32 &           outMaxIntegrationTapsPerPixel );
+        static uint32           countNumIntegrationTaps( uint32 probeRes );
 
         /**
          * @brief fillIntegrationWeights
@@ -236,11 +236,11 @@ namespace Ogre
         */
         static void fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
                                             uint32 maxTapsPerPixel );
-        void setIrradianceFieldGenParams();
+        void        setIrradianceFieldGenParams();
 
         void setupBorderMirrorParams( uint32 borderedRes, uint32 fullWidth,
                                       ConstBufferPacked *ifdBorderMirrorParamsBuffer,
-                                      HlmsComputeJob *job );
+                                      HlmsComputeJob *   job );
 
         void setTextureToDebugVisualizer();
 
@@ -291,9 +291,9 @@ namespace Ogre
                 tessellation = 9u -> 130560 vertices
                 tessellation = 16u -> 2.147.418.112 vertices
         */
-        void setDebugVisualization( IrradianceField::DebugVisualizationMode mode,
-                                    SceneManager *sceneManager, uint8 tessellation );
-        bool getDebugVisualizationMode() const;
+        void  setDebugVisualization( IrradianceField::DebugVisualizationMode mode,
+                                     SceneManager *sceneManager, uint8 tessellation );
+        bool  getDebugVisualizationMode() const;
         uint8 getDebugTessellation() const;
 
         TextureGpu *getIrradianceTex() const { return mIrradianceTex; }

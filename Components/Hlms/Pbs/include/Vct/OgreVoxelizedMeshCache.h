@@ -51,8 +51,8 @@ namespace Ogre
     public:
         struct VoxelizedMesh
         {
-            uint64 hash[2];
-            String meshName;
+            uint64      hash[2];
+            String      meshName;
             TextureGpu *albedoVox;
             TextureGpu *normalVox;
             TextureGpu *emissiveVox;
@@ -61,12 +61,12 @@ namespace Ogre
     protected:
         typedef map<IdString, VoxelizedMesh>::type MeshCacheMap;
 
-        uint32 mMeshWidth;
-        uint32 mMeshHeight;
-        uint32 mMeshDepth;
-        uint32 mMeshMaxWidth;
-        uint32 mMeshMaxHeight;
-        uint32 mMeshMaxDepth;
+        uint32        mMeshWidth;
+        uint32        mMeshHeight;
+        uint32        mMeshDepth;
+        uint32        mMeshMaxWidth;
+        uint32        mMeshMaxHeight;
+        uint32        mMeshMaxDepth;
         Ogre::Vector3 mMeshDimensionPerPixel;
 
         MeshCacheMap mMeshes;

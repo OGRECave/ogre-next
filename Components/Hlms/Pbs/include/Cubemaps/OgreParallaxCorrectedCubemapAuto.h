@@ -29,10 +29,13 @@ THE SOFTWARE.
 #define _OgreParallaxCorrectedCubemapAuto_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
+
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreFrameListener.h"
 #include "OgreGpuProgramParams.h"
-#include "Compositor/OgreCompositorWorkspaceListener.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -69,12 +72,14 @@ namespace Ogre
 
         /// This variable should be updated every frame and often represents the camera position,
         /// but it can also be used set to other things like the player's character position.
-        public: Vector3                 mTrackedPosition;
-    private:
-        TextureGpu                      *mRenderTarget;
-        TextureGpu                      *mIblTarget;
+    public:
+        Vector3 mTrackedPosition;
 
-        vector<uint64>::type            mReservedSlotBitset;
+    private:
+        TextureGpu *mRenderTarget;
+        TextureGpu *mIblTarget;
+
+        vector<uint64>::type mReservedSlotBitset;
 
         ParallaxCorrectedCubemapAutoListener *mListener;
 
@@ -100,14 +105,14 @@ namespace Ogre
         void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
         ParallaxCorrectedCubemapAutoListener *getListener() const { return mListener; }
 
-        virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
-        virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
+        virtual TextureGpu *_acquireTextureSlot( uint16 &outTexSlot );
+        virtual void        _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
 
-        virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
-        virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+        virtual TextureGpu *findTmpRtt( const TextureGpu *baseParams );
+        virtual void        releaseTmpRtt( const TextureGpu *tmpRtt );
 
-        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
-        virtual void releaseIbl( const TextureGpu *tmpRtt );
+        virtual TextureGpu *findIbl( const TextureGpu *baseParams );
+        virtual void        releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 
@@ -169,20 +174,20 @@ namespace Ogre
         /// This function also uses a memory-friendly way of updating the probes.
         void updateAllDirtyProbes();
 
-        //CompositorWorkspaceListener overloads
+        // CompositorWorkspaceListener overloads
         virtual void allWorkspacesBeforeBeginUpdate();
         virtual void allWorkspacesBeginUpdate();
 
         virtual void passPreExecute( CompositorPass *pass );
 
-        //FrameListener overloads
-        virtual bool frameStarted( const FrameEvent& evt );
+        // FrameListener overloads
+        virtual bool frameStarted( const FrameEvent &evt );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

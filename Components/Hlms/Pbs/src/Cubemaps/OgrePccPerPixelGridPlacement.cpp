@@ -374,7 +374,6 @@ namespace Ogre
     void PccPerPixelGridPlacement::preCopyRenderTargetToCubemap( TextureGpu *renderTarget,
                                                                  uint32 cubemapArrayIdx )
     {
-
         TextureGpuManager *textureManager = renderTarget->getTextureManager();
 
         AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(

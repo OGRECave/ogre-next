@@ -71,15 +71,15 @@ namespace Ogre
         /// we wouldn't be able to support anisotropic mips for high resolution voxels.
         /// But more importantly, we would waste 1/4th of memory (actually 1/2 of memory
         /// because GPUs like GCN round memory consumption to the next power of 2).
-        TextureGpu              *mLightVoxel[4];
-        HlmsSamplerblock const  *mSamplerblockTrilinear;
+        TextureGpu *            mLightVoxel[4];
+        HlmsSamplerblock const *mSamplerblockTrilinear;
 
-        VctVoxelizerSourceBase  *mVoxelizer;
-        bool            mVoxelizerTexturesChanged;
-        bool            mVoxelizerListenersRemoved;
+        VctVoxelizerSourceBase *mVoxelizer;
+        bool                    mVoxelizerTexturesChanged;
+        bool                    mVoxelizerListenersRemoved;
 
-        HlmsComputeJob      *mLightInjectionJob;
-        ConstBufferPacked   *mLightsConstBuffer;
+        HlmsComputeJob *   mLightInjectionJob;
+        ConstBufferPacked *mLightsConstBuffer;
 
         /// Anisotropic mipmap generation consists of 2 main steps:
         ///
@@ -88,39 +88,39 @@ namespace Ogre
         ///
         /// Step 2 takes mLightVoxel[i].mip[n] and computes mLightVoxel[i].mip[n+1]
         /// where i is in range [1; 3] and n is the number of mipmaps in those textures.
-        HlmsComputeJob              *mAnisoGeneratorStep0;
-        FastArray<HlmsComputeJob*>  mAnisoGeneratorStep1;
+        HlmsComputeJob *            mAnisoGeneratorStep0;
+        FastArray<HlmsComputeJob *> mAnisoGeneratorStep1;
 
-        HlmsComputeJob              *mLightVctBounceInject;
-        TextureGpu                  *mLightBounce;
+        HlmsComputeJob *mLightVctBounceInject;
+        TextureGpu *    mLightBounce;
 
-        float   mBakingMultiplier;
-        float   mInvBakingMultiplier;
+        float mBakingMultiplier;
+        float mInvBakingMultiplier;
 
-        float	mUpperHemisphere[3];
-        float	mLowerHemisphere[3];
+        float mUpperHemisphere[3];
+        float mLowerHemisphere[3];
 
         float mDefaultLightDistThreshold;
-        bool    mAnisotropic;
+        bool  mAnisotropic;
 
         /// When we do multiple bounces, cascades can be used to improve accuracy
-        FastArray<VctLighting*> mExtraCascades;
+        FastArray<VctLighting *> mExtraCascades;
 
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
         ShaderParams::Param *mVoxelCellSize;
         ShaderParams::Param *mDirCorrectionRatioThinWallCounter;
         ShaderParams::Param *mInvVoxelResolution;
-        ShaderParams        *mShaderParams;
+        ShaderParams *       mShaderParams;
 
         typedef vector<ShaderParams::Param>::type ParamVec;
-        ParamVec mLocalBounceShaderParams;
-        ShaderParams::Param *mBounceVoxelCellSize;
-        ShaderParams::Param *mBounceInvVoxelResolution;
-        ShaderParams::Param *mBounceIterationDampening;
-        ShaderParams::Param *mBounceStartBiasInvBiasCascadeMaxLod;
+        ParamVec                                  mLocalBounceShaderParams;
+        ShaderParams::Param *                     mBounceVoxelCellSize;
+        ShaderParams::Param *                     mBounceInvVoxelResolution;
+        ShaderParams::Param *                     mBounceIterationDampening;
+        ShaderParams::Param *                     mBounceStartBiasInvBiasCascadeMaxLod;
         ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
-        ShaderParams        *mBounceShaderParams;
+        ShaderParams *       mBounceShaderParams;
 
         ResourceTransitionArray mResourceTransitions;
 
@@ -153,7 +153,7 @@ namespace Ogre
             PUBLIC VARIABLE. This variable can be altered directly.
             Changes are reflected immediately.
         */
-        float   mSpecularSdfQuality;
+        float mSpecularSdfQuality;
 
         /** Sets the intensity/brightness of the GI. e.g. to make the GI 2x brighter, set it to 2.0
             To make the GI darker, set it to 0.5
@@ -165,17 +165,16 @@ namespace Ogre
             @remark	 PUBLIC VARIABLE. This variable can be altered directly.
                      Changes are reflected immediately.
         */
-        float   mMultiplier;
+        float mMultiplier;
 
     protected:
-
         VoxelVisualizer *mDebugVoxelVisualizer;
 
         ShaderParams::Param *addLocalBounceShaderParam( const char *name );
 
         void restoreSwappedTextures();
 
-        float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
+        float addLight( ShaderVctLight *RESTRICT_ALIAS vctLight, Light *light,
                         const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
         void createTextures();
@@ -250,13 +249,13 @@ namespace Ogre
             Changes to this value take effect after calling VctLighting::update
             and autoMultiplier must be set to false
         */
-        void setBakingMultiplier( float bakingMult );
-        float getBakingMultiplier() const               { return mBakingMultiplier; }
+        void  setBakingMultiplier( float bakingMult );
+        float getBakingMultiplier() const { return mBakingMultiplier; }
 
         /// If you've set setBakingMultiplier but haven't yet called VctLighting::update
         /// with autoMultiplier = false, this function returns the baking multiplier that
         /// is currently in use (beware of floating point accuracy differences)
-        float getCurrentBakingMultiplier() const        { return 1.0f / mInvBakingMultiplier; }
+        float getCurrentBakingMultiplier() const { return 1.0f / mInvBakingMultiplier; }
 
         /**
         @param sceneManager
@@ -288,9 +287,9 @@ namespace Ogre
             are supposed to be shadowed won't be shadowed)
         @param lightMask
         */
-        void update( SceneManager *sceneManager, uint32 numBounces,
-                     float thinWallCounter=1.0f, bool autoMultiplier=true,
-                     float rayMarchStepScale=1.0f, uint32 lightMask=0xffffffff );
+        void update( SceneManager *sceneManager, uint32 numBounces, float thinWallCounter = 1.0f,
+                     bool autoMultiplier = true, float rayMarchStepScale = 1.0f,
+                     uint32 lightMask = 0xffffffff );
 
         /// When VctImageVoxelizer::buildRelative is called; voxelizer's textures
         /// (albedo, normal, emissive) may be swapped for a copy.
@@ -304,8 +303,7 @@ namespace Ogre
 
         size_t getConstBufferSize() const;
 
-        void fillConstBufferData( const Matrix4 &viewMatrix,
-                                  float * RESTRICT_ALIAS passBufferPtr ) const;
+        void fillConstBufferData( const Matrix4 &viewMatrix, float *RESTRICT_ALIAS passBufferPtr ) const;
 
         bool shouldEnableSpecularSdfQuality() const;
 
@@ -328,7 +326,7 @@ namespace Ogre
             *must* be called again to repopulate the light data.
         */
         void setAnisotropic( bool bAnisotropic );
-        bool isAnisotropic() const                      { return mAnisotropic; }
+        bool isAnisotropic() const { return mAnisotropic; }
 
         /** Extremely similar version of SceneManager::setAmbientLight
             In fact the hemisphereDir parameter is shared and set in SceneManager::setAmbientLight
@@ -343,22 +341,22 @@ namespace Ogre
         @param lowerHemisphere
             lowerHemisphere should be set to the ground colour
         */
-        void setAmbient( const ColourValue& upperHemisphere, const ColourValue& lowerHemisphere );
+        void setAmbient( const ColourValue &upperHemisphere, const ColourValue &lowerHemisphere );
 
-        TextureGpu** getLightVoxelTextures()            { return mLightVoxel; }
+        TextureGpu **getLightVoxelTextures() { return mLightVoxel; }
         TextureGpu **getLightVoxelTextures( const size_t cascadeIdx );
-        uint32 getNumVoxelTextures() const              { return mAnisotropic ? 4u : 1u; }
-        const HlmsSamplerblock* getBindTrilinearSamplerblock()
-                                                            { return mSamplerblockTrilinear; }
+        uint32       getNumVoxelTextures() const { return mAnisotropic ? 4u : 1u; }
 
-        const VctVoxelizerSourceBase* getVoxelizer() const      { return mVoxelizer; }
+        const HlmsSamplerblock *getBindTrilinearSamplerblock() { return mSamplerblockTrilinear; }
 
-        //TextureGpuListener overloads
+        const VctVoxelizerSourceBase *getVoxelizer() const { return mVoxelizer; }
+
+        // TextureGpuListener overloads
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );
-        virtual bool shouldStayLoaded( TextureGpu *texture )        { return false; }
+        virtual bool shouldStayLoaded( TextureGpu *texture ) { return false; }
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -45,11 +45,11 @@ namespace Ogre
     */
     class _OgreHlmsPbsExport LightProfiles : public UtilityAlloc
     {
-        FastArray<IesLoader *> mIesData;
+        FastArray<IesLoader *>      mIesData;
         map<IdString, size_t>::type mIesNameMap;
-        TextureGpu *mLightProfilesTexture;
+        TextureGpu *                mLightProfilesTexture;
 
-        HlmsPbs *mHlmsPbs;
+        HlmsPbs *          mHlmsPbs;
         TextureGpuManager *mTextureGpuManager;
 
         void destroyTexture();

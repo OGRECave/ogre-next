@@ -32,10 +32,10 @@ THE SOFTWARE.
 
 #include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 
-#include "OgreResource.h"
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreFrameListener.h"
 #include "OgreGpuProgramParams.h"
-#include "Compositor/OgreCompositorWorkspaceListener.h"
+#include "OgreResource.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -50,48 +50,51 @@ namespace Ogre
                                                         public FrameListener,
                                                         protected ManualResourceLoader
     {
-        CubemapProbe    *mCollectedProbes[OGRE_MAX_CUBE_PROBES];
-        uint32          mNumCollectedProbes;
-        Real            mProbeNDFs[OGRE_MAX_CUBE_PROBES];
-        Real            mProbeBlendFactors[OGRE_MAX_CUBE_PROBES];
+        CubemapProbe *mCollectedProbes[OGRE_MAX_CUBE_PROBES];
+        uint32        mNumCollectedProbes;
+        Real          mProbeNDFs[OGRE_MAX_CUBE_PROBES];
+        Real          mProbeBlendFactors[OGRE_MAX_CUBE_PROBES];
 
         CubemapProbeVec mManuallyActiveProbes;
-        StagingBuffer   *mStagingBuffer;
+        StagingBuffer * mStagingBuffer;
         size_t          mLastPassNumViewMatrices;
         Matrix4         mCachedLastViewMatrix;
 
-        bool            mBlendedProbeNeedsUpdate;
+        bool mBlendedProbeNeedsUpdate;
 
         /// This variable should be updated every frame and often represents the camera position,
         /// but it can also be used set to other things like the player's character position.
-        public: Vector3                 mTrackedPosition;
+    public:
+        Vector3 mTrackedPosition;
         /// When mTrackedPosition is not inside any probe, we'll use the view-projection matrix
         /// to select the closest probe based on which one has approximately the largest volume
         /// shown on camera. See setUpdatedTrackedDataFromCamera if you don't know how to set this
-        public: Matrix4                 mTrackedViewProjMatrix;
+    public:
+        Matrix4 mTrackedViewProjMatrix;
+
     private:
-        GpuProgramParametersSharedPtr   mBlendCubemapParamsVs[OGRE_MAX_CUBE_PROBES];
-        GpuProgramParametersSharedPtr   mBlendCubemapParams[OGRE_MAX_CUBE_PROBES];
-        TextureUnitState                *mBlendCubemapTUs[OGRE_MAX_CUBE_PROBES];
-        GpuProgramParametersSharedPtr   mCopyCubemapParams[6];
-        TextureUnitState                *mCopyCubemapTUs[6];
-        CubemapProbe                    mBlankProbe;
-        CubemapProbe                    mFinalProbe;
-        Camera                          *mBlendProxyCamera;
-        CompositorWorkspace             *mBlendWorkspace;
-        CompositorWorkspace             *mCopyWorkspace;
-        HlmsSamplerblock const          *mSamplerblockPoint;
-        float                           mCurrentMip;
-        uint32                          mProxyVisibilityMask;
-        uint32                          mProxyQueryMask;
-        uint8                           mReservedRqId;
-        MeshPtr                         mProxyMesh;
-        Item                            *mProxyItems[OGRE_MAX_CUBE_PROBES];
-        SceneNode                       *mProxyNodes[OGRE_MAX_CUBE_PROBES];
+        GpuProgramParametersSharedPtr mBlendCubemapParamsVs[OGRE_MAX_CUBE_PROBES];
+        GpuProgramParametersSharedPtr mBlendCubemapParams[OGRE_MAX_CUBE_PROBES];
+        TextureUnitState *            mBlendCubemapTUs[OGRE_MAX_CUBE_PROBES];
+        GpuProgramParametersSharedPtr mCopyCubemapParams[6];
+        TextureUnitState *            mCopyCubemapTUs[6];
+        CubemapProbe                  mBlankProbe;
+        CubemapProbe                  mFinalProbe;
+        Camera *                      mBlendProxyCamera;
+        CompositorWorkspace *         mBlendWorkspace;
+        CompositorWorkspace *         mCopyWorkspace;
+        HlmsSamplerblock const *      mSamplerblockPoint;
+        float                         mCurrentMip;
+        uint32                        mProxyVisibilityMask;
+        uint32                        mProxyQueryMask;
+        uint8                         mReservedRqId;
+        MeshPtr                       mProxyMesh;
+        Item *                        mProxyItems[OGRE_MAX_CUBE_PROBES];
+        SceneNode *                   mProxyNodes[OGRE_MAX_CUBE_PROBES];
 
         struct TempRtt
         {
-            TextureGpu  *texture;
+            TextureGpu *texture;
             uint32      refCount;
         };
 
@@ -106,10 +109,11 @@ namespace Ogre
         /// The temp. RTTs can be shared by all probes if they match the same
         /// resolution and format.
         typedef vector<TempRtt>::type TempRttVec;
-        TempRttVec  mTmpRtt;
-        TempRttVec  mIblRtt;
+        TempRttVec                    mTmpRtt;
+        TempRttVec                    mIblRtt;
 
-        virtual void loadResource(Resource* resource);
+        virtual void loadResource( Resource *resource );
+
         void createProxyGeometry();
         void destroyProxyGeometry();
         void createCubemapBlendWorkspaceDefinition();
@@ -191,57 +195,58 @@ namespace Ogre
         void updateAllDirtyProbes();
 
         virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
+
         virtual size_t getConstBufferSize();
-        static size_t getConstBufferSizeStatic();
+        static size_t  getConstBufferSizeStatic();
+
         virtual void fillConstBufferData( const Matrix4 &viewMatrix,
-                                          float * RESTRICT_ALIAS passBufferPtr ) const;
+                                          float *RESTRICT_ALIAS passBufferPtr ) const;
 
     protected:
         TextureGpu *findRtt( const TextureGpu *baseParams, TempRttVec &container, uint32 textureFlags,
                              bool fullMipmaps );
-        void releaseRtt( const TextureGpu *rtt, TempRttVec &container );
+        void        releaseRtt( const TextureGpu *rtt, TempRttVec &container );
 
     public:
-
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
-        virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
-        virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+        virtual TextureGpu *findTmpRtt( const TextureGpu *baseParams );
+        virtual void        releaseTmpRtt( const TextureGpu *tmpRtt );
 
-        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
-        virtual void releaseIbl( const TextureGpu *tmpRtt );
+        virtual TextureGpu *findIbl( const TextureGpu *baseParams );
+        virtual void        releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _addManuallyActiveProbe( CubemapProbe *probe );
         virtual void _removeManuallyActiveProbe( CubemapProbe *probe );
 
         /// Returns the RenderQueue ID you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.
-        uint8 getProxyReservedRenderQueueId() const     { return mReservedRqId; }
+        uint8 getProxyReservedRenderQueueId() const { return mReservedRqId; }
         /// Returns the visibility mask you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.
-        uint32 getProxyReservedVisibilityMask() const   { return mProxyVisibilityMask; }
+        uint32 getProxyReservedVisibilityMask() const { return mProxyVisibilityMask; }
         /// Returns the query mask you told us you reserved for storing our internal objects.
-        uint32 getProxyReservedQueryMask() const      { return mProxyQueryMask; }
+        uint32 getProxyReservedQueryMask() const { return mProxyQueryMask; }
 
-        Item * const * getProxyItems() const            { return mProxyItems; }
-        SceneNode * const * getProxySceneNodes() const  { return mProxyNodes; }
+        Item *const *     getProxyItems() const { return mProxyItems; }
+        SceneNode *const *getProxySceneNodes() const { return mProxyNodes; }
 
-        //Statistics
-        uint32 getNumCollectedProbes() const        { return mNumCollectedProbes; }
+        // Statistics
+        uint32 getNumCollectedProbes() const { return mNumCollectedProbes; }
 
-        //CompositorWorkspaceListener overloads
+        // CompositorWorkspaceListener overloads
         virtual void passPreExecute( CompositorPass *pass );
         virtual void allWorkspacesBeforeBeginUpdate();
         virtual void allWorkspacesBeginUpdate();
 
-        //FrameListener overloads
-        virtual bool frameStarted( const FrameEvent& evt );
+        // FrameListener overloads
+        virtual bool frameStarted( const FrameEvent &evt );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

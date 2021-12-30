@@ -36,37 +36,32 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
-#include "OgreShaderPrimitives.h"
-
-#include "OgreTextureGpuManager.h"
-#include "OgreStringConverter.h"
-
+#include "OgreLight.h"
+#include "OgreLwString.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
-
-#include "OgreLight.h"
+#include "OgreShaderPrimitives.h"
+#include "OgreStringConverter.h"
+#include "OgreTextureGpuManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
-
-#include "OgreLwString.h"
-
 
 namespace Ogre
 {
     struct ShaderVctLight
     {
-        //Pre-mul by PI? -No because we lose a ton of precision
+        // Pre-mul by PI? -No because we lose a ton of precision
         //.w contains lightDistThreshold
         float diffuse[4];
-        //For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
-        //For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
+        // For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
+        // For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
         float pos[4];
-        //uvwPos.w contains the light type
+        // uvwPos.w contains the light type
         float uvwPos[4];
 
-        //Used by area lights
-        //points[0].w contains double sided info
+        // Used by area lights
+        // points[0].w contains double sided info
         float points[4][4];
     };
 
@@ -107,9 +102,9 @@ namespace Ogre
         mMultiplier( 1.0f ),
         mDebugVoxelVisualizer( 0 )
     {
-        memset( mLightVoxel, 0, sizeof(mLightVoxel) );
-        memset( mUpperHemisphere, 0, sizeof(mUpperHemisphere) );
-        memset( mLowerHemisphere, 0, sizeof(mLowerHemisphere) );
+        memset( mLightVoxel, 0, sizeof( mLightVoxel ) );
+        memset( mUpperHemisphere, 0, sizeof( mUpperHemisphere ) );
+        memset( mLowerHemisphere, 0, sizeof( mLowerHemisphere ) );
 
         OGRE_ASSERT_LOW( mVoxelizer->getAlbedoVox() &&
                          "VctVoxelizer::build must've been called before creating VctLighting!" );
@@ -118,8 +113,8 @@ namespace Ogre
         mVoxelizer->getNormalVox()->addListener( this );
         mVoxelizerListenersRemoved = false;
 
-        //VctVoxelizer should've already been initialized, thus no need
-        //to check if JSON has been built or if the assets were added
+        // VctVoxelizer should've already been initialized, thus no need
+        // to check if JSON has been built or if the assets were added
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         mLightInjectionJob = hlmsCompute->findComputeJob( "VCT/LightInjection" );
 
@@ -128,12 +123,12 @@ namespace Ogre
         mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize_bakingMultiplier" );
         mVoxelCellSize = mShaderParams->findParameter( "voxelCellSize" );
         mDirCorrectionRatioThinWallCounter =
-                mShaderParams->findParameter( "dirCorrectionRatio_thinWallCounter" );
+            mShaderParams->findParameter( "dirCorrectionRatio_thinWallCounter" );
         mInvVoxelResolution = mShaderParams->findParameter( "invVoxelResolution" );
 
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         VaoManager *vaoManager = renderSystem->getVaoManager();
-        mLightsConstBuffer = vaoManager->createConstBuffer( sizeof(ShaderVctLight) * 16u,
+        mLightsConstBuffer = vaoManager->createConstBuffer( sizeof( ShaderVctLight ) * 16u,
                                                             BT_DYNAMIC_PERSISTENT, 0, false );
 
         HlmsManager *hlmsManager = mVoxelizer->getHlmsManager();
@@ -220,18 +215,18 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    float VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
+    float VctLighting::addLight( ShaderVctLight *RESTRICT_ALIAS vctLight, Light *light,
                                  const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
     {
         const ColourValue diffuseColour = light->getDiffuseColour() * light->getPowerScale();
-        for( size_t i=0; i<3u; ++i )
+        for( size_t i = 0; i < 3u; ++i )
             vctLight->diffuse[i] = static_cast<float>( diffuseColour[i] );
 
         const Vector4 *lightDistThreshold =
-                light->getCustomParameterNoThrow( msDistanceThresholdCustomParam );
-        vctLight->diffuse[3] = lightDistThreshold ?
-                                   (lightDistThreshold->x * lightDistThreshold->x) :
-                                   (mDefaultLightDistThreshold * mDefaultLightDistThreshold);
+            light->getCustomParameterNoThrow( msDistanceThresholdCustomParam );
+        vctLight->diffuse[3] = lightDistThreshold
+                                   ? ( lightDistThreshold->x * lightDistThreshold->x )
+                                   : ( mDefaultLightDistThreshold * mDefaultLightDistThreshold );
 
         Light::LightTypes lightType = light->getType();
         if( lightType == Light::LT_AREA_APPROX )
@@ -241,12 +236,12 @@ namespace Ogre
         if( lightType != Light::LT_DIRECTIONAL )
             light4dVec -= Vector4( voxelOrigin, 0.0f );
 
-        for( size_t i=0; i<4u; ++i )
+        for( size_t i = 0; i < 4u; ++i )
             vctLight->pos[i] = static_cast<float>( light4dVec[i] );
 
         Vector3 uvwPos = light->getParentNode()->_getDerivedPosition();
-        uvwPos = (uvwPos - voxelOrigin) * invVoxelSize;
-        for( size_t i=0; i<3u; ++i )
+        uvwPos = ( uvwPos - voxelOrigin ) * invVoxelSize;
+        for( size_t i = 0; i < 3u; ++i )
             vctLight->uvwPos[i] = static_cast<float>( uvwPos[i] );
         vctLight->uvwPos[3] = static_cast<float>( lightType );
 
@@ -269,16 +264,16 @@ namespace Ogre
         }
         else
         {
-            memset( rectPoints, 0, sizeof(rectPoints) );
+            memset( rectPoints, 0, sizeof( rectPoints ) );
 
             if( lightType == Light::LT_SPOTLIGHT )
             {
-                //float3 spotDirection
+                // float3 spotDirection
                 rectPoints[0].x = -lightDir.x;
                 rectPoints[0].y = -lightDir.y;
                 rectPoints[0].z = -lightDir.z;
 
-                //float3 spotParams
+                // float3 spotParams
                 const Radian innerAngle = light->getSpotlightInnerAngle();
                 const Radian outerAngle = light->getSpotlightOuterAngle();
                 rectPoints[1].x = 1.0f / ( cosf( innerAngle.valueRadians() * 0.5f ) -
@@ -289,9 +284,9 @@ namespace Ogre
         }
 
         const float isDoubleSided = light->getDoubleSided() ? 1.0f : 0.0f;
-        for( size_t i=0; i<4u; ++i )
+        for( size_t i = 0; i < 4u; ++i )
         {
-            for( size_t j=0; j<3u; ++j )
+            for( size_t j = 0; j < 3u; ++j )
                 vctLight->points[i][j] = rectPoints[i][j];
             vctLight->points[i][3u] = isDoubleSided;
         }
@@ -321,39 +316,37 @@ namespace Ogre
 
         const TextureGpu *albedoVox = mVoxelizer->getAlbedoVox();
 
-        const uint32 width  = albedoVox->getWidth();
+        const uint32 width = albedoVox->getWidth();
         const uint32 height = albedoVox->getHeight();
-        const uint32 depth  = albedoVox->getDepth();
+        const uint32 depth = albedoVox->getDepth();
 
-        const uint32 widthAniso     = std::max( 1u, width );
-        const uint32 heightAniso    = std::max( 1u, height >> 1u );
-        const uint32 depthAniso     = std::max( 1u, depth >> 1u );
+        const uint32 widthAniso = std::max( 1u, width );
+        const uint32 heightAniso = std::max( 1u, height >> 1u );
+        const uint32 depthAniso = std::max( 1u, depth >> 1u );
 
-        const uint8 numMipsMain  = (mAnisotropic && !bSdfQuality) ?
-                                       1u :
-                                       PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
-        //numMipsAniso needs one less mip; because the last mip must be 2x1x1, not 1x1x1
+        const uint8 numMipsMain = ( mAnisotropic && !bSdfQuality )
+                                      ? 1u
+                                      : PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
+        // numMipsAniso needs one less mip; because the last mip must be 2x1x1, not 1x1x1
         const uint8 numMipsAniso =
-                PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso, depthAniso ) - 1u;
+            PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso, depthAniso ) - 1u;
 
         const size_t numTextures = mAnisotropic ? 4u : 1u;
 
-        const char *names[] =
-        {
-            "Main",
-            "X_axis",
-            "Y_axis",
-            "Z_axis"
+        const char *names[] = {
+            "Main",    //
+            "X_axis",  //
+            "Y_axis",  //
+            "Z_axis"   //
         };
 
-        for( size_t i=0; i<numTextures; ++i )
+        for( size_t i = 0; i < numTextures; ++i )
         {
             char tmpBuffer[128];
-            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             texName.a( "VctLighting_", names[i], "/Id", getId() );
-            TextureGpu *texture = textureManager->createTexture( texName.c_str(),
-                                                                 GpuPageOutStrategy::Discard,
-                                                                 texFlags, TextureTypes::Type3D );
+            TextureGpu *texture = textureManager->createTexture(
+                texName.c_str(), GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
             if( i == 0u )
             {
                 texture->setResolution( width, height, depth );
@@ -368,86 +361,85 @@ namespace Ogre
             texture->scheduleTransitionTo( GpuResidency::Resident );
             mLightVoxel[i] = texture;
 
-            texFlags &= (uint32)~(TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps);
+            texFlags &= ( uint32 ) ~( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
         }
 
         if( mAnisotropic )
         {
-            //Setup the compute shaders for VctLighting::generateAnisotropicMips()
+            // Setup the compute shaders for VctLighting::generateAnisotropicMips()
             HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
             mAnisoGeneratorStep0 = hlmsCompute->findComputeJob( "VCT/AnisotropicMipStep0" );
 
             char tmpBuffer[128];
-            LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-            //Step 0
+            // Step 0
             jobName.clear();
             jobName.a( "VCT/AnisotropicMipStep0/Id", getId() );
             mAnisoGeneratorStep0 = mAnisoGeneratorStep0->clone( jobName.c_str() );
 
-            for( uint8 i=0; i<3u; ++i )
+            for( uint8 i = 0; i < 3u; ++i )
             {
                 DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
                 uavSlot.access = ResourceAccess::Write;
-                uavSlot.texture = mLightVoxel[i+1u];
+                uavSlot.texture = mLightVoxel[i + 1u];
                 uavSlot.pixelFormat = PFG_RGBA8_UNORM;
                 mAnisoGeneratorStep0->_setUavTexture( i, uavSlot );
             }
 
-            DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::
-                                                        TextureSlot::makeEmpty() );
+            DescriptorSetTexture2::TextureSlot texSlot(
+                DescriptorSetTexture2::TextureSlot::makeEmpty() );
             texSlot.texture = mLightVoxel[0];
             mAnisoGeneratorStep0->setTexture( 0, texSlot );
             texSlot.texture = mVoxelizer->getNormalVox();
             mAnisoGeneratorStep0->setTexture( 1, texSlot );
 
             ShaderParams *shaderParams = &mAnisoGeneratorStep0->getShaderParams( "default" );
-            //higherMipHalfWidth
+            // higherMipHalfWidth
             ShaderParams::Param *lowerMipResolutionParam = &shaderParams->mParams.back();
-            //int32 resolution[4] = { static_cast<int32>( mLightVoxel[1]->getWidth() >> 1u ) };
-            lowerMipResolutionParam->setManualValue( static_cast<int32>(
-                                                         mLightVoxel[1]->getWidth() >> 1u ) );
+            // int32 resolution[4] = { static_cast<int32>( mLightVoxel[1]->getWidth() >> 1u ) };
+            lowerMipResolutionParam->setManualValue(
+                static_cast<int32>( mLightVoxel[1]->getWidth() >> 1u ) );
             shaderParams->setDirty();
 
-            //Now setup step 1
-            //numMipsOnStep1 is subtracted one because mip 0 got processed by step 0
+            // Now setup step 1
+            // numMipsOnStep1 is subtracted one because mip 0 got processed by step 0
             const uint8 numMipsOnStep1 = mLightVoxel[1]->getNumMipmaps() - 1u;
             mAnisoGeneratorStep1.resize( numMipsOnStep1 );
 
             HlmsComputeJob *baseJob = hlmsCompute->findComputeJob( "VCT/AnisotropicMipStep1" );
 
-            for( uint8 i=0; i<numMipsOnStep1; ++i )
+            for( uint8 i = 0; i < numMipsOnStep1; ++i )
             {
                 jobName.clear();
                 jobName.a( "VCT/AnisotropicMipStep1/Id", getId(), "/Mip", i + 1u );
                 HlmsComputeJob *mipJob = baseJob->clone( jobName.c_str() );
 
-                for( uint8 axis=0; axis<3u; ++axis )
+                for( uint8 axis = 0; axis < 3u; ++axis )
                 {
-                    texSlot.texture = mLightVoxel[axis+1u];
+                    texSlot.texture = mLightVoxel[axis + 1u];
                     texSlot.mipmapLevel = i;
                     texSlot.numMipmaps = 1u;
                     mipJob->setTexture( axis, texSlot );
 
                     DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
                     uavSlot.access = ResourceAccess::Write;
-                    uavSlot.texture = mLightVoxel[axis+1u];
+                    uavSlot.texture = mLightVoxel[axis + 1u];
                     uavSlot.mipmapLevel = i + 1u;
                     uavSlot.pixelFormat = PFG_RGBA8_UNORM;
                     mipJob->_setUavTexture( axis, uavSlot );
                 }
 
                 shaderParams = &mipJob->getShaderParams( "default" );
-                //higherMipHalfRes_lowerMipHalfWidth
+                // higherMipHalfRes_lowerMipHalfWidth
                 lowerMipResolutionParam = &shaderParams->mParams.back();
-                int32 resolutions[4] =
-                {
-                    static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 2u) ),
-                    static_cast<int32>( mLightVoxel[1]->getHeight()>> (i + 1u) ),
-                    static_cast<int32>( mLightVoxel[1]->getDepth() >> (i + 1u) ),
-                    static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 1u) )
+                int32 resolutions[4] = { //
+                                         static_cast<int32>( mLightVoxel[1]->getWidth() >> ( i + 2u ) ),
+                                         static_cast<int32>( mLightVoxel[1]->getHeight() >> ( i + 1u ) ),
+                                         static_cast<int32>( mLightVoxel[1]->getDepth() >> ( i + 1u ) ),
+                                         static_cast<int32>( mLightVoxel[1]->getWidth() >> ( i + 1u ) )
                 };
-                for( size_t j=0; j<4u; ++j )
+                for( size_t j = 0; j < 4u; ++j )
                     resolutions[j] = std::max( 1, resolutions[j] );
                 lowerMipResolutionParam->setManualValue( resolutions, 4u );
                 shaderParams->setDirty();
@@ -473,7 +465,7 @@ namespace Ogre
         restoreSwappedTextures();
 
         TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
-        for( size_t i=0; i<sizeof(mLightVoxel) / sizeof(mLightVoxel[0]); ++i )
+        for( size_t i = 0; i < sizeof( mLightVoxel ) / sizeof( mLightVoxel[0] ); ++i )
         {
             if( mLightVoxel[i] )
             {
@@ -490,12 +482,12 @@ namespace Ogre
             mAnisoGeneratorStep0 = 0;
         }
 
-        FastArray<HlmsComputeJob*>::const_iterator itor = mAnisoGeneratorStep1.begin();
-        FastArray<HlmsComputeJob*>::const_iterator end  = mAnisoGeneratorStep1.end();
+        FastArray<HlmsComputeJob *>::const_iterator itor = mAnisoGeneratorStep1.begin();
+        FastArray<HlmsComputeJob *>::const_iterator end = mAnisoGeneratorStep1.end();
 
         while( itor != end )
         {
-            hlmsCompute->destroyComputeJob( (*itor)->getName() );
+            hlmsCompute->destroyComputeJob( ( *itor )->getName() );
             ++itor;
         }
 
@@ -550,7 +542,6 @@ namespace Ogre
         texSlot.texture = mLightVoxel[0];
         mLightVctBounceInject->setTexture( 2, texSlot, mSamplerblockTrilinear );
 
-
         uint8 texSlotIdx = 3u;
 
         for( size_t cascadeIdx = 0u; cascadeIdx < numExtraCascades; ++cascadeIdx )
@@ -567,7 +558,7 @@ namespace Ogre
 
         if( mAnisotropic )
         {
-            for( uint8 i=0u; i<3u; ++i )
+            for( uint8 i = 0u; i < 3u; ++i )
             {
                 texSlot.texture = mLightVoxel[i + 1u];
                 mLightVctBounceInject->setTexture( texSlotIdx++, texSlot, 0, false );
@@ -717,7 +708,7 @@ namespace Ogre
 
             if( i == numCascades - 1u )
             {
-                startBias_invStartBias_cascadeMaxLod[i].z = 256.0f; // cascadeMaxLod
+                startBias_invStartBias_cascadeMaxLod[i].z = 256.0f;  // cascadeMaxLod
             }
             else
             {
@@ -835,11 +826,10 @@ namespace Ogre
                 texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
             char tmpBuffer[128];
-            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             texName.a( "VctLightingBounce/Id", getId() );
-            TextureGpu *texture = textureManager->createTexture( texName.c_str(),
-                                                                 GpuPageOutStrategy::Discard,
-                                                                 texFlags, TextureTypes::Type3D );
+            TextureGpu *texture = textureManager->createTexture(
+                texName.c_str(), GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
 
             texture->setResolution( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
                                     mLightVoxel[0]->getDepth() );
@@ -875,15 +865,9 @@ namespace Ogre
             setupGlslTextureUnits();
     }
     //-------------------------------------------------------------------------
-    bool VctLighting::getAllowMultipleBounces() const
-    {
-        return mLightBounce != 0;
-    }
+    bool VctLighting::getAllowMultipleBounces() const { return mLightBounce != 0; }
     //-------------------------------------------------------------------------
-    void VctLighting::setBakingMultiplier( float bakingMult )
-    {
-        mBakingMultiplier = bakingMult;
-    }
+    void VctLighting::setBakingMultiplier( float bakingMult ) { mBakingMultiplier = bakingMult; }
     //-------------------------------------------------------------------------
     void VctLighting::update( SceneManager *sceneManager, uint32 numBounces, float thinWallCounter,
                               bool autoMultiplier, float rayMarchStepScale, uint32 _lightMask )
@@ -914,37 +898,37 @@ namespace Ogre
 
         float autoMultiplierValue = 0.0f;
 
-        const Vector3 voxelOrigin   = mVoxelizer->getVoxelOrigin();
-        const Vector3 invVoxelRes   = 1.0f / mVoxelizer->getVoxelResolution();
-        const Vector3 invVoxelSize  = 1.0f / mVoxelizer->getVoxelSize();
+        const Vector3 voxelOrigin = mVoxelizer->getVoxelOrigin();
+        const Vector3 invVoxelRes = 1.0f / mVoxelizer->getVoxelResolution();
+        const Vector3 invVoxelSize = 1.0f / mVoxelizer->getVoxelSize();
 
-        ShaderVctLight * RESTRICT_ALIAS vctLight =
-                reinterpret_cast<ShaderVctLight*>(
-                    mLightsConstBuffer->map( 0, mLightsConstBuffer->getNumElements() ) );
+        ShaderVctLight *RESTRICT_ALIAS vctLight = reinterpret_cast<ShaderVctLight *>(
+            mLightsConstBuffer->map( 0, mLightsConstBuffer->getNumElements() ) );
         uint32 numCollectedLights = 0;
-        const uint32 maxNumLights = static_cast<uint32>( mLightsConstBuffer->getNumElements() /
-                                                         sizeof(ShaderVctLight) );
+        const uint32 maxNumLights =
+            static_cast<uint32>( mLightsConstBuffer->getNumElements() / sizeof( ShaderVctLight ) );
 
         const uint32 lightMask = _lightMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
 
         ObjectMemoryManager &memoryManager = sceneManager->_getLightMemoryManager();
         const size_t numRenderQueues = memoryManager.getNumRenderQueues();
 
-        for( size_t i=0; i<numRenderQueues; ++i )
+        for( size_t i = 0; i < numRenderQueues; ++i )
         {
             ObjectData objData;
             const size_t totalObjs = memoryManager.getFirstObjectData( objData, i );
 
-            for( size_t j=0; j<totalObjs && numCollectedLights < maxNumLights; j += ARRAY_PACKED_REALS )
+            for( size_t j = 0; j < totalObjs && numCollectedLights < maxNumLights;
+                 j += ARRAY_PACKED_REALS )
             {
-                for( size_t k=0; k<ARRAY_PACKED_REALS && numCollectedLights < maxNumLights; ++k )
+                for( size_t k = 0; k < ARRAY_PACKED_REALS && numCollectedLights < maxNumLights; ++k )
                 {
-                    uint32 * RESTRICT_ALIAS visibilityFlags = objData.mVisibilityFlags;
+                    uint32 *RESTRICT_ALIAS visibilityFlags = objData.mVisibilityFlags;
 
                     if( visibilityFlags[k] & VisibilityFlags::LAYER_VISIBILITY &&
                         visibilityFlags[k] & lightMask )
                     {
-                        Light *light = static_cast<Light*>( objData.mOwner[k] );
+                        Light *light = static_cast<Light *>( objData.mOwner[k] );
                         if( light->getType() == Light::LT_DIRECTIONAL ||
                             light->getType() == Light::LT_POINT ||
                             light->getType() == Light::LT_SPOTLIGHT ||
@@ -976,13 +960,12 @@ namespace Ogre
         const Vector3 voxelCellSize( mVoxelizer->getVoxelCellSize() );
 
         Vector3 dirCorrection( 1.0f / voxelCellSize );
-        dirCorrection /= std::max( std::max( fabsf( dirCorrection.x ),
-                                               fabsf( dirCorrection.y ) ),
-                                    fabsf( dirCorrection.z ) );
+        dirCorrection /= std::max( std::max( fabsf( dirCorrection.x ), fabsf( dirCorrection.y ) ),
+                                   fabsf( dirCorrection.z ) );
 
         mNumLights->setManualValue( numCollectedLights );
-        mRayMarchStepSize->setManualValue( Vector4( rayMarchStepScale / voxelRes,
-                                                    autoMultiplierValue ) );
+        mRayMarchStepSize->setManualValue(
+            Vector4( rayMarchStepScale / voxelRes, autoMultiplierValue ) );
         mVoxelCellSize->setManualValue( voxelCellSize );
         mDirCorrectionRatioThinWallCounter->setManualValue( Vector4( dirCorrection, thinWallCounter ) );
         mInvVoxelResolution->setManualValue( invVoxelRes );
@@ -1014,7 +997,7 @@ namespace Ogre
                              "numBounces must be 0, else call setAllowMultipleBounces first!",
                              "VctLighting::update" );
             }
-            for( uint32 i=0u; i<numBounces; ++i )
+            for( uint32 i = 0u; i < numBounces; ++i )
                 runBounce( i );
         }
 
@@ -1026,7 +1009,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     bool VctLighting::needsAmbientHemisphere() const
     {
-        return memcmp( mUpperHemisphere, mLowerHemisphere, sizeof(mUpperHemisphere) ) != 0;
+        return memcmp( mUpperHemisphere, mLowerHemisphere, sizeof( mUpperHemisphere ) ) != 0;
     }
     //-------------------------------------------------------------------------
     void VctLighting::resetTexturesFromBuildRelative()
@@ -1068,22 +1051,21 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
-                                           float * RESTRICT_ALIAS passBufferPtr ) const
+                                           float *RESTRICT_ALIAS passBufferPtr ) const
     {
-        const uint32 width  = mLightVoxel[0]->getWidth();
+        const uint32 width = mLightVoxel[0]->getWidth();
         const uint32 height = mLightVoxel[0]->getHeight();
-        const uint32 depth  = mLightVoxel[0]->getDepth();
+        const uint32 depth = mLightVoxel[0]->getDepth();
 
         const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
 
-        const float maxMipmapCount =
-                static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
-                                        static_cast<uint32>( smallestRes ) ) );
+        const float maxMipmapCount = static_cast<float>(
+            PixelFormatGpuUtils::getMaxMipmapCount( static_cast<uint32>( smallestRes ) ) );
 
-        const float mipDiff = (maxMipmapCount - 8.0f) * 0.5f;
+        const float mipDiff = ( maxMipmapCount - 8.0f ) * 0.5f;
 
-        const float finalMultiplier     = mInvBakingMultiplier * mMultiplier;
-        const float invFinalMultiplier  = 1.0f / finalMultiplier;
+        const float finalMultiplier = mInvBakingMultiplier * mMultiplier;
+        const float invFinalMultiplier = 1.0f / finalMultiplier;
 
         const size_t numCascades = mExtraCascades.size() + 1u;
 
@@ -1184,27 +1166,27 @@ namespace Ogre
             *passBufferPtr++ = 1.0f / ( cascadeNumMipmaps * cascadeNumMipmaps * cascadeNumMipmaps );
         }
 
-        //float specSdfMaxMip;
-        //float specularSdfFactor;
-        //float blendFade;
-        //float multiplier;
+        // float specSdfMaxMip;
+        // float specularSdfFactor;
+        // float blendFade;
+        // float multiplier;
         *passBufferPtr++ = 7.0f + mipDiff;
-        //Where did 0.1875f & 0.3125f come from? Empirically obtained.
-        //At 128x128x128, values in range [24; 40] gave good results.
-        //Below 24, quality became unnacceptable.
-        //Past 40, performance only went down without visible changes.
-        //Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
+        // Where did 0.1875f & 0.3125f come from? Empirically obtained.
+        // At 128x128x128, values in range [24; 40] gave good results.
+        // Below 24, quality became unnacceptable.
+        // Past 40, performance only went down without visible changes.
+        // Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
         *passBufferPtr++ = Math::lerp( 0.1875f, 0.3125f, mSpecularSdfQuality ) * smallestRes;
         *passBufferPtr++ = 1.0f;
         *passBufferPtr++ = finalMultiplier;
 
-        //float4 ambientUpperHemi
+        // float4 ambientUpperHemi
         *passBufferPtr++ = mUpperHemisphere[0] * invFinalMultiplier;
         *passBufferPtr++ = mUpperHemisphere[1] * invFinalMultiplier;
         *passBufferPtr++ = mUpperHemisphere[2] * invFinalMultiplier;
         *passBufferPtr++ = 0.0f;
 
-        //float4 ambientLowerHemi
+        // float4 ambientLowerHemi
         *passBufferPtr++ = mLowerHemisphere[0] * invFinalMultiplier;
         *passBufferPtr++ = mLowerHemisphere[1] * invFinalMultiplier;
         *passBufferPtr++ = mLowerHemisphere[2] * invFinalMultiplier;
@@ -1212,30 +1194,29 @@ namespace Ogre
 
         Matrix4 xform, invXForm;
         xform.makeTransform( -mVoxelizer->getVoxelOrigin() / mVoxelizer->getVoxelSize(),
-                             1.0f / mVoxelizer->getVoxelSize(),
-                             Quaternion::IDENTITY );
-        //xform = xform * viewMatrix.inverse();
+                             1.0f / mVoxelizer->getVoxelSize(), Quaternion::IDENTITY );
+        // xform = xform * viewMatrix.inverse();
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
         invXForm = xform.inverseAffine();
 
-        //float4 xform_row0;
-        //float4 xform_row1;
-        //float4 xform_row2;
-        for( size_t i=0; i<12u; ++i )
+        // float4 xform_row0;
+        // float4 xform_row1;
+        // float4 xform_row2;
+        for( size_t i = 0; i < 12u; ++i )
             *passBufferPtr++ = static_cast<float>( xform[0][i] );
 
-        //float4 invXform_row0;
-        //float4 invXform_row1;
-        //float4 invXform_row2;
-        for( size_t i=0; i<12u; ++i )
+        // float4 invXform_row0;
+        // float4 invXform_row1;
+        // float4 invXform_row2;
+        for( size_t i = 0; i < 12u; ++i )
             *passBufferPtr++ = static_cast<float>( invXForm[0][i] );
     }
     //-------------------------------------------------------------------------
     bool VctLighting::shouldEnableSpecularSdfQuality() const
     {
         return mVoxelizer->getAlbedoVox()->getWidth() > 32u &&
-                mVoxelizer->getAlbedoVox()->getHeight() > 32u &&
-                mVoxelizer->getAlbedoVox()->getDepth() > 32u;
+               mVoxelizer->getAlbedoVox()->getHeight() > 32u &&
+               mVoxelizer->getAlbedoVox()->getDepth() > 32u;
     }
     //-------------------------------------------------------------------------
     void VctLighting::setDebugVisualization( bool bShow, SceneManager *sceneManager )
@@ -1255,10 +1236,9 @@ namespace Ogre
             SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
             SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
 
-            mDebugVoxelVisualizer =
-                    OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
-                                              &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
-                                              sceneManager, 0u );
+            mDebugVoxelVisualizer = OGRE_NEW VoxelVisualizer(
+                Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                &sceneManager->_getEntityMemoryManager( SCENE_STATIC ), sceneManager, 0u );
 
             mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0], true );
 
@@ -1268,10 +1248,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    bool VctLighting::getDebugVisualizationMode() const
-    {
-        return mDebugVoxelVisualizer != 0;
-    }
+    bool VctLighting::getDebugVisualizationMode() const { return mDebugVoxelVisualizer != 0; }
     //-------------------------------------------------------------------------
     void VctLighting::setAnisotropic( bool bAnisotropic )
     {
@@ -1282,10 +1259,10 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctLighting::setAmbient( const ColourValue& upperHemisphere,
-                                  const ColourValue& lowerHemisphere )
+    void VctLighting::setAmbient( const ColourValue &upperHemisphere,
+                                  const ColourValue &lowerHemisphere )
     {
-        for( size_t i=0; i<3u; ++i )
+        for( size_t i = 0; i < 3u; ++i )
         {
             mUpperHemisphere[i] = static_cast<float>( upperHemisphere[i] );
             mLowerHemisphere[i] = static_cast<float>( lowerHemisphere[i] );
@@ -1312,4 +1289,4 @@ namespace Ogre
             mVoxelizerListenersRemoved = true;
         }
     }
-}
+}  // namespace Ogre

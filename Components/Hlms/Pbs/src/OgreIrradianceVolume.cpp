@@ -29,14 +29,13 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreIrradianceVolume.h"
-#include "OgreHlmsPbsDatablock.h"
-#include "OgreHlmsPbs.h"
+
 #include "OgreHlmsManager.h"
-
-#include "OgreTextureGpuManager.h"
-#include "OgreStagingTexture.h"
-
+#include "OgreHlmsPbs.h"
+#include "OgreHlmsPbsDatablock.h"
 #include "OgreLwString.h"
+#include "OgreStagingTexture.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {
@@ -65,7 +64,7 @@ namespace Ogre
         freeMemory();
     }
     //-----------------------------------------------------------------------------------
-    void IrradianceVolume::gaussFilter( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+    void IrradianceVolume::gaussFilter( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                         size_t texWidth, size_t texHeight, size_t texDepth )
     {
         /*const float c_kernel[17] =
@@ -77,43 +76,45 @@ namespace Ogre
 
         const int kernelStart = -8;
         const int kernelEnd   =  8;*/
+        // clang-format off
         const float c_kernel[9] =
         {
             0.028532f, 0.067234f, 0.124009f, 0.179044f,
             0.20236f,
             0.179044f, 0.124009f, 0.067234f, 0.028532f
         };
+        // clang-format on
 
         const int kernelStart = -4;
-        const int kernelEnd   =  4;
+        const int kernelEnd = 4;
 
-        gaussFilterX( dstData, srcData, texWidth, texHeight, texDepth,
-                      c_kernel, kernelStart, kernelEnd );
-        gaussFilterY( srcData, dstData, texWidth, texHeight, texDepth,
-                      c_kernel, kernelStart, kernelEnd );
-        gaussFilterZ( dstData, srcData, texWidth, texHeight, texDepth,
-                      c_kernel, kernelStart, kernelEnd );
+        gaussFilterX( dstData, srcData, texWidth, texHeight, texDepth, c_kernel, kernelStart,
+                      kernelEnd );
+        gaussFilterY( srcData, dstData, texWidth, texHeight, texDepth, c_kernel, kernelStart,
+                      kernelEnd );
+        gaussFilterZ( dstData, srcData, texWidth, texHeight, texDepth, c_kernel, kernelStart,
+                      kernelEnd );
     }
     //-----------------------------------------------------------------------------------
-    void IrradianceVolume::gaussFilterX( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+    void IrradianceVolume::gaussFilterX( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                          size_t texWidth, size_t texHeight, size_t texDepth,
-                                         const float * RESTRICT_ALIAS kernel,
-                                         int kernelStart, int kernelEnd )
+                                         const float *RESTRICT_ALIAS kernel, int kernelStart,
+                                         int kernelEnd )
     {
         const size_t rowPitch = texWidth * 3u;
         const size_t slicePitch = rowPitch * texHeight;
 
-        //X filter
-        for( size_t z=0; z<texDepth; ++z )
+        // X filter
+        for( size_t z = 0; z < texDepth; ++z )
         {
-            for( size_t y=0; y<texHeight; y += 6u )
+            for( size_t y = 0; y < texHeight; y += 6u )
             {
-                for( size_t x=0; x<texWidth; ++x )
+                for( size_t x = 0; x < texWidth; ++x )
                 {
-                    const int kStart    = std::max<int>( -(int)x, kernelStart );
-                    const int kEnd      = std::min<int>( texWidth - 1 - x, kernelEnd );
+                    const int kStart = std::max<int>( -(int)x, kernelStart );
+                    const int kEnd = std::min<int>( texWidth - 1 - x, kernelEnd );
 
-                    for( int i=0; i<6; ++i )
+                    for( int i = 0; i < 6; ++i )
                     {
                         float accumR = 0;
                         float accumG = 0;
@@ -121,51 +122,51 @@ namespace Ogre
 
                         float divisor = 0;
 
-                        size_t srcIdx = z * slicePitch + (y + i) * rowPitch + (x + kStart) * 3u;
+                        size_t srcIdx = z * slicePitch + ( y + i ) * rowPitch + ( x + kStart ) * 3u;
 
-                        for( int k=kStart; k<=kEnd; ++k )
+                        for( int k = kStart; k <= kEnd; ++k )
                         {
-                            const float kernelVal = kernel[k+kernelEnd];
+                            const float kernelVal = kernel[k + kernelEnd];
 
-                            accumR += srcData[srcIdx+0] * kernelVal;
-                            accumG += srcData[srcIdx+1] * kernelVal;
-                            accumB += srcData[srcIdx+2] * kernelVal;
+                            accumR += srcData[srcIdx + 0] * kernelVal;
+                            accumG += srcData[srcIdx + 1] * kernelVal;
+                            accumB += srcData[srcIdx + 2] * kernelVal;
 
                             divisor += kernelVal;
                             srcIdx += 3;
                         }
 
                         float invDivisor = 1.0f / divisor;
-                        const size_t dstIdx = z * slicePitch + (y + i) * rowPitch + x * 3u;
+                        const size_t dstIdx = z * slicePitch + ( y + i ) * rowPitch + x * 3u;
 
-                        dstData[dstIdx+0] = accumR * invDivisor;
-                        dstData[dstIdx+1] = accumG * invDivisor;
-                        dstData[dstIdx+2] = accumB * invDivisor;
+                        dstData[dstIdx + 0] = accumR * invDivisor;
+                        dstData[dstIdx + 1] = accumG * invDivisor;
+                        dstData[dstIdx + 2] = accumB * invDivisor;
                     }
                 }
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void IrradianceVolume::gaussFilterY( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+    void IrradianceVolume::gaussFilterY( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                          size_t texWidth, size_t texHeight, size_t texDepth,
-                                         const float * RESTRICT_ALIAS kernel,
-                                         int kernelStart, int kernelEnd )
+                                         const float *RESTRICT_ALIAS kernel, int kernelStart,
+                                         int kernelEnd )
     {
         const size_t rowPitch = texWidth * 3u;
         const size_t slicePitch = rowPitch * texHeight;
 
-        //Y filter
-        for( size_t z=0; z<texDepth; ++z )
+        // Y filter
+        for( size_t z = 0; z < texDepth; ++z )
         {
-            for( size_t y=0; y<texHeight; y += 6u )
+            for( size_t y = 0; y < texHeight; y += 6u )
             {
-                const int kStart    = std::max<int>( -(int)(y / 6u), kernelStart );
-                const int kEnd      = std::min<int>( (texHeight - 6u - y) / 6u, kernelEnd );
+                const int kStart = std::max<int>( -(int)( y / 6u ), kernelStart );
+                const int kEnd = std::min<int>( ( texHeight - 6u - y ) / 6u, kernelEnd );
 
-                for( size_t x=0; x<texWidth; ++x )
+                for( size_t x = 0; x < texWidth; ++x )
                 {
-                    for( int i=0; i<6; ++i )
+                    for( int i = 0; i < 6; ++i )
                     {
                         float accumR = 0;
                         float accumG = 0;
@@ -173,51 +174,51 @@ namespace Ogre
 
                         float divisor = 0;
 
-                        size_t srcIdx = z * slicePitch + (y + i + kStart * 6) * rowPitch + x * 3u;
+                        size_t srcIdx = z * slicePitch + ( y + i + kStart * 6 ) * rowPitch + x * 3u;
 
-                        for( int k=kStart; k<=kEnd; ++k )
+                        for( int k = kStart; k <= kEnd; ++k )
                         {
-                            const float kernelVal = kernel[k+kernelEnd];
+                            const float kernelVal = kernel[k + kernelEnd];
 
-                            accumR += srcData[srcIdx+0] * kernelVal;
-                            accumG += srcData[srcIdx+1] * kernelVal;
-                            accumB += srcData[srcIdx+2] * kernelVal;
+                            accumR += srcData[srcIdx + 0] * kernelVal;
+                            accumG += srcData[srcIdx + 1] * kernelVal;
+                            accumB += srcData[srcIdx + 2] * kernelVal;
 
                             divisor += kernelVal;
                             srcIdx += rowPitch * 6u;
                         }
 
                         float invDivisor = 1.0f / divisor;
-                        const size_t dstIdx = z * slicePitch + (y + i) * rowPitch + x * 3u;
+                        const size_t dstIdx = z * slicePitch + ( y + i ) * rowPitch + x * 3u;
 
-                        dstData[dstIdx+0] = accumR * invDivisor;
-                        dstData[dstIdx+1] = accumG * invDivisor;
-                        dstData[dstIdx+2] = accumB * invDivisor;
+                        dstData[dstIdx + 0] = accumR * invDivisor;
+                        dstData[dstIdx + 1] = accumG * invDivisor;
+                        dstData[dstIdx + 2] = accumB * invDivisor;
                     }
                 }
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void IrradianceVolume::gaussFilterZ( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+    void IrradianceVolume::gaussFilterZ( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                          size_t texWidth, size_t texHeight, size_t texDepth,
-                                         const float * RESTRICT_ALIAS kernel,
-                                         int kernelStart, int kernelEnd )
+                                         const float *RESTRICT_ALIAS kernel, int kernelStart,
+                                         int kernelEnd )
     {
         const size_t rowPitch = texWidth * 3u;
         const size_t slicePitch = rowPitch * texHeight;
 
-        //Z filter
-        for( size_t z=0; z<texDepth; ++z )
+        // Z filter
+        for( size_t z = 0; z < texDepth; ++z )
         {
-            const int kStart    = std::max<int>( -(int)z, kernelStart );
-            const int kEnd      = std::min<int>( texDepth - 1u - z, kernelEnd );
+            const int kStart = std::max<int>( -(int)z, kernelStart );
+            const int kEnd = std::min<int>( texDepth - 1u - z, kernelEnd );
 
-            for( size_t y=0; y<texHeight; y += 6u )
+            for( size_t y = 0; y < texHeight; y += 6u )
             {
-                for( size_t x=0; x<texWidth; ++x )
+                for( size_t x = 0; x < texWidth; ++x )
                 {
-                    for( int i=0; i<6; ++i )
+                    for( int i = 0; i < 6; ++i )
                     {
                         float accumR = 0;
                         float accumG = 0;
@@ -225,33 +226,34 @@ namespace Ogre
 
                         float divisor = 0;
 
-                        size_t srcIdx = (z + kStart) * slicePitch + (y + i) * rowPitch + x * 3u;
+                        size_t srcIdx = ( z + kStart ) * slicePitch + ( y + i ) * rowPitch + x * 3u;
 
-                        for( int k=kStart; k<=kEnd; ++k )
+                        for( int k = kStart; k <= kEnd; ++k )
                         {
-                            const float kernelVal = kernel[k+kernelEnd];
+                            const float kernelVal = kernel[k + kernelEnd];
 
-                            accumR += srcData[srcIdx+0] * kernelVal;
-                            accumG += srcData[srcIdx+1] * kernelVal;
-                            accumB += srcData[srcIdx+2] * kernelVal;
+                            accumR += srcData[srcIdx + 0] * kernelVal;
+                            accumG += srcData[srcIdx + 1] * kernelVal;
+                            accumB += srcData[srcIdx + 2] * kernelVal;
 
                             divisor += kernelVal;
                             srcIdx += slicePitch;
                         }
 
                         float invDivisor = 1.0f / divisor;
-                        const size_t dstIdx = z * slicePitch + (y + i) * rowPitch + x * 3u;
+                        const size_t dstIdx = z * slicePitch + ( y + i ) * rowPitch + x * 3u;
 
-                        dstData[dstIdx+0] = accumR * invDivisor;
-                        dstData[dstIdx+1] = accumG * invDivisor;
-                        dstData[dstIdx+2] = accumB * invDivisor;
+                        dstData[dstIdx + 0] = accumR * invDivisor;
+                        dstData[dstIdx + 1] = accumG * invDivisor;
+                        dstData[dstIdx + 2] = accumB * invDivisor;
                     }
                 }
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    void IrradianceVolume::createIrradianceVolumeTexture( uint32 numBlocksX, uint32 numBlocksY, uint32 numBlocksZ )
+    void IrradianceVolume::createIrradianceVolumeTexture( uint32 numBlocksX, uint32 numBlocksY,
+                                                          uint32 numBlocksZ )
     {
         destroyIrradianceVolumeTexture();
 
@@ -266,11 +268,11 @@ namespace Ogre
         mRowPitch = width * 3u;
         mSlicePitch = mRowPitch * height;
 
-        //const uint32 maxMipCount = PixelUtil::getMaxMipmapCount( width, height, depth );
-        //const uint32 maxMipCount = 0; //TODO?
+        // const uint32 maxMipCount = PixelUtil::getMaxMipmapCount( width, height, depth );
+        // const uint32 maxMipCount = 0; //TODO?
 
         char tmpBuffer[64];
-        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
         texName.a( "InstantRadiosity_IrradianceVolume", Id::generateNewId<IrradianceVolume>() );
 
         TextureGpuManager *textureManager = mHlmsManager->getRenderSystem()->getTextureGpuManager();
@@ -278,8 +280,8 @@ namespace Ogre
                                                            0, TextureTypes::Type3D );
         mIrradianceVolume->setResolution( width, height, depth );
         mIrradianceVolume->setPixelFormat( PFG_R10G10B10A2_UNORM );
-        //mIrradianceVolume->setNumMipmaps( maxMipCount );
-        mIrradianceVolume->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        // mIrradianceVolume->setNumMipmaps( maxMipCount );
+        mIrradianceVolume->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         mIrradianceVolume->_setNextResidencyStatus( GpuResidency::Resident );
 
         HlmsSamplerblock samplerblock;
@@ -318,12 +320,13 @@ namespace Ogre
         }
     }
 
-    void IrradianceVolume::changeVolumeData(uint32 x, uint32 y, uint32 z, uint32 direction_id, const Vector3& delta)
+    void IrradianceVolume::changeVolumeData( uint32 x, uint32 y, uint32 z, uint32 direction_id,
+                                             const Vector3 &delta )
     {
         assert( mVolumeData );
         assert( direction_id < 6 );
 
-        const size_t idx = z * mSlicePitch + (y * 6 + direction_id) * mRowPitch + x * 3u;
+        const size_t idx = z * mSlicePitch + ( y * 6 + direction_id ) * mRowPitch + x * 3u;
         mVolumeData[idx + 0] += delta.x;
         mVolumeData[idx + 1] += delta.y;
         mVolumeData[idx + 2] += delta.z;
@@ -337,62 +340,61 @@ namespace Ogre
         {
             const int32 texWidth = static_cast<int32>( mIrradianceVolume->getWidth() );
             const int32 texHeight = static_cast<int32>( mIrradianceVolume->getHeight() );
-            const int32 texDepth  = static_cast<int32>( mIrradianceVolume->getDepth() );
+            const int32 texDepth = static_cast<int32>( mIrradianceVolume->getDepth() );
 
-            mVolumeData = reinterpret_cast<float*>( OGRE_MALLOC( texWidth * texHeight *
-                                                                 texDepth * 3u * sizeof(float),
-                                                                 MEMCATEGORY_GENERAL ) );
-            mBlurredVolumeData = reinterpret_cast<float*>( OGRE_MALLOC( texWidth * texHeight *
-                                                                        texDepth * 3u * sizeof(float),
-                                                                        MEMCATEGORY_GENERAL ) );
+            mVolumeData = reinterpret_cast<float *>( OGRE_MALLOC(
+                texWidth * texHeight * texDepth * 3u * sizeof( float ), MEMCATEGORY_GENERAL ) );
+            mBlurredVolumeData = reinterpret_cast<float *>( OGRE_MALLOC(
+                texWidth * texHeight * texDepth * 3u * sizeof( float ), MEMCATEGORY_GENERAL ) );
 
-            memset( mVolumeData, 0, texWidth * texHeight * texDepth * 3u * sizeof(float) );
+            memset( mVolumeData, 0, texWidth * texHeight * texDepth * 3u * sizeof( float ) );
         }
     }
 
     void IrradianceVolume::updateIrradianceVolumeTexture()
     {
-        const int32 texWidth  = static_cast<int32>( mIrradianceVolume->getWidth() );
+        const int32 texWidth = static_cast<int32>( mIrradianceVolume->getWidth() );
         const int32 texHeight = static_cast<int32>( mIrradianceVolume->getHeight() );
-        const int32 texDepth  = static_cast<int32>( mIrradianceVolume->getDepth() );
+        const int32 texDepth = static_cast<int32>( mIrradianceVolume->getDepth() );
 
         gaussFilter( mBlurredVolumeData, mVolumeData, texWidth, texHeight, texDepth );
 
         TextureGpuManager *textureManager = mHlmsManager->getRenderSystem()->getTextureGpuManager();
 
         StagingTexture *stagingTexture =
-                textureManager->getStagingTexture( mIrradianceVolume->getWidth(),
-                                                   mIrradianceVolume->getHeight(),
-                                                   mIrradianceVolume->getDepth(),
-                                                   mIrradianceVolume->getNumSlices(),
-                                                   mIrradianceVolume->getPixelFormat(), 100u );
+            textureManager->getStagingTexture( mIrradianceVolume->getWidth(),        //
+                                               mIrradianceVolume->getHeight(),       //
+                                               mIrradianceVolume->getDepth(),        //
+                                               mIrradianceVolume->getNumSlices(),    //
+                                               mIrradianceVolume->getPixelFormat(),  //
+                                               100u );
 
         stagingTexture->startMapRegion();
-        TextureBox dstBox = stagingTexture->mapRegion( mIrradianceVolume->getWidth(),
-                                                       mIrradianceVolume->getHeight(),
-                                                       mIrradianceVolume->getDepth(),
-                                                       mIrradianceVolume->getNumSlices(),
+        TextureBox dstBox = stagingTexture->mapRegion( mIrradianceVolume->getWidth(),      //
+                                                       mIrradianceVolume->getHeight(),     //
+                                                       mIrradianceVolume->getDepth(),      //
+                                                       mIrradianceVolume->getNumSlices(),  //
                                                        mIrradianceVolume->getPixelFormat() );
 
         const size_t bytesPerPixel = dstBox.bytesPerPixel;
 
-        const size_t rowPitch   = texWidth * 3u;
+        const size_t rowPitch = texWidth * 3u;
         const size_t slicePitch = rowPitch * texHeight;
 
-        for (size_t z = 0; z<(size_t)texDepth; ++z)
+        for( size_t z = 0; z < (size_t)texDepth; ++z )
         {
-            for( size_t y=0; y<(size_t)texHeight; ++y )
+            for( size_t y = 0; y < (size_t)texHeight; ++y )
             {
-                uint8 * RESTRICT_ALIAS dstData =
-                        reinterpret_cast<uint8 * RESTRICT_ALIAS>( dstBox.at( 0, y, z ) );
-                for( size_t x=0; x<(size_t)texWidth; ++x )
+                uint8 *RESTRICT_ALIAS dstData =
+                    reinterpret_cast<uint8 * RESTRICT_ALIAS>( dstBox.at( 0, y, z ) );
+                for( size_t x = 0; x < (size_t)texWidth; ++x )
                 {
                     const size_t srcIdx = z * slicePitch + y * rowPitch + x * 3u;
                     const size_t dstIdx = x * bytesPerPixel;
                     float rgba[4];
-                    rgba[0] = mBlurredVolumeData[srcIdx+0];
-                    rgba[1] = mBlurredVolumeData[srcIdx+1];
-                    rgba[2] = mBlurredVolumeData[srcIdx+2];
+                    rgba[0] = mBlurredVolumeData[srcIdx + 0];
+                    rgba[1] = mBlurredVolumeData[srcIdx + 1];
+                    rgba[2] = mBlurredVolumeData[srcIdx + 2];
                     rgba[3] = 1.0f;
                     PixelFormatGpuUtils::packColour( rgba, PFG_R10G10B10A2_UNORM, &dstData[dstIdx] );
                 }
@@ -405,4 +407,4 @@ namespace Ogre
         if( !mIrradianceVolume->isDataReady() )
             mIrradianceVolume->notifyDataIsReady();
     }
-}
+}  // namespace Ogre

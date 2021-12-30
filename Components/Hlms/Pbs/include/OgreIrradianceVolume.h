@@ -29,50 +29,52 @@ THE SOFTWARE.
 #define _OgreIrradianceVolume_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
-#include "OgreHlmsBufferManager.h"
+
 #include "OgreConstBufferPool.h"
-#include "OgreRay.h"
+#include "OgreHlmsBufferManager.h"
 #include "OgreRawPtr.h"
+#include "OgreRay.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreHlmsPbsExport IrradianceVolume
     {
     private:
-        HlmsManager             *mHlmsManager;
+        HlmsManager *mHlmsManager;
 
-        uint32                  mNumBlocksX;
-        uint32                  mNumBlocksY;
-        uint32                  mNumBlocksZ;
+        uint32 mNumBlocksX;
+        uint32 mNumBlocksY;
+        uint32 mNumBlocksZ;
 
         /// Value kept for storing original creation parameters. It's not used after creation.
         bool mFadeAttenuationOverDistace;
 
         /// Tweaks how strong Irradiance Volume should be.
         /// In range (0; inf)
-        float                   mPowerScale;
+        float mPowerScale;
         /// Value kept for storing original creation parameters;
         /// as in every frame it just gets multiplied against mPowerScale
         float                   mIrradianceMaxPower;
         Vector3                 mIrradianceOrigin;
         Vector3                 mIrradianceCellSize;
-        TextureGpu              *mIrradianceVolume;
-        HlmsSamplerblock const  *mIrradianceSamplerblock;
+        TextureGpu *            mIrradianceVolume;
+        HlmsSamplerblock const *mIrradianceSamplerblock;
 
-        float*                  mVolumeData;
-        float*                  mBlurredVolumeData;
+        float *mVolumeData;
+        float *mBlurredVolumeData;
 
         /// Cached data for faster changeVolumeData()
-        size_t                  mRowPitch;
-        size_t                  mSlicePitch;
+        size_t mRowPitch;
+        size_t mSlicePitch;
 
     public:
         void createIrradianceVolumeTexture( uint32 numBlocksX, uint32 numBlocksY, uint32 numBlocksZ );
@@ -82,55 +84,53 @@ namespace Ogre
         void updateIrradianceVolumeTexture();
         void freeMemory();
 
-        void changeVolumeData(uint32 x, uint32 y, uint32 z, uint32 direction_id, const Vector3& delta);
+        void changeVolumeData( uint32 x, uint32 y, uint32 z, uint32 direction_id, const Vector3 &delta );
 
-        static void gaussFilter( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+        static void gaussFilter( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                  size_t texWidth, size_t texHeight, size_t texDepth );
-        static void gaussFilterX( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+        static void gaussFilterX( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                   size_t texWidth, size_t texHeight, size_t texDepth,
-                                  const float * RESTRICT_ALIAS kernel, int kernelStart, int kernelEnd );
-        static void gaussFilterY( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+                                  const float *RESTRICT_ALIAS kernel, int kernelStart, int kernelEnd );
+        static void gaussFilterY( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                   size_t texWidth, size_t texHeight, size_t texDepth,
-                                  const float * RESTRICT_ALIAS kernel, int kernelStart, int kernelEnd );
-        static void gaussFilterZ( float * RESTRICT_ALIAS dstData, float * RESTRICT_ALIAS srcData,
+                                  const float *RESTRICT_ALIAS kernel, int kernelStart, int kernelEnd );
+        static void gaussFilterZ( float *RESTRICT_ALIAS dstData, float *RESTRICT_ALIAS srcData,
                                   size_t texWidth, size_t texHeight, size_t texDepth,
-                                  const float * RESTRICT_ALIAS kernel, int kernelStart, int kernelEnd );
+                                  const float *RESTRICT_ALIAS kernel, int kernelStart, int kernelEnd );
 
     public:
         IrradianceVolume( HlmsManager *hlmsManager );
         ~IrradianceVolume();
 
-        float getIrradianceMaxPower() const             { return mIrradianceMaxPower; }
+        float getIrradianceMaxPower() const { return mIrradianceMaxPower; }
         /// Not really used. It's only use is keeping track of creation parameters.
-        void setIrradianceMaxPower(float power)             { mIrradianceMaxPower = power; }
+        void setIrradianceMaxPower( float power ) { mIrradianceMaxPower = power; }
 
-        const Vector3& getIrradianceOrigin() const      { return mIrradianceOrigin; }
-        void setIrradianceOrigin(const Vector3& origin)     { mIrradianceOrigin = origin; }
+        const Vector3 &getIrradianceOrigin() const { return mIrradianceOrigin; }
+        void           setIrradianceOrigin( const Vector3 &origin ) { mIrradianceOrigin = origin; }
 
-        const Vector3& getIrradianceCellSize() const    { return mIrradianceCellSize; }
-        void setIrradianceCellSize(const Vector3& cellSize) { mIrradianceCellSize = cellSize; }
+        const Vector3 &getIrradianceCellSize() const { return mIrradianceCellSize; }
+        void setIrradianceCellSize( const Vector3 &cellSize ) { mIrradianceCellSize = cellSize; }
 
         /// Not really used. It's only use is keeping track of creation parameters.
-        void setFadeAttenuationOverDistace( bool fade )     { mFadeAttenuationOverDistace = fade; }
-        bool getFadeAttenuationOverDistace() const      { return mFadeAttenuationOverDistace; }
+        void setFadeAttenuationOverDistace( bool fade ) { mFadeAttenuationOverDistace = fade; }
+        bool getFadeAttenuationOverDistace() const { return mFadeAttenuationOverDistace; }
 
-        float getPowerScale() const  { return mPowerScale; }
-        void setPowerScale(float power)  { mPowerScale = power; }
+        float getPowerScale() const { return mPowerScale; }
+        void  setPowerScale( float power ) { mPowerScale = power; }
 
         uint32 getNumBlocksX() const { return mNumBlocksX; }
         uint32 getNumBlocksY() const { return mNumBlocksY; }
         uint32 getNumBlocksZ() const { return mNumBlocksZ; }
 
-        TextureGpu* getIrradianceVolumeTexture() const          { return mIrradianceVolume; }
-        const HlmsSamplerblock* getIrradSamplerblock() const    { return mIrradianceSamplerblock; }
-
-
+        TextureGpu *            getIrradianceVolumeTexture() const { return mIrradianceVolume; }
+        const HlmsSamplerblock *getIrradSamplerblock() const { return mIrradianceSamplerblock; }
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
