@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreNULLStagingTexture.h"
+
 #include "OgreNULLTextureGpu.h"
 
 namespace Ogre
@@ -34,7 +35,7 @@ namespace Ogre
     NULLStagingTexture::NULLStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
                                             size_t size ) :
         StagingTextureBufferImpl( vaoManager, formatFamily, size, 0, 0 ),
-        mDynamicBuffer( (uint8*)OGRE_MALLOC_SIMD( size, MEMCATEGORY_RENDERSYS ) ),
+        mDynamicBuffer( (uint8 *)OGRE_MALLOC_SIMD( size, MEMCATEGORY_RENDERSYS ) ),
         mMappedPtr( 0 ),
         mLastMappedPtr( 0 )
     {
@@ -55,11 +56,11 @@ namespace Ogre
     bool NULLStagingTexture::belongsToUs( const TextureBox &box )
     {
         return box.data >= mLastMappedPtr &&
-               box.data <= static_cast<uint8*>( mLastMappedPtr ) + mCurrentOffset;
+               box.data <= static_cast<uint8 *>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN NULLStagingTexture::mapRegionImplRawPtr()
+    void *RESTRICT_ALIAS_RETURN NULLStagingTexture::mapRegionImplRawPtr()
     {
-        return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
+        return static_cast<uint8 *>( mMappedPtr ) + mCurrentOffset;
     }
-}
+}  // namespace Ogre

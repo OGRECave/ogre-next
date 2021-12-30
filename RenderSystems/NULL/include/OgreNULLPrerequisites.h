@@ -38,40 +38,40 @@ namespace Ogre
     class NULLStagingBuffer;
     class NULLRenderSystem;
     class NULLVaoManager;
-}
+}  // namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#if !defined( __MINGW32__ )
-#   define WIN32_LEAN_AND_MEAN
-#  ifndef NOMINMAX
-#   define NOMINMAX // required to stop windows.h messing up std::min
-#  endif
-#endif
+#    if !defined( __MINGW32__ )
+#        define WIN32_LEAN_AND_MEAN
+#        ifndef NOMINMAX
+#            define NOMINMAX  // required to stop windows.h messing up std::min
+#        endif
+#    endif
 #endif
 
 // Lots of generated code in here which triggers the new VC CRT security warnings
 #if !defined( _CRT_SECURE_NO_DEPRECATE )
-#define _CRT_SECURE_NO_DEPRECATE
+#    define _CRT_SECURE_NO_DEPRECATE
 #endif
 
-#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32) && !defined(__MINGW32__) && !defined(OGRE_STATIC_LIB)
-#   ifdef RenderSystem_NULL_EXPORTS
-#       define _OgreNULLExport __declspec(dllexport)
-#   else
-#       if defined( __MINGW32__ )
-#           define _OgreNULLExport
-#       else
-#           define _OgreNULLExport __declspec(dllimport)
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   if !defined( OGRE_STATIC_LIB )
-#       define _OgreNULLExport __attribute__ ((visibility("default")))
-#   else
-#       define _OgreNULLExport __attribute__ ((visibility("hidden")))
-#   endif
+#if( OGRE_PLATFORM == OGRE_PLATFORM_WIN32 ) && !defined( __MINGW32__ ) && !defined( OGRE_STATIC_LIB )
+#    ifdef RenderSystem_NULL_EXPORTS
+#        define _OgreNULLExport __declspec( dllexport )
+#    else
+#        if defined( __MINGW32__ )
+#            define _OgreNULLExport
+#        else
+#            define _OgreNULLExport __declspec( dllimport )
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreNULLExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreNULLExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
 #    define _OgreNULLExport
 #endif
 
-#endif //#ifndef _OgreNULLPrerequisites_H_
+#endif  //#ifndef _OgreNULLPrerequisites_H_

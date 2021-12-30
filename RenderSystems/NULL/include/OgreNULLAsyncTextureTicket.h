@@ -44,12 +44,12 @@ namespace Ogre
         uint8 *mVboName;
 
         TextureBox mapImpl( uint32 slice ) override;
-        void unmapImpl() override;
+        void       unmapImpl() override;
 
     public:
         NULLAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                 TextureTypes::TextureTypes textureType,
-                                PixelFormatGpu pixelFormatFamily );
+                                PixelFormatGpu             pixelFormatFamily );
         ~NULLAsyncTextureTicket() override;
 
         bool queryIsTransferDone() override;

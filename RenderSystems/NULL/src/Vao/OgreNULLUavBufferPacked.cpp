@@ -27,37 +27,34 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreNULLUavBufferPacked.h"
+
 #include "Vao/OgreNULLBufferInterface.h"
 #include "Vao/OgreNULLTexBufferPacked.h"
 
 namespace Ogre
 {
-    NULLUavBufferPacked::NULLUavBufferPacked(
-                size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 bindFlags, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, NULLBufferInterface *bufferInterface) :
-        UavBufferPacked( internalBufStartBytes, numElements, bytesPerElement,
-                         bindFlags, initialData, keepAsShadow, vaoManager, bufferInterface )
+    NULLUavBufferPacked::NULLUavBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                              uint32 bytesPerElement, uint32 bindFlags,
+                                              void *initialData, bool keepAsShadow,
+                                              VaoManager *vaoManager,
+                                              NULLBufferInterface *bufferInterface ) :
+        UavBufferPacked( internalBufStartBytes, numElements, bytesPerElement, bindFlags, initialData,
+                         keepAsShadow, vaoManager, bufferInterface )
     {
     }
     //-----------------------------------------------------------------------------------
-    NULLUavBufferPacked::~NULLUavBufferPacked()
-    {
-    }
+    NULLUavBufferPacked::~NULLUavBufferPacked() {}
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* NULLUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
+    TexBufferPacked *NULLUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
-        OGRE_ASSERT_HIGH( dynamic_cast<NULLBufferInterface*>( mBufferInterface ) );
+        OGRE_ASSERT_HIGH( dynamic_cast<NULLBufferInterface *>( mBufferInterface ) );
 
-        NULLBufferInterface *bufferInterface = static_cast<NULLBufferInterface*>( mBufferInterface );
-
+        NULLBufferInterface *bufferInterface = static_cast<NULLBufferInterface *>( mBufferInterface );
 
         TexBufferPacked *retVal = OGRE_NEW NULLTexBufferPacked(
-                                                        mInternalBufferStart * mBytesPerElement,
-                                                        mNumElements, mBytesPerElement, 0,
-                                                        mBufferType, (void*)0, false,
-                                                        (VaoManager*)0, bufferInterface, pixelFormat );
-        //We were overriden by the BufferPacked we just created. Restore this back!
+            mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
+            (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat );
+        // We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
@@ -77,4 +74,4 @@ namespace Ogre
 
         return retVal;
     }
-}
+}  // namespace Ogre

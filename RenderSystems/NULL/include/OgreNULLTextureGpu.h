@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreNULLTextureGpu_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
@@ -37,11 +38,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreNULLExport NULLTextureGpu : public TextureGpu
     {
@@ -68,26 +69,26 @@ namespace Ogre
     class _OgreNULLExport NULLTextureGpuRenderTarget : public NULLTextureGpu
     {
     protected:
-        uint16          mDepthBufferPoolId;
-        bool            mPreferDepthTexture;
-        PixelFormatGpu  mDesiredDepthBufferFormat;
+        uint16         mDepthBufferPoolId;
+        bool           mPreferDepthTexture;
+        PixelFormatGpu mDesiredDepthBufferFormat;
 
     public:
         NULLTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                     VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                     TextureTypes::TextureTypes initialType,
-                                    TextureGpuManager *textureManager );
+                                    TextureGpuManager *        textureManager );
 
-        void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                      PixelFormatGpu desiredDepthBufferFormat ) override;
-        uint16 getDepthBufferPoolId() const override;
-        bool getPreferDepthTexture() const override;
+        void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16         getDepthBufferPoolId() const override;
+        bool           getPreferDepthTexture() const override;
         PixelFormatGpu getDesiredDepthBufferFormat() const override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

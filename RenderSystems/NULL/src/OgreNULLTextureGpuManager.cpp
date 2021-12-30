@@ -27,16 +27,14 @@ THE SOFTWARE.
 */
 
 #include "OgreNULLTextureGpuManager.h"
-#include "OgreNULLTextureGpu.h"
-#include "OgreNULLStagingTexture.h"
-#include "OgreNULLAsyncTextureTicket.h"
-
-#include "Vao/OgreNULLVaoManager.h"
-
-#include "OgrePixelFormatGpuUtils.h"
-#include "OgreVector2.h"
 
 #include "OgreException.h"
+#include "OgreNULLAsyncTextureTicket.h"
+#include "OgreNULLStagingTexture.h"
+#include "OgreNULLTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreVector2.h"
+#include "Vao/OgreNULLVaoManager.h"
 
 namespace Ogre
 {
@@ -45,72 +43,61 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    NULLTextureGpuManager::~NULLTextureGpuManager()
+    NULLTextureGpuManager::~NULLTextureGpuManager() { destroyAll(); }
+    //-----------------------------------------------------------------------------------
+    TextureGpu *NULLTextureGpuManager::createTextureGpuWindow()
     {
-        destroyAll();
+        return OGRE_NEW NULLTextureGpuRenderTarget(
+            GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
+            TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
+            TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* NULLTextureGpuManager::createTextureGpuWindow()
-    {
-        return OGRE_NEW NULLTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
-                                                    "RenderWindow",
-                                                    TextureFlags::NotTexture|
-                                                    TextureFlags::RenderToTexture|
-                                                    TextureFlags::RenderWindowSpecific|
-                                                    TextureFlags::DiscardableContent,
-                                                    TextureTypes::Type2D, this );
-    }
-    //-----------------------------------------------------------------------------------
-    TextureGpu* NULLTextureGpuManager::createTextureImpl(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
+    TextureGpu *NULLTextureGpuManager::createTextureImpl(
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, IdString name, uint32 textureFlags,
+        TextureTypes::TextureTypes initialType )
     {
         NULLTextureGpu *retVal = 0;
         if( textureFlags & TextureFlags::RenderToTexture )
         {
-            retVal = OGRE_NEW NULLTextureGpuRenderTarget(
-                         pageOutStrategy, mVaoManager, name,
-                         textureFlags,
-                         initialType, this );
+            retVal = OGRE_NEW NULLTextureGpuRenderTarget( pageOutStrategy, mVaoManager, name,
+                                                          textureFlags, initialType, this );
         }
         else
         {
-            retVal = OGRE_NEW NULLTextureGpu(
-                         pageOutStrategy, mVaoManager, name,
-                         textureFlags,
-                         initialType, this );
+            retVal = OGRE_NEW NULLTextureGpu( pageOutStrategy, mVaoManager, name, textureFlags,
+                                              initialType, this );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture* NULLTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
-                                                                     uint32 depth,
-                                                                     uint32 slices,
+    StagingTexture *NULLTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
+                                                                     uint32 depth, uint32 slices,
                                                                      PixelFormatGpu pixelFormat )
     {
         const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                    pixelFormat, rowAlignment );
+        const size_t sizeBytes =
+            PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices, pixelFormat, rowAlignment );
 
-        NULLVaoManager *vaoManager = static_cast<NULLVaoManager*>( mVaoManager );
-        NULLStagingTexture *retVal =
-                OGRE_NEW NULLStagingTexture( vaoManager, PixelFormatGpuUtils::getFamily( pixelFormat ),
-                                             sizeBytes );
+        NULLVaoManager *vaoManager = static_cast<NULLVaoManager *>( mVaoManager );
+        NULLStagingTexture *retVal = OGRE_NEW NULLStagingTexture(
+            vaoManager, PixelFormatGpuUtils::getFamily( pixelFormat ), sizeBytes );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     void NULLTextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        //Do nothing, caller will delete stagingTexture.
+        // Do nothing, caller will delete stagingTexture.
     }
     //-----------------------------------------------------------------------------------
-    AsyncTextureTicket* NULLTextureGpuManager::createAsyncTextureTicketImpl(
-            uint32 width, uint32 height, uint32 depthOrSlices,
-            TextureTypes::TextureTypes textureType, PixelFormatGpu pixelFormatFamily )
+    AsyncTextureTicket *NULLTextureGpuManager::createAsyncTextureTicketImpl(
+        uint32 width, uint32 height, uint32 depthOrSlices, TextureTypes::TextureTypes textureType,
+        PixelFormatGpu pixelFormatFamily )
     {
         return OGRE_NEW NULLAsyncTextureTicket( width, height, depthOrSlices, textureType,
                                                 pixelFormatFamily );
     }
-}
+}  // namespace Ogre

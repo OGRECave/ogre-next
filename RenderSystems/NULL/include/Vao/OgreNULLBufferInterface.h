@@ -41,10 +41,10 @@ namespace Ogre
     class _OgreNULLExport NULLBufferInterface : public BufferInterface
     {
     protected:
-        size_t  mVboPoolIdx;
-        void    *mMappedPtr;
+        size_t mVboPoolIdx;
+        void * mMappedPtr;
 
-        uint8   *mNullDataPtr;
+        uint8 *mNullDataPtr;
 
         size_t advanceFrame( bool bAdvanceFrame );
 
@@ -52,9 +52,9 @@ namespace Ogre
         NULLBufferInterface( size_t vboPoolIdx );
         ~NULLBufferInterface();
 
-        size_t getVboPoolIndex()                { return mVboPoolIdx; }
+        size_t getVboPoolIndex() { return mVboPoolIdx; }
 
-        uint8* getNullDataPtr()                 { return mNullDataPtr; }
+        uint8 *getNullDataPtr() { return mNullDataPtr; }
 
         /// will null the data ptr so it wont be freed on destruction
         void nullDataPtr() { mNullDataPtr = 0; }
@@ -64,7 +64,7 @@ namespace Ogre
 
         void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
                                          MappingState prevMappingState,
-                                         bool advanceFrame = true ) override;
+                                         bool         advanceFrame = true ) override;
 
         void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
                     size_t flushSizeElem = 0 ) override;
@@ -76,6 +76,6 @@ namespace Ogre
         void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
                      size_t sizeBytes ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

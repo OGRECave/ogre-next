@@ -57,6 +57,7 @@ namespace Ogre
     class _OgreNULLExport NULLRenderSystem final : public RenderSystem
     {
         bool mInitialized;
+
         v1::HardwareBufferManager *mHardwareBufferManager;
 
         ConfigOptionMap mOptions;
@@ -71,8 +72,9 @@ namespace Ogre
 
         const String &getName() const override;
         const String &getFriendlyName() const override;
+
         ConfigOptionMap &getConfigOptions() override { return mOptions; }
-        void setConfigOption( const String &name, const String &value ) override {}
+        void             setConfigOption( const String &name, const String &value ) override {}
 
         HardwareOcclusionQuery *createHardwareOcclusionQuery() override;
 
@@ -82,7 +84,7 @@ namespace Ogre
 
         void reinitialise() override;
 
-        Window *_initialise( bool autoCreateWindow,
+        Window *_initialise( bool          autoCreateWindow,
                              const String &windowTitle = "OGRE Render Window" ) override;
 
         Window *_createRenderWindow( const String &name, uint32 width, uint32 height, bool fullScreen,
@@ -130,7 +132,7 @@ namespace Ogre
         void _setComputePso( const HlmsComputePso *pso ) override;
 
         VertexElementType getColourVertexElementType() const override;
-        void _convertProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) override {}
+        void              _convertProjectionMatrix( const Matrix4 &matrix, Matrix4 &dest ) override {}
 
         void _dispatch( const HlmsComputePso &pso ) override;
 
@@ -161,6 +163,7 @@ namespace Ogre
         void postExtraThreadsStarted() override;
         void registerThread() override;
         void unregisterThread() override;
+
         unsigned int getDisplayMonitorCount() const override { return 1; }
 
         const PixelFormatToShaderType *getPixelFormatToShaderType() const override;
@@ -180,7 +183,7 @@ namespace Ogre
 
         void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                     Window *primary ) override;
+                                                     Window *                  primary ) override;
     };
 }  // namespace Ogre
 

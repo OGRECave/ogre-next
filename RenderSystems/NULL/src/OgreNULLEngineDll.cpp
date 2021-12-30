@@ -27,6 +27,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreNULLPlugin.h"
+
 #include "OgreRoot.h"
 
 #ifndef OGRE_STATIC_LIB

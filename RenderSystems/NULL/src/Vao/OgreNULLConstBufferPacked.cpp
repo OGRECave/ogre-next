@@ -27,21 +27,22 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreNULLConstBufferPacked.h"
+
 #include "Vao/OgreNULLBufferInterface.h"
 
 namespace Ogre
 {
-    NULLConstBufferPacked::NULLConstBufferPacked(
-                size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, BufferInterface *bufferInterface , size_t bindableSize ) :
+    NULLConstBufferPacked::NULLConstBufferPacked( size_t internalBufferStartBytes, size_t numElements,
+                                                  uint32 bytesPerElement, uint32 numElementsPadding,
+                                                  BufferType bufferType, void *initialData,
+                                                  bool keepAsShadow, VaoManager *vaoManager,
+                                                  BufferInterface *bufferInterface,
+                                                  size_t bindableSize ) :
         ConstBufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                            bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
     {
     }
     //-----------------------------------------------------------------------------------
-    NULLConstBufferPacked::~NULLConstBufferPacked()
-    {
-    }
+    NULLConstBufferPacked::~NULLConstBufferPacked() {}
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

@@ -62,11 +62,11 @@ namespace Ogre
 
         typedef vector<MappedRange>::type MappedRangeVec;
 
-        GLuint  mVboName;
-        GLuint  mVboSize;
-        void    *mMappedPtr;
+        GLuint mVboName;
+        GLuint mVboSize;
+        void * mMappedPtr;
 
-        MappedRangeVec mMappedRanges;
+        MappedRangeVec       mMappedRanges;
         vector<size_t>::type mFreeRanges;
 
         BufferType mPersistentMethod;
@@ -78,10 +78,10 @@ namespace Ogre
                               BufferType persistentMethod );
         ~GL3PlusDynamicBuffer();
 
-        GLuint getVboName() const               { return mVboName; }
+        GLuint getVboName() const { return mVboName; }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
-        void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
+        void *RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
 
         /// Flushes the region of the given ticket. start is 0-based.
         void flush( size_t ticket, size_t start, size_t count );
@@ -91,6 +91,6 @@ namespace Ogre
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
     };
-}
+}  // namespace Ogre
 
 #endif

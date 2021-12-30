@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_NULLConstBufferPacked_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "Vao/OgreConstBufferPacked.h"
 
 namespace Ogre
@@ -38,10 +39,9 @@ namespace Ogre
     {
     public:
         NULLConstBufferPacked( size_t internalBufferStartBytes, size_t numElements,
-                               uint32 bytesPerElement, uint32 numElementsPadding,
-                               BufferType bufferType, void *initialData, bool keepAsShadow,
-                               VaoManager *vaoManager, BufferInterface *bufferInterface,
-                               size_t bindableSize );
+                               uint32 bytesPerElement, uint32 numElementsPadding, BufferType bufferType,
+                               void *initialData, bool keepAsShadow, VaoManager *vaoManager,
+                               BufferInterface *bufferInterface, size_t bindableSize );
         ~NULLConstBufferPacked() override;
 
         void bindBufferVS( uint16 slot ) override {}
@@ -51,6 +51,6 @@ namespace Ogre
         void bindBufferDS( uint16 slot ) override {}
         void bindBufferCS( uint16 slot ) override {}
     };
-}
+}  // namespace Ogre
 
 #endif

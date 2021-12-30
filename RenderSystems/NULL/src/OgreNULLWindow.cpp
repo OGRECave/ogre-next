@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreNULLWindow.h"
+
 #include "OgreNULLTextureGpu.h"
 #include "OgreNULLTextureGpuManager.h"
 
@@ -38,10 +39,7 @@ namespace Ogre
         mClosed = false;
     }
     //-------------------------------------------------------------------------
-    NULLWindow::~NULLWindow()
-    {
-        destroy();
-    }
+    NULLWindow::~NULLWindow() { destroy(); }
     //-------------------------------------------------------------------------
     void NULLWindow::destroy()
     {
@@ -68,8 +66,8 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void NULLWindow::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 width, uint32 height,
-                                              uint32 frequencyNumerator, uint32 frequencyDenominator )
+                                              uint32 width, uint32 height, uint32 frequencyNumerator,
+                                              uint32 frequencyDenominator )
     {
         Window::requestFullscreenSwitch( goFullscreen, borderless, monitorIdx, width, height,
                                          frequencyNumerator, frequencyDenominator );
@@ -77,28 +75,15 @@ namespace Ogre
         mFullscreenMode = goFullscreen;
     }
     //-------------------------------------------------------------------------
-    bool NULLWindow::isClosed() const
-    {
-        return mClosed;
-    }
+    bool NULLWindow::isClosed() const { return mClosed; }
     //-------------------------------------------------------------------------
-    void NULLWindow::_setVisible( bool visible )
-    {
-    }
+    void NULLWindow::_setVisible( bool visible ) {}
     //-------------------------------------------------------------------------
-    bool NULLWindow::isVisible() const
-    {
-        return true;
-    }
+    bool NULLWindow::isVisible() const { return true; }
     //-------------------------------------------------------------------------
-    void NULLWindow::setHidden( bool hidden )
-    {
-    }
+    void NULLWindow::setHidden( bool hidden ) {}
     //-------------------------------------------------------------------------
-    bool NULLWindow::isHidden() const
-    {
-        return false;
-    }
+    bool NULLWindow::isHidden() const { return false; }
     //-------------------------------------------------------------------------
     void NULLWindow::_initialize( TextureGpuManager *textureGpuManager )
     {
@@ -107,21 +92,20 @@ namespace Ogre
         mFocused = true;
         mClosed = false;
 
-        NULLTextureGpuManager *textureManager = static_cast<NULLTextureGpuManager*>( textureGpuManager );
+        NULLTextureGpuManager *textureManager =
+            static_cast<NULLTextureGpuManager *>( textureGpuManager );
 
-        mTexture        = textureManager->createTextureGpuWindow();
-        mDepthBuffer    = textureManager->createTextureGpuWindow();
-        mStencilBuffer  = mDepthBuffer;
+        mTexture = textureManager->createTextureGpuWindow();
+        mDepthBuffer = textureManager->createTextureGpuWindow();
+        mStencilBuffer = mDepthBuffer;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
         mTexture->setPixelFormat( PFG_RGBA8_UNORM );
         mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
 
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
     }
     //-------------------------------------------------------------------------
-    void NULLWindow::swapBuffers()
-    {
-    }
-}
+    void NULLWindow::swapBuffers() {}
+}  // namespace Ogre

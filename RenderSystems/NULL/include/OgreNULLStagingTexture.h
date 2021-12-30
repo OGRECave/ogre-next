@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreNULLStagingTexture_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "OgreStagingTextureBufferImpl.h"
 
 #include "OgreHeaderPrefix.h"
@@ -38,18 +39,18 @@ namespace Ogre
 {
     class _OgreNULLExport NULLStagingTexture : public StagingTextureBufferImpl
     {
-        uint8   *mDynamicBuffer;
-        void    *mMappedPtr;
-        void    *mLastMappedPtr;
+        uint8 *mDynamicBuffer;
+        void * mMappedPtr;
+        void * mLastMappedPtr;
 
-        bool belongsToUs( const TextureBox &box ) override;
-        void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
+        bool  belongsToUs( const TextureBox &box ) override;
+        void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:
         NULLStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size );
         ~NULLStagingTexture() override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -32,8 +32,8 @@ THE SOFTWARE.
 #include "OgreNULLPrerequisites.h"
 
 #ifdef _OGRE_MULTISOURCE_VBO
-#include "Vao/OgreMultiSourceVertexBufferPool.h"
-#include "Vao/OgreNULLVaoManager.h"
+#    include "Vao/OgreMultiSourceVertexBufferPool.h"
+#    include "Vao/OgreNULLVaoManager.h"
 
 namespace Ogre
 {
@@ -61,17 +61,16 @@ namespace Ogre
         virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers );
 
     public:
-        NULLMultiSourceVertexBufferPool( size_t vboPoolIndex,
-                                            const VertexElement2VecVec &vertexElementsBySource,
-                                            size_t maxVertices, BufferType bufferType,
-                                            size_t internalBufferStart,
-                                            VaoManager *vaoManager );
+        NULLMultiSourceVertexBufferPool( size_t                      vboPoolIndex,
+                                         const VertexElement2VecVec &vertexElementsBySource,
+                                         size_t maxVertices, BufferType bufferType,
+                                         size_t internalBufferStart, VaoManager *vaoManager );
         virtual ~NULLMultiSourceVertexBufferPool();
 
         void createVertexBuffers( VertexBufferPackedVec &outVertexBuffers, size_t numVertices,
-                                  void * const *initialData, bool keepAsShadow );
+                                  void *const *initialData, bool keepAsShadow );
     };
-}
+}  // namespace Ogre
 
 #endif
 #endif

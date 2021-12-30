@@ -50,7 +50,7 @@ namespace Ogre
         uint8 *mNullDataPtr;
 
         void *mapImpl( size_t sizeBytes ) override;
-        void unmapImpl( const Destination *destinations, size_t numDestinations ) override;
+        void  unmapImpl( const Destination *destinations, size_t numDestinations ) override;
 
         const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 

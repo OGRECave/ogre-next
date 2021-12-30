@@ -50,12 +50,13 @@ namespace Ogre
         TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                        IdString name, uint32 textureFlags,
                                        TextureTypes::TextureTypes initialType ) override;
+
         StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
                                                   uint32 slices, PixelFormatGpu pixelFormat ) override;
-        void destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
+        void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
         AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
-                                                          uint32 depthOrSlices,
+                                                          uint32                     depthOrSlices,
                                                           TextureTypes::TextureTypes textureType,
                                                           PixelFormatGpu pixelFormatFamily ) override;
 

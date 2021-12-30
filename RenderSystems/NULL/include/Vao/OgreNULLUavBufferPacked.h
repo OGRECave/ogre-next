@@ -30,17 +30,17 @@ THE SOFTWARE.
 #define _Ogre_NULLUavBufferPacked_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre
 {
     class NULLBufferInterface;
 
-
     class _OgreNULLExport NULLUavBufferPacked : public UavBufferPacked
     {
     protected:
-        TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        TexBufferPacked *     getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
         ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
     public:
@@ -49,8 +49,8 @@ namespace Ogre
                              VaoManager *vaoManager, NULLBufferInterface *bufferInterface );
         ~NULLUavBufferPacked() override;
 
-        void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override {}
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
     };
-}
+}  // namespace Ogre
 
 #endif
