@@ -48,34 +48,34 @@ namespace Ogre
     {
     public:
         /** Command object for randomness (see ParamCommand).*/
-        class CmdRandomness : public ParamCommand
+        class CmdRandomness final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for scope (see ParamCommand).*/
-        class CmdScope : public ParamCommand
+        class CmdScope final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for keep_velocity (see ParamCommand).*/
-        class CmdKeepVelocity : public ParamCommand
+        class CmdKeepVelocity final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /// Default constructor
         DirectionRandomiserAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the randomness to apply to the particles in a system. */
         void setRandomness( Real force );

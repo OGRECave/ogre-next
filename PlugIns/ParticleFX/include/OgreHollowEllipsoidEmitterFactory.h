@@ -40,15 +40,15 @@ namespace Ogre
     @remarks
         Creates instances of HollowEllipsoidEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport HollowEllipsoidEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport HollowEllipsoidEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
     public:
         /** See ParticleEmitterFactory */
-        String getName() const { return "HollowEllipsoid"; }
+        String getName() const override { return "HollowEllipsoid"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter *createEmitter( ParticleSystem *psys )
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW HollowEllipsoidEmitter( psys );
             mEmitters.push_back( emit );

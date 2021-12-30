@@ -50,24 +50,24 @@ namespace Ogre
     public:
         /// @see AreaEmitter
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerX : public ParamCommand
+        class CmdInnerX final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /** Command object for inner size (see ParamCommand).*/
-        class CmdInnerY : public ParamCommand
+        class CmdInnerY final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         RingEmitter( ParticleSystem *psys );
 
         /// @see ParticleEmitter
-        void _initParticle( Particle *pParticle );
+        void _initParticle( Particle *pParticle ) override;
 
         /** Sets the size of the clear space inside the area from where NO particles are emitted.
         @param x, y

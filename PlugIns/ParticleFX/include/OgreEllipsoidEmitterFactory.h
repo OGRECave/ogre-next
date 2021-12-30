@@ -40,15 +40,15 @@ namespace Ogre
     @remarks
         Creates instances of EllipsoidEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport EllipsoidEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport EllipsoidEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
     public:
         /** See ParticleEmitterFactory */
-        String getName() const { return "Ellipsoid"; }
+        String getName() const override { return "Ellipsoid"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter *createEmitter( ParticleSystem *psys )
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW EllipsoidEmitter( psys );
             mEmitters.push_back( emit );

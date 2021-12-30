@@ -45,45 +45,45 @@ namespace Ogre
     {
     public:
         /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationSpeedRangeStart : public ParamCommand
+        class CmdRotationSpeedRangeStart final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationSpeedRangeEnd : public ParamCommand
+        class CmdRotationSpeedRangeEnd final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationRangeStart : public ParamCommand
+        class CmdRotationRangeStart final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /// Command object for particle emitter  - see ParamCommand
-        class CmdRotationRangeEnd : public ParamCommand
+        class CmdRotationRangeEnd final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
         RotationAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _initParticle( Particle *pParticle );
+        void _initParticle( Particle *pParticle ) override;
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the minimum rotation speed of particles to be emitted. */
         void setRotationSpeedRangeStart( const Radian &angle );

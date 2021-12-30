@@ -59,7 +59,7 @@ namespace Ogre
         {
             ParamDictionary *dict = getParamDictionary();
 
-            for( int i = 0; i < MAX_STAGES; i++ )
+            for( size_t i = 0; i < MAX_STAGES; i++ )
             {
                 msColourCmd[i].mIndex = i;
                 msTimeCmd[i].mIndex = i;

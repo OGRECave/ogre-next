@@ -40,15 +40,15 @@ namespace Ogre
     @remarks
         Creates instances of CylinderEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport CylinderEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport CylinderEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
     public:
         /** See ParticleEmitterFactory */
-        String getName() const { return "Cylinder"; }
+        String getName() const override { return "Cylinder"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter *createEmitter( ParticleSystem *psys )
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW CylinderEmitter( psys );
             mEmitters.push_back( emit );

@@ -39,15 +39,15 @@ namespace Ogre
     @remarks
         Creates instances of BoxEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport BoxEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport BoxEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
     public:
         /** See ParticleEmitterFactory */
-        String getName() const { return "Box"; }
+        String getName() const override { return "Box"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter *createEmitter( ParticleSystem *psys )
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW BoxEmitter( psys );
             mEmitters.push_back( emit );

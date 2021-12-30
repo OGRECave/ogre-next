@@ -36,13 +36,13 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for DeflectorPlaneAffector. */
-    class _OgreParticleFXExport DeflectorPlaneAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport DeflectorPlaneAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "DeflectorPlane"; }
+        String getName() const override { return "DeflectorPlane"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector *createAffector( ParticleSystem *psys )
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
             ParticleAffector *p = OGRE_NEW DeflectorPlaneAffector( psys );
             mAffectors.push_back( p );

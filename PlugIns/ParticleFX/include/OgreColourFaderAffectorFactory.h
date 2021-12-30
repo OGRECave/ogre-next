@@ -36,13 +36,13 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for ColourFaderAffector. */
-    class _OgreParticleFXExport ColourFaderAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport ColourFaderAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "ColourFader"; }
+        String getName() const override { return "ColourFader"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector *createAffector( ParticleSystem *psys )
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
             ParticleAffector *p = OGRE_NEW ColourFaderAffector( psys );
             mAffectors.push_back( p );

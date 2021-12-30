@@ -52,7 +52,7 @@ namespace Ogre
         CylinderEmitter( ParticleSystem *psys );
 
         /** See ParticleEmitter. */
-        void _initParticle( Particle *pParticle );
+        void _initParticle( Particle *pParticle ) override;
     };
 
 }  // namespace Ogre

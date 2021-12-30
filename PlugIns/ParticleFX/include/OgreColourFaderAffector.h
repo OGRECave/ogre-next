@@ -44,42 +44,42 @@ namespace Ogre
     {
     public:
         /** Command object for red adjust (see ParamCommand).*/
-        class CmdRedAdjust : public ParamCommand
+        class CmdRedAdjust final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for green adjust (see ParamCommand).*/
-        class CmdGreenAdjust : public ParamCommand
+        class CmdGreenAdjust final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for blue adjust (see ParamCommand).*/
-        class CmdBlueAdjust : public ParamCommand
+        class CmdBlueAdjust final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for alpha adjust (see ParamCommand).*/
-        class CmdAlphaAdjust : public ParamCommand
+        class CmdAlphaAdjust final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
         ColourFaderAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the colour adjustment to be made per second to particles.
         @param red, green, blue, alpha

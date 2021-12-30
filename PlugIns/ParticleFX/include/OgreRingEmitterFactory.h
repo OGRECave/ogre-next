@@ -40,15 +40,15 @@ namespace Ogre
     @remarks
         Creates instances of RingEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport RingEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport RingEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
     public:
         /** See ParticleEmitterFactory */
-        String getName() const { return "Ring"; }
+        String getName() const override { return "Ring"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter *createEmitter( ParticleSystem *psys )
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW RingEmitter( psys );
             mEmitters.push_back( emit );

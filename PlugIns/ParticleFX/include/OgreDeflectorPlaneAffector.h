@@ -47,34 +47,34 @@ namespace Ogre
     {
     public:
         /** Command object for plane point (see ParamCommand).*/
-        class CmdPlanePoint : public ParamCommand
+        class CmdPlanePoint final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for plane normal (see ParamCommand).*/
-        class CmdPlaneNormal : public ParamCommand
+        class CmdPlaneNormal final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for bounce (see ParamCommand).*/
-        class CmdBounce : public ParamCommand
+        class CmdBounce final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /// Default constructor
         DeflectorPlaneAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the plane point of the deflector plane. */
         void setPlanePoint( const Vector3 &pos );

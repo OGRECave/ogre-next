@@ -39,15 +39,15 @@ namespace Ogre
     @remarks
         Creates instances of PointEmitter to be used in particle systems.
     */
-    class _OgreParticleFXExport PointEmitterFactory : public ParticleEmitterFactory
+    class _OgreParticleFXExport PointEmitterFactory final : public ParticleEmitterFactory
     {
     protected:
     public:
         /** See ParticleEmitterFactory */
-        String getName() const { return "Point"; }
+        String getName() const override { return "Point"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter *createEmitter( ParticleSystem *psys )
+        ParticleEmitter *createEmitter( ParticleSystem *psys ) override
         {
             ParticleEmitter *emit = OGRE_NEW PointEmitter( psys );
             mEmitters.push_back( emit );

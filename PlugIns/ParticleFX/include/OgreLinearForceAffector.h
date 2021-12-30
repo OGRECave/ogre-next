@@ -52,19 +52,19 @@ namespace Ogre
     {
     public:
         /** Command object for force vector (see ParamCommand).*/
-        class CmdForceVector : public ParamCommand
+        class CmdForceVector final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for force application (see ParamCommand).*/
-        class CmdForceApp : public ParamCommand
+        class CmdForceApp final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
         /// Choice of how to apply the force vector to particles
         enum ForceApplication
@@ -78,7 +78,7 @@ namespace Ogre
         LinearForceAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the force vector to apply to the particles in a system. */
         void setForceVector( const Vector3 &force );

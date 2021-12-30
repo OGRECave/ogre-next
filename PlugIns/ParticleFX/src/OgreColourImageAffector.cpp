@@ -76,7 +76,7 @@ namespace Ogre
             _loadImage();
         }
 
-        int width = (int)mColourImage.getWidth() - 1;
+        const size_t width = mColourImage.getWidth() - 1u;
 
         while( !pi.end() )
         {
@@ -90,13 +90,9 @@ namespace Ogre
                 particle_time = 0.0f;
 
             const Real float_index = particle_time * width;
-            const int index = (int)float_index;
+            const size_t index = static_cast<size_t>( float_index );
 
-            if( index < 0 )
-            {
-                p->mColour = mColourImage.getColourAt( 0, 0, 0 );
-            }
-            else if( index >= width )
+            if( index >= width )
             {
                 p->mColour = mColourImage.getColourAt( width, 0, 0 );
             }

@@ -44,18 +44,18 @@ namespace Ogre
     {
     public:
         /** Command object for scale adjust (see ParamCommand).*/
-        class CmdScaleAdjust : public ParamCommand
+        class CmdScaleAdjust final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
         ScaleAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         /** Sets the scale adjustment to be made per second to particles.
         @param rate

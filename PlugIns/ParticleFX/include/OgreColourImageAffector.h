@@ -41,21 +41,21 @@ namespace Ogre
     {
     public:
         /** Command object for red adjust (see ParamCommand).*/
-        class CmdImageAdjust : public ParamCommand
+        class CmdImageAdjust final : public ParamCommand
         {
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
         ColourImageAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _initParticle( Particle *pParticle );
+        void _initParticle( Particle *pParticle ) override;
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         void   setImageAdjust( String name );
         String getImageAdjust() const;

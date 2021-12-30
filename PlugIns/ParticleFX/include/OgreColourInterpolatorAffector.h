@@ -48,32 +48,32 @@ namespace Ogre
         };
 
         /** Command object for red adjust (see ParamCommand).*/
-        class CmdColourAdjust : public ParamCommand
+        class CmdColourAdjust final : public ParamCommand
         {
         public:
             size_t mIndex;
 
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Command object for red adjust (see ParamCommand).*/
-        class CmdTimeAdjust : public ParamCommand
+        class CmdTimeAdjust final : public ParamCommand
         {
         public:
             size_t mIndex;
 
         public:
-            String doGet( const void *target ) const;
-            void   doSet( void *target, const String &val );
+            String doGet( const void *target ) const override;
+            void   doSet( void *target, const String &val ) override;
         };
 
         /** Default constructor. */
         ColourInterpolatorAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed ) override;
 
         void        setColourAdjust( size_t index, ColourValue colour );
         ColourValue getColourAdjust( size_t index ) const;

@@ -36,13 +36,13 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Factory class for ScaleAffector. */
-    class _OgreParticleFXExport ScaleAffectorFactory : public ParticleAffectorFactory
+    class _OgreParticleFXExport ScaleAffectorFactory final : public ParticleAffectorFactory
     {
         /** See ParticleAffectorFactory */
-        String getName() const { return "Scaler"; }
+        String getName() const override { return "Scaler"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector *createAffector( ParticleSystem *psys )
+        ParticleAffector *createAffector( ParticleSystem *psys ) override
         {
             ParticleAffector *p = OGRE_NEW ScaleAffector( psys );
             mAffectors.push_back( p );
