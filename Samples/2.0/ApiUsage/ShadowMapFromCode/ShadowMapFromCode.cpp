@@ -18,8 +18,6 @@
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
-#define USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS 1
-
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
@@ -67,7 +65,9 @@ namespace Demo
             shadowParams.push_back( shadowParam );
 
             //Second light, directional, spot or point
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             shadowParam.atlasId = 1;
+#endif
             shadowParam.technique = Ogre::SHADOWMAP_FOCUSED;
             shadowParam.resolution[0].x = 2048u;
             shadowParam.resolution[0].y = 2048u;
@@ -84,6 +84,7 @@ namespace Demo
             shadowParam.atlasStart[0].y = 2048u;
             shadowParams.push_back( shadowParam );
             
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             //Fourth light
             shadowParam.atlasStart[0].x = 2048u;
             shadowParam.atlasStart[0].y = 0u;
@@ -93,6 +94,7 @@ namespace Demo
             shadowParam.atlasStart[0].x = 2048u;
             shadowParam.atlasStart[0].y = 2048u;
             shadowParams.push_back( shadowParam );
+#endif
 
             Ogre::ShadowNodeHelper::createShadowNodeWithSettings( compositorManager,
                                                                   renderSystem->getCapabilities(),
@@ -131,7 +133,9 @@ namespace Demo
             shadowParams.push_back( shadowParam );
 
             //Second light, directional, spot or point
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             shadowParam.atlasId = 1;
+#endif
             shadowParam.technique = Ogre::SHADOWMAP_FOCUSED;
             shadowParam.resolution[0].x = 1024u;
             shadowParam.resolution[0].y = 1024u;
@@ -148,6 +152,7 @@ namespace Demo
             shadowParam.atlasStart[0].x = 1024u;
             shadowParams.push_back( shadowParam );
 
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             //Fourth light
             shadowParam.atlasStart[0].x = 1024u;
             shadowParam.atlasStart[0].y = 0u;
@@ -157,6 +162,7 @@ namespace Demo
             shadowParam.atlasStart[0].x = 1024u;
             shadowParam.atlasStart[0].y = 1024u;
             shadowParams.push_back( shadowParam );
+#endif
 
             const Ogre::RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
             Ogre::RenderSystemCapabilities capsCopy = *capabilities;
