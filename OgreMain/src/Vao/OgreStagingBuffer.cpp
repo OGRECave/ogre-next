@@ -248,7 +248,7 @@ namespace Ogre
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == static_cast<ptrdiff_t>( blocks.size() - 1 ) )
+                if( static_cast<size_t>( idx ) == blocks.size() - 1u )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
@@ -264,7 +264,7 @@ namespace Ogre
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == static_cast<ptrdiff_t>( blocks.size() - 1 ) )
+                if( static_cast<size_t>( idx ) == blocks.size() - 1u )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );

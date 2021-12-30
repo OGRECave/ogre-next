@@ -977,12 +977,16 @@ namespace Ogre
                 if( !desc->requiresTextureFlipping() )
                 {
                     // Convert "upper-left" corner to "lower-left"
-                    xywhVp[i][1] = anyTarget->getHeight() - xywhVp[i][3] - xywhVp[i][1];
-                    xywhSc[i][1] = anyTarget->getHeight() - xywhSc[i][3] - xywhSc[i][1];
+                    xywhVp[i][1] =
+                        static_cast<GLint>( anyTarget->getHeight() ) - xywhVp[i][3] - xywhVp[i][1];
+                    xywhSc[i][1] =
+                        static_cast<GLint>( anyTarget->getHeight() ) - xywhSc[i][3] - xywhSc[i][1];
                 }
             }
-            glViewportArrayv( 0u, numViewports, reinterpret_cast<GLfloat *>( xywhVp ) );
-            glScissorArrayv( 0u, numViewports, reinterpret_cast<GLint *>( xywhVp ) );
+            glViewportArrayv( 0u, static_cast<GLsizei>( numViewports ),
+                              reinterpret_cast<GLfloat *>( xywhVp ) );
+            glScissorArrayv( 0u, static_cast<GLsizei>( numViewports ),
+                             reinterpret_cast<GLint *>( xywhVp ) );
         }
         /*else
         {
@@ -1498,7 +1502,7 @@ namespace Ogre
             OGRE_CHECK_GL_ERROR( glBlendFunc( sourceBlend, destBlend ) );
         }
 
-        GLint func = GL_FUNC_ADD;
+        GLenum func = GL_FUNC_ADD;
         switch( op )
         {
         case SBO_ADD:
@@ -1542,7 +1546,7 @@ namespace Ogre
                 glBlendFuncSeparate( sourceBlend, destBlend, sourceBlendAlpha, destBlendAlpha ) );
         }
 
-        GLint func = GL_FUNC_ADD, alphaFunc = GL_FUNC_ADD;
+        GLenum func = GL_FUNC_ADD, alphaFunc = GL_FUNC_ADD;
 
         switch( op )
         {
@@ -2475,7 +2479,7 @@ namespace Ogre
 
             OCGE( glStencilFuncSeparate( GL_BACK,
                                          convertCompareFunction( stencilParams.stencilBack.compareOp ),
-                                         refValue, stencilParams.readMask ) );
+                                         static_cast<GLint>( refValue ), stencilParams.readMask ) );
             OCGE( glStencilOpSeparate( GL_BACK,
                                        convertStencilOp( stencilParams.stencilBack.stencilFailOp ),
                                        convertStencilOp( stencilParams.stencilBack.stencilDepthFailOp ),
@@ -2483,7 +2487,7 @@ namespace Ogre
 
             OCGE( glStencilFuncSeparate( GL_FRONT,
                                          convertCompareFunction( stencilParams.stencilFront.compareOp ),
-                                         refValue, stencilParams.readMask ) );
+                                         static_cast<GLint>( refValue ), stencilParams.readMask ) );
             OCGE( glStencilOpSeparate( GL_FRONT,
                                        convertStencilOp( stencilParams.stencilFront.stencilFailOp ),
                                        convertStencilOp( stencilParams.stencilFront.stencilDepthFailOp ),
@@ -2608,7 +2612,7 @@ namespace Ogre
         activateGLTextureUnit( 0 );
 
         // Determine the correct primitive type to render.
-        GLint primType;
+        GLenum primType;
         // Use adjacency if there is a geometry program and it requested adjacency info.
         bool useAdjacency = ( mGeometryProgramBound && mPso->geometryShader &&
                               mPso->geometryShader->isAdjacencyInfoRequired() );
@@ -2743,8 +2747,9 @@ namespace Ogre
                 if( numberOfInstances > 1 )
                 {
                     OGRE_CHECK_GL_ERROR( glDrawElementsInstancedBaseVertex(
-                        primType, op.indexData->indexCount, indexType, pBufferData, numberOfInstances,
-                        op.vertexData->vertexStart ) );
+                        primType, static_cast<GLsizei>( op.indexData->indexCount ), indexType,
+                        pBufferData, static_cast<GLsizei>( numberOfInstances ),
+                        static_cast<GLint>( op.vertexData->vertexStart ) ) );
                 }
                 else
                 {
@@ -2824,7 +2829,8 @@ namespace Ogre
                                ? GL_UNSIGNED_SHORT
                                : GL_UNSIGNED_INT;
 
-        OCGE( glMultiDrawElementsIndirect( mode, indexType, cmd->indirectBufferOffset, cmd->numDraws,
+        OCGE( glMultiDrawElementsIndirect( mode, indexType, cmd->indirectBufferOffset,
+                                           static_cast<GLsizei>( cmd->numDraws ),
                                            sizeof( CbDrawIndexed ) ) );
     }
 
@@ -2833,7 +2839,8 @@ namespace Ogre
         const GL3PlusVertexArrayObject *vao = static_cast<const GL3PlusVertexArrayObject *>( cmd->vao );
         GLenum mode = mPso->domainShader ? GL_PATCHES : vao->mPrimType[mUseAdjacency];
 
-        OCGE( glMultiDrawArraysIndirect( mode, cmd->indirectBufferOffset, cmd->numDraws,
+        OCGE( glMultiDrawArraysIndirect( mode, cmd->indirectBufferOffset,
+                                         static_cast<GLsizei>( cmd->numDraws ),
                                          sizeof( CbDrawStrip ) ) );
     }
 
@@ -2854,9 +2861,10 @@ namespace Ogre
         for( uint32 i = cmd->numDraws; i--; )
         {
             OCGE( glDrawElementsInstancedBaseVertexBaseInstance(
-                mode, drawCmd->primCount, indexType,
+                mode, static_cast<GLsizei>( drawCmd->primCount ), indexType,
                 reinterpret_cast<void *>( drawCmd->firstVertexIndex * bytesPerIndexElement ),
-                drawCmd->instanceCount, drawCmd->baseVertex, drawCmd->baseInstance ) );
+                static_cast<GLsizei>( drawCmd->instanceCount ),
+                static_cast<GLint>( drawCmd->baseVertex ), drawCmd->baseInstance ) );
             ++drawCmd;
         }
     }
@@ -2871,8 +2879,10 @@ namespace Ogre
 
         for( uint32 i = cmd->numDraws; i--; )
         {
-            OCGE( glDrawArraysInstancedBaseInstance( mode, drawCmd->firstVertexIndex, drawCmd->primCount,
-                                                     drawCmd->instanceCount, drawCmd->baseInstance ) );
+            OCGE( glDrawArraysInstancedBaseInstance(
+                mode, static_cast<GLint>( drawCmd->firstVertexIndex ),
+                static_cast<GLsizei>( drawCmd->primCount ),
+                static_cast<GLsizei>( drawCmd->instanceCount ), drawCmd->baseInstance ) );
             ++drawCmd;
         }
     }
@@ -2900,9 +2910,10 @@ namespace Ogre
                                 static_cast<GLuint>( drawCmd->baseInstance ) ) );
 
             OCGE( glDrawElementsInstancedBaseVertex(
-                mode, drawCmd->primCount, indexType,
+                mode, static_cast<GLsizei>( drawCmd->primCount ), indexType,
                 reinterpret_cast<void *>( drawCmd->firstVertexIndex * bytesPerIndexElement ),
-                drawCmd->instanceCount, drawCmd->baseVertex ) );
+                static_cast<GLsizei>( drawCmd->instanceCount ),
+                static_cast<GLint>( drawCmd->baseVertex ) ) );
             ++drawCmd;
         }
     }
@@ -2923,8 +2934,9 @@ namespace Ogre
             OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation,
                                 static_cast<GLuint>( drawCmd->baseInstance ) ) );
 
-            OCGE( glDrawArraysInstanced( mode, drawCmd->firstVertexIndex, drawCmd->primCount,
-                                         drawCmd->instanceCount ) );
+            OCGE( glDrawArraysInstanced( mode, static_cast<GLint>( drawCmd->firstVertexIndex ),
+                                         static_cast<GLsizei>( drawCmd->primCount ),
+                                         static_cast<GLsizei>( drawCmd->instanceCount ) ) );
             ++drawCmd;
         }
     }
@@ -3081,16 +3093,18 @@ namespace Ogre
         const size_t bytesPerIndexElement = mCurrentIndexBuffer->indexBuffer->getIndexSize();
 
         OCGE( glDrawElementsInstancedBaseVertexBaseInstance(
-            mCurrentPolygonMode, cmd->primCount, indexType,
-            reinterpret_cast<void *>( cmd->firstVertexIndex * bytesPerIndexElement ), cmd->instanceCount,
-            mCurrentVertexBuffer->vertexStart, cmd->baseInstance ) );
+            mCurrentPolygonMode, static_cast<GLsizei>( cmd->primCount ), indexType,
+            reinterpret_cast<void *>( cmd->firstVertexIndex * bytesPerIndexElement ),
+            static_cast<GLsizei>( cmd->instanceCount ),
+            static_cast<GLint>( mCurrentVertexBuffer->vertexStart ), cmd->baseInstance ) );
     }
 
     void GL3PlusRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
-        OCGE( glDrawArraysInstancedBaseInstance( mCurrentPolygonMode, cmd->firstVertexIndex,
-                                                 cmd->primCount, cmd->instanceCount,
-                                                 cmd->baseInstance ) );
+        OCGE( glDrawArraysInstancedBaseInstance(
+            mCurrentPolygonMode, static_cast<GLint>( cmd->firstVertexIndex ),
+            static_cast<GLsizei>( cmd->primCount ), static_cast<GLsizei>( cmd->instanceCount ),
+            cmd->baseInstance ) );
     }
 
     void GL3PlusRenderSystem::_renderNoBaseInstance( const v1::CbDrawCallIndexed *cmd )
@@ -3109,9 +3123,10 @@ namespace Ogre
                             static_cast<GLuint>( cmd->baseInstance ) ) );
 
         OCGE( glDrawElementsInstancedBaseVertex(
-            mCurrentPolygonMode, cmd->primCount, indexType,
-            reinterpret_cast<void *>( cmd->firstVertexIndex * bytesPerIndexElement ), cmd->instanceCount,
-            mCurrentVertexBuffer->vertexStart ) );
+            mCurrentPolygonMode, static_cast<GLsizei>( cmd->primCount ), indexType,
+            reinterpret_cast<void *>( cmd->firstVertexIndex * bytesPerIndexElement ),
+            static_cast<GLsizei>( cmd->instanceCount ),
+            static_cast<GLint>( mCurrentVertexBuffer->vertexStart ) ) );
     }
 
     void GL3PlusRenderSystem::_renderNoBaseInstance( const v1::CbDrawCallStrip *cmd )
@@ -3122,8 +3137,9 @@ namespace Ogre
         OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation,
                             static_cast<GLuint>( cmd->baseInstance ) ) );
 
-        OCGE( glDrawArraysInstanced( mCurrentPolygonMode, cmd->firstVertexIndex, cmd->primCount,
-                                     cmd->instanceCount ) );
+        OCGE( glDrawArraysInstanced( mCurrentPolygonMode, static_cast<GLint>( cmd->firstVertexIndex ),
+                                     static_cast<GLsizei>( cmd->primCount ),
+                                     static_cast<GLsizei>( cmd->instanceCount ) ) );
     }
 
     void GL3PlusRenderSystem::clearFrameBuffer( RenderPassDescriptor *desc, TextureGpu *anyTarget,
@@ -3336,7 +3352,7 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "**************************************" );
     }
 
-    GLint GL3PlusRenderSystem::convertCompareFunction( CompareFunction func ) const
+    GLenum GL3PlusRenderSystem::convertCompareFunction( CompareFunction func ) const
     {
         switch( func )
         {
@@ -3356,12 +3372,14 @@ namespace Ogre
             return GL_GEQUAL;
         case CMPF_GREATER:
             return GL_GREATER;
-        };
+        case NUM_COMPARE_FUNCTIONS:
+            return GL_ALWAYS;
+        }
         // To keep compiler happy
         return GL_ALWAYS;
     }
 
-    GLint GL3PlusRenderSystem::convertStencilOp( StencilOperation op ) const
+    GLenum GL3PlusRenderSystem::convertStencilOp( StencilOperation op ) const
     {
         switch( op )
         {

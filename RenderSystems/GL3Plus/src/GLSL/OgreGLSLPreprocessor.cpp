@@ -110,9 +110,14 @@ namespace Ogre
         if( String[i] == '0' )
         {
             if( Length > i + 1 && String[i + 1] == 'x' )
-                base = 16, i += 2;
+            {
+                base = 16;
+                i += 2;
+            }
             else
+            {
                 base = 8;
+            }
         }
 
         for( ; i < Length; i++ )
@@ -140,8 +145,10 @@ namespace Ogre
 
         // Check that all other characters are just spaces
         for( ; i < Length; i++ )
+        {
             if( !isspace( String[i] ) )
                 return false;
+        }
 
         oValue = val;
         return true;
@@ -152,7 +159,7 @@ namespace Ogre
         char tmp[21];
         int len = snprintf( tmp, sizeof( tmp ), "%ld", iValue );
         Length = 0;
-        Append( tmp, len );
+        Append( tmp, static_cast<size_t>( len ) );
         Type = TK_NUMBER;
     }
 
@@ -166,7 +173,7 @@ namespace Ogre
             iCount -= 8;
         }
         if( iCount > 0 )
-            Append( newlines, iCount );
+            Append( newlines, static_cast<size_t>( iCount ) );
     }
 
     int CPreprocessor::Token::CountNL()
@@ -183,7 +190,7 @@ namespace Ogre
             if( !n )
                 return c;
             c++;
-            l -= ( n - s + 1 );
+            l -= static_cast<size_t>( n - s + 1 );
             s = n + 1;
         }
         return c;
@@ -279,14 +286,14 @@ namespace Ogre
             BOL = true;
             if( c == '\r' )
                 Source++;
-            return Token( Token::TK_NEWLINE, begin, Source - begin );
+            return Token( Token::TK_NEWLINE, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( isspace( c ) )
         {
             while( Source < SourceEnd && *Source != '\r' && *Source != '\n' && isspace( *Source ) )
                 Source++;
 
-            return Token( Token::TK_WHITESPACE, begin, Source - begin );
+            return Token( Token::TK_WHITESPACE, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( isdigit( c ) )
         {
@@ -300,14 +307,14 @@ namespace Ogre
             else
                 while( Source < SourceEnd && isdigit( *Source ) )
                     Source++;
-            return Token( Token::TK_NUMBER, begin, Source - begin );
+            return Token( Token::TK_NUMBER, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( c == '_' || isalnum( c ) )
         {
             BOL = false;
             while( Source < SourceEnd && ( *Source == '_' || isalnum( *Source ) ) )
                 Source++;
-            Token t( Token::TK_KEYWORD, begin, Source - begin );
+            Token t( Token::TK_KEYWORD, begin, static_cast<size_t>( Source - begin ) );
             if( iExpand )
                 t = ExpandMacro( t );
             return t;
@@ -329,7 +336,7 @@ namespace Ogre
             }
             if( Source < SourceEnd )
                 Source++;
-            return Token( Token::TK_STRING, begin, Source - begin );
+            return Token( Token::TK_STRING, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( c == '/' && *Source == '/' )
         {
@@ -337,7 +344,7 @@ namespace Ogre
             Source++;
             while( Source < SourceEnd && *Source != '\r' && *Source != '\n' )
                 Source++;
-            return Token( Token::TK_LINECOMMENT, begin, Source - begin );
+            return Token( Token::TK_LINECOMMENT, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( c == '/' && *Source == '*' )
         {
@@ -353,7 +360,7 @@ namespace Ogre
                 Source++;
             if( Source < SourceEnd && *Source == '/' )
                 Source++;
-            return Token( Token::TK_COMMENT, begin, Source - begin );
+            return Token( Token::TK_COMMENT, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( c == '#' && BOL )
         {
@@ -362,7 +369,7 @@ namespace Ogre
                 Source++;
             while( Source < SourceEnd && !isspace( *Source ) )
                 Source++;
-            return Token( Token::TK_DIRECTIVE, begin, Source - begin );
+            return Token( Token::TK_DIRECTIVE, begin, static_cast<size_t>( Source - begin ) );
         }
         else if( c == '\\' && Source < SourceEnd && ( *Source == '\r' || *Source == '\n' ) )
         {
@@ -373,7 +380,7 @@ namespace Ogre
                 Source++;
             Line++;
             BOL = true;
-            return Token( Token::TK_LINECONT, begin, Source - begin );
+            return Token( Token::TK_LINECONT, begin, static_cast<size_t>( Source - begin ) );
         }
         else
         {
@@ -389,7 +396,7 @@ namespace Ogre
                 Source++;
             else if( ( c == '|' || c == '&' || c == '^' ) && *Source == c )
                 Source++;
-            return Token( Token::TK_PUNCTUATION, begin, Source - begin );
+            return Token( Token::TK_PUNCTUATION, begin, static_cast<size_t>( Source - begin ) );
         }
     }
 
@@ -934,9 +941,13 @@ namespace Ogre
         }
 
     Done:
+        // numArgs = nargs but unsigned to calm compiler warnings
+        const size_t numArgs = static_cast<size_t>( nargs );
+
         oNumArgs = nargs;
-        oArgs = new Token[nargs];
-        for( int i = 0; i < nargs; i++ )
+        oArgs = new Token[numArgs];
+
+        for( size_t i = 0u; i < numArgs; ++i )
             oArgs[i] = args[i];
         return t;
     }
@@ -974,7 +985,7 @@ namespace Ogre
         default:
             t.Type = Token::TK_TEXT;
             assert( t.String + t.Length == cpp.Source );
-            t.Length = cpp.SourceEnd - t.String;
+            t.Length = static_cast<size_t>( cpp.SourceEnd - t.String );
             break;
         }
 
@@ -1033,7 +1044,7 @@ namespace Ogre
 
     bool CPreprocessor::HandleIfDef( Token &iBody, int iLine )
     {
-        if( EnableOutput & ( 1 << 31 ) )
+        if( EnableOutput & ( 1u << 31u ) )
         {
             Error( iLine, "Too many embedded #if directives" );
             return false;
@@ -1132,9 +1143,9 @@ namespace Ogre
             return false;
 
         if( val )
-            EnableOutput |= 1;
+            EnableOutput |= 1u;
         else
-            EnableOutput &= ~1;
+            EnableOutput &= ~1u;
 
         return true;
     }
@@ -1175,9 +1186,12 @@ namespace Ogre
     {
         // Analyze preprocessor directive
         const char *directive = iToken.String + 1;
-        size_t dirlen = iToken.Length - 1;
+        size_t dirlen = iToken.Length - 1u;
         while( dirlen && isspace( *directive ) )
-            dirlen--, directive++;
+        {
+            dirlen--;
+            directive++;
+        }
 
         int old_line = Line;
 

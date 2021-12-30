@@ -123,8 +123,8 @@ namespace Ogre
                                                GLint yPos, GLint slicePos, GLsizei width, GLsizei height,
                                                GLsizei numSlices )
     {
-        const size_t distToStart =
-            static_cast<uint8 *>( srcBox.data ) - static_cast<uint8 *>( mLastMappedPtr );
+        const size_t distToStart = static_cast<size_t>( static_cast<uint8 *>( srcBox.data ) -
+                                                        static_cast<uint8 *>( mLastMappedPtr ) );
         uint8 *offsetPtr = reinterpret_cast<uint8 *>( mInternalBufferStart + distToStart );
 
         const GLsizei sizeBytes = static_cast<GLsizei>(
@@ -132,7 +132,8 @@ namespace Ogre
 
         for( size_t i = 0; i < (size_t)numSlices; ++i )
         {
-            const GLenum targetGl = static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i + slicePos );
+            const GLenum targetGl = static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i +
+                                                         static_cast<GLenum>( slicePos ) );
             if( type != GL_NONE )
             {
                 OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height, format, type,
@@ -190,8 +191,8 @@ namespace Ogre
         GLsizei depth = static_cast<GLsizei>( srcBox.depth );
         GLsizei numSlices = static_cast<GLsizei>( srcBox.numSlices );
 
-        const size_t distToStart =
-            static_cast<uint8 *>( srcBox.data ) - static_cast<uint8 *>( mLastMappedPtr );
+        const size_t distToStart = static_cast<size_t>( static_cast<uint8 *>( srcBox.data ) -
+                                                        static_cast<uint8 *>( mLastMappedPtr ) );
         const void *offsetPtr = reinterpret_cast<void *>( mInternalBufferStart + distToStart );
 
         if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )

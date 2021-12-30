@@ -203,7 +203,8 @@ namespace Ogre
             for( size_t i = mNumColourEntries; i < lastNumColourEntries; ++i )
             {
                 // Detach removed colour entries
-                OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER,
+                                                 GL_COLOR_ATTACHMENT0 + static_cast<GLenum>( i ),
                                                  GL_RENDERBUFFER, 0 ) );
             }
         }
@@ -250,18 +251,20 @@ namespace Ogre
                 const bool hasLayers =
                     textureType != TextureTypes::Type1D && textureType != TextureTypes::Type2D;
 
+                const GLenum colorAttachment =
+                    static_cast<GLenum>( GL_COLOR_ATTACHMENT0 + static_cast<GLenum>( i ) );
                 if( mColour[i].allLayers || !hasLayers )
                 {
                     if( texture->isMultisample() &&
                         ( !texture->hasMsaaExplicitResolves() || !texture->isTexture() ) )
                     {
-                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, colorAttachment,
                                                          GL_RENDERBUFFER,
                                                          texture->getMsaaFramebufferName() ) );
                     }
                     else
                     {
-                        OCGE( glFramebufferTexture( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                        OCGE( glFramebufferTexture( GL_FRAMEBUFFER, colorAttachment,
                                                     texture->getFinalTextureName(),
                                                     mColour[i].mipLevel ) );
                     }
@@ -271,13 +274,13 @@ namespace Ogre
                     if( texture->isMultisample() &&
                         ( !texture->hasMsaaExplicitResolves() || !texture->isTexture() ) )
                     {
-                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, colorAttachment,
                                                          GL_RENDERBUFFER,
                                                          texture->getMsaaFramebufferName() ) );
                     }
                     else
                     {
-                        OCGE( glFramebufferTextureLayer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                        OCGE( glFramebufferTextureLayer( GL_FRAMEBUFFER, colorAttachment,
                                                          texture->getFinalTextureName(),
                                                          mColour[i].mipLevel, mColour[i].slice ) );
                     }
@@ -286,9 +289,9 @@ namespace Ogre
             else if( mColour[i].texture->getPixelFormat() == PFG_NULL && bSupportsTIR )
             {
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
-                                               mColour[i].texture->getWidth() ) );
+                                               static_cast<GLint>( mColour[i].texture->getWidth() ) ) );
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
-                                               mColour[i].texture->getHeight() ) );
+                                               static_cast<GLint>( mColour[i].texture->getHeight() ) ) );
                 OCGE( glFramebufferParameteri(
                     GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
                     mColour[i].texture->isMultisample()
@@ -496,8 +499,9 @@ namespace Ogre
         else
         {
             GLenum colourBuffs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-            for( int i = 0; i < mNumColourEntries; ++i )
-                colourBuffs[i] = GL_COLOR_ATTACHMENT0 + i;
+            const int numColourEntries = mNumColourEntries;
+            for( int i = 0; i < numColourEntries; ++i )
+                colourBuffs[i] = GL_COLOR_ATTACHMENT0 + static_cast<GLenum>( i );
             OCGE( glDrawBuffers( mNumColourEntries, colourBuffs ) );
         }
 
@@ -560,7 +564,7 @@ namespace Ogre
                         clearColour[1] = mColour[i].clearColour.g;
                         clearColour[2] = mColour[i].clearColour.b;
                         clearColour[3] = mColour[i].clearColour.a;
-                        OCGE( glClearBufferfv( GL_COLOR, i, clearColour ) );
+                        OCGE( glClearBufferfv( GL_COLOR, static_cast<GLint>( i ), clearColour ) );
                     }
                 }
             }
@@ -599,7 +603,7 @@ namespace Ogre
                 // Enable buffer for writing if it isn't
                 OCGE( glStencilMask( 0xFFFFFFFF ) );
             }
-            OCGE( glClearStencil( mStencil.clearStencil ) );
+            OCGE( glClearStencil( static_cast<GLint>( mStencil.clearStencil ) ) );
         }
 
         if( flags != 0 )
@@ -690,7 +694,7 @@ namespace Ogre
                         const uint32 width = resolveTexture->getWidth();
                         const uint32 height = resolveTexture->getHeight();
 
-                        OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + i ) );
+                        OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + static_cast<GLenum>( i ) ) );
                         if( resolveTexture->isRenderWindowSpecific() )
                         {
                             OCGE( glDrawBuffer( GL_BACK ) );
@@ -699,13 +703,16 @@ namespace Ogre
                         {
                             OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
                         }
-                        OCGE( glBlitFramebuffer( 0, 0, width, height, 0, 0, width, height,
-                                                 GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
+                        OCGE( glBlitFramebuffer(
+                            0, 0, static_cast<GLint>( width ), static_cast<GLint>( height ),  //
+                            0, 0, static_cast<GLint>( width ), static_cast<GLint>( height ),  //
+                            GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
 
                         if( mColour[i].storeAction == StoreAction::MultisampleResolve )
                         {
                             attachments[numAttachments] =
-                                mHasRenderWindow ? GL_COLOR : ( GL_COLOR_ATTACHMENT0 + i );
+                                mHasRenderWindow ? GL_COLOR
+                                                 : ( GL_COLOR_ATTACHMENT0 + static_cast<GLenum>( i ) );
                         }
 
                         unbindReadDrawFramebuffers = true;
@@ -714,7 +721,7 @@ namespace Ogre
                     if( mColour[i].storeAction == StoreAction::DontCare ||
                         mColour[i].storeAction == StoreAction::MultisampleResolve )
                     {
-                        attachments[numAttachments] = GL_COLOR_ATTACHMENT0 + i;
+                        attachments[numAttachments] = GL_COLOR_ATTACHMENT0 + static_cast<GLenum>( i );
                         ++numAttachments;
                     }
                 }

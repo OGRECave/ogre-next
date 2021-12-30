@@ -91,7 +91,8 @@ namespace Ogre
             static_cast<GL3PlusBufferInterface *>( mBufferInterface );
 
         OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, bufferInterface->getVboName(),
-                                 mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+                                 static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                 static_cast<GLsizeiptr>( sizeBytes ) ) );
     }
     //-----------------------------------------------------------------------------------
     //    void GL3PlusUavBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )

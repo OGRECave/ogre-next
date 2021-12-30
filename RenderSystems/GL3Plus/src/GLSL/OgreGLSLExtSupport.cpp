@@ -65,7 +65,7 @@ namespace Ogre
 
         GLint charsWritten = 0;
 
-        char *infoLog = new char[infologLength];
+        char *infoLog = new char[static_cast<size_t>( infologLength )];
         infoLog[0] = 0;
 
         if( isShader )

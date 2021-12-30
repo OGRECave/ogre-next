@@ -65,7 +65,8 @@ namespace Ogre
         OCGE( glActiveTexture( GL_TEXTURE0 + slot ) );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
         OCGE( glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
-                                mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+                                static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                static_cast<GLsizeiptr>( sizeBytes ) ) );
 
         // TODO: Get rid of this nonsense of restoring the active texture.
         // RenderSystem is always restores to 0 after using,
@@ -85,7 +86,8 @@ namespace Ogre
             static_cast<GL3PlusBufferInterface *>( mBufferInterface );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
         OCGE( glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
-                                mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+                                static_cast<GLintptr>( mFinalBufferStart * mBytesPerElement + offset ),
+                                static_cast<GLsizeiptr>( sizeBytes ) ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )

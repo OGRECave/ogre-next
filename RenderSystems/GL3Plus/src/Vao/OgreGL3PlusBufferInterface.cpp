@@ -184,7 +184,8 @@ namespace Ogre
         OCGE( glBindBuffer( GL_COPY_READ_BUFFER, mVboName ) );
         OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, dstBufferGl->getVboName() ) );
 
-        OCGE( glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, srcOffsetBytes,
-                                   dstOffsetBytes, sizeBytes ) );
+        OCGE( glCopyBufferSubData(
+            GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, static_cast<GLintptr>( srcOffsetBytes ),
+            static_cast<GLintptr>( dstOffsetBytes ), static_cast<GLsizeiptr>( sizeBytes ) ) );
     }
 }  // namespace Ogre

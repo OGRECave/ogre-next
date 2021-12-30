@@ -135,20 +135,20 @@ namespace Ogre
         // places of Ogre assume such alignment for SIMD reasons.
         GLint alignment = 1;  // initial value according to specs
         OCGE( glGetIntegerv( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &alignment ) );
-        mConstBufferAlignment = std::max<uint32>( alignment, 16u );
+        mConstBufferAlignment = static_cast<uint32>( std::max( alignment, 16 ) );
         mTexBufferAlignment = 16;
         if( !emulateTexBuffers )
         {
             alignment = 1;  // initial value according to specs
             OCGE( glGetIntegerv( GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT, &alignment ) );
-            mTexBufferAlignment = std::max<uint32>( alignment, 16u );
+            mTexBufferAlignment = static_cast<uint32>( std::max( alignment, 16 ) );
         }
         if( _supportsSsbo )
         {
             mReadOnlyIsTexBuffer = false;
             alignment = 1;  // initial value according to specs
             OCGE( glGetIntegerv( GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, &alignment ) );
-            mUavBufferAlignment = std::max<uint32>( alignment, 16u );
+            mUavBufferAlignment = static_cast<uint32>( std::max( alignment, 16 ) );
         }
 
         GLint maxBufferSize = 16384;  // minimum value according to specs
@@ -451,8 +451,8 @@ namespace Ogre
         // Find a suitable VBO that can hold the requested size. We prefer those free
         // blocks that have a matching stride (the current offset is a multiple of
         // bytesPerElement) in order to minimize the amount of memory padding.
-        size_t bestVboIdx = ~0;
-        size_t bestBlockIdx = ~0;
+        size_t bestVboIdx = std::numeric_limits<size_t>::max();
+        ptrdiff_t bestBlockIdx = -1;
         bool foundMatchingStride = false;
 
         while( itor != end && !foundMatchingStride )
@@ -470,7 +470,7 @@ namespace Ogre
 
                 if( sizeBytes + padding <= block.size )
                 {
-                    bestVboIdx = itor - mVbos[vboFlag].begin();
+                    bestVboIdx = static_cast<size_t>( itor - mVbos[vboFlag].begin() );
                     bestBlockIdx = blockIt - itor->freeBlocks.begin();
 
                     if( newOffset == block.offset )
@@ -483,7 +483,7 @@ namespace Ogre
             ++itor;
         }
 
-        if( bestBlockIdx == (size_t)~0 )
+        if( bestBlockIdx == -1 )
         {
             bestVboIdx = mVbos[vboFlag].size();
             bestBlockIdx = 0;
@@ -521,13 +521,13 @@ namespace Ogre
                     }
                 }
 
-                glBufferStorage( GL_ARRAY_BUFFER, poolSize, 0, flags );
+                glBufferStorage( GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( poolSize ), 0, flags );
 
                 error = glGetError();
             }
             else
             {
-                glBufferData( GL_ARRAY_BUFFER, poolSize, 0,
+                glBufferData( GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( poolSize ), 0,
                               vboFlag == CPU_INACCESSIBLE ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW );
 
                 error = glGetError();
@@ -563,7 +563,7 @@ namespace Ogre
         }
 
         Vbo &bestVbo = mVbos[vboFlag][bestVboIdx];
-        Block &bestBlock = bestVbo.freeBlocks[bestBlockIdx];
+        Block &bestBlock = bestVbo.freeBlocks[static_cast<size_t>( bestBlockIdx )];
 
         size_t newOffset = ( ( bestBlock.offset + alignment - 1 ) / alignment ) * alignment;
         size_t padding = newOffset - bestBlock.offset;
@@ -622,11 +622,11 @@ namespace Ogre
             if( itor->offset + itor->size == blockToMerge->offset )
             {
                 itor->size += blockToMerge->size;
-                size_t idx = itor - blocks.begin();
+                ptrdiff_t idx = itor - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( static_cast<size_t>( idx ) == blocks.size() - 1u )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
@@ -638,11 +638,11 @@ namespace Ogre
             else if( blockToMerge->offset + blockToMerge->size == itor->offset )
             {
                 blockToMerge->size += itor->size;
-                size_t idx = blockToMerge - blocks.begin();
+                ptrdiff_t idx = blockToMerge - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( static_cast<size_t>( idx ) == blocks.size() - 1u )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );
@@ -755,7 +755,7 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        GLint alignment = mConstBufferAlignment;
+        GLint alignment = static_cast<GLint>( mConstBufferAlignment );
         size_t requestedSize = sizeBytes;
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
@@ -766,17 +766,17 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+            sizeBytes = alignToNextMultiple( sizeBytes, static_cast<size_t>( alignment ) );
         }
 
-        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+        allocateVbo( sizeBytes, static_cast<size_t>( alignment ), bufferType, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         GL3PlusBufferInterface *bufferInterface =
             new GL3PlusBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         ConstBufferPacked *retVal = OGRE_NEW GL3PlusConstBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
-            keepAsShadow, this, bufferInterface );
+            bufferOffset, requestedSize, 1u, static_cast<uint32>( sizeBytes - requestedSize ) / 1u,
+            bufferType, initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );
@@ -801,7 +801,7 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        GLint alignment = mTexBufferAlignment;
+        GLint alignment = static_cast<GLint>( mTexBufferAlignment );
         size_t requestedSize = sizeBytes;
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
@@ -809,7 +809,8 @@ namespace Ogre
         if( mEmulateTexBuffers )
         {
             // Align to the texture size since we must copy the PBO to a texture.
-            ushort maxTexSizeBytes = 2048 * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
+            uint16 maxTexSizeBytes =
+                static_cast<uint16>( 2048 * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
             // We need another line of maxTexSizeBytes for uploading
             // to create a rectangle when calling glTexSubImage2D().
             sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );
@@ -821,10 +822,10 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+            sizeBytes = alignToNextMultiple( sizeBytes, static_cast<size_t>( alignment ) );
         }
 
-        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+        allocateVbo( sizeBytes, static_cast<size_t>( alignment ), bufferType, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         GL3PlusBufferInterface *bufferInterface =
@@ -834,14 +835,14 @@ namespace Ogre
         if( !mEmulateTexBuffers )
         {
             retVal = OGRE_NEW GL3PlusTexBufferPacked(
-                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
-                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+                bufferOffset, requestedSize, 1u, static_cast<uint32>( sizeBytes - requestedSize ) / 1u,
+                bufferType, initialData, keepAsShadow, this, bufferInterface, pixelFormat );
         }
         else
         {
             retVal = OGRE_NEW GL3PlusTexBufferEmulatedPacked(
-                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
-                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+                bufferOffset, requestedSize, 1u, static_cast<uint32>( sizeBytes - requestedSize ) / 1u,
+                bufferType, initialData, keepAsShadow, this, bufferInterface, pixelFormat );
         }
 
         if( initialData )
@@ -869,10 +870,10 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        GLint alignment =
-            mReadOnlyIsTexBuffer
-                ? mTexBufferAlignment
-                : Math::lcm( mUavBufferAlignment, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+        const GLint alignment = static_cast<GLint>(
+            mReadOnlyIsTexBuffer ? mTexBufferAlignment
+                                 : Math::lcm( mUavBufferAlignment,
+                                              PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) ) );
         size_t requestedSize = sizeBytes;
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
@@ -880,7 +881,8 @@ namespace Ogre
         if( mEmulateTexBuffers )
         {
             // Align to the texture size since we must copy the PBO to a texture.
-            ushort maxTexSizeBytes = 2048u * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
+            uint16 maxTexSizeBytes =
+                static_cast<uint16>( 2048u * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
             // We need another line of maxTexSizeBytes for uploading
             // to create a rectangle when calling glTexSubImage2D().
             sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );
@@ -892,10 +894,10 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+            sizeBytes = alignToNextMultiple( sizeBytes, static_cast<size_t>( alignment ) );
         }
 
-        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+        allocateVbo( sizeBytes, static_cast<size_t>( alignment ), bufferType, vboIdx, bufferOffset );
 
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         GL3PlusBufferInterface *bufferInterface =
@@ -905,20 +907,20 @@ namespace Ogre
         if( !mReadOnlyIsTexBuffer )
         {
             retVal = OGRE_NEW GL3PlusReadOnlyUavBufferPacked(
-                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
-                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+                bufferOffset, requestedSize, 1u, static_cast<uint32>( sizeBytes - requestedSize ) / 1u,
+                bufferType, initialData, keepAsShadow, this, bufferInterface, pixelFormat );
         }
         else if( !mEmulateTexBuffers )
         {
             retVal = OGRE_NEW GL3PlusReadOnlyTexBufferPacked(
-                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
-                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+                bufferOffset, requestedSize, 1u, static_cast<uint32>( sizeBytes - requestedSize ) / 1u,
+                bufferType, initialData, keepAsShadow, this, bufferInterface, pixelFormat );
         }
         else
         {
             retVal = OGRE_NEW GL3PlusReadOnlyBufferEmulatedPacked(
-                bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType,
-                initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+                bufferOffset, requestedSize, 1u, static_cast<uint32>( sizeBytes - requestedSize ) / 1u,
+                bufferType, initialData, keepAsShadow, this, bufferInterface, pixelFormat );
         }
 
         if( initialData )
@@ -1188,7 +1190,8 @@ namespace Ogre
                     static_cast<GL3PlusBufferInterface *>( ( *itor )->getBufferInterface() )
                         ->getVboName();
                 vertexBinding.vertexElements = ( *itor )->getVertexElements();
-                vertexBinding.stride = calculateVertexSize( vertexBinding.vertexElements );
+                vertexBinding.stride =
+                    static_cast<GLsizei>( calculateVertexSize( vertexBinding.vertexElements ) );
                 vertexBinding.offset = 0;
                 vertexBinding.instancingDivisor = 0;
 
@@ -1242,7 +1245,7 @@ namespace Ogre
         {
             vao.vaoName = createVao( vao );
             mVaos.push_back( vao );
-            itor = mVaos.begin() + mVaos.size() - 1;
+            itor = mVaos.begin() + static_cast<ptrdiff_t>( mVaos.size() - 1u );
         }
 
         // Mix mNumGeneratedVaos with the GL Vao for better sorting purposes:
@@ -1266,7 +1269,7 @@ namespace Ogre
         const uint32 maskVaoGl = OGRE_RQ_MAKE_MASK( bitsVaoGl );
         const uint32 maskVao = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsVaoGl );
 
-        const uint32 shiftVaoGl = RqBits::MeshBits - bitsVaoGl;
+        const uint32 shiftVaoGl = static_cast<uint32>( RqBits::MeshBits - bitsVaoGl );
 
         uint32 renderQueueId =
             ( ( itor->vaoName & maskVaoGl ) << shiftVaoGl ) | ( mNumGeneratedVaos & maskVao );
@@ -1317,21 +1320,24 @@ namespace Ogre
 
         if( mArbBufferStorage )
         {
-            OCGE( glBufferStorage( target, sizeBytes, 0,
+            OCGE( glBufferStorage( target, static_cast<GLsizeiptr>( sizeBytes ), 0,
                                    forUpload ? GL_MAP_WRITE_BIT : GL_MAP_READ_BIT ) );
         }
         else
         {
-            OCGE( glBufferData( target, sizeBytes, 0, forUpload ? GL_STREAM_DRAW : GL_STREAM_READ ) );
+            OCGE( glBufferData( target, static_cast<GLsizeiptr>( sizeBytes ), 0,
+                                forUpload ? GL_STREAM_DRAW : GL_STREAM_READ ) );
         }
 
         GL3PlusStagingBuffer *stagingBuffer =
             OGRE_NEW GL3PlusStagingBuffer( 0, sizeBytes, this, forUpload, bufferName );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
-        if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
+        if( mNextStagingBufferTimestampCheckpoint == std::numeric_limits<uint64>::max() )
+        {
             mNextStagingBufferTimestampCheckpoint =
                 mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
+        }
 
         return stagingBuffer;
     }
@@ -1366,7 +1372,7 @@ namespace Ogre
             OCGE( glBindBuffer( GL_COPY_READ_BUFFER, bufferName ) );
 
             GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT;
-            glBufferStorage( GL_COPY_READ_BUFFER, sizeBytes, 0, flags );
+            glBufferStorage( GL_COPY_READ_BUFFER, static_cast<GLsizeiptr>( sizeBytes ), 0, flags );
         }
         else
         {
@@ -1375,7 +1381,7 @@ namespace Ogre
             // on it, which will probably work but is illegal as per the OpenGL spec.
             OCGE( glGenBuffers( 1, &bufferName ) );
             OCGE( glBindBuffer( GL_COPY_READ_BUFFER, bufferName ) );
-            glBufferData( GL_COPY_READ_BUFFER, sizeBytes, 0, GL_STREAM_DRAW );
+            glBufferData( GL_COPY_READ_BUFFER, static_cast<GLsizeiptr>( sizeBytes ), 0, GL_STREAM_DRAW );
         }
 
         error = glGetError();
@@ -1421,7 +1427,7 @@ namespace Ogre
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)( ~0 );
+            mNextStagingBufferTimestampCheckpoint = std::numeric_limits<uint64>::max();
 
             for( size_t i = 0; i < 2; ++i )
             {

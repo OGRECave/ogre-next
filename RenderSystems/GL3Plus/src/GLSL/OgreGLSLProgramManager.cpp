@@ -781,7 +781,7 @@ namespace Ogre
                         // the array term might be a simple number or it might be
                         // an expression (e.g. 24*3) or refer to a constant expression
                         // we'd have to evaluate the expression which could get nasty
-                        def.arraySize *= StringConverter::parseInt( arrayDimTerm );
+                        def.arraySize *= StringConverter::parseUnsignedInt( arrayDimTerm );
                         arrayStart = i->find( "[", arrayEnd );
                     }
                 }

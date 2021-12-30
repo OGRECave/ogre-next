@@ -92,8 +92,8 @@ namespace Ogre
 
                 screenSizes = XRRConfigSizes( screenConfig, &nSizes );
 
-                mCurrentMode.first.first = screenSizes[currentSizeID].width;
-                mCurrentMode.first.second = screenSizes[currentSizeID].height;
+                mCurrentMode.first.first = static_cast<uint>( screenSizes[currentSizeID].width );
+                mCurrentMode.first.second = static_cast<uint>( screenSizes[currentSizeID].height );
                 mCurrentMode.second = XRRConfigCurrentRate( screenConfig );
 
                 mOriginalMode = mCurrentMode;
@@ -109,8 +109,8 @@ namespace Ogre
                     {
                         VideoMode mode;
 
-                        mode.first.first = screenSizes[sizeID].width;
-                        mode.first.second = screenSizes[sizeID].height;
+                        mode.first.first = static_cast<uint>( screenSizes[sizeID].width );
+                        mode.first.second = static_cast<uint>( screenSizes[sizeID].height );
                         mode.second = rates[rate];
 
                         mVideoModes.push_back( mode );
@@ -121,8 +121,10 @@ namespace Ogre
         }
         else
         {
-            mCurrentMode.first.first = DisplayWidth( mXDisplay, DefaultScreen( mXDisplay ) );
-            mCurrentMode.first.second = DisplayHeight( mXDisplay, DefaultScreen( mXDisplay ) );
+            mCurrentMode.first.first =
+                static_cast<uint>( DisplayWidth( mXDisplay, DefaultScreen( mXDisplay ) ) );
+            mCurrentMode.first.second =
+                static_cast<uint>( DisplayHeight( mXDisplay, DefaultScreen( mXDisplay ) ) );
             mCurrentMode.second = 0;
 
             mOriginalMode = mCurrentMode;
@@ -535,8 +537,8 @@ namespace Ogre
 
                 fbConfig = getFBConfigFromVisualID( visualid );
 
-                *width = windowAttrib.width;
-                *height = windowAttrib.height;
+                *width = static_cast<unsigned int>( windowAttrib.width );
+                *height = static_cast<unsigned int>( windowAttrib.height );
             }
         }
 
@@ -706,7 +708,7 @@ namespace Ogre
     bool GLXGLSupport::loadIcon( const String &name, Pixmap *pixmap, Pixmap *bitmap )
     {
         Image2 image;
-        int width, height;
+        uint32 width, height;
         char *imageData;
 
         if( !Ogre::ResourceGroupManager::getSingleton().resourceExists(
@@ -736,17 +738,17 @@ namespace Ogre
             return false;
         }
 
-        int bitmapLineLength = ( width + 7 ) / 8;
-        int pixmapLineLength = 4 * width;
+        uint32 bitmapLineLength = ( width + 7 ) / 8;
+        uint32 pixmapLineLength = 4 * width;
 
         char *bitmapData = (char *)malloc( bitmapLineLength * height );
         char *pixmapData = (char *)malloc( pixmapLineLength * height );
 
         int sptr = 0, dptr = 0;
 
-        for( int y = 0; y < height; y++ )
+        for( uint32 y = 0; y < height; y++ )
         {
-            for( int x = 0; x < width; x++ )
+            for( uint32 x = 0; x < width; x++ )
             {
                 if( ImageByteOrder( mXDisplay ) == MSBFirst )
                 {
@@ -786,8 +788,8 @@ namespace Ogre
         *pixmap = XCreatePixmap( mXDisplay, DefaultRootWindow( mXDisplay ), width, height, 24 );
 
         GC gc = XCreateGC( mXDisplay, DefaultRootWindow( mXDisplay ), 0, NULL );
-        XImage *pixmapXImage =
-            XCreateImage( mXDisplay, NULL, 24, ZPixmap, 0, pixmapData, width, height, 8, width * 4 );
+        XImage *pixmapXImage = XCreateImage( mXDisplay, NULL, 24, ZPixmap, 0, pixmapData, width, height,
+                                             8, static_cast<int>( width * 4 ) );
         XPutImage( mXDisplay, *pixmap, gc, pixmapXImage, 0, 0, 0, 0, width, height );
         XDestroyImage( pixmapXImage );
         XFreeGC( mXDisplay, gc );

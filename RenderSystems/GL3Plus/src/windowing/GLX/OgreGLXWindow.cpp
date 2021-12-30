@@ -139,8 +139,10 @@ namespace Ogre
         ::GLXDrawable glxDrawable = 0;
         ::Window externalWindow = 0;
         ::Window parentWindow = DefaultRootWindow( xDisplay );
-        int left = DisplayWidth( xDisplay, DefaultScreen( xDisplay ) ) / 2 - mRequestedWidth / 2u;
-        int top = DisplayHeight( xDisplay, DefaultScreen( xDisplay ) ) / 2 - mRequestedHeight / 2u;
+        int left = DisplayWidth( xDisplay, DefaultScreen( xDisplay ) ) / 2 -
+                   static_cast<int>( mRequestedWidth / 2u );
+        int top = DisplayHeight( xDisplay, DefaultScreen( xDisplay ) ) / 2 -
+                  static_cast<int>( mRequestedHeight / 2u );
         String border;
 
         if( miscParams )
@@ -482,8 +484,10 @@ namespace Ogre
 
                     if( !mRequestedFullscreenMode && border == "fixed" )
                     {
-                        sizeHints->min_width = sizeHints->max_width = mRequestedWidth;
-                        sizeHints->min_height = sizeHints->max_height = mRequestedHeight;
+                        sizeHints->min_width = sizeHints->max_width =
+                            static_cast<int>( mRequestedWidth );
+                        sizeHints->min_height = sizeHints->max_height =
+                            static_cast<int>( mRequestedHeight );
                         sizeHints->flags |= PMaxSize | PMinSize;
                     }
                 }
@@ -506,7 +510,8 @@ namespace Ogre
 
                 left = windowAttrib.x;
                 top = windowAttrib.y;
-                setFinalResolution( windowAttrib.width, windowAttrib.height );
+                setFinalResolution( static_cast<uint32>( windowAttrib.width ),
+                                    static_cast<uint32>( windowAttrib.height ) );
             }
 
             glxDrawable = mWindow;
@@ -724,10 +729,10 @@ namespace Ogre
             else if( _glXSwapIntervalEXT )
             {
                 _glXSwapIntervalEXT( mGLSupport->getGLDisplay(), mContext->mDrawable,
-                                     mVSync ? mVSyncInterval : 0 );
+                                     mVSync ? static_cast<int>( mVSyncInterval ) : 0 );
             }
             else
-                _glXSwapIntervalSGI( mVSync ? mVSyncInterval : 0 );
+                _glXSwapIntervalSGI( mVSync ? static_cast<int>( mVSyncInterval ) : 0 );
         }
 
         mContext->endCurrent();
@@ -788,7 +793,8 @@ namespace Ogre
 
         XGetWindowAttributes( xDisplay, mWindow, &windowAttrib );
 
-        setFinalResolution( windowAttrib.width, windowAttrib.height );
+        setFinalResolution( static_cast<uint32>( windowAttrib.width ),
+                            static_cast<uint32>( windowAttrib.height ) );
     }
     //-----------------------------------------------------------------------------------
     void GLXWindow::swapBuffers()
@@ -863,7 +869,7 @@ namespace Ogre
             xMessage.message_type = mGLSupport->mAtomState;
             xMessage.format = 32;
             xMessage.data.l[0] = ( fullscreen ? 1 : 0 );
-            xMessage.data.l[1] = mGLSupport->mAtomFullScreen;
+            xMessage.data.l[1] = static_cast<long>( mGLSupport->mAtomFullScreen );
             xMessage.data.l[2] = 0;
 
             XSendEvent( xDisplay, DefaultRootWindow( xDisplay ), False,

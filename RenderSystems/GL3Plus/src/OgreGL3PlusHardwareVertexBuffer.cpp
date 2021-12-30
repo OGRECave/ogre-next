@@ -55,7 +55,8 @@ namespace Ogre
             }
 
             OGRE_CHECK_GL_ERROR( glBindBuffer( GL_ARRAY_BUFFER, mBufferId ) );
-            OGRE_CHECK_GL_ERROR( glBufferData( GL_ARRAY_BUFFER, mSizeInBytes, NULL,
+            OGRE_CHECK_GL_ERROR( glBufferData( GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( mSizeInBytes ),
+                                               NULL,
                                                GL3PlusHardwareBufferManager::getGLUsage( usage ) ) );
             OGRE_CHECK_GL_ERROR( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
 
@@ -105,7 +106,10 @@ namespace Ogre
 
             // FIXME: Big stall here
             void *pBuffer = 0;
-            OGRE_CHECK_GL_ERROR( pBuffer = glMapBufferRange( GL_ARRAY_BUFFER, offset, length, access ) );
+            OGRE_CHECK_GL_ERROR( pBuffer =
+                                     glMapBufferRange( GL_ARRAY_BUFFER,  //
+                                                       static_cast<GLintptr>( offset ),
+                                                       static_cast<GLsizeiptr>( length ), access ) );
             // OGRE_CHECK_GL_ERROR(pBuffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 
             if( pBuffer == 0 )
@@ -146,7 +150,8 @@ namespace Ogre
 
                 if( mUsage & HBU_WRITE_ONLY )
                 {
-                    OGRE_CHECK_GL_ERROR( glFlushMappedBufferRange( GL_ARRAY_BUFFER, 0, mLockSize ) );
+                    OGRE_CHECK_GL_ERROR( glFlushMappedBufferRange(
+                        GL_ARRAY_BUFFER, 0, static_cast<GLsizeiptr>( mLockSize ) ) );
                 }
 
                 GLboolean mapped;
@@ -174,7 +179,9 @@ namespace Ogre
                 // get data from the real buffer
                 OGRE_CHECK_GL_ERROR( glBindBuffer( GL_ARRAY_BUFFER, mBufferId ) );
 
-                OGRE_CHECK_GL_ERROR( glGetBufferSubData( GL_ARRAY_BUFFER, offset, length, pDest ) );
+                OGRE_CHECK_GL_ERROR( glGetBufferSubData( GL_ARRAY_BUFFER,
+                                                         static_cast<GLintptr>( offset ),
+                                                         static_cast<GLsizeiptr>( length ), pDest ) );
             }
         }
 
@@ -194,7 +201,7 @@ namespace Ogre
             if( offset == 0 && length == mSizeInBytes )
             {
                 OGRE_CHECK_GL_ERROR(
-                    glBufferData( GL_ARRAY_BUFFER, mSizeInBytes, pSource,
+                    glBufferData( GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( mSizeInBytes ), pSource,
                                   GL3PlusHardwareBufferManager::getGLUsage( mUsage ) ) );
             }
             else
@@ -202,11 +209,12 @@ namespace Ogre
                 if( discardWholeBuffer )
                 {
                     OGRE_CHECK_GL_ERROR(
-                        glBufferData( GL_ARRAY_BUFFER, mSizeInBytes, NULL,
+                        glBufferData( GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( mSizeInBytes ), NULL,
                                       GL3PlusHardwareBufferManager::getGLUsage( mUsage ) ) );
                 }
 
-                OGRE_CHECK_GL_ERROR( glBufferSubData( GL_ARRAY_BUFFER, offset, length, pSource ) );
+                OGRE_CHECK_GL_ERROR( glBufferSubData( GL_ARRAY_BUFFER, static_cast<GLintptr>( offset ),
+                                                      static_cast<GLsizeiptr>( length ), pSource ) );
             }
         }
 
@@ -227,7 +235,7 @@ namespace Ogre
                 // Zero out this(destination) buffer
                 OGRE_CHECK_GL_ERROR( glBindBuffer( GL_ARRAY_BUFFER, mBufferId ) );
                 OGRE_CHECK_GL_ERROR(
-                    glBufferData( GL_ARRAY_BUFFER, mSizeInBytes, 0,
+                    glBufferData( GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( mSizeInBytes ), 0,
                                   GL3PlusHardwareBufferManager::getGLUsage( mUsage ) ) );
                 OGRE_CHECK_GL_ERROR( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
 
@@ -237,8 +245,10 @@ namespace Ogre
                     static_cast<GL3PlusHardwareVertexBuffer &>( srcBuffer ).getGLBufferId() ) );
                 OGRE_CHECK_GL_ERROR( glBindBuffer( GL_COPY_WRITE_BUFFER, mBufferId ) );
 
-                OGRE_CHECK_GL_ERROR( glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
-                                                          srcOffset, dstOffset, length ) );
+                OGRE_CHECK_GL_ERROR( glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,  //
+                                                          static_cast<GLintptr>( srcOffset ),
+                                                          static_cast<GLintptr>( dstOffset ),
+                                                          static_cast<GLsizeiptr>( length ) ) );
 
                 OGRE_CHECK_GL_ERROR( glBindBuffer( GL_COPY_READ_BUFFER, 0 ) );
                 OGRE_CHECK_GL_ERROR( glBindBuffer( GL_COPY_WRITE_BUFFER, 0 ) );
@@ -257,14 +267,16 @@ namespace Ogre
                 // Update whole buffer if possible, otherwise normal
                 if( mLockStart == 0 && mLockSize == mSizeInBytes )
                 {
-                    OGRE_CHECK_GL_ERROR(
-                        glBufferData( GL_ARRAY_BUFFER, mSizeInBytes, shadowLock.pData,
-                                      GL3PlusHardwareBufferManager::getGLUsage( mUsage ) ) );
+                    OGRE_CHECK_GL_ERROR( glBufferData(
+                        GL_ARRAY_BUFFER, static_cast<GLsizeiptr>( mSizeInBytes ), shadowLock.pData,
+                        GL3PlusHardwareBufferManager::getGLUsage( mUsage ) ) );
                 }
                 else
                 {
-                    OGRE_CHECK_GL_ERROR(
-                        glBufferSubData( GL_ARRAY_BUFFER, mLockStart, mLockSize, shadowLock.pData ) );
+                    OGRE_CHECK_GL_ERROR( glBufferSubData( GL_ARRAY_BUFFER,  //
+                                                          static_cast<GLintptr>( mLockStart ),
+                                                          static_cast<GLsizeiptr>( mLockSize ),
+                                                          shadowLock.pData ) );
                 }
 
                 mShadowUpdated = false;

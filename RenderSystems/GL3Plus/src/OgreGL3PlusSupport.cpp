@@ -88,7 +88,7 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "GL_EXTENSIONS = " );
         for( int i = 0; i < numExt; i++ )
         {
-            const GLubyte *pcExt = glGetStringi( GL_EXTENSIONS, i );
+            const GLubyte *pcExt = glGetStringi( GL_EXTENSIONS, static_cast<GLuint>( i ) );
             assert( pcExt && "Problems getting GL extension string using glGetString" );
             str = String( (const char *)pcExt );
             LogManager::getSingleton().logMessage( str );

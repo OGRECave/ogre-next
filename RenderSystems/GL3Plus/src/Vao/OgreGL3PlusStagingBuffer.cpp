@@ -202,8 +202,10 @@ namespace Ogre
         waitIfNeeded();  // Will fill mMappingStart
 
         OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mVboName ) );
-        OCGE( mMappedPtr = glMapBufferRange( GL_COPY_WRITE_BUFFER, mInternalBufferStart + mMappingStart,
-                                             mMappingCount, flags ) );
+        OCGE( mMappedPtr =
+                  glMapBufferRange( GL_COPY_WRITE_BUFFER,                                           //
+                                    static_cast<GLintptr>( mInternalBufferStart + mMappingStart ),  //
+                                    static_cast<GLsizeiptr>( mMappingCount ), flags ) );
 
         return mMappedPtr;
     }
@@ -218,7 +220,7 @@ namespace Ogre
         if( mUploadOnly )
         {
             OCGE( glFlushMappedBufferRange( target, 0 /*mInternalBufferStart + mMappingStart*/,
-                                            mMappingCount ) );
+                                            static_cast<GLsizeiptr>( mMappingCount ) ) );
         }
 
         OCGE( glUnmapBuffer( target ) );
@@ -233,13 +235,15 @@ namespace Ogre
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
-            GLintptr dstOffset = dst.dstOffset + dst.destination->_getInternalBufferStart() *
-                                                     dst.destination->getBytesPerElement();
+            const GLintptr dstOffset =
+                static_cast<GLintptr>( dst.dstOffset + dst.destination->_getInternalBufferStart() *
+                                                           dst.destination->getBytesPerElement() );
 
             OCGE( glBindBuffer( oppositeTarget, bufferInterface->getVboName() ) );
-            OCGE( glCopyBufferSubData( target, oppositeTarget,
-                                       mInternalBufferStart + mMappingStart + dst.srcOffset, dstOffset,
-                                       dst.length ) );
+            OCGE( glCopyBufferSubData(
+                target, oppositeTarget,
+                static_cast<GLintptr>( mInternalBufferStart + mMappingStart + dst.srcOffset ), dstOffset,
+                static_cast<GLsizeiptr>( dst.length ) ) );
         }
 
         if( mUploadOnly )
@@ -337,8 +341,10 @@ namespace Ogre
 
         OCGE( glCopyBufferSubData(
             GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
-            source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset,
-            mInternalBufferStart + freeRegionOffset, srcLength ) );
+            static_cast<GLintptr>( source->_getFinalBufferStart() * source->getBytesPerElement() +
+                                   srcOffset ),
+            static_cast<GLintptr>( mInternalBufferStart + freeRegionOffset ),
+            static_cast<GLsizeiptr>( srcLength ) ) );
 
         return freeRegionOffset;
     }
@@ -355,8 +361,10 @@ namespace Ogre
         mMappingCount = sizeBytes;
 
         OCGE( glBindBuffer( GL_COPY_READ_BUFFER, mVboName ) );
-        OCGE( mMappedPtr = glMapBufferRange( GL_COPY_READ_BUFFER, mInternalBufferStart + mMappingStart,
-                                             mMappingCount, flags ) );
+        OCGE( mMappedPtr =
+                  glMapBufferRange( GL_COPY_READ_BUFFER,  //
+                                    static_cast<GLintptr>( mInternalBufferStart + mMappingStart ),
+                                    static_cast<GLsizeiptr>( mMappingCount ), flags ) );
 
         // Put the mapped region back to our records as "available" for subsequent _asyncDownload
         _cancelDownload( offset, sizeBytes );

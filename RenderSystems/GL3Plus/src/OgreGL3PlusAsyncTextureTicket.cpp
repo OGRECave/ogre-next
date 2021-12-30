@@ -92,11 +92,13 @@ namespace Ogre
 
         if( mVaoManager->supportsArbBufferStorage() )
         {
-            OCGE( glBufferStorage( GL_PIXEL_PACK_BUFFER, sizeBytes, 0, GL_MAP_READ_BIT ) );
+            OCGE( glBufferStorage( GL_PIXEL_PACK_BUFFER, static_cast<GLsizeiptr>( sizeBytes ), 0,
+                                   GL_MAP_READ_BIT ) );
         }
         else
         {
-            OCGE( glBufferData( GL_PIXEL_PACK_BUFFER, sizeBytes, 0, GL_STREAM_READ ) );
+            OCGE( glBufferData( GL_PIXEL_PACK_BUFFER, static_cast<GLsizeiptr>( sizeBytes ), 0,
+                                GL_STREAM_READ ) );
         }
 
         return vboName;
@@ -316,7 +318,8 @@ namespace Ogre
         if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
             retVal.setCompressedPixelFormat( mPixelFormatFamily );
 
-        retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, sizeBytes, GL_MAP_READ_BIT );
+        retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, static_cast<GLsizeiptr>( sizeBytes ),
+                                        GL_MAP_READ_BIT );
 
         if( mTmpVboName )
         {

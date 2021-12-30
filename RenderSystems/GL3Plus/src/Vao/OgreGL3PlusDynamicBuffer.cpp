@@ -98,8 +98,9 @@ namespace Ogre
     {
         assert( start <= mMappedRanges[ticket].count && start + count <= mMappedRanges[ticket].count );
 
-        OCGE( glFlushMappedBufferRange( GL_COPY_WRITE_BUFFER, mMappedRanges[ticket].start + start,
-                                        count ) );
+        OCGE( glFlushMappedBufferRange( GL_COPY_WRITE_BUFFER,
+                                        static_cast<GLintptr>( mMappedRanges[ticket].start + start ),
+                                        static_cast<GLsizeiptr>( count ) ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusDynamicBuffer::unmap( size_t ticket )

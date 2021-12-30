@@ -487,8 +487,8 @@ namespace Ogre
         void _oneTimeContextInitialization();
         void initialiseContext( Window *primary );
 
-        GLint convertCompareFunction( CompareFunction func ) const;
-        GLint convertStencilOp( StencilOperation op ) const;
+        GLenum convertCompareFunction( CompareFunction func ) const;
+        GLenum convertStencilOp( StencilOperation op ) const;
 
         bool supportsTargetIndependentRasterization() const
         {

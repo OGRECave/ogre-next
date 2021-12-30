@@ -40,7 +40,7 @@ namespace Ogre
     GLSLProgram::GLSLProgram( GLSLShader *vertexShader, GLSLShader *hullShader, GLSLShader *domainShader,
                               GLSLShader *geometryShader, GLSLShader *fragmentShader,
                               GLSLShader *computeShader ) :
-        mBaseInstanceLocation( GL_INVALID_INDEX ),
+        mBaseInstanceLocation( static_cast<GLint>( GL_INVALID_INDEX ) ),
         mVertexShader( vertexShader ),
         mHullShader( hullShader ),
         mDomainShader( domainShader ),
@@ -365,8 +365,8 @@ namespace Ogre
         for( size_t i = 0; i < OGRE_NUM_SEMANTICS - 1; ++i )
         {
             const SemanticNameTable &entry = attributesTable[i];
-            GLint attrIdx = GL3PlusVaoManager::getAttributeIndexFor( entry.semantic );
-            if( attrIdx < maxVertexAttribs )
+            const GLuint attrIdx = GL3PlusVaoManager::getAttributeIndexFor( entry.semantic );
+            if( static_cast<GLint>( attrIdx ) < maxVertexAttribs )
             {
                 OCGE( glBindAttribLocation( programName, attrIdx, entry.semanticName ) );
             }

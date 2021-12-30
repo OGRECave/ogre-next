@@ -72,8 +72,9 @@ namespace Ogre
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
         OCGE( glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
-        OCGE( glTexImage2D( GL_TEXTURE_2D, 0, mInternalFormat, width, texHeight, 0, mOriginFormat,
-                            mOriginDataType, NULL ) );
+        OCGE( glTexImage2D( GL_TEXTURE_2D, 0, static_cast<GLint>( mInternalFormat ),
+                            static_cast<GLsizei>( width ), static_cast<GLsizei>( texHeight ), 0,
+                            mOriginFormat, mOriginDataType, NULL ) );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusTexBufferEmulatedPacked::~GL3PlusTexBufferEmulatedPacked()

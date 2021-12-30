@@ -559,7 +559,8 @@ namespace Ogre
 
             // going from the end so when we delete a line the numbers of the lines before will not
             // change
-            for( int i = (int)errors.size() - 1; i != -1; i-- )
+            const size_t numErrors = errors.size();
+            for( size_t i = numErrors; i--; )
             {
                 String &curError = errors[i];
                 size_t foundPos = curError.find( precisionQualifierErrorString );

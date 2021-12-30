@@ -87,7 +87,6 @@ namespace Ogre
             case TextureTypes::Unknown:
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Ogre should never hit this path",
                              "GL3PlusTextureGpuManager::GL3PlusTextureGpuManager" );
-                break;
             case TextureTypes::Type1D:
                 OCGE( glTexStorage1D( targets[i], 1, GL_RGBA8, 4 ) );
                 OCGE( glTexSubImage1D( targets[i], 0, 0, 4, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
@@ -105,7 +104,7 @@ namespace Ogre
                 break;
             case TextureTypes::TypeCube:
                 OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 4 ) );
-                for( int j = 0; j < 6; ++j )
+                for( uint32 j = 0; j < 6; ++j )
                 {
                     OCGE( glTexSubImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0, 0, 0, 4, 4, GL_RGBA,
                                            GL_UNSIGNED_INT_8_8_8_8_REV, c_blackData ) );

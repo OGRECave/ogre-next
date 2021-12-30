@@ -118,7 +118,7 @@ namespace Ogre
             float vals[2];
             for( int i = 0; i < mSampleDescription.getColourSamples(); ++i )
             {
-                glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
+                glGetMultisamplefv( GL_SAMPLE_POSITION, static_cast<GLuint>( i ), vals );
                 locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );
             }
         }
