@@ -42,12 +42,12 @@ namespace Ogre
         void    *mMappedPtr;
         void    *mLastMappedPtr;
 
-        virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr();
+        bool belongsToUs( const TextureBox &box ) override;
+        void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:
         NULLStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily, size_t size );
-        virtual ~NULLStagingTexture();
+        ~NULLStagingTexture() override;
     };
 }
 

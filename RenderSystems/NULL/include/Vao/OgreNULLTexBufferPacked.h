@@ -42,18 +42,17 @@ namespace Ogre
     {
     public:
         NULLTexBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                             uint32 numElementsPadding, BufferType bufferType,
-                             void *initialData, bool keepAsShadow,
-                             VaoManager *vaoManager, NULLBufferInterface *bufferInterface,
-                             PixelFormatGpu pf );
-        ~NULLTexBufferPacked();
+                             uint32 numElementsPadding, BufferType bufferType, void *initialData,
+                             bool keepAsShadow, VaoManager *vaoManager,
+                             NULLBufferInterface *bufferInterface, PixelFormatGpu pf );
+        ~NULLTexBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
     };
 
     class _OgreNULLExport NULLReadOnlyBufferPacked : public ReadOnlyBufferPacked
@@ -64,15 +63,15 @@ namespace Ogre
                                   BufferType bufferType, void *initialData, bool keepAsShadow,
                                   VaoManager *vaoManager, NULLBufferInterface *bufferInterface,
                                   PixelFormatGpu pf );
-        virtual ~NULLReadOnlyBufferPacked();
+        ~NULLReadOnlyBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) {}
+        void bindBufferVS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferPS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferGS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferDS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferHS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
+        void bindBufferCS( uint16 slot, size_t offset = 0, size_t sizeBytes = 0 ) override {}
     };
-}
+}  // namespace Ogre
 
 #endif

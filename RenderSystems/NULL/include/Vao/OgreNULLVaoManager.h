@@ -130,13 +130,12 @@ namespace Ogre
         VertexBufferPacked  *mDrawId;
 
     protected:
-        virtual VertexBufferPacked* createVertexBufferImpl( size_t numElements,
-                                                            uint32 bytesPerElement,
-                                                            BufferType bufferType,
-                                                            void *initialData, bool keepAsShadow,
-                                                            const VertexElement2Vec &vertexElements );
+        VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                    BufferType bufferType, void *initialData,
+                                                    bool keepAsShadow,
+                                                    const VertexElement2Vec &vertexElements ) override;
 
-        virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
+        void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) override;
 
 #ifdef _OGRE_MULTISOURCE_VBO
         virtual MultiSourceVertexBufferPool* createMultiSourceVertexBufferPoolImpl(
@@ -145,56 +144,54 @@ namespace Ogre
                                             BufferType bufferType );
 #endif
 
-        virtual IndexBufferPacked* createIndexBufferImpl( size_t numElements,
-                                                          uint32 bytesPerElement,
-                                                          BufferType bufferType,
-                                                          void *initialData, bool keepAsShadow );
+        IndexBufferPacked *createIndexBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                  BufferType bufferType, void *initialData,
+                                                  bool keepAsShadow ) override;
 
-        virtual void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer );
+        void destroyIndexBufferImpl( IndexBufferPacked *indexBuffer ) override;
 
-        virtual ConstBufferPacked* createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                          void *initialData, bool keepAsShadow );
-        virtual void destroyConstBufferImpl( ConstBufferPacked *constBuffer );
+        ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                  void *initialData, bool keepAsShadow ) override;
+        void destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
 
-        virtual TexBufferPacked* createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                      BufferType bufferType,
-                                                      void *initialData, bool keepAsShadow );
-        virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer );
+        TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                              BufferType bufferType, void *initialData,
+                                              bool keepAsShadow ) override;
+        void destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
 
-        virtual ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat,
-                                                                size_t sizeBytes, BufferType bufferType,
-                                                                void *initialData, bool keepAsShadow );
-        virtual void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer );
+        ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                        BufferType bufferType, void *initialData,
+                                                        bool keepAsShadow ) override;
+        void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
 
-        virtual UavBufferPacked* createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                      uint32 bindFlags,
-                                                      void *initialData, bool keepAsShadow );
-        virtual void destroyUavBufferImpl( UavBufferPacked *uavBuffer );
+        UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                              uint32 bindFlags, void *initialData,
+                                              bool keepAsShadow ) override;
+        void destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
 
-        virtual IndirectBufferPacked* createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
-                                                                void *initialData, bool keepAsShadow );
-        virtual void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer );
+        IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
+                                                        void *initialData, bool keepAsShadow ) override;
+        void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
 
-        virtual VertexArrayObject* createVertexArrayObjectImpl(
-                                                        const VertexBufferPackedVec &vertexBuffers,
+        VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
                                                         IndexBufferPacked *indexBuffer,
-                                                        OperationType opType );
+                                                        OperationType opType ) override;
 
-        virtual void destroyVertexArrayObjectImpl( VertexArrayObject *vao );
+        void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;
 
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
-        virtual void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
-                                             size_t newPoolIdx, BufferPacked *buffer );
+        void switchVboPoolIndexImpl( unsigned internalVboBufferType, size_t oldPoolIdx,
+                                     size_t newPoolIdx, BufferPacked *buffer ) override;
 
     public:
         NULLVaoManager();
         virtual ~NULLVaoManager();
 
-        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
-                                     size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const;
+        void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                             size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const override;
 
-        virtual void cleanupEmptyPools();
+        void cleanupEmptyPools() override;
 
         bool supportsArbBufferStorage() const       { return false; }
 
@@ -203,19 +200,19 @@ namespace Ogre
             The returned buffer starts with a reference count of 1. You should decrease
             it when you're done using it.
         */
-        virtual StagingBuffer* createStagingBuffer( size_t sizeBytes, bool forUpload );
+        StagingBuffer *createStagingBuffer( size_t sizeBytes, bool forUpload ) override;
 
-        virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
-                                                  size_t elementStart, size_t elementCount );
+        AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                          size_t elementStart, size_t elementCount ) override;
 
-        virtual void _update();
+        void _update() override;
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
         /// is finished.
-        uint8 waitForTailFrameToFinish();
-        virtual void waitForSpecificFrameToFinish( uint32 frameCount );
-        virtual bool isFrameFinished( uint32 frameCount );
+        uint8 waitForTailFrameToFinish() override;
+        void waitForSpecificFrameToFinish( uint32 frameCount ) override;
+        bool isFrameFinished( uint32 frameCount ) override;
     };
 }
 

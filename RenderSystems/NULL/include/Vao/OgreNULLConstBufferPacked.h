@@ -42,14 +42,14 @@ namespace Ogre
                                BufferType bufferType, void *initialData, bool keepAsShadow,
                                VaoManager *vaoManager, BufferInterface *bufferInterface,
                                size_t bindableSize );
-        ~NULLConstBufferPacked();
+        ~NULLConstBufferPacked() override;
 
-        virtual void bindBufferVS( uint16 slot ) {}
-        virtual void bindBufferPS( uint16 slot ) {}
-        virtual void bindBufferGS( uint16 slot ) {}
-        virtual void bindBufferHS( uint16 slot ) {}
-        virtual void bindBufferDS( uint16 slot ) {}
-        virtual void bindBufferCS( uint16 slot ) {}
+        void bindBufferVS( uint16 slot ) override {}
+        void bindBufferPS( uint16 slot ) override {}
+        void bindBufferGS( uint16 slot ) override {}
+        void bindBufferHS( uint16 slot ) override {}
+        void bindBufferDS( uint16 slot ) override {}
+        void bindBufferCS( uint16 slot ) override {}
     };
 }
 

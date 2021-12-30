@@ -29,33 +29,35 @@ THE SOFTWARE.
 #define _OgreNULLWindow_H_
 
 #include "OgreNULLPrerequisites.h"
+
 #include "OgreWindow.h"
 
-namespace Ogre 
+namespace Ogre
 {
     class NULLWindow : public Window
-	{
-		bool    mClosed;
+    {
+        bool mClosed;
+
     public:
         NULLWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
-        virtual ~NULLWindow();
+        ~NULLWindow() override;
 
-        virtual void destroy();
+        void destroy() override;
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestResolution( uint32 width, uint32 height );
-        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 width, uint32 height,
-                                              uint32 frequencyNumerator, uint32 frequencyDenominator );
-        virtual bool isClosed() const;
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
+        void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                      uint32 width, uint32 height, uint32 frequencyNumerator,
+                                      uint32 frequencyDenominator ) override;
+        bool isClosed() const override;
 
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible() const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden() const;
-        virtual void _initialize( TextureGpuManager *textureGpuManager );
-        virtual void swapBuffers();
-	};
-}
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
+        void swapBuffers() override;
+    };
+}  // namespace Ogre
 
 #endif

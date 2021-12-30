@@ -70,14 +70,9 @@ namespace Ogre
 
         TextureBox retVal;
 
-        size_t sizeBytes = 0;
-        const uint32 rowAlignment = 4u;
         retVal = TextureBox( mWidth, mHeight, getDepth(), getNumSlices(),
                              PixelFormatGpuUtils::getBytesPerPixel( mPixelFormatFamily ),
                              getBytesPerRow(), getBytesPerImage() );
-        sizeBytes = PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, mDepthOrSlices,
-                                                       1u, mPixelFormatFamily,
-                                                       rowAlignment );
 
         if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
             retVal.setCompressedPixelFormat( mPixelFormatFamily );

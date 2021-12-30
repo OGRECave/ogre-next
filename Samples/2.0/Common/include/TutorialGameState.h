@@ -43,14 +43,14 @@ namespace Demo
 
         void _notifyGraphicsSystem( GraphicsSystem *graphicsSystem );
 
-        virtual void createScene01();
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        virtual void update( float timeSinceLast ) override;
 
-        virtual void keyPressed( const SDL_KeyboardEvent &arg );
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        virtual void keyPressed( const SDL_KeyboardEvent &arg ) override;
+        virtual void keyReleased( const SDL_KeyboardEvent &arg ) override;
 
-        virtual void mouseMoved( const SDL_Event &arg );
+        virtual void mouseMoved( const SDL_Event &arg ) override;
     };
 }
 

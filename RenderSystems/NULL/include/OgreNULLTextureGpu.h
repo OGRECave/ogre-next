@@ -46,24 +46,23 @@ namespace Ogre
     class _OgreNULLExport NULLTextureGpu : public TextureGpu
     {
     protected:
-        virtual void createInternalResourcesImpl();
-        virtual void destroyInternalResourcesImpl();
+        void createInternalResourcesImpl() override;
+        void destroyInternalResourcesImpl() override;
 
     public:
-        NULLTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                        VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                        TextureTypes::TextureTypes initialType,
+        NULLTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                        IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                         TextureGpuManager *textureManager );
-        virtual ~NULLTextureGpu();
+        ~NULLTextureGpu() override;
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
-        virtual void notifyDataIsReady();
+        void getSubsampleLocations( vector<Vector2>::type locations ) override;
+        void notifyDataIsReady() override;
 
-        virtual void _autogenerateMipmaps(
-            CopyEncTransitionMode::CopyEncTransitionMode transitionMode = CopyEncTransitionMode::Auto );
-        virtual void _setToDisplayDummyTexture();
+        void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
+                                       CopyEncTransitionMode::Auto ) override;
+        void _setToDisplayDummyTexture() override;
 
-        virtual bool _isDataReadyImpl() const;
+        bool _isDataReadyImpl() const override;
     };
 
     class _OgreNULLExport NULLTextureGpuRenderTarget : public NULLTextureGpu
@@ -79,11 +78,11 @@ namespace Ogre
                                     TextureTypes::TextureTypes initialType,
                                     TextureGpuManager *textureManager );
 
-        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat );
-        virtual uint16 getDepthBufferPoolId() const;
-        virtual bool getPreferDepthTexture() const;
-        virtual PixelFormatGpu getDesiredDepthBufferFormat() const;
+        void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                      PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16 getDepthBufferPoolId() const override;
+        bool getPreferDepthTexture() const override;
+        PixelFormatGpu getDesiredDepthBufferFormat() const override;
     };
 
     /** @} */

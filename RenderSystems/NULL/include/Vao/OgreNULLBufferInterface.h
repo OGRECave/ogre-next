@@ -62,18 +62,19 @@ namespace Ogre
         /// Only use this function for the first upload
         void _firstUpload( const void *data, size_t elementStart, size_t elementCount );
 
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame();
-        virtual void regressFrame();
+        void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
+                                         MappingState prevMappingState,
+                                         bool advanceFrame = true ) override;
 
-        virtual void _notifyBuffer( BufferPacked *buffer );
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
 
-        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
-                             size_t srcOffsetBytes, size_t sizeBytes );
+        void _notifyBuffer( BufferPacked *buffer ) override;
+
+        void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
+                     size_t sizeBytes ) override;
     };
 }
 

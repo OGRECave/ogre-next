@@ -78,14 +78,15 @@ namespace Ogre
             //Non-persistent buffers just map the small region they'll need.
             size_t offset = mBuffer->mInternalBufferStart + elementStart +
                             mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
-            size_t length = elementCount;
+            // size_t length = elementCount;
 
             if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT && canPersistentMap )
             {
                 //Persistent buffers map the *whole* assigned buffer,
                 //we later care for the offsets and lengths
                 offset = mBuffer->mInternalBufferStart;
-                length = mBuffer->_getInternalNumElements() * vaoManager->getDynamicBufferMultiplier();
+                // length = mBuffer->_getInternalNumElements() *
+                // vaoManager->getDynamicBufferMultiplier();
             }
 
             mMappedPtr = mNullDataPtr + offset * bytesPerElement;

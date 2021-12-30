@@ -30,45 +30,45 @@ THE SOFTWARE.
 #define _OgreNULLTextureGpuManager_H_
 
 #include "OgreNULLPrerequisites.h"
-#include "OgreTextureGpuManager.h"
 
 #include "OgreTextureGpu.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     class _OgreNULLExport NULLTextureGpuManager : public TextureGpuManager
     {
     protected:
-        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags,
-                                               TextureTypes::TextureTypes initialType );
-        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
-                                                          uint32 slices, PixelFormatGpu pixelFormat );
-        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
+        TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                       IdString name, uint32 textureFlags,
+                                       TextureTypes::TextureTypes initialType ) override;
+        StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                  uint32 slices, PixelFormatGpu pixelFormat ) override;
+        void destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
-        virtual AsyncTextureTicket* createAsyncTextureTicketImpl( uint32 width, uint32 height,
-                                                                  uint32 depthOrSlices,
-                                                                  TextureTypes::TextureTypes textureType,
-                                                                  PixelFormatGpu pixelFormatFamily );
+        AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                          uint32 depthOrSlices,
+                                                          TextureTypes::TextureTypes textureType,
+                                                          PixelFormatGpu pixelFormatFamily ) override;
 
     public:
         NULLTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
-        virtual ~NULLTextureGpuManager();
+        ~NULLTextureGpuManager() override;
 
-        TextureGpu* createTextureGpuWindow();
+        TextureGpu *createTextureGpuWindow();
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

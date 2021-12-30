@@ -40,21 +40,16 @@ namespace Ogre
     class _OgreNULLExport NULLUavBufferPacked : public UavBufferPacked
     {
     protected:
-        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
-        virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl();
+        TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
     public:
         NULLUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                              uint32 bindFlags, void *initialData, bool keepAsShadow,
                              VaoManager *vaoManager, NULLBufferInterface *bufferInterface );
-        ~NULLUavBufferPacked();
+        ~NULLUavBufferPacked() override;
 
-//        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferGS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferDS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-//        virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
-        virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) {}
+        void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) override {}
     };
 }
 
