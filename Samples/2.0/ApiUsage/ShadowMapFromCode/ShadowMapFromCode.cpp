@@ -75,12 +75,22 @@ namespace Demo
             shadowParam.atlasStart[0].y = 0u;
 
             shadowParam.supportedLightTypes = 0u;
-            //shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
+            shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
             shadowParam.addLightType( Ogre::Light::LT_POINT );
             shadowParam.addLightType( Ogre::Light::LT_SPOTLIGHT );
             shadowParams.push_back( shadowParam );
 
             //Third light, directional, spot or point
+            shadowParam.atlasStart[0].y = 2048u;
+            shadowParams.push_back( shadowParam );
+            
+            //Fourth light
+            shadowParam.atlasStart[0].x = 2048u;
+            shadowParam.atlasStart[0].y = 0u;
+            shadowParams.push_back( shadowParam );
+            
+            //Fifth light
+            shadowParam.atlasStart[0].x = 2048u;
             shadowParam.atlasStart[0].y = 2048u;
             shadowParams.push_back( shadowParam );
 
@@ -121,6 +131,7 @@ namespace Demo
             shadowParams.push_back( shadowParam );
 
             //Second light, directional, spot or point
+            shadowParam.atlasId = 1;
             shadowParam.technique = Ogre::SHADOWMAP_FOCUSED;
             shadowParam.resolution[0].x = 1024u;
             shadowParam.resolution[0].y = 1024u;
@@ -135,6 +146,16 @@ namespace Demo
 
             //Third light, directional, spot or point
             shadowParam.atlasStart[0].x = 1024u;
+            shadowParams.push_back( shadowParam );
+
+            //Fourth light
+            shadowParam.atlasStart[0].x = 1024u;
+            shadowParam.atlasStart[0].y = 0u;
+            shadowParams.push_back( shadowParam );
+            
+            //Fifth light
+            shadowParam.atlasStart[0].x = 1024u;
+            shadowParam.atlasStart[0].y = 1024u;
             shadowParams.push_back( shadowParam );
 
             const Ogre::RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
@@ -199,7 +220,7 @@ namespace Demo
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
             Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs*>( hlms );
             if(pbs)
-                pbs->setMaxShadowMapLights(2);
+                pbs->setMaxShadowMapLights(4);
         }
 #endif
 

@@ -14,7 +14,7 @@ namespace Demo
     {
         Ogre::SceneNode     *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode     *mLightNodes[5];
 
         bool                mAnimateObjects;
 
