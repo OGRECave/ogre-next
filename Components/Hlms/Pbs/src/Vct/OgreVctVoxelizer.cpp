@@ -293,7 +293,7 @@ namespace Ogre
 
             uint32 *partSubMeshIdx = 0;
 
-            bool uses32bitIndices = false;
+            // bool uses32bitIndices = false;
 
             IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
             if( indexBuffer )
@@ -301,7 +301,6 @@ namespace Ogre
                 numIndices = vao->getPrimitiveCount();
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
-                    uses32bitIndices = false;
                     ibOffset = mNumIndices16 + totalNumIndices16;
                     totalNumIndices16 += alignToNextMultiple( numIndices, 4u );
 
@@ -494,7 +493,6 @@ namespace Ogre
             SubMesh *subMesh = mesh->getSubMesh( subMeshIdx );
             VertexArrayObject *vao = subMesh->mVao[VpNormal].front();
 
-            size_t vertexStart = 0u;
             size_t numVertices = vao->getBaseVertexBuffer()->getNumElements();
 
             IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
@@ -517,7 +515,7 @@ namespace Ogre
             }
             else
             {
-                vertexStart = vao->getPrimitiveStart();
+                // vertexStart = vao->getPrimitiveStart();
                 numVertices = vao->getPrimitiveCount();
             }
 
@@ -539,7 +537,7 @@ namespace Ogre
             }
 #endif
             const VertexBufferDownloadHelper::DownloadData *downloadData =
-                downloadHelper.getDownloadData().begin();
+                downloadHelper.getDownloadData().data();
 
             VertexElement2 dummy( VET_FLOAT1, VES_TEXTURE_COORDINATES );
             VertexElement2 origElements[3] = {

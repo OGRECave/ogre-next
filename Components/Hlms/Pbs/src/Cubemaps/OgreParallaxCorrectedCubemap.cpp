@@ -343,10 +343,14 @@ namespace Ogre
         vertexElements.push_back( VertexElement2( VET_FLOAT3, VES_POSITION ) );
 
         VaoManager *vaoManager = mSceneManager->getDestinationRenderSystem()->getVaoManager();
-        VertexBufferPacked *vertexBuffer =
-            vaoManager->createVertexBuffer( vertexElements, 8, BT_IMMUTABLE, (void *)c_vertices, false );
+        // It's ok to const_cast as long we send "false" in the "keepAsShadow
+        VertexBufferPacked *vertexBuffer = vaoManager->createVertexBuffer(
+            vertexElements, 8, BT_IMMUTABLE,
+            reinterpret_cast<void *>( const_cast<Vector3 *>( c_vertices ) ), false );
+        // It's ok to const_cast as long we send "false" in the "keepAsShadow
         IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer(
-            IndexBufferPacked::IT_16BIT, 3 * 2 * 6, BT_IMMUTABLE, (void *)c_indexData, false );
+            IndexBufferPacked::IT_16BIT, 3 * 2 * 6, BT_IMMUTABLE,
+            reinterpret_cast<void *>( const_cast<uint16 *>( c_indexData ) ), false );
         VertexBufferPackedVec vertexBuffers( 1, vertexBuffer );
         VertexArrayObject *vao =
             vaoManager->createVertexArrayObject( vertexBuffers, indexBuffer, OT_TRIANGLE_LIST );

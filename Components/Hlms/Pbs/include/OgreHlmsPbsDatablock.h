@@ -249,12 +249,12 @@ namespace Ogre
         /// @see PbsBrdf::PbsBrdf
         uint32 mBrdf;
 
-        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+        void cloneImpl( HlmsDatablock *datablock ) const override;
 
-        virtual bool bakeTextures( bool hasSeparateSamplers );
-        void         scheduleConstBufferUpdate();
-        virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
-        virtual void notifyOptimizationStrategyChanged();
+        bool bakeTextures( bool hasSeparateSamplers ) override;
+        void scheduleConstBufferUpdate();
+        void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags ) override;
+        void notifyOptimizationStrategyChanged() override;
 
     public:
         /** Valid parameters in params:
@@ -567,10 +567,10 @@ namespace Ogre
                                   CullingMode oneSidedShadowCast = CULL_ANTICLOCKWISE );
         bool getTwoSidedLighting() const;
 
-        virtual bool hasCustomShadowMacroblock() const;
+        bool hasCustomShadowMacroblock() const override;
 
-        virtual void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
-                                   bool useAlphaFromTextures = true );
+        void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
+                           bool useAlphaFromTextures = true ) override;
 
         /** @see HlmsDatablock::setAlphaTest
         @remarks
@@ -580,7 +580,7 @@ namespace Ogre
             If there are no diffuse nor detail-diffuse maps, the alpha test is
             compared against the value 1.0
         */
-        virtual void setAlphaTestThreshold( float threshold );
+        void setAlphaTestThreshold( float threshold ) override;
 
         /** Makes the material transparent, and sets the amount of transparency
         @param transparency
@@ -747,15 +747,15 @@ namespace Ogre
         bool   suggestUsingSRGB( PbsTextureTypes type ) const;
         uint32 suggestFiltersForType( PbsTextureTypes type ) const;
 
-        virtual ColourValue getDiffuseColour() const;
-        virtual ColourValue getEmissiveColour() const;
-        virtual TextureGpu *getDiffuseTexture() const;
-        virtual TextureGpu *getEmissiveTexture() const;
+        ColourValue getDiffuseColour() const override;
+        ColourValue getEmissiveColour() const override;
+        TextureGpu *getDiffuseTexture() const override;
+        TextureGpu *getEmissiveTexture() const override;
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
 
-        virtual void calculateHash();
+        void calculateHash() override;
 
         static const size_t MaterialSizeInGpu;
         static const size_t MaterialSizeInGpuAligned;

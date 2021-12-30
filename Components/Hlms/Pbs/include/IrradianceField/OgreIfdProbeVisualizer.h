@@ -47,13 +47,13 @@ namespace Ogre
                              uint8_t tessellation );
 
         // Overrides from MovableObject
-        virtual const String &getMovableType() const;
+        const String &getMovableType() const override;
 
         // Overrides from Renderable
-        virtual const LightList &getLights() const;
-        virtual void             getRenderOperation( v1::RenderOperation &op, bool casterPass );
-        virtual void             getWorldTransforms( Matrix4 *xform ) const;
-        virtual bool             getCastsShadows() const;
+        const LightList &getLights() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
 }  // namespace Ogre
 

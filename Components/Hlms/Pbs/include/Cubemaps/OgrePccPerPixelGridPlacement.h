@@ -285,7 +285,7 @@ namespace Ogre
         void buildEnd();
 
         /// ParallaxCorrectedCubemapAutoListener overloads
-        virtual void preCopyRenderTargetToCubemap( TextureGpu *renderTarget, uint32 cubemapArrayIdx );
+        void preCopyRenderTargetToCubemap( TextureGpu *renderTarget, uint32 cubemapArrayIdx ) override;
     };
 }  // namespace Ogre
 

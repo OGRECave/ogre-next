@@ -740,7 +740,7 @@ namespace Ogre
         memset( &meshData, 0, sizeof( meshData ) );
 
         // Issue all async requests now.
-        VertexArrayObject::ReadRequestsArray readRequests;
+        VertexArrayObject::ReadRequestsVec readRequests;
         AsyncTicketPtr indexTicket;
 
         {
@@ -1114,7 +1114,7 @@ namespace Ogre
                         if( datablock->mType == HLMS_PBS )
                         {
                             MaterialData material;
-                            memset( &material, 0, sizeof( material ) );
+                            silent_memset( &material, 0, sizeof( material ) );
                             int imageIdx = 0;
 
                             HlmsPbsDatablock *pbsDatablock =

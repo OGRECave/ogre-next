@@ -262,7 +262,7 @@ namespace Ogre
         VoxelizedMeshCache *getMeshCache() { return mMeshCache; }
 
         /// CompositorWorkspaceListener override
-        virtual void allWorkspacesBeforeBeginUpdate();
+        void allWorkspacesBeforeBeginUpdate() override;
 
         void           setCameraPosition( const Vector3 &cameraPosition );
         const Vector3 &getCameraPosition() const { return mCameraPosition; }

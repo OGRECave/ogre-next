@@ -146,7 +146,7 @@ namespace Ogre
         void createAltVoxelTextures();
         void setVoxelTexturesToJobs();
 
-        virtual void destroyVoxelTextures();
+        void destroyVoxelTextures() override;
 
         void createInstanceBuffers();
         void destroyInstanceBuffers();

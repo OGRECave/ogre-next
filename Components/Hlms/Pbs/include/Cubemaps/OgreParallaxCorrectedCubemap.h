@@ -112,7 +112,7 @@ namespace Ogre
         TempRttVec                    mTmpRtt;
         TempRttVec                    mIblRtt;
 
-        virtual void loadResource( Resource *resource );
+        void loadResource( Resource *resource ) override;
 
         void createProxyGeometry();
         void destroyProxyGeometry();
@@ -146,17 +146,17 @@ namespace Ogre
                                   uint32 proxyVisibilityMask, uint32 proxyQueryMask = 0 );
         ~ParallaxCorrectedCubemap();
 
-        void _releaseManualHardwareResources();
-        void _restoreManualHardwareResources();
+        void _releaseManualHardwareResources() override;
+        void _restoreManualHardwareResources() override;
 
-        virtual void destroyAllProbes();
+        void destroyAllProbes() override;
 
         void createProxyItems();
         void destroyProxyItems();
 
         /// @copydoc ParallaxCorrectedCubemapBase::prepareForClearScene
-        virtual void prepareForClearScene();
-        virtual void restoreFromClearScene();
+        void prepareForClearScene() override;
+        void restoreFromClearScene() override;
 
         /** Will update both mTrackedPosition & mTrackedViewProjMatrix with appropiate settings
             every time it's called. Must be called every time the camera changes.
@@ -192,15 +192,15 @@ namespace Ogre
         /// By default the probes will be constructed when the user enters its vecinity.
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
-        void updateAllDirtyProbes();
+        void updateAllDirtyProbes() override;
 
-        virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
+        void _notifyPreparePassHash( const Matrix4 &viewMatrix ) override;
 
-        virtual size_t getConstBufferSize();
-        static size_t  getConstBufferSizeStatic();
+        size_t        getConstBufferSize() override;
+        static size_t getConstBufferSizeStatic();
 
-        virtual void fillConstBufferData( const Matrix4 &viewMatrix,
-                                          float *RESTRICT_ALIAS passBufferPtr ) const;
+        void fillConstBufferData( const Matrix4 &viewMatrix,
+                                  float *RESTRICT_ALIAS passBufferPtr ) const override;
 
     protected:
         TextureGpu *findRtt( const TextureGpu *baseParams, TempRttVec &container, uint32 textureFlags,
@@ -210,14 +210,14 @@ namespace Ogre
     public:
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
-        virtual TextureGpu *findTmpRtt( const TextureGpu *baseParams );
-        virtual void        releaseTmpRtt( const TextureGpu *tmpRtt );
+        TextureGpu *findTmpRtt( const TextureGpu *baseParams ) override;
+        void        releaseTmpRtt( const TextureGpu *tmpRtt ) override;
 
-        virtual TextureGpu *findIbl( const TextureGpu *baseParams );
-        virtual void        releaseIbl( const TextureGpu *tmpRtt );
+        TextureGpu *findIbl( const TextureGpu *baseParams ) override;
+        void        releaseIbl( const TextureGpu *tmpRtt ) override;
 
-        virtual void _addManuallyActiveProbe( CubemapProbe *probe );
-        virtual void _removeManuallyActiveProbe( CubemapProbe *probe );
+        void _addManuallyActiveProbe( CubemapProbe *probe ) override;
+        void _removeManuallyActiveProbe( CubemapProbe *probe ) override;
 
         /// Returns the RenderQueue ID you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.
@@ -235,12 +235,12 @@ namespace Ogre
         uint32 getNumCollectedProbes() const { return mNumCollectedProbes; }
 
         // CompositorWorkspaceListener overloads
-        virtual void passPreExecute( CompositorPass *pass );
-        virtual void allWorkspacesBeforeBeginUpdate();
-        virtual void allWorkspacesBeginUpdate();
+        void passPreExecute( CompositorPass *pass ) override;
+        void allWorkspacesBeforeBeginUpdate() override;
+        void allWorkspacesBeginUpdate() override;
 
         // FrameListener overloads
-        virtual bool frameStarted( const FrameEvent &evt );
+        bool frameStarted( const FrameEvent &evt ) override;
     };
 
     /** @} */

@@ -98,23 +98,23 @@ namespace Ogre
     public:
         ParallaxCorrectedCubemapAuto( IdType id, Root *root, SceneManager *sceneManager,
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
-        ~ParallaxCorrectedCubemapAuto();
+        ~ParallaxCorrectedCubemapAuto() override;
 
-        virtual void destroyProbe( CubemapProbe *probe );
+        void destroyProbe( CubemapProbe *probe ) override;
 
         void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
         ParallaxCorrectedCubemapAutoListener *getListener() const { return mListener; }
 
-        virtual TextureGpu *_acquireTextureSlot( uint16 &outTexSlot );
-        virtual void        _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
+        TextureGpu *_acquireTextureSlot( uint16 &outTexSlot ) override;
+        void        _releaseTextureSlot( TextureGpu *texture, uint32 texSlot ) override;
 
-        virtual TextureGpu *findTmpRtt( const TextureGpu *baseParams );
-        virtual void        releaseTmpRtt( const TextureGpu *tmpRtt );
+        TextureGpu *findTmpRtt( const TextureGpu *baseParams ) override;
+        void        releaseTmpRtt( const TextureGpu *tmpRtt ) override;
 
-        virtual TextureGpu *findIbl( const TextureGpu *baseParams );
-        virtual void        releaseIbl( const TextureGpu *tmpRtt );
+        TextureGpu *findIbl( const TextureGpu *baseParams ) override;
+        void        releaseIbl( const TextureGpu *tmpRtt ) override;
 
-        virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
+        void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx ) override;
 
         /** Will update both mTrackedPosition with appropiate settings
             every time it's called. Must be called every time the camera changes.
@@ -172,16 +172,16 @@ namespace Ogre
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
         /// This function also uses a memory-friendly way of updating the probes.
-        void updateAllDirtyProbes();
+        void updateAllDirtyProbes() override;
 
         // CompositorWorkspaceListener overloads
-        virtual void allWorkspacesBeforeBeginUpdate();
-        virtual void allWorkspacesBeginUpdate();
+        void allWorkspacesBeforeBeginUpdate() override;
+        void allWorkspacesBeginUpdate() override;
 
-        virtual void passPreExecute( CompositorPass *pass );
+        void passPreExecute( CompositorPass *pass ) override;
 
         // FrameListener overloads
-        virtual bool frameStarted( const FrameEvent &evt );
+        bool frameStarted( const FrameEvent &evt ) override;
     };
 
     /** @} */

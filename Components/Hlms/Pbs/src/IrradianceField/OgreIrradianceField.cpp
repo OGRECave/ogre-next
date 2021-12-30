@@ -428,7 +428,7 @@ namespace Ogre
         if( mSettings.isRaster() )
         {
             // Avoid Valgrind from complaining when we copy the whole struct to GPU for the integrator
-            memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
+            silent_memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
             return;
         }
 

@@ -77,7 +77,7 @@ namespace Ogre
         ParallaxCorrectedCubemapBase( IdType id, Root *root, SceneManager *sceneManager,
                                       const CompositorWorkspaceDef *probeWorkspaceDef,
                                       bool                          automaticMode );
-        virtual ~ParallaxCorrectedCubemapBase();
+        ~ParallaxCorrectedCubemapBase() override;
 
         virtual void _releaseManualHardwareResources();
         virtual void _restoreManualHardwareResources();
@@ -157,10 +157,10 @@ namespace Ogre
 
         const CompositorWorkspaceDef *getDefaultWorkspaceDef() const;
 
-        virtual void passPreExecute( CompositorPass *pass );
+        void passPreExecute( CompositorPass *pass ) override;
 
         // RenderSystem::Listener overloads
-        virtual void eventOccurred( const String &eventName, const NameValuePairList *parameters );
+        void eventOccurred( const String &eventName, const NameValuePairList *parameters ) override;
     };
 
     /** @} */

@@ -352,9 +352,9 @@ namespace Ogre
         const VctVoxelizerSourceBase *getVoxelizer() const { return mVoxelizer; }
 
         // TextureGpuListener overloads
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
-                                           void *extraData );
-        virtual bool shouldStayLoaded( TextureGpu *texture ) { return false; }
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   void *extraData ) override;
+        bool shouldStayLoaded( TextureGpu *texture ) override { return false; }
     };
 }  // namespace Ogre
 
