@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define __ColourFaderAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreColourFaderAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for ColourFaderAffector. */
     class _OgreParticleFXExport ColourFaderAffectorFactory : public ParticleAffectorFactory
     {
@@ -41,16 +42,14 @@ namespace Ogre {
         String getName() const { return "ColourFader"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys )
         {
-            ParticleAffector* p = OGRE_NEW ColourFaderAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW ColourFaderAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

@@ -27,23 +27,21 @@ THE SOFTWARE.
 */
 #ifndef __ParticleFXPlugin_H__
 #define __ParticleFXPlugin_H__
-
 #include "OgrePlugin.h"
+
 #include "OgreParticleAffectorFactory.h"
 #include "OgreParticleEmitterFactory.h"
 
 namespace Ogre
 {
-
     /** Plugin instance for ParticleFX Manager */
     class ParticleFXPlugin : public Plugin
     {
     public:
         ParticleFXPlugin();
 
-
         /// @copydoc Plugin::getName
-        const String& getName() const;
+        const String &getName() const;
 
         /// @copydoc Plugin::install
         void install();
@@ -56,11 +54,11 @@ namespace Ogre
 
         /// @copydoc Plugin::uninstall
         void uninstall();
-    protected:
-        vector<ParticleEmitterFactory*>::type mEmitterFactories;
-        vector<ParticleAffectorFactory*>::type mAffectorFactories;
 
+    protected:
+        vector<ParticleEmitterFactory *>::type  mEmitterFactories;
+        vector<ParticleAffectorFactory *>::type mAffectorFactories;
     };
-}
+}  // namespace Ogre
 
 #endif

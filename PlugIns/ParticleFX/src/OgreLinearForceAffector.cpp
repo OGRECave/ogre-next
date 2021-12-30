@@ -26,21 +26,19 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreLinearForceAffector.h"
-#include "OgreParticleSystem.h"
+
 #include "OgreParticle.h"
+#include "OgreParticleSystem.h"
 #include "OgreStringConverter.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     // Instantiate statics
     LinearForceAffector::CmdForceVector LinearForceAffector::msForceVectorCmd;
     LinearForceAffector::CmdForceApp LinearForceAffector::msForceAppCmd;
 
-
     //-----------------------------------------------------------------------
-    LinearForceAffector::LinearForceAffector(ParticleSystem* psys)
-        :ParticleAffector(psys)
+    LinearForceAffector::LinearForceAffector( ParticleSystem *psys ) : ParticleAffector( psys )
     {
         mType = "LinearForce";
 
@@ -50,23 +48,22 @@ namespace Ogre {
         mForceVector.y = -100;
 
         // Set up parameters
-        if (createParamDictionary("LinearForceAffector"))
+        if( createParamDictionary( "LinearForceAffector" ) )
         {
             addBaseParameters();
             // Add extra parameters
-            ParamDictionary* dict = getParamDictionary();
-            dict->addParameter(ParameterDef("force_vector", 
-                "The vector representing the force to apply.",
-                PT_VECTOR3),&msForceVectorCmd);
-            dict->addParameter(ParameterDef("force_application", 
-                "How to apply the force vector to particles.",
-                PT_STRING),&msForceAppCmd);
-
+            ParamDictionary *dict = getParamDictionary();
+            dict->addParameter(
+                ParameterDef( "force_vector", "The vector representing the force to apply.",
+                              PT_VECTOR3 ),
+                &msForceVectorCmd );
+            dict->addParameter( ParameterDef( "force_application",
+                                              "How to apply the force vector to particles.", PT_STRING ),
+                                &msForceAppCmd );
         }
-
     }
     //-----------------------------------------------------------------------
-    void LinearForceAffector::_affectParticles(ParticleSystem* pSystem, Real timeElapsed)
+    void LinearForceAffector::_affectParticles( ParticleSystem *pSystem, Real timeElapsed )
     {
         ParticleIterator pi = pSystem->_getIterator();
         Particle *p;
@@ -74,41 +71,31 @@ namespace Ogre {
         Vector3 scaledVector = Vector3::ZERO;
 
         // Precalc scaled force for optimisation
-        if (mForceApplication == FA_ADD)
+        if( mForceApplication == FA_ADD )
         {
             // Scale force by time
             scaledVector = mForceVector * timeElapsed;
         }
 
-        while (!pi.end())
+        while( !pi.end() )
         {
             p = pi.getNext();
-            if (mForceApplication == FA_ADD)
+            if( mForceApplication == FA_ADD )
             {
                 p->mDirection += scaledVector;
             }
-            else // FA_AVERAGE
+            else  // FA_AVERAGE
             {
-                p->mDirection = (p->mDirection + mForceVector) / 2;
+                p->mDirection = ( p->mDirection + mForceVector ) / 2;
             }
         }
-        
     }
     //-----------------------------------------------------------------------
-    void LinearForceAffector::setForceVector(const Vector3& force)
-    {
-        mForceVector = force;
-    }
+    void LinearForceAffector::setForceVector( const Vector3 &force ) { mForceVector = force; }
     //-----------------------------------------------------------------------
-    void LinearForceAffector::setForceApplication(ForceApplication fa)
-    {
-        mForceApplication = fa;
-    }
+    void LinearForceAffector::setForceApplication( ForceApplication fa ) { mForceApplication = fa; }
     //-----------------------------------------------------------------------
-    Vector3 LinearForceAffector::getForceVector() const
-    {
-        return mForceVector;
-    }
+    Vector3 LinearForceAffector::getForceVector() const { return mForceVector; }
     //-----------------------------------------------------------------------
     LinearForceAffector::ForceApplication LinearForceAffector::getForceApplication() const
     {
@@ -120,21 +107,21 @@ namespace Ogre {
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String LinearForceAffector::CmdForceVector::doGet(const void* target) const
+    String LinearForceAffector::CmdForceVector::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const LinearForceAffector*>(target)->getForceVector() );
+            static_cast<const LinearForceAffector *>( target )->getForceVector() );
     }
-    void LinearForceAffector::CmdForceVector::doSet(void* target, const String& val)
+    void LinearForceAffector::CmdForceVector::doSet( void *target, const String &val )
     {
-        static_cast<LinearForceAffector*>(target)->setForceVector(
-            StringConverter::parseVector3(val));
+        static_cast<LinearForceAffector *>( target )->setForceVector(
+            StringConverter::parseVector3( val ) );
     }
     //-----------------------------------------------------------------------
-    String LinearForceAffector::CmdForceApp::doGet(const void* target) const
+    String LinearForceAffector::CmdForceApp::doGet( const void *target ) const
     {
-        ForceApplication app = static_cast<const LinearForceAffector*>(target)->getForceApplication();
-        switch(app)
+        ForceApplication app = static_cast<const LinearForceAffector *>( target )->getForceApplication();
+        switch( app )
         {
         case LinearForceAffector::FA_AVERAGE:
             return "average";
@@ -146,18 +133,16 @@ namespace Ogre {
         // Compiler nicety
         return "";
     }
-    void LinearForceAffector::CmdForceApp::doSet(void* target, const String& val)
+    void LinearForceAffector::CmdForceApp::doSet( void *target, const String &val )
     {
-        if (val == "average")
+        if( val == "average" )
         {
-            static_cast<LinearForceAffector*>(target)->setForceApplication(FA_AVERAGE);
+            static_cast<LinearForceAffector *>( target )->setForceApplication( FA_AVERAGE );
         }
-        else if (val == "add")
+        else if( val == "add" )
         {
-            static_cast<LinearForceAffector*>(target)->setForceApplication(FA_ADD);
+            static_cast<LinearForceAffector *>( target )->setForceApplication( FA_ADD );
         }
     }
 
-
-}
-
+}  // namespace Ogre

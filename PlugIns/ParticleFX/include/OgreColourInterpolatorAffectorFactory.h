@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define __ColourInterpolatorAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreColourInterpolatorAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for ColourInterpolatorAffector. */
     class _OgreParticleFXExport ColourInterpolatorAffectorFactory : public ParticleAffectorFactory
     {
@@ -41,16 +42,14 @@ namespace Ogre {
         String getName() const { return "ColourInterpolator"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys )
         {
-            ParticleAffector* p = new ColourInterpolatorAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = new ColourInterpolatorAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

@@ -26,21 +26,21 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreDirectionRandomiserAffector.h"
-#include "OgreParticleSystem.h"
+
 #include "OgreParticle.h"
+#include "OgreParticleSystem.h"
 #include "OgreStringConverter.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     // Instantiate statics
     DirectionRandomiserAffector::CmdRandomness DirectionRandomiserAffector::msRandomnessCmd;
     DirectionRandomiserAffector::CmdScope DirectionRandomiserAffector::msScopeCmd;
     DirectionRandomiserAffector::CmdKeepVelocity DirectionRandomiserAffector::msKeepVelocityCmd;
 
     //-----------------------------------------------------------------------
-    DirectionRandomiserAffector::DirectionRandomiserAffector(ParticleSystem* psys)
-       : ParticleAffector(psys)
+    DirectionRandomiserAffector::DirectionRandomiserAffector( ParticleSystem *psys ) :
+        ParticleAffector( psys )
     {
         mType = "DirectionRandomiser";
 
@@ -50,46 +50,50 @@ namespace Ogre {
         mKeepVelocity = false;
 
         // Set up parameters
-        if (createParamDictionary("DirectionRandomiserAffector"))
+        if( createParamDictionary( "DirectionRandomiserAffector" ) )
         {
             addBaseParameters();
             // Add extra parameters
-            ParamDictionary* dict = getParamDictionary();
-            dict->addParameter(ParameterDef("randomness",
-                "The amount of randomness (chaos) to apply to the particle movement.",
-                PT_REAL), &msRandomnessCmd);
-            dict->addParameter(ParameterDef("scope",
-                "The percentage of particles which is affected.",
-                PT_REAL), &msScopeCmd);
-            dict->addParameter(ParameterDef("keep_velocity",
-                "Determines whether the velocity of the particles is changed.",
-                PT_BOOL), &msKeepVelocityCmd);
+            ParamDictionary *dict = getParamDictionary();
+            dict->addParameter(
+                ParameterDef( "randomness",
+                              "The amount of randomness (chaos) to apply to the particle movement.",
+                              PT_REAL ),
+                &msRandomnessCmd );
+            dict->addParameter(
+                ParameterDef( "scope", "The percentage of particles which is affected.", PT_REAL ),
+                &msScopeCmd );
+            dict->addParameter(
+                ParameterDef( "keep_velocity",
+                              "Determines whether the velocity of the particles is changed.", PT_BOOL ),
+                &msKeepVelocityCmd );
         }
     }
     //-----------------------------------------------------------------------
-    void DirectionRandomiserAffector::_affectParticles(ParticleSystem* pSystem, Real timeElapsed)
+    void DirectionRandomiserAffector::_affectParticles( ParticleSystem *pSystem, Real timeElapsed )
     {
         ParticleIterator pi = pSystem->_getIterator();
         Particle *p;
         Real length = 0;
 
-        while (!pi.end())
+        while( !pi.end() )
         {
             p = pi.getNext();
-            if (mScope > Math::UnitRandom())
+            if( mScope > Math::UnitRandom() )
             {
-                if (!p->mDirection.isZeroLength())
+                if( !p->mDirection.isZeroLength() )
                 {
-                    if (mKeepVelocity)
+                    if( mKeepVelocity )
                     {
                         length = p->mDirection.length();
                     }
 
-                    p->mDirection += Vector3(Math::RangeRandom(-mRandomness, mRandomness) * timeElapsed,
-                        Math::RangeRandom(-mRandomness, mRandomness) * timeElapsed,
-                        Math::RangeRandom(-mRandomness, mRandomness) * timeElapsed);
+                    p->mDirection +=
+                        Vector3( Math::RangeRandom( -mRandomness, mRandomness ) * timeElapsed,
+                                 Math::RangeRandom( -mRandomness, mRandomness ) * timeElapsed,
+                                 Math::RangeRandom( -mRandomness, mRandomness ) * timeElapsed );
 
-                    if (mKeepVelocity)
+                    if( mKeepVelocity )
                     {
                         p->mDirection *= length / p->mDirection.length();
                     }
@@ -98,68 +102,56 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void DirectionRandomiserAffector::setRandomness(Real force)
-    {
-        mRandomness = force;
-    }
+    void DirectionRandomiserAffector::setRandomness( Real force ) { mRandomness = force; }
     //-----------------------------------------------------------------------
-    void DirectionRandomiserAffector::setScope(Real scope)
-    {
-        mScope = scope;
-    }
+    void DirectionRandomiserAffector::setScope( Real scope ) { mScope = scope; }
     //-----------------------------------------------------------------------
-    void DirectionRandomiserAffector::setKeepVelocity(bool keepVelocity)
+    void DirectionRandomiserAffector::setKeepVelocity( bool keepVelocity )
     {
         mKeepVelocity = keepVelocity;
     }
     //-----------------------------------------------------------------------
-    Real DirectionRandomiserAffector::getRandomness() const
-    {
-        return mRandomness;
-    }
+    Real DirectionRandomiserAffector::getRandomness() const { return mRandomness; }
     //-----------------------------------------------------------------------
-    Real DirectionRandomiserAffector::getScope() const
-    {
-        return mScope;
-    }
+    Real DirectionRandomiserAffector::getScope() const { return mScope; }
     //-----------------------------------------------------------------------
-    bool DirectionRandomiserAffector::getKeepVelocity() const
-    {
-        return mKeepVelocity;
-    }
+    bool DirectionRandomiserAffector::getKeepVelocity() const { return mKeepVelocity; }
 
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String DirectionRandomiserAffector::CmdRandomness::doGet(const void* target) const
+    String DirectionRandomiserAffector::CmdRandomness::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const DirectionRandomiserAffector*>(target)->getRandomness() );
+            static_cast<const DirectionRandomiserAffector *>( target )->getRandomness() );
     }
-    void DirectionRandomiserAffector::CmdRandomness::doSet(void* target, const String& val)
+    void DirectionRandomiserAffector::CmdRandomness::doSet( void *target, const String &val )
     {
-        static_cast<DirectionRandomiserAffector*>(target)->setRandomness(StringConverter::parseReal(val));
+        static_cast<DirectionRandomiserAffector *>( target )->setRandomness(
+            StringConverter::parseReal( val ) );
     }
 
-    String DirectionRandomiserAffector::CmdScope::doGet(const void* target) const
+    String DirectionRandomiserAffector::CmdScope::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const DirectionRandomiserAffector*>(target)->getScope() );
+            static_cast<const DirectionRandomiserAffector *>( target )->getScope() );
     }
-    void DirectionRandomiserAffector::CmdScope::doSet(void* target, const String& val)
+    void DirectionRandomiserAffector::CmdScope::doSet( void *target, const String &val )
     {
-        static_cast<DirectionRandomiserAffector*>(target)->setScope(StringConverter::parseReal(val));
+        static_cast<DirectionRandomiserAffector *>( target )->setScope(
+            StringConverter::parseReal( val ) );
     }
-    String DirectionRandomiserAffector::CmdKeepVelocity::doGet(const void* target) const
+    String DirectionRandomiserAffector::CmdKeepVelocity::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const DirectionRandomiserAffector*>(target)->getKeepVelocity() );
+            static_cast<const DirectionRandomiserAffector *>( target )->getKeepVelocity() );
     }
-    void DirectionRandomiserAffector::CmdKeepVelocity::doSet(void* target, const String& val)
+    void DirectionRandomiserAffector::CmdKeepVelocity::doSet( void *target, const String &val )
     {
-        static_cast<DirectionRandomiserAffector*>(target)->setKeepVelocity(StringConverter::parseBool(val));
+        static_cast<DirectionRandomiserAffector *>( target )->setKeepVelocity(
+            StringConverter::parseBool( val ) );
     }
 
-}
+}  // namespace Ogre

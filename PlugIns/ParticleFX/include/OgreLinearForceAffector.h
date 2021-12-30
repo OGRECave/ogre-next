@@ -29,23 +29,23 @@ THE SOFTWARE.
 #define __LinearForceAffector_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleAffector.h"
 #include "OgreVector3.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** This class defines a ParticleAffector which applies a linear force to particles in a system.
     @remarks
-        This affector (see ParticleAffector) applies a linear force, such as gravity, to a particle system.
-        This force can be applied in 2 ways: by taking the average of the particle's current momentum and the 
-        force vector, or by adding the force vector to the current particle's momentum. 
+        This affector (see ParticleAffector) applies a linear force, such as gravity, to a particle
+    system. This force can be applied in 2 ways: by taking the average of the particle's current momentum
+    and the force vector, or by adding the force vector to the current particle's momentum.
     @par
         The former approach is self-stabilising i.e. once a particle's momentum
         is equal to the force vector, no further change is made to it's momentum. It also results in
         a non-linear acceleration of particles.
         The latter approach is simpler and applies a constant acceleration to particles. However,
-        it is not self-stabilising and can lead to perpetually increasing particle velocities. 
+        it is not self-stabilising and can lead to perpetually increasing particle velocities.
         You choose the approach by calling the setForceApplication method.
     */
     class _OgreParticleFXExport LinearForceAffector : public ParticleAffector
@@ -55,16 +55,16 @@ namespace Ogre {
         class CmdForceVector : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const;
+            void   doSet( void *target, const String &val );
         };
 
         /** Command object for force application (see ParamCommand).*/
         class CmdForceApp : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const;
+            void   doSet( void *target, const String &val );
         };
         /// Choice of how to apply the force vector to particles
         enum ForceApplication
@@ -75,33 +75,32 @@ namespace Ogre {
             FA_ADD
         };
         /// Default constructor
-        LinearForceAffector(ParticleSystem* psys);
+        LinearForceAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles(ParticleSystem* pSystem, Real timeElapsed);
-
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
 
         /** Sets the force vector to apply to the particles in a system. */
-        void setForceVector(const Vector3& force);
+        void setForceVector( const Vector3 &force );
 
         /** Gets the force vector to apply to the particles in a system. */
         Vector3 getForceVector() const;
 
-        /** Sets how the force vector is applied to a particle. 
+        /** Sets how the force vector is applied to a particle.
         @remarks
           The default is FA_ADD.
         @param fa A member of the ForceApplication enum.
         */
-        void setForceApplication(ForceApplication fa);
+        void setForceApplication( ForceApplication fa );
 
-        /** Retrieves how the force vector is applied to a particle. 
+        /** Retrieves how the force vector is applied to a particle.
         @return A member of the ForceApplication enum.
         */
         ForceApplication getForceApplication() const;
 
         /// Command objects
         static CmdForceVector msForceVectorCmd;
-        static CmdForceApp msForceAppCmd;
+        static CmdForceApp    msForceAppCmd;
 
     protected:
         /// Force vector
@@ -109,12 +108,8 @@ namespace Ogre {
 
         /// How to apply force
         ForceApplication mForceApplication;
-
     };
 
-
-}
-
+}  // namespace Ogre
 
 #endif
-

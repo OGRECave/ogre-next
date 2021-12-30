@@ -33,29 +33,29 @@ THE SOFTWARE.
 //-----------------------------------------------------------------------
 // Windows Settings
 //-----------------------------------------------------------------------
-#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT) && !defined(OGRE_STATIC_LIB)
-#   ifdef OGRE_PARTICLEFXPLUGIN_EXPORTS
-#       define _OgreParticleFXExport __declspec(dllexport)
-#   else
-#       if defined( __MINGW32__ )
-#           define _OgreParticleFXExport
-#       else
-#           define _OgreParticleFXExport __declspec(dllimport)
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   if !defined( OGRE_STATIC_LIB )
-#       define _OgreParticleFXExport __attribute__ ((visibility("default")))
-#   else
-#       define _OgreParticleFXExport __attribute__ ((visibility("hidden")))
-#   endif
+#if( OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT ) && \
+    !defined( OGRE_STATIC_LIB )
+#    ifdef OGRE_PARTICLEFXPLUGIN_EXPORTS
+#        define _OgreParticleFXExport __declspec( dllexport )
+#    else
+#        if defined( __MINGW32__ )
+#            define _OgreParticleFXExport
+#        else
+#            define _OgreParticleFXExport __declspec( dllimport )
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreParticleFXExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreParticleFXExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
-#   define _OgreParticleFXExport
+#    define _OgreParticleFXExport
 #endif
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     // Predeclare classes
     class PointEmitter;
     class PointEmitterFactory;
@@ -64,9 +64,6 @@ namespace Ogre {
     class DirectionRandomiserAffectorFactory;
     class DeflectorPlaneAffectorFactory;
 
-
-
-}
-
+}  // namespace Ogre
 
 #endif

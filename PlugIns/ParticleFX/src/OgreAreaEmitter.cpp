@@ -27,62 +27,59 @@ THE SOFTWARE.
 */
 // Original author: Tels <http://bloodgate.com>, released as public domain
 #include "OgreAreaEmitter.h"
+
+#include "OgreException.h"
 #include "OgreParticle.h"
 #include "OgreQuaternion.h"
-#include "OgreException.h"
 #include "OgreStringConverter.h"
 
-
-
-namespace Ogre {
-
+namespace Ogre
+{
     // Instatiate statics
     AreaEmitter::CmdWidth AreaEmitter::msWidthCmd;
     AreaEmitter::CmdHeight AreaEmitter::msHeightCmd;
     AreaEmitter::CmdDepth AreaEmitter::msDepthCmd;
 
     //-----------------------------------------------------------------------
-    bool AreaEmitter::initDefaults(const String& t)
+    bool AreaEmitter::initDefaults( const String &t )
     {
         // called by the constructor as initDefaults("Type")
 
         // Defaults
         mDirection = Vector3::UNIT_Z;
         mUp = Vector3::UNIT_Y;
-        setSize(100,100,100);
+        setSize( 100, 100, 100 );
         mType = t;
 
         // Set up parameters
-        if (createParamDictionary(mType + "Emitter"))
+        if( createParamDictionary( mType + "Emitter" ) )
         {
-
             addBaseParameters();
-            ParamDictionary* dict = getParamDictionary();
+            ParamDictionary *dict = getParamDictionary();
 
             // Custom params
-            dict->addParameter(ParameterDef("width", 
-                "Width of the shape in world coordinates.",
-                PT_REAL),&msWidthCmd);
-            dict->addParameter(ParameterDef("height", 
-                "Height of the shape in world coordinates.",
-                PT_REAL),&msHeightCmd);
-            dict->addParameter(ParameterDef("depth", 
-                "Depth of the shape in world coordinates.",
-                PT_REAL),&msDepthCmd);
+            dict->addParameter(
+                ParameterDef( "width", "Width of the shape in world coordinates.", PT_REAL ),
+                &msWidthCmd );
+            dict->addParameter(
+                ParameterDef( "height", "Height of the shape in world coordinates.", PT_REAL ),
+                &msHeightCmd );
+            dict->addParameter(
+                ParameterDef( "depth", "Depth of the shape in world coordinates.", PT_REAL ),
+                &msDepthCmd );
             return true;
-
         }
         return false;
     }
 
     //-----------------------------------------------------------------------
-    unsigned short AreaEmitter::_getEmissionCount(Real timeElapsed)
+    unsigned short AreaEmitter::_getEmissionCount( Real timeElapsed )
     {
-        // Use basic constant emission 
-        return genConstantEmissionCount(timeElapsed);
+        // Use basic constant emission
+        return genConstantEmissionCount( timeElapsed );
     }
     //-----------------------------------------------------------------------
-    void AreaEmitter::setDirection( const Vector3& inDirection )
+    void AreaEmitter::setDirection( const Vector3 &inDirection )
     {
         ParticleEmitter::setDirection( inDirection );
 
@@ -90,13 +87,13 @@ namespace Ogre {
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    void AreaEmitter::setSize(const Vector3& size)
+    void AreaEmitter::setSize( const Vector3 &size )
     {
         mSize = size;
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    void AreaEmitter::setSize(Real x, Real y, Real z)
+    void AreaEmitter::setSize( Real x, Real y, Real z )
     {
         mSize.x = x;
         mSize.y = y;
@@ -104,84 +101,68 @@ namespace Ogre {
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    void AreaEmitter::setWidth(Real width)
+    void AreaEmitter::setWidth( Real width )
     {
         mSize.x = width;
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    Real AreaEmitter::getWidth() const
-    {
-        return mSize.x;
-    }
+    Real AreaEmitter::getWidth() const { return mSize.x; }
     //-----------------------------------------------------------------------
-    void AreaEmitter::setHeight(Real height)
+    void AreaEmitter::setHeight( Real height )
     {
         mSize.y = height;
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    Real AreaEmitter::getHeight() const
-    {
-        return mSize.y;
-    }
+    Real AreaEmitter::getHeight() const { return mSize.y; }
     //-----------------------------------------------------------------------
-    void AreaEmitter::setDepth(Real depth)
+    void AreaEmitter::setDepth( Real depth )
     {
         mSize.z = depth;
         genAreaAxes();
     }
     //-----------------------------------------------------------------------
-    Real AreaEmitter::getDepth() const
-    {
-        return mSize.z;
-    }
+    Real AreaEmitter::getDepth() const { return mSize.z; }
     //-----------------------------------------------------------------------
     void AreaEmitter::genAreaAxes()
     {
-        Vector3 mLeft = mUp.crossProduct(mDirection);
+        Vector3 mLeft = mUp.crossProduct( mDirection );
 
-        mXRange = mLeft * (mSize.x * 0.5f);
-        mYRange = mUp * (mSize.y * 0.5f);
-        mZRange = mDirection * (mSize.z * 0.5f);
+        mXRange = mLeft * ( mSize.x * 0.5f );
+        mYRange = mUp * ( mSize.y * 0.5f );
+        mZRange = mDirection * ( mSize.z * 0.5f );
     }
 
     //-----------------------------------------------------------------------
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String AreaEmitter::CmdWidth::doGet(const void* target) const
+    String AreaEmitter::CmdWidth::doGet( const void *target ) const
     {
-        return StringConverter::toString(
-            static_cast<const AreaEmitter*>(target)->getWidth() );
+        return StringConverter::toString( static_cast<const AreaEmitter *>( target )->getWidth() );
     }
-    void AreaEmitter::CmdWidth::doSet(void* target, const String& val)
+    void AreaEmitter::CmdWidth::doSet( void *target, const String &val )
     {
-        static_cast<AreaEmitter*>(target)->setWidth(StringConverter::parseReal(val));
-    }
-    //-----------------------------------------------------------------------
-    String AreaEmitter::CmdHeight::doGet(const void* target) const
-    {
-        return StringConverter::toString(
-            static_cast<const AreaEmitter*>(target)->getHeight() );
-    }
-    void AreaEmitter::CmdHeight::doSet(void* target, const String& val)
-    {
-        static_cast<AreaEmitter*>(target)->setHeight(StringConverter::parseReal(val));
+        static_cast<AreaEmitter *>( target )->setWidth( StringConverter::parseReal( val ) );
     }
     //-----------------------------------------------------------------------
-    String AreaEmitter::CmdDepth::doGet(const void* target) const
+    String AreaEmitter::CmdHeight::doGet( const void *target ) const
     {
-        return StringConverter::toString(
-            static_cast<const AreaEmitter*>(target)->getDepth() );
+        return StringConverter::toString( static_cast<const AreaEmitter *>( target )->getHeight() );
     }
-    void AreaEmitter::CmdDepth::doSet(void* target, const String& val)
+    void AreaEmitter::CmdHeight::doSet( void *target, const String &val )
     {
-        static_cast<AreaEmitter*>(target)->setDepth(StringConverter::parseReal(val));
+        static_cast<AreaEmitter *>( target )->setHeight( StringConverter::parseReal( val ) );
+    }
+    //-----------------------------------------------------------------------
+    String AreaEmitter::CmdDepth::doGet( const void *target ) const
+    {
+        return StringConverter::toString( static_cast<const AreaEmitter *>( target )->getDepth() );
+    }
+    void AreaEmitter::CmdDepth::doSet( void *target, const String &val )
+    {
+        static_cast<AreaEmitter *>( target )->setDepth( StringConverter::parseReal( val ) );
     }
 
-
-
-}
-
-
+}  // namespace Ogre

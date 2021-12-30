@@ -30,38 +30,32 @@ THE SOFTWARE.
 #define __RingEmitterFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleEmitterFactory.h"
 #include "OgreRingEmitter.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for particle emitter of type "Ring".
     @remarks
-        Creates instances of RingEmitter to be used in particle systems. 
+        Creates instances of RingEmitter to be used in particle systems.
     */
     class _OgreParticleFXExport RingEmitterFactory : public ParticleEmitterFactory
     {
     protected:
-
     public:
         /** See ParticleEmitterFactory */
-        String getName() const
-        { 
-            return "Ring"; 
-        }
+        String getName() const { return "Ring"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter* createEmitter(ParticleSystem* psys) 
+        ParticleEmitter *createEmitter( ParticleSystem *psys )
         {
-            ParticleEmitter* emit = OGRE_NEW RingEmitter(psys);
-            mEmitters.push_back(emit);
+            ParticleEmitter *emit = OGRE_NEW RingEmitter( psys );
+            mEmitters.push_back( emit );
             return emit;
         }
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

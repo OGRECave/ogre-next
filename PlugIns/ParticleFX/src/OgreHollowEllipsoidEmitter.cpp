@@ -27,10 +27,11 @@ THE SOFTWARE.
 */
 // Original author: Tels <http://bloodgate.com>, released as public domain
 #include "OgreHollowEllipsoidEmitter.h"
-#include "OgreParticle.h"
+
 #include "OgreException.h"
-#include "OgreStringConverter.h"
 #include "OgreMath.h"
+#include "OgreParticle.h"
+#include "OgreStringConverter.h"
 
 /* Implements an Emitter whose emitting points all lie inside an ellipsoid.
    See <http://mathworld.wolfram.com/Ellipsoid.html> for mathematical details.
@@ -41,34 +42,41 @@ THE SOFTWARE.
   same, it is a 'sphere' (ball).
 */
 
-namespace Ogre {
-
+namespace Ogre
+{
     HollowEllipsoidEmitter::CmdInnerX HollowEllipsoidEmitter::msCmdInnerX;
     HollowEllipsoidEmitter::CmdInnerY HollowEllipsoidEmitter::msCmdInnerY;
     HollowEllipsoidEmitter::CmdInnerZ HollowEllipsoidEmitter::msCmdInnerZ;
 
-
     //-----------------------------------------------------------------------
-    HollowEllipsoidEmitter::HollowEllipsoidEmitter(ParticleSystem* psys)
-        : EllipsoidEmitter(psys)
+    HollowEllipsoidEmitter::HollowEllipsoidEmitter( ParticleSystem *psys ) : EllipsoidEmitter( psys )
     {
-        if (initDefaults("HollowEllipsoid"))
+        if( initDefaults( "HollowEllipsoid" ) )
         {
             // Add custom parameters
-            ParamDictionary* pDict = getParamDictionary();
+            ParamDictionary *pDict = getParamDictionary();
 
-            pDict->addParameter(ParameterDef("inner_width", "Parametric value describing the proportion of the "
-                "shape which is hollow.", PT_REAL), &msCmdInnerX);
-            pDict->addParameter(ParameterDef("inner_height", "Parametric value describing the proportion of the "
-                "shape which is hollow.", PT_REAL), &msCmdInnerY);
-            pDict->addParameter(ParameterDef("inner_depth", "Parametric value describing the proportion of the "
-                "shape which is hollow.", PT_REAL), &msCmdInnerZ);
+            pDict->addParameter( ParameterDef( "inner_width",
+                                               "Parametric value describing the proportion of the "
+                                               "shape which is hollow.",
+                                               PT_REAL ),
+                                 &msCmdInnerX );
+            pDict->addParameter( ParameterDef( "inner_height",
+                                               "Parametric value describing the proportion of the "
+                                               "shape which is hollow.",
+                                               PT_REAL ),
+                                 &msCmdInnerY );
+            pDict->addParameter( ParameterDef( "inner_depth",
+                                               "Parametric value describing the proportion of the "
+                                               "shape which is hollow.",
+                                               PT_REAL ),
+                                 &msCmdInnerZ );
         }
         // default is half empty
-        setInnerSize(0.5,0.5,0.5);
+        setInnerSize( 0.5, 0.5, 0.5 );
     }
     //-----------------------------------------------------------------------
-    void HollowEllipsoidEmitter::_initParticle(Particle* pParticle)
+    void HollowEllipsoidEmitter::_initParticle( Particle *pParticle )
     {
         Real a, b, c, x, y, z;
 
@@ -78,123 +86,110 @@ namespace Ogre {
         // create two random angles alpha and beta
         // with these two angles, we are able to select any point on an
         // ellipsoid's surface
-        Radian alpha ( Math::RangeRandom(0,Math::TWO_PI) );
-        Radian beta  ( Math::RangeRandom(0,Math::PI) );
+        Radian alpha( Math::RangeRandom( 0, Math::TWO_PI ) );
+        Radian beta( Math::RangeRandom( 0, Math::PI ) );
 
         // create three random radius values that are bigger than the inner
         // size, but smaller/equal than/to the outer size 1.0 (inner size is
         // between 0 and 1)
-        a = Math::RangeRandom(mInnerSize.x,1.0);
-        b = Math::RangeRandom(mInnerSize.y,1.0);
-        c = Math::RangeRandom(mInnerSize.z,1.0);
+        a = Math::RangeRandom( mInnerSize.x, 1.0 );
+        b = Math::RangeRandom( mInnerSize.y, 1.0 );
+        c = Math::RangeRandom( mInnerSize.z, 1.0 );
 
         // with a,b,c we have defined a random ellipsoid between the inner
         // ellipsoid and the outer sphere (radius 1.0)
         // with alpha and beta we select on point on this random ellipsoid
         // and calculate the 3D coordinates of this point
-        Real sinbeta ( Math::Sin(beta) );
-        x = a * Math::Cos(alpha) * sinbeta;
-        y = b * Math::Sin(alpha) * sinbeta;
-        z = c * Math::Cos(beta);
+        Real sinbeta( Math::Sin( beta ) );
+        x = a * Math::Cos( alpha ) * sinbeta;
+        y = b * Math::Sin( alpha ) * sinbeta;
+        z = c * Math::Cos( beta );
 
         // scale the found point to the ellipsoid's size and move it
         // relatively to the center of the emitter point
 
-        pParticle->mPosition = mPosition +
-         + x * mXRange + y * mYRange + z * mZRange;
+        pParticle->mPosition = mPosition + +x * mXRange + y * mYRange + z * mZRange;
 
         // Generate complex data by reference
-        genEmissionColour(pParticle->mColour);
+        genEmissionColour( pParticle->mColour );
         genEmissionDirection( pParticle->mPosition, pParticle->mDirection );
-        genEmissionVelocity(pParticle->mDirection);
+        genEmissionVelocity( pParticle->mDirection );
 
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
-        
     }
     //-----------------------------------------------------------------------
-    void HollowEllipsoidEmitter::setInnerSize(Real x, Real y, Real z)
+    void HollowEllipsoidEmitter::setInnerSize( Real x, Real y, Real z )
     {
-        assert((x > 0) && (x < 1.0) &&
-            (y > 0) && (y < 1.0) &&
-            (z > 0) && (z < 1.0));
+        assert( ( x > 0 ) && ( x < 1.0 ) && ( y > 0 ) && ( y < 1.0 ) && ( z > 0 ) && ( z < 1.0 ) );
 
         mInnerSize.x = x;
         mInnerSize.y = y;
         mInnerSize.z = z;
     }
     //-----------------------------------------------------------------------
-    void HollowEllipsoidEmitter::setInnerSizeX(Real x)
+    void HollowEllipsoidEmitter::setInnerSizeX( Real x )
     {
-        assert(x > 0 && x < 1.0);
+        assert( x > 0 && x < 1.0 );
 
         mInnerSize.x = x;
     }
     //-----------------------------------------------------------------------
-    void HollowEllipsoidEmitter::setInnerSizeY(Real y)
+    void HollowEllipsoidEmitter::setInnerSizeY( Real y )
     {
-        assert(y > 0 && y < 1.0);
+        assert( y > 0 && y < 1.0 );
 
         mInnerSize.y = y;
     }
     //-----------------------------------------------------------------------
-    void HollowEllipsoidEmitter::setInnerSizeZ(Real z)
+    void HollowEllipsoidEmitter::setInnerSizeZ( Real z )
     {
-        assert(z > 0 && z < 1.0);
+        assert( z > 0 && z < 1.0 );
 
         mInnerSize.z = z;
     }
     //-----------------------------------------------------------------------
-    Real HollowEllipsoidEmitter::getInnerSizeX() const
-    {
-        return mInnerSize.x;
-    }
+    Real HollowEllipsoidEmitter::getInnerSizeX() const { return mInnerSize.x; }
     //-----------------------------------------------------------------------
-    Real HollowEllipsoidEmitter::getInnerSizeY() const
-    {
-        return mInnerSize.y;
-    }
+    Real HollowEllipsoidEmitter::getInnerSizeY() const { return mInnerSize.y; }
     //-----------------------------------------------------------------------
-    Real HollowEllipsoidEmitter::getInnerSizeZ() const
-    {
-        return mInnerSize.z;
-    }
+    Real HollowEllipsoidEmitter::getInnerSizeZ() const { return mInnerSize.z; }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String HollowEllipsoidEmitter::CmdInnerX::doGet(const void* target) const
+    String HollowEllipsoidEmitter::CmdInnerX::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const HollowEllipsoidEmitter*>(target)->getInnerSizeX() );
+            static_cast<const HollowEllipsoidEmitter *>( target )->getInnerSizeX() );
     }
-    void HollowEllipsoidEmitter::CmdInnerX::doSet(void* target, const String& val)
+    void HollowEllipsoidEmitter::CmdInnerX::doSet( void *target, const String &val )
     {
-        static_cast<HollowEllipsoidEmitter*>(target)->setInnerSizeX(StringConverter::parseReal(val));
+        static_cast<HollowEllipsoidEmitter *>( target )->setInnerSizeX(
+            StringConverter::parseReal( val ) );
     }
     //-----------------------------------------------------------------------
-    String HollowEllipsoidEmitter::CmdInnerY::doGet(const void* target) const
+    String HollowEllipsoidEmitter::CmdInnerY::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const HollowEllipsoidEmitter*>(target)->getInnerSizeY() );
+            static_cast<const HollowEllipsoidEmitter *>( target )->getInnerSizeY() );
     }
-    void HollowEllipsoidEmitter::CmdInnerY::doSet(void* target, const String& val)
+    void HollowEllipsoidEmitter::CmdInnerY::doSet( void *target, const String &val )
     {
-        static_cast<HollowEllipsoidEmitter*>(target)->setInnerSizeY(StringConverter::parseReal(val));
+        static_cast<HollowEllipsoidEmitter *>( target )->setInnerSizeY(
+            StringConverter::parseReal( val ) );
     }
     //-----------------------------------------------------------------------
-    String HollowEllipsoidEmitter::CmdInnerZ::doGet(const void* target) const
+    String HollowEllipsoidEmitter::CmdInnerZ::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const HollowEllipsoidEmitter*>(target)->getInnerSizeZ() );
+            static_cast<const HollowEllipsoidEmitter *>( target )->getInnerSizeZ() );
     }
-    void HollowEllipsoidEmitter::CmdInnerZ::doSet(void* target, const String& val)
+    void HollowEllipsoidEmitter::CmdInnerZ::doSet( void *target, const String &val )
     {
-        static_cast<HollowEllipsoidEmitter*>(target)->setInnerSizeZ(StringConverter::parseReal(val));
+        static_cast<HollowEllipsoidEmitter *>( target )->setInnerSizeZ(
+            StringConverter::parseReal( val ) );
     }
 
-
-}
-
-
+}  // namespace Ogre

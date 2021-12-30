@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define __RotationAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleAffectorFactory.h"
 #include "OgreRotationAffector.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for RotationAffector. */
     class _OgreParticleFXExport RotationAffectorFactory : public ParticleAffectorFactory
     {
@@ -41,16 +42,14 @@ namespace Ogre {
         String getName() const { return "Rotator"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys )
         {
-            ParticleAffector* p = OGRE_NEW RotationAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW RotationAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

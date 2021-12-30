@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define __DirectionRandomiserAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreDirectionRandomiserAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for DirectionRandomiserAffector. */
     class _OgreParticleFXExport DirectionRandomiserAffectorFactory : public ParticleAffectorFactory
     {
@@ -41,14 +42,14 @@ namespace Ogre {
         String getName() const { return "DirectionRandomiser"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys )
         {
-            ParticleAffector* p = OGRE_NEW DirectionRandomiserAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW DirectionRandomiserAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-}
+}  // namespace Ogre
 
 #endif

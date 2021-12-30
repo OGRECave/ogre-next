@@ -25,8 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#include "OgreParticleFXPlugin.h"
+
 #include "OgreParticleFXPrerequisites.h"
+
+#include "OgreParticleFXPlugin.h"
+
 #include "OgreRoot.h"
 
 #ifndef OGRE_STATIC_LIB

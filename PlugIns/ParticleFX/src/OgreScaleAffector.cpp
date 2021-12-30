@@ -26,35 +26,36 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreScaleAffector.h"
+
+#include "OgreParticle.h"
 #include "OgreParticleSystem.h"
 #include "OgreStringConverter.h"
-#include "OgreParticle.h"
 
-
-namespace Ogre {
-    
+namespace Ogre
+{
     // init statics
     ScaleAffector::CmdScaleAdjust ScaleAffector::msScaleCmd;
 
     //-----------------------------------------------------------------------
-    ScaleAffector::ScaleAffector(ParticleSystem* psys)
-        :ParticleAffector(psys)
+    ScaleAffector::ScaleAffector( ParticleSystem *psys ) : ParticleAffector( psys )
     {
         mScaleAdj = 0;
         mType = "Scaler";
 
         // Init parameters
-        if (createParamDictionary("ScaleAffector"))
+        if( createParamDictionary( "ScaleAffector" ) )
         {
-            ParamDictionary* dict = getParamDictionary();
+            ParamDictionary *dict = getParamDictionary();
 
-            dict->addParameter(ParameterDef("rate", 
-                "The amount by which to adjust the x and y scale components of particles per second.",
-                PT_REAL), &msScaleCmd);
+            dict->addParameter( ParameterDef( "rate",
+                                              "The amount by which to adjust the x and y scale "
+                                              "components of particles per second.",
+                                              PT_REAL ),
+                                &msScaleCmd );
         }
     }
     //-----------------------------------------------------------------------
-    void ScaleAffector::_affectParticles(ParticleSystem* pSystem, Real timeElapsed)
+    void ScaleAffector::_affectParticles( ParticleSystem *pSystem, Real timeElapsed )
     {
         ParticleIterator pi = pSystem->_getIterator();
         Particle *p;
@@ -65,7 +66,7 @@ namespace Ogre {
 
         Real NewWide, NewHigh;
 
-        while (!pi.end())
+        while( !pi.end() )
         {
             p = pi.getNext();
 
@@ -73,27 +74,19 @@ namespace Ogre {
             {
                 NewWide = pSystem->getDefaultWidth() + ds;
                 NewHigh = pSystem->getDefaultHeight() + ds;
-
             }
             else
             {
-                NewWide = p->getOwnWidth()  + ds;
+                NewWide = p->getOwnWidth() + ds;
                 NewHigh = p->getOwnHeight() + ds;
             }
-            p->setDimensions( NewWide, NewHigh ); 
+            p->setDimensions( NewWide, NewHigh );
         }
-
     }
     //-----------------------------------------------------------------------
-    void ScaleAffector::setAdjust( Real rate )
-    {
-        mScaleAdj = rate;
-    }
+    void ScaleAffector::setAdjust( Real rate ) { mScaleAdj = rate; }
     //-----------------------------------------------------------------------
-    Real ScaleAffector::getAdjust() const
-    {
-        return mScaleAdj;
-    }
+    Real ScaleAffector::getAdjust() const { return mScaleAdj; }
     //-----------------------------------------------------------------------
 
     //-----------------------------------------------------------------------
@@ -101,18 +94,13 @@ namespace Ogre {
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String ScaleAffector::CmdScaleAdjust::doGet(const void* target) const
+    String ScaleAffector::CmdScaleAdjust::doGet( const void *target ) const
     {
-        return StringConverter::toString(
-            static_cast<const ScaleAffector*>(target)->getAdjust() );
+        return StringConverter::toString( static_cast<const ScaleAffector *>( target )->getAdjust() );
     }
-    void ScaleAffector::CmdScaleAdjust::doSet(void* target, const String& val)
+    void ScaleAffector::CmdScaleAdjust::doSet( void *target, const String &val )
     {
-        static_cast<ScaleAffector*>(target)->setAdjust(
-            StringConverter::parseReal(val));
+        static_cast<ScaleAffector *>( target )->setAdjust( StringConverter::parseReal( val ) );
     }
 
-}
-
-
-
+}  // namespace Ogre

@@ -29,38 +29,32 @@ THE SOFTWARE.
 #define __BoxEmitterFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleEmitterFactory.h"
+
 #include "OgreBoxEmitter.h"
+#include "OgreParticleEmitterFactory.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for particle emitter of type "Box".
     @remarks
-        Creates instances of BoxEmitter to be used in particle systems. 
+        Creates instances of BoxEmitter to be used in particle systems.
     */
     class _OgreParticleFXExport BoxEmitterFactory : public ParticleEmitterFactory
     {
     protected:
-
     public:
         /** See ParticleEmitterFactory */
-        String getName() const
-        { 
-            return "Box"; 
-        }
+        String getName() const { return "Box"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter* createEmitter(ParticleSystem* psys) 
+        ParticleEmitter *createEmitter( ParticleSystem *psys )
         {
-            ParticleEmitter* emit = OGRE_NEW BoxEmitter(psys);
-            mEmitters.push_back(emit);
+            ParticleEmitter *emit = OGRE_NEW BoxEmitter( psys );
+            mEmitters.push_back( emit );
             return emit;
         }
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

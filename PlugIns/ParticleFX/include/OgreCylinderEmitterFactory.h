@@ -30,38 +30,32 @@ THE SOFTWARE.
 #define __CylinderEmitterFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleEmitterFactory.h"
+
 #include "OgreCylinderEmitter.h"
+#include "OgreParticleEmitterFactory.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for particle emitter of type "Cylinder".
     @remarks
-        Creates instances of CylinderEmitter to be used in particle systems. 
+        Creates instances of CylinderEmitter to be used in particle systems.
     */
     class _OgreParticleFXExport CylinderEmitterFactory : public ParticleEmitterFactory
     {
     protected:
-
     public:
         /** See ParticleEmitterFactory */
-        String getName() const
-        { 
-            return "Cylinder"; 
-        }
+        String getName() const { return "Cylinder"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter* createEmitter(ParticleSystem* psys) 
+        ParticleEmitter *createEmitter( ParticleSystem *psys )
         {
-            ParticleEmitter* emit = OGRE_NEW CylinderEmitter(psys);
-            mEmitters.push_back(emit);
+            ParticleEmitter *emit = OGRE_NEW CylinderEmitter( psys );
+            mEmitters.push_back( emit );
             return emit;
         }
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

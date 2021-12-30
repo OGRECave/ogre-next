@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define __LinearForceAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreLinearForceAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for LinearForceAffector. */
     class _OgreParticleFXExport LinearForceAffectorFactory : public ParticleAffectorFactory
     {
@@ -41,16 +42,14 @@ namespace Ogre {
         String getName() const { return "LinearForce"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys )
         {
-            ParticleAffector* p = OGRE_NEW LinearForceAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW LinearForceAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

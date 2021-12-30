@@ -26,13 +26,13 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreColourFaderAffector.h"
+
+#include "OgreParticle.h"
 #include "OgreParticleSystem.h"
 #include "OgreStringConverter.h"
-#include "OgreParticle.h"
 
-
-namespace Ogre {
-    
+namespace Ogre
+{
     // init statics
     ColourFaderAffector::CmdRedAdjust ColourFaderAffector::msRedCmd;
     ColourFaderAffector::CmdGreenAdjust ColourFaderAffector::msGreenCmd;
@@ -40,34 +40,42 @@ namespace Ogre {
     ColourFaderAffector::CmdAlphaAdjust ColourFaderAffector::msAlphaCmd;
 
     //-----------------------------------------------------------------------
-    ColourFaderAffector::ColourFaderAffector(ParticleSystem* psys) : ParticleAffector(psys)
+    ColourFaderAffector::ColourFaderAffector( ParticleSystem *psys ) : ParticleAffector( psys )
     {
         mRedAdj = mGreenAdj = mBlueAdj = mAlphaAdj = 0;
         mType = "ColourFader";
 
         // Init parameters
-        if (createParamDictionary("ColourFaderAffector"))
+        if( createParamDictionary( "ColourFaderAffector" ) )
         {
-            ParamDictionary* dict = getParamDictionary();
+            ParamDictionary *dict = getParamDictionary();
 
-            dict->addParameter(ParameterDef("red", 
-                "The amount by which to adjust the red component of particles per second.",
-                PT_REAL), &msRedCmd);
-            dict->addParameter(ParameterDef("green", 
-                "The amount by which to adjust the green component of particles per second.",
-                PT_REAL), &msGreenCmd);
-            dict->addParameter(ParameterDef("blue", 
-                "The amount by which to adjust the blue component of particles per second.",
-                PT_REAL), &msBlueCmd);
-            dict->addParameter(ParameterDef("alpha", 
-                "The amount by which to adjust the alpha component of particles per second.",
-                PT_REAL), &msAlphaCmd);
-
-
+            dict->addParameter(
+                ParameterDef( "red",
+                              "The amount by which to adjust the red component of particles per second.",
+                              PT_REAL ),
+                &msRedCmd );
+            dict->addParameter(
+                ParameterDef(
+                    "green",
+                    "The amount by which to adjust the green component of particles per second.",
+                    PT_REAL ),
+                &msGreenCmd );
+            dict->addParameter(
+                ParameterDef(
+                    "blue", "The amount by which to adjust the blue component of particles per second.",
+                    PT_REAL ),
+                &msBlueCmd );
+            dict->addParameter(
+                ParameterDef(
+                    "alpha",
+                    "The amount by which to adjust the alpha component of particles per second.",
+                    PT_REAL ),
+                &msAlphaCmd );
         }
     }
     //-----------------------------------------------------------------------
-    void ColourFaderAffector::_affectParticles(ParticleSystem* pSystem, Real timeElapsed)
+    void ColourFaderAffector::_affectParticles( ParticleSystem *pSystem, Real timeElapsed )
     {
         ParticleIterator pi = pSystem->_getIterator();
         Particle *p;
@@ -79,18 +87,17 @@ namespace Ogre {
         db = mBlueAdj * timeElapsed;
         da = mAlphaAdj * timeElapsed;
 
-        while (!pi.end())
+        while( !pi.end() )
         {
             p = pi.getNext();
-            applyAdjustWithClamp(&p->mColour.r, dr);
-            applyAdjustWithClamp(&p->mColour.g, dg);
-            applyAdjustWithClamp(&p->mColour.b, db);
-            applyAdjustWithClamp(&p->mColour.a, da);
+            applyAdjustWithClamp( &p->mColour.r, dr );
+            applyAdjustWithClamp( &p->mColour.g, dg );
+            applyAdjustWithClamp( &p->mColour.b, db );
+            applyAdjustWithClamp( &p->mColour.a, da );
         }
-
     }
     //-----------------------------------------------------------------------
-    void ColourFaderAffector::setAdjust(float red, float green, float blue, float alpha)
+    void ColourFaderAffector::setAdjust( float red, float green, float blue, float alpha )
     {
         mRedAdj = red;
         mGreenAdj = green;
@@ -98,96 +105,67 @@ namespace Ogre {
         mAlphaAdj = alpha;
     }
     //-----------------------------------------------------------------------
-    void ColourFaderAffector::setRedAdjust(float red)
-    {
-        mRedAdj = red;
-    }
+    void ColourFaderAffector::setRedAdjust( float red ) { mRedAdj = red; }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getRedAdjust() const
-    {
-        return mRedAdj;
-    }
+    float ColourFaderAffector::getRedAdjust() const { return mRedAdj; }
     //-----------------------------------------------------------------------
-    void ColourFaderAffector::setGreenAdjust(float green)
-    {
-        mGreenAdj = green;
-    }
+    void ColourFaderAffector::setGreenAdjust( float green ) { mGreenAdj = green; }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getGreenAdjust() const
-    {
-        return mGreenAdj;
-    }
+    float ColourFaderAffector::getGreenAdjust() const { return mGreenAdj; }
     //-----------------------------------------------------------------------
-    void ColourFaderAffector::setBlueAdjust(float blue)
-    {
-        mBlueAdj = blue;
-    }
+    void ColourFaderAffector::setBlueAdjust( float blue ) { mBlueAdj = blue; }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getBlueAdjust() const
-    {
-        return mBlueAdj;
-    }
+    float ColourFaderAffector::getBlueAdjust() const { return mBlueAdj; }
     //-----------------------------------------------------------------------
-    void ColourFaderAffector::setAlphaAdjust(float alpha)
-    {
-        mAlphaAdj = alpha;
-    }
+    void ColourFaderAffector::setAlphaAdjust( float alpha ) { mAlphaAdj = alpha; }
     //-----------------------------------------------------------------------
-    float ColourFaderAffector::getAlphaAdjust() const
-    {
-        return mAlphaAdj;
-    }
+    float ColourFaderAffector::getAlphaAdjust() const { return mAlphaAdj; }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String ColourFaderAffector::CmdRedAdjust::doGet(const void* target) const
+    String ColourFaderAffector::CmdRedAdjust::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const ColourFaderAffector*>(target)->getRedAdjust() );
+            static_cast<const ColourFaderAffector *>( target )->getRedAdjust() );
     }
-    void ColourFaderAffector::CmdRedAdjust::doSet(void* target, const String& val)
+    void ColourFaderAffector::CmdRedAdjust::doSet( void *target, const String &val )
     {
-        static_cast<ColourFaderAffector*>(target)->setRedAdjust(
-            StringConverter::parseReal(val));
+        static_cast<ColourFaderAffector *>( target )->setRedAdjust( StringConverter::parseReal( val ) );
     }
     //-----------------------------------------------------------------------
-    String ColourFaderAffector::CmdGreenAdjust::doGet(const void* target) const
+    String ColourFaderAffector::CmdGreenAdjust::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const ColourFaderAffector*>(target)->getGreenAdjust() );
+            static_cast<const ColourFaderAffector *>( target )->getGreenAdjust() );
     }
-    void ColourFaderAffector::CmdGreenAdjust::doSet(void* target, const String& val)
+    void ColourFaderAffector::CmdGreenAdjust::doSet( void *target, const String &val )
     {
-        static_cast<ColourFaderAffector*>(target)->setGreenAdjust(
-            StringConverter::parseReal(val));
+        static_cast<ColourFaderAffector *>( target )->setGreenAdjust(
+            StringConverter::parseReal( val ) );
     }
     //-----------------------------------------------------------------------
-    String ColourFaderAffector::CmdBlueAdjust::doGet(const void* target) const
+    String ColourFaderAffector::CmdBlueAdjust::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const ColourFaderAffector*>(target)->getBlueAdjust() );
+            static_cast<const ColourFaderAffector *>( target )->getBlueAdjust() );
     }
-    void ColourFaderAffector::CmdBlueAdjust::doSet(void* target, const String& val)
+    void ColourFaderAffector::CmdBlueAdjust::doSet( void *target, const String &val )
     {
-        static_cast<ColourFaderAffector*>(target)->setBlueAdjust(
-            StringConverter::parseReal(val));
+        static_cast<ColourFaderAffector *>( target )->setBlueAdjust( StringConverter::parseReal( val ) );
     }
     //-----------------------------------------------------------------------
-    String ColourFaderAffector::CmdAlphaAdjust::doGet(const void* target) const
+    String ColourFaderAffector::CmdAlphaAdjust::doGet( const void *target ) const
     {
         return StringConverter::toString(
-            static_cast<const ColourFaderAffector*>(target)->getAlphaAdjust() );
+            static_cast<const ColourFaderAffector *>( target )->getAlphaAdjust() );
     }
-    void ColourFaderAffector::CmdAlphaAdjust::doSet(void* target, const String& val)
+    void ColourFaderAffector::CmdAlphaAdjust::doSet( void *target, const String &val )
     {
-        static_cast<ColourFaderAffector*>(target)->setAlphaAdjust(
-            StringConverter::parseReal(val));
+        static_cast<ColourFaderAffector *>( target )->setAlphaAdjust(
+            StringConverter::parseReal( val ) );
     }
 
-}
-
-
-
+}  // namespace Ogre

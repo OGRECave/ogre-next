@@ -29,11 +29,12 @@ THE SOFTWARE.
 #define __ColourImageAffectorFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleAffectorFactory.h"
+
 #include "OgreColourImageAffector.h"
+#include "OgreParticleAffectorFactory.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for ColourImageAffector. */
     class _OgreParticleFXExport ColourImageAffectorFactory : public ParticleAffectorFactory
     {
@@ -41,16 +42,14 @@ namespace Ogre {
         String getName() const { return "ColourImage"; }
 
         /** See ParticleAffectorFactory */
-        ParticleAffector* createAffector(ParticleSystem* psys)
+        ParticleAffector *createAffector( ParticleSystem *psys )
         {
-            ParticleAffector* p = OGRE_NEW ColourImageAffector(psys);
-            mAffectors.push_back(p);
+            ParticleAffector *p = OGRE_NEW ColourImageAffector( psys );
+            mAffectors.push_back( p );
             return p;
         }
     };
 
-
-}
+}  // namespace Ogre
 
 #endif
-

@@ -27,73 +27,67 @@ THE SOFTWARE.
 */
 // Original author: Tels <http://bloodgate.com>, released as public domain
 #include "OgreCylinderEmitter.h"
+
+#include "OgreException.h"
 #include "OgreParticle.h"
 #include "OgreQuaternion.h"
-#include "OgreException.h"
 #include "OgreStringConverter.h"
 
-
 /* Implements an Emitter whose emitting points all lie inside a cylinder.
-*/
+ */
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    CylinderEmitter::CylinderEmitter(ParticleSystem* psys)
-        : AreaEmitter(psys)
+    CylinderEmitter::CylinderEmitter( ParticleSystem *psys ) : AreaEmitter( psys )
     {
-        initDefaults("Cylinder");
+        initDefaults( "Cylinder" );
     }
     //-----------------------------------------------------------------------
-    void CylinderEmitter::_initParticle(Particle* pParticle)
+    void CylinderEmitter::_initParticle( Particle *pParticle )
     {
         Real x, y, z;
 
         // Call superclass
-        AreaEmitter::_initParticle(pParticle);
+        AreaEmitter::_initParticle( pParticle );
 
         // First we create a random point inside a bounding cylinder with a
         // radius and height of 1 (this is easy to do). The distance of the
         // point from 0,0,0 must be <= 1 (== 1 means on the surface and we
         // count this as inside, too).
 
-        while (true)
+        while( true )
         {
-/* ClearSpace not yet implemeted
+            /* ClearSpace not yet implemeted
 
-*/
-                // three random values for one random point in 3D space
-                x = Math::SymmetricRandom();
-                y = Math::SymmetricRandom();
-                z = Math::SymmetricRandom();
+            */
+            // three random values for one random point in 3D space
+            x = Math::SymmetricRandom();
+            y = Math::SymmetricRandom();
+            z = Math::SymmetricRandom();
 
-                // the distance of x,y from 0,0 is sqrt(x*x+y*y), but
-                // as usual we can omit the sqrt(), since sqrt(1) == 1 and we
-                // use the 1 as boundary. z is not taken into account, since
-                // all values in the z-direction are inside the cylinder:
-                if ( x*x + y*y <= 1)
-                {
-                        break;          // found one valid point inside
-                }
-        }       
+            // the distance of x,y from 0,0 is sqrt(x*x+y*y), but
+            // as usual we can omit the sqrt(), since sqrt(1) == 1 and we
+            // use the 1 as boundary. z is not taken into account, since
+            // all values in the z-direction are inside the cylinder:
+            if( x * x + y * y <= 1 )
+            {
+                break;  // found one valid point inside
+            }
+        }
 
         // scale the found point to the cylinder's size and move it
         // relatively to the center of the emitter point
 
-        pParticle->mPosition = mPosition +
-         + x * mXRange + y * mYRange + z * mZRange;
+        pParticle->mPosition = mPosition + +x * mXRange + y * mYRange + z * mZRange;
 
         // Generate complex data by reference
-        genEmissionColour(pParticle->mColour);
+        genEmissionColour( pParticle->mColour );
         genEmissionDirection( pParticle->mPosition, pParticle->mDirection );
-        genEmissionVelocity(pParticle->mDirection);
+        genEmissionVelocity( pParticle->mDirection );
 
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
-        
     }
 
-}
-
-
+}  // namespace Ogre

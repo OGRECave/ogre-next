@@ -29,12 +29,12 @@ THE SOFTWARE.
 #define __ScaleAffector_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreParticleAffector.h"
 #include "OgreStringInterface.h"
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     /** This plugin subclass of ParticleAffector allows you to alter the scale of particles.
     @remarks
         This class supplies the ParticleAffector implementation required to make the particle expand
@@ -43,22 +43,21 @@ namespace Ogre {
     class _OgreParticleFXExport ScaleAffector : public ParticleAffector
     {
     public:
-
         /** Command object for scale adjust (see ParamCommand).*/
         class CmdScaleAdjust : public ParamCommand
         {
         public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
+            String doGet( const void *target ) const;
+            void   doSet( void *target, const String &val );
         };
 
         /** Default constructor. */
-        ScaleAffector(ParticleSystem* psys);
+        ScaleAffector( ParticleSystem *psys );
 
         /** See ParticleAffector. */
-        void _affectParticles(ParticleSystem* pSystem, Real timeElapsed);
+        void _affectParticles( ParticleSystem *pSystem, Real timeElapsed );
 
-        /** Sets the scale adjustment to be made per second to particles. 
+        /** Sets the scale adjustment to be made per second to particles.
         @param rate
             Sets the adjustment to be made to the x and y scale components per second. These
             values will be added to the scale of all particles every second, scaled over each frame
@@ -73,12 +72,8 @@ namespace Ogre {
 
     protected:
         Real mScaleAdj;
-
     };
 
-
-}
-
+}  // namespace Ogre
 
 #endif
-

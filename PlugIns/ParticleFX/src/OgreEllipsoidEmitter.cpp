@@ -27,10 +27,10 @@ THE SOFTWARE.
 */
 // Original author: Tels <http://bloodgate.com>, released as public domain
 #include "OgreEllipsoidEmitter.h"
-#include "OgreParticle.h"
-#include "OgreException.h"
-#include "OgreStringConverter.h"
 
+#include "OgreException.h"
+#include "OgreParticle.h"
+#include "OgreStringConverter.h"
 
 /* Implements an Emitter whose emitting points all lie inside an ellipsoid.
    See <http://mathworld.wolfram.com/Ellipsoid.html> for mathematical details.
@@ -41,28 +41,26 @@ THE SOFTWARE.
   same, it is a 'sphere' (ball).
 */
 
-namespace Ogre {
-
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    EllipsoidEmitter::EllipsoidEmitter(ParticleSystem* psys)
-        : AreaEmitter(psys)
+    EllipsoidEmitter::EllipsoidEmitter( ParticleSystem *psys ) : AreaEmitter( psys )
     {
-        initDefaults("Ellipsoid");
+        initDefaults( "Ellipsoid" );
     }
     //-----------------------------------------------------------------------
-    void EllipsoidEmitter::_initParticle(Particle* pParticle)
+    void EllipsoidEmitter::_initParticle( Particle *pParticle )
     {
         Real x, y, z;
 
         // Call superclass
-        AreaEmitter::_initParticle(pParticle);
+        AreaEmitter::_initParticle( pParticle );
         // First we create a random point inside a bounding sphere with a
         // radius of 1 (this is easy to do). The distance of the point from
         // 0,0,0 must be <= 1 (== 1 means on the surface and we count this as
         // inside, too).
 
-        while (true)
+        while( true )
         {
             // three random values for one random point in 3D space
 
@@ -73,28 +71,24 @@ namespace Ogre {
             // the distance of x,y,z from 0,0,0 is sqrt(x*x+y*y+z*z), but
             // as usual we can omit the sqrt(), since sqrt(1) == 1 and we
             // use the 1 as boundary:
-            if ( x*x + y*y + z*z <= 1)
-                {
-                        break;          // found one valid point inside
-                }
-        }       
+            if( x * x + y * y + z * z <= 1 )
+            {
+                break;  // found one valid point inside
+            }
+        }
 
         // scale the found point to the ellipsoid's size and move it
         // relatively to the center of the emitter point
 
-        pParticle->mPosition = mPosition +
-         + x * mXRange + y * mYRange + z * mZRange;
+        pParticle->mPosition = mPosition + +x * mXRange + y * mYRange + z * mZRange;
 
         // Generate complex data by reference
-        genEmissionColour(pParticle->mColour);
+        genEmissionColour( pParticle->mColour );
         genEmissionDirection( pParticle->mPosition, pParticle->mDirection );
-        genEmissionVelocity(pParticle->mDirection);
+        genEmissionVelocity( pParticle->mDirection );
 
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
-        
     }
 
-}
-
-
+}  // namespace Ogre

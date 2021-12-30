@@ -30,38 +30,32 @@ THE SOFTWARE.
 #define __EllipsoidEmitterFactory_H__
 
 #include "OgreParticleFXPrerequisites.h"
-#include "OgreParticleEmitterFactory.h"
+
 #include "OgreEllipsoidEmitter.h"
+#include "OgreParticleEmitterFactory.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     /** Factory class for particle emitter of type "Ellipsoid".
     @remarks
-        Creates instances of EllipsoidEmitter to be used in particle systems. 
+        Creates instances of EllipsoidEmitter to be used in particle systems.
     */
     class _OgreParticleFXExport EllipsoidEmitterFactory : public ParticleEmitterFactory
     {
     protected:
-
     public:
         /** See ParticleEmitterFactory */
-        String getName() const
-        { 
-            return "Ellipsoid"; 
-        }
+        String getName() const { return "Ellipsoid"; }
 
         /** See ParticleEmitterFactory */
-        ParticleEmitter* createEmitter(ParticleSystem* psys) 
+        ParticleEmitter *createEmitter( ParticleSystem *psys )
         {
-            ParticleEmitter* emit = OGRE_NEW EllipsoidEmitter(psys);
-            mEmitters.push_back(emit);
+            ParticleEmitter *emit = OGRE_NEW EllipsoidEmitter( psys );
+            mEmitters.push_back( emit );
             return emit;
         }
-
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

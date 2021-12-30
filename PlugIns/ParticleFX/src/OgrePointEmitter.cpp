@@ -26,50 +26,45 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgrePointEmitter.h"
+
 #include "OgreParticle.h"
 
-
-
-namespace Ogre {
-
+namespace Ogre
+{
     //-----------------------------------------------------------------------
-    PointEmitter::PointEmitter(ParticleSystem* psys)
-        :ParticleEmitter(psys)
+    PointEmitter::PointEmitter( ParticleSystem *psys ) : ParticleEmitter( psys )
     {
         mType = "Point";
         // Set up parameters
-        if (createParamDictionary("PointEmitter"))
+        if( createParamDictionary( "PointEmitter" ) )
         {
             addBaseParameters();
         }
         // No custom parameters
     }
     //-----------------------------------------------------------------------
-    void PointEmitter::_initParticle(Particle* pParticle)
+    void PointEmitter::_initParticle( Particle *pParticle )
     {
         // Very simple emitter, uses default implementations with no modification
 
         // Call superclass
-        ParticleEmitter::_initParticle(pParticle);
+        ParticleEmitter::_initParticle( pParticle );
 
         // Point emitter emits from own position
         pParticle->mPosition = mPosition;
 
         // Generate complex data by reference
-        genEmissionColour(pParticle->mColour);
+        genEmissionColour( pParticle->mColour );
         genEmissionDirection( pParticle->mPosition, pParticle->mDirection );
-        genEmissionVelocity(pParticle->mDirection);
+        genEmissionVelocity( pParticle->mDirection );
 
         // Generate simpler data
         pParticle->mTimeToLive = pParticle->mTotalTimeToLive = genEmissionTTL();
-        
     }
     //-----------------------------------------------------------------------
-    unsigned short PointEmitter::_getEmissionCount(Real timeElapsed)
+    unsigned short PointEmitter::_getEmissionCount( Real timeElapsed )
     {
-        // Use basic constant emission 
-        return genConstantEmissionCount(timeElapsed);
+        // Use basic constant emission
+        return genConstantEmissionCount( timeElapsed );
     }
-}
-
-
+}  // namespace Ogre

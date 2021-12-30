@@ -31,10 +31,11 @@ THE SOFTWARE.
 #define __CylinderEmitter_H__
 
 #include "OgreParticleFXPrerequisites.h"
+
 #include "OgreAreaEmitter.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Particle emitter which emits particles randomly from points inside a cylinder.
     @remarks
         This basic particle emitter emits particles from a cylinder area. The
@@ -42,19 +43,18 @@ namespace Ogre {
         (i.e. a line), a random scattering inside a cone, or a random
         scattering in all directions, depending the 'angle' parameter, which
         is the angle across which to scatter the particles either side of the
-        base direction of the emitter. 
+        base direction of the emitter.
     */
     class _OgreParticleFXExport CylinderEmitter : public AreaEmitter
     {
     public:
         /** See AreaEmitter. */
-        CylinderEmitter(ParticleSystem* psys);
+        CylinderEmitter( ParticleSystem *psys );
 
         /** See ParticleEmitter. */
-        void _initParticle(Particle* pParticle);
+        void _initParticle( Particle *pParticle );
     };
 
-}
+}  // namespace Ogre
 
 #endif
-

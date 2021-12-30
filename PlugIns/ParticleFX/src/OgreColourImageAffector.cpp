@@ -26,99 +26,100 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreColourImageAffector.h"
-#include "OgreParticleSystem.h"
-#include "OgreStringConverter.h"
-#include "OgreParticle.h"
+
 #include "OgreException.h"
-#include "OgreResourceGroupManager.h"
-
+#include "OgreParticle.h"
+#include "OgreParticleSystem.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreResourceGroupManager.h"
+#include "OgreStringConverter.h"
 
-namespace Ogre {
-    
+namespace Ogre
+{
     // init statics
-    ColourImageAffector::CmdImageAdjust     ColourImageAffector::msImageCmd;
+    ColourImageAffector::CmdImageAdjust ColourImageAffector::msImageCmd;
 
     //-----------------------------------------------------------------------
-    ColourImageAffector::ColourImageAffector(ParticleSystem* psys)
-        :ParticleAffector(psys), mColourImageLoaded(false)
+    ColourImageAffector::ColourImageAffector( ParticleSystem *psys ) :
+        ParticleAffector( psys ),
+        mColourImageLoaded( false )
     {
         mType = "ColourImage";
 
         // Init parameters
-        if (createParamDictionary("ColourImageAffector"))
+        if( createParamDictionary( "ColourImageAffector" ) )
         {
-            ParamDictionary* dict = getParamDictionary();
+            ParamDictionary *dict = getParamDictionary();
 
-            dict->addParameter(ParameterDef("image", "image where the colours come from", PT_STRING), &msImageCmd);
+            dict->addParameter( ParameterDef( "image", "image where the colours come from", PT_STRING ),
+                                &msImageCmd );
         }
     }
     //-----------------------------------------------------------------------
-    void ColourImageAffector::_initParticle(Particle* pParticle)
+    void ColourImageAffector::_initParticle( Particle *pParticle )
     {
-        if (!mColourImageLoaded)
+        if( !mColourImageLoaded )
         {
             _loadImage();
         }
 
-        pParticle->mColour = mColourImage.getColourAt(0, 0, 0);
-    
+        pParticle->mColour = mColourImage.getColourAt( 0, 0, 0 );
     }
     //-----------------------------------------------------------------------
-    void ColourImageAffector::_affectParticles(ParticleSystem* pSystem, Real timeElapsed)
+    void ColourImageAffector::_affectParticles( ParticleSystem *pSystem, Real timeElapsed )
     {
-        Particle*           p;
-        ParticleIterator    pi              = pSystem->_getIterator();
+        Particle *p;
+        ParticleIterator pi = pSystem->_getIterator();
 
-        if (!mColourImageLoaded)
+        if( !mColourImageLoaded )
         {
             _loadImage();
         }
 
-        int                width            = (int)mColourImage.getWidth()  - 1;
-        
-        while (!pi.end())
+        int width = (int)mColourImage.getWidth() - 1;
+
+        while( !pi.end() )
         {
             p = pi.getNext();
-            const Real      life_time       = p->mTotalTimeToLive;
-            Real            particle_time   = 1.0f - (p->mTimeToLive / life_time);
+            const Real life_time = p->mTotalTimeToLive;
+            Real particle_time = 1.0f - ( p->mTimeToLive / life_time );
 
-            if (particle_time > 1.0f)
+            if( particle_time > 1.0f )
                 particle_time = 1.0f;
-            if (particle_time < 0.0f)
+            if( particle_time < 0.0f )
                 particle_time = 0.0f;
 
-            const Real      float_index     = particle_time * width;
-            const int       index           = (int)float_index;
+            const Real float_index = particle_time * width;
+            const int index = (int)float_index;
 
-            if(index < 0)
+            if( index < 0 )
             {
-                p->mColour = mColourImage.getColourAt(0, 0, 0);
+                p->mColour = mColourImage.getColourAt( 0, 0, 0 );
             }
-            else if(index >= width) 
+            else if( index >= width )
             {
-                p->mColour = mColourImage.getColourAt(width, 0, 0);
+                p->mColour = mColourImage.getColourAt( width, 0, 0 );
             }
             else
             {
                 // Linear interpolation
-                const Real      fract       = float_index - (Real)index;
-                const Real      to_colour   = fract;
-                const Real      from_colour = 1.0f - to_colour;
-             
-                ColourValue from=mColourImage.getColourAt(index, 0, 0),
-                            to=mColourImage.getColourAt(index+1, 0, 0);
+                const Real fract = float_index - (Real)index;
+                const Real to_colour = fract;
+                const Real from_colour = 1.0f - to_colour;
 
-                p->mColour.r = from.r*from_colour + to.r*to_colour;
-                p->mColour.g = from.g*from_colour + to.g*to_colour;
-                p->mColour.b = from.b*from_colour + to.b*to_colour;
-                p->mColour.a = from.a*from_colour + to.a*to_colour;
+                ColourValue from = mColourImage.getColourAt( index, 0, 0 ),
+                            to = mColourImage.getColourAt( index + 1, 0, 0 );
+
+                p->mColour.r = from.r * from_colour + to.r * to_colour;
+                p->mColour.g = from.g * from_colour + to.g * to_colour;
+                p->mColour.b = from.b * from_colour + to.b * to_colour;
+                p->mColour.a = from.a * from_colour + to.a * to_colour;
             }
         }
     }
-    
+
     //-----------------------------------------------------------------------
-    void ColourImageAffector::setImageAdjust(String name)
+    void ColourImageAffector::setImageAdjust( String name )
     {
         mColourImageName = name;
         mColourImageLoaded = false;
@@ -126,41 +127,34 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void ColourImageAffector::_loadImage()
     {
-        mColourImage.load(mColourImageName, mParent->getResourceGroupName());
+        mColourImage.load( mColourImageName, mParent->getResourceGroupName() );
 
         PixelFormatGpu format = mColourImage.getPixelFormat();
 
-        if ( !PixelFormatGpuUtils::isAccessible(format) )
+        if( !PixelFormatGpuUtils::isAccessible( format ) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Error: Image is not accessible (rgba) image.",
-                    "ColourImageAffector::_loadImage" );
+                         "ColourImageAffector::_loadImage" );
         }
 
         mColourImageLoaded = true;
     }
     //-----------------------------------------------------------------------
-    String ColourImageAffector::getImageAdjust() const
-    {
-        return mColourImageName;
-    }
-    
-    
+    String ColourImageAffector::getImageAdjust() const { return mColourImageName; }
+
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     // Command objects
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
-    String ColourImageAffector::CmdImageAdjust::doGet(const void* target) const
+    String ColourImageAffector::CmdImageAdjust::doGet( const void *target ) const
     {
-        return static_cast<const ColourImageAffector*>(target)->getImageAdjust();
+        return static_cast<const ColourImageAffector *>( target )->getImageAdjust();
     }
-    void ColourImageAffector::CmdImageAdjust::doSet(void* target, const String& val)
+    void ColourImageAffector::CmdImageAdjust::doSet( void *target, const String &val )
     {
-        static_cast<ColourImageAffector*>(target)->setImageAdjust(val);
+        static_cast<ColourImageAffector *>( target )->setImageAdjust( val );
     }
 
-}
-
-
-
+}  // namespace Ogre
