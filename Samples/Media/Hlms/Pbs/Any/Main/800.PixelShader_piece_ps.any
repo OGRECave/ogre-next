@@ -556,7 +556,7 @@
         int light_idx = sm_point_lights_offset + n;
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
-		if( fDistance <= light0Buf.lights[light_idx].attenuation.x @insertpiece( andObjLightMaskCmp ) )
+		if( fDistance <= light0Buf.lights[light_idx].attenuation.x @insertpiece( andObjLightMaskCmp_light_idx ) )
 		{
 			lightDir *= 1.0 / fDistance;
 			tmpColour = BRDF( lightDir, light0Buf.lights[light_idx].diffuse.xyz, light0Buf.lights[light_idx].specular, pixelData )@insertpiece( DarkenWithShadowPoint_cur_shadow_map );
@@ -595,7 +595,7 @@
 		fDistance= length( lightDir );
 		lightDir *= 1.0 / fDistance;
         spotCosAngle = dot( -lightDir, light0Buf.lights[light_idx].spotDirection.xyz );
-		if( fDistance <= light0Buf.lights[light_idx].attenuation.x && spotCosAngle >= light0Buf.lights[light_idx].spotParams.y @insertpiece( andObjLightMaskCmp ) )
+		if( fDistance <= light0Buf.lights[light_idx].attenuation.x && spotCosAngle >= light0Buf.lights[light_idx].spotParams.y @insertpiece( andObjLightMaskCmp_light_idx ) )
 		{
             float spotAtten = saturate( (spotCosAngle - light0Buf.lights[light_idx].spotParams.y) * light0Buf.lights[light_idx].spotParams.x );
             spotAtten = pow( spotAtten, light0Buf.lights[light_idx].spotParams.z );
