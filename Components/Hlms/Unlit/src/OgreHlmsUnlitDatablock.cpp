@@ -29,19 +29,20 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsUnlitDatablock.h"
-#include "OgreHlmsUnlit.h"
+
 #include "OgreHlmsManager.h"
+#include "OgreHlmsUnlit.h"
+#include "OgreLogManager.h"
+#include "OgreRenderSystem.h"
+#include "OgreString.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
-#include "OgreRenderSystem.h"
-#include "OgreLogManager.h"
-#include "OgreString.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
 #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
 #define OGRE_HLMS_CREATOR_CLASS HlmsUnlit
-    #include "OgreHlmsTextureBaseClass.inl"
+#include "OgreHlmsTextureBaseClass.inl"
 #undef _OgreHlmsTextureBaseClassExport
 #undef OGRE_HLMS_TEXTURE_BASE_CLASS
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
@@ -52,41 +53,25 @@ THE SOFTWARE.
 namespace Ogre
 {
     extern const String c_unlitBlendModes[];
-    const String c_unlitBlendModes[] =
-    {
-        "NormalNonPremul", "NormalPremul", "Add", "Subtract", "Multiply",
-        "Multiply2x", "Screen", "Overlay", "Lighten", "Darken", "GrainExtract",
-        "GrainMerge", "Difference"
+    const String c_unlitBlendModes[] = { "NormalNonPremul", "NormalPremul", "Add",          "Subtract",
+                                         "Multiply",        "Multiply2x",   "Screen",       "Overlay",
+                                         "Lighten",         "Darken",       "GrainExtract", "GrainMerge",
+                                         "Difference" };
+
+    const String c_diffuseMap[NUM_UNLIT_TEXTURE_TYPES] = {
+        "diffuse_map",   "diffuse_map1",  "diffuse_map2",  "diffuse_map3",
+        "diffuse_map4",  "diffuse_map5",  "diffuse_map6",  "diffuse_map7",
+        "diffuse_map8",  "diffuse_map9",  "diffuse_map10", "diffuse_map11",
+        "diffuse_map12", "diffuse_map13", "diffuse_map14", "diffuse_map15"
     };
 
-    const String c_diffuseMap[NUM_UNLIT_TEXTURE_TYPES] =
-    {
-        "diffuse_map",
-        "diffuse_map1",
-        "diffuse_map2",
-        "diffuse_map3",
-        "diffuse_map4",
-        "diffuse_map5",
-        "diffuse_map6",
-        "diffuse_map7",
-        "diffuse_map8",
-        "diffuse_map9",
-        "diffuse_map10",
-        "diffuse_map11",
-        "diffuse_map12",
-        "diffuse_map13",
-        "diffuse_map14",
-        "diffuse_map15"
-    };
-
-    const size_t HlmsUnlitDatablock::MaterialSizeInGpu          = 8 * 4 + NUM_UNLIT_TEXTURE_TYPES * 2;
-    const size_t HlmsUnlitDatablock::MaterialSizeInGpuAligned   = alignToNextMultiple(
-                                                                   HlmsUnlitDatablock::MaterialSizeInGpu,
-                                                                   4 * 4 );
-    const uint8 HlmsUnlitDatablock::R_MASK  = 0;
-    const uint8 HlmsUnlitDatablock::G_MASK  = 1;
-    const uint8 HlmsUnlitDatablock::B_MASK  = 2;
-    const uint8 HlmsUnlitDatablock::A_MASK  = 3;
+    const size_t HlmsUnlitDatablock::MaterialSizeInGpu = 8 * 4 + NUM_UNLIT_TEXTURE_TYPES * 2;
+    const size_t HlmsUnlitDatablock::MaterialSizeInGpuAligned =
+        alignToNextMultiple( HlmsUnlitDatablock::MaterialSizeInGpu, 4 * 4 );
+    const uint8 HlmsUnlitDatablock::R_MASK = 0;
+    const uint8 HlmsUnlitDatablock::G_MASK = 1;
+    const uint8 HlmsUnlitDatablock::B_MASK = 2;
+    const uint8 HlmsUnlitDatablock::A_MASK = 3;
     //-----------------------------------------------------------------------------------
     HlmsUnlitDatablock::HlmsUnlitDatablock( IdString name, HlmsUnlit *creator,
                                             const HlmsMacroblock *macroblock,
@@ -95,9 +80,12 @@ namespace Ogre
         HlmsUnlitBaseTextureDatablock( name, creator, macroblock, blendblock, params ),
         mNumEnabledAnimationMatrices( 0 ),
         mHasColour( false ),
-        mR( 1.0f ), mG( 1.0f ), mB( 1.0f ), mA( 1.0f )
+        mR( 1.0f ),
+        mG( 1.0f ),
+        mB( 1.0f ),
+        mA( 1.0f )
     {
-        for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
+        for( size_t i = 0; i < NUM_UNLIT_TEXTURE_TYPES; ++i )
         {
             mTextureMatrices[i] = Matrix4::IDENTITY;
             setTextureSwizzle( i, R_MASK, G_MASK, B_MASK, A_MASK );
@@ -125,40 +113,40 @@ namespace Ogre
             }
         }
 
-        for( size_t i=0; i<sizeof( c_diffuseMap ) / sizeof( String ); ++i )
+        for( size_t i = 0; i < sizeof( c_diffuseMap ) / sizeof( String ); ++i )
         {
             if( Hlms::findParamInVec( params, c_diffuseMap[i], paramVal ) )
             {
                 StringVector vec = StringUtil::split( paramVal );
 
                 StringVector::const_iterator itor = vec.begin();
-                StringVector::const_iterator end  = vec.end();
+                StringVector::const_iterator end = vec.end();
 
                 while( itor != end )
                 {
                     uint val = StringConverter::parseUnsignedInt( *itor, ~0 );
 
-                    if( val != (uint)(~0) )
+                    if( val != ( uint )( ~0 ) )
                     {
-                        //It's a number, must be an UV Set
+                        // It's a number, must be an UV Set
                         setTextureUvSource( i, val );
                     }
                     else if( !itor->empty() )
                     {
-                        //Is it a blend mode?
-                        const String *it = std::find( c_unlitBlendModes, c_unlitBlendModes +
-                                                      sizeof(c_unlitBlendModes) / sizeof( String ),
-                                                      *itor );
+                        // Is it a blend mode?
+                        const String *it = std::find(
+                            c_unlitBlendModes,
+                            c_unlitBlendModes + sizeof( c_unlitBlendModes ) / sizeof( String ), *itor );
 
-                        if( it == c_unlitBlendModes + sizeof(c_unlitBlendModes) / sizeof( String ) )
+                        if( it == c_unlitBlendModes + sizeof( c_unlitBlendModes ) / sizeof( String ) )
                         {
-                            //Not blend mode, try loading a texture
+                            // Not blend mode, try loading a texture
                             setTexture( i, *itor );
                         }
                         else
                         {
-                            //It's a blend mode
-                            mBlendModes[i] = (it - c_unlitBlendModes);
+                            // It's a blend mode
+                            mBlendModes[i] = ( it - c_unlitBlendModes );
                         }
                     }
 
@@ -177,17 +165,19 @@ namespace Ogre
                 if( val >= NUM_UNLIT_TEXTURE_TYPES )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 mName.getFriendlyText() +
-                                 ": animate parameters must be in range [0; " +
-                                 StringConverter::toString( NUM_UNLIT_TEXTURE_TYPES ) + ")",
+                                 mName.getFriendlyText() + ": animate parameters must be in range [0; " +
+                                     StringConverter::toString( NUM_UNLIT_TEXTURE_TYPES ) + ")",
                                  "HlmsUnlitDatablock::HlmsUnlitDatablock" );
                 }
 
                 if( mEnabledAnimationMatrices[val] )
                 {
-                    LogManager::getSingleton().logMessage( "WARNING: specified same texture unit twice "
-                            "in material '" + mName.getFriendlyText() +
-                            "'; parameter 'animate'. Are you sure this is correct?", LML_CRITICAL );
+                    LogManager::getSingleton().logMessage(
+                        "WARNING: specified same texture unit twice "
+                        "in material '" +
+                            mName.getFriendlyText() +
+                            "'; parameter 'animate'. Are you sure this is correct?",
+                        LML_CRITICAL );
                 }
                 else
                 {
@@ -200,7 +190,7 @@ namespace Ogre
             }
         }
 
-        //Use the same hash for everything (the number of materials per buffer is high)
+        // Use the same hash for everything (the number of materials per buffer is high)
         creator->requestSlot( mNumEnabledAnimationMatrices != 0, this,
                               mNumEnabledAnimationMatrices != 0 );
     }
@@ -208,7 +198,7 @@ namespace Ogre
     HlmsUnlitDatablock::~HlmsUnlitDatablock()
     {
         if( mAssignedPool )
-            static_cast<HlmsUnlit*>(mCreator)->releaseSlot( this );
+            static_cast<HlmsUnlit *>( mCreator )->releaseSlot( this );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::calculateHash()
@@ -217,21 +207,22 @@ namespace Ogre
 
         if( mTexturesDescSet )
         {
-            FastArray<const TextureGpu*>::const_iterator itor = mTexturesDescSet->mTextures.begin();
-            FastArray<const TextureGpu*>::const_iterator end  = mTexturesDescSet->mTextures.end();
+            FastArray<const TextureGpu *>::const_iterator itor = mTexturesDescSet->mTextures.begin();
+            FastArray<const TextureGpu *>::const_iterator end = mTexturesDescSet->mTextures.end();
             while( itor != end )
             {
-                hash += (*itor)->getName();
+                hash += ( *itor )->getName();
                 ++itor;
             }
         }
         if( mSamplersDescSet )
         {
-            FastArray<const HlmsSamplerblock*>::const_iterator itor= mSamplersDescSet->mSamplers.begin();
-            FastArray<const HlmsSamplerblock*>::const_iterator end = mSamplersDescSet->mSamplers.end();
+            FastArray<const HlmsSamplerblock *>::const_iterator itor =
+                mSamplersDescSet->mSamplers.begin();
+            FastArray<const HlmsSamplerblock *>::const_iterator end = mSamplersDescSet->mSamplers.end();
             while( itor != end )
             {
-                hash += IdString( (*itor)->mId );
+                hash += IdString( ( *itor )->mId );
                 ++itor;
             }
         }
@@ -239,28 +230,28 @@ namespace Ogre
         if( mTextureHash != hash.mHash )
         {
             mTextureHash = hash.mHash;
-            //static_cast<HlmsUnlit*>(mCreator)->requestSlot( mTextureHash, this );
+            // static_cast<HlmsUnlit*>(mCreator)->requestSlot( mTextureHash, this );
         }
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
-        if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
+        if( dirtyFlags & ( ConstBufferPool::DirtyTextures | ConstBufferPool::DirtySamplers ) )
         {
-            //Must be called first so mTexIndices[i] gets updated before uploading to GPU.
-            updateDescriptorSets( (dirtyFlags & ConstBufferPool::DirtyTextures) != 0,
-                                  (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
+            // Must be called first so mTexIndices[i] gets updated before uploading to GPU.
+            updateDescriptorSets( ( dirtyFlags & ConstBufferPool::DirtyTextures ) != 0,
+                                  ( dirtyFlags & ConstBufferPool::DirtySamplers ) != 0 );
         }
 
         uint16 texIndices[OGRE_NumTexIndices];
-        for( size_t i=0; i<OGRE_NumTexIndices; ++i )
+        for( size_t i = 0; i < OGRE_NumTexIndices; ++i )
             texIndices[i] = mTexIndices[i] & ~ManualTexIndexBit;
 
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
-        dstPtr += 4 * sizeof(float);
-        memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices) );
-        dstPtr += MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices);
-        memcpy( dstPtr, texIndices, sizeof(texIndices) );
+        dstPtr += 4 * sizeof( float );
+        memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof( float ) - sizeof( mTexIndices ) );
+        dstPtr += MaterialSizeInGpu - 4 * sizeof( float ) - sizeof( mTexIndices );
+        memcpy( dstPtr, texIndices, sizeof( texIndices ) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToExtraBuffer( char *dstPtr )
@@ -268,9 +259,9 @@ namespace Ogre
 #if !OGRE_DOUBLE_PRECISION
         memcpy( dstPtr, mTextureMatrices, sizeof( mTextureMatrices ) );
 #else
-        float * RESTRICT_ALIAS dstFloat = reinterpret_cast<float * RESTRICT_ALIAS>( dstPtr );
+        float *RESTRICT_ALIAS dstFloat = reinterpret_cast<float * RESTRICT_ALIAS>( dstPtr );
 
-        for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES * 4; ++i )
+        for( size_t i = 0; i < NUM_UNLIT_TEXTURE_TYPES * 4; ++i )
             *dstFloat++ = (float)mTextureMatrices[0][0][i];
 #endif
     }
@@ -283,11 +274,9 @@ namespace Ogre
         if( !name.empty() )
         {
             texture = textureManager->createOrRetrieveTexture(
-                          name, GpuPageOutStrategy::Discard,
-                          TextureFlags::AutomaticBatching |
-                          TextureFlags::PrefersLoadingFromFileAsSRGB,
-                          TextureTypes::Type2D,
-                          ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                name, GpuPageOutStrategy::Discard,
+                TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
+                TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
         }
         setTexture( texUnit, texture, refParams );
     }
@@ -304,8 +293,8 @@ namespace Ogre
     void HlmsUnlitDatablock::setColour( const ColourValue &diffuse )
     {
         assert( diffuse == ColourValue::White ||
-                (mHasColour &&
-                 "Setting colour to a Datablock created w/out diffuse flag will be ignored") );
+                ( mHasColour &&
+                  "Setting colour to a Datablock created w/out diffuse flag will be ignored" ) );
         mR = diffuse.r;
         mG = diffuse.g;
         mB = diffuse.b;
@@ -317,7 +306,8 @@ namespace Ogre
     void HlmsUnlitDatablock::setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-        mTextureSwizzles[texType] = (r << 6u) | ((g & 0x03u) << 4u) | ((b & 0x03u) << 2u) | (a & 0x03u);
+        mTextureSwizzles[texType] =
+            ( r << 6u ) | ( ( g & 0x03u ) << 4u ) | ( ( b & 0x03u ) << 2u ) | ( a & 0x03u );
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------
@@ -375,12 +365,13 @@ namespace Ogre
         if( mEnabledAnimationMatrices[textureUnit] != bEnable )
         {
             mEnabledAnimationMatrices[textureUnit] = bEnable;
-            mNumEnabledAnimationMatrices += (bEnable * 2) - 1; //bEnable ? +1 : -1
+            mNumEnabledAnimationMatrices += ( bEnable * 2 ) - 1;  // bEnable ? +1 : -1
 
-            if( !mNumEnabledAnimationMatrices || (mNumEnabledAnimationMatrices == 1 && bEnable) )
+            if( !mNumEnabledAnimationMatrices || ( mNumEnabledAnimationMatrices == 1 && bEnable ) )
             {
-                static_cast<HlmsUnlit*>(mCreator)->requestSlot( mNumEnabledAnimationMatrices != 0, this,
-                                                                mNumEnabledAnimationMatrices != 0 );
+                static_cast<HlmsUnlit *>( mCreator )
+                    ->requestSlot( mNumEnabledAnimationMatrices != 0, this,
+                                   mNumEnabledAnimationMatrices != 0 );
             }
 
             scheduleConstBufferUpdate();
@@ -403,7 +394,7 @@ namespace Ogre
             scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    const Matrix4& HlmsUnlitDatablock::getAnimationMatrix( uint8 textureUnit ) const
+    const Matrix4 &HlmsUnlitDatablock::getAnimationMatrix( uint8 textureUnit ) const
     {
         return mTextureMatrices[textureUnit];
     }
@@ -424,18 +415,12 @@ namespace Ogre
         return mEnablePlanarReflection[textureUnit];
     }
     //-----------------------------------------------------------------------------------
-    ColourValue HlmsUnlitDatablock::getDiffuseColour() const
-    {
-        return ColourValue( 0, 0, 0, 0 );
-    }
+    ColourValue HlmsUnlitDatablock::getDiffuseColour() const { return ColourValue( 0, 0, 0, 0 ); }
     //-----------------------------------------------------------------------------------
     ColourValue HlmsUnlitDatablock::getEmissiveColour() const
     {
         return hasColour() ? getColour() : ColourValue::White;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsUnlitDatablock::getEmissiveTexture() const
-    {
-        return getTexture( 0 );
-    }
-}
+    TextureGpu *HlmsUnlitDatablock::getEmissiveTexture() const { return getTexture( 0 ); }
+}  // namespace Ogre

@@ -36,15 +36,14 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-
-	struct _OgreHlmsUnlitExport UnlitProperty
+    struct _OgreHlmsUnlitExport UnlitProperty
     {
         static const IdString HwGammaRead;
         static const IdString HwGammaWrite;
         static const IdString SignedIntTex;
         static const IdString MaterialsPerBuffer;
         static const IdString LowerGpuOverhead;
-        static const IdString AnimationMatricesPerBuffer; //TODO: Seems dead
+        static const IdString AnimationMatricesPerBuffer;  // TODO: Seems dead
         static const IdString TextureMatrix;
         static const IdString ExponentialShadowMaps;
         static const IdString HasPlanarReflections;
@@ -70,8 +69,8 @@ namespace Ogre
         /// Number of diffuse maps.
         static const IdString DiffuseMap;
 
-        //static const IdString DiffuseMap0;
-        //static const IdString DiffuseMap0Array;
+        // static const IdString DiffuseMap0;
+        // static const IdString DiffuseMap0Array;
 
         /// UV source # assigned to each texture.
         static const IdString UvDiffuse0;
@@ -141,7 +140,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

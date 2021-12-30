@@ -29,47 +29,39 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreHlmsUnlit.h"
-#include "OgreHlmsUnlitDatablock.h"
-#include "OgreUnlitProperty.h"
-#include "OgreHlmsListener.h"
 
-#if !OGRE_NO_JSON
-#include "OgreHlmsJsonUnlit.h"
-#endif
-
-#include "OgreLwString.h"
-
-#include "OgreViewport.h"
-#include "OgreCamera.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreHighLevelGpuProgram.h"
-#include "OgreRootLayout.h"
-
-#include "OgreDescriptorSetTexture.h"
-#include "OgreTextureGpu.h"
-
-#include "OgreSceneManager.h"
-#include "OgreRenderQueue.h"
+#include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "CommandBuffer/OgreCbTexture.h"
+#include "CommandBuffer/OgreCommandBuffer.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-#include "Vao/OgreVaoManager.h"
-#include "Vao/OgreConstBufferPacked.h"
-#include "Vao/OgreTexBufferPacked.h"
-#include "Vao/OgreStagingBuffer.h"
-
+#include "OgreCamera.h"
+#include "OgreDescriptorSetTexture.h"
+#include "OgreHighLevelGpuProgram.h"
+#include "OgreHighLevelGpuProgramManager.h"
+#include "OgreHlmsListener.h"
 #include "OgreHlmsManager.h"
+#include "OgreHlmsUnlitDatablock.h"
 #include "OgreLogManager.h"
-
-#include "CommandBuffer/OgreCommandBuffer.h"
-#include "CommandBuffer/OgreCbTexture.h"
-#include "CommandBuffer/OgreCbShaderBuffer.h"
-
-
+#include "OgreLwString.h"
 #include "OgreProfiler.h"
+#include "OgreRenderQueue.h"
+#include "OgreRootLayout.h"
+#include "OgreSceneManager.h"
+#include "OgreTextureGpu.h"
+#include "OgreUnlitProperty.h"
+#include "OgreViewport.h"
+#include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
+
+#if !OGRE_NO_JSON
+#    include "OgreHlmsJsonUnlit.h"
+#endif
 
 namespace Ogre
 {
-
     extern const String c_unlitBlendModes[];
 
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders ) :
@@ -98,20 +90,19 @@ namespace Ogre
         mTexUnitSlotStart( 2u ),
         mSamplerUnitSlotStart( 2u )
     {
-        //Override defaults
+        // Override defaults
         mLightGatheringMode = LightGatherNone;
 
-        //Always use this strategy, even on mobile
+        // Always use this strategy, even on mobile
         mOptimizationStrategy = LowerCpuOverhead;
 
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
-    HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
-                          HlmsTypes type, const String &typeName, size_t constBufferSize ) :
+    HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
+                          const String &typeName, size_t constBufferSize ) :
         HlmsBufferManager( type, typeName, dataFolder, libraryFolders ),
-        ConstBufferPool( constBufferSize,
-                         ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
+        ConstBufferPool( constBufferSize, ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
         mCurrentPassBuffer( 0 ),
         mLastBoundPool( 0 ),
         mLastDescTexture( 0 ),
@@ -123,20 +114,17 @@ namespace Ogre
         mTexUnitSlotStart( 2u ),
         mSamplerUnitSlotStart( 2u )
     {
-        //Override defaults
+        // Override defaults
         mLightGatheringMode = LightGatherNone;
 
-        //Always use this strategy, even on mobile
+        // Always use this strategy, even on mobile
         mOptimizationStrategy = LowerCpuOverhead;
 
         // Always an identity matrix
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     //-----------------------------------------------------------------------------------
-    HlmsUnlit::~HlmsUnlit()
-    {
-        destroyAllBuffers();
-    }
+    HlmsUnlit::~HlmsUnlit() { destroyAllBuffers(); }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::_changeRenderSystem( RenderSystem *newRs )
     {
@@ -149,12 +137,13 @@ namespace Ogre
         if( newRs )
         {
             HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-            HlmsDatablockMap::const_iterator end  = mDatablocks.end();
+            HlmsDatablockMap::const_iterator end = mDatablocks.end();
 
             while( itor != end )
             {
-                assert( dynamic_cast<HlmsUnlitDatablock*>( itor->second.datablock ) );
-                HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>( itor->second.datablock );
+                assert( dynamic_cast<HlmsUnlitDatablock *>( itor->second.datablock ) );
+                HlmsUnlitDatablock *datablock =
+                    static_cast<HlmsUnlitDatablock *>( itor->second.datablock );
 
                 requestSlot( datablock->mNumEnabledAnimationMatrices != 0, datablock,
                              datablock->mNumEnabledAnimationMatrices != 0 );
@@ -190,24 +179,23 @@ namespace Ogre
         mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
-    const HlmsCache* HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
-                                                        const HlmsCache &passCache,
-                                                        uint32 finalHash,
+    const HlmsCache *HlmsUnlit::createShaderCacheEntry( uint32 renderableHash,
+                                                        const HlmsCache &passCache, uint32 finalHash,
                                                         const QueuedRenderable &queuedRenderable )
     {
         OgreProfileExhaustive( "HlmsUnlit::createShaderCacheEntry" );
 
-        const HlmsCache *retVal = Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash,
-                                                                queuedRenderable );
+        const HlmsCache *retVal =
+            Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash, queuedRenderable );
 
         if( mShaderProfile != "glsl" )
         {
-            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
-                                                mSetProperties, queuedRenderable );
-            return retVal; //D3D embeds the texture slots in the shader.
+            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties,
+                                                queuedRenderable );
+            return retVal;  // D3D embeds the texture slots in the shader.
         }
 
-        //Set samplers.
+        // Set samplers.
         /*assert(
          dynamic_cast<const HlmsUnlitDatablock*>( queuedRenderable.renderable->getDatablock() ) );
         const HlmsUnlitDatablock *datablock = static_cast<const HlmsUnlitDatablock*>(
@@ -221,8 +209,8 @@ namespace Ogre
                 vsParams->setNamedConstant( "animationMatrixBuf", 1 );
         }
 
-        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
-                                            mSetProperties, queuedRenderable );
+        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache, mSetProperties,
+                                            queuedRenderable );
 
         mRenderSystem->_setPipelineStateObject( &retVal->pso );
 
@@ -235,7 +223,7 @@ namespace Ogre
 
         if( !mRenderSystem->getCapabilities()->hasCapability( RSC_CONST_BUFFER_SLOTS_IN_SHADER ) )
         {
-            //Setting it to the vertex shader will set it to the PSO actually.
+            // Setting it to the vertex shader will set it to the PSO actually.
             retVal->pso.vertexShader->setUniformBlockBinding( "PassBuffer", 0 );
             retVal->pso.vertexShader->setUniformBlockBinding( "MaterialBuf", 1 );
             retVal->pso.vertexShader->setUniformBlockBinding( "InstanceBuffer", 2 );
@@ -247,7 +235,7 @@ namespace Ogre
     void HlmsUnlit::setTextureProperty( LwString &propertyName, HlmsUnlitDatablock *datablock,
                                         uint8 texType )
     {
-        const size_t basePropSize = propertyName.size(); // diffuse_map0
+        const size_t basePropSize = propertyName.size();  // diffuse_map0
 
         const uint8 idx = datablock->getIndexToDescriptorTexture( texType );
 
@@ -256,14 +244,14 @@ namespace Ogre
             setProperty( propertyName.c_str(), 1 );
 
             propertyName.resize( basePropSize );
-            propertyName.a( "_idx" );                   //diffuse_map0_idx
+            propertyName.a( "_idx" );  // diffuse_map0_idx
             setProperty( propertyName.c_str(), idx );
 
             const TextureGpu *texture = datablock->getTexture( texType );
             if( texture && texture->getInternalTextureType() == TextureTypes::Type2DArray )
             {
                 propertyName.resize( basePropSize );
-                propertyName.a( "_array" );             //diffuse_map0_array
+                propertyName.a( "_array" );  // diffuse_map0_array
                 setProperty( propertyName.c_str(), 1 );
             }
 
@@ -271,7 +259,7 @@ namespace Ogre
             {
                 const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propertyName.resize( basePropSize );
-                propertyName.a( "_sampler" );           //diffuse_map0_sampler
+                propertyName.a( "_sampler" );  // diffuse_map0_sampler
                 setProperty( propertyName.c_str(), samplerIdx );
             }
         }
@@ -279,11 +267,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
     {
-        assert( dynamic_cast<HlmsUnlitDatablock*>( renderable->getDatablock() ) );
-        HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>( renderable->getDatablock() );
-        if( datablock->getDirtyFlags() & (DirtyTextures|DirtySamplers) )
+        assert( dynamic_cast<HlmsUnlitDatablock *>( renderable->getDatablock() ) );
+        HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock *>( renderable->getDatablock() );
+        if( datablock->getDirtyFlags() & ( DirtyTextures | DirtySamplers ) )
         {
-            //Delay hash generation for later, when we have the final (or temporary) descriptor sets.
+            // Delay hash generation for later, when we have the final (or temporary) descriptor sets.
             outHash = 0;
             outCasterHash = 0;
         }
@@ -304,15 +292,14 @@ namespace Ogre
     typedef vector<UvOutput>::type UvOutputVec;
     void HlmsUnlit::calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces )
     {
-        assert( dynamic_cast<HlmsUnlitDatablock*>( renderable->getDatablock() ) );
-        HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
-                                                        renderable->getDatablock() );
+        assert( dynamic_cast<HlmsUnlitDatablock *>( renderable->getDatablock() ) );
+        HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock *>( renderable->getDatablock() );
 
-        setProperty( HlmsBaseProp::Skeleton,    0 );
-        setProperty( HlmsBaseProp::Normal,      0 );
-        setProperty( HlmsBaseProp::QTangent,    0 );
-        setProperty( HlmsBaseProp::Tangent,     0 );
-        setProperty( HlmsBaseProp::Tangent4,    0 );
+        setProperty( HlmsBaseProp::Skeleton, 0 );
+        setProperty( HlmsBaseProp::Normal, 0 );
+        setProperty( HlmsBaseProp::QTangent, 0 );
+        setProperty( HlmsBaseProp::Tangent, 0 );
+        setProperty( HlmsBaseProp::Tangent4, 0 );
         setProperty( HlmsBaseProp::BonesPerVertex, 0 );
 
         if( datablock->mTexturesDescSet )
@@ -354,26 +341,26 @@ namespace Ogre
         int32 maxUsedTexUnitPlusOne = 0;
 
         char tmpBuffer[64];
-        LwString diffuseMapN( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString diffuseMapN( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
         diffuseMapN.a( "diffuse_map" );
         const size_t basePropSize = diffuseMapN.size();
 
-        for( uint8 i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
+        for( uint8 i = 0; i < NUM_UNLIT_TEXTURE_TYPES; ++i )
         {
             diffuseMapN.resize( basePropSize );
-            diffuseMapN.a( i ); //diffuse_map0
+            diffuseMapN.a( i );  // diffuse_map0
 
-            //Set whether the texture is used.
+            // Set whether the texture is used.
             setTextureProperty( diffuseMapN, datablock, i );
 
-            //Sanity check.
+            // Sanity check.
             bool hasTexture = datablock->getTexture( i ) != 0;
             if( hasTexture && getProperty( *HlmsBaseProp::UvCountPtrs[datablock->mUvSource[i]] ) < 2 )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Renderable must have at least 2 coordinates in UV set #" +
-                             StringConverter::toString( datablock->mUvSource[i] ) +
-                             ". Either change the mesh, or change the UV source settings",
+                                 StringConverter::toString( datablock->mUvSource[i] ) +
+                                 ". Either change the mesh, or change the UV source settings",
                              "HlmsUnlit::calculateHashForPreCreate" );
             }
 
@@ -382,7 +369,7 @@ namespace Ogre
                 if( datablock->getEnablePlanarReflection( i ) )
                 {
                     diffuseMapN.resize( basePropSize + 1u );
-                    diffuseMapN.a( "_reflection" ); //diffuse_map0_reflection
+                    diffuseMapN.a( "_reflection" );  // diffuse_map0_reflection
                     IdString diffuseMapNReflection( diffuseMapN.c_str() );
                     setProperty( diffuseMapNReflection, 1 );
                     hasPlanarReflection = true;
@@ -391,22 +378,22 @@ namespace Ogre
                 maxUsedTexUnitPlusOne = i + 1;
             }
 
-            //Set the blend mode
+            // Set the blend mode
             uint8 blendMode = datablock->mBlendModes[i];
             inOutPieces[PixelShader][*UnlitProperty::DiffuseMapPtrs[i].blendModeIndex] =
-                                "@insertpiece( " + c_unlitBlendModes[blendMode] + ")";
+                "@insertpiece( " + c_unlitBlendModes[blendMode] + ")";
 
-            //Match the texture unit to the UV output.
+            // Match the texture unit to the UV output.
             if( hasTexture )
             {
                 const IdString &uvSourceSwizzleN = *UnlitProperty::DiffuseMapPtrs[i].uvSourceSwizzle;
 
                 if( datablock->mEnabledAnimationMatrices[i] )
                 {
-                    //Animated outputs need their own entry
+                    // Animated outputs need their own entry
                     UvOutput uvOutput;
-                    uvOutput.uvSource   = datablock->mUvSource[i];
-                    uvOutput.texUnit    = i;
+                    uvOutput.uvSource = datablock->mUvSource[i];
+                    uvOutput.texUnit = i;
                     uvOutput.isAnimated = true;
                     hasAnimationMatrices = true;
 
@@ -418,12 +405,12 @@ namespace Ogre
                 }
                 else
                 {
-                    //Non-animated outputs may share their entry with another non-animated one.
+                    // Non-animated outputs may share their entry with another non-animated one.
                     UvOutputVec::iterator itor = uvOutputs.begin();
-                    UvOutputVec::iterator end  = uvOutputs.end();
+                    UvOutputVec::iterator end = uvOutputs.end();
 
                     while( itor != end &&
-                           (itor->uvSource != datablock->mUvSource[i] || itor->isAnimated) )
+                           ( itor->uvSource != datablock->mUvSource[i] || itor->isAnimated ) )
                     {
                         ++itor;
                     }
@@ -435,26 +422,27 @@ namespace Ogre
 
                     if( itor == end )
                     {
-                        //Entry didn't exist yet.
+                        // Entry didn't exist yet.
                         UvOutput uvOutput;
-                        uvOutput.uvSource   = datablock->mUvSource[i];
-                        uvOutput.texUnit    = 0; //Not used
+                        uvOutput.uvSource = datablock->mUvSource[i];
+                        uvOutput.texUnit = 0;  // Not used
                         uvOutput.isAnimated = false;
 
                         uvOutputs.push_back( uvOutput );
                     }
                 }
 
-                //Generate the texture swizzle for the pixel shader.
+                // Generate the texture swizzle for the pixel shader.
                 diffuseMapN.resize( basePropSize + 1u );
                 diffuseMapN.a( "_tex_swizzle" );
                 IdString diffuseMapNTexSwizzle( diffuseMapN.c_str() );
                 String texSwizzle;
                 texSwizzle.reserve( 4 );
 
-                for( size_t j=0; j<4; ++j )
+                for( size_t j = 0; j < 4; ++j )
                 {
-                    const size_t swizzleMask = (datablock->mTextureSwizzles[i] >> (6u - j*2u)) & 0x03u;
+                    const size_t swizzleMask =
+                        ( datablock->mTextureSwizzles[i] >> ( 6u - j * 2u ) ) & 0x03u;
                     if( swizzleMask == HlmsUnlitDatablock::R_MASK )
                         texSwizzle += "x";
                     else if( swizzleMask == HlmsUnlitDatablock::G_MASK )
@@ -480,20 +468,20 @@ namespace Ogre
             setProperty( UnlitProperty::HasPlanarReflections, 1 );
         }
 
-        size_t halfUvOutputs = (uvOutputs.size() + 1u) >> 1u;
+        size_t halfUvOutputs = ( uvOutputs.size() + 1u ) >> 1u;
         setProperty( UnlitProperty::OutUvCount, static_cast<int32>( uvOutputs.size() ) );
         setProperty( UnlitProperty::OutUvHalfCount, static_cast<int32>( halfUvOutputs ) );
 
-        for( size_t i=0; i<halfUvOutputs; ++i )
+        for( size_t i = 0; i < halfUvOutputs; ++i )
         {
-            //Decide whether to use vec4 or vec2 in VStoPS_block piece:
+            // Decide whether to use vec4 or vec2 in VStoPS_block piece:
             // vec4 uv0; //--> When interpolant contains two uvs in one
             // vec2 uv0; //--> When interpolant contains the last UV (uvOutputs.size() is odd)
             setProperty( "out_uv_half_count" + StringConverter::toString( i ),
-                         (i << 1u) == (uvOutputs.size() - 1u) ? 2 : 4 );
+                         ( i << 1u ) == ( uvOutputs.size() - 1u ) ? 2 : 4 );
         }
 
-        for( size_t i=0; i<uvOutputs.size(); ++i )
+        for( size_t i = 0; i < uvOutputs.size(); ++i )
         {
             String outPrefix = "out_uv" + StringConverter::toString( i );
 
@@ -512,7 +500,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
     {
-        //HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
+        // HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>(
         //                                              renderable->getDatablock() );
 
         HlmsDatablock *datablock = renderable->getDatablock();
@@ -589,7 +577,7 @@ namespace Ogre
 
         mSetProperties.clear();
 
-        //Set the properties and create/retrieve the cache.
+        // Set the properties and create/retrieve the cache.
         if( casterPass )
         {
             setProperty( HlmsBaseProp::ShadowCaster, 1 );
@@ -623,9 +611,9 @@ namespace Ogre
 
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
-                     (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
+                     ( renderPassDesc->getNumColourEntries() > 0 ) ? 0 : 1 );
         setProperty( HlmsBaseProp::RenderDepthOnly,
-                     (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
+                     ( renderPassDesc->getNumColourEntries() > 0 ) ? 0 : 1 );
 
         setProperty( UnlitProperty::SamplerStateStart, (int32)mSamplerUnitSlotStart );
 
@@ -655,16 +643,16 @@ namespace Ogre
             it = mPassCache.end() - 1;
         }
 
-        const uint32 hash = (it - mPassCache.begin()) << HlmsBits::PassShift;
+        const uint32 hash = ( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
-        //Fill the buffers
+        // Fill the buffers
         HlmsCache retVal( hash, mType, HlmsPso() );
         retVal.setProperties = mSetProperties;
         retVal.pso.pass = passCache.passPso;
 
         mUsingInstancedStereo = isInstancedStereo;
         mConstantBiasScale = cameras.renderingCamera->_getConstantBiasScale();
-        Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
+        Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix( true );
 
         Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
         Matrix4 identityProjMat;
@@ -673,15 +661,15 @@ namespace Ogre
 
         if( renderPassDesc->requiresTextureFlipping() )
         {
-            projectionMatrix[1][0]  = -projectionMatrix[1][0];
-            projectionMatrix[1][1]  = -projectionMatrix[1][1];
-            projectionMatrix[1][2]  = -projectionMatrix[1][2];
-            projectionMatrix[1][3]  = -projectionMatrix[1][3];
+            projectionMatrix[1][0] = -projectionMatrix[1][0];
+            projectionMatrix[1][1] = -projectionMatrix[1][1];
+            projectionMatrix[1][2] = -projectionMatrix[1][2];
+            projectionMatrix[1][3] = -projectionMatrix[1][3];
 
-            identityProjMat[1][0]   = -identityProjMat[1][0];
-            identityProjMat[1][1]   = -identityProjMat[1][1];
-            identityProjMat[1][2]   = -identityProjMat[1][2];
-            identityProjMat[1][3]   = -identityProjMat[1][3];
+            identityProjMat[1][0] = -identityProjMat[1][0];
+            identityProjMat[1][1] = -identityProjMat[1][1];
+            identityProjMat[1][2] = -identityProjMat[1][2];
+            identityProjMat[1][3] = -identityProjMat[1][3];
         }
 
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
@@ -717,12 +705,13 @@ namespace Ogre
             }
         }
 
-        bool isShadowCastingPointLight =  casterPass && getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
+        bool isShadowCastingPointLight =
+            casterPass && getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
 
         mSetProperties.clear();
 
-        //mat4 viewProj[2] + vec4 invWindowSize;
-        size_t mapSize = (16 + 16 + 4) * 4;
+        // mat4 viewProj[2] + vec4 invWindowSize;
+        size_t mapSize = ( 16 + 16 + 4 ) * 4;
 
         if( isInstancedStereo )
         {
@@ -731,7 +720,7 @@ namespace Ogre
         }
 
         const bool isCameraReflected = cameras.renderingCamera->isReflected();
-        //mat4 invViewProj
+        // mat4 invViewProj
         if( ( isCameraReflected ||
               ( casterPass && ( mUsingExponentialShadowMaps || isShadowCastingPointLight ) ) ) &&
             !isInstancedStereo )
@@ -741,35 +730,33 @@ namespace Ogre
 
         if( casterPass )
         {
-            //vec4 viewZRow
+            // vec4 viewZRow
             if( mUsingExponentialShadowMaps )
                 mapSize += 4 * 4;
-            //vec4 depthRange
-            mapSize += (2 + 2) * 4;
-            //vec4 cameraPosWS
+            // vec4 depthRange
+            mapSize += ( 2 + 2 ) * 4;
+            // vec4 cameraPosWS
             if( isShadowCastingPointLight )
                 mapSize += 4 * 4;
         }
-        //vec4 clipPlane0
+        // vec4 clipPlane0
         if( isCameraReflected )
             mapSize += 4 * 4;
 
-        mapSize += mListener->getPassBufferSize( shadowNode, casterPass,
-                                                 dualParaboloid, sceneManager );
+        mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid, sceneManager );
 
-        //Arbitrary 2kb (minimum supported by GL is 64kb), should be enough.
+        // Arbitrary 2kb (minimum supported by GL is 64kb), should be enough.
         const size_t maxBufferSize = 2 * 1024;
         assert( mapSize <= maxBufferSize );
 
         if( mCurrentPassBuffer >= mPassBuffers.size() )
         {
-            mPassBuffers.push_back( mVaoManager->createConstBuffer( maxBufferSize,
-                                                                    BT_DYNAMIC_PERSISTENT,
-                                                                    0, false ) );
+            mPassBuffers.push_back(
+                mVaoManager->createConstBuffer( maxBufferSize, BT_DYNAMIC_PERSISTENT, 0, false ) );
         }
 
         ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer++];
-        float *passBufferPtr = reinterpret_cast<float*>( passBuffer->map( 0, mapSize ) );
+        float *passBufferPtr = reinterpret_cast<float *>( passBuffer->map( 0, mapSize ) );
 
 #ifndef NDEBUG
         const float *startupPtr = passBufferPtr;
@@ -778,12 +765,12 @@ namespace Ogre
         //                          ---- VERTEX SHADER ----
         //---------------------------------------------------------------------------
 
-        //mat4 viewProj[0];
-        for( size_t i=0; i<16; ++i )
+        // mat4 viewProj[0];
+        for( size_t i = 0; i < 16; ++i )
             *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[0][0][i];
 
-        //mat4 viewProj[1] (identityProj);
-        for( size_t i=0; i<16; ++i )
+        // mat4 viewProj[1] (identityProj);
+        for( size_t i = 0; i < 16; ++i )
             *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[1][0][i];
 
         if( isInstancedStereo )
@@ -797,7 +784,7 @@ namespace Ogre
                 *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[3][0][i];
         }
 
-        //vec4 clipPlane0
+        // vec4 clipPlane0
         if( isCameraReflected )
         {
             const Plane &reflPlane = cameras.renderingCamera->getReflectionPlane();
@@ -811,16 +798,16 @@ namespace Ogre
               ( casterPass && ( mUsingExponentialShadowMaps || isShadowCastingPointLight ) ) ) &&
             !isInstancedStereo )
         {
-            //We don't care about the inverse of the identity proj because that's not
-            //really compatible with shadows anyway.
+            // We don't care about the inverse of the identity proj because that's not
+            // really compatible with shadows anyway.
             Matrix4 invViewProj = mPreparedPass.viewProjMatrix[0].inverse();
-            for( size_t i=0; i<16; ++i )
+            for( size_t i = 0; i < 16; ++i )
                 *passBufferPtr++ = (float)invViewProj[0][i];
         }
 
         if( casterPass )
         {
-            //vec4 viewZRow
+            // vec4 viewZRow
             if( mUsingExponentialShadowMaps )
             {
                 *passBufferPtr++ = viewMatrix[2][0];
@@ -829,7 +816,7 @@ namespace Ogre
                 *passBufferPtr++ = viewMatrix[2][3];
             }
 
-            //vec2 depthRange;
+            // vec2 depthRange;
             Real fNear, fFar;
             shadowNode->getMinMaxDepthRange( cameras.renderingCamera, fNear, fFar );
             const Real depthRange = fFar - fNear;
@@ -837,7 +824,7 @@ namespace Ogre
             *passBufferPtr++ = 1.0f / depthRange;
             passBufferPtr += 2;
 
-            //vec4 cameraPosWS;
+            // vec4 cameraPosWS;
             if( isShadowCastingPointLight )
             {
                 const Vector3 &camPos = cameras.renderingCamera->getDerivedPosition();
@@ -849,7 +836,7 @@ namespace Ogre
         }
 
         TextureGpu *renderTarget = mRenderSystem->getCurrentRenderViewports()[0].getCurrentTarget();
-        //vec4 invWindowSize;
+        // vec4 invWindowSize;
         *passBufferPtr++ = 1.0f / (float)renderTarget->getWidth();
         *passBufferPtr++ = 1.0f / (float)renderTarget->getHeight();
         *passBufferPtr++ = 1.0f;
@@ -858,11 +845,11 @@ namespace Ogre
         passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,
                                                       sceneManager, passBufferPtr );
 
-        assert( (size_t)(passBufferPtr - startupPtr) * 4u == mapSize );
+        assert( ( size_t )( passBufferPtr - startupPtr ) * 4u == mapSize );
 
         passBuffer->unmap( UO_KEEP_PERSISTENT );
 
-        //mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
+        // mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
         if( mTexBuffers.empty() )
         {
             size_t bufferSize =
@@ -882,8 +869,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsUnlit::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                      bool casterPass, uint32 lastCacheHash,
-                                      uint32 lastTextureHash )
+                                      bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Trying to use slow-path on a desktop implementation. "
@@ -891,59 +877,53 @@ namespace Ogre
                      "HlmsUnlit::fillBuffersFor" );
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsUnlit::fillBuffersForV1( const HlmsCache *cache,
-                                        const QueuedRenderable &queuedRenderable,
+    uint32 HlmsUnlit::fillBuffersForV1( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                         bool casterPass, uint32 lastCacheHash,
                                         CommandBuffer *commandBuffer )
     {
-        return fillBuffersFor( cache, queuedRenderable, casterPass,
-                               lastCacheHash, commandBuffer, true );
+        return fillBuffersFor( cache, queuedRenderable, casterPass, lastCacheHash, commandBuffer, true );
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsUnlit::fillBuffersForV2( const HlmsCache *cache,
-                                        const QueuedRenderable &queuedRenderable,
+    uint32 HlmsUnlit::fillBuffersForV2( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                         bool casterPass, uint32 lastCacheHash,
                                         CommandBuffer *commandBuffer )
     {
-        return fillBuffersFor( cache, queuedRenderable, casterPass,
-                               lastCacheHash, commandBuffer, false );
+        return fillBuffersFor( cache, queuedRenderable, casterPass, lastCacheHash, commandBuffer,
+                               false );
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsUnlit::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                       bool casterPass, uint32 lastCacheHash,
                                       CommandBuffer *commandBuffer, bool isV1 )
     {
-        assert( dynamic_cast<const HlmsUnlitDatablock*>( queuedRenderable.renderable->getDatablock() ) );
-        const HlmsUnlitDatablock *datablock = static_cast<const HlmsUnlitDatablock*>(
-                                                queuedRenderable.renderable->getDatablock() );
+        assert(
+            dynamic_cast<const HlmsUnlitDatablock *>( queuedRenderable.renderable->getDatablock() ) );
+        const HlmsUnlitDatablock *datablock =
+            static_cast<const HlmsUnlitDatablock *>( queuedRenderable.renderable->getDatablock() );
 
         if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != mType )
         {
-            //We changed HlmsType, rebind the shared textures.
+            // We changed HlmsType, rebind the shared textures.
             mLastDescTexture = 0;
             mLastDescSampler = 0;
             mLastBoundPool = 0;
 
-            //layout(binding = 0) uniform PassBuffer {} pass
-            ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer-1];
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           0, passBuffer, 0,
-                                                                           passBuffer->
-                                                                           getTotalSizeBytes() );
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
-                                                                           0, passBuffer, 0,
-                                                                           passBuffer->
-                                                                           getTotalSizeBytes() );
+            // layout(binding = 0) uniform PassBuffer {} pass
+            ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer - 1];
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( PixelShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
 
-            //layout(binding = 2) uniform InstanceBuffer {} instance
+            // layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
-                (size_t)((mCurrentMappedConstBuffer - mStartMappedConstBuffer) + 4) <=
+                ( size_t )( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
                     mCurrentConstBufferSize )
             {
                 *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( VertexShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
+                    CbShaderBuffer( VertexShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
                 *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
+                    CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
             }
 
             rebindTexBuffer( commandBuffer );
@@ -951,52 +931,49 @@ namespace Ogre
             mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
         }
 
-        //Don't bind the material buffer on caster passes (important to keep
-        //MDI & auto-instancing running on shadow map passes)
+        // Don't bind the material buffer on caster passes (important to keep
+        // MDI & auto-instancing running on shadow map passes)
         if( mLastBoundPool != datablock->getAssignedPool() && !casterPass )
         {
-            //layout(binding = 1) uniform MaterialBuf {} materialArray
+            // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           1, newPool->materialBuffer, 0,
-                                                                           newPool->materialBuffer->
-                                                                           getTotalSizeBytes() );
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
-                                                                           1, newPool->materialBuffer, 0,
-                                                                           newPool->materialBuffer->
-                                                                           getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, 1, newPool->materialBuffer, 0,
+                                newPool->materialBuffer->getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( PixelShader, 1, newPool->materialBuffer, 0,
+                                newPool->materialBuffer->getTotalSizeBytes() );
             if( newPool->extraBuffer )
             {
-                TexBufferPacked *extraBuffer = static_cast<TexBufferPacked*>( newPool->extraBuffer );
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader, 1,
-                                                                               extraBuffer, 0,
-                                                                               extraBuffer->
-                                                                               getTotalSizeBytes() );
+                TexBufferPacked *extraBuffer = static_cast<TexBufferPacked *>( newPool->extraBuffer );
+                *commandBuffer->addCommand<CbShaderBuffer>() =
+                    CbShaderBuffer( VertexShader, 1, extraBuffer, 0, extraBuffer->getTotalSizeBytes() );
             }
 
             mLastBoundPool = newPool;
         }
 
-        uint32 * RESTRICT_ALIAS currentMappedConstBuffer    = mCurrentMappedConstBuffer;
-        float * RESTRICT_ALIAS currentMappedTexBuffer       = mCurrentMappedTexBuffer;
+        uint32 *RESTRICT_ALIAS currentMappedConstBuffer = mCurrentMappedConstBuffer;
+        float *RESTRICT_ALIAS currentMappedTexBuffer = mCurrentMappedTexBuffer;
 
         const Matrix4 &worldMat = queuedRenderable.movableObject->_getParentNodeFullTransform();
 
-        bool exceedsConstBuffer = (size_t)((currentMappedConstBuffer - mStartMappedConstBuffer) + 4) >
-                                                                                mCurrentConstBufferSize;
+        bool exceedsConstBuffer = ( size_t )( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
+                                              4 ) > mCurrentConstBufferSize;
 
         const size_t minimumTexBufferSize = 16;
-        bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
-                                     minimumTexBufferSize >= mCurrentTexBufferSize;
+        bool exceedsTexBuffer =
+            ( currentMappedTexBuffer - mStartMappedTexBuffer ) + minimumTexBufferSize >=
+            mCurrentTexBufferSize;
 
         if( exceedsConstBuffer || exceedsTexBuffer )
         {
             currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
 
             if( exceedsTexBuffer )
-                mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof(float) );
+                mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof( float ) );
             else
-                rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof(float) );
+                rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof( float ) );
 
             currentMappedTexBuffer = mCurrentMappedTexBuffer;
         }
@@ -1006,14 +983,14 @@ namespace Ogre
         //---------------------------------------------------------------------------
         bool useIdentityProjection = queuedRenderable.renderable->getUseIdentityProjection();
 
-        //uint materialIdx[]
+        // uint materialIdx[]
         *currentMappedConstBuffer = datablock->getAssignedSlot();
         *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer + 1 ) =
             datablock->mShadowConstantBias * mConstantBiasScale;
-        *(currentMappedConstBuffer+2) = useIdentityProjection;
+        *( currentMappedConstBuffer + 2 ) = useIdentityProjection;
         currentMappedConstBuffer += 4;
 
-        //mat4 worldViewProj
+        // mat4 worldViewProj
         Matrix4 tmp =
             mPreparedPass.viewProjMatrix[mUsingInstancedStereo ? 4u : useIdentityProjection] * worldMat;
 #if !OGRE_DOUBLE_PRECISION
@@ -1024,7 +1001,7 @@ namespace Ogre
         {
             for( int x = 0; x < 4; ++x )
             {
-                *currentMappedTexBuffer++ = tmp[ y ][ x ];
+                *currentMappedTexBuffer++ = tmp[y][x];
             }
         }
 #endif
@@ -1037,19 +1014,18 @@ namespace Ogre
         {
             if( datablock->mTexturesDescSet != mLastDescTexture )
             {
-                //Bind textures
+                // Bind textures
                 size_t texUnit = mTexUnitSlotStart;
 
                 if( datablock->mTexturesDescSet )
                 {
-                    *commandBuffer->addCommand<CbTextures>() =
-                        CbTextures( texUnit, std::numeric_limits<uint16>::max(),
-                                    datablock->mTexturesDescSet );
+                    *commandBuffer->addCommand<CbTextures>() = CbTextures(
+                        texUnit, std::numeric_limits<uint16>::max(), datablock->mTexturesDescSet );
 
                     if( !mHasSeparateSamplers )
                     {
                         *commandBuffer->addCommand<CbSamplers>() =
-                                CbSamplers( texUnit, datablock->mSamplersDescSet );
+                            CbSamplers( texUnit, datablock->mSamplersDescSet );
                     }
 
                     texUnit += datablock->mTexturesDescSet->mTextures.size();
@@ -1062,35 +1038,35 @@ namespace Ogre
             {
                 if( datablock->mSamplersDescSet )
                 {
-                    //Bind samplers
+                    // Bind samplers
                     size_t texUnit = mSamplerUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
-                            CbSamplers( texUnit, datablock->mSamplersDescSet );
+                        CbSamplers( texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;
                 }
             }
         }
 
-        mCurrentMappedConstBuffer   = currentMappedConstBuffer;
-        mCurrentMappedTexBuffer     = currentMappedTexBuffer;
+        mCurrentMappedConstBuffer = currentMappedConstBuffer;
+        mCurrentMappedTexBuffer = currentMappedTexBuffer;
 
-        return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 2) - 1;
+        return ( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) >> 2 ) - 1;
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::destroyAllBuffers()
     {
         HlmsBufferManager::destroyAllBuffers();
 
-        mCurrentPassBuffer  = 0;
+        mCurrentPassBuffer = 0;
 
         {
             ConstBufferPackedVec::const_iterator itor = mPassBuffers.begin();
-            ConstBufferPackedVec::const_iterator end  = mPassBuffers.end();
+            ConstBufferPackedVec::const_iterator end = mPassBuffers.end();
 
             while( itor != end )
             {
-                if( (*itor)->getMappingState() != MS_UNMAPPED )
-                    (*itor)->unmap( UO_UNMAP_ALL );
+                if( ( *itor )->getMappingState() != MS_UNMAPPED )
+                    ( *itor )->unmap( UO_UNMAP_ALL );
                 mVaoManager->destroyConstBuffer( *itor );
                 ++itor;
             }
@@ -1102,7 +1078,7 @@ namespace Ogre
     void HlmsUnlit::frameEnded()
     {
         HlmsBufferManager::frameEnded();
-        mCurrentPassBuffer  = 0;
+        mCurrentPassBuffer = 0;
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::setShadowSettings( bool useExponentialShadowMaps )
@@ -1118,57 +1094,57 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )
     {
-        //We need to know what RenderSystem is currently in use, as the
-        //name of the compatible shading language is part of the path
+        // We need to know what RenderSystem is currently in use, as the
+        // name of the compatible shading language is part of the path
         RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
         String shaderSyntax = "GLSL";
-        if (renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem")
+        if( renderSystem->getName() == "OpenGL ES 2.x Rendering Subsystem" )
             shaderSyntax = "GLSLES";
         else if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
             shaderSyntax = "HLSL";
         else if( renderSystem->getName() == "Metal Rendering Subsystem" )
             shaderSyntax = "Metal";
 
-        //Fill the library folder paths with the relevant folders
+        // Fill the library folder paths with the relevant folders
         outLibraryFoldersPaths.clear();
         outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
         outLibraryFoldersPaths.push_back( "Hlms/Unlit/Any" );
 
-        //Fill the data folder path
+        // Fill the data folder path
         outDataFolderPath = "Hlms/Unlit/" + shaderSyntax;
     }
 #if !OGRE_NO_JSON
-	//-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     void HlmsUnlit::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                                HlmsDatablock *datablock, const String &resourceGroup,
                                HlmsJsonListener *listener,
                                const String &additionalTextureExtension ) const
-	{
+    {
         HlmsJsonUnlit jsonUnlit( mHlmsManager, mRenderSystem->getTextureGpuManager() );
         jsonUnlit.loadMaterial( jsonValue, blocks, datablock, resourceGroup );
-	}
-	//-----------------------------------------------------------------------------------
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsUnlit::_saveJson( const HlmsDatablock *datablock, String &outString,
                                HlmsJsonListener *listener,
                                const String &additionalTextureExtension ) const
-	{
+    {
         HlmsJsonUnlit jsonUnlit( mHlmsManager, mRenderSystem->getTextureGpuManager() );
         jsonUnlit.saveMaterial( datablock, outString );
-	}
-	//-----------------------------------------------------------------------------------
-	void HlmsUnlit::_collectSamplerblocks(set<const HlmsSamplerblock*>::type &outSamplerblocks,
-		const HlmsDatablock *datablock) const
-	{
-		HlmsJsonUnlit::collectSamplerblocks(datablock, outSamplerblocks);
-	}
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::_collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
+                                           const HlmsDatablock *datablock ) const
+    {
+        HlmsJsonUnlit::collectSamplerblocks( datablock, outSamplerblocks );
+    }
 #endif
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsUnlit::createDatablockImpl( IdString datablockName,
-                                                       const HlmsMacroblock *macroblock,
-                                                       const HlmsBlendblock *blendblock,
-                                                       const HlmsParamVec &paramVec )
+    HlmsDatablock *HlmsUnlit::createDatablockImpl( IdString datablockName,
+                                                   const HlmsMacroblock *macroblock,
+                                                   const HlmsBlendblock *blendblock,
+                                                   const HlmsParamVec &paramVec )
     {
         return OGRE_NEW HlmsUnlitDatablock( datablockName, this, macroblock, blendblock, paramVec );
     }
-}
+}  // namespace Ogre

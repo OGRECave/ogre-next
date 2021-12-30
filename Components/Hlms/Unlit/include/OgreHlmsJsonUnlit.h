@@ -27,38 +27,39 @@ THE SOFTWARE.
 */
 
 #if !OGRE_NO_JSON
-#ifndef _OgreHlmsJsonUnlit_H_
-#define _OgreHlmsJsonUnlit_H_
+#    ifndef _OgreHlmsJsonUnlit_H_
+#        define _OgreHlmsJsonUnlit_H_
 
-#include "OgreHlmsUnlitPrerequisites.h"
-#include "OgreHlmsJson.h"
-#include "OgreHlmsUnlitDatablock.h"
-#include "OgreHeaderPrefix.h"
+#        include "OgreHlmsUnlitPrerequisites.h"
+
+#        include "OgreHlmsJson.h"
+#        include "OgreHlmsUnlitDatablock.h"
+
+#        include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class _OgreHlmsUnlitExport HlmsJsonUnlit
     {
-        HlmsManager         *mHlmsManager;
-        TextureGpuManager   *mTextureManager;
-	
-		UnlitBlendModes parseBlendMode(const char *value);
-		void parseAnimation(const rapidjson::Value &jsonArray, Matrix4 &mat);
+        HlmsManager *      mHlmsManager;
+        TextureGpuManager *mTextureManager;
+
+        UnlitBlendModes parseBlendMode( const char *value );
+        void            parseAnimation( const rapidjson::Value &jsonArray, Matrix4 &mat );
+
         void loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                           uint8 textureType, HlmsUnlitDatablock *datablock,
                           const String &resourceGroup );
 
-		void saveTexture( const char *blockName,
-                          uint8 textureType,
-                          const HlmsUnlitDatablock *datablock, String &outString,
-                          bool writeTexture=true );
+        void saveTexture( const char *blockName, uint8 textureType, const HlmsUnlitDatablock *datablock,
+                          String &outString, bool writeTexture = true );
 
     public:
         HlmsJsonUnlit( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
@@ -67,17 +68,17 @@ namespace Ogre
                            HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
-        static void collectSamplerblocks( const HlmsDatablock *datablock,
-                                          set<const HlmsSamplerblock*>::type &outSamplerblocks );
+        static void collectSamplerblocks( const HlmsDatablock *                datablock,
+                                          set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
-#include "OgreHeaderSuffix.h"
+#        include "OgreHeaderSuffix.h"
 
-#endif
+#    endif
 
 #endif
