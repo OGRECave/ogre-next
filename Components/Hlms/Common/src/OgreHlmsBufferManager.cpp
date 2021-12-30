@@ -30,12 +30,12 @@ THE SOFTWARE.
 
 #include "OgreHlmsBufferManager.h"
 
+#include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "CommandBuffer/OgreCommandBuffer.h"
 #include "OgreRenderSystem.h"
-#include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreReadOnlyBufferPacked.h"
-#include "CommandBuffer/OgreCommandBuffer.h"
-#include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {
@@ -58,10 +58,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    HlmsBufferManager::~HlmsBufferManager()
-    {
-        destroyAllBuffers();
-    }
+    HlmsBufferManager::~HlmsBufferManager() { destroyAllBuffers(); }
     //-----------------------------------------------------------------------------------
     void HlmsBufferManager::_changeRenderSystem( RenderSystem *newRs )
     {
@@ -77,16 +74,17 @@ namespace Ogre
         Hlms::_changeRenderSystem( newRs );
     }
     //-----------------------------------------------------------------------------------
-    HlmsCache HlmsBufferManager::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
-                                        bool dualParaboloid, SceneManager *sceneManager )
+    HlmsCache HlmsBufferManager::preparePassHash( const CompositorShadowNode *shadowNode,
+                                                  bool casterPass, bool dualParaboloid,
+                                                  SceneManager *sceneManager )
     {
         HlmsCache retVal = Hlms::preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager );
 
-        //mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
+        // mTexBuffers must hold at least one buffer to prevent out of bound exceptions.
         if( mTexBuffers.empty() )
         {
-            size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
-                                                  mVaoManager->getReadOnlyBufferMaxSize() );
+            size_t bufferSize =
+                std::min<size_t>( mTextureBufferDefaultSize, mVaoManager->getReadOnlyBufferMaxSize() );
             ReadOnlyBufferPacked *newBuffer = mVaoManager->createReadOnlyBuffer(
                 PFG_RGBA32_FLOAT, bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
             mTexBuffers.push_back( newBuffer );
@@ -99,62 +97,63 @@ namespace Ogre
     {
         if( mStartMappedConstBuffer )
         {
-            //Unmap the current buffer
+            // Unmap the current buffer
             ConstBufferPacked *constBuffer = mConstBuffers[mCurrentConstBuffer];
-            constBuffer->unmap( UO_KEEP_PERSISTENT, 0,
-                                (mCurrentMappedConstBuffer - mStartMappedConstBuffer) * sizeof(uint32) );
+            constBuffer->unmap(
+                UO_KEEP_PERSISTENT, 0,
+                static_cast<size_t>( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) *
+                    sizeof( uint32 ) );
 
             ++mCurrentConstBuffer;
 
-            mStartMappedConstBuffer     = 0;
-            mCurrentMappedConstBuffer   = 0;
-            mCurrentConstBufferSize     = 0;
+            mStartMappedConstBuffer = 0;
+            mCurrentMappedConstBuffer = 0;
+            mCurrentConstBufferSize = 0;
         }
     }
     //-----------------------------------------------------------------------------------
-    uint32* RESTRICT_ALIAS_RETURN HlmsBufferManager::mapNextConstBuffer( CommandBuffer *commandBuffer )
+    uint32 *RESTRICT_ALIAS_RETURN HlmsBufferManager::mapNextConstBuffer( CommandBuffer *commandBuffer )
     {
         unmapConstBuffer();
 
         if( mCurrentConstBuffer >= mConstBuffers.size() )
         {
             size_t bufferSize = std::min<size_t>( 65536, mVaoManager->getConstBufferMaxSize() );
-            ConstBufferPacked *newBuffer = mVaoManager->createConstBuffer( bufferSize,
-                                                                           BT_DYNAMIC_PERSISTENT,
-                                                                           0, false );
+            ConstBufferPacked *newBuffer =
+                mVaoManager->createConstBuffer( bufferSize, BT_DYNAMIC_PERSISTENT, 0, false );
             mConstBuffers.push_back( newBuffer );
         }
 
         ConstBufferPacked *constBuffer = mConstBuffers[mCurrentConstBuffer];
 
-        mStartMappedConstBuffer     = reinterpret_cast<uint32*>(
-                                            constBuffer->map( 0, constBuffer->getNumElements() ) );
-        mCurrentMappedConstBuffer   = mStartMappedConstBuffer;
-        mCurrentConstBufferSize     = constBuffer->getNumElements() >> 2;
+        mStartMappedConstBuffer =
+            reinterpret_cast<uint32 *>( constBuffer->map( 0, constBuffer->getNumElements() ) );
+        mCurrentMappedConstBuffer = mStartMappedConstBuffer;
+        mCurrentConstBufferSize = constBuffer->getNumElements() >> 2;
 
-        *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader, 2,
-                                                                       constBuffer, 0, 0 );
-        *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader, 2,
-                                                                       constBuffer, 0, 0 );
+        *commandBuffer->addCommand<CbShaderBuffer>() =
+            CbShaderBuffer( VertexShader, 2, constBuffer, 0, 0 );
+        *commandBuffer->addCommand<CbShaderBuffer>() =
+            CbShaderBuffer( PixelShader, 2, constBuffer, 0, 0 );
 
         return mStartMappedConstBuffer;
     }
     //-----------------------------------------------------------------------------------
     void HlmsBufferManager::unmapTexBuffer( CommandBuffer *commandBuffer )
     {
-        //Save our progress
-        const size_t bytesWritten = (mCurrentMappedTexBuffer - mRealStartMappedTexBuffer) *
-                                                                            sizeof(float);
+        // Save our progress
+        const size_t bytesWritten =
+            static_cast<size_t>( mCurrentMappedTexBuffer - mRealStartMappedTexBuffer ) * sizeof( float );
         mTexLastOffset += bytesWritten;
 
         if( mRealStartMappedTexBuffer )
         {
-            //Unmap the current buffer
+            // Unmap the current buffer
             TexBufferPacked *texBuffer = mTexBuffers[mCurrentTexBuffer];
             texBuffer->unmap( UO_KEEP_PERSISTENT, 0, bytesWritten );
 
-            CbShaderBuffer *shaderBufferCmd = reinterpret_cast<CbShaderBuffer*>(
-                        commandBuffer->getCommandFromOffset( mLastTexBufferCmdOffset ) );
+            CbShaderBuffer *shaderBufferCmd = reinterpret_cast<CbShaderBuffer *>(
+                commandBuffer->getCommandFromOffset( mLastTexBufferCmdOffset ) );
             if( shaderBufferCmd )
             {
                 assert( shaderBufferCmd->bufferPacked == texBuffer );
@@ -164,15 +163,15 @@ namespace Ogre
         }
 
         mRealStartMappedTexBuffer = 0;
-        mStartMappedTexBuffer   = 0;
+        mStartMappedTexBuffer = 0;
         mCurrentMappedTexBuffer = 0;
-        mCurrentTexBufferSize   = 0;
+        mCurrentTexBufferSize = 0;
 
-        //Ensure the proper alignment
+        // Ensure the proper alignment
         mTexLastOffset = alignToNextMultiple( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
     }
     //-----------------------------------------------------------------------------------
-    float* RESTRICT_ALIAS_RETURN HlmsBufferManager::mapNextTexBuffer( CommandBuffer *commandBuffer,
+    float *RESTRICT_ALIAS_RETURN HlmsBufferManager::mapNextTexBuffer( CommandBuffer *commandBuffer,
                                                                       size_t minimumSizeBytes )
     {
         unmapTexBuffer( commandBuffer );
@@ -181,7 +180,7 @@ namespace Ogre
 
         mTexLastOffset = alignToNextMultiple( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
 
-        //We'll go out of bounds. This buffer is full. Get a new one and remap from 0.
+        // We'll go out of bounds. This buffer is full. Get a new one and remap from 0.
         if( mTexLastOffset + minimumSizeBytes >= texBuffer->getTotalSizeBytes() )
         {
             mTexLastOffset = 0;
@@ -199,13 +198,11 @@ namespace Ogre
             texBuffer = mTexBuffers[mCurrentTexBuffer];
         }
 
-        mRealStartMappedTexBuffer   = reinterpret_cast<float*>(
-                                            texBuffer->map( mTexLastOffset,
-                                                            texBuffer->getNumElements() - mTexLastOffset,
-                                                            false ) );
-        mStartMappedTexBuffer   = mRealStartMappedTexBuffer;
+        mRealStartMappedTexBuffer = reinterpret_cast<float *>(
+            texBuffer->map( mTexLastOffset, texBuffer->getNumElements() - mTexLastOffset, false ) );
+        mStartMappedTexBuffer = mRealStartMappedTexBuffer;
         mCurrentMappedTexBuffer = mRealStartMappedTexBuffer;
-        mCurrentTexBufferSize   = (texBuffer->getNumElements() - mTexLastOffset) >> 2;
+        mCurrentTexBufferSize = ( texBuffer->getNumElements() - mTexLastOffset ) >> 2;
 
         CbShaderBuffer *shaderBufferCmd = commandBuffer->addCommand<CbShaderBuffer>();
         *shaderBufferCmd = CbShaderBuffer( VertexShader, 0, texBuffer, mTexLastOffset, 0 );
@@ -216,22 +213,23 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsBufferManager::rebindTexBuffer( CommandBuffer *commandBuffer, bool resetOffset,
-                                   size_t minimumSizeBytes )
+                                             size_t minimumSizeBytes )
     {
         assert( minimumSizeBytes > 0 );
 
-        //Set the binding size of the old binding command (if exists)
-        CbShaderBuffer *shaderBufferCmd = reinterpret_cast<CbShaderBuffer*>(
-                    commandBuffer->getCommandFromOffset( mLastTexBufferCmdOffset ) );
+        // Set the binding size of the old binding command (if exists)
+        CbShaderBuffer *shaderBufferCmd = reinterpret_cast<CbShaderBuffer *>(
+            commandBuffer->getCommandFromOffset( mLastTexBufferCmdOffset ) );
         if( shaderBufferCmd )
         {
             assert( shaderBufferCmd->bufferPacked == mTexBuffers[mCurrentTexBuffer] );
-            shaderBufferCmd->bindSizeBytes = (mCurrentMappedTexBuffer - mStartMappedTexBuffer) *
-                                                sizeof(float);
+            shaderBufferCmd->bindSizeBytes =
+                static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer ) * sizeof( float );
         }
 
-        const size_t bufferSizeBytes = mCurrentTexBufferSize * sizeof(float);
-        size_t currentOffset = (mCurrentMappedTexBuffer - mStartMappedTexBuffer) * sizeof(float);
+        const size_t bufferSizeBytes = mCurrentTexBufferSize * sizeof( float );
+        size_t currentOffset =
+            static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer ) * sizeof( float );
         currentOffset = alignToNextMultiple( currentOffset, mVaoManager->getTexBufferAlignment() );
         currentOffset = std::min( bufferSizeBytes, currentOffset );
         const size_t remainingSize = bufferSizeBytes - currentOffset;
@@ -242,15 +240,18 @@ namespace Ogre
         }
         else
         {
-            size_t bindOffset = (mStartMappedTexBuffer - mRealStartMappedTexBuffer) * sizeof(float);
+            size_t bindOffset =
+                static_cast<size_t>( mStartMappedTexBuffer - mRealStartMappedTexBuffer ) *
+                sizeof( float );
             if( resetOffset )
             {
-                mStartMappedTexBuffer = reinterpret_cast<float*>(
-                            reinterpret_cast<unsigned char*>(mStartMappedTexBuffer) + currentOffset );
+                mStartMappedTexBuffer = reinterpret_cast<float *>(
+                    reinterpret_cast<unsigned char *>( mStartMappedTexBuffer ) + currentOffset );
                 mCurrentMappedTexBuffer = mStartMappedTexBuffer;
-                mCurrentTexBufferSize -= currentOffset / sizeof(float);
+                mCurrentTexBufferSize -= currentOffset / sizeof( float );
 
-                bindOffset = (mCurrentMappedTexBuffer - mRealStartMappedTexBuffer) * sizeof(float);
+                bindOffset = static_cast<size_t>( mCurrentMappedTexBuffer - mRealStartMappedTexBuffer ) *
+                             sizeof( float );
             }
 
             if( mTexLastOffset + bindOffset >= mTexBuffers[mCurrentTexBuffer]->getTotalSizeBytes() )
@@ -259,7 +260,7 @@ namespace Ogre
             }
             else
             {
-                //Add a new binding command.
+                // Add a new binding command.
                 shaderBufferCmd = commandBuffer->addCommand<CbShaderBuffer>();
                 *shaderBufferCmd = CbShaderBuffer( VertexShader, 0, mTexBuffers[mCurrentTexBuffer],
                                                    mTexLastOffset + bindOffset, 0 );
@@ -271,17 +272,17 @@ namespace Ogre
     void HlmsBufferManager::destroyAllBuffers()
     {
         mCurrentConstBuffer = 0;
-        mCurrentTexBuffer   = 0;
-        mTexLastOffset      = 0;
+        mCurrentTexBuffer = 0;
+        mTexLastOffset = 0;
 
         {
             ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-            ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
+            ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
 
             while( itor != end )
             {
-                if( (*itor)->getMappingState() != MS_UNMAPPED )
-                    (*itor)->unmap( UO_UNMAP_ALL );
+                if( ( *itor )->getMappingState() != MS_UNMAPPED )
+                    ( *itor )->unmap( UO_UNMAP_ALL );
                 mVaoManager->destroyReadOnlyBuffer( *itor );
                 ++itor;
             }
@@ -291,12 +292,12 @@ namespace Ogre
 
         {
             ConstBufferPackedVec::const_iterator itor = mConstBuffers.begin();
-            ConstBufferPackedVec::const_iterator end  = mConstBuffers.end();
+            ConstBufferPackedVec::const_iterator end = mConstBuffers.end();
 
             while( itor != end )
             {
-                if( (*itor)->getMappingState() != MS_UNMAPPED )
-                    (*itor)->unmap( UO_UNMAP_ALL );
+                if( ( *itor )->getMappingState() != MS_UNMAPPED )
+                    ( *itor )->unmap( UO_UNMAP_ALL );
                 mVaoManager->destroyConstBuffer( *itor );
                 ++itor;
             }
@@ -311,11 +312,11 @@ namespace Ogre
         unmapTexBuffer( commandBuffer );
 
         ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
 
         while( itor != end )
         {
-            (*itor)->advanceFrame();
+            ( *itor )->advanceFrame();
             ++itor;
         }
     }
@@ -323,11 +324,11 @@ namespace Ogre
     void HlmsBufferManager::postCommandBufferExecution( CommandBuffer *commandBuffer )
     {
         ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
 
         while( itor != end )
         {
-            (*itor)->regressFrame();
+            ( *itor )->regressFrame();
             ++itor;
         }
     }
@@ -335,15 +336,15 @@ namespace Ogre
     void HlmsBufferManager::frameEnded()
     {
         mCurrentConstBuffer = 0;
-        mCurrentTexBuffer   = 0;
-        mTexLastOffset      = 0;
+        mCurrentTexBuffer = 0;
+        mTexLastOffset = 0;
 
         ReadOnlyBufferPackedVec::const_iterator itor = mTexBuffers.begin();
-        ReadOnlyBufferPackedVec::const_iterator end  = mTexBuffers.end();
+        ReadOnlyBufferPackedVec::const_iterator end = mTexBuffers.end();
 
         while( itor != end )
         {
-            (*itor)->advanceFrame();
+            ( *itor )->advanceFrame();
             ++itor;
         }
     }
@@ -352,4 +353,4 @@ namespace Ogre
     {
         mTextureBufferDefaultSize = defaultSize;
     }
-}
+}  // namespace Ogre

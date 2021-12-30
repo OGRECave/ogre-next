@@ -446,7 +446,7 @@ namespace Ogre
                                       sampler, OrderBlockById );
             if( itor != mSamplersDescSet->mSamplers.end() && *itor == sampler )
             {
-                const size_t idx = itor - mSamplersDescSet->mSamplers.begin();
+                const size_t idx = static_cast<size_t>( itor - mSamplersDescSet->mSamplers.begin() );
                 retVal = static_cast<uint8>( idx );
             }
         }

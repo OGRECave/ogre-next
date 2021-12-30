@@ -57,7 +57,7 @@ namespace Ogre
         std::mt19937 mRng;
 
     public:
-        uint32 rand() { return mRng(); }
+        uint32 rand() { return static_cast<uint32>( mRng() ); }
 
         /// Returns value in range [0; 1]
         Real saturatedRand() { return rand() / (Real)mRng.max(); }
@@ -359,7 +359,8 @@ namespace Ogre
         {
             mTmpSparseClusters[1] = mTmpSparseClusters[0];
 
-            for( int i = mNumSpreadIterations; --i; )
+            const size_t numSpreadIterations = mNumSpreadIterations;
+            for( size_t i = numSpreadIterations; i--; )
             {
                 spreadSparseClusters( mTmpSparseClusters[0], mTmpSparseClusters[1] );
                 mTmpSparseClusters[0] = mTmpSparseClusters[1];
@@ -498,7 +499,7 @@ namespace Ogre
         {
             Vpl vpl = *itor;  // Hard copy!
 
-            const size_t idx = itor - mVpls.begin();
+            const ptrdiff_t idx = itor - mVpls.begin();
 
             const int32 blockX = static_cast<int32>( Math::Floor( vpl.position.x * cellSize ) );
             const int32 blockY = static_cast<int32>( Math::Floor( vpl.position.y * cellSize ) );
@@ -675,7 +676,9 @@ namespace Ogre
 
             rayStart += numRays;
             numRays = static_cast<size_t>( mNumRays * powf( mSurvivingRayFraction, k + 1 ) );
-            numRays = std::min<size_t>( numRays, std::max<int>( 0, mTotalNumRays - rayStart ) );
+
+            const int rayLimit = std::max( 0, static_cast<int>( mTotalNumRays - rayStart ) );
+            numRays = std::min<size_t>( numRays, static_cast<size_t>( rayLimit ) );
 
             numRays = generateRayBounces( oldRayStart, oldNumRays, numRays, rng );
         }
@@ -1692,9 +1695,9 @@ namespace Ogre
             ++itor;
         }
 
-        outNumBlocksX = maxBlockX - minBlockX + 1;
-        outNumBlocksY = maxBlockY - minBlockY + 1;
-        outNumBlocksZ = maxBlockZ - minBlockZ + 1;
+        outNumBlocksX = static_cast<uint32>( maxBlockX - minBlockX + 1 );
+        outNumBlocksY = static_cast<uint32>( maxBlockY - minBlockY + 1 );
+        outNumBlocksZ = static_cast<uint32>( maxBlockZ - minBlockZ + 1 );
 
         outVolumeOrigin.x = static_cast<Real>( minBlockX ) * cellSize.x;
         outVolumeOrigin.y = static_cast<Real>( minBlockY ) * cellSize.y;
@@ -1729,9 +1732,9 @@ namespace Ogre
 
         const Real invMaxPower = 1.0f / lightMaxPower;
 
-        const int32 numBlocksX = volume->getNumBlocksX();
-        const int32 numBlocksY = volume->getNumBlocksY();
-        const int32 numBlocksZ = volume->getNumBlocksZ();
+        const int32 numBlocksX = static_cast<int32>( volume->getNumBlocksX() );
+        const int32 numBlocksY = static_cast<int32>( volume->getNumBlocksY() );
+        const int32 numBlocksZ = static_cast<int32>( volume->getNumBlocksZ() );
 
         VplVec::const_iterator itor = mVpls.begin();
         VplVec::const_iterator end = mVpls.end();
@@ -1809,15 +1812,22 @@ namespace Ogre
                             {
                                 if( x != blockX || y != blockY || z != blockZ )
                                 {
-                                    Vector3 finalCol =
+                                    const Vector3 finalCol =
                                         std::max( -vplToCell.dotProduct( c_directions[i] ),
                                                   Real( 0.0f ) ) *
                                         diffuseCol;
-                                    volume->changeVolumeData( x, y, z, i, finalCol );
+                                    volume->changeVolumeData( static_cast<uint32>( x ),  //
+                                                              static_cast<uint32>( y ),  //
+                                                              static_cast<uint32>( z ),  //
+                                                              static_cast<uint32>( i ),  //
+                                                              finalCol );
                                 }
                                 else
                                 {
-                                    volume->changeVolumeData( x, y, z, i,
+                                    volume->changeVolumeData( static_cast<uint32>( x ),  //
+                                                              static_cast<uint32>( y ),  //
+                                                              static_cast<uint32>( z ),  //
+                                                              static_cast<uint32>( i ),  //
                                                               vpl.dirDiffuse[i] * invMaxPower );
                                 }
                             }

@@ -616,37 +616,40 @@ namespace Ogre
     void HlmsPbs::setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
                                           const bool bCasterPass )
     {
-        uint32 minNormalMap = 4;
+        int32 minNormalMap = 4;
         bool hasDiffuseMaps = false;
         bool hasNormalMaps = false;
         bool anyDetailWeight = false;
-        for( size_t i = 0; i < 4; ++i )
+        for( int32 i = 0; i < 4; ++i )
         {
             uint8 blendMode = datablock->mBlendModes[i];
 
-            setDetailTextureProperty( PbsProperty::DetailMapN, datablock, PBSM_DETAIL0, i );
-            if( !bCasterPass )
-                setDetailTextureProperty( PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM, i );
+            const uint8 idx = static_cast<uint8>( i );
 
-            if( datablock->getTexture( PBSM_DETAIL0 + i ) )
+            setDetailTextureProperty( PbsProperty::DetailMapN, datablock, PBSM_DETAIL0, idx );
+            if( !bCasterPass )
+                setDetailTextureProperty( PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM, idx );
+
+            if( datablock->getTexture( PBSM_DETAIL0 + idx ) )
             {
                 inOutPieces[PixelShader][*PbsProperty::BlendModes[i]] =
                     "@insertpiece( " + c_pbsBlendModes[blendMode] + ")";
                 hasDiffuseMaps = true;
             }
 
-            if( !bCasterPass && datablock->getTexture( PBSM_DETAIL0_NM + i ) )
+            if( !bCasterPass && datablock->getTexture( PBSM_DETAIL0_NM + idx ) )
             {
-                minNormalMap = std::min<uint32>( minNormalMap, i );
+                minNormalMap = std::min<int32>( minNormalMap, i );
                 hasNormalMaps = true;
             }
 
-            if( datablock->getDetailMapOffsetScale( i ) != Vector4( 0, 0, 1, 1 ) )
+            if( datablock->getDetailMapOffsetScale( idx ) != Vector4( 0, 0, 1, 1 ) )
                 setProperty( *PbsProperty::DetailOffsetsPtrs[i], 1 );
 
             if( datablock->mDetailWeight[i] != 1.0f &&
-                ( datablock->getTexture( PBSM_DETAIL0 + i ) ||
-                  ( !bCasterPass && datablock->getTexture( PBSM_DETAIL0_NM + i ) ) ) )
+                ( datablock->getTexture( static_cast<uint8>( PBSM_DETAIL0 + i ) ) ||
+                  ( !bCasterPass &&
+                    datablock->getTexture( static_cast<uint8>( PBSM_DETAIL0_NM + i ) ) ) ) )
             {
                 anyDetailWeight = true;
             }
@@ -783,12 +786,13 @@ namespace Ogre
         if( brdf & PbsBrdf::FLAG_FULL_LEGACY )
             setProperty( PbsProperty::RoughnessIsShininess, 1 );
 
-        for( size_t i = 0; i < PBSM_REFLECTION; ++i )
+        for( size_t i = 0u; i < PBSM_REFLECTION; ++i )
         {
             uint8 uvSource = datablock->mUvSource[i];
             setProperty( *PbsProperty::UvSourcePtrs[i], uvSource );
 
-            if( datablock->getTexture( i ) && getProperty( *HlmsBaseProp::UvCountPtrs[uvSource] ) < 2 )
+            if( datablock->getTexture( static_cast<uint8>( i ) ) &&
+                getProperty( *HlmsBaseProp::UvCountPtrs[uvSource] ) < 2 )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Renderable needs at least 2 coordinates in UV set #" +
@@ -805,7 +809,7 @@ namespace Ogre
             ++numNormalWeights;
         }
 
-        for( size_t i = 0; i < 4; ++i )
+        for( size_t i = 0u; i < 4u; ++i )
         {
             if( datablock->getTexture( PBSM_DETAIL0_NM + i ) )
             {
@@ -934,28 +938,28 @@ namespace Ogre
             const bool isSigned = PixelFormatGpuUtils::isSigned( nmPixelFormat );
             if( isSigned )
             {
-                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
-                setProperty( PbsProperty::NormalRgSnorm, PbsProperty::NormalRgSnorm.mHash );
+                setProperty( PbsProperty::NormalSamplingFormat,
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                setProperty( PbsProperty::NormalRgSnorm,
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
             }
             else
             {
                 if( nmPixelFormat != PFG_BC3_UNORM )
                 {
-                    setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgUnorm.mHash );
-                    setProperty( PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
+                    setProperty( PbsProperty::NormalSamplingFormat,
+                                 static_cast<int32>( PbsProperty::NormalRgUnorm.mHash ) );
+                    setProperty( PbsProperty::NormalRgUnorm,
+                                 static_cast<int32>( PbsProperty::NormalRgUnorm.mHash ) );
                 }
                 else
                 {
-                    setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalBc3Unorm.mHash );
-                    setProperty( PbsProperty::NormalBc3Unorm, PbsProperty::NormalBc3Unorm.mHash );
+                    setProperty( PbsProperty::NormalSamplingFormat,
+                                 static_cast<int32>( PbsProperty::NormalBc3Unorm.mHash ) );
+                    setProperty( PbsProperty::NormalBc3Unorm,
+                                 static_cast<int32>( PbsProperty::NormalBc3Unorm.mHash ) );
                 }
             }
-            // Reserved for supporting LA textures in GLES2.
-            //            else
-            //            {
-            //                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash
-            //                ); setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
-            //            }
         }
 
         // check and ensure all normal maps use the same signed convention
@@ -1698,12 +1702,16 @@ namespace Ogre
             projectionMatrix[1][3] = -projectionMatrix[1][3];
         }
 
-        int32 numLights = getProperty( HlmsBaseProp::LightsSpot );
-        int32 numDirectionalLights = getProperty( HlmsBaseProp::LightsDirNonCaster );
-        int32 numShadowMapLights = getProperty( HlmsBaseProp::NumShadowMapLights );
-        int32 numPssmSplits = getProperty( HlmsBaseProp::PssmSplits );
-        int32 numAreaApproxLights = getProperty( HlmsBaseProp::LightsAreaApprox );
-        int32 numAreaLtcLights = getProperty( HlmsBaseProp::LightsAreaLtc );
+        const size_t numLights = static_cast<size_t>( getProperty( HlmsBaseProp::LightsSpot ) );
+        const size_t numDirectionalLights =
+            static_cast<size_t>( getProperty( HlmsBaseProp::LightsDirNonCaster ) );
+        const size_t numShadowMapLights =
+            static_cast<size_t>( getProperty( HlmsBaseProp::NumShadowMapLights ) );
+        const size_t numPssmSplits = static_cast<size_t>( getProperty( HlmsBaseProp::PssmSplits ) );
+        const size_t numAreaApproxLights =
+            static_cast<size_t>( getProperty( HlmsBaseProp::LightsAreaApprox ) );
+        const size_t numAreaLtcLights =
+            static_cast<size_t>( getProperty( HlmsBaseProp::LightsAreaLtc ) );
         const uint32 realNumDirectionalLights = mRealNumDirectionalLights;
         const uint32 realNumAreaApproxLightsWithMask = mRealNumAreaApproxLightsWithMask;
         const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
@@ -2059,7 +2067,7 @@ namespace Ogre
             const TextureGpuVec &contiguousShadowMapTex =
                 shadowNode ? shadowNode->getContiguousShadowMapTex() : c_emptyTextureContainer;
 
-            for( int32 i = 0; i < numShadowMapLights; ++i )
+            for( size_t i = 0u; i < numShadowMapLights; ++i )
             {
                 // Skip inactive lights (e.g. no directional lights are available
                 // and there's a shadow map that only accepts dir lights)
@@ -2268,21 +2276,21 @@ namespace Ogre
             }
 
             // float pssmSplitPoints
-            for( int32 i = 0; i < numPssmSplits; ++i )
+            for( size_t i = 0; i < numPssmSplits; ++i )
                 *passBufferPtr++ = ( *shadowNode->getPssmSplits( 0 ) )[i + 1];
 
-            int32 numPssmBlendsAndFade = 0;
+            size_t numPssmBlendsAndFade = 0u;
             if( isPssmBlend )
             {
-                numPssmBlendsAndFade += numPssmSplits - 1;
+                numPssmBlendsAndFade += numPssmSplits - 1u;
 
                 // float pssmBlendPoints
-                for( int32 i = 0; i < numPssmSplits - 1; ++i )
+                for( size_t i = 0u; i < numPssmSplits - 1u; ++i )
                     *passBufferPtr++ = ( *shadowNode->getPssmBlends( 0 ) )[i];
             }
             if( isPssmFade )
             {
-                numPssmBlendsAndFade += 1;
+                numPssmBlendsAndFade += 1u;
 
                 // float pssmFadePoint
                 *passBufferPtr++ = *shadowNode->getPssmFade( 0 );
@@ -2310,15 +2318,16 @@ namespace Ogre
                 const CompositorShadowNode::LightsBitSet &affectedLights =
                     shadowNode->getAffectedLightsBitSet();
 
-                int32 shadowCastingDirLights = getProperty( HlmsBaseProp::LightsDirectional );
+                const size_t shadowCastingDirLights =
+                    static_cast<size_t>( getProperty( HlmsBaseProp::LightsDirectional ) );
 
-                for( int32 i = 0; i < numLights; ++i )
+                for( size_t i = 0u; i < numLights; ++i )
                 {
                     Light const *light = 0;
 
                     if( i >= shadowCastingDirLights && i < numDirectionalLights )
                     {
-                        if( i < (int32)realNumDirectionalLights )
+                        if( i < realNumDirectionalLights )
                         {
                             while( affectedLights[nonShadowLightIdx] )
                                 ++nonShadowLightIdx;
@@ -2422,7 +2431,7 @@ namespace Ogre
                 // No shadow maps, only send directional lights
                 const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
 
-                for( int32 i = 0; i < (int32)realNumDirectionalLights; ++i )
+                for( size_t i = 0u; i < realNumDirectionalLights; ++i )
                 {
                     assert( globalLightList.lights[i]->getType() == Light::LT_DIRECTIONAL );
 
@@ -2501,7 +2510,7 @@ namespace Ogre
             if( !mUseLightBuffers )
                 light1BufferPtr = passBufferPtr;
 
-            for( size_t i = 0; i < realNumAreaApproxLights; ++i )
+            for( size_t i = 0u; i < realNumAreaApproxLights; ++i )
             {
                 Light const *light = mAreaLights[i];
 
@@ -2610,7 +2619,7 @@ namespace Ogre
             if( !mUseLightBuffers )
                 light2BufferPtr = passBufferPtr;
 
-            for( size_t i = 0; i < realNumAreaLtcLights; ++i )
+            for( size_t i = 0u; i < realNumAreaLtcLights; ++i )
             {
                 Light const *light = mAreaLights[i];
 
@@ -2856,7 +2865,7 @@ namespace Ogre
             if( mLtcMatrixTexture )
                 ++mTexUnitSlotStart;
 
-            for( size_t i = 0; i < 3u; ++i )
+            for( size_t i = 0u; i < 3u; ++i )
             {
                 if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
                 {
@@ -3006,7 +3015,7 @@ namespace Ogre
                     const size_t numCascades = mVctLighting->getNumCascades();
                     const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
                     const HlmsSamplerblock *samplerblock = mVctLighting->getBindTrilinearSamplerblock();
-                    for( size_t i = 0; i < numVctTextures; ++i )
+                    for( size_t i = 0u; i < numVctTextures; ++i )
                     {
                         for( size_t cascadeIdx = 0; cascadeIdx < numCascades; ++cascadeIdx )
                         {
@@ -3050,7 +3059,7 @@ namespace Ogre
                     ++texUnit;
                 }
 
-                for( size_t i = 0; i < 3u; ++i )
+                for( size_t i = 0u; i < 3u; ++i )
                 {
                     if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
                     {
@@ -3146,16 +3155,17 @@ namespace Ogre
             // We need to correct currentMappedConstBuffer to point to the right texture buffer's
             // offset, which may not be in sync if the previous draw had skeletal and/or pose animation.
             const size_t currentConstOffset =
-                ( currentMappedTexBuffer - mStartMappedTexBuffer ) >> ( 2 + !casterPass );
+                static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) >>
+                ( 2u + !casterPass );
             currentMappedConstBuffer = currentConstOffset + mStartMappedConstBuffer;
             bool exceedsConstBuffer =
-                ( size_t )( ( currentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) >
+                static_cast<size_t>( ( currentMappedConstBuffer - mStartMappedConstBuffer ) + 4u ) >
                 mCurrentConstBufferSize;
 
-            const size_t minimumTexBufferSize = 16 * ( 1 + !casterPass );
+            const size_t minimumTexBufferSize = 16u * ( 1u + !casterPass );
             bool exceedsTexBuffer =
-                ( currentMappedTexBuffer - mStartMappedTexBuffer ) + minimumTexBufferSize >=
-                mCurrentTexBufferSize;
+                ( static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) +
+                  minimumTexBufferSize ) >= mCurrentTexBufferSize;
 
             if( exceedsConstBuffer || exceedsTexBuffer )
             {
@@ -3220,8 +3230,9 @@ namespace Ogre
 
                     const size_t poseDataSize = numPoses > 0u ? ( 4u + poseWeightsNumFloats ) : 0u;
                     const size_t minimumTexBufferSize = 12 * numWorldTransforms + poseDataSize;
-                    bool exceedsTexBuffer =
-                        ( currentMappedTexBuffer - mStartMappedTexBuffer ) + minimumTexBufferSize >=
+                    const bool exceedsTexBuffer =
+                        static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) +
+                            minimumTexBufferSize >=
                         mCurrentTexBufferSize;
 
                     if( exceedsConstBuffer || exceedsTexBuffer )
@@ -3238,7 +3249,8 @@ namespace Ogre
                     }
 
                     // uint worldMaterialIdx[]
-                    size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
+                    size_t distToWorldMatStart =
+                        static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer );
                     distToWorldMatStart >>= 2;
                     *currentMappedConstBuffer =
                         ( distToWorldMatStart << 9 ) | ( datablock->getAssignedSlot() & 0x1FF );
@@ -3247,7 +3259,7 @@ namespace Ogre
                     // TODO: Don't rely on a virtual function + make a direct 4x3 copy
                     Matrix4 tmp[256];
                     queuedRenderable.renderable->getWorldTransforms( tmp );
-                    for( size_t i = 0; i < numWorldTransforms; ++i )
+                    for( size_t i = 0u; i < numWorldTransforms; ++i )
                     {
 #if !OGRE_DOUBLE_PRECISION
                         memcpy( currentMappedTexBuffer, &tmp[i], 12 * sizeof( float ) );
@@ -3280,7 +3292,8 @@ namespace Ogre
                     const size_t poseDataSize = numPoses > 0u ? ( 4u + poseWeightsNumFloats ) : 0u;
                     const size_t minimumTexBufferSize = 12 * indexMap->size() + poseDataSize;
                     bool exceedsTexBuffer =
-                        ( currentMappedTexBuffer - mStartMappedTexBuffer ) + minimumTexBufferSize >=
+                        static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) +
+                            minimumTexBufferSize >=
                         mCurrentTexBufferSize;
 
                     if( exceedsConstBuffer || exceedsTexBuffer )
@@ -3297,7 +3310,8 @@ namespace Ogre
                     }
 
                     // uint worldMaterialIdx[]
-                    size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
+                    size_t distToWorldMatStart =
+                        static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer );
                     distToWorldMatStart >>= 2;
                     *currentMappedConstBuffer =
                         ( distToWorldMatStart << 9 ) | ( datablock->getAssignedSlot() & 0x1FF );
@@ -3325,7 +3339,8 @@ namespace Ogre
                     // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView.
                     const size_t minimumTexBufferSize = 4 + poseWeightsNumFloats + 3 * 4 + 4 * 4;
                     bool exceedsTexBuffer =
-                        ( currentMappedTexBuffer - mStartMappedTexBuffer ) + minimumTexBufferSize >=
+                        static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) +
+                            minimumTexBufferSize >=
                         mCurrentTexBufferSize;
 
                     if( exceedsConstBuffer || exceedsTexBuffer )
@@ -3342,7 +3357,8 @@ namespace Ogre
                     }
 
                     // uint worldMaterialIdx[]
-                    size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
+                    size_t distToWorldMatStart =
+                        static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer );
                     distToWorldMatStart >>= 2;
                     *currentMappedConstBuffer =
                         ( distToWorldMatStart << 9 ) | ( datablock->getAssignedSlot() & 0x1FF );

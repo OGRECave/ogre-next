@@ -112,9 +112,9 @@ namespace Ogre
                 for( size_t x = 0; x < texWidth; ++x )
                 {
                     const int kStart = std::max<int>( -(int)x, kernelStart );
-                    const int kEnd = std::min<int>( texWidth - 1 - x, kernelEnd );
+                    const int kEnd = std::min<int>( static_cast<int>( texWidth - 1 - x ), kernelEnd );
 
-                    for( int i = 0; i < 6; ++i )
+                    for( size_t i = 0; i < 6u; ++i )
                     {
                         float accumR = 0;
                         float accumG = 0;
@@ -122,7 +122,8 @@ namespace Ogre
 
                         float divisor = 0;
 
-                        size_t srcIdx = z * slicePitch + ( y + i ) * rowPitch + ( x + kStart ) * 3u;
+                        size_t srcIdx = z * slicePitch + ( y + i ) * rowPitch +
+                                        ( x + static_cast<size_t>( kStart ) ) * 3u;
 
                         for( int k = kStart; k <= kEnd; ++k )
                         {
@@ -162,11 +163,12 @@ namespace Ogre
             for( size_t y = 0; y < texHeight; y += 6u )
             {
                 const int kStart = std::max<int>( -(int)( y / 6u ), kernelStart );
-                const int kEnd = std::min<int>( ( texHeight - 6u - y ) / 6u, kernelEnd );
+                const int kEnd =
+                    std::min<int>( static_cast<int>( ( texHeight - 6u - y ) / 6u ), kernelEnd );
 
                 for( size_t x = 0; x < texWidth; ++x )
                 {
-                    for( int i = 0; i < 6; ++i )
+                    for( size_t i = 0; i < 6; ++i )
                     {
                         float accumR = 0;
                         float accumG = 0;
@@ -174,7 +176,9 @@ namespace Ogre
 
                         float divisor = 0;
 
-                        size_t srcIdx = z * slicePitch + ( y + i + kStart * 6 ) * rowPitch + x * 3u;
+                        size_t srcIdx = z * slicePitch +
+                                        ( y + i + static_cast<size_t>( kStart ) * 6 ) * rowPitch +
+                                        x * 3u;
 
                         for( int k = kStart; k <= kEnd; ++k )
                         {
@@ -212,13 +216,13 @@ namespace Ogre
         for( size_t z = 0; z < texDepth; ++z )
         {
             const int kStart = std::max<int>( -(int)z, kernelStart );
-            const int kEnd = std::min<int>( texDepth - 1u - z, kernelEnd );
+            const int kEnd = std::min<int>( static_cast<int>( texDepth - 1u - z ), kernelEnd );
 
             for( size_t y = 0; y < texHeight; y += 6u )
             {
                 for( size_t x = 0; x < texWidth; ++x )
                 {
-                    for( int i = 0; i < 6; ++i )
+                    for( size_t i = 0; i < 6; ++i )
                     {
                         float accumR = 0;
                         float accumG = 0;
@@ -226,7 +230,8 @@ namespace Ogre
 
                         float divisor = 0;
 
-                        size_t srcIdx = ( z + kStart ) * slicePitch + ( y + i ) * rowPitch + x * 3u;
+                        size_t srcIdx = ( z + static_cast<size_t>( kStart ) ) * slicePitch +
+                                        ( y + i ) * rowPitch + x * 3u;
 
                         for( int k = kStart; k <= kEnd; ++k )
                         {
@@ -338,9 +343,9 @@ namespace Ogre
 
         if( mIrradianceVolume )
         {
-            const int32 texWidth = static_cast<int32>( mIrradianceVolume->getWidth() );
-            const int32 texHeight = static_cast<int32>( mIrradianceVolume->getHeight() );
-            const int32 texDepth = static_cast<int32>( mIrradianceVolume->getDepth() );
+            const uint32 texWidth = mIrradianceVolume->getWidth();
+            const uint32 texHeight = mIrradianceVolume->getHeight();
+            const uint32 texDepth = mIrradianceVolume->getDepth();
 
             mVolumeData = reinterpret_cast<float *>( OGRE_MALLOC(
                 texWidth * texHeight * texDepth * 3u * sizeof( float ), MEMCATEGORY_GENERAL ) );
@@ -353,9 +358,9 @@ namespace Ogre
 
     void IrradianceVolume::updateIrradianceVolumeTexture()
     {
-        const int32 texWidth = static_cast<int32>( mIrradianceVolume->getWidth() );
-        const int32 texHeight = static_cast<int32>( mIrradianceVolume->getHeight() );
-        const int32 texDepth = static_cast<int32>( mIrradianceVolume->getDepth() );
+        const uint32 texWidth = mIrradianceVolume->getWidth();
+        const uint32 texHeight = mIrradianceVolume->getHeight();
+        const uint32 texDepth = mIrradianceVolume->getDepth();
 
         gaussFilter( mBlurredVolumeData, mVolumeData, texWidth, texHeight, texDepth );
 

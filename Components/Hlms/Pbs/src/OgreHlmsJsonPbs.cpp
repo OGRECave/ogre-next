@@ -222,7 +222,7 @@ namespace Ogre
             if( textureType == PBSM_REFLECTION )
             {
                 internalTextureType = TextureTypes::TypeCube;
-                textureFlags &= ~TextureFlags::AutomaticBatching;
+                textureFlags &= static_cast<uint32>( ~TextureFlags::AutomaticBatching );
             }
 
             uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;

@@ -754,10 +754,10 @@ namespace Ogre
                     if( mNumCollectedProbes >= OGRE_MAX_CUBE_PROBES )
                     {
                         Real highestNdf = -1;
-                        int highestNdfIdx = OGRE_MAX_CUBE_PROBES;
+                        uint32 highestNdfIdx = OGRE_MAX_CUBE_PROBES;
 
                         // Drop the probe with the highest NDF (note: we may drop this probe)
-                        for( size_t i = 0; i < OGRE_MAX_CUBE_PROBES; ++i )
+                        for( uint32 i = 0; i < OGRE_MAX_CUBE_PROBES; ++i )
                         {
                             if( ndf < mProbeNDFs[i] && mProbeNDFs[i] >= highestNdf )
                             {
