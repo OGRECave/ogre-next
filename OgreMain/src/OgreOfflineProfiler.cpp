@@ -226,7 +226,9 @@ namespace Ogre
         {
             ProfileSample newSample;
             memcpy( newSample.nameStr, sample->nameStr, OGRE_OFFLINE_PROFILER_NAME_STR_LENGTH );
+            newSample.usStart = 0;  // Unused, but GCC complains w/ O2 if we don't set it
             newSample.usTaken = 0;
+            newSample.parent = nullptr;  // Unused, but GCC complains w/ O2 if we don't set it
             accumStats[sample->nameHash] = newSample;
             itAccum = accumStats.find( sample->nameHash );
         }

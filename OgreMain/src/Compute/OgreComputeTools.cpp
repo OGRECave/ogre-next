@@ -98,7 +98,7 @@ namespace Ogre
         shaderParams.mParams.push_back( param );
         shaderParams.setDirty();
 
-        uint32 threadsPerGroup[3];
+        uint32 threadsPerGroup[3] = { 0u, 0u, 0u };
         switch( texture->getTextureType() )
         {
         case TextureTypes::Type1D:

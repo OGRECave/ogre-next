@@ -150,8 +150,8 @@ namespace Ogre
         /// Constant, linear, quadratic coeffs
         Real mPointAttenuationCoeffs[3];
         // TU Content type lookups
-        typedef vector<size_t>::type ContentTypeLookup;
-        ContentTypeLookup            mShadowContentTypeLookup;
+        typedef FastArray<size_t> ContentTypeLookup;
+        ContentTypeLookup         mShadowContentTypeLookup;
         /// Scissoring for the light?
         bool mLightScissoring;
         /// User clip planes for light?

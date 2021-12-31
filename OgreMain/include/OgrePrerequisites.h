@@ -400,8 +400,9 @@ namespace Ogre
 /* Include all the standard header *after* all the configuration
 settings have been made.
 */
-#    include "OgreMemoryAllocatorConfig.h"
 #    include "OgreStdHeaders.h"
+
+#    include "OgreMemoryAllocatorConfig.h"
 
 namespace Ogre
 {

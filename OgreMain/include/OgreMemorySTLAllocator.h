@@ -141,7 +141,7 @@ namespace Ogre
 
     const_pointer address( const_reference x ) const { return &x; }
 
-    size_type max_size() const throw()
+    size_type max_size() const noexcept
     {
         // maximum size this can handle, delegate
         return AllocPolicy::getMaxAllocationSize();
