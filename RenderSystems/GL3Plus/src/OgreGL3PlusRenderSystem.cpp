@@ -968,10 +968,10 @@ namespace Ogre
                 xywhVp[i][2] = (GLfloat)mCurrentRenderViewport[i].getActualWidth();
                 xywhVp[i][3] = (GLfloat)mCurrentRenderViewport[i].getActualHeight();
 
-                xywhSc[i][0] = (GLfloat)mCurrentRenderViewport[i].getScissorActualLeft();
-                xywhSc[i][1] = (GLfloat)mCurrentRenderViewport[i].getScissorActualTop();
-                xywhSc[i][2] = (GLfloat)mCurrentRenderViewport[i].getScissorActualWidth();
-                xywhSc[i][3] = (GLfloat)mCurrentRenderViewport[i].getScissorActualHeight();
+                xywhSc[i][0] = (GLint)mCurrentRenderViewport[i].getScissorActualLeft();
+                xywhSc[i][1] = (GLint)mCurrentRenderViewport[i].getScissorActualTop();
+                xywhSc[i][2] = (GLint)mCurrentRenderViewport[i].getScissorActualWidth();
+                xywhSc[i][3] = (GLint)mCurrentRenderViewport[i].getScissorActualHeight();
 
                 if( !desc->requiresTextureFlipping() )
                 {
