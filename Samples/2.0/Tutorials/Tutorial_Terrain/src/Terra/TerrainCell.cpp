@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "Terra/TerrainCell.h"
+
 #include "Terra/Terra.h"
 
 #include "Vao/OgreVaoManager.h"
@@ -82,8 +83,10 @@ namespace Ogre
         m_gridZ = gridPos.z;
         m_lodLevel = lodLevel;
 
-        horizontalPixelDim = std::min( horizontalPixelDim, m_parentTerra->m_width - m_gridX );
-        verticalPixelDim = std::min( verticalPixelDim, m_parentTerra->m_depth - m_gridZ );
+        horizontalPixelDim =
+            std::min( horizontalPixelDim, m_parentTerra->m_width - static_cast<uint32>( m_gridX ) );
+        verticalPixelDim =
+            std::min( verticalPixelDim, m_parentTerra->m_depth - static_cast<uint32>( m_gridZ ) );
 
         m_sizeX = horizontalPixelDim;
         m_sizeZ = verticalPixelDim;
@@ -126,8 +129,14 @@ namespace Ogre
             uint32 horizontalPixelDim = m_sizeX;
             uint32 verticalPixelDim = m_sizeZ;
 
-            if( ( this->m_gridX + this->m_sizeX == next->m_gridX ||
-                  next->m_gridX + next->m_sizeX == this->m_gridX ) &&
+            const uint32 thisGridX = static_cast<uint32>( this->m_gridX );
+            const uint32 nextGridX = static_cast<uint32>( next->m_gridX );
+
+            const uint32 thisGridZ = static_cast<uint32>( this->m_gridZ );
+            const uint32 nextGridZ = static_cast<uint32>( next->m_gridZ );
+
+            if( ( thisGridX + this->m_sizeX == nextGridX ||  //
+                  nextGridX + next->m_sizeX == thisGridX ) &&
                 m_gridZ == next->m_gridZ && m_sizeZ == next->m_sizeZ )
             {
                 // Merge horizontally
@@ -137,8 +146,8 @@ namespace Ogre
                 this->setOrigin( pos, horizontalPixelDim, verticalPixelDim, m_lodLevel );
                 merged = true;
             }
-            else if( ( this->m_gridZ + this->m_sizeZ == next->m_gridZ ||
-                       next->m_gridZ + next->m_sizeZ == this->m_gridZ ) &&
+            else if( ( thisGridZ + this->m_sizeZ == nextGridZ ||  //
+                       nextGridZ + next->m_sizeZ == thisGridZ ) &&
                      m_gridX == next->m_gridX && m_sizeX == next->m_sizeX )
             {
                 // Merge vertically
@@ -167,8 +176,8 @@ namespace Ogre
         // ivec4 xzTexPosBounds
         ( ( int32 * RESTRICT_ALIAS ) gpuPtr )[4] = m_gridX;
         ( ( int32 * RESTRICT_ALIAS ) gpuPtr )[5] = m_gridZ;
-        ( ( int32 * RESTRICT_ALIAS ) gpuPtr )[6] = m_parentTerra->m_width - 1u;
-        ( ( int32 * RESTRICT_ALIAS ) gpuPtr )[7] = m_parentTerra->m_depth - 1u;
+        ( ( uint32 * RESTRICT_ALIAS ) gpuPtr )[6] = m_parentTerra->m_width - 1u;
+        ( ( uint32 * RESTRICT_ALIAS ) gpuPtr )[7] = m_parentTerra->m_depth - 1u;
 
         ( (float *RESTRICT_ALIAS)gpuPtr )[8] = m_parentTerra->m_terrainOrigin.x;
         ( (float *RESTRICT_ALIAS)gpuPtr )[9] = m_parentTerra->m_terrainOrigin.y;

@@ -30,10 +30,11 @@ THE SOFTWARE.
 #    ifndef _OgreHlmsJsonTerra_H_
 #        define _OgreHlmsJsonTerra_H_
 
-#        include "OgreHeaderPrefix.h"
 #        include "OgreHlmsJson.h"
 #        include "Terra/Hlms/OgreHlmsTerraDatablock.h"
 #        include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
+
+#        include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -46,7 +47,7 @@ namespace Ogre
 
     class HlmsJsonTerra
     {
-        HlmsManager *mHlmsManager;
+        HlmsManager *      mHlmsManager;
         TextureGpuManager *mTextureManager;
 
         static TerraBrdf::TerraBrdf parseBrdf( const char *value );
@@ -81,7 +82,7 @@ namespace Ogre
                            HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
-        static void collectSamplerblocks( const HlmsDatablock *datablock,
+        static void collectSamplerblocks( const HlmsDatablock *                datablock,
                                           set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 

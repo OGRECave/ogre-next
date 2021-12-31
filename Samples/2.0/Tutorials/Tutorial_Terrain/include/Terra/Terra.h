@@ -29,8 +29,9 @@ THE SOFTWARE.
 #ifndef _OgreTerra_H_
 #define _OgreTerra_H_
 
-#include "OgreMovableObject.h"
 #include "OgrePrerequisites.h"
+
+#include "OgreMovableObject.h"
 #include "OgreShaderParams.h"
 
 #include "Terra/TerrainCell.h"
@@ -65,39 +66,39 @@ namespace Ogre
         struct SavedState
         {
             RenderableArray m_renderables;
-            size_t m_currentCell;
-            Camera const *m_camera;
+            size_t          m_currentCell;
+            Camera const *  m_camera;
         };
 
         std::vector<float> m_heightMap;
-        uint32 m_width;
-        uint32 m_depth;  // PNG's Height
-        float m_depthWidthRatio;
-        float m_skirtSize;  // Already unorm scaled
-        float m_invWidth;
-        float m_invDepth;
+        uint32             m_width;
+        uint32             m_depth;  // PNG's Height
+        float              m_depthWidthRatio;
+        float              m_skirtSize;  // Already unorm scaled
+        float              m_invWidth;
+        float              m_invDepth;
 
         bool m_zUp;
 
         Vector2 m_xzDimensions;
         Vector2 m_xzInvDimensions;
         Vector2 m_xzRelativeSize;  // m_xzDimensions / [m_width, m_height]
-        float m_height;
-        float m_heightUnormScaled;  // m_height / 1 or m_height / 65535
+        float   m_height;
+        float   m_heightUnormScaled;  // m_height / 1 or m_height / 65535
         Vector3 m_terrainOrigin;
-        uint32 m_basePixelDimension;
+        uint32  m_basePixelDimension;
 
         /// 0 is currently in use
         /// 1 is SavedState
         std::vector<TerrainCell> m_terrainCells[2];
         /// 0 & 1 are for tmp use
         std::vector<TerrainCell *> m_collectedCells[2];
-        size_t m_currentCell;
+        size_t                     m_currentCell;
 
         Ogre::TextureGpu *m_heightMapTex;
         Ogre::TextureGpu *m_normalMapTex;
 
-        Vector3 m_prevLightDir;
+        Vector3       m_prevLightDir;
         ShadowMapper *m_shadowMapper;
 
         TerraSharedResources *m_sharedResources;
@@ -108,7 +109,7 @@ namespace Ogre
 
         // Ogre stuff
         CompositorManager2 *m_compositorManager;
-        Camera const *m_camera;
+        Camera const *      m_camera;
 
         /// Converts value from Y-up to whatever the user up vector is (see m_zUp)
         inline Vector3 fromYUp( Vector3 value ) const;
@@ -145,7 +146,7 @@ namespace Ogre
         void calculateOptimumSkirtSize();
 
         inline GridPoint worldToGrid( const Vector3 &vPos ) const;
-        inline Vector2 gridToWorld( const GridPoint &gPos ) const;
+        inline Vector2   gridToWorld( const GridPoint &gPos ) const;
 
         bool isVisible( const GridPoint &gPos, const GridPoint &gSize ) const;
 
@@ -177,7 +178,7 @@ namespace Ogre
         ///
         /// A value of 0.0 will give you the biggest skirt and fix all skirt-related issues.
         /// Note however, this may have a *tremendous* GPU performance impact.
-        void setCustomSkirtMinHeight( const float skirtMinHeight ) { m_skirtSize = skirtMinHeight; }
+        void  setCustomSkirtMinHeight( const float skirtMinHeight ) { m_skirtSize = skirtMinHeight; }
         float getCustomSkirtMinHeight() const { return m_skirtSize; }
 
         /** Must be called every frame so we can check the camera's position
@@ -238,7 +239,7 @@ namespace Ogre
         void _swapSavedState();
 
         const Camera *getCamera() const { return m_camera; }
-        void setCamera( const Camera *camera ) { m_camera = camera; }
+        void          setCamera( const Camera *camera ) { m_camera = camera; }
 
         bool isZUp() const { return m_zUp; }
 
@@ -246,12 +247,12 @@ namespace Ogre
 
         Ogre::TextureGpu *getHeightMapTex() const { return m_heightMapTex; }
         Ogre::TextureGpu *getNormalMapTex() const { return m_normalMapTex; }
-        TextureGpu *_getShadowMapTex() const;
+        TextureGpu *      _getShadowMapTex() const;
 
         // These are always in Y-up space
         const Vector2 &getXZDimensions() const { return m_xzDimensions; }
         const Vector2 &getXZInvDimensions() const { return m_xzInvDimensions; }
-        float getHeight() const { return m_height; }
+        float          getHeight() const { return m_height; }
         const Vector3 &getTerrainOriginRaw() const { return m_terrainOrigin; }
 
         /// Return value is in client-space (i.e. could be y- or z-up)

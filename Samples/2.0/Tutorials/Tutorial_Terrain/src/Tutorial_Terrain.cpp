@@ -60,7 +60,7 @@ namespace Demo
     {
         Ogre::TerraWorkspaceListener *mTerraWorkspaceListener;
 
-        virtual void stopCompositor()
+        void stopCompositor() override
         {
             if( mWorkspace )
                 mWorkspace->removeListener( mTerraWorkspaceListener );
@@ -115,7 +115,7 @@ namespace Demo
             }
         }
 
-        virtual void registerHlms()
+        void registerHlms() override
         {
             GraphicsSystem::registerHlms();
 

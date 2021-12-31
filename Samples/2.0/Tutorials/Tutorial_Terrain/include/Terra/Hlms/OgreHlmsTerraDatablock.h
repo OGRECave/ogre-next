@@ -28,8 +28,9 @@ THE SOFTWARE.
 #ifndef _OgreHlmsTerraDatablock_H_
 #define _OgreHlmsTerraDatablock_H_
 
-#include "OgreConstBufferPool.h"
 #include "OgreHlmsDatablock.h"
+
+#include "OgreConstBufferPool.h"
 #include "OgreVector4.h"
 #include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
 
@@ -171,10 +172,10 @@ namespace Ogre
         friend class HlmsTerra;
 
     protected:
-        float mkDr, mkDg, mkDb;  // kD
-        float mShadowConstantBiasGpu;
-        float mRoughness[4];
-        float mMetalness[4];
+        float   mkDr, mkDg, mkDb;  // kD
+        float   mShadowConstantBiasGpu;
+        float   mRoughness[4];
+        float   mMetalness[4];
         Vector4 mDetailsOffsetScale[4];
         // uint16  mTexIndices[NUM_TERRA_TEXTURE_TYPES];
 
@@ -192,11 +193,11 @@ namespace Ogre
         ~HlmsTerraDatablock() override;
 
         /// Sets overall diffuse colour. The colour will be divided by PI for energy conservation.
-        void setDiffuse( const Vector3 &diffuseColour );
+        void    setDiffuse( const Vector3 &diffuseColour );
         Vector3 getDiffuse() const;
 
         /// Sets the roughness
-        void setRoughness( uint8 detailMapIdx, float roughness );
+        void  setRoughness( uint8 detailMapIdx, float roughness );
         float getRoughness( uint8 detailMapIdx ) const;
 
         /** Sets the metalness in a metallic workflow.
@@ -206,7 +207,7 @@ namespace Ogre
         @param metalness
             Value in range [0; 1]
         */
-        void setMetalness( uint8 detailMapIdx, float metalness );
+        void  setMetalness( uint8 detailMapIdx, float metalness );
         float getMetalness( uint8 detailMapIdx ) const;
 
         /** Sets the scale and offset of the detail map.
@@ -221,7 +222,7 @@ namespace Ogre
             ZW = Constains the UV scale.
             Default value is Vector4( 0, 0, 1, 1 )
         */
-        void setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale );
+        void           setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale );
         const Vector4 &getDetailMapOffsetScale( uint8 detailMap ) const;
 
         /// Overloaded to tell it's unsupported
@@ -233,7 +234,7 @@ namespace Ogre
 
         /// Changes the BRDF in use. Calling this function may trigger an
         /// HlmsDatablock::flushRenderables
-        void setBrdf( TerraBrdf::TerraBrdf brdf );
+        void   setBrdf( TerraBrdf::TerraBrdf brdf );
         uint32 getBrdf() const;
 
         /** Suggests the TextureMapType (aka texture category) for each type of texture
@@ -246,7 +247,7 @@ namespace Ogre
         */
         //        static HlmsTextureManager::TextureMapType suggestMapTypeBasedOnTextureType(
         //                                                                TerraTextureTypes type );
-        bool suggestUsingSRGB( TerraTextureTypes type ) const;
+        bool   suggestUsingSRGB( TerraTextureTypes type ) const;
         uint32 suggestFiltersForType( TerraTextureTypes type ) const;
 
         void calculateHash() override;

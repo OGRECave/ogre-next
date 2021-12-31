@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "Terra/Hlms/OgreHlmsTerraDatablock.h"
+
 #include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
 #include "OgreRenderSystem.h"

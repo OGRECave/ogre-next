@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTerrainCell_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreRenderable.h"
 
 namespace Ogre
@@ -39,8 +40,8 @@ namespace Ogre
 
     class TerrainCell : public Renderable
     {
-        int32 m_gridX;
-        int32 m_gridZ;
+        int32  m_gridX;
+        int32  m_gridZ;
         uint32 m_lodLevel;
         uint32 m_verticesPerLine;
 
@@ -87,9 +88,9 @@ namespace Ogre
 
         // Renderable overloads
         const LightList &getLights() const override;
-        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
-        void getWorldTransforms( Matrix4 *xform ) const override;
-        bool getCastsShadows() const override;
+        void             getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void             getWorldTransforms( Matrix4 *xform ) const override;
+        bool             getCastsShadows() const override;
     };
 }  // namespace Ogre
 

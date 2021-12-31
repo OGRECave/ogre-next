@@ -39,7 +39,7 @@ namespace Ogre
     class HlmsPbsTerraShadows : public HlmsListener
     {
     protected:
-        Terra *mTerra;
+        Terra *                 mTerra;
         HlmsSamplerblock const *mTerraSamplerblock;
 #if OGRE_DEBUG_MODE
         SceneManager *mSceneManager;
@@ -47,30 +47,31 @@ namespace Ogre
 
     public:
         HlmsPbsTerraShadows();
-        ~HlmsPbsTerraShadows();
+        virtual ~HlmsPbsTerraShadows();
 
         void setTerra( Terra *terra );
 
-        virtual uint16 getNumExtraPassTextures( const HlmsPropertyVec &properties,
-                                                bool casterPass ) const;
+        uint16 getNumExtraPassTextures( const HlmsPropertyVec &properties,
+                                        bool                   casterPass ) const override;
 
-        virtual void propertiesMergedPreGenerationStep(
-            Hlms *hlms, const HlmsCache &passCache, const HlmsPropertyVec &renderableCacheProperties,
-            const PiecesMap renderableCachePieces[NumShaderTypes], const HlmsPropertyVec &properties,
-            const QueuedRenderable &queuedRenderable );
+        void propertiesMergedPreGenerationStep( Hlms *hlms, const HlmsCache &passCache,
+                                                const HlmsPropertyVec &renderableCacheProperties,
+                                                const PiecesMap renderableCachePieces[NumShaderTypes],
+                                                const HlmsPropertyVec & properties,
+                                                const QueuedRenderable &queuedRenderable ) override;
 
-        virtual void preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
-                                      bool dualParaboloid, SceneManager *sceneManager, Hlms *hlms );
+        void preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
+                              bool dualParaboloid, SceneManager *sceneManager, Hlms *hlms ) override;
 
-        virtual uint32 getPassBufferSize( const CompositorShadowNode *shadowNode, bool casterPass,
-                                          bool dualParaboloid, SceneManager *sceneManager ) const;
+        uint32 getPassBufferSize( const CompositorShadowNode *shadowNode, bool casterPass,
+                                  bool dualParaboloid, SceneManager *sceneManager ) const override;
 
-        virtual float *preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
-                                          bool dualParaboloid, SceneManager *sceneManager,
-                                          float *passBufferPtr );
+        float *preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
+                                  bool dualParaboloid, SceneManager *sceneManager,
+                                  float *passBufferPtr ) override;
 
-        virtual void hlmsTypeChanged( bool casterPass, CommandBuffer *commandBuffer,
-                                      const HlmsDatablock *datablock, size_t texUnit );
+        void hlmsTypeChanged( bool casterPass, CommandBuffer *commandBuffer,
+                              const HlmsDatablock *datablock, size_t texUnit ) override;
     };
 
     struct PbsTerraProperty

@@ -28,22 +28,20 @@ THE SOFTWARE.
 
 #include "Terra/Terra.h"
 
-#include "Terra/Hlms/OgreHlmsTerra.h"
-#include "Terra/TerraShadowMapper.h"
-
-#include "OgreImage2.h"
-
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreCamera.h"
 #include "OgreDepthBuffer.h"
+#include "OgreImage2.h"
 #include "OgreMaterialManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreSceneManager.h"
 #include "OgreStagingTexture.h"
 #include "OgreTechnique.h"
 #include "OgreTextureGpuManager.h"
+#include "Terra/Hlms/OgreHlmsTerra.h"
+#include "Terra/TerraShadowMapper.h"
 
 namespace Ogre
 {
@@ -417,8 +415,8 @@ namespace Ogre
 
         const float fX = floorf( ( ( vPos.x - m_terrainOrigin.x ) * m_xzInvDimensions.x ) * fWidth );
         const float fZ = floorf( ( ( vPos.z - m_terrainOrigin.z ) * m_xzInvDimensions.y ) * fDepth );
-        retVal.x = fX >= 0.0f ? static_cast<uint32>( fX ) : 0xffffffff;
-        retVal.z = fZ >= 0.0f ? static_cast<uint32>( fZ ) : 0xffffffff;
+        retVal.x = fX >= 0.0f ? static_cast<int32>( fX ) : -1;
+        retVal.z = fZ >= 0.0f ? static_cast<int32>( fZ ) : -1;
 
         return retVal;
     }
@@ -447,8 +445,8 @@ namespace Ogre
         //        return true;
 
         const Vector2 cellPos = gridToWorld( gPos );
-        const Vector2 cellSize( ( gSize.x + 1u ) * m_xzRelativeSize.x,
-                                ( gSize.z + 1u ) * m_xzRelativeSize.y );
+        const Vector2 cellSize( ( gSize.x + 1 ) * m_xzRelativeSize.x,
+                                ( gSize.z + 1 ) * m_xzRelativeSize.y );
 
         const Vector3 vHalfSizeYUp = Vector3( cellSize.x, m_height, cellSize.y ) * 0.5f;
         const Vector3 vCenter =
@@ -474,7 +472,9 @@ namespace Ogre
     void Terra::addRenderable( const GridPoint &gridPos, const GridPoint &cellSize, uint32 lodLevel )
     {
         TerrainCell *cell = &m_terrainCells[0][m_currentCell++];
-        cell->setOrigin( gridPos, cellSize.x, cellSize.z, lodLevel );
+        cell->setOrigin( gridPos,  //
+                         static_cast<uint32>( cellSize.x ), static_cast<uint32>( cellSize.z ),
+                         lodLevel );
         m_collectedCells[0].push_back( cell );
     }
     //-----------------------------------------------------------------------------------
@@ -547,9 +547,8 @@ namespace Ogre
 
         const Vector3 camPos = toYUp( m_camera->getDerivedPosition() );
 
-        const uint32 basePixelDimension = m_basePixelDimension;
-        const uint32 vertPixelDimension =
-            static_cast<uint32>( m_basePixelDimension * m_depthWidthRatio );
+        const int32 basePixelDimension = static_cast<int32>( m_basePixelDimension );
+        const int32 vertPixelDimension = static_cast<int32>( m_basePixelDimension * m_depthWidthRatio );
 
         GridPoint cellSize;
         cellSize.x = basePixelDimension;
@@ -735,7 +734,10 @@ namespace Ogre
 
         GridPoint pos2D = worldToGrid( vPos );
 
-        if( pos2D.x < m_width - 1 && pos2D.z < m_depth - 1 )
+        const int32 iWidth = static_cast<int32>( m_width );
+        const int32 iDepth = static_cast<int32>( m_depth );
+
+        if( pos2D.x < iWidth - 1 && pos2D.z < iDepth - 1 )
         {
             const Vector2 vPos2D = gridToWorld( pos2D );
 
@@ -743,8 +745,8 @@ namespace Ogre
             const float dz = ( vPos.z - vPos2D.y ) * m_depth * m_xzInvDimensions.y;
 
             float a, b, c;
-            const float h00 = m_heightMap[pos2D.z * m_width + pos2D.x];
-            const float h11 = m_heightMap[( pos2D.z + 1 ) * m_width + pos2D.x + 1];
+            const float h00 = m_heightMap[size_t( pos2D.z * iWidth + pos2D.x )];
+            const float h11 = m_heightMap[size_t( ( pos2D.z + 1 ) * iWidth + pos2D.x + 1 )];
 
             c = h00;
             if( dx < dz )
@@ -753,7 +755,7 @@ namespace Ogre
                 // x=0 z=0 -> c		= h00
                 // x=0 z=1 -> b + c	= h01 -> b = h01 - c
                 // x=1 z=1 -> a + b + c  = h11 -> a = h11 - b - c
-                const float h01 = m_heightMap[( pos2D.z + 1 ) * m_width + pos2D.x];
+                const float h01 = m_heightMap[size_t( ( pos2D.z + 1 ) * iWidth + pos2D.x )];
 
                 b = h01 - c;
                 a = h11 - b - c;
@@ -764,7 +766,7 @@ namespace Ogre
                 // x=0 z=0 -> c		= h00
                 // x=1 z=0 -> a + c	= h10 -> a = h10 - c
                 // x=1 z=1 -> a + b + c  = h11 -> b = h11 - a - c
-                const float h10 = m_heightMap[pos2D.z * m_width + pos2D.x + 1];
+                const float h10 = m_heightMap[size_t( pos2D.z * iWidth + pos2D.x + 1 )];
 
                 a = h10 - c;
                 b = h11 - a - c;

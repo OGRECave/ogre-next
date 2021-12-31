@@ -177,7 +177,6 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void Tutorial_TerrainGameState::update( float timeSinceLast )
     {
-        static float accumTime = 0;
         // mSunLight->setDirection( Ogre::Vector3( cosf( mTimeOfDay ), -sinf( mTimeOfDay ), -1.0
         // ).normalisedCopy() ); mSunLight->setDirection( Ogre::Vector3( 0, -sinf( mTimeOfDay ), -1.0
         // ).normalisedCopy() );

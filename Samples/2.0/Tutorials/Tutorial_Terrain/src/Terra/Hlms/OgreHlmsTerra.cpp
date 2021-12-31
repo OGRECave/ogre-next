@@ -27,32 +27,31 @@ THE SOFTWARE.
 */
 
 #include "Terra/Hlms/OgreHlmsTerra.h"
-#include "OgreHlmsListener.h"
-#include "OgreHlmsManager.h"
-#include "OgreLwString.h"
+
 #include "Terra/Hlms/OgreHlmsTerraDatablock.h"
 
-#if !OGRE_NO_JSON
-#    include "Terra/Hlms/OgreHlmsJsonTerra.h"
-#endif
-
+#include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "CommandBuffer/OgreCbTexture.h"
+#include "CommandBuffer/OgreCommandBuffer.h"
+#include "Compositor/OgreCompositorShadowNode.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "OgreCamera.h"
 #include "OgreForward3D.h"
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreHighLevelGpuProgramManager.h"
+#include "OgreHlmsListener.h"
+#include "OgreHlmsManager.h"
 #include "OgreIrradianceVolume.h"
-#include "OgreViewport.h"
-
-#include "Compositor/OgreCompositorShadowNode.h"
+#include "OgreLwString.h"
 #include "OgreRenderQueue.h"
 #include "OgreSceneManager.h"
+#include "OgreViewport.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
-#include "CommandBuffer/OgreCbShaderBuffer.h"
-#include "CommandBuffer/OgreCbTexture.h"
-#include "CommandBuffer/OgreCommandBuffer.h"
+#if !OGRE_NO_JSON
+#    include "Terra/Hlms/OgreHlmsJsonTerra.h"
+#endif
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
 #    include "OgrePlanarReflections.h"
@@ -349,24 +348,12 @@ namespace Ogre
 
         if( usesNormalMap )
         {
-            //            TextureGpu *normalMapTex = datablock->getTexture( TERRA_DETAIL0_NM );
-            //            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
             {
-                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
-                setProperty( PbsProperty::NormalRgSnorm, PbsProperty::NormalRgSnorm.mHash );
+                setProperty( PbsProperty::NormalSamplingFormat,
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
+                setProperty( PbsProperty::NormalRgSnorm,
+                             static_cast<int32>( PbsProperty::NormalRgSnorm.mHash ) );
             }
-            //            else
-            //            {
-            //                setProperty( PbsProperty::NormalSamplingFormat,
-            //                PbsProperty::NormalRgUnorm.mHash ); setProperty(
-            //                PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
-            //            }
-            // Reserved for supporting LA textures in GLES2.
-            //            else
-            //            {
-            //                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash
-            //                ); setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
-            //            }
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS

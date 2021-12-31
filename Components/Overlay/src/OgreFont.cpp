@@ -363,7 +363,7 @@ namespace Ogre
         size_t l = 0, m = 0;
         CodePointRangeList::const_iterator itor = mCodePointRangeList.begin();
         CodePointRangeList::const_iterator endt = mCodePointRangeList.end();
-        while( itor != end )
+        while( itor != endt )
         {
             const CodePointRange &range = *itor;
             for( CodePoint cp = range.first; cp <= range.second; ++cp )

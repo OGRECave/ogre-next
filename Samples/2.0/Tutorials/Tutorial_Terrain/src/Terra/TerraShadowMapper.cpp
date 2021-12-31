@@ -30,21 +30,18 @@ THE SOFTWARE.
 
 #include "Terra/Terra.h"
 
-#include "OgreTextureGpuManager.h"
-
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-#include "OgreSceneManager.h"
-
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
+#include "OgreLwString.h"
 #include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreTextureGpuManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
-
-#include "OgreLwString.h"
 
 namespace Ogre
 {
@@ -227,7 +224,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline size_t ShadowMapper::getStartsPtrCount( int32 *starts, int32 *startsBase )
     {
-        const size_t offset = starts - startsBase;
+        const size_t offset = static_cast<size_t>( starts - startsBase );
         if( ( offset & 0x11 ) == 0 )
             return offset >> 2u;
         else
@@ -396,7 +393,8 @@ namespace Ogre
             }
 
             perGroupData->iterations =
-                widthOrHeight - std::max<int32>( 0, idy - ( heightOrWidth - startY ) );
+                static_cast<int32>( widthOrHeight ) -
+                std::max<int32>( 0, idy - static_cast<int32>( heightOrWidth - startY ) );
             perGroupData->deltaErrorStart = 0;
             perGroupData->padding0 = 0;
             perGroupData->padding1 = 0;
@@ -419,8 +417,9 @@ namespace Ogre
                     starts -= ( 4096u << 2u ) - 2u;
             }
 
-            perGroupData->iterations = widthOrHeight - xN;
-            perGroupData->deltaErrorStart = getErrorAfterXsteps( xN, dx, dy ) - dx * 0.5f;
+            perGroupData->iterations = static_cast<int32>( widthOrHeight ) - xN;
+            perGroupData->deltaErrorStart =
+                getErrorAfterXsteps( static_cast<uint32>( xN ), dx, dy ) - dx * 0.5f;
             ++perGroupData;
         }
 

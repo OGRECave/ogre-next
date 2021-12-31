@@ -33,7 +33,6 @@ THE SOFTWARE.
 
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCommandBuffer.h"
-
 #include "OgreHlmsManager.h"
 #include "OgreHlmsPbs.h"
 #include "OgreRoot.h"

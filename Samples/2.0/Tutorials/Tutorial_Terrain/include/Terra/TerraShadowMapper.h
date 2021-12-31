@@ -29,8 +29,9 @@ THE SOFTWARE.
 #ifndef _OgreTerraShadowMapper_H_
 #define _OgreTerraShadowMapper_H_
 
-#include "OgreMovableObject.h"
 #include "OgrePrerequisites.h"
+
+#include "OgreMovableObject.h"
 #include "OgreShaderParams.h"
 
 #include "Terra/TerrainCell.h"
@@ -45,25 +46,25 @@ namespace Ogre
     {
         Ogre::TextureGpu *m_heightMapTex;
 
-        ConstBufferPacked *m_shadowStarts;
-        ConstBufferPacked *m_shadowPerGroupData;
+        ConstBufferPacked *  m_shadowStarts;
+        ConstBufferPacked *  m_shadowPerGroupData;
         CompositorWorkspace *m_shadowWorkspace;
-        TextureGpu *m_shadowMapTex;
-        TextureGpu *m_tmpGaussianFilterTex;
-        HlmsComputeJob *m_shadowJob;
+        TextureGpu *         m_shadowMapTex;
+        TextureGpu *         m_tmpGaussianFilterTex;
+        HlmsComputeJob *     m_shadowJob;
         ShaderParams::Param *m_jobParamDelta;
         ShaderParams::Param *m_jobParamXYStep;
         ShaderParams::Param *m_jobParamIsStep;
         ShaderParams::Param *m_jobParamHeightDelta;
         ShaderParams::Param *m_jobParamResolutionShift;
 
-        IdType m_terraId;
-        bool m_minimizeMemoryConsumption;
-        bool m_lowResShadow;
+        IdType                m_terraId;
+        bool                  m_minimizeMemoryConsumption;
+        bool                  m_lowResShadow;
         TerraSharedResources *m_sharedResources;
 
         // Ogre stuff
-        SceneManager *m_sceneManager;
+        SceneManager *      m_sceneManager;
         CompositorManager2 *m_compositorManager;
 
         static inline size_t getStartsPtrCount( int32 *starts, int32 *startsBase );
