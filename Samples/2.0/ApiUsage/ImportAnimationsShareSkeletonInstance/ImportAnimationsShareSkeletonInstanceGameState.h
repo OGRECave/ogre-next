@@ -17,12 +17,11 @@ namespace Demo
         Ogre::SkeletonAnimation *mAnyAnimation;
 
     public:
-        ImportAnimationsShareSkeletonInstanceGameState(const Ogre::String &helpDescription);
+        ImportAnimationsShareSkeletonInstanceGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01();
-        virtual void update(float timeSinceLast);
+        virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif
-

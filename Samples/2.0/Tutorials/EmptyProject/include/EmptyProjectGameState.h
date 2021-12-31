@@ -7,12 +7,12 @@
 
 namespace Demo
 {
-	class EmptyProjectGameState : public TutorialGameState
+    class EmptyProjectGameState : public TutorialGameState
     {
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
-		EmptyProjectGameState( const Ogre::String &helpDescription );
+        EmptyProjectGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01();
 
@@ -20,6 +20,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

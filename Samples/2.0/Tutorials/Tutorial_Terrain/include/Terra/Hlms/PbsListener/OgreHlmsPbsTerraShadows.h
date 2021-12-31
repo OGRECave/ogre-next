@@ -39,10 +39,10 @@ namespace Ogre
     class HlmsPbsTerraShadows : public HlmsListener
     {
     protected:
-        Terra                   *mTerra;
-        HlmsSamplerblock const  *mTerraSamplerblock;
+        Terra *mTerra;
+        HlmsSamplerblock const *mTerraSamplerblock;
 #if OGRE_DEBUG_MODE
-        SceneManager            *mSceneManager;
+        SceneManager *mSceneManager;
 #endif
 
     public:
@@ -59,14 +59,13 @@ namespace Ogre
             const PiecesMap renderableCachePieces[NumShaderTypes], const HlmsPropertyVec &properties,
             const QueuedRenderable &queuedRenderable );
 
-        virtual void preparePassHash( const CompositorShadowNode *shadowNode,
-                                      bool casterPass, bool dualParaboloid,
-                                      SceneManager *sceneManager, Hlms *hlms );
+        virtual void preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
+                                      bool dualParaboloid, SceneManager *sceneManager, Hlms *hlms );
 
         virtual uint32 getPassBufferSize( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager ) const;
 
-        virtual float* preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
+        virtual float *preparePassBuffer( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager,
                                           float *passBufferPtr );
 
@@ -78,6 +77,6 @@ namespace Ogre
     {
         static const IdString TerraEnabled;
     };
-}
+}  // namespace Ogre
 
 #endif

@@ -9,8 +9,8 @@ namespace Demo
 {
     class MyGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
-        float               mDisplacement;
+        Ogre::SceneNode *mSceneNode;
+        float mDisplacement;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
@@ -23,6 +23,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

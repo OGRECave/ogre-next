@@ -2,12 +2,11 @@
 #ifndef _Demo_MemoryCleanupGameState_H_
 #define _Demo_MemoryCleanupGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
-#include "OgreOverlay.h"
 #include "OgreGpuResource.h"
+#include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
@@ -15,12 +14,12 @@ namespace Demo
     {
         struct VisibleItem
         {
-            Ogre::Item          *item;
+            Ogre::Item *item;
             Ogre::HlmsDatablock *datablock;
         };
 
         typedef std::vector<VisibleItem> VisibleItemVec;
-        VisibleItemVec  mVisibleItems;
+        VisibleItemVec mVisibleItems;
 
         bool mReleaseMemoryOnCleanup;
         bool mReleaseGpuMemory;
@@ -43,6 +42,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

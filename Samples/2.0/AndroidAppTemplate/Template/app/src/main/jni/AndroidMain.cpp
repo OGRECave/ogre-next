@@ -157,16 +157,16 @@ void handle_cmd( android_app *app, int32_t cmd )
         g_appController.init();
         break;
     case APP_CMD_TERM_WINDOW:
-		__android_log_print( ANDROID_LOG_INFO, "OgreSamples", "g_appController.destroy(): %d", cmd );
+        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "g_appController.destroy(): %d", cmd );
         g_appController.destroy();
         break;
     case APP_CMD_CONTENT_RECT_CHANGED:
     case APP_CMD_WINDOW_RESIZED:
-		__android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
+        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "windowMovedOrResized: %d", cmd );
         g_appController.mGraphicsSystem->getRenderWindow()->windowMovedOrResized();
         break;
     default:
-		__android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
+        __android_log_print( ANDROID_LOG_INFO, "OgreSamples", "event not handled: %d", cmd );
     }
 }
 

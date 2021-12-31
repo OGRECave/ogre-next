@@ -2,29 +2,29 @@
 #ifndef _Demo_AreaApproxLightsGameState_H_
 #define _Demo_AreaApproxLightsGameState_H_
 
-#include "OgrePrerequisites.h"
 #include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
+
 #include "OgreOverlay.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
     class AreaApproxLightsGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
-        Ogre::Light         *mAreaLights[2];
+        Ogre::SceneNode *mLightNodes[3];
+        Ogre::Light *mAreaLights[2];
         Ogre::HlmsUnlitDatablock *mAreaLightPlaneDatablocks[2];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-        Ogre::TextureGpu    *mAreaMaskTex;
+        Ogre::TextureGpu *mAreaMaskTex;
 
         void createAreaMask();
         void createAreaPlaneMesh();
-        Ogre::HlmsUnlitDatablock* createPlaneForAreaLight( Ogre::Light *light );
+        Ogre::HlmsUnlitDatablock *createPlaneForAreaLight( Ogre::Light *light );
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
@@ -38,6 +38,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

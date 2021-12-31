@@ -10,7 +10,7 @@ namespace Ogre
     class VctVoxelizer;
     class VctLighting;
     class IrradianceField;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
@@ -55,22 +55,22 @@ namespace Demo
             NumGiModes
         };
 
-        Ogre::VctVoxelizer  *mVoxelizer;
-        Ogre::VctLighting   *mVctLighting;
-        float               mThinWallCounter;
+        Ogre::VctVoxelizer *mVoxelizer;
+        Ogre::VctLighting *mVctLighting;
+        float mThinWallCounter;
 
-        Ogre::IrradianceField   *mIrradianceField;
-        bool                    mUseRasterIrradianceField;
+        Ogre::IrradianceField *mIrradianceField;
+        bool mUseRasterIrradianceField;
 
-        Ogre::uint32    mDebugVisualizationMode;
-        Ogre::uint32    mIfdDebugVisualizationMode;
-        Ogre::uint32    mNumBounces;
+        Ogre::uint32 mDebugVisualizationMode;
+        Ogre::uint32 mIfdDebugVisualizationMode;
+        Ogre::uint32 mNumBounces;
 
-        Ogre::FastArray<Ogre::Item*>    mItems;
+        Ogre::FastArray<Ogre::Item *> mItems;
 
-        Scenes			mCurrentScene;
+        Scenes mCurrentScene;
 
-        TestUtils       *mTestUtils;
+        TestUtils *mTestUtils;
 
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality();
@@ -100,6 +100,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

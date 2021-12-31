@@ -1,20 +1,21 @@
 
 #include "OpenVRCompositorListener.h"
-#include "OgreTextureGpu.h"
-#include "OgreRenderSystem.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/Pass/OgreCompositorPassDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
+#include "OgreRenderSystem.h"
+#include "OgreTextureGpu.h"
 
 #include "Compositor/OgreCompositorWorkspace.h"
 
 namespace Demo
 {
-    OpenVRCompositorListener::OpenVRCompositorListener(
-            vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
-            Ogre::TextureGpu *vrTexture, Ogre::Root *root,
-            Ogre::CompositorWorkspace *workspace,
-            Ogre::Camera *camera, Ogre::Camera *cullCamera ) :
+    OpenVRCompositorListener::OpenVRCompositorListener( vr::IVRSystem *hmd,
+                                                        vr::IVRCompositor *vrCompositor,
+                                                        Ogre::TextureGpu *vrTexture, Ogre::Root *root,
+                                                        Ogre::CompositorWorkspace *workspace,
+                                                        Ogre::Camera *camera,
+                                                        Ogre::Camera *cullCamera ) :
         mHMD( hmd ),
         mVrCompositor( vrCompositor ),
         mVrTexture( vrTexture ),
@@ -62,21 +63,19 @@ namespace Demo
     //-------------------------------------------------------------------------
     Ogre::Matrix4 OpenVRCompositorListener::convertSteamVRMatrixToMatrix4( vr::HmdMatrix34_t matPose )
     {
-        Ogre::Matrix4 matrixObj(
-                    matPose.m[0][0], matPose.m[0][1], matPose.m[0][2], matPose.m[0][3],
-                    matPose.m[1][0], matPose.m[1][1], matPose.m[1][2], matPose.m[1][3],
-                    matPose.m[2][0], matPose.m[2][1], matPose.m[2][2], matPose.m[2][3],
-                               0.0f,            0.0f,            0.0f,            1.0f );
+        Ogre::Matrix4 matrixObj( matPose.m[0][0], matPose.m[0][1], matPose.m[0][2], matPose.m[0][3],
+                                 matPose.m[1][0], matPose.m[1][1], matPose.m[1][2], matPose.m[1][3],
+                                 matPose.m[2][0], matPose.m[2][1], matPose.m[2][2], matPose.m[2][3],
+                                 0.0f, 0.0f, 0.0f, 1.0f );
         return matrixObj;
     }
     //-------------------------------------------------------------------------
     Ogre::Matrix4 OpenVRCompositorListener::convertSteamVRMatrixToMatrix4( vr::HmdMatrix44_t matPose )
     {
-        Ogre::Matrix4 matrixObj(
-                    matPose.m[0][0], matPose.m[0][1], matPose.m[0][2], matPose.m[0][3],
-                    matPose.m[1][0], matPose.m[1][1], matPose.m[1][2], matPose.m[1][3],
-                    matPose.m[2][0], matPose.m[2][1], matPose.m[2][2], matPose.m[2][3],
-                    matPose.m[3][0], matPose.m[3][1], matPose.m[3][2], matPose.m[3][3] );
+        Ogre::Matrix4 matrixObj( matPose.m[0][0], matPose.m[0][1], matPose.m[0][2], matPose.m[0][3],
+                                 matPose.m[1][0], matPose.m[1][1], matPose.m[1][2], matPose.m[1][3],
+                                 matPose.m[2][0], matPose.m[2][1], matPose.m[2][2], matPose.m[2][3],
+                                 matPose.m[3][0], matPose.m[3][1], matPose.m[3][2], matPose.m[3][3] );
         return matrixObj;
     }
     //-------------------------------------------------------------------------
@@ -87,11 +86,11 @@ namespace Demo
         mValidPoseCount = 0;
         for( size_t nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; ++nDevice )
         {
-            if ( mTrackedDevicePose[nDevice].bPoseIsValid )
+            if( mTrackedDevicePose[nDevice].bPoseIsValid )
             {
                 ++mValidPoseCount;
                 mDevicePose[nDevice] = convertSteamVRMatrixToMatrix4(
-                                           mTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking );
+                    mTrackedDevicePose[nDevice].mDeviceToAbsoluteTracking );
             }
         }
 
@@ -128,7 +127,7 @@ namespace Demo
     void OpenVRCompositorListener::syncCameraProjection( bool bForceUpdate )
     {
         const Ogre::Real camNear = mCamera->getNearClipDistance();
-        const Ogre::Real camFar  = mCamera->getFarClipDistance();
+        const Ogre::Real camFar = mCamera->getFarClipDistance();
 
         if( mLastCamNear != camNear || mLastCamFar != camFar || bForceUpdate )
         {
@@ -137,13 +136,12 @@ namespace Demo
             Ogre::Matrix4 projectionMatrixRS[2];
             Ogre::Vector4 eyeFrustumExtents[2];
 
-            for( size_t i=0u; i<2u; ++i )
+            for( size_t i = 0u; i < 2u; ++i )
             {
                 vr::EVREye eyeIdx = static_cast<vr::EVREye>( i );
                 eyeToHead[i] = convertSteamVRMatrixToMatrix4( mHMD->GetEyeToHeadTransform( eyeIdx ) );
-                projectionMatrix[i] =
-                        convertSteamVRMatrixToMatrix4( mHMD->GetProjectionMatrix( eyeIdx,
-                                                                                  camNear, camFar ) );
+                projectionMatrix[i] = convertSteamVRMatrixToMatrix4(
+                    mHMD->GetProjectionMatrix( eyeIdx, camNear, camFar ) );
                 mRenderSystem->_convertOpenVrProjectionMatrix( projectionMatrix[i],
                                                                projectionMatrixRS[i] );
                 mHMD->GetProjectionRaw( eyeIdx, &eyeFrustumExtents[i].x, &eyeFrustumExtents[i].y,
@@ -166,7 +164,7 @@ namespace Demo
 
             const float ipd = mVrData.mLeftToRight.x;
             mCullCameraOffset = Ogre::Vector3::ZERO;
-            mCullCameraOffset.z = (ipd / 2.0f) / Ogre::Math::Abs( cameraCullFrustumExtents.x );
+            mCullCameraOffset.z = ( ipd / 2.0f ) / Ogre::Math::Abs( cameraCullFrustumExtents.x );
 
             const Ogre::Real offset = mCullCameraOffset.length();
             mVrCullCamera->setNearClipDistance( camNear + offset );
@@ -174,7 +172,7 @@ namespace Demo
         }
     }
     //-------------------------------------------------------------------------
-    bool OpenVRCompositorListener::frameStarted( const Ogre::FrameEvent& evt )
+    bool OpenVRCompositorListener::frameStarted( const Ogre::FrameEvent &evt )
     {
         if( mWaitingMode == VrWaitingMode::BeforeSceneGraph )
             updateHmdTrackingPose();
@@ -195,12 +193,7 @@ namespace Demo
             texBounds.vMax = 1.0f;
         }
 
-        vr::Texture_t eyeTexture =
-        {
-            0,
-            mApiTextureType,
-            vr::ColorSpace_Gamma
-        };
+        vr::Texture_t eyeTexture = { 0, mApiTextureType, vr::ColorSpace_Gamma };
         mVrTexture->getCustomAttribute( Ogre::TextureGpu::msFinalTextureBuffer, &eyeTexture.handle );
 
         texBounds.uMin = 0;
@@ -212,9 +205,8 @@ namespace Demo
 
         mRenderSystem->flushCommands();
 
-
         vr::VREvent_t event;
-        while( mHMD->PollNextEvent( &event, sizeof(event) ) )
+        while( mHMD->PollNextEvent( &event, sizeof( event ) ) )
         {
             if( event.trackedDeviceIndex != vr::k_unTrackedDeviceIndex_Hmd &&
                 event.trackedDeviceIndex != vr::k_unTrackedDeviceIndexInvalid )
@@ -235,7 +227,7 @@ namespace Demo
         return true;
     }
     //-------------------------------------------------------------------------
-    bool OpenVRCompositorListener::frameEnded( const Ogre::FrameEvent& evt )
+    bool OpenVRCompositorListener::frameEnded( const Ogre::FrameEvent &evt )
     {
         syncCameraProjection( false );
         if( mWaitingMode == VrWaitingMode::AfterSwap )
@@ -295,7 +287,6 @@ namespace Demo
     //-------------------------------------------------------------------------
     bool OpenVRCompositorListener::canSyncCameraTransformImmediately() const
     {
-        return mWaitingMode <= VrWaitingMode::BeforeSceneGraph ||
-               mWaitingMode <= mFirstGlitchFreeMode;
+        return mWaitingMode <= VrWaitingMode::BeforeSceneGraph || mWaitingMode <= mFirstGlitchFreeMode;
     }
-}
+}  // namespace Demo

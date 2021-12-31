@@ -14,11 +14,11 @@ namespace Demo
     class LogicSystem : public BaseSystem
     {
     protected:
-        BaseSystem          *mGraphicsSystem;
-        GameEntityManager   *mGameEntityManager;
+        BaseSystem *       mGraphicsSystem;
+        GameEntityManager *mGameEntityManager;
 
-        Ogre::uint32                mCurrentTransformIdx;
-        std::deque<Ogre::uint32>    mAvailableTransformIdx;
+        Ogre::uint32             mCurrentTransformIdx;
+        std::deque<Ogre::uint32> mAvailableTransformIdx;
 
         /// @see MessageQueueSystem::processIncomingMessage
         virtual void processIncomingMessage( Mq::MessageId messageId, const void *data );
@@ -27,14 +27,14 @@ namespace Demo
         LogicSystem( GameState *gameState );
         virtual ~LogicSystem();
 
-        void _notifyGraphicsSystem( BaseSystem *graphicsSystem )    { mGraphicsSystem = graphicsSystem; }
-        void _notifyGameEntityManager( GameEntityManager *mgr )     { mGameEntityManager = mgr; }
+        void _notifyGraphicsSystem( BaseSystem *graphicsSystem ) { mGraphicsSystem = graphicsSystem; }
+        void _notifyGameEntityManager( GameEntityManager *mgr ) { mGameEntityManager = mgr; }
 
         void finishFrameParallel();
 
-        GameEntityManager* getGameEntityManager()               { return mGameEntityManager; }
-        Ogre::uint32 getCurrentTransformIdx() const             { return mCurrentTransformIdx; }
+        GameEntityManager *getGameEntityManager() { return mGameEntityManager; }
+        Ogre::uint32       getCurrentTransformIdx() const { return mCurrentTransformIdx; }
     };
-}
+}  // namespace Demo
 
 #endif

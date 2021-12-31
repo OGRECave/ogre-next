@@ -32,9 +32,9 @@ THE SOFTWARE.
 
 namespace Demo
 {
-	class iOSUtils
-	{
+    class iOSUtils
+    {
     public:
         static Ogre::Vector2 getScreenResolutionInPoints();
-	};
-}
+    };
+}  // namespace Demo

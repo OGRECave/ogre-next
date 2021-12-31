@@ -2,11 +2,10 @@
 #ifndef _Demo_UpdatingDecalsAndAreaLightTexGameState_H_
 #define _Demo_UpdatingDecalsAndAreaLightTexGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
 #include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
@@ -14,14 +13,14 @@ namespace Demo
 
     class UpdatingDecalsAndAreaLightTexGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mLightNodes[c_numAreaLights];
-        Ogre::Light         *mAreaLights[c_numAreaLights];
+        Ogre::SceneNode *mLightNodes[c_numAreaLights];
+        Ogre::Light *mAreaLights[c_numAreaLights];
 
-        bool                mUseTextureFromFile[c_numAreaLights];
-        float               mLightTexRadius[c_numAreaLights];
+        bool mUseTextureFromFile[c_numAreaLights];
+        float mLightTexRadius[c_numAreaLights];
 
-        Ogre::TextureGpu    *mAreaMaskTex;
-        bool                mUseSynchronousMethod;
+        Ogre::TextureGpu *mAreaMaskTex;
+        bool mUseSynchronousMethod;
 
         /** Creates an Image of a hollow rectangle on the GPU
         @param radius
@@ -36,7 +35,7 @@ namespace Demo
         /// emitting so that it can use the same texture the light is using.
         ///
         /// Must be called again whenever the texture changes (i.e. setupLightTexture was called)
-        Ogre::HlmsDatablock* setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
+        Ogre::HlmsDatablock *setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
         /// Creates a billboard showing where the given light is emitting
         void createPlaneForAreaLight( Ogre::Light *light, size_t idx );
 
@@ -56,6 +55,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

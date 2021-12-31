@@ -3,13 +3,13 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
-#include "OgreMeshManager.h"
-#include "OgreMeshManager2.h"
 #include "OgreMesh.h"
 #include "OgreMesh2.h"
+#include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
 
 #include "OgreCamera.h"
 #include "OgreWindow.h"
@@ -17,17 +17,17 @@
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
 
-#include "OgreRoot.h"
 #include "OgreHlmsManager.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreTextureFilters.h"
 #include "OgreHlmsPbs.h"
+#include "OgreRoot.h"
+#include "OgreTextureFilters.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreConfigFile.h"
 #include "OgreLodConfig.h"
 #include "OgreLodStrategyManager.h"
-#include "OgreMeshLodGenerator.h"
 #include "OgreMesh2Serializer.h"
+#include "OgreMeshLodGenerator.h"
 #include "OgrePixelCountLodStrategy.h"
 
 using namespace Demo;
@@ -43,37 +43,36 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
             item->setDatablock( "Marble" );
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                             ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
             sceneNode->attachObject( item );
 
-            //Change the addressing mode of the roughness map to wrap via code.
-            //Detail maps default to wrap, but the rest to clamp.
-            assert( dynamic_cast<Ogre::HlmsPbsDatablock*>( item->getSubItem(0)->getDatablock() ) );
-            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                                            item->getSubItem(0)->getDatablock() );
-            //Make a hard copy of the sampler block
+            // Change the addressing mode of the roughness map to wrap via code.
+            // Detail maps default to wrap, but the rest to clamp.
+            assert( dynamic_cast<Ogre::HlmsPbsDatablock *>( item->getSubItem( 0 )->getDatablock() ) );
+            Ogre::HlmsPbsDatablock *datablock =
+                static_cast<Ogre::HlmsPbsDatablock *>( item->getSubItem( 0 )->getDatablock() );
+            // Make a hard copy of the sampler block
             Ogre::HlmsSamplerblock samplerblock( *datablock->getSamplerblock( Ogre::PBSM_ROUGHNESS ) );
             samplerblock.mU = Ogre::TAM_WRAP;
             samplerblock.mV = Ogre::TAM_WRAP;
             samplerblock.mW = Ogre::TAM_WRAP;
-            //Set the new samplerblock. The Hlms system will
-            //automatically create the API block if necessary
+            // Set the new samplerblock. The Hlms system will
+            // automatically create the API block if necessary
             datablock->setSamplerblock( Ogre::PBSM_ROUGHNESS, samplerblock );
         }
 
@@ -95,7 +94,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
+        light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -108,7 +107,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.2f, 0.4f, 0.8f ); //Cold
+        light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
         light->setSpecularColour( 0.2f, 0.4f, 0.8f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -193,4 +192,4 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Demo

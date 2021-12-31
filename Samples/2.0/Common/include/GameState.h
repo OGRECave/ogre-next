@@ -23,6 +23,6 @@ namespace Demo
         virtual void finishFrameParallel() {}
         virtual void finishFrame() {}
     };
-}
+}  // namespace Demo
 
 #endif

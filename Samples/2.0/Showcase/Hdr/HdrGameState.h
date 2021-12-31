@@ -9,12 +9,12 @@ namespace Demo
 {
     class HdrGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
-        Ogre::uint32        mCurrentPreset;
+        bool mAnimateObjects;
+        Ogre::uint32 mCurrentPreset;
 
         Ogre::String mPresetName;
         float mExposure;
@@ -24,7 +24,7 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
-        void switchPreset( int direction=1 );
+        void switchPreset( int direction = 1 );
 
     public:
         HdrGameState( const Ogre::String &helpDescription );
@@ -35,6 +35,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

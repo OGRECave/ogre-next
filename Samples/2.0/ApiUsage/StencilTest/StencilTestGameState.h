@@ -9,7 +9,7 @@ namespace Demo
 {
     class StencilTestGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
+        Ogre::SceneNode *mSceneNode;
 
     public:
         StencilTestGameState( const Ogre::String &helpDescription );
@@ -18,6 +18,6 @@ namespace Demo
 
         virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

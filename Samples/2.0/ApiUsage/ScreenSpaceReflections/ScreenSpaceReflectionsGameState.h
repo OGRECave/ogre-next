@@ -9,7 +9,7 @@
 
 #include "SdlEmulationLayer.h"
 #if OGRE_USE_SDL2
-    #include "SDL_keyboard.h"
+#    include "SDL_keyboard.h"
 #endif
 
 namespace Ogre
@@ -21,8 +21,8 @@ namespace Demo
 {
     class ScreenSpaceReflectionsGameState : public TutorialGameState
     {
-        ScreenSpaceReflections  *mScreenSpaceReflections;
-        Ogre::HlmsPbsDatablock  *mMaterials[4];
+        ScreenSpaceReflections *mScreenSpaceReflections;
+        Ogre::HlmsPbsDatablock *mMaterials[4];
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
@@ -36,6 +36,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

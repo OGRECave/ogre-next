@@ -206,8 +206,8 @@ namespace Demo
             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-            planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );

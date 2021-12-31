@@ -32,11 +32,11 @@ THE SOFTWARE.
 
 namespace Demo
 {
-	Ogre::Vector2 iOSUtils::getScreenResolutionInPoints(void)
-	{
-		UIScreen *mainScreen = [UIScreen mainScreen];
-		CGRect screenRect = [mainScreen bounds];
+    Ogre::Vector2 iOSUtils::getScreenResolutionInPoints( void )
+    {
+        UIScreen *mainScreen = [UIScreen mainScreen];
+        CGRect screenRect = [mainScreen bounds];
 
-		return Ogre::Vector2( screenRect.size.width, screenRect.size.height );
-	}
+        return Ogre::Vector2( screenRect.size.width, screenRect.size.height );
+    }
 }

@@ -18,6 +18,6 @@ namespace Demo
     public:
         GraphicsGameState( const Ogre::String &helpDescription );
     };
-}
+}  // namespace Demo
 
 #endif

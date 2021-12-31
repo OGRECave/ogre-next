@@ -156,7 +156,7 @@ int main( int argc, const char *argv[] )
     const char *pluginsFile = "plugins.cfg";
 #    endif
 #else
-    const char *pluginsFile = 0; // TODO
+    const char *pluginsFile = 0;  // TODO
 #endif
     Root *root = OGRE_NEW Root( pluginsFolder + pluginsFile,     //
                                 writeAccessFolder + "ogre.cfg",  //

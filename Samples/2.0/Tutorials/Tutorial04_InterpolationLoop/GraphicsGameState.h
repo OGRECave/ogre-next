@@ -17,15 +17,15 @@ namespace Demo
         Ogre::Vector3 mLastPosition;
         Ogre::Vector3 mCurrentPosition;
 
-        bool        mEnableInterpolation;
+        bool mEnableInterpolation;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
         GraphicsGameState( const Ogre::String &helpDescription );
 
-        Ogre::Vector3& _getLastPositionRef()        { return mLastPosition; }
-        Ogre::Vector3& _getCurrentPositionRef()      { return mCurrentPosition; }
+        Ogre::Vector3 &_getLastPositionRef() { return mLastPosition; }
+        Ogre::Vector3 &_getCurrentPositionRef() { return mCurrentPosition; }
 
         virtual void createScene01();
 
@@ -33,6 +33,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

@@ -3,10 +3,10 @@
 
 #include "OgreRoot.h"
 
-#include "OgreMaterialManager.h"
 #include "OgreMaterial.h"
-#include "OgreTechnique.h"
+#include "OgreMaterialManager.h"
 #include "OgrePass.h"
+#include "OgreTechnique.h"
 
 namespace Demo
 {
@@ -15,12 +15,8 @@ namespace Demo
     {
         const Ogre::RenderSystemCapabilities *caps = renderSystem->getCapabilities();
 
-        Ogre::String materialNames[3] =
-        {
-            "SMAA/EdgeDetection",
-            "SMAA/BlendingWeightCalculation",
-            "SMAA/NeighborhoodBlending"
-        };
+        Ogre::String materialNames[3] = { "SMAA/EdgeDetection", "SMAA/BlendingWeightCalculation",
+                                          "SMAA/NeighborhoodBlending" };
 
         Ogre::String preprocessorDefines = "SMAA_INITIALIZED=1,";
 
@@ -40,13 +36,12 @@ namespace Demo
             break;
         }
 
-        //Actually these macros (EdgeDetectionMode) only
-        //affect pixel shader SMAA/EdgeDetection_ps
+        // Actually these macros (EdgeDetectionMode) only
+        // affect pixel shader SMAA/EdgeDetection_ps
         switch( edgeDetectionMode )
         {
         case EdgeDetectionDepth:
-            OGRE_EXCEPT( Ogre::Exception::ERR_NOT_IMPLEMENTED,
-                         "EdgeDetectionDepth not implemented.",
+            OGRE_EXCEPT( Ogre::Exception::ERR_NOT_IMPLEMENTED, "EdgeDetectionDepth not implemented.",
                          "SmaaUtils::initialize" );
             break;
         case EdgeDetectionLuma:
@@ -69,35 +64,35 @@ namespace Demo
         else if( caps->isShaderProfileSupported( "glsl330" ) )
             preprocessorDefines += "SMAA_GLSL_3=1,";
 
-        for( size_t i=0; i<sizeof(materialNames) / sizeof(materialNames[0]); ++i )
+        for( size_t i = 0; i < sizeof( materialNames ) / sizeof( materialNames[0] ); ++i )
         {
-            Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().load(
-                        materialNames[i],
-                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ).
-                    staticCast<Ogre::Material>();
+            Ogre::MaterialPtr material =
+                Ogre::MaterialManager::getSingleton()
+                    .load( materialNames[i], Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
+                    .staticCast<Ogre::Material>();
 
-            Ogre::Pass *pass = material->getTechnique(0)->getPass(0);
+            Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 
             Ogre::GpuProgram *shader = 0;
             Ogre::GpuProgramParametersSharedPtr oldParams;
 
-            //Save old manual & auto params
+            // Save old manual & auto params
             oldParams = pass->getVertexProgramParameters();
-            //Retrieve the HLSL/GLSL/Metal shader and rebuild it with the right settings.
+            // Retrieve the HLSL/GLSL/Metal shader and rebuild it with the right settings.
             shader = pass->getVertexProgram()->_getBindingDelegate();
             shader->setParameter( "preprocessor_defines", preprocessorDefines );
             pass->getVertexProgram()->reload();
-            //Restore manual & auto params to the newly compiled shader
+            // Restore manual & auto params to the newly compiled shader
             pass->getVertexProgramParameters()->copyConstantsFrom( *oldParams );
 
-            //Save old manual & auto params
+            // Save old manual & auto params
             oldParams = pass->getFragmentProgramParameters();
-            //Retrieve the HLSL/GLSL/Metal shader and rebuild it with the right settings.
+            // Retrieve the HLSL/GLSL/Metal shader and rebuild it with the right settings.
             shader = pass->getFragmentProgram()->_getBindingDelegate();
             shader->setParameter( "preprocessor_defines", preprocessorDefines );
             pass->getFragmentProgram()->reload();
-            //Restore manual & auto params to the newly compiled shader
+            // Restore manual & auto params to the newly compiled shader
             pass->getFragmentProgramParameters()->copyConstantsFrom( *oldParams );
         }
     }
-}
+}  // namespace Demo

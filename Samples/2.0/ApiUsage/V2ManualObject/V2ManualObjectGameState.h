@@ -18,17 +18,17 @@ namespace Demo
 
         virtual void update( float timeSinceLast );
 
-        virtual void keyReleased( const SDL_KeyboardEvent & arg );
+        virtual void keyReleased( const SDL_KeyboardEvent &arg );
 
     private:
-        Ogre::ManualObject * mManualObject;
+        Ogre::ManualObject *mManualObject;
         bool mFirstFrame;
         std::vector<Ogre::Vector3> mVertices;
         float mAccumulator;
         bool mAnimate;
 
-        void fillBuffer(float uvOffset);
+        void fillBuffer( float uvOffset );
     };
-}
+}  // namespace Demo
 
 #endif

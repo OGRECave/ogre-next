@@ -12,19 +12,19 @@ namespace Ogre
         void createBuffers();
 
     public:
-        MyCustomRenderable( IdType id, ObjectMemoryManager *objectMemoryManager,
-                            SceneManager* manager, uint8 renderQueueId );
+        MyCustomRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
+                            uint8 renderQueueId );
         virtual ~MyCustomRenderable();
 
-        //Overrides from MovableObject
-        virtual const String& getMovableType() const;
+        // Overrides from MovableObject
+        virtual const String &getMovableType() const;
 
-        //Overrides from Renderable
-        virtual const LightList& getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
+        // Overrides from Renderable
+        virtual const LightList &getLights() const;
+        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
+        virtual void getWorldTransforms( Matrix4 *xform ) const;
         virtual bool getCastsShadows() const;
     };
-}
+}  // namespace Ogre
 
 #endif

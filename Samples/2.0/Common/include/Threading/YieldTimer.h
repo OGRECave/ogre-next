@@ -11,16 +11,13 @@ namespace Demo
         Ogre::Timer *mExternalTimer;
 
     public:
-        YieldTimer( Ogre::Timer *externalTimer ) :
-            mExternalTimer( externalTimer )
-        {
-        }
+        YieldTimer( Ogre::Timer *externalTimer ) : mExternalTimer( externalTimer ) {}
 
         Ogre::uint64 yield( double frameTime, Ogre::uint64 startTime )
         {
             Ogre::uint64 endTime = mExternalTimer->getMicroseconds();
 
-            while( frameTime * 1000000.0 > (endTime - startTime) )
+            while( frameTime * 1000000.0 > ( endTime - startTime ) )
             {
                 endTime = mExternalTimer->getMicroseconds();
 
@@ -34,6 +31,6 @@ namespace Demo
             return endTime;
         }
     };
-}
+}  // namespace Demo
 
 #endif

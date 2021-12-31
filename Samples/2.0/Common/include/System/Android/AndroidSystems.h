@@ -40,7 +40,7 @@ namespace Demo
     class AndroidSystems
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        android_app *mAndroidApp;
+        android_app *  mAndroidApp;
         ANativeWindow *mNativeWindow;
 #endif
 
@@ -49,7 +49,7 @@ namespace Demo
 
         static void setAndroidApp( android_app *androidApp );
 
-        static void setNativeWindow( ANativeWindow *nativeWindow );
+        static void           setNativeWindow( ANativeWindow *nativeWindow );
         static ANativeWindow *getNativeWindow();
 
         /**

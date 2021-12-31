@@ -26,6 +26,6 @@ namespace Demo
         virtual void createScene01();
         virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

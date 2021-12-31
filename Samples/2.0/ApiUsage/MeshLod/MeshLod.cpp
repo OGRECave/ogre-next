@@ -3,24 +3,24 @@
 
 #include "MeshLodGameState.h"
 
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreRoot.h"
-#include "OgreWindow.h"
-#include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreCamera.h"
+#include "OgreConfigFile.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/Android/AndroidSystems.h"
 #include "System/MainEntryPoints.h"
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#    if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
-#else
+#    else
 int mainApp( int argc, const char *argv[] )
-#endif
+#    endif
 {
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
@@ -41,7 +41,7 @@ namespace Demo
 
             if( dataFolder.empty() )
                 dataFolder = AndroidSystems::isAndroid() ? "/" : "./";
-            else if( *(dataFolder.end() - 1) != '/' )
+            else if( *( dataFolder.end() - 1 ) != '/' )
                 dataFolder += "/";
 
             Ogre::String dataFolderSinbad = dataFolder;
@@ -55,25 +55,21 @@ namespace Demo
         }
 
     public:
-        MeshLodGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
-        {
-        }
+        MeshLodGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
         MeshLodGameState *gfxGameState = new MeshLodGameState(
-        "Shows how to automatically generate LODs from an existing mesh.\n"
-        "The mesh must be in v1 format because the MeshLodGenerator Component\n"
-        "hasn't yet been ported to v2 interfaces\n"
-        "However meshes can be converted back and forth between v1 <-> v2\n"
-        "to get LOD generation.\n"
-        "Once LODs have been generated, LOD display can work in either v1 or v2 mode\n"
-        "The model you're looking right now is in v2 mode");
+            "Shows how to automatically generate LODs from an existing mesh.\n"
+            "The mesh must be in v1 format because the MeshLodGenerator Component\n"
+            "hasn't yet been ported to v2 interfaces\n"
+            "However meshes can be converted back and forth between v1 <-> v2\n"
+            "to get LOD generation.\n"
+            "Once LODs have been generated, LOD display can work in either v1 or v2 mode\n"
+            "The model you're looking right now is in v2 mode" );
 
         GraphicsSystem *graphicsSystem = new MeshLodGraphicsSystem( gfxGameState );
 
@@ -83,17 +79,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle()
-    {
-        return "Automatic LOD Generation Sample";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "Automatic LOD Generation Sample"; }
+}  // namespace Demo

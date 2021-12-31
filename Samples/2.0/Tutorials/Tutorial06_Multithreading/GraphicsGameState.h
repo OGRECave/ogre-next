@@ -13,7 +13,7 @@ namespace Demo
 
     class GraphicsGameState : public TutorialGameState
     {
-        bool        mEnableInterpolation;
+        bool mEnableInterpolation;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
@@ -24,6 +24,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

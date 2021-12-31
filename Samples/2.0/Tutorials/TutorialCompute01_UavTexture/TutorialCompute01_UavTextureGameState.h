@@ -9,8 +9,8 @@ namespace Demo
 {
     class TutorialCompute01_UavTextureGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
-        float               mDisplacement;
+        Ogre::SceneNode *mSceneNode;
+        float mDisplacement;
 
     public:
         TutorialCompute01_UavTextureGameState( const Ogre::String &helpDescription );
@@ -19,6 +19,6 @@ namespace Demo
 
         virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

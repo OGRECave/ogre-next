@@ -28,12 +28,12 @@ THE SOFTWARE.
 #ifndef _OgreHlmsTerra_H_
 #define _OgreHlmsTerra_H_
 
-#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
-#include "OgreHlmsBufferManager.h"
 #include "OgreConstBufferPool.h"
-#include "OgreMatrix4.h"
-#include "OgreHlmsPbs.h"
 #include "OgreHeaderPrefix.h"
+#include "OgreHlmsBufferManager.h"
+#include "OgreHlmsPbs.h"
+#include "OgreMatrix4.h"
+#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
 
 namespace Ogre
 {
@@ -43,11 +43,11 @@ namespace Ogre
     class Terra;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class HlmsTerraDatablock;
 
@@ -61,7 +61,7 @@ namespace Ogre
         FastArray<Terra *> mLinkedTerras;
 
     protected:
-        virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
+        virtual HlmsDatablock *createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,
                                                     const HlmsParamVec &paramVec );
@@ -79,9 +79,9 @@ namespace Ogre
         virtual void notifyPropertiesMergedPreGenerationStep();
 
         FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
-                                           const QueuedRenderable &queuedRenderable,
-                                           bool casterPass, uint32 lastCacheHash,
-                                           CommandBuffer *commandBuffer, bool isV1 );
+                                           const QueuedRenderable &queuedRenderable, bool casterPass,
+                                           uint32 lastCacheHash, CommandBuffer *commandBuffer,
+                                           bool isV1 );
 
     public:
         HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders );
@@ -99,19 +99,16 @@ namespace Ogre
                                       Camera *renderingCamera, const bool bCasterPass );
 
         virtual uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                       bool casterPass, uint32 lastCacheHash,
-                                       uint32 lastTextureHash );
+                                       bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash );
 
         virtual uint32 fillBuffersForV1( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer );
+                                         const QueuedRenderable &queuedRenderable, bool casterPass,
+                                         uint32 lastCacheHash, CommandBuffer *commandBuffer );
         virtual uint32 fillBuffersForV2( const HlmsCache *cache,
-                                         const QueuedRenderable &queuedRenderable,
-                                         bool casterPass, uint32 lastCacheHash,
-                                         CommandBuffer *commandBuffer );
+                                         const QueuedRenderable &queuedRenderable, bool casterPass,
+                                         uint32 lastCacheHash, CommandBuffer *commandBuffer );
 
-        static void getDefaultPaths( String& outDataFolderPath, StringVector& outLibraryFoldersPaths );
+        static void getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths );
 
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
@@ -125,7 +122,7 @@ namespace Ogre
                                 const String &additionalTextureExtension ) const;
 
         /// @copydoc Hlms::_collectSamplerblocks
-        virtual void _collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,
+        virtual void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
                                             const HlmsDatablock *datablock ) const;
 #endif
     };
@@ -148,7 +145,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

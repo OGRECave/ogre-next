@@ -9,7 +9,7 @@
 
 #include "SdlEmulationLayer.h"
 #if OGRE_USE_SDL2
-    #include "SDL_keyboard.h"
+#    include "SDL_keyboard.h"
 #endif
 
 namespace Ogre
@@ -17,19 +17,19 @@ namespace Ogre
     class InstantRadiosity;
     class HlmsPbsDatablock;
     class IrradianceVolume;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
     class InstantRadiosityGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mLightNode;
-        Ogre::Light         *mLight;
-        Ogre::Light::LightTypes  mCurrentType;
+        Ogre::SceneNode *mLightNode;
+        Ogre::Light *mLight;
+        Ogre::Light::LightTypes mCurrentType;
 
-        Ogre::InstantRadiosity          *mInstantRadiosity;
-        Ogre::IrradianceVolume          *mIrradianceVolume;
-        Ogre::Real                      mIrradianceCellSize;
+        Ogre::InstantRadiosity *mInstantRadiosity;
+        Ogre::IrradianceVolume *mIrradianceVolume;
+        Ogre::Real mIrradianceCellSize;
 
         std::map<SDL_Keycode, SDL_Keysym> mKeysHold;
 
@@ -49,6 +49,6 @@ namespace Demo
         virtual void keyPressed( const SDL_KeyboardEvent &arg );
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

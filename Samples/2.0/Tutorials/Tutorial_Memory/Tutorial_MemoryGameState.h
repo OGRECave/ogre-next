@@ -2,14 +2,13 @@
 #ifndef _Demo_MemoryGameState_H_
 #define _Demo_MemoryGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
-#include "OgreOverlay.h"
 #include "OgreGpuResource.h"
-#include "OgreTextureGpuManagerListener.h"
+#include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreTextureGpuManagerListener.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
@@ -30,8 +29,8 @@ namespace Demo
 
         template <typename T, size_t MaxNumTextures>
         void unloadTexturesFromUnusedMaterials( Ogre::HlmsDatablock *datablock,
-                                                std::set<Ogre::TextureGpu*> &usedTex,
-                                                std::set<Ogre::TextureGpu*> &unusedTex );
+                                                std::set<Ogre::TextureGpu *> &usedTex,
+                                                std::set<Ogre::TextureGpu *> &unusedTex );
         /// Unloads textures that are only bound to unused materials/datablock
         void unloadTexturesFromUnusedMaterials();
 
@@ -57,6 +56,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

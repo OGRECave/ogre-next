@@ -9,29 +9,29 @@ namespace Demo
 {
     struct DebugDecalVisual
     {
-        Ogre::Item  *plane;
-        Ogre::Item  *cube;
+        Ogre::Item *plane;
+        Ogre::Item *cube;
         Ogre::SceneNode *sceneNode;
     };
 
     class DecalsGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-        size_t          mNumSpheres;
-        Ogre::uint8     mTransparencyMode;
-        float           mTransparencyValue;
+        size_t mNumSpheres;
+        Ogre::uint8 mTransparencyMode;
+        float mTransparencyValue;
 
         DebugDecalVisual *mDecalDebugVisual;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
         void createDecalDebugData();
-        DebugDecalVisual* attachDecalDebugHelper( Ogre::SceneNode *decalNode );
+        DebugDecalVisual *attachDecalDebugHelper( Ogre::SceneNode *decalNode );
         void destroyDecalDebugHelper( DebugDecalVisual *decalDebugVisual );
         void setTransparencyToMaterials();
 
@@ -45,6 +45,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

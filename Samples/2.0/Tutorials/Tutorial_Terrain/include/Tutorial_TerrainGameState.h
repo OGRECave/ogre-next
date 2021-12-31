@@ -36,7 +36,7 @@ namespace Ogre
 {
     class Terra;
     class HlmsPbsTerraShadows;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
@@ -63,6 +63,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

@@ -2,11 +2,10 @@
 #ifndef _Demo_Tutorial_TextureBakingGameState_H_
 #define _Demo_Tutorial_TextureBakingGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
 #include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
@@ -24,20 +23,20 @@ namespace Demo
 
     class Tutorial_TextureBakingGameState : public TutorialGameState
     {
-        Ogre::Light         *mAreaLights[c_numAreaLights];
-        Ogre::TextureGpu    *mAreaMaskTex;
+        Ogre::Light *mAreaLights[c_numAreaLights];
+        Ogre::TextureGpu *mAreaMaskTex;
 
-        Ogre::TextureGpu            *mBakedResult;
-        Ogre::CompositorWorkspace   *mBakedWorkspace;
-        Ogre::CompositorWorkspace   *mShowBakedTexWorkspace;
+        Ogre::TextureGpu *mBakedResult;
+        Ogre::CompositorWorkspace *mBakedWorkspace;
+        Ogre::CompositorWorkspace *mShowBakedTexWorkspace;
 
         Ogre::ResourceTransitionArray mResourceTransitions;
 
-        Ogre::Item      *mFloorRender;
-        Ogre::Item      *mFloorBaked;
+        Ogre::Item *mFloorRender;
+        Ogre::Item *mFloorBaked;
 
-        RenderingMode::RenderingMode    mRenderingMode;
-        bool            mBakeEveryFrame;
+        RenderingMode::RenderingMode mRenderingMode;
+        bool mBakeEveryFrame;
 
         /// Creates the Mesh for the billboards
         void createAreaPlaneMesh();
@@ -45,7 +44,7 @@ namespace Demo
         /// emitting so that it can use the same texture the light is using.
         ///
         /// Must be called again whenever the texture changes (i.e. setupLightTexture was called)
-        Ogre::HlmsDatablock* setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
+        Ogre::HlmsDatablock *setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
         /// Creates a billboard showing where the given light is emitting
         void createPlaneForAreaLight( Ogre::Light *light, size_t idx );
 
@@ -70,6 +69,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

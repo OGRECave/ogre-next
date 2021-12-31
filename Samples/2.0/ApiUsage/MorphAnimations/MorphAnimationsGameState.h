@@ -14,17 +14,17 @@ namespace Demo
 {
     class MorphAnimationsGameState : public TutorialGameState
     {
-        Ogre::Item* mSmileyItem;
-        Ogre::Item* mSpringItem;
-        Ogre::Item* mBlobItem;
+        Ogre::Item *mSmileyItem;
+        Ogre::Item *mSpringItem;
+        Ogre::Item *mBlobItem;
         float mAccumulator;
-        
+
     public:
-        MorphAnimationsGameState(const Ogre::String &helpDescription);
+        MorphAnimationsGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01();
-        virtual void update(float timeSinceLast);
+        virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

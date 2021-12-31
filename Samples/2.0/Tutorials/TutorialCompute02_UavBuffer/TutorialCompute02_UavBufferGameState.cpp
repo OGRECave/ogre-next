@@ -2,14 +2,14 @@
 #include "TutorialCompute02_UavBufferGameState.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
-#include "OgreItem.h"
-#include "OgreRoot.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreItem.h"
 #include "OgreMaterialManager.h"
-#include "OgreTechnique.h"
 #include "OgrePass.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreTechnique.h"
 #include "OgreWindow.h"
 
 using namespace Demo;
@@ -17,7 +17,7 @@ using namespace Demo;
 namespace Demo
 {
     TutorialCompute02_UavBufferGameState::TutorialCompute02_UavBufferGameState(
-            const Ogre::String &helpDescription ) :
+        const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mSceneNode( 0 ),
         mDisplacement( 0 ),
@@ -31,30 +31,27 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::Item *item = sceneManager->createItem( "Cube_d.mesh",
-                                                     Ogre::ResourceGroupManager::
-                                                     AUTODETECT_RESOURCE_GROUP_NAME,
-                                                     Ogre::SCENE_DYNAMIC );
+        Ogre::Item *item = sceneManager->createItem(
+            "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::SCENE_DYNAMIC );
 
-        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
         mSceneNode->attachObject( item );
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::HlmsCompute *hlmsCompute = root->getHlmsManager()->getComputeHlms();
         mComputeJob = hlmsCompute->findComputeJob( "TestJob" );
-        mDrawFromUavBufferMat = Ogre::MaterialManager::getSingleton().load(
-                    "DrawFromUavBuffer", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ).
-                staticCast<Ogre::Material>();
+        mDrawFromUavBufferMat =
+            Ogre::MaterialManager::getSingleton()
+                .load( "DrawFromUavBuffer", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
+                .staticCast<Ogre::Material>();
 
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void TutorialCompute02_UavBufferGameState::destroyScene()
-    {
-        mDrawFromUavBufferMat.setNull();
-    }
+    void TutorialCompute02_UavBufferGameState::destroyScene() { mDrawFromUavBufferMat.setNull(); }
     //-----------------------------------------------------------------------------------
     void TutorialCompute02_UavBufferGameState::update( float timeSinceLast )
     {
@@ -73,27 +70,28 @@ namespace Demo
             res[0] = renderWindow->getWidth();
             res[1] = renderWindow->getHeight();
 
-            //Update the compute shader's
+            // Update the compute shader's
             Ogre::ShaderParams &shaderParams = mComputeJob->getShaderParams( "default" );
             Ogre::ShaderParams::Param *texResolution = shaderParams.findParameter( "texResolution" );
-            texResolution->setManualValue( res, sizeof(res) / sizeof(Ogre::uint32) );
+            texResolution->setManualValue( res, sizeof( res ) / sizeof( Ogre::uint32 ) );
             shaderParams.setDirty();
 
-            mComputeJob->setNumThreadGroups( (res[0] + mComputeJob->getThreadsPerGroupX() - 1u) /
-                                             mComputeJob->getThreadsPerGroupX(),
-                                             (res[1] + mComputeJob->getThreadsPerGroupY() - 1u) /
-                                             mComputeJob->getThreadsPerGroupY(), 1u );
+            mComputeJob->setNumThreadGroups( ( res[0] + mComputeJob->getThreadsPerGroupX() - 1u ) /
+                                                 mComputeJob->getThreadsPerGroupX(),
+                                             ( res[1] + mComputeJob->getThreadsPerGroupY() - 1u ) /
+                                                 mComputeJob->getThreadsPerGroupY(),
+                                             1u );
 
-            //Update the pass that draws the UAV Buffer into the RTT (we could
-            //use auto param viewport_size, but this more flexible)
-            Ogre::GpuProgramParametersSharedPtr psParams = mDrawFromUavBufferMat->getTechnique(0)->
-                    getPass(0)->getFragmentProgramParameters();
+            // Update the pass that draws the UAV Buffer into the RTT (we could
+            // use auto param viewport_size, but this more flexible)
+            Ogre::GpuProgramParametersSharedPtr psParams =
+                mDrawFromUavBufferMat->getTechnique( 0 )->getPass( 0 )->getFragmentProgramParameters();
             psParams->setNamedConstant( "texResolution", res, 1u, 2u );
 
-            mLastWindowWidth  = renderWindow->getWidth();
+            mLastWindowWidth = renderWindow->getWidth();
             mLastWindowHeight = renderWindow->getHeight();
         }
 
         TutorialGameState::update( timeSinceLast );
     }
-}
+}  // namespace Demo

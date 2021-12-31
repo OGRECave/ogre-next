@@ -11,7 +11,7 @@ namespace Demo
     class BaseSystem : public Mq::MessageQueueSystem
     {
     protected:
-        GameState   *mCurrentGameState;
+        GameState *mCurrentGameState;
 
     public:
         BaseSystem( GameState *gameState );
@@ -30,6 +30,6 @@ namespace Demo
         void finishFrameParallel();
         void finishFrame();
     };
-}
+}  // namespace Demo
 
 #endif

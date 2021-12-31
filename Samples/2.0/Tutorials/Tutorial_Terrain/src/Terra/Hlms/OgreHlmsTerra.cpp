@@ -27,57 +27,57 @@ THE SOFTWARE.
 */
 
 #include "Terra/Hlms/OgreHlmsTerra.h"
-#include "Terra/Hlms/OgreHlmsTerraDatablock.h"
-#include "OgreHlmsManager.h"
 #include "OgreHlmsListener.h"
+#include "OgreHlmsManager.h"
 #include "OgreLwString.h"
+#include "Terra/Hlms/OgreHlmsTerraDatablock.h"
 
 #if !OGRE_NO_JSON
-    #include "Terra/Hlms/OgreHlmsJsonTerra.h"
+#    include "Terra/Hlms/OgreHlmsJsonTerra.h"
 #endif
 
-#include "OgreViewport.h"
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreHighLevelGpuProgram.h"
-#include "OgreForward3D.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
-#include "OgreIrradianceVolume.h"
 #include "OgreCamera.h"
+#include "OgreForward3D.h"
+#include "OgreHighLevelGpuProgram.h"
+#include "OgreHighLevelGpuProgramManager.h"
+#include "OgreIrradianceVolume.h"
+#include "OgreViewport.h"
 
-#include "OgreSceneManager.h"
-#include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-#include "Vao/OgreVaoManager.h"
+#include "OgreRenderQueue.h"
+#include "OgreSceneManager.h"
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
-#include "CommandBuffer/OgreCommandBuffer.h"
-#include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "CommandBuffer/OgreCbTexture.h"
+#include "CommandBuffer/OgreCommandBuffer.h"
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-    #include "OgrePlanarReflections.h"
+#    include "OgrePlanarReflections.h"
 #endif
 
 #include "Terra/Terra.h"
 
 namespace Ogre
 {
-    const IdString TerraProperty::UseSkirts         = IdString( "use_skirts" );
-    const IdString TerraProperty::ZUp               = IdString( "z_up" );
+    const IdString TerraProperty::UseSkirts = IdString( "use_skirts" );
+    const IdString TerraProperty::ZUp = IdString( "z_up" );
 
-    const char *TerraProperty::DiffuseMap           = "diffuse_map";
-    const char *TerraProperty::EnvProbeMap          = "envprobe_map";
-    const char *TerraProperty::DetailWeightMap      = "detail_weight_map";
-    const char *TerraProperty::DetailMapN           = "detail_map";     //detail_map0-4
-    const char *TerraProperty::DetailMapNmN         = "detail_map_nm";  //detail_map_nm0-4
-    const char *TerraProperty::RoughnessMap         = "roughness_map";
-    const char *TerraProperty::MetalnessMap         = "metalness_map";
+    const char *TerraProperty::DiffuseMap = "diffuse_map";
+    const char *TerraProperty::EnvProbeMap = "envprobe_map";
+    const char *TerraProperty::DetailWeightMap = "detail_weight_map";
+    const char *TerraProperty::DetailMapN = "detail_map";       // detail_map0-4
+    const char *TerraProperty::DetailMapNmN = "detail_map_nm";  // detail_map_nm0-4
+    const char *TerraProperty::RoughnessMap = "roughness_map";
+    const char *TerraProperty::MetalnessMap = "metalness_map";
 
     HlmsTerra::HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders ) :
         HlmsPbs( dataFolder, libraryFolders ),
         mLastMovableObject( 0 )
     {
-        //Override defaults
+        // Override defaults
         mType = HLMS_USER3;
         mTypeName = "Terra";
         mTypeNameStr = "Terra";
@@ -86,15 +86,12 @@ namespace Ogre
         mOptimizationStrategy = LowerGpuOverhead;
         mSetupWorldMatBuf = false;
         mReservedTexBufferSlots = 0u;
-        mReservedTexSlots = 3u; //heightMap, terrainNormals & terrainShadows
+        mReservedTexSlots = 3u;  // heightMap, terrainNormals & terrainShadows
 
         mSkipRequestSlotInChangeRS = true;
     }
     //-----------------------------------------------------------------------------------
-    HlmsTerra::~HlmsTerra()
-    {
-        destroyAllBuffers();
-    }
+    HlmsTerra::~HlmsTerra() { destroyAllBuffers(); }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_linkTerra( Terra *terra )
     {
@@ -133,13 +130,13 @@ namespace Ogre
         if( newRs )
         {
             HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-            HlmsDatablockMap::const_iterator end  = mDatablocks.end();
+            HlmsDatablockMap::const_iterator end = mDatablocks.end();
 
             while( itor != end )
             {
-                assert( dynamic_cast<HlmsTerraDatablock*>( itor->second.datablock ) );
+                assert( dynamic_cast<HlmsTerraDatablock *>( itor->second.datablock ) );
                 HlmsTerraDatablock *datablock =
-                        static_cast<HlmsTerraDatablock*>( itor->second.datablock );
+                    static_cast<HlmsTerraDatablock *>( itor->second.datablock );
 
                 requestSlot( datablock->mTextureHash, datablock, false );
                 ++itor;
@@ -152,16 +149,14 @@ namespace Ogre
         int32 minNormalMap = 4;
         bool hasDiffuseMaps = false;
         bool hasNormalMaps = false;
-        for( uint8 i=0; i<4u; ++i )
+        for( uint8 i = 0; i < 4u; ++i )
         {
-            setDetailTextureProperty( TerraProperty::DetailMapN,   datablock,
-                                      TERRA_DETAIL0, i );
-            setDetailTextureProperty( TerraProperty::DetailMapNmN, datablock,
-                                      TERRA_DETAIL0_NM, i );
-            setDetailTextureProperty( TerraProperty::RoughnessMap, datablock,
-                                      TERRA_DETAIL_ROUGHNESS0, i );
-            setDetailTextureProperty( TerraProperty::MetalnessMap, datablock,
-                                      TERRA_DETAIL_METALNESS0, i );
+            setDetailTextureProperty( TerraProperty::DetailMapN, datablock, TERRA_DETAIL0, i );
+            setDetailTextureProperty( TerraProperty::DetailMapNmN, datablock, TERRA_DETAIL0_NM, i );
+            setDetailTextureProperty( TerraProperty::RoughnessMap, datablock, TERRA_DETAIL_ROUGHNESS0,
+                                      i );
+            setDetailTextureProperty( TerraProperty::MetalnessMap, datablock, TERRA_DETAIL_METALNESS0,
+                                      i );
 
             if( datablock->getTexture( TERRA_DETAIL0 + i ) )
                 hasDiffuseMaps = true;
@@ -192,26 +187,26 @@ namespace Ogre
         if( idx != NUM_TERRA_TEXTURE_TYPES )
         {
             char tmpData[64];
-            LwString propName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+            LwString propName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
 
-            propName = propertyName; //diffuse_map
+            propName = propertyName;  // diffuse_map
 
-            const size_t basePropSize = propName.size(); // diffuse_map
+            const size_t basePropSize = propName.size();  // diffuse_map
 
-            //In the template the we subtract the "+1" for the index.
-            //We need to increment it now otherwise @property( diffuse_map )
-            //can translate to @property( 0 ) which is not what we want.
+            // In the template the we subtract the "+1" for the index.
+            // We need to increment it now otherwise @property( diffuse_map )
+            // can translate to @property( 0 ) which is not what we want.
             setProperty( propertyName, idx + 1 );
 
             propName.resize( basePropSize );
-            propName.a( "_idx" ); //diffuse_map_idx
+            propName.a( "_idx" );  // diffuse_map_idx
             setProperty( propName.c_str(), idx );
 
             if( mHasSeparateSamplers )
             {
                 const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propName.resize( basePropSize );
-                propName.a( "_sampler" );           //diffuse_map_sampler
+                propName.a( "_sampler" );  // diffuse_map_sampler
                 setProperty( propName.c_str(), samplerIdx );
             }
         }
@@ -225,26 +220,26 @@ namespace Ogre
         if( idx != NUM_TERRA_TEXTURE_TYPES )
         {
             char tmpData[64];
-            LwString propName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+            LwString propName = LwString::FromEmptyPointer( tmpData, sizeof( tmpData ) );
 
-            propName.a( propertyName, detailIdx ); //detail_map0
+            propName.a( propertyName, detailIdx );  // detail_map0
 
-            const size_t basePropSize = propName.size(); // diffuse_map
+            const size_t basePropSize = propName.size();  // diffuse_map
 
-            //In the template the we subtract the "+1" for the index.
-            //We need to increment it now otherwise @property( diffuse_map )
-            //can translate to @property( 0 ) which is not what we want.
+            // In the template the we subtract the "+1" for the index.
+            // We need to increment it now otherwise @property( diffuse_map )
+            // can translate to @property( 0 ) which is not what we want.
             setProperty( propName.c_str(), idx + 1 );
 
             propName.resize( basePropSize );
-            propName.a( "_idx" ); //detail_map0_idx
+            propName.a( "_idx" );  // detail_map0_idx
             setProperty( propName.c_str(), idx );
 
             if( mHasSeparateSamplers )
             {
                 const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propName.resize( basePropSize );
-                propName.a( "_sampler" );           //detail_map0_sampler
+                propName.a( "_sampler" );  // detail_map0_sampler
                 setProperty( propName.c_str(), samplerIdx );
             }
         }
@@ -252,11 +247,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerra::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
     {
-        assert( dynamic_cast<HlmsTerraDatablock*>( renderable->getDatablock() ) );
-        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>( renderable->getDatablock() );
-        if( datablock->getDirtyFlags() & (DirtyTextures|DirtySamplers) )
+        assert( dynamic_cast<HlmsTerraDatablock *>( renderable->getDatablock() ) );
+        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock *>( renderable->getDatablock() );
+        if( datablock->getDirtyFlags() & ( DirtyTextures | DirtySamplers ) )
         {
-            //Delay hash generation for later, when we have the final (or temporary) descriptor sets.
+            // Delay hash generation for later, when we have the final (or temporary) descriptor sets.
             outHash = 0;
             outCasterHash = 0;
         }
@@ -270,7 +265,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerra::calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces )
     {
-        assert( dynamic_cast<TerrainCell*>(renderable) &&
+        assert( dynamic_cast<TerrainCell *>( renderable ) &&
                 "This Hlms can only be used on a Terra object!" );
 
         // Disable normal offset bias because the world normals are not available in the
@@ -279,12 +274,12 @@ namespace Ogre
         // has no self occlussion artifacts.
         setProperty( "skip_normal_offset_bias_vs", 1 );
 
-        TerrainCell *terrainCell = static_cast<TerrainCell*>(renderable);
+        TerrainCell *terrainCell = static_cast<TerrainCell *>( renderable );
         setProperty( TerraProperty::UseSkirts, terrainCell->getUseSkirts() );
         setProperty( TerraProperty::ZUp, terrainCell->isZUp() );
 
-        assert( dynamic_cast<HlmsTerraDatablock*>( renderable->getDatablock() ) );
-        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>( renderable->getDatablock() );
+        assert( dynamic_cast<HlmsTerraDatablock *>( renderable->getDatablock() ) );
+        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock *>( renderable->getDatablock() );
 
         setProperty( PbsProperty::FresnelScalar, 1 );
         setProperty( PbsProperty::FresnelWorkflow, 0 );
@@ -293,16 +288,16 @@ namespace Ogre
         setProperty( PbsProperty::ReceiveShadows, 1 );
 
         uint32 brdf = datablock->getBrdf();
-        if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::Default )
+        if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::Default )
         {
             setProperty( PbsProperty::BrdfDefault, 1 );
 
-            if( !(brdf & TerraBrdf::FLAG_UNCORRELATED) )
+            if( !( brdf & TerraBrdf::FLAG_UNCORRELATED ) )
                 setProperty( PbsProperty::GgxHeightCorrelated, 1 );
         }
-        else if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::CookTorrance )
+        else if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::CookTorrance )
             setProperty( PbsProperty::BrdfCookTorrance, 1 );
-        else if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::BlinnPhong )
+        else if( ( brdf & TerraBrdf::BRDF_MASK ) == TerraBrdf::BlinnPhong )
             setProperty( PbsProperty::BrdfBlinnPhong, 1 );
 
         if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
@@ -330,47 +325,48 @@ namespace Ogre
             setProperty( PbsProperty::NumTextures,
                          datablock->mTexturesDescSet->mTextures.size() - envMap );
 
-            setTextureProperty( PbsProperty::DiffuseMap,    datablock,  TERRA_DIFFUSE );
-            setTextureProperty( PbsProperty::EnvProbeMap,   datablock,  TERRA_REFLECTION );
-            setTextureProperty( PbsProperty::DetailWeightMap,datablock, TERRA_DETAIL_WEIGHT );
+            setTextureProperty( PbsProperty::DiffuseMap, datablock, TERRA_DIFFUSE );
+            setTextureProperty( PbsProperty::EnvProbeMap, datablock, TERRA_REFLECTION );
+            setTextureProperty( PbsProperty::DetailWeightMap, datablock, TERRA_DETAIL_WEIGHT );
 
-            //Save the name of the cubemap for hazard prevention
+            // Save the name of the cubemap for hazard prevention
             //(don't sample the cubemap and render to it at the same time).
             const TextureGpu *reflectionTexture = datablock->getTexture( TERRA_REFLECTION );
             if( reflectionTexture )
             {
-                //Manual reflection texture
-//                if( datablock->getCubemapProbe() )
-//                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
+                // Manual reflection texture
+                //                if( datablock->getCubemapProbe() )
+                //                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
                 setProperty( PbsProperty::EnvProbeMap,
                              static_cast<int32>( reflectionTexture->getName().mHash ) );
             }
         }
 
         bool usesNormalMap = false;
-        for( uint8 i=TERRA_DETAIL0_NM; i<=TERRA_DETAIL3_NM; ++i )
+        for( uint8 i = TERRA_DETAIL0_NM; i <= TERRA_DETAIL3_NM; ++i )
             usesNormalMap |= datablock->getTexture( i ) != 0;
         setProperty( PbsProperty::NormalMap, usesNormalMap );
 
         if( usesNormalMap )
         {
-//            TextureGpu *normalMapTex = datablock->getTexture( TERRA_DETAIL0_NM );
-//            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
+            //            TextureGpu *normalMapTex = datablock->getTexture( TERRA_DETAIL0_NM );
+            //            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
             {
                 setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
                 setProperty( PbsProperty::NormalRgSnorm, PbsProperty::NormalRgSnorm.mHash );
             }
-//            else
-//            {
-//                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgUnorm.mHash );
-//                setProperty( PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
-//            }
-            //Reserved for supporting LA textures in GLES2.
-//            else
-//            {
-//                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash );
-//                setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
-//            }
+            //            else
+            //            {
+            //                setProperty( PbsProperty::NormalSamplingFormat,
+            //                PbsProperty::NormalRgUnorm.mHash ); setProperty(
+            //                PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
+            //            }
+            // Reserved for supporting LA textures in GLES2.
+            //            else
+            //            {
+            //                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash
+            //                ); setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
+            //            }
         }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
@@ -404,8 +400,8 @@ namespace Ogre
         setTextureReg( VertexShader, "heightMap", texSlotsStart + 0 );
         if( !getProperty( HlmsBaseProp::ShadowCaster ) )
         {
-                setTextureReg( PixelShader, "terrainNormals", texSlotsStart + 1 );
-                setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
+            setTextureReg( PixelShader, "terrainNormals", texSlotsStart + 1 );
+            setTextureReg( PixelShader, "terrainShadows", texSlotsStart + 2 );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -449,8 +445,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                      bool casterPass, uint32 lastCacheHash,
-                                      uint32 lastTextureHash )
+                                      bool casterPass, uint32 lastCacheHash, uint32 lastTextureHash )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Trying to use slow-path on a desktop implementation. "
@@ -458,44 +453,38 @@ namespace Ogre
                      "HlmsTerra::fillBuffersFor" );
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsTerra::fillBuffersForV1( const HlmsCache *cache,
-                                        const QueuedRenderable &queuedRenderable,
+    uint32 HlmsTerra::fillBuffersForV1( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                         bool casterPass, uint32 lastCacheHash,
                                         CommandBuffer *commandBuffer )
     {
-        return fillBuffersFor( cache, queuedRenderable, casterPass,
-                               lastCacheHash, commandBuffer, true );
+        return fillBuffersFor( cache, queuedRenderable, casterPass, lastCacheHash, commandBuffer, true );
     }
     //-----------------------------------------------------------------------------------
-    uint32 HlmsTerra::fillBuffersForV2( const HlmsCache *cache,
-                                        const QueuedRenderable &queuedRenderable,
+    uint32 HlmsTerra::fillBuffersForV2( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                         bool casterPass, uint32 lastCacheHash,
                                         CommandBuffer *commandBuffer )
     {
-        return fillBuffersFor( cache, queuedRenderable, casterPass,
-                               lastCacheHash, commandBuffer, false );
+        return fillBuffersFor( cache, queuedRenderable, casterPass, lastCacheHash, commandBuffer,
+                               false );
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                       bool casterPass, uint32 lastCacheHash,
                                       CommandBuffer *commandBuffer, bool isV1 )
     {
-        assert( dynamic_cast<const HlmsTerraDatablock*>( queuedRenderable.renderable->getDatablock() ) );
-        const HlmsTerraDatablock *datablock = static_cast<const HlmsTerraDatablock*>(
-                                                queuedRenderable.renderable->getDatablock() );
+        assert(
+            dynamic_cast<const HlmsTerraDatablock *>( queuedRenderable.renderable->getDatablock() ) );
+        const HlmsTerraDatablock *datablock =
+            static_cast<const HlmsTerraDatablock *>( queuedRenderable.renderable->getDatablock() );
 
         if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != mType )
         {
-            //layout(binding = 0) uniform PassBuffer {} pass
-            ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer-1];
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           0, passBuffer, 0,
-                                                                           passBuffer->
-                                                                           getTotalSizeBytes() );
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
-                                                                           0, passBuffer, 0,
-                                                                           passBuffer->
-                                                                           getTotalSizeBytes() );
+            // layout(binding = 0) uniform PassBuffer {} pass
+            ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer - 1];
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( PixelShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
 
             size_t texUnit = mReservedTexBufferSlots;
 
@@ -504,9 +493,9 @@ namespace Ogre
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                            CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
+                        CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                            CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
+                        CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
                 }
 
                 texUnit += mReservedTexSlots;
@@ -514,21 +503,20 @@ namespace Ogre
                 if( !mPrePassTextures->empty() )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, (*mPrePassTextures)[0], 0 );
+                        CbTexture( texUnit++, ( *mPrePassTextures )[0], 0 );
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, (*mPrePassTextures)[1], 0 );
+                        CbTexture( texUnit++, ( *mPrePassTextures )[1], 0 );
                 }
 
                 if( mPrePassMsaaDepthTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
+                        CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
                 }
 
                 if( mSsrTexture )
                 {
-                    *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, mSsrTexture, 0 );
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit++, mSsrTexture, 0 );
                 }
 
                 if( mIrradianceVolume )
@@ -536,47 +524,42 @@ namespace Ogre
                     TextureGpu *irradianceTex = mIrradianceVolume->getIrradianceVolumeTexture();
                     const HlmsSamplerblock *samplerblock = mIrradianceVolume->getIrradSamplerblock();
 
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                         irradianceTex,
-                                                                         samplerblock );
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit, irradianceTex, samplerblock );
                     ++texUnit;
                 }
 
                 if( mUsingAreaLightMasks )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                         mAreaLightMasks,
-                                                                         mAreaLightMasksSamplerblock );
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit, mAreaLightMasks, mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
 
                 if( mLtcMatrixTexture )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                         mLtcMatrixTexture,
-                                                                         mAreaLightMasksSamplerblock );
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit, mLtcMatrixTexture, mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
 
-                for( size_t i=0; i<3u; ++i )
+                for( size_t i = 0; i < 3u; ++i )
                 {
-                    if( mDecalsTextures[i] &&
-                        (i != 2u || !mDecalsDiffuseMergedEmissive) )
+                    if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
                     {
-                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                             mDecalsTextures[i],
-                                                                             mDecalsSamplerblock );
+                        *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit, mDecalsTextures[i], mDecalsSamplerblock );
                         ++texUnit;
                     }
                 }
 
-                //We changed HlmsType, rebind the shared textures.
-                FastArray<TextureGpu*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
-                FastArray<TextureGpu*>::const_iterator end  = mPreparedPass.shadowMaps.end();
+                // We changed HlmsType, rebind the shared textures.
+                FastArray<TextureGpu *>::const_iterator itor = mPreparedPass.shadowMaps.begin();
+                FastArray<TextureGpu *>::const_iterator end = mPreparedPass.shadowMaps.end();
                 while( itor != end )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, *itor,
-                                                                         mCurrentShadowmapSamplerblock );
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit, *itor, mCurrentShadowmapSamplerblock );
                     ++texUnit;
                     ++itor;
                 }
@@ -585,9 +568,9 @@ namespace Ogre
                 {
                     TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBindTexture();
                     const HlmsSamplerblock *samplerblock =
-                            mParallaxCorrectedCubemap->getBindTrilinearSamplerblock();
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, pccTexture,
-                                                                         samplerblock );
+                        mParallaxCorrectedCubemap->getBindTrilinearSamplerblock();
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit, pccTexture, samplerblock );
                     ++texUnit;
                 }
             }
@@ -597,18 +580,18 @@ namespace Ogre
             mLastMovableObject = 0;
             mLastBoundPool = 0;
 
-            //layout(binding = 2) uniform InstanceBuffer {} instance
+            // layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
-                (size_t)((mCurrentMappedConstBuffer - mStartMappedConstBuffer) + 4) <=
+                ( size_t )( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
                     mCurrentConstBufferSize )
             {
                 *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( VertexShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
+                    CbShaderBuffer( VertexShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
                 *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
+                    CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
             }
 
-            //rebindTexBuffer( commandBuffer );
+            // rebindTexBuffer( commandBuffer );
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mLastBoundPlanarReflection = 0u;
@@ -616,27 +599,25 @@ namespace Ogre
             mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock, 0u );
         }
 
-        //Don't bind the material buffer on caster passes (important to keep
-        //MDI & auto-instancing running on shadow map passes)
+        // Don't bind the material buffer on caster passes (important to keep
+        // MDI & auto-instancing running on shadow map passes)
         if( mLastBoundPool != datablock->getAssignedPool() )
         {
-            //layout(binding = 1) uniform MaterialBuf {} materialArray
+            // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           1, newPool->materialBuffer, 0,
-                                                                           newPool->materialBuffer->
-                                                                           getTotalSizeBytes() );
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
-                                                                           1, newPool->materialBuffer, 0,
-                                                                           newPool->materialBuffer->
-                                                                           getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, 1, newPool->materialBuffer, 0,
+                                newPool->materialBuffer->getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( PixelShader, 1, newPool->materialBuffer, 0,
+                                newPool->materialBuffer->getTotalSizeBytes() );
             mLastBoundPool = newPool;
         }
 
         if( mLastMovableObject != queuedRenderable.movableObject )
         {
-            //Different Terra? Must change textures then.
-            const Terra *terraObj = static_cast<const Terra*>( queuedRenderable.movableObject );
+            // Different Terra? Must change textures then.
+            const Terra *terraObj = static_cast<const Terra *>( queuedRenderable.movableObject );
             *commandBuffer->addCommand<CbTexture>() =
                 CbTexture( mTexBufUnitSlotEnd + 0u, terraObj->getHeightMapTex() );
             if( !casterPass )
@@ -654,20 +635,20 @@ namespace Ogre
             mLastMovableObject = queuedRenderable.movableObject;
         }
 
-        uint32 * RESTRICT_ALIAS currentMappedConstBuffer    = mCurrentMappedConstBuffer;
+        uint32 *RESTRICT_ALIAS currentMappedConstBuffer = mCurrentMappedConstBuffer;
 
         //---------------------------------------------------------------------------
         //                          ---- VERTEX SHADER ----
         //---------------------------------------------------------------------------
-        //We need to correct currentMappedConstBuffer to point to the right texture buffer's
-        //offset, which may not be in sync if the previous draw had skeletal animation.
-        bool exceedsConstBuffer = (size_t)((currentMappedConstBuffer - mStartMappedConstBuffer) + 12)
-                                    > mCurrentConstBufferSize;
+        // We need to correct currentMappedConstBuffer to point to the right texture buffer's
+        // offset, which may not be in sync if the previous draw had skeletal animation.
+        bool exceedsConstBuffer = ( size_t )( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
+                                              12 ) > mCurrentConstBufferSize;
 
         if( exceedsConstBuffer )
             currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
 
-        const TerrainCell *terrainCell = static_cast<const TerrainCell*>( queuedRenderable.renderable );
+        const TerrainCell *terrainCell = static_cast<const TerrainCell *>( queuedRenderable.renderable );
 
         terrainCell->uploadToGpu( currentMappedConstBuffer );
         currentMappedConstBuffer += 16u;
@@ -679,15 +660,13 @@ namespace Ogre
         if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-            if( mHasPlanarReflections &&
-                (queuedRenderable.renderable->mCustomParameter & 0x80) &&
+            if( mHasPlanarReflections && ( queuedRenderable.renderable->mCustomParameter & 0x80 ) &&
                 mLastBoundPlanarReflection != queuedRenderable.renderable->mCustomParameter )
             {
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
                 TextureGpu *planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
                 *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( mTexUnitSlotStart - 1u, planarReflTex,
-                                   mPlanarReflectionsSamplerblock );
+                    CbTexture( mTexUnitSlotStart - 1u, planarReflTex, mPlanarReflectionsSamplerblock );
                 mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
             }
 #endif
@@ -695,19 +674,18 @@ namespace Ogre
             {
                 if( datablock->mTexturesDescSet )
                 {
-                    //Rebind textures
+                    // Rebind textures
                     size_t texUnit = mTexUnitSlotStart;
 
-                    *commandBuffer->addCommand<CbTextures>() =
-                            CbTextures( texUnit, std::numeric_limits<uint16>::max(),
-                                        datablock->mTexturesDescSet );
+                    *commandBuffer->addCommand<CbTextures>() = CbTextures(
+                        texUnit, std::numeric_limits<uint16>::max(), datablock->mTexturesDescSet );
 
                     if( !mHasSeparateSamplers )
                     {
                         *commandBuffer->addCommand<CbSamplers>() =
-                                CbSamplers( texUnit, datablock->mSamplersDescSet );
+                            CbSamplers( texUnit, datablock->mSamplersDescSet );
                     }
-                    //texUnit += datablock->mTexturesDescSet->mTextures.size();
+                    // texUnit += datablock->mTexturesDescSet->mTextures.size();
                 }
 
                 mLastDescTexture = datablock->mTexturesDescSet;
@@ -717,32 +695,32 @@ namespace Ogre
             {
                 if( datablock->mSamplersDescSet )
                 {
-                    //Bind samplers
+                    // Bind samplers
                     size_t texUnit = mTexUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
-                            CbSamplers( texUnit, datablock->mSamplersDescSet );
+                        CbSamplers( texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;
                 }
             }
         }
 
-        mCurrentMappedConstBuffer   = currentMappedConstBuffer;
+        mCurrentMappedConstBuffer = currentMappedConstBuffer;
 
-        return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 4) - 1;
+        return ( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) >> 4 ) - 1;
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )
     {
-        //We need to know what RenderSystem is currently in use, as the
-        //name of the compatible shading language is part of the path
+        // We need to know what RenderSystem is currently in use, as the
+        // name of the compatible shading language is part of the path
         Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
         Ogre::String shaderSyntax = "GLSL";
-        if (renderSystem->getName() == "Direct3D11 Rendering Subsystem")
+        if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
             shaderSyntax = "HLSL";
-        else if (renderSystem->getName() == "Metal Rendering Subsystem")
+        else if( renderSystem->getName() == "Metal Rendering Subsystem" )
             shaderSyntax = "Metal";
 
-        //Fill the library folder paths with the relevant folders
+        // Fill the library folder paths with the relevant folders
         outLibraryFoldersPaths.clear();
         outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
@@ -750,7 +728,7 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
         outLibraryFoldersPaths.push_back( "Hlms/Terra/Any" );
 
-        //Fill the data folder path
+        // Fill the data folder path
         outDataFolderPath = "Hlms/Terra/" + shaderSyntax;
     }
 #if !OGRE_NO_JSON
@@ -768,22 +746,22 @@ namespace Ogre
                                HlmsJsonListener *listener,
                                const String &additionalTextureExtension ) const
     {
-//        HlmsJsonTerra jsonTerra( mHlmsManager );
-//        jsonTerra.saveMaterial( datablock, outString );
+        //        HlmsJsonTerra jsonTerra( mHlmsManager );
+        //        jsonTerra.saveMaterial( datablock, outString );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerra::_collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,
-                                         const HlmsDatablock *datablock ) const
+    void HlmsTerra::_collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
+                                           const HlmsDatablock *datablock ) const
     {
         HlmsJsonTerra::collectSamplerblocks( datablock, outSamplerblocks );
     }
 #endif
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* HlmsTerra::createDatablockImpl( IdString datablockName,
+    HlmsDatablock *HlmsTerra::createDatablockImpl( IdString datablockName,
                                                    const HlmsMacroblock *macroblock,
                                                    const HlmsBlendblock *blendblock,
                                                    const HlmsParamVec &paramVec )
     {
         return OGRE_NEW HlmsTerraDatablock( datablockName, this, macroblock, blendblock, paramVec );
     }
-}
+}  // namespace Ogre

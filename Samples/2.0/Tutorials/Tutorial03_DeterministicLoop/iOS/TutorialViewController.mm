@@ -33,9 +33,9 @@ THE SOFTWARE.
 
 #include "OgreWindow.h"
 
+#include "GameState.h"
 #include "GraphicsSystem.h"
 #include "LogicSystem.h"
-#include "GameState.h"
 
 #include "System/MainEntryPoints.h"
 
@@ -57,13 +57,11 @@ extern int gCurrentFrameTimeIdx;
     double _accumTimeError;
 }
 
--(void)dealloc
-{
+- (void)dealloc {
     [self shutdownOgre];
 }
 
--(void)shutdownOgre
-{
+- (void)shutdownOgre {
     if( _graphicsGameState )
     {
         _graphicsSystem->destroyScene();
@@ -75,8 +73,7 @@ extern int gCurrentFrameTimeIdx;
     _graphicsSystem = 0;
 }
 
--(void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     if( !_graphicsSystem )
@@ -88,7 +85,7 @@ extern int gCurrentFrameTimeIdx;
         _graphicsSystem->createScene02();
     }
 
-    //Connect the UIView created by Ogre to our UIViewController
+    // Connect the UIView created by Ogre to our UIViewController
     Ogre::Window *renderWindow = _graphicsSystem->getRenderWindow();
     void *uiViewPtr = 0;
     renderWindow->getCustomAttribute( "UIView", &uiViewPtr );
@@ -96,27 +93,24 @@ extern int gCurrentFrameTimeIdx;
     self.view = uiView;
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    //Create the timer required by Metal. iOS will call us at fixed intervals.
+    // Create the timer required by Metal. iOS will call us at fixed intervals.
     if( _timer )
     {
         [_timer invalidate];
         _timer = nullptr;
     }
     // create a game loop timer using a display link
-    _timer = [[UIScreen mainScreen] displayLinkWithTarget:self
-                                                 selector:@selector(mainLoop)];
-    _timer.frameInterval = 1; //VSync to 60 FPS
+    _timer = [[UIScreen mainScreen] displayLinkWithTarget:self selector:@selector( mainLoop )];
+    _timer.frameInterval = 1;  // VSync to 60 FPS
     [_timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 
     _accumTimeError = 0;
 }
 
--(void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     if( _timer )
     {
         [_timer invalidate];
@@ -128,24 +122,23 @@ extern int gCurrentFrameTimeIdx;
     [super viewWillDisappear:animated];
 }
 
--(void)mainLoop
-{
+- (void)mainLoop {
     const double updateFrequency = _timer.duration;
     const double timerTimestamp = _timer.timestamp;
 
     _accumTimeError += std::min( 1.0, _timer.duration * _timer.frameInterval );
 
-    OgreMetalView *ogreMetalView = (OgreMetalView*)self.view;
+    OgreMetalView *ogreMetalView = (OgreMetalView *)self.view;
     int framesProcessed = 0;
 
     while( _accumTimeError >= 0 )
     {
-        //Schedule Metal to present the next frame after cFrametime seconds,
-        //but rounded to the closest updateFrequency interval
+        // Schedule Metal to present the next frame after cFrametime seconds,
+        // but rounded to the closest updateFrequency interval
         double presentationTime =
-                timerTimestamp + cFrametime[gCurrentFrameTimeIdx] * (framesProcessed + 1);
-        presentationTime = floor( (presentationTime + updateFrequency * 0.5) /
-                                  updateFrequency ) * updateFrequency;
+            timerTimestamp + cFrametime[gCurrentFrameTimeIdx] * ( framesProcessed + 1 );
+        presentationTime =
+            floor( ( presentationTime + updateFrequency * 0.5 ) / updateFrequency ) * updateFrequency;
         ogreMetalView.presentationTime = presentationTime;
 
         _graphicsSystem->beginFrameParallel();
@@ -159,17 +152,19 @@ extern int gCurrentFrameTimeIdx;
 
     if( cFrametime[gCurrentFrameTimeIdx] >= 1.0 / 30.0 )
     {
-        if(_timer.frameInterval != 2 )
-            _timer.frameInterval = 2; //VSync to 30 FPS
+        if( _timer.frameInterval != 2 )
+            _timer.frameInterval = 2;  // VSync to 30 FPS
     }
     else if( _timer.frameInterval != 1 )
-        _timer.frameInterval = 1; //VSync to 60 FPS
+        _timer.frameInterval = 1;  // VSync to 60 FPS
 }
 
 @end
 
-int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+int main( int argc, char *argv[] )
+{
+    @autoreleasepool
+    {
+        return UIApplicationMain( argc, argv, nil, NSStringFromClass( [AppDelegate class] ) );
     }
 }

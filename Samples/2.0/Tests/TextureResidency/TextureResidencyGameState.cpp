@@ -3,27 +3,27 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 
-#include "OgreRoot.h"
-#include "OgreHlmsManager.h"
-#include "OgreHlms.h"
-#include "OgreHlmsPbs.h"
-#include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorShadowNode.h"
-
-#include "OgreTextureGpuManager.h"
-#include "OgreTextureFilters.h"
-
-#include "OgreHlmsPbsDatablock.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
 #include "OgreHlmsPbs.h"
+#include "OgreRoot.h"
+
+#include "OgreTextureFilters.h"
+#include "OgreTextureGpuManager.h"
+
+#include "OgreHlmsPbs.h"
+#include "OgreHlmsPbsDatablock.h"
 
 using namespace Demo;
 
@@ -39,15 +39,15 @@ namespace Demo
     void TextureResidencyGameState::switchTextureResidency( int intTargetResidency )
     {
         Ogre::GpuResidency::GpuResidency targetResidency =
-                static_cast<Ogre::GpuResidency::GpuResidency>( intTargetResidency );
+            static_cast<Ogre::GpuResidency::GpuResidency>( intTargetResidency );
 
         if( mTextures.front()->getNextResidencyStatus() == targetResidency )
             return;
 
         mChangeLog.push_back( targetResidency );
 
-        std::vector<Ogre::TextureGpu*>::const_iterator itor = mTextures.begin();
-        std::vector<Ogre::TextureGpu*>::const_iterator end  = mTextures.end();
+        std::vector<Ogre::TextureGpu *>::const_iterator itor = mTextures.begin();
+        std::vector<Ogre::TextureGpu *>::const_iterator end = mTextures.end();
 
         while( itor != end )
         {
@@ -66,44 +66,42 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::enableHeavyRamMode()
     {
-        const Ogre::String textureNames[] =
-        {
-            "snow_1024.jpg",    //1024x1024
+        const Ogre::String textureNames[] = {
+            "snow_1024.jpg",  // 1024x1024
             "AreaTexDX10.dds",
-            "MRAMOR6X6.jpg",    //600x600
-            "KAMEN320x240.jpg", //640x477
+            "MRAMOR6X6.jpg",     // 600x600
+            "KAMEN320x240.jpg",  // 640x477
         };
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
-        for( size_t i=0; i<sizeof( textureNames ) / sizeof( textureNames[0] ); ++i )
+        for( size_t i = 0; i < sizeof( textureNames ) / sizeof( textureNames[0] ); ++i )
         {
-            for( size_t j=0; j<128; ++j )
+            for( size_t j = 0; j < 128; ++j )
             {
                 Ogre::TextureGpu *texture = 0;
                 texture = textureMgr->createOrRetrieveTexture(
-                              textureNames[i],
-                              "TestTex" + Ogre::StringConverter::toString( mTextures.size() ),
-                              Ogre::GpuPageOutStrategy::Discard/*AlwaysKeepSystemRamCopy*/,
-                              Ogre::TextureFlags::AutomaticBatching |
-                              Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
-                              Ogre::TextureTypes::Type2D,
-                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                    textureNames[i], "TestTex" + Ogre::StringConverter::toString( mTextures.size() ),
+                    Ogre::GpuPageOutStrategy::Discard /*AlwaysKeepSystemRamCopy*/,
+                    Ogre::TextureFlags::AutomaticBatching |
+                        Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
+                    Ogre::TextureTypes::Type2D,
+                    Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
                 texture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
                 mTextures.push_back( texture );
             }
         }
 
-        //Ensure all the new textures are shown
+        // Ensure all the new textures are shown
         if( isShowingTextureOnScreen() )
             showTexturesOnScreen();
     }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::disableHeavyRamMode()
     {
-        //Ensure we don't try to show dangling pointers on screen
+        // Ensure we don't try to show dangling pointers on screen
         const bool wasShowingTexturesOnScreen = isShowingTextureOnScreen();
         if( wasShowingTexturesOnScreen )
             hideTexturesFromScreen();
@@ -112,7 +110,7 @@ namespace Demo
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
         const size_t numTextures = mTextures.size();
-        for( size_t i=mNumInitialTextures; i<numTextures; ++i )
+        for( size_t i = mNumInitialTextures; i < numTextures; ++i )
             textureMgr->destroyTexture( mTextures[i] );
 
         mTextures.erase( mTextures.begin() + mNumInitialTextures, mTextures.end() );
@@ -131,11 +129,12 @@ namespace Demo
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
 
-        for( int j=0; j<3; ++j )
+        for( int j = 0; j < 3; ++j )
         {
-            for( size_t i=0; i<200; ++i )
-                switchTextureResidency( (Ogre::GpuResidency::GpuResidency)(i % 3) );
-            //switchTextureResidency( (i % 2) ? Ogre::GpuResidency::OnStorage : Ogre::GpuResidency::Resident );
+            for( size_t i = 0; i < 200; ++i )
+                switchTextureResidency( ( Ogre::GpuResidency::GpuResidency )( i % 3 ) );
+            // switchTextureResidency( (i % 2) ? Ogre::GpuResidency::OnStorage :
+            // Ogre::GpuResidency::Resident );
 
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -154,14 +153,14 @@ namespace Demo
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
 
-        //Make sure these 3 are included in the test coverage
+        // Make sure these 3 are included in the test coverage
         switchTextureResidency( Ogre::GpuResidency::Resident );
         switchTextureResidency( Ogre::GpuResidency::OnSystemRam );
         switchTextureResidency( Ogre::GpuResidency::Resident );
 
         srand( 101 );
-        for( size_t i=0; i<100; ++i )
-            switchTextureResidency( (Ogre::GpuResidency::GpuResidency)(rand() % 3) );
+        for( size_t i = 0; i < 100; ++i )
+            switchTextureResidency( ( Ogre::GpuResidency::GpuResidency )( rand() % 3 ) );
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -175,11 +174,11 @@ namespace Demo
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
 
-        for( int j=0; j<3; ++j )
+        for( int j = 0; j < 3; ++j )
         {
-            for( size_t i=0; i<2000; ++i )
-                switchTextureResidency( (i % 2) ? Ogre::GpuResidency::OnStorage :
-                                                  Ogre::GpuResidency::Resident );
+            for( size_t i = 0; i < 2000; ++i )
+                switchTextureResidency( ( i % 2 ) ? Ogre::GpuResidency::OnStorage
+                                                  : Ogre::GpuResidency::Resident );
 
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
@@ -199,33 +198,28 @@ namespace Demo
 
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
         Ogre::SceneNode *staticRootNode = sceneManager->getRootSceneNode( Ogre::SCENE_STATIC );
 
         const size_t numTextures = mTextures.size();
 
-        for( size_t i=0; i<numTextures; ++i )
+        for( size_t i = 0; i < numTextures; ++i )
         {
             VisibleItem visibleItem;
             visibleItem.item = sceneManager->createItem(
-                                   "Cube_d.mesh",
-                                   Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                                   Ogre::SCENE_STATIC );
+                "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                Ogre::SCENE_STATIC );
 
             Ogre::SceneNode *sceneNode = staticRootNode->createChildSceneNode( Ogre::SCENE_STATIC );
-            sceneNode->setPosition( (i % 5u) * 2.5f - 5.0f,
-                                    (i % 4u) * 2.5f - 3.75f, 0.0f );
+            sceneNode->setPosition( ( i % 5u ) * 2.5f - 5.0f, ( i % 4u ) * 2.5f - 3.75f, 0.0f );
             sceneNode->attachObject( visibleItem.item );
 
             Ogre::String datablockName = "Test" + Ogre::StringConverter::toString( i );
-            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                        hlmsPbs->createDatablock( datablockName,
-                                                  datablockName,
-                                                  Ogre::HlmsMacroblock(),
-                                                  Ogre::HlmsBlendblock(),
-                                                  Ogre::HlmsParamVec() ) );
+            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>(
+                hlmsPbs->createDatablock( datablockName, datablockName, Ogre::HlmsMacroblock(),
+                                          Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
             datablock->mAllowTextureResidencyChange = false;
             if( mTextures[i]->getTextureType() != Ogre::TextureTypes::TypeCube )
                 datablock->setTexture( Ogre::PBSM_EMISSIVE, mTextures[i] );
@@ -242,12 +236,12 @@ namespace Demo
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
-        //LIFO order removal is better for Ogre
+        // LIFO order removal is better for Ogre
         VisibleItemVec::const_reverse_iterator itor = mVisibleItems.rbegin();
-        VisibleItemVec::const_reverse_iterator end  = mVisibleItems.rend();
+        VisibleItemVec::const_reverse_iterator end = mVisibleItems.rend();
 
         while( itor != end )
         {
@@ -263,39 +257,35 @@ namespace Demo
         mVisibleItems.clear();
     }
     //-----------------------------------------------------------------------------------
-    bool TextureResidencyGameState::isShowingTextureOnScreen() const
-    {
-        return !mVisibleItems.empty();
-    }
+    bool TextureResidencyGameState::isShowingTextureOnScreen() const { return !mVisibleItems.empty(); }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::createScene01()
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
-        //textureMgr->createOrRetrieveTexture(  );
+        // textureMgr->createOrRetrieveTexture(  );
         Ogre::TextureGpu *texture = 0;
 
         texture = textureMgr->createOrRetrieveTexture(
-                      "MRAMOR6X6.jpg", Ogre::GpuPageOutStrategy::Discard/*AlwaysKeepSystemRamCopy*/,
-                      Ogre::CommonTextureTypes::Diffuse,
-                      Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            "MRAMOR6X6.jpg", Ogre::GpuPageOutStrategy::Discard /*AlwaysKeepSystemRamCopy*/,
+            Ogre::CommonTextureTypes::Diffuse,
+            Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
         mTextures.push_back( texture );
 
         texture = textureMgr->createOrRetrieveTexture(
-                      "SaintPetersBasilica.dds", Ogre::GpuPageOutStrategy::Discard,
-                      Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
-                      Ogre::TextureTypes::TypeCube,
-                      Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                      Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
+            "SaintPetersBasilica.dds", Ogre::GpuPageOutStrategy::Discard,
+            Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB, Ogre::TextureTypes::TypeCube,
+            Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
 
         mTextures.push_back( texture );
 
         mNumInitialTextures = mTextures.size();
 
-        std::vector<Ogre::TextureGpu*>::const_iterator itor = mTextures.begin();
-        std::vector<Ogre::TextureGpu*>::const_iterator end  = mTextures.end();
+        std::vector<Ogre::TextureGpu *>::const_iterator itor = mTextures.begin();
+        std::vector<Ogre::TextureGpu *>::const_iterator end = mTextures.end();
 
         while( itor != end )
         {
@@ -326,12 +316,7 @@ namespace Demo
     {
         TutorialGameState::generateDebugText( timeSinceLast, outText );
 
-        static const Ogre::String residencyNames[] =
-        {
-            "OnStorage",
-            "OnSystemRam",
-            "Resident"
-        };
+        static const Ogre::String residencyNames[] = { "OnStorage", "OnSystemRam", "Resident" };
 
         outText += "\nCurrent Texture State: " + residencyNames[mTextures.front()->getResidencyStatus()];
         if( !mChangeLog.empty() )
@@ -352,7 +337,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -405,4 +390,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

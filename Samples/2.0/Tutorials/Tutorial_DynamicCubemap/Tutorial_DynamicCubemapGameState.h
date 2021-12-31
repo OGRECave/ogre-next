@@ -16,27 +16,27 @@ namespace Demo
 
     class DynamicCubemapGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
-        IblQuality          mIblQuality;
+        IblQuality mIblQuality;
 
-        std::vector<Ogre::MovableObject*> mSpheres;
-        std::vector<Ogre::MovableObject*> mObjects;
+        std::vector<Ogre::MovableObject *> mSpheres;
+        std::vector<Ogre::MovableObject *> mObjects;
 
-        Ogre::Camera                *mCubeCamera;
-        Ogre::TextureGpu            *mDynamicCubemap;
-        Ogre::CompositorWorkspace   *mDynamicCubemapWorkspace;
+        Ogre::Camera *mCubeCamera;
+        Ogre::TextureGpu *mDynamicCubemap;
+        Ogre::CompositorWorkspace *mDynamicCubemapWorkspace;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
         DynamicCubemapGameState( const Ogre::String &helpDescription );
 
-        Ogre::CompositorWorkspace* setupCompositor();
+        Ogre::CompositorWorkspace *setupCompositor();
 
         virtual void createScene01();
         virtual void destroyScene();
@@ -45,6 +45,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

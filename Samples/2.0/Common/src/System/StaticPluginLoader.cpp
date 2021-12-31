@@ -29,21 +29,21 @@ THE SOFTWARE.
 #include "System/StaticPluginLoader.h"
 
 #ifdef OGRE_STATIC_LIB
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
-        #include "OgreGL3PlusPlugin.h"
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
-        #include "OgreGLES2Plugin.h"
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
-        #include "OgreD3D11Plugin.h"
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
-        #include "OgreMetalPlugin.h"
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
-        #include "OgreVulkanPlugin.h"
-    #endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
+#        include "OgreGL3PlusPlugin.h"
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+#        include "OgreGLES2Plugin.h"
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
+#        include "OgreD3D11Plugin.h"
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_METAL
+#        include "OgreMetalPlugin.h"
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+#        include "OgreVulkanPlugin.h"
+#    endif
 #endif
 #include "OgreRoot.h"
 
@@ -53,21 +53,26 @@ namespace Demo
 #if defined( OGRE_STATIC_LIB )
         :
         mDummy( 0 )
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
-    ,   mGL3PlusPlugin( 0 )
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
-    ,   mGLES2Plugin( 0 )
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
-    ,   mD3D11PlusPlugin( 0 )
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
-    ,   mMetalPlugin( 0 )
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
-    ,   mVulkanPlugin( 0 )
-    #endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
+        ,
+        mGL3PlusPlugin( 0 )
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+        ,
+        mGLES2Plugin( 0 )
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
+        ,
+        mD3D11PlusPlugin( 0 )
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_METAL
+        ,
+        mMetalPlugin( 0 )
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+        ,
+        mVulkanPlugin( 0 )
+#    endif
 #endif
     {
 #if defined( OGRE_STATIC_LIB )
@@ -78,57 +83,57 @@ namespace Demo
     StaticPluginLoader::~StaticPluginLoader()
     {
 #ifdef OGRE_STATIC_LIB
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         OGRE_DELETE mGL3PlusPlugin;
         mGL3PlusPlugin = 0;
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
         OGRE_DELETE mGLES2Plugin;
         mGLES2Plugin = 0;
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
         OGRE_DELETE mD3D11PlusPlugin;
         mD3D11PlusPlugin = 0;
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_METAL
         OGRE_DELETE mMetalPlugin;
         mMetalPlugin = 0;
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
         OGRE_DELETE mVulkanPlugin;
         mVulkanPlugin = 0;
-    #endif
+#    endif
 #endif
     }
     //-----------------------------------------------------------------------------------
     void StaticPluginLoader::install( Ogre::Root *root )
     {
 #ifdef OGRE_STATIC_LIB
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         if( !mGL3PlusPlugin )
             mGL3PlusPlugin = OGRE_NEW Ogre::GL3PlusPlugin();
         root->installPlugin( mGL3PlusPlugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
         if( !mGLES2Plugin )
             mGLES2Plugin = OGRE_NEW Ogre::GLES2Plugin();
         root->installPlugin( mGLES2Plugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
         if( !mD3D11PlusPlugin )
             mD3D11PlusPlugin = OGRE_NEW Ogre::D3D11Plugin();
         root->installPlugin( mD3D11PlusPlugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_METAL
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_METAL
         if( !mMetalPlugin )
             mMetalPlugin = OGRE_NEW Ogre::MetalPlugin();
         root->installPlugin( mMetalPlugin );
-    #endif
-    #ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
+#    endif
+#    ifdef OGRE_BUILD_RENDERSYSTEM_VULKAN
         if( !mVulkanPlugin )
             mVulkanPlugin = OGRE_NEW Ogre::VulkanPlugin();
         root->installPlugin( mVulkanPlugin );
-    #endif
+#    endif
 #endif
     }
-}
+}  // namespace Demo

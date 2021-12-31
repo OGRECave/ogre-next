@@ -26,8 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#import <UIKit/UIKit.h>
 #import <Metal/Metal.h>
+#import <UIKit/UIKit.h>
 
 @interface TutorialViewController : UIViewController
 

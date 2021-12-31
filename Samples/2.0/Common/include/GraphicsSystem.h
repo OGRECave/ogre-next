@@ -4,17 +4,17 @@
 
 #include "BaseSystem.h"
 #include "GameEntityManager.h"
-#include "System/StaticPluginLoader.h"
-#include "OgrePrerequisites.h"
 #include "OgreColourValue.h"
 #include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
+#include "System/StaticPluginLoader.h"
 
-#include "Threading/OgreUniformScalableTask.h"
-#include "SdlEmulationLayer.h"
 #include "OgreOverlaySystem.h"
+#include "SdlEmulationLayer.h"
+#include "Threading/OgreUniformScalableTask.h"
 
 #if OGRE_USE_SDL2
-    #include <SDL.h>
+#    include <SDL.h>
 #endif
 
 namespace Demo
@@ -27,44 +27,44 @@ namespace Demo
         using BaseSystem::initialize;
 
     protected:
-        BaseSystem          *mLogicSystem;
+        BaseSystem *mLogicSystem;
 
-    #if OGRE_USE_SDL2
-        SDL_Window          *mSdlWindow;
-        SdlInputHandler     *mInputHandler;
-    #endif
+#if OGRE_USE_SDL2
+        SDL_Window *     mSdlWindow;
+        SdlInputHandler *mInputHandler;
+#endif
 
-        Ogre::Root                  *mRoot;
-        Ogre::Window                *mRenderWindow;
-        Ogre::SceneManager          *mSceneManager;
-        Ogre::Camera                *mCamera;
-        Ogre::CompositorWorkspace   *mWorkspace;
-        Ogre::String                mPluginsFolder;
-        Ogre::String                mWriteAccessFolder;
-        Ogre::String                mResourcePath;
+        Ogre::Root *               mRoot;
+        Ogre::Window *             mRenderWindow;
+        Ogre::SceneManager *       mSceneManager;
+        Ogre::Camera *             mCamera;
+        Ogre::CompositorWorkspace *mWorkspace;
+        Ogre::String               mPluginsFolder;
+        Ogre::String               mWriteAccessFolder;
+        Ogre::String               mResourcePath;
 
-        Ogre::v1::OverlaySystem     *mOverlaySystem;
+        Ogre::v1::OverlaySystem *mOverlaySystem;
 
-        StaticPluginLoader          mStaticPluginLoader;
+        StaticPluginLoader mStaticPluginLoader;
 
         /// Tracks the amount of elapsed time since we last
         /// heard from the LogicSystem finishing a frame
-        float               mAccumTimeSinceLastLogicFrame;
-        Ogre::uint32        mCurrentTransformIdx;
-        GameEntityVec       mGameEntities[Ogre::NUM_SCENE_MEMORY_MANAGER_TYPES];
+        float                mAccumTimeSinceLastLogicFrame;
+        Ogre::uint32         mCurrentTransformIdx;
+        GameEntityVec        mGameEntities[Ogre::NUM_SCENE_MEMORY_MANAGER_TYPES];
         GameEntityVec const *mThreadGameEntityToUpdate;
-        float               mThreadWeight;
+        float                mThreadWeight;
 
-        bool                mQuit;
-        bool                mAlwaysAskForConfig;
-        bool                mUseHlmsDiskCache;
-        bool                mUseMicrocodeCache;
+        bool mQuit;
+        bool mAlwaysAskForConfig;
+        bool mUseHlmsDiskCache;
+        bool mUseMicrocodeCache;
 
-        Ogre::ColourValue   mBackgroundColour;
+        Ogre::ColourValue mBackgroundColour;
 
-    #if OGRE_USE_SDL2
-        void handleWindowEvent( const SDL_Event& evt );
-    #endif
+#if OGRE_USE_SDL2
+        void handleWindowEvent( const SDL_Event &evt );
+#endif
 
         bool isWriteAccessFolder( const Ogre::String &folderPath, const Ogre::String &fileToSave );
 
@@ -73,10 +73,11 @@ namespace Demo
 
         static void addResourceLocation( const Ogre::String &archName, const Ogre::String &typeName,
                                          const Ogre::String &secName );
-        void loadTextureCache();
-        void saveTextureCache();
-        void loadHlmsDiskCache();
-        void saveHlmsDiskCache();
+
+        void         loadTextureCache();
+        void         saveTextureCache();
+        void         loadHlmsDiskCache();
+        void         saveHlmsDiskCache();
         virtual void setupResources();
         virtual void registerHlms();
         /// Optional override method where you can perform resource group loading
@@ -87,7 +88,7 @@ namespace Demo
         /// Virtual so that advanced samples such as Sample_Compositor can override this
         /// method to change the default behavior if setupCompositor() is overridden, be
         /// aware @mBackgroundColour will be ignored
-        virtual Ogre::CompositorWorkspace* setupCompositor();
+        virtual Ogre::CompositorWorkspace *setupCompositor();
 
         /// Called right before initializing Ogre's first window, so the params can be customized
         virtual void initMiscParamsListener( Ogre::NameValuePairList &params );
@@ -97,13 +98,13 @@ namespace Demo
 
         void gameEntityAdded( const GameEntityManager::CreatedGameEntity *createdGameEntity );
         void gameEntityRemoved( GameEntity *toRemove );
+
     public:
-        GraphicsSystem( GameState *gameState,
-                        Ogre::String resourcePath = Ogre::String(""),
+        GraphicsSystem( GameState *gameState, Ogre::String resourcePath = Ogre::String( "" ),
                         Ogre::ColourValue backgroundColour = Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) );
         virtual ~GraphicsSystem();
 
-        void _notifyLogicSystem( BaseSystem *logicSystem )      { mLogicSystem = logicSystem; }
+        void _notifyLogicSystem( BaseSystem *logicSystem ) { mLogicSystem = logicSystem; }
 
         void initialize( const Ogre::String &windowTitle );
         void deinitialize();
@@ -125,36 +126,38 @@ namespace Demo
 
         /// Returns the GameEntities that are ready to be rendered. May include entities
         /// that are scheduled to be removed (i.e. they are no longer updated by logic)
-        const GameEntityVec& getGameEntities( Ogre::SceneMemoryMgrTypes type ) const
-                                                                { return mGameEntities[type]; }
+        const GameEntityVec &getGameEntities( Ogre::SceneMemoryMgrTypes type ) const
+        {
+            return mGameEntities[type];
+        }
 
-    #if OGRE_USE_SDL2
-        SdlInputHandler* getInputHandler()                  { return mInputHandler; }
-    #endif
+#if OGRE_USE_SDL2
+        SdlInputHandler *getInputHandler() { return mInputHandler; }
+#endif
 
-        void setQuit()                                      { mQuit = true; }
-        bool getQuit() const                                { return mQuit; }
+        void setQuit() { mQuit = true; }
+        bool getQuit() const { return mQuit; }
 
-        float getAccumTimeSinceLastLogicFrame() const       { return mAccumTimeSinceLastLogicFrame; }
+        float getAccumTimeSinceLastLogicFrame() const { return mAccumTimeSinceLastLogicFrame; }
 
-        Ogre::Root* getRoot() const                         { return mRoot; }
-        Ogre::Window* getRenderWindow() const               { return mRenderWindow; }
-        Ogre::SceneManager* getSceneManager() const         { return mSceneManager; }
-        Ogre::Camera* getCamera() const                     { return mCamera; }
-        Ogre::CompositorWorkspace* getCompositorWorkspace() const { return mWorkspace; }
-        Ogre::v1::OverlaySystem* getOverlaySystem() const   { return mOverlaySystem; }
+        Ogre::Root *               getRoot() const { return mRoot; }
+        Ogre::Window *             getRenderWindow() const { return mRenderWindow; }
+        Ogre::SceneManager *       getSceneManager() const { return mSceneManager; }
+        Ogre::Camera *             getCamera() const { return mCamera; }
+        Ogre::CompositorWorkspace *getCompositorWorkspace() const { return mWorkspace; }
+        Ogre::v1::OverlaySystem *  getOverlaySystem() const { return mOverlaySystem; }
 
         void setAlwaysAskForConfig( bool alwaysAskForConfig );
-        bool getAlwaysAskForConfig() const                { return mAlwaysAskForConfig; }
+        bool getAlwaysAskForConfig() const { return mAlwaysAskForConfig; }
 
-        const Ogre::String& getPluginsFolder() const        { return mPluginsFolder; }
-        const Ogre::String& getWriteAccessFolder() const    { return mWriteAccessFolder; }
-        const Ogre::String& getResourcePath() const         { return mResourcePath; }
-        const char *getMediaReadArchiveType() const;
+        const Ogre::String &getPluginsFolder() const { return mPluginsFolder; }
+        const Ogre::String &getWriteAccessFolder() const { return mWriteAccessFolder; }
+        const Ogre::String &getResourcePath() const { return mResourcePath; }
+        const char *        getMediaReadArchiveType() const;
 
         virtual void stopCompositor();
         virtual void restartCompositor();
     };
-}
+}  // namespace Demo
 
 #endif

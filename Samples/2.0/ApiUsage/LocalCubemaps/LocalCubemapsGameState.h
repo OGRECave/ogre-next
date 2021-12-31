@@ -11,23 +11,23 @@ namespace Ogre
     class ParallaxCorrectedCubemapAuto;
     class ParallaxCorrectedCubemapBase;
     class HlmsPbsDatablock;
-}
+}  // namespace Ogre
 
 namespace Demo
 {
     class LocalCubemapsGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        Ogre::ParallaxCorrectedCubemapBase  *mParallaxCorrectedCubemap;
-        Ogre::ParallaxCorrectedCubemapAuto  *mParallaxCorrectedCubemapAuto;
-        Ogre::ParallaxCorrectedCubemap      *mParallaxCorrectedCubemapOrig;
-        Ogre::HlmsPbsDatablock          *mMaterials[4];
-        bool                            mUseMultipleProbes;
-        bool                            mRegenerateProbes;
-        bool                            mPerPixelReflections;
-        bool                            mUseDpm2DArray;
-        bool                            mRoughnessDirty;
+        Ogre::ParallaxCorrectedCubemapBase *mParallaxCorrectedCubemap;
+        Ogre::ParallaxCorrectedCubemapAuto *mParallaxCorrectedCubemapAuto;
+        Ogre::ParallaxCorrectedCubemap *mParallaxCorrectedCubemapOrig;
+        Ogre::HlmsPbsDatablock *mMaterials[4];
+        bool mUseMultipleProbes;
+        bool mRegenerateProbes;
+        bool mPerPixelReflections;
+        bool mUseDpm2DArray;
+        bool mRoughnessDirty;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
@@ -44,6 +44,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

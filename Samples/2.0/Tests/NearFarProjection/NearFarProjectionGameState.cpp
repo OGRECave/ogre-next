@@ -35,7 +35,6 @@ namespace Demo
             "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
             true, true );
 
-
         {
             // We must alter the AABB because we want to always pass frustum culling
             // Otherwise frustum culling may hide bugs in the projection matrix math

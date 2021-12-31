@@ -3,14 +3,14 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreEntity.h"
 #include "OgreMesh.h"
 #include "OgreMeshManager.h"
+#include "OgreSceneManager.h"
 
-#include "OgreRoot.h"
-#include "OgreHlmsManager.h"
 #include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreRoot.h"
 
 using namespace Demo;
 
@@ -25,25 +25,25 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z );
+        Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z );
 
         {
             Ogre::v1::Entity *entity = sceneManager->createEntity(
-                        "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                        Ogre::SCENE_DYNAMIC );
+                "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                Ogre::SCENE_DYNAMIC );
 
             entity->setCastShadows( false );
 
-            //The plane mesh won't try to set any material. **Therefore it will crash
-            //inside Ogre** if we don't specify any material (we use the default one here).
+            // The plane mesh won't try to set any material. **Therefore it will crash
+            // inside Ogre** if we don't specify any material (we use the default one here).
             Ogre::Hlms *hlms = mGraphicsSystem->getRoot()->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
             entity->setDatablock( hlms->getDefaultDatablock() );
 
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                             ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
             sceneNode->attachObject( entity );
         }
@@ -68,12 +68,11 @@ namespace Demo
         //Leave it loaded if you want to use athene with v1 Entity.
         v1Mesh->unload();*/
 
-        Ogre::v1::Entity *entity = sceneManager->createEntity( "athene.mesh",
-                                                               Ogre::ResourceGroupManager::
-                                                               AUTODETECT_RESOURCE_GROUP_NAME,
-                                                               Ogre::SCENE_DYNAMIC );
-        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        Ogre::v1::Entity *entity = sceneManager->createEntity(
+            "athene.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::SCENE_DYNAMIC );
+        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
         sceneNode->attachObject( entity );
         sceneNode->setPosition( 0.0f, 1.6f, 0.0f );
         sceneNode->scale( 0.02f, 0.02f, 0.02f );
@@ -81,7 +80,8 @@ namespace Demo
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setPowerScale( Ogre::Math::PI ); //Since we don't do HDR, counter the PBS' division by PI
+        light->setPowerScale( Ogre::Math::PI );  // Since we don't do HDR, counter the PBS' division by
+                                                 // PI
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
 
@@ -89,4 +89,4 @@ namespace Demo
 
         TutorialGameState::createScene01();
     }
-}
+}  // namespace Demo

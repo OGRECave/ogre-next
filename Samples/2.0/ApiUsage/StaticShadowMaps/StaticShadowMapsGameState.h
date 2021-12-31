@@ -2,9 +2,9 @@
 #ifndef _Demo_StaticShadowMapsGameState_H_
 #define _Demo_StaticShadowMapsGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
 #include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
 
 namespace Ogre
@@ -16,13 +16,13 @@ namespace Demo
 {
     class StaticShadowMapsGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
-        bool                mUpdateShadowMaps;
-        Ogre::CompositorShadowNode  *mShadowNode;
+        bool mAnimateObjects;
+        bool mUpdateShadowMaps;
+        Ogre::CompositorShadowNode *mShadowNode;
 
         Ogre::v1::Overlay *mDebugOverlayPSSM;
         Ogre::v1::Overlay *mDebugOverlaySpotlights;
@@ -40,6 +40,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

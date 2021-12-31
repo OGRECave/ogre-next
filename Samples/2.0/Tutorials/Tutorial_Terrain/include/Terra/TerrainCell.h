@@ -39,13 +39,13 @@ namespace Ogre
 
     class TerrainCell : public Renderable
     {
-        int32  m_gridX;
-        int32  m_gridZ;
+        int32 m_gridX;
+        int32 m_gridZ;
         uint32 m_lodLevel;
-        uint32  m_verticesPerLine;
+        uint32 m_verticesPerLine;
 
-        uint32  m_sizeX;
-        uint32  m_sizeZ;
+        uint32 m_sizeX;
+        uint32 m_sizeZ;
 
         VaoManager *m_vaoManager;
 
@@ -57,14 +57,14 @@ namespace Ogre
         TerrainCell( Terra *parentTerra );
         virtual ~TerrainCell();
 
-        bool getUseSkirts() const                   { return m_useSkirts; }
+        bool getUseSkirts() const { return m_useSkirts; }
 
         bool isZUp() const;
 
         void initialize( VaoManager *vaoManager, bool useSkirts );
 
-        void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim,
-                        uint32 verticalPixelDim, uint32 lodLevel );
+        void setOrigin( const GridPoint &gridPos, uint32 horizontalPixelDim, uint32 verticalPixelDim,
+                        uint32 lodLevel );
 
         /** Merges another TerrainCell into 'this' for reducing batch counts.
             e.g.
@@ -81,16 +81,16 @@ namespace Ogre
         */
         bool merge( TerrainCell *next );
 
-        void uploadToGpu( uint32 * RESTRICT_ALIAS gpuPtr ) const;
+        void uploadToGpu( uint32 *RESTRICT_ALIAS gpuPtr ) const;
 
         Terra *getParentTerra() const { return m_parentTerra; }
 
-        //Renderable overloads
-        virtual const LightList& getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation& op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4* xform ) const;
+        // Renderable overloads
+        virtual const LightList &getLights() const;
+        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
+        virtual void getWorldTransforms( Matrix4 *xform ) const;
         virtual bool getCastsShadows() const;
     };
-}
+}  // namespace Ogre
 
 #endif

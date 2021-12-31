@@ -9,13 +9,13 @@ namespace Demo
 {
     class MeshLodGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
     public:
         MeshLodGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01();
     };
-}
+}  // namespace Demo
 
 #endif

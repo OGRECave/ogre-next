@@ -3,18 +3,18 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 
-#include "OgreRoot.h"
-#include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsPbs.h"
+#include "OgreHlmsPbsDatablock.h"
+#include "OgreRoot.h"
 
 #include "Vao/OgreVaoManager.h"
 
@@ -31,7 +31,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void MemoryCleanupGameState::testSequence()
     {
-        for( int j=0; j<100; ++j )
+        for( int j = 0; j < 100; ++j )
         {
             destroyCleanupScene();
             createCleanupScene();
@@ -47,17 +47,15 @@ namespace Demo
 
         const size_t numObjs = 10000;
 
-        for( size_t i=0; i<numObjs; ++i )
+        for( size_t i = 0; i < numObjs; ++i )
         {
             VisibleItem visibleItem;
             visibleItem.item = sceneManager->createItem(
-                                   (i & 0x01) ? "Cube_d.mesh" : "Sphere1000.mesh",
-                                   Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                                   Ogre::SCENE_STATIC );
+                ( i & 0x01 ) ? "Cube_d.mesh" : "Sphere1000.mesh",
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, Ogre::SCENE_STATIC );
 
             Ogre::SceneNode *sceneNode = staticRootNode->createChildSceneNode( Ogre::SCENE_STATIC );
-            sceneNode->setPosition( (i % 5u) * 2.5f - 5.0f,
-                                    (i % 4u) * 2.5f - 3.75f, 0.0f );
+            sceneNode->setPosition( ( i % 5u ) * 2.5f - 5.0f, ( i % 4u ) * 2.5f - 3.75f, 0.0f );
             sceneNode->attachObject( visibleItem.item );
             visibleItem.datablock = 0;
             mVisibleItems.push_back( visibleItem );
@@ -68,10 +66,10 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        //Force FIFO removal on purpose to avoid triggering
-        //best case scenario (best case scenario is LIFO)
+        // Force FIFO removal on purpose to avoid triggering
+        // best case scenario (best case scenario is LIFO)
         VisibleItemVec::const_iterator itor = mVisibleItems.begin();
-        VisibleItemVec::const_iterator end  = mVisibleItems.end();
+        VisibleItemVec::const_iterator end = mVisibleItems.end();
 
         while( itor != end )
         {
@@ -90,11 +88,11 @@ namespace Demo
         if( mReleaseGpuMemory )
         {
             const char *meshNames[2] = { "Cube_d.mesh", "Sphere1000.mesh" };
-            for( size_t i=0; i<2u; ++i )
+            for( size_t i = 0; i < 2u; ++i )
             {
                 Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName( meshNames[i] );
-                //Do not unload the first one, to test cleanupEmptyPools
-                //can deal with this correctly
+                // Do not unload the first one, to test cleanupEmptyPools
+                // can deal with this correctly
                 if( i != 0 && mesh )
                     mesh->unload();
             }
@@ -105,10 +103,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    bool MemoryCleanupGameState::isSceneLoaded() const
-    {
-        return !mVisibleItems.empty();
-    }
+    bool MemoryCleanupGameState::isSceneLoaded() const { return !mVisibleItems.empty(); }
     //-----------------------------------------------------------------------------------
     void MemoryCleanupGameState::createScene01()
     {
@@ -140,7 +135,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void MemoryCleanupGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -167,4 +162,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

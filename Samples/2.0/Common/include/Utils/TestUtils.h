@@ -1,19 +1,20 @@
 
+#include "OgrePixelFormatGpu.h"
 #include "OgrePrerequisites.h"
 #include "OgreStringVector.h"
-#include "OgrePixelFormatGpu.h"
 
 namespace Demo
 {
     /** Functions mostly useful for Unit Testing
-    */
+     */
     class TestUtils
     {
-        Ogre::uint32    mNumGenTextures;
-        Ogre::uint32    mNumUnlitDatablocks;
-        Ogre::uint32    mNumPbsDatablocks;
+        Ogre::uint32 mNumGenTextures;
+        Ogre::uint32 mNumUnlitDatablocks;
+        Ogre::uint32 mNumPbsDatablocks;
 
         Ogre::TextureGpuManager *mTextureManager;
+
     public:
         TestUtils();
 
@@ -27,10 +28,9 @@ namespace Demo
                 height = [minWidth; maxWidth];
             The textures are not guaranteed to be squared.
         */
-        void generateRandomBlankTextures( Ogre::uint32 numTextures,
-                                          Ogre::uint16 minWidth,
-                                          Ogre::uint16 maxWidth,
-                                          Ogre::PixelFormatGpu pixelFormat=Ogre::PFG_RGBA8_UNORM_SRGB );
+        void generateRandomBlankTextures(
+            Ogre::uint32 numTextures, Ogre::uint16 minWidth, Ogre::uint16 maxWidth,
+            Ogre::PixelFormatGpu pixelFormat = Ogre::PFG_RGBA8_UNORM_SRGB );
 
         /** Generates N random duplicates of the textures in sourceTex[] with names like
             'UnitTestTex/0' where 0 is in range [mNumGenTextures; mNumGenTextures + numTextures)
@@ -62,8 +62,7 @@ namespace Demo
                                                   Ogre::uint32 numTextures );
 
         /// See TestUtils::generateUnlitDatablocksWithTextures
-        void generatePbsDatablocksWithTextures( Ogre::uint32 numDatablocks,
-                                                Ogre::uint32 firstTextureIdx,
+        void generatePbsDatablocksWithTextures( Ogre::uint32 numDatablocks, Ogre::uint32 firstTextureIdx,
                                                 Ogre::uint32 numTextures );
     };
-}
+}  // namespace Demo

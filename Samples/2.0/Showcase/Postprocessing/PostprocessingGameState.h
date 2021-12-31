@@ -5,15 +5,15 @@
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
 
-#include "OgreStringVector.h"
 #include "OgreIdString.h"
+#include "OgreStringVector.h"
 
 namespace Demo
 {
     class PostprocessingGameState : public TutorialGameState
     {
-        Ogre::StringVector          mCompositorNames;
-        size_t                      mCurrentPage;
+        Ogre::StringVector mCompositorNames;
+        size_t mCurrentPage;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
@@ -36,7 +36,7 @@ namespace Demo
     public:
         PostprocessingGameState( const Ogre::String &helpDescription );
 
-        Ogre::CompositorWorkspace* setupCompositor();
+        Ogre::CompositorWorkspace *setupCompositor();
 
         virtual void createScene01();
 
@@ -44,6 +44,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

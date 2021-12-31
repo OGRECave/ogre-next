@@ -27,27 +27,27 @@ THE SOFTWARE.
 */
 
 #if !OGRE_NO_JSON
-#ifndef _OgreHlmsJsonTerra_H_
-#define _OgreHlmsJsonTerra_H_
+#    ifndef _OgreHlmsJsonTerra_H_
+#        define _OgreHlmsJsonTerra_H_
 
-#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
-#include "Terra/Hlms/OgreHlmsTerraDatablock.h"
-#include "OgreHlmsJson.h"
-#include "OgreHeaderPrefix.h"
+#        include "OgreHeaderPrefix.h"
+#        include "OgreHlmsJson.h"
+#        include "Terra/Hlms/OgreHlmsTerraDatablock.h"
+#        include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     class HlmsJsonTerra
     {
-        HlmsManager         *mHlmsManager;
-        TextureGpuManager   *mTextureManager;
+        HlmsManager *mHlmsManager;
+        TextureGpuManager *mTextureManager;
 
         static TerraBrdf::TerraBrdf parseBrdf( const char *value );
         static void parseOffset( const rapidjson::Value &jsonArray, Vector4 &offsetScale );
@@ -63,38 +63,35 @@ namespace Ogre
                           TerraTextureTypes textureType, HlmsTerraDatablock *datablock,
                           const String &resourceGroup );
 
-        void saveTexture( const char *blockName,
-                          TerraTextureTypes textureType,
+        void saveTexture( const char *blockName, TerraTextureTypes textureType,
                           const HlmsTerraDatablock *datablock, String &outString,
-                          bool writeTexture=true );
-        void saveTexture( const Vector3 &value, const char *blockName,
-                          TerraTextureTypes textureType,
+                          bool writeTexture = true );
+        void saveTexture( const Vector3 &value, const char *blockName, TerraTextureTypes textureType,
                           const HlmsTerraDatablock *datablock, String &outString,
-                          bool writeTexture=true );
+                          bool writeTexture = true );
 
-        void saveTexture( const Vector3 &value, const char *blockName,
-                          TerraTextureTypes textureType,
-                          bool writeValue, bool writeTexture,
-                          const HlmsTerraDatablock *datablock, String &outString );
+        void saveTexture( const Vector3 &value, const char *blockName, TerraTextureTypes textureType,
+                          bool writeValue, bool writeTexture, const HlmsTerraDatablock *datablock,
+                          String &outString );
 
     public:
         HlmsJsonTerra( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
 
         void loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                           HlmsDatablock *datablock , const String &resourceGroup );
+                           HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
         static void collectSamplerblocks( const HlmsDatablock *datablock,
-                                          set<const HlmsSamplerblock*>::type &outSamplerblocks );
+                                          set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
-#include "OgreHeaderSuffix.h"
+#        include "OgreHeaderSuffix.h"
 
-#endif
+#    endif
 
 #endif

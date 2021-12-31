@@ -60,6 +60,6 @@ namespace Ogre
     };
 
     class HlmsTerra;
-}
+}  // namespace Ogre
 
 #endif

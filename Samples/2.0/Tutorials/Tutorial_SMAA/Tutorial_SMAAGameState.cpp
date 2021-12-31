@@ -3,24 +3,23 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 
-#include "OgreRoot.h"
-#include "OgreHlmsManager.h"
-#include "OgreHlms.h"
-#include "OgreHlmsPbs.h"
-#include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreHlmsPbs.h"
+#include "OgreRoot.h"
 
 #include "Utils/SmaaUtils.h"
-
 
 using namespace Demo;
 
@@ -30,7 +29,7 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mAnimateObjects( true )
     {
-        memset( mSceneNode, 0, sizeof(mSceneNode) );
+        memset( mSceneNode, 0, sizeof( mSceneNode ) );
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_SMAAGameState::createScene01()
@@ -38,47 +37,43 @@ namespace Demo
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
         SmaaUtils::initialize( mGraphicsSystem->getRoot()->getRenderSystem(),
-                               SmaaUtils::SMAA_PRESET_ULTRA,
-                               SmaaUtils::EdgeDetectionColour );
+                               SmaaUtils::SMAA_PRESET_ULTRA, SmaaUtils::EdgeDetectionColour );
 
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                             ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
             sceneNode->attachObject( item );
         }
 
         float armsLength = 2.5f;
 
-        for( int i=0; i<4; ++i )
+        for( int i = 0; i < 4; ++i )
         {
-            for( int j=0; j<4; ++j )
+            for( int j = 0; j < 4; ++j )
             {
-                Ogre::Item *item = sceneManager->createItem( "Cube_d.mesh",
-                                                             Ogre::ResourceGroupManager::
-                                                             AUTODETECT_RESOURCE_GROUP_NAME,
-                                                             Ogre::SCENE_DYNAMIC );
+                Ogre::Item *item = sceneManager->createItem(
+                    "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    Ogre::SCENE_DYNAMIC );
 
                 size_t idx = i * 4 + j;
 
-                mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                        createChildSceneNode( Ogre::SCENE_DYNAMIC );
+                mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( (i - 1.5f) * armsLength,
-                                              2.0f,
-                                              (j - 1.5f) * armsLength );
+                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
+                                              ( j - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -101,7 +96,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
+        light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -114,7 +109,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.2f, 0.4f, 0.8f ); //Cold
+        light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
         light->setSpecularColour( 0.2f, 0.4f, 0.8f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -133,8 +128,8 @@ namespace Demo
     {
         if( mAnimateObjects )
         {
-            for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+            for( int i = 0; i < 16; ++i )
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );
@@ -150,7 +145,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void Tutorial_SMAAGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -165,4 +160,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

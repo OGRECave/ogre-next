@@ -2,21 +2,20 @@
 #ifndef _Demo_ShadowMapDebuggingGameState_H_
 #define _Demo_ShadowMapDebuggingGameState_H_
 
-#include "OgrePrerequisites.h"
-#include "OgreOverlayPrerequisites.h"
 #include "OgreOverlay.h"
+#include "OgreOverlayPrerequisites.h"
+#include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
-
 
 namespace Demo
 {
     class ShadowMapDebuggingGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
-        Ogre::SceneNode     *mLightNodes[3];
+        Ogre::SceneNode *mLightNodes[3];
 
-        bool                mAnimateObjects;
+        bool mAnimateObjects;
 
         Ogre::v1::Overlay *mDebugOverlayPSSM;
         Ogre::v1::Overlay *mDebugOverlaySpotlights;
@@ -27,7 +26,7 @@ namespace Demo
         /// Pixel shader filter is faster for small kernels, also to use as a fallback
         /// on GPUs that don't support compute shaders, or where compute shaders are slow).
         /// For reference large kernels means kernelRadius > 2 (approx)
-        const char* chooseEsmShadowNode();
+        const char *chooseEsmShadowNode();
         void setupShadowNode( bool forEsm );
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
@@ -44,6 +43,6 @@ namespace Demo
 
         virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
-}
+}  // namespace Demo
 
 #endif

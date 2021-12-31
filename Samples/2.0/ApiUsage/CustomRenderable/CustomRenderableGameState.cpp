@@ -21,18 +21,18 @@ namespace Demo
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
         mMyCustomRenderable = OGRE_NEW Ogre::MyCustomRenderable(
-                    Ogre::Id::generateNewId<Ogre::MovableObject>(),
-                    &sceneManager->_getEntityMemoryManager( Ogre::SCENE_DYNAMIC ),
-                    sceneManager, 10u );
+            Ogre::Id::generateNewId<Ogre::MovableObject>(),
+            &sceneManager->_getEntityMemoryManager( Ogre::SCENE_DYNAMIC ), sceneManager, 10u );
 
-        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
         sceneNode->attachObject( mMyCustomRenderable );
 
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setPowerScale( Ogre::Math::PI ); //Since we don't do HDR, counter the PBS' division by PI
+        light->setPowerScale( Ogre::Math::PI );  // Since we don't do HDR, counter the PBS' division by
+                                                 // PI
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
 
@@ -46,4 +46,4 @@ namespace Demo
         OGRE_DELETE mMyCustomRenderable;
         mMyCustomRenderable = 0;
     }
-}
+}  // namespace Demo

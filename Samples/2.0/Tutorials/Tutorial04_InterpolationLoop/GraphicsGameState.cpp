@@ -2,8 +2,8 @@
 #include "GraphicsGameState.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
 #include "OgreTextAreaOverlayElement.h"
 
@@ -28,13 +28,12 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::Item *item = sceneManager->createItem( "Cube_d.mesh",
-                                                     Ogre::ResourceGroupManager::
-                                                     AUTODETECT_RESOURCE_GROUP_NAME,
-                                                     Ogre::SCENE_DYNAMIC );
+        Ogre::Item *item = sceneManager->createItem(
+            "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::SCENE_DYNAMIC );
 
-        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        mSceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
         mSceneNode->attachObject( item );
 
@@ -51,9 +50,9 @@ namespace Demo
         outText += "\nPress F4 to enable interpolation. ";
         outText += mEnableInterpolation ? "[On]" : "[Off]";
 
-        //Show the current weight.
-        //The text doesn't get updated every frame while displaying
-        //help, so don't show the weight as it is inaccurate.
+        // Show the current weight.
+        // The text doesn't get updated every frame while displaying
+        // help, so don't show the weight as it is inaccurate.
         if( mDisplayHelpMode != 0 )
         {
             float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / cFrametime;
@@ -84,7 +83,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -107,4 +106,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

@@ -3,12 +3,12 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 #include "OgreWindow.h"
@@ -16,11 +16,11 @@
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
 
-#include "OgreRoot.h"
 #include "OgreHlmsManager.h"
-#include "OgreTextureGpuManager.h"
-#include "OgreTextureFilters.h"
 #include "OgreHlmsPbs.h"
+#include "OgreRoot.h"
+#include "OgreTextureFilters.h"
+#include "OgreTextureGpuManager.h"
 
 #include "System/MainEntryPoints.h"
 
@@ -34,7 +34,7 @@ namespace Demo
         mNumSpheres( 0 ),
         mFrameCount( 0 )
     {
-        memset( mSceneNode, 0, sizeof(mSceneNode) );
+        memset( mSceneNode, 0, sizeof( mSceneNode ) );
     }
     //-----------------------------------------------------------------------------------
     void RestartGameState::createScene01()
@@ -43,43 +43,42 @@ namespace Demo
 
         const float armsLength = 2.5f;
 
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
             item->setDatablock( "Marble" );
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                             ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
             sceneNode->attachObject( item );
 
-            //Change the addressing mode of the roughness map to wrap via code.
-            //Detail maps default to wrap, but the rest to clamp.
-            assert( dynamic_cast<Ogre::HlmsPbsDatablock*>( item->getSubItem(0)->getDatablock() ) );
-            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                                            item->getSubItem(0)->getDatablock() );
-            //Make a hard copy of the sampler block
+            // Change the addressing mode of the roughness map to wrap via code.
+            // Detail maps default to wrap, but the rest to clamp.
+            assert( dynamic_cast<Ogre::HlmsPbsDatablock *>( item->getSubItem( 0 )->getDatablock() ) );
+            Ogre::HlmsPbsDatablock *datablock =
+                static_cast<Ogre::HlmsPbsDatablock *>( item->getSubItem( 0 )->getDatablock() );
+            // Make a hard copy of the sampler block
             Ogre::HlmsSamplerblock samplerblock( *datablock->getSamplerblock( Ogre::PBSM_ROUGHNESS ) );
             samplerblock.mU = Ogre::TAM_WRAP;
             samplerblock.mV = Ogre::TAM_WRAP;
             samplerblock.mW = Ogre::TAM_WRAP;
-            //Set the new samplerblock. The Hlms system will
-            //automatically create the API block if necessary
+            // Set the new samplerblock. The Hlms system will
+            // automatically create the API block if necessary
             datablock->setSamplerblock( Ogre::PBSM_ROUGHNESS, samplerblock );
         }
 
-        for( int i=0; i<4; ++i )
+        for( int i = 0; i < 4; ++i )
         {
-            for( int j=0; j<4; ++j )
+            for( int j = 0; j < 4; ++j )
             {
                 Ogre::String meshName;
 
@@ -88,10 +87,9 @@ namespace Demo
                 else
                     meshName = "Cube_d.mesh";
 
-                Ogre::Item *item = sceneManager->createItem( meshName,
-                                                             Ogre::ResourceGroupManager::
-                                                             AUTODETECT_RESOURCE_GROUP_NAME,
-                                                             Ogre::SCENE_DYNAMIC );
+                Ogre::Item *item = sceneManager->createItem(
+                    meshName, Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    Ogre::SCENE_DYNAMIC );
                 if( i % 2 == 0 )
                     item->setDatablock( "Rocks" );
                 else
@@ -101,12 +99,11 @@ namespace Demo
 
                 size_t idx = i * 4 + j;
 
-                mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                        createChildSceneNode( Ogre::SCENE_DYNAMIC );
+                mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( (i - 1.5f) * armsLength,
-                                              2.0f,
-                                              (j - 1.5f) * armsLength );
+                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
+                                              ( j - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -119,59 +116,55 @@ namespace Demo
             mNumSpheres = 0;
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            Ogre::HlmsPbs *hlmsPbs =
+                static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
             const int numX = 8;
             const int numZ = 8;
 
             const float armsLength = 1.0f;
-            const float startX = (numX-1) / 2.0f;
-            const float startZ = (numZ-1) / 2.0f;
+            const float startX = ( numX - 1 ) / 2.0f;
+            const float startZ = ( numZ - 1 ) / 2.0f;
 
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
-            for( int x=0; x<numX; ++x )
+            for( int x = 0; x < numX; ++x )
             {
-                for( int z=0; z<numZ; ++z )
+                for( int z = 0; z < numZ; ++z )
                 {
-                    Ogre::String datablockName = "Test" + Ogre::StringConverter::toString( mNumSpheres++ );
-                    Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
-                                hlmsPbs->createDatablock( datablockName,
-                                                          datablockName,
-                                                          Ogre::HlmsMacroblock(),
-                                                          Ogre::HlmsBlendblock(),
-                                                          Ogre::HlmsParamVec() ) );
+                    Ogre::String datablockName =
+                        "Test" + Ogre::StringConverter::toString( mNumSpheres++ );
+                    Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>(
+                        hlmsPbs->createDatablock( datablockName, datablockName, Ogre::HlmsMacroblock(),
+                                                  Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
 
                     Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
-                                                    "SaintPetersBasilica.dds",
-                                                    Ogre::GpuPageOutStrategy::Discard,
-                                                    Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
-                                                    Ogre::TextureTypes::TypeCube,
-                                                    Ogre::ResourceGroupManager::
-                                                    AUTODETECT_RESOURCE_GROUP_NAME,
-                                                    Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
+                        "SaintPetersBasilica.dds", Ogre::GpuPageOutStrategy::Discard,
+                        Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB, Ogre::TextureTypes::TypeCube,
+                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                        Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
 
                     datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
-                    datablock->setRoughness( std::max( 0.02f, x / std::max( 1.0f, (float)(numX-1) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)(numZ-1) ) ), false );
+                    datablock->setRoughness(
+                        std::max( 0.02f, x / std::max( 1.0f, (float)( numX - 1 ) ) ) );
+                    datablock->setFresnel( Ogre::Vector3( z / std::max( 1.0f, (float)( numZ - 1 ) ) ),
+                                           false );
 
-                    Ogre::Item *item = sceneManager->createItem( "Sphere1000.mesh",
-                                                                 Ogre::ResourceGroupManager::
-                                                                 AUTODETECT_RESOURCE_GROUP_NAME,
-                                                                 Ogre::SCENE_DYNAMIC );
+                    Ogre::Item *item = sceneManager->createItem(
+                        "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                        Ogre::SCENE_DYNAMIC );
                     item->setDatablock( datablock );
                     item->setVisibilityFlags( 0x000000002 );
 
-                    Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                            createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition( Ogre::Vector3( armsLength * x - startX,
-                                                           1.0f,
-                                                           armsLength * z - startZ ) );
+                    Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                                     ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
+                    sceneNode->setPosition(
+                        Ogre::Vector3( armsLength * x - startX, 1.0f, armsLength * z - startZ ) );
                     sceneNode->attachObject( item );
                 }
             }
@@ -195,7 +188,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
+        light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -208,7 +201,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.2f, 0.4f, 0.8f ); //Cold
+        light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
         light->setSpecularColour( 0.2f, 0.4f, 0.8f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -218,7 +211,8 @@ namespace Demo
 
         mLightNodes[2] = lightNode;
 
-        Ogre::TextureGpuManager *textureMgr = mGraphicsSystem->getRoot()->getRenderSystem()->getTextureGpuManager();
+        Ogre::TextureGpuManager *textureMgr =
+            mGraphicsSystem->getRoot()->getRenderSystem()->getTextureGpuManager();
         textureMgr->waitForStreamingCompletion();
 
         TutorialGameState::createScene01();
@@ -226,14 +220,14 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void RestartGameState::update( float timeSinceLast )
     {
-        //Force a specific framerate (determinism)
+        // Force a specific framerate (determinism)
         timeSinceLast = MainEntryPoints::Frametime;
         TutorialGameState::update( timeSinceLast );
 
         if( mAnimateObjects )
         {
-            for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+            for( int i = 0; i < 16; ++i )
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
         }
 
         if( mFrameCount > 50u )
@@ -243,4 +237,4 @@ namespace Demo
         }
         ++mFrameCount;
     }
-}
+}  // namespace Demo

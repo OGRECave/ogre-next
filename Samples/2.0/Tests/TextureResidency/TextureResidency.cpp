@@ -2,14 +2,14 @@
 #include "GraphicsSystem.h"
 #include "TextureResidencyGameState.h"
 
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
-#include "OgreRoot.h"
-#include "OgreWindow.h"
-#include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreCamera.h"
+#include "OgreConfigFile.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreWindow.h"
 
-//Declares WinMain / main
+// Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
@@ -26,7 +26,7 @@ namespace Demo
 {
     class TextureResidencyGraphicsSystem : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace* setupCompositor()
+        virtual Ogre::CompositorWorkspace *setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
@@ -54,19 +54,14 @@ namespace Demo
         }
 
     public:
-        TextureResidencyGraphicsSystem( GameState *gameState ) :
-            GraphicsSystem( gameState )
-        {
-        }
+        TextureResidencyGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}
     };
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
-                                         GameState **outLogicGameState,
-                                         LogicSystem **outLogicSystem )
+                                         GameState **outLogicGameState, LogicSystem **outLogicSystem )
     {
-        TextureResidencyGameState *gfxGameState = new TextureResidencyGameState(
-        "" );
+        TextureResidencyGameState *gfxGameState = new TextureResidencyGameState( "" );
 
         GraphicsSystem *graphicsSystem = new TextureResidencyGraphicsSystem( gfxGameState );
 
@@ -76,17 +71,12 @@ namespace Demo
         *outGraphicsSystem = graphicsSystem;
     }
 
-    void MainEntryPoints::destroySystems( GameState *graphicsGameState,
-                                          GraphicsSystem *graphicsSystem,
-                                          GameState *logicGameState,
-                                          LogicSystem *logicSystem )
+    void MainEntryPoints::destroySystems( GameState *graphicsGameState, GraphicsSystem *graphicsSystem,
+                                          GameState *logicGameState, LogicSystem *logicSystem )
     {
         delete graphicsSystem;
         delete graphicsGameState;
     }
 
-    const char* MainEntryPoints::getWindowTitle()
-    {
-        return "Texture Residency";
-    }
-}
+    const char *MainEntryPoints::getWindowTitle() { return "Texture Residency"; }
+}  // namespace Demo

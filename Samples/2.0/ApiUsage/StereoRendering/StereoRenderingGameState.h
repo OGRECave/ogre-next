@@ -9,7 +9,7 @@ namespace Demo
 {
     class StereoRenderingGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode[16];
+        Ogre::SceneNode *mSceneNode[16];
 
     public:
         StereoRenderingGameState( const Ogre::String &helpDescription );
@@ -18,6 +18,6 @@ namespace Demo
 
         virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

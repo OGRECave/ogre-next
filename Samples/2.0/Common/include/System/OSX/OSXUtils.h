@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Demo
 {
-extern unsigned long WindowContentViewHandle(const SDL_SysWMinfo &info);
+    extern unsigned long WindowContentViewHandle( const SDL_SysWMinfo &info );
 }
 
-#endif //  OSXUTILS_H
+#endif  //  OSXUTILS_H

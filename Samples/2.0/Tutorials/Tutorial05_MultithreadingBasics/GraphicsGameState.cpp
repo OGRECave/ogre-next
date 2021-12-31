@@ -2,8 +2,8 @@
 #include "GraphicsGameState.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
 #include "OgreTextAreaOverlayElement.h"
 
@@ -22,9 +22,9 @@ namespace Demo
     {
         TutorialGameState::generateDebugText( timeSinceLast, outText );
 
-        //Show the current weight.
-        //The text doesn't get updated every frame while displaying
-        //help, so don't show the weight as it is inaccurate.
+        // Show the current weight.
+        // The text doesn't get updated every frame while displaying
+        // help, so don't show the weight as it is inaccurate.
         if( mDisplayHelpMode != 0 )
         {
             outText += "\nSEE HELP DESCRIPTION!";
@@ -36,4 +36,4 @@ namespace Demo
             outText += Ogre::StringConverter::toString( weight );
         }
     }
-}
+}  // namespace Demo

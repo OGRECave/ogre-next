@@ -3,29 +3,29 @@
 #include "CameraController.h"
 #include "GraphicsSystem.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
-#include "OgreMeshManager.h"
-#include "OgreMeshManager2.h"
 #include "OgreMesh.h"
 #include "OgreMesh2.h"
+#include "OgreMeshManager.h"
+#include "OgreMeshManager2.h"
 
 #include "OgreCamera.h"
 
-#include "OgreRoot.h"
-#include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsPbs.h"
+#include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsUnlitDatablock.h"
+#include "OgreRoot.h"
 
-//Reuse the scene from SceneFormat which is a "heavy" one.
-//We don't want to focus on geometry loading here, we want
-//to focus on memory management functions in this sample
-#include "../../ApiUsage/SceneFormat/SceneFormatGameState.h"
+// Reuse the scene from SceneFormat which is a "heavy" one.
+// We don't want to focus on geometry loading here, we want
+// to focus on memory management functions in this sample
 #include "../../ApiUsage/SceneFormat/SceneFormatGameState.cpp"
+#include "../../ApiUsage/SceneFormat/SceneFormatGameState.h"
 
-#include "OgreTextureGpuManager.h"
 #include "OgreLwString.h"
+#include "OgreTextureGpuManager.h"
 
 #include "Vao/OgreVaoManager.h"
 
@@ -65,27 +65,24 @@ namespace Demo
             mesh->unload();
     }
     //-----------------------------------------------------------------------------------
-    bool MemoryGameState::isSceneLoaded() const
-    {
-        return true;
-    }
+    bool MemoryGameState::isSceneLoaded() const { return true; }
     //-----------------------------------------------------------------------------------
     template <typename T, size_t MaxNumTextures>
     void MemoryGameState::unloadTexturesFromUnusedMaterials( Ogre::HlmsDatablock *datablock,
-                                                             std::set<Ogre::TextureGpu*> &usedTex,
-                                                             std::set<Ogre::TextureGpu*> &unusedTex )
+                                                             std::set<Ogre::TextureGpu *> &usedTex,
+                                                             std::set<Ogre::TextureGpu *> &unusedTex )
     {
-        OGRE_ASSERT_HIGH( dynamic_cast<T*>( datablock ) );
-        T *derivedDatablock = static_cast<T*>( datablock );
+        OGRE_ASSERT_HIGH( dynamic_cast<T *>( datablock ) );
+        T *derivedDatablock = static_cast<T *>( datablock );
 
-        for( size_t texUnit=0; texUnit<MaxNumTextures; ++texUnit )
+        for( size_t texUnit = 0; texUnit < MaxNumTextures; ++texUnit )
         {
-            //Check each texture from the material
+            // Check each texture from the material
             Ogre::TextureGpu *tex = derivedDatablock->getTexture( texUnit );
             if( tex )
             {
-                //If getLinkedRenderables is empty, then the material is not in use,
-                //and thus so is potentially the texture
+                // If getLinkedRenderables is empty, then the material is not in use,
+                // and thus so is potentially the texture
                 if( !datablock->getLinkedRenderables().empty() )
                     usedTex.insert( tex );
                 else
@@ -99,12 +96,12 @@ namespace Demo
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
 
-        std::set<Ogre::TextureGpu*> usedTex;
-        std::set<Ogre::TextureGpu*> unusedTex;
+        std::set<Ogre::TextureGpu *> usedTex;
+        std::set<Ogre::TextureGpu *> unusedTex;
 
-        //Check each material from each Hlms (except low level) to see if their material is
-        //currently in use. If it's not, then its textures may be not either
-        for( size_t i=Ogre::HLMS_PBS; i<Ogre::HLMS_MAX; ++i )
+        // Check each material from each Hlms (except low level) to see if their material is
+        // currently in use. If it's not, then its textures may be not either
+        for( size_t i = Ogre::HLMS_PBS; i < Ogre::HLMS_MAX; ++i )
         {
             Ogre::Hlms *hlms = hlmsManager->getHlms( static_cast<Ogre::HlmsTypes>( i ) );
 
@@ -113,21 +110,21 @@ namespace Demo
                 const Ogre::Hlms::HlmsDatablockMap &datablocks = hlms->getDatablockMap();
 
                 Ogre::Hlms::HlmsDatablockMap::const_iterator itor = datablocks.begin();
-                Ogre::Hlms::HlmsDatablockMap::const_iterator end  = datablocks.end();
+                Ogre::Hlms::HlmsDatablockMap::const_iterator end = datablocks.end();
 
                 while( itor != end )
                 {
                     if( i == Ogre::HLMS_PBS )
                     {
                         unloadTexturesFromUnusedMaterials<Ogre::HlmsPbsDatablock,
-                                Ogre::NUM_PBSM_TEXTURE_TYPES>( itor->second.datablock,
-                                                               usedTex, unusedTex );
+                                                          Ogre::NUM_PBSM_TEXTURE_TYPES>(
+                            itor->second.datablock, usedTex, unusedTex );
                     }
                     else if( i == Ogre::HLMS_UNLIT )
                     {
                         unloadTexturesFromUnusedMaterials<Ogre::HlmsUnlitDatablock,
-                                Ogre::NUM_UNLIT_TEXTURE_TYPES>( itor->second.datablock,
-                                                                usedTex, unusedTex );
+                                                          Ogre::NUM_UNLIT_TEXTURE_TYPES>(
+                            itor->second.datablock, usedTex, unusedTex );
                     }
 
                     ++itor;
@@ -135,15 +132,15 @@ namespace Demo
             }
         }
 
-        //Unload all unused textures, unless they're also in the "usedTex" (a texture may be
-        //set to a material that is currently unused, and also in another material in use)
-        std::set<Ogre::TextureGpu*>::const_iterator itor = unusedTex.begin();
-        std::set<Ogre::TextureGpu*>::const_iterator end  = unusedTex.end();
+        // Unload all unused textures, unless they're also in the "usedTex" (a texture may be
+        // set to a material that is currently unused, and also in another material in use)
+        std::set<Ogre::TextureGpu *>::const_iterator itor = unusedTex.begin();
+        std::set<Ogre::TextureGpu *>::const_iterator end = unusedTex.end();
 
         while( itor != end )
         {
             if( usedTex.find( *itor ) == usedTex.end() )
-                (*itor)->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
+                ( *itor )->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
 
             ++itor;
         }
@@ -159,43 +156,42 @@ namespace Demo
         const Ogre::TextureGpuManager::ResourceEntryMap &entries = textureGpuManager->getEntries();
 
         Ogre::TextureGpuManager::ResourceEntryMap::const_iterator itor = entries.begin();
-        Ogre::TextureGpuManager::ResourceEntryMap::const_iterator end  = entries.end();
+        Ogre::TextureGpuManager::ResourceEntryMap::const_iterator end = entries.end();
 
         while( itor != end )
         {
             const Ogre::TextureGpuManager::ResourceEntry &entry = itor->second;
 
-            const Ogre::vector<Ogre::TextureGpuListener*>::type &listeners =
-                    entry.texture->getListeners();
+            const Ogre::vector<Ogre::TextureGpuListener *>::type &listeners =
+                entry.texture->getListeners();
 
             bool canBeUnloaded = true;
 
-            Ogre::vector<Ogre::TextureGpuListener*>::type::const_iterator itListener = listeners.begin();
-            Ogre::vector<Ogre::TextureGpuListener*>::type::const_iterator enListener = listeners.end();
+            Ogre::vector<Ogre::TextureGpuListener *>::type::const_iterator itListener =
+                listeners.begin();
+            Ogre::vector<Ogre::TextureGpuListener *>::type::const_iterator enListener = listeners.end();
 
             while( itListener != enListener )
             {
-                //We must use dynamic_cast because we don't know if it's safe to cast
-                Ogre::HlmsDatablock *datablock = dynamic_cast<Ogre::HlmsDatablock*>( *itListener );
+                // We must use dynamic_cast because we don't know if it's safe to cast
+                Ogre::HlmsDatablock *datablock = dynamic_cast<Ogre::HlmsDatablock *>( *itListener );
                 if( datablock )
                     canBeUnloaded = false;
 
-                canBeUnloaded &= (*itListener)->shouldStayLoaded( entry.texture );
+                canBeUnloaded &= ( *itListener )->shouldStayLoaded( entry.texture );
 
                 ++itListener;
             }
 
             if( entry.texture->getTextureType() != Ogre::TextureTypes::Type2D ||
-                !entry.texture->hasAutomaticBatching() ||
-                !entry.texture->isTexture() ||
-                entry.texture->isRenderToTexture() ||
-                entry.texture->isUav() )
+                !entry.texture->hasAutomaticBatching() || !entry.texture->isTexture() ||
+                entry.texture->isRenderToTexture() || entry.texture->isUav() )
             {
-                //This is likely a texture internal to us (i.e. a PCC probe)
-                //Note that cubemaps loaded from file will also fall here, at
-                //least the way I wrote the if logic.
+                // This is likely a texture internal to us (i.e. a PCC probe)
+                // Note that cubemaps loaded from file will also fall here, at
+                // least the way I wrote the if logic.
                 //
-                //You may have to customize this further
+                // You may have to customize this further
                 canBeUnloaded = false;
             }
 
@@ -245,8 +241,7 @@ namespace Demo
 
         Ogre::TextureGpuManager *textureGpuManager = renderSystem->getTextureGpuManager();
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && \
-    OGRE_PLATFORM != OGRE_PLATFORM_ANDROID && \
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID && \
     OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_32
         textureGpuManager->setStagingTextureMaxBudgetBytes( 256u * 1024u * 1024u );
 #else
@@ -277,19 +272,18 @@ namespace Demo
         Ogre::TextureGpuManager *textureGpuManager = renderSystem->getTextureGpuManager();
         textureGpuManager->setTextureGpuManagerListener( this );
 
-        //setTightMemoryBudget();
+        // setTightMemoryBudget();
         mDefaultBudget = textureGpuManager->getBudget();
 
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
         planeMeshV1->unload();
 
         createCleanupScene();
@@ -311,10 +305,7 @@ namespace Demo
         TutorialGameState::destroyScene();
     }
     //-----------------------------------------------------------------------------------
-    void MemoryGameState::update( float timeSinceLast )
-    {
-        TutorialGameState::update( timeSinceLast );
-    }
+    void MemoryGameState::update( float timeSinceLast ) { TutorialGameState::update( timeSinceLast ); }
     //-----------------------------------------------------------------------------------
     void MemoryGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
     {
@@ -326,14 +317,14 @@ namespace Demo
         outText += mTightMemoryBudget ? "[Tight]" : "[Relaxed]";
         outText += "\nPress F5 to minimize memory";
 
-        //NOTE: Some of these routines to retrieve memory may be relatively "expensive".
-        //So don't call them every frame in the final build for the user.
+        // NOTE: Some of these routines to retrieve memory may be relatively "expensive".
+        // So don't call them every frame in the final build for the user.
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::RenderSystem *renderSystem = root->getRenderSystem();
         Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
-        //Note that VaoManager::getMemoryStats gives us a lot of info that we don't show on screen!
-        //Dumping to a Log is highly recommended!
+        // Note that VaoManager::getMemoryStats gives us a lot of info that we don't show on screen!
+        // Dumping to a Log is highly recommended!
         Ogre::VaoManager::MemoryStatsEntryVec memoryStats;
         size_t freeBytes;
         size_t capacityBytes;
@@ -342,8 +333,8 @@ namespace Demo
 
         Ogre::TextureGpuManager *textureGpuManager = renderSystem->getTextureGpuManager();
         size_t textureBytesCpu, textureBytesGpu, usedStagingTextureBytes, availableStagingTextureBytes;
-        textureGpuManager->getMemoryStats( textureBytesCpu, textureBytesGpu,
-                                           usedStagingTextureBytes, availableStagingTextureBytes );
+        textureGpuManager->getMemoryStats( textureBytesCpu, textureBytesGpu, usedStagingTextureBytes,
+                                           availableStagingTextureBytes );
 
         // Don't count texture memory twice if it's already included in VaoManager
         if( bIncludesTextures )
@@ -355,15 +346,16 @@ namespace Demo
 
         text.clear();
         text.a( "\n\nGPU buffer pools (meshes, const, texture, indirect & uav buffers): ",
-                (Ogre::uint32)((capacityBytes - freeBytes) / bytesToMb), "/",
-                (Ogre::uint32)(capacityBytes / bytesToMb), " MB" );
+                ( Ogre::uint32 )( ( capacityBytes - freeBytes ) / bytesToMb ), "/",
+                ( Ogre::uint32 )( capacityBytes / bytesToMb ), " MB" );
         outText += text.c_str();
 
         text.clear();
-        text.a( "\nGPU StagingTextures. In use: ",
-                (Ogre::uint32)(usedStagingTextureBytes / bytesToMb), " MB. Available: ",
-                (Ogre::uint32)(availableStagingTextureBytes / bytesToMb), " MB. Total:",
-                (Ogre::uint32)((usedStagingTextureBytes + availableStagingTextureBytes) / bytesToMb) );
+        text.a(
+            "\nGPU StagingTextures. In use: ", ( Ogre::uint32 )( usedStagingTextureBytes / bytesToMb ),
+            " MB. Available: ", ( Ogre::uint32 )( availableStagingTextureBytes / bytesToMb ),
+            " MB. Total:",
+            ( Ogre::uint32 )( ( usedStagingTextureBytes + availableStagingTextureBytes ) / bytesToMb ) );
         outText += text.c_str();
 
         const size_t totalBytesNeeded =
@@ -378,7 +370,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void MemoryGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -408,4 +400,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

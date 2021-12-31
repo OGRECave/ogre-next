@@ -3,6 +3,7 @@
 #define _Demo_TutorialGameState_H_
 
 #include "OgrePrerequisites.h"
+
 #include "GameState.h"
 
 namespace Ogre
@@ -11,7 +12,7 @@ namespace Ogre
     {
         class TextAreaOverlayElement;
     }
-}
+}  // namespace Ogre
 
 namespace Demo
 {
@@ -22,14 +23,14 @@ namespace Demo
     class TutorialGameState : public GameState
     {
     protected:
-        GraphicsSystem      *mGraphicsSystem;
+        GraphicsSystem *mGraphicsSystem;
 
         /// Optional, for controlling the camera with WASD and the mouse
-        CameraController    *mCameraController;
+        CameraController *mCameraController;
 
-        Ogre::String        mHelpDescription;
-        Ogre::uint16        mDisplayHelpMode;
-        Ogre::uint16        mNumDisplayHelpModes;
+        Ogre::String mHelpDescription;
+        Ogre::uint16 mDisplayHelpMode;
+        Ogre::uint16 mNumDisplayHelpModes;
 
         Ogre::v1::TextAreaOverlayElement *mDebugText;
         Ogre::v1::TextAreaOverlayElement *mDebugTextShadow;
@@ -39,19 +40,19 @@ namespace Demo
 
     public:
         TutorialGameState( const Ogre::String &helpDescription );
-        virtual ~TutorialGameState();
+        ~TutorialGameState() override;
 
         void _notifyGraphicsSystem( GraphicsSystem *graphicsSystem );
 
         void createScene01() override;
 
-        virtual void update( float timeSinceLast ) override;
+        void update( float timeSinceLast ) override;
 
-        virtual void keyPressed( const SDL_KeyboardEvent &arg ) override;
-        virtual void keyReleased( const SDL_KeyboardEvent &arg ) override;
+        void keyPressed( const SDL_KeyboardEvent &arg ) override;
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
 
-        virtual void mouseMoved( const SDL_Event &arg ) override;
+        void mouseMoved( const SDL_Event &arg ) override;
     };
-}
+}  // namespace Demo
 
 #endif

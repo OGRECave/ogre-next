@@ -4,30 +4,30 @@
 #include "GraphicsSystem.h"
 #include "OgreForward3D.h"
 
-#include "OgreSceneManager.h"
 #include "OgreItem.h"
+#include "OgreSceneManager.h"
 
+#include "OgreMesh2.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreMesh2.h"
 
 #include "OgreCamera.h"
 
-#include "OgreHlmsUnlitDatablock.h"
 #include "OgreHlmsSamplerblock.h"
+#include "OgreHlmsUnlitDatablock.h"
 
-#include "OgreRoot.h"
-#include "OgreHlmsManager.h"
-#include "OgreHlms.h"
-#include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreRoot.h"
 
 #include "OgreHlmsPbs.h"
 #include "OgreHlmsPbsDatablock.h"
 
-#include "OgreOverlayManager.h"
-#include "OgreOverlayContainer.h"
 #include "OgreOverlay.h"
+#include "OgreOverlayContainer.h"
+#include "OgreOverlayManager.h"
 
 using namespace Demo;
 
@@ -43,6 +43,7 @@ namespace Demo
         float maxDistance;
     };
 
+    // clang-format off
     const Presets c_presets[] =
     {
         { 4, 4, 5, 96, 3.0f, 200.0f },
@@ -52,6 +53,7 @@ namespace Demo
         { 4, 4, 7, 64, 3.0f, 150.0f },
         { 4, 4, 3, 128, 3.0f, 200.0f },
     };
+    // clang-format on
 
     InstancedStereoGameState::InstancedStereoGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
@@ -61,9 +63,9 @@ namespace Demo
         mLightRadius( 10.0f ),
         mLowThreshold( false )
     {
-        mDisplayHelpMode        = 2;
-        mNumDisplayHelpModes    = 3;
-        memset( mSceneNode, 0, sizeof(mSceneNode) );
+        mDisplayHelpMode = 2;
+        mNumDisplayHelpModes = 3;
+        memset( mSceneNode, 0, sizeof( mSceneNode ) );
     }
     //-----------------------------------------------------------------------------------
     void InstancedStereoGameState::createScene01()
@@ -74,44 +76,41 @@ namespace Demo
 
         sceneManager->setForwardClustered( true, 16, 8, 24, 96, 0, 0, 5, 500 );
 
-        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
-                                            Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 5000.0f, 5000.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC,
-                                            Ogre::v1::HardwareBuffer::HBU_STATIC );
+        Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
+            "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 5000.0f, 5000.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
+            Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         Ogre::MeshPtr planeMesh = Ogre::MeshManager::getSingleton().createByImportingV1(
-                    "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    planeMeshV1.get(), true, true, true );
+            "Plane", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, planeMeshV1.get(), true,
+            true, true );
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                             ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
             sceneNode->attachObject( item );
         }
 
         float armsLength = 2.5f;
 
-        for( int i=0; i<4; ++i )
+        for( int i = 0; i < 4; ++i )
         {
-            for( int j=0; j<4; ++j )
+            for( int j = 0; j < 4; ++j )
             {
-                Ogre::Item *item = sceneManager->createItem( "Cube_d.mesh",
-                                                             Ogre::ResourceGroupManager::
-                                                             AUTODETECT_RESOURCE_GROUP_NAME,
-                                                             Ogre::SCENE_DYNAMIC );
+                Ogre::Item *item = sceneManager->createItem(
+                    "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    Ogre::SCENE_DYNAMIC );
 
                 size_t idx = i * 4 + j;
 
-                mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                        createChildSceneNode( Ogre::SCENE_DYNAMIC );
+                mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-                mSceneNode[idx]->setPosition( (i - 1.5f) * armsLength,
-                                              2.0f,
-                                              (j - 1.5f) * armsLength );
+                mSceneNode[idx]->setPosition( ( i - 1.5f ) * armsLength, 2.0f,
+                                              ( j - 1.5f ) * armsLength );
                 mSceneNode[idx]->setScale( 0.65f, 0.65f, 0.65f );
 
                 mSceneNode[idx]->roll( Ogre::Radian( (Ogre::Real)idx ) );
@@ -120,22 +119,20 @@ namespace Demo
             }
         }
 
-        for( int i=0; i<64; ++i )
+        for( int i = 0; i < 64; ++i )
         {
-            Ogre::Item *item = sceneManager->createItem( "Cube_d.mesh",
-                                                         Ogre::ResourceGroupManager::
-                                                         AUTODETECT_RESOURCE_GROUP_NAME,
-                                                         Ogre::SCENE_STATIC );
+            Ogre::Item *item = sceneManager->createItem(
+                "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                Ogre::SCENE_STATIC );
 
-            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->
-                    createChildSceneNode( Ogre::SCENE_STATIC );
+            Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )
+                                             ->createChildSceneNode( Ogre::SCENE_STATIC );
 
             Ogre::Vector3 vScale( Ogre::Math::RangeRandom( 0.5f, 10.0f ),
                                   Ogre::Math::RangeRandom( 5.0f, 15.0f ),
                                   Ogre::Math::RangeRandom( 0.5f, 10.0f ) );
 
-            sceneNode->setPosition( Ogre::Math::RangeRandom( -250, 250 ),
-                                    vScale.y * 0.5f - 1.0f,
+            sceneNode->setPosition( Ogre::Math::RangeRandom( -250, 250 ), vScale.y * 0.5f - 1.0f,
                                     Ogre::Math::RangeRandom( -250, 250 ) );
             sceneNode->setScale( vScale );
             sceneNode->attachObject( item );
@@ -159,7 +156,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
+        light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -172,7 +169,7 @@ namespace Demo
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.2f, 0.4f, 0.8f ); //Cold
+        light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
         light->setSpecularColour( 0.2f, 0.4f, 0.8f );
         light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_SPOTLIGHT );
@@ -186,14 +183,14 @@ namespace Demo
 
         mCameraController = new CameraController( mGraphicsSystem, false );
 
-        //This sample is too taxing on pixel shaders. Use the fastest PCF filter.
+        // This sample is too taxing on pixel shaders. Use the fastest PCF filter.
         Ogre::Hlms *hlms = mGraphicsSystem->getRoot()->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
-        assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
-        Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs*>( hlms );
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );
+        Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs *>( hlms );
         pbs->setShadowSettings( Ogre::HlmsPbs::PCF_2x2 );
 
-        //Change the roughness of the default datablock to something prettier.
-        static_cast<Ogre::HlmsPbsDatablock*>( pbs->getDefaultDatablock() )->setRoughness( 0.1f );
+        // Change the roughness of the default datablock to something prettier.
+        static_cast<Ogre::HlmsPbsDatablock *>( pbs->getDefaultDatablock() )->setRoughness( 0.1f );
 
         TutorialGameState::createScene01();
     }
@@ -203,9 +200,9 @@ namespace Demo
         const Ogre::uint32 numPresets = sizeof( c_presets ) / sizeof( c_presets[0] );
 
         if( goForward )
-            mCurrentForward3DPreset = (mCurrentForward3DPreset + 1) % numPresets;
+            mCurrentForward3DPreset = ( mCurrentForward3DPreset + 1 ) % numPresets;
         else
-            mCurrentForward3DPreset = (mCurrentForward3DPreset + numPresets - 1) % numPresets;
+            mCurrentForward3DPreset = ( mCurrentForward3DPreset + numPresets - 1 ) % numPresets;
 
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -213,9 +210,8 @@ namespace Demo
         const bool wasInDebugMode = forwardPlus->getDebugMode();
 
         const Presets &preset = c_presets[mCurrentForward3DPreset];
-        sceneManager->setForward3D( true, preset.width, preset.height,
-                                    preset.numSlices, preset.lightsPerCell,
-                                    preset.minDistance, preset.maxDistance );
+        sceneManager->setForward3D( true, preset.width, preset.height, preset.numSlices,
+                                    preset.lightsPerCell, preset.minDistance, preset.maxDistance );
 
         forwardPlus = sceneManager->getForwardPlus();
         forwardPlus->setDebugMode( wasInDebugMode );
@@ -225,11 +221,11 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         Ogre::LightArray::const_iterator itor = mGeneratedLights.begin();
-        Ogre::LightArray::const_iterator end  = mGeneratedLights.end();
+        Ogre::LightArray::const_iterator end = mGeneratedLights.end();
 
         while( itor != end )
         {
-            Ogre::SceneNode *sceneNode = (*itor)->getParentSceneNode();
+            Ogre::SceneNode *sceneNode = ( *itor )->getParentSceneNode();
             sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
             sceneManager->destroyLight( *itor );
             ++itor;
@@ -239,10 +235,10 @@ namespace Demo
 
         Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
 
-        //Deterministic randomness
+        // Deterministic randomness
         srand( 101 );
 
-        for( Ogre::uint32 i=0; i<mNumLights; ++i )
+        for( Ogre::uint32 i = 0; i < mNumLights; ++i )
         {
             Ogre::Light *light = sceneManager->createLight();
             Ogre::SceneNode *lightNode = rootNode->createChildSceneNode();
@@ -250,12 +246,12 @@ namespace Demo
 
             if( i & 1 )
             {
-                light->setDiffuseColour( 0.2f, 0.4f, 0.8f ); //Cold
+                light->setDiffuseColour( 0.2f, 0.4f, 0.8f );  // Cold
                 light->setSpecularColour( 0.2f, 0.4f, 0.8f );
             }
             else
             {
-                light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
+                light->setDiffuseColour( 0.8f, 0.4f, 0.2f );  // Warm
                 light->setSpecularColour( 0.8f, 0.4f, 0.2f );
             }
 
@@ -279,8 +275,8 @@ namespace Demo
     {
         if( mAnimateObjects )
         {
-            for( int i=0; i<16; ++i )
-                mSceneNode[i]->yaw( Ogre::Radian(timeSinceLast * i * 0.125f) );
+            for( int i = 0; i < 16; ++i )
+                mSceneNode[i]->yaw( Ogre::Radian( timeSinceLast * i * 0.125f ) );
         }
 
         TutorialGameState::update( timeSinceLast );
@@ -308,8 +304,9 @@ namespace Demo
             outText += "\nF9 Debug Mode. ";
             outText += forwardPlus->getDebugMode() ? "[On]" : "[Off]";
             outText += "\nF10 Switch between Forward3D and Clustered Forward. ";
-            outText += forwardPlus->getForwardPlusMethod() == Ogre::ForwardPlusBase::MethodForward3D ?
-                        "[F3D]" : "[Clustered]";
+            outText += forwardPlus->getForwardPlusMethod() == Ogre::ForwardPlusBase::MethodForward3D
+                           ? "[F3D]"
+                           : "[Clustered]";
 
             if( forwardPlus->getForwardPlusMethod() == Ogre::ForwardPlusBase::MethodForward3D )
             {
@@ -323,7 +320,7 @@ namespace Demo
                 outText += "\nSlices " + Ogre::StringConverter::toString( preset.numSlices );
                 outText += "\nLights p/ Cell " + Ogre::StringConverter::toString( preset.lightsPerCell );
                 outText += "\nMin Distance   " + Ogre::StringConverter::toString( preset.minDistance );
-                outText += "\nMax Distance  "  + Ogre::StringConverter::toString( preset.maxDistance );
+                outText += "\nMax Distance  " + Ogre::StringConverter::toString( preset.maxDistance );
             }
         }
     }
@@ -336,9 +333,9 @@ namespace Demo
         if( arg.keysym.sym == SDLK_SPACE &&
             forwardPlus->getForwardPlusMethod() == Ogre::ForwardPlusBase::MethodForward3D )
         {
-            changeForward3DPreset( !(arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) );
+            changeForward3DPreset( !( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) );
         }
-        else if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        else if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -388,9 +385,9 @@ namespace Demo
             if( forwardPlus->getForwardPlusMethod() == Ogre::ForwardPlusBase::MethodForwardClustered )
             {
                 const Presets &preset = c_presets[mCurrentForward3DPreset];
-                sceneManager->setForward3D( true, preset.width, preset.height,
-                                            preset.numSlices, preset.lightsPerCell,
-                                            preset.minDistance, preset.maxDistance );
+                sceneManager->setForward3D( true, preset.width, preset.height, preset.numSlices,
+                                            preset.lightsPerCell, preset.minDistance,
+                                            preset.maxDistance );
             }
             else
             {
@@ -405,4 +402,4 @@ namespace Demo
             TutorialGameState::keyReleased( arg );
         }
     }
-}
+}  // namespace Demo

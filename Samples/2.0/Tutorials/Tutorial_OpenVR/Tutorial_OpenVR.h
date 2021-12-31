@@ -19,15 +19,15 @@ namespace Demo
         std::string mDeviceModelNumber;
         vr::TrackedDevicePose_t mTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
 
-        Ogre::CompositorWorkspace   *mVrWorkspace;
-        Ogre::TextureGpu            *mVrTexture;
-        Ogre::Camera                *mVrCullCamera;
+        Ogre::CompositorWorkspace *mVrWorkspace;
+        Ogre::TextureGpu *mVrTexture;
+        Ogre::Camera *mVrCullCamera;
 
-        OpenVRCompositorListener    *mOvrCompositorListener;
+        OpenVRCompositorListener *mOvrCompositorListener;
         /// Only used if USE_OPEN_VR is defined
-        NullCompositorListener      *mNullCompositorListener;
+        NullCompositorListener *mNullCompositorListener;
 
-        virtual Ogre::CompositorWorkspace* setupCompositor();
+        virtual Ogre::CompositorWorkspace *setupCompositor();
 
         virtual void setupResources();
 
@@ -47,13 +47,13 @@ namespace Demo
             mOvrCompositorListener( 0 ),
             mNullCompositorListener( 0 )
         {
-            memset( mTrackedDevicePose, 0, sizeof (mTrackedDevicePose) );
+            memset( mTrackedDevicePose, 0, sizeof( mTrackedDevicePose ) );
         }
 
         virtual void deinitialize();
 
-        OpenVRCompositorListener* getOvrCompositorListener() { return mOvrCompositorListener; }
+        OpenVRCompositorListener *getOvrCompositorListener() { return mOvrCompositorListener; }
     };
-}
+}  // namespace Demo
 
 #endif

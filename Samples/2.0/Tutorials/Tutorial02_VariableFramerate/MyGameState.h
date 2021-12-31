@@ -9,8 +9,8 @@ namespace Demo
 {
     class MyGameState : public TutorialGameState
     {
-        Ogre::SceneNode     *mSceneNode;
-        float               mDisplacement;
+        Ogre::SceneNode *mSceneNode;
+        float mDisplacement;
 
     public:
         MyGameState( const Ogre::String &helpDescription );
@@ -19,6 +19,6 @@ namespace Demo
 
         virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

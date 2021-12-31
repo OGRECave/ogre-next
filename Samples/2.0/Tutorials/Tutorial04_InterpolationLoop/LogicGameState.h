@@ -11,8 +11,8 @@ namespace Demo
 
     class LogicGameState : public GameState
     {
-        float               mDisplacement;
-        GraphicsGameState   *mGraphicsGameState;
+        float mDisplacement;
+        GraphicsGameState *mGraphicsGameState;
 
     public:
         LogicGameState();
@@ -21,6 +21,6 @@ namespace Demo
 
         virtual void update( float timeSinceLast );
     };
-}
+}  // namespace Demo
 
 #endif

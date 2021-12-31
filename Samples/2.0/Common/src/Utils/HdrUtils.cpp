@@ -3,17 +3,17 @@
 
 #include "OgreVector4.h"
 
-#include "OgreRoot.h"
 #include "Compositor/OgreCompositorManager2.h"
-#include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
+#include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
+#include "OgreRoot.h"
 
-#include "OgreMaterialManager.h"
 #include "OgreMaterial.h"
-#include "OgreTechnique.h"
+#include "OgreMaterialManager.h"
 #include "OgrePass.h"
+#include "OgreTechnique.h"
 
 namespace Demo
 {
@@ -29,28 +29,28 @@ namespace Demo
         preprocessorDefines += ",MSAA_NUM_SUBSAMPLES=";
         preprocessorDefines += Ogre::StringConverter::toString( fsaa );
 
-        Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().load(
-                    "HDR/Resolve_4xFP32_HDR_Box",
-                    Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ).
-                staticCast<Ogre::Material>();
+        Ogre::MaterialPtr material =
+            Ogre::MaterialManager::getSingleton()
+                .load( "HDR/Resolve_4xFP32_HDR_Box",
+                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
+                .staticCast<Ogre::Material>();
 
-        Ogre::Pass *pass = material->getTechnique(0)->getPass(0);
+        Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 
         Ogre::GpuProgram *shader = 0;
         Ogre::GpuProgramParametersSharedPtr oldParams;
 
-        //Save old manual & auto params
+        // Save old manual & auto params
         oldParams = pass->getFragmentProgramParameters();
-        //Retrieve the HLSL/GLSL/Metal shader and rebuild it with the right settings.
+        // Retrieve the HLSL/GLSL/Metal shader and rebuild it with the right settings.
         shader = pass->getFragmentProgram()->_getBindingDelegate();
         shader->setParameter( "preprocessor_defines", preprocessorDefines );
         pass->getFragmentProgram()->reload();
-        //Restore manual & auto params to the newly compiled shader
+        // Restore manual & auto params to the newly compiled shader
         pass->getFragmentProgramParameters()->copyConstantsFrom( *oldParams );
     }
     //-----------------------------------------------------------------------------------
-    void HdrUtils::setSkyColour( const Ogre::ColourValue &colour,
-                                 float multiplier,
+    void HdrUtils::setSkyColour( const Ogre::ColourValue &colour, float multiplier,
                                  Ogre::CompositorWorkspace *workspace )
     {
         Ogre::CompositorNode *node = workspace->findNode( "HdrRenderingNode" );
@@ -58,8 +58,7 @@ namespace Demo
         if( !node )
         {
             OGRE_EXCEPT( Ogre::Exception::ERR_INVALIDPARAMS,
-                         "No node 'HdrRenderingNode' in provided workspace ",
-                         "HdrUtils::setSkyColour" );
+                         "No node 'HdrRenderingNode' in provided workspace ", "HdrUtils::setSkyColour" );
         }
 
         const Ogre::CompositorPassVec passes = node->_getPasses();
@@ -70,10 +69,10 @@ namespace Demo
         Ogre::RenderPassDescriptor *renderPassDesc = pass->getRenderPassDesc();
         renderPassDesc->setClearColour( colour * multiplier );
 
-        //Set the definition as well, although this isn't strictly necessary.
+        // Set the definition as well, although this isn't strictly necessary.
         Ogre::CompositorManager2 *compositorManager = workspace->getCompositorManager();
         Ogre::CompositorNodeDef *nodeDef =
-                compositorManager->getNodeDefinitionNonConst( "HdrRenderingNode" );
+            compositorManager->getNodeDefinitionNonConst( "HdrRenderingNode" );
 
         assert( nodeDef->getNumTargetPasses() >= 1 );
 
@@ -90,16 +89,16 @@ namespace Demo
     {
         assert( minAutoExposure <= maxAutoExposure );
 
-        Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().load(
-                    "HDR/DownScale03_SumLumEnd",
-                    Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ).
-                staticCast<Ogre::Material>();
+        Ogre::MaterialPtr material =
+            Ogre::MaterialManager::getSingleton()
+                .load( "HDR/DownScale03_SumLumEnd",
+                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
+                .staticCast<Ogre::Material>();
 
         Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
         Ogre::GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();
 
-        const Ogre::Vector3 exposureParams( 1024.0f * expf( exposure - 2.0f ),
-                                            7.5f - maxAutoExposure,
+        const Ogre::Vector3 exposureParams( 1024.0f * expf( exposure - 2.0f ), 7.5f - maxAutoExposure,
                                             7.5f - minAutoExposure );
 
         psParams = pass->getFragmentProgramParameters();
@@ -110,18 +109,17 @@ namespace Demo
     {
         assert( minThreshold < fullColourThreshold );
 
-        Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().load(
-                    "HDR/BrightPass_Start",
-                    Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ).
-                staticCast<Ogre::Material>();
+        Ogre::MaterialPtr material =
+            Ogre::MaterialManager::getSingleton()
+                .load( "HDR/BrightPass_Start",
+                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
+                .staticCast<Ogre::Material>();
 
         Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 
         Ogre::GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();
-        psParams->setNamedConstant( "brightThreshold",
-                                    Ogre::Vector4(
-                                        minThreshold,
-                                        1.0f / (fullColourThreshold - minThreshold),
-                                        0, 0 ) );
+        psParams->setNamedConstant(
+            "brightThreshold",
+            Ogre::Vector4( minThreshold, 1.0f / ( fullColourThreshold - minThreshold ), 0, 0 ) );
     }
-}
+}  // namespace Demo

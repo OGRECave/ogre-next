@@ -60,29 +60,29 @@ namespace Demo
     {
         struct KeyStroke
         {
-            int32_t keycode;    // SDL_Keycode
+            int32_t  keycode;   // SDL_Keycode
             uint16_t scancode;  // SDL_Scancode
-            bool bReleased;
+            bool     bReleased;
             KeyStroke();
         };
 
         struct FrameActivity
         {
-            uint32_t frameId;
-            Ogre::Vector3 cameraPos;
-            Ogre::Quaternion cameraRot;
+            uint32_t               frameId;
+            Ogre::Vector3          cameraPos;
+            Ogre::Quaternion       cameraRot;
             std::vector<KeyStroke> keyStrokes;
-            bool screenshotRenderWindow;
-            Ogre::StringVector targetsToScreenshot;
+            bool                   screenshotRenderWindow;
+            Ogre::StringVector     targetsToScreenshot;
             FrameActivity( uint32_t _frameId );
         };
 
     public:
         struct Params
         {
-            bool bRecord;
-            bool bCompressDuration;
-            bool bSkipDump;  // Useful for debugging a record showing something that is broken
+            bool        bRecord;
+            bool        bCompressDuration;
+            bool        bSkipDump;  // Useful for debugging a record showing something that is broken
             std::string recordPath;
             std::string outputPath;
             Params();
@@ -92,16 +92,16 @@ namespace Demo
         };
 
     protected:
-        double mFrametime;
-        uint32_t mFrameIdx;
-        uint32_t mNumFrames;
+        double            mFrametime;
+        uint32_t          mFrameIdx;
+        uint32_t          mNumFrames;
         KeyboardListener *mRealKeyboardListener;
-        MouseListener *mRealMouseListener;
+        MouseListener *   mRealMouseListener;
 
         std::vector<FrameActivity> mFrameActivity;
 
         Params mParams;
-        bool mBlockInputForwarding;
+        bool   mBlockInputForwarding;
 
         inline static void flushLwString( Ogre::LwString &jsonStr, std::string &outJson );
 
@@ -109,7 +109,7 @@ namespace Demo
                                   std::string &outJson );
         void saveToJsonStr( std::string &outJson );
 
-        static bool shouldRecordKey( const SDL_KeyboardEvent &arg );
+        static bool          shouldRecordKey( const SDL_KeyboardEvent &arg );
         static Ogre::Vector3 getCameraRecordPosition( Ogre::Camera *camera );
 
     public:

@@ -14,6 +14,6 @@ namespace Demo
 
         virtual void createScene01();
     };
-}
+}  // namespace Demo
 
 #endif
