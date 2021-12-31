@@ -62,13 +62,6 @@ namespace Demo
         Ogre::ConfigFile cf;
         cf.load( mResourcePath + "resources2.cfg" );
 
-        Ogre::String dataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
-
-        if( dataFolder.empty() )
-            dataFolder = "./";
-        else if( *( dataFolder.end() - 1 ) != '/' )
-            dataFolder += "/";
-
         Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
         if( originalDataFolder.empty() )

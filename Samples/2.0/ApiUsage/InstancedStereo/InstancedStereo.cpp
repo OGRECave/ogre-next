@@ -25,9 +25,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class InstancedStereoGraphicsSystem : public GraphicsSystem
+    class InstancedStereoGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,

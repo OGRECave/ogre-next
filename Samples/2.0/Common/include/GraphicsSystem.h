@@ -70,15 +70,16 @@ namespace Demo
         bool isWriteAccessFolder( const Ogre::String &folderPath, const Ogre::String &fileToSave );
 
         /// @see MessageQueueSystem::processIncomingMessage
-        virtual void processIncomingMessage( Mq::MessageId messageId, const void *data );
+        void processIncomingMessage( Mq::MessageId messageId, const void *data ) override;
 
         static void addResourceLocation( const Ogre::String &archName, const Ogre::String &typeName,
                                          const Ogre::String &secName );
 
-        void         loadTextureCache();
-        void         saveTextureCache();
-        void         loadHlmsDiskCache();
-        void         saveHlmsDiskCache();
+        void loadTextureCache();
+        void saveTextureCache();
+        void loadHlmsDiskCache();
+        void saveHlmsDiskCache();
+
         virtual void setupResources();
         virtual void registerHlms();
         /// Optional override method where you can perform resource group loading
@@ -103,12 +104,12 @@ namespace Demo
     public:
         GraphicsSystem( GameState *gameState, Ogre::String resourcePath = Ogre::String( "" ),
                         Ogre::ColourValue backgroundColour = Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) );
-        virtual ~GraphicsSystem();
+        ~GraphicsSystem() override;
 
         void _notifyLogicSystem( BaseSystem *logicSystem ) { mLogicSystem = logicSystem; }
 
         void initialize( const Ogre::String &windowTitle );
-        void deinitialize();
+        void deinitialize() override;
 
         void update( float timeSinceLast );
 
@@ -123,7 +124,7 @@ namespace Demo
         void updateGameEntities( const GameEntityVec &gameEntities, float weight );
 
         /// Overload Ogre::UniformScalableTask. @see updateGameEntities
-        virtual void execute( size_t threadId, size_t numThreads );
+        void execute( size_t threadId, size_t numThreads ) override;
 
         /// Returns the GameEntities that are ready to be rendered. May include entities
         /// that are scheduled to be removed (i.e. they are no longer updated by logic)

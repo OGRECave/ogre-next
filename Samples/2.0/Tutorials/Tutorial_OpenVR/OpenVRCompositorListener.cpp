@@ -35,7 +35,7 @@ namespace Demo
     {
         memset( mTrackedDevicePose, 0, sizeof( mTrackedDevicePose ) );
         memset( mDevicePose, 0, sizeof( mDevicePose ) );
-        memset( &mVrData, 0, sizeof( mVrData ) );
+        silent_memset( &mVrData, 0, sizeof( mVrData ) );
 
         mCamera->setVrData( &mVrData );
         syncCameraProjection( true );

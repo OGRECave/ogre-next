@@ -27,11 +27,11 @@ using namespace Demo;
 
 namespace Demo
 {
-    class MyGraphicsSystem : public GraphicsSystem
+    class MyGraphicsSystem final : public GraphicsSystem
     {
         // No resources. They're not needed and a potential point of failure.
         // This is a very simple project
-        virtual void setupResources() {}
+        void setupResources() override {}
 
     public:
         MyGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}

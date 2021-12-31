@@ -153,9 +153,9 @@ namespace Ogre
     public:
         DefaultSceneFormatListener();
 
-        virtual void setSceneFlags( uint32 sceneFlags, SceneFormatBase *parent );
-        virtual bool exportSceneNode( const SceneNode *sceneNode );
-        virtual bool exportItem( const Item *item );
+        void setSceneFlags( uint32 sceneFlags, SceneFormatBase *parent ) override;
+        bool exportSceneNode( const SceneNode *sceneNode ) override;
+        bool exportItem( const Item *item ) override;
     };
 
     /** @} */

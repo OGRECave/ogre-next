@@ -170,8 +170,6 @@ namespace Demo
         sceneManager->setForwardClustered( true, 16, 8, 24, 4, 0, 2, 2, 50 );
         // sceneManager->setForwardClustered( true, 1, 1, 1, 96, 0, 3, 2, 50 );
 
-        const float armsLength = 2.5f;
-
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
             "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
             Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,

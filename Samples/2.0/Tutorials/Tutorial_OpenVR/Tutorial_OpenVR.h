@@ -11,7 +11,7 @@ namespace Demo
     class NullCompositorListener;
     class OpenVRCompositorListener;
 
-    class Tutorial_OpenVRGraphicsSystem : public GraphicsSystem
+    class Tutorial_OpenVRGraphicsSystem final : public GraphicsSystem
     {
         vr::IVRSystem *mHMD;
         std::string mStrDriver;
@@ -27,9 +27,9 @@ namespace Demo
         /// Only used if USE_OPEN_VR is defined
         NullCompositorListener *mNullCompositorListener;
 
-        virtual Ogre::CompositorWorkspace *setupCompositor();
+        Ogre::CompositorWorkspace *setupCompositor() override;
 
-        virtual void setupResources();
+        void setupResources() override;
 
         static std::string GetTrackedDeviceString( vr::TrackedDeviceIndex_t unDevice,
                                                    vr::TrackedDeviceProperty prop,
@@ -50,7 +50,7 @@ namespace Demo
             memset( mTrackedDevicePose, 0, sizeof( mTrackedDevicePose ) );
         }
 
-        virtual void deinitialize();
+        void deinitialize() override;
 
         OpenVRCompositorListener *getOvrCompositorListener() { return mOvrCompositorListener; }
     };

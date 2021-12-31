@@ -27,9 +27,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class HdrSmaaGraphicsSystem : public GraphicsSystem
+    class HdrSmaaGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             Ogre::RenderSystem *renderSystem = mRoot->getRenderSystem();
@@ -44,7 +44,7 @@ namespace Demo
                                                     compositorName, true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

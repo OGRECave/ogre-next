@@ -856,8 +856,11 @@ namespace Ogre
             {
                 for( uint8 j = 0; j < numLodLevels; ++j )
                 {
-                    uint16 streamID = readChunk( stream );
-                    assert( streamID == M_SUBMESH_LOD && !stream->eof() );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+                    const uint16 streamID =
+#endif
+                        readChunk( stream );
+                    OGRE_ASSERT_LOW( streamID == M_SUBMESH_LOD && !stream->eof() );
 
                     totalSubmeshLods.push_back( SubMeshLod() );
                     const uint8 currentLod = static_cast<uint8>( submeshLods.size() );

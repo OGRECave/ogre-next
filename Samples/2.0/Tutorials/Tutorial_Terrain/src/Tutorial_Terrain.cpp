@@ -56,7 +56,7 @@ THE SOFTWARE.
 
 namespace Demo
 {
-    class Tutorial_TerrainGraphicsSystem : public GraphicsSystem
+    class Tutorial_TerrainGraphicsSystem final : public GraphicsSystem
     {
         Ogre::TerraWorkspaceListener *mTerraWorkspaceListener;
 
@@ -68,7 +68,7 @@ namespace Demo
             mTerraWorkspaceListener = 0;
         }
 
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             using namespace Ogre;
             CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
@@ -88,7 +88,7 @@ namespace Demo
             return workspace;
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

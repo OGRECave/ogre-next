@@ -26,9 +26,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class PostprocessingGraphicsSystem : public GraphicsSystem
+    class PostprocessingGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             // Delegate compositor creation to the game state. It could be done here,
             // but we would later have to inform the game state about some data.
@@ -36,7 +36,7 @@ namespace Demo
             return static_cast<PostprocessingGameState *>( mCurrentGameState )->setupCompositor();
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -60,14 +60,14 @@ namespace Demo
             };
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-            Ogre::String dataFolder = originalDataFolder + "packs/cubemapsJS.zip";
+            Ogre::String packFolder = originalDataFolder + "packs/cubemapsJS.zip";
 #else
-            Ogre::String dataFolder = originalDataFolder + "cubemapsJS.zip";
+            Ogre::String packFolder = originalDataFolder + "cubemapsJS.zip";
 #endif
 #if OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
-            addResourceLocation( dataFolder, "Zip", "General" );
+            addResourceLocation( packFolder, "Zip", "General" );
 #else
-            addResourceLocation( dataFolder, "APKZip", "General" );
+            addResourceLocation( packFolder, "APKZip", "General" );
 #endif
 
             for( size_t i = 0; i < 6; ++i )

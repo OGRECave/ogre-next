@@ -31,7 +31,7 @@ namespace Demo
 
         It throws when it detects the buffer hasn't been copied correctly
     */
-    class UnalignedBufferUavCopyGraphicsSystem : public GraphicsSystem
+    class UnalignedBufferUavCopyGraphicsSystem final : public GraphicsSystem
     {
     public:
         UnalignedBufferUavCopyGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState )

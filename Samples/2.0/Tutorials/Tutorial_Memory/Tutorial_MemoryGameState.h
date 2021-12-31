@@ -47,8 +47,8 @@ namespace Demo
     public:
         MemoryGameState( const Ogre::String &helpDescription );
 
-        virtual size_t getNumSlicesFor( Ogre::TextureGpu *texture,
-                                        Ogre::TextureGpuManager *textureManager );
+        size_t getNumSlicesFor( Ogre::TextureGpu *texture,
+                                Ogre::TextureGpuManager *textureManager ) override;
 
         void createScene01() override;
         void destroyScene() override;

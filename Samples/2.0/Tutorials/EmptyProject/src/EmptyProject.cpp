@@ -36,14 +36,14 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class EmptyProjectGraphicsSystem : public GraphicsSystem
+    class EmptyProjectGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             return GraphicsSystem::setupCompositor();
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

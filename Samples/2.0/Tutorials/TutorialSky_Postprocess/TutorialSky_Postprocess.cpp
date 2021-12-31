@@ -26,16 +26,16 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class TutorialSky_PostprocessGraphicsSystem : public GraphicsSystem
+    class TutorialSky_PostprocessGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                     "TutorialSky_PostprocessWorkspace", true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

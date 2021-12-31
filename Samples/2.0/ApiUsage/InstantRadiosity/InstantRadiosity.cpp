@@ -26,9 +26,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class InstantRadiosityGraphicsSystem : public GraphicsSystem
+    class InstantRadiosityGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,

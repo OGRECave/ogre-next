@@ -254,7 +254,7 @@ namespace Demo
             const int numX = 8;
             const int numZ = 8;
 
-            const float armsLength = 1.0f;
+            const float armsLengthSphere = 1.0f;
             const float startX = ( numX - 1 ) / 2.0f;
             const float startZ = ( numZ - 1 ) / 2.0f;
 
@@ -292,8 +292,8 @@ namespace Demo
 
                     Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition(
-                        Ogre::Vector3( armsLength * x - startX, 1.0f, armsLength * z - startZ ) );
+                    sceneNode->setPosition( Ogre::Vector3( armsLengthSphere * x - startX, 1.0f,
+                                                           armsLengthSphere * z - startZ ) );
                     sceneNode->attachObject( item );
                 }
             }

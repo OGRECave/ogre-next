@@ -15,16 +15,16 @@
 
 namespace Demo
 {
-    class TutorialCompute01_UavTextureGraphicsSystem : public GraphicsSystem
+    class TutorialCompute01_UavTextureGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                     "TutorialComputeTest01_UavTextureWorkspace", true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

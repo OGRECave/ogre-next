@@ -30,9 +30,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class IesProfilesGraphicsSystem : public GraphicsSystem
+    class IesProfilesGraphicsSystem final : public GraphicsSystem
     {
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -56,7 +56,7 @@ namespace Demo
             addResourceLocation( dataFolder, getMediaReadArchiveType(), "General" );
         }
 
-        virtual void loadResources()
+        void loadResources() override
         {
             GraphicsSystem::loadResources();
 

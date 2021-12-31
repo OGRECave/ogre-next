@@ -13,9 +13,9 @@
 
 namespace Demo
 {
-    class ManualObjectGraphicsSystem : public GraphicsSystem
+    class ManualObjectGraphicsSystem final : public GraphicsSystem
     {
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

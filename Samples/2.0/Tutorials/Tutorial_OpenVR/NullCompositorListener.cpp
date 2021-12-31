@@ -25,7 +25,7 @@ namespace Demo
         mLastCamFar( 0 ),
         mMustSyncAtEndOfFrame( false )
     {
-        memset( &mVrData, 0, sizeof( mVrData ) );
+        silent_memset( &mVrData, 0, sizeof( mVrData ) );
 
         mCamera->setVrData( &mVrData );
         syncCameraProjection( true );

@@ -35,28 +35,28 @@ THE SOFTWARE.
 #include <string.h>
 
 #if defined( __GNUC__ ) && !defined( __clang__ )
-namespace Ogre
-{
 #    pragma GCC diagnostic push
 #    pragma GCC diagnostic ignored "-Wclass-memaccess"
 
-    inline void *silent_memset( void *a, int b, size_t c ) noexcept __nonnull( ( 1 ) );
-    inline void *silent_memset( void *a, int b, size_t c ) noexcept { return memset( a, b, c ); }
+inline void *silent_memset( void *a, int b, size_t c ) noexcept __nonnull( ( 1 ) );
+inline void *silent_memset( void *a, int b, size_t c ) noexcept
+{
+    return memset( a, b, c );
+}
 
-    inline void *silent_memcpy( void *__restrict __dest, const void *__restrict __src,
-                                size_t __n ) noexcept __nonnull( ( 1, 2 ) );
-    inline void *silent_memcpy( void *__restrict a, const void *__restrict b, size_t c ) noexcept
-    {
-        return memcpy( a, b, c );
-    }
+inline void *silent_memcpy( void *__restrict __dest, const void *__restrict __src,
+                            size_t __n ) noexcept __nonnull( ( 1, 2 ) );
+inline void *silent_memcpy( void *__restrict a, const void *__restrict b, size_t c ) noexcept
+{
+    return memcpy( a, b, c );
+}
 
-    __fortify_function void *__NTH( silent_memmove( void *a, const void *b, size_t c ) )
-    {
-        return memmove( a, b, c );
-    }
+__fortify_function void *__NTH( silent_memmove( void *a, const void *b, size_t c ) )
+{
+    return memmove( a, b, c );
+}
 
 #    pragma GCC diagnostic pop
-}  // namespace Ogre
 #else
 #    define silent_memset( a, b, c ) memset( a, b, c )
 #    define silent_memcpy( a, b, c ) memcpy( a, b, c )

@@ -21,11 +21,11 @@ namespace Demo
         std::deque<Ogre::uint32> mAvailableTransformIdx;
 
         /// @see MessageQueueSystem::processIncomingMessage
-        virtual void processIncomingMessage( Mq::MessageId messageId, const void *data );
+        void processIncomingMessage( Mq::MessageId messageId, const void *data ) override;
 
     public:
         LogicSystem( GameState *gameState );
-        virtual ~LogicSystem();
+        ~LogicSystem() override;
 
         void _notifyGraphicsSystem( BaseSystem *graphicsSystem ) { mGraphicsSystem = graphicsSystem; }
         void _notifyGameEntityManager( GameEntityManager *mgr ) { mGameEntityManager = mgr; }

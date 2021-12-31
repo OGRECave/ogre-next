@@ -30,9 +30,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class Tutorial_TextureBakingGraphicsSystem : public GraphicsSystem
+    class Tutorial_TextureBakingGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
@@ -40,7 +40,7 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -66,7 +66,7 @@ namespace Demo
             }
         }
 
-        virtual void loadResources()
+        void loadResources() override
         {
             GraphicsSystem::loadResources();
 

@@ -26,9 +26,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class ShadowMapDebuggingGraphicsSystem : public GraphicsSystem
+    class ShadowMapDebuggingGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),

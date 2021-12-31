@@ -232,7 +232,7 @@ namespace Ogre
         void setDatablock( HlmsDatablock *datablock );
 
         // MovableObject overloads
-        const String &getMovableType() const;
+        const String &getMovableType() const override;
 
         /// Swaps current state with a saved one. Useful for rendering shadow maps
         void _swapSavedState();

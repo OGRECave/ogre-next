@@ -28,9 +28,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class MeshLodGraphicsSystem : public GraphicsSystem
+    class MeshLodGraphicsSystem final : public GraphicsSystem
     {
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

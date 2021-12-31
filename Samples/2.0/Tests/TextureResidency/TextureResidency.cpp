@@ -24,9 +24,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class TextureResidencyGraphicsSystem : public GraphicsSystem
+    class TextureResidencyGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
@@ -34,7 +34,7 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

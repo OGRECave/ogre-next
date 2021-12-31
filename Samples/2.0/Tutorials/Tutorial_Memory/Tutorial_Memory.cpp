@@ -31,16 +31,16 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class MemoryGraphicsSystem : public GraphicsSystem
+    class MemoryGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                     "LocalCubemapsWorkspace", true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -67,7 +67,7 @@ namespace Demo
             }
         }
 
-        virtual void initMiscParamsListener( Ogre::NameValuePairList &params )
+        void initMiscParamsListener( Ogre::NameValuePairList &params ) override
         {
             // The default parameters may be fine, but they may be not for you.
             // Monitor what's your average and worst case consumption,

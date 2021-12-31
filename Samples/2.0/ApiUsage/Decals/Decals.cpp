@@ -29,16 +29,16 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class DecalsGraphicsSystem : public GraphicsSystem
+    class DecalsGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                     "PbsMaterialsWorkspace", true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 
@@ -153,7 +153,7 @@ namespace Demo
                 Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, decalNormalId );
         }
 
-        virtual void loadResources()
+        void loadResources() override
         {
             registerHlms();
 

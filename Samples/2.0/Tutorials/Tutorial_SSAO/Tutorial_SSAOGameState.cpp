@@ -56,8 +56,6 @@ namespace Demo
         // Lets make some environment to look at
         // We use the same code as PBS demo to create meshes
 
-        const float armsLength = 2.5f;
-
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
             "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
             Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
@@ -103,7 +101,7 @@ namespace Demo
             const int numX = 8;
             const int numZ = 8;
 
-            const float armsLength = 2.0f;
+            const float armsLengthSphere = 2.0f;
             const float startX = ( numX - 1 ) / 2.0f;
             const float startZ = ( numZ - 1 ) / 2.0f;
 
@@ -158,8 +156,9 @@ namespace Demo
 
                     Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                                      ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition( Ogre::Vector3(
-                        armsLength * x - startX, 0.0f + ( numZ - z ) * 0.5f, armsLength * z - startZ ) );
+                    sceneNode->setPosition( Ogre::Vector3( armsLengthSphere * x - startX,
+                                                           0.0f + ( numZ - z ) * 0.5f,
+                                                           armsLengthSphere * z - startZ ) );
                     sceneNode->setScale( Ogre::Vector3( meshScale ) );
                     sceneNode->attachObject( item );
                 }

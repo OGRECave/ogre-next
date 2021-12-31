@@ -39,7 +39,7 @@ namespace Demo
             Ogre::ShadowNodeHelper::ShadowParamVec shadowParams;
 
             Ogre::ShadowNodeHelper::ShadowParam shadowParam;
-            memset( &shadowParam, 0, sizeof( shadowParam ) );
+            silent_memset( &shadowParam, 0, sizeof( shadowParam ) );
 
             // First light, directional
             shadowParam.technique = Ogre::SHADOWMAP_PSSM;
@@ -92,7 +92,7 @@ namespace Demo
             Ogre::ShadowNodeHelper::ShadowParamVec shadowParams;
 
             Ogre::ShadowNodeHelper::ShadowParam shadowParam;
-            memset( &shadowParam, 0, sizeof( shadowParam ) );
+            silent_memset( &shadowParam, 0, sizeof( shadowParam ) );
 
             // First light, directional
             shadowParam.technique = Ogre::SHADOWMAP_PSSM;
@@ -149,7 +149,7 @@ namespace Demo
                 true );
         }
 
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             const Ogre::String workspaceName( "ShadowMapFromCodeWorkspace" );

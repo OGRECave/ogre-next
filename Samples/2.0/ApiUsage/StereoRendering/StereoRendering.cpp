@@ -25,14 +25,14 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class StereoGraphicsSystem : public GraphicsSystem
+    class StereoGraphicsSystem final : public GraphicsSystem
     {
         Ogre::SceneNode *mCamerasNode;
         Ogre::Camera *mEyeCameras[2];
         Ogre::CompositorWorkspace *mEyeWorkspaces[2];
 
         //-------------------------------------------------------------------------------
-        virtual void createCamera()
+        void createCamera() override
         {
             // Use one node to control both cameras
             mCamerasNode = mSceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
@@ -69,7 +69,7 @@ namespace Demo
             mCamera = mEyeCameras[0];
         }
 
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::uint8 vpModifierMask, executionMask;
             Ogre::Vector4 vpOffsetScale;

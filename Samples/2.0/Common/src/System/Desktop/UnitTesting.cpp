@@ -42,9 +42,14 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-#if !OGRE_NO_JSON
-#    include "rapidjson/document.h"
-#    include "rapidjson/error/en.h"
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
+#include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
 #endif
 
 #include <fstream>

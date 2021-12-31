@@ -26,7 +26,7 @@ namespace Demo
 {
     class MemoryCleanupGraphicsSystem : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
@@ -34,7 +34,7 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void initMiscParamsListener( Ogre::NameValuePairList &params )
+        void initMiscParamsListener( Ogre::NameValuePairList &params ) override
         {
             // Used by GL3+ & Metal
             params["VaoManager::CPU_INACCESSIBLE"] = "0";

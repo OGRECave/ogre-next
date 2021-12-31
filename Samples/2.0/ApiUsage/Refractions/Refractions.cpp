@@ -27,9 +27,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class RefractionsGraphicsSystem : public GraphicsSystem
+    class RefractionsGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             const bool useMsaa = mRenderWindow->isMultisample();
@@ -44,7 +44,7 @@ namespace Demo
                                                     compositorName, true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

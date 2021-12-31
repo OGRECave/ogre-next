@@ -276,14 +276,14 @@ namespace Demo
             const int numX = 8;
             const int numZ = 8;
 
-            const float armsLength = 1.0f;
+            const float armsLengthSpheres = 1.0f;
             const float startX = ( numX - 1 ) / 2.0f;
             const float startZ = ( numZ - 1 ) / 2.0f;
 
             for( int x = 0; x < numX; ++x )
             {
                 for( int z = 0; z < numZ; ++z )
-                    createRefractiveSphere( x, z, numX, numZ, armsLength, startX, startZ );
+                    createRefractiveSphere( x, z, numX, numZ, armsLengthSpheres, startX, startZ );
             }
         }
 

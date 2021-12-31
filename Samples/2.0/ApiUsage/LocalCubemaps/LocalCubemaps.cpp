@@ -27,9 +27,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class LocalCubemapsGraphicsSystem : public GraphicsSystem
+    class LocalCubemapsGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             // Delegate compositor creation to the game state. We need cubemap's texture
             // to be passed to the compositor so Ogre can insert the proper barriers.
@@ -42,7 +42,7 @@ namespace Demo
                                                     "LocalCubemapsWorkspace", true );
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

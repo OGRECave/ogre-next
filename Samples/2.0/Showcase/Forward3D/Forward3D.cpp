@@ -23,9 +23,9 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    class Forward3DGraphicsSystem : public GraphicsSystem
+    class Forward3DGraphicsSystem final : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             // We reuse the ShadowMapDebugging sample's workspace. Pretty handful.
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();

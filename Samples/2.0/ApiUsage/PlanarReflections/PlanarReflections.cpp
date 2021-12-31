@@ -26,7 +26,7 @@ namespace Demo
 {
     class PlanarReflectionsGraphicsSystem : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace *setupCompositor()
+        Ogre::CompositorWorkspace *setupCompositor() override
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             mWorkspace =
@@ -35,7 +35,7 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void setupResources()
+        void setupResources() override
         {
             GraphicsSystem::setupResources();
 

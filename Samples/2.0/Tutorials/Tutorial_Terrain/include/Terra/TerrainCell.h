@@ -55,7 +55,7 @@ namespace Ogre
 
     public:
         TerrainCell( Terra *parentTerra );
-        virtual ~TerrainCell();
+        ~TerrainCell() override;
 
         bool getUseSkirts() const { return m_useSkirts; }
 
@@ -86,10 +86,10 @@ namespace Ogre
         Terra *getParentTerra() const { return m_parentTerra; }
 
         // Renderable overloads
-        virtual const LightList &getLights() const;
-        virtual void getRenderOperation( v1::RenderOperation &op, bool casterPass );
-        virtual void getWorldTransforms( Matrix4 *xform ) const;
-        virtual bool getCastsShadows() const;
+        const LightList &getLights() const override;
+        void getRenderOperation( v1::RenderOperation &op, bool casterPass ) override;
+        void getWorldTransforms( Matrix4 *xform ) const override;
+        bool getCastsShadows() const override;
     };
 }  // namespace Ogre
 

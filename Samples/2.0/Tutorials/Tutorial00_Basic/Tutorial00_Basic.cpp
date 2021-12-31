@@ -129,13 +129,13 @@ static void registerHlms()
     }
 }
 
-class MyWindowEventListener : public Ogre::WindowEventListener
+class MyWindowEventListener final : public Ogre::WindowEventListener
 {
     bool mQuit;
 
 public:
     MyWindowEventListener() : mQuit( false ) {}
-    virtual void windowClosed( Ogre::Window *rw ) { mQuit = true; }
+    void windowClosed( Ogre::Window *rw ) override { mQuit = true; }
 
     bool getQuit() const { return mQuit; }
 };
