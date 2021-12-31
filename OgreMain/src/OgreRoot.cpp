@@ -1115,7 +1115,7 @@ namespace Ogre
         FrameEvent evt;
         evt.timeSinceLastFrame = timeSinceLastFrame;
 
-        const uint64 now = mTimer->getMilliseconds();
+        uint64 now = mTimer->getMilliseconds();
         evt.timeSinceLastEvent = calculateEventTime( now, FETT_ANY );
 
         if( !_fireFrameStarted( evt ) )
