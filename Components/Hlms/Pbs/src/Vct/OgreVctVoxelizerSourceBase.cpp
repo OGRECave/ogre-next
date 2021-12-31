@@ -162,7 +162,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     Vector3 VctVoxelizerSourceBase::getVoxelResolution() const
     {
-        return Vector3( mWidth, mHeight, mDepth );
+        return Vector3( (Real)mWidth, (Real)mHeight, (Real)mDepth );
     }
     //-------------------------------------------------------------------------
     TextureGpuManager *VctVoxelizerSourceBase::getTextureGpuManager() { return mTextureGpuManager; }

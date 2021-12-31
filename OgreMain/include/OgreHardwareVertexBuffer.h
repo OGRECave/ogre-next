@@ -147,9 +147,9 @@ namespace Ogre
             /// Gets the index of this element, only applicable for repeating elements
             unsigned short getIndex() const { return mIndex; }
             /// Gets the size of this element in bytes
-            size_t getSize() const;
+            uint32 getSize() const;
             /// Utility method for helping to calculate offsets
-            static size_t getTypeSize( VertexElementType etype );
+            static uint32 getTypeSize( VertexElementType etype );
             /// Utility method which returns the count of values in a given type
             static uint8 getTypeCount( VertexElementType etype );
             /// Utility method which returns true if the type is SNORM or NORM

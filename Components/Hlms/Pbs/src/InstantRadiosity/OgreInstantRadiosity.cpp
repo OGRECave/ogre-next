@@ -207,8 +207,8 @@ namespace Ogre
                 const Vector2 *RESTRICT_ALIAS uv = hit.triUVs[uvSet];
                 Vector2 interpUV = uv[0] * a0 + uv[1] * a1 + uv[2] * a2;
 
-                const Real texWidth = hit.material.image[i]->getWidth();
-                const Real texHeight = hit.material.image[i]->getHeight();
+                const Real texWidth = Real( hit.material.image[i]->getWidth() );
+                const Real texHeight = Real( hit.material.image[i]->getHeight() );
 
                 // The texel centers are in the middle of the pixel, so we need to subtract
                 // 0.5; but later we need to add 0.5 to do correct rounding. So they negate
@@ -338,13 +338,13 @@ namespace Ogre
             }
 
             // vpl.diffuse /= numCollectedVpls;
-            vpl.diffuse /= mTotalNumRays;
+            vpl.diffuse /= (Real)mTotalNumRays;
             vpl.position /= numCollectedVpls;
             vpl.normal.normalise();
             vpl.numMergedVpls = numCollectedVpls;
 
             for( int i = 0; i < 6; ++i )
-                vpl.dirDiffuse[i] /= mTotalNumRays;
+                vpl.dirDiffuse[i] /= (Real)mTotalNumRays;
 
             mVpls.push_back( vpl );
 
@@ -391,7 +391,7 @@ namespace Ogre
         for( int i = 0; i < 6; ++i )
         {
             Vector3 clusterCorner =
-                Vector3( c_directions[i][0], c_directions[i][1], c_directions[i][2] );
+                Vector3( (Real)c_directions[i][0], (Real)c_directions[i][1], (Real)c_directions[i][2] );
             vDirs[i][0] = clusterCorner;
             vDirs[i][1] = clusterCorner + Vector3( -0.5f, -0.5f, -0.5f );
             vDirs[i][2] = clusterCorner + Vector3( 0.5f, -0.5f, -0.5f );
@@ -468,7 +468,9 @@ namespace Ogre
 
         while( itor != end )
         {
-            Vector3 vClusterCenter( itor->blockHash[0], itor->blockHash[1], itor->blockHash[2] );
+            Vector3 vClusterCenter( (Real)itor->blockHash[0],  //
+                                    (Real)itor->blockHash[1],  //
+                                    (Real)itor->blockHash[2] );
             vClusterCenter = ( vClusterCenter + 0.5f ) * cellSize;
 
             Vpl vpl;
@@ -675,7 +677,7 @@ namespace Ogre
             const size_t oldNumRays = numRays;
 
             rayStart += numRays;
-            numRays = static_cast<size_t>( mNumRays * powf( mSurvivingRayFraction, k + 1 ) );
+            numRays = mNumRays * static_cast<size_t>( std::pow( mSurvivingRayFraction, Real( k + 1 ) ) );
 
             const int rayLimit = std::max( 0, static_cast<int>( mTotalNumRays - rayStart ) );
             numRays = std::min<size_t>( numRays, static_cast<size_t>( rayLimit ) );
@@ -1716,9 +1718,9 @@ namespace Ogre
         const Vector3 invCellSize = Real( 1.0 ) / cellSize;
 
         // Quantize volumeCenter.
-        volumeOrigin.x = static_cast<int32>( Math::Floor( volumeOrigin.x * invCellSize.x ) );
-        volumeOrigin.y = static_cast<int32>( Math::Floor( volumeOrigin.y * invCellSize.y ) );
-        volumeOrigin.z = static_cast<int32>( Math::Floor( volumeOrigin.z * invCellSize.z ) );
+        volumeOrigin.x = Math::Floor( volumeOrigin.x * invCellSize.x );
+        volumeOrigin.y = Math::Floor( volumeOrigin.y * invCellSize.y );
+        volumeOrigin.z = Math::Floor( volumeOrigin.z * invCellSize.z );
 
         volume->setIrradianceOrigin( volumeOrigin * cellSize );
         volume->setIrradianceCellSize( cellSize );
@@ -1794,7 +1796,9 @@ namespace Ogre
                     {
                         for( int32 x = minBlockX; x <= maxBlockX; ++x )
                         {
-                            Vector3 vplToCell = Vector3( x - blockX, y - blockY, z - blockZ );
+                            Vector3 vplToCell = Vector3( Real( x - blockX ),  //
+                                                         Real( y - blockY ),  //
+                                                         Real( z - blockZ ) );
                             vplToCell *= cellSize;
                             Real distance = vplToCell.normalise();
                             if( vplToCell.dotProduct( vpl.normal ) < 0 )

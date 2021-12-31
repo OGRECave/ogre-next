@@ -38,9 +38,9 @@ THE SOFTWARE.
 #    include <intrin.h>
 #else
 // MinGW needs some extra headers and define MemoryBarrier manually
-#    include <x86intrin.h>
 #    include <winbase.h>
 #    include <windef.h>
+#    include <x86intrin.h>
 
 #    define MemoryBarrier __sync_synchronize
 #endif
@@ -50,7 +50,7 @@ namespace Ogre
     Barrier::Barrier( size_t threadCount ) : mNumThreads( threadCount ), mIndex( 0 ), mLockCount( 0 )
     {
         for( size_t i = 0; i < 2; ++i )
-            mSemaphores[i] = CreateSemaphore( NULL, 0, mNumThreads, NULL );
+            mSemaphores[i] = CreateSemaphore( NULL, 0, (LONG)mNumThreads, NULL );
     }
     //-----------------------------------------------------------------------------------
     Barrier::~Barrier()

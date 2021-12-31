@@ -2173,8 +2173,8 @@ namespace Ogre
             *passBufferPtr++ = mMaxSpecIblMipmap;
 
             {
-                const float windowWidth = renderTarget->getWidth();
-                const float windowHeight = renderTarget->getHeight();
+                const float windowWidth = (float)renderTarget->getWidth();
+                const float windowHeight = (float)renderTarget->getHeight();
 
                 // float4 aspectRatio_planarReflNumMips_unused2
                 *passBufferPtr++ = windowWidth / windowHeight;
@@ -2490,7 +2490,7 @@ namespace Ogre
                 // Roughness minimum value is 0.02, so we need to map
                 //[0.02; 1.0] -> [0; 1] in the pixel shader that's why we divide by 0.98.
                 // The 2.0 is just arbitrary (it looks good)
-                areaLightNumMipmaps = ( mAreaLightMasks->getNumMipmaps() - 1u );
+                areaLightNumMipmaps = float( mAreaLightMasks->getNumMipmaps() - 1u );
                 areaLightNumMipmapsSpecFactor = areaLightNumMipmaps * 2.0f / 0.98f;
             }
 
@@ -2837,7 +2837,7 @@ namespace Ogre
             if( mVctLighting )
             {
                 mTexUnitSlotStart +=
-                    mVctLighting->getNumVoxelTextures() * mVctLighting->getNumCascades();
+                    uint32( mVctLighting->getNumVoxelTextures() * mVctLighting->getNumCascades() );
             }
             if( mIrradianceField )
                 mTexUnitSlotStart += 2u;

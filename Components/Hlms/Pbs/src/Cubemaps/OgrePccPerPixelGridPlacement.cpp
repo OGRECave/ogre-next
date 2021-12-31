@@ -205,8 +205,9 @@ namespace Ogre
         for( size_t i = 0u; i < 6u; ++i )
             colourVal[i] = box.getColourAt( 0u, 0u, sliceIdx + i, pixelFormat );
 
-        const Vector3 probeAreaHalfSize( mOverlap * mFullRegion.mHalfSize /
-                                         Vector3( mNumProbes[0], mNumProbes[1], mNumProbes[2] ) );
+        const Vector3 probeAreaHalfSize(
+            mOverlap * mFullRegion.mHalfSize /
+            Vector3( (Real)mNumProbes[0], (Real)mNumProbes[1], (Real)mNumProbes[2] ) );
 
         const Vector3 probeShapeCenter = probe->getProbeShape().mCenter;
 
@@ -263,8 +264,9 @@ namespace Ogre
         mPcc->setEnabled( true, resolution, resolution, maxNumProbes, pixelFormat );
         mPcc->setUpdatedTrackedDataFromCamera( camera );
 
-        const Vector3 probeAreaHalfSize( mOverlap * mFullRegion.mHalfSize /
-                                         Vector3( mNumProbes[0], mNumProbes[1], mNumProbes[2] ) );
+        const Vector3 probeAreaHalfSize(
+            mOverlap * mFullRegion.mHalfSize /
+            Vector3( (Real)mNumProbes[0], (Real)mNumProbes[1], (Real)mNumProbes[2] ) );
         const Vector3 regionOrigin( mFullRegion.getMinimum() );
 
         for( size_t i = 0u; i < maxNumProbes; ++i )

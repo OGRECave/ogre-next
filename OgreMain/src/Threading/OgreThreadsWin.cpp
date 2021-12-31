@@ -70,7 +70,7 @@ namespace Ogre
         for( size_t i = 0; i < numThreadHandles; ++i )
             hThreads[i] = threadHandles[i]->_getOsHandle();
 
-        WaitForMultipleObjects( numThreadHandles, hThreads, true, INFINITE );
+        WaitForMultipleObjects( (DWORD)numThreadHandles, hThreads, true, INFINITE );
     }
     //-----------------------------------------------------------------------------------
     void Threads::WaitForThreads( const ThreadHandleVec &threadHandles )

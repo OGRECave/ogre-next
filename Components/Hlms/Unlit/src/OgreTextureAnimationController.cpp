@@ -79,8 +79,8 @@ namespace Ogre
 
             mLastFrame = static_cast<uint16>( currentFrame );
 
-            mUScale = mNumFramesHorizontal;
-            mVScale = mNumFramesVertical;
+            mUScale = (Real)mNumFramesHorizontal;
+            mVScale = (Real)mNumFramesVertical;
         }
         else
         {

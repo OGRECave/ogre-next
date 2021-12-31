@@ -672,7 +672,8 @@ namespace Ogre
 
         const Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
         const Vector3 octantCellSize =
-            mRegionToVoxelize.getSize() / Vector3( numOctantsX, numOctantsY, numOctantsZ );
+            mRegionToVoxelize.getSize() /
+            Vector3( (Real)numOctantsX, (Real)numOctantsY, (Real)numOctantsZ );
 
         for( uint32 x = 0u; x < numOctantsX; ++x )
         {
@@ -684,7 +685,7 @@ namespace Ogre
                 {
                     octant.z = z * octant.depth;
 
-                    Vector3 octantOrigin = Vector3( x, y, z ) * octantCellSize;
+                    Vector3 octantOrigin = Vector3( (Real)x, (Real)y, (Real)z ) * octantCellSize;
                     octantOrigin += voxelOrigin;
                     octant.region.setExtents( octantOrigin, octantOrigin + octantCellSize );
                     mOctants.push_back( octant );

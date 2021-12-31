@@ -193,10 +193,10 @@ namespace Ogre
         const IrradianceFieldSettings &settings = mCreator->mSettings;
 
         Vector3 pos;
-        pos.x = probeIdx % settings.mNumProbes[0];
-        pos.y =
-            ( probeIdx % ( settings.mNumProbes[0] * settings.mNumProbes[1] ) ) / settings.mNumProbes[0];
-        pos.z = probeIdx / ( settings.mNumProbes[0] * settings.mNumProbes[1] );
+        pos.x = Real( probeIdx % settings.mNumProbes[0] );
+        pos.y = Real( ( probeIdx % ( settings.mNumProbes[0] * settings.mNumProbes[1] ) ) /
+                      settings.mNumProbes[0] );
+        pos.z = Real( probeIdx / ( settings.mNumProbes[0] * settings.mNumProbes[1] ) );
         pos += 0.5f;
 
         pos /= settings.getNumProbes3f();

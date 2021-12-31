@@ -122,9 +122,9 @@ namespace Ogre
         {
         }
         //-----------------------------------------------------------------------------
-        size_t VertexElement::getSize() const { return getTypeSize( mType ); }
+        uint32 VertexElement::getSize() const { return getTypeSize( mType ); }
         //-----------------------------------------------------------------------------
-        size_t VertexElement::getTypeSize( VertexElementType etype )
+        uint32 VertexElement::getTypeSize( VertexElementType etype )
         {
             switch( etype )
             {
