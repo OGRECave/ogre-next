@@ -35,7 +35,8 @@
 
 #include "OgreLwConstString.h"
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1600  // no <inttypes.h>
+#if( OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1600 ) || \
+    ( OGRE_COMPILER == OGRE_COMPILER_GNUC && OGRE_COMP_VER < 800 )  // no <inttypes.h>
 #    define PRIi64 "lli"
 #    define PRIu64 "llu"
 #else

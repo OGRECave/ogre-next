@@ -374,7 +374,7 @@ namespace Ogre
                                                         buffer->getBufferInterface() );
             if( bufferInterface->_getInitialData() == 0 )
             {
-                InternalBufferType idx0 = 
+                InternalBufferType idx0 =
                     ( bufferPackedType == BP_TYPE_VERTEX ) ? VERTEX_BUFFER :
                     ( bufferPackedType == BP_TYPE_INDEX ) ? INDEX_BUFFER :
                     SHADER_BUFFER;
@@ -850,7 +850,8 @@ namespace Ogre
                     }
                     else
                     {
-                        totalBytes = alignToNextMultiple( totalBytes, (*itor)->getBytesPerElement() );
+                        totalBytes =
+                            alignToNextMultiple<size_t>( totalBytes, ( *itor )->getBytesPerElement() );
                         totalBytes += (*itor)->getTotalSizeBytes();
 
                         ++itor;
@@ -869,7 +870,7 @@ namespace Ogre
                                 (*itor)->getBufferInterface() );
 
                     const size_t dstOffsetBeforeAlignment = dstOffset;
-                    dstOffset = alignToNextMultiple( dstOffset, (*itor)->getBytesPerElement() );
+                    dstOffset = alignToNextMultiple<size_t>( dstOffset, (*itor)->getBytesPerElement() );
 
                     if( dstOffsetBeforeAlignment != dstOffset )
                     {
@@ -907,7 +908,7 @@ namespace Ogre
                 {
                     D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
                                 (*itor)->getBufferInterface() );
-                    dstOffset = alignToNextMultiple( dstOffset, (*itor)->getBytesPerElement() );
+                    dstOffset = alignToNextMultiple<size_t>( dstOffset, (*itor)->getBytesPerElement() );
 
                     bufferInterface->_setVboName( vboIdx, vboName, dstOffset );
 
@@ -1292,7 +1293,7 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, alignment );
         }
 
         if( !mReadOnlyIsTexBuffer )

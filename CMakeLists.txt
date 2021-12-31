@@ -125,7 +125,9 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
       "-Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wno-unused-parameter -Wshadow")
 
   if( CMAKE_COMPILER_IS_GNUCXX )
-    # On GCC Wsign-conversion has too many false positives. See https://stackoverflow.com/a/64542771
+    # On GCC:
+    # - Wsign-conversion has too many false positives. See https://stackoverflow.com/a/64542771
+    # - Wconversion is too dumb. Too many false positives.
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} -Wsuggest-override" )
   else()
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} \
