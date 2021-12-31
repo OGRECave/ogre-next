@@ -1798,7 +1798,7 @@ namespace Ogre
         GLuint samplerName = 0;
         OCGE( glGenSamplers( 1, &samplerName ) );
 
-        GLint minFilter, magFilter;
+        GLint minFilter = GL_NEAREST, magFilter = GL_NEAREST;
         switch( newBlock->mMinFilter )
         {
         case FO_ANISOTROPIC:

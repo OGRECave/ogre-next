@@ -2099,7 +2099,7 @@ namespace Ogre
             return CPU_READ_WRITE;
         }
 
-        VboFlag vboFlag;
+        VboFlag vboFlag = MAX_VBO_FLAG;
 
         switch( bufferType )
         {
