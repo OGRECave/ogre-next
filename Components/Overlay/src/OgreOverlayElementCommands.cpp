@@ -27,204 +27,207 @@ THE SOFTWARE.
 */
 
 #include "OgreOverlayElementCommands.h"
+
+#include "OgreLogManager.h"
 #include "OgreOverlayElement.h"
 #include "OgreStringConverter.h"
-#include "OgreLogManager.h"
 
+namespace Ogre
+{
+    namespace v1
+    {
+        namespace OverlayElementCommands
+        {
+            //-----------------------------------------------------------------------
+            String CmdLeft::doGet( const void *target ) const
+            {
+                return StringConverter::toString(
+                    static_cast<const OverlayElement *>( target )->getLeft() );
+            }
+            void CmdLeft::doSet( void *target, const String &val )
+            {
+                Real r = StringConverter::parseReal( val );
+                static_cast<OverlayElement *>( target )->setLeft( r );
+            }
+            //-----------------------------------------------------------------------
+            String CmdTop::doGet( const void *target ) const
+            {
+                return StringConverter::toString(
+                    static_cast<const OverlayElement *>( target )->getTop() );
+            }
+            void CmdTop::doSet( void *target, const String &val )
+            {
+                Real r = StringConverter::parseReal( val );
+                static_cast<OverlayElement *>( target )->setTop( r );
+            }
+            //-----------------------------------------------------------------------
+            String CmdWidth::doGet( const void *target ) const
+            {
+                return StringConverter::toString(
+                    static_cast<const OverlayElement *>( target )->getWidth() );
+            }
+            void CmdWidth::doSet( void *target, const String &val )
+            {
+                Real r = StringConverter::parseReal( val );
+                static_cast<OverlayElement *>( target )->setWidth( r );
+            }
+            //-----------------------------------------------------------------------
+            String CmdHeight::doGet( const void *target ) const
+            {
+                return StringConverter::toString(
+                    static_cast<const OverlayElement *>( target )->getHeight() );
+            }
+            void CmdHeight::doSet( void *target, const String &val )
+            {
+                Real r = StringConverter::parseReal( val );
+                static_cast<OverlayElement *>( target )->setHeight( r );
+            }
+            //-----------------------------------------------------------------------
+            String CmdMaterial::doGet( const void *target ) const
+            {
+                return static_cast<const OverlayElement *>( target )->getMaterialName();
+            }
+            void CmdMaterial::doSet( void *target, const String &val )
+            {
+                if( val != "" )
+                {
+                    static_cast<OverlayElement *>( target )->setMaterialName( val );
+                }
+            }
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            String CmdCaption::doGet( const void *target ) const
+            {
+                return static_cast<const OverlayElement *>( target )->getCaption();
+            }
+            void CmdCaption::doSet( void *target, const String &val )
+            {
+                static_cast<OverlayElement *>( target )->setCaption( val );
+            }
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            String CmdMetricsMode::doGet( const void *target ) const
+            {
+                GuiMetricsMode gmm = static_cast<const OverlayElement *>( target )->getMetricsMode();
 
-namespace Ogre {
-namespace v1 {
-    namespace OverlayElementCommands {
-        //-----------------------------------------------------------------------
-        String CmdLeft::doGet(const void* target) const
-        {
-            return StringConverter::toString(
-                static_cast<const OverlayElement*>(target)->getLeft() );
-        }
-        void CmdLeft::doSet(void* target, const String& val)
-        {
-            Real r = StringConverter::parseReal(val);
-            static_cast<OverlayElement*>(target)->setLeft(r);
-        }
-        //-----------------------------------------------------------------------
-        String CmdTop::doGet(const void* target) const
-        {
-            return StringConverter::toString(
-                static_cast<const OverlayElement*>(target)->getTop() );
-        }
-        void CmdTop::doSet(void* target, const String& val)
-        {
-            Real r = StringConverter::parseReal(val);
-            static_cast<OverlayElement*>(target)->setTop(r);
-        }
-        //-----------------------------------------------------------------------
-        String CmdWidth::doGet(const void* target) const
-        {
-            return StringConverter::toString(
-                static_cast<const OverlayElement*>(target)->getWidth() );
-        }
-        void CmdWidth::doSet(void* target, const String& val)
-        {
-            Real r = StringConverter::parseReal(val);
-            static_cast<OverlayElement*>(target)->setWidth(r);
-        }
-        //-----------------------------------------------------------------------
-        String CmdHeight::doGet(const void* target) const
-        {
-            return StringConverter::toString(
-                static_cast<const OverlayElement*>(target)->getHeight() );
-        }
-        void CmdHeight::doSet(void* target, const String& val)
-        {
-            Real r = StringConverter::parseReal(val);
-            static_cast<OverlayElement*>(target)->setHeight(r);
-        }
-        //-----------------------------------------------------------------------
-        String CmdMaterial::doGet(const void* target) const
-        {
-            return static_cast<const OverlayElement*>(target)->getMaterialName();
-        }
-        void CmdMaterial::doSet(void* target, const String& val)
-        {
-            if (val != "")
-            {
-                static_cast<OverlayElement*>(target)->setMaterialName(val);
-            }
-        }
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        String CmdCaption::doGet(const void* target) const
-        {
-            return static_cast<const OverlayElement*>(target)->getCaption();
-        }
-        void CmdCaption::doSet(void* target, const String& val)
-        {
-            static_cast<OverlayElement*>(target)->setCaption(val);
-        }
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        String CmdMetricsMode::doGet(const void* target) const
-        {
-            GuiMetricsMode gmm = 
-                static_cast<const OverlayElement*>(target)->getMetricsMode();
+                switch( gmm )
+                {
+                case GMM_PIXELS:
+                    return "pixels";
 
-            switch (gmm)
-            {
-            case GMM_PIXELS :
-                return "pixels";
+                case GMM_RELATIVE_ASPECT_ADJUSTED:
+                    return "relative_aspect_adjusted";
 
-            case GMM_RELATIVE_ASPECT_ADJUSTED :
-                return "relative_aspect_adjusted";
-
-            default :
-                return "relative";
+                default:
+                    return "relative";
+                }
             }
-        }
-        void CmdMetricsMode::doSet(void* target, const String& val)
-        {
-            if (val == "pixels")
+            void CmdMetricsMode::doSet( void *target, const String &val )
             {
-                static_cast<OverlayElement*>(target)->setMetricsMode(GMM_PIXELS);
+                if( val == "pixels" )
+                {
+                    static_cast<OverlayElement *>( target )->setMetricsMode( GMM_PIXELS );
+                }
+                else if( val == "relative_aspect_adjusted" )
+                {
+                    static_cast<OverlayElement *>( target )->setMetricsMode(
+                        GMM_RELATIVE_ASPECT_ADJUSTED );
+                }
+                else
+                {
+                    static_cast<OverlayElement *>( target )->setMetricsMode( GMM_RELATIVE );
+                }
             }
-            else if (val == "relative_aspect_adjusted")
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            String CmdHorizontalAlign::doGet( const void *target ) const
             {
-                static_cast<OverlayElement*>(target)->setMetricsMode(GMM_RELATIVE_ASPECT_ADJUSTED);
-            }
-            else
-            {
-                static_cast<OverlayElement*>(target)->setMetricsMode(GMM_RELATIVE);
-            }
-        }
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        String CmdHorizontalAlign::doGet(const void* target) const
-        {
-            GuiHorizontalAlignment gha = 
-                static_cast<const OverlayElement*>(target)->getHorizontalAlignment();
-            switch(gha)
-            {
-            case GHA_LEFT:
-                return "left";
-            case GHA_RIGHT:
-                return "right";
-            case GHA_CENTER:
+                GuiHorizontalAlignment gha =
+                    static_cast<const OverlayElement *>( target )->getHorizontalAlignment();
+                switch( gha )
+                {
+                case GHA_LEFT:
+                    return "left";
+                case GHA_RIGHT:
+                    return "right";
+                case GHA_CENTER:
+                    return "center";
+                }
+                // To keep compiler happy
                 return "center";
             }
-            // To keep compiler happy
-            return "center";
-        }
-        void CmdHorizontalAlign::doSet(void* target, const String& val)
-        {
-            if (val == "left")
+            void CmdHorizontalAlign::doSet( void *target, const String &val )
             {
-                static_cast<OverlayElement*>(target)->setHorizontalAlignment(GHA_LEFT);
+                if( val == "left" )
+                {
+                    static_cast<OverlayElement *>( target )->setHorizontalAlignment( GHA_LEFT );
+                }
+                else if( val == "right" )
+                {
+                    static_cast<OverlayElement *>( target )->setHorizontalAlignment( GHA_RIGHT );
+                }
+                else
+                {
+                    static_cast<OverlayElement *>( target )->setHorizontalAlignment( GHA_CENTER );
+                }
             }
-            else if (val == "right")
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            String CmdVerticalAlign::doGet( const void *target ) const
             {
-                static_cast<OverlayElement*>(target)->setHorizontalAlignment(GHA_RIGHT);
-            }
-            else
-            {
-                static_cast<OverlayElement*>(target)->setHorizontalAlignment(GHA_CENTER);
-            }
-        }
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        String CmdVerticalAlign::doGet(const void* target) const
-        {
-            GuiVerticalAlignment gva = 
-                static_cast<const OverlayElement*>(target)->getVerticalAlignment();
-            switch(gva)
-            {
-            case GVA_TOP:
-                return "top";
-            case GVA_BOTTOM:
-                return "bottom";
-            case GVA_CENTER:
+                GuiVerticalAlignment gva =
+                    static_cast<const OverlayElement *>( target )->getVerticalAlignment();
+                switch( gva )
+                {
+                case GVA_TOP:
+                    return "top";
+                case GVA_BOTTOM:
+                    return "bottom";
+                case GVA_CENTER:
+                    return "center";
+                }
+                // To keep compiler happy
                 return "center";
             }
-            // To keep compiler happy
-            return "center";
-        }
-        void CmdVerticalAlign::doSet(void* target, const String& val)
-        {
-            if (val == "top")
+            void CmdVerticalAlign::doSet( void *target, const String &val )
             {
-                static_cast<OverlayElement*>(target)->setVerticalAlignment(GVA_TOP);
+                if( val == "top" )
+                {
+                    static_cast<OverlayElement *>( target )->setVerticalAlignment( GVA_TOP );
+                }
+                else if( val == "bottom" )
+                {
+                    static_cast<OverlayElement *>( target )->setVerticalAlignment( GVA_BOTTOM );
+                }
+                else
+                {
+                    static_cast<OverlayElement *>( target )->setVerticalAlignment( GVA_CENTER );
+                }
             }
-            else if (val == "bottom")
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            //-----------------------------------------------------------------------
+            String CmdVisible::doGet( const void *target ) const
             {
-                static_cast<OverlayElement*>(target)->setVerticalAlignment(GVA_BOTTOM);
+                return StringConverter::toString(
+                    static_cast<const OverlayElement *>( target )->isVisible() );
             }
-            else
+            void CmdVisible::doSet( void *target, const String &val )
             {
-                static_cast<OverlayElement*>(target)->setVerticalAlignment(GVA_CENTER);
+                if( val == "true" )
+                {
+                    static_cast<OverlayElement *>( target )->show();
+                }
+                else if( val == "false" )
+                {
+                    static_cast<OverlayElement *>( target )->hide();
+                }
             }
-        }
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        //-----------------------------------------------------------------------
-        String CmdVisible::doGet(const void* target) const
-        {
-            return StringConverter::toString(static_cast<const OverlayElement*>(target)->isVisible());
-        }
-        void CmdVisible::doSet(void* target, const String& val)
-        {
-            if (val == "true")
-            {
-                static_cast<OverlayElement*>(target)->show();
-            }
-            else if (val == "false")
-            {
-                static_cast<OverlayElement*>(target)->hide();
-            }
-        }
-        //-----------------------------------------------------------------------
-    }
-}
-}
-
+            //-----------------------------------------------------------------------
+        }  // namespace OverlayElementCommands
+    }      // namespace v1
+}  // namespace Ogre

@@ -27,80 +27,83 @@ THE SOFTWARE.
 */
 
 #include "OgreOverlaySystem.h"
+
 #include "OgreCamera.h"
+#include "OgreFontManager.h"
+#include "OgreOverlayElementFactory.h"
+#include "OgreOverlayManager.h"
+#include "OgreOverlayProfileSessionListener.h"
 #include "OgreRoot.h"
 #include "OgreViewport.h"
-#include "OgreOverlayManager.h"
-#include "OgreOverlayElementFactory.h"
-#include "OgreOverlayProfileSessionListener.h"
-#include "OgreFontManager.h"
 
-namespace Ogre {
-namespace v1 {
-    //---------------------------------------------------------------------
-    OverlaySystem::OverlaySystem()
+namespace Ogre
+{
+    namespace v1
     {
-        RenderSystem::addSharedListener(this);
+        //---------------------------------------------------------------------
+        OverlaySystem::OverlaySystem()
+        {
+            RenderSystem::addSharedListener( this );
 
-        mOverlayManager = OGRE_NEW OverlayManager();
-        mOverlayManager->addOverlayElementFactory(OGRE_NEW PanelOverlayElementFactory());
+            mOverlayManager = OGRE_NEW OverlayManager();
+            mOverlayManager->addOverlayElementFactory( OGRE_NEW PanelOverlayElementFactory() );
 
-        mOverlayManager->addOverlayElementFactory(OGRE_NEW BorderPanelOverlayElementFactory());
+            mOverlayManager->addOverlayElementFactory( OGRE_NEW BorderPanelOverlayElementFactory() );
 
-        mOverlayManager->addOverlayElementFactory(OGRE_NEW TextAreaOverlayElementFactory());
+            mOverlayManager->addOverlayElementFactory( OGRE_NEW TextAreaOverlayElementFactory() );
 
-        mFontManager = OGRE_NEW FontManager();
+            mFontManager = OGRE_NEW FontManager();
 #if OGRE_PROFILING
-        mProfileListener = new Ogre::v1::OverlayProfileSessionListener();
-        Ogre::Profiler* prof = Ogre::Profiler::getSingletonPtr();
-        if (prof)
-        {
-            prof->addListener(mProfileListener);
-        }
-#endif
-    }
-    //---------------------------------------------------------------------
-    OverlaySystem::~OverlaySystem()
-    {
-        RenderSystem::removeSharedListener(this);
-
-#if OGRE_PROFILING
-        Ogre::Profiler* prof = Ogre::Profiler::getSingletonPtr();
-        if (prof)
-        {
-            prof->removeListener(mProfileListener);
-        }
-        delete mProfileListener;
-#endif
-        OGRE_DELETE mOverlayManager;
-        OGRE_DELETE mFontManager;
-    }
-    //---------------------------------------------------------------------
-    void OverlaySystem::renderQueueStarted( RenderQueue *rq, uint8 queueGroupId,
-                                            const String& invocation, bool& skipThisInvocation )
-    {
-        if(queueGroupId == mOverlayManager->mDefaultRenderQueueId)
-        {
-            Ogre::Viewport* vp =
-                    Ogre::Root::getSingletonPtr()->getRenderSystem()->getCurrentRenderViewports();
-            if (vp->getOverlaysEnabled())
+            mProfileListener = new Ogre::v1::OverlayProfileSessionListener();
+            Ogre::Profiler *prof = Ogre::Profiler::getSingletonPtr();
+            if( prof )
             {
-                OverlayManager::getSingleton()._queueOverlaysForRendering( rq, vp );
+                prof->addListener( mProfileListener );
+            }
+#endif
+        }
+        //---------------------------------------------------------------------
+        OverlaySystem::~OverlaySystem()
+        {
+            RenderSystem::removeSharedListener( this );
+
+#if OGRE_PROFILING
+            Ogre::Profiler *prof = Ogre::Profiler::getSingletonPtr();
+            if( prof )
+            {
+                prof->removeListener( mProfileListener );
+            }
+            delete mProfileListener;
+#endif
+            OGRE_DELETE mOverlayManager;
+            OGRE_DELETE mFontManager;
+        }
+        //---------------------------------------------------------------------
+        void OverlaySystem::renderQueueStarted( RenderQueue *rq, uint8 queueGroupId,
+                                                const String &invocation, bool &skipThisInvocation )
+        {
+            if( queueGroupId == mOverlayManager->mDefaultRenderQueueId )
+            {
+                Ogre::Viewport *vp =
+                    Ogre::Root::getSingletonPtr()->getRenderSystem()->getCurrentRenderViewports();
+                if( vp->getOverlaysEnabled() )
+                {
+                    OverlayManager::getSingleton()._queueOverlaysForRendering( rq, vp );
+                }
             }
         }
-    }
-    //---------------------------------------------------------------------
-    void OverlaySystem::eventOccurred( const String &eventName, const NameValuePairList *parameters )
-    {
-        if( eventName == "DeviceLost" )
+        //---------------------------------------------------------------------
+        void OverlaySystem::eventOccurred( const String &eventName, const NameValuePairList *parameters )
         {
-            mOverlayManager->_releaseManualHardwareResources();
+            if( eventName == "DeviceLost" )
+            {
+                mOverlayManager->_releaseManualHardwareResources();
+            }
+            else if( eventName == "DeviceRestored" )
+            {
+                mOverlayManager->_restoreManualHardwareResources();
+            }
         }
-        else if( eventName == "DeviceRestored" )
-        {
-            mOverlayManager->_restoreManualHardwareResources();
-        }
-    }
-    //---------------------------------------------------------------------
-}
-}
+        //---------------------------------------------------------------------
+    }  // namespace v1
+}  // namespace Ogre

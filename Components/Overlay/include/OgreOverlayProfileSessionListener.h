@@ -30,109 +30,113 @@ THE SOFTWARE.
 #define __OverlayProfileSessionListener_H__
 
 #include "OgreOverlayPrerequisites.h"
+
 #include "OgreProfiler.h"
 
 #include "ogrestd/list.h"
 
-namespace Ogre  {
-namespace v1 {
-
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Overlays
-    *  @{
-    */
-
-    /** Concrete impl. of the ProfileSessionListener which visualizes
-        the profling results using overlays.
-    */
-    class _OgreOverlayExport OverlayProfileSessionListener : public ProfileSessionListener
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        OverlayProfileSessionListener();
-        virtual ~OverlayProfileSessionListener();
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Overlays
+         *  @{
+         */
 
-        /// @see ProfileSessionListener::initializeSession
-        virtual void initializeSession();
+        /** Concrete impl. of the ProfileSessionListener which visualizes
+            the profling results using overlays.
+        */
+        class _OgreOverlayExport OverlayProfileSessionListener : public ProfileSessionListener
+        {
+        public:
+            OverlayProfileSessionListener();
+            virtual ~OverlayProfileSessionListener();
 
-        /// @see ProfileSessionListener::finializeSession
-        virtual void finializeSession();
+            /// @see ProfileSessionListener::initializeSession
+            void initializeSession() override;
 
-        /// @see ProfileSessionListener::displayResults
-        virtual void displayResults(const ProfileInstance& instance, ulong maxTotalFrameTime);
+            /// @see ProfileSessionListener::finializeSession
+            void finializeSession() override;
 
-        /// @see ProfileSessionListener::changeEnableState
-        virtual void changeEnableState(bool enabled);
+            /// @see ProfileSessionListener::displayResults
+            void displayResults( const ProfileInstance &instance, ulong maxTotalFrameTime ) override;
 
-        /** Set the size of the profiler overlay, in pixels. */
-        void setOverlayDimensions(Real width, Real height);
+            /// @see ProfileSessionListener::changeEnableState
+            void changeEnableState( bool enabled ) override;
 
-        /** Set the position of the profiler overlay, in pixels. */
-        void setOverlayPosition(Real left, Real top);
+            /** Set the size of the profiler overlay, in pixels. */
+            void setOverlayDimensions( Real width, Real height );
 
-        Real getOverlayWidth() const;
-        Real getOverlayHeight() const;
-        Real getOverlayLeft() const;
-        Real getOverlayTop() const;
+            /** Set the position of the profiler overlay, in pixels. */
+            void setOverlayPosition( Real left, Real top );
 
-    private:
-        typedef list<OverlayElement*>::type ProfileBarList;
+            Real getOverlayWidth() const;
+            Real getOverlayHeight() const;
+            Real getOverlayLeft() const;
+            Real getOverlayTop() const;
 
-        /** Prints the profiling results of each frame 
-        @remarks Recursive, for all the little children. */
-        void displayResults(ProfileInstance* instance, ProfileBarList::const_iterator& bIter, Real& maxTimeMillisecs, Real& newGuiHeight, int& profileCount);
+        private:
+            typedef list<OverlayElement *>::type ProfileBarList;
 
-        /** An internal function to create the container which will hold our display elements*/
-        OverlayContainer* createContainer();
+            /** Prints the profiling results of each frame
+            @remarks Recursive, for all the little children. */
+            void displayResults( ProfileInstance *instance, ProfileBarList::const_iterator &bIter,
+                                 Real &maxTimeMillisecs, Real &newGuiHeight, int &profileCount );
 
-        /** An internal function to create a text area */
-        OverlayElement* createTextArea(const String& name, Real width, Real height, Real top, Real left, 
-                                    uint fontSize, const String& caption, bool show = true);
+            /** An internal function to create the container which will hold our display elements*/
+            OverlayContainer *createContainer();
 
-        /** An internal function to create a panel */
-        OverlayElement* createPanel(const String& name, Real width, Real height, Real top, Real left, 
-                                const String& materialName, bool show = true);
+            /** An internal function to create a text area */
+            OverlayElement *createTextArea( const String &name, Real width, Real height, Real top,
+                                            Real left, uint fontSize, const String &caption,
+                                            bool show = true );
 
-        /// Holds the display bars for each profile results
-        ProfileBarList mProfileBars;
+            /** An internal function to create a panel */
+            OverlayElement *createPanel( const String &name, Real width, Real height, Real top,
+                                         Real left, const String &materialName, bool show = true );
 
-        /// The overlay which contains our profiler results display
-        Overlay* mOverlay;
+            /// Holds the display bars for each profile results
+            ProfileBarList mProfileBars;
 
-        /// The window that displays the profiler results
-        OverlayContainer* mProfileGui;
+            /// The overlay which contains our profiler results display
+            Overlay *mOverlay;
 
-        /// The height of each bar
-        Real mBarHeight;
+            /// The window that displays the profiler results
+            OverlayContainer *mProfileGui;
 
-        /// The height of the stats window
-        Real mGuiHeight;
+            /// The height of each bar
+            Real mBarHeight;
 
-        /// The width of the stats window
-        Real mGuiWidth;
+            /// The height of the stats window
+            Real mGuiHeight;
 
-        /// The horz position of the stats window
-        Real mGuiLeft;
+            /// The width of the stats window
+            Real mGuiWidth;
 
-        /// The vertical position of the stats window
-        Real mGuiTop;
+            /// The horz position of the stats window
+            Real mGuiLeft;
 
-        /// The size of the indent for each profile display bar
-        Real mBarIndent;
+            /// The vertical position of the stats window
+            Real mGuiTop;
 
-        /// The width of the border between the profile window and each bar
-        Real mGuiBorderWidth;
+            /// The size of the indent for each profile display bar
+            Real mBarIndent;
 
-        /// The width of the min, avg, and max lines in a profile display
-        Real mBarLineWidth;
+            /// The width of the border between the profile window and each bar
+            Real mGuiBorderWidth;
 
-        /// The distance between bars
-        Real mBarSpacing;
+            /// The width of the min, avg, and max lines in a profile display
+            Real mBarLineWidth;
 
-        /// The max number of profiles we can display
-        uint mMaxDisplayProfiles;
-    };
-}
-}
+            /// The distance between bars
+            Real mBarSpacing;
+
+            /// The max number of profiles we can display
+            uint mMaxDisplayProfiles;
+        };
+    }  // namespace v1
+}  // namespace Ogre
 #endif

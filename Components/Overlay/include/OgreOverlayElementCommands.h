@@ -29,95 +29,97 @@ THE SOFTWARE.
 #define __OverlayElementEmitterCommands_H__
 
 #include "OgreOverlayPrerequisites.h"
+
 #include "OgreStringInterface.h"
 
-namespace Ogre  {
-namespace v1 {
-    /** \addtogroup Core
-    *  @{
-    */
-    /** \addtogroup Overlays
-    *  @{
-    */
+namespace Ogre
+{
+    namespace v1
+    {
+        /** \addtogroup Core
+         *  @{
+         */
+        /** \addtogroup Overlays
+         *  @{
+         */
 
-    namespace OverlayElementCommands {
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdLeft : public ParamCommand
+        namespace OverlayElementCommands
         {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdTop : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdWidth : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdHeight : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdMaterial : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdCaption : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdMetricsMode : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdHorizontalAlign : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdVerticalAlign : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
-        /// Command object for OverlayElement  - see ParamCommand 
-        class _OgreOverlayExport CmdVisible : public ParamCommand
-        {
-        public:
-            String doGet(const void* target) const;
-            void doSet(void* target, const String& val);
-        };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdLeft final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdTop final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdWidth final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdHeight final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdMaterial final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdCaption final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdMetricsMode final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdHorizontalAlign final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdVerticalAlign final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
+            /// Command object for OverlayElement  - see ParamCommand
+            class _OgreOverlayExport CmdVisible final : public ParamCommand
+            {
+            public:
+                String doGet( const void *target ) const override;
+                void   doSet( void *target, const String &val ) override;
+            };
 
-    }
-    /** @} */
-    /** @} */
-}
-}
+        }  // namespace OverlayElementCommands
+        /** @} */
+        /** @} */
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif
-
-

@@ -30,25 +30,25 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-namespace v1
-{
-    //-----------------------------------------------------------------------
-    const String& PanelOverlayElementFactory::getTypeName() const
+    namespace v1
     {
-        static String name = "Panel";
-        return name;
-    }
-    //-----------------------------------------------------------------------
-    const String& BorderPanelOverlayElementFactory::getTypeName() const
-    {
-        static String name = "BorderPanel";
-        return name;
-    }
-    //-----------------------------------------------------------------------
-    const String& TextAreaOverlayElementFactory::getTypeName() const
-    {
-        static String name = "TextArea";
-        return name;
-    }
-}
-}
+        //-----------------------------------------------------------------------
+        const String &PanelOverlayElementFactory::getTypeName() const
+        {
+            static String name = "Panel";
+            return name;
+        }
+        //-----------------------------------------------------------------------
+        const String &BorderPanelOverlayElementFactory::getTypeName() const
+        {
+            static String name = "BorderPanel";
+            return name;
+        }
+        //-----------------------------------------------------------------------
+        const String &TextAreaOverlayElementFactory::getTypeName() const
+        {
+            static String name = "TextArea";
+            return name;
+        }
+    }  // namespace v1
+}  // namespace Ogre

@@ -25,24 +25,24 @@ THE SOFTWARE
 -------------------------------------------------------------------------*/
 
 #include "OgreFontManager.h"
-#include "OgreLogManager.h"
-#include "OgreStringConverter.h"
-#include "OgreStringVector.h"
+
 #include "OgreException.h"
+#include "OgreLogManager.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreString.h"
+#include "OgreStringConverter.h"
+#include "OgreStringVector.h"
 
 namespace Ogre
 {
     //---------------------------------------------------------------------
-    template<> FontManager * Singleton< FontManager >::msSingleton = 0;
-    FontManager* FontManager::getSingletonPtr()
+    template <>
+    FontManager *Singleton<FontManager>::msSingleton = 0;
+    FontManager *FontManager::getSingletonPtr() { return msSingleton; }
+    FontManager &FontManager::getSingleton()
     {
-        return msSingleton;
-    }
-    FontManager& FontManager::getSingleton()
-    {  
-        assert( msSingleton );  return ( *msSingleton );  
+        assert( msSingleton );
+        return ( *msSingleton );
     }
     //---------------------------------------------------------------------
     FontManager::FontManager() : ResourceManager()
@@ -50,48 +50,44 @@ namespace Ogre
         // Loading order
         mLoadOrder = 200.0f;
         // Scripting is supported by this manager
-        mScriptPatterns.push_back("*.fontdef");
+        mScriptPatterns.push_back( "*.fontdef" );
         // Register scripting with resource group manager
-        ResourceGroupManager::getSingleton()._registerScriptLoader(this);
+        ResourceGroupManager::getSingleton()._registerScriptLoader( this );
 
         // Resource type
         mResourceType = "Font";
 
         // Register with resource group manager
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
-
-
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
     }
     //---------------------------------------------------------------------
     FontManager::~FontManager()
     {
         // Unregister with resource group manager
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
         // Unegister scripting with resource group manager
-        ResourceGroupManager::getSingleton()._unregisterScriptLoader(this);
-
+        ResourceGroupManager::getSingleton()._unregisterScriptLoader( this );
     }
     //---------------------------------------------------------------------
-    Resource* FontManager::createImpl(const String& name, ResourceHandle handle, 
-        const String& group, bool isManual, ManualResourceLoader* loader,
-        const NameValuePairList* params)
+    Resource *FontManager::createImpl( const String &name, ResourceHandle handle, const String &group,
+                                       bool isManual, ManualResourceLoader *loader,
+                                       const NameValuePairList *params )
     {
-        return OGRE_NEW Font(this, name, handle, group, isManual, loader);
+        return OGRE_NEW Font( this, name, handle, group, isManual, loader );
     }
     //-----------------------------------------------------------------------
-    FontPtr FontManager::getByName(const String& name, const String& groupName)
+    FontPtr FontManager::getByName( const String &name, const String &groupName )
     {
-        return getResourceByName(name, groupName).staticCast<Font>();
+        return getResourceByName( name, groupName ).staticCast<Font>();
     }
     //---------------------------------------------------------------------
-    FontPtr FontManager::create (const String& name, const String& group,
-                                    bool isManual, ManualResourceLoader* loader,
-                                    const NameValuePairList* createParams)
+    FontPtr FontManager::create( const String &name, const String &group, bool isManual,
+                                 ManualResourceLoader *loader, const NameValuePairList *createParams )
     {
-        return createResource(name,group,isManual,loader,createParams).staticCast<Font>();
+        return createResource( name, group, isManual, loader, createParams ).staticCast<Font>();
     }
     //---------------------------------------------------------------------
-    void FontManager::parseScript(DataStreamPtr& stream, const String& groupName)
+    void FontManager::parseScript( DataStreamPtr &stream, const String &groupName )
     {
         String line;
         FontPtr pFont;
@@ -106,172 +102,164 @@ namespace Ogre
             }
             else
             {
-                if (pFont.isNull())
+                if( pFont.isNull() )
                 {
                     // No current font
                     // So first valid data should be font name
-                    if (StringUtil::startsWith(line, "font "))
+                    if( StringUtil::startsWith( line, "font " ) )
                     {
                         // chop off the 'particle_system ' needed by new compilers
-                        line = line.substr(5);
+                        line = line.substr( 5 );
                     }
-                    pFont = create(line, groupName);
-                    pFont->_notifyOrigin(stream->getName());
+                    pFont = create( line, groupName );
+                    pFont->_notifyOrigin( stream->getName() );
                     // Skip to and over next {
-                    stream->skipLine("{");
+                    stream->skipLine( "{" );
                 }
                 else
                 {
                     // Already in font
-                    if (line == "}")
+                    if( line == "}" )
                     {
-                        // Finished 
+                        // Finished
                         pFont.setNull();
                         // NB font isn't loaded until required
                     }
                     else
                     {
-                        parseAttribute(line, pFont);
+                        parseAttribute( line, pFont );
                     }
                 }
             }
         }
     }
     //---------------------------------------------------------------------
-    void FontManager::parseAttribute(const String& line, FontPtr& pFont)
+    void FontManager::parseAttribute( const String &line, FontPtr &pFont )
     {
-        vector<String>::type params = StringUtil::split(line);
-        String& attrib = params[0];
-        StringUtil::toLowerCase(attrib);
-        if (attrib == "type")
+        vector<String>::type params = StringUtil::split( line );
+        String &attrib = params[0];
+        StringUtil::toLowerCase( attrib );
+        if( attrib == "type" )
         {
             // Check params
-            if (params.size() != 2)
+            if( params.size() != 2 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
-            StringUtil::toLowerCase(params[1]);
-            if (params[1] == "truetype")
+            StringUtil::toLowerCase( params[1] );
+            if( params[1] == "truetype" )
             {
-                pFont->setType(FT_TRUETYPE);
+                pFont->setType( FT_TRUETYPE );
             }
             else
             {
-                pFont->setType(FT_IMAGE);
+                pFont->setType( FT_IMAGE );
             }
-
         }
-        else if (attrib == "source")
+        else if( attrib == "source" )
         {
             // Check params
-            if (params.size() != 2)
+            if( params.size() != 2 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
-            pFont->setSource(params[1]);
+            pFont->setSource( params[1] );
         }
-        else if (attrib == "glyph")
+        else if( attrib == "glyph" )
         {
             // Check params
-            if (params.size() != 6)
+            if( params.size() != 6 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
             // Support numeric and character glyph specification
             Font::CodePoint cp;
-            if (params[1].at(0) == 'u' && params[1].size() > 1)
+            if( params[1].at( 0 ) == 'u' && params[1].size() > 1 )
             {
                 // Unicode glyph spec
-                String trimmed = params[1].substr(1);
-                cp = StringConverter::parseUnsignedInt(trimmed);
+                String trimmed = params[1].substr( 1 );
+                cp = StringConverter::parseUnsignedInt( trimmed );
             }
             else
             {
                 // Direct character
-                cp = params[1].at(0);
+                cp = params[1].at( 0 );
             }
             pFont->setGlyphTexCoords(
-                cp, 
-                StringConverter::parseReal(params[2]),
-                StringConverter::parseReal(params[3]),
-                StringConverter::parseReal(params[4]),
-                StringConverter::parseReal(params[5]), 1.0 ); // assume image is square
+                cp, StringConverter::parseReal( params[2] ), StringConverter::parseReal( params[3] ),
+                StringConverter::parseReal( params[4] ), StringConverter::parseReal( params[5] ),
+                1.0 );  // assume image is square
         }
-        else if (attrib == "size")
+        else if( attrib == "size" )
         {
             // Check params
-            if (params.size() != 2)
+            if( params.size() != 2 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
-            pFont->setTrueTypeSize(
-                StringConverter::parseReal(params[1]));
+            pFont->setTrueTypeSize( StringConverter::parseReal( params[1] ) );
         }
-        else if (attrib == "character_spacer")
+        else if( attrib == "character_spacer" )
         {
             // Check params
-            if (params.size() != 2)
+            if( params.size() != 2 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
-            pFont->setCharacterSpacer(
-                StringConverter::parseUnsignedInt(params[1]));
+            pFont->setCharacterSpacer( StringConverter::parseUnsignedInt( params[1] ) );
         }
-        else if (attrib == "resolution")
+        else if( attrib == "resolution" )
         {
             // Check params
-            if (params.size() != 2)
+            if( params.size() != 2 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
-            pFont->setTrueTypeResolution(
-                (uint)StringConverter::parseReal(params[1]) );
+            pFont->setTrueTypeResolution( (uint)StringConverter::parseReal( params[1] ) );
         }
-        else if (attrib == "antialias_colour")
+        else if( attrib == "antialias_colour" )
         {
             // Check params
-            if (params.size() != 2)
+            if( params.size() != 2 )
             {
-                logBadAttrib(line, pFont);
+                logBadAttrib( line, pFont );
                 return;
             }
             // Set
-            pFont->setAntialiasColour(StringConverter::parseBool(params[1]));
+            pFont->setAntialiasColour( StringConverter::parseBool( params[1] ) );
         }
-        else if (attrib == "code_points")
+        else if( attrib == "code_points" )
         {
-            for (size_t c = 1; c < params.size(); ++c)
+            for( size_t c = 1; c < params.size(); ++c )
             {
-                String& item = params[c];
-                StringVector itemVec = StringUtil::split(item, "-");
-                if (itemVec.size() == 2)
+                String &item = params[c];
+                StringVector itemVec = StringUtil::split( item, "-" );
+                if( itemVec.size() == 2 )
                 {
-                    pFont->addCodePointRange(Font::CodePointRange(
-                        StringConverter::parseUnsignedInt(itemVec[0]),
-                        StringConverter::parseUnsignedInt(itemVec[1])));
+                    pFont->addCodePointRange(
+                        Font::CodePointRange( StringConverter::parseUnsignedInt( itemVec[0] ),
+                                              StringConverter::parseUnsignedInt( itemVec[1] ) ) );
                 }
             }
         }
-
     }
     //---------------------------------------------------------------------
-    void FontManager::logBadAttrib(const String& line, FontPtr& pFont)
+    void FontManager::logBadAttrib( const String &line, FontPtr &pFont )
     {
-        LogManager::getSingleton().logMessage("Bad attribute line: " + line +
-            " in font " + pFont->getName(), LML_CRITICAL);
-
+        LogManager::getSingleton().logMessage(
+            "Bad attribute line: " + line + " in font " + pFont->getName(), LML_CRITICAL );
     }
 
-}
+}  // namespace Ogre
