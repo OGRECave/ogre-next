@@ -195,7 +195,7 @@ namespace Ogre
             return 0;
         }
         //-----------------------------------------------------------------------------
-        unsigned short VertexElement::getTypeCount( VertexElementType etype )
+        uint8 VertexElement::getTypeCount( VertexElementType etype )
         {
             switch( etype )
             {
@@ -446,7 +446,7 @@ namespace Ogre
                 mInputLayoutDirty = false;
             }
 
-            return mBaseInputLayoutId | ( static_cast<uint16>( opType ) << 10u );
+            return uint16( mBaseInputLayoutId | ( uint16( opType ) << 10u ) );
         }
         //-----------------------------------------------------------------------------
         const VertexDeclaration::VertexElementList &VertexDeclaration::getElements() const
@@ -695,7 +695,7 @@ namespace Ogre
 
                 while( itor != endt )
                 {
-                    addElement( i, acumOffset, itor->mType, itor->mSemantic,
+                    addElement( (uint16)i, acumOffset, itor->mType, itor->mSemantic,
                                 repeatCounts[itor->mSemantic - 1]++ );
                     acumOffset += v1::VertexElement::getTypeSize( itor->mType );
                     ++itor;

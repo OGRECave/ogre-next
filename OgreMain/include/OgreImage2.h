@@ -325,7 +325,7 @@ namespace Ogre
 
         PixelFormatGpu getPixelFormat() const;
 
-        size_t getBytesPerRow( uint8 mipLevel ) const;
+        uint32 getBytesPerRow( uint8 mipLevel ) const;
         size_t getBytesPerImage( uint8 mipLevel ) const;
         /// Returns total size in bytes used in GPU by this texture including mipmaps.
         size_t getSizeBytes() const;

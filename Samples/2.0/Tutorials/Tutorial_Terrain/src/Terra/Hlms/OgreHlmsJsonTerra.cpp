@@ -223,7 +223,7 @@ namespace Ogre
             loadTexture( subobj, blocks, TERRA_DETAIL_WEIGHT, terraDatablock, resourceGroup );
         }
 
-        for( int i = 0; i < 4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
             const String iAsStr = StringConverter::toString( i );
             String texTypeName = "detail" + iAsStr;

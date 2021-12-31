@@ -115,7 +115,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void SampleDescription::parseString( const String &fsaaSetting )
     {
-        const uint8 samples = std::max( 1u, StringConverter::parseUnsignedInt( fsaaSetting ) );
+        const uint8 samples =
+            static_cast<uint8>( std::max( 1u, StringConverter::parseUnsignedInt( fsaaSetting ) ) );
         const bool csaa = fsaaSetting.find( "CSAA" ) != String::npos;
         const bool eqaa = fsaaSetting.find( "EQAA" ) != String::npos;
 

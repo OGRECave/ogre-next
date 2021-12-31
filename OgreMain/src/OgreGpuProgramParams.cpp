@@ -3608,7 +3608,7 @@ namespace Ogre
                     srcToDestNamedMap.find( autoEntry.physicalIndex );
                 if( mi != srcToDestNamedMap.end() )
                 {
-                    if( autoEntry.fData )
+                    if( autoEntry.fData != 0.0 )
                     {
                         setNamedAutoConstantReal( mi->second, autoEntry.paramType, autoEntry.fData );
                     }

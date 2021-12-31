@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const Real Quaternion::msEpsilon = 1e-03;
+    const Real Quaternion::msEpsilon = Real( 1e-03 );
     const Quaternion Quaternion::ZERO( 0, 0, 0, 0 );
     const Quaternion Quaternion::IDENTITY( 1, 0, 0, 0 );
 
@@ -455,7 +455,7 @@ namespace Ogre
             return rkP;
 
         Real fSin = Math::Sin( fAngle );
-        Radian fPhase( Math::PI * iExtraSpins * fT );
+        Radian fPhase( Math::PI * Real( iExtraSpins ) * fT );
         Real fInvSin = 1.0f / fSin;
         Real fCoeff0 = Math::Sin( ( 1.0f - fT ) * fAngle - fPhase ) * fInvSin;
         Real fCoeff1 = Math::Sin( fT * fAngle + fPhase ) * fInvSin;

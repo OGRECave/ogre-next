@@ -359,7 +359,7 @@ namespace Ogre
         };
 
         // Check BPP
-        size_t bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
+        uint32 bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
         if( bpp == 32 && imageType == FIT_BITMAP &&
             !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp ) &&
             FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, 24 ) )
@@ -382,8 +382,8 @@ namespace Ogre
         }
 
         ret = FreeImage_AllocateT( imageType, static_cast<int>( pImgData->box.width ),
-                                   static_cast<int>( pImgData->box.height ), bpp, red_mask, green_mask,
-                                   blue_mask );
+                                   static_cast<int>( pImgData->box.height ), (int)bpp, red_mask,
+                                   green_mask, blue_mask );
         if( !ret )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -603,8 +603,8 @@ namespace Ogre
 
         const uint32 rowAlignment = 4u;
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat );
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u,
-                                                                      supportedFormat, rowAlignment );
+        imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
+            imgData->box.width, 1u, 1u, 1u, supportedFormat, rowAlignment );
         imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 

@@ -63,9 +63,16 @@ namespace Ogre
             mBaseVertexBuffer = mVertexBuffers[0];
 
         if( mIndexBuffer )
-            mPrimCount = mIndexBuffer->getNumElements();
+        {
+            OGRE_ASSERT_MEDIUM( mIndexBuffer->getNumElements() <= std::numeric_limits<uint32>::max() );
+            mPrimCount = (uint32)mIndexBuffer->getNumElements();
+        }
         else if( !mVertexBuffers.empty() )
-            mPrimCount = mVertexBuffers[0]->getNumElements();
+        {
+            OGRE_ASSERT_MEDIUM( mVertexBuffers[0]->getNumElements() <=
+                                std::numeric_limits<uint32>::max() );
+            mPrimCount = (uint32)mVertexBuffers[0]->getNumElements();
+        }
 
         /*switch( mOperationType )
         {

@@ -83,7 +83,7 @@ namespace Ogre
         const size_t blockSizeBytes =
             PixelFormatGpuUtils::isCompressed( pixelFormat )
                 ? PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat )
-                : std::max( (size_t)4u, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
+                : std::max( 4u, PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
         mCurrentOffset = alignToNextMultiple( mCurrentOffset, blockSizeBytes );
         mCurrentOffset = std::min( mCurrentOffset, mSize );
 
@@ -99,7 +99,7 @@ namespace Ogre
             retVal.numSlices = slices;
             retVal.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
             retVal.bytesPerRow =
-                PixelFormatGpuUtils::getSizeBytes( width, 1, 1, 1, pixelFormat, rowAlignment );
+                (uint32)PixelFormatGpuUtils::getSizeBytes( width, 1, 1, 1, pixelFormat, rowAlignment );
             retVal.bytesPerImage =
                 PixelFormatGpuUtils::getSizeBytes( width, height, 1, 1, pixelFormat, rowAlignment );
             retVal.data = mapRegionImplRawPtr();

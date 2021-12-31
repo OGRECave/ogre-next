@@ -306,7 +306,7 @@ namespace Ogre
         {
             const float val = i - fKernelRadius + ( 1.0f - 1.0f / stepSize );
             float fWeight = 1.0f / std::sqrt( 2.0f * Math::PI * gaussianDeviation * gaussianDeviation );
-            fWeight *= exp( -( val * val ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
+            fWeight *= expf( -( val * val ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
 
             fWeightSum += fWeight;
             weights[i] = fWeight;
@@ -358,7 +358,8 @@ namespace Ogre
             shaderParams.mParams.push_back( p );
             ShaderParams::Param *param = &shaderParams.mParams.back();
 
-            param->setManualValue( &weights[i], std::min<uint32>( floatsPerParam, weights.size() - i ) );
+            param->setManualValue( &weights[i],
+                                   std::min( floatsPerParam, uint32( weights.size() - i ) ) );
         }
 
         shaderParams.setDirty();

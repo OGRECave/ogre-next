@@ -115,7 +115,7 @@ namespace Ogre
 
                     for( size_t i = 0; i < track->getNumKeyFrames(); ++i )
                     {
-                        Real timestamp = track->getKeyFrame( i )->getTime();
+                        Real timestamp = track->getKeyFrame( (uint16)i )->getTime();
                         TimestampVec::iterator it = std::lower_bound(
                             itKeyframes->second.begin(), itKeyframes->second.end(), timestamp );
                         if( it == itKeyframes->second.end() || *it != timestamp )
@@ -186,9 +186,10 @@ namespace Ogre
                     if( it != slotToBone.end() )
                         boneIdx = it->second;
 
-                    if( animation->hasOldNodeTrack( boneIdx ) )
+                    if( animation->hasOldNodeTrack( (uint16)boneIdx ) )
                     {
-                        v1::OldNodeAnimationTrack *oldTrack = animation->getOldNodeTrack( boneIdx );
+                        v1::OldNodeAnimationTrack *oldTrack =
+                            animation->getOldNodeTrack( (uint16)boneIdx );
 
                         v1::TransformKeyFrame originalKF( 0, fTime );
                         getInterpolatedUnnormalizedKeyFrame( oldTrack, animation->_getTimeIndex( fTime ),
@@ -400,7 +401,7 @@ namespace Ogre
 
             for( size_t i = 0; i < ARRAY_PACKED_REALS; ++i )
             {
-                uint32 slotIdx = SkeletonDef::blockIdxToSlotStart( blockIdx ) + i;
+                uint32 slotIdx = SkeletonDef::blockIdxToSlotStart( blockIdx ) + (uint32)i;
 
                 SkeletonDef::IndexToIndexMap::const_iterator itSlotToBone = slotToBone.find( slotIdx );
 

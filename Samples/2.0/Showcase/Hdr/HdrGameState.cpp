@@ -460,19 +460,19 @@ namespace Demo
         if( arg.keysym.sym == SDLK_F5 )
         {
             if( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
-                mExposure -= 0.5;
+                mExposure -= 0.5f;
             else
-                mExposure += 0.5;
+                mExposure += 0.5f;
 
             HdrUtils::setExposure( mExposure, mMinAutoExposure, mMaxAutoExposure );
         }
         else if( arg.keysym.sym == SDLK_F6 )
         {
             if( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
-                mMinAutoExposure -= 0.5;
+                mMinAutoExposure -= 0.5f;
             else
             {
-                mMinAutoExposure += 0.5;
+                mMinAutoExposure += 0.5f;
                 if( mMinAutoExposure > mMaxAutoExposure )
                     mMaxAutoExposure = mMinAutoExposure;
             }
@@ -483,13 +483,13 @@ namespace Demo
         {
             if( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) )
             {
-                mMaxAutoExposure -= 0.5;
+                mMaxAutoExposure -= 0.5f;
                 if( mMaxAutoExposure < mMinAutoExposure )
                     mMinAutoExposure = mMaxAutoExposure;
             }
             else
             {
-                mMaxAutoExposure += 0.5;
+                mMaxAutoExposure += 0.5f;
             }
 
             HdrUtils::setExposure( mExposure, mMinAutoExposure, mMaxAutoExposure );

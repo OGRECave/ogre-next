@@ -503,7 +503,7 @@ namespace Ogre
         mBlendProxyCamera->setFOVy( Degree( 90 ) );
         mBlendProxyCamera->setAspectRatio( 1 );
         mBlendProxyCamera->setFixedYawAxis( false );
-        mBlendProxyCamera->setNearClipDistance( 0.01 );
+        mBlendProxyCamera->setNearClipDistance( Real( 0.01 ) );
         mBlendProxyCamera->setFarClipDistance( 0.0 );
 
         CompositorChannelVec channels( 1, mBindTexture );
@@ -579,10 +579,10 @@ namespace Ogre
         for( size_t i = 0; i < mNumCollectedProbes; ++i )
             sumNdf += mProbeNDFs[i];
 
-        const Real invSumNdf = 1.0 / sumNdf;
+        const Real invSumNdf = Real( 1.0 ) / sumNdf;
 
         const Real reverseSumNdf = mNumCollectedProbes - sumNdf;
-        const Real invRevSumNdf = 1.0 / reverseSumNdf;
+        const Real invRevSumNdf = Real( 1.0 ) / reverseSumNdf;
 
         Real sumBlendFactor = 0;
 
@@ -601,7 +601,7 @@ namespace Ogre
         if( sumBlendFactor <= 0.0 )
             sumBlendFactor = 1.0f;
 
-        Real invSumBlendFactor = 1.0 / sumBlendFactor;
+        const Real invSumBlendFactor = Real( 1.0 ) / sumBlendFactor;
 
         for( size_t i = 0; i < mNumCollectedProbes; ++i )
             mProbeBlendFactors[i] *= invSumBlendFactor;

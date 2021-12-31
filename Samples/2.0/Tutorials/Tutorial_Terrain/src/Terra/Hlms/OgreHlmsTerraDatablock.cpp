@@ -51,9 +51,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    const size_t HlmsTerraDatablock::MaterialSizeInGpu = 4 * 10 * 4;
-    const size_t HlmsTerraDatablock::MaterialSizeInGpuAligned =
-        alignToNextMultiple( HlmsTerraDatablock::MaterialSizeInGpu, 4 * 4 );
+    const uint32 HlmsTerraDatablock::MaterialSizeInGpu = 4 * 10 * 4;
+    const uint32 HlmsTerraDatablock::MaterialSizeInGpuAligned =
+        alignToNextMultiple<uint32>( HlmsTerraDatablock::MaterialSizeInGpu, 4 * 4 );
 
     //-----------------------------------------------------------------------------------
     HlmsTerraDatablock::HlmsTerraDatablock( IdString name, HlmsTerra *creator,

@@ -72,7 +72,7 @@ namespace Ogre
         mFogColour( ColourValue::White ),
         mFogStart( 0.0 ),
         mFogEnd( 1.0 ),
-        mFogDensity( 0.001 ),
+        mFogDensity( Real( 0.001 ) ),
         mVertexProgramUsage( 0 ),
         mShadowCasterVertexProgramUsage( 0 ),
         mShadowCasterFragmentProgramUsage( 0 ),

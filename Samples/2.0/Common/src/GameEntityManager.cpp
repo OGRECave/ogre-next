@@ -80,7 +80,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GameEntityManager::removeGameEntity( GameEntity *toRemove )
     {
-        Ogre::uint32 slot = getScheduledForRemovalAvailableSlot();
+        const size_t slot = getScheduledForRemovalAvailableSlot();
         mScheduledForRemoval[slot].push_back( toRemove );
         GameEntityVec::iterator itor =
             std::lower_bound( mGameEntities[toRemove->mType].begin(),
@@ -165,7 +165,7 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
-    Ogre::uint32 GameEntityManager::getScheduledForRemovalAvailableSlot()
+    size_t GameEntityManager::getScheduledForRemovalAvailableSlot()
     {
         if( mScheduledForRemovalCurrentSlot >= mScheduledForRemoval.size() )
         {

@@ -262,7 +262,7 @@ namespace Ogre
         assert( lexemeStorage.capacity() >=
                 lexemeStorage.size() + lexeme.size() );  // lexemeStorage is preallocated
         token.lexemePtr = lexemeStorage.c_str() + lexemeStorage.size();
-        token.lexemeLen = lexeme.size();
+        token.lexemeLen = static_cast<uint32>( lexeme.size() );
         lexemeStorage.append( lexeme );
         token.line = line;
         bool ignore = false;

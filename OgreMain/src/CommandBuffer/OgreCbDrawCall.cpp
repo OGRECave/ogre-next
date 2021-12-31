@@ -55,8 +55,9 @@ namespace Ogre
 
     CbDrawCallIndexed::CbDrawCallIndexed( int baseInstanceAndIndirectBuffers, VertexArrayObject *_vao,
                                           void *_indirectBufferOffset ) :
-        CbDrawCall( CB_DRAW_CALL_INDEXED_EMULATED_NO_BASE_INSTANCE + baseInstanceAndIndirectBuffers,
-                    _vao, _indirectBufferOffset )
+        CbDrawCall(
+            uint16( CB_DRAW_CALL_INDEXED_EMULATED_NO_BASE_INSTANCE + baseInstanceAndIndirectBuffers ),
+            _vao, _indirectBufferOffset )
     {
     }
 
@@ -83,8 +84,9 @@ namespace Ogre
 
     CbDrawCallStrip::CbDrawCallStrip( int baseInstanceAndIndirectBuffers, VertexArrayObject *_vao,
                                       void *_indirectBufferOffset ) :
-        CbDrawCall( CB_DRAW_CALL_STRIP_EMULATED_NO_BASE_INSTANCE + baseInstanceAndIndirectBuffers, _vao,
-                    _indirectBufferOffset )
+        CbDrawCall(
+            uint16( CB_DRAW_CALL_STRIP_EMULATED_NO_BASE_INSTANCE + baseInstanceAndIndirectBuffers ),
+            _vao, _indirectBufferOffset )
     {
     }
 

@@ -539,7 +539,7 @@ namespace Ogre
 
         while( itor != endt )
         {
-            int position = std::min<int>( itor->position, mWorkspaces.size() );
+            const int position = std::min<int>( itor->position, (int)mWorkspaces.size() );
 
             if( position < 0 )
                 mWorkspaces.push_back( itor->workspace );

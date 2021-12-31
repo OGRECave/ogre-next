@@ -224,7 +224,7 @@ namespace Ogre
         const bool transparent = datablock->mBlendblock[casterPass]->mIsTransparent != 0u;
 
         uint16 macroblock = datablock->mMacroblockHash[casterPass];
-        uint16 texturehash = datablock->mTextureHash;
+        uint16 texturehash = static_cast<uint16>( datablock->mTextureHash );
 
         // Flip the float to deal with negative & positive numbers
 #if OGRE_DOUBLE_PRECISION == 0
@@ -652,8 +652,9 @@ namespace Ogre
                     drawIndexedPtr->primCount = vao->mPrimCount;
                     drawIndexedPtr->instanceCount = instancesPerDraw;
                     drawIndexedPtr->firstVertexIndex =
-                        vao->mIndexBuffer->_getFinalBufferStart() + vao->mPrimStart;
-                    drawIndexedPtr->baseVertex = vao->mBaseVertexBuffer->_getFinalBufferStart();
+                        uint32( vao->mIndexBuffer->_getFinalBufferStart() + vao->mPrimStart );
+                    drawIndexedPtr->baseVertex =
+                        uint32( vao->mBaseVertexBuffer->_getFinalBufferStart() );
                     drawIndexedPtr->baseInstance = baseInstance << baseInstanceShift;
 
                     instanceCount = instancesPerDraw;
@@ -667,7 +668,7 @@ namespace Ogre
                     drawStripPtr->primCount = vao->mPrimCount;
                     drawStripPtr->instanceCount = instancesPerDraw;
                     drawStripPtr->firstVertexIndex =
-                        vao->mBaseVertexBuffer->_getFinalBufferStart() + vao->mPrimStart;
+                        uint32( vao->mBaseVertexBuffer->_getFinalBufferStart() + vao->mPrimStart );
                     drawStripPtr->baseInstance = baseInstance << baseInstanceShift;
 
                     instanceCount = instancesPerDraw;
@@ -792,9 +793,9 @@ namespace Ogre
 
                     /*drawCall->useGlobalInstancingVertexBufferIsAvailable =
                             renderOp.useGlobalInstancingVertexBufferIsAvailable;*/
-                    drawCall->primCount = renderOp.indexData->indexCount;
+                    drawCall->primCount = (uint32)renderOp.indexData->indexCount;
                     drawCall->instanceCount = instancesPerDraw;
-                    drawCall->firstVertexIndex = renderOp.indexData->indexStart;
+                    drawCall->firstVertexIndex = (uint32)renderOp.indexData->indexStart;
                     drawCall->baseInstance = baseInstance << baseInstanceShift;
 
                     instanceCount = instancesPerDraw;
@@ -808,9 +809,9 @@ namespace Ogre
 
                     /*drawCall->useGlobalInstancingVertexBufferIsAvailable =
                             renderOp.useGlobalInstancingVertexBufferIsAvailable;*/
-                    drawCall->primCount = renderOp.vertexData->vertexCount;
+                    drawCall->primCount = (uint32)renderOp.vertexData->vertexCount;
                     drawCall->instanceCount = instancesPerDraw;
-                    drawCall->firstVertexIndex = renderOp.vertexData->vertexStart;
+                    drawCall->firstVertexIndex = (uint32)renderOp.vertexData->vertexStart;
                     drawCall->baseInstance = baseInstance << baseInstanceShift;
 
                     instanceCount = instancesPerDraw;

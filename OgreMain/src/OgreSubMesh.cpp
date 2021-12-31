@@ -376,7 +376,7 @@ namespace Ogre
 
                 for( size_t i = 0; i < indexData[VpNormal]->indexCount; i++ )
                 {
-                    size_t idx = ( elsz == 2u ) ? ( (uint16 *)idata )[i] : ( (uint32 *)idata )[i];
+                    uint32 idx = ( elsz == 2u ) ? ( (uint16 *)idata )[i] : ( (uint32 *)idata )[i];
                     boxes[0].mIndices.insert( idx );
                 }
                 indexData[VpNormal]->indexBuffer->unlock();
@@ -725,7 +725,7 @@ namespace Ogre
                 for( size_t j = 0; j < vertexData[i]->vertexDeclaration->getMaxSource() + 1u; ++j )
                 {
                     const HardwareVertexBufferSharedPtr &vertexBuffer =
-                        vertexData[i]->vertexBufferBinding->getBuffer( j );
+                        vertexData[i]->vertexBufferBinding->getBuffer( (uint16)j );
 
                     HardwareBufferLockGuard vertexLock( vertexBuffer, HardwareBuffer::HBL_READ_ONLY );
                     const char *data = reinterpret_cast<const char *>( vertexLock.pData );
@@ -741,7 +741,7 @@ namespace Ogre
                     HardwareBufferLockGuard vbufLock( vbuf, HardwareBuffer::HBL_DISCARD );
                     memcpy( vbufLock.pData, newData, vbuf->getSizeInBytes() );
                     vbufLock.unlock();
-                    vertexData[i]->vertexBufferBinding->setBinding( j, vbuf );
+                    vertexData[i]->vertexBufferBinding->setBinding( (uint16)j, vbuf );
                 }
 
                 vertexData[i]->vertexDeclaration->convertFromV2( newDeclaration );

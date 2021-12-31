@@ -568,7 +568,7 @@ namespace Ogre
                 const Vector3 &n2 = getNormal( iPolyB );
 
                 // if the normals point into the same direction
-                if( n1.directionEquals( n2, Radian( Degree( 0.00001 ) ) ) )
+                if( n1.directionEquals( n2, Radian( Degree( static_cast<Real>( 0.00001 ) ) ) ) )
                 {
                     // indicates if a neighbor has been found and joined
                     bool bFound = false;

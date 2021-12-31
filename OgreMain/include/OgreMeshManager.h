@@ -459,7 +459,7 @@ namespace Ogre
             /** Utility method for tessellating 2D meshes.
              */
             void tesselate2DMesh(
-                Mesh *pMesh, SubMesh *pSub, unsigned short meshWidth, unsigned short meshHeight,
+                Mesh *pMesh, SubMesh *pSub, uint32 meshWidth, uint32 meshHeight,
                 bool                  doubleSided = false,
                 HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 bool                  indexSysMem = false );

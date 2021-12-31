@@ -106,11 +106,11 @@ namespace Demo
         probe->setTextureParams( 1024, 1024, true );
         probe->initWorkspace();
 
-        probeCenter = Ogre::Vector3( -0.0, 1.799999, 0.232415 );
-        probeArea.mCenter = Ogre::Vector3( -0.0, 12.011974, 0.232414 );
-        probeArea.mHalfSize = Ogre::Vector3( 12.589478, 24.297745, 10.569476 ) * 0.5;
-        probeShape.mCenter = Ogre::Vector3( -0.0, 12.011974, 0.232414 );
-        probeShape.mHalfSize = Ogre::Vector3( 12.589478, 24.297745, 10.569476 ) * 0.5;
+        probeCenter = Ogre::Vector3( -0.0, 1.799999f, 0.232415f );
+        probeArea.mCenter = Ogre::Vector3( -0.0, 12.011974f, 0.232414f );
+        probeArea.mHalfSize = Ogre::Vector3( 12.589478f, 24.297745f, 10.569476f ) * 0.5;
+        probeShape.mCenter = Ogre::Vector3( -0.0, 12.011974f, 0.232414f );
+        probeShape.mHalfSize = Ogre::Vector3( 12.589478f, 24.297745f, 10.569476f ) * 0.5;
         probe->set( probeCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ), Ogre::Matrix3::IDENTITY,
                     probeShape );
 
@@ -119,11 +119,11 @@ namespace Demo
         probe->setTextureParams( 1024, 1024, true );
         probe->initWorkspace();
 
-        probeCenter = Ogre::Vector3( -5.232418, 1.799997, 18.313454 );
-        probeArea.mCenter = Ogre::Vector3( -5.263578, 12.011974, 13.145589 );
-        probeArea.mHalfSize = Ogre::Vector3( 2.062322, 24.297745, 17.866102 ) * 0.5;
-        probeShape.mCenter = Ogre::Vector3( -5.211694, 12.011974, 8.478205 );
-        probeShape.mHalfSize = Ogre::Vector3( 2.166091, 24.297745, 27.200872 ) * 0.5;
+        probeCenter = Ogre::Vector3( -5.232418f, 1.799997f, 18.313454f );
+        probeArea.mCenter = Ogre::Vector3( -5.263578f, 12.011974f, 13.145589f );
+        probeArea.mHalfSize = Ogre::Vector3( 2.062322f, 24.297745f, 17.866102f ) * 0.5;
+        probeShape.mCenter = Ogre::Vector3( -5.211694f, 12.011974f, 8.478205f );
+        probeShape.mHalfSize = Ogre::Vector3( 2.166091f, 24.297745f, 27.200872f ) * 0.5;
         probe->set( probeCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ), Ogre::Matrix3::IDENTITY,
                     probeShape );
 
@@ -132,11 +132,11 @@ namespace Demo
         probe->setTextureParams( 1024, 1024, true );
         probe->initWorkspace();
 
-        probeCenter = Ogre::Vector3( 3.767576, 1.799997, 20.84387 );
-        probeArea.mCenter = Ogre::Vector3( 2.632758, 12.011975, 22.444103 );
-        probeArea.mHalfSize = Ogre::Vector3( 10.365083, 24.297745, 21.705084 ) * 0.5;
-        probeShape.mCenter = Ogre::Vector3( 3.752187, 12.011975, 22.444103 );
-        probeShape.mHalfSize = Ogre::Vector3( 8.126225, 24.297745, 21.705084 ) * 0.5;
+        probeCenter = Ogre::Vector3( 3.767576f, 1.799997f, 20.84387f );
+        probeArea.mCenter = Ogre::Vector3( 2.632758f, 12.011975f, 22.444103f );
+        probeArea.mHalfSize = Ogre::Vector3( 10.365083f, 24.297745f, 21.705084f ) * 0.5;
+        probeShape.mCenter = Ogre::Vector3( 3.752187f, 12.011975f, 22.444103f );
+        probeShape.mHalfSize = Ogre::Vector3( 8.126225f, 24.297745f, 21.705084f ) * 0.5;
         probe->set( probeCenter, probeArea, Ogre::Vector3( 0.7f, 1.0f, 0.3f ), Ogre::Matrix3::IDENTITY,
                     probeShape );
 
@@ -145,11 +145,11 @@ namespace Demo
         probe->setTextureParams( 1024, 1024, true );
         probe->initWorkspace();
 
-        probeCenter = Ogre::Vector3( -2.565753, 1.799996, 20.929661 );
-        probeArea.mCenter = Ogre::Vector3( -2.703529, 12.011974, 21.099365 );
-        probeArea.mHalfSize = Ogre::Vector3( 7.057773, 24.297745, 2.166093 ) * 0.5;
-        probeShape.mCenter = Ogre::Vector3( 0.767578, 12.011974, 21.099365 );
-        probeShape.mHalfSize = Ogre::Vector3( 13.999986, 24.297745, 2.166093 ) * 0.5;
+        probeCenter = Ogre::Vector3( -2.565753f, 1.799996f, 20.929661f );
+        probeArea.mCenter = Ogre::Vector3( -2.703529f, 12.011974f, 21.099365f );
+        probeArea.mHalfSize = Ogre::Vector3( 7.057773f, 24.297745f, 2.166093f ) * 0.5;
+        probeShape.mCenter = Ogre::Vector3( 0.767578f, 12.011974f, 21.099365f );
+        probeShape.mHalfSize = Ogre::Vector3( 13.999986f, 24.297745f, 2.166093f ) * 0.5;
         probe->set( probeCenter, probeArea, Ogre::Vector3( 0.7f, 1.0f, 0.3f ), Ogre::Matrix3::IDENTITY,
                     probeShape );
 
@@ -218,7 +218,7 @@ namespace Demo
                         finalName, finalName, macroblock, blendblock, Ogre::HlmsParamVec() ) );
                     datablock->setBackgroundDiffuse( materials[i].colour );
                     datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-                    datablock->setRoughness( 0.02 );
+                    datablock->setRoughness( 0.02f );
                     // datablock->setCubemapProbe( mParallaxCorrectedCubemap->getProbes()[j] );
                     mMaterials[i * 4 + j] = datablock;
                 }
@@ -276,7 +276,7 @@ namespace Demo
         mCameraController->mCameraSpeedBoost = 10.0f;
 
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
-        camera->setPosition( Ogre::Vector3( 3.767576, 1.799997, 20.84387 ) );
+        camera->setPosition( Ogre::Vector3( 3.767576f, 1.799997f, 20.84387f ) );
         camera->lookAt( camera->getPosition() + Ogre::Vector3( -1, 0, 0 ) );
         if( mParallaxCorrectedCubemapAuto )
             mParallaxCorrectedCubemapAuto->setUpdatedTrackedDataFromCamera( camera );

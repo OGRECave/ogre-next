@@ -112,8 +112,8 @@ namespace Ogre
                     params->find( String( "VaoManager::" ) + c_vboTypes[i] );
                 if( itor != params->end() )
                 {
-                    mDefaultPoolSize[i] =
-                        StringConverter::parseUnsignedInt( itor->second, mDefaultPoolSize[i] );
+                    mDefaultPoolSize[i] = StringConverter::parseUnsignedInt(
+                        itor->second, (unsigned int)mDefaultPoolSize[i] );
                 }
             }
         }
@@ -236,7 +236,7 @@ namespace Ogre
 
         if( !bufferNames.empty() )
         {
-            OCGE( glDeleteBuffers( bufferNames.size(), &bufferNames[0] ) );
+            OCGE( glDeleteBuffers( (GLsizei)bufferNames.size(), &bufferNames[0] ) );
             bufferNames.clear();
         }
 
@@ -430,7 +430,7 @@ namespace Ogre
 
         if( !bufferNames.empty() )
         {
-            OCGE( glDeleteBuffers( bufferNames.size(), &bufferNames[0] ) );
+            OCGE( glDeleteBuffers( (GLsizei)bufferNames.size(), &bufferNames[0] ) );
             bufferNames.clear();
         }
     }
@@ -555,8 +555,8 @@ namespace Ogre
 
             if( vboFlag != CPU_INACCESSIBLE )
             {
-                newVbo.dynamicBuffer =
-                    new GL3PlusDynamicBuffer( newVbo.vboName, newVbo.sizeBytes, this, bufferType );
+                newVbo.dynamicBuffer = new GL3PlusDynamicBuffer(
+                    newVbo.vboName, (GLuint)newVbo.sizeBytes, this, bufferType );
             }
 
             mVbos[vboFlag].push_back( newVbo );
@@ -813,7 +813,7 @@ namespace Ogre
                 static_cast<uint16>( 2048 * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
             // We need another line of maxTexSizeBytes for uploading
             // to create a rectangle when calling glTexSubImage2D().
-            sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, maxTexSizeBytes );
         }
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
@@ -885,7 +885,7 @@ namespace Ogre
                 static_cast<uint16>( 2048u * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) );
             // We need another line of maxTexSizeBytes for uploading
             // to create a rectangle when calling glTexSubImage2D().
-            sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );
+            sizeBytes = alignToNextMultiple<size_t>( sizeBytes, maxTexSizeBytes );
         }
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
@@ -1008,8 +1008,8 @@ namespace Ogre
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
-            keepAsShadow, this, bufferInterface );
+            bufferOffset, requestedSize, 1, uint32( ( sizeBytes - requestedSize ) / 1u ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
         {
@@ -1401,7 +1401,7 @@ namespace Ogre
         }
 
         dynamicBuffer =
-            new GL3PlusDynamicBuffer( bufferName, sizeBytes, this,
+            new GL3PlusDynamicBuffer( bufferName, (GLuint)sizeBytes, this,
                                       mArbBufferStorage ? BT_DYNAMIC_PERSISTENT : BT_DYNAMIC_DEFAULT );
 
         GL3PlusStagingTexture *retVal = OGRE_NEW GL3PlusStagingTexture(
@@ -1471,7 +1471,7 @@ namespace Ogre
 
         if( !bufferNames.empty() )
         {
-            OCGE( glDeleteBuffers( bufferNames.size(), &bufferNames[0] ) );
+            OCGE( glDeleteBuffers( (GLsizei)bufferNames.size(), &bufferNames[0] ) );
             bufferNames.clear();
         }
 

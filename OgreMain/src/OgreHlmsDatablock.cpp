@@ -107,7 +107,7 @@ namespace Ogre
         if( bForceTransparent )
             mIsTransparent |= 0x02u;
         else
-            mIsTransparent &= ~0x02u;
+            mIsTransparent &= static_cast<uint8>( ~0x02u );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
@@ -404,7 +404,7 @@ namespace Ogre
         assert( renderable->mHlmsGlobalIndex == (uint32)~0 &&
                 "Renderable must be unlinked before being linked again!" );
 
-        renderable->mHlmsGlobalIndex = mLinkedRenderables.size();
+        renderable->mHlmsGlobalIndex = static_cast<uint32>( mLinkedRenderables.size() );
         mLinkedRenderables.push_back( renderable );
     }
     //-----------------------------------------------------------------------------------
@@ -439,7 +439,8 @@ namespace Ogre
             macroId = mMacroblock[casterPass]->mId;
         if( mBlendblock[casterPass] )
             blendId = mBlendblock[casterPass]->mId;
-        mMacroblockHash[casterPass] = ( ( macroId & 0x1F ) << 5 ) | ( blendId & 0x1F );
+        mMacroblockHash[casterPass] =
+            static_cast<uint16>( ( ( macroId & 0x1F ) << 5u ) | ( blendId & 0x1F ) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::flushRenderables( bool onlyNullHashes )

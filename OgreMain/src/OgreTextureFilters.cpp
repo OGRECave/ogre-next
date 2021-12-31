@@ -219,7 +219,7 @@ namespace Ogre
             tempTexture->_autogenerateMipmaps();
 
             uint8 numMipmaps = texture->getNumMipmaps();
-            for( size_t i = 1u; i < numMipmaps; ++i )
+            for( uint8 i = 1u; i < numMipmaps; ++i )
             {
                 box = texture->getEmptyBox( i );
                 tempTexture->copyTo( texture, box, i, box, i );
@@ -275,7 +275,7 @@ namespace Ogre
                 TextureBox dstBox = srcBox;
                 dstBox.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstFormat );
                 dstBox.bytesPerRow =
-                    PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, dstFormat, 4u );
+                    (uint32)PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, dstFormat, 4u );
                 dstBox.bytesPerImage =
                     PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, dstFormat, 4u );
                 dstBox.data = PixelFormatGpuUtils::advancePointerToMip(
@@ -415,7 +415,7 @@ namespace Ogre
                 TextureBox dstBox = srcBox;
                 dstBox.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstFormat );
                 dstBox.bytesPerRow =
-                    PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, dstFormat, 4u );
+                    (uint32)PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, dstFormat, 4u );
                 dstBox.bytesPerImage =
                     PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, dstFormat, 4u );
                 dstBox.data = PixelFormatGpuUtils::advancePointerToMip(

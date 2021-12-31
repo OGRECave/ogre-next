@@ -312,7 +312,7 @@ namespace Ogre
         mRebaseListener->buildDiffList( mLevel, mMemoryPools, diffsList );
 
         // Ensure mMaxMemory will be rounded up to ARRAY_PACKED_REALS and is never 0.
-        size_t newMemory = alignToNextMultiple(
+        size_t newMemory = alignToNextMultiple<size_t>(
             std::max<size_t>( mUsedMemory, ARRAY_PACKED_REALS ) + OGRE_PREFETCH_SLOT_DISTANCE,
             ARRAY_PACKED_REALS );
 
@@ -333,7 +333,7 @@ namespace Ogre
             //
             // Rounding up is safe to do because the slots between [mUsedMemory; usedMemRoundUp)
             // have already been default-initialized, and mMaxMemory is always rounded up too.
-            const size_t usedMemRoundUp = alignToNextMultiple( mUsedMemory, ARRAY_PACKED_REALS );
+            const size_t usedMemRoundUp = alignToNextMultiple<size_t>( mUsedMemory, ARRAY_PACKED_REALS );
             memcpy( tmp, *itor, usedMemRoundUp * mElementsMemSizes[i] );
             if( mInitRoutines && mInitRoutines[i] )
             {

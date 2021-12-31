@@ -83,7 +83,8 @@ namespace Ogre
         //---------------------------------------------------------------------
         NodeAnimationTrack *Animation::createNodeTrack()
         {
-            NodeAnimationTrack *ret = OGRE_NEW NodeAnimationTrack( this, mNodeTrackList.size() );
+            NodeAnimationTrack *ret =
+                OGRE_NEW NodeAnimationTrack( this, static_cast<uint16>( mNodeTrackList.size() ) );
 
             mNodeTrackList.push_back( ret );
             return ret;

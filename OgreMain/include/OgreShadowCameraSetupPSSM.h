@@ -87,8 +87,9 @@ namespace Ogre
         @param blend Factor to use to reduce the split seams
         @param fade Factor to use to fade out the last split
         */
-        void calculateSplitPoints( uint splitCount, Real nearDist, Real farDist, Real lambda = 0.95,
-                                   Real blend = 0.125, Real fade = 0.313 );
+        void calculateSplitPoints( uint splitCount, Real nearDist, Real farDist,
+                                   Real lambda = Real( 0.95 ), Real blend = Real( 0.125 ),
+                                   Real fade = Real( 0.313 ) );
 
         /** Manually configure a new splitting scheme.
         @param newSplitPoints A list which is splitCount + 1 entries long, containing the
@@ -98,8 +99,8 @@ namespace Ogre
         @param blend Factor to use to reduce the split seams.
         @param fade Factor to use to fade out the last split.
         */
-        void setSplitPoints( const SplitPointList &newSplitPoints, Real blend = 0.125,
-                             Real fade = 0.313 );
+        void setSplitPoints( const SplitPointList &newSplitPoints, Real blend = Real( 0.125 ),
+                             Real fade = Real( 0.313 ) );
 
         /** Set the LiSPSM optimal adjust factor for a given split (call after
             configuring splits).

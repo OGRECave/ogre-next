@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
+#include "OgreMath.h"
 #include "OgreSharedPtr.h"
 
 namespace Ogre
@@ -66,11 +67,7 @@ namespace Ogre
             if( mDeltaInput )
             {
                 mDeltaCount += input;
-                // Wrap
-                while( mDeltaCount >= 1.0 )
-                    mDeltaCount -= 1.0;
-                while( mDeltaCount < 0.0 )
-                    mDeltaCount += 1.0;
+                mDeltaCount = Math::Wrap( mDeltaCount );
 
                 return mDeltaCount;
             }

@@ -120,7 +120,7 @@ namespace Demo
             "Spring.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
             Ogre::SCENE_DYNAMIC );
         springNode->attachObject( mSpringItem );
-        springNode->setScale( Ogre::Vector3( 1.2 ) );
+        springNode->setScale( Ogre::Vector3( 1.2f ) );
         springNode->setPosition( 1, 0.57f, 0 );
 
         // Blob
@@ -196,8 +196,8 @@ namespace Demo
         subItem = mBlobItem->getSubItem( 0 );
         for( size_t i = 0; i < subItem->getNumPoses(); ++i )
         {
-            subItem->setPoseWeight( i,
-                                    Ogre::Math::Sin( mAccumulator * ( 1 + i * 0.1 ) * 3 + i ) * 0.27 );
+            subItem->setPoseWeight(
+                i, std::sin( mAccumulator * ( 1 + (float)i * 0.1f ) * 3 + (float)i ) * 0.27f );
         }
 
         TutorialGameState::update( timeSinceLast );

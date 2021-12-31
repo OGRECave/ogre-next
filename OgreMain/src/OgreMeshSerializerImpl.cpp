@@ -333,7 +333,7 @@ namespace Ogre
                     has_extremes = true;
                     LogManager::getSingleton().logMessage( "Writing submesh extremes..." );
                 }
-                writeSubMeshExtremes( i, sm );
+                writeSubMeshExtremes( (uint16)i, sm );
             }
             if( has_extremes )
                 LogManager::getSingleton().logMessage( "Extremes exported." );
@@ -346,7 +346,7 @@ namespace Ogre
                 SubMesh *sm = pMesh->getSubMesh( i );
                 if( !sm->extremityPoints.empty() )
                 {
-                    size += calcSubMeshExtremesSize( i, sm );
+                    size += calcSubMeshExtremesSize( (uint16)i, sm );
                 }
             }
             return size;
@@ -1253,7 +1253,7 @@ namespace Ogre
                     }
                     else
                     {
-                        writeLodUsageGenerated( pMesh, usage, i, j );
+                        writeLodUsageGenerated( pMesh, usage, i, (uint8)j );
                     }
                 }
             }
@@ -1349,7 +1349,7 @@ namespace Ogre
                     }
                     else
                     {
-                        size += calcLodUsageGeneratedSize( pMesh, usage, i, j );
+                        size += calcLodUsageGeneratedSize( pMesh, usage, i, (uint8)j );
                     }
                 }
             }
@@ -3439,11 +3439,11 @@ namespace Ogre
 
                 if( pMesh->hasManualLodLevel() )
                 {
-                    readMeshLodUsageManual( stream, pMesh, i, usage );
+                    readMeshLodUsageManual( stream, pMesh, (uint16)i, usage );
                 }
                 else  //(!pMesh->hasManualLodLevel())
                 {
-                    readMeshLodUsageGenerated( stream, pMesh, i, usage, 0 );
+                    readMeshLodUsageGenerated( stream, pMesh, (uint16)i, usage, 0 );
                 }
                 usage.edgeData = NULL;
 
@@ -3843,11 +3843,11 @@ namespace Ogre
 
                 if( manual )
                 {
-                    readMeshLodUsageManual( stream, pMesh, i, usage );
+                    readMeshLodUsageManual( stream, pMesh, (uint16)i, usage );
                 }
                 else  //(!pMesh->isLodManual)
                 {
-                    readMeshLodUsageGenerated( stream, pMesh, i, usage, 0 );
+                    readMeshLodUsageGenerated( stream, pMesh, (uint16)i, usage, 0 );
                 }
                 usage.edgeData = NULL;
 

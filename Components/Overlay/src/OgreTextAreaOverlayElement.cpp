@@ -73,7 +73,7 @@ namespace Ogre
 
             mAllocSize = 0;
 
-            mCharHeight = 0.02;
+            mCharHeight = Real( 0.02 );
             mPixelCharHeight = 12;
             mSpaceWidthOverridden = false;
             mSpaceWidth = 0;

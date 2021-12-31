@@ -136,9 +136,9 @@ namespace Ogre
         mLightClippingInfoMapFrameNumber( 999 ),
         mDefaultShadowFarDist( 200 ),
         mDefaultShadowFarDistSquared( 200 * 200 ),
-        mShadowTextureOffset( 0.6 ),
-        mShadowTextureFadeStart( 0.7 ),
-        mShadowTextureFadeEnd( 0.9 ),
+        mShadowTextureOffset( Real( 0.6 ) ),
+        mShadowTextureFadeStart( Real( 0.7 ) ),
+        mShadowTextureFadeEnd( Real( 0.9 ) ),
         mShadowTextureCustomCasterPass( 0 ),
         mVisibilityMask( 0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
         mLightMask( 0xFFFFFFFF ),
@@ -1278,8 +1278,10 @@ namespace Ogre
                     ObjectMemoryManagerVec::const_iterator endt = mEntitiesMemoryManagerCulledList.end();
                     while( itor != endt )
                     {
-                        realFirstRq = std::min<uint8>( realFirstRq, ( *itor )->_getTotalRenderQueues() );
-                        realLastRq = std::max<uint8>( realLastRq, ( *itor )->_getTotalRenderQueues() );
+                        realFirstRq =
+                            (uint8)std::min<size_t>( realFirstRq, ( *itor )->_getTotalRenderQueues() );
+                        realLastRq =
+                            (uint8)std::max<size_t>( realLastRq, ( *itor )->_getTotalRenderQueues() );
                         ++itor;
                     }
 
@@ -2394,7 +2396,7 @@ namespace Ogre
             ObjectMemoryManagerVec::const_iterator endt = mEntitiesMemoryManagerCulledList.end();
             while( itor != endt )
             {
-                numRqs = std::max<uint8>( numRqs, ( *itor )->_getTotalRenderQueues() );
+                numRqs = (uint8)std::max<size_t>( numRqs, ( *itor )->_getTotalRenderQueues() );
                 ++itor;
             }
         }

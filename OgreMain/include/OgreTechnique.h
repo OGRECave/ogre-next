@@ -342,7 +342,7 @@ namespace Ogre
         @see Pass::setFog
         */
         void setFog( bool overrideScene, FogMode mode = FOG_NONE,
-                     const ColourValue &colour = ColourValue::White, Real expDensity = 0.001,
+                     const ColourValue &colour = ColourValue::White, Real expDensity = Real( 0.001 ),
                      Real linearStart = 0.0, Real linearEnd = 1.0 );
 
         /** Set samplerblock for every texture unit in every Pass

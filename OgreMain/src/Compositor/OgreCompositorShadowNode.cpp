@@ -422,8 +422,13 @@ namespace Ogre
                 break;
             }
 
-            findNextEmptyShadowCastingLightEntry( 1u << globalLightList.lights[*itor]->getType(),
-                                                  &begEmptyLightIdx, &nxtEmptyLightIdx );
+            static_assert( ( 1u << Light::NUM_LIGHT_TYPES ) < std::numeric_limits<uint8>::max(),
+                           "Shadow map lights are tracking lights via u8 but there's more"
+                           "possible types than that" );
+
+            findNextEmptyShadowCastingLightEntry(
+                uint8( 1u << globalLightList.lights[*itor]->getType() ),  //
+                &begEmptyLightIdx, &nxtEmptyLightIdx );
 
             if( nxtEmptyLightIdx < mShadowMapCastingLights.size() )
             {
@@ -438,7 +443,7 @@ namespace Ogre
         restoreStaticShadowCastingLights( globalLightList );
 
         mCastersBox = sceneManager->_calculateCurrentCastersBox(
-            viewport->getVisibilityMask(), mDefinition->mMinRq, mDefinition->mMaxRq );
+            viewport->getVisibilityMask(), (uint8)mDefinition->mMinRq, (uint8)mDefinition->mMaxRq );
     }
     //-----------------------------------------------------------------------------------
     void CompositorShadowNode::findNextEmptyShadowCastingLightEntry(
@@ -847,10 +852,10 @@ namespace Ogre
     {
         const ShadowTextureDefinition &shadowTexDef =
             mDefinition->mShadowMapTexDefinitions[shadowMapIdx];
-        return 1u << mShadowMapCastingLights[shadowTexDef.light].light->getType();
+        return uint8( 1u << mShadowMapCastingLights[shadowTexDef.light].light->getType() );
     }
     //-----------------------------------------------------------------------------------
-    const Light *CompositorShadowNode::getLightAssociatedWith( uint32 shadowMapIdx ) const
+    const Light *CompositorShadowNode::getLightAssociatedWith( size_t shadowMapIdx ) const
     {
         Light const *retVal = 0;
 
@@ -1272,7 +1277,7 @@ namespace Ogre
                 // Make all atlases with the same resolution share the same temporary
                 // gaussian filter target (to avoid wasting GPU RAM) and give
                 // each one a unique ID.
-                resolutionsToEsmMap[atlasRes.asUint64()] = i;
+                resolutionsToEsmMap[atlasRes.asUint64()] = (uint32)i;
             }
 
             // Define the temporary needed to filter ESM using gaussian filters
@@ -1339,10 +1344,10 @@ namespace Ogre
 
             const Resolution &texResolution = atlasResolutions[shadowParam.atlasId];
 
-            const size_t numSplits =
+            const uint32 numSplits =
                 shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
 
-            for( size_t j = 0; j < numSplits; ++j )
+            for( uint32 j = 0; j < numSplits; ++j )
             {
                 Vector2 uvOffset( shadowParam.atlasStart[j].x, shadowParam.atlasStart[j].y );
                 Vector2 uvLength( shadowParam.resolution[j].x, shadowParam.resolution[j].y );
@@ -1389,7 +1394,7 @@ namespace Ogre
             }
 
             // Pass scene for directional and spot lights first
-            size_t shadowMapIdx = 0;
+            uint32 shadowMapIdx = 0;
             itor = shadowParams.begin();
             while( itor != endt )
             {

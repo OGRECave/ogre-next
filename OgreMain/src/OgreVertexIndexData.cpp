@@ -686,7 +686,7 @@ namespace Ogre
             while( itor != endt )
             {
                 const VertexElement *vElement = vertexDeclaration->findElementBySemantic(
-                    itor->semantic, semanticCounts[itor->semantic - 1] );
+                    itor->semantic, (uint16)semanticCounts[itor->semantic - 1] );
 
                 ++semanticCounts[itor->semantic - 1];
                 if( !vElement )

@@ -1042,9 +1042,9 @@ namespace Ogre
             mConstantDefs->map.insert( GpuConstantDefinitionMap::value_type( varName, def ) );
             vp->mConstantDefsSorted.push_back( def );
 
-            vp->mConstantsBytesToWrite =
-                std::max<uint32>( vp->mConstantsBytesToWrite,
-                                  def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) );
+            vp->mConstantsBytesToWrite = std::max<uint32>(
+                vp->mConstantsBytesToWrite,
+                uint32( def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) ) );
         }
 
         VulkanConstantDefinitionBindingParam bindingParam;

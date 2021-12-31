@@ -442,7 +442,7 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only first 65536 submeshes could be named.",
                          "Mesh::nameSubMesh" );
         }
-        mSubMeshNameMap[name] = index;
+        mSubMeshNameMap[name] = static_cast<uint16>( index );
     }
     //---------------------------------------------------------------------
     void Mesh::unnameSubMesh( const String &name )

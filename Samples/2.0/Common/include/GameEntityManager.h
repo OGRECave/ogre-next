@@ -50,8 +50,8 @@ namespace Demo
         Mq::MessageQueueSystem *mGraphicsSystem;
         LogicSystem *           mLogicSystem;
 
-        Ogre::uint32 getScheduledForRemovalAvailableSlot();
-        void         destroyAllGameEntitiesIn( GameEntityVec &container );
+        size_t getScheduledForRemovalAvailableSlot();
+        void   destroyAllGameEntitiesIn( GameEntityVec &container );
 
         void aquireTransformSlot( size_t &outSlot, size_t &outBufferIdx );
         void releaseTransformSlot( size_t bufferIdx, GameEntityTransform *transform );

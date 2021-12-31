@@ -177,16 +177,16 @@ namespace Ogre
         // (RGBA = 8888)
 
         // Red
-        r = ( ( val32 >> 24 ) & 0xFF ) / 255.0f;
+        r = static_cast<float>( ( val32 >> 24 ) & 0xFF ) / 255.0f;
 
         // Green
-        g = ( ( val32 >> 16 ) & 0xFF ) / 255.0f;
+        g = static_cast<float>( ( val32 >> 16 ) & 0xFF ) / 255.0f;
 
         // Blue
-        b = ( ( val32 >> 8 ) & 0xFF ) / 255.0f;
+        b = static_cast<float>( ( val32 >> 8 ) & 0xFF ) / 255.0f;
 
         // Alpha
-        a = ( val32 & 0xFF ) / 255.0f;
+        a = static_cast<float>( val32 & 0xFF ) / 255.0f;
     }
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
@@ -201,16 +201,16 @@ namespace Ogre
         // (ARGB = 8888)
 
         // Alpha
-        a = ( ( val32 >> 24 ) & 0xFF ) / 255.0f;
+        a = static_cast<float>( ( val32 >> 24 ) & 0xFF ) / 255.0f;
 
         // Red
-        r = ( ( val32 >> 16 ) & 0xFF ) / 255.0f;
+        r = static_cast<float>( ( val32 >> 16 ) & 0xFF ) / 255.0f;
 
         // Green
-        g = ( ( val32 >> 8 ) & 0xFF ) / 255.0f;
+        g = static_cast<float>( ( val32 >> 8 ) & 0xFF ) / 255.0f;
 
         // Blue
-        b = ( val32 & 0xFF ) / 255.0f;
+        b = static_cast<float>( val32 & 0xFF ) / 255.0f;
     }
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
@@ -225,16 +225,16 @@ namespace Ogre
         // (ARGB = 8888)
 
         // Blue
-        b = ( ( val32 >> 24 ) & 0xFF ) / 255.0f;
+        b = static_cast<float>( ( val32 >> 24 ) & 0xFF ) / 255.0f;
 
         // Green
-        g = ( ( val32 >> 16 ) & 0xFF ) / 255.0f;
+        g = static_cast<float>( ( val32 >> 16 ) & 0xFF ) / 255.0f;
 
         // Red
-        r = ( ( val32 >> 8 ) & 0xFF ) / 255.0f;
+        r = static_cast<float>( ( val32 >> 8 ) & 0xFF ) / 255.0f;
 
         // Alpha
-        a = ( val32 & 0xFF ) / 255.0f;
+        a = static_cast<float>( val32 & 0xFF ) / 255.0f;
     }
     //---------------------------------------------------------------------
 #if OGRE_ENDIAN == OGRE_ENDIAN_BIG
@@ -249,16 +249,16 @@ namespace Ogre
         // (ABGR = 8888)
 
         // Alpha
-        a = ( ( val32 >> 24 ) & 0xFF ) / 255.0f;
+        a = static_cast<float>( ( val32 >> 24 ) & 0xFF ) / 255.0f;
 
         // Blue
-        b = ( ( val32 >> 16 ) & 0xFF ) / 255.0f;
+        b = static_cast<float>( ( val32 >> 16 ) & 0xFF ) / 255.0f;
 
         // Green
-        g = ( ( val32 >> 8 ) & 0xFF ) / 255.0f;
+        g = static_cast<float>( ( val32 >> 8 ) & 0xFF ) / 255.0f;
 
         // Red
-        r = ( val32 & 0xFF ) / 255.0f;
+        r = static_cast<float>( val32 & 0xFF ) / 255.0f;
     }
     //---------------------------------------------------------------------
     bool ColourValue::operator==( const ColourValue &rhs ) const
@@ -270,15 +270,8 @@ namespace Ogre
     //---------------------------------------------------------------------
     void ColourValue::setHSB( Real hue, Real saturation, Real brightness )
     {
-        // wrap hue
-        if( hue > 1.0f )
-        {
-            hue -= (int)hue;
-        }
-        else if( hue < 0.0f )
-        {
-            hue += (int)hue + 1;
-        }
+        hue = Math::Wrap( hue );
+
         // clamp saturation / brightness
         saturation = std::min( saturation, (Real)1.0 );
         saturation = std::max( saturation, (Real)0.0 );
@@ -360,7 +353,7 @@ namespace Ogre
 
         *brightness = vMax;
 
-        if( Math::RealEqual( delta, 0.0f, 1e-6 ) )
+        if( Math::RealEqual( delta, 0.0f, Real( 1e-6 ) ) )
         {
             // grey
             *hue = 0;

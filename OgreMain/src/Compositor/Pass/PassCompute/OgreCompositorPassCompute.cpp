@@ -56,7 +56,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassComputeDef::addTextureSource( uint32 texUnitIdx, const String &textureName,
-                                                     int32 textureArrayIndex, int32 mipmapLevel,
+                                                     uint16 textureArrayIndex, uint8 mipmapLevel,
                                                      PixelFormatGpu pixelFormat )
     {
         mTextureSources.push_back( ComputeTextureSource( texUnitIdx, textureName, ResourceAccess::Read,
@@ -66,7 +66,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassComputeDef::addUavSource( uint32 texUnitIdx, const String &textureName,
                                                  ResourceAccess::ResourceAccess access,
-                                                 int32 textureArrayIndex, int32 mipmapLevel,
+                                                 uint16 textureArrayIndex, uint8 mipmapLevel,
                                                  PixelFormatGpu pixelFormat, bool allowWriteAfterWrite )
     {
         assert( access != ResourceAccess::Undefined );
@@ -169,7 +169,7 @@ namespace Ogre
             {
                 DescriptorSetTexture2::TextureSlot texSlot(
                     DescriptorSetTexture2::TextureSlot::makeEmpty() );
-                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->setTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
 
@@ -179,7 +179,7 @@ namespace Ogre
             while( itor != endt )
             {
                 DescriptorSetUav::TextureSlot texSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
-                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->_setUavTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
         }
@@ -193,7 +193,7 @@ namespace Ogre
             while( itor != endt )
             {
                 DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
-                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
+                mComputeJob->_setUavBuffer( (uint8)itor->slotIdx, bufferSlot );
                 ++itor;
             }
         }
@@ -217,7 +217,7 @@ namespace Ogre
                     texSlot.textureArrayIndex = static_cast<uint16>( itor->textureArrayIndex );
                     texSlot.pixelFormat = itor->pixelFormat;
                 }
-                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->setTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
 
@@ -233,7 +233,7 @@ namespace Ogre
                 texSlot.mipmapLevel = itor->mipmapLevel;
                 texSlot.textureArrayIndex = itor->textureArrayIndex;
                 texSlot.pixelFormat = itor->pixelFormat;
-                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
+                mComputeJob->_setUavTexture( (uint8)itor->texUnitIdx, texSlot );
                 ++itor;
             }
         }
@@ -252,7 +252,7 @@ namespace Ogre
                 bufferSlot.offset = itor->offset;
                 bufferSlot.sizeBytes = itor->sizeBytes;
                 bufferSlot.access = itor->access;
-                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
+                mComputeJob->_setUavBuffer( (uint8)itor->slotIdx, bufferSlot );
                 ++itor;
             }
         }

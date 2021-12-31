@@ -996,8 +996,8 @@ namespace Ogre
         }
 
         const size_t structStride = sizeof( float ) * 4u * 6u;
-        const size_t elementCount = alignToNextMultiple( instanceCount * mOctants.size(),
-                                                         mAabbWorldSpaceJob->getThreadsPerGroupX() );
+        const size_t elementCount = alignToNextMultiple<size_t>(
+            instanceCount * mOctants.size(), mAabbWorldSpaceJob->getThreadsPerGroupX() );
 
         if( !mInstanceBuffer || ( elementCount * structStride ) > mInstanceBuffer->getTotalSizeBytes() )
         {

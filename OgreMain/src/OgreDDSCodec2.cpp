@@ -859,8 +859,8 @@ namespace Ogre
 
         const uint32 rowAlignment = 4u;
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u,
-                                                                      imgData->format, rowAlignment );
+        imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
+            imgData->box.width, 1u, 1u, 1u, imgData->format, rowAlignment );
         imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,   //
                                                                         imgData->box.height,  //
                                                                         1u, 1u,               //
@@ -896,9 +896,10 @@ namespace Ogre
             uint32 height = imgData->box.height;
             uint32 depth = imgData->box.depth;
 
-            for( size_t mip = 0; mip < imgData->numMipmaps; ++mip )
+            const size_t numMipmaps = imgData->numMipmaps;
+            for( size_t mip = 0; mip < numMipmaps; ++mip )
             {
-                TextureBox dstBox = image.getData( mip );
+                TextureBox dstBox = image.getData( (uint8)mip );
                 void *destPtr = dstBox.at( 0, 0, i );
                 size_t srcBytesPerRow =
                     PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, sourceFormat, 1u );

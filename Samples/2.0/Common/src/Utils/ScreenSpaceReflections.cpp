@@ -191,8 +191,8 @@ namespace Demo
         zThicknessBiasStart *= equivalentMetersInCurrentUnit;
         zThicknessBiasEnd *= equivalentMetersInCurrentUnit;
         zThicknessBiasAmount *= equivalentMetersInCurrentUnit;
-        maxDistance *= equivalentMetersInCurrentUnit;
-        reprojectionMaxDistanceError *= equivalentMetersInCurrentUnit;
+        maxDistance *= (float)equivalentMetersInCurrentUnit;
+        reprojectionMaxDistanceError *= (float)equivalentMetersInCurrentUnit;
 
         Ogre::MaterialPtr material =
             Ogre::MaterialManager::getSingleton()

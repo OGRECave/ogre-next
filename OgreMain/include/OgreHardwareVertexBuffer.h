@@ -151,7 +151,7 @@ namespace Ogre
             /// Utility method for helping to calculate offsets
             static size_t getTypeSize( VertexElementType etype );
             /// Utility method which returns the count of values in a given type
-            static unsigned short getTypeCount( VertexElementType etype );
+            static uint8 getTypeCount( VertexElementType etype );
             /// Utility method which returns true if the type is SNORM or NORM
             static bool isTypeNormalized( VertexElementType etype );
             /** Simple converter function which will turn a single-value type into a

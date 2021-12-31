@@ -45,7 +45,8 @@ THE SOFTWARE.
 #include "OgreVector4.h"
 #include "OgreViewport.h"
 
-namespace Ogre {
+namespace Ogre
+{
     // clang-format off
     static const Matrix4 PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE(
         0.5,    0,    0,  0.5, 
@@ -1095,7 +1096,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     const Vector4 &AutoParamDataSource::getSceneDepthRange() const
     {
-        static Vector4 dummy( 0, 100000.0, 100000.0, 1 / 100000.0 );
+        static Vector4 dummy( 0, 100000.0, 100000.0, Real( 1.0 / 100000.0 ) );
 
         if( mSceneDepthRangeDirty )
         {
@@ -1115,7 +1116,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     const Vector4 &AutoParamDataSource::getShadowSceneDepthRange( size_t index ) const
     {
-        static Vector4 dummy( 0, 100000.0, 100000.0, 1 / 100000.0 );
+        static Vector4 dummy( 0, 100000.0, 100000.0, Real( 1 / 100000.0 ) );
 
         if( index < OGRE_MAX_SIMULTANEOUS_LIGHTS )
         {

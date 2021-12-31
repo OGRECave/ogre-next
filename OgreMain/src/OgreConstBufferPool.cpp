@@ -405,7 +405,7 @@ namespace Ogre
                 else
                     mBufferSize = mBytesPerSlot;
 
-                mSlotsPerPool = mBufferSize / mBytesPerSlot;
+                mSlotsPerPool = static_cast<uint32>( mBufferSize / mBytesPerSlot );
             }
 
             {
@@ -446,7 +446,7 @@ namespace Ogre
             else
                 mBufferSize = mBytesPerSlot;
 
-            mSlotsPerPool = mBufferSize / mBytesPerSlot;
+            mSlotsPerPool = static_cast<uint32>( mBufferSize / mBytesPerSlot );
         }
     }
     //-----------------------------------------------------------------------------------

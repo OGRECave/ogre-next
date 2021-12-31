@@ -30,30 +30,32 @@ namespace Ogre
 {
     inline void LodStrategy::lodSet( ObjectData &objData, Real lodValues[ARRAY_PACKED_REALS] )
     {
-        for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+        for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
         {
             MovableObject *owner = objData.mOwner[j];
 
-            //This may look like a lot of ugly indirections, but mLodMerged is a pointer that allows
-            //sharing with many MovableObjects (it should perfectly fit even in small caches).
+            // This may look like a lot of ugly indirections, but mLodMerged is a pointer that allows
+            // sharing with many MovableObjects (it should perfectly fit even in small caches).
             {
-                FastArray<Real>::const_iterator it = std::lower_bound( owner->mLodMesh->begin(),
-                                                                        owner->mLodMesh->end(),
-                                                                        lodValues[j] );
-                owner->mCurrentMeshLod = std::max<int>( it - owner->mLodMesh->begin() - 1, 0 );
+                FastArray<Real>::const_iterator it =
+                    std::lower_bound( owner->mLodMesh->begin(), owner->mLodMesh->end(), lodValues[j] );
+                owner->mCurrentMeshLod =
+                    static_cast<uint8>( std::max<ptrdiff_t>( it - owner->mLodMesh->begin() - 1, 0 ) );
             }
 
             RenderableArray::iterator itor = owner->mRenderables.begin();
-            RenderableArray::iterator end  = owner->mRenderables.end();
+            RenderableArray::iterator end = owner->mRenderables.end();
 
             while( itor != end )
             {
-                const FastArray<Real> *lodVec = (*itor)->mLodMaterial;
-                FastArray<Real>::const_iterator it = std::lower_bound( lodVec->begin(), lodVec->end(),
-                                                                       lodValues[j] );
-                (*itor)->mCurrentMaterialLod = (uint8)std::max<int>( it - lodVec->begin() - 1, 0 );
+                const FastArray<Real> *lodVec = ( *itor )->mLodMaterial;
+
+                FastArray<Real>::const_iterator it =
+                    std::lower_bound( lodVec->begin(), lodVec->end(), lodValues[j] );
+                ( *itor )->mCurrentMaterialLod =
+                    static_cast<uint8>( std::max<ptrdiff_t>( it - lodVec->begin() - 1, 0 ) );
                 ++itor;
             }
         }
     }
-}
+}  // namespace Ogre

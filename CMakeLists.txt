@@ -129,7 +129,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} -Wsuggest-override" )
   else()
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} \
-        -Winconsistent-missing-destructor-override -Wcomma -Wsign-conversion " )
+        -Winconsistent-missing-destructor-override -Wcomma -Wsign-conversion -Wconversion" )
   endif()
 
   if (EMSCRIPTEN)

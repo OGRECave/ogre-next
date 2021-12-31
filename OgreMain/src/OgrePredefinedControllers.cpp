@@ -50,7 +50,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     bool FrameTimeControllerValue::frameStarted( const FrameEvent &evt )
     {
-        if( mFrameDelay )
+        if( mFrameDelay != 0.0 )
         {
             // Fixed frame time
             mFrameTime = mFrameDelay;
@@ -283,12 +283,9 @@ namespace Ogre
     {
         Real input = getAdjustedInput( source * mFrequency );
         Real output = 0;
-        // For simplicity, factor input down to {0,1)
-        // Use looped subtract rather than divide / round
-        while( input >= 1.0 )
-            input -= 1.0;
-        while( input < 0.0 )
-            input += 1.0;
+
+        // For simplicity, factor input down to [0,1)
+        input = Math::Wrap( input );
 
         // Calculate output in -1..1 range
         switch( mWaveType )

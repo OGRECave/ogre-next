@@ -290,7 +290,7 @@ namespace Ogre
         const VertexBufferPackedVec &vertexBuffers, IndexBufferPacked *indexBuffer,
         OperationType opType )
     {
-        size_t idx = mVertexArrayObjects.size();
+        uint32 idx = (uint32)mVertexArrayObjects.size();
 
         const uint32 bitsOpType = 3;
         const uint32 bitsVaoGl = 2;

@@ -36,7 +36,8 @@ namespace Ogre
 {
     InternalCubemapProbe::InternalCubemapProbe( IdType id, ObjectMemoryManager *objectMemoryManager,
                                                 SceneManager *manager ) :
-        MovableObject( id, objectMemoryManager, manager, ForwardPlusBase::MinCubemapProbeRq )
+        MovableObject( id, objectMemoryManager, manager,
+                       static_cast<uint8>( ForwardPlusBase::MinCubemapProbeRq ) )
     {
         memset( mGpuData, 0, sizeof( mGpuData ) );
 

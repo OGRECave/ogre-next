@@ -1004,7 +1004,7 @@ namespace Ogre
             }
 
             // u and v scroll animation speeds merged, if present serialize scroll_anim
-            if( scrollAnimU || scrollAnimV )
+            if( scrollAnimU != 0.0 || scrollAnimV != 0.0 )
             {
                 TextureUnitState::TextureEffect texEffect;
                 texEffect.arg1 = scrollAnimU;
@@ -1088,7 +1088,7 @@ namespace Ogre
     void MaterialSerializer::writeRotationEffect( const TextureUnitState::TextureEffect &effect,
                                                   const TextureUnitState *pTex )
     {
-        if( effect.arg1 )
+        if( effect.arg1 != 0.0 )
         {
             writeAttribute( 4, "rotate_anim" );
             writeValue( StringConverter::toString( effect.arg1 ) );
@@ -1150,7 +1150,7 @@ namespace Ogre
     void MaterialSerializer::writeScrollEffect( const TextureUnitState::TextureEffect &effect,
                                                 const TextureUnitState *pTex )
     {
-        if( effect.arg1 || effect.arg2 )
+        if( effect.arg1 != 0.0 || effect.arg2 != 0.0 )
         {
             writeAttribute( 4, "scroll_anim" );
             writeValue( StringConverter::toString( effect.arg1 ) );

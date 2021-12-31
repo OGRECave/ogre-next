@@ -115,9 +115,9 @@ namespace Ogre
         // TODO: (dark_sylinc) give a specialized hint for each depth
         while( newDepth >= mMemoryManagers.size() )
         {
-            mMemoryManagers.push_back( NodeArrayMemoryManager( mMemoryManagers.size(), 100, mDummyNode,
-                                                               100, ArrayMemoryManager::MAX_MEMORY_SLOTS,
-                                                               this ) );
+            mMemoryManagers.push_back(
+                NodeArrayMemoryManager( (uint16)mMemoryManagers.size(), 100, mDummyNode, 100,
+                                        ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
             mMemoryManagers.back().initialize();
         }
     }
@@ -292,7 +292,7 @@ namespace Ogre
             {
                 if( transform.mOwner[j] )
                 {
-                    transform.mIndex = j;
+                    transform.mIndex = (uint8)j;
                     transform.mOwner[j]->_getTransform() = transform;
                     transform.mOwner[j]->_callMemoryChangeListeners();
                 }
@@ -319,7 +319,7 @@ namespace Ogre
             {
                 if( transform.mOwner[j] )
                 {
-                    transform.mIndex = j;
+                    transform.mIndex = (uint8)j;
                     transform.mOwner[j]->_getTransform() = transform;
                     transform.mOwner[j]->_callMemoryChangeListeners();
                 }

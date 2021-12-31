@@ -263,7 +263,7 @@ namespace Ogre
             mRemainder -= intRequest;
 
             // Check duration
-            if( mDurationMax )
+            if( mDurationMax != 0.0 )
             {
                 mDurationRemain -= timeElapsed;
                 if( mDurationRemain <= 0 )
@@ -277,7 +277,7 @@ namespace Ogre
         else
         {
             // Check repeat
-            if( mRepeatDelayMax )
+            if( mRepeatDelayMax != 0.0 )
             {
                 mRepeatDelayRemain -= timeElapsed;
                 if( mRepeatDelayRemain <= 0 )
@@ -286,7 +286,7 @@ namespace Ogre
                     setEnabled( true );
                 }
             }
-            if( mStartTime )
+            if( mStartTime != 0.0 )
             {
                 mStartTime -= timeElapsed;
                 if( mStartTime <= 0 )

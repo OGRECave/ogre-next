@@ -102,20 +102,20 @@ namespace Ogre
                 }
 
 #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
-                float invDivisor = 1.0f / divisor;
+                float invDivisor = 1.0f / static_cast<float>( divisor );
 #endif
 
 #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( static_cast<float>( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( static_cast<float>( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] =
-                    static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
+                    OGRE_LIN_TO_GAM( static_cast<float>( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] =
@@ -210,15 +210,15 @@ namespace Ogre
 
 #ifdef OGRE_DOWNSAMPLE_R
                     dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>(
-                        OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
+                        OGRE_LIN_TO_GAM( static_cast<float>( accumR ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_G
                     dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>(
-                        OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
+                        OGRE_LIN_TO_GAM( static_cast<float>( accumG ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_B
                     dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>(
-                        OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
+                        OGRE_LIN_TO_GAM( static_cast<float>( accumB ) * invDivisor ) + OGRE_ROUND_HALF );
 #endif
 #ifdef OGRE_DOWNSAMPLE_A
                     dstPtr[OGRE_DOWNSAMPLE_A] =

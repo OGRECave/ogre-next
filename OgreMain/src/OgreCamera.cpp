@@ -360,7 +360,7 @@ namespace Ogre
         // update the pixel display ratio
         if( mProjType == Ogre::PT_PERSPECTIVE )
         {
-            mPixelDisplayRatio = ( 2 * Ogre::Math::Tan( mFOVy * 0.5f ) ) / vp->getActualHeight();
+            mPixelDisplayRatio = ( 2 * Ogre::Math::Tan( mFOVy * Real( 0.5 ) ) ) / vp->getActualHeight();
         }
         else
         {
@@ -1016,7 +1016,7 @@ namespace Ogre
         if( pval.normal.z < 0.0 )
         {
             pval.normal *= -1.0;
-            pval.d *= -1.0;
+            pval.d *= Real( -1.0 );
         }
         Quaternion invPlaneRot = pval.normal.getRotationTo( Vector3::UNIT_Z );
 

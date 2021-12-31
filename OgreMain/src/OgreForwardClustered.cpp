@@ -94,8 +94,8 @@ namespace Ogre
         mThreadCameras.reserve( mSceneManager->getNumWorkerThreads() );
         for( size_t i = 0; i < mSceneManager->getNumWorkerThreads(); ++i )
         {
-            SceneNode *sceneNode = OGRE_NEW SceneNode( i, 0, mNodeMemoryManager, 0 );
-            Camera *newCamera = OGRE_NEW Camera( i, mObjectMemoryManager, 0 );
+            SceneNode *sceneNode = OGRE_NEW SceneNode( (IdType)i, 0, mNodeMemoryManager, 0 );
+            Camera *newCamera = OGRE_NEW Camera( (IdType)i, mObjectMemoryManager, 0 );
             sceneNode->attachObject( newCamera );
             mThreadCameras.push_back( newCamera );
         }
@@ -301,8 +301,8 @@ namespace Ogre
     {
         const size_t frustumStartIdx = slice * ( mWidth / ARRAY_PACKED_REALS ) * mHeight;
 
-        Real nearDepthAtSlice = -getDepthAtSlice( slice );
-        Real farDepthAtSlice = -getDepthAtSlice( slice + 1 );
+        Real nearDepthAtSlice = -getDepthAtSlice( (uint32)slice );
+        Real farDepthAtSlice = -getDepthAtSlice( ( uint32 )( slice + 1u ) );
 
         if( slice == 0 )
             nearDepthAtSlice = mCurrentCamera->getNearClipDistance();
@@ -628,13 +628,14 @@ namespace Ogre
         const size_t cubemapOffsetStart = getCubemapProbesOffsetStart();
 
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
-        const size_t actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
+        const size_t actualMaxDecalRq = std::min<size_t>( MaxDecalRq, objsPerRqInThread0.size() );
         collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx, mDecalFloat4Offset, MinDecalRq,
                              actualMaxDecalRq, mDecalsPerCell,
                              decalOffsetStart + c_reservedDecalsSlotsPerCell, ObjType_Decal,
                              (uint16)c_ForwardPlusNumFloat4PerDecal );
 
-        const size_t actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
+        const size_t actualMaxCubemapProbeRq =
+            std::min<size_t>( MaxCubemapProbeRq, objsPerRqInThread0.size() );
         collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx, mCubemapProbeFloat4Offset,
                              MinCubemapProbeRq, actualMaxCubemapProbeRq, mCubemapProbesPerCell,
                              cubemapOffsetStart + c_reservedCubemapProbeSlotsPerCell,

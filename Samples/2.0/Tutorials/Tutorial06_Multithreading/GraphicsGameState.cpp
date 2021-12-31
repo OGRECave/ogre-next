@@ -36,7 +36,7 @@ namespace Demo
         // help, so don't show the weight as it is inaccurate.
         if( mDisplayHelpMode != 0 )
         {
-            float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / cFrametime;
+            float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / (float)cFrametime;
             weight = std::min( 1.0f, weight );
 
             if( !mEnableInterpolation )
@@ -49,7 +49,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsGameState::update( float timeSinceLast )
     {
-        float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / cFrametime;
+        float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / (float)cFrametime;
         weight = std::min( 1.0f, weight );
 
         if( !mEnableInterpolation )

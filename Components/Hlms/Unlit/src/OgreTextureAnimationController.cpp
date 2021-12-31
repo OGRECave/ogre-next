@@ -144,7 +144,7 @@ namespace Ogre
             }
         }
 
-        if( mUMod || mVMod )
+        if( mUMod != 0.0 || mVMod != 0.0 )
         {
             Matrix4 xlate = Matrix4::IDENTITY;
 

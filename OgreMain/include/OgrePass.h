@@ -631,7 +631,7 @@ namespace Ogre
             Only applicable if mode is FOG_LINEAR.
         */
         void setFog( bool overrideScene, FogMode mode = FOG_NONE,
-                     const ColourValue &colour = ColourValue::White, Real expDensity = 0.001,
+                     const ColourValue &colour = ColourValue::White, Real expDensity = Real( 0.001 ),
                      Real linearStart = 0.0, Real linearEnd = 1.0 );
 
         /** Returns true if this pass is to override the scene fog settings.

@@ -51,8 +51,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     MeshManager::MeshManager() :
         mVaoManager( 0 ),
-        mBoundsPaddingFactor( 0.01 ) /*,
-         mListener( 0 )*/
+        mBoundsPaddingFactor( Real( 0.01 ) )
     {
         mLoadOrder = 300.0f;
         mResourceType = "Mesh2";
@@ -177,16 +176,6 @@ namespace Ogre
         if( unloadV1 )
             meshV1->unload();
     }
-    //-------------------------------------------------------------------------
-    /*void MeshManager::setListener(MeshSerializerListener *listener)
-    {
-        mListener = listener;
-    }
-    //-------------------------------------------------------------------------
-    MeshSerializerListener *MeshManager::getListener()
-    {
-        return mListener;
-    }*/
     //-----------------------------------------------------------------------
     Real MeshManager::getBoundsPaddingFactor() { return mBoundsPaddingFactor; }
     //-----------------------------------------------------------------------

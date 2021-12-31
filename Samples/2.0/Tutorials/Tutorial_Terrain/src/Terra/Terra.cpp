@@ -459,7 +459,7 @@ namespace Ogre
             if( i == FRUSTUM_PLANE_FAR && m_camera->getFarClipDistance() == 0 )
                 continue;
 
-            Plane::Side side = m_camera->getFrustumPlane( i ).getSide( vCenter, vHalfSize );
+            Plane::Side side = m_camera->getFrustumPlane( (uint16)i ).getSide( vCenter, vHalfSize );
 
             // We only need one negative match to know the obj is outside the frustum
             if( side == Plane::NEGATIVE_SIDE )

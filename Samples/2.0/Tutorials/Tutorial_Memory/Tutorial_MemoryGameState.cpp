@@ -78,7 +78,7 @@ namespace Demo
         for( size_t texUnit = 0; texUnit < MaxNumTextures; ++texUnit )
         {
             // Check each texture from the material
-            Ogre::TextureGpu *tex = derivedDatablock->getTexture( texUnit );
+            Ogre::TextureGpu *tex = derivedDatablock->getTexture( (uint8_t)texUnit );
             if( tex )
             {
                 // If getLinkedRenderables is empty, then the material is not in use,

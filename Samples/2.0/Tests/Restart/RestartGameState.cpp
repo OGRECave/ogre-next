@@ -221,7 +221,7 @@ namespace Demo
     void RestartGameState::update( float timeSinceLast )
     {
         // Force a specific framerate (determinism)
-        timeSinceLast = MainEntryPoints::Frametime;
+        timeSinceLast = (float)MainEntryPoints::Frametime;
         TutorialGameState::update( timeSinceLast );
 
         if( mAnimateObjects )

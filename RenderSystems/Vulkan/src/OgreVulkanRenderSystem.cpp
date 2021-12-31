@@ -1711,10 +1711,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VertexElementType VulkanRenderSystem::getColourVertexElementType() const
-    {
-        return VET_COLOUR_ARGB;
-    }
+    VertexElementType VulkanRenderSystem::getColourVertexElementType() const { return VET_COLOUR_ARGB; }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_dispatch( const HlmsComputePso &pso )
     {
@@ -2052,8 +2049,8 @@ namespace Ogre
 
             const uint8 *oldBufferPos = mCurrentAutoParamsBufferPtr;
             mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>(
-                alignToNextMultiple( reinterpret_cast<uintptr_t>( mCurrentAutoParamsBufferPtr ),
-                                     mVaoManager->getConstBufferAlignment() ) );
+                alignToNextMultiple<size_t>( reinterpret_cast<uintptr_t>( mCurrentAutoParamsBufferPtr ),
+                                             mVaoManager->getConstBufferAlignment() ) );
             bytesToWrite += ( size_t )( mCurrentAutoParamsBufferPtr - oldBufferPos );
 
             // We know that bytesToWrite <= mCurrentAutoParamsBufferSpaceLeft, but that was
@@ -3210,7 +3207,7 @@ namespace Ogre
                                                                      PixelFormatGpu format )
     {
         SampleDescription retVal(
-            getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
+            (uint8)getMaxUsableSampleCount( mDevice->mDeviceProperties, sampleDesc.getMaxSamples() ),
             sampleDesc.getMsaaPattern() );
         return retVal;
     }

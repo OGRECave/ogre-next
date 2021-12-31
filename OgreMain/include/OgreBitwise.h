@@ -262,7 +262,7 @@ namespace Ogre
             else if( value >= 1.0f )
                 return ( 1u << bits ) - 1u;
             else
-                return (unsigned int)( value * ( 1 << bits ) );
+                return (unsigned int)( value * static_cast<float>( 1u << bits ) );
         }
 
         /**

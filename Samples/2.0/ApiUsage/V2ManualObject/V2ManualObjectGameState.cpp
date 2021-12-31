@@ -201,7 +201,8 @@ namespace Demo
 
     void V2ManualObjectGameState::fillBuffer( float uvOffset )
     {
-        for( size_t i = 0; i < mVertices.size(); )
+        const size_t numVertices = mVertices.size();
+        for( size_t i = 0; i < numVertices; )
         {
             mManualObject->position( mVertices[i] );
             mManualObject->normal( 0.0f, 1.0f, 0.0f );
@@ -223,7 +224,8 @@ namespace Demo
             mManualObject->tangent( 1.0f, 0.0f, 0.0f );
             mManualObject->textureCoord( 1.0f + uvOffset, 1.0f + uvOffset );
 
-            mManualObject->quad( i, i + 1, i + 3, i + 2 );
+            mManualObject->quad( uint32_t( i ), uint32_t( i + 1u ), uint32_t( i + 3u ),
+                                 uint32_t( i + 2u ) );
 
             i += 4;
         }

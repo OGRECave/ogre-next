@@ -25,14 +25,14 @@ namespace Demo
     // clang-format off
     const CubeVertices c_originalVertices[8] =
     {
-        CubeVertices( -1, -1,  1, -0.57737, -0.57737,  0.57737 ),
-        CubeVertices(  1, -1,  1,  0.57737, -0.57737,  0.57737 ),
-        CubeVertices(  1,  1,  1,  0.57737,  0.57737,  0.57737 ),
-        CubeVertices( -1,  1,  1, -0.57737,  0.57737,  0.57737 ),
-        CubeVertices( -1, -1, -1, -0.57737, -0.57737, -0.57737 ),
-        CubeVertices(  1, -1, -1,  0.57737, -0.57737, -0.57737 ),
-        CubeVertices(  1,  1, -1,  0.57737,  0.57737, -0.57737 ),
-        CubeVertices( -1,  1, -1, -0.57737,  0.57737, -0.57737 )
+        CubeVertices( -1, -1,  1, -0.57737f, -0.57737f,  0.57737f ),
+        CubeVertices(  1, -1,  1,  0.57737f, -0.57737f,  0.57737f ),
+        CubeVertices(  1,  1,  1,  0.57737f,  0.57737f,  0.57737f ),
+        CubeVertices( -1,  1,  1, -0.57737f,  0.57737f,  0.57737f ),
+        CubeVertices( -1, -1, -1, -0.57737f, -0.57737f, -0.57737f ),
+        CubeVertices(  1, -1, -1,  0.57737f, -0.57737f, -0.57737f ),
+        CubeVertices(  1,  1, -1,  0.57737f,  0.57737f, -0.57737f ),
+        CubeVertices( -1,  1, -1, -0.57737f,  0.57737f, -0.57737f )
     };
     // clang-format on
 

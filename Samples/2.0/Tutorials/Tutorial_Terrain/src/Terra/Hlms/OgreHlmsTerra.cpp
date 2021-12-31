@@ -313,7 +313,10 @@ namespace Ogre
             setProperty( PbsProperty::FirstValidDetailMapNm, 4 );
 
         if( datablock->mSamplersDescSet )
-            setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
+        {
+            setProperty( PbsProperty::NumSamplers,
+                         (int32)datablock->mSamplersDescSet->mSamplers.size() );
+        }
 
         if( terrainCell->getParentTerra()->getHeightMapTex()->getPixelFormat() == PFG_R16_UINT )
             setProperty( "terra_use_uint", 1 );
@@ -322,7 +325,7 @@ namespace Ogre
         {
             bool envMap = datablock->getTexture( TERRA_REFLECTION ) != 0;
             setProperty( PbsProperty::NumTextures,
-                         datablock->mTexturesDescSet->mTextures.size() - envMap );
+                         int32( datablock->mTexturesDescSet->mTextures.size() - envMap ) );
 
             setTextureProperty( PbsProperty::DiffuseMap, datablock, TERRA_DIFFUSE );
             setTextureProperty( PbsProperty::EnvProbeMap, datablock, TERRA_REFLECTION );
@@ -468,10 +471,10 @@ namespace Ogre
         {
             // layout(binding = 0) uniform PassBuffer {} pass
             ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer - 1];
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                VertexShader, 0, passBuffer, 0, (uint32)passBuffer->getTotalSizeBytes() );
             *commandBuffer->addCommand<CbShaderBuffer>() =
-                CbShaderBuffer( VertexShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
-            *commandBuffer->addCommand<CbShaderBuffer>() =
-                CbShaderBuffer( PixelShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
+                CbShaderBuffer( PixelShader, 0, passBuffer, 0, (uint32)passBuffer->getTotalSizeBytes() );
 
             size_t texUnit = mReservedTexBufferSlots;
 
@@ -480,9 +483,9 @@ namespace Ogre
                 if( mGridBuffer )
                 {
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
+                        CbShaderBuffer( PixelShader, (uint16)texUnit++, mGlobalLightListBuffer, 0, 0 );
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
+                        CbShaderBuffer( PixelShader, (uint16)texUnit++, mGridBuffer, 0, 0 );
                 }
 
                 texUnit += mReservedTexSlots;
@@ -490,20 +493,21 @@ namespace Ogre
                 if( !mPrePassTextures->empty() )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit++, ( *mPrePassTextures )[0], 0 );
+                        CbTexture( (uint16)texUnit++, ( *mPrePassTextures )[0], 0 );
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit++, ( *mPrePassTextures )[1], 0 );
+                        CbTexture( (uint16)texUnit++, ( *mPrePassTextures )[1], 0 );
                 }
 
                 if( mPrePassMsaaDepthTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
+                        CbTexture( (uint16)texUnit++, mPrePassMsaaDepthTexture, 0 );
                 }
 
                 if( mSsrTexture )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit++, mSsrTexture, 0 );
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( (uint16)texUnit++, mSsrTexture, 0 );
                 }
 
                 if( mIrradianceVolume )
@@ -512,21 +516,21 @@ namespace Ogre
                     const HlmsSamplerblock *samplerblock = mIrradianceVolume->getIrradSamplerblock();
 
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit, irradianceTex, samplerblock );
+                        CbTexture( (uint16)texUnit, irradianceTex, samplerblock );
                     ++texUnit;
                 }
 
                 if( mUsingAreaLightMasks )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit, mAreaLightMasks, mAreaLightMasksSamplerblock );
+                        CbTexture( (uint16)texUnit, mAreaLightMasks, mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
 
                 if( mLtcMatrixTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit, mLtcMatrixTexture, mAreaLightMasksSamplerblock );
+                        CbTexture( (uint16)texUnit, mLtcMatrixTexture, mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
 
@@ -535,7 +539,7 @@ namespace Ogre
                     if( mDecalsTextures[i] && ( i != 2u || !mDecalsDiffuseMergedEmissive ) )
                     {
                         *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit, mDecalsTextures[i], mDecalsSamplerblock );
+                            CbTexture( (uint16)texUnit, mDecalsTextures[i], mDecalsSamplerblock );
                         ++texUnit;
                     }
                 }
@@ -546,7 +550,7 @@ namespace Ogre
                 while( itor != end )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit, *itor, mCurrentShadowmapSamplerblock );
+                        CbTexture( (uint16)texUnit, *itor, mCurrentShadowmapSamplerblock );
                     ++texUnit;
                     ++itor;
                 }
@@ -557,7 +561,7 @@ namespace Ogre
                     const HlmsSamplerblock *samplerblock =
                         mParallaxCorrectedCubemap->getBindTrilinearSamplerblock();
                     *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( texUnit, pccTexture, samplerblock );
+                        CbTexture( (uint16)texUnit, pccTexture, samplerblock );
                     ++texUnit;
                 }
             }
@@ -594,10 +598,10 @@ namespace Ogre
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
             *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( VertexShader, 1, newPool->materialBuffer, 0,
-                                newPool->materialBuffer->getTotalSizeBytes() );
+                                (uint32)newPool->materialBuffer->getTotalSizeBytes() );
             *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( PixelShader, 1, newPool->materialBuffer, 0,
-                                newPool->materialBuffer->getTotalSizeBytes() );
+                                (uint32)newPool->materialBuffer->getTotalSizeBytes() );
             mLastBoundPool = newPool;
         }
 
@@ -664,13 +668,14 @@ namespace Ogre
                     // Rebind textures
                     size_t texUnit = mTexUnitSlotStart;
 
-                    *commandBuffer->addCommand<CbTextures>() = CbTextures(
-                        texUnit, std::numeric_limits<uint16>::max(), datablock->mTexturesDescSet );
+                    *commandBuffer->addCommand<CbTextures>() =
+                        CbTextures( (uint16)texUnit, std::numeric_limits<uint16>::max(),
+                                    datablock->mTexturesDescSet );
 
                     if( !mHasSeparateSamplers )
                     {
                         *commandBuffer->addCommand<CbSamplers>() =
-                            CbSamplers( texUnit, datablock->mSamplersDescSet );
+                            CbSamplers( (uint16)texUnit, datablock->mSamplersDescSet );
                     }
                     // texUnit += datablock->mTexturesDescSet->mTextures.size();
                 }
@@ -685,7 +690,7 @@ namespace Ogre
                     // Bind samplers
                     size_t texUnit = mTexUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
-                        CbSamplers( texUnit, datablock->mSamplersDescSet );
+                        CbSamplers( (uint16)texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;
                 }
             }
@@ -693,7 +698,7 @@ namespace Ogre
 
         mCurrentMappedConstBuffer = currentMappedConstBuffer;
 
-        return ( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) >> 4 ) - 1;
+        return uint32( ( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) >> 4u ) - 1u );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )

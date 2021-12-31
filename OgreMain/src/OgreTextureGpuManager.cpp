@@ -58,13 +58,13 @@ THE SOFTWARE.
 #if !OGRE_NO_JSON
 #    include "OgreStringConverter.h"
 #
-#    if defined( __GNUC__ ) && !defined(__clang__)
+#    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic push
 #        pragma GCC diagnostic ignored "-Wclass-memaccess"
 #    endif
 #    include "rapidjson/document.h"
 #    include "rapidjson/error/en.h"
-#    if defined( __GNUC__ ) && !defined(__clang__)
+#    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic pop
 #    endif
 #endif
@@ -1344,7 +1344,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget,
-                                                          size_t maxSplitResolution )
+                                                          uint32 maxSplitResolution )
     {
         if( maxSplitResolution == 0 )
             maxSplitResolution = mStreamingData.maxSplitResolution;
@@ -2008,7 +2008,8 @@ namespace Ogre
             newPool.masterTexture =
                 createTextureImpl( GpuPageOutStrategy::Discard, texName.c_str(), TextureFlags::PoolOwner,
                                    TextureTypes::Type2DArray );
-            const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
+            const uint16 numSlices =
+                (uint16)mTextureGpuManagerListener->getNumSlicesFor( texture, this );
             newPool.masterTexture->_setSourceType( TextureSourceType::PoolOwner );
 
             newPool.manuallyReserved = false;
@@ -2094,8 +2095,8 @@ namespace Ogre
                     itStats->width, itStats->height, 1u, 1u, itStats->formatFamily, rowAlignment );
 
                 // Round up.
-                const size_t numSlices =
-                    ( itStats->accumSizeBytes + oneSliceBytes - 1u ) / oneSliceBytes;
+                const uint32 numSlices =
+                    uint32( ( itStats->accumSizeBytes + oneSliceBytes - 1u ) / oneSliceBytes );
 
                 bool isSupported = false;
 
@@ -2440,9 +2441,12 @@ namespace Ogre
         {
             TextureBox srcBox = img.getData( i );
             const uint32 imgDepthOrSlices = srcBox.getDepthOrSlices();
+
+            OGRE_ASSERT_MEDIUM( imgDepthOrSlices < std::numeric_limits<uint8>::max() );
+
             for( uint32 z = 0; z < imgDepthOrSlices; ++z )
             {
-                if( queuedImage.isMipSliceQueued( i, z ) )
+                if( queuedImage.isMipSliceQueued( i, (uint8)z ) )
                 {
                     srcBox.z = is3DVolume ? z : 0;
                     srcBox.sliceStart = is3DVolume ? 0 : z;
@@ -2470,7 +2474,7 @@ namespace Ogre
                         new( uploadCmd ) ObjCmdBuffer::UploadFromStagingTex( stagingTexture, dstBox,
                                                                              texture, srcBox, i );
                         // This mip has been processed, flag it as done.
-                        queuedImage.unqueueMipSlice( i, z );
+                        queuedImage.unqueueMipSlice( i, (uint8)z );
                     }
                 }
             }
@@ -3140,7 +3144,7 @@ namespace Ogre
                         {
                             const uint32 numSlices = itor->texture->getNumSlices();
 
-                            for( size_t i = 0; i < numSlices; ++i )
+                            for( uint32 i = 0; i < numSlices; ++i )
                             {
                                 const TextureBox srcBox = asyncTicket->map( i );
                                 dstBox.copyFrom( srcBox );

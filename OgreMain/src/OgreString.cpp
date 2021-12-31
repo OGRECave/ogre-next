@@ -209,12 +209,12 @@ namespace Ogre
     void StringUtil::toTitleCase( String &str )
     {
         String::iterator it = str.begin();
-        *it = toupper( *it );
+        *it = (String::value_type)toupper( *it );
         for( ; it != str.end() - 1; it++ )
         {
             if( *it == ' ' )
             {
-                *( it + 1 ) = toupper( *( it + 1 ) );
+                *( it + 1 ) = (String::value_type)toupper( *( it + 1 ) );
             }
         }
     }
@@ -335,7 +335,7 @@ namespace Ogre
             {
                 char curChar = bufferSrc[indexSrc];
                 if( makeLowerCase )
-                    curChar = tolower( curChar );
+                    curChar = (char)tolower( curChar );
                 if( ( curChar == '\\' ) || ( curChar == '/' ) )
                     curChar = '/';
                 bufferDst[indexDst] = curChar;

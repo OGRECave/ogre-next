@@ -154,7 +154,7 @@ namespace Ogre
             // Bind the shadows' texture. Tex. slot must match with
             // the one in HlmsPbsTerraShadows::propertiesMergedPreGenerationStep
             *commandBuffer->addCommand<CbTexture>() =
-                CbTexture( texUnit++, terraShadowTex, mTerraSamplerblock );
+                CbTexture( (uint16)texUnit++, terraShadowTex, mTerraSamplerblock );
         }
     }
 }  // namespace Ogre

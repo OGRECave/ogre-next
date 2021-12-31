@@ -59,18 +59,18 @@ namespace Ogre
             IdString textureName;
             bool     isExternal;
 
+            uint8                          mipmapLevel;
             ResourceAccess::ResourceAccess access;
-            int32                          mipmapLevel;
             PixelFormatGpu                 pixelFormat;
 
             TextureSource( uint32 _uavSlot, IdString _textureName, bool _isExternal,
-                           ResourceAccess::ResourceAccess _access, int32 _mipmapLevel,
+                           ResourceAccess::ResourceAccess _access, uint8 _mipmapLevel,
                            PixelFormatGpu _pixelFormat ) :
                 uavSlot( _uavSlot ),
                 textureName( _textureName ),
                 isExternal( _isExternal ),
-                access( _access ),
                 mipmapLevel( _mipmapLevel ),
+                access( _access ),
                 pixelFormat( _pixelFormat )
             {
             }
@@ -133,7 +133,7 @@ namespace Ogre
             Will be the same is left as PFG_UNKNOWN
         */
         void setUav( uint32 slot, bool isExternal, const String &textureName,
-                     ResourceAccess::ResourceAccess access, int32 mipmapLevel,
+                     ResourceAccess::ResourceAccess access, uint8 mipmapLevel,
                      PixelFormatGpu pixelFormat );
 
         void addUavBuffer( uint32 slotIdx, IdString bufferName, ResourceAccess::ResourceAccess access,

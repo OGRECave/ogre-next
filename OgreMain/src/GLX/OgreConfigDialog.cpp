@@ -418,7 +418,7 @@ namespace Ogre
             TextureBox dstBox(
                 srcBox.width, srcBox.height, 1u, 1u,
                 PixelFormatGpuUtils::getBytesPerPixel( intermediateFormat ),
-                PixelFormatGpuUtils::getSizeBytes( uWidth, 1u, 1u, 1u, intermediateFormat, 1u ),
+                (uint32)PixelFormatGpuUtils::getSizeBytes( uWidth, 1u, 1u, 1u, intermediateFormat, 1u ),
                 PixelFormatGpuUtils::getSizeBytes( uWidth, uHeight, 1u, 1u, intermediateFormat, 1u ) );
             dstBox.x = ( uWidth - srcBox.width ) >> 1u;
             dstBox.y = 12u;
@@ -438,7 +438,7 @@ namespace Ogre
             const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_BGRA8_UNORM;
             TextureBox finalBox(
                 uWidth, uHeight, 1u, 1u, PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
-                PixelFormatGpuUtils::getSizeBytes( uWidth, 1u, 1u, 1u, dstFormat, 1u ),
+                (uint32)PixelFormatGpuUtils::getSizeBytes( uWidth, 1u, 1u, 1u, dstFormat, 1u ),
                 PixelFormatGpuUtils::getSizeBytes( uWidth, uHeight, 1u, 1u, dstFormat, 1u ) );
             finalBox.data = data;
 

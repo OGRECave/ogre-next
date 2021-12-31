@@ -154,7 +154,7 @@ namespace Ogre
             case SPFM_NONE:
                 return OGRE_NEW_T( SharedPtrInfoNone, MEMCATEGORY_GENERAL )();
             }
-            assert( !"Bad method" );
+            assert( false && "Bad method" );
             return 0;
         }
 

@@ -837,7 +837,7 @@ namespace Ogre
             // Copy UVs
             for( size_t j = 1; j < numVertexElements; ++j )
             {
-                float *RESTRICT_ALIAS uvDst = meshData.getUvStart( j - 1u );
+                float *RESTRICT_ALIAS uvDst = meshData.getUvStart( uint8( j - 1u ) );
                 if( isHalf[j] )
                 {
                     uint16 const *RESTRICT_ALIAS bufferF16 =
@@ -971,7 +971,7 @@ namespace Ogre
             // Copy UVs
             for( size_t j = 1; j < numVertexElements; ++j )
             {
-                float *RESTRICT_ALIAS uvDst = meshData.getUvStart( j - 1u );
+                float *RESTRICT_ALIAS uvDst = meshData.getUvStart( uint8( j - 1u ) );
                 if( isHalf[j] )
                 {
                     uint16 const *RESTRICT_ALIAS bufferF16 =
@@ -1211,9 +1211,9 @@ namespace Ogre
             }
             else
             {
-                vertexIdx[0] = i + 0;
-                vertexIdx[1] = i + 1;
-                vertexIdx[2] = i + 2;
+                vertexIdx[0] = uint32( i + 0u );
+                vertexIdx[1] = uint32( i + 1u );
+                vertexIdx[2] = uint32( i + 2u );
             }
 
             triVerts[0].x = meshData.vertexData[vertexIdx[0] * 3u + 0];

@@ -171,7 +171,7 @@ namespace Ogre
         else
         {
             if( isfinite( value ) )
-                strValue.a( LwString::Float( value, 18 ) );
+                strValue.a( LwString::Float( (float)value, 18 ) );
             else
             {
                 if( isinf( value ) )
@@ -475,7 +475,7 @@ namespace Ogre
                                light->getSpotlightFalloff(), light->getSpotlightNearClipDistance() ) );
 
         const Real ownShadowFarDistance = light->_getOwnShadowFarDistance();
-        if( ownShadowFarDistance )
+        if( ownShadowFarDistance != 0.0 )
         {
             jsonStr.a( ",\n\t\t\t\"shadow_far_dist\" : ", encodeFloat( light->getShadowFarDistance() ) );
         }

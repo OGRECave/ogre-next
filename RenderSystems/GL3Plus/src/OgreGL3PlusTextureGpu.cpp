@@ -416,8 +416,8 @@ namespace Ogre
         OCGE( glViewport( 0, 0, static_cast<GLsizei>( dstBox.width ),
                           static_cast<GLsizei>( dstBox.height ) ) );
 
-        size_t depthOrSlices = srcBox.getDepthOrSlices();
-        for( size_t i = 0; i < depthOrSlices; ++i )
+        const uint32 depthOrSlices = srcBox.getDepthOrSlices();
+        for( uint32 i = 0; i < depthOrSlices; ++i )
         {
             if( srcIsFboAble )
             {
@@ -607,7 +607,7 @@ namespace Ogre
             OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 ) );
             OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 ) );
 
-            for( size_t i = 0; i < dstBox.numSlices; ++i )
+            for( uint32 i = 0; i < dstBox.numSlices; ++i )
             {
                 dstGl->bindTextureToFrameBuffer( GL_READ_FRAMEBUFFER, dstGl->mMsaaFramebufferName, 0,
                                                  dstBox.getZOrSlice() + i, true );

@@ -136,7 +136,7 @@ namespace Demo
             {
                 uint8 *data = reinterpret_cast<uint8 *>( texBox.at( 0, y, 0 ) );
                 for( size_t x = 0; x < width; ++x )
-                    data[x] = Ogre::Math::RangeRandom( 64.0, 192 );
+                    data[x] = (uint8)Ogre::Math::RangeRandom( 64, 192 );
             }
 
             stagingTexture->stopMapRegion();
@@ -614,7 +614,7 @@ namespace Demo
 
         Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )
                                          ->createChildSceneNode( Ogre::SCENE_STATIC );
-        sceneNode->setPosition( 0, -1.9, 0 );
+        sceneNode->setPosition( 0, -1.9f, 0 );
         sceneNode->attachObject( item );
 
         importV1Mesh( "tudorhouse.mesh" );
@@ -709,7 +709,7 @@ namespace Demo
         outText += StringConverter::toString( mCurrentPage / COMPOSITORS_PER_PAGE + 1 );
         outText += "/";
         outText += StringConverter::toString(
-            alignToNextMultiple( mCompositorNames.size(), COMPOSITORS_PER_PAGE ) /
+            alignToNextMultiple<size_t>( mCompositorNames.size(), COMPOSITORS_PER_PAGE ) /
             COMPOSITORS_PER_PAGE );
         outText += "]";
     }

@@ -96,7 +96,7 @@ namespace Ogre
         mBoneToSlot.reserve( originalSkeleton->getNumBones() );
         for( size_t i = 0; i < originalSkeleton->getNumBones(); ++i )
         {
-            const v1::OldBone *bone = originalSkeleton->getBone( i );
+            const v1::OldBone *bone = originalSkeleton->getBone( (uint16)i );
 
             size_t depthLevel = 0;
             v1::OldNode const *parentBone = bone;
@@ -124,8 +124,9 @@ namespace Ogre
         for( size_t i = 0; i < originalSkeleton->getNumAnimations(); ++i )
         {
             mAnimationDefs[i]._setSkeletonDef( this );
-            mAnimationDefs[i].setName( originalSkeleton->getAnimation( i )->getName() );
-            mAnimationDefs[i].build( originalSkeleton, originalSkeleton->getAnimation( i ), frameRate );
+            mAnimationDefs[i].setName( originalSkeleton->getAnimation( (uint16)i )->getName() );
+            mAnimationDefs[i].build( originalSkeleton, originalSkeleton->getAnimation( (uint16)i ),
+                                     frameRate );
         }
 
         // Create the bones (just like we would for SkeletonInstance)so we can

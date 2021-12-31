@@ -455,7 +455,7 @@ namespace Ogre
             size_t bytesPreloaded;
             /// See setWorkerThreadMinimumBudget
             /// Read by worker thread. Occasionally written by main thread. Not protected.
-            size_t maxSplitResolution;
+            uint32 maxSplitResolution;
             /// See setWorkerThreadMaxPerStagingTextureRequestBytes
             /// Read by worker thread. Occasionally written by main thread. Not protected.
             size_t maxPerStagingTextureRequestBytes;
@@ -1065,7 +1065,7 @@ namespace Ogre
             because a texture whose resolution is >= maxSplitResolution will force us to use
             multiple StagingTextures, thus relieving the pressure on memory and memory fragmentation.
         */
-        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, size_t maxSplitResolution = 0 );
+        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, uint32 maxSplitResolution = 0 );
 
         const BudgetEntryVec &getBudget() const;
 

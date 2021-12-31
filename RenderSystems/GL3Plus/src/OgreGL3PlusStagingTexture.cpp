@@ -159,9 +159,9 @@ namespace Ogre
 
         assert( !dstTexture->isMultisample() && "Cannot upload to an MSAA texture!" );
 
-        const GLint rowLength = bytesPerPixel > 0 ? ( srcBox.bytesPerRow / bytesPerPixel ) : 0;
+        const GLint rowLength = bytesPerPixel > 0 ? GLint( srcBox.bytesPerRow / bytesPerPixel ) : 0;
         const GLint imageHeight =
-            ( srcBox.bytesPerRow > 0 ) ? ( srcBox.bytesPerImage / srcBox.bytesPerRow ) : 0;
+            ( srcBox.bytesPerRow > 0 ) ? GLint( srcBox.bytesPerImage / srcBox.bytesPerRow ) : 0;
 
         OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );
         OCGE( glPixelStorei( GL_UNPACK_ROW_LENGTH, rowLength ) );

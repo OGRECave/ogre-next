@@ -38,7 +38,8 @@ THE SOFTWARE.
 namespace Ogre
 {
     Decal::Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
-        MovableObject( id, objectMemoryManager, manager, ForwardPlusBase::MinDecalRq ),
+        MovableObject( id, objectMemoryManager, manager,
+                       static_cast<uint8>( ForwardPlusBase::MinDecalRq ) ),
         mDiffuseTexture( 0 ),
         mNormalTexture( 0 ),
         mEmissiveTexture( 0 ),
@@ -96,7 +97,7 @@ namespace Ogre
             diffuseTex->addListener( this );
             diffuseTex->scheduleTransitionTo( GpuResidency::Resident );
             mDiffuseTexture = diffuseTex;
-            mDiffuseIdx = static_cast<uint16>( diffuseTex->getInternalSliceStart() );
+            mDiffuseIdx = diffuseTex->getInternalSliceStart();
         }
         else
         {
@@ -119,7 +120,7 @@ namespace Ogre
             normalTex->addListener( this );
             normalTex->scheduleTransitionTo( GpuResidency::Resident );
             mNormalTexture = normalTex;
-            mNormalMapIdx = static_cast<uint16>( normalTex->getInternalSliceStart() );
+            mNormalMapIdx = normalTex->getInternalSliceStart();
         }
         else
         {
@@ -142,7 +143,7 @@ namespace Ogre
             emissiveTex->addListener( this );
             emissiveTex->scheduleTransitionTo( GpuResidency::Resident );
             mEmissiveTexture = emissiveTex;
-            mEmissiveIdx = static_cast<uint16>( emissiveTex->getInternalSliceStart() );
+            mEmissiveIdx = emissiveTex->getInternalSliceStart();
         }
         else
         {
@@ -158,8 +159,9 @@ namespace Ogre
         OGRE_ASSERT_LOW( ( !diffuseTex || !diffuseTex->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( diffuseTex->getTextureType() == TextureTypes::Type2DArray );
+        OGRE_ASSERT_LOW( sliceIdx <= std::numeric_limits<uint16>::max() );
         mDiffuseTexture = diffuseTex;
-        mDiffuseIdx = sliceIdx;
+        mDiffuseIdx = static_cast<uint16>( sliceIdx );
     }
     //-----------------------------------------------------------------------------------
     void Decal::setNormalTextureRaw( TextureGpu *normalTex, uint32 sliceIdx )
@@ -169,8 +171,9 @@ namespace Ogre
         OGRE_ASSERT_LOW( ( !normalTex || !normalTex->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( normalTex->getTextureType() == TextureTypes::Type2DArray );
+        OGRE_ASSERT_LOW( sliceIdx <= std::numeric_limits<uint16>::max() );
         mNormalTexture = normalTex;
-        mNormalMapIdx = sliceIdx;
+        mNormalMapIdx = static_cast<uint16>( sliceIdx );
     }
     //-----------------------------------------------------------------------------------
     void Decal::setEmissiveTextureRaw( TextureGpu *emissiveTex, uint32 sliceIdx )
@@ -180,8 +183,9 @@ namespace Ogre
         OGRE_ASSERT_LOW( ( !emissiveTex || !emissiveTex->hasAutomaticBatching() ) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
         OGRE_ASSERT_LOW( emissiveTex->getTextureType() == TextureTypes::Type2DArray );
+        OGRE_ASSERT_LOW( sliceIdx <= std::numeric_limits<uint16>::max() );
         mEmissiveTexture = emissiveTex;
-        mEmissiveIdx = sliceIdx;
+        mEmissiveIdx = static_cast<uint16>( sliceIdx );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu *Decal::getEmissiveTexture() const { return mEmissiveTexture; }
@@ -215,11 +219,11 @@ namespace Ogre
         if( reason == TextureGpuListener::PoolTextureSlotChanged )
         {
             if( texture == mDiffuseTexture )
-                mDiffuseIdx = static_cast<uint16>( mDiffuseTexture->getInternalSliceStart() );
+                mDiffuseIdx = mDiffuseTexture->getInternalSliceStart();
             if( texture == mNormalTexture )
-                mNormalMapIdx = static_cast<uint16>( mNormalTexture->getInternalSliceStart() );
+                mNormalMapIdx = mNormalTexture->getInternalSliceStart();
             if( texture == mEmissiveTexture )
-                mEmissiveIdx = static_cast<uint16>( mEmissiveTexture->getInternalSliceStart() );
+                mEmissiveIdx = mEmissiveTexture->getInternalSliceStart();
         }
         else if( reason == TextureGpuListener::Deleted )
         {

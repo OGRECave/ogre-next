@@ -453,7 +453,7 @@ namespace Ogre
         void  setNumMipmaps( uint8 numMipmaps );
         uint8 getNumMipmaps() const;
 
-        uint32 getInternalSliceStart() const;
+        uint16 getInternalSliceStart() const;
 
         virtual void               setTextureType( TextureTypes::TextureTypes textureType );
         TextureTypes::TextureTypes getTextureType() const;
@@ -740,7 +740,7 @@ namespace Ogre
         TextureBox _getSysRamCopyAsBox( uint8 mipLevel );
         uint8 *    _getSysRamCopy( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
-        size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
+        uint32 _getSysRamCopyBytesPerRow( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
 

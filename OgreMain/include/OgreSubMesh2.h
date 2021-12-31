@@ -345,7 +345,7 @@ namespace Ogre
             Caller MUST free the pointer with OGRE_FREE_SIMD( MEMCATEGORY_GEOMETRY ).
         */
         static char *_arrangeEfficient( SourceDataArray srcData, const VertexElement2Vec &vertexElements,
-                                        uint32 vertexCount );
+                                        size_t vertexCount );
 
         /** Generic form that does the actual job for both v1 and v2 objects
             @see dearrangeEfficientToInefficient.
@@ -360,7 +360,7 @@ namespace Ogre
         @return
             Pointer to the decompressed/dearranged data, interleaved in a single buffer.
         */
-        static char *_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, uint32 numElements,
+        static char *_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, size_t numElements,
                                           const VertexElement2Vec &vertexElements,
                                           VertexElement2Vec *      outVertexElements );
 

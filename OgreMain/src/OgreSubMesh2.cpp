@@ -86,9 +86,9 @@ namespace Ogre
 
         const VertexBoneAssignmentVec::const_iterator endt = mBoneAssignments.end();
 
-        const uint32 numVertices = mVao[VpNormal][0]->getVertexBuffers()[0]->getNumElements();
+        const size_t numVertices = mVao[VpNormal][0]->getVertexBuffers()[0]->getNumElements();
 
-        for( uint32 i = 0; i < numVertices; ++i )
+        for( size_t i = 0; i < numVertices; ++i )
         {
             uint8 bonesPerVertex = 0;
             VertexBoneAssignmentVec::iterator first =
@@ -407,14 +407,17 @@ namespace Ogre
 
         const VertexBufferPacked *vertexBuffer = mVao[VpNormal][0]->getVertexBuffers()[indexSource];
 
-        const uint32 bytesPerVertex = vertexBuffer->getBytesPerElement();
-        const uint32 vertexCount = vertexBuffer->getNumElements();
+        const size_t bytesPerVertex = vertexBuffer->getBytesPerElement();
+        const size_t vertexCount = vertexBuffer->getNumElements();
         const VertexElementType weightBaseType = v1::VertexElement::getBaseType( weightElement->mType );
+
+        OGRE_ASSERT_LOW( vertexCount <= std::numeric_limits<uint32>::max() &&
+                         "Meshes with skeleton exceed number of max vertices" );
 
         const float invMaxU16 = 1.0f / 65535.0f;
         const float invMaxU8 = 1.0f / 255.0f;
 
-        for( uint32 i = 0; i < vertexCount; ++i )
+        for( size_t i = 0; i < vertexCount; ++i )
         {
             uint8 const *blendIndex = reinterpret_cast<uint8 const *>( vertexData + indexOffset );
 
@@ -424,7 +427,8 @@ namespace Ogre
                 for( uint8 j = 0; j < numWeightsPerVertex; ++j )
                 {
                     const uint16 boneIndex = mBlendIndexToBoneIndexMap[*blendIndex++];
-                    mBoneAssignments.push_back( VertexBoneAssignment( i, boneIndex, *blendWeight++ ) );
+                    mBoneAssignments.push_back(
+                        VertexBoneAssignment( (uint32)i, boneIndex, *blendWeight++ ) );
                 }
             }
             else if( weightBaseType == VET_USHORT2_NORM )
@@ -435,7 +439,7 @@ namespace Ogre
                 {
                     const uint16 boneIndex = mBlendIndexToBoneIndexMap[*blendIndex++];
                     const float weight = *blendWeight++ * invMaxU16;
-                    mBoneAssignments.push_back( VertexBoneAssignment( i, boneIndex, weight ) );
+                    mBoneAssignments.push_back( VertexBoneAssignment( (uint32)i, boneIndex, weight ) );
                 }
             }
             else if( weightBaseType == VET_UBYTE4_NORM )
@@ -445,7 +449,7 @@ namespace Ogre
                 {
                     const uint16 boneIndex = mBlendIndexToBoneIndexMap[*blendIndex++];
                     const float weight = *blendWeight++ * invMaxU8;
-                    mBoneAssignments.push_back( VertexBoneAssignment( i, boneIndex, weight ) );
+                    mBoneAssignments.push_back( VertexBoneAssignment( (uint32)i, boneIndex, weight ) );
                 }
             }
 
@@ -1063,7 +1067,7 @@ namespace Ogre
         for( size_t i = 0; i < vertexData->vertexBufferBinding->getBufferCount(); ++i )
         {
             const v1::HardwareVertexBufferSharedPtr &vBuffer =
-                vertexData->vertexBufferBinding->getBuffer( i );
+                vertexData->vertexBufferBinding->getBuffer( (uint16)i );
             srcLocks[i].lock( vBuffer, v1::HardwareBuffer::HBL_READ_ONLY );
             srcPtrs.push_back( static_cast<char *>( srcLocks[i].pData ) );
             vertexBuffSizes.push_back( vBuffer->getVertexSize() );
@@ -1099,7 +1103,7 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     char *SubMesh::_arrangeEfficient( SourceDataArray srcData, const VertexElement2Vec &vertexElements,
-                                      uint32 vertexCount )
+                                      size_t vertexCount )
     {
         // Prepare for the transfer between buffers.
         size_t vertexSize = VaoManager::calculateVertexSize( vertexElements );
@@ -1382,7 +1386,7 @@ namespace Ogre
                                                     vao->getOperationType() );
     }
     //---------------------------------------------------------------------
-    char *SubMesh::_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, uint32 numElements,
+    char *SubMesh::_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, size_t numElements,
                                         const VertexElement2Vec &vertexElements,
                                         VertexElement2Vec *outVertexElements )
     {
@@ -1424,7 +1428,7 @@ namespace Ogre
             static_cast<char *>( OGRE_MALLOC_SIMD( numElements * newVertexSize, MEMCATEGORY_GEOMETRY ) );
         char *dstData = data;
 
-        for( uint32 i = 0; i < numElements; ++i )
+        for( size_t i = 0; i < numElements; ++i )
         {
             itElements = vertexElements.begin();
 

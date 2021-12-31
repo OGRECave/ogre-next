@@ -777,6 +777,18 @@ namespace Ogre
             return std::abs( b - a ) <= tolerance;
         }
 
+        /// Wraps the value 'v' into the range [0; 1)
+        static Real Wrap( Real v )
+        {
+            Real unusedInt;
+
+            Real fractPart = std::abs( std::modf( v, &unusedInt ) );
+            if( fractPart < 0.0 )
+                fractPart = Real( 1.0 ) + fractPart;
+
+            return fractPart;
+        }
+
         /** Calculates the tangent space vector for a given set of positions / texture coords. */
         static Vector3 calculateTangentSpaceVector( const Vector3 &position1, const Vector3 &position2,
                                                     const Vector3 &position3, Real u1, Real v1, Real u2,

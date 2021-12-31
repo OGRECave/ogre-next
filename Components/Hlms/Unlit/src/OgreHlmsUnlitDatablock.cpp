@@ -65,9 +65,9 @@ namespace Ogre
         "diffuse_map12", "diffuse_map13", "diffuse_map14", "diffuse_map15"
     };
 
-    const size_t HlmsUnlitDatablock::MaterialSizeInGpu = 8 * 4 + NUM_UNLIT_TEXTURE_TYPES * 2;
-    const size_t HlmsUnlitDatablock::MaterialSizeInGpuAligned =
-        alignToNextMultiple( HlmsUnlitDatablock::MaterialSizeInGpu, 4 * 4 );
+    const uint32 HlmsUnlitDatablock::MaterialSizeInGpu = 8 * 4 + NUM_UNLIT_TEXTURE_TYPES * 2;
+    const uint32 HlmsUnlitDatablock::MaterialSizeInGpuAligned =
+        alignToNextMultiple<uint32>( HlmsUnlitDatablock::MaterialSizeInGpu, 4 * 4 );
     const uint8 HlmsUnlitDatablock::R_MASK = 0;
     const uint8 HlmsUnlitDatablock::G_MASK = 1;
     const uint8 HlmsUnlitDatablock::B_MASK = 2;
@@ -88,7 +88,7 @@ namespace Ogre
         for( size_t i = 0; i < NUM_UNLIT_TEXTURE_TYPES; ++i )
         {
             mTextureMatrices[i] = Matrix4::IDENTITY;
-            setTextureSwizzle( i, R_MASK, G_MASK, B_MASK, A_MASK );
+            setTextureSwizzle( (uint8)i, R_MASK, G_MASK, B_MASK, A_MASK );
         }
 
         memset( mUvSource, 0, sizeof( mUvSource ) );
@@ -130,7 +130,7 @@ namespace Ogre
                     if( val != std::numeric_limits<uint>::max() )
                     {
                         // It's a number, must be an UV Set
-                        setTextureUvSource( i, static_cast<uint8>( val ) );
+                        setTextureUvSource( (uint8)i, static_cast<uint8>( val ) );
                     }
                     else if( !itor->empty() )
                     {
@@ -142,12 +142,12 @@ namespace Ogre
                         if( it == c_unlitBlendModes + sizeof( c_unlitBlendModes ) / sizeof( String ) )
                         {
                             // Not blend mode, try loading a texture
-                            setTexture( i, *itor );
+                            setTexture( (uint8)i, *itor );
                         }
                         else
                         {
                             // It's a blend mode
-                            mBlendModes[i] = ( it - c_unlitBlendModes );
+                            mBlendModes[i] = uint8( it - c_unlitBlendModes );
                         }
                     }
 
@@ -308,8 +308,8 @@ namespace Ogre
     void HlmsUnlitDatablock::setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-        mTextureSwizzles[texType] =
-            ( ( r & 0x03u ) << 6u ) | ( ( g & 0x03u ) << 4u ) | ( ( b & 0x03u ) << 2u ) | ( a & 0x03u );
+        mTextureSwizzles[texType] = uint8( ( ( r & 0x03u ) << 6u ) | ( ( g & 0x03u ) << 4u ) |
+                                           ( ( b & 0x03u ) << 2u ) | ( a & 0x03u ) );
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------

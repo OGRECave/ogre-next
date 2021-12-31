@@ -37,7 +37,8 @@ namespace Demo
                 queue.resize( queue.size() + totalSize );
 
                 // Write the header: the Size and the MessageId
-                *reinterpret_cast<Ogre::uint32 *>( queue.begin() + startOffset ) = totalSize;
+                *reinterpret_cast<Ogre::uint32 *>( queue.begin() + startOffset ) =
+                    (Ogre::uint32)totalSize;
                 *reinterpret_cast<Ogre::uint32 *>( queue.begin() + startOffset +
                                                    sizeof( Ogre::uint32 ) ) = messageId;
 

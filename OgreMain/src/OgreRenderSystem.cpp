@@ -366,7 +366,7 @@ namespace Ogre
                              mCurrentRenderPassDescriptor->mDepth.texture == tex );
         }
 
-        _setHlmsSamplerblock( texUnit, tl.getSamplerblock() );
+        _setHlmsSamplerblock( (uint8)texUnit, tl.getSamplerblock() );
 
         // Set blend modes
         // Note, colour before alpha is important

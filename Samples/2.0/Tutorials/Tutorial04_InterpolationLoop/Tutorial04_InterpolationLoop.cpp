@@ -109,7 +109,7 @@ int mainApp( int argc, const char *argv[] )
         }
 
         graphicsSystem.beginFrameParallel();
-        graphicsSystem.update( timeSinceLast );
+        graphicsSystem.update( (float)timeSinceLast );
         graphicsSystem.finishFrameParallel();
 
         if( !renderWindow->isVisible() )

@@ -1955,7 +1955,8 @@ namespace Ogre
                 FOG_LINEAR.
         */
         void setFog( FogMode mode = FOG_NONE, const ColourValue &colour = ColourValue::White,
-                     Real expDensity = 0.001, Real linearStart = 0.0, Real linearEnd = 1.0 );
+                     Real expDensity = Real( 0.001 ), Real linearStart = Real( 0.0 ),
+                     Real linearEnd = Real( 1.0 ) );
 
         /** Returns the fog mode for the scene.
          */

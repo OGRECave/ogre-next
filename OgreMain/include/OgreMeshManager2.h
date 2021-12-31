@@ -67,9 +67,6 @@ namespace Ogre
         // the factor by which the bounding box of an entity is padded
         Real mBoundsPaddingFactor;
 
-        // The listener to pass to serializers
-        // MeshSerializerListener *mListener;
-
     public:
         MeshManager();
         ~MeshManager() override;

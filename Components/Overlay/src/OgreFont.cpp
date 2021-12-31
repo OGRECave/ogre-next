@@ -344,7 +344,7 @@ namespace Ogre
         const uint32 rowAlignment = 4u;
         const size_t dataSize = PixelFormatGpuUtils::getSizeBytes(
             finalWidth, finalHeight, 1u, 1u, mTexture->getPixelFormat(), rowAlignment );
-        const size_t bytesPerRow = mTexture->_getSysRamCopyBytesPerRow( 0 );
+        const uint32 bytesPerRow = mTexture->_getSysRamCopyBytesPerRow( 0 );
         const size_t bytesPerPixel = 2u;
 
         LogManager::getSingleton().logMessage( "Font " + mName + " using texture size " +

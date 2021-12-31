@@ -129,7 +129,7 @@ namespace Ogre
                              "Mesh::createSubMesh" );
             }
             SubMesh *sub = createSubMesh();
-            nameSubMesh( name, mSubMeshList.size() - 1 );
+            nameSubMesh( name, (unsigned)( mSubMeshList.size() - 1u ) );
             return sub;
         }
         //-----------------------------------------------------------------------
@@ -190,7 +190,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only first 65536 submeshes could be named.",
                              "Mesh::nameSubMesh" );
             }
-            mSubMeshNameMap[name] = index;
+            mSubMeshNameMap[name] = (uint16)index;
         }
 
         //---------------------------------------------------------------------
@@ -1157,7 +1157,7 @@ namespace Ogre
                 vector<vector<ushort>::type>::type boneChildren;  // for each bone, a list of children
                 {
                     // extract binding pose bone positions, and also indices for child bones
-                    size_t numBones = mOldSkeleton->getNumBones();
+                    const size_t numBones = mOldSkeleton->getNumBones();
                     mOldSkeleton->setBindingPose();
                     mOldSkeleton->_updateTransforms();
                     bonePositions.resize( numBones );
@@ -1165,12 +1165,12 @@ namespace Ogre
                     // for each bone,
                     for( size_t iBone = 0; iBone < numBones; ++iBone )
                     {
-                        OldBone *bone = mOldSkeleton->getBone( iBone );
+                        OldBone *bone = mOldSkeleton->getBone( (uint16)iBone );
                         bonePositions[iBone] = bone->_getDerivedPosition();
                         boneChildren[iBone].reserve( bone->numChildren() );
                         for( size_t iChild = 0; iChild < bone->numChildren(); ++iChild )
                         {
-                            OldBone *child = static_cast<OldBone *>( bone->getChild( iChild ) );
+                            OldBone *child = static_cast<OldBone *>( bone->getChild( (uint16)iChild ) );
                             boneChildren[iBone].push_back( child->getHandle() );
                         }
                     }
@@ -1434,7 +1434,7 @@ namespace Ogre
                     const VertexDeclaration::VertexElementList &veList = vDecl->getElements();
                     VertexDeclaration::VertexElementList::const_iterator uv0Itor =
                         std::find( veList.begin(), veList.end(), *uv0 );
-                    unsigned short elem_idx = std::distance( veList.begin(), uv0Itor );
+                    unsigned short elem_idx = (uint16)std::distance( veList.begin(), uv0Itor );
                     VertexElementType newType =
                         VertexElement::multiplyTypeCount( baseType0, totalTypeCount );
 

@@ -182,7 +182,7 @@ namespace Ogre
         uint32         getNumSlices() const;
         PixelFormatGpu getPixelFormatFamily() const;
 
-        size_t getBytesPerRow() const;
+        uint32 getBytesPerRow() const;
         size_t getBytesPerImage() const;
 
         virtual bool queryIsTransferDone();

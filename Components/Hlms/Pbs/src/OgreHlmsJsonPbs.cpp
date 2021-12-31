@@ -468,7 +468,7 @@ namespace Ogre
             loadTexture( subobj, blocks, PBSM_DETAIL_WEIGHT, pbsDatablock, resourceGroup );
         }
 
-        for( int i = 0; i < 4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
             const String iAsStr = StringConverter::toString( i );
             String texTypeName = "detail_diffuse" + iAsStr;
@@ -852,7 +852,7 @@ namespace Ogre
         if( pbsDatablock->getTexture( PBSM_DETAIL_WEIGHT ) )
             saveTexture( "detail_weight", PBSM_DETAIL_WEIGHT, pbsDatablock, outString );
 
-        for( int i = 0; i < 4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
             PbsBlendModes blendMode = pbsDatablock->getDetailMapBlendMode( i );
             const Vector4 &offsetScale = pbsDatablock->getDetailMapOffsetScale( i );
@@ -875,7 +875,7 @@ namespace Ogre
             }
         }
 
-        for( int i = 0; i < 4; ++i )
+        for( uint8 i = 0u; i < 4u; ++i )
         {
             const PbsTextureTypes textureType = static_cast<PbsTextureTypes>( PBSM_DETAIL0_NM + i );
 

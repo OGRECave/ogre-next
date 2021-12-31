@@ -53,13 +53,13 @@ namespace Ogre
         return msPixelFormatDesc[idx];
     }
     //-----------------------------------------------------------------------------------
-    size_t PixelFormatGpuUtils::getBytesPerPixel( PixelFormatGpu format )
+    uint32 PixelFormatGpuUtils::getBytesPerPixel( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
         return desc.bytesPerPixel;
     }
     //-----------------------------------------------------------------------------------
-    size_t PixelFormatGpuUtils::getNumberOfComponents( PixelFormatGpu format )
+    uint32 PixelFormatGpuUtils::getNumberOfComponents( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
         return desc.components;
@@ -77,7 +77,7 @@ namespace Ogre
         if( !isCompressed( format ) )
         {
             size_t retVal = width * getBytesPerPixel( format );
-            retVal = alignToNextMultiple( retVal, rowAlignment );
+            retVal = alignToNextMultiple<size_t>( retVal, rowAlignment );
 
             retVal *= height * depth * slices;
 
@@ -763,7 +763,7 @@ namespace Ogre
             const uint8 ig = static_cast<uint8>( Math::saturate( rgbaPtr[1] ) * 63.0f + 0.5f );
             const uint8 ib = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 31.0f + 0.5f );
 
-            ( (uint16 *)dstPtr )[0] = ( ir << 11u ) | ( ig << 5u ) | ( ib );
+            ( (uint16 *)dstPtr )[0] = uint16( ( ir << 11u ) | ( ig << 5u ) | ( ib ) );
             break;
         }
         case PFG_B5G5R5A1_UNORM:
@@ -773,7 +773,7 @@ namespace Ogre
             const uint8 ib = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 31.0f + 0.5f );
             const uint8 ia = rgbaPtr[3] == 0.0f ? 0u : 1u;
 
-            ( (uint16 *)dstPtr )[0] = ( ia << 15u ) | ( ir << 10u ) | ( ig << 5u ) | ( ib );
+            ( (uint16 *)dstPtr )[0] = uint16( ( ia << 15u ) | ( ir << 10u ) | ( ig << 5u ) | ( ib ) );
             break;
         }
         case PFG_BGRA8_UNORM:
@@ -791,7 +791,6 @@ namespace Ogre
         case PFG_R10G10B10_XR_BIAS_A2_UNORM:
             OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "PFG_R10G10B10_XR_BIAS_A2_UNORM",
                          "PixelFormatGpuUtils::packColour" );
-            break;
         case PFG_BGRA8_UNORM_SRGB:
             ( (uint8 *)dstPtr )[0] =
                 static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[2] ) ) * 255.0f + 0.5f );
@@ -817,7 +816,7 @@ namespace Ogre
             const uint8 ib = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 15.0f + 0.5f );
             const uint8 ia = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 15.0f + 0.5f );
 
-            ( (uint16 *)dstPtr )[0] = ( ia << 12u ) | ( ir << 8u ) | ( ig << 4u ) | ( ib );
+            ( (uint16 *)dstPtr )[0] = uint16( ( ia << 12u ) | ( ir << 8u ) | ( ig << 4u ) | ( ib ) );
             break;
         }
 

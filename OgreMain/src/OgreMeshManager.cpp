@@ -52,7 +52,7 @@ namespace Ogre
             return ( *msSingleton );
         }
         //-----------------------------------------------------------------------
-        MeshManager::MeshManager() : mBoundsPaddingFactor( 0.01 ), mListener( 0 )
+        MeshManager::MeshManager() : mBoundsPaddingFactor( Real( 0.01 ) ), mListener( 0 )
         {
             mPrepAllMeshesForShadowVolumes = false;
 
@@ -259,13 +259,12 @@ namespace Ogre
         }
 
         //-----------------------------------------------------------------------
-        void MeshManager::tesselate2DMesh( Mesh *pMesh, SubMesh *sm, unsigned short meshWidth,
-                                           unsigned short meshHeight, bool doubleSided,
-                                           HardwareBuffer::Usage indexBufferUsage,
+        void MeshManager::tesselate2DMesh( Mesh *pMesh, SubMesh *sm, uint32 meshWidth, uint32 meshHeight,
+                                           bool doubleSided, HardwareBuffer::Usage indexBufferUsage,
                                            bool indexShadowBuffer )
         {
             // The mesh is built, just make a list of indexes to spit out the triangles
-            unsigned short vInc, v, iterations;
+            uint32 vInc, v, iterations;
 
             if( doubleSided )
             {
@@ -280,10 +279,14 @@ namespace Ogre
                 v = 0;
             }
 
+            OGRE_ASSERT_LOW( ( meshWidth - 1 ) * ( meshHeight - 1 ) * 2 * iterations * 3 <
+                             std::numeric_limits<uint16>::max() );
+
             // Allocate memory for faces
             // Num faces, width*height*2 (2 tris per square), index count is * 3 on top
             sm->indexData[VpNormal]->indexCount =
-                ( meshWidth - 1 ) * ( meshHeight - 1 ) * 2 * iterations * 3;
+                ( meshWidth - 1u ) * ( meshHeight - 1u ) * 2u * iterations * 3u;
+
             sm->indexData[VpNormal]->indexBuffer = pMesh->getHardwareBufferManager()->createIndexBuffer(
                 HardwareIndexBuffer::IT_16BIT, sm->indexData[VpNormal]->indexCount, indexBufferUsage,
                 indexShadowBuffer );
@@ -298,29 +301,29 @@ namespace Ogre
             while( iterations-- )
             {
                 // Make tris in a zigzag pattern (compatible with strips)
-                unsigned short u = 0;
-                unsigned short uInc = 1;  // Start with moving +u
-                unsigned short vCount = meshHeight - 1;
+                uint32 u = 0;
+                uint32 uInc = 1;  // Start with moving +u
+                uint32 vCount = meshHeight - 1;
 
                 while( vCount-- )
                 {
-                    unsigned short uCount = meshWidth - 1;
+                    uint32 uCount = meshWidth - 1;
                     while( uCount-- )
                     {
                         // First Tri in cell
                         // -----------------
-                        v1 = ( ( v + vInc ) * meshWidth ) + u;
-                        v2 = ( v * meshWidth ) + u;
-                        v3 = ( ( v + vInc ) * meshWidth ) + ( u + uInc );
+                        v1 = uint16( ( ( v + vInc ) * meshWidth ) + u );
+                        v2 = uint16( ( v * meshWidth ) + u );
+                        v3 = uint16( ( ( v + vInc ) * meshWidth ) + ( u + uInc ) );
                         // Output indexes
                         *pIndexes++ = v1;
                         *pIndexes++ = v2;
                         *pIndexes++ = v3;
                         // Second Tri in cell
                         // ------------------
-                        v1 = ( ( v + vInc ) * meshWidth ) + ( u + uInc );
-                        v2 = ( v * meshWidth ) + u;
-                        v3 = ( v * meshWidth ) + ( u + uInc );
+                        v1 = uint16( ( ( v + vInc ) * meshWidth ) + ( u + uInc ) );
+                        v2 = uint16( ( v * meshWidth ) + u );
+                        v3 = uint16( ( v * meshWidth ) + ( u + uInc ) );
                         // Output indexes
                         *pIndexes++ = v1;
                         *pIndexes++ = v2;
@@ -999,13 +1002,16 @@ namespace Ogre
                 for( size_t bufIdx = 0; bufIdx < sharedVertexData->vertexBufferBinding->getBufferCount();
                      bufIdx++ )
                 {
+                    // TODO: Do we know if there are gaps? (i.e. mBindingMap[bufIdx].first == bufIdx)
+                    // Anyway sharedVertexData->vertexBufferBinding->getBuffer will throw
+                    // if bufIdx has no binding
                     HardwareVertexBufferSharedPtr sharedVertexBuffer =
-                        sharedVertexData->vertexBufferBinding->getBuffer( bufIdx );
+                        sharedVertexData->vertexBufferBinding->getBuffer( (uint16)bufIdx );
                     HardwareVertexBufferSharedPtr newVertexBuffer = remapInfo.getRemappedVertexBuffer(
                         mesh->getHardwareBufferManager(), sharedVertexBuffer,
                         sharedVertexData->vertexStart, sharedVertexData->vertexCount );
 
-                    newVertexData->vertexBufferBinding->setBinding( bufIdx, newVertexBuffer );
+                    newVertexData->vertexBufferBinding->setBinding( (uint16)bufIdx, newVertexBuffer );
                 }
 
                 ushort numLods = mesh->hasManualLodLevel() ? 1 : mesh->getNumLodLevels();

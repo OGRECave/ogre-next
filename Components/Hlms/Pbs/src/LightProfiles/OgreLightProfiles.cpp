@@ -167,7 +167,7 @@ namespace Ogre
                              "LightProfiles::assignProfile" );
             }
 
-            light->_setLightProfileIdx( itor->second + 1u );
+            light->_setLightProfileIdx( uint16( itor->second + 1u ) );
         }
     }
     //-------------------------------------------------------------------------

@@ -289,7 +289,9 @@ namespace Ogre
         // char* materialName
         writeString( s->getMaterialName() );
 
-        const uint8 blendIndexToBoneIndexCount = s->mBlendIndexToBoneIndexMap.size();
+        OGRE_ASSERT_LOW( s->mBlendIndexToBoneIndexMap.size() <= std::numeric_limits<uint8>::max() );
+
+        const uint8 blendIndexToBoneIndexCount = (uint8)s->mBlendIndexToBoneIndexMap.size();
         writeData( &blendIndexToBoneIndexCount, 1, 1 );
         writeShorts( s->mBlendIndexToBoneIndexMap.begin(), blendIndexToBoneIndexCount );
 
@@ -370,7 +372,10 @@ namespace Ogre
         uint32 indexCount = 0;
 
         if( indexBuffer )
-            indexCount = indexBuffer->getNumElements();
+        {
+            OGRE_ASSERT_LOW( indexBuffer->getNumElements() <= std::numeric_limits<uint32>::max() );
+            indexCount = (uint32)indexBuffer->getNumElements();
+        }
 
         writeInts( &indexCount, 1 );
 
@@ -435,7 +440,7 @@ namespace Ogre
                     VertexElement2Vec vertexElements = ( *itor )->getVertexElements();
 
                     // Number of elements in the declaration in this source.
-                    uint8 numVertexElements = vertexElements.size();
+                    uint8 numVertexElements = (uint8)vertexElements.size();
                     writeData( &numVertexElements, 1, 1 );
 
                     VertexElement2Vec::const_iterator itElement = vertexElements.begin();
@@ -470,7 +475,7 @@ namespace Ogre
                 writeData( &i, 1, 1 );
 
                 // Per-vertex size, must agree with declaration at this source
-                uint8 bytesPerVertex = vertexData[i]->getBytesPerElement();
+                const uint8 bytesPerVertex = (uint8)vertexData[i]->getBytesPerElement();
                 writeData( &bytesPerVertex, 1, 1 );
 
                 AsyncTicketPtr asyncTicket =

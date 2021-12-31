@@ -242,8 +242,9 @@ namespace Ogre
         RenderSystem *rs = Root::getSingleton().getRenderSystem();
 
         Hash hashVal[2];
-        OGRE_HASH128_FUNC( source.c_str(), source.size(), IdString::Seed, &hashVal[0] );
-        OGRE_HASH128_FUNC( rs->getName().c_str(), rs->getName().size(), IdString::Seed, &hashVal[1] );
+        OGRE_HASH128_FUNC( source.c_str(), (int)source.size(), IdString::Seed, &hashVal[0] );
+        OGRE_HASH128_FUNC( rs->getName().c_str(), (int)rs->getName().size(), IdString::Seed,
+                           &hashVal[1] );
 
         Hash retVal;
         OGRE_HASH128_FUNC( hashVal, sizeof( hashVal ), IdString::Seed, &retVal );

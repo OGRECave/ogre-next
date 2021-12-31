@@ -300,7 +300,7 @@ namespace Ogre
         GLUniformReferenceIterator endUniform = mGLUniformReferences.end();
 
         // determine if we need to transpose matrices when binding
-        int transpose = GL_TRUE;
+        GLboolean transpose = GL_TRUE;
         if( ( fromProgType == GPT_FRAGMENT_PROGRAM && mVertexShader &&
               ( !mVertexShader->getColumnMajorMatrices() ) ) ||
             ( fromProgType == GPT_VERTEX_PROGRAM && mFragmentShader &&

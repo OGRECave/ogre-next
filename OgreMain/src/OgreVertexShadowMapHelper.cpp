@@ -160,7 +160,8 @@ namespace Ogre
                         vertexElements.push_back( *origElements[i] );
                 }
 
-                uint32 numVertices = origVertexBuffers[0]->getNumElements();  // numVertices may shrink
+                uint32 numVertices =
+                    (uint32)origVertexBuffers[0]->getNumElements();  // numVertices may shrink
                 const uint32 bytesPerVertex = VaoManager::calculateVertexSize( vertexElements );
 
                 uint8 *finalVertexData = reinterpret_cast<uint8 *>(
@@ -502,8 +503,8 @@ namespace Ogre
                         {
                             if( !sameBuffer )
                             {
-                                tickets[i] =
-                                    geom.vertexData->vertexBufferBinding->getBuffer( bufferIdx[i] );
+                                tickets[i] = geom.vertexData->vertexBufferBinding->getBuffer(
+                                    (uint16)bufferIdx[i] );
                                 ticketsLocks[i].lock( tickets[i], HardwareBuffer::HBL_READ_ONLY );
                                 srcData[i] = reinterpret_cast<uint8 const *>( ticketsLocks[i].pData );
                                 srcBytesPerVertex[i] = tickets[i]->getVertexSize();
@@ -532,7 +533,7 @@ namespace Ogre
                         }
                     }
 
-                    uint32 numVertices = geom.vertexData->vertexCount;  // numVertices may shrink
+                    uint32 numVertices = (uint32)geom.vertexData->vertexCount;  // numVertices may shrink
                     const uint32 bytesPerVertex = VaoManager::calculateVertexSize( vertexElements );
 
                     uint8 *finalVertexData = reinterpret_cast<uint8 *>(

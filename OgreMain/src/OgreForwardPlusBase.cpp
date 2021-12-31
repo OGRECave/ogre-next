@@ -43,10 +43,10 @@ THE SOFTWARE.
 namespace Ogre
 {
     // N variables * 4 (vec4 or padded vec3) * 4 (bytes per float)
-    const size_t ForwardPlusBase::MinDecalRq = 0u;
-    const size_t ForwardPlusBase::MaxDecalRq = 4u;
-    const size_t ForwardPlusBase::MinCubemapProbeRq = 5u;
-    const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
+    const uint32 ForwardPlusBase::MinDecalRq = 0u;
+    const uint32 ForwardPlusBase::MaxDecalRq = 4u;
+    const uint32 ForwardPlusBase::MinCubemapProbeRq = 5u;
+    const uint32 ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = c_ForwardPlusNumFloat4PerLight * 4u * 4u;
     const size_t ForwardPlusBase::NumBytesPerDecal = c_ForwardPlusNumFloat4PerDecal * 4u * 4u;
     const size_t ForwardPlusBase::NumBytesPerCubemapProbe =
@@ -149,13 +149,13 @@ namespace Ogre
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
         if( mDecalsEnabled )
         {
-            actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
+            actualMaxDecalRq = std::min<size_t>( MaxDecalRq, objsPerRqInThread0.size() );
             for( size_t rqId = MinDecalRq; rqId <= actualMaxDecalRq; ++rqId )
                 numDecals += objsPerRqInThread0[rqId].size();
         }
         if( mCubemapProbesEnabled )
         {
-            actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
+            actualMaxCubemapProbeRq = std::min<size_t>( MaxCubemapProbeRq, objsPerRqInThread0.size() );
             for( size_t rqId = MinCubemapProbeRq; rqId <= actualMaxCubemapProbeRq; ++rqId )
                 numCubemapProbes += objsPerRqInThread0[rqId].size();
         }

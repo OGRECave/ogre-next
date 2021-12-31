@@ -61,9 +61,9 @@ namespace Ogre
                                        "Lighten",         "Darken",       "GrainExtract", "GrainMerge",
                                        "Difference" };
 
-    const size_t HlmsPbsDatablock::MaterialSizeInGpu = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
-    const size_t HlmsPbsDatablock::MaterialSizeInGpuAligned =
-        alignToNextMultiple( HlmsPbsDatablock::MaterialSizeInGpu, 4 * 4 );
+    const uint32 HlmsPbsDatablock::MaterialSizeInGpu = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
+    const uint32 HlmsPbsDatablock::MaterialSizeInGpuAligned =
+        alignToNextMultiple<uint32>( HlmsPbsDatablock::MaterialSizeInGpu, 4 * 4 );
 
     //-----------------------------------------------------------------------------------
     HlmsPbsDatablock::HlmsPbsDatablock( IdString name, HlmsPbs *creator,
@@ -215,16 +215,17 @@ namespace Ogre
             setTexture( PBSM_REFLECTION, paramVal );
 
         if( Hlms::findParamInVec( params, "uv_diffuse_map", paramVal ) )
-            setTextureUvSource( PBSM_DIFFUSE, StringConverter::parseUnsignedInt( paramVal ) );
+            setTextureUvSource( PBSM_DIFFUSE, (uint8)StringConverter::parseUnsignedInt( paramVal ) );
         if( Hlms::findParamInVec( params, "uv_normal_map", paramVal ) )
-            setTextureUvSource( PBSM_NORMAL, StringConverter::parseUnsignedInt( paramVal ) );
+            setTextureUvSource( PBSM_NORMAL, (uint8)StringConverter::parseUnsignedInt( paramVal ) );
         if( Hlms::findParamInVec( params, "uv_specular_map", paramVal ) )
-            setTextureUvSource( PBSM_SPECULAR, StringConverter::parseUnsignedInt( paramVal ) );
+            setTextureUvSource( PBSM_SPECULAR, (uint8)StringConverter::parseUnsignedInt( paramVal ) );
         if( Hlms::findParamInVec( params, "uv_roughness_map", paramVal ) )
-            setTextureUvSource( PBSM_ROUGHNESS, StringConverter::parseUnsignedInt( paramVal ) );
+            setTextureUvSource( PBSM_ROUGHNESS, (uint8)StringConverter::parseUnsignedInt( paramVal ) );
         if( Hlms::findParamInVec( params, "uv_detail_weight_map", paramVal ) )
         {
-            setTextureUvSource( PBSM_DETAIL_WEIGHT, StringConverter::parseUnsignedInt( paramVal ) );
+            setTextureUvSource( PBSM_DETAIL_WEIGHT,
+                                (uint8)StringConverter::parseUnsignedInt( paramVal ) );
         }
 
         // Detail maps default to wrap mode.
@@ -236,7 +237,7 @@ namespace Ogre
         String key;
         for( size_t i = 0; i < 4; ++i )
         {
-            key.assign( "detail_map" ).push_back( '0' + i );
+            key.assign( "detail_map" ).push_back( char( '0' + i ) );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 TextureGpu *texture;
@@ -245,10 +246,10 @@ namespace Ogre
                     TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
                     TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     TextureFilter::TypeGenerateDefaultMipmaps );
-                setTexture( PBSM_DETAIL0 + i, texture, &detailSamplerRef );
+                setTexture( uint8( PBSM_DETAIL0 + i ), texture, &detailSamplerRef );
             }
 
-            key.assign( "detail_normal_map" ).push_back( '0' + i );
+            key.assign( "detail_normal_map" ).push_back( char( '0' + i ) );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 TextureGpu *texture;
@@ -257,10 +258,10 @@ namespace Ogre
                     TextureTypes::Type2D, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     TextureFilter::TypeGenerateDefaultMipmaps |
                         TextureFilter::TypePrepareForNormalMapping );
-                setTexture( PBSM_DETAIL0_NM + i, texture, &detailSamplerRef );
+                setTexture( uint8( PBSM_DETAIL0_NM + i ), texture, &detailSamplerRef );
             }
 
-            key.assign( "detail_blend_mode" ).push_back( '0' + i );
+            key.assign( "detail_blend_mode" ).push_back( char( '0' + i ) );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 for( size_t j = 0; j < NUM_PBSM_BLEND_MODES; ++j )
@@ -271,33 +272,33 @@ namespace Ogre
                                     blendModeLowerCase.begin(), ::tolower );
                     StringUtil::toLowerCase( paramVal );
                     if( blendModeLowerCase == paramVal )
-                        setDetailMapBlendMode( i, static_cast<PbsBlendModes>( j ) );
+                        setDetailMapBlendMode( (uint8)i, static_cast<PbsBlendModes>( j ) );
                 }
             }
 
-            key.assign( "detail_offset_scale" ).push_back( '0' + i );
+            key.assign( "detail_offset_scale" ).push_back( char( '0' + i ) );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 Vector4 offsetScale =
-                    StringConverter::parseVector4( paramVal, getDetailMapOffsetScale( i ) );
+                    StringConverter::parseVector4( paramVal, getDetailMapOffsetScale( (uint8)i ) );
                 mDetailsOffsetScale[i][0] = static_cast<float>( offsetScale[0] );
                 mDetailsOffsetScale[i][1] = static_cast<float>( offsetScale[1] );
                 mDetailsOffsetScale[i][2] = static_cast<float>( offsetScale[2] );
                 mDetailsOffsetScale[i][3] = static_cast<float>( offsetScale[3] );
             }
 
-            key.assign( "uv_detail_map" ).push_back( '0' + i );
+            key.assign( "uv_detail_map" ).push_back( char( '0' + i ) );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 setTextureUvSource( static_cast<PbsTextureTypes>( PBSM_DETAIL0 + i ),
-                                    StringConverter::parseUnsignedInt( paramVal ) );
+                                    (uint8)StringConverter::parseUnsignedInt( paramVal ) );
             }
 
-            key.assign( "uv_detail_normal_map" ).push_back( '0' + i );
+            key.assign( "uv_detail_normal_map" ).push_back( char( '0' + i ) );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
                 setTextureUvSource( static_cast<PbsTextureTypes>( PBSM_DETAIL0_NM + i ),
-                                    StringConverter::parseUnsignedInt( paramVal ) );
+                                    (uint8)StringConverter::parseUnsignedInt( paramVal ) );
             }
         }
 

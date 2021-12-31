@@ -147,7 +147,7 @@ namespace Ogre {
                 // Add to accumulator
                 // NB weights must be normalised!!
                 Real weight = pBlendWeight[blendIdx];
-                if (weight)
+                if (weight != 0.0)
                 {
                     // Blend position, use 3x4 matrix
                     const Matrix4& mat = *blendMatrices[pBlendIndex[blendIdx]];

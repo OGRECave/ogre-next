@@ -500,7 +500,7 @@ namespace Ogre
         if( tmpIt != movableObjectValue.MemberEnd() && tmpIt->value.IsUint() )
         {
             uint32 rqId = tmpIt->value.GetUint();
-            movableObject->setRenderQueueGroup( rqId );
+            movableObject->setRenderQueueGroup( (uint8)rqId );
         }
 
         tmpIt = movableObjectValue.FindMember( "local_aabb" );
@@ -652,8 +652,9 @@ namespace Ogre
         if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsArray() )
         {
             const rapidjson::Value &subItemsArray = tmpIt->value;
-            const size_t numSubItems = std::min<size_t>( item->getNumSubItems(), subItemsArray.Size() );
-            for( size_t i = 0; i < numSubItems; ++i )
+            const rapidjson::SizeType numSubItems =
+                (rapidjson::SizeType)std::min<size_t>( item->getNumSubItems(), subItemsArray.Size() );
+            for( rapidjson::SizeType i = 0; i < numSubItems; ++i )
             {
                 const rapidjson::Value &subentityValue = subItemsArray[i];
 
@@ -719,9 +720,9 @@ namespace Ogre
         if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsArray() )
         {
             const rapidjson::Value &subEntitiesArray = tmpIt->value;
-            const size_t numSubEntities =
-                std::min<size_t>( entity->getNumSubEntities(), subEntitiesArray.Size() );
-            for( size_t i = 0; i < numSubEntities; ++i )
+            const rapidjson::SizeType numSubEntities = (rapidjson::SizeType)std::min<size_t>(
+                entity->getNumSubEntities(), subEntitiesArray.Size() );
+            for( rapidjson::SizeType i = 0; i < numSubEntities; ++i )
             {
                 const rapidjson::Value &subEntityValue = subEntitiesArray[i];
 
@@ -886,9 +887,9 @@ namespace Ogre
         tmpIt = json.FindMember( "areas_of_interest" );
         if( tmpIt != json.MemberEnd() && tmpIt->value.IsArray() )
         {
-            const size_t numAoIs = tmpIt->value.Size();
+            const rapidjson::SizeType numAoIs = tmpIt->value.Size();
 
-            for( size_t i = 0; i < numAoIs; ++i )
+            for( rapidjson::SizeType i = 0; i < numAoIs; ++i )
             {
                 const rapidjson::Value &aoi = tmpIt->value[i];
 
@@ -937,7 +938,7 @@ namespace Ogre
 
         tmpIt = json.FindMember( "mipmap_bias" );
         if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
-            mInstantRadiosity->mMipmapBias = static_cast<uint32>( tmpIt->value.GetUint() );
+            mInstantRadiosity->mMipmapBias = static_cast<uint8>( tmpIt->value.GetUint() );
 
         tmpIt = json.FindMember( "use_textures" );
         if( tmpIt != json.MemberEnd() && tmpIt->value.IsBool() )
@@ -1163,9 +1164,9 @@ namespace Ogre
         if( tmpIt != pccValue.MemberEnd() && tmpIt->value.IsArray() )
         {
             const rapidjson::Value &jsonProbeArray = tmpIt->value;
-            const size_t numProbes = jsonProbeArray.Size();
+            const rapidjson::SizeType numProbes = jsonProbeArray.Size();
 
-            for( size_t i = 0; i < numProbes; ++i )
+            for( rapidjson::SizeType i = 0; i < numProbes; ++i )
             {
                 const rapidjson::Value &jsonProbe = jsonProbeArray[i];
 
@@ -1244,7 +1245,7 @@ namespace Ogre
 
                 tmpIt = jsonProbe.FindMember( "num_iterations" );
                 if( tmpIt != jsonProbe.MemberEnd() && tmpIt->value.IsUint() )
-                    probe->mNumIterations = tmpIt->value.GetUint();
+                    probe->mNumIterations = (uint16)tmpIt->value.GetUint();
 
                 tmpIt = jsonProbe.FindMember( "mask" );
                 if( tmpIt != jsonProbe.MemberEnd() && tmpIt->value.IsUint() )

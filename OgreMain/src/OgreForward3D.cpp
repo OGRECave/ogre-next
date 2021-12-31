@@ -370,7 +370,7 @@ namespace Ogre
                             uint16 *RESTRICT_ALIAS cellElem =
                                 gridBuffer + offset + ( y * sliceRes.width + x ) * mLightsPerCell +
                                 ( numLightsInCell->lightCount[0] + 3u );
-                            *cellElem = i * 6;
+                            *cellElem = uint16( i * 6 );
                             ++numLightsInCell->lightCount[0];
                             ++numLightsInCell->lightCount[lightType];
                         }

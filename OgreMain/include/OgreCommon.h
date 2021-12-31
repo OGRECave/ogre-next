@@ -1142,10 +1142,12 @@ namespace Ogre
     ///
     /// alignToNextMultiple( 0, 3 ) = 0;
     /// alignToNextMultiple( 1, 3 ) = 3;
-    inline size_t alignToNextMultiple( size_t offset, size_t alignment )
+    template <typename T>
+    T alignToNextMultiple( T offset, T alignment )
     {
         return ( ( offset + alignment - 1u ) / alignment ) * alignment;
     }
+
     /// This function has been purposedly not been named 'alignToPrevMultiple'
     /// to avoid easily confusing it with alignToNextMultiple
     inline size_t alignToPreviousMult( size_t offset, size_t alignment )

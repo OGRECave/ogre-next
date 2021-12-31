@@ -139,10 +139,10 @@ namespace Demo
         mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
 
         Ogre::CubemapProbe *probe = 0;
-        Ogre::Aabb roomShape( Ogre::Vector3( -0.505, 3.400016, 5.066226 ),
-                              Ogre::Vector3( 5.064587, 3.891282, 9.556003 ) );
+        Ogre::Aabb roomShape( Ogre::Vector3( -0.505f, 3.400016f, 5.066226f ),
+                              Ogre::Vector3( 5.064587f, 3.891282f, 9.556003f ) );
         Ogre::Aabb probeArea;
-        probeArea.mHalfSize = Ogre::Vector3( 5.064587, 3.891282, 3.891282 );
+        probeArea.mHalfSize = Ogre::Vector3( 5.064587f, 3.891282f, 3.891282f );
 
         const bool useMultipleProbes = true;
 
@@ -153,7 +153,7 @@ namespace Demo
             probe->setTextureParams( 1024, 1024 );
             probe->initWorkspace();
 
-            probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, -0.598495 );
+            probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, -0.598495f );
             probe->set( probeArea.mCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                         Ogre::Matrix3::IDENTITY, roomShape );
         }
@@ -163,7 +163,7 @@ namespace Demo
         probe->setTextureParams( 1024, 1024 );
         probe->initWorkspace();
 
-        probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 5.423867 );
+        probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, 5.423867f );
         probe->set( useMultipleProbes ? probeArea.mCenter : roomShape.mCenter,
                     useMultipleProbes ? probeArea : roomShape, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                     Ogre::Matrix3::IDENTITY, roomShape );
@@ -175,7 +175,7 @@ namespace Demo
             probe->setTextureParams( 1024, 1024 );
             probe->initWorkspace();
 
-            probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 10.657585 );
+            probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, 10.657585f );
             probe->set( probeArea.mCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                         Ogre::Matrix3::IDENTITY, roomShape );
         }
@@ -506,7 +506,7 @@ namespace Demo
                 }
                 datablock->setBackgroundDiffuse( materials[i].colour );
                 datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-                datablock->setRoughness( 0.02 );
+                datablock->setRoughness( 0.02f );
             }
 
             ::generateScene( sceneManager );

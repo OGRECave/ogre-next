@@ -268,7 +268,8 @@ namespace Ogre
             char tmpBuffer[256];
             LwString compundName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             compundName.a( mName.c_str(), " (", mFilename.c_str(), ")" );
-            ogreGlObjectLabel( GL_SHADER, mGLShaderHandle, compundName.size(), compundName.c_str() );
+            ogreGlObjectLabel( GL_SHADER, mGLShaderHandle, (GLsizei)compundName.size(),
+                               compundName.c_str() );
         }
 
         // if

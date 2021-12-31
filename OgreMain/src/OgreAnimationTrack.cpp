@@ -323,7 +323,7 @@ namespace Ogre
                                                      Real scale )
         {
             // Nothing to do if no keyframes or zero weight, scale
-            if( mKeyFrames.empty() || !weight || !scale )
+            if( mKeyFrames.empty() || weight == Real( 0.0 ) || scale == Real( 0.0 ) )
                 return;
 
             NumericKeyFrame kf( 0, timeIndex.getTimePos() );
@@ -502,7 +502,7 @@ namespace Ogre
                                               Real scl )
         {
             // Nothing to do if no keyframes or zero weight or no node
-            if( mKeyFrames.empty() || !weight || !node )
+            if( mKeyFrames.empty() || weight == Real( 0.0 ) || !node )
                 return;
 
             TransformKeyFrame kf( 0, timeIndex.getTimePos() );
@@ -647,8 +647,9 @@ namespace Ogre
                     // 4 indicates this is the 5th duplicate keyframe
                     if( dupKfCount == 4 )
                     {
+                        OGRE_ASSERT_LOW( k >= 2 );
                         // remove the 'middle' keyframe
-                        removeList.push_back( k - 2 );
+                        removeList.push_back( static_cast<uint16_t>( k - 2u ) );
                         --dupKfCount;
                     }
                 }
@@ -828,7 +829,7 @@ namespace Ogre
                                                  Real scl )
         {
             // Nothing to do if no keyframes or zero weight or no node
-            if( mKeyFrames.empty() || !weight || !node )
+            if( mKeyFrames.empty() || weight == Real( 0.0 ) || !node )
                 return;
 
             TransformKeyFrame kf( 0, timeIndex.getTimePos() );
@@ -976,8 +977,9 @@ namespace Ogre
                     // 4 indicates this is the 5th duplicate keyframe
                     if( dupKfCount == 4 )
                     {
+                        OGRE_ASSERT_LOW( k >= 2 );
                         // remove the 'middle' keyframe
-                        removeList.push_back( k - 2 );
+                        removeList.push_back( static_cast<uint16_t>( k - 2u ) );
                         --dupKfCount;
                     }
                 }

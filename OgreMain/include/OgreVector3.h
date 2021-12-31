@@ -648,7 +648,7 @@ namespace Ogre
         @param tolerance The amount that each element of the vector may vary by
             and still be considered equal
         */
-        inline bool positionEquals( const Vector3 &rhs, Real tolerance = 1e-03 ) const
+        inline bool positionEquals( const Vector3 &rhs, Real tolerance = Real( 1e-03 ) ) const
         {
             return Math::RealEqual( x, rhs.x, tolerance ) && Math::RealEqual( y, rhs.y, tolerance ) &&
                    Math::RealEqual( z, rhs.z, tolerance );

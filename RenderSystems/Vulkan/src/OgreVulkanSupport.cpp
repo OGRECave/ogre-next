@@ -153,7 +153,7 @@ namespace Ogre
             FastArray<String>::const_iterator itDevice =
                 std::find( mDevices.begin(), mDevices.end(), deviceName );
             if( itDevice != mDevices.end() )
-                deviceIdx = itDevice - mDevices.begin();
+                deviceIdx = uint32( itDevice - mDevices.begin() );
         }
 
         return deviceIdx;

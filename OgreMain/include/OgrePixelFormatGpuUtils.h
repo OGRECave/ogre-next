@@ -126,8 +126,8 @@ namespace Ogre
                                     uint32 flags );
 
     public:
-        static size_t            getBytesPerPixel( PixelFormatGpu format );
-        static size_t            getNumberOfComponents( PixelFormatGpu format );
+        static uint32            getBytesPerPixel( PixelFormatGpu format );
+        static uint32            getNumberOfComponents( PixelFormatGpu format );
         static PixelFormatLayout getPixelLayout( PixelFormatGpu format );
 
         static size_t getSizeBytes( uint32 width, uint32 height, uint32 depth, uint32 slices,

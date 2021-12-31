@@ -141,9 +141,10 @@ namespace Ogre
         const size_t bytesPerPixel =
             PixelFormatGpuUtils::getBytesPerPixel( textureSrc->getPixelFormat() );
 
-        const GLint rowLength = bytesPerPixel > 0 ? ( srcTextureBox.bytesPerRow / bytesPerPixel ) : 0;
+        const GLint rowLength =
+            bytesPerPixel > 0 ? GLint( srcTextureBox.bytesPerRow / bytesPerPixel ) : 0;
         const GLint imageHeight = ( srcTextureBox.bytesPerRow > 0 )
-                                      ? ( srcTextureBox.bytesPerImage / srcTextureBox.bytesPerRow )
+                                      ? GLint( srcTextureBox.bytesPerImage / srcTextureBox.bytesPerRow )
                                       : 0;
 
         OCGE( glPixelStorei( GL_PACK_ALIGNMENT, 4 ) );

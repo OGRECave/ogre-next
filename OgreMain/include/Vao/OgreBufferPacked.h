@@ -151,8 +151,8 @@ namespace Ogre
         size_t mInternalBufferStart;  /// In elements
         size_t mFinalBufferStart;     /// In elements, includes dynamic buffer frame offset
         size_t mNumElements;
-        size_t mBytesPerElement;
-        size_t mNumElementsPadding;
+        uint32 mBytesPerElement;
+        uint32 mNumElementsPadding;
 
         BufferType  mBufferType;
         VaoManager *mVaoManager;
@@ -316,7 +316,7 @@ namespace Ogre
         bool isCurrentlyMapped() const;
 
         size_t getNumElements() const { return mNumElements; }
-        size_t getBytesPerElement() const { return mBytesPerElement; }
+        uint32 getBytesPerElement() const { return mBytesPerElement; }
         size_t getTotalSizeBytes() const { return mNumElements * mBytesPerElement; }
 
         size_t _getInternalBufferStart() const { return mInternalBufferStart; }

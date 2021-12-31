@@ -191,7 +191,7 @@ namespace Ogre
                 //the order of OGRE_HLMS_TEXTURE_BASE_MAX_TEX
                 if( mTexLocationInDescSet[i] == OGRE_HLMS_TEXTURE_BASE_MAX_TEX )
                 {
-                    mTexLocationInDescSet[i] = baseSet.mTextures.size();
+                    mTexLocationInDescSet[i] = (uint8)baseSet.mTextures.size();
                     baseSet.mTextures.push_back( mTextures[i] );
                     if( !hasSeparateSamplers )
                         baseSampler.mSamplers.push_back( mSamplerblocks[i] );
@@ -466,7 +466,7 @@ namespace Ogre
             for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
             {
                 if( mTextures[i] == texture )
-                    setTexture( i, 0, mSamplerblocks[i] );
+                    setTexture( (uint8)i, 0, mSamplerblocks[i] );
             }
         }
 

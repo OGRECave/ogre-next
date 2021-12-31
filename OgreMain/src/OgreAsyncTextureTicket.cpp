@@ -201,9 +201,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     PixelFormatGpu AsyncTextureTicket::getPixelFormatFamily() const { return mPixelFormatFamily; }
     //-----------------------------------------------------------------------------------
-    size_t AsyncTextureTicket::getBytesPerRow() const
+    uint32 AsyncTextureTicket::getBytesPerRow() const
     {
-        return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
+        return (uint32)PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
     size_t AsyncTextureTicket::getBytesPerImage() const

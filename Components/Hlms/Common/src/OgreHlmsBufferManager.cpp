@@ -53,7 +53,7 @@ namespace Ogre
         mCurrentMappedTexBuffer( 0 ),
         mCurrentTexBufferSize( 0 ),
         mTexLastOffset( 0 ),
-        mLastTexBufferCmdOffset( (size_t)~0 ),
+        mLastTexBufferCmdOffset( std::numeric_limits<size_t>::max() ),
         mTextureBufferDefaultSize( 4 * 1024 * 1024 )
     {
     }
@@ -157,8 +157,9 @@ namespace Ogre
             if( shaderBufferCmd )
             {
                 assert( shaderBufferCmd->bufferPacked == texBuffer );
-                shaderBufferCmd->bindSizeBytes = mTexLastOffset - shaderBufferCmd->bindOffset;
-                mLastTexBufferCmdOffset = (size_t)~0;
+                shaderBufferCmd->bindSizeBytes =
+                    ( uint32 )( mTexLastOffset - shaderBufferCmd->bindOffset );
+                mLastTexBufferCmdOffset = std::numeric_limits<size_t>::max();
             }
         }
 
@@ -168,7 +169,8 @@ namespace Ogre
         mCurrentTexBufferSize = 0;
 
         // Ensure the proper alignment
-        mTexLastOffset = alignToNextMultiple( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
+        mTexLastOffset =
+            alignToNextMultiple<size_t>( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
     }
     //-----------------------------------------------------------------------------------
     float *RESTRICT_ALIAS_RETURN HlmsBufferManager::mapNextTexBuffer( CommandBuffer *commandBuffer,
@@ -178,7 +180,8 @@ namespace Ogre
 
         ReadOnlyBufferPacked *texBuffer = mTexBuffers[mCurrentTexBuffer];
 
-        mTexLastOffset = alignToNextMultiple( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
+        mTexLastOffset =
+            alignToNextMultiple<size_t>( mTexLastOffset, mVaoManager->getTexBufferAlignment() );
 
         // We'll go out of bounds. This buffer is full. Get a new one and remap from 0.
         if( mTexLastOffset + minimumSizeBytes >= texBuffer->getTotalSizeBytes() )
@@ -205,7 +208,7 @@ namespace Ogre
         mCurrentTexBufferSize = ( texBuffer->getNumElements() - mTexLastOffset ) >> 2;
 
         CbShaderBuffer *shaderBufferCmd = commandBuffer->addCommand<CbShaderBuffer>();
-        *shaderBufferCmd = CbShaderBuffer( VertexShader, 0, texBuffer, mTexLastOffset, 0 );
+        *shaderBufferCmd = CbShaderBuffer( VertexShader, 0, texBuffer, (uint32)mTexLastOffset, 0 );
 
         mLastTexBufferCmdOffset = commandBuffer->getCommandOffset( shaderBufferCmd );
 
@@ -224,13 +227,14 @@ namespace Ogre
         {
             assert( shaderBufferCmd->bufferPacked == mTexBuffers[mCurrentTexBuffer] );
             shaderBufferCmd->bindSizeBytes =
-                static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer ) * sizeof( float );
+                static_cast<uint32>( mCurrentMappedTexBuffer - mStartMappedTexBuffer ) * sizeof( float );
         }
 
         const size_t bufferSizeBytes = mCurrentTexBufferSize * sizeof( float );
         size_t currentOffset =
             static_cast<size_t>( mCurrentMappedTexBuffer - mStartMappedTexBuffer ) * sizeof( float );
-        currentOffset = alignToNextMultiple( currentOffset, mVaoManager->getTexBufferAlignment() );
+        currentOffset =
+            alignToNextMultiple<size_t>( currentOffset, mVaoManager->getTexBufferAlignment() );
         currentOffset = std::min( bufferSizeBytes, currentOffset );
         const size_t remainingSize = bufferSizeBytes - currentOffset;
 
@@ -263,7 +267,7 @@ namespace Ogre
                 // Add a new binding command.
                 shaderBufferCmd = commandBuffer->addCommand<CbShaderBuffer>();
                 *shaderBufferCmd = CbShaderBuffer( VertexShader, 0, mTexBuffers[mCurrentTexBuffer],
-                                                   mTexLastOffset + bindOffset, 0 );
+                                                   uint32( mTexLastOffset + bindOffset ), 0 );
                 mLastTexBufferCmdOffset = commandBuffer->getCommandOffset( shaderBufferCmd );
             }
         }

@@ -234,10 +234,10 @@ namespace Ogre
 
         const uint32 rowAlignment = 4u;
         imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
-                                                                      1u, 1u, 1u,          //
-                                                                      imgData->format,     //
-                                                                      rowAlignment );
+        imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
+                                                                              1u, 1u, 1u,          //
+                                                                              imgData->format,     //
+                                                                              rowAlignment );
         imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,   //
                                                                         imgData->box.height,  //
                                                                         1u, 1u,               //

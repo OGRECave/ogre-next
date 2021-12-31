@@ -82,7 +82,7 @@ namespace Ogre
 
             size_t cleanupThreshold = 50 * numSlots - 1;  // 50 is arbitrary
             mMemoryManagers.push_back(
-                BoneArrayMemoryManager( mMemoryManagers.size(), 100, cleanupThreshold,
+                BoneArrayMemoryManager( (uint16)mMemoryManagers.size(), 100, cleanupThreshold,
                                         ArrayMemoryManager::MAX_MEMORY_SLOTS, this ) );
             mMemoryManagers.back().initialize();
         }
@@ -211,7 +211,7 @@ namespace Ogre
             {
                 if( transform.mOwner[j] )
                 {
-                    transform.mIndex = j;
+                    transform.mIndex = (uint8)j;
                     transform.mOwner[j]->_getTransform() = transform;
                     transform.mOwner[j]->_memoryRebased();
                 }
@@ -241,7 +241,7 @@ namespace Ogre
             {
                 if( transform.mOwner[j] )
                 {
-                    transform.mIndex = j;
+                    transform.mIndex = (uint8)j;
                     transform.mOwner[j]->_getTransform() = transform;
                     transform.mOwner[j]->_memoryRebased();
                 }

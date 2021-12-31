@@ -774,7 +774,7 @@ namespace Ogre
             xform[1][3] = ( -0.5f * xform[1][1] ) + 0.5f;
         }
 
-        if( mUMod || mVMod )
+        if( mUMod != 0.0 || mVMod != 0.0 )
         {
             Matrix4 xlate = Matrix4::IDENTITY;
 
@@ -853,13 +853,13 @@ namespace Ogre
         }
         else
         {
-            if( uSpeed )
+            if( uSpeed != 0.0 )
             {
                 eff.type = ET_USCROLL;
                 eff.arg1 = uSpeed;
                 addEffect( eff );
             }
-            if( vSpeed )
+            if( vSpeed != 0.0 )
             {
                 eff.type = ET_VSCROLL;
                 eff.arg1 = vSpeed;

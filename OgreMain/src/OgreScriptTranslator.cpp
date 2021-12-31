@@ -2411,7 +2411,7 @@ namespace Ogre{
                         {
                             FogMode mode = FOG_NONE;
                             ColourValue clr = ColourValue::White;
-                            Real dens = 0.001, start = 0.0f, end = 1.0f;
+                            Real dens = Real( 0.001 ), start = 0.0f, end = 1.0f;
 
                             if(i1 != prop->values.end())
                             {
@@ -6432,7 +6432,7 @@ namespace Ogre{
                         return;
                     }
 
-                    depthBufferId = StringConverter::parseInt(atom->value);
+                    depthBufferId = (uint16)StringConverter::parseUnsignedInt(atom->value);
                 }
                 break;
             case ID_DEPTH_TEXTURE:
@@ -6477,7 +6477,7 @@ namespace Ogre{
                         return;
                     }
 
-                    numMipmaps = StringConverter::parseInt(atom->value);
+                    numMipmaps = (uint8)StringConverter::parseUnsignedInt(atom->value);
                 }
                 break;
             case ID_NO_AUTOMIPMAPS:
@@ -7315,7 +7315,7 @@ namespace Ogre{
                 uint32 val;
                 if( getUInt( *it0, &val ) )
                 {
-                    arrayIdx = static_cast<uint32>( val );
+                    arrayIdx = static_cast<uint8>( val );
                 }
                 else
                 {
@@ -8028,7 +8028,7 @@ namespace Ogre{
 
                         uint32 depthBufferPool = 0;
                         if( getUInt( *it0, &depthBufferPool ) )
-                            mRtv->depthBufferId = depthBufferPool;
+                            mRtv->depthBufferId = (uint16)depthBufferPool;
                         else
                         {
                             compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED,
@@ -9632,7 +9632,7 @@ namespace Ogre{
                         AbstractNodeList::const_iterator it0 = prop->values.begin();
                         if( getUInt( *it0, &val ) )
                         {
-                            passScene->mFirstRQ = val;
+                            passScene->mFirstRQ = (uint8)val;
                         }
                         else
                         {
@@ -9653,7 +9653,8 @@ namespace Ogre{
                         AbstractNodeList::const_iterator it0 = prop->values.begin();
                         if( getUInt( *it0, &val ) )
                         {
-                            passScene->mLastRQ = std::min<uint32>( val, std::numeric_limits<uint8>::max() );
+                            passScene->mLastRQ =
+                                (uint8)std::min<uint32>( val, std::numeric_limits<uint8>::max() );
                         }
                         else if( getString( *it0, &str ) && str == "max" )
                         {
@@ -10273,7 +10274,7 @@ namespace Ogre{
                         {
                             uint32 access = 0;
                             PixelFormatGpu format = PFG_UNKNOWN;
-                            int32 mipmap = 0;
+                            uint8 mipmap = 0;
                             bool mipmapFollows = false;
 
                             bool isExternal = prop->id == ID_UAV_EXTERNAL;
@@ -10300,7 +10301,8 @@ namespace Ogre{
                                         {
                                             if( mipmapFollows )
                                             {
-                                                mipmap = StringConverter::parseInt(atom->value);
+                                                mipmap = (uint8)StringConverter::parseUnsignedInt(
+                                                    atom->value );
                                                 mipmapFollows = false;
                                             }
                                         }
@@ -10557,8 +10559,8 @@ namespace Ogre{
 
                         uint32 slot = ~0u;
                         PixelFormatGpu pixelFormat = PFG_UNKNOWN;
-                        int32 slice = 0;
-                        int32 mipmap = 0;
+                        uint16 slice = 0;
+                        uint8 mipmap = 0;
                         uint32 access = ResourceAccess::Undefined;
                         bool allowWriteAfterWrite = false;
 
@@ -10600,7 +10602,8 @@ namespace Ogre{
                                         {
                                             if( mipmapFollows )
                                             {
-                                                mipmap = StringConverter::parseInt(atom->value);
+                                                mipmap = (uint8)StringConverter::parseUnsignedInt(
+                                                    atom->value );
                                                 mipmapFollows = false;
                                             }
                                         }

@@ -588,7 +588,7 @@ namespace Ogre
                     ++itor;
                 }
 
-                mMaxTexUnitReached = mTexSlots.size();
+                mMaxTexUnitReached = static_cast<uint8>( mTexSlots.size() );
             }
 
             // Deal with UAVs
@@ -646,7 +646,7 @@ namespace Ogre
                     ++itor;
                 }
 
-                mMaxUavUnitReached = mUavSlots.size();
+                mMaxUavUnitReached = static_cast<uint8>( mUavSlots.size() );
             }
         }
     }
@@ -776,7 +776,7 @@ namespace Ogre
 
             DescriptorSetTexture2 baseParams;
             baseParams.mTextures = mTexSlots;
-            baseParams.mShaderTypeTexCount[0] = mTexSlots.size();
+            baseParams.mShaderTypeTexCount[0] = static_cast<uint16>( mTexSlots.size() );
             mTexturesDescSet = hlmsManager->getDescriptorSetTexture2( baseParams );
         }
 
@@ -787,7 +787,7 @@ namespace Ogre
 
             DescriptorSetSampler baseParams;
             baseParams.mSamplers = mSamplerSlots;
-            baseParams.mShaderTypeSamplerCount[0] = mSamplerSlots.size();
+            baseParams.mShaderTypeSamplerCount[0] = static_cast<uint16>( mSamplerSlots.size() );
             mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseParams );
         }
     }
@@ -837,7 +837,8 @@ namespace Ogre
         mPieces[pieceName] = pieceContent;
 
         int32 contentHash = 0;
-        MurmurHash3_x86_32( pieceContent.c_str(), pieceContent.size(), IdString::Seed, &contentHash );
+        MurmurHash3_x86_32( pieceContent.c_str(), static_cast<int>( pieceContent.size() ),
+                            IdString::Seed, &contentHash );
         setProperty( pieceName, contentHash );
     }
     //-----------------------------------------------------------------------------------
@@ -1348,7 +1349,7 @@ namespace Ogre
                     {
                         DescriptorSetTexture2::TextureSlot emptySlot = itor->getTexture();
                         emptySlot.texture = 0;
-                        setTexture( itor - mTexSlots.begin(), emptySlot );
+                        setTexture( static_cast<uint8>( itor - mTexSlots.begin() ), emptySlot );
                     }
                     ++itor;
                 }
@@ -1365,7 +1366,7 @@ namespace Ogre
                     {
                         DescriptorSetUav::TextureSlot emptySlot = itor->getTexture();
                         emptySlot.texture = 0;
-                        _setUavTexture( itor - mUavSlots.begin(), emptySlot );
+                        _setUavTexture( static_cast<uint8>( itor - mUavSlots.begin() ), emptySlot );
                     }
                     ++itor;
                 }

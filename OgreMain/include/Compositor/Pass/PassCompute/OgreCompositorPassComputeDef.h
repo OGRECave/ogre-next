@@ -58,8 +58,8 @@ namespace Ogre
 
             // Used by UAVs
             ResourceAccess::ResourceAccess access;
-            int32                          mipmapLevel;
-            int32                          textureArrayIndex;
+            uint8                          mipmapLevel;
+            uint16                         textureArrayIndex;
             PixelFormatGpu                 pixelFormat;
             union
             {
@@ -79,8 +79,8 @@ namespace Ogre
             }
 
             ComputeTextureSource( uint32 _texUnitIdx, IdString _textureName,
-                                  ResourceAccess::ResourceAccess _access, int32 _mipmapLevel,
-                                  int32 _textureArrayIndex, PixelFormatGpu _pixelFormat,
+                                  ResourceAccess::ResourceAccess _access, uint8 _mipmapLevel,
+                                  uint16 _textureArrayIndex, PixelFormatGpu _pixelFormat,
                                   bool _allowWriteAfterWrite ) :
                 texUnitIdx( _texUnitIdx ),
                 textureName( _textureName ),
@@ -140,15 +140,13 @@ namespace Ogre
             @See ComputeTextureSource for params
         */
         void addTextureSource( uint32 texUnitIdx, const String &textureName );
-        void addTextureSource( uint32 texUnitIdx, const String &textureName, int32 textureArrayIndex,
-                               int32 mipmapLevel, PixelFormatGpu pixelFormat );
+        void addTextureSource( uint32 texUnitIdx, const String &textureName, uint16 textureArrayIndex,
+                               uint8 mipmapLevel, PixelFormatGpu pixelFormat );
 
         void addUavSource( uint32 texUnitIdx, const String &textureName,
-                           ResourceAccess::ResourceAccess access, int32 textureArrayIndex,
-                           int32 mipmapLevel, PixelFormatGpu pixelFormat, bool allowWriteAfterWrite );
+                           ResourceAccess::ResourceAccess access, uint16 textureArrayIndex,
+                           uint8 mipmapLevel, PixelFormatGpu pixelFormat, bool allowWriteAfterWrite );
 
-        //        void addTexBuffer( uint32 slotIdx, const String &bufferName,
-        //                           size_t offset=0, size_t sizeBytes=0 );
         void addUavBuffer( uint32 slotIdx, const String &bufferName,
                            ResourceAccess::ResourceAccess access, size_t offset = 0,
                            size_t sizeBytes = 0, bool allowWriteAfterWrite = false );

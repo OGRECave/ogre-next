@@ -129,7 +129,7 @@ namespace Demo
             Ogre::Decal *decal = sceneManager->createDecal();
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode()->createChildSceneNode();
             sceneNode->attachObject( decal );
-            sceneNode->setPosition( Ogre::Vector3( 0, 0.4, 0 ) );
+            sceneNode->setPosition( Ogre::Vector3( 0, 0.4f, 0 ) );
             sceneNode->setOrientation(
                 Ogre::Quaternion( Ogre::Degree( 45.0f ), Ogre::Vector3::UNIT_Y ) );
             sceneNode->setScale( Ogre::Vector3( 10.0f ) );

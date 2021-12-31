@@ -325,8 +325,8 @@ namespace Ogre
 
         texture->waitForData();
 
-        minMip = std::min<uint8>( minMip, texture->getNumMipmaps() - 1u );
-        maxMip = std::min<uint8>( maxMip, texture->getNumMipmaps() - 1u );
+        minMip = std::min<uint8>( minMip, static_cast<uint8>( texture->getNumMipmaps() - 1u ) );
+        maxMip = std::min<uint8>( maxMip, static_cast<uint8>( texture->getNumMipmaps() - 1u ) );
 
         mWidth = std::max( 1u, texture->getInternalWidth() >> minMip );
         mHeight = std::max( 1u, texture->getInternalHeight() >> minMip );
@@ -788,11 +788,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     PixelFormatGpu Image2::getPixelFormat() const { return mPixelFormat; }
     //-----------------------------------------------------------------------------------
-    size_t Image2::getBytesPerRow( uint8 mipLevel ) const
+    uint32 Image2::getBytesPerRow( uint8 mipLevel ) const
     {
         assert( mipLevel < mNumMipmaps );
         uint32 width = std::max( mWidth >> mipLevel, 1u );
-        return PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, mPixelFormat, 4u );
+        return (uint32)PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, mPixelFormat, 4u );
     }
     //-----------------------------------------------------------------------------------
     size_t Image2::getBytesPerImage( uint8 mipLevel ) const
@@ -1174,7 +1174,8 @@ namespace Ogre
                     // Filter again...
                     ( *separableBlur2DFunc )( tmpBuffer1, reinterpret_cast<uint8 *>( tmpImage0.mBuffer ),
                                               static_cast<int32>( srcWidth ),
-                                              static_cast<int32>( srcHeight ), box0.bytesPerRow,
+                                              static_cast<int32>( srcHeight ),  //
+                                              static_cast<int32>( box0.bytesPerRow ),
                                               separableKernel.kernel, separableKernel.kernelStart,
                                               separableKernel.kernelEnd );
 
@@ -1237,7 +1238,8 @@ namespace Ogre
                 // Allocate temporary buffer of destination size in source format
                 temp = dst;
                 temp.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( srcFormat );
-                temp.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
+                temp.bytesPerRow =
+                    (uint32)PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
                 temp.bytesPerImage = temp.bytesPerRow * temp.height;
                 buf.bind( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
                 temp.data = buf->getPtr();
@@ -1306,7 +1308,7 @@ namespace Ogre
                     temp = dst;
                     temp.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( srcFormat );
                     temp.bytesPerRow =
-                        PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
+                        (uint32)PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
                     temp.bytesPerImage = temp.bytesPerRow * temp.height;
                     buf.bind( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
                     temp.data = buf->getPtr();

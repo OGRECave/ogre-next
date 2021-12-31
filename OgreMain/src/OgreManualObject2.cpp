@@ -503,7 +503,7 @@ namespace Ogre
         }
         else
         {
-            *( (uint16 *)mIndexBufferCursor ) = idx;
+            *( (uint16 *)mIndexBufferCursor ) = static_cast<uint16>( idx );
             mIndexBufferCursor += sizeof( uint16 );
         }
 
@@ -641,7 +641,7 @@ namespace Ogre
 
                 for( size_t i = 0; i < mIndices; i++ )
                 {
-                    *( (uint16 *)indexData ) = l32Buffer[i];
+                    *( (uint16 *)indexData ) = static_cast<uint16>( l32Buffer[i] );
                     indexData += sizeof( uint16 );
                 }
             }

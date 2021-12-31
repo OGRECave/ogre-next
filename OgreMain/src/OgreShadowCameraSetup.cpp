@@ -63,7 +63,7 @@ namespace Ogre
 
         // get the shadow frustum's far distance
         Real shadowDist = light->getShadowFarDistance();
-        if( !shadowDist )
+        if( shadowDist == 0.0 )
         {
             // need a shadow distance, make one up
             shadowDist = cam->getNearClipDistance() * 300;
@@ -142,7 +142,7 @@ namespace Ogre
             // Set perspective projection
             texCam->setProjectionType( PT_PERSPECTIVE );
             // set FOV slightly larger than the spotlight range to ensure coverage
-            Radian fovy = light->getSpotlightOuterAngle() * 1.2;
+            Radian fovy = light->getSpotlightOuterAngle() * Real( 1.2 );
             // limit angle
             if( fovy.valueDegrees() > 175 )
                 fovy = Degree( 175 );

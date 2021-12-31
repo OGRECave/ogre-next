@@ -683,11 +683,11 @@ namespace Ogre
             mMaxTextureResolutionCubemap = resCube;
         }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolution2D() const { return mMaxTextureResolution2D; }
+        uint32 getMaximumResolution2D() const { return mMaxTextureResolution2D; }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolution3D() const { return mMaxTextureResolution3D; }
+        uint32 getMaximumResolution3D() const { return mMaxTextureResolution3D; }
         /// Maximum resolution (width or height)
-        ushort getMaximumResolutionCubemap() const { return mMaxTextureResolutionCubemap; }
+        uint32 getMaximumResolutionCubemap() const { return mMaxTextureResolutionCubemap; }
         /// Maximum point screen size in pixels
         void setMaxPointSize( Real s ) { mMaxPointSize = s; }
         /// Maximum point screen size in pixels

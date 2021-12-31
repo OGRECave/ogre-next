@@ -180,9 +180,9 @@ namespace Ogre
 
             // Note: Some platforms support AA inside ordinary windows
             if( ( opt = miscParams->find( "FSAA" ) ) != end )
-                samples = StringConverter::parseUnsignedInt( opt->second );
+                samples = (uint8)StringConverter::parseUnsignedInt( opt->second );
             if( ( opt = miscParams->find( "MSAA" ) ) != end )
-                samples = StringConverter::parseUnsignedInt( opt->second );
+                samples = (uint8)StringConverter::parseUnsignedInt( opt->second );
 
             if( ( opt = miscParams->find( "displayFrequency" ) ) != end && opt->second != "N/A" )
                 mFrequencyNumerator = StringConverter::parseUnsignedInt( opt->second );
@@ -657,7 +657,7 @@ namespace Ogre
 
         if( goFullscreen )
         {
-            mGLSupport->switchMode( width, height, frequencyNumerator );
+            mGLSupport->switchMode( width, height, (short)frequencyNumerator );
         }
         else
         {

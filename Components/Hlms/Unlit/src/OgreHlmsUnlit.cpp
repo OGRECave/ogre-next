@@ -75,7 +75,7 @@ namespace Ogre
     {
     }
 
-    HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, size_t constBufferSize ) :
+    HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, uint32 constBufferSize ) :
         HlmsBufferManager( HLMS_UNLIT, "unlit", dataFolder, libraryFolders ),
         ConstBufferPool( constBufferSize, ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
         mCurrentPassBuffer( 0 ),
@@ -100,7 +100,7 @@ namespace Ogre
         mPreparedPass.viewProjMatrix[4] = Matrix4::IDENTITY;
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders, HlmsTypes type,
-                          const String &typeName, size_t constBufferSize ) :
+                          const String &typeName, uint32 constBufferSize ) :
         HlmsBufferManager( type, typeName, dataFolder, libraryFolders ),
         ConstBufferPool( constBufferSize, ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
         mCurrentPassBuffer( 0 ),
@@ -332,7 +332,10 @@ namespace Ogre
         setProperty( UnlitProperty::Diffuse, datablock->mHasColour );
 
         if( datablock->mSamplersDescSet )
-            setProperty( UnlitProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
+        {
+            setProperty( UnlitProperty::NumSamplers,
+                         (int32)datablock->mSamplersDescSet->mSamplers.size() );
+        }
 
         bool hasAnimationMatrices = false;
         UvOutputVec uvOutputs;
@@ -485,7 +488,7 @@ namespace Ogre
         {
             String outPrefix = "out_uv" + StringConverter::toString( i );
 
-            setProperty( outPrefix + "_out_uv", i >> 1u );
+            setProperty( outPrefix + "_out_uv", int32( i >> 1u ) );
             setProperty( outPrefix + "_texture_matrix", uvOutputs[i].isAnimated );
             setProperty( outPrefix + "_tex_unit", uvOutputs[i].texUnit );
             setProperty( outPrefix + "_source_uv", uvOutputs[i].uvSource );
@@ -587,8 +590,8 @@ namespace Ogre
             const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
             if( pass )
             {
-                const uint8 shadowMapIdx = pass->getDefinition()->mShadowMapIdx;
-                const Light *light = shadowNode->getLightAssociatedWith( shadowMapIdx );
+                const Light *light =
+                    shadowNode->getLightAssociatedWith( pass->getDefinition()->mShadowMapIdx );
                 if( light->getType() == Light::LT_DIRECTIONAL )
                     setProperty( HlmsBaseProp::ShadowCasterDirectional, 1 );
                 else if( light->getType() == Light::LT_POINT )
@@ -643,7 +646,7 @@ namespace Ogre
             it = mPassCache.end() - 1;
         }
 
-        const uint32 hash = ( it - mPassCache.begin() ) << HlmsBits::PassShift;
+        const uint32 hash = uint32( it - mPassCache.begin() ) << HlmsBits::PassShift;
 
         // Fill the buffers
         HlmsCache retVal( hash, mType, HlmsPso() );
@@ -910,10 +913,10 @@ namespace Ogre
 
             // layout(binding = 0) uniform PassBuffer {} pass
             ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer - 1];
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                VertexShader, 0, passBuffer, 0, (uint32)passBuffer->getTotalSizeBytes() );
             *commandBuffer->addCommand<CbShaderBuffer>() =
-                CbShaderBuffer( VertexShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
-            *commandBuffer->addCommand<CbShaderBuffer>() =
-                CbShaderBuffer( PixelShader, 0, passBuffer, 0, passBuffer->getTotalSizeBytes() );
+                CbShaderBuffer( PixelShader, 0, passBuffer, 0, (uint32)passBuffer->getTotalSizeBytes() );
 
             // layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
@@ -939,15 +942,15 @@ namespace Ogre
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
             *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( VertexShader, 1, newPool->materialBuffer, 0,
-                                newPool->materialBuffer->getTotalSizeBytes() );
+                                (uint32)newPool->materialBuffer->getTotalSizeBytes() );
             *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( PixelShader, 1, newPool->materialBuffer, 0,
-                                newPool->materialBuffer->getTotalSizeBytes() );
+                                (uint32)newPool->materialBuffer->getTotalSizeBytes() );
             if( newPool->extraBuffer )
             {
                 TexBufferPacked *extraBuffer = static_cast<TexBufferPacked *>( newPool->extraBuffer );
-                *commandBuffer->addCommand<CbShaderBuffer>() =
-                    CbShaderBuffer( VertexShader, 1, extraBuffer, 0, extraBuffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 1, extraBuffer, 0, (uint32)extraBuffer->getTotalSizeBytes() );
             }
 
             mLastBoundPool = newPool;
@@ -1019,13 +1022,14 @@ namespace Ogre
 
                 if( datablock->mTexturesDescSet )
                 {
-                    *commandBuffer->addCommand<CbTextures>() = CbTextures(
-                        texUnit, std::numeric_limits<uint16>::max(), datablock->mTexturesDescSet );
+                    *commandBuffer->addCommand<CbTextures>() =
+                        CbTextures( (uint16)texUnit, std::numeric_limits<uint16>::max(),
+                                    datablock->mTexturesDescSet );
 
                     if( !mHasSeparateSamplers )
                     {
                         *commandBuffer->addCommand<CbSamplers>() =
-                            CbSamplers( texUnit, datablock->mSamplersDescSet );
+                            CbSamplers( (uint16)texUnit, datablock->mSamplersDescSet );
                     }
 
                     texUnit += datablock->mTexturesDescSet->mTextures.size();
@@ -1041,7 +1045,7 @@ namespace Ogre
                     // Bind samplers
                     size_t texUnit = mSamplerUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
-                        CbSamplers( texUnit, datablock->mSamplersDescSet );
+                        CbSamplers( (uint16)texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;
                 }
             }
@@ -1050,7 +1054,7 @@ namespace Ogre
         mCurrentMappedConstBuffer = currentMappedConstBuffer;
         mCurrentMappedTexBuffer = currentMappedTexBuffer;
 
-        return ( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) >> 2 ) - 1;
+        return uint32( ( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) >> 2u ) - 1u );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::destroyAllBuffers()

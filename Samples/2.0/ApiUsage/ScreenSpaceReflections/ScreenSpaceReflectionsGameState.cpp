@@ -89,7 +89,7 @@ namespace Demo
                     finalName, finalName, macroblock, blendblock, Ogre::HlmsParamVec() ) );
                 datablock->setBackgroundDiffuse( materials[i].colour );
                 datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-                datablock->setRoughness( 0.02 );
+                datablock->setRoughness( 0.02f );
                 mMaterials[i] = datablock;
             }
         }
@@ -105,8 +105,9 @@ namespace Demo
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
 
-        sceneManager->setAmbientLight( Ogre::ColourValue( 0.2, 0.4, 0.8 ) * 0.2,
-                                       Ogre::ColourValue( 0.6, 0.5, 0.4 ) * 0.2, Ogre::Vector3::UNIT_Y );
+        sceneManager->setAmbientLight( Ogre::ColourValue( 0.2f, 0.4f, 0.8f ) * 0.2f,
+                                       Ogre::ColourValue( 0.6f, 0.5f, 0.4f ) * 0.2f,
+                                       Ogre::Vector3::UNIT_Y );
 
         mCameraController = new CameraController( mGraphicsSystem, false );
         mCameraController->mCameraBaseSpeed = 1.0f;

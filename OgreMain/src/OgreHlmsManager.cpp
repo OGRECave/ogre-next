@@ -331,13 +331,13 @@ namespace Ogre
         }
         else
         {
-            size_t idx = getFreeBasicBlock( BLOCK_SAMPLER, 0 );
+            const size_t idx = getFreeBasicBlock( BLOCK_SAMPLER, 0 );
 
             mSamplerblocks[idx] = baseParams;
             // Restore the values which has just been overwritten and we need properly set.
             mSamplerblocks[idx].mRefCount = 0;
-            mSamplerblocks[idx].mId = idx;
-            mSamplerblocks[idx].mLifetimeId = idx;
+            mSamplerblocks[idx].mId = static_cast<uint16>( idx );
+            mSamplerblocks[idx].mLifetimeId = static_cast<uint16>( idx );
             mSamplerblocks[idx].mBlockType = BLOCK_SAMPLER;
             mRenderSystem->_hlmsSamplerblockCreated( &mSamplerblocks[idx] );
 

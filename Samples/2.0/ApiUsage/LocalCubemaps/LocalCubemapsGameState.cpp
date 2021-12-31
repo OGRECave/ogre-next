@@ -97,10 +97,10 @@ namespace Demo
         }
 
         Ogre::CubemapProbe *probe = 0;
-        Ogre::Aabb roomShape( Ogre::Vector3( -0.505, 3.400016, 5.066226 ),
-                              Ogre::Vector3( 5.064587, 3.891282, 9.556003 ) );
+        Ogre::Aabb roomShape( Ogre::Vector3( -0.505f, 3.400016f, 5.066226f ),
+                              Ogre::Vector3( 5.064587f, 3.891282f, 9.556003f ) );
         Ogre::Aabb probeArea;
-        probeArea.mHalfSize = Ogre::Vector3( 5.064587, 3.891282, 3.891282 );
+        probeArea.mHalfSize = Ogre::Vector3( 5.064587f, 3.891282f, 3.891282f );
 
         if( mUseMultipleProbes )
         {
@@ -109,7 +109,7 @@ namespace Demo
             probe->setTextureParams( 512, 512 );
             probe->initWorkspace();
 
-            probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, -0.598495 );
+            probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, -0.598495f );
             probe->set( probeArea.mCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                         Ogre::Matrix3::IDENTITY, roomShape );
         }
@@ -119,7 +119,7 @@ namespace Demo
         probe->setTextureParams( 512, 512 );
         probe->initWorkspace();
 
-        probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 5.423867 );
+        probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, 5.423867f );
         probe->set( mUseMultipleProbes ? probeArea.mCenter : roomShape.mCenter,
                     mUseMultipleProbes ? probeArea : roomShape, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                     Ogre::Matrix3::IDENTITY, roomShape );
@@ -131,7 +131,7 @@ namespace Demo
             probe->setTextureParams( 512, 512 );
             probe->initWorkspace();
 
-            probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 10.657585 );
+            probeArea.mCenter = Ogre::Vector3( -0.505f, 3.400016f, 10.657585f );
             probe->set( probeArea.mCenter, probeArea, Ogre::Vector3( 1.0f, 1.0f, 0.3f ),
                         Ogre::Matrix3::IDENTITY, roomShape );
         }
@@ -194,28 +194,28 @@ namespace Demo
                 hlmsPbs->createDatablock( "Red", "Red", macroblock, blendblock, Ogre::HlmsParamVec() ) );
             datablock->setBackgroundDiffuse( Ogre::ColourValue::Red );
             datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-            datablock->setRoughness( 0.65 );
+            datablock->setRoughness( 0.65f );
             mMaterials[0] = datablock;
 
             datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->createDatablock(
                 "Green", "Green", macroblock, blendblock, Ogre::HlmsParamVec() ) );
             datablock->setBackgroundDiffuse( Ogre::ColourValue::Green );
             datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-            datablock->setRoughness( 0.65 );
+            datablock->setRoughness( 0.65f );
             mMaterials[1] = datablock;
 
             datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->createDatablock(
                 "Blue", "Blue", macroblock, blendblock, Ogre::HlmsParamVec() ) );
             datablock->setBackgroundDiffuse( Ogre::ColourValue::Blue );
             datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-            datablock->setRoughness( 0.65 );
+            datablock->setRoughness( 0.65f );
             mMaterials[2] = datablock;
 
             datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->createDatablock(
                 "Cream", "Cream", macroblock, blendblock, Ogre::HlmsParamVec() ) );
             datablock->setBackgroundDiffuse( Ogre::ColourValue::White );
             datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-            datablock->setRoughness( 0.65 );
+            datablock->setRoughness( 0.65f );
             mMaterials[3] = datablock;
         }
 

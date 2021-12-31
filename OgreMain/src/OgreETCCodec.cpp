@@ -209,11 +209,11 @@ namespace Ogre
             FOURCC( header.name[0], header.name[1], header.name[2], header.name[3] ) )  // "PKM 10"
             return false;
 
-        uint16 width = ( header.iWidthMSB << 8 ) | header.iWidthLSB;
-        uint16 height = ( header.iHeightMSB << 8 ) | header.iHeightLSB;
-        uint16 paddedWidth = ( header.iPaddedWidthMSB << 8 ) | header.iPaddedWidthLSB;
-        uint16 paddedHeight = ( header.iPaddedHeightMSB << 8 ) | header.iPaddedHeightLSB;
-        uint16 type = ( header.iTextureTypeMSB << 8 ) | header.iTextureTypeLSB;
+        const uint16 width = uint16( ( header.iWidthMSB << 8 ) | header.iWidthLSB );
+        const uint16 height = uint16( ( header.iHeightMSB << 8 ) | header.iHeightLSB );
+        const uint16 paddedWidth = uint16( ( header.iPaddedWidthMSB << 8 ) | header.iPaddedWidthLSB );
+        const uint16 paddedHeight = uint16( ( header.iPaddedHeightMSB << 8 ) | header.iPaddedHeightLSB );
+        const uint16 type = uint16( ( header.iTextureTypeMSB << 8 ) | header.iTextureTypeLSB );
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
         imgData->box.width = width;
@@ -263,8 +263,8 @@ namespace Ogre
         imgData->textureType = TextureTypes::Type2D;
 
         const uint32 rowAlignment = 4u;
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u,
-                                                                      imgData->format, rowAlignment );
+        imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
+            imgData->box.width, 1u, 1u, 1u, imgData->format, rowAlignment );
         imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes(
             imgData->box.width, imgData->box.height, 1u, 1u, imgData->format, rowAlignment );
 
@@ -396,8 +396,8 @@ namespace Ogre
         else
             imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
         const uint32 rowAlignment = 4u;
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width, 1u, 1u, 1u,
-                                                                      imgData->format, rowAlignment );
+        imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes(
+            imgData->box.width, 1u, 1u, 1u, imgData->format, rowAlignment );
         imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,   //
                                                                         imgData->box.height,  //
                                                                         1u, 1u,               //

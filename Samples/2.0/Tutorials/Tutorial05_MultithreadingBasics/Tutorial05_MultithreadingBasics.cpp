@@ -116,7 +116,7 @@ unsigned long renderThreadApp( Ogre::ThreadHandle *threadHandle )
     while( !graphicsSystem->getQuit() )
     {
         graphicsSystem->beginFrameParallel();
-        graphicsSystem->update( timeSinceLast );
+        graphicsSystem->update( (float)timeSinceLast );
         graphicsSystem->finishFrameParallel();
 
         if( !renderWindow->isVisible() )

@@ -155,7 +155,7 @@ namespace Ogre
     }
     void ogreGlObjectLabel( GLenum identifier, GLuint name, const String &label )
     {
-        ogreGlObjectLabel( identifier, name, label.size(), label.c_str() );
+        ogreGlObjectLabel( identifier, name, (GLsizei)label.size(), label.c_str() );
     }
 
     GL3PlusRenderSystem::GL3PlusRenderSystem() :
@@ -310,7 +310,7 @@ namespace Ogre
         // Multitexturing support and set number of texture units
         GLint units;
         OGRE_CHECK_GL_ERROR( glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &units ) );
-        rsc->setNumTextureUnits( std::min<ushort>( 16, units ) );
+        rsc->setNumTextureUnits( std::min<ushort>( 16, (ushort)units ) );
 
         // Check for Anisotropy support
         if( mGLSupport->checkExtension( "GL_EXT_texture_filter_anisotropic" ) )
@@ -408,8 +408,7 @@ namespace Ogre
         // Only makes sense with FBO support, so probe here
         GLint buffers;
         OGRE_CHECK_GL_ERROR( glGetIntegerv( GL_MAX_DRAW_BUFFERS, &buffers ) );
-        rsc->setNumMultiRenderTargets(
-            std::min<int>( buffers, (GLint)OGRE_MAX_MULTIPLE_RENDER_TARGETS ) );
+        rsc->setNumMultiRenderTargets( (ushort)std::min( buffers, OGRE_MAX_MULTIPLE_RENDER_TARGETS ) );
         rsc->setCapability( RSC_MRT_DIFFERENT_BIT_DEPTHS );
 
         // Stencil wrapping
@@ -454,8 +453,7 @@ namespace Ogre
         OGRE_CHECK_GL_ERROR( glGetIntegerv( GL_MAX_3D_TEXTURE_SIZE, &maxRes3d ) );
         OGRE_CHECK_GL_ERROR( glGetIntegerv( GL_MAX_CUBE_MAP_TEXTURE_SIZE, &maxResCube ) );
 
-        rsc->setMaximumResolutions( static_cast<ushort>( maxRes2d ), static_cast<ushort>( maxRes3d ),
-                                    static_cast<ushort>( maxResCube ) );
+        rsc->setMaximumResolutions( (ushort)maxRes2d, (ushort)maxRes3d, (ushort)maxResCube );
 
         {
             uint32 numTexturesInTextureDescriptor[NumShaderTypes + 1];
@@ -546,7 +544,7 @@ namespace Ogre
         rsc->setCapability( RSC_GEOMETRY_PROGRAM );
 
         OGRE_CHECK_GL_ERROR( glGetFloatv( GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, &floatConstantCount ) );
-        rsc->setGeometryProgramConstantFloatCount( floatConstantCount );
+        rsc->setGeometryProgramConstantFloatCount( (ushort)floatConstantCount );
 
         GLint maxOutputVertices;
         OGRE_CHECK_GL_ERROR( glGetIntegerv( GL_MAX_GEOMETRY_OUTPUT_VERTICES, &maxOutputVertices ) );
@@ -554,9 +552,9 @@ namespace Ogre
 
         // FIXME Is this correct?
         OGRE_CHECK_GL_ERROR( glGetFloatv( GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, &floatConstantCount ) );
-        rsc->setGeometryProgramConstantFloatCount( floatConstantCount );
-        rsc->setGeometryProgramConstantBoolCount( floatConstantCount );
-        rsc->setGeometryProgramConstantIntCount( floatConstantCount );
+        rsc->setGeometryProgramConstantFloatCount( (ushort)floatConstantCount );
+        rsc->setGeometryProgramConstantBoolCount( (ushort)floatConstantCount );
+        rsc->setGeometryProgramConstantIntCount( (ushort)floatConstantCount );
 
         // Tessellation Program Properties
         if( mGLSupport->checkExtension( "GL_ARB_tessellation_shader" ) || hasGL40 )
@@ -567,20 +565,20 @@ namespace Ogre
             OGRE_CHECK_GL_ERROR(
                 glGetFloatv( GL_MAX_TESS_CONTROL_UNIFORM_COMPONENTS, &floatConstantCount ) );
             // 16 boolean params allowed
-            rsc->setTessellationHullProgramConstantBoolCount( floatConstantCount );
+            rsc->setTessellationHullProgramConstantBoolCount( (ushort)floatConstantCount );
             // 16 integer params allowed, 4D
-            rsc->setTessellationHullProgramConstantIntCount( floatConstantCount );
+            rsc->setTessellationHullProgramConstantIntCount( (ushort)floatConstantCount );
             // float params, always 4D
-            rsc->setTessellationHullProgramConstantFloatCount( floatConstantCount );
+            rsc->setTessellationHullProgramConstantFloatCount( (ushort)floatConstantCount );
 
             OGRE_CHECK_GL_ERROR(
                 glGetFloatv( GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS, &floatConstantCount ) );
             // 16 boolean params allowed
-            rsc->setTessellationDomainProgramConstantBoolCount( floatConstantCount );
+            rsc->setTessellationDomainProgramConstantBoolCount( (ushort)floatConstantCount );
             // 16 integer params allowed, 4D
-            rsc->setTessellationDomainProgramConstantIntCount( floatConstantCount );
+            rsc->setTessellationDomainProgramConstantIntCount( (ushort)floatConstantCount );
             // float params, always 4D
-            rsc->setTessellationDomainProgramConstantFloatCount( floatConstantCount );
+            rsc->setTessellationDomainProgramConstantFloatCount( (ushort)floatConstantCount );
         }
 
         // Compute Program Properties
@@ -590,9 +588,9 @@ namespace Ogre
 
             // FIXME Is this correct?
             OGRE_CHECK_GL_ERROR( glGetFloatv( GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &floatConstantCount ) );
-            rsc->setComputeProgramConstantFloatCount( floatConstantCount );
-            rsc->setComputeProgramConstantBoolCount( floatConstantCount );
-            rsc->setComputeProgramConstantIntCount( floatConstantCount );
+            rsc->setComputeProgramConstantFloatCount( (ushort)floatConstantCount );
+            rsc->setComputeProgramConstantBoolCount( (ushort)floatConstantCount );
+            rsc->setComputeProgramConstantIntCount( (ushort)floatConstantCount );
 
             // TODO we should also check max workgroup count & size
             // OGRE_CHECK_GL_ERROR(glGetFloatv(GL_MAX_COMPUTE_WORK_GROUP_SIZE, &workgroupCount));
@@ -846,8 +844,9 @@ namespace Ogre
 
             const char *shadingLangVersion = (const char *)glGetString( GL_SHADING_LANGUAGE_VERSION );
             StringVector tokens = StringUtil::split( shadingLangVersion, ". " );
-            mNativeShadingLanguageVersion = ( StringConverter::parseUnsignedInt( tokens[0] ) * 100 ) +
-                                            StringConverter::parseUnsignedInt( tokens[1] );
+            mNativeShadingLanguageVersion =
+                uint16( ( StringConverter::parseUnsignedInt( tokens[0] ) * 100 ) +
+                        StringConverter::parseUnsignedInt( tokens[1] ) );
 
             // Initialise GL after the first window has been created
             // TODO: fire this from emulation options, and don't duplicate Real and Current capabilities
@@ -977,16 +976,12 @@ namespace Ogre
                 if( !desc->requiresTextureFlipping() )
                 {
                     // Convert "upper-left" corner to "lower-left"
-                    xywhVp[i][1] =
-                        static_cast<GLint>( anyTarget->getHeight() ) - xywhVp[i][3] - xywhVp[i][1];
-                    xywhSc[i][1] =
-                        static_cast<GLint>( anyTarget->getHeight() ) - xywhSc[i][3] - xywhSc[i][1];
+                    xywhVp[i][1] = GLint( anyTarget->getHeight() ) - xywhVp[i][3] - xywhVp[i][1];
+                    xywhSc[i][1] = GLint( anyTarget->getHeight() ) - xywhSc[i][3] - xywhSc[i][1];
                 }
             }
-            glViewportArrayv( 0u, static_cast<GLsizei>( numViewports ),
-                              reinterpret_cast<GLfloat *>( xywhVp ) );
-            glScissorArrayv( 0u, static_cast<GLsizei>( numViewports ),
-                             reinterpret_cast<GLint *>( xywhVp ) );
+            glViewportArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLfloat *>( xywhVp ) );
+            glScissorArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLint *>( xywhVp ) );
         }
         /*else
         {
@@ -1195,7 +1190,7 @@ namespace Ogre
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
                 if( bufferSlot.buffer )
                 {
-                    bufferSlot.buffer->_bindBufferDirectly( texUnit, bufferSlot.offset,
+                    bufferSlot.buffer->_bindBufferDirectly( (uint16)texUnit, bufferSlot.offset,
                                                             bufferSlot.sizeBytes );
                 }
             }
@@ -1271,7 +1266,7 @@ namespace Ogre
     {
         if( bufferSlot.buffer )
         {
-            bufferSlot.buffer->bindBufferCS( slot, bufferSlot.offset, bufferSlot.sizeBytes );
+            bufferSlot.buffer->bindBufferCS( (uint16)slot, bufferSlot.offset, bufferSlot.sizeBytes );
         }
         else
         {
@@ -1356,8 +1351,9 @@ namespace Ogre
             ++itor;
         }
 
-        mFirstUavBoundSlot = std::min<uint8>( mFirstUavBoundSlot, slotStart );
-        mLastUavBoundPlusOne = std::max<uint8>( mLastUavBoundPlusOne, slotStart + set->mUavs.size() );
+        mFirstUavBoundSlot = (uint8)std::min<size_t>( mFirstUavBoundSlot, slotStart );
+        mLastUavBoundPlusOne =
+            (uint8)std::max<size_t>( mLastUavBoundPlusOne, slotStart + set->mUavs.size() );
     }
 
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
@@ -1390,8 +1386,8 @@ namespace Ogre
                 const size_t startingSlot = mUavStartingSlot;
                 for( size_t i = mFirstUavBoundSlot; i < startingSlot; ++i )
                 {
-                    OCGE( glBindImageTexture( i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
-                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, i, 0, 0, 0 ) );
+                    OCGE( glBindImageTexture( (GLuint)i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, (GLuint)i, 0, 0, 0 ) );
                 }
 
                 mFirstUavBoundSlot = 255;
@@ -1409,8 +1405,8 @@ namespace Ogre
 
                 for( size_t i = lastUavToBindPlusOne; i < lastUavBoundPlusOne; ++i )
                 {
-                    OCGE( glBindImageTexture( i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
-                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, i, 0, 0, 0 ) );
+                    OCGE( glBindImageTexture( (GLuint)i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, (GLuint)i, 0, 0, 0 ) );
                 }
 
                 mLastUavBoundPlusOne = 0;
@@ -2232,15 +2228,15 @@ namespace Ogre
         {
             for( size_t i = 0; i < 8u; ++i )
             {
-                const uint8 bitFlag = 1u << i;
+                const uint8 bitFlag = uint8( 1u << i );
                 bool oldClipSet = ( mClipDistances & bitFlag ) != 0;
                 bool newClipSet = ( newClipDistances & bitFlag ) != 0;
                 if( oldClipSet != newClipSet )
                 {
                     if( newClipSet )
-                        glEnable( GL_CLIP_DISTANCE0 + i );
+                        glEnable( GLenum( GL_CLIP_DISTANCE0 + i ) );
                     else
-                        glDisable( GL_CLIP_DISTANCE0 + i );
+                        glDisable( GLenum( GL_CLIP_DISTANCE0 + i ) );
                 }
             }
 
@@ -2551,7 +2547,7 @@ namespace Ogre
         v1::VertexDeclaration *globalVertexDeclaration =
             getGlobalInstanceVertexBufferVertexDeclaration();
 
-        size_t numberOfInstances = op.numberOfInstances;
+        GLsizei numberOfInstances = (GLsizei)op.numberOfInstances;
 
         if( op.useGlobalInstancingVertexBufferIsAvailable )
         {
@@ -2585,7 +2581,7 @@ namespace Ogre
         for( elemIter = decl.begin(); elemIter != elemEnd; ++elemIter )
         {
             const v1::VertexElement &elem = *elemIter;
-            size_t source = elem.getSource();
+            const uint16 source = elem.getSource();
 
             if( !op.vertexData->vertexBufferBinding->isBufferBound( source ) )
                 continue;  // Skip unbound elements.
@@ -2704,8 +2700,8 @@ namespace Ogre
                     ( op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT )
                         ? GL_UNSIGNED_SHORT
                         : GL_UNSIGNED_INT;
-                OGRE_CHECK_GL_ERROR(
-                    glDrawElements( GL_PATCHES, op.indexData->indexCount, indexType, pBufferData ) );
+                OGRE_CHECK_GL_ERROR( glDrawElements( GL_PATCHES, (GLsizei)op.indexData->indexCount,
+                                                     indexType, pBufferData ) );
                 // OGRE_CHECK_GL_ERROR(glDrawElements(GL_PATCHES, op.indexData->indexCount, indexType,
                 // pBufferData));
                 //                OGRE_CHECK_GL_ERROR(glDrawArraysInstanced(GL_PATCHES, 0, primCount,
@@ -2713,7 +2709,8 @@ namespace Ogre
             }
             else
             {
-                OGRE_CHECK_GL_ERROR( glDrawArrays( GL_PATCHES, 0, op.vertexData->vertexCount ) );
+                OGRE_CHECK_GL_ERROR(
+                    glDrawArrays( GL_PATCHES, 0, (GLsizei)op.vertexData->vertexCount ) );
                 // OGRE_CHECK_GL_ERROR(glDrawArrays(GL_PATCHES, 0, primCount));
                 //                OGRE_CHECK_GL_ERROR(glDrawArraysInstanced(GL_PATCHES, 0, primCount,
                 //                1));
@@ -2747,15 +2744,14 @@ namespace Ogre
                 if( numberOfInstances > 1 )
                 {
                     OGRE_CHECK_GL_ERROR( glDrawElementsInstancedBaseVertex(
-                        primType, static_cast<GLsizei>( op.indexData->indexCount ), indexType,
-                        pBufferData, static_cast<GLsizei>( numberOfInstances ),
-                        static_cast<GLint>( op.vertexData->vertexStart ) ) );
+                        primType, (GLsizei)op.indexData->indexCount, indexType, pBufferData,
+                        numberOfInstances, (GLint)op.vertexData->vertexStart ) );
                 }
                 else
                 {
-                    OGRE_CHECK_GL_ERROR( glDrawElementsBaseVertex( primType, op.indexData->indexCount,
-                                                                   indexType, pBufferData,
-                                                                   op.vertexData->vertexStart ) );
+                    OGRE_CHECK_GL_ERROR(
+                        glDrawElementsBaseVertex( primType, (GLsizei)op.indexData->indexCount, indexType,
+                                                  pBufferData, (GLint)op.vertexData->vertexStart ) );
                 }
             } while( updatePassIterationRenderState() );
         }
@@ -2773,12 +2769,13 @@ namespace Ogre
 
                 if( numberOfInstances > 1 )
                 {
-                    OGRE_CHECK_GL_ERROR( glDrawArraysInstanced( primType, 0, op.vertexData->vertexCount,
-                                                                numberOfInstances ) );
+                    OGRE_CHECK_GL_ERROR( glDrawArraysInstanced(
+                        primType, 0, (GLsizei)op.vertexData->vertexCount, numberOfInstances ) );
                 }
                 else
                 {
-                    OGRE_CHECK_GL_ERROR( glDrawArrays( primType, 0, op.vertexData->vertexCount ) );
+                    OGRE_CHECK_GL_ERROR(
+                        glDrawArrays( primType, 0, (GLsizei)op.vertexData->vertexCount ) );
                 }
             } while( updatePassIterationRenderState() );
         }
@@ -2830,8 +2827,7 @@ namespace Ogre
                                : GL_UNSIGNED_INT;
 
         OCGE( glMultiDrawElementsIndirect( mode, indexType, cmd->indirectBufferOffset,
-                                           static_cast<GLsizei>( cmd->numDraws ),
-                                           sizeof( CbDrawIndexed ) ) );
+                                           (GLsizei)cmd->numDraws, sizeof( CbDrawIndexed ) ) );
     }
 
     void GL3PlusRenderSystem::_render( const CbDrawCallStrip *cmd )
@@ -2839,8 +2835,7 @@ namespace Ogre
         const GL3PlusVertexArrayObject *vao = static_cast<const GL3PlusVertexArrayObject *>( cmd->vao );
         GLenum mode = mPso->domainShader ? GL_PATCHES : vao->mPrimType[mUseAdjacency];
 
-        OCGE( glMultiDrawArraysIndirect( mode, cmd->indirectBufferOffset,
-                                         static_cast<GLsizei>( cmd->numDraws ),
+        OCGE( glMultiDrawArraysIndirect( mode, cmd->indirectBufferOffset, (GLsizei)cmd->numDraws,
                                          sizeof( CbDrawStrip ) ) );
     }
 
@@ -2861,10 +2856,9 @@ namespace Ogre
         for( uint32 i = cmd->numDraws; i--; )
         {
             OCGE( glDrawElementsInstancedBaseVertexBaseInstance(
-                mode, static_cast<GLsizei>( drawCmd->primCount ), indexType,
+                mode, (GLsizei)drawCmd->primCount, indexType,
                 reinterpret_cast<void *>( drawCmd->firstVertexIndex * bytesPerIndexElement ),
-                static_cast<GLsizei>( drawCmd->instanceCount ),
-                static_cast<GLint>( drawCmd->baseVertex ), drawCmd->baseInstance ) );
+                (GLsizei)drawCmd->instanceCount, (GLint)drawCmd->baseVertex, drawCmd->baseInstance ) );
             ++drawCmd;
         }
     }
@@ -2880,9 +2874,8 @@ namespace Ogre
         for( uint32 i = cmd->numDraws; i--; )
         {
             OCGE( glDrawArraysInstancedBaseInstance(
-                mode, static_cast<GLint>( drawCmd->firstVertexIndex ),
-                static_cast<GLsizei>( drawCmd->primCount ),
-                static_cast<GLsizei>( drawCmd->instanceCount ), drawCmd->baseInstance ) );
+                mode, (GLint)drawCmd->firstVertexIndex, (GLsizei)drawCmd->primCount,
+                (GLsizei)drawCmd->instanceCount, drawCmd->baseInstance ) );
             ++drawCmd;
         }
     }
@@ -2910,10 +2903,9 @@ namespace Ogre
                                 static_cast<GLuint>( drawCmd->baseInstance ) ) );
 
             OCGE( glDrawElementsInstancedBaseVertex(
-                mode, static_cast<GLsizei>( drawCmd->primCount ), indexType,
+                mode, (GLsizei)drawCmd->primCount, indexType,
                 reinterpret_cast<void *>( drawCmd->firstVertexIndex * bytesPerIndexElement ),
-                static_cast<GLsizei>( drawCmd->instanceCount ),
-                static_cast<GLint>( drawCmd->baseVertex ) ) );
+                (GLsizei)drawCmd->instanceCount, (GLint)drawCmd->baseVertex ) );
             ++drawCmd;
         }
     }
@@ -2934,9 +2926,9 @@ namespace Ogre
             OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation,
                                 static_cast<GLuint>( drawCmd->baseInstance ) ) );
 
-            OCGE( glDrawArraysInstanced( mode, static_cast<GLint>( drawCmd->firstVertexIndex ),
-                                         static_cast<GLsizei>( drawCmd->primCount ),
-                                         static_cast<GLsizei>( drawCmd->instanceCount ) ) );
+            OCGE( glDrawArraysInstanced( mode, (GLint)drawCmd->firstVertexIndex,
+                                         (GLsizei)drawCmd->primCount,
+                                         (GLsizei)drawCmd->instanceCount ) );
             ++drawCmd;
         }
     }
@@ -3024,8 +3016,7 @@ namespace Ogre
             default:
             case VET_FLOAT1:
                 OCGE( glVertexAttribPointer( attributeIndex, typeCount, type, normalised,
-                                             static_cast<GLsizei>( vertexBuffer->getVertexSize() ),
-                                             bindOffset ) );
+                                             (GLsizei)vertexBuffer->getVertexSize(), bindOffset ) );
                 break;
             case VET_BYTE4:
             case VET_UBYTE4:
@@ -3034,18 +3025,16 @@ namespace Ogre
             case VET_UINT1:
             case VET_INT1:
                 OCGE( glVertexAttribIPointer( attributeIndex, typeCount, type,
-                                              static_cast<GLsizei>( vertexBuffer->getVertexSize() ),
-                                              bindOffset ) );
+                                              (GLsizei)vertexBuffer->getVertexSize(), bindOffset ) );
                 break;
             case VET_DOUBLE1:
                 OCGE( glVertexAttribLPointer( attributeIndex, typeCount, type,
-                                              static_cast<GLsizei>( vertexBuffer->getVertexSize() ),
-                                              bindOffset ) );
+                                              (GLsizei)vertexBuffer->getVertexSize(), bindOffset ) );
                 break;
             }
 
-            OCGE( glVertexAttribDivisor( attributeIndex, hwGlBuffer->getInstanceDataStepRate() *
-                                                             hwGlBuffer->getIsInstanceData() ) );
+            OCGE( glVertexAttribDivisor( attributeIndex, GLuint( hwGlBuffer->getInstanceDataStepRate() *
+                                                                 hwGlBuffer->getIsInstanceData() ) ) );
             OCGE( glEnableVertexAttribArray( attributeIndex ) );
 
             ++itor;
@@ -3093,18 +3082,16 @@ namespace Ogre
         const size_t bytesPerIndexElement = mCurrentIndexBuffer->indexBuffer->getIndexSize();
 
         OCGE( glDrawElementsInstancedBaseVertexBaseInstance(
-            mCurrentPolygonMode, static_cast<GLsizei>( cmd->primCount ), indexType,
+            mCurrentPolygonMode, (GLsizei)cmd->primCount, indexType,
             reinterpret_cast<void *>( cmd->firstVertexIndex * bytesPerIndexElement ),
-            static_cast<GLsizei>( cmd->instanceCount ),
-            static_cast<GLint>( mCurrentVertexBuffer->vertexStart ), cmd->baseInstance ) );
+            (GLsizei)cmd->instanceCount, (GLint)mCurrentVertexBuffer->vertexStart, cmd->baseInstance ) );
     }
 
     void GL3PlusRenderSystem::_render( const v1::CbDrawCallStrip *cmd )
     {
-        OCGE( glDrawArraysInstancedBaseInstance(
-            mCurrentPolygonMode, static_cast<GLint>( cmd->firstVertexIndex ),
-            static_cast<GLsizei>( cmd->primCount ), static_cast<GLsizei>( cmd->instanceCount ),
-            cmd->baseInstance ) );
+        OCGE( glDrawArraysInstancedBaseInstance( mCurrentPolygonMode, (GLint)cmd->firstVertexIndex,
+                                                 (GLsizei)cmd->primCount, (GLsizei)cmd->instanceCount,
+                                                 cmd->baseInstance ) );
     }
 
     void GL3PlusRenderSystem::_renderNoBaseInstance( const v1::CbDrawCallIndexed *cmd )
@@ -3119,14 +3106,12 @@ namespace Ogre
         GLSLMonolithicProgram *activeLinkProgram =
             GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
 
-        OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation,
-                            static_cast<GLuint>( cmd->baseInstance ) ) );
+        OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation, (GLuint)cmd->baseInstance ) );
 
         OCGE( glDrawElementsInstancedBaseVertex(
-            mCurrentPolygonMode, static_cast<GLsizei>( cmd->primCount ), indexType,
+            mCurrentPolygonMode, (GLsizei)cmd->primCount, indexType,
             reinterpret_cast<void *>( cmd->firstVertexIndex * bytesPerIndexElement ),
-            static_cast<GLsizei>( cmd->instanceCount ),
-            static_cast<GLint>( mCurrentVertexBuffer->vertexStart ) ) );
+            (GLsizei)cmd->instanceCount, (GLint)mCurrentVertexBuffer->vertexStart ) );
     }
 
     void GL3PlusRenderSystem::_renderNoBaseInstance( const v1::CbDrawCallStrip *cmd )
@@ -3134,12 +3119,10 @@ namespace Ogre
         GLSLMonolithicProgram *activeLinkProgram =
             GLSLMonolithicProgramManager::getSingleton().getActiveMonolithicProgram();
 
-        OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation,
-                            static_cast<GLuint>( cmd->baseInstance ) ) );
+        OCGE( glUniform1ui( activeLinkProgram->mBaseInstanceLocation, (GLuint)cmd->baseInstance ) );
 
-        OCGE( glDrawArraysInstanced( mCurrentPolygonMode, static_cast<GLint>( cmd->firstVertexIndex ),
-                                     static_cast<GLsizei>( cmd->primCount ),
-                                     static_cast<GLsizei>( cmd->instanceCount ) ) );
+        OCGE( glDrawArraysInstanced( mCurrentPolygonMode, (GLint)cmd->firstVertexIndex,
+                                     (GLsizei)cmd->primCount, (GLsizei)cmd->instanceCount ) );
     }
 
     void GL3PlusRenderSystem::clearFrameBuffer( RenderPassDescriptor *desc, TextureGpu *anyTarget,
@@ -3678,7 +3661,7 @@ namespace Ogre
                 if( hwGlBuffer->getIsInstanceData() )
                 {
                     OGRE_CHECK_GL_ERROR(
-                        glVertexAttribDivisor( attrib, hwGlBuffer->getInstanceDataStepRate() ) );
+                        glVertexAttribDivisor( attrib, (GLuint)hwGlBuffer->getInstanceDataStepRate() ) );
                     instanceAttribsBound.push_back( attrib );
                 }
             }
@@ -3704,12 +3687,12 @@ namespace Ogre
             case VET_FLOAT1:
                 OGRE_CHECK_GL_ERROR( glVertexAttribPointer(
                     attrib, typeCount, v1::GL3PlusHardwareBufferManager::getGLType( elem.getType() ),
-                    normalised, static_cast<GLsizei>( vertexBuffer->getVertexSize() ), pBufferData ) );
+                    normalised, (GLsizei)vertexBuffer->getVertexSize(), pBufferData ) );
                 break;
             case VET_DOUBLE1:
                 OGRE_CHECK_GL_ERROR( glVertexAttribLPointer(
                     attrib, typeCount, v1::GL3PlusHardwareBufferManager::getGLType( elem.getType() ),
-                    static_cast<GLsizei>( vertexBuffer->getVertexSize() ), pBufferData ) );
+                    (GLsizei)vertexBuffer->getVertexSize(), pBufferData ) );
                 break;
             }
 

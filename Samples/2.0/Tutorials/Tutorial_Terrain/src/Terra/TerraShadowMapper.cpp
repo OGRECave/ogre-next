@@ -333,7 +333,7 @@ namespace Ogre
                 std::swap( _y0, _y1 );
             }
             dx = _x1 - _x0 + 1.0f;
-            dy = fabs( _y1 - _y0 );
+            dy = fabsf( _y1 - _y0 );
             if( fabsf( lightDir2d.x ) > fabsf( lightDir2d.y ) )
                 dy += 1.0f * fabsf( lightDir2d.y ) / fabsf( lightDir2d.x );
             else
@@ -510,7 +510,7 @@ namespace Ogre
         {
             const float _X = i - fKernelRadius + ( 1.0f - 1.0f / stepSize );
             float fWeight = 1.0f / std::sqrt( 2.0f * Math::PI * gaussianDeviation * gaussianDeviation );
-            fWeight *= exp( -( _X * _X ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
+            fWeight *= expf( -( _X * _X ) / ( 2.0f * gaussianDeviation * gaussianDeviation ) );
 
             fWeightSum += fWeight;
             weights[i] = fWeight;
@@ -562,7 +562,8 @@ namespace Ogre
             shaderParams.mParams.push_back( p );
             ShaderParams::Param *param = &shaderParams.mParams.back();
 
-            param->setManualValue( &weights[i], std::min<uint32>( floatsPerParam, weights.size() - i ) );
+            param->setManualValue( &weights[i],
+                                   std::min( floatsPerParam, uint32( weights.size() - i ) ) );
         }
 
         shaderParams.setDirty();

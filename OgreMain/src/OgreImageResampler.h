@@ -122,7 +122,7 @@ struct LinearResampler
             temp = (temp > 0x8000)? temp - 0x8000 : 0;
             uint32 sz1 = temp >> 16;                 // src z, sample #1
             uint32 sz2 = std::min(sz1+1,src.depth-1);// src z, sample #2
-            float szf = (temp & 0xFFFF) / 65536.f; // weight of sample #2
+            float szf = static_cast<float>(temp & 0xFFFF) / 65536.f; // weight of sample #2
 
             uint64 sy_48 = (stepy >> 1) - 1;
             for (size_t y = 0; y < dst.height; y++, sy_48+=stepy) {
@@ -130,7 +130,7 @@ struct LinearResampler
                 temp = (temp > 0x8000)? temp - 0x8000 : 0;
                 uint32 sy1 = temp >> 16;                    // src y #1
                 uint32 sy2 = std::min(sy1+1,src.height-1);// src y #2
-                float syf = (temp & 0xFFFF) / 65536.f; // weight of #2
+                float syf = static_cast<float>(temp & 0xFFFF) / 65536.f; // weight of #2
 
                 uchar *pdst = dstdata + y * dst.bytesPerRow + z * dst.bytesPerImage;
 
@@ -140,7 +140,7 @@ struct LinearResampler
                     temp = (temp > 0x8000)? temp - 0x8000 : 0;
                     uint32 sx1 = temp >> 16;                    // src x #1
                     uint32 sx2 = std::min(sx1+1,src.width-1);// src x #2
-                    float sxf = (temp & 0xFFFF) / 65536.f; // weight of #2
+                    float sxf = static_cast<float>(temp & 0xFFFF) / 65536.f; // weight of #2
                 
                     ColourValue x1y1z1, x2y1z1, x1y2z1, x2y2z1;
                     ColourValue x1y1z2, x2y1z2, x1y2z2, x2y2z2;
@@ -208,7 +208,7 @@ struct LinearResampler_Float32
             temp = (temp > 0x8000)? temp - 0x8000 : 0;
             uint32 sz1 = temp >> 16;                 // src z, sample #1
             uint32 sz2 = std::min(sz1+1,src.depth-1);// src z, sample #2
-            float szf = (temp & 0xFFFF) / 65536.f; // weight of sample #2
+            float szf = static_cast<float>(temp & 0xFFFF) / 65536.f; // weight of sample #2
 
             uint64 sy_48 = (stepy >> 1) - 1;
             for (size_t y = 0; y < dst.height; y++, sy_48+=stepy) {
@@ -216,7 +216,7 @@ struct LinearResampler_Float32
                 temp = (temp > 0x8000)? temp - 0x8000 : 0;
                 uint32 sy1 = temp >> 16;                    // src y #1
                 uint32 sy2 = std::min(sy1+1,src.height-1);// src y #2
-                float syf = (temp & 0xFFFF) / 65536.f; // weight of #2
+                float syf = static_cast<float>(temp & 0xFFFF) / 65536.f; // weight of #2
 
                 uchar *pdst = (uchar*)(dstdata + y * dst.bytesPerRow + z * dst.bytesPerImage);
 
@@ -226,7 +226,7 @@ struct LinearResampler_Float32
                     temp = (temp > 0x8000)? temp - 0x8000 : 0;
                     uint32 sx1 = temp >> 16;                    // src x #1
                     uint32 sx2 = std::min(sx1+1,src.width-1);// src x #2
-                    float sxf = (temp & 0xFFFF) / 65536.f; // weight of #2
+                    float sxf = static_cast<float>(temp & 0xFFFF) / 65536.f; // weight of #2
                     
                     // process R,G,B,A simultaneously for cache coherence?
                     float accum[4] = { 0.0f, 0.0f, 0.0f, 1.0f };

@@ -51,7 +51,10 @@ namespace Ogre
         _this->mRenderSystem->_setTexture( cmd->texUnit, cmd->texture, cmd->bDepthReadOnly );
 
         if( cmd->samplerBlock )
-            _this->mRenderSystem->_setHlmsSamplerblock( cmd->texUnit, cmd->samplerBlock );
+        {
+            OGRE_ASSERT_MEDIUM( cmd->texUnit < std::numeric_limits<uint8>::max() );
+            _this->mRenderSystem->_setHlmsSamplerblock( (uint8)cmd->texUnit, cmd->samplerBlock );
+        }
     }
 
     CbTextures::CbTextures( uint16 _texUnit, uint16 _hazardousTexIdx,

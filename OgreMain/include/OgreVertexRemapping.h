@@ -220,8 +220,10 @@ namespace Ogre
         {
             unsigned newIdx = indexMap[oldIdx];
             if( newIdx != UnusedIdx )
+            {
                 memcpy( (uint8 *)dstLock.pData + newIdx * vertexSize,
                         (uint8 *)srcLock.pData + oldIdx * vertexSize, vertexSize );
+            }
         }
 
         return dstbuf;

@@ -39,12 +39,13 @@ THE SOFTWARE.
 #    include "OgreLwString.h"
 #    include "OgreTextureGpuManager.h"
 
-#    if defined( __GNUC__ ) && !defined(__clang__)
+#    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic push
 #        pragma GCC diagnostic ignored "-Wclass-memaccess"
+#        pragma GCC diagnostic ignored "-Wconversion"
 #    endif
 #    include "rapidjson/document.h"
-#    if defined( __GNUC__ ) && !defined(__clang__)
+#    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic pop
 #    endif
 
@@ -231,7 +232,7 @@ namespace Ogre
                 const rapidjson::Value &paramArray = subArray[1];
                 const rapidjson::SizeType paramArraySize = std::min( paramArray.Size(), 16u );
 
-                param.mp.dataSizeBytes = paramArraySize * 4u;
+                param.mp.dataSizeBytes = static_cast<uint8>( paramArraySize * 4u );
                 memset( param.mp.dataBytes, 0, param.mp.dataSizeBytes );
 
                 float *dataFloat = reinterpret_cast<float *>( param.mp.dataBytes );
@@ -347,7 +348,7 @@ namespace Ogre
                 {
                     if( divArray[i].IsUint() )
                     {
-                        divisors[i] = divArray[i].GetUint();
+                        divisors[i] = static_cast<uint8>( divArray[i].GetUint() );
                     }
                     else
                     {
@@ -486,7 +487,7 @@ namespace Ogre
 
             assert( jsonArray.Size() < 256u && "Exceeding max limit!" );
 
-            const uint8 arraySize = std::min( jsonArray.Size(), 255u );
+            const uint8 arraySize = static_cast<uint8>( std::min( jsonArray.Size(), 255u ) );
             job->setNumTexUnits( arraySize );
 
             for( uint8 i = 0; i < arraySize; ++i )
@@ -505,7 +506,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsUint() )
         {
             assert( itor->value.GetUint() < 256u && "Exceeding max limit!" );
-            job->setNumUavUnits( std::min( itor->value.GetUint(), 255u ) );
+            job->setNumUavUnits( static_cast<uint8>( std::min( itor->value.GetUint(), 255u ) ) );
         }
     }
     //-----------------------------------------------------------------------------------

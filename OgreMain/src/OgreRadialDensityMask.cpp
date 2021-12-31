@@ -126,7 +126,7 @@ namespace Ogre
 
         VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
         mJobParams = vaoManager->createConstBuffer(
-            alignToNextMultiple( sizeof( RdmShaderParams ), 16u ), BT_DEFAULT, 0, false );
+            alignToNextMultiple<size_t>( sizeof( RdmShaderParams ), 16u ), BT_DEFAULT, 0, false );
         mReconstructJob->setConstBuffer( 0, mJobParams );
 
         setQuality( RdmHigh );

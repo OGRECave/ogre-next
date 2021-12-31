@@ -70,12 +70,12 @@ namespace Demo
         case Ogre::Light::LT_SPOTLIGHT:
             mLight->setType( Ogre::Light::LT_SPOTLIGHT );
             mLight->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
-            mLightNode->setPosition( Ogre::Vector3( -0.505, 3.400016, 5.423867 ) );
+            mLightNode->setPosition( Ogre::Vector3( -0.505f, 3.400016f, 5.423867f ) );
             mLight->setAttenuation( 23.0f, 0.5f, 0.0f, 0.5f );
             break;
         case Ogre::Light::LT_POINT:
             mLight->setType( Ogre::Light::LT_POINT );
-            mLightNode->setPosition( Ogre::Vector3( -0.505, 3.400016, 5.423867 ) );
+            mLightNode->setPosition( Ogre::Vector3( -0.505f, 3.400016f, 5.423867f ) );
             mLight->setAttenuation( 23.0f, 0.5f, 0.0f, 0.5f );
             break;
         case Ogre::Light::LT_DIRECTIONAL:
@@ -155,7 +155,7 @@ namespace Demo
                     finalName, finalName, macroblock, blendblock, Ogre::HlmsParamVec() ) );
                 datablock->setBackgroundDiffuse( materials[i].colour );
                 datablock->setFresnel( Ogre::Vector3( 0.1f ), false );
-                datablock->setRoughness( 0.02 );
+                datablock->setRoughness( 0.02f );
             }
         }
 

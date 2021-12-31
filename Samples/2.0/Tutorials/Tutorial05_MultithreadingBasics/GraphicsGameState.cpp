@@ -29,7 +29,7 @@ namespace Demo
         {
             outText += "\nSEE HELP DESCRIPTION!";
 
-            float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / cFrametime;
+            float weight = mGraphicsSystem->getAccumTimeSinceLastLogicFrame() / (float)cFrametime;
             weight = std::min( 1.0f, weight );
 
             outText += "\nBlend weight: ";

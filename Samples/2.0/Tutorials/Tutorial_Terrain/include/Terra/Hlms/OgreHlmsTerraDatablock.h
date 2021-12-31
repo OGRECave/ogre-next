@@ -252,8 +252,8 @@ namespace Ogre
 
         void calculateHash() override;
 
-        static const size_t MaterialSizeInGpu;
-        static const size_t MaterialSizeInGpuAligned;
+        static const uint32 MaterialSizeInGpu;
+        static const uint32 MaterialSizeInGpuAligned;
     };
 
     /** @} */

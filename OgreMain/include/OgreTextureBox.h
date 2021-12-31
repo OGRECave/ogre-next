@@ -46,8 +46,8 @@ namespace Ogre
         uint32 width, height, depth, numSlices;
         /// When TextureBox contains a compressed format, bytesPerPixel contains
         /// the pixel format instead. See getCompressedPixelFormat.
-        size_t bytesPerPixel;
-        size_t bytesPerRow;
+        uint32 bytesPerPixel;
+        uint32 bytesPerRow;
         size_t bytesPerImage;
         /// Pointer is never owned by us. Do not alter where
         /// data points to (e.g. do not increment it)
@@ -70,7 +70,7 @@ namespace Ogre
         }
 
         TextureBox( uint32 _width, uint32 _height, uint32 _depth, uint32 _numSlices,
-                    uint32 _bytesPerPixel, uint32 _bytesPerRow, uint32 _bytesPerImage ) :
+                    uint32 _bytesPerPixel, uint32 _bytesPerRow, size_t _bytesPerImage ) :
             x( 0 ),
             y( 0 ),
             z( 0 ),

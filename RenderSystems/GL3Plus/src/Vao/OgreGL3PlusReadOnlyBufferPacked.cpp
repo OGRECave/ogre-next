@@ -264,7 +264,8 @@ namespace Ogre
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, bufferInterface->getVboName() ) );
         OCGE( glBindTexture( GL_TEXTURE_2D, mTexName ) );
         OCGE( glTexSubImage2D(
-            GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight, mOriginFormat, mOriginDataType,
+            GL_TEXTURE_2D, 0, 0, 0, (GLsizei)texWidth, (GLsizei)texHeight, mOriginFormat,
+            mOriginDataType,
             reinterpret_cast<void *>( mFinalBufferStart * mBytesPerElement + offset ) ) );
 
         // Restore alignment.

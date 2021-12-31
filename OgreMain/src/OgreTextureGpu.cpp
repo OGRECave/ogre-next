@@ -276,7 +276,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     PixelFormatGpu TextureGpu::getPixelFormat() const { return mPixelFormat; }
     //-----------------------------------------------------------------------------------
-    uint32 TextureGpu::getInternalSliceStart() const { return mInternalSliceStart; }
+    uint16 TextureGpu::getInternalSliceStart() const { return mInternalSliceStart; }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setSourceType( uint8 type ) { mSourceType = type; }
     //-----------------------------------------------------------------------------------
@@ -993,11 +993,11 @@ namespace Ogre
         return reinterpret_cast<uint8 *>( data );
     }
     //-----------------------------------------------------------------------------------
-    size_t TextureGpu::_getSysRamCopyBytesPerRow( uint8 mipLevel )
+    uint32 TextureGpu::_getSysRamCopyBytesPerRow( uint8 mipLevel )
     {
         assert( mipLevel < mNumMipmaps );
         uint32 width = std::max( mWidth >> mipLevel, 1u );
-        return PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, mPixelFormat, 4u );
+        return (uint32)PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, mPixelFormat, 4u );
     }
     //-----------------------------------------------------------------------------------
     size_t TextureGpu::_getSysRamCopyBytesPerImage( uint8 mipLevel )

@@ -83,11 +83,11 @@ namespace Ogre
 
         typedef vector<CachedGridBuffer>::type CachedGridBufferVec;
 
-        static const size_t MinDecalRq;  // Inclusive
-        static const size_t MaxDecalRq;  // Inclusive
+        static const uint32 MinDecalRq;  // Inclusive
+        static const uint32 MaxDecalRq;  // Inclusive
 
-        static const size_t MinCubemapProbeRq;  // Inclusive
-        static const size_t MaxCubemapProbeRq;  // Inclusive
+        static const uint32 MinCubemapProbeRq;  // Inclusive
+        static const uint32 MaxCubemapProbeRq;  // Inclusive
 
     protected:
         static const size_t NumBytesPerLight;
