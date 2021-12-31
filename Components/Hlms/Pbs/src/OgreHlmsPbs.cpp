@@ -2169,7 +2169,7 @@ namespace Ogre
             // float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps
             *passBufferPtr++ = mPccVctMinDistance;
             *passBufferPtr++ = mInvPccVctInvDistance;
-            *passBufferPtr++ = currViewports[1].getActualLeft();
+            *passBufferPtr++ = (float)currViewports[1].getActualLeft();
             *passBufferPtr++ = mMaxSpecIblMipmap;
 
             {

@@ -1860,8 +1860,8 @@ namespace Ogre
         {
             OCGE(
                 glSamplerParameteri( samplerName, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE ) );
-            OCGE( glSamplerParameterf( samplerName, GL_TEXTURE_COMPARE_FUNC,
-                                       convertCompareFunction( newBlock->mCompareFunction ) ) );
+            OCGE( glSamplerParameteri( samplerName, GL_TEXTURE_COMPARE_FUNC,
+                                       (GLint)convertCompareFunction( newBlock->mCompareFunction ) ) );
         }
 
         if( mCurrentCapabilities->hasCapability( RSC_ANISOTROPY ) )
@@ -2551,7 +2551,7 @@ namespace Ogre
 
         if( op.useGlobalInstancingVertexBufferIsAvailable )
         {
-            numberOfInstances *= getGlobalNumberOfInstances();
+            numberOfInstances *= (GLsizei)getGlobalNumberOfInstances();
         }
 
         // Get vertex array organization.
