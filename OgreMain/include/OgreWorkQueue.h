@@ -386,7 +386,7 @@ namespace Ogre
         @param name Optional name, just helps to identify logging output
         */
         DefaultWorkQueueBase( const String &name = BLANKSTRING );
-        virtual ~DefaultWorkQueueBase();
+        ~DefaultWorkQueueBase() override;
         /// Get the name of the work queue
         const String &getName() const;
         /** Get the number of worker threads that this queue will start when

@@ -73,7 +73,7 @@ namespace Ogre
         public:
             /// Constructor: do not call direct, use OverlayManager::createOverlayElement
             OverlayContainer( const String &name );
-            virtual ~OverlayContainer();
+            ~OverlayContainer() override;
 
             /** Adds another OverlayElement to this container. */
             virtual void addChild( OverlayElement *elem );

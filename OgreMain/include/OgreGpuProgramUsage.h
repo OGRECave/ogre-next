@@ -97,7 +97,7 @@ namespace Ogre
         /** Copy constructor */
         GpuProgramUsage( const GpuProgramUsage &rhs, Pass *newparent );
 
-        ~GpuProgramUsage();
+        ~GpuProgramUsage() override;
 
         /** Gets the type of program we're trying to link to. */
         GpuProgramType getType() const { return mType; }

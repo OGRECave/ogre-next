@@ -289,7 +289,7 @@ namespace Ogre
             {
             }
             /// Destructor (parent already virtual)
-            ~AnimationStateControllerValue() {}
+            ~AnimationStateControllerValue() override {}
             /** ControllerValue implementation. */
             Real getValue() const override;
 

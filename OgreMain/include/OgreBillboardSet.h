@@ -344,7 +344,7 @@ namespace Ogre
                           unsigned int poolSize = 20, bool externalDataSource = false,
                           uint8 renderQueueId = 110u );
 
-            virtual ~BillboardSet();
+            ~BillboardSet() override;
 
             /** Creates a new billboard and adds it to this set.
             @remarks
@@ -861,7 +861,7 @@ namespace Ogre
 
         public:
             BillboardSetFactory() {}
-            ~BillboardSetFactory() {}
+            ~BillboardSetFactory() override {}
 
             static String FACTORY_TYPE_NAME;
 

@@ -433,7 +433,7 @@ namespace Ogre
         MemoryDataStream( const String &name, size_t size, bool freeOnClose = true,
                           bool readOnly = false );
 
-        ~MemoryDataStream();
+        ~MemoryDataStream() override;
 
         /** Get a pointer to the start of the memory block this stream holds. */
         uchar *getPtr() { return mData; }

@@ -109,7 +109,7 @@ namespace Ogre
         {
         public:
             DefaultHardwareBufferManagerBase();
-            ~DefaultHardwareBufferManagerBase();
+            ~DefaultHardwareBufferManagerBase() override;
             /// Creates a vertex buffer
             HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
                                                               HardwareBuffer::Usage usage,

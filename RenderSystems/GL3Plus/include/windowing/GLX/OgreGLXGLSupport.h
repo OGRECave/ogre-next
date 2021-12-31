@@ -39,7 +39,7 @@ namespace Ogre
     {
     public:
         GLXGLSupport();
-        ~GLXGLSupport();
+        ~GLXGLSupport() override;
 
         Atom mAtomDeleteWindow;
         Atom mAtomFullScreen;

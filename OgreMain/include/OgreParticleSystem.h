@@ -151,7 +151,7 @@ namespace Ogre
         ParticleSystem( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                         const String &resourceGroupName );
 
-        virtual ~ParticleSystem();
+        virtual ~ParticleSystem() override;
 
         /** Sets the ParticleRenderer to be used to render this particle system.
         @remarks

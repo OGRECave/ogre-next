@@ -114,7 +114,7 @@ namespace Ogre
 
         /** Standard destructor.
          */
-        ~Light();
+        ~Light() override;
 
         /** Sets the type of light - see LightTypes for more info.
          */

@@ -709,7 +709,7 @@ namespace Ogre
 
     public:
         TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
-        virtual ~TextureGpuManager();
+        ~TextureGpuManager() override;
 
         void shutdown();
 

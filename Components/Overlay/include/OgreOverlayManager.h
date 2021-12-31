@@ -110,7 +110,7 @@ namespace Ogre
 
         public:
             OverlayManager();
-            virtual ~OverlayManager();
+            ~OverlayManager() override;
 
             /** Notifies that hardware resources were lost */
             void _releaseManualHardwareResources();

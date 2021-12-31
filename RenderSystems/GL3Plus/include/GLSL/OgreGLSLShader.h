@@ -145,7 +145,7 @@ namespace Ogre
         //     ResourceHandle handle,
         //     const String& group, bool isManual = false,
         //     ManualResourceLoader* loader = 0);
-        ~GLSLShader();
+        ~GLSLShader() override;
 
         GLuint getGLShaderHandle() const { return mGLShaderHandle; }
         void   attachToProgramObject( const GLuint programObject );

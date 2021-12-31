@@ -44,7 +44,7 @@ namespace Ogre
     {
     public:
         LodWorkQueueInjector();
-        virtual ~LodWorkQueueInjector();
+        ~LodWorkQueueInjector() override;
 
         static LodWorkQueueInjector *getSingletonPtr();
         static LodWorkQueueInjector &getSingleton();

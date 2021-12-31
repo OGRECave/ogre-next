@@ -43,7 +43,7 @@ namespace Ogre
     {
     public:
         DefaultWorkQueue( const String &name = BLANKSTRING );
-        virtual ~DefaultWorkQueue();
+        ~DefaultWorkQueue() override;
 
         /// Main function for each thread spawned.
         void _threadMain() override;

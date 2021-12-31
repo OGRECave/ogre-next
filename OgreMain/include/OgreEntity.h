@@ -275,7 +275,7 @@ namespace Ogre
         public:
             /** Default destructor.
              */
-            ~Entity();
+            ~Entity() override;
 
             /** Gets the Mesh that this Entity is based on.
              */

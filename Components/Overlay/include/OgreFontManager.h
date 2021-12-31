@@ -46,7 +46,7 @@ namespace Ogre
     {
     public:
         FontManager();
-        ~FontManager();
+        ~FontManager() override;
 
         /// Create a new font
         /// @see ResourceManager::createResource

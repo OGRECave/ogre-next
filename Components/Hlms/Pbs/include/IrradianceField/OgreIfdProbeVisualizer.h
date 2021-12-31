@@ -20,7 +20,7 @@ namespace Ogre
     public:
         IfdProbeVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                             uint8 renderQueueId );
-        virtual ~IfdProbeVisualizer();
+        ~IfdProbeVisualizer() override;
 
         /**
         @param ifSettings

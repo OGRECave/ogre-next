@@ -198,7 +198,7 @@ namespace Ogre
         public:
             /// Constructor: do not call direct, use OverlayManager::createElement
             OverlayElement( const String &name );
-            virtual ~OverlayElement();
+            ~OverlayElement() override;
 
             /** Initialise gui element */
             virtual void initialise() = 0;

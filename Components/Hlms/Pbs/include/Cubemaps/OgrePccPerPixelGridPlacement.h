@@ -120,7 +120,7 @@ namespace Ogre
 
     public:
         PccPerPixelGridPlacement();
-        ~PccPerPixelGridPlacement();
+        ~PccPerPixelGridPlacement() override;
 
         void setParallaxCorrectedCubemapAuto( ParallaxCorrectedCubemapAuto *pcc );
         ParallaxCorrectedCubemapAuto *getParallaxCorrectedCubemap() { return mPcc; }

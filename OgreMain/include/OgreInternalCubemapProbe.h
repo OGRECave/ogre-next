@@ -51,7 +51,7 @@ namespace Ogre
     public:
         InternalCubemapProbe( IdType id, ObjectMemoryManager *objectMemoryManager,
                               SceneManager *manager );
-        virtual ~InternalCubemapProbe();
+        ~InternalCubemapProbe() override;
 
         // Overrides from MovableObject
         const String &getMovableType() const override;

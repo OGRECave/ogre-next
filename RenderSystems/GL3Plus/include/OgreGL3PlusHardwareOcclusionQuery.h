@@ -74,7 +74,7 @@ namespace Ogre
         /**
          * Object destructor
          */
-        ~GL3PlusHardwareOcclusionQuery();
+        ~GL3PlusHardwareOcclusionQuery() override;
 
         //------------------------------------------------------------------
         // Occlusion query functions (see base class documentation for this)

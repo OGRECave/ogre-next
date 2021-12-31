@@ -65,7 +65,7 @@ namespace Ogre
         public:
             /** Constructor. */
             PanelOverlayElement( const String &name );
-            virtual ~PanelOverlayElement();
+            ~PanelOverlayElement() override;
 
             /** Initialise */
             void initialise() override;

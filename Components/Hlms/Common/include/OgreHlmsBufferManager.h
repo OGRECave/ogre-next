@@ -169,7 +169,7 @@ namespace Ogre
     public:
         HlmsBufferManager( HlmsTypes type, const String &typeName, Archive *dataFolder,
                            ArchiveVec *libraryFolders );
-        ~HlmsBufferManager();
+        ~HlmsBufferManager() override;
 
         void _changeRenderSystem( RenderSystem *newRs ) override;
 

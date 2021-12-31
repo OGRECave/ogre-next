@@ -114,7 +114,7 @@ namespace Ogre
                             size_t maxElements = 20, size_t numberOfChains = 1,
                             bool useTextureCoords = true, bool useColours = true, bool dynamic = true );
             /// Destructor
-            virtual ~BillboardChain();
+            ~BillboardChain() override;
 
             /** Set the maximum number of chain elements per chain
              */

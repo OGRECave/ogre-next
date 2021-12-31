@@ -123,7 +123,7 @@ namespace Ogre
     public:
         /** Default destructor.
          */
-        ~Item();
+        ~Item() override;
 
         /** Gets the Mesh that this Item is based on.
          */

@@ -144,7 +144,7 @@ namespace Ogre
         ParallaxCorrectedCubemap( IdType id, Root *root, SceneManager *sceneManager,
                                   const CompositorWorkspaceDef *probeWorkspaceDef, uint8 reservedRqId,
                                   uint32 proxyVisibilityMask, uint32 proxyQueryMask = 0 );
-        ~ParallaxCorrectedCubemap();
+        ~ParallaxCorrectedCubemap() override;
 
         void _releaseManualHardwareResources() override;
         void _restoreManualHardwareResources() override;

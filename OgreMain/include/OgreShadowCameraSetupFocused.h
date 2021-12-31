@@ -67,7 +67,7 @@ namespace Ogre
         @remarks
             Temporary frustum and camera destroyed here.
         */
-        virtual ~FocusedShadowCameraSetup();
+        ~FocusedShadowCameraSetup() override;
 
         /** Returns a uniform shadow camera with a focused view.
          */

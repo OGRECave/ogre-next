@@ -281,7 +281,7 @@ namespace Ogre
         GpuProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
                     const String &group, bool isManual = false, ManualResourceLoader *loader = 0 );
 
-        virtual ~GpuProgram() {}
+        ~GpuProgram() override {}
 
         /** Sets the filename of the source assembly for this program.
             @remarks

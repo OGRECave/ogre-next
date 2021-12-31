@@ -187,7 +187,7 @@ namespace Ogre
 
     public:
         NULLVaoManager();
-        virtual ~NULLVaoManager();
+        ~NULLVaoManager() override;
 
         void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                              size_t &outFreeBytes, Log *log, bool &outIncludesTextures ) const override;

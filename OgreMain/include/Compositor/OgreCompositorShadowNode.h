@@ -184,7 +184,7 @@ namespace Ogre
         CompositorShadowNode( IdType id, const CompositorShadowNodeDef *definition,
                               CompositorWorkspace *workspace, RenderSystem *renderSys,
                               TextureGpu *finalTarget );
-        virtual ~CompositorShadowNode();
+        ~CompositorShadowNode() override;
 
         const CompositorShadowNodeDef *getDefinition() const { return mDefinition; }
 

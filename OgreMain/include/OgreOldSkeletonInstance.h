@@ -61,7 +61,7 @@ namespace Ogre
             when you create an Entity based on a skeletally animated Mesh.
             */
             OldSkeletonInstance( const SkeletonPtr &masterCopy );
-            ~OldSkeletonInstance();
+            ~OldSkeletonInstance() override;
 
             /** Gets the number of animations on this skeleton. */
             unsigned short getNumAnimations() const override;

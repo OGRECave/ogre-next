@@ -53,7 +53,7 @@ namespace Ogre
         {
         public:
             OverlayProfileSessionListener();
-            virtual ~OverlayProfileSessionListener();
+            ~OverlayProfileSessionListener() override;
 
             /// @see ProfileSessionListener::initializeSession
             void initializeSession() override;

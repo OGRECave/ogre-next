@@ -128,7 +128,8 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
     # On GCC Wsign-conversion has too many false positives. See https://stackoverflow.com/a/64542771
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} -Wsuggest-override" )
   else()
-    set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} -Wcomma -Wsign-conversion" )
+    set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} \
+        -Winconsistent-missing-destructor-override -Wcomma -Wsign-conversion " )
   endif()
 
   if (EMSCRIPTEN)

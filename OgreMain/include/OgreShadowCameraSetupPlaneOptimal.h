@@ -78,7 +78,7 @@ namespace Ogre
         /// Constructor -- requires a plane of interest
         PlaneOptimalShadowCameraSetup( MovablePlane *plane );
         /// Destructor
-        virtual ~PlaneOptimalShadowCameraSetup();
+        ~PlaneOptimalShadowCameraSetup() override;
 
         /// Returns shadow camera configured to get 1-1 homography between screen and shadow map when
         /// restricted to plane

@@ -315,7 +315,7 @@ namespace Ogre
             /// Constructor, associates with a OldNode
             NodeAnimationTrack( Animation *parent, unsigned short handle, Node *targetNode );
             /// Destructor
-            virtual ~NodeAnimationTrack();
+            ~NodeAnimationTrack() override;
             /** Creates a new KeyFrame and adds it to this animation at the given time index.
             @remarks
                 It is better to create KeyFrames in time order. Creating them out of order can result
@@ -436,7 +436,7 @@ namespace Ogre
             /// Constructor, associates with a OldNode
             OldNodeAnimationTrack( Animation *parent, unsigned short handle, OldNode *targetNode );
             /// Destructor
-            virtual ~OldNodeAnimationTrack();
+            ~OldNodeAnimationTrack() override;
             /** Creates a new KeyFrame and adds it to this animation at the given time index.
             @remarks
                 It is better to create KeyFrames in time order. Creating them out of order can result

@@ -175,7 +175,7 @@ namespace Ogre
             mMaxRq( 0 )
         {
         }
-        virtual ~CompositorShadowNodeDef() {}
+        ~CompositorShadowNodeDef() override {}
 
         /// Overloaded to prevent creating input channels.
         IdString addTextureSourceName( const String &name, size_t index,

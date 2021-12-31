@@ -62,7 +62,7 @@ namespace Ogre
         public:
             BillboardParticleRenderer( IdType id, ObjectMemoryManager *objectMemoryManager,
                                        SceneManager *sceneManager );
-            ~BillboardParticleRenderer();
+            ~BillboardParticleRenderer() override;
 
             /** Command object for billboard type (see ParamCommand).*/
             class _OgrePrivate CmdBillboardType final : public ParamCommand

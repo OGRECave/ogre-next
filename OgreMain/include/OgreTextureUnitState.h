@@ -166,7 +166,7 @@ namespace Ogre
 
         /** Default destructor.
          */
-        ~TextureUnitState();
+        ~TextureUnitState() override;
 
         /** Name-based constructor.
         @param texName

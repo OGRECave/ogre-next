@@ -122,7 +122,7 @@ namespace Ogre
         HighLevelGpuProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
                              const String &group, bool isManual = false,
                              ManualResourceLoader *loader = 0 );
-        ~HighLevelGpuProgram();
+        ~HighLevelGpuProgram() override;
 
         /** Creates a new parameters object compatible with this program definition.
         @remarks

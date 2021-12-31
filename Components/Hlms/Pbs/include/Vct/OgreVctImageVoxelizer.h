@@ -159,7 +159,7 @@ namespace Ogre
     public:
         VctImageVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
                            VoxelizedMeshCache *meshCache, bool correctAreaLightShadows );
-        virtual ~VctImageVoxelizer();
+        ~VctImageVoxelizer() override;
 
         /** Adds an item to voxelize.
         @param item

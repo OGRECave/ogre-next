@@ -157,7 +157,7 @@ namespace Ogre
     public:
         Terra( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *sceneManager,
                uint8 renderQueueId, CompositorManager2 *compositorManager, Camera *camera, bool zUp );
-        ~Terra();
+        ~Terra() override;
 
         /// Sets shared resources for minimizing memory consumption wasted on temporary
         /// resources when you have more than one Terra.

@@ -50,7 +50,7 @@ namespace Ogre
                                  BufferType bufferType, void *initialData, bool keepAsShadow,
                                  VulkanRenderSystem *renderSystem, VaoManager *vaoManager,
                                  BufferInterface *bufferInterface );
-        ~VulkanConstBufferPacked();
+        ~VulkanConstBufferPacked() override;
 
         void getBufferInfo( VkDescriptorBufferInfo &outBufferInfo ) const;
 

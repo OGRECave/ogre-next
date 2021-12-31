@@ -88,7 +88,7 @@ namespace Ogre
             bool           bindNormals;
 
         public:
-            ~TempBlendedBufferInfo();
+            ~TempBlendedBufferInfo() override;
             /// Utility method, extract info from the given VertexData.
             void extractFrom( const VertexData *sourceData );
             /// Utility method, checks out temporary copies of src into dest.
@@ -407,7 +407,7 @@ namespace Ogre
 
         public:
             HardwareBufferManager( HardwareBufferManagerBase *imp );
-            ~HardwareBufferManager();
+            ~HardwareBufferManager() override;
 
             /** @copydoc HardwareBufferManagerBase::createVertexBuffer */
             HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,

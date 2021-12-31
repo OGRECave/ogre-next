@@ -111,7 +111,7 @@ namespace Ogre
         ForwardClustered( uint32 width, uint32 height, uint32 numSlices, uint32 lightsPerCell,
                           uint32 decalsPerCell, uint32 cubemapProbesPerCell, float minDistance,
                           float maxDistance, SceneManager *sceneManager );
-        virtual ~ForwardClustered();
+        ~ForwardClustered() override;
 
         ForwardPlusMethods getForwardPlusMethod() const override { return MethodForwardClustered; }
 

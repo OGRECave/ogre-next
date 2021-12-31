@@ -167,7 +167,7 @@ namespace Ogre
 
     public:
         ResourceBackgroundQueue();
-        virtual ~ResourceBackgroundQueue();
+        ~ResourceBackgroundQueue() override;
 
         /** Initialise the background queue system.
         @note Called automatically by Root::initialise.

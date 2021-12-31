@@ -74,7 +74,7 @@ namespace Ogre
     public:
         /** Destructor.
          */
-        virtual ~SubItem();
+        ~SubItem() override;
 
     protected:
         /// Pointer to parent.

@@ -103,7 +103,7 @@ namespace Ogre
             */
             Skeleton( ResourceManager *creator, const String &name, ResourceHandle handle,
                       const String &group, bool isManual = false, ManualResourceLoader *loader = 0 );
-            virtual ~Skeleton();
+            ~Skeleton() override;
 
             /** Creates a brand new OldBone owned by this Skeleton.
             @remarks

@@ -218,7 +218,7 @@ namespace Ogre
         {
         public:
             MeshSerializerImpl_v1_10();
-            virtual ~MeshSerializerImpl_v1_10();
+            ~MeshSerializerImpl_v1_10() override;
 
         protected:
             void   readMesh( DataStreamPtr &stream, Mesh *pMesh,
@@ -234,7 +234,7 @@ namespace Ogre
         {
         public:
             MeshSerializerImpl_v1_8();
-            ~MeshSerializerImpl_v1_8();
+            ~MeshSerializerImpl_v1_8() override;
 
         protected:
             // In the past we could select to use manual or automatic generated Lod levels,
@@ -314,7 +314,7 @@ namespace Ogre
         {
         public:
             MeshSerializerImpl_v1_3();
-            ~MeshSerializerImpl_v1_3();
+            ~MeshSerializerImpl_v1_3() override;
 
         protected:
             void readEdgeListLodInfo( DataStreamPtr &stream, EdgeData *edgeData ) override;

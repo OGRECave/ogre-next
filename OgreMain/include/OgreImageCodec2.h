@@ -48,7 +48,7 @@ namespace Ogre
     class _OgreExport ImageCodec2 : public Codec
     {
     public:
-        virtual ~ImageCodec2();
+        ~ImageCodec2() override;
         /** Codec return class for images. Has information about the size and the
             pixel format of the image. */
         class _OgrePrivate ImageData2 : public Codec::CodecData
@@ -61,7 +61,7 @@ namespace Ogre
                 freeOnDestruction( true )
             {
             }
-            virtual ~ImageData2()
+            ~ImageData2() override
             {
                 if( freeOnDestruction && box.data )
                 {

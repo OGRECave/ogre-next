@@ -107,7 +107,7 @@ namespace Ogre
     public:
         AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                             TextureTypes::TextureTypes textureType, PixelFormatGpu pixelFormatFamily );
-        virtual ~AsyncTextureTicket();
+        ~AsyncTextureTicket() override;
 
         /// TextureGpuListener overload
         void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,

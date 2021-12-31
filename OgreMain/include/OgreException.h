@@ -142,7 +142,7 @@ namespace Ogre
         Exception( const Exception &rhs );
 
         /// Needed for compatibility with std::exception
-        virtual ~Exception() noexcept;
+        ~Exception() noexcept override;
 
         /** Assignment operator.
          */

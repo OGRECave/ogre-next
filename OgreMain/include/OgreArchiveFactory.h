@@ -61,7 +61,7 @@ namespace Ogre
     class _OgreExport ArchiveFactory : public FactoryObj<Archive>, public ArchiveAlloc
     {
     public:
-        virtual ~ArchiveFactory() {}
+        ~ArchiveFactory() override {}
         /** Creates a new object.
         @param name Name of the object to create
         @return

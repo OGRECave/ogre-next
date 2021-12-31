@@ -126,7 +126,7 @@ namespace Ogre
     public:
         OGRE_AUTO_MUTEX;  // public to allow external locking
         ResourceManager();
-        virtual ~ResourceManager();
+        ~ResourceManager() override;
 
         /** Creates a new blank resource, but does not immediately load it.
         @remarks

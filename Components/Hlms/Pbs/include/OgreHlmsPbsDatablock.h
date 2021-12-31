@@ -362,7 +362,7 @@ namespace Ogre
         */
         HlmsPbsDatablock( IdString name, HlmsPbs *creator, const HlmsMacroblock *macroblock,
                           const HlmsBlendblock *blendblock, const HlmsParamVec &params );
-        virtual ~HlmsPbsDatablock();
+        ~HlmsPbsDatablock() override;
 
         /// Sets the diffuse background colour. When no diffuse texture is present, this
         /// solid colour replaces it, and can act as a background for the detail maps.

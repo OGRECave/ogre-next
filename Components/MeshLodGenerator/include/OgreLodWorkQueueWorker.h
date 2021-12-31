@@ -44,7 +44,7 @@ namespace Ogre
     {
     public:
         LodWorkQueueWorker();
-        virtual ~LodWorkQueueWorker();
+        ~LodWorkQueueWorker() override;
 
         static LodWorkQueueWorker *getSingletonPtr();
         static LodWorkQueueWorker &getSingleton();

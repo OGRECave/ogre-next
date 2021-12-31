@@ -55,7 +55,7 @@ namespace Ogre
         public:
             /** Constructor. */
             TextAreaOverlayElement( const String &name );
-            virtual ~TextAreaOverlayElement();
+            ~TextAreaOverlayElement() override;
 
             void initialise() override;
 

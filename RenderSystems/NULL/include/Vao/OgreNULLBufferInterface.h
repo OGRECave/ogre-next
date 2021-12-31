@@ -50,7 +50,7 @@ namespace Ogre
 
     public:
         NULLBufferInterface( size_t vboPoolIdx );
-        ~NULLBufferInterface();
+        ~NULLBufferInterface() override;
 
         size_t getVboPoolIndex() { return mVboPoolIdx; }
 

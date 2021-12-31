@@ -48,7 +48,7 @@ namespace Ogre
         class ManualObjectSection;
 
         ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        virtual ~ManualObject();
+        ~ManualObject() override;
 
         /** @copydoc MovableObject::_releaseManualHardwareResources */
         void _releaseManualHardwareResources() override { clear(); }

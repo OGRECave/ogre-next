@@ -63,7 +63,7 @@ namespace Ogre
         {
         public:
             OverlaySystem();
-            virtual ~OverlaySystem();
+            ~OverlaySystem() override;
 
             /// @see RenderQueueListener
             void renderQueueStarted( RenderQueue *rq, uint8 queueGroupId, const String &invocation,

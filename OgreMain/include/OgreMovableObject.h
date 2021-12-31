@@ -647,7 +647,7 @@ namespace Ogre
     public:
         NullEntity() : MovableObject( 0 ) {}
 
-        virtual ~NullEntity();
+        ~NullEntity() override;
 
         const String &getMovableType() const override { return msMovableType; }
     };

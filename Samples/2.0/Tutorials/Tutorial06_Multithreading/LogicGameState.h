@@ -21,7 +21,7 @@ namespace Demo
 
     public:
         LogicGameState();
-        ~LogicGameState();
+        ~LogicGameState() override;
 
         void _notifyLogicSystem( LogicSystem *logicSystem ) { mLogicSystem = logicSystem; }
 

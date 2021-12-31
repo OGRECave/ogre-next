@@ -444,7 +444,7 @@ namespace Ogre
 
     public:
         ScriptCompilerManager();
-        virtual ~ScriptCompilerManager();
+        ~ScriptCompilerManager() override;
 
         /// Sets the listener used for compiler instances
         void setListener( ScriptCompilerListener *listener );

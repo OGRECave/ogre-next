@@ -77,7 +77,7 @@ namespace Ogre
     public:
         /// Constructor, defaults to 3 splits
         PSSMShadowCameraSetup();
-        virtual ~PSSMShadowCameraSetup();
+        ~PSSMShadowCameraSetup() override;
 
         /** Calculate a new splitting scheme.
         @param splitCount The number of splits to use

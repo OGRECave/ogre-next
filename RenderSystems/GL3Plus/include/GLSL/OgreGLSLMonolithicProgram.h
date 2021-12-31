@@ -61,7 +61,7 @@ namespace Ogre
         GLSLMonolithicProgram( GLSLShader *vertexProgram, GLSLShader *hullProgram,
                                GLSLShader *domainProgram, GLSLShader *geometryProgram,
                                GLSLShader *fragmentProgram, GLSLShader *computeProgram );
-        ~GLSLMonolithicProgram();
+        ~GLSLMonolithicProgram() override;
 
         /** Makes a program object active by making sure it is linked
             and then putting it in use.

@@ -76,7 +76,7 @@ namespace Ogre
         public:
             /** Destructor.
              */
-            virtual ~SubEntity();
+            ~SubEntity() override;
 
         protected:
             /// Pointer to parent.

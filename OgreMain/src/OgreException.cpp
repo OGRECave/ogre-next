@@ -75,7 +75,7 @@ namespace Ogre
     {
     }
 
-    Exception::~Exception() throw() {}
+    Exception::~Exception() noexcept {}
 
     Exception &Exception::operator=( const Exception &rhs )
     {

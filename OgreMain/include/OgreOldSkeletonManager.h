@@ -56,7 +56,7 @@ namespace Ogre
         public:
             /// Constructor
             OldSkeletonManager();
-            ~OldSkeletonManager();
+            ~OldSkeletonManager() override;
 
             /// Create a new skeleton
             /// @see ResourceManager::createResource

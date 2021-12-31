@@ -189,7 +189,7 @@ namespace Ogre
 
     public:
         VctLighting( IdType id, VctVoxelizerSourceBase *voxelizer, bool bAnisotropic );
-        virtual ~VctLighting();
+        ~VctLighting() override;
 
         /// Used by VctCascadedVoxelizer. By having extra cascade info, we can
         /// calculate multiple bounces with extra info

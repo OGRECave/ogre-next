@@ -25,7 +25,7 @@ namespace Ogre
 
     public:
         WireAabb( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
-        virtual ~WireAabb();
+        ~WireAabb() override;
 
         /** Starts tracking the given MovableObject and render its Aabb.
             If the tracked object is destroyed, we automatically stop

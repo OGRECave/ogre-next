@@ -85,7 +85,7 @@ namespace Ogre
                          size_t maxElements = 20, size_t numberOfChains = 1,
                          bool useTextureCoords = true, bool useVertexColours = true );
             /// destructor
-            virtual ~RibbonTrail();
+            ~RibbonTrail() override;
 
             typedef vector<Node *>::type          NodeList;
             typedef ConstVectorIterator<NodeList> NodeIterator;

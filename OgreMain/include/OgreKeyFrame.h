@@ -84,7 +84,7 @@ namespace Ogre
             /** Default constructor, you should not call this but use AnimationTrack::createKeyFrame
              * instead. */
             NumericKeyFrame( const AnimationTrack *parent, Real time );
-            ~NumericKeyFrame() {}
+            ~NumericKeyFrame() override {}
 
             /** Get the value at this keyframe. */
             virtual const AnyNumeric &getValue() const;
@@ -157,7 +157,7 @@ namespace Ogre
             /** Default constructor, you should not call this but use AnimationTrack::createKeyFrame
              * instead. */
             VertexMorphKeyFrame( const AnimationTrack *parent, Real time );
-            ~VertexMorphKeyFrame() {}
+            ~VertexMorphKeyFrame() override {}
             /** Sets the vertex buffer containing the source positions for this keyframe.
             @remarks
                 We assume that positions are the first 3 float elements in this buffer,
@@ -187,7 +187,7 @@ namespace Ogre
             /** Default constructor, you should not call this but use AnimationTrack::createKeyFrame
              * instead. */
             VertexPoseKeyFrame( const AnimationTrack *parent, Real time );
-            ~VertexPoseKeyFrame() {}
+            ~VertexPoseKeyFrame() override {}
 
             /** Reference to a pose at a given influence level
             @remarks

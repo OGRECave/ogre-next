@@ -193,7 +193,7 @@ namespace Ogre
         /// Named constructor
         Frustum( IdType id, ObjectMemoryManager *objectMemoryManager );
 
-        virtual ~Frustum();
+        ~Frustum() override;
         /** Sets the Y-dimension Field Of View (FOV) of the frustum.
         @remarks
             Field Of View (FOV) is the angle made between the frustum's position, and the edges

@@ -105,7 +105,7 @@ namespace Ogre
             /// Constructor: do not call direct, use OverlayManager::create
             Overlay( const String &name, IdType id, ObjectMemoryManager *objectMemoryManager,
                      uint8 renderQueueId );
-            virtual ~Overlay();
+            ~Overlay() override;
 
             /** Returns the type name of this object. */
             const String &getMovableType() const override;

@@ -226,7 +226,7 @@ namespace Ogre
     public:
         /** Standard constructor, should be called by SceneManager. */
         RegionSceneQuery( SceneManager *mgr );
-        virtual ~RegionSceneQuery();
+        ~RegionSceneQuery() override;
         /** Executes the query, returning the results back in one list.
         @remarks
             This method executes the scene query as configured, gathers the results
@@ -378,7 +378,7 @@ namespace Ogre
 
     public:
         RaySceneQuery( SceneManager *mgr );
-        virtual ~RaySceneQuery();
+        ~RaySceneQuery() override;
         /** Sets the ray which is to be used for this query. */
         virtual void setRay( const Ray &ray );
         /** Gets the ray which is to be used for this query. */
@@ -504,7 +504,7 @@ namespace Ogre
 
     public:
         IntersectionSceneQuery( SceneManager *mgr );
-        virtual ~IntersectionSceneQuery();
+        ~IntersectionSceneQuery() override;
 
         /** Executes the query, returning the results back in one list.
         @remarks

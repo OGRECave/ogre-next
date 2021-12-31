@@ -152,7 +152,7 @@ namespace Ogre
 
     public:
         HlmsManager();
-        virtual ~HlmsManager();
+        ~HlmsManager() override;
 
         /// Increments the reference count for the block, despite being const.
         void addReference( const BasicBlock *block );
