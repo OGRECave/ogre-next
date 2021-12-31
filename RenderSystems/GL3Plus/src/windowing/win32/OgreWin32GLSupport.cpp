@@ -25,6 +25,9 @@
  THE SOFTWARE.
  -----------------------------------------------------------------------------
  */
+
+#include "OgreWin32GLSupport.h"
+
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -33,9 +36,9 @@
 
 #include <algorithm>
 
-#include <GL/wglext.h>
-#include "OgreWin32GLSupport.h"
 #include "OgreWin32Window.h"
+
+#include <GL/wglext.h>
 
 #include <sstream>
 
