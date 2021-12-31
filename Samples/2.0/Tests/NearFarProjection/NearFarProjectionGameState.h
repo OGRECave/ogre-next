@@ -11,14 +11,14 @@ namespace Demo
     {
         Ogre::SceneNode *mSceneNode;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         NearFarProjectionGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
+        void createScene01() override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

@@ -19,7 +19,7 @@ namespace Demo
 
         bool mEnableInterpolation;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         GraphicsGameState( const Ogre::String &helpDescription );
@@ -27,11 +27,11 @@ namespace Demo
         Ogre::Vector3 &_getLastPositionRef() { return mLastPosition; }
         Ogre::Vector3 &_getCurrentPositionRef() { return mCurrentPosition; }
 
-        virtual void createScene01();
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

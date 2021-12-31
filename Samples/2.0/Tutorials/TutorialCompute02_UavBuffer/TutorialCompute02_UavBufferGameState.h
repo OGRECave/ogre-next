@@ -22,10 +22,10 @@ namespace Demo
     public:
         TutorialCompute02_UavBufferGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
-        virtual void destroyScene();
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
     };
 }  // namespace Demo
 

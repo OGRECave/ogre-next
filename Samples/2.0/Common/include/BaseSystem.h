@@ -15,7 +15,7 @@ namespace Demo
 
     public:
         BaseSystem( GameState *gameState );
-        virtual ~BaseSystem();
+        ~BaseSystem() override;
 
         virtual void initialize();
         virtual void deinitialize();

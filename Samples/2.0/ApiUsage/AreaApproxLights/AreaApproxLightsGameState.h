@@ -3,6 +3,7 @@
 #define _Demo_AreaApproxLightsGameState_H_
 
 #include "OgreOverlayPrerequisites.h"
+
 #include "OgrePrerequisites.h"
 
 #include "OgreOverlay.h"
@@ -26,17 +27,17 @@ namespace Demo
         void createAreaPlaneMesh();
         Ogre::HlmsUnlitDatablock *createPlaneForAreaLight( Ogre::Light *light );
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         AreaApproxLightsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
-        virtual void destroyScene();
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

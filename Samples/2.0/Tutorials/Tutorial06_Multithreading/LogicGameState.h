@@ -25,8 +25,8 @@ namespace Demo
 
         void _notifyLogicSystem( LogicSystem *logicSystem ) { mLogicSystem = logicSystem; }
 
-        virtual void createScene01();
-        virtual void update( float timeSinceLast );
+        void createScene01() override;
+        void update( float timeSinceLast ) override;
     };
 }  // namespace Demo
 

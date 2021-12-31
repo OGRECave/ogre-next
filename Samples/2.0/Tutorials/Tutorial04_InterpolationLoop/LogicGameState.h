@@ -19,7 +19,7 @@ namespace Demo
 
         void _notifyGraphicsGameState( GraphicsGameState *graphicsGameState );
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
     };
 }  // namespace Demo
 

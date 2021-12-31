@@ -89,16 +89,16 @@ namespace Demo
 
         bool needsVoxels() const;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         VoxelizerGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
-        virtual void destroyScene();
-        virtual void update( float timeSinceLast );
+        void createScene01() override;
+        void destroyScene() override;
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

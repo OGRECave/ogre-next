@@ -2,15 +2,16 @@
 #ifndef _Demo_GraphicsSystem_H_
 #define _Demo_GraphicsSystem_H_
 
-#include "BaseSystem.h"
-#include "GameEntityManager.h"
-#include "OgreColourValue.h"
 #include "OgreOverlayPrerequisites.h"
 #include "OgrePrerequisites.h"
-#include "System/StaticPluginLoader.h"
 
+#include "BaseSystem.h"
+
+#include "GameEntityManager.h"
+#include "OgreColourValue.h"
 #include "OgreOverlaySystem.h"
 #include "SdlEmulationLayer.h"
+#include "System/StaticPluginLoader.h"
 #include "Threading/OgreUniformScalableTask.h"
 
 #if OGRE_USE_SDL2

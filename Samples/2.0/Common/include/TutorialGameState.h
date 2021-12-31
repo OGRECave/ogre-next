@@ -36,7 +36,7 @@ namespace Demo
         Ogre::v1::TextAreaOverlayElement *mDebugTextShadow;
 
         virtual void createDebugTextOverlay();
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         TutorialGameState( const Ogre::String &helpDescription );

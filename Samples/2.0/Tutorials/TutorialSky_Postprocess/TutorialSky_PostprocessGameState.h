@@ -30,7 +30,7 @@ namespace Demo
     public:
         TutorialSky_PostprocessGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
+        void createScene01() override;
     };
 }  // namespace Demo
 

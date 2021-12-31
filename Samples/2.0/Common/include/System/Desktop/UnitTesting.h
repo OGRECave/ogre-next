@@ -133,7 +133,7 @@ namespace Demo
         void saveToJson( const char *fullpath, const bool bCompressDuration );
 
         virtual void keyPressed( const SDL_KeyboardEvent &arg );
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
         virtual void mouseMoved( const SDL_Event &arg );
         virtual void mousePressed( const SDL_MouseButtonEvent &arg, Ogre::uint8 id );
         virtual void mouseReleased( const SDL_MouseButtonEvent &arg, Ogre::uint8 id );

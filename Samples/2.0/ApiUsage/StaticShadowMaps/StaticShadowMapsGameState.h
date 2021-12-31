@@ -5,6 +5,7 @@
 #include "OgreOverlay.h"
 #include "OgreOverlayPrerequisites.h"
 #include "OgrePrerequisites.h"
+
 #include "TutorialGameState.h"
 
 namespace Ogre
@@ -27,18 +28,18 @@ namespace Demo
         Ogre::v1::Overlay *mDebugOverlayPSSM;
         Ogre::v1::Overlay *mDebugOverlaySpotlights;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
         void createShadowMapDebugOverlays();
 
     public:
         StaticShadowMapsGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
+        void createScene01() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

@@ -31,19 +31,19 @@ namespace Demo
         Ogre::TextureGpu *mDynamicCubemap;
         Ogre::CompositorWorkspace *mDynamicCubemapWorkspace;
 
-        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+        void generateDebugText( float timeSinceLast, Ogre::String &outText ) override;
 
     public:
         DynamicCubemapGameState( const Ogre::String &helpDescription );
 
         Ogre::CompositorWorkspace *setupCompositor();
 
-        virtual void createScene01();
-        virtual void destroyScene();
+        void createScene01() override;
+        void destroyScene() override;
 
-        virtual void update( float timeSinceLast );
+        void update( float timeSinceLast ) override;
 
-        virtual void keyReleased( const SDL_KeyboardEvent &arg );
+        void keyReleased( const SDL_KeyboardEvent &arg ) override;
     };
 }  // namespace Demo
 

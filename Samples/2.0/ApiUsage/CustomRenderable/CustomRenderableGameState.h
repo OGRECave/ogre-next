@@ -19,8 +19,8 @@ namespace Demo
     public:
         CustomRenderableGameState( const Ogre::String &helpDescription );
 
-        virtual void createScene01();
-        virtual void destroyScene();
+        void createScene01() override;
+        void destroyScene() override;
     };
 }  // namespace Demo
 
