@@ -42,13 +42,13 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreWindow.h"
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( __clang__ )
 #    pragma GCC diagnostic push
 #    pragma GCC diagnostic ignored "-Wclass-memaccess"
 #endif
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( __clang__ )
 #    pragma GCC diagnostic pop
 #endif
 
@@ -293,7 +293,7 @@ namespace Demo
                          "Could not write to file " + Ogre::String( fullpath ) );
         }
 
-        outFile.write( jsonStr.c_str(), jsonStr.size() );
+        outFile.write( jsonStr.c_str(), static_cast<std::streamsize>( jsonStr.size() ) );
     }
     //-------------------------------------------------------------------------
     bool UnitTest::shouldRecordKey( const SDL_KeyboardEvent &arg )

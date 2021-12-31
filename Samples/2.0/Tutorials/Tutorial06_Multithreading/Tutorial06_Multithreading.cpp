@@ -164,7 +164,7 @@ unsigned long renderThreadApp( Ogre::ThreadHandle *threadHandle )
 }
 unsigned long renderThread( Ogre::ThreadHandle *threadHandle )
 {
-    unsigned long retVal = -1;
+    unsigned long retVal = std::numeric_limits<unsigned long>::max();
 
     try
     {

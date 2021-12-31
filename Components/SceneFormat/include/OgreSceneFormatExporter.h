@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreSceneFormatExporter_H_
 
 #include "OgreSceneFormatBase.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -37,27 +38,27 @@ namespace Ogre
     class InstantRadiosity;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
 
     /**
-    */
+     */
     class _OgreSceneFormatExport SceneFormatExporter : public SceneFormatBase
     {
     protected:
-        InstantRadiosity        *mInstantRadiosity;
-        String                  mCurrentExportFolder;
+        InstantRadiosity *mInstantRadiosity;
+        String mCurrentExportFolder;
 
-        typedef map<Node*, uint32>::type NodeToIdxMap;
-        NodeToIdxMap            mNodeToIdxMap;
+        typedef map<Node *, uint32>::type NodeToIdxMap;
+        NodeToIdxMap mNodeToIdxMap;
 
-        typedef set<const Mesh*>::type MeshSet;
-        typedef set<const v1::Mesh*>::type MeshV1Set;
-        MeshSet     mExportedMeshes;
-        MeshV1Set   mExportedMeshesV1;
+        typedef set<const Mesh *>::type MeshSet;
+        typedef set<const v1::Mesh *>::type MeshV1Set;
+        MeshSet mExportedMeshes;
+        MeshV1Set mExportedMeshesV1;
 
         bool mUseBinaryFloatingPoint;
         uint8 mCurrentBinFloat;
@@ -65,11 +66,11 @@ namespace Ogre
         char mFloatBinTmpString[24][64];
         char mDoubleBinTmpString[4][384];
 
-        String      mDecalsTexNames[3];
-        TextureGpu  *mDecalsTex[3];
-        bool        mDecalsTexManaged[3];
+        String mDecalsTexNames[3];
+        TextureGpu *mDecalsTex[3];
+        bool mDecalsTexManaged[3];
 
-        static const char* toQuotedStr( bool value );
+        static const char *toQuotedStr( bool value );
         static void toQuotedStr( LwString &jsonStr, Light::LightTypes lightType );
 
         static uint32 encodeFloatBin( float value );
@@ -81,9 +82,9 @@ namespace Ogre
         /// we need all three strings to remain valid when someFunc is executed, otherwise
         /// the successive calls to encodeFloat overwrite the previous returned value
         /// while it may still be used.
-        const char* encodeFloat( float value );
+        const char *encodeFloat( float value );
         /// Warning: not thread safe. Returned pointer gets modified with next call
-        const char* encodeDouble( double value );
+        const char *encodeDouble( double value );
         inline void rewindFloatBinStringPool( uint8 rewindAmount );
         void encodeVector( LwString &jsonStr, const Vector2 &value );
         void encodeVector( LwString &jsonStr, const Vector3 &value );
@@ -117,8 +118,7 @@ namespace Ogre
             Default to exporting everything.
             Note that excluding scene nodes can cause issues later during import.
         */
-        void _exportScene( String &outJson, set<String>::type &savedTextures,
-                           uint32 exportFlags=~0u );
+        void _exportScene( String &outJson, set<String>::type &savedTextures, uint32 exportFlags = ~0u );
 
     public:
         SceneFormatExporter( Root *root, SceneManager *sceneManager,
@@ -154,16 +154,17 @@ namespace Ogre
             Defaults to exporting everything.
             Note that excluding scene nodes can cause issues later during import.
         */
-        void exportScene( String &outJson, uint32 exportFlags=~SceneFlags::TexturesOriginal );
+        void exportScene( String &outJson,
+                          uint32 exportFlags = static_cast<uint32>( ~SceneFlags::TexturesOriginal ) );
 
-        void exportSceneToFile( const String &folderPath,
-                                uint32 exportFlags=~SceneFlags::TexturesOriginal );
+        void exportSceneToFile( const String &folderPath, uint32 exportFlags = static_cast<uint32>(
+                                                              ~SceneFlags::TexturesOriginal ) );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

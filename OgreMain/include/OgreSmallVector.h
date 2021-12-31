@@ -260,12 +260,12 @@ namespace Ogre
         reverse_iterator       rend() { return reverse_iterator( begin() ); }
         const_reverse_iterator rend() const { return const_reverse_iterator( begin() ); }
 
-        size_type size() const { return end() - begin(); }
+        size_type size() const { return static_cast<size_type>( end() - begin() ); }
         size_type max_size() const { return size_type( -1 ) / sizeof( T ); }
 
         /// capacity - Return the total number of elements in the currently allocated
         /// buffer.
-        size_t capacity() const { return capacity_ptr() - begin(); }
+        size_t capacity() const { return static_cast<size_t>( capacity_ptr() - begin() ); }
 
         /// data - Return a pointer to the vector's buffer, even if empty().
         pointer data() { return pointer( begin() ); }

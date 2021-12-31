@@ -31,7 +31,7 @@ namespace Demo
     HdrGameState::HdrGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mAnimateObjects( true ),
-        mCurrentPreset( -1 ),
+        mCurrentPreset( std::numeric_limits<Ogre::uint32>::max() ),
         mExposure( 0.0f ),
         mMinAutoExposure( -2.5f ),
         mMaxAutoExposure( 2.5f ),
@@ -104,7 +104,7 @@ namespace Demo
 
                 item->setVisibilityFlags( 0x000000001 );
 
-                size_t idx = i * 4 + j;
+                const size_t idx = static_cast<size_t>( i * 4 + j );
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
@@ -294,65 +294,94 @@ namespace Demo
         //  Exposure values were adjusted by hand based on observation.
         const Preset c_presets[] = {
             {
-                "Bright, sunny day", Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) * 60.0f,  // Sky
+                "Bright, sunny day",
+                Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) * 60.0f,  // Sky
                 Ogre::ColourValue( 0.3f, 0.50f, 0.7f ) * 4.5f,
                 Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 2.925f,
-                97.0f,              // Sun power
-                1.5f, 1.5f,         // Lights
-                0.0f, -1.0f, 2.5f,  // Exposure
-                5.0f,               // Bloom
-                16.0f               // Env. map scale
+                {
+                    97.0f,      // Sun power
+                    1.5f, 1.5f  // Lights
+                },
+                0.0f,   // Exposure
+                -1.0f,  // Exposure
+                2.5f,   // Exposure
+                5.0f,   // Bloom
+                16.0f   // Env. map scale
             },
             {
-                "Average, slightly hazy day", Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) * 32.0f,  // Sky
+                "Average, slightly hazy day",
+                Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) * 32.0f,  // Sky
                 Ogre::ColourValue( 0.3f, 0.50f, 0.7f ) * 3.15f,
                 Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 2.0475f,
-                48.0f,              // Sun power
-                1.5f, 1.5f,         // Lights
-                0.0f, -2.0f, 2.5f,  // Exposure
-                5.0f,               // Bloom
-                8.0f                // Env. map scale
+                {
+                    48.0f,      // Sun power
+                    1.5f, 1.5f  // Lights
+                },
+                0.0f,   // Exposure
+                -2.0f,  // Exposure
+                2.5f,   // Exposure
+                5.0f,   // Bloom
+                8.0f    // Env. map scale
             },
             {
-                "Heavy overcast day", Ogre::ColourValue( 0.4f, 0.4f, 0.4f ) * 4.5f,  // Sky
+                "Heavy overcast day",
+                Ogre::ColourValue( 0.4f, 0.4f, 0.4f ) * 4.5f,  // Sky
                 Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) * 0.4f,
                 Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) * 0.365625f,
-                6.0625f,            // Sun power
-                1.5f, 1.5f,         // Lights
-                0.0f, -2.5f, 1.0f,  // Exposure
-                5.0f,               // Bloom
-                0.5f                // Env. map scale
+                {
+                    6.0625f,    // Sun power
+                    1.5f, 1.5f  // Lights
+                },
+                0.0f,   // Exposure
+                -2.5f,  // Exposure
+                1.0f,   // Exposure
+                5.0f,   // Bloom
+                0.5f    // Env. map scale
             },
             {
-                "Gibbous moon night", Ogre::ColourValue( 0.27f, 0.3f, 0.6f ) * 0.01831072f,  // Sky
+                "Gibbous moon night",
+                Ogre::ColourValue( 0.27f, 0.3f, 0.6f ) * 0.01831072f,  // Sky
                 Ogre::ColourValue( 0.5f, 0.5f, 0.50f ) * 0.003f,
                 Ogre::ColourValue( 0.4f, 0.5f, 0.65f ) * 0.00274222f,
-                0.0009251f,          // Sun power
-                1.5f, 1.5f,          // Lights
-                0.65f, -2.5f, 3.0f,  // Exposure
-                5.0f,                // Bloom
-                0.0152587890625f     // Env. map scale
+                {
+                    0.0009251f,  // Sun power
+                    1.5f, 1.5f   // Lights
+                },
+                0.65f,            // Exposure
+                -2.5f,            // Exposure
+                3.0f,             // Exposure
+                5.0f,             // Bloom
+                0.0152587890625f  // Env. map scale
             },
             {
                 "Gibbous moon night w/ powerful spotlights",
                 Ogre::ColourValue( 0.27f, 0.3f, 0.6f ) * 0.01831072f,  // Sky
                 Ogre::ColourValue( 0.5f, 0.5f, 0.50f ) * 0.003f,
                 Ogre::ColourValue( 0.4f, 0.5f, 0.65f ) * 0.00274222f,
-                0.0009251f,          // Sun power
-                6.5f, 6.5f,          // Lights
-                0.65f, -2.5f, 3.0f,  // Exposure
-                5.0f,                // Bloom
-                0.0152587890625f     // Env. map scale
+                {
+                    0.0009251f,  // Sun power
+                    6.5f, 6.5f   // Lights
+                },
+                0.65f,            // Exposure
+                -2.5f,            // Exposure
+                3.0f,             // Exposure
+                5.0f,             // Bloom
+                0.0152587890625f  // Env. map scale
             },
             {
-                "JJ Abrams style", Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) * 6.0f,  // Sky
+                "JJ Abrams style",
+                Ogre::ColourValue( 0.2f, 0.4f, 0.6f ) * 6.0f,  // Sky
                 Ogre::ColourValue( 0.3f, 0.50f, 0.7f ) * 0.1125f,
                 Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 0.073125f,
-                4.0f,              // Sun power
-                17.05f, 17.05f,    // Lights
-                0.5f, 1.0f, 2.5f,  // Exposure
-                3.0f,              // Bloom
-                1.0f,              // Env. map scale
+                {
+                    4.0f,           // Sun power
+                    17.05f, 17.05f  // Lights
+                },
+                0.5f,  // Exposure
+                1.0f,  // Exposure
+                2.5f,  // Exposure
+                3.0f,  // Bloom
+                1.0f,  // Env. map scale
             },
         };
 
@@ -494,7 +523,7 @@ namespace Demo
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
             bool showMovingObjects = ( visibilityMask & 0x00000001 );
             showMovingObjects = !showMovingObjects;
-            visibilityMask &= ~0x00000001;
+            visibilityMask &= static_cast<uint32_t>( ~0x00000001 );
             visibilityMask |= (Ogre::uint32)showMovingObjects;
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
         }
@@ -503,7 +532,7 @@ namespace Demo
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
             bool showPalette = ( visibilityMask & 0x00000002 ) != 0;
             showPalette = !showPalette;
-            visibilityMask &= ~0x00000002;
+            visibilityMask &= static_cast<uint32_t>( ~0x00000002 );
             visibilityMask |= ( Ogre::uint32 )( showPalette ) << 1;
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
         }

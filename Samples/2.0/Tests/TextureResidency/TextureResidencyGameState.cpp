@@ -113,7 +113,8 @@ namespace Demo
         for( size_t i = mNumInitialTextures; i < numTextures; ++i )
             textureMgr->destroyTexture( mTextures[i] );
 
-        mTextures.erase( mTextures.begin() + mNumInitialTextures, mTextures.end() );
+        mTextures.erase( mTextures.begin() + static_cast<ptrdiff_t>( mNumInitialTextures ),
+                         mTextures.end() );
 
         if( wasShowingTexturesOnScreen )
             showTexturesOnScreen();

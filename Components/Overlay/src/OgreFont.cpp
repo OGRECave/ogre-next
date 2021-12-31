@@ -315,8 +315,8 @@ namespace Ogre
         }
 
         // Now work out how big our texture needs to be
-        size_t rawSize =
-            ( max_width + mCharacterSpacer ) * ( ( max_height >> 6 ) + mCharacterSpacer ) * glyphCount;
+        size_t rawSize = ( static_cast<size_t>( max_width ) + mCharacterSpacer ) *
+                         ( static_cast<size_t>( max_height >> 6 ) + mCharacterSpacer ) * glyphCount;
 
         uint32 tex_side = static_cast<uint32>( Math::Sqrt( (Real)rawSize ) );
         // just in case the size might chop a glyph in half, add another glyph width/height
@@ -362,7 +362,7 @@ namespace Ogre
 
         size_t l = 0, m = 0;
         CodePointRangeList::const_iterator itor = mCodePointRangeList.begin();
-        CodePointRangeList::const_iterator end = mCodePointRangeList.end();
+        CodePointRangeList::const_iterator endt = mCodePointRangeList.end();
         while( itor != end )
         {
             const CodePointRange &range = *itor;
@@ -399,8 +399,9 @@ namespace Ogre
 
                 for( int j = 0; j < face->glyph->bitmap.rows; ++j )
                 {
-                    size_t row = j + m + y_bearing;
-                    uint8 *pDest = &imageData[( row * bytesPerRow ) + ( l + x_bearing ) * bytesPerPixel];
+                    const size_t row = static_cast<size_t>( j ) + m + static_cast<size_t>( y_bearing );
+                    uint8 *pDest = &imageData[( row * bytesPerRow ) +
+                                              ( l + static_cast<size_t>( x_bearing ) ) * bytesPerPixel];
                     for( int k = 0; k < face->glyph->bitmap.width; k++ )
                     {
                         if( mAntialiasColour )
@@ -421,19 +422,20 @@ namespace Ogre
 
                 this->setGlyphTexCoords(
                     cp,
-                    (Real)l / (Real)finalWidth,                                          // u1
-                    (Real)m / (Real)finalHeight,                                         // v1
-                    ( Real )( l + ( face->glyph->advance.x >> 6 ) ) / (Real)finalWidth,  // u2
-                    ( m + ( max_height >> 6 ) ) / (Real)finalHeight,                     // v2
+                    (Real)l / (Real)finalWidth,   // u1
+                    (Real)m / (Real)finalHeight,  // v1
+                    ( Real )( l + static_cast<size_t>( face->glyph->advance.x >> 6 ) ) /
+                        (Real)finalWidth,                                                // u2
+                    ( m + static_cast<size_t>( max_height >> 6 ) ) / (Real)finalHeight,  // v2
                     textureAspect );
 
                 // Advance a column
-                l += ( advance + mCharacterSpacer );
+                l += ( static_cast<uint>( advance ) + mCharacterSpacer );
 
                 // If at end of row
-                if( finalWidth - 1 < l + ( advance ) )
+                if( finalWidth - 1 < l + static_cast<size_t>( advance ) )
                 {
-                    m += ( max_height >> 6 ) + mCharacterSpacer;
+                    m += static_cast<size_t>( max_height >> 6 ) + mCharacterSpacer;
                     l = 0;
                 }
             }
@@ -524,7 +526,7 @@ namespace Ogre
     void Font::CmdCharSpacer::doSet( void *target, const String &val )
     {
         Font *f = static_cast<Font *>( target );
-        f->setCharacterSpacer( atoi( val.c_str() ) );
+        f->setCharacterSpacer( static_cast<uint>( atoi( val.c_str() ) ) );
     }
     //-----------------------------------------------------------------------
     String Font::CmdSize::doGet( const void *target ) const

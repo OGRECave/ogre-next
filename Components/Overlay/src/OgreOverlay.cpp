@@ -72,14 +72,15 @@ namespace Ogre
         //---------------------------------------------------------------------
         void Overlay::setZOrder( uint16 zorder )
         {
-            mObjectData.mDistanceToCamera[mObjectData.mIndex] = ( zorder ^ 0xffff )
-                                                                << ( 32u - RqBits::DepthBits );
+            mObjectData.mDistanceToCamera[mObjectData.mIndex] =
+                static_cast<uint32>( zorder ^ 0xffff )
+                << ( 32u - static_cast<uint32>( RqBits::DepthBits ) );
         }
         //---------------------------------------------------------------------
         uint16 Overlay::getZOrder() const
         {
             return ( uint16 )( mObjectData.mDistanceToCamera[mObjectData.mIndex] >>
-                               ( 32u - RqBits::DepthBits ) ) ^
+                               ( 32u - static_cast<uint32>( RqBits::DepthBits ) ) ) ^
                    0xffff;
         }
         //---------------------------------------------------------------------

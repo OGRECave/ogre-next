@@ -189,7 +189,7 @@ namespace Ogre
             else
             {
                 // Direct character
-                cp = params[1].at( 0 );
+                cp = static_cast<Font::CodePoint>( params[1].at( 0 ) );
             }
             pFont->setGlyphTexCoords(
                 cp, StringConverter::parseReal( params[2] ), StringConverter::parseReal( params[3] ),

@@ -685,10 +685,12 @@ namespace Demo
             return;
 
         CompositorWorkspace *workspace = mGraphicsSystem->getCompositorWorkspace();
-        Ogre::StringVector::const_iterator itor = mCompositorNames.begin() + mCurrentPage;
+        Ogre::StringVector::const_iterator itor =
+            mCompositorNames.begin() + static_cast<ptrdiff_t>( mCurrentPage );
         Ogre::StringVector::const_iterator end =
             mCompositorNames.begin() +
-            std::min( mCurrentPage + COMPOSITORS_PER_PAGE, mCompositorNames.size() );
+            static_cast<ptrdiff_t>(
+                std::min( mCurrentPage + COMPOSITORS_PER_PAGE, mCompositorNames.size() ) );
 
         size_t idx = 0;
         while( itor != end )
@@ -722,7 +724,7 @@ namespace Demo
 
         if( arg.keysym.sym >= SDLK_1 && arg.keysym.sym <= SDLK_8 )
         {
-            size_t idx = mCurrentPage + arg.keysym.sym - SDLK_1;
+            size_t idx = mCurrentPage + static_cast<size_t>( arg.keysym.sym - SDLK_1 );
 
             if( idx < mCompositorNames.size() )
             {
@@ -731,7 +733,7 @@ namespace Demo
         }
         else if( arg.keysym.sym >= SDLK_KP_1 && arg.keysym.sym <= SDLK_KP_8 )
         {
-            size_t idx = mCurrentPage + arg.keysym.sym - SDLK_KP_1;
+            size_t idx = mCurrentPage + static_cast<size_t>( arg.keysym.sym - SDLK_KP_1 );
 
             if( idx < mCompositorNames.size() )
             {

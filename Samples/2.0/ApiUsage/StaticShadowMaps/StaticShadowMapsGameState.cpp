@@ -83,7 +83,7 @@ namespace Demo
                     "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     Ogre::SCENE_DYNAMIC );
 
-                size_t idx = i * 4 + j;
+                const size_t idx = static_cast<size_t>( i * 4 + j );
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
@@ -161,7 +161,7 @@ namespace Demo
             workspace->findShadowNode( "StaticShadowMapsShadowNode" );
         const Ogre::CompositorShadowNodeDef *shadowNodeDef = shadowNode->getDefinition();
 
-        for( int i = 0; i < 5; ++i )
+        for( size_t i = 0u; i < 5u; ++i )
         {
             const Ogre::String datablockName( "depthShadow" + Ogre::StringConverter::toString( i ) );
             Ogre::HlmsUnlitDatablock *depthShadow =

@@ -29,40 +29,34 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreSceneFormatImporter.h"
-#include "OgreSceneManager.h"
-#include "OgreRoot.h"
 
-#include "OgreLwString.h"
-
-#include "OgreItem.h"
-#include "OgreMesh2.h"
-#include "OgreEntity.h"
-#include "OgreDecal.h"
-#include "OgreHlms.h"
-
-#include "OgreHlmsPbs.h"
-#include "InstantRadiosity/OgreInstantRadiosity.h"
-#include "OgreIrradianceVolume.h"
-
-#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Compositor/OgreCompositorManager2.h"
-
+#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "InstantRadiosity/OgreInstantRadiosity.h"
+#include "OgreDecal.h"
+#include "OgreEntity.h"
+#include "OgreFileSystemLayer.h"
+#include "OgreHlms.h"
+#include "OgreHlmsPbs.h"
+#include "OgreIrradianceVolume.h"
+#include "OgreItem.h"
+#include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "OgreMesh2.h"
+#include "OgreMesh2Serializer.h"
+#include "OgreMeshSerializer.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
 #include "OgreTextureFilters.h"
 #include "OgreTextureGpuManager.h"
 
-#include "OgreMeshSerializer.h"
-#include "OgreMesh2Serializer.h"
-#include "OgreFileSystemLayer.h"
-
-#include "OgreLogManager.h"
-
-#if defined( __GNUC__ ) && !defined(__clang__)
+#if defined( __GNUC__ ) && !defined( __clang__ )
 #    pragma GCC diagnostic push
 #    pragma GCC diagnostic ignored "-Wclass-memaccess"
 #endif
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
-#if defined( __GNUC__ ) && !defined(__clang__)
+#if defined( __GNUC__ ) && !defined( __clang__ )
 #    pragma GCC diagnostic pop
 #endif
 
@@ -79,8 +73,8 @@ namespace Ogre
         mUseBinaryFloatingPoint( true ),
         mUsingOitd( false )
     {
-        memset( mRootNodes, 0, sizeof(mRootNodes) );
-        memset( mParentlessRootNodes, 0, sizeof(mParentlessRootNodes) );
+        memset( mRootNodes, 0, sizeof( mRootNodes ) );
+        memset( mParentlessRootNodes, 0, sizeof( mParentlessRootNodes ) );
     }
     //-----------------------------------------------------------------------------------
     SceneFormatImporter::~SceneFormatImporter()
@@ -120,7 +114,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Light::LightTypes SceneFormatImporter::parseLightType( const char *value )
     {
-        for( size_t i=0; i<Light::NUM_LIGHT_TYPES+1u; ++i )
+        for( size_t i = 0; i < Light::NUM_LIGHT_TYPES + 1u; ++i )
         {
             if( !strcmp( value, c_lightTypes[i] ) )
                 return static_cast<Light::LightTypes>( i );
@@ -141,8 +135,7 @@ namespace Ogre
                 return true;
             else
             {
-                if( !strcmp( jsonValue.GetString(), "nan" ) ||
-                    !strcmp( jsonValue.GetString(), "inf" ) ||
+                if( !strcmp( jsonValue.GetString(), "nan" ) || !strcmp( jsonValue.GetString(), "inf" ) ||
                     !strcmp( jsonValue.GetString(), "-inf" ) )
                 {
                     return true;
@@ -165,8 +158,7 @@ namespace Ogre
                 return true;
             else
             {
-                if( !strcmp( jsonValue.GetString(), "nan" ) ||
-                    !strcmp( jsonValue.GetString(), "inf" ) ||
+                if( !strcmp( jsonValue.GetString(), "nan" ) || !strcmp( jsonValue.GetString(), "inf" ) ||
                     !strcmp( jsonValue.GetString(), "-inf" ) )
                 {
                     return true;
@@ -183,8 +175,8 @@ namespace Ogre
         {
             union MyUnion
             {
-                float   f32;
-                uint32  u32;
+                float f32;
+                uint32 u32;
             };
 
             MyUnion myUnion;
@@ -217,8 +209,8 @@ namespace Ogre
         {
             union MyUnion
             {
-                double  f64;
-                uint64  u64;
+                double f64;
+                uint64 u64;
             };
 
             MyUnion myUnion;
@@ -250,7 +242,7 @@ namespace Ogre
         Vector2 retVal( Vector2::ZERO );
 
         const rapidjson::SizeType arraySize = std::min( 2u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
@@ -264,7 +256,7 @@ namespace Ogre
         Vector3 retVal( Vector3::ZERO );
 
         const rapidjson::SizeType arraySize = std::min( 3u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
@@ -278,7 +270,7 @@ namespace Ogre
         Vector4 retVal( Vector4::ZERO );
 
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
@@ -292,7 +284,7 @@ namespace Ogre
         Quaternion retVal( Quaternion::IDENTITY );
 
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
@@ -306,7 +298,7 @@ namespace Ogre
         ColourValue retVal( ColourValue::Black );
 
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
@@ -334,7 +326,7 @@ namespace Ogre
         Matrix3 retVal( Matrix3::IDENTITY );
 
         const rapidjson::SizeType arraySize = std::min( 12u, jsonArray.Size() );
-        for( rapidjson::SizeType i=0; i<arraySize; ++i )
+        for( rapidjson::SizeType i = 0; i < arraySize; ++i )
         {
             if( isFloat( jsonArray[i] ) )
                 retVal[0][i] = decodeFloat( jsonArray[i] );
@@ -345,7 +337,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void SceneFormatImporter::importNode( const rapidjson::Value &nodeValue, Node *node )
     {
-        rapidjson::Value::ConstMemberIterator  itor;
+        rapidjson::Value::ConstMemberIterator itor;
 
         itor = nodeValue.FindMember( "position" );
         if( itor != nodeValue.MemberEnd() && itor->value.IsArray() )
@@ -372,7 +364,7 @@ namespace Ogre
             node->setName( itor->value.GetString() );
     }
     //-----------------------------------------------------------------------------------
-    SceneNode* SceneFormatImporter::importSceneNode( const rapidjson::Value &sceneNodeValue,
+    SceneNode *SceneFormatImporter::importSceneNode( const rapidjson::Value &sceneNodeValue,
                                                      uint32 nodeIdx,
                                                      const rapidjson::Value &sceneNodesJson )
     {
@@ -402,26 +394,26 @@ namespace Ogre
                 IndexToSceneNodeMap::const_iterator parentNodeIt = mCreatedSceneNodes.find( parentIdx );
                 if( parentNodeIt == mCreatedSceneNodes.end() )
                 {
-                    //Our parent node will be created after us. Initialize it now.
-                    if( parentIdx < sceneNodesJson.Size() &&
-                        sceneNodesJson[parentIdx].IsObject() )
+                    // Our parent node will be created after us. Initialize it now.
+                    if( parentIdx < sceneNodesJson.Size() && sceneNodesJson[parentIdx].IsObject() )
                     {
-                        parentNode = importSceneNode( sceneNodesJson[parentIdx], parentIdx,
-                                                      sceneNodesJson );
+                        parentNode =
+                            importSceneNode( sceneNodesJson[parentIdx], parentIdx, sceneNodesJson );
                     }
 
                     if( !parentNode )
                     {
-                        OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                                     "Node " + StringConverter::toString( nodeIdx ) + " is child of " +
-                                     StringConverter::toString( parentIdx ) +
-                                     " but we could not find it or create it. This file is malformed.",
-                                     "SceneFormatImporter::importSceneNode" );
+                        OGRE_EXCEPT(
+                            Exception::ERR_ITEM_NOT_FOUND,
+                            "Node " + StringConverter::toString( nodeIdx ) + " is child of " +
+                                StringConverter::toString( parentIdx ) +
+                                " but we could not find it or create it. This file is malformed.",
+                            "SceneFormatImporter::importSceneNode" );
                     }
                 }
                 else
                 {
-                    //Parent was already created
+                    // Parent was already created
                     parentNode = parentNodeIt->second;
                 }
 
@@ -429,8 +421,8 @@ namespace Ogre
             }
             else
             {
-                //Has no parent. Could be root scene node,
-                //or a loose node whose parent wasn't exported.
+                // Has no parent. Could be root scene node,
+                // or a loose node whose parent wasn't exported.
                 bool isRootNode = false;
                 itTmp = sceneNodeValue.FindMember( "is_root_node" );
                 if( itTmp != sceneNodeValue.MemberEnd() && itTmp->value.IsBool() )
@@ -455,7 +447,7 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "Object 'node' must be present in a scene_node. SceneNode: " +
-                         StringConverter::toString( nodeIdx ) + " File: " + mFilename,
+                             StringConverter::toString( nodeIdx ) + " File: " + mFilename,
                          "SceneFormatImporter::importSceneNodes" );
         }
 
@@ -466,13 +458,12 @@ namespace Ogre
     {
         rapidjson::Value::ConstValueIterator begin = json.Begin();
         rapidjson::Value::ConstValueIterator itor = begin;
-        rapidjson::Value::ConstValueIterator end  = json.End();
+        rapidjson::Value::ConstValueIterator end = json.End();
 
         while( itor != end )
         {
-            const size_t nodeIdx = itor - begin;
-            if( itor->IsObject() &&
-                mCreatedSceneNodes.find( nodeIdx ) == mCreatedSceneNodes.end() )
+            const uint32 nodeIdx = static_cast<uint32>( itor - begin );
+            if( itor->IsObject() && mCreatedSceneNodes.find( nodeIdx ) == mCreatedSceneNodes.end() )
             {
                 importSceneNode( *itor, nodeIdx, json );
             }
@@ -515,8 +506,8 @@ namespace Ogre
         tmpIt = movableObjectValue.FindMember( "local_aabb" );
         if( tmpIt != movableObjectValue.MemberEnd() && tmpIt->value.IsArray() )
         {
-            movableObject->setLocalAabb( decodeAabbArray( tmpIt->value,
-                                                          movableObject->getLocalAabb() ) );
+            movableObject->setLocalAabb(
+                decodeAabbArray( tmpIt->value, movableObject->getLocalAabb() ) );
         }
 
         ObjectData &objData = movableObject->_getObjectData();
@@ -529,7 +520,7 @@ namespace Ogre
         if( tmpIt != movableObjectValue.MemberEnd() && isFloat( tmpIt->value ) )
             movableObject->setRenderingDistance( decodeFloat( tmpIt->value ) );
 
-        //Decode raw flag values
+        // Decode raw flag values
         tmpIt = movableObjectValue.FindMember( "visibility_flags" );
         if( tmpIt != movableObjectValue.MemberEnd() && tmpIt->value.IsUint() )
             objData.mVisibilityFlags[objData.mIndex] = tmpIt->value.GetUint();
@@ -550,7 +541,7 @@ namespace Ogre
         if( tmpIt != renderableValue.MemberEnd() && tmpIt->value.IsObject() )
         {
             rapidjson::Value::ConstMemberIterator itor = tmpIt->value.MemberBegin();
-            rapidjson::Value::ConstMemberIterator end  = tmpIt->value.MemberEnd();
+            rapidjson::Value::ConstMemberIterator end = tmpIt->value.MemberEnd();
 
             while( itor != end )
             {
@@ -577,8 +568,7 @@ namespace Ogre
             else
             {
                 renderable->setDatablockOrMaterialName(
-                            tmpIt->value.GetString(),
-                            ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                    tmpIt->value.GetString(), ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             }
         }
 
@@ -631,12 +621,12 @@ namespace Ogre
             meshName = tmpIt->value.GetString();
 
         resourceGroup = "SceneFormatImporter";
-//        tmpIt = entityValue.FindMember( "mesh_resource_group" );
-//        if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsString() )
-//            resourceGroup = tmpIt->value.GetString();
+        // tmpIt = entityValue.FindMember( "mesh_resource_group" );
+        // if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsString() )
+        //    resourceGroup = tmpIt->value.GetString();
 
-//        if( resourceGroup.empty() )
-//            resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
+        // if( resourceGroup.empty() )
+        //    resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
 
         bool isStatic = false;
         rapidjson::Value const *movableObjectValue = 0;
@@ -662,9 +652,8 @@ namespace Ogre
         if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsArray() )
         {
             const rapidjson::Value &subItemsArray = tmpIt->value;
-            const size_t numSubItems = std::min<size_t>( item->getNumSubItems(),
-                                                         subItemsArray.Size() );
-            for( size_t i=0; i<numSubItems; ++i )
+            const size_t numSubItems = std::min<size_t>( item->getNumSubItems(), subItemsArray.Size() );
+            for( size_t i = 0; i < numSubItems; ++i )
             {
                 const rapidjson::Value &subentityValue = subItemsArray[i];
 
@@ -677,7 +666,7 @@ namespace Ogre
     void SceneFormatImporter::importItems( const rapidjson::Value &json )
     {
         rapidjson::Value::ConstValueIterator itor = json.Begin();
-        rapidjson::Value::ConstValueIterator end  = json.End();
+        rapidjson::Value::ConstValueIterator end = json.End();
 
         while( itor != end )
         {
@@ -699,12 +688,12 @@ namespace Ogre
             meshName = tmpIt->value.GetString();
 
         resourceGroup = "SceneFormatImporter";
-//        tmpIt = entityValue.FindMember( "mesh_resource_group" );
-//        if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsString() )
-//            resourceGroup = tmpIt->value.GetString();
+        //        tmpIt = entityValue.FindMember( "mesh_resource_group" );
+        //        if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsString() )
+        //            resourceGroup = tmpIt->value.GetString();
 
-//        if( resourceGroup.empty() )
-//            resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
+        //        if( resourceGroup.empty() )
+        //            resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
 
         bool isStatic = false;
         rapidjson::Value const *movableObjectValue = 0;
@@ -730,9 +719,9 @@ namespace Ogre
         if( tmpIt != entityValue.MemberEnd() && tmpIt->value.IsArray() )
         {
             const rapidjson::Value &subEntitiesArray = tmpIt->value;
-            const size_t numSubEntities = std::min<size_t>( entity->getNumSubEntities(),
-                                                            subEntitiesArray.Size() );
-            for( size_t i=0; i<numSubEntities; ++i )
+            const size_t numSubEntities =
+                std::min<size_t>( entity->getNumSubEntities(), subEntitiesArray.Size() );
+            for( size_t i = 0; i < numSubEntities; ++i )
             {
                 const rapidjson::Value &subEntityValue = subEntitiesArray[i];
 
@@ -745,7 +734,7 @@ namespace Ogre
     void SceneFormatImporter::importEntities( const rapidjson::Value &json )
     {
         rapidjson::Value::ConstValueIterator itor = json.Begin();
-        rapidjson::Value::ConstValueIterator end  = json.End();
+        rapidjson::Value::ConstValueIterator end = json.End();
 
         while( itor != end )
         {
@@ -789,8 +778,8 @@ namespace Ogre
         if( tmpIt != lightValue.MemberEnd() && tmpIt->value.IsArray() )
         {
             const Vector4 rangeConstLinQuad = decodeVector4Array( tmpIt->value );
-            light->setAttenuation( rangeConstLinQuad.x, rangeConstLinQuad.y,
-                                   rangeConstLinQuad.z, rangeConstLinQuad.w );
+            light->setAttenuation( rangeConstLinQuad.x, rangeConstLinQuad.y, rangeConstLinQuad.z,
+                                   rangeConstLinQuad.w );
         }
 
         tmpIt = lightValue.FindMember( "spot" );
@@ -834,7 +823,7 @@ namespace Ogre
     void SceneFormatImporter::importLights( const rapidjson::Value &json )
     {
         rapidjson::Value::ConstValueIterator itor = json.Begin();
-        rapidjson::Value::ConstValueIterator end  = json.End();
+        rapidjson::Value::ConstValueIterator end = json.End();
 
         while( itor != end )
         {
@@ -899,13 +888,11 @@ namespace Ogre
         {
             const size_t numAoIs = tmpIt->value.Size();
 
-            for( size_t i=0; i<numAoIs; ++i )
+            for( size_t i = 0; i < numAoIs; ++i )
             {
                 const rapidjson::Value &aoi = tmpIt->value[i];
 
-                if( aoi.IsArray() && aoi.Size() == 2u &&
-                    aoi[0].IsArray() &&
-                    isFloat( aoi[1] ) )
+                if( aoi.IsArray() && aoi.Size() == 2u && aoi[0].IsArray() && isFloat( aoi[1] ) )
                 {
                     Aabb aabb = decodeAabbArray( aoi[0], Aabb::BOX_ZERO );
                     const float sphereRadius = decodeFloat( aoi[1] );
@@ -966,16 +953,11 @@ namespace Ogre
             mIrradianceVolume = new IrradianceVolume( mRoot->getHlmsManager() );
 
             tmpIt = json.FindMember( "num_blocks" );
-            if( tmpIt != json.MemberEnd() && tmpIt->value.IsArray() &&
-                tmpIt->value.Size() == 3u &&
-                tmpIt->value[0].IsUint() &&
-                tmpIt->value[1].IsUint() &&
-                tmpIt->value[2].IsUint() )
+            if( tmpIt != json.MemberEnd() && tmpIt->value.IsArray() && tmpIt->value.Size() == 3u &&
+                tmpIt->value[0].IsUint() && tmpIt->value[1].IsUint() && tmpIt->value[2].IsUint() )
             {
                 mIrradianceVolume->createIrradianceVolumeTexture(
-                            tmpIt->value[0].GetUint(),
-                            tmpIt->value[1].GetUint(),
-                            tmpIt->value[2].GetUint() );
+                    tmpIt->value[0].GetUint(), tmpIt->value[1].GetUint(), tmpIt->value[2].GetUint() );
             }
 
             tmpIt = json.FindMember( "power_scale" );
@@ -1021,25 +1003,23 @@ namespace Ogre
         if( mUsingOitd )
             additionalExtension = ".oitd";
 
-        DecalTex decalTex[3] =
-        {
+        DecalTex decalTex[3] = {
             DecalTex( 0, 0, "diffuse" ),
             DecalTex( 0, 0, "normal" ),
             DecalTex( 0, 0, "emissive" ),
         };
 
         char tmpBuffer[32];
-        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
         TextureGpuManager *textureManager =
-                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
-        for( int i=0; i<3; ++i )
+        for( int i = 0; i < 3; ++i )
         {
             texName.clear();
             texName.a( decalTex[i].texTypeName, "_managed" );
             tmpIt = decalValue.FindMember( texName.c_str() );
-            if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsArray() &&
-                tmpIt->value.Size() == 3u &&
+            if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsArray() && tmpIt->value.Size() == 3u &&
                 tmpIt->value[0].IsString() && tmpIt->value[1].IsString() && tmpIt->value[2].IsUint() )
             {
                 const char *aliasName = tmpIt->value[0].GetString();
@@ -1054,27 +1034,25 @@ namespace Ogre
                     filters |= TextureFilter::TypePrepareForNormalMapping;
 
                 decalTex[i].texture = textureManager->createOrRetrieveTexture(
-                                          textureName + additionalExtension, aliasName,
-                                          GpuPageOutStrategy::Discard, textureFlags,
-                                          TextureTypes::Type2D, "SceneFormatImporter", filters, poolId );
-                decalTex[i].xIdx    = static_cast<uint16>(decalTex[i].texture->getInternalSliceStart());
+                    textureName + additionalExtension, aliasName, GpuPageOutStrategy::Discard,
+                    textureFlags, TextureTypes::Type2D, "SceneFormatImporter", filters, poolId );
+                decalTex[i].xIdx = static_cast<uint16>( decalTex[i].texture->getInternalSliceStart() );
             }
 
             texName.clear();
             texName.a( decalTex[i].texTypeName, "_raw" );
             tmpIt = decalValue.FindMember( texName.c_str() );
-            if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsArray() &&
-                tmpIt->value.Size() == 2u &&
+            if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsArray() && tmpIt->value.Size() == 2u &&
                 tmpIt->value[0].IsString() && tmpIt->value[1].IsUint() )
             {
                 const char *textureName = tmpIt->value[0].GetString();
                 const uint32 arrayIdx = tmpIt->value[1].GetUint();
 
-                //Open OITD directly
+                // Open OITD directly
                 decalTex[i].texture = textureManager->createOrRetrieveTexture(
-                                          textureName, GpuPageOutStrategy::Discard,
-                                          0, TextureTypes::Type2DArray, "SceneFormatImporter", 0, 0 );
-                decalTex[i].xIdx    = static_cast<uint16>( arrayIdx );
+                    textureName, GpuPageOutStrategy::Discard, 0, TextureTypes::Type2DArray,
+                    "SceneFormatImporter", 0, 0 );
+                decalTex[i].xIdx = static_cast<uint16>( arrayIdx );
             }
         }
 
@@ -1104,7 +1082,7 @@ namespace Ogre
     void SceneFormatImporter::importDecals( const rapidjson::Value &json )
     {
         rapidjson::Value::ConstValueIterator itor = json.Begin();
-        rapidjson::Value::ConstValueIterator end  = json.End();
+        rapidjson::Value::ConstValueIterator end = json.End();
 
         while( itor != end )
         {
@@ -1139,8 +1117,8 @@ namespace Ogre
             if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
             {
                 LogManager::getSingleton().logMessage(
-                            "INFO: Parallax Corrected Cubemaps workspace definition '" +
-                            workspaceName + "not found, using default one." );
+                    "INFO: Parallax Corrected Cubemaps workspace definition '" + workspaceName +
+                    "not found, using default one." );
                 workspaceName = mDefaultPccWorkspaceName;
             }
         }
@@ -1148,17 +1126,16 @@ namespace Ogre
         if( workspaceName.empty() )
         {
             LogManager::getSingleton().logMessage(
-                        "WARNING: Cannot import Parallax Corrected Cubemaps." );
+                "WARNING: Cannot import Parallax Corrected Cubemaps." );
             return;
         }
 
         Ogre::CompositorWorkspaceDef *workspaceDef =
-                compositorManager->getWorkspaceDefinition( workspaceName );
+            compositorManager->getWorkspaceDefinition( workspaceName );
 
         mParallaxCorrectedCubemap = new ParallaxCorrectedCubemap(
-                                        Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(),
-                                        mRoot, mSceneManager, workspaceDef,
-                                        reservedRqId, reservedProxyMask );
+            Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(), mRoot, mSceneManager,
+            workspaceDef, reservedRqId, reservedProxyMask );
 
         uint32 maxWidth = 0, maxHeight = 0;
         PixelFormatGpu blendPixelFormat = PFG_UNKNOWN;
@@ -1188,7 +1165,7 @@ namespace Ogre
             const rapidjson::Value &jsonProbeArray = tmpIt->value;
             const size_t numProbes = jsonProbeArray.Size();
 
-            for( size_t i=0; i<numProbes; ++i )
+            for( size_t i = 0; i < numProbes; ++i )
             {
                 const rapidjson::Value &jsonProbe = jsonProbeArray[i];
 
@@ -1256,7 +1233,7 @@ namespace Ogre
                 cameraPos = mSceneComponentTransform * cameraPos;
                 probeArea.transformAffine( mSceneComponentTransform );
                 areaInnerRegion = mSceneComponentTransform * areaInnerRegion;
-                //orientation = pccTransform3x3 * orientation;
+                // orientation = pccTransform3x3 * orientation;
                 probeShape.transformAffine( mSceneComponentTransform );
 
                 probe->set( cameraPos, probeArea, areaInnerRegion, orientation, probeShape );
@@ -1285,9 +1262,7 @@ namespace Ogre
         rapidjson::Value::ConstMemberIterator tmpIt;
         tmpIt = json.FindMember( "ambient" );
         if( tmpIt != json.MemberEnd() && tmpIt->value.IsArray() && tmpIt->value.Size() >= 4u &&
-            tmpIt->value[0].IsArray() &&
-            tmpIt->value[1].IsArray() &&
-            tmpIt->value[2].IsArray() &&
+            tmpIt->value[0].IsArray() && tmpIt->value[1].IsArray() && tmpIt->value[2].IsArray() &&
             isFloat( tmpIt->value[3] ) )
         {
             const ColourValue upperHemisphere = decodeColourValueArray( tmpIt->value[0] );
@@ -1317,11 +1292,10 @@ namespace Ogre
             if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
             {
                 TextureGpuManager *textureGpuManager =
-                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 TextureGpu *areaLightMask = textureGpuManager->createOrRetrieveTexture(
-                                                String( tmpIt->value.GetString() ) + ".oitd",
-                                                GpuPageOutStrategy::Discard, 0,
-                                                TextureTypes::Type2DArray, "SceneFormatImporter" );
+                    String( tmpIt->value.GetString() ) + ".oitd", GpuPageOutStrategy::Discard, 0,
+                    TextureTypes::Type2DArray, "SceneFormatImporter" );
                 areaLightMask->scheduleTransitionTo( GpuResidency::Resident );
                 HlmsPbs *hlmsPbs = getPbs();
                 hlmsPbs->setAreaLightMasks( areaLightMask );
@@ -1331,34 +1305,34 @@ namespace Ogre
         if( importFlags & SceneFlags::Decals )
         {
             TextureGpuManager *textureManager =
-                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
             char tmpBuffer[32];
             LwString keyName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             const char *texTypes[3] = { "diffuse", "normals", "emissive" };
             TextureGpu *textures[3] = { 0, 0, 0 };
 
-            for( int i=0; i<3; ++i )
+            for( int i = 0; i < 3; ++i )
             {
                 keyName.clear();
-                keyName.a( "decals_", texTypes[i],"_managed" );
+                keyName.a( "decals_", texTypes[i], "_managed" );
                 tmpIt = json.FindMember( keyName.c_str() );
                 if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
                 {
-                    //Most settings shouldn't matter because that alias should've been loaded by now
+                    // Most settings shouldn't matter because that alias should've been loaded by now
                     textures[i] = textureManager->createOrRetrieveTexture(
-                                      tmpIt->value.GetString(), GpuPageOutStrategy::Discard,
-                                      CommonTextureTypes::Diffuse, "SceneFormatImporter" );
+                        tmpIt->value.GetString(), GpuPageOutStrategy::Discard,
+                        CommonTextureTypes::Diffuse, "SceneFormatImporter" );
                 }
 
                 keyName.clear();
-                keyName.a( "decals_", texTypes[i],"_raw" );
+                keyName.a( "decals_", texTypes[i], "_raw" );
                 tmpIt = json.FindMember( keyName.c_str() );
                 if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
                 {
                     textures[i] = textureManager->createOrRetrieveTexture(
-                                      tmpIt->value.GetString(), GpuPageOutStrategy::Discard,
-                                      0, TextureTypes::Type2DArray, "SceneFormatImporter", 0, 0 );
+                        tmpIt->value.GetString(), GpuPageOutStrategy::Discard, 0,
+                        TextureTypes::Type2DArray, "SceneFormatImporter", 0, 0 );
                 }
             }
 
@@ -1371,19 +1345,19 @@ namespace Ogre
     void SceneFormatImporter::importScene( const String &filename, const rapidjson::Document &d,
                                            uint32 importFlags )
     {
-        mUseBinaryFloatingPoint = true; //The default when setting is not present
+        mUseBinaryFloatingPoint = true;  // The default when setting is not present
 
         mFilename = filename;
         destroyInstantRadiosity();
         destroyParallaxCorrectedCubemap();
 
-        //Set null pointers to valid root scene nodes. We'll restore the nullptrs at the end.
+        // Set null pointers to valid root scene nodes. We'll restore the nullptrs at the end.
         SceneNode *oldRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
-        for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+        for( size_t i = 0; i < NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         {
             oldRootNodes[i] = mRootNodes[i];
             if( !mRootNodes[i] )
-                mRootNodes[i] = mSceneManager->getRootSceneNode( static_cast<SceneMemoryMgrTypes>(i) );
+                mRootNodes[i] = mSceneManager->getRootSceneNode( static_cast<SceneMemoryMgrTypes>( i ) );
         }
 
         rapidjson::Value::ConstMemberIterator itor;
@@ -1391,10 +1365,10 @@ namespace Ogre
         itor = d.FindMember( "version" );
         if( itor == d.MemberEnd() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "SceneFormatImporter::importScene",
-                         "JSON file " + filename + " does not contain version key. "
-                         "Probably this is not a valid Ogre scene" );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "SceneFormatImporter::importScene",
+                         "JSON file " + filename +
+                             " does not contain version key. "
+                             "Probably this is not a valid Ogre scene" );
         }
         else
         {
@@ -1404,12 +1378,14 @@ namespace Ogre
                 if( version > LATEST_VERSION )
                 {
                     LogManager::getSingleton().logMessage(
-                                "WARNING: SceneFormatImporter::importScene "
-                                "JSON file " + filename + " is a newer version(" +
-                                StringConverter::toString( version ) +") than what we support (" +
-                                StringConverter::toString( LATEST_VERSION ) + "). "
-                                "Imported scene may not be complete or have graphical corruption. "
-                                "Or crash.", LML_CRITICAL );
+                        "WARNING: SceneFormatImporter::importScene "
+                        "JSON file " +
+                            filename + " is a newer version(" + StringConverter::toString( version ) +
+                            ") than what we support (" + StringConverter::toString( LATEST_VERSION ) +
+                            "). "
+                            "Imported scene may not be complete or have graphical corruption. "
+                            "Or crash.",
+                        LML_CRITICAL );
                 }
             }
         }
@@ -1467,7 +1443,7 @@ namespace Ogre
         if( itor != d.MemberEnd() && itor->value.IsObject() )
             importSceneSettings( itor->value, importFlags );
 
-        if( !(importFlags & SceneFlags::LightsVpl) )
+        if( !( importFlags & SceneFlags::LightsVpl ) )
         {
             LightArray::const_iterator itLight = mVplLights.begin();
             LightArray::const_iterator enLight = mVplLights.end();
@@ -1495,15 +1471,13 @@ namespace Ogre
             if( mIrradianceVolume )
             {
                 mInstantRadiosity->fillIrradianceVolume(
-                            mIrradianceVolume,
-                            mIrradianceVolume->getIrradianceCellSize(),
-                            mIrradianceVolume->getIrradianceOrigin(),
-                            mIrradianceVolume->getIrradianceMaxPower(),
-                            mIrradianceVolume->getFadeAttenuationOverDistace() );
+                    mIrradianceVolume, mIrradianceVolume->getIrradianceCellSize(),
+                    mIrradianceVolume->getIrradianceOrigin(), mIrradianceVolume->getIrradianceMaxPower(),
+                    mIrradianceVolume->getFadeAttenuationOverDistace() );
             }
         }
 
-        for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+        for( size_t i = 0; i < NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
             mRootNodes[i] = oldRootNodes[i];
     }
 
@@ -1533,11 +1507,10 @@ namespace Ogre
 
         if( d.HasParseError() )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "SceneFormatImporter::importScene",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "SceneFormatImporter::importScene",
                          "Invalid JSON string in file " + filename + " at line " +
-                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
-                         rapidjson::GetParseError_En( d.GetParseError() ) );
+                             StringConverter::toString( d.GetErrorOffset() ) +
+                             " Reason: " + rapidjson::GetParseError_En( d.GetParseError() ) );
         }
 
         importScene( filename, d, importFlags );
@@ -1547,26 +1520,26 @@ namespace Ogre
     {
         ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
         resourceGroupManager.addResourceLocation( folderPath, "FileSystem", "SceneFormatImporter" );
-        resourceGroupManager.addResourceLocation( folderPath + "/v2/",
-                                                  "FileSystem", "SceneFormatImporter" );
-        resourceGroupManager.addResourceLocation( folderPath + "/v1/",
-                                                  "FileSystem", "SceneFormatImporter" );
-        resourceGroupManager.addResourceLocation( folderPath + "/textures/",
-                                                  "FileSystem", "SceneFormatImporter" );
+        resourceGroupManager.addResourceLocation( folderPath + "/v2/", "FileSystem",
+                                                  "SceneFormatImporter" );
+        resourceGroupManager.addResourceLocation( folderPath + "/v1/", "FileSystem",
+                                                  "SceneFormatImporter" );
+        resourceGroupManager.addResourceLocation( folderPath + "/textures/", "FileSystem",
+                                                  "SceneFormatImporter" );
 
         {
-            DataStreamPtr stream = resourceGroupManager.openResource( "textureMetadataCache.json",
-                                                                      "SceneFormatImporter" );
+            DataStreamPtr stream =
+                resourceGroupManager.openResource( "textureMetadataCache.json", "SceneFormatImporter" );
             vector<char>::type fileData;
             fileData.resize( stream->size() + 1 );
             if( !fileData.empty() )
             {
                 stream->read( &fileData[0], stream->size() );
-                //Add null terminator just in case (to prevent bad input)
+                // Add null terminator just in case (to prevent bad input)
                 fileData.back() = '\0';
 
                 TextureGpuManager *textureManager =
-                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 textureManager->importTextureMetadataCache( stream->getName(), &fileData[0], true );
             }
         }
@@ -1578,7 +1551,7 @@ namespace Ogre
         {
             stream->read( &fileData[0], stream->size() );
 
-            //Add null terminator just in case (to prevent bad input)
+            // Add null terminator just in case (to prevent bad input)
             fileData.back() = '\0';
 
             rapidjson::Document d;
@@ -1586,14 +1559,13 @@ namespace Ogre
 
             if( d.HasParseError() )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "SceneFormatImporter::importScene",
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "SceneFormatImporter::importScene",
                              "Invalid JSON string in file " + stream->getName() + " at line " +
-                             StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
-                             rapidjson::GetParseError_En( d.GetParseError() ) );
+                                 StringConverter::toString( d.GetErrorOffset() ) +
+                                 " Reason: " + rapidjson::GetParseError_En( d.GetParseError() ) );
             }
 
-            rapidjson::Value::ConstMemberIterator  itor;
+            rapidjson::Value::ConstMemberIterator itor;
 
             mUsingOitd = false;
             itor = d.FindMember( "saved_oitd_textures" );
@@ -1609,7 +1581,8 @@ namespace Ogre
 
             importScene( stream->getName(), d, importFlags );
 
-            resourceGroupManager.removeResourceLocation( folderPath + "/textures/", "SceneFormatImporter" );
+            resourceGroupManager.removeResourceLocation( folderPath + "/textures/",
+                                                         "SceneFormatImporter" );
             resourceGroupManager.removeResourceLocation( folderPath + "/v2/", "SceneFormatImporter" );
             resourceGroupManager.removeResourceLocation( folderPath + "/v1/", "SceneFormatImporter" );
             resourceGroupManager.removeResourceLocation( folderPath, "SceneFormatImporter" );
@@ -1629,7 +1602,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    ParallaxCorrectedCubemap* SceneFormatImporter::getParallaxCorrectedCubemap( bool releaseOwnership )
+    ParallaxCorrectedCubemap *SceneFormatImporter::getParallaxCorrectedCubemap( bool releaseOwnership )
     {
         ParallaxCorrectedCubemap *retVal = mParallaxCorrectedCubemap;
         if( releaseOwnership )
@@ -1637,4 +1610,4 @@ namespace Ogre
 
         return retVal;
     }
-}
+}  // namespace Ogre

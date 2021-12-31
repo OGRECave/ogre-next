@@ -96,7 +96,7 @@ namespace Demo
 
                 item->setVisibilityFlags( 0x000000001 );
 
-                size_t idx = i * 4 + j;
+                const size_t idx = static_cast<size_t>( i * 4 + j );
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
@@ -287,7 +287,7 @@ namespace Demo
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
             bool showMovingObjects = ( visibilityMask & 0x00000001 );
             showMovingObjects = !showMovingObjects;
-            visibilityMask &= ~0x00000001;
+            visibilityMask &= static_cast<uint32_t>( ~0x00000001 );
             visibilityMask |= (Ogre::uint32)showMovingObjects;
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
         }
@@ -296,7 +296,7 @@ namespace Demo
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
             bool showPalette = ( visibilityMask & 0x00000002 ) != 0;
             showPalette = !showPalette;
-            visibilityMask &= ~0x00000002;
+            visibilityMask &= static_cast<uint32_t>( ~0x00000002 );
             visibilityMask |= ( Ogre::uint32 )( showPalette ) << 1;
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
         }

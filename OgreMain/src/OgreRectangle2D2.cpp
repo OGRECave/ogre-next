@@ -170,8 +170,9 @@ namespace Ogre
         Vector2 posCenter[2] = { mPosition, mSize };
 
         const size_t numIterations = isStereo() ? 2u : 1u;
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float *vertexDataStart = vertexData;
-
+#endif
         for( size_t i = 0u; i < numIterations; ++i )
         {
             posCenter[i].y = -posCenter[i].y;
@@ -222,8 +223,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Rectangle2D::fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements )
     {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float *vertexDataStart = vertexData;
-
+#endif
         const size_t numIterations = isStereo() ? 2u : 1u;
         const bool bHasNormals = hasNormals();
 

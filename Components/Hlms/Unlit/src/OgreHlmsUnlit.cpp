@@ -415,7 +415,7 @@ namespace Ogre
                         ++itor;
                     }
 
-                    size_t rawIdx = itor - uvOutputs.begin();
+                    const ptrdiff_t rawIdx = itor - uvOutputs.begin();
                     int32 idx = static_cast<int32>( rawIdx >> 1u );
                     setProperty( *UnlitProperty::DiffuseMapPtrs[i].uvSource, idx );
                     inOutPieces[PixelShader][uvSourceSwizzleN] = rawIdx % 2 ? "zw" : "xy";
@@ -962,9 +962,9 @@ namespace Ogre
                                               4 ) > mCurrentConstBufferSize;
 
         const size_t minimumTexBufferSize = 16;
-        bool exceedsTexBuffer =
-            ( currentMappedTexBuffer - mStartMappedTexBuffer ) + minimumTexBufferSize >=
-            mCurrentTexBufferSize;
+        bool exceedsTexBuffer = static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) +
+                                    minimumTexBufferSize >=
+                                mCurrentTexBufferSize;
 
         if( exceedsConstBuffer || exceedsTexBuffer )
         {

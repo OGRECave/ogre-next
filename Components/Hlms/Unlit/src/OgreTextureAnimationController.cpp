@@ -59,8 +59,12 @@ namespace Ogre
     {
         if( mNumFramesHorizontal > 0 )  // tex tile animation
         {
+            if( value < 0.0f )
+                value = 1.0f + value;
+
             // The current animation frame.
-            unsigned int currentFrame = ( (int)( value * mNumFramesHorizontal ) % mNumFramesHorizontal );
+            uint32 currentFrame =
+                static_cast<uint32>( value * mNumFramesHorizontal ) % mNumFramesHorizontal;
 
             if( mLastFrame == 0 && currentFrame == ( mNumFramesHorizontal - 1u ) )
             {
@@ -73,7 +77,7 @@ namespace Ogre
             mUMod = ( 1 / (Real)mNumFramesHorizontal ) * (Real)currentFrame;
             mVMod = ( 1 / (Real)mNumFramesVertical ) * (Real)mCurrentVerticalFrame;
 
-            mLastFrame = currentFrame;
+            mLastFrame = static_cast<uint16>( currentFrame );
 
             mUScale = mNumFramesHorizontal;
             mVScale = mNumFramesVertical;

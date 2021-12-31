@@ -29,21 +29,27 @@ THE SOFTWARE.
 #define _OgreSceneFormatImporter_H_
 
 #include "OgreSceneFormatBase.h"
+
 #include "OgreHeaderPrefix.h"
 
 // Forward declaration for |Document|.
 namespace rapidjson
 {
     class CrtAllocator;
-    template <typename> class MemoryPoolAllocator;
-    template <typename> struct UTF8;
-    template <typename, typename, typename> class GenericDocument;
-    typedef GenericDocument< UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator > Document;
+    template <typename>
+    class MemoryPoolAllocator;
+    template <typename>
+    struct UTF8;
+    template <typename, typename, typename>
+    class GenericDocument;
+    typedef GenericDocument<UTF8<char>, MemoryPoolAllocator<CrtAllocator>, CrtAllocator> Document;
 
-    template <typename BaseAllocator> class MemoryPoolAllocator;
-    template <typename Encoding, typename>  class GenericValue;
+    template <typename BaseAllocator>
+    class MemoryPoolAllocator;
+    template <typename Encoding, typename>
+    class GenericValue;
     typedef GenericValue<UTF8<char>, MemoryPoolAllocator<CrtAllocator> > Value;
-}
+}  // namespace rapidjson
 
 namespace Ogre
 {
@@ -52,13 +58,13 @@ namespace Ogre
     class IrradianceVolume;
 
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
     /**
-    */
+     */
     class _OgreSceneFormatExport SceneFormatImporter : public SceneFormatBase
     {
     protected:
@@ -67,14 +73,14 @@ namespace Ogre
         IrradianceVolume *mIrradianceVolume;
         ParallaxCorrectedCubemap *mParallaxCorrectedCubemap;
         Matrix4 mSceneComponentTransform;
-        String  mDefaultPccWorkspaceName;
+        String mDefaultPccWorkspaceName;
 
         bool mUseBinaryFloatingPoint;
         bool mUsingOitd;
 
         LightArray mVplLights;
 
-        typedef map<uint32, SceneNode*>::type IndexToSceneNodeMap;
+        typedef map<uint32, SceneNode *>::type IndexToSceneNodeMap;
         IndexToSceneNodeMap mCreatedSceneNodes;
 
         SceneNode *mRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
@@ -93,12 +99,11 @@ namespace Ogre
         inline Vector4 decodeVector4Array( const rapidjson::Value &jsonArray );
         inline Quaternion decodeQuaternionArray( const rapidjson::Value &jsonArray );
         inline ColourValue decodeColourValueArray( const rapidjson::Value &jsonArray );
-        inline Aabb decodeAabbArray( const rapidjson::Value &jsonArray,
-                                            const Aabb &defaultValue );
+        inline Aabb decodeAabbArray( const rapidjson::Value &jsonArray, const Aabb &defaultValue );
         inline Matrix3 decodeMatrix3Array( const rapidjson::Value &jsonArray );
 
         void importNode( const rapidjson::Value &nodeValue, Node *node );
-        SceneNode* importSceneNode( const rapidjson::Value &sceneNodeValue, uint32 nodeIdx,
+        SceneNode *importSceneNode( const rapidjson::Value &sceneNodeValue, uint32 nodeIdx,
                                     const rapidjson::Value &sceneNodesJson );
         void importSceneNodes( const rapidjson::Value &json );
         void importMovableObject( const rapidjson::Value &movableObjectValue,
@@ -119,7 +124,7 @@ namespace Ogre
         void importSceneSettings( const rapidjson::Value &json, uint32 importFlags );
 
         void importScene( const String &filename, const rapidjson::Document &d,
-                          uint32 importFlags=~SceneFlags::LightsVpl );
+                          uint32 importFlags = static_cast<uint32>( ~SceneFlags::LightsVpl ) );
 
     public:
         /**
@@ -202,9 +207,10 @@ namespace Ogre
             import time because the cached results will be loaded instead.
         */
         void importScene( const String &filename, const char *jsonString,
-                          uint32 importFlags=~SceneFlags::LightsVpl );
+                          uint32 importFlags = static_cast<uint32>( ~SceneFlags::LightsVpl ) );
 
-        void importSceneFromFile( const String &filename, uint32 importFlags=~SceneFlags::LightsVpl );
+        void importSceneFromFile( const String &filename,
+                                  uint32 importFlags = static_cast<uint32>( ~SceneFlags::LightsVpl ) );
 
         /** Retrieve the InstantRadiosity pointer that may have been created while importing a scene
         @param releaseOwnership
@@ -226,17 +232,16 @@ namespace Ogre
         @return
             InstantRadiosity pointer.
         */
-        void getInstantRadiosity( bool releaseOwnership,
-                                  InstantRadiosity **outInstantRadiosity,
+        void getInstantRadiosity( bool releaseOwnership, InstantRadiosity **outInstantRadiosity,
                                   IrradianceVolume **outIrradianceVolume );
 
-        ParallaxCorrectedCubemap* getParallaxCorrectedCubemap( bool releaseOwnership );
+        ParallaxCorrectedCubemap *getParallaxCorrectedCubemap( bool releaseOwnership );
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

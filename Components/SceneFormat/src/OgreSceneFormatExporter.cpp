@@ -29,55 +29,50 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreSceneFormatExporter.h"
-#include "OgreSceneManager.h"
-#include "OgreRoot.h"
 
-#include "OgreLwString.h"
-
-#include "OgreItem.h"
-#include "OgreMesh.h"
-#include "OgreMesh2.h"
-#include "OgreEntity.h"
-#include "OgreDecal.h"
-#include "OgreHlms.h"
-#include "OgreTextureGpuManager.h"
-
-#include "OgreMeshSerializer.h"
-#include "OgreMesh2Serializer.h"
-#include "OgreFileSystemLayer.h"
-
-#include "OgreHlmsPbs.h"
-#include "InstantRadiosity/OgreInstantRadiosity.h"
-#include "OgreIrradianceVolume.h"
-
-#include "OgreImage2.h"
-
-#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
-
+#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "InstantRadiosity/OgreInstantRadiosity.h"
+#include "OgreDecal.h"
+#include "OgreEntity.h"
+#include "OgreFileSystemLayer.h"
 #include "OgreForward3D.h"
 #include "OgreForwardClustered.h"
+#include "OgreHlms.h"
+#include "OgreHlmsPbs.h"
+#include "OgreImage2.h"
+#include "OgreIrradianceVolume.h"
+#include "OgreItem.h"
+#include "OgreLwString.h"
+#include "OgreMesh.h"
+#include "OgreMesh2.h"
+#include "OgreMesh2Serializer.h"
+#include "OgreMeshSerializer.h"
+#include "OgreRoot.h"
+#include "OgreSceneManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "math.h"
 
-#include <queue>
 #include <fstream>
+#include <queue>
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
-    inline float isfinite( float x )
-    {
-        return _finite( x ) == 0;
-    }
-    inline float isinf( float x )
-    {
-        return  x == std::numeric_limits<float>::infinity() ||
-                x == -std::numeric_limits<float>::infinity();
-    }
+inline float isfinite( float x )
+{
+    return _finite( x ) == 0;
+}
+inline float isinf( float x )
+{
+    return x == std::numeric_limits<float>::infinity() || x == -std::numeric_limits<float>::infinity();
+}
 #endif
 
-#define SceneFormatExporterNumFloatBins (sizeof( mFloatBinTmpString ) / sizeof( mFloatBinTmpString[0] ))
+#define SceneFormatExporterNumFloatBins \
+    ( sizeof( mFloatBinTmpString ) / sizeof( mFloatBinTmpString[0] ) )
 #define SceneFormatExporterFloatBinStrLength sizeof( mFloatBinTmpString[0] )
-#define SceneFormatExporterNumDoubleBins (sizeof( mDoubleBinTmpString ) / sizeof( mDoubleBinTmpString[0] ))
+#define SceneFormatExporterNumDoubleBins \
+    ( sizeof( mDoubleBinTmpString ) / sizeof( mDoubleBinTmpString[0] ) )
 #define SceneFormatExporterDoubleBinStrLength sizeof( mDoubleBinTmpString[0] )
 
 namespace Ogre
@@ -93,7 +88,7 @@ namespace Ogre
         memset( mFloatBinTmpString, 0, sizeof( mFloatBinTmpString ) );
         memset( mDoubleBinTmpString, 0, sizeof( mDoubleBinTmpString ) );
 
-        for( int i=0; i<3; ++i )
+        for( int i = 0; i < 3; ++i )
         {
             mDecalsTexNames[i].clear();
             mDecalsTex[i] = 0;
@@ -101,24 +96,16 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    SceneFormatExporter::~SceneFormatExporter()
-    {
-    }
+    SceneFormatExporter::~SceneFormatExporter() {}
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::setUseBinaryFloatingPoint( bool useBinaryFp )
     {
         mUseBinaryFloatingPoint = useBinaryFp;
     }
     //-----------------------------------------------------------------------------------
-    bool SceneFormatExporter::getUseBinaryFloatingPoint()
-    {
-        return mUseBinaryFloatingPoint;
-    }
+    bool SceneFormatExporter::getUseBinaryFloatingPoint() { return mUseBinaryFloatingPoint; }
     //-----------------------------------------------------------------------------------
-    const char* SceneFormatExporter::toQuotedStr( bool value )
-    {
-        return value ? "true" : "false";
-    }
+    const char *SceneFormatExporter::toQuotedStr( bool value ) { return value ? "true" : "false"; }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::toQuotedStr( LwString &jsonStr, Light::LightTypes lightType )
     {
@@ -129,8 +116,8 @@ namespace Ogre
     {
         union MyUnion
         {
-            float   f32;
-            uint32  u32;
+            float f32;
+            uint32 u32;
         };
 
         MyUnion myUnion;
@@ -142,8 +129,8 @@ namespace Ogre
     {
         union MyUnion
         {
-            double  f64;
-            uint64  u64;
+            double f64;
+            uint64 u64;
         };
 
         MyUnion myUnion;
@@ -151,7 +138,7 @@ namespace Ogre
         return myUnion.u64;
     }
     //-----------------------------------------------------------------------------------
-    const char* SceneFormatExporter::encodeFloat( float value )
+    const char *SceneFormatExporter::encodeFloat( float value )
     {
         LwString strValue( LwString::FromEmptyPointer( mFloatBinTmpString[mCurrentBinFloat],
                                                        SceneFormatExporterFloatBinStrLength ) );
@@ -170,12 +157,12 @@ namespace Ogre
             }
         }
 
-        mCurrentBinFloat = (mCurrentBinFloat + 1u) % SceneFormatExporterNumFloatBins;
+        mCurrentBinFloat = ( mCurrentBinFloat + 1u ) % SceneFormatExporterNumFloatBins;
 
         return strValue.c_str();
     }
     //-----------------------------------------------------------------------------------
-    const char* SceneFormatExporter::encodeDouble( double value )
+    const char *SceneFormatExporter::encodeDouble( double value )
     {
         LwString strValue( LwString::FromEmptyPointer( mDoubleBinTmpString[mCurrentBinDouble],
                                                        SceneFormatExporterDoubleBinStrLength ) );
@@ -194,67 +181,52 @@ namespace Ogre
             }
         }
 
-        mCurrentBinDouble = (mCurrentBinDouble + 1u) % SceneFormatExporterNumDoubleBins;
+        mCurrentBinDouble = ( mCurrentBinDouble + 1u ) % SceneFormatExporterNumDoubleBins;
 
         return strValue.c_str();
     }
     //-----------------------------------------------------------------------------------
     inline void SceneFormatExporter::rewindFloatBinStringPool( uint8 rewindAmount )
     {
-        //Rewind the pool bin, since we know these bins are not needed anymore
-        mCurrentBinFloat = (mCurrentBinFloat + SceneFormatExporterNumFloatBins - rewindAmount) %
-                      SceneFormatExporterNumFloatBins;
+        // Rewind the pool bin, since we know these bins are not needed anymore
+        mCurrentBinFloat = ( mCurrentBinFloat + SceneFormatExporterNumFloatBins - rewindAmount ) %
+                           SceneFormatExporterNumFloatBins;
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeVector( LwString &jsonStr, const Vector2 &value )
     {
-        jsonStr.a( "[ ",
-                   encodeFloat( value.x ), ", ",
-                   encodeFloat( value.y ),
-                   " ]" );
+        jsonStr.a( "[ ", encodeFloat( value.x ), ", ", encodeFloat( value.y ), " ]" );
         rewindFloatBinStringPool( 2u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeVector( LwString &jsonStr, const Vector3 &value )
     {
-        jsonStr.a( "[ ",
-                   encodeFloat( value.x ), ", ",
-                   encodeFloat( value.y ), ", ",
-                   encodeFloat( value.z ),
-                   " ]" );
+        jsonStr.a( "[ ", encodeFloat( value.x ), ", ", encodeFloat( value.y ), ", ",
+                   encodeFloat( value.z ), " ]" );
         rewindFloatBinStringPool( 3u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeVector( LwString &jsonStr, const Vector4 &value )
     {
-        jsonStr.a( "[ ",
-                   encodeFloat( value.x ), ", ",
-                   encodeFloat( value.y ), ", ",
+        jsonStr.a( "[ ", encodeFloat( value.x ), ", ", encodeFloat( value.y ), ", ",
                    encodeFloat( value.z ), ", " );
-        jsonStr.a( encodeFloat( value.w ),
-                   " ]" );
+        jsonStr.a( encodeFloat( value.w ), " ]" );
         rewindFloatBinStringPool( 4u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeQuaternion( LwString &jsonStr, const Quaternion &value )
     {
-        jsonStr.a( "[ ",
-                   encodeFloat( value.w ), ", ",
-                   encodeFloat( value.x ), ", ",
+        jsonStr.a( "[ ", encodeFloat( value.w ), ", ", encodeFloat( value.x ), ", ",
                    encodeFloat( value.y ), ", " );
-        jsonStr.a( encodeFloat( value.z ),
-                   " ]" );
+        jsonStr.a( encodeFloat( value.z ), " ]" );
         rewindFloatBinStringPool( 4u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeColour( LwString &jsonStr, const ColourValue &value )
     {
-        jsonStr.a( "[ ",
-                   encodeFloat( value.r ), ", ",
-                   encodeFloat( value.g ), ", ",
+        jsonStr.a( "[ ", encodeFloat( value.r ), ", ", encodeFloat( value.g ), ", ",
                    encodeFloat( value.b ), ", " );
-        jsonStr.a( encodeFloat( value.a ),
-                   " ]" );
+        jsonStr.a( encodeFloat( value.a ), " ]" );
         rewindFloatBinStringPool( 4u );
     }
     //-----------------------------------------------------------------------------------
@@ -269,17 +241,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeMatrix( LwString &jsonStr, const Matrix3 &value )
     {
-        jsonStr.a( "[ ",
-                   encodeFloat( value[0][0] ), ", ",
-                   encodeFloat( value[0][1] ), ", ",
+        jsonStr.a( "[ ", encodeFloat( value[0][0] ), ", ", encodeFloat( value[0][1] ), ", ",
                    encodeFloat( value[0][2] ), ", " );
         rewindFloatBinStringPool( 3u );
-        jsonStr.a( encodeFloat( value[1][0] ), ", ",
-                   encodeFloat( value[1][1] ), ", ",
+        jsonStr.a( encodeFloat( value[1][0] ), ", ", encodeFloat( value[1][1] ), ", ",
                    encodeFloat( value[1][2] ), ", " );
         rewindFloatBinStringPool( 3u );
-        jsonStr.a( encodeFloat( value[2][0] ), ", ",
-                   encodeFloat( value[2][1] ), ", ",
+        jsonStr.a( encodeFloat( value[2][0] ), ", ", encodeFloat( value[2][1] ), ", ",
                    encodeFloat( value[2][2] ), " ]" );
         rewindFloatBinStringPool( 3u );
     }
@@ -334,7 +302,8 @@ namespace Ogre
         exportNode( jsonStr, outJson, sceneNode );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatExporter::exportRenderable( LwString &jsonStr, String &outJson, Renderable *renderable )
+    void SceneFormatExporter::exportRenderable( LwString &jsonStr, String &outJson,
+                                                Renderable *renderable )
     {
         outJson += "\n\t\t\t\t\t\"renderable\" :\n\t\t\t\t\t{";
 
@@ -352,13 +321,14 @@ namespace Ogre
         }
         else
         {
-            jsonStr.a( "\n\t\t\t\t\t\t\"datablock\" : \"",
-                       renderable->getMaterial()->getName().c_str(), "\"" );
+            jsonStr.a( "\n\t\t\t\t\t\t\"datablock\" : \"", renderable->getMaterial()->getName().c_str(),
+                       "\"" );
             jsonStr.a( ",\n\t\t\t\t\t\t\"is_v1_material\" : true" );
         }
 
         jsonStr.a( ",\n\t\t\t\t\t\t\"custom_parameter\" : ", renderable->mCustomParameter );
-        jsonStr.a( ",\n\t\t\t\t\t\t\"render_queue_sub_group\" : ", renderable->getRenderQueueSubGroup() );
+        jsonStr.a( ",\n\t\t\t\t\t\t\"render_queue_sub_group\" : ",
+                   renderable->getRenderQueueSubGroup() );
         jsonStr.a( ",\n\t\t\t\t\t\t\"polygon_mode_overrideable\" : ",
                    toQuotedStr( renderable->getPolygonModeOverrideable() ) );
         jsonStr.a( ",\n\t\t\t\t\t\t\"use_identity_view\" : ",
@@ -374,8 +344,8 @@ namespace Ogre
         {
             outJson += ",\n\t\t\t\t\t\t\"custom_parameters\" : { ";
             Renderable::CustomParameterMap::const_iterator begin = customParams.begin();
-            Renderable::CustomParameterMap::const_iterator itor  = customParams.begin();
-            Renderable::CustomParameterMap::const_iterator end   = customParams.end();
+            Renderable::CustomParameterMap::const_iterator itor = customParams.begin();
+            Renderable::CustomParameterMap::const_iterator end = customParams.end();
             while( itor != end )
             {
                 if( itor != begin )
@@ -394,7 +364,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::exportMovableObject( LwString &jsonStr, String &outJson,
-                                           MovableObject *movableObject )
+                                                   MovableObject *movableObject )
     {
         outJson += "\t\t\t\"movable_object\" :\n\t\t\t{";
         if( !movableObject->getName().empty() )
@@ -414,15 +384,14 @@ namespace Ogre
 
         const ObjectData &objData = movableObject->_getObjectData();
 
-        jsonStr.a( ",\n\t\t\t\t\"local_radius\" : ",
-                   encodeFloat( movableObject->getLocalRadius() ) );
+        jsonStr.a( ",\n\t\t\t\t\"local_radius\" : ", encodeFloat( movableObject->getLocalRadius() ) );
         jsonStr.a( ",\n\t\t\t\t\"rendering_distance\" : ",
                    encodeFloat( movableObject->getRenderingDistance() ) );
 
         if( movableObject->isStatic() )
             jsonStr.a( ",\n\t\t\t\t\"is_static\" : ", toQuotedStr( movableObject->isStatic() ) );
 
-        //Encode raw flag values
+        // Encode raw flag values
         jsonStr.a( ",\n\t\t\t\t\"visibility_flags\" : ", objData.mVisibilityFlags[objData.mIndex] );
         jsonStr.a( ",\n\t\t\t\t\"query_flags\" : ", objData.mQueryFlags[objData.mIndex] );
         jsonStr.a( ",\n\t\t\t\t\"light_mask\" : ", objData.mLightMask[objData.mIndex] );
@@ -440,7 +409,8 @@ namespace Ogre
         outJson += "\n\t\t\t}";
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatExporter::exportItem( LwString &jsonStr, String &outJson, Item *item, bool exportMesh )
+    void SceneFormatExporter::exportItem( LwString &jsonStr, String &outJson, Item *item,
+                                          bool exportMesh )
     {
         const Mesh *mesh = item->getMesh().get();
 
@@ -457,7 +427,7 @@ namespace Ogre
 
         outJson += ",\n\t\t\t\"sub_items\" :\n\t\t\t[";
         const size_t numSubItems = item->getNumSubItems();
-        for( size_t i=0; i<numSubItems; ++i )
+        for( size_t i = 0; i < numSubItems; ++i )
         {
             if( i != 0 )
                 outJson += ",\n";
@@ -469,9 +439,8 @@ namespace Ogre
         }
         outJson += "\n\t\t\t]";
 
-        //Export the mesh, if we haven't done that already
-        if( exportMesh &&
-            mExportedMeshes.find( mesh ) == mExportedMeshes.end() &&
+        // Export the mesh, if we haven't done that already
+        if( exportMesh && mExportedMeshes.find( mesh ) == mExportedMeshes.end() &&
             mListener->exportMesh( mesh ) )
         {
             FileSystemLayer::createDirectory( mCurrentExportFolder + "/v2/" );
@@ -495,16 +464,15 @@ namespace Ogre
         toQuotedStr( jsonStr, light->getType() );
 
         jsonStr.a( ",\n\t\t\t\"attenuation\" : " );
-        encodeVector( jsonStr, Vector4( light->getAttenuationRange(),
-                                        light->getAttenuationConstant(),
-                                        light->getAttenuationLinear(),
-                                        light->getAttenuationQuadric() ) );
+        encodeVector( jsonStr,
+                      Vector4( light->getAttenuationRange(), light->getAttenuationConstant(),
+                               light->getAttenuationLinear(), light->getAttenuationQuadric() ) );
 
         jsonStr.a( ",\n\t\t\t\"spot\" : " );
-        encodeVector( jsonStr, Vector4( light->getSpotlightInnerAngle().valueRadians(),
-                                        light->getSpotlightOuterAngle().valueRadians(),
-                                        light->getSpotlightFalloff(),
-                                        light->getSpotlightNearClipDistance() ) );
+        encodeVector( jsonStr,
+                      Vector4( light->getSpotlightInnerAngle().valueRadians(),
+                               light->getSpotlightOuterAngle().valueRadians(),
+                               light->getSpotlightFalloff(), light->getSpotlightNearClipDistance() ) );
 
         const Real ownShadowFarDistance = light->_getOwnShadowFarDistance();
         if( ownShadowFarDistance )
@@ -530,8 +498,8 @@ namespace Ogre
         exportMovableObject( jsonStr, outJson, light );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatExporter::exportEntity( LwString &jsonStr, String &outJson,
-                                    v1::Entity *entity, bool exportMesh )
+    void SceneFormatExporter::exportEntity( LwString &jsonStr, String &outJson, v1::Entity *entity,
+                                            bool exportMesh )
     {
         const v1::Mesh *mesh = entity->getMesh().get();
 
@@ -548,7 +516,7 @@ namespace Ogre
 
         outJson += ",\n\t\t\t\"sub_entities\" :\n\t\t\t[";
         const size_t numSubEntities = entity->getNumSubEntities();
-        for( size_t i=0; i<numSubEntities; ++i )
+        for( size_t i = 0; i < numSubEntities; ++i )
         {
             if( i != 0 )
                 outJson += ",\n";
@@ -560,9 +528,8 @@ namespace Ogre
         }
         outJson += "\n\t\t\t]";
 
-        //Export the mesh, if we haven't done that already
-        if( exportMesh &&
-            mExportedMeshesV1.find( mesh ) == mExportedMeshesV1.end() &&
+        // Export the mesh, if we haven't done that already
+        if( exportMesh && mExportedMeshesV1.find( mesh ) == mExportedMeshesV1.end() &&
             mListener->exportMesh( mesh ) )
         {
             FileSystemLayer::createDirectory( mCurrentExportFolder + "/v1/" );
@@ -575,8 +542,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::exportDecalTex( LwString &jsonStr, String &outJson,
-                                              const DecalTex &decalTex,
-                                              set<String>::type &savedTextures,
+                                              const DecalTex &decalTex, set<String>::type &savedTextures,
                                               uint32 exportFlags, int texTypeIndex )
     {
         if( !decalTex.texture )
@@ -595,16 +561,15 @@ namespace Ogre
                 mDecalsTexManaged[texTypeIndex] = true;
             }
             uint32 poolId = decalTex.texture->getTexturePoolId();
-            jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName ,"_managed\" : [ \"", aliasName.c_str(),
+            jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName, "_managed\" : [ \"", aliasName.c_str(),
                        "\", \"", resName->c_str(), "\", " );
             jsonStr.a( poolId, " ]," );
 
-            if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal) )
+            if( exportFlags & ( SceneFlags::TexturesOitd | SceneFlags::TexturesOriginal ) )
             {
                 textureManager->saveTexture( decalTex.texture, mCurrentExportFolder + "/textures/",
                                              savedTextures, exportFlags & SceneFlags::TexturesOitd,
-                                             exportFlags & SceneFlags::TexturesOriginal,
-                                             mListener );
+                                             exportFlags & SceneFlags::TexturesOriginal, mListener );
             }
         }
         else
@@ -615,7 +580,7 @@ namespace Ogre
                 mDecalsTexManaged[texTypeIndex] = false;
             }
 
-            //Texture not managed by HlmsTextureManager
+            // Texture not managed by HlmsTextureManager
             jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName, "_raw\" : [ \"",
                        decalTex.texture->getNameStr().c_str(), ".oitd\", " );
             jsonStr.a( decalTex.xIdx, " ]," );
@@ -623,8 +588,7 @@ namespace Ogre
             if( exportFlags & SceneFlags::TexturesOitd )
             {
                 textureManager->saveTexture( decalTex.texture, mCurrentExportFolder + "/textures/",
-                                             savedTextures, true, false,
-                                             mListener );
+                                             savedTextures, true, false, mListener );
             }
         }
 
@@ -632,17 +596,16 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::exportDecal( LwString &jsonStr, String &outJson, Decal *decal,
-                                           set<String>::type &savedTextures,
-                                           uint32 exportFlags )
+                                           set<String>::type &savedTextures, uint32 exportFlags )
     {
-        DecalTex decalTex( decal->getDiffuseTexture(),
-                           static_cast<uint16>( decal->mDiffuseIdx ), "diffuse" );
+        DecalTex decalTex( decal->getDiffuseTexture(), static_cast<uint16>( decal->mDiffuseIdx ),
+                           "diffuse" );
         exportDecalTex( jsonStr, outJson, decalTex, savedTextures, exportFlags, 0 );
-        decalTex = DecalTex( decal->getNormalTexture(),
-                             static_cast<uint16>( decal->mNormalMapIdx ), "normal" );
+        decalTex =
+            DecalTex( decal->getNormalTexture(), static_cast<uint16>( decal->mNormalMapIdx ), "normal" );
         exportDecalTex( jsonStr, outJson, decalTex, savedTextures, exportFlags, 1 );
-        decalTex = DecalTex( decal->getEmissiveTexture(),
-                             static_cast<uint16>( decal->mEmissiveIdx ), "emissive" );
+        decalTex = DecalTex( decal->getEmissiveTexture(), static_cast<uint16>( decal->mEmissiveIdx ),
+                             "emissive" );
         exportDecalTex( jsonStr, outJson, decalTex, savedTextures, exportFlags, 2 );
 
         jsonStr.a( "\n" );
@@ -655,8 +618,9 @@ namespace Ogre
         if( !mInstantRadiosity )
             return;
 
-        jsonStr.a( ",\n\t\t\"instant_radiosity\" :"
-                   "\n\t\t{" );
+        jsonStr.a(
+            ",\n\t\t\"instant_radiosity\" :"
+            "\n\t\t{" );
         jsonStr.a( "\n\t\t\t\"first_rq\" : ", mInstantRadiosity->mFirstRq );
         jsonStr.a( ",\n\t\t\t\"last_rq\" : ", mInstantRadiosity->mLastRq );
         jsonStr.a( ",\n\t\t\t\"visibility_mask\" : ", mInstantRadiosity->mVisibilityMask );
@@ -676,7 +640,7 @@ namespace Ogre
             jsonStr.a( ",\n\t\t\t\"areas_of_interest\" :\n\t\t\t[" );
             bool firstIteration = true;
             InstantRadiosity::AreaOfInterestVec::const_iterator itor = mInstantRadiosity->mAoI.begin();
-            InstantRadiosity::AreaOfInterestVec::const_iterator end  = mInstantRadiosity->mAoI.end();
+            InstantRadiosity::AreaOfInterestVec::const_iterator end = mInstantRadiosity->mAoI.end();
 
             while( itor != end )
             {
@@ -691,43 +655,35 @@ namespace Ogre
             jsonStr.a( "\n\t\t\t]" );
             flushLwString( jsonStr, outJson );
         }
-        jsonStr.a( ",\n\t\t\t\"vpl_max_range\" : ",
-                   encodeFloat( mInstantRadiosity->mVplMaxRange ) );
-        jsonStr.a( ",\n\t\t\t\"vpl_const_atten\" : ",
-                   encodeFloat( mInstantRadiosity->mVplConstAtten ) );
+        jsonStr.a( ",\n\t\t\t\"vpl_max_range\" : ", encodeFloat( mInstantRadiosity->mVplMaxRange ) );
+        jsonStr.a( ",\n\t\t\t\"vpl_const_atten\" : ", encodeFloat( mInstantRadiosity->mVplConstAtten ) );
         jsonStr.a( ",\n\t\t\t\"vpl_linear_atten\" : ",
                    encodeFloat( mInstantRadiosity->mVplLinearAtten ) );
-        jsonStr.a( ",\n\t\t\t\"vpl_quad_atten\" : ",
-                   encodeFloat( mInstantRadiosity->mVplQuadAtten ) );
-        jsonStr.a( ",\n\t\t\t\"vpl_threshold\" : ",
-                   encodeFloat( mInstantRadiosity->mVplThreshold ) );
-        jsonStr.a( ",\n\t\t\t\"vpl_power_boost\" : ",
-                   encodeFloat( mInstantRadiosity->mVplPowerBoost ) );
+        jsonStr.a( ",\n\t\t\t\"vpl_quad_atten\" : ", encodeFloat( mInstantRadiosity->mVplQuadAtten ) );
+        jsonStr.a( ",\n\t\t\t\"vpl_threshold\" : ", encodeFloat( mInstantRadiosity->mVplThreshold ) );
+        jsonStr.a( ",\n\t\t\t\"vpl_power_boost\" : ", encodeFloat( mInstantRadiosity->mVplPowerBoost ) );
         jsonStr.a( ",\n\t\t\t\"vpl_use_intensity_for_max_range\" : ",
                    toQuotedStr( mInstantRadiosity->mVplUseIntensityForMaxRange ) );
         jsonStr.a( ",\n\t\t\t\"vpl_intensity_range_multiplier\" : ",
                    encodeDouble( mInstantRadiosity->mVplIntensityRangeMultiplier ) );
         jsonStr.a( ",\n\t\t\t\"mipmap_bias\" : ", mInstantRadiosity->mMipmapBias );
-        jsonStr.a( ",\n\t\t\t\"use_textures\" : ",
-                   toQuotedStr( mInstantRadiosity->getUseTextures() ) );
+        jsonStr.a( ",\n\t\t\t\"use_textures\" : ", toQuotedStr( mInstantRadiosity->getUseTextures() ) );
         jsonStr.a( ",\n\t\t\t\"use_irradiance_volume\" : ",
                    toQuotedStr( mInstantRadiosity->getUseIrradianceVolume() ) );
 
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
         Hlms *hlms = hlmsManager->getHlms( "pbs" );
-        HlmsPbs *hlmsPbs = dynamic_cast<HlmsPbs*>( hlms );
+        HlmsPbs *hlmsPbs = dynamic_cast<HlmsPbs *>( hlms );
 
         if( hlmsPbs && hlmsPbs->getIrradianceVolume() )
         {
             IrradianceVolume *irradianceVolume = hlmsPbs->getIrradianceVolume();
 
             jsonStr.a( ",\n\t\t\t\"irradiance_volume\" :\n\t\t\t\t{" );
-            jsonStr.a( ",\n\t\t\t\"num_blocks\" : [ ",
-                       irradianceVolume->getNumBlocksX(), " ,",
-                       irradianceVolume->getNumBlocksY(), " ,",
-                       irradianceVolume->getNumBlocksZ(), " ]" );
-            jsonStr.a( ",\n\t\t\t\"power_scale\" : ",
-                       encodeFloat( irradianceVolume->getPowerScale() ) );
+            jsonStr.a( ",\n\t\t\t\"num_blocks\" : [ ", irradianceVolume->getNumBlocksX(), " ,",
+                       irradianceVolume->getNumBlocksY(), " ,", irradianceVolume->getNumBlocksZ(),
+                       " ]" );
+            jsonStr.a( ",\n\t\t\t\"power_scale\" : ", encodeFloat( irradianceVolume->getPowerScale() ) );
             jsonStr.a( ",\n\t\t\t\"fade_attenuation_over_distance\" : ",
                        toQuotedStr( irradianceVolume->getFadeAttenuationOverDistace() ) );
             jsonStr.a( ",\n\t\t\t\"irradiance_max_power\" : ",
@@ -764,13 +720,14 @@ namespace Ogre
 
         TextureGpu *pccBlendTex = pccBase->getBindTexture();
 
-        jsonStr.a( ",\n\t\t\"parallax_corrected_cubemaps\" :"
-                   "\n\t\t{" );
+        jsonStr.a(
+            ",\n\t\t\"parallax_corrected_cubemaps\" :"
+            "\n\t\t{" );
         jsonStr.a( "\n\t\t\t\"paused\" : ", toQuotedStr( pccBase->mPaused ) );
         if( !pccBase->getAutomaticMode() )
         {
-            OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemap*>( pccBase ) );
-            ParallaxCorrectedCubemap *pcc = static_cast<ParallaxCorrectedCubemap*>( pccBase );
+            OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemap *>( pccBase ) );
+            ParallaxCorrectedCubemap *pcc = static_cast<ParallaxCorrectedCubemap *>( pccBase );
             jsonStr.a( ",\n\t\t\t\"mask\" : ", pcc->mMask );
             jsonStr.a( ",\n\t\t\t\"reserved_rq_id\" : ", pcc->getProxyReservedRenderQueueId() );
             jsonStr.a( ",\n\t\t\t\"proxy_visibility_mask\" : ", pcc->getProxyReservedVisibilityMask() );
@@ -786,16 +743,17 @@ namespace Ogre
         const CompositorWorkspaceDef *workspaceDef = pccBase->getDefaultWorkspaceDef();
         jsonStr.a( ",\n\t\t\t\"workspace\" : \"", workspaceDef->getNameStr().c_str(), "\"" );
 
-        const CubemapProbeVec& probes = pccBase->getProbes();
+        const CubemapProbeVec &probes = pccBase->getProbes();
 
         if( !probes.empty() )
         {
-            jsonStr.a( ",\n\t\t\t\"probes\" :"
-                       "\n\t\t\t[" );
+            jsonStr.a(
+                ",\n\t\t\t\"probes\" :"
+                "\n\t\t\t[" );
 
             CubemapProbeVec::const_iterator begin = probes.begin();
-            CubemapProbeVec::const_iterator itor  = probes.begin();
-            CubemapProbeVec::const_iterator end   = probes.end();
+            CubemapProbeVec::const_iterator itor = probes.begin();
+            CubemapProbeVec::const_iterator end = probes.end();
             while( itor != end )
             {
                 if( itor != begin )
@@ -870,8 +828,7 @@ namespace Ogre
             jsonStr.a( ",\n\t\t\"forward_plus\" : \n\t\t{" );
             if( forwardPlus->getForwardPlusMethod() == ForwardPlusBase::MethodForward3D )
             {
-                const Forward3D *forwardImpl =
-                        static_cast<const Forward3D*>( forwardPlus );
+                const Forward3D *forwardImpl = static_cast<const Forward3D *>( forwardPlus );
 
                 jsonStr.a( "\n\t\t\t\"mode\" : \"3d\"" );
                 jsonStr.a( ",\n\t\t\t\"params\" : [" );
@@ -883,7 +840,7 @@ namespace Ogre
             else
             {
                 const ForwardClustered *forwardImpl =
-                        static_cast<const ForwardClustered*>( forwardPlus );
+                    static_cast<const ForwardClustered *>( forwardPlus );
 
                 jsonStr.a( "\n\t\t\t\"mode\" : \"clustered\"" );
                 jsonStr.a( ",\n\t\t\t\"params\" : [" );
@@ -915,8 +872,8 @@ namespace Ogre
                 TextureGpu *areaLightMask = hlmsPbs->getAreaLightMasks();
                 Image2 image;
                 image.convertFromTexture( areaLightMask, 0, areaLightMask->getNumMipmaps() );
-                jsonStr.a( ",\n\t\t\"area_light_masks\" : \"",
-                           areaLightMask->getNameStr().c_str(), "\"" );
+                jsonStr.a( ",\n\t\t\"area_light_masks\" : \"", areaLightMask->getNameStr().c_str(),
+                           "\"" );
                 image.save( mCurrentExportFolder + "/textures/" + areaLightMask->getNameStr() + ".oitd",
                             0, areaLightMask->getNumMipmaps() );
             }
@@ -924,19 +881,19 @@ namespace Ogre
 
         if( exportFlags & SceneFlags::Decals )
         {
-            //When the texture is managed type:
+            // When the texture is managed type:
             //  "decals_diffuse_managed" : "alias_name_of_any_texture_using_it"
-            //which we gathered in exportDecal()
-            //When it's not managed, type instead:
+            // which we gathered in exportDecal()
+            // When it's not managed, type instead:
             //  "decals_diffuse_raw" : "tex_name.oitd"
-            //which was also filled in exportDecal()
+            // which was also filled in exportDecal()
             const char *texTypes[3] = { "diffuse", "normals", "emissive" };
-            for( int i=0; i<3; ++i )
+            for( int i = 0; i < 3; ++i )
             {
                 if( !mDecalsTexNames[i].empty() )
                 {
                     const char *texMode = mDecalsTexManaged[i] ? "_managed" : "_raw";
-                    jsonStr.a( ",\n\t\t\"decals_", texTypes[i], texMode,"\" : \"",
+                    jsonStr.a( ",\n\t\t\"decals_", texTypes[i], texMode, "\" : \"",
                                mDecalsTexNames[i].c_str(), "\"" );
                 }
             }
@@ -954,7 +911,7 @@ namespace Ogre
         mExportedMeshes.clear();
         mExportedMeshesV1.clear();
 
-        for( int i=0; i<3; ++i )
+        for( int i = 0; i < 3; ++i )
         {
             mDecalsTexNames[i].clear();
             mDecalsTex[i] = 0;
@@ -968,9 +925,9 @@ namespace Ogre
         mListener->setSceneFlags( exportFlags, this );
 
         char tmpBuffer[4096];
-        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-        //Old importers cannot import our scenes if they use float literals
+        // Old importers cannot import our scenes if they use float literals
         if( mUseBinaryFloatingPoint )
             jsonStr.a( "{\n\t\"version\" : ", (int)VERSION_0, "" );
         else
@@ -997,10 +954,10 @@ namespace Ogre
             uint32 nodeCount = 0;
 
             outJson += ",\n\t\"scene_nodes\" :\n\t[";
-            for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+            for( size_t i = 0; i < NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
             {
                 SceneNode *rootSceneNode =
-                        mSceneManager->getRootSceneNode( static_cast<SceneMemoryMgrTypes>(i) );
+                    mSceneManager->getRootSceneNode( static_cast<SceneMemoryMgrTypes>( i ) );
 
                 mNodeToIdxMap[rootSceneNode] = nodeCount++;
                 if( i == 0 )
@@ -1010,18 +967,18 @@ namespace Ogre
                 exportSceneNode( jsonStr, outJson, rootSceneNode );
                 outJson += "\n\t\t}";
 
-                std::queue<SceneNode*> nodeQueue;
-                nodeQueue.push(rootSceneNode);
+                std::queue<SceneNode *> nodeQueue;
+                nodeQueue.push( rootSceneNode );
 
                 while( !nodeQueue.empty() )
                 {
-                    SceneNode* frontNode = nodeQueue.front();
+                    SceneNode *frontNode = nodeQueue.front();
                     nodeQueue.pop();
                     Node::NodeVecIterator nodeItor = frontNode->getChildIterator();
                     while( nodeItor.hasMoreElements() )
                     {
                         Node *node = nodeItor.getNext();
-                        SceneNode *sceneNode = dynamic_cast<SceneNode*>( node );
+                        SceneNode *sceneNode = dynamic_cast<SceneNode *>( node );
 
                         if( sceneNode && mListener->exportSceneNode( sceneNode ) )
                         {
@@ -1040,7 +997,7 @@ namespace Ogre
         if( exportFlags & SceneFlags::Items )
         {
             SceneManager::MovableObjectIterator movableObjects =
-                    mSceneManager->getMovableObjectIterator( ItemFactory::FACTORY_TYPE_NAME );
+                mSceneManager->getMovableObjectIterator( ItemFactory::FACTORY_TYPE_NAME );
 
             if( movableObjects.hasMoreElements() )
             {
@@ -1051,7 +1008,7 @@ namespace Ogre
                 while( movableObjects.hasMoreElements() )
                 {
                     MovableObject *mo = movableObjects.getNext();
-                    Item *item = static_cast<Item*>( mo );
+                    Item *item = static_cast<Item *>( mo );
                     if( mListener->exportItem( item ) )
                     {
                         if( firstObject )
@@ -1073,7 +1030,7 @@ namespace Ogre
         if( exportFlags & SceneFlags::Lights )
         {
             SceneManager::MovableObjectIterator movableObjects =
-                    mSceneManager->getMovableObjectIterator( LightFactory::FACTORY_TYPE_NAME );
+                mSceneManager->getMovableObjectIterator( LightFactory::FACTORY_TYPE_NAME );
 
             if( movableObjects.hasMoreElements() )
             {
@@ -1084,7 +1041,7 @@ namespace Ogre
                 while( movableObjects.hasMoreElements() )
                 {
                     MovableObject *mo = movableObjects.getNext();
-                    Light *light = static_cast<Light*>( mo );
+                    Light *light = static_cast<Light *>( mo );
                     if( mListener->exportLight( light ) )
                     {
                         if( firstObject )
@@ -1106,7 +1063,7 @@ namespace Ogre
         if( exportFlags & SceneFlags::Entities )
         {
             SceneManager::MovableObjectIterator movableObjects =
-                    mSceneManager->getMovableObjectIterator( v1::EntityFactory::FACTORY_TYPE_NAME );
+                mSceneManager->getMovableObjectIterator( v1::EntityFactory::FACTORY_TYPE_NAME );
 
             if( movableObjects.hasMoreElements() )
             {
@@ -1117,7 +1074,7 @@ namespace Ogre
                 while( movableObjects.hasMoreElements() )
                 {
                     MovableObject *mo = movableObjects.getNext();
-                    v1::Entity *entity = static_cast<v1::Entity*>( mo );
+                    v1::Entity *entity = static_cast<v1::Entity *>( mo );
                     if( mListener->exportEntity( entity ) )
                     {
                         if( firstObject )
@@ -1139,7 +1096,7 @@ namespace Ogre
         if( exportFlags & SceneFlags::Decals )
         {
             SceneManager::MovableObjectIterator movableObjects =
-                    mSceneManager->getMovableObjectIterator( DecalFactory::FACTORY_TYPE_NAME );
+                mSceneManager->getMovableObjectIterator( DecalFactory::FACTORY_TYPE_NAME );
 
             if( movableObjects.hasMoreElements() )
             {
@@ -1150,7 +1107,7 @@ namespace Ogre
                 while( movableObjects.hasMoreElements() )
                 {
                     MovableObject *mo = movableObjects.getNext();
-                    Decal *decal = static_cast<Decal*>( mo );
+                    Decal *decal = static_cast<Decal *>( mo );
                     if( mListener->exportDecal( decal ) )
                     {
                         if( firstObject )
@@ -1170,7 +1127,7 @@ namespace Ogre
         }
 
         if( exportFlags & SceneFlags::SceneSettings )
-            exportSceneSettings( jsonStr, outJson , exportFlags );
+            exportSceneSettings( jsonStr, outJson, exportFlags );
 
         outJson += "\n}\n";
 
@@ -1181,8 +1138,9 @@ namespace Ogre
     {
         mCurrentExportFolder.clear();
         set<String>::type savedTextures;
-        _exportScene( outJson, savedTextures,
-                      exportFlags & ~(SceneFlags::Meshes | SceneFlags::MeshesV1) );
+        _exportScene(
+            outJson, savedTextures,
+            exportFlags & static_cast<uint32>( ~( SceneFlags::Meshes | SceneFlags::MeshesV1 ) ) );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::exportSceneToFile( const String &folderPath, uint32 exportFlags )
@@ -1190,7 +1148,7 @@ namespace Ogre
         mCurrentExportFolder = folderPath;
         const String textureFolder = folderPath + "/textures/";
         FileSystemLayer::createDirectory( mCurrentExportFolder );
-        if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal)  )
+        if( exportFlags & ( SceneFlags::TexturesOitd | SceneFlags::TexturesOriginal ) )
             FileSystemLayer::createDirectory( textureFolder );
 
         set<String>::type savedTextures;
@@ -1201,53 +1159,51 @@ namespace Ogre
             const String scenePath = folderPath + "/scene.json";
             std::ofstream file( scenePath.c_str(), std::ios::binary | std::ios::out );
             if( file.is_open() )
-                file.write( jsonString.c_str(), jsonString.size() );
+                file.write( jsonString.c_str(), static_cast<std::streamsize>( jsonString.size() ) );
             file.close();
         }
 
         if( exportFlags & SceneFlags::Materials )
         {
             HlmsManager *hlmsManager = mRoot->getHlmsManager();
-            for( size_t i=HLMS_LOW_LEVEL + 1u; i<HLMS_MAX; ++i )
+            for( size_t i = HLMS_LOW_LEVEL + 1u; i < HLMS_MAX; ++i )
             {
                 if( hlmsManager->getHlms( static_cast<HlmsTypes>( i ) ) )
                 {
-                    const String materialPath = folderPath + "/material" +
-                                                StringConverter::toString( i ) + ".material.json";
+                    const String materialPath =
+                        folderPath + "/material" + StringConverter::toString( i ) + ".material.json";
                     hlmsManager->saveMaterials( static_cast<HlmsTypes>( i ), materialPath.c_str(),
                                                 mListener, BLANKSTRING );
                 }
             }
         }
 
-        if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal)  )
+        if( exportFlags & ( SceneFlags::TexturesOitd | SceneFlags::TexturesOriginal ) )
         {
             {
                 String jsonString;
                 TextureGpuManager *textureManager =
-                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 textureManager->exportTextureMetadataCache( jsonString );
 
                 const String scenePath = folderPath + "/textureMetadataCache.json";
                 std::ofstream file( scenePath.c_str(), std::ios::binary | std::ios::out );
                 if( file.is_open() )
-                    file.write( jsonString.c_str(), jsonString.size() );
+                    file.write( jsonString.c_str(), static_cast<std::streamsize>( jsonString.size() ) );
                 file.close();
             }
 
             HlmsManager *hlmsManager = mRoot->getHlmsManager();
-            for( size_t i=HLMS_LOW_LEVEL + 1u; i<HLMS_MAX; ++i )
+            for( size_t i = HLMS_LOW_LEVEL + 1u; i < HLMS_MAX; ++i )
             {
                 Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
                 if( hlms )
                 {
                     hlms->saveAllTexturesFromDatablocks(
-                                textureFolder, savedTextures,
-                                (exportFlags & SceneFlags::TexturesOitd) != 0,
-                                (exportFlags & SceneFlags::TexturesOriginal) != 0,
-                                mListener );
+                        textureFolder, savedTextures, ( exportFlags & SceneFlags::TexturesOitd ) != 0,
+                        ( exportFlags & SceneFlags::TexturesOriginal ) != 0, mListener );
                 }
             }
         }
     }
-}
+}  // namespace Ogre

@@ -65,7 +65,7 @@ namespace Demo
         aquireTransformSlot( slot, bufferIdx );
 
         gameEntity->mTransformBufferIdx = bufferIdx;
-        for( int i = 0; i < NUM_GAME_ENTITY_BUFFERS; ++i )
+        for( size_t i = 0; i < NUM_GAME_ENTITY_BUFFERS; ++i )
         {
             gameEntity->mTransform[i] = mTransformBuffers[bufferIdx] + slot + cNumTransforms * i;
             memcpy( gameEntity->mTransform[i], &cge.initialTransform, sizeof( GameEntityTransform ) );
@@ -136,7 +136,7 @@ namespace Demo
         // Try to prevent a lot of fragmentation by adding the slot to an existing region.
         // It won't fully avoid it, but this is good/simple enough. If you want to fully
         // prevent fragmentation, see StagingBuffer::mergeContiguousBlocks implementation.
-        const size_t slot = transform - mTransformBuffers[bufferIdx];
+        const size_t slot = static_cast<size_t>( transform - mTransformBuffers[bufferIdx] );
 
         std::vector<Region>::iterator itor = mAvailableTransforms.begin();
         std::vector<Region>::iterator end = mAvailableTransforms.end();

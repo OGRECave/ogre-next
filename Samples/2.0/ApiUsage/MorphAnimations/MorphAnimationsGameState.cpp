@@ -194,7 +194,7 @@ namespace Demo
         subItem->setPoseWeight( "Compressed", ( Ogre::Math::Sin( mAccumulator ) + 1 ) / 2 );
 
         subItem = mBlobItem->getSubItem( 0 );
-        for( int i = 0; i < subItem->getNumPoses(); ++i )
+        for( size_t i = 0; i < subItem->getNumPoses(); ++i )
         {
             subItem->setPoseWeight( i,
                                     Ogre::Math::Sin( mAccumulator * ( 1 + i * 0.1 ) * 3 + i ) * 0.27 );

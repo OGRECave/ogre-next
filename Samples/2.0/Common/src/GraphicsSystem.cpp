@@ -230,9 +230,9 @@ namespace Demo
         Ogre::NameValuePairList params;
         bool fullscreen = Ogre::StringConverter::parseBool( cfgOpts["Full Screen"].currentValue );
 #if OGRE_USE_SDL2
-        int screen = 0;
-        int posX = SDL_WINDOWPOS_CENTERED_DISPLAY( screen );
-        int posY = SDL_WINDOWPOS_CENTERED_DISPLAY( screen );
+        unsigned int screen = 0;
+        unsigned int posX = SDL_WINDOWPOS_CENTERED_DISPLAY( screen );
+        unsigned int posY = SDL_WINDOWPOS_CENTERED_DISPLAY( screen );
 
         if( fullscreen )
         {
@@ -241,11 +241,11 @@ namespace Demo
         }
 
         mSdlWindow = SDL_CreateWindow(
-            windowTitle.c_str(),  // window title
-            posX,                 // initial x position
-            posY,                 // initial y position
-            width,                // width, in pixels
-            height,               // height, in pixels
+            windowTitle.c_str(),       // window title
+            static_cast<int>( posX ),  // initial x position
+            static_cast<int>( posY ),  // initial y position
+            width,                     // width, in pixels
+            height,                    // height, in pixels
             SDL_WINDOW_SHOWN | ( fullscreen ? SDL_WINDOW_FULLSCREEN : 0 ) | SDL_WINDOW_RESIZABLE );
 
         // Get the native whnd
@@ -314,8 +314,10 @@ namespace Demo
 
         initMiscParamsListener( params );
 
-        mRenderWindow = Ogre::Root::getSingleton().createRenderWindow( windowTitle, width, height,
-                                                                       fullscreen, &params );
+        mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(
+            windowTitle,                                                      //
+            static_cast<uint32_t>( width ), static_cast<uint32_t>( height ),  //
+            fullscreen, &params );
 
         mOverlaySystem = OGRE_NEW Ogre::v1::OverlaySystem();
 
@@ -431,13 +433,14 @@ namespace Demo
             int w, h;
             SDL_GetWindowSize( mSdlWindow, &w, &h );
 #    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-            mRenderWindow->requestResolution( w, h );
+            mRenderWindow->requestResolution( static_cast<uint32_t>( w ), static_cast<uint32_t>( h ) );
 #    endif
             mRenderWindow->windowMovedOrResized();
             break;
         case SDL_WINDOWEVENT_RESIZED:
 #    if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-            mRenderWindow->requestResolution( evt.window.data1, evt.window.data2 );
+            mRenderWindow->requestResolution( static_cast<uint32_t>( evt.window.data1 ),
+                                              static_cast<uint32_t>( evt.window.data2 ) );
 #    endif
             mRenderWindow->windowMovedOrResized();
             break;
@@ -1007,10 +1010,12 @@ namespace Demo
             ( mThreadGameEntityToUpdate->size() + ( numThreads - 1 ) ) / numThreads;
         const size_t toAdvance = std::min( threadId * objsPerThread, mThreadGameEntityToUpdate->size() );
 
-        GameEntityVec::const_iterator itor = mThreadGameEntityToUpdate->begin() + toAdvance;
+        GameEntityVec::const_iterator itor =
+            mThreadGameEntityToUpdate->begin() + static_cast<ptrdiff_t>( toAdvance );
         GameEntityVec::const_iterator end =
             mThreadGameEntityToUpdate->begin() +
-            std::min( toAdvance + objsPerThread, mThreadGameEntityToUpdate->size() );
+            static_cast<ptrdiff_t>(
+                std::min( toAdvance + objsPerThread, mThreadGameEntityToUpdate->size() ) );
         while( itor != end )
         {
             GameEntity *gEnt = *itor;

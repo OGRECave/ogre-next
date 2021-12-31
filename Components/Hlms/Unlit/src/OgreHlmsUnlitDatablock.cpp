@@ -124,12 +124,13 @@ namespace Ogre
 
                 while( itor != end )
                 {
-                    uint val = StringConverter::parseUnsignedInt( *itor, ~0 );
+                    uint val =
+                        StringConverter::parseUnsignedInt( *itor, std::numeric_limits<uint>::max() );
 
-                    if( val != ( uint )( ~0 ) )
+                    if( val != std::numeric_limits<uint>::max() )
                     {
                         // It's a number, must be an UV Set
-                        setTextureUvSource( i, val );
+                        setTextureUvSource( i, static_cast<uint8>( val ) );
                     }
                     else if( !itor->empty() )
                     {
@@ -160,7 +161,8 @@ namespace Ogre
             size_t pos = paramVal.find_first_of( ' ' );
             while( pos != String::npos )
             {
-                uint val = StringConverter::parseUnsignedInt( paramVal.substr( pos, 1 ), ~0 );
+                uint val = StringConverter::parseUnsignedInt( paramVal.substr( pos, 1 ),
+                                                              std::numeric_limits<uint>::max() );
 
                 if( val >= NUM_UNLIT_TEXTURE_TYPES )
                 {
@@ -307,7 +309,7 @@ namespace Ogre
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
         mTextureSwizzles[texType] =
-            ( r << 6u ) | ( ( g & 0x03u ) << 4u ) | ( ( b & 0x03u ) << 2u ) | ( a & 0x03u );
+            ( ( r & 0x03u ) << 6u ) | ( ( g & 0x03u ) << 4u ) | ( ( b & 0x03u ) << 2u ) | ( a & 0x03u );
         flushRenderables();
     }
     //-----------------------------------------------------------------------------------

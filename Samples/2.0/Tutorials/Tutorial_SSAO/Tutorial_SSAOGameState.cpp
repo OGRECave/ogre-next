@@ -264,7 +264,7 @@ namespace Demo
                                                      Ogre::Math::RangeRandom( -1.0f, 1.0f ), 0.0f );
                 noise.normalise();
 
-                Ogre::uint8 *pixelData = reinterpret_cast<Ogre::uint8 *>( texBox.at( i, j, 0 ) );
+                Ogre::int8 *pixelData = reinterpret_cast<Ogre::int8 *>( texBox.at( i, j, 0 ) );
                 pixelData[0] = Ogre::Bitwise::floatToSnorm8( noise.x );
                 pixelData[1] = Ogre::Bitwise::floatToSnorm8( noise.y );
                 pixelData[2] = Ogre::Bitwise::floatToSnorm8( noise.z );

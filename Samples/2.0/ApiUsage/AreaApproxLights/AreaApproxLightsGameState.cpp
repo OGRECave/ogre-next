@@ -275,7 +275,7 @@ namespace Demo
 
                 item->setVisibilityFlags( 0x000000001 );
 
-                size_t idx = i * 4 + j;
+                const size_t idx = static_cast<size_t>( i * 4 + j );
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
