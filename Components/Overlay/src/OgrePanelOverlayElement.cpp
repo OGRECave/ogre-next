@@ -277,18 +277,16 @@ namespace Ogre
             // Generate for as many texture layers as there are in material
             if( !mMaterialName.empty() && mInitialised )
             {
+#ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
+                uint8 numLayers = 1;  // TODO?
+#else
                 HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
                 Hlms *hlms = hlmsManager->getHlms( HLMS_UNLIT );
                 HlmsDatablock *datablock = hlms->getDatablock( mMaterialName );
                 assert( dynamic_cast<OverlayUnlitDatablock *>( datablock ) );
-
-#ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
-                uint8 numLayers = 1;  // TODO?
-#else
                 OverlayUnlitDatablock *guiDatablock = static_cast<OverlayUnlitDatablock *>( datablock );
                 uint8 numLayers = guiDatablock->getNumUvSets();
 #endif
-
                 VertexDeclaration *decl = mRenderOp.vertexData->vertexDeclaration;
                 // Check the number of texcoords we have in our buffer now
                 if( mNumTexCoordsInBuffer > numLayers )

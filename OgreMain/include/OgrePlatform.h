@@ -352,11 +352,13 @@ THE SOFTWARE.
 #        endif
 #    endif
 
-#    if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
-#        define OGRE_ASSERTS_ENABLED
-#    endif
+#    define OGRE_ASSERTS_ENABLED
 
-#    define OGRE_ASSERT_LOW OGRE_ASSERT
+#    if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+#        define OGRE_ASSERT_LOW OGRE_ASSERT
+#    else
+#        define OGRE_ASSERT_LOW( condition ) ( (void)0 )
+#    endif
 
 #    if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
 #        define OGRE_ASSERT_MEDIUM OGRE_ASSERT

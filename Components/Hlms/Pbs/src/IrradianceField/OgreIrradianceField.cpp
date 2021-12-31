@@ -249,7 +249,9 @@ namespace Ogre
         OGRE_ASSERT_LOW( !mSettings.isRaster() );
 
         float *RESTRICT_ALIAS updateData = reinterpret_cast<float * RESTRICT_ALIAS>( outBuffer );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float *RESTRICT_ALIAS updateDataStart = updateData;
+#endif
 
         const Vector2 *subsamples = &mSettings.getSubsamples()[0];
 
@@ -362,7 +364,9 @@ namespace Ogre
                                                   uint32 maxTapsPerPixel )
     {
         float2 *RESTRICT_ALIAS updateData = reinterpret_cast<float2 * RESTRICT_ALIAS>( outBuffer );
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
         const float2 *RESTRICT_ALIAS updateDataStart = updateData;
+#endif
 
         for( size_t y = 0u; y < probeRes; ++y )
         {
