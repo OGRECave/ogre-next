@@ -46,7 +46,14 @@ THE SOFTWARE.
 #include "OgreNULLRenderSystem.h"
 #endif
 
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
 #include "XML/tinyxml.h"
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
 #include "XML/OgreXMLMeshSerializer.h"
 #include "XML/OgreXMLSkeletonSerializer.h"
 

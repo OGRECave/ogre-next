@@ -32,7 +32,14 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 // Include tinyxml headers
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsuggest-override"
+#endif
 #include "tinyxml.h"
+#if defined( __GNUC__ ) && !defined( __clang__ )
+#    pragma GCC diagnostic pop
+#endif
 
 
 #endif
