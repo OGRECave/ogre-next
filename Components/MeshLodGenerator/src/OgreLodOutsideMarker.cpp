@@ -540,7 +540,7 @@ namespace Ogre
             assert( !mHull[i].removed );
             for( size_t n = 0; n < 3; n++ )
             {
-                indexBuffer.push_back( id++ );
+                indexBuffer.push_back( uint16( id++ ) );
                 const CHVertex *vn = &mVertexListOrig[mHull[i].vertexi[n]];
                 vertexBuffer.push_back( vn->position.x );
                 vertexBuffer.push_back( vn->position.y );

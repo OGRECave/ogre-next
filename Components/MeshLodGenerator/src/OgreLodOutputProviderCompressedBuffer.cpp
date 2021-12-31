@@ -40,7 +40,7 @@ namespace Ogre
     }
     void LodOutputProviderCompressedBuffer::bakeFirstPass( LodData *data, int lodIndex )
     {
-        unsigned submeshCount = data->mIndexBufferInfoList.size();
+        const unsigned submeshCount = (unsigned)data->mIndexBufferInfoList.size();
         assert( mTriangleCacheList.size() == data->mTriangleList.size() );
         mLastIndexBufferID = lodIndex;
 
@@ -66,7 +66,7 @@ namespace Ogre
     void LodOutputProviderCompressedBuffer::bakeSecondPass( LodData *data, int lodIndex )
     {
         LodOutputBuffer &buffer = static_cast<LodOutputProviderBuffer *>( fallback )->getBuffer();
-        unsigned submeshCount = data->mIndexBufferInfoList.size();
+        const unsigned submeshCount = (unsigned)data->mIndexBufferInfoList.size();
         assert( mTriangleCacheList.size() == data->mTriangleList.size() );
         assert( lodIndex > mLastIndexBufferID );  // Implementation limitation
 

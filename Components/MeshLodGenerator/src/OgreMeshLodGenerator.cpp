@@ -107,7 +107,7 @@ namespace Ogre
         lodConfig.mesh->setLodStrategyName( lodConfig.strategy->getName() );
         v1::MeshLodUsage usage;
         size_t n = 0;
-        lodConfig.mesh->_setLodInfo( lodConfig.levels.size() + 1 );  // add Lod levels
+        lodConfig.mesh->_setLodInfo( uint16( lodConfig.levels.size() + 1u ) );  // add Lod levels
         for( size_t i = 0; i < lodConfig.levels.size(); i++ )
         {
             // Record usages. First Lod usage is the mesh itself.
@@ -120,11 +120,11 @@ namespace Ogre
                 usage.edgeData = NULL;
                 usage.manualMesh.setNull();
                 usage.manualName = lodConfig.levels[i].manualMeshName;
-                lodConfig.mesh->_setLodUsage( ++n, usage );
+                lodConfig.mesh->_setLodUsage( uint16( ++n ), usage );
             }
         }
         // Remove skipped Lod levels
-        lodConfig.mesh->_setLodInfo( n + 1 );
+        lodConfig.mesh->_setLodInfo( uint16( n + 1u ) );
         if( edgeListWasBuilt )
             lodConfig.mesh->buildEdgeList();
     }

@@ -84,7 +84,7 @@ namespace Ogre
         data->mMeshName = mBuffer.meshName;
 #endif
         data->mMeshBoundingSphereRadius = mBuffer.boundingSphereRadius;
-        unsigned submeshCount = mBuffer.submesh.size();
+        unsigned submeshCount = (unsigned)mBuffer.submesh.size();
         for( unsigned i = 0; i < submeshCount; ++i )
         {
             LodInputBuffer::Submesh &submesh = mBuffer.submesh[i];
