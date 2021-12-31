@@ -92,7 +92,7 @@ namespace Ogre
         {
             uint8 bonesPerVertex = 0;
             VertexBoneAssignmentVec::iterator first =
-                std::lower_bound( mBoneAssignments.begin(), mBoneAssignments.end(), i );
+                std::lower_bound( mBoneAssignments.begin(), mBoneAssignments.end(), uint32( i ) );
             VertexBoneAssignmentVec::iterator itor = first;
 
             while( itor != endt && itor->vertexIndex == i )
