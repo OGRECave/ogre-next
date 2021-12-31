@@ -1893,7 +1893,7 @@ namespace Ogre {
         {
             OCGE( glSamplerParameteri( samplerName, GL_TEXTURE_COMPARE_MODE,
                                        GL_COMPARE_REF_TO_TEXTURE ) );
-            OCGE( glSamplerParameterf( samplerName, GL_TEXTURE_COMPARE_FUNC,
+            OCGE( glSamplerParameteri( samplerName, GL_TEXTURE_COMPARE_FUNC,
                                        convertCompareFunction( newBlock->mCompareFunction ) ) );
         }
 
