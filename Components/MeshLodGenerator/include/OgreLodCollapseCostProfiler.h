@@ -31,29 +31,34 @@
 #define _LodCollapseCostProfiler_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodCollapseCost.h"
-#include "OgreLodData.h"
 #include "OgreLodConfig.h"
+#include "OgreLodData.h"
 
 #include "ogrestd/unordered_map.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodCollapseCostProfiler :
-        public LodCollapseCost
+    class _OgreLodExport LodCollapseCostProfiler : public LodCollapseCost
     {
     public:
-        LodCollapseCostProfiler(LodProfile& profile, LodCollapseCostPtr& costCalculator) : mProfile(profile), mCostCalculator(costCalculator) {}
-        virtual void initCollapseCosts(LodData* data);
-        virtual void computeVertexCollapseCost(LodData* data, LodData::VertexI vertexi, Real& collapseCost, LodData::VertexI& collapseToi);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
-    protected:
+        LodCollapseCostProfiler( LodProfile &profile, LodCollapseCostPtr &costCalculator ) :
+            mProfile( profile ),
+            mCostCalculator( costCalculator )
+        {
+        }
+        void initCollapseCosts( LodData *data ) override;
+        void computeVertexCollapseCost( LodData *data, LodData::VertexI vertexi, Real &collapseCost,
+                                        LodData::VertexI &collapseToi ) override;
+        Real computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                      LodData::Edge *dstEdge ) override;
 
+    protected:
         struct ProfiledEdge
         {
             LodData::VertexI dsti;
-            Real cost;
+            Real             cost;
         };
 
         typedef vector<bool>::type HasVertexProfileList;
@@ -61,14 +66,15 @@ namespace Ogre
         HasVertexProfileList mHasProfile;
 
         typedef unordered_multimap<LodData::VertexI, ProfiledEdge>::type ProfileLookup;
+
         ProfileLookup mProfileLookup;
-        LodProfile mProfile;
+        LodProfile    mProfile;
 
         // If an edge doesn't have a profile, this collapsecost algorithm will be used.
         LodCollapseCostPtr mCostCalculator;
 
-        void injectProfile(LodData* data);
+        void injectProfile( LodData *data );
     };
 
-}
+}  // namespace Ogre
 #endif

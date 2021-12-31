@@ -30,6 +30,7 @@
 #define _LodBuffer_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreCommon.h"
 #include "OgreSharedPtr.h"
 
@@ -37,45 +38,46 @@
 
 namespace Ogre
 {
-/// Thread-safe buffer for storing Hardware index buffer
+    /// Thread-safe buffer for storing Hardware index buffer
     struct _OgreLodExport LodIndexBuffer
     {
-        size_t indexSize; /// Index size: 2 or 4 byte/index is supported only.
-        size_t indexCount; /// index count from indexStart.
-        size_t indexStart; /// Offset from the start of the indexBuffer
-        size_t indexBufferSize; /// size of the index buffer in bytes
-        Ogre::SharedPtr<unsigned char> indexBuffer; /// if NULL, then the previous Lod level's buffer is used. (compression)
-        void fillBuffer(Ogre::v1::IndexData* data); /// Fills the buffer from an Ogre::IndexData. Call this on Ogre main thread only
+        size_t indexSize;        /// Index size: 2 or 4 byte/index is supported only.
+        size_t indexCount;       /// index count from indexStart.
+        size_t indexStart;       /// Offset from the start of the indexBuffer
+        size_t indexBufferSize;  /// size of the index buffer in bytes
+        Ogre::SharedPtr<unsigned char>
+             indexBuffer;  /// if NULL, then the previous Lod level's buffer is used. (compression)
+        void fillBuffer( Ogre::v1::IndexData *data );  /// Fills the buffer from an Ogre::IndexData. Call
+                                                       /// this on Ogre main thread only
     };
-/// Thread-safe buffer for storing Hardware vertex buffer
+    /// Thread-safe buffer for storing Hardware vertex buffer
     struct _OgreLodExport LodVertexBuffer
     {
-        size_t vertexCount;
+        size_t                   vertexCount;
         Ogre::SharedPtr<Vector3> vertexBuffer;
         Ogre::SharedPtr<Vector3> vertexNormalBuffer;
-        void fillBuffer(Ogre::v1::VertexData* data);
+        void                     fillBuffer( Ogre::v1::VertexData *data );
     };
-/// Data representing all required information from a Mesh. Used by LodInputProviderBuffer.
+    /// Data representing all required information from a Mesh. Used by LodInputProviderBuffer.
     struct _OgreLodExport LodInputBuffer
     {
         struct _OgreLodExport Submesh
         {
-            LodIndexBuffer indexBuffer;
+            LodIndexBuffer  indexBuffer;
             LodVertexBuffer vertexBuffer;
-            OperationType operationType;
-            bool useSharedVertexBuffer;
+            OperationType   operationType;
+            bool            useSharedVertexBuffer;
         };
         vector<Submesh>::type submesh;
-        LodVertexBuffer sharedVertexBuffer;
-        String meshName;
-        Real boundingSphereRadius;
-        void fillBuffer(Ogre::v1::MeshPtr mesh);
-        void clear();
+        LodVertexBuffer       sharedVertexBuffer;
+        String                meshName;
+        Real                  boundingSphereRadius;
+        void                  fillBuffer( Ogre::v1::MeshPtr mesh );
+        void                  clear();
     };
     /// Data representing the output of the Mesh reduction. Used by LodOutputProviderBuffer.
     struct _OgreLodExport LodOutputBuffer
     {
-
         struct _OgreLodExport Submesh
         {
             vector<LodIndexBuffer>::type genIndexBuffers;
@@ -83,5 +85,5 @@ namespace Ogre
         /// Contains every generated indexBuffer from every submesh. submeshCount*lodLevelCount buffers.
         vector<Submesh>::type submesh;
     };
-}
+}  // namespace Ogre
 #endif

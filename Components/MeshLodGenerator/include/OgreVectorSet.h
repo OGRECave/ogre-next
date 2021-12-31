@@ -33,28 +33,25 @@
 
 namespace Ogre
 {
-
-/// VectorSet is basically a helper to use a vector as a small set container.
-/// Also these functions keep the code clean and fast.
-/// You can insert in O(1) time, if you know that it doesn't exists.
-/// You can remove in O(1) time, if you know the position of the item.
-    template<typename T, unsigned S>
-    struct VectorSet :
-        public SmallVector<T, S>
+    /// VectorSet is basically a helper to use a vector as a small set container.
+    /// Also these functions keep the code clean and fast.
+    /// You can insert in O(1) time, if you know that it doesn't exists.
+    /// You can remove in O(1) time, if you know the position of the item.
+    template <typename T, unsigned S>
+    struct VectorSet : public SmallVector<T, S>
     {
-
         typedef typename SmallVector<T, S>::iterator iterator;
 
-        void addNotExists(const T& item); // Complexity: O(1)!!
-        void remove(iterator it); // Complexity: O(1)!!
-        iterator add(const T& item); // Complexity: O(N)
-        void removeExists(const T& item); // Complexity: O(N)
-        bool remove(const T& item); // Complexity: O(N)
-        void replaceExists(const T& oldItem, const T& newItem); // Complexity: O(N)
-        bool has(const T& item); // Complexity: O(N)
-        iterator find(const T& item); // Complexity: O(N)
-        iterator findExists(const T& item); // Complexity: O(N)
+        void     addNotExists( const T &item );                        // Complexity: O(1)!!
+        void     remove( iterator it );                                // Complexity: O(1)!!
+        iterator add( const T &item );                                 // Complexity: O(N)
+        void     removeExists( const T &item );                        // Complexity: O(N)
+        bool     remove( const T &item );                              // Complexity: O(N)
+        void     replaceExists( const T &oldItem, const T &newItem );  // Complexity: O(N)
+        bool     has( const T &item );                                 // Complexity: O(N)
+        iterator find( const T &item );                                // Complexity: O(N)
+        iterator findExists( const T &item );                          // Complexity: O(N)
     };
 
-}
+}  // namespace Ogre
 #endif

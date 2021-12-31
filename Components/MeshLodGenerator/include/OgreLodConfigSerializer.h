@@ -36,25 +36,20 @@
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodConfigSerializer :
-        public Ogre::Serializer
+    class _OgreLodExport LodConfigSerializer : public Ogre::Serializer
     {
-
     public:
-
         LodConfigSerializer();
 
-        void exportLodConfig(Ogre::LodConfig& config, const Ogre::String& filename,
-                             Endian endianMode = ENDIAN_NATIVE);
-        void exportLodConfig(Ogre::LodConfig& config, Ogre::DataStreamPtr stream,
-                             Endian endianMode = ENDIAN_NATIVE);
+        void exportLodConfig( Ogre::LodConfig &config, const Ogre::String &filename,
+                              Endian endianMode = ENDIAN_NATIVE );
+        void exportLodConfig( Ogre::LodConfig &config, Ogre::DataStreamPtr stream,
+                              Endian endianMode = ENDIAN_NATIVE );
 
-        void importLodConfig(Ogre::LodConfig* config, const Ogre::String& filename);
-        void importLodConfig(Ogre::LodConfig* config, DataStreamPtr& stream);
+        void importLodConfig( Ogre::LodConfig *config, const Ogre::String &filename );
+        void importLodConfig( Ogre::LodConfig *config, DataStreamPtr &stream );
 
     protected:
-
         enum LodConfigChunkID
         {
             LCCID_FILE_HEADER = 0x300,
@@ -71,18 +66,18 @@ namespace Ogre
         void readLodAdvancedInfo();
         void readLodProfile();
 
-        void writeLodConfig();
+        void   writeLodConfig();
         size_t calcLodConfigSize();
-        void writeLodBasicInfo();
+        void   writeLodBasicInfo();
         size_t calcLodBasicInfoSize();
-        void writeLodLevels();
+        void   writeLodLevels();
         size_t calcLodLevelsSize();
-        void writeLodAdvancedInfo();
+        void   writeLodAdvancedInfo();
         size_t calcLodAdvancedInfoSize();
-        void writeLodProfile();
+        void   writeLodProfile();
         size_t calcLodProfileSize();
 
-        LodConfig* mLodConfig;
+        LodConfig *mLodConfig;
     };
-}
+}  // namespace Ogre
 #endif

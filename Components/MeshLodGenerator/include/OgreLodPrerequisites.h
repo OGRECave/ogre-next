@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-// forward decls
+    // forward decls
     class LodCollapseCost;
     class LodCollapseCostCurvature;
     class LodCollapseCostOutside;
@@ -49,7 +49,6 @@ namespace Ogre
     class LodOutputProviderCompressedBuffer;
     class LodOutsideMarker;
 
-
     class LodCollapser;
     struct LodConfig;
     struct LodLevel;
@@ -61,37 +60,37 @@ namespace Ogre
     class LodWorkQueueInjectorListener;
     struct LodData;
 
-    typedef SharedPtr<LodCollapseCost> LodCollapseCostPtr;
-    typedef SharedPtr<LodCollapser> LodCollapserPtr;
-    typedef SharedPtr<LodData> LodDataPtr;
-    typedef SharedPtr<LodInputProvider> LodInputProviderPtr;
+    typedef SharedPtr<LodCollapseCost>   LodCollapseCostPtr;
+    typedef SharedPtr<LodCollapser>      LodCollapserPtr;
+    typedef SharedPtr<LodData>           LodDataPtr;
+    typedef SharedPtr<LodInputProvider>  LodInputProviderPtr;
     typedef SharedPtr<LodOutputProvider> LodOutputProviderPtr;
 
     typedef GeneralAllocatedObject MeshLodAlloc;
-}
+}  // namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-#   if defined( OGRE_STATIC_LIB )
-#       define _OgreLodExport
-#   else
-#       if defined( OGRE_MESHLODGENERATOR_EXPORTS )
-#           define _OgreLodExport __declspec( dllexport )
-#       else
-#           if defined( __MINGW32__ )
-#               define _OgreLodExport
-#           else
-#               define _OgreLodExport __declspec( dllimport )
-#           endif
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   if !defined( OGRE_STATIC_LIB )
-#       define _OgreLodExport __attribute__ ((visibility("default")))
-#   else
-#       define _OgreLodExport __attribute__ ((visibility("hidden")))
-#   endif
+#    if defined( OGRE_STATIC_LIB )
+#        define _OgreLodExport
+#    else
+#        if defined( OGRE_MESHLODGENERATOR_EXPORTS )
+#            define _OgreLodExport __declspec( dllexport )
+#        else
+#            if defined( __MINGW32__ )
+#                define _OgreLodExport
+#            else
+#                define _OgreLodExport __declspec( dllimport )
+#            endif
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreLodExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreLodExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
-#   define _OgreLodExport
+#    define _OgreLodExport
 #endif
 
 #endif

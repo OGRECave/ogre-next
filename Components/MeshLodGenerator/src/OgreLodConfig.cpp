@@ -31,39 +31,39 @@
 namespace Ogre
 {
     LodConfig::Advanced::Advanced() :
-        useBackgroundQueue(false),
-        useCompression(true),
-        useVertexNormals(true),
-        outsideWeight(0.0),
-        outsideWalkAngle(0.0)
+        useBackgroundQueue( false ),
+        useCompression( true ),
+        useVertexNormals( true ),
+        outsideWeight( 0.0 ),
+        outsideWalkAngle( 0.0 )
     {
     }
 
-    LodConfig::LodConfig(v1::MeshPtr& _mesh, LodStrategy* _strategy /*= DistanceLodStrategy::getSingletonPtr()*/) :
-        mesh(_mesh), strategy(_strategy)
+    LodConfig::LodConfig( v1::MeshPtr &_mesh,
+                          LodStrategy *_strategy /*= DistanceLodStrategy::getSingletonPtr()*/ ) :
+        mesh( _mesh ),
+        strategy( _strategy )
     {
     }
 
-    LodConfig::LodConfig()
-    {
-    }
+    LodConfig::LodConfig() {}
 
-    void LodConfig::createManualLodLevel(Ogre::Real distance, const String& manualMeshName)
+    void LodConfig::createManualLodLevel( Ogre::Real distance, const String &manualMeshName )
     {
         LodLevel lodLevel;
         lodLevel.distance = distance;
         lodLevel.manualMeshName = manualMeshName;
-        levels.push_back(lodLevel);
+        levels.push_back( lodLevel );
     }
 
-    void LodConfig::createGeneratedLodLevel(Ogre::Real distance,
-                                            Real reductionValue,
-                                            LodLevel::VertexReductionMethod reductionMethod /*= LodLevel::VRM_PROPORTIONAL*/)
+    void LodConfig::createGeneratedLodLevel(
+        Ogre::Real distance, Real reductionValue,
+        LodLevel::VertexReductionMethod reductionMethod /*= LodLevel::VRM_PROPORTIONAL*/ )
     {
         LodLevel lodLevel;
         lodLevel.distance = distance;
         lodLevel.reductionValue = reductionValue;
         lodLevel.reductionMethod = reductionMethod;
-        levels.push_back(lodLevel);
+        levels.push_back( lodLevel );
     }
-}
+}  // namespace Ogre

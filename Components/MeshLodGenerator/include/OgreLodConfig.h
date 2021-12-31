@@ -30,20 +30,20 @@
 #define __LogConfig_H_
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreDistanceLodStrategy.h"
-#include "OgreVector3.h"
 #include "OgreSharedPtr.h"
+#include "OgreVector3.h"
 
 #include "ogrestd/vector.h"
 
 namespace Ogre
 {
-
     struct _OgreLodExport ProfiledEdge
     {
-        Vector3 src; // Vertex identifier
-        Vector3 dst; // Direction of collapse
-        Real cost; // Requested collapse cost
+        Vector3 src;   // Vertex identifier
+        Vector3 dst;   // Direction of collapse
+        Real    cost;  // Requested collapse cost
     };
 
     typedef vector<ProfiledEdge>::type LodProfile;
@@ -121,53 +121,55 @@ namespace Ogre
         size_t outUniqueVertexCount;
 
         /**
-         * @brief Whether the Lod level generation was skipped, because it has same vertex count as the previous Lod level.
+         * @brief Whether the Lod level generation was skipped, because it has same vertex count as the
+         * previous Lod level.
          */
         bool outSkipped;
     };
 
     struct _OgreLodExport LodConfig
     {
-        v1::MeshPtr mesh; /// The mesh which we want to reduce.
-        LodStrategy* strategy; /// Lod strategy to use.
+        v1::MeshPtr  mesh;      /// The mesh which we want to reduce.
+        LodStrategy *strategy;  /// Lod strategy to use.
 
         typedef vector<LodLevel>::type LodLevelList;
-        LodLevelList levels; /// Info about Lod levels
+        LodLevelList                   levels;  /// Info about Lod levels
 
-        LodConfig(v1::MeshPtr & _mesh, LodStrategy * _strategy = DistanceLodStrategy::getSingletonPtr());
+        LodConfig( v1::MeshPtr &_mesh, LodStrategy *_strategy = DistanceLodStrategy::getSingletonPtr() );
         LodConfig();
 
         // Helper functions:
-        void createManualLodLevel(Ogre::Real distance, const String& manualMeshName);
-        void createGeneratedLodLevel(Ogre::Real distance,
-                                     Real reductionValue,
-                                     LodLevel::VertexReductionMethod reductionMethod = LodLevel::VRM_PROPORTIONAL);
+        void createManualLodLevel( Ogre::Real distance, const String &manualMeshName );
+        void createGeneratedLodLevel(
+            Ogre::Real distance, Real reductionValue,
+            LodLevel::VertexReductionMethod reductionMethod = LodLevel::VRM_PROPORTIONAL );
 
         struct _OgreLodExport Advanced
         {
-            /// Whether you want to process it immediatelly on main thread or you want to use Ogre::WorkQueue.
-            /// If you use workqueue the generator will return immediately. After processed in background,
-            /// the LodWorkQueueInjector will inject it in frameEnd event when rendering next frame.
-            /// Ready LODs can also be injected by calling Root::getSingleton().getWorkQueue()->processResponses().
-            /// (disabled by default)
+            /// Whether you want to process it immediatelly on main thread or you want to use
+            /// Ogre::WorkQueue. If you use workqueue the generator will return immediately. After
+            /// processed in background, the LodWorkQueueInjector will inject it in frameEnd event when
+            /// rendering next frame. Ready LODs can also be injected by calling
+            /// Root::getSingleton().getWorkQueue()->processResponses(). (disabled by default)
             bool useBackgroundQueue;
-            /// If enabled, it allows up to 50% smaller index buffers by storing once shared faces with frame shifting.
-            /// There is no performance disadvantage! (enabled by default)
+            /// If enabled, it allows up to 50% smaller index buffers by storing once shared faces with
+            /// frame shifting. There is no performance disadvantage! (enabled by default)
             bool useCompression;
-            /// Use vertex normals to improve quality. Bit slower to generate, but it has better quality most of the time.
-            /// (enabled by default)
+            /// Use vertex normals to improve quality. Bit slower to generate, but it has better quality
+            /// most of the time. (enabled by default)
             bool useVertexNormals;
-            /// Faces inside a house can't be seen from far away. Weightening outside allows to remove those internal faces.
-            /// It makes generation smaller and it is not 100% accurate. Set it to 0.0 to disable.
-            /// (disabled by default)
+            /// Faces inside a house can't be seen from far away. Weightening outside allows to remove
+            /// those internal faces. It makes generation smaller and it is not 100% accurate. Set it to
+            /// 0.0 to disable. (disabled by default)
             Ogre::Real outsideWeight;
-            /// If outsideWeight is enabled, this will set the angle how deep the algorithm can walk inside the mesh.
-            /// This value is an acos number between -1 and 1. (by default it is 0 which means 90 degree)
+            /// If outsideWeight is enabled, this will set the angle how deep the algorithm can walk
+            /// inside the mesh. This value is an acos number between -1 and 1. (by default it is 0 which
+            /// means 90 degree)
             Ogre::Real outsideWalkAngle;
             /// If the algorithm makes errors, you can fix it, by adding the edge to the profile.
             LodProfile profile;
             Advanced();
         } advanced;
     };
-}
+}  // namespace Ogre
 #endif

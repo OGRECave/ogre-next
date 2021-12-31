@@ -31,31 +31,33 @@
 #define _LodCollapseCost_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodData.h"
 
 namespace Ogre
 {
-
     class _OgreLodExport LodCollapseCost
     {
     public:
         virtual ~LodCollapseCost() {}
         /// This is called after the LodInputProvider has initialized LodData.
-        virtual void initCollapseCosts(LodData* data);
+        virtual void initCollapseCosts( LodData *data );
         /// Called from initCollapseCosts for every edge.
-        virtual void initVertexCollapseCost(LodData* data, LodData::VertexI vertexi);
+        virtual void initVertexCollapseCost( LodData *data, LodData::VertexI vertexi );
         /// Called when edge cost gets invalid.
-        virtual void updateVertexCollapseCost(LodData* data, LodData::VertexI vertexi);
-        /// Called by initVertexCollapseCost and updateVertexCollapseCost, when the vertex minimal cost needs to be updated.
-        virtual void computeVertexCollapseCost(LodData* data, LodData::VertexI vertexi, Real& collapseCost, LodData::VertexI& collapseToi);
+        virtual void updateVertexCollapseCost( LodData *data, LodData::VertexI vertexi );
+        /// Called by initVertexCollapseCost and updateVertexCollapseCost, when the vertex minimal cost
+        /// needs to be updated.
+        virtual void computeVertexCollapseCost( LodData *data, LodData::VertexI vertexi,
+                                                Real &collapseCost, LodData::VertexI &collapseToi );
         /// Returns the collapse cost of the given edge.
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge) = 0;
+        virtual Real computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                              LodData::Edge *dstEdge ) = 0;
+
     protected:
         // Helper functions:
-        bool isBorderVertex(const LodData::Vertex* vertex) const;
+        bool isBorderVertex( const LodData::Vertex *vertex ) const;
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

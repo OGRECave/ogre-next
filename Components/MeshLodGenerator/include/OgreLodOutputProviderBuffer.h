@@ -31,29 +31,29 @@
 #define _LodOutputProviderBuffer_H__
 
 #include "OgreLodPrerequisites.h"
-#include "OgreLodOutputProvider.h"
+
 #include "OgreLodBuffer.h"
+#include "OgreLodOutputProvider.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodOutputProviderBuffer :
-        public LodOutputProvider
+    class _OgreLodExport LodOutputProviderBuffer : public LodOutputProvider
     {
     public:
-        LodOutputProviderBuffer(v1::MeshPtr mesh) : mMesh(mesh) {}
-        virtual void prepare(LodData* data);
-        virtual void finalize(LodData* data) {}
-        virtual void bakeManualLodLevel(LodData* data, String& manualMeshName, int lodIndex);
-        virtual void bakeLodLevel(LodData* data, int lodIndex);
-        virtual void inject();
-        LodOutputBuffer& getBuffer();
+        LodOutputProviderBuffer( v1::MeshPtr mesh ) : mMesh( mesh ) {}
+
+        void prepare( LodData *data ) override;
+        void finalize( LodData *data ) override {}
+        void bakeManualLodLevel( LodData *data, String &manualMeshName, int lodIndex ) override;
+        void bakeLodLevel( LodData *data, int lodIndex ) override;
+        void inject() override;
+
+        LodOutputBuffer &getBuffer();
+
     protected:
-        v1::MeshPtr mMesh;
+        v1::MeshPtr     mMesh;
         LodOutputBuffer mBuffer;
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

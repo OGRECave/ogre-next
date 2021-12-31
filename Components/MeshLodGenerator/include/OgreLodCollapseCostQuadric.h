@@ -31,33 +31,32 @@
 #define _LodCollapseCostQuadric_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodCollapseCost.h"
 #include "OgreLodData.h"
 #include "OgreMatrix4.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodCollapseCostQuadric :
-        public LodCollapseCost
+    class _OgreLodExport LodCollapseCostQuadric : public LodCollapseCost
     {
     public:
-        virtual void initCollapseCosts(LodData* data);
-        virtual void updateVertexCollapseCost(LodData* data, LodData::VertexI vertexi);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
-    protected:
+        void initCollapseCosts( LodData *data ) override;
+        void updateVertexCollapseCost( LodData *data, LodData::VertexI vertexi ) override;
+        Real computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                      LodData::Edge *dstEdge ) override;
 
+    protected:
         struct TriangleQuadricPlane
         {
             Matrix4 quadric;
         };
         vector<Matrix4>::type mTrianglePlaneQuadricList;
         vector<Matrix4>::type mVertexQuadricList;
-        void computeTrianglePlaneQuadric(LodData* data, size_t triangleID);
-        void computeVertexQuadric(LodData* data, size_t vertexID);
+
+        void computeTrianglePlaneQuadric( LodData *data, size_t triangleID );
+        void computeVertexQuadric( LodData *data, size_t vertexID );
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

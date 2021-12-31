@@ -31,32 +31,32 @@
 #define _LodCollapseCostOutside_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodCollapseCost.h"
 #include "OgreLodData.h"
 #include "OgreSharedPtr.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodCollapseCostOutside :
-        public LodCollapseCost
+    class _OgreLodExport LodCollapseCostOutside : public LodCollapseCost
     {
     public:
-        LodCollapseCostOutside(LodCollapseCostPtr costCalculator, Real outsideWeight, Real outsideWalkAngle);
-        ~LodCollapseCostOutside();
-        virtual void initCollapseCosts(LodData* data);
-        virtual Real computeEdgeCollapseCost(LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge);
-    protected:
+        LodCollapseCostOutside( LodCollapseCostPtr costCalculator, Real outsideWeight,
+                                Real outsideWalkAngle );
+        ~LodCollapseCostOutside() override;
 
+        void initCollapseCosts( LodData *data ) override;
+        Real computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                      LodData::Edge *dstEdge ) override;
+
+    protected:
         Real mOutsideWeight;
         Real mOutsideWalkAngle;
 
         // Result of this collapse cost algorithm will be modified, if it is outside.
         LodCollapseCostPtr mCostCalculator;
-        LodOutsideMarker* mOutsideMarker;
+        LodOutsideMarker * mOutsideMarker;
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

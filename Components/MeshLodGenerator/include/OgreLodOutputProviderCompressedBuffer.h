@@ -31,23 +31,20 @@
 #define _LodOutputProviderCompressedBuffer_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodOutputProviderCompressedMesh.h"
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodOutputProviderCompressedBuffer :
-        public LodOutputProviderCompressedMesh
+    class _OgreLodExport LodOutputProviderCompressedBuffer : public LodOutputProviderCompressedMesh
     {
     public:
-        LodOutputProviderCompressedBuffer(v1::MeshPtr mesh);
+        LodOutputProviderCompressedBuffer( v1::MeshPtr mesh );
 
     protected:
-        virtual void bakeFirstPass(LodData* data, int lodIndex);
-        virtual void bakeSecondPass(LodData* data, int lodIndex);
+        void bakeFirstPass( LodData *data, int lodIndex ) override;
+        void bakeSecondPass( LodData *data, int lodIndex ) override;
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

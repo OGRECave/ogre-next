@@ -31,26 +31,24 @@
 #define _LodInputProviderBuffer_H__
 
 #include "OgreLodPrerequisites.h"
-#include "OgreLodInputProvider.h"
-#include "OgreLodData.h"
+
 #include "OgreLodBuffer.h"
+#include "OgreLodData.h"
+#include "OgreLodInputProvider.h"
 #include "OgreLogManager.h"
 
 #include <sstream>
 
 namespace Ogre
 {
-
-    class _OgreLodExport LodInputProviderBuffer :
-        public LodInputProvider
+    class _OgreLodExport LodInputProviderBuffer : public LodInputProvider
     {
     public:
-        LodInputProviderBuffer(v1::MeshPtr mesh);
+        LodInputProviderBuffer( v1::MeshPtr mesh );
         /// Called when the data should be filled with the input.
-        virtual void initData(LodData* data);
+        void initData( LodData *data ) override;
 
     protected:
-
         LodInputBuffer mBuffer;
 
         typedef vector<LodData::VertexI>::type VertexLookupList;
@@ -58,48 +56,47 @@ namespace Ogre
         VertexLookupList mSharedVertexLookup;
         VertexLookupList mVertexLookup;
 
-
-        void tuneContainerSize(LodData* data);
-        void initialize(LodData* data);
-        void addVertexData(LodData* data, LodVertexBuffer& vertexBuffer, bool useSharedVertexLookup);
-        void addIndexData(LodData* data, LodIndexBuffer& indexBuffer, bool useSharedVertexLookup, unsigned submeshID, OperationType op);
-        template<typename IndexType>
-        void addTriangle(LodData* data, IndexType i0, IndexType i1, IndexType i2, VertexLookupList& lookup, unsigned submeshID)
+        void tuneContainerSize( LodData *data );
+        void initialize( LodData *data );
+        void addVertexData( LodData *data, LodVertexBuffer &vertexBuffer, bool useSharedVertexLookup );
+        void addIndexData( LodData *data, LodIndexBuffer &indexBuffer, bool useSharedVertexLookup,
+                           unsigned submeshID, OperationType op );
+        template <typename IndexType>
+        void addTriangle( LodData *data, IndexType i0, IndexType i1, IndexType i2,
+                          VertexLookupList &lookup, unsigned submeshID )
         {
-                // It should never reallocate or every pointer will be invalid.
-                OgreAssert(data->mTriangleList.capacity() > data->mTriangleList.size(), "");
-                data->mTriangleList.push_back(LodData::Triangle());
-                LodData::Triangle* tri = &data->mTriangleList.back();
-                tri->submeshIDOrRemovedTag = submeshID;
-                // Invalid index: Index is bigger then vertex buffer size.
-                OgreAssert(i0 < lookup.size() && i1 < lookup.size() && i2 < lookup.size(), "");
-                tri->vertexID[0] = i0;
-                tri->vertexID[1] = i1;
-                tri->vertexID[2] = i2;
-                tri->vertexi[0] = lookup[i0];
-                tri->vertexi[1] = lookup[i1];
-                tri->vertexi[2] = lookup[i2];
+            // It should never reallocate or every pointer will be invalid.
+            OgreAssert( data->mTriangleList.capacity() > data->mTriangleList.size(), "" );
+            data->mTriangleList.push_back( LodData::Triangle() );
+            LodData::Triangle *tri = &data->mTriangleList.back();
+            tri->submeshIDOrRemovedTag = submeshID;
+            // Invalid index: Index is bigger then vertex buffer size.
+            OgreAssert( i0 < lookup.size() && i1 < lookup.size() && i2 < lookup.size(), "" );
+            tri->vertexID[0] = i0;
+            tri->vertexID[1] = i1;
+            tri->vertexID[2] = i2;
+            tri->vertexi[0] = lookup[i0];
+            tri->vertexi[1] = lookup[i1];
+            tri->vertexi[2] = lookup[i2];
 
-                if (tri->isMalformed())
-                {
+            if( tri->isMalformed() )
+            {
 #if OGRE_DEBUG_MODE
-                    stringstream str;
-                    str << "In " << data->mMeshName << " malformed triangle found with ID: " << LodData::getVectorIDFromPointer(data->mTriangleList, tri) << ". " <<
-                        std::endl;
-                    printTriangle(data, tri, str);
-                    str << "It will be excluded from Lod level calculations.";
-                    LogManager::getSingleton().stream() << str.str();
+                stringstream str;
+                str << "In " << data->mMeshName << " malformed triangle found with ID: "
+                    << LodData::getVectorIDFromPointer( data->mTriangleList, tri ) << ". " << std::endl;
+                printTriangle( data, tri, str );
+                str << "It will be excluded from Lod level calculations.";
+                LogManager::getSingleton().stream() << str.str();
 #endif
-                    data->mIndexBufferInfoList[tri->submeshID()].indexCount -= 3;
-                    tri->setRemoved();
-                    return;
-                }
-                tri->computeNormal(data->mVertexList);
-                addTriangleToEdges(data, tri);
+                data->mIndexBufferInfoList[tri->submeshID()].indexCount -= 3;
+                tri->setRemoved();
+                return;
+            }
+            tri->computeNormal( data->mVertexList );
+            addTriangleToEdges( data, tri );
         }
     };
 
-}
+}  // namespace Ogre
 #endif
-
-

@@ -30,24 +30,25 @@
 #define _LodWorkQueueRequest_H__
 
 #include "OgreLodPrerequisites.h"
+
+#include "OgreLodCollapseCost.h"
+#include "OgreLodCollapser.h"
 #include "OgreLodConfig.h"
 #include "OgreLodData.h"
 #include "OgreLodInputProvider.h"
 #include "OgreLodOutputProvider.h"
-#include "OgreLodCollapseCost.h"
-#include "OgreLodCollapser.h"
 
 namespace Ogre
 {
     struct _OgreLodExport LodWorkQueueRequest
     {
-        LodConfig config;
-        LodDataPtr data;
-        LodInputProviderPtr input;
+        LodConfig            config;
+        LodDataPtr           data;
+        LodInputProviderPtr  input;
         LodOutputProviderPtr output;
-        LodCollapseCostPtr cost;
-        LodCollapserPtr collapser;
+        LodCollapseCostPtr   cost;
+        LodCollapserPtr      collapser;
     };
 
-}
+}  // namespace Ogre
 #endif

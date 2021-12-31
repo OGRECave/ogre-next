@@ -27,6 +27,7 @@
  */
 
 #include "OgreLodWorkQueueInjector.h"
+
 #include "OgreLodWorkQueueInjectorListener.h"
 #include "OgreLodWorkQueueRequest.h"
 #include "OgreMeshLodGenerator.h"
@@ -34,61 +35,56 @@
 
 namespace Ogre
 {
-    template<> LodWorkQueueInjector* Singleton<LodWorkQueueInjector>::msSingleton = 0;
-    LodWorkQueueInjector* LodWorkQueueInjector::getSingletonPtr()
-    {
-        return msSingleton;
-    }
-    LodWorkQueueInjector& LodWorkQueueInjector::getSingleton()
+    template <>
+    LodWorkQueueInjector *Singleton<LodWorkQueueInjector>::msSingleton = 0;
+    LodWorkQueueInjector *LodWorkQueueInjector::getSingletonPtr() { return msSingleton; }
+    LodWorkQueueInjector &LodWorkQueueInjector::getSingleton()
     {
         assert( msSingleton );
         return ( *msSingleton );
     }
 
-
-    LodWorkQueueInjector::LodWorkQueueInjector() :
-        mInjectorListener(0)
+    LodWorkQueueInjector::LodWorkQueueInjector() : mInjectorListener( 0 )
     {
-        WorkQueue* wq = Root::getSingleton().getWorkQueue();
-        unsigned short workQueueChannel = wq->getChannel("PMGen");
-        wq->addResponseHandler(workQueueChannel, this);
+        WorkQueue *wq = Root::getSingleton().getWorkQueue();
+        unsigned short workQueueChannel = wq->getChannel( "PMGen" );
+        wq->addResponseHandler( workQueueChannel, this );
     }
 
     LodWorkQueueInjector::~LodWorkQueueInjector()
     {
-        Root* root = Root::getSingletonPtr();
-        if (root)
+        Root *root = Root::getSingletonPtr();
+        if( root )
         {
-            WorkQueue* wq = root->getWorkQueue();
-            if (wq)
+            WorkQueue *wq = root->getWorkQueue();
+            if( wq )
             {
-                unsigned short workQueueChannel = wq->getChannel("PMGen");
-                wq->removeResponseHandler(workQueueChannel, this);
+                unsigned short workQueueChannel = wq->getChannel( "PMGen" );
+                wq->removeResponseHandler( workQueueChannel, this );
             }
         }
     }
 
-    void LodWorkQueueInjector::handleResponse(const WorkQueue::Response* res, const WorkQueue* srcQ)
+    void LodWorkQueueInjector::handleResponse( const WorkQueue::Response *res, const WorkQueue *srcQ )
     {
-        LodWorkQueueRequest* request = any_cast<LodWorkQueueRequest*>(res->getData());
+        LodWorkQueueRequest *request = any_cast<LodWorkQueueRequest *>( res->getData() );
 
-        if(mInjectorListener)
+        if( mInjectorListener )
         {
-            if(!mInjectorListener->shouldInject(request))
+            if( !mInjectorListener->shouldInject( request ) )
             {
                 return;
             }
         }
 
         request->output->inject();
-        MeshLodGenerator::_configureMeshLodUsage(request->config);
-        //lodConfig.mesh->buildEdgeList();
+        MeshLodGenerator::_configureMeshLodUsage( request->config );
+        // lodConfig.mesh->buildEdgeList();
 
-        if(mInjectorListener)
+        if( mInjectorListener )
         {
-            mInjectorListener->injectionCompleted(request);
+            mInjectorListener->injectionCompleted( request );
         }
     }
 
-
-}
+}  // namespace Ogre

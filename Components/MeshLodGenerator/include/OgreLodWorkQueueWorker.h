@@ -30,34 +30,36 @@
 #define _LodWorkQueueWorker_H__
 
 #include "OgreLodPrerequisites.h"
-#include "OgreWorkQueue.h"
+
 #include "OgreSingleton.h"
+#include "OgreWorkQueue.h"
 
 namespace Ogre
 {
-
     /**
      * @brief Processes requests.
      */
-    class _OgreLodExport LodWorkQueueWorker :
-        private WorkQueue::RequestHandler,
-        public Singleton<LodWorkQueueWorker>
+    class _OgreLodExport LodWorkQueueWorker : private WorkQueue::RequestHandler,
+                                              public Singleton<LodWorkQueueWorker>
     {
     public:
         LodWorkQueueWorker();
         virtual ~LodWorkQueueWorker();
 
-        static LodWorkQueueWorker* getSingletonPtr();
-        static LodWorkQueueWorker& getSingleton();
+        static LodWorkQueueWorker *getSingletonPtr();
+        static LodWorkQueueWorker &getSingleton();
 
-        void addRequestToQueue(LodWorkQueueRequest* request);
-        void addRequestToQueue(LodConfig& lodConfig, LodCollapseCostPtr& cost, LodDataPtr& data, LodInputProviderPtr& input, LodOutputProviderPtr& output, LodCollapserPtr& collapser);
+        void addRequestToQueue( LodWorkQueueRequest *request );
+        void addRequestToQueue( LodConfig &lodConfig, LodCollapseCostPtr &cost, LodDataPtr &data,
+                                LodInputProviderPtr &input, LodOutputProviderPtr &output,
+                                LodCollapserPtr &collapser );
 
         void clearPendingLodRequests();
 
     protected:
-        ushort mChannelID;
-        WorkQueue::Response* handleRequest(const WorkQueue::Request* req, const WorkQueue* srcQ);
+        ushort               mChannelID;
+        WorkQueue::Response *handleRequest( const WorkQueue::Request *req,
+                                            const WorkQueue *         srcQ ) override;
     };
-}
+}  // namespace Ogre
 #endif

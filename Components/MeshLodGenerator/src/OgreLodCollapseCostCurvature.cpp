@@ -33,11 +33,13 @@
  */
 
 #include "OgreLodCollapseCostCurvature.h"
+
 #include "OgreVector3.h"
 
 namespace Ogre
 {
-    Real LodCollapseCostCurvature::computeEdgeCollapseCost( LodData* data, LodData::VertexI srci, LodData::Edge* dstEdge )
+    Real LodCollapseCostCurvature::computeEdgeCollapseCost( LodData *data, LodData::VertexI srci,
+                                                            LodData::Edge *dstEdge )
     {
         LodData::VertexI dsti = dstEdge->dsti;
         LodData::Vertex *src = &data->mVertexList[srci];
@@ -47,33 +49,36 @@ namespace Ogre
         // Are we going to invert a face normal of one of the neighboring faces?
         // Can occur when we have a very small remaining edge and collapse crosses it
         // Look for a face normal changing by > 90 degrees
-        if(MESHLOD_QUALITY >= 2)   // 30% speedup if disabled.
+        if( MESHLOD_QUALITY >= 2 )  // 30% speedup if disabled.
         {
             LodData::VTriangles::iterator it = src->triangles.begin();
             LodData::VTriangles::iterator itEnd = src->triangles.end();
-            for (; it != itEnd; ++it)
+            for( ; it != itEnd; ++it )
             {
-                LodData::Triangle* triangle = &data->mTriangleList[*it];
+                LodData::Triangle *triangle = &data->mTriangleList[*it];
                 // Ignore the deleted faces (those including src & dest)
-                if (!triangle->hasVertex(dsti))
+                if( !triangle->hasVertex( dsti ) )
                 {
                     // Test the new face normal
-                    LodData::Vertex* pv0, * pv1, * pv2;
+                    LodData::Vertex *pv0, *pv1, *pv2;
 
                     // Replace src with dest wherever it is
-                    pv0 = (triangle->vertexi[0] == srci) ? dst : &data->mVertexList[triangle->vertexi[0]];
-                    pv1 = (triangle->vertexi[1] == srci) ? dst : &data->mVertexList[triangle->vertexi[1]];
-                    pv2 = (triangle->vertexi[2] == srci) ? dst : &data->mVertexList[triangle->vertexi[2]];
+                    pv0 = ( triangle->vertexi[0] == srci ) ? dst
+                                                           : &data->mVertexList[triangle->vertexi[0]];
+                    pv1 = ( triangle->vertexi[1] == srci ) ? dst
+                                                           : &data->mVertexList[triangle->vertexi[1]];
+                    pv2 = ( triangle->vertexi[2] == srci ) ? dst
+                                                           : &data->mVertexList[triangle->vertexi[2]];
 
                     // Cross-product 2 edges
                     Vector3 e1 = pv1->position - pv0->position;
                     Vector3 e2 = pv2->position - pv1->position;
 
-                    Vector3 newNormal = e1.crossProduct(e2);
+                    Vector3 newNormal = e1.crossProduct( e2 );
 
                     // Dot old and new face normal
                     // If < 0 then more than 90 degree difference
-                    if (newNormal.dotProduct(triangle->normal) < 0.0f)
+                    if( newNormal.dotProduct( triangle->normal ) < 0.0f )
                     {
                         // Don't do it!
                         return LodData::NEVER_COLLAPSE_COST;
@@ -86,9 +91,9 @@ namespace Ogre
 
         // Special cases
         // If we're looking at a border vertex
-        if (isBorderVertex(src))
+        if( isBorderVertex( src ) )
         {
-            if (dstEdge->refCount > 1)
+            if( dstEdge->refCount > 1 )
             {
                 // src is on a border, but the src-dest edge has more than one tri on it
                 // So it must be collapsing inwards
@@ -112,26 +117,25 @@ namespace Ogre
                 collapseEdge.normalise();
                 LodData::VEdges::iterator it = src->edges.begin();
                 LodData::VEdges::iterator itEnd = src->edges.end();
-                for (; it != itEnd; it++)
+                for( ; it != itEnd; it++ )
                 {
-                    LodData::Vertex* neighbor = &data->mVertexList[it->dsti];
-                    if (neighbor != dst && it->refCount == 1)
+                    LodData::Vertex *neighbor = &data->mVertexList[it->dsti];
+                    if( neighbor != dst && it->refCount == 1 )
                     {
                         Vector3 otherBorderEdge = src->position - neighbor->position;
                         otherBorderEdge.normalise();
                         // This time, the nearer the dot is to -1, the better, because that means
                         // the edges are opposite each other, therefore less kinkiness
                         // Scale into [0..1]
-                        Real kinkiness = otherBorderEdge.dotProduct(collapseEdge);
-                        cost = std::max<Real>(cost, kinkiness);
+                        Real kinkiness = otherBorderEdge.dotProduct( collapseEdge );
+                        cost = std::max<Real>( cost, kinkiness );
                     }
                 }
-                cost = (1.002f + cost) * 0.5f;
+                cost = ( 1.002f + cost ) * 0.5f;
             }
         }
-        else     // not a border
+        else  // not a border
         {
-
             // Standard inner vertex
             // Calculate curvature
             // use the triangle facing most away from the sides
@@ -140,101 +144,102 @@ namespace Ogre
             cost = 1.0f;
             LodData::VTriangles::iterator it = src->triangles.begin();
             LodData::VTriangles::iterator itEnd = src->triangles.end();
-            for (; it != itEnd; ++it)
+            for( ; it != itEnd; ++it )
             {
-                Real mincurv = -1.0f; // curve for face i and closer side to it
-                LodData::Triangle* triangle = &data->mTriangleList[*it];
+                Real mincurv = -1.0f;  // curve for face i and closer side to it
+                LodData::Triangle *triangle = &data->mTriangleList[*it];
                 LodData::VTriangles::iterator it2 = src->triangles.begin();
-                for (; it2 != itEnd; ++it2)
+                for( ; it2 != itEnd; ++it2 )
                 {
-                    LodData::Triangle* triangle2 = &data->mTriangleList[*it2];
-                    if (triangle2->hasVertex(dsti))
+                    LodData::Triangle *triangle2 = &data->mTriangleList[*it2];
+                    if( triangle2->hasVertex( dsti ) )
                     {
-
                         // Dot product of face normal gives a good delta angle
-                        Real dotprod = triangle->normal.dotProduct(triangle2->normal);
+                        Real dotprod = triangle->normal.dotProduct( triangle2->normal );
                         // NB we do (1-..) to invert curvature where 1 is high curvature [0..1]
                         // Whilst dot product is high when angle difference is low
-                        mincurv = std::max<Real>(mincurv, dotprod);
+                        mincurv = std::max<Real>( mincurv, dotprod );
                     }
                 }
-                cost = std::min<Real>(cost, mincurv);
+                cost = std::min<Real>( cost, mincurv );
             }
-            cost = (1.002f - cost) * 0.5f;
+            cost = ( 1.002f - cost ) * 0.5f;
         }
 
         // check for texture seam ripping and multiple submeshes
-        if (src->seam)
+        if( src->seam )
         {
-            if (!dst->seam)
+            if( !dst->seam )
             {
-                cost = std::max<Real>(cost, (Real)0.05f);
+                cost = std::max<Real>( cost, (Real)0.05f );
                 cost *= 64;
             }
             else
             {
-                if(MESHLOD_QUALITY >= 3)
+                if( MESHLOD_QUALITY >= 3 )
                 {
                     int seamNeighbors = 0;
                     LodData::VertexI otherSeam;
                     LodData::VEdges::iterator it = src->edges.begin();
                     LodData::VEdges::iterator itEnd = src->edges.end();
-                    for (; it != itEnd; it++)
+                    for( ; it != itEnd; it++ )
                     {
-                        LodData::Vertex* neighbor = &data->mVertexList[it->dsti];
-                        if(neighbor->seam)
+                        LodData::Vertex *neighbor = &data->mVertexList[it->dsti];
+                        if( neighbor->seam )
                         {
                             seamNeighbors++;
-                            if(neighbor != dst)
+                            if( neighbor != dst )
                             {
                                 otherSeam = it->dsti;
                             }
                         }
                     }
-                    if(seamNeighbors != 2 || (seamNeighbors == 2 && dst->edges.has(LodData::Edge(otherSeam))))
+                    if( seamNeighbors != 2 ||
+                        ( seamNeighbors == 2 && dst->edges.has( LodData::Edge( otherSeam ) ) ) )
                     {
-                        cost = std::max<Real>(cost, 0.05f);
+                        cost = std::max<Real>( cost, 0.05f );
                         cost *= 64;
                     }
                     else
                     {
-                        cost = std::max<Real>(cost, 0.005f);
+                        cost = std::max<Real>( cost, 0.005f );
                         cost *= 8;
                     }
                 }
                 else
                 {
-                    cost = std::max<Real>(cost, 0.005f);
+                    cost = std::max<Real>( cost, 0.005f );
                     cost *= 8;
                 }
-
             }
         }
 
-        Real diff = src->normal.dotProduct(dst->normal) / 8.0f;
-        Real dist = src->position.distance(dst->position);
+        Real diff = src->normal.dotProduct( dst->normal ) / 8.0f;
+        Real dist = src->position.distance( dst->position );
         cost = cost * dist;
-        if(data->mUseVertexNormals)
+        if( data->mUseVertexNormals )
         {
-            //Take into account vertex normals.
+            // Take into account vertex normals.
             Real normalCost = 0;
             LodData::VEdges::iterator it = src->edges.begin();
             LodData::VEdges::iterator itEnd = src->edges.end();
-            for (; it != itEnd; ++it)
+            for( ; it != itEnd; ++it )
             {
-                LodData::Vertex* neighbor = &data->mVertexList[it->dsti];
-                Real beforeDist = neighbor->position.distance(src->position);
-                Real afterDist = neighbor->position.distance(dst->position);
-                Real beforeDot = neighbor->normal.dotProduct(src->normal);
-                Real afterDot = neighbor->normal.dotProduct(dst->normal);
-                normalCost = std::max<Real>(normalCost, std::max<Real>(diff, std::abs(beforeDot - afterDot)) *
-                                            std::max<Real>(afterDist/8.0f, std::max<Real>(dist, std::abs(beforeDist - afterDist))));
+                LodData::Vertex *neighbor = &data->mVertexList[it->dsti];
+                Real beforeDist = neighbor->position.distance( src->position );
+                Real afterDist = neighbor->position.distance( dst->position );
+                Real beforeDot = neighbor->normal.dotProduct( src->normal );
+                Real afterDot = neighbor->normal.dotProduct( dst->normal );
+                normalCost = std::max<Real>(
+                    normalCost,
+                    std::max<Real>( diff, std::abs( beforeDot - afterDot ) ) *
+                        std::max<Real>( afterDist / 8.0f,
+                                        std::max<Real>( dist, std::abs( beforeDist - afterDist ) ) ) );
             }
-            cost = std::max<Real>(normalCost * 0.25f, cost);
+            cost = std::max<Real>( normalCost * 0.25f, cost );
         }
 
-        OgreAssert(cost >= 0 && cost != LodData::UNINITIALIZED_COLLAPSE_COST, "Invalid collapse cost");
+        OgreAssert( cost >= 0 && cost != LodData::UNINITIALIZED_COLLAPSE_COST, "Invalid collapse cost" );
         return cost;
     }
-}
-
+}  // namespace Ogre

@@ -31,17 +31,18 @@
 #define _LodCollapser_H__
 
 #include "OgreLodPrerequisites.h"
+
 #include "OgreLodData.h"
 
 namespace Ogre
 {
-
     class _OgreLodExport LodCollapser
     {
     public:
         virtual ~LodCollapser() {}
         /// Reduces vertices until vertexCountLimit or collapseCostLimit is reached.
-        virtual void collapse(LodData* data, LodCollapseCost* cost, LodOutputProvider* output, int vertexCountLimit, Real collapseCostLimit);
+        virtual void collapse( LodData *data, LodCollapseCost *cost, LodOutputProvider *output,
+                               int vertexCountLimit, Real collapseCostLimit );
 
         /**
          * @brief Returns the last reduced vertex.
@@ -50,9 +51,10 @@ namespace Ogre
          *
          * @param data This parameter is not used, but this will guarantee that data is alive.
          * @param outVec The vector receiving the position of the vertex.
-         * @return Whether the outVec was changed. If the mesh is reduced at least 1 vertex, then it returns true.
+         * @return Whether the outVec was changed. If the mesh is reduced at least 1 vertex, then it
+         * returns true.
          */
-        bool _getLastVertexPos(LodData* data, Vector3& outVec);
+        bool _getLastVertexPos( LodData *data, Vector3 &outVec );
 
         /**
          * @brief Returns the destination of the edge, which was last reduced.
@@ -61,9 +63,11 @@ namespace Ogre
          *
          * @param data This parameter is not used, but this will guarantee that data is alive.
          * @param outVec The vector receiving the CollapseTo position.
-         * @return Whether the outVec was changed. If the mesh is reduced at least 1 vertex, then it returns true.
+         * @return Whether the outVec was changed. If the mesh is reduced at least 1 vertex, then it
+         * returns true.
          */
-        bool _getLastVertexCollapseTo(LodData* data, Vector3& outVec);
+        bool _getLastVertexCollapseTo( LodData *data, Vector3 &outVec );
+
     protected:
         struct CollapsedEdge
         {
@@ -77,21 +81,25 @@ namespace Ogre
         /// tmp variable, to overcome allocation on every collapse.
         CollapsedEdges tmpCollapsedEdges;
 
-        /// Last reduced vertex. Can be used for debugging purposes. For example the Mesh Lod Editor uses it to select edge.
-        LodData::Vertex* mLastReducedVertex;
+        /// Last reduced vertex. Can be used for debugging purposes. For example the Mesh Lod Editor uses
+        /// it to select edge.
+        LodData::Vertex *mLastReducedVertex;
 
         /// Collapses a single vertex.
-        void collapseVertex(LodData* data, LodCollapseCost* cost, LodOutputProvider* output, LodData::Vertex* src);
-        void assertOutdatedCollapseCost(LodData* data, LodCollapseCost* cost, LodData::VertexI vertexi);
-        void assertValidMesh(LodData* data);
-        void assertValidVertex(LodData* data, LodData::VertexI vi);
-        bool hasSrcID(unsigned int srcID, unsigned submeshID);
-        void removeTriangleFromEdges(LodData* data, LodData::Triangle* triangle, LodData::VertexI skipi);
-        size_t findDstID(unsigned int srcID, unsigned submeshID);
-        void replaceVertexID(LodData* data, LodData::Triangle* triangle, unsigned int oldID, unsigned int newID, LodData::Vertex* dst);
+        void collapseVertex( LodData *data, LodCollapseCost *cost, LodOutputProvider *output,
+                             LodData::Vertex *src );
+        void assertOutdatedCollapseCost( LodData *data, LodCollapseCost *cost,
+                                         LodData::VertexI vertexi );
+        void assertValidMesh( LodData *data );
+        void assertValidVertex( LodData *data, LodData::VertexI vi );
+        bool hasSrcID( unsigned int srcID, unsigned submeshID );
+        void removeTriangleFromEdges( LodData *data, LodData::Triangle *triangle,
+                                      LodData::VertexI skipi );
+
+        size_t findDstID( unsigned int srcID, unsigned submeshID );
+        void   replaceVertexID( LodData *data, LodData::Triangle *triangle, unsigned int oldID,
+                                unsigned int newID, LodData::Vertex *dst );
     };
 
-}
+}  // namespace Ogre
 #endif
-
-
