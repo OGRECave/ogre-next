@@ -81,8 +81,8 @@ namespace Ogre
             // one to get stuck in the current sync point (and ultimately, deadlock).
             mIndex = !idx;
             mLockCount = 0;
-            if( mNumThreads > 1 )
-                ReleaseSemaphore( mSemaphores[idx], mNumThreads - 1, NULL );
+            if( mNumThreads > 1u )
+                ReleaseSemaphore( mSemaphores[idx], LONG( mNumThreads - 1u ), NULL );
         }
     }
 }  // namespace Ogre

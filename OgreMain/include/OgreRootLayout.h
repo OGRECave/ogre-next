@@ -55,7 +55,7 @@ namespace Ogre
         uint16 end;    // Exclusive
         DescBindingRange();
 
-        size_t getNumUsedSlots() const { return end - start; }
+        uint32 getNumUsedSlots() const { return end - start; }
 
         bool isInUse() const { return start < end; }
         bool isValid() const { return start <= end; }

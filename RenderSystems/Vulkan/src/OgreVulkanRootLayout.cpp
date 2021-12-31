@@ -162,14 +162,14 @@ namespace Ogre
                             macroStr += textStr.c_str();
                         }
 
-                        const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
+                        const uint32 numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
                         bindingIdx += numSlots;
                     }
                 }
                 else
                 {
                     uint32 emulatedSlot = mDescBindingRanges[i][j].start;
-                    const size_t numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
+                    const uint32 numSlots = mDescBindingRanges[i][j].getNumUsedSlots();
 
                     FastArray<uint32>::const_iterator arrayRangesEnd = mArrayRanges[j].end();
                     FastArray<uint32>::const_iterator arrayRanges =
@@ -330,7 +330,7 @@ namespace Ogre
         writeDescSet.dstBinding = currBinding;
         writeDescSet.dstArrayElement = 0u;
         writeDescSet.descriptorCount = static_cast<uint32_t>( bindRanges.getNumUsedSlots() );
-        currBinding += bindRanges.getNumUsedSlots() - arrayedSlots;
+        currBinding += uint32( bindRanges.getNumUsedSlots() - arrayedSlots );
         ++numWriteDescSets;
     }
     //-------------------------------------------------------------------------

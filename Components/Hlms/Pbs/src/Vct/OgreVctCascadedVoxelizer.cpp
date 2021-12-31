@@ -64,7 +64,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     Vector3 VctCascadeSetting::getVoxelCellSize() const
     {
-        return 2.0f * this->areaHalfSize / Vector3( resolution[0], resolution[1], resolution[2] );
+        return 2.0f * this->areaHalfSize /
+               Vector3( (Real)resolution[0], (Real)resolution[1], (Real)resolution[2] );
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -140,8 +141,9 @@ namespace Ogre
             mCascadeSettings[i].cameraStepSize.z = std::ceil( mCascadeSettings[i].cameraStepSize.z );
             mCascadeSettings[i].cameraStepSize.makeCeil( Vector3::UNIT_SCALE );
 
-            Ogre::Vector3 res( mCascadeSettings[i].resolution[0], mCascadeSettings[i].resolution[1],
-                               mCascadeSettings[i].resolution[2] );
+            Ogre::Vector3 res( (Real)mCascadeSettings[i].resolution[0],
+                               (Real)mCascadeSettings[i].resolution[1],
+                               (Real)mCascadeSettings[i].resolution[2] );
             // Step size should be <= resolution / 2 (it must be <= resolution;
             // but we use half to avoid potential glitches / distortion)
             mCascadeSettings[i].cameraStepSize.makeFloor( res * 0.5f );

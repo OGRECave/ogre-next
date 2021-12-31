@@ -140,7 +140,7 @@ namespace Ogre
         }
         //-----------------------------------------------------------------------
         void OverlayProfileSessionListener::displayResults( const ProfileInstance &root,
-                                                            ulong maxTotalFrameTime )
+                                                            uint64 maxTotalFrameTime )
         {
 #if OGRE_PROFILING == OGRE_PROFILING_INTERNAL
             Real newGuiHeight = mGuiHeight;

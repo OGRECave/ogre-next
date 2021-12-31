@@ -62,7 +62,7 @@ namespace Ogre
             void finializeSession() override;
 
             /// @see ProfileSessionListener::displayResults
-            void displayResults( const ProfileInstance &instance, ulong maxTotalFrameTime ) override;
+            void displayResults( const ProfileInstance &instance, uint64 maxTotalFrameTime ) override;
 
             /// @see ProfileSessionListener::changeEnableState
             void changeEnableState( bool enabled ) override;

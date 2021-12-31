@@ -119,7 +119,7 @@ namespace Ogre
         for( size_t i = 0u; i < numPoolSizes; ++i )
         {
             poolSizes[i] = mPoolSizes[i];
-            poolSizes[i].descriptorCount *= newCapacity;
+            poolSizes[i].descriptorCount *= (uint32)newCapacity;
         }
 
         // We do not set FREE_DESCRIPTOR_SET_BIT as we do not need to free individual descriptor sets

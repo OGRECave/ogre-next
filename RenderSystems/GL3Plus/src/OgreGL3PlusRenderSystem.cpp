@@ -963,15 +963,15 @@ namespace Ogre
             GLint xywhSc[16][4];
             for( size_t i = 0; i < numViewports; ++i )
             {
-                xywhVp[i][0] = mCurrentRenderViewport[i].getActualLeft();
-                xywhVp[i][1] = mCurrentRenderViewport[i].getActualTop();
-                xywhVp[i][2] = mCurrentRenderViewport[i].getActualWidth();
-                xywhVp[i][3] = mCurrentRenderViewport[i].getActualHeight();
+                xywhVp[i][0] = (GLfloat)mCurrentRenderViewport[i].getActualLeft();
+                xywhVp[i][1] = (GLfloat)mCurrentRenderViewport[i].getActualTop();
+                xywhVp[i][2] = (GLfloat)mCurrentRenderViewport[i].getActualWidth();
+                xywhVp[i][3] = (GLfloat)mCurrentRenderViewport[i].getActualHeight();
 
-                xywhSc[i][0] = mCurrentRenderViewport[i].getScissorActualLeft();
-                xywhSc[i][1] = mCurrentRenderViewport[i].getScissorActualTop();
-                xywhSc[i][2] = mCurrentRenderViewport[i].getScissorActualWidth();
-                xywhSc[i][3] = mCurrentRenderViewport[i].getScissorActualHeight();
+                xywhSc[i][0] = (GLfloat)mCurrentRenderViewport[i].getScissorActualLeft();
+                xywhSc[i][1] = (GLfloat)mCurrentRenderViewport[i].getScissorActualTop();
+                xywhSc[i][2] = (GLfloat)mCurrentRenderViewport[i].getScissorActualWidth();
+                xywhSc[i][3] = (GLfloat)mCurrentRenderViewport[i].getScissorActualHeight();
 
                 if( !desc->requiresTextureFlipping() )
                 {

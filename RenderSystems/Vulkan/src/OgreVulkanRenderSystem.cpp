@@ -2296,10 +2296,10 @@ namespace Ogre
             VkViewport vkVp[16];
             for( size_t i = 0; i < numViewports; ++i )
             {
-                vkVp[i].x = mCurrentRenderViewport[i].getActualLeft();
-                vkVp[i].y = mCurrentRenderViewport[i].getActualTop();
-                vkVp[i].width = mCurrentRenderViewport[i].getActualWidth();
-                vkVp[i].height = mCurrentRenderViewport[i].getActualHeight();
+                vkVp[i].x = (float)mCurrentRenderViewport[i].getActualLeft();
+                vkVp[i].y = (float)mCurrentRenderViewport[i].getActualTop();
+                vkVp[i].width = (float)mCurrentRenderViewport[i].getActualWidth();
+                vkVp[i].height = (float)mCurrentRenderViewport[i].getActualHeight();
                 vkVp[i].minDepth = 0;
                 vkVp[i].maxDepth = 1;
 
