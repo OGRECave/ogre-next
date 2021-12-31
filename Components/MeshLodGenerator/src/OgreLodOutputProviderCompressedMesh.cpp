@@ -283,8 +283,8 @@ namespace Ogre
         for( unsigned i = 0; i < submeshCount; i++ )
         {
             v1::SubMesh::LODFaceList &lods = mMesh->getSubMesh( i )->mLodFaceList[VpNormal];
-            v1::IndexData *prevLod = lods[mLastIndexBufferID];
-            v1::IndexData *curLod = lods[lodIndex];
+            v1::IndexData *prevLod = lods[static_cast<size_t>( mLastIndexBufferID )];
+            v1::IndexData *curLod = lods[static_cast<size_t>( lodIndex )];
             prevLod->indexBuffer->unlock();
             curLod->indexBuffer = prevLod->indexBuffer;
         }

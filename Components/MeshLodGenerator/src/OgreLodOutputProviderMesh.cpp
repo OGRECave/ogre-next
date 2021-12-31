@@ -150,7 +150,7 @@ namespace Ogre
         for( unsigned i = 0; i < submeshCount; i++ )
         {
             v1::SubMesh::LODFaceList &lods = mMesh->getSubMesh( i )->mLodFaceList[VpNormal];
-            lods[lodIndex]->indexBuffer->unlock();
+            lods[static_cast<size_t>( lodIndex )]->indexBuffer->unlock();
         }
     }
 

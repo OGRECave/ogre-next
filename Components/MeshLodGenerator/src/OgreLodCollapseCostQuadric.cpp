@@ -63,7 +63,7 @@ namespace Ogre
         plane[2] = triangle.normal.z;
         Vector3 &v0 = data->mVertexList[triangle.vertexi[0]].position;
         plane[3] = -v0.dotProduct( triangle.normal );
-        for( int i = 0; i < 4; i++ )
+        for( size_t i = 0; i < 4; i++ )
         {
             for( int n = 0; n < 4; n++ )
             {

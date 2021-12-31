@@ -271,7 +271,7 @@ namespace Ogre
                     ( curLod != 0 && lodConfig.levels[curLod].manualMeshName ==
                                          lodConfig.levels[curLod - 1].manualMeshName );
                 lodConfig.levels[curLod].outUniqueVertexCount = 0;
-                lastBakeVertexCount = -1;
+                lastBakeVertexCount = std::numeric_limits<size_t>::max();
                 if( !lodConfig.levels[curLod].outSkipped )
                 {
                     output->bakeManualLodLevel( data, lodConfig.levels[curLod].manualMeshName, lodID++ );

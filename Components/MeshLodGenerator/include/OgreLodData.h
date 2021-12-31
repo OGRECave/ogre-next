@@ -189,7 +189,7 @@ namespace Ogre
         template <typename T, typename A>
         static size_t getVectorIDFromPointer( const std::vector<T, A> &vec, const T *pointer )
         {
-            size_t id = pointer - &vec[0];
+            size_t id = static_cast<size_t>( pointer - &vec[0] );
             OgreAssert( id < vec.size() && ( &vec[id] == pointer ), "Invalid pointer" );
             return id;
         }
