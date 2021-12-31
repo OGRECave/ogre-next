@@ -74,6 +74,4 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#include "OgreHeaderSuffix.h"
-
 #endif
