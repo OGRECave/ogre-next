@@ -173,7 +173,7 @@ namespace Ogre
         setEyeCenter( &leftEyeCenter_rightEyeCenter[2], mRightEyeCenter, viewports[1] );
 
         Vector4 rightEyeStart_radius;
-        rightEyeStart_radius.x = viewports[1].getActualLeft();
+        rightEyeStart_radius.x = (Real)viewports[1].getActualLeft();
         for( size_t i = 0u; i < 3u; ++i )
             rightEyeStart_radius[i + 1u] = mRadius[i] * 0.5f;
 

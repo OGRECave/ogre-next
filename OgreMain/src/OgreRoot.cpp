@@ -1022,12 +1022,12 @@ namespace Ogre
     //---------------------------------------------------------------------
     void Root::populateFrameEvent( FrameEventTimeType type, FrameEvent &evtToUpdate )
     {
-        unsigned long now = mTimer->getMilliseconds();
+        const uint64 now = mTimer->getMilliseconds();
         evtToUpdate.timeSinceLastEvent = calculateEventTime( now, FETT_ANY );
         evtToUpdate.timeSinceLastFrame = calculateEventTime( now, type );
     }
     //-----------------------------------------------------------------------
-    Real Root::calculateEventTime( unsigned long now, FrameEventTimeType type )
+    Real Root::calculateEventTime( uint64 now, FrameEventTimeType type )
     {
         // Calculate the average time passed between events of the given type
         // during the last mFrameSmoothingTime seconds.
@@ -1039,7 +1039,7 @@ namespace Ogre
             return 0;
 
         // Times up to mFrameSmoothingTime seconds old should be kept
-        unsigned long discardThreshold = static_cast<unsigned long>( mFrameSmoothingTime * 1000.0f );
+        const uint64 discardThreshold = static_cast<uint64>( mFrameSmoothingTime * 1000.0f );
 
         // Find the oldest time to keep
         EventTimesQueue::iterator it = times.begin(),
@@ -1115,7 +1115,7 @@ namespace Ogre
         FrameEvent evt;
         evt.timeSinceLastFrame = timeSinceLastFrame;
 
-        unsigned long now = mTimer->getMilliseconds();
+        const uint64 now = mTimer->getMilliseconds();
         evt.timeSinceLastEvent = calculateEventTime( now, FETT_ANY );
 
         if( !_fireFrameStarted( evt ) )

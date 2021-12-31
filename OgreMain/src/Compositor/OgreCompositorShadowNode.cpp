@@ -1349,11 +1349,11 @@ namespace Ogre
 
             for( uint32 j = 0; j < numSplits; ++j )
             {
-                Vector2 uvOffset( shadowParam.atlasStart[j].x, shadowParam.atlasStart[j].y );
-                Vector2 uvLength( shadowParam.resolution[j].x, shadowParam.resolution[j].y );
+                Vector2 uvOffset( (Real)shadowParam.atlasStart[j].x, (Real)shadowParam.atlasStart[j].y );
+                Vector2 uvLength( (Real)shadowParam.resolution[j].x, (Real)shadowParam.resolution[j].y );
 
-                uvOffset /= Vector2( texResolution.x, texResolution.y );
-                uvLength /= Vector2( texResolution.x, texResolution.y );
+                uvOffset /= Vector2( (Real)texResolution.x, (Real)texResolution.y );
+                uvLength /= Vector2( (Real)texResolution.x, (Real)texResolution.y );
 
                 const String texName = "atlas" + StringConverter::toString( shadowParam.atlasId );
 
@@ -1399,7 +1399,7 @@ namespace Ogre
             while( itor != endt )
             {
                 const ShadowParam &shadowParam = *itor;
-                const size_t numSplits =
+                const uint32 numSplits =
                     shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                 if( shadowParam.atlasId == atlasId && shadowParam.supportedLightTypes & spotAndDirMask )
                 {
@@ -1481,7 +1481,7 @@ namespace Ogre
                     passQuad->addQuadTextureSource( 0, "tmpCubemap" );
                     passQuad->mShadowMapIdx = shadowMapIdx;
                 }
-                const size_t numSplits =
+                const uint32 numSplits =
                     shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                 shadowMapIdx += numSplits;
                 ++itor;

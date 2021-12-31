@@ -208,7 +208,7 @@ namespace Ogre
         };
 
         /// Contains the times of recently fired events
-        typedef deque<unsigned long>::type EventTimesQueue;
+        typedef deque<uint64>::type EventTimesQueue;
 
         EventTimesQueue mEventTimes[FETT_COUNT];
 
@@ -216,7 +216,7 @@ namespace Ogre
         @param now The current time in ms.
         @param type The type of event to be considered.
         */
-        Real calculateEventTime( unsigned long now, FrameEventTimeType type );
+        Real calculateEventTime( uint64 now, FrameEventTimeType type );
 
         /** Update a set of event times (note, progressive, only call once for each type per frame) */
         void populateFrameEvent( FrameEventTimeType type, FrameEvent &evtToUpdate );

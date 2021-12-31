@@ -279,7 +279,8 @@ namespace Ogre
             shaderParams.mParams.push_back( ShaderParams::Param() );
             p = &shaderParams.mParams.back();
             p->name = "params2";
-            p->setManualValue( Vector4( mInputTexture->getWidth(), mInputTexture->getHeight(),
+            p->setManualValue( Vector4( (Real)mInputTexture->getWidth(),
+                                        (Real)mInputTexture->getHeight(),
                                         std::max( mOutputTexture->getWidth() >> mip, 1u ),
                                         std::max( mOutputTexture->getHeight() >> mip, 1u ) ) );
 

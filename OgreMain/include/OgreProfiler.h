@@ -252,7 +252,7 @@ namespace Ogre
     struct ProfileFrame
     {
         /// The total time this profile has taken this frame
-        ulong frameTime;
+        uint64 frameTime;
 
         /// The number of times this profile was called this frame
         uint calls;
@@ -344,7 +344,7 @@ namespace Ogre
 
         /// Represents the total time of all child profiles to subtract
         /// from this profile
-        ulong accum;
+        uint64 accum;
 
         /// The hierarchical level of this profile, 0 being the root profile
         uint hierarchicalLvl;
@@ -382,7 +382,7 @@ namespace Ogre
         virtual void changeEnableState( bool enabled ){};
 
         /// Here we get the real profiling information which we can use
-        virtual void displayResults( const ProfileInstance &instance, ulong maxTotalFrameTime ){};
+        virtual void displayResults( const ProfileInstance &instance, uint64 maxTotalFrameTime ){};
 
         /// Set the display mode for the overlay.
         void setDisplayMode( DisplayMode d ) { mDisplayMode = d; }
@@ -646,7 +646,7 @@ namespace Ogre
         Timer *mTimer;
 
         /// The total time each frame takes
-        ulong mTotalFrameTime;
+        uint64 mTotalFrameTime;
 
         /// Whether this profiler is enabled
         bool mEnabled;
@@ -660,7 +660,7 @@ namespace Ogre
         uint32 mProfileMask;
 
         /// The max frame time recorded
-        ulong mMaxTotalFrameTime;
+        uint64 mMaxTotalFrameTime;
 
         /// Rolling average of millisecs
         Real mAverageFrameTime;

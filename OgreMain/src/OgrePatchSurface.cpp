@@ -483,8 +483,8 @@ namespace Ogre
             // which step over the vertices we don't need for this level of detail.
 
             // Calculate steps
-            const size_t vStep = 1u << ( mMaxVLevel - mVLevel );
-            const size_t uStep = 1u << ( mMaxULevel - mULevel );
+            const size_t vStep = size_t( 1u ) << ( mMaxVLevel - mVLevel );
+            const size_t uStep = size_t( 1u ) << ( mMaxULevel - mULevel );
             size_t currWidth = ( LEVEL_WIDTH( mULevel ) - 1 ) * ( ( mCtlWidth - 1 ) / 2 ) + 1;
             size_t currHeight = ( LEVEL_WIDTH( mVLevel ) - 1 ) * ( ( mCtlHeight - 1 ) / 2 ) + 1;
 

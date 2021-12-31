@@ -1439,8 +1439,8 @@ namespace Ogre
         typedef vector<GpuSharedParametersUsage>::type GpuSharedParamUsageList;
 
         // Map that store subroutines associated with slots
-        typedef unordered_map<unsigned int, String>::type           SubroutineMap;
-        typedef unordered_map<unsigned int, String>::const_iterator SubroutineIterator;
+        typedef unordered_map<size_t, String>::type           SubroutineMap;
+        typedef unordered_map<size_t, String>::const_iterator SubroutineIterator;
 
     protected:
         SubroutineMap mSubroutineMap;
