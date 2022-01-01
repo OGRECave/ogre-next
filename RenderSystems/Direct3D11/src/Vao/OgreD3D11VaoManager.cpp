@@ -111,9 +111,8 @@ namespace Ogre
                             params->find( String( "VaoManager::" ) + c_vboTypes[i][j] );
                     if( itor != params->end() )
                     {
-                        mDefaultPoolSize[i][j] =
-                                StringConverter::parseUnsignedLong( itor->second,
-                                                                    mDefaultPoolSize[i][j] );
+                        mDefaultPoolSize[i][j] = StringConverter::parseUnsignedLong(
+                            itor->second, (unsigned long)mDefaultPoolSize[i][j] );
                     }
                 }
             }
@@ -491,13 +490,13 @@ namespace Ogre
 
             Vbo newVbo;
 
-            size_t poolSize = std::max( mDefaultPoolSize[internalType][bufferType], sizeBytes );
+            const size_t poolSize = std::max( mDefaultPoolSize[internalType][bufferType], sizeBytes );
 
             ID3D11DeviceN *d3dDevice = mDevice.get();
 
             D3D11_BUFFER_DESC desc;
             ZeroMemory( &desc, sizeof(D3D11_BUFFER_DESC) );
-            desc.ByteWidth  = poolSize;
+            desc.ByteWidth  = (UINT)poolSize;
             desc.CPUAccessFlags = 0;
             if( bufferType == BT_IMMUTABLE )
                 desc.Usage = D3D11_USAGE_IMMUTABLE;
@@ -624,7 +623,7 @@ namespace Ogre
 
         D3D11_BUFFER_DESC desc;
         ZeroMemory( &desc, sizeof(D3D11_BUFFER_DESC) );
-        desc.ByteWidth  = poolSize;
+        desc.ByteWidth  = (UINT)poolSize;
         desc.CPUAccessFlags = 0;
         desc.Usage = D3D11_USAGE_IMMUTABLE;
 
@@ -1113,7 +1112,7 @@ namespace Ogre
             desc.MiscFlags |= D3D11_RESOURCE_MISC_BUFFER_STRUCTURED /*|
                     D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS*/;
         }
-        desc.ByteWidth      = sizeBytes;
+        desc.ByteWidth      = (UINT)sizeBytes;
         desc.CPUAccessFlags = 0;
         if( bufferType == BT_IMMUTABLE )
             desc.Usage = D3D11_USAGE_IMMUTABLE;
@@ -1225,11 +1224,9 @@ namespace Ogre
         const size_t numElements = requestedSize;
 
         D3D11TexBufferPacked *retVal = OGRE_NEW D3D11TexBufferPacked(
-                                                        bufferOffset, numElements, bytesPerElement,
-                                                        (sizeBytes - requestedSize) / bytesPerElement,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface,
-                                                        pixelFormat, false, mDevice );
+            bufferOffset, numElements, bytesPerElement,
+            uint32( ( sizeBytes - requestedSize ) / bytesPerElement ), bufferType, initialData,
+            keepAsShadow, this, bufferInterface, pixelFormat, false, mDevice );
 
         if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
         {
@@ -1481,10 +1478,8 @@ namespace Ogre
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-                                                        bufferOffset, requestedSize, 1,
-                                                        (sizeBytes - requestedSize) / 1,
-                                                        bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface );
+            bufferOffset, requestedSize, 1, uint32( ( sizeBytes - requestedSize ) / 1 ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
         {
@@ -1787,7 +1782,7 @@ namespace Ogre
 
         D3D11_BUFFER_DESC desc;
         ZeroMemory( &desc, sizeof(D3D11_BUFFER_DESC) );
-        desc.ByteWidth  = sizeBytes;
+        desc.ByteWidth  = (UINT)sizeBytes;
 
         if( forUpload )
         {

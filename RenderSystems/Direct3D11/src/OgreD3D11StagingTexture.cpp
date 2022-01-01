@@ -195,10 +195,10 @@ namespace Ogre
         for( size_t slice=0; slice<numSlices; ++slice )
         {
             if( data == mLastSubresourceData[slice].pData )
-                return slice;
+                return (uint32)slice;
         }
 
-        return -1;
+        return std::numeric_limits<uint32>::max();
     }
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::belongsToUs( const TextureBox &box )
@@ -484,9 +484,9 @@ namespace Ogre
                         retVal.x = itor->x;
                         retVal.y = itor->y;
                         if( depth > 1u )
-                            retVal.z = slice - numBackwardSlices;
+                            retVal.z = uint32( slice - numBackwardSlices );
                         else
-                            retVal.sliceStart = slice - numBackwardSlices;
+                            retVal.sliceStart = uint32( slice - numBackwardSlices );
 
                         for( size_t i=0; i<depthOrSlices; ++i )
                         {
@@ -556,7 +556,7 @@ namespace Ogre
             retVal.x = bestMatch->x;
             retVal.y = bestMatch->y;
             if( !mIsArray2DTexture )
-                retVal.z = bestMatchSlice;
+                retVal.z = uint32( bestMatchSlice );
             retVal.data = reinterpret_cast<uint8*>( mSubresourceData[sliceIdx].pData );
 
             //Now shrink our records.

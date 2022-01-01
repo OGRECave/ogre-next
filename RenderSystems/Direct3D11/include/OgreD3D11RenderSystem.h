@@ -339,7 +339,7 @@ namespace Ogre
         D3D_FEATURE_LEVEL _getFeatureLevel() const { return mFeatureLevel; }
 
         /// @copydoc RenderSystem::setSubroutine
-        void setSubroutine(GpuProgramType gptype, unsigned int slotIndex, const String& subroutineName);
+        void setSubroutine(GpuProgramType gptype, size_t slotIndex, const String& subroutineName);
         
         /// @copydoc RenderSystem::setSubroutineName
         void setSubroutine(GpuProgramType gptype, const String& slotName, const String& subroutineName);

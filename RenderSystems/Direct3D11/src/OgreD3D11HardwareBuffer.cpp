@@ -268,7 +268,7 @@ namespace v1 {
             // copy subregion
             D3D11_BOX srcBox;
             srcBox.left = (UINT)srcOffset;
-            srcBox.right = (UINT)srcOffset + length;
+            srcBox.right = UINT( srcOffset + length );
             srcBox.top = 0;
             srcBox.bottom = 1;
             srcBox.front = 0;

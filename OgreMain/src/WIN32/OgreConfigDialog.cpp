@@ -77,7 +77,8 @@ namespace Ogre
         static ConfigOptionMap opts;
         String err;
 
-        int i, sel, savedSel;
+        int i;
+        LRESULT sel, savedSel;
 
         switch( iMsg )
         {
@@ -298,14 +299,13 @@ namespace Ogre
     {
         // Display dialog
         // Don't return to caller until dialog dismissed
-        int i;
         dlg = this;
 
-        i = DialogBox( mHInstance, MAKEINTRESOURCE( IDD_DLG_CONFIG ), NULL, DlgProc );
+        INT_PTR i = DialogBox( mHInstance, MAKEINTRESOURCE( IDD_DLG_CONFIG ), NULL, DlgProc );
 
         if( i == -1 )
         {
-            int winError = GetLastError();
+            DWORD winError = GetLastError();
             char *errDesc;
             int i;
 

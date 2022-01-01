@@ -111,8 +111,8 @@ namespace Ogre
 
         mCachedResourceViews[cacheIdx].mResourceView.Reset();
 
-        mCachedResourceViews[cacheIdx].mOffset  = mFinalBufferStart + offset;
-        mCachedResourceViews[cacheIdx].mSize    = sizeBytes;
+        mCachedResourceViews[cacheIdx].mOffset = uint32( mFinalBufferStart + offset );
+        mCachedResourceViews[cacheIdx].mSize = sizeBytes;
 
         D3D11_UNORDERED_ACCESS_VIEW_DESC srDesc;
 
@@ -120,7 +120,7 @@ namespace Ogre
         // Format must be DXGI_FORMAT_R32_TYPELESS, when creating Raw Unordered Access View
         srDesc.Format               = DXGI_FORMAT_UNKNOWN;
         srDesc.ViewDimension        = D3D11_UAV_DIMENSION_BUFFER;
-        srDesc.Buffer.FirstElement  = (mFinalBufferStart + offset) / mBytesPerElement;
+        srDesc.Buffer.FirstElement  = UINT( ( mFinalBufferStart + offset ) / mBytesPerElement );
         srDesc.Buffer.NumElements   = sizeBytes / mBytesPerElement;
         srDesc.Buffer.Flags         = 0;
 
@@ -157,7 +157,7 @@ namespace Ogre
             else if( !mCachedResourceViews[i].mResourceView )
             {
                 //We create in-order. If we hit here, the next ones are also null pointers.
-                resourceView = createResourceView( i, offset, sizeBytes );
+                resourceView = createResourceView( i, (uint32)offset, (uint32)sizeBytes );
                 break;
             }
         }
@@ -165,7 +165,7 @@ namespace Ogre
         if( !resourceView )
         {
             //If we hit here, the cache is full and couldn't find a match.
-            resourceView = createResourceView( mCurrentCacheCursor, offset, sizeBytes );
+            resourceView = createResourceView( mCurrentCacheCursor, (uint32)offset, (uint32)sizeBytes );
         }
 
         return resourceView;
@@ -188,8 +188,9 @@ namespace Ogre
         // Format must be DXGI_FORMAT_R32_TYPELESS, when creating Raw Unordered Access View
         uavDesc.Format               = DXGI_FORMAT_UNKNOWN;
         uavDesc.ViewDimension        = D3D11_UAV_DIMENSION_BUFFER;
-        uavDesc.Buffer.FirstElement  = (mFinalBufferStart + bufferSlot.offset) / mBytesPerElement;
-        uavDesc.Buffer.NumElements   = sizeBytes / mBytesPerElement;
+        uavDesc.Buffer.FirstElement =
+            UINT( ( mFinalBufferStart + bufferSlot.offset ) / mBytesPerElement );
+        uavDesc.Buffer.NumElements = UINT( sizeBytes / mBytesPerElement );
         uavDesc.Buffer.Flags         = 0;
 
         assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );

@@ -486,7 +486,7 @@ namespace Ogre
 
         DXGI_FORMAT format = D3D11Mappings::get( dstD3d->getPixelFormat() );
 
-        for( size_t i=0; i<srcBox.numSlices; ++i )
+        for( uint32 i = 0; i < srcBox.numSlices; ++i )
         {
             const UINT srcResourceIndex = D3D11CalcSubresource( srcMipLevel, srcBox.sliceStart + i +
                                                                 this->getInternalSliceStart(),

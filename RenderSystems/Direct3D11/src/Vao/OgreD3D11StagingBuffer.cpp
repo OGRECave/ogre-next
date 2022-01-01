@@ -107,8 +107,8 @@ namespace Ogre
 
             D3D11_BOX srcBox;
             ZeroMemory( &srcBox, sizeof(D3D11_BOX) );
-            srcBox.left     = mMappingStart + dst.srcOffset;
-            srcBox.right    = mMappingStart + dst.srcOffset + dst.length;
+            srcBox.left     = UINT( mMappingStart + dst.srcOffset );
+            srcBox.right    = UINT( mMappingStart + dst.srcOffset + dst.length );
             srcBox.back     = 1;
             srcBox.bottom   = 1;
 
@@ -167,13 +167,13 @@ namespace Ogre
 
         D3D11_BOX srcBox;
         ZeroMemory( &srcBox, sizeof(D3D11_BOX) );
-        srcBox.left     = source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset;
-        srcBox.right    = srcBox.left + srcLength;
-        srcBox.back     = 1;
-        srcBox.bottom   = 1;
+        srcBox.left = UINT( source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset );
+        srcBox.right = UINT( srcBox.left + srcLength );
+        srcBox.back = 1;
+        srcBox.bottom = 1;
 
         ID3D11DeviceContextN *d3dContext = mDevice.GetImmediateContext();
-        d3dContext->CopySubresourceRegion( mVboName.Get(), 0, freeRegionOffset,
+        d3dContext->CopySubresourceRegion( mVboName.Get(), 0, (UINT)freeRegionOffset,
                                            0, 0, bufferInterface->getVboName(),
                                            0, &srcBox );
 

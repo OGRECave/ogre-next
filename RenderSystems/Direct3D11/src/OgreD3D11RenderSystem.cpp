@@ -1074,7 +1074,10 @@ namespace Ogre
 
         // Set number of texture units, always 16
         rsc->setNumTextureUnits(16);
-        rsc->setMaxSupportedAnisotropy(mFeatureLevel >= D3D_FEATURE_LEVEL_9_2 ? 16 : 2); // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476876.aspx
+        rsc->setMaxSupportedAnisotropy( Real(
+            mFeatureLevel >= D3D_FEATURE_LEVEL_9_2
+                ? 16
+                : 2 ) );  // From http://msdn.microsoft.com/en-us/library/windows/desktop/ff476876.aspx
         rsc->setCapability(RSC_ANISOTROPY);
         rsc->setCapability(RSC_AUTOMIPMAP);
         rsc->setCapability(RSC_BLENDING);
@@ -1837,8 +1840,8 @@ namespace Ogre
             ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
             mDevice.GetImmediateContext()->VSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
             mDevice.GetImmediateContext()->PSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
-            mMaxSrvCount[VertexShader]  = std::max<uint32>( mMaxSrvCount[VertexShader], stage + 1u );
-            mMaxSrvCount[PixelShader]   = std::max<uint32>( mMaxSrvCount[PixelShader], stage + 1u );
+            mMaxSrvCount[VertexShader] = std::max( mMaxSrvCount[VertexShader], uint32( stage + 1u ) );
+            mMaxSrvCount[PixelShader] = std::max( mMaxSrvCount[PixelShader], uint32( stage + 1u ) );
         }
         else
         {
@@ -2100,7 +2103,7 @@ namespace Ogre
         context->CSSetUnorderedAccessViews( slotStart, static_cast<UINT>( set->mUavs.size() ),
                                             uavList[0].GetAddressOf(), 0 );
 
-        mMaxBoundUavCS = std::max<uint32>( mMaxBoundUavCS, slotStart + set->mUavs.size() );
+        mMaxBoundUavCS = std::max( mMaxBoundUavCS, uint32( slotStart + set->mUavs.size() ) );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)
@@ -3114,9 +3117,10 @@ namespace Ogre
 
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
-        deviceContext->IASetVertexBuffers( 0, vao->mVertexBuffers.size() + 1, //+1 due to DrawId
-                                           sharedData->mVertexBuffers[0].GetAddressOf(),
-                                           sharedData->mStrides,
+        deviceContext->IASetVertexBuffers( 0,
+                                           UINT( vao->mVertexBuffers.size() + 1u ),  //+1 due to DrawId
+                                           sharedData->mVertexBuffers[0].GetAddressOf(),  //
+                                           sharedData->mStrides,                          //
                                            sharedData->mOffsets );
         deviceContext->IASetIndexBuffer( sharedData->mIndexBuffer.Get(), sharedData->mIndexFormat, 0 );
     }
@@ -3125,7 +3129,8 @@ namespace Ogre
     {
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
-        UINT indirectBufferOffset = reinterpret_cast<UINT>(cmd->indirectBufferOffset);
+        UINT indirectBufferOffset =
+            static_cast<UINT>( reinterpret_cast<uintptr_t>( cmd->indirectBufferOffset ) );
         for( uint32 i=cmd->numDraws; i--; )
         {
             deviceContext->DrawIndexedInstancedIndirect( mBoundIndirectBuffer, indirectBufferOffset );
@@ -3138,7 +3143,8 @@ namespace Ogre
     {
         ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
 
-        UINT indirectBufferOffset = reinterpret_cast<UINT>(cmd->indirectBufferOffset);
+        UINT indirectBufferOffset =
+            static_cast<UINT>( reinterpret_cast<uintptr_t>( cmd->indirectBufferOffset ) );
         for( uint32 i=cmd->numDraws; i--; )
         {
             deviceContext->DrawInstancedIndirect( mBoundIndirectBuffer, indirectBufferOffset );
@@ -3433,7 +3439,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::setSubroutine(GpuProgramType gptype, unsigned int slotIndex, const String& subroutineName)
+    void D3D11RenderSystem::setSubroutine(GpuProgramType gptype, size_t slotIndex, const String& subroutineName)
     {
         ID3D11ClassInstance* instance = 0;
 
@@ -3684,7 +3690,7 @@ namespace Ogre
 
         for (size_t i = 0; i < mDriverList->count(); ++i)
         {
-            for (size_t m = 0;; ++m)
+            for (UINT m = 0u;; ++m)
             {
                 hr = mDriverList->item(i)->getDeviceAdapter()->EnumOutputs(m, pOutput.ReleaseAndGetAddressOf());
                 if (DXGI_ERROR_NOT_FOUND == hr)
@@ -3826,8 +3832,8 @@ namespace Ogre
             wchar_t wideName[256];  // Let avoid heap memory allocation if we are in profiling code.
             bool wideNameOk =
                 !eventName.empty() &&
-                0 != MultiByteToWideChar( CP_ACP, 0, eventName.data(), eventName.length() + 1, wideName,
-                                          ARRAYSIZE( wideName ) );
+                0 != MultiByteToWideChar( CP_ACP, 0, eventName.data(), int( eventName.length() + 1u ),
+                                          wideName, ARRAYSIZE( wideName ) );
             mDevice.GetProfiler()->BeginEvent( wideNameOk ? wideName
                                                          : L"<too long or empty event name>" );
         }
