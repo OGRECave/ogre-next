@@ -55,7 +55,7 @@ namespace Ogre
         and cleanups of these type of buffers (in practice only affects D3D11).
         Don't rely on the contents of these two variables if the Vao contains
     */
-    struct _OgreExport VertexArrayObject : public VertexArrayObjectAlloc
+    struct _OgreExport VertexArrayObject : public OgreAllocatedObj
     {
         friend class RenderQueue;
         friend class RenderSystem;

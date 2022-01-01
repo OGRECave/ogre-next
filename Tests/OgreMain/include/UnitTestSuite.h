@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "OgreSingleton.h"
 
-class UnitTestSuite : public Ogre::Singleton<UnitTestSuite>, public Ogre::GeneralAllocatedObject
+class UnitTestSuite : public Ogre::Singleton<UnitTestSuite>, public Ogre::AllocPolicy
 {
 public:
     UnitTestSuite() {};

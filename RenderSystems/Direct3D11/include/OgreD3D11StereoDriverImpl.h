@@ -38,7 +38,7 @@ THE SOFTWARE.
 namespace Ogre {
 
   /** Virtual interface of the stereo driver */
-  class _OgreD3D11Export D3D11StereoDriverImpl : public ResourceAlloc
+  class _OgreD3D11Export D3D11StereoDriverImpl : public OgreAllocatedObj
   {
     public:
       D3D11StereoDriverImpl() {}

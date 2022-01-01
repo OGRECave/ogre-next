@@ -121,7 +121,7 @@ namespace Ogre
     @note
         If OGRE_THREAD_SUPPORT is 1, this class is thread-safe.
     */
-    class _OgreExport ResourceManager : public ScriptLoader, public ResourceAlloc
+    class _OgreExport ResourceManager : public ScriptLoader, public OgreAllocatedObj
     {
     public:
         OGRE_AUTO_MUTEX;  // public to allow external locking
@@ -511,7 +511,7 @@ namespace Ogre
             This is a simple utility class which allows the reuse of resources
             between code which has a changing need for them. For example,
         */
-        class _OgreExport ResourcePool : public Pool<ResourcePtr>, public ResourceAlloc
+        class _OgreExport ResourcePool : public Pool<ResourcePtr>, public OgreAllocatedObj
         {
         protected:
             String mName;

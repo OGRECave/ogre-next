@@ -62,7 +62,7 @@ namespace Volume {
 
     /** Class for the generation of the DualGrid.
     */
-    class _OgreVolumeExport DualGridGenerator : public UtilityAlloc
+    class _OgreVolumeExport DualGridGenerator : public OgreAllocatedObj
     {
     protected:
         

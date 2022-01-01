@@ -53,7 +53,7 @@ namespace Ogre
         */
         class _OgreOverlayExport OverlayManager : public Singleton<OverlayManager>,
                                                   public ScriptLoader,
-                                                  public OverlayAlloc
+                                                  public OgreAllocatedObj
         {
         public:
             typedef map<String, Overlay *>::type               OverlayMap;

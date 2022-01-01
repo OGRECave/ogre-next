@@ -235,7 +235,7 @@ namespace Ogre
         thread can keep executing your code (like moving on to the next Item
         or Datablock you're instantiating)
     */
-    class _OgreExport TextureGpuManager : public ResourceAlloc, public TextureGpuListener
+    class _OgreExport TextureGpuManager : public OgreAllocatedObj, public TextureGpuListener
     {
     public:
         /// Specifies the minimum squared resolution & number of slices to keep around

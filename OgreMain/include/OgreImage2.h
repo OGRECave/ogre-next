@@ -53,7 +53,7 @@ namespace Ogre
         when extra processing needs to be done on an image before it is
         loaded or when you want to blit to an existing texture.
     */
-    class _OgreExport Image2 : public ImageAlloc
+    class _OgreExport Image2 : public OgreAllocatedObj
     {
     protected:
         /// The width of the image in pixels

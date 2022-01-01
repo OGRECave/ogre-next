@@ -69,7 +69,7 @@ namespace Ogre
 
             if( !( usage & HardwareBuffer::HBU_DISCARDABLE ) )
             {
-                const size_t sizeBytesAligned = alignToNextMultiple( sizeBytes, 4u );
+                const size_t sizeBytesAligned = alignToNextMultiple<size_t>( sizeBytes, 4u );
                 mBuffer = [mDevice->mDevice newBufferWithLength:sizeBytesAligned
                                                         options:resourceOptions];
                 if( !mBuffer )

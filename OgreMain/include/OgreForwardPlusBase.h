@@ -51,7 +51,7 @@ namespace Ogre
     static const size_t c_ForwardPlusNumFloat4PerCubemapProbe = 8u;
 
     /** ForwardPlusBase */
-    class _OgreExport ForwardPlusBase : public HlmsAlloc
+    class _OgreExport ForwardPlusBase : public OgreAllocatedObj
     {
     public:
         enum ForwardPlusMethods

@@ -48,7 +48,7 @@ namespace Ogre
     Any instance of Ogre class that will derive from this class could be associated with custom
     application object using this class interface.
     */
-    class _OgreExport UserObjectBindings : public GeneralAllocatedObject
+    class _OgreExport UserObjectBindings : public OgreAllocatedObj
     {
     public:
         /** Class constructor. */
@@ -107,7 +107,7 @@ namespace Ogre
 
         /** Internal class that uses as data storage container.
          */
-        class Attributes : public GeneralAllocatedObject
+        class Attributes : public OgreAllocatedObj
         {
         public:
             /** Attribute storage ctor. */

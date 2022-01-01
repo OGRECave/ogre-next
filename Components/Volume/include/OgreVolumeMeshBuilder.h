@@ -126,7 +126,7 @@ namespace Volume {
 
     /** Class to build up a mesh with vertices and indices.
     */
-    class _OgreVolumeExport MeshBuilder : public UtilityAlloc
+    class _OgreVolumeExport MeshBuilder : public OgreAllocatedObj
     {
     protected:
 

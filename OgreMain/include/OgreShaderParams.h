@@ -50,7 +50,7 @@ namespace Ogre
     @par
         Parameters are kept unsorted in mParams
     */
-    class _OgreExport ShaderParams : public PassAlloc
+    class _OgreExport ShaderParams : public OgreAllocatedObj
     {
     public:
         enum ElementType

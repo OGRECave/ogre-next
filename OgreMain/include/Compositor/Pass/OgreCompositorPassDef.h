@@ -92,7 +92,7 @@ namespace Ogre
         immediately while not see others (eg. changing CompositorPassSceneDef::mCameraName)
         Also crashes could happen depending on the changes being made.
     */
-    class _OgreExport CompositorPassDef : public CompositorInstAlloc
+    class _OgreExport CompositorPassDef : public OgreAllocatedObj
     {
         CompositorPassType mPassType;
 
@@ -276,7 +276,7 @@ namespace Ogre
 
     typedef vector<CompositorPassDef *>::type CompositorPassDefVec;
 
-    class _OgreExport CompositorTargetDef : public CompositorInstAlloc
+    class _OgreExport CompositorTargetDef : public OgreAllocatedObj
     {
         /// Name is local to Node! (unless using 'global_' prefix)
         IdString mRenderTargetName;

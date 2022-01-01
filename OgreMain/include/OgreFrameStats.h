@@ -43,7 +43,7 @@ namespace Ogre
     /** All return values are either in milliseconds or frames per second;
         but they're internally stored in microseconds
     */
-    class _OgreExport FrameStats : public ProfilerAlloc
+    class _OgreExport FrameStats : public OgreAllocatedObj
     {
         int           mNextFrame;
         unsigned long mBestFrameTime;

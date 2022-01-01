@@ -324,7 +324,7 @@ namespace Ogre
             We need this because we have to render twice, once with the inner panel's repeating
             material (handled by superclass) and once for the border's separate material.
         */
-        class _OgreOverlayExport BorderRenderable : public Renderable, public OverlayAlloc
+        class _OgreOverlayExport BorderRenderable : public Renderable, public OgreAllocatedObj
         {
         protected:
             BorderPanelOverlayElement *mParent;

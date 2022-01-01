@@ -48,7 +48,7 @@ namespace Ogre
         getIndex, sort, and isSorted.
         In addition, transformUserValue may be overridden.
     */
-    class _OgreExport LodStrategy : public LodAlloc
+    class _OgreExport LodStrategy : public OgreAllocatedObj
     {
     protected:
         /** Name of this strategy. */

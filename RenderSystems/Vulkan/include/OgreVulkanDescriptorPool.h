@@ -43,7 +43,7 @@ namespace Ogre
         However it is not tied to a single VulkanRootLayout and
         may be shared by multiple VulkanRootLayouts
     */
-    class _OgreVulkanExport VulkanDescriptorPool : public RenderSysAlloc
+    class _OgreVulkanExport VulkanDescriptorPool : public OgreAllocatedObj
     {
         struct Pool
         {

@@ -73,7 +73,7 @@ namespace Ogre
         from CompositorPassClear & CompositorPassClearDef and implement your own
         custom pass that clears the render target.
     */
-    class _OgreExport CompositorPassProvider : public ResourceAlloc
+    class _OgreExport CompositorPassProvider : public OgreAllocatedObj
     {
     public:
         /** Called from CompositorTargetDef::addPass when adding a Compositor Pass of type 'custom'

@@ -529,7 +529,7 @@ namespace Ogre
             // Ensure pool size is multiple of 4 otherwise some StagingBuffer copies can fail.
             //(when allocations happen very close to the end of the pool)
             size_t poolSize = std::max( mDefaultPoolSize[vboFlag], sizeBytes );
-            poolSize = alignToNextMultiple( poolSize, 4u );
+            poolSize = alignToNextMultiple<size_t>( poolSize, 4u );
 
             // No luck, allocate a new buffer.
             MTLResourceOptions resourceOptions = 0;
@@ -677,7 +677,7 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            const uint32 alignment = Math::lcm( bytesPerElement, c_minimumAlignment );
+            const size_t alignment = Math::lcm( bytesPerElement, c_minimumAlignment );
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
@@ -746,7 +746,7 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            const uint32 alignment = Math::lcm( bytesPerElement, c_indexBufferAlignment );
+            const size_t alignment = Math::lcm( bytesPerElement, c_indexBufferAlignment );
             sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
@@ -1188,7 +1188,7 @@ namespace Ogre
     StagingBuffer *MetalVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
     {
         sizeBytes = std::max<size_t>( sizeBytes, 4 * 1024 * 1024 );
-        sizeBytes = alignToNextMultiple( sizeBytes, 4u );
+        sizeBytes = alignToNextMultiple<size_t>( sizeBytes, 4u );
 
         MTLResourceOptions resourceOptions = 0;
 
@@ -1242,11 +1242,11 @@ namespace Ogre
         MTLSize threadsPerThreadgroup = MTLSizeMake( 1024u, 1u, 1u );
         MTLSize threadgroupsPerGrid = MTLSizeMake( 1u, 1u, 1u );
 
-        const size_t threadsRequired = alignToNextMultiple( sizeBytes, 64u ) / 64u;
+        const size_t threadsRequired = alignToNextMultiple<size_t>( sizeBytes, 64u ) / 64u;
         threadsPerThreadgroup.width =
             std::min<NSUInteger>( static_cast<NSUInteger>( threadsRequired ), 1024u );
         threadgroupsPerGrid.width = static_cast<NSUInteger>(
-            alignToNextMultiple( threadsRequired, threadsPerThreadgroup.width ) /
+            alignToNextMultiple<size_t>( threadsRequired, threadsPerThreadgroup.width ) /
             threadsPerThreadgroup.width );
 
         [computeEncoder setComputePipelineState:mUnalignedCopyPso];

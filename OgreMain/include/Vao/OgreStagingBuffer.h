@@ -75,7 +75,7 @@ namespace Ogre
     @par
         Staging buffers can't be persistently mapped, since it beats the point.
     */
-    class _OgreExport StagingBuffer : public StagingBufferAlloc
+    class _OgreExport StagingBuffer : public OgreAllocatedObj
     {
     public:
         struct Destination

@@ -42,7 +42,7 @@ namespace Ogre
     typedef vector<StagingBuffer *>::type            StagingBufferVec;
     typedef unordered_set<VertexArrayObject *>::type VertexArrayObjectSet;
 
-    class _OgreExport VaoManager : public RenderSysAlloc
+    class _OgreExport VaoManager : public OgreAllocatedObj
     {
     protected:
         Timer *mTimer;

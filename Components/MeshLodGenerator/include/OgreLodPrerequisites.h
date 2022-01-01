@@ -65,8 +65,6 @@ namespace Ogre
     typedef SharedPtr<LodData>           LodDataPtr;
     typedef SharedPtr<LodInputProvider>  LodInputProviderPtr;
     typedef SharedPtr<LodOutputProvider> LodOutputProviderPtr;
-
-    typedef GeneralAllocatedObject MeshLodAlloc;
 }  // namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT

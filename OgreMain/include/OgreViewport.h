@@ -57,7 +57,7 @@ namespace Ogre
             viewport on a single render target and they overlap, one must
             obscure the other in some predetermined way.
     */
-    class _OgreExport Viewport : public ViewportAlloc
+    class _OgreExport Viewport : public OgreAllocatedObj
     {
     public:
         /// @copydoc MovableObject::mGlobalIndex

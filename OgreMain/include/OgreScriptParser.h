@@ -45,7 +45,7 @@ namespace Ogre
      *  @{
      */
 
-    class _OgreExport ScriptParser : public ScriptCompilerAlloc
+    class _OgreExport ScriptParser : public OgreAllocatedObj
     {
     public:
         ScriptParser();

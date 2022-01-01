@@ -72,7 +72,7 @@ namespace Ogre
         Just incase it wasn't clear from the above, this class provides linkage to both
         GpuProgram and HighLevelGpuProgram, despite its name.
     */
-    class _OgreExport GpuProgramUsage : public Resource::Listener, public PassAlloc
+    class _OgreExport GpuProgramUsage : public Resource::Listener, public OgreAllocatedObj
     {
     protected:
         GpuProgramType mType;

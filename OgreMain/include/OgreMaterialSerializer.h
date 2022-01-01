@@ -63,7 +63,7 @@ namespace Ogre
     };
 
     /** Class for serializing Materials to / from a .material script.*/
-    class _OgreExport MaterialSerializer : public SerializerAlloc
+    class _OgreExport MaterialSerializer : public OgreAllocatedObj
     {
     public:
         // Material serialize event.

@@ -76,7 +76,7 @@ namespace Ogre
         there is a system initialisation or shutdown, e.g. when Root::initialise
         or Root::shutdown are called.
     */
-    class _OgreExport Plugin : public PluginAlloc
+    class _OgreExport Plugin : public OgreAllocatedObj
     {
     public:
         Plugin() {}

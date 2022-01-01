@@ -129,7 +129,7 @@ namespace Ogre
                                     to the internal ISA.
     @endcode
     */
-    class _OgreExport HlmsDiskCache : public HlmsAlloc
+    class _OgreExport HlmsDiskCache : public OgreAllocatedObj
     {
     public:
         struct SourceCode

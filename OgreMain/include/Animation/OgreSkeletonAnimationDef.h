@@ -41,7 +41,7 @@ namespace Ogre
         class TimeIndex;
     }
 
-    class _OgreExport SkeletonAnimationDef : public AnimationAlloc
+    class _OgreExport SkeletonAnimationDef : public OgreAllocatedObj
     {
         friend class SkeletonAnimation;
 

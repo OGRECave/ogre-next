@@ -92,7 +92,7 @@ namespace Ogre
             200-224: FAST \n
             225-255: V1_FAST
     */
-    class _OgreExport RenderQueue : public RenderQueueAlloc
+    class _OgreExport RenderQueue : public OgreAllocatedObj
     {
     public:
         enum Modes

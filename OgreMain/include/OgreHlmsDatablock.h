@@ -281,7 +281,7 @@ namespace Ogre
         or use some depth bias. As for blendblocks, with transparent objects you may want to
         turn off alpha blending, but enable alpha testing instead.
     */
-    class _OgreExport HlmsDatablock : public PassAlloc
+    class _OgreExport HlmsDatablock : public OgreAllocatedObj
     {
         friend class RenderQueue;
 

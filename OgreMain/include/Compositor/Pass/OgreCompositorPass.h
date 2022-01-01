@@ -73,7 +73,7 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport CompositorPass : public CompositorInstAlloc
+    class _OgreExport CompositorPass : public OgreAllocatedObj
     {
         CompositorPassDef const *mDefinition;
 

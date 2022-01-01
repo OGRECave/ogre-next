@@ -66,7 +66,7 @@ namespace Ogre
             throughout the life of that object by using Root::getSingleton
             (as a reference) or Root::getSingletonPtr (as a pointer).
     */
-    class _OgreExport Root : public Singleton<Root>, public RootAlloc
+    class _OgreExport Root : public Singleton<Root>, public OgreAllocatedObj
     {
         // To allow update of active renderer if
         // RenderSystem::initialise is used directly

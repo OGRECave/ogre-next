@@ -63,7 +63,7 @@ namespace Ogre
             TypeGenerateDefaultMipmaps = TypeGenerateSwMipmaps | TypeGenerateHwMipmaps
         };
 
-        class _OgreExport FilterBase : public ResourceAlloc
+        class _OgreExport FilterBase : public OgreAllocatedObj
         {
         public:
             virtual ~FilterBase();

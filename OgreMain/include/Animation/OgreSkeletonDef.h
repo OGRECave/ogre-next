@@ -41,7 +41,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreExport SkeletonDef : public MovableAlloc
+    class _OgreExport SkeletonDef : public OgreAllocatedObj
     {
         friend class SkeletonInstance;
 

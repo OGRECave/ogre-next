@@ -64,7 +64,7 @@ namespace Ogre
         degrees of freedom.  This class is meant to allow custom methods for
         handling optimization.
     */
-    class _OgreExport ShadowCameraSetup : public ShadowDataAlloc
+    class _OgreExport ShadowCameraSetup : public OgreAllocatedObj
     {
     protected:
         /// Defines the min & max frustum distance. TODO: put as output from getShadowCamera

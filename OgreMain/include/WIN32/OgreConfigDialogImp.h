@@ -56,7 +56,7 @@ namespace Ogre
     @author
         Steven J. Streeting
     */
-    class _OgreExport ConfigDialog : public UtilityAlloc
+    class _OgreExport ConfigDialog : public OgreAllocatedObj
     {
     public:
         ConfigDialog();

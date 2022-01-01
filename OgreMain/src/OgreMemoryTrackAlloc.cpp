@@ -76,7 +76,7 @@ namespace Ogre
             Magic[3] = 0x45;
 
             size_t j = 0;
-            for( int i = 0; i < OGRE_TRACK_POOL_SIZE; ++i )
+            for( size_t i = 0; i < OGRE_TRACK_POOL_SIZE; ++i )
             {
                 MemoryPool[i] = Magic[j];
                 j = ( j + 1 ) % 4;

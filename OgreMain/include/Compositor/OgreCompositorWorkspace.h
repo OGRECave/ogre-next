@@ -82,7 +82,7 @@ namespace Ogre
     @version
         1.1
     */
-    class _OgreExport CompositorWorkspace : public CompositorInstAlloc, public IdObject
+    class _OgreExport CompositorWorkspace : public OgreAllocatedObj, public IdObject
     {
     protected:
         CompositorWorkspaceDef const *mDefinition;

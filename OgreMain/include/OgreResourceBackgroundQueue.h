@@ -80,7 +80,7 @@ namespace Ogre
         from your queueing thread.
     */
     class _OgreExport ResourceBackgroundQueue : public Singleton<ResourceBackgroundQueue>,
-                                                public ResourceAlloc,
+                                                public OgreAllocatedObj,
                                                 public WorkQueue::RequestHandler,
                                                 public WorkQueue::ResponseHandler
     {

@@ -93,7 +93,7 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport CompositorNode : public CompositorInstAlloc, public IdObject
+    class _OgreExport CompositorNode : public OgreAllocatedObj, public IdObject
     {
     protected:
         /// Unique name across the same workspace

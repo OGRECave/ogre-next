@@ -54,7 +54,7 @@ namespace Ogre
         a name which identifies them, examples might be 'force_vector', 'attractor', or 'fader', and
         these can be also be used from particle system scripts.
     */
-    class _OgreExport ParticleAffectorFactory : public FXAlloc
+    class _OgreExport ParticleAffectorFactory : public OgreAllocatedObj
     {
     protected:
         vector<ParticleAffector *>::type mAffectors;

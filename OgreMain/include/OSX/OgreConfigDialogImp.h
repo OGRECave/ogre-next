@@ -81,7 +81,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreExport ConfigDialog : public UtilityAlloc
+    class _OgreExport ConfigDialog : public OgreAllocatedObj
     {
     public:
         ConfigDialog();

@@ -71,7 +71,7 @@ namespace Ogre
         using the SceneManager interfaces for the type of query required, e.g.
         SceneManager::createSphereSceneQuery.
     */
-    class _OgreExport SceneQuery : public SceneMgtAlloc
+    class _OgreExport SceneQuery : public OgreAllocatedObj
     {
     public:
         /** This type can be used by collaborating applications & SceneManagers to
@@ -204,7 +204,7 @@ namespace Ogre
     typedef list<MovableObject *>::type             SceneQueryResultMovableList;
     typedef list<SceneQuery::WorldFragment *>::type SceneQueryResultWorldFragmentList;
     /** Holds the results of a scene query. */
-    struct _OgreExport SceneQueryResult : public SceneMgtAlloc
+    struct _OgreExport SceneQueryResult : public OgreAllocatedObj
     {
         /// List of movable objects in the query (entities, particle systems etc)
         SceneQueryResultMovableList movables;
@@ -481,7 +481,7 @@ namespace Ogre
     typedef list<SceneQueryMovableObjectWorldFragmentPair>::type
         SceneQueryMovableWorldFragmentIntersectionList;
     /** Holds the results of an intersection scene query (pair values). */
-    struct _OgreExport IntersectionSceneQueryResult : public SceneMgtAlloc
+    struct _OgreExport IntersectionSceneQueryResult : public OgreAllocatedObj
     {
         /// List of movable / movable intersections (entities, particle systems etc)
         SceneQueryMovableIntersectionList movables2movables;

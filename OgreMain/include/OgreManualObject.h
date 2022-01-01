@@ -423,7 +423,7 @@ namespace Ogre
             bool hasEdgeList();
 
             /// Built, renderable section of geometry
-            class _OgreExport ManualObjectSection : public Renderable, public MovableAlloc
+            class _OgreExport ManualObjectSection : public Renderable, public OgreAllocatedObj
             {
             protected:
                 ManualObject *      mParent;

@@ -57,7 +57,7 @@ namespace Ogre
             Each OverlayElementFactory creates a single type of OverlayElement,
             identified by a 'type name' which must be unique.
         */
-        class _OgreOverlayExport OverlayElementFactory : public OverlayAlloc
+        class _OgreOverlayExport OverlayElementFactory : public OgreAllocatedObj
         {
         public:
             /** Destroy the overlay element factory */

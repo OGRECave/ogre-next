@@ -61,7 +61,7 @@ namespace Ogre
             Settings can be optionally grouped in sections, using a header
             beforehand of the form [SectionName].
     */
-    class _OgreExport ConfigFile : public ConfigAlloc
+    class _OgreExport ConfigFile : public OgreAllocatedObj
     {
     public:
         ConfigFile();

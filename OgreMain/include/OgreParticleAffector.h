@@ -63,7 +63,7 @@ namespace Ogre
         system effects, with literally infinite combinations of affector and affector types, and
         parameters within those types.
     */
-    class _OgreExport ParticleAffector : public StringInterface, public FXAlloc
+    class _OgreExport ParticleAffector : public StringInterface, public OgreAllocatedObj
     {
     protected:
         /// Name of the type of affector, MUST be initialised by subclasses

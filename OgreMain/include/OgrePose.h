@@ -55,7 +55,7 @@ namespace Ogre
             Pose instances can be referred to by keyframes in VertexAnimationTrack in
             order to animate based on blending poses together.
         */
-        class _OgreExport Pose : public AnimationAlloc
+        class _OgreExport Pose : public OgreAllocatedObj
         {
         public:
             /** Constructor

@@ -2600,10 +2600,10 @@ namespace Ogre
             mCurrentAutoParamsBufferPtr += bytesToWrite;
 
             const uint8 *oldBufferPos = mCurrentAutoParamsBufferPtr;
-            mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>(
-                alignToNextMultiple( reinterpret_cast<uintptr_t>( mCurrentAutoParamsBufferPtr ),
-                                     mVaoManager->getConstBufferAlignment() ) );
-            bytesToWrite += mCurrentAutoParamsBufferPtr - oldBufferPos;
+            mCurrentAutoParamsBufferPtr = reinterpret_cast<uint8 *>( alignToNextMultiple<uintptr_t>(
+                reinterpret_cast<uintptr_t>( mCurrentAutoParamsBufferPtr ),
+                mVaoManager->getConstBufferAlignment() ) );
+            bytesToWrite += size_t( mCurrentAutoParamsBufferPtr - oldBufferPos );
 
             // We know that bytesToWrite <= mCurrentAutoParamsBufferSpaceLeft, but that was
             // before padding. After padding this may no longer hold true.

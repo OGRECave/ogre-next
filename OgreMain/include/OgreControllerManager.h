@@ -57,7 +57,7 @@ namespace Ogre
         and updating them when requested. It also provides a number of convenience methods
         for creating commonly used controllers (such as texture animators).
     */
-    class _OgreExport ControllerManager : public Singleton<ControllerManager>, public ControllerAlloc
+    class _OgreExport ControllerManager : public Singleton<ControllerManager>, public OgreAllocatedObj
     {
     protected:
         typedef set<Controller<Real> *>::type ControllerList;

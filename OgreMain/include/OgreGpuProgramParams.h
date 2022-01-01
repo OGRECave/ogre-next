@@ -458,7 +458,7 @@ namespace Ogre
     typedef ConstMapIterator<GpuConstantDefinitionMap> GpuConstantDefinitionIterator;
 
     /// Struct collecting together the information for named constants.
-    struct _OgreExport GpuNamedConstants : public GpuParamsAlloc
+    struct _OgreExport GpuNamedConstants : public OgreAllocatedObj
     {
         /// Total size of the float buffer required
         size_t floatBufferSize;
@@ -564,7 +564,7 @@ namespace Ogre
     };
     typedef map<size_t, GpuLogicalIndexUse>::type GpuLogicalIndexUseMap;
     /// Container struct to allow params to safely & update shared list of logical buffer assignments
-    struct _OgreExport GpuLogicalBufferStruct : public GpuParamsAlloc
+    struct _OgreExport GpuLogicalBufferStruct : public OgreAllocatedObj
     {
         OGRE_MUTEX( mutex );
 
@@ -619,7 +619,7 @@ namespace Ogre
         @note
         Shared parameter sets can be named, and looked up using the GpuProgramManager.
     */
-    class _OgreExport GpuSharedParameters : public GpuParamsAlloc
+    class _OgreExport GpuSharedParameters : public OgreAllocatedObj
     {
     protected:
         /// Name of the shared parameter set.
@@ -813,7 +813,7 @@ namespace Ogre
     /** This class records the usage of a set of shared parameters in a concrete
         set of GpuProgramParameters.
     */
-    class _OgreExport GpuSharedParametersUsage : public GpuParamsAlloc
+    class _OgreExport GpuSharedParametersUsage : public OgreAllocatedObj
     {
     protected:
         GpuSharedParametersPtr mSharedParams;
@@ -886,7 +886,7 @@ namespace Ogre
         any of this unless you intend to read parameters back from this structure
         rather than just setting them.
     */
-    class _OgreExport GpuProgramParameters : public GpuParamsAlloc
+    class _OgreExport GpuProgramParameters : public OgreAllocatedObj
     {
     public:
         /** Defines the types of automatically updated values that may be bound to GpuProgram

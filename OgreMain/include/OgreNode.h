@@ -56,7 +56,7 @@ namespace Ogre
         This is an abstract class - concrete classes are based on this for specific purposes,
         e.g. SceneNode, Bone
     */
-    class _OgreExport Node : public NodeAlloc, public IdObject
+    class _OgreExport Node : public OgreAllocatedObj, public IdObject
     {
         friend class TagPoint;
 
@@ -100,7 +100,7 @@ namespace Ogre
         };
 
         /** Inner class for displaying debug renderable for Node. */
-        /*class DebugRenderable : public Renderable, public NodeAlloc
+        /*class DebugRenderable : public Renderable, public OgreAllocatedObj
         {
         protected:
             Node* mParent;

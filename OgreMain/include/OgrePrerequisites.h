@@ -416,26 +416,24 @@ namespace Ogre
 {
 #if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
 #    if OGRE_WCHAR_T_STRINGS
-    typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
-                              STLAllocator<wchar_t, GeneralAllocPolicy>>
+    typedef std::basic_string<wchar_t, std::char_traits<wchar_t>, STLAllocator<wchar_t, AllocPolicy>>
         _StringBase;
 #    else
-    typedef std::basic_string<char, std::char_traits<char>, STLAllocator<char, GeneralAllocPolicy>>
-        _StringBase;
+    typedef std::basic_string<char, std::char_traits<char>, STLAllocator<char, AllocPolicy>> _StringBase;
 #    endif
 
 #    if OGRE_WCHAR_T_STRINGS
     typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
-                                    STLAllocator<wchar_t, GeneralAllocPolicy>>
+                                    STLAllocator<wchar_t, AllocPolicy>>
         _StringStreamBase;
 #    else
-    typedef std::basic_stringstream<char, std::char_traits<char>, STLAllocator<char, GeneralAllocPolicy>>
+    typedef std::basic_stringstream<char, std::char_traits<char>, STLAllocator<char, AllocPolicy>>
         _StringStreamBase;
 #    endif
 
 #    define StdStringT( T ) std::basic_string<T, std::char_traits<T>, std::allocator<T>>
 #    define CustomMemoryStringT( T ) \
-        std::basic_string<T, std::char_traits<T>, STLAllocator<T, GeneralAllocPolicy>>
+        std::basic_string<T, std::char_traits<T>, STLAllocator<T, AllocPolicy>>
 
     template <typename T>
     bool operator<( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
@@ -585,22 +583,22 @@ namespace Ogre
     template <typename, typename>
     class STLAllocator;
 
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy>>
+    template <typename T, typename A = STLAllocator<T, AllocPolicy>>
     class StdVector;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy>>
+              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy>>
     class StdMap;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy>>
+              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy>>
     class StdMultiMap;
 
-    template <typename T, typename A = STLAllocator<T, GeneralAllocPolicy>>
+    template <typename T, typename A = STLAllocator<T, AllocPolicy>>
     class StdList;
 
     template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<K, GeneralAllocPolicy>>
+              typename A = STLAllocator<K, AllocPolicy>>
     class StdUnorderedSet;
 }  // namespace Ogre
 

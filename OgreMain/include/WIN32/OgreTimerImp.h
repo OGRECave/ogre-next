@@ -49,7 +49,7 @@ namespace Ogre
      *  @{
      */
 
-    class _OgreExport Timer : public TimerAlloc
+    class _OgreExport Timer : public OgreAllocatedObj
     {
     private:
         clock_t mZeroClock;

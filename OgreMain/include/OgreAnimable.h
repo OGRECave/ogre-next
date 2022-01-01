@@ -73,7 +73,7 @@ namespace Ogre
         are often comprised of multiple properties it helps to be able to deal
         with all values through a single class.
     */
-    class _OgreExport AnimableValue : public AnimableAlloc
+    class _OgreExport AnimableValue : public OgreAllocatedObj
     {
     public:
         /// The type of the value being animated

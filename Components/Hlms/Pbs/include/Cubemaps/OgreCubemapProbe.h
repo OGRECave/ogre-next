@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreHlmsPbsExport CubemapProbe : public UtilityAlloc
+    class _OgreHlmsPbsExport CubemapProbe : public OgreAllocatedObj
     {
         friend class ParallaxCorrectedCubemapBase;
         friend class ParallaxCorrectedCubemap;

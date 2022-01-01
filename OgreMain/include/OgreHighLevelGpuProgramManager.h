@@ -45,7 +45,7 @@ namespace Ogre
      *  @{
      */
     /** Interface definition for factories of HighLevelGpuProgram. */
-    class _OgreExport HighLevelGpuProgramFactory : public FactoryAlloc
+    class _OgreExport HighLevelGpuProgramFactory : public OgreAllocatedObj
     {
     public:
         HighLevelGpuProgramFactory() {}

@@ -77,7 +77,7 @@ namespace Ogre
                 through a generic interface.</li>
             </ol>
     */
-    class _OgreExport Resource : public StringInterface, public ResourceAlloc
+    class _OgreExport Resource : public StringInterface, public OgreAllocatedObj
     {
     public:
         OGRE_AUTO_MUTEX;  // public to allow external locking

@@ -129,7 +129,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
   endif ()
   # This is a set of sensible warnings that provide meaningful output
   set(OGRE_WARNING_FLAGS
-      "-Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wno-unused-parameter -Wshadow")
+      "-Wall -Winit-self -Wcast-qual -Wwrite-strings -Wextra -Wno-unused-parameter -Wshadow -Wimplicit-fallthrough")
 
   if( CMAKE_COMPILER_IS_GNUCXX )
     # On GCC:
@@ -139,6 +139,17 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
   else()
     set( OGRE_WARNING_FLAGS "${OGRE_WARNING_FLAGS} \
         -Winconsistent-missing-destructor-override -Wcomma -Wsign-conversion -Wconversion" )
+#    set( OGRE_WARNING_FLAGS
+#        "-Weverything -Wno-reserved-id-macro -Wno-old-style-cast -Wno-documentation-unknown-command \
+#        -Wno-zero-as-null-pointer-constant -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-undef \
+#        -Wno-padded -Werror" )
+#    set( OGRE_WARNING_FLAGS
+#        "-Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-unused-macros -Wno-newline-eof \
+#        -Wno-exit-time-destructors -Wno-global-constructors -Wno-gnu-zero-variadic-macro-arguments \
+#        -Wno-documentation -Wno-shadow -Wno-switch-enum -Wno-missing-prototypes \
+#        -Wno-used-but-marked-unused -Wno-zero-as-null-pointer-constant -Wno-old-style-cast \
+#        -Wno-double-promotion -Wno-reserved-id-macro -Wno-undef -Wno-documentation-unknown-command \
+#        -Wno-float-equal -Wno-covered-switch-default -Werror" )
   endif()
 
   if (EMSCRIPTEN)
@@ -473,9 +484,7 @@ else ()
 set(OGRE_CONFIG_ALLOCATOR 1 CACHE STRING
 "Specify the memory allocator to use. Possible values:
   1 - Standard allocator
-  2 - nedmalloc - NOT RECOMMENDED - Only useful in WinXP & for debugging mem. corruption - Has known issues see https://github.com/ned14/nedmalloc/issues/15
   3 - User-provided allocator
-  4 - nedmalloc with pooling - NOT RECOMMENDED - See nedmalloc issues.
   5 - Debug allocator that will assert on most forms of memory corruption and provides deterministic memory addressing (for easier debugging w/ data breakpoints). Not indended for release or deployment. You may want to tweak OGRE_TRACK_POOL_SIZE in OgreMain/src/OgreMemoryTrackAlloc.cpp."
 )
 endif ()

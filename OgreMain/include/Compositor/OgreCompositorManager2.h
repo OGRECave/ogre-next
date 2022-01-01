@@ -105,7 +105,7 @@ namespace Ogre
     @par
         For more information @see CompositorNode & @see CompositorShadowNode
     */
-    class _OgreExport CompositorManager2 : public ResourceAlloc
+    class _OgreExport CompositorManager2 : public OgreAllocatedObj
     {
     public:
         typedef map<IdString, CompositorNodeDef *>::type CompositorNodeDefMap;

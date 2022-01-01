@@ -102,7 +102,7 @@ namespace Ogre
         };
     }  // namespace GpuPageOutStrategy
 
-    class _OgreExport GpuResource : public ResourceAlloc
+    class _OgreExport GpuResource : public OgreAllocatedObj
     {
     protected:
         GpuResidency::GpuResidency mResidencyStatus;

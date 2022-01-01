@@ -46,7 +46,7 @@ namespace Ogre
      *  @{
      */
     /** Manager for LOD strategies. */
-    class _OgreExport LodStrategyManager : public Singleton<LodStrategyManager>, public LodAlloc
+    class _OgreExport LodStrategyManager : public Singleton<LodStrategyManager>, public OgreAllocatedObj
     {
         /** Map of strategies. */
         typedef map<String, LodStrategy *>::type StrategyMap;

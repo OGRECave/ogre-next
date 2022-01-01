@@ -9,7 +9,7 @@
 namespace Ogre
 {
     template <typename K, typename V, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy> >
     struct unordered_map
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
@@ -22,7 +22,7 @@ namespace Ogre
     };
 
     template <typename K, typename V, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy> >
     struct unordered_multimap
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR

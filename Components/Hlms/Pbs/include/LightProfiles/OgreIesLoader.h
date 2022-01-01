@@ -57,7 +57,7 @@ namespace Ogre
     /**
     @class IesLoader
     */
-    class _OgreHlmsPbsExport IesLoader : public UtilityAlloc
+    class _OgreHlmsPbsExport IesLoader : public OgreAllocatedObj
     {
         float mCandelaMult;
         /// Vertical angle aka Cone Angle

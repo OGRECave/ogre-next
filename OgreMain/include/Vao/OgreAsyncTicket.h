@@ -47,7 +47,7 @@ namespace Ogre
     @par
         Call @BufferPacked::disposeTicket when you're done with this ticket.
     */
-    class _OgreExport AsyncTicket : public RenderSysAlloc
+    class _OgreExport AsyncTicket : public OgreAllocatedObj
     {
     protected:
         bool           mHasBeenMapped;

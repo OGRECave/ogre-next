@@ -56,7 +56,7 @@ namespace Ogre
             animation sequence, with the exact state of the animation being an
             interpolation between these key frames.
         */
-        class _OgreExport KeyFrame : public AnimationAlloc
+        class _OgreExport KeyFrame : public OgreAllocatedObj
         {
         public:
             /** Default constructor, you should not call this but use AnimationTrack::createKeyFrame

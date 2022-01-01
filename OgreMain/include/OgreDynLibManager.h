@@ -49,7 +49,7 @@ namespace Ogre
         libraries, opens them and returns references to already-open
         libraries.
     */
-    class _OgreExport DynLibManager : public Singleton<DynLibManager>, public DynLibAlloc
+    class _OgreExport DynLibManager : public Singleton<DynLibManager>, public OgreAllocatedObj
     {
     protected:
         typedef map<String, DynLib *>::type DynLibList;

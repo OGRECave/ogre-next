@@ -8,7 +8,7 @@
 
 namespace Ogre
 {
-    template <typename T, typename P = std::less<T>, typename A = STLAllocator<T, GeneralAllocPolicy> >
+    template <typename T, typename P = std::less<T>, typename A = STLAllocator<T, AllocPolicy> >
     struct set
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR

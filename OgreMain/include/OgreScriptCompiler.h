@@ -66,7 +66,7 @@ namespace Ogre
     typedef SharedPtr<ConcreteNode>     ConcreteNodePtr;
     typedef list<ConcreteNodePtr>::type ConcreteNodeList;
     typedef SharedPtr<ConcreteNodeList> ConcreteNodeListPtr;
-    struct ConcreteNode : public ScriptCompilerAlloc
+    struct ConcreteNode : public OgreAllocatedObj
     {
         String           token, file;
         unsigned int     line;
@@ -91,7 +91,7 @@ namespace Ogre
     typedef list<AbstractNodePtr>::type AbstractNodeList;
     typedef SharedPtr<AbstractNodeList> AbstractNodeListPtr;
 
-    class _OgreExport AbstractNode : public AbstractNodeAlloc
+    class _OgreExport AbstractNode : public OgreAllocatedObj
     {
     public:
         String           file;
@@ -194,14 +194,14 @@ namespace Ogre
         and processes the CST into an AST and then uses translators
         to translate the AST into the final resources.
     */
-    class _OgreExport ScriptCompiler : public ScriptCompilerAlloc
+    class _OgreExport ScriptCompiler : public OgreAllocatedObj
     {
     public:  // Externally accessible types
         // typedef map<String,uint32>::type IdMap;
         typedef unordered_map<String, uint32>::type IdMap;
 
         // The container for errors
-        struct Error : public ScriptCompilerAlloc
+        struct Error : public OgreAllocatedObj
         {
             String       file, message;
             unsigned int line;
@@ -422,7 +422,7 @@ namespace Ogre
     */
     class _OgreExport ScriptCompilerManager : public Singleton<ScriptCompilerManager>,
                                               public ScriptLoader,
-                                              public ScriptCompilerAlloc
+                                              public OgreAllocatedObj
     {
     private:
         OGRE_AUTO_MUTEX;

@@ -74,7 +74,7 @@ namespace Ogre
         in their own subsystems. We also provide a default implementation in the
         form of DefaultWorkQueue.
     */
-    class _OgreExport WorkQueue : public UtilityAlloc
+    class _OgreExport WorkQueue : public OgreAllocatedObj
     {
     protected:
         typedef map<String, uint16>::type ChannelMap;
@@ -88,7 +88,7 @@ namespace Ogre
 
         /** General purpose request structure.
          */
-        class _OgreExport Request : public UtilityAlloc
+        class _OgreExport Request : public OgreAllocatedObj
         {
             friend class WorkQueue;
 
@@ -128,7 +128,7 @@ namespace Ogre
 
         /** General purpose response structure.
          */
-        struct _OgreExport Response : public UtilityAlloc
+        struct _OgreExport Response : public OgreAllocatedObj
         {
             /// Pointer to the request that this response is in relation to
             const Request *mRequest;
@@ -508,7 +508,7 @@ namespace Ogre
             provides insurance against the handler itself being disconnected
             while the list remains unchanged.
         */
-        class _OgreExport RequestHandlerHolder : public UtilityAlloc
+        class _OgreExport RequestHandlerHolder : public OgreAllocatedObj
         {
         protected:
             OGRE_RW_MUTEX( mRWMutex );

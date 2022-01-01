@@ -34,7 +34,7 @@ THE SOFTWARE.
  *    are no provisions for traversal, parsing, etc. */
 
 /** An abstract html node */
-struct HtmlNode : public Ogre::GeneralAllocatedObject
+struct HtmlNode : public Ogre::AllocPolicy
 {
     virtual ~HtmlNode() {}
     virtual Ogre::String print(Ogre::String indent = "") = 0;

@@ -120,7 +120,7 @@ namespace Ogre
                 }
             }
     */
-    class _OgreExport PsoCacheHelper : public PassAlloc
+    class _OgreExport PsoCacheHelper : public OgreAllocatedObj
     {
         static const uint32 RenderableBits;
         static const uint32 PassBits;

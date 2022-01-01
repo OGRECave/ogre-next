@@ -62,7 +62,7 @@ namespace Ogre
             Instances of this class are discrete, relatively small, movable objects
             which are attached to SceneNode objects to define their position.
     */
-    class _OgreExport MovableObject : public AnimableObject, public MovableAlloc, public IdObject
+    class _OgreExport MovableObject : public AnimableObject, public OgreAllocatedObj, public IdObject
     {
     public:
         static const FastArray<Real> c_DefaultLodMesh;
@@ -613,7 +613,7 @@ namespace Ogre
         to allow all clients to produce new instances of this object, integrated
         with the standard Ogre processing.
     */
-    class _OgreExport MovableObjectFactory : public MovableAlloc
+    class _OgreExport MovableObjectFactory : public OgreAllocatedObj
     {
     protected:
         /// Internal implementation of create method - must be overridden

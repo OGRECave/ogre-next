@@ -37,7 +37,7 @@ namespace Ogre {
     class EGLContext;
     class GLES2ManagedResource;
     
-    class _OgrePrivate GLES2ManagedResourceManager : public ResourceAlloc
+    class _OgrePrivate GLES2ManagedResourceManager : public OgreAllocatedObj
     {
     // Interface.
     public:

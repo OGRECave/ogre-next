@@ -64,7 +64,7 @@ namespace Ogre
         There are pros and cons to both, just remember that if you use a programmable
         pass to create some great effects, allow more time for definition and testing.
     */
-    class _OgreExport Pass : public PassAlloc
+    class _OgreExport Pass : public OgreAllocatedObj
     {
     protected:
         /// Increments on the constructor, in order to create a unique datablock for each material pass

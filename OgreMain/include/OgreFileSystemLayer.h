@@ -46,7 +46,7 @@ namespace Ogre
       */
 
     /** Implementation for the FileSystemLayer interface. */
-    class _OgreExport FileSystemLayer : public FileSystemLayerAlloc
+    class _OgreExport FileSystemLayer : public OgreAllocatedObj
     {
     public:
         /** Creates a concrete platform-dependent implementation of FileSystemLayer.

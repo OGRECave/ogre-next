@@ -41,7 +41,7 @@ namespace Volume {
 
     /** A node in the volume octree.
     */
-    class _OgreVolumeExport OctreeNode : public UtilityAlloc
+    class _OgreVolumeExport OctreeNode : public OgreAllocatedObj
     {
     protected:
         

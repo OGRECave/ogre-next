@@ -58,7 +58,7 @@ namespace Ogre
             mDerivedPosition, mDeriverdOrientation and mDerivedScale are still in world space
             though, it's only the 4x4 matrix we send to the GPU that is in a different space.
     */
-    class _OgreExport Bone : public NodeAlloc, public IdObject
+    class _OgreExport Bone : public OgreAllocatedObj, public IdObject
     {
     public:
         typedef vector<Bone *>::type     BoneVec;

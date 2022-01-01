@@ -135,7 +135,7 @@ namespace Ogre
         FreeOnDestructor &operator=( const FreeOnDestructor & );
     };
 
-    class _OgreExport BufferPacked : public GpuTrackedResource, public BufferPackedAlloc
+    class _OgreExport BufferPacked : public GpuTrackedResource, public OgreAllocatedObj
     {
         friend class BufferInterface;
         friend class D3D11BufferInterfaceBase;

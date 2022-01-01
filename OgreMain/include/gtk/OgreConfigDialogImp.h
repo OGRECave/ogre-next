@@ -50,7 +50,7 @@ namespace Ogre
     @author
         Andrew Zabolotny <zap@homelink.ru>
     */
-    class _OgreExport ConfigDialog : public UtilityAlloc
+    class _OgreExport ConfigDialog : public OgreAllocatedObj
     {
     public:
         ConfigDialog();

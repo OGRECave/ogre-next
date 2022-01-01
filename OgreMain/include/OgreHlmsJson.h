@@ -71,7 +71,7 @@ namespace Ogre
     };
 
     /** HLMS stands for "High Level Material System". */
-    class _OgreExport HlmsJson : public HlmsAlloc
+    class _OgreExport HlmsJson : public OgreAllocatedObj
     {
     public:
         struct NamedBlocks

@@ -70,7 +70,7 @@ namespace Ogre
                 BillboardSet
         */
 
-        class _OgreExport Billboard : public FXAlloc
+        class _OgreExport Billboard : public OgreAllocatedObj
         {
             friend class BillboardSet;
             friend class BillboardParticleRenderer;

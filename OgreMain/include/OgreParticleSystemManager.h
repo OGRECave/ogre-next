@@ -77,7 +77,7 @@ namespace Ogre
     */
     class _OgreExport ParticleSystemManager : public Singleton<ParticleSystemManager>,
                                               public ScriptLoader,
-                                              public FXAlloc
+                                              public OgreAllocatedObj
     {
         friend class ParticleSystemFactory;
 

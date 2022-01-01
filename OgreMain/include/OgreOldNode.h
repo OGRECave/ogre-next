@@ -65,7 +65,7 @@ namespace Ogre
             This is an abstract class - concrete classes are based on this for specific purposes,
             e.g. OldBone
         */
-        class _OgreExport OldNode : public NodeAlloc
+        class _OgreExport OldNode : public OgreAllocatedObj
         {
         public:
             /** Enumeration denoting the spaces which a transform can be relative to.

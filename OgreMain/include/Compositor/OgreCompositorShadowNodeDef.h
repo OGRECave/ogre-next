@@ -53,7 +53,7 @@ namespace Ogre
     };
 
     /// Local texture definition
-    class ShadowTextureDefinition : public CompositorInstAlloc
+    class ShadowTextureDefinition : public OgreAllocatedObj
     {
     public:
         Vector2 uvOffset;

@@ -43,7 +43,7 @@ namespace Ogre
     /**
     @class LightProfiles
     */
-    class _OgreHlmsPbsExport LightProfiles : public UtilityAlloc
+    class _OgreHlmsPbsExport LightProfiles : public OgreAllocatedObj
     {
         FastArray<IesLoader *>      mIesData;
         map<IdString, size_t>::type mIesNameMap;

@@ -34,7 +34,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** Timer class */
-    class _OgreExport Timer : public TimerAlloc
+    class _OgreExport Timer : public OgreAllocatedObj
     {
     private:
         double  start;

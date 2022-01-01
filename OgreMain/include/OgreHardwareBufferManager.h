@@ -71,7 +71,7 @@ namespace Ogre
         };
 
         /** Structure for recording the use of temporary blend buffers. */
-        class _OgreExport TempBlendedBufferInfo : public HardwareBufferLicensee, public BufferAlloc
+        class _OgreExport TempBlendedBufferInfo : public HardwareBufferLicensee, public OgreAllocatedObj
         {
         private:
             // Pre-blended
@@ -112,7 +112,7 @@ namespace Ogre
             and passes it to the HardwareBufferManager superclass as a delegate.
             This subclass must also delete the implementation instance it creates.
         */
-        class _OgreExport HardwareBufferManagerBase : public BufferAlloc
+        class _OgreExport HardwareBufferManagerBase : public OgreAllocatedObj
         {
             friend class HardwareVertexBufferSharedPtr;
             friend class HardwareIndexBufferSharedPtr;

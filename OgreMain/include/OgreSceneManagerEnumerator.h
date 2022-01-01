@@ -87,7 +87,7 @@ namespace Ogre
             Just instantiate your own SceneManager manually and use it directly.
     */
     class _OgreExport SceneManagerEnumerator : public Singleton<SceneManagerEnumerator>,
-                                               public SceneMgtAlloc
+                                               public OgreAllocatedObj
     {
     public:
         /// Scene manager instances, indexed by instance name

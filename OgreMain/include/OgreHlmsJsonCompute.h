@@ -46,7 +46,7 @@ namespace Ogre
      *  @{
      */
     /** HLMS stands for "High Level Material System". */
-    class _OgreExport HlmsJsonCompute : public PassAlloc
+    class _OgreExport HlmsJsonCompute : public OgreAllocatedObj
     {
         HlmsManager *      mHlmsManager;
         TextureGpuManager *mTextureManager;

@@ -57,7 +57,7 @@ namespace Ogre
             Other classes can hold instances of this class to store the state of any animations
             they are using.
         */
-        class _OgreExport AnimationState : public AnimationAlloc
+        class _OgreExport AnimationState : public OgreAllocatedObj
         {
         public:
             /// Typedef for an array of float values used as a bone blend mask
@@ -200,7 +200,7 @@ namespace Ogre
 
         /** Class encapsulating a set of AnimationState objects.
          */
-        class _OgreExport AnimationStateSet : public AnimationAlloc
+        class _OgreExport AnimationStateSet : public OgreAllocatedObj
         {
         public:
             /// Mutex, public for external locking if needed

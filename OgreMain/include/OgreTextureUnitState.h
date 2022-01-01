@@ -64,7 +64,7 @@ namespace Ogre
         where you do not use vertex or fragment programs (shaders). Programmable
         pipeline means that for this pass you are using vertex or fragment programs.
     */
-    class _OgreExport TextureUnitState : public TextureUnitStateAlloc, public TextureGpuListener
+    class _OgreExport TextureUnitState : public OgreAllocatedObj, public TextureGpuListener
     {
         friend class RenderSystem;
 

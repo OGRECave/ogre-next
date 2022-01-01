@@ -85,7 +85,7 @@ namespace Ogre
     @version
         1.0
     */
-    class _OgreExport TextureDefinitionBase : public CompositorInstAlloc
+    class _OgreExport TextureDefinitionBase : public OgreAllocatedObj
     {
     public:
         enum TextureSource
@@ -99,7 +99,7 @@ namespace Ogre
         typedef vector<PixelFormatGpu>::type PixelFormatGpuVec;
 
         /// Local texture definition
-        class _OgreExport TextureDefinition : public CompositorInstAlloc
+        class _OgreExport TextureDefinition : public OgreAllocatedObj
         {
             IdString name;
 
@@ -162,7 +162,7 @@ namespace Ogre
         };
         typedef vector<TextureDefinition>::type TextureDefinitionVec;
 
-        struct _OgreExport BufferDefinition : public CompositorInstAlloc
+        struct _OgreExport BufferDefinition : public OgreAllocatedObj
         {
             IdString name;
 

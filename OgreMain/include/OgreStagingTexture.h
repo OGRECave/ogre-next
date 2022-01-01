@@ -77,7 +77,7 @@ namespace Ogre
                 * MetalStagingTexture
             * D3D11StagingTexture
     */
-    class _OgreExport StagingTexture : public RenderSysAlloc
+    class _OgreExport StagingTexture : public OgreAllocatedObj
     {
     protected:
         VaoManager *   mVaoManager;

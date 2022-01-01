@@ -52,7 +52,7 @@ namespace Ogre
     }
     typedef FastArray<TextureFilter::FilterBase *> FilterBaseArray;
 
-    class _OgreExport ObjCmdBuffer : public ResourceAlloc
+    class _OgreExport ObjCmdBuffer : public OgreAllocatedObj
     {
     public:
         class Cmd

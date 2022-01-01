@@ -9,7 +9,7 @@
 namespace Ogre
 {
     template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<K, GeneralAllocPolicy> >
+              typename A = STLAllocator<K, AllocPolicy> >
     struct unordered_set
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
@@ -22,7 +22,7 @@ namespace Ogre
     };
 
     template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<K, GeneralAllocPolicy> >
+              typename A = STLAllocator<K, AllocPolicy> >
     struct unordered_multiset
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR

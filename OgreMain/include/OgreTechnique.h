@@ -49,7 +49,7 @@ namespace Ogre
         unless you specifically request a lower detail technique (say for distant
         rendering).
     */
-    class _OgreExport Technique : public TechniqueAlloc
+    class _OgreExport Technique : public OgreAllocatedObj
     {
     protected:
         typedef vector<Pass *>::type Passes;

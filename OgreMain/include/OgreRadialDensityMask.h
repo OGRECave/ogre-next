@@ -55,7 +55,7 @@ namespace Ogre
 
         Used as an optimization for VR.
     */
-    class _OgreExport RadialDensityMask : public MovableAlloc
+    class _OgreExport RadialDensityMask : public OgreAllocatedObj
     {
         Rectangle2D *mRectangle;
 

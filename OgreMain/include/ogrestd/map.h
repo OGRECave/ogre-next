@@ -9,7 +9,7 @@
 namespace Ogre
 {
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy> >
     struct map
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
@@ -24,7 +24,7 @@ namespace Ogre
     };
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
+              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy> >
     struct multimap
     {
 #if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR

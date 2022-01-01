@@ -85,7 +85,7 @@ namespace Ogre
         @since
             27 January 2002
     */
-    class _OgreExport DynLib : public DynLibAlloc
+    class _OgreExport DynLib : public OgreAllocatedObj
     {
     protected:
         String mName;

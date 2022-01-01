@@ -109,7 +109,7 @@ namespace Ogre
         */
         class _OgreOverlayExport OverlayElement : public StringInterface,
                                                   public Renderable,
-                                                  public OverlayAlloc
+                                                  public OgreAllocatedObj
         {
         public:
         protected:

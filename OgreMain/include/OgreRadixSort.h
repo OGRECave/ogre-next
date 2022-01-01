@@ -109,7 +109,7 @@ namespace Ogre
             SortEntry( TCompValueType k, ContainerIter it ) : key( k ), iter( it ) {}
         };
         /// Temp sort storage
-        typedef std::vector<SortEntry, STLAllocator<SortEntry, GeneralAllocPolicy> > SortVector;
+        typedef std::vector<SortEntry, STLAllocator<SortEntry, AllocPolicy> > SortVector;
 
         SortVector  mSortArea1;
         SortVector  mSortArea2;

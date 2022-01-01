@@ -101,7 +101,7 @@ namespace Ogre
     @note
         <br>Should not be used directly, but trough the LogManager class.
     */
-    class _OgreExport Log : public LogAlloc
+    class _OgreExport Log : public OgreAllocatedObj
     {
     protected:
         std::ofstream *mLog;

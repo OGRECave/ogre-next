@@ -167,7 +167,7 @@ namespace Ogre
             MeshSerializerListener *getListener();
 
         protected:
-            class MeshVersionData : public SerializerAlloc
+            class MeshVersionData : public OgreAllocatedObj
             {
             public:
                 MeshVersion         version;

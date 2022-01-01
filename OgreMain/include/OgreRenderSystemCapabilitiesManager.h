@@ -50,7 +50,7 @@ namespace Ogre
     */
     class _OgreExport RenderSystemCapabilitiesManager
         : public Singleton<RenderSystemCapabilitiesManager>,
-          public RenderSysAlloc
+          public OgreAllocatedObj
     {
     public:
         /** Default constructor.

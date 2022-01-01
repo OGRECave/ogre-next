@@ -51,7 +51,7 @@ namespace Ogre
     @par
         Call TextureGpuManager::destroyAsyncTextureTicket when you're done with this ticket.
     */
-    class _OgreExport AsyncTextureTicket : public PassAlloc, public TextureGpuListener
+    class _OgreExport AsyncTextureTicket : public OgreAllocatedObj, public TextureGpuListener
     {
     public:
         enum Status

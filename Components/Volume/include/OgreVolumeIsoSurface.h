@@ -38,7 +38,7 @@ namespace Volume {
 
     /** Abstract IsoSurface.
      */
-    class _OgreVolumeExport IsoSurface : public UtilityAlloc
+    class _OgreVolumeExport IsoSurface : public OgreAllocatedObj
     {
     protected:
         

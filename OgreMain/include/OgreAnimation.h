@@ -93,7 +93,7 @@ namespace Ogre
             You should not create these animations directly. They will be created via a parent
             object which owns the animation, e.g. Skeleton.
         */
-        class _OgreExport Animation : public AnimationAlloc
+        class _OgreExport Animation : public OgreAllocatedObj
         {
         public:
             /** The types of animation interpolation available. */

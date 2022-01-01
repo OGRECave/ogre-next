@@ -50,7 +50,7 @@ namespace Ogre
         typedef vector<HardwareBuffer::Usage>::type BufferUsageList;
 
         /** Summary class collecting together vertex source information. */
-        class _OgreExport VertexData : public VertexDataAlloc
+        class _OgreExport VertexData : public OgreAllocatedObj
         {
         private:
             /// Protected copy constructor, to prevent misuse
@@ -292,7 +292,7 @@ namespace Ogre
         };
 
         /** Summary class collecting together index data source information. */
-        class _OgreExport IndexData : public IndexDataAlloc
+        class _OgreExport IndexData : public OgreAllocatedObj
         {
         protected:
             /// Protected copy constructor, to prevent misuse
@@ -334,7 +334,7 @@ namespace Ogre
             Utility class for evaluating the effectiveness of the use of the vertex
             cache by a given index buffer.
         */
-        class _OgreExport VertexCacheProfiler : public BufferAlloc
+        class _OgreExport VertexCacheProfiler : public OgreAllocatedObj
         {
         public:
             VertexCacheProfiler( unsigned int cachesize = 16 ) :

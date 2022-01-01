@@ -107,7 +107,7 @@ namespace Ogre
             It is possible to change this behaviour using
             setUseShortestRotationPath() method.
         */
-        class _OgreExport AnimationTrack : public AnimationAlloc
+        class _OgreExport AnimationTrack : public OgreAllocatedObj
         {
         public:
             /** Listener allowing you to override certain behaviour of a track,

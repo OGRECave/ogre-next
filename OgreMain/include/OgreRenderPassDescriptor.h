@@ -157,7 +157,7 @@ namespace Ogre
         RenderPassStencilTarget();
     };
 
-    class _OgreExport RenderPassDescriptor : public RenderSysAlloc
+    class _OgreExport RenderPassDescriptor : public OgreAllocatedObj
     {
     public:
         enum EntryTypes

@@ -70,7 +70,7 @@ namespace Ogre
         The 'Chunk data' section will contain chunk-specific data, which may include
         other nested chunks.
     */
-    class _OgreExport StreamSerialiser : public StreamAlloc
+    class _OgreExport StreamSerialiser : public OgreAllocatedObj
     {
     public:
         /// The endianness of files
@@ -94,7 +94,7 @@ namespace Ogre
         };
 
         /// Definition of a chunk of data in a file
-        struct Chunk : public StreamAlloc
+        struct Chunk : public OgreAllocatedObj
         {
             /// Identifier of the chunk (for example from makeIdentifier)  (stored)
             uint32 id;

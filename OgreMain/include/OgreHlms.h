@@ -80,7 +80,7 @@ namespace Ogre
             that PSOs require additional information, such as HlmsMacroblock. HlmsBlendblock.
             For more information of all that is required, see HlmsPso
     */
-    class _OgreExport Hlms : public HlmsAlloc
+    class _OgreExport Hlms : public OgreAllocatedObj
     {
     public:
         friend class HlmsDiskCache;
