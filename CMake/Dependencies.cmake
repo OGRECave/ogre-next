@@ -138,9 +138,6 @@ endif()
 
 # Find DirectX
 if(WIN32)
-	find_package(DirectX)
-	macro_log_feature(DirectX9_FOUND "DirectX9" "Support for the DirectX render system" "http://msdn.microsoft.com/en-us/directx/" FALSE "" "")
-	
 	find_package(DirectX11)
 	macro_log_feature(DirectX11_FOUND "DirectX11" "Support for the DirectX11 render system" "http://msdn.microsoft.com/en-us/directx/" FALSE "" "")
 
@@ -258,7 +255,6 @@ include_directories(
   ${OPENGLES2_INCLUDE_DIRS}
   ${OPENGLES3_INCLUDE_DIRS}
   ${X11_INCLUDE_DIR}
-  ${DirectX_INCLUDE_DIRS}
   ${CppUnit_INCLUDE_DIRS}
   ${GLSL_Optimizer_INCLUDE_DIRS}
   ${HLSL2GLSL_INCLUDE_DIRS}
@@ -269,6 +265,5 @@ link_directories(
   ${OPENGLES2_LIBRARY_DIRS}
   ${OPENGLES3_LIBRARY_DIRS}
   ${X11_LIBRARY_DIRS}
-  ${DirectX_LIBRARY_DIRS}
   ${CppUnit_LIBRARY_DIRS}
 )

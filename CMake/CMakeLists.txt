@@ -43,10 +43,8 @@ if (OGRE_CONFIG_THREAD_PROVIDER STREQUAL "tbb")
 endif ()
 
 set(STATIC_INST_FILES
-  Packages/FindDirectX.cmake
   Packages/FindFreeImage.cmake
   Packages/FindFreetype.cmake
-  Packages/FindOpenGLES.cmake
   Packages/FindOpenGLES2.cmake
   Packages/FindZLIB.cmake
   Packages/FindZZip.cmake
