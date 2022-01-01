@@ -1342,14 +1342,9 @@ namespace Ogre
             case PFG_RGB32_FLOAT:
             case PFG_RG32_FLOAT:
             case PFG_R32_FLOAT:
-                if( dstFormat == PFG_RGBA32_FLOAT || dstFormat == PFG_RGB32_FLOAT ||
-                    dstFormat == PFG_RG32_FLOAT || dstFormat == PFG_R32_FLOAT )
-                {
-                    // float32 to float32, avoid unpack/repack overhead
-                    LinearResampler_Float32::scale( src, srcFormat, dst, dstFormat );
-                    break;
-                }
-                // else, fall through
+                // float32 to float32, avoid unpack/repack overhead
+                LinearResampler_Float32::scale( src, srcFormat, dst, dstFormat );
+                break;
             default:
                 // non-optimized: floating-point math, performs conversion but always works
                 LinearResampler::scale( src, srcFormat, dst, dstFormat );

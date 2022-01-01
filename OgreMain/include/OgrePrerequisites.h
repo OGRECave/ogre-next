@@ -24,57 +24,68 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE
 -------------------------------------------------------------------------*/
 #ifndef __OgrePrerequisites_H__
-#    define __OgrePrerequisites_H__
+#define __OgrePrerequisites_H__
 
 // Platform-specific stuff
-#    include "OgrePlatform.h"
+#include "OgrePlatform.h"
 
-#    include <string>
+#include <string>
 
 // configure memory tracking
-#    if OGRE_DEBUG_MODE
-#        if OGRE_MEMORY_TRACKER_DEBUG_MODE
-#            define OGRE_MEMORY_TRACKER 1
-#        else
-#            define OGRE_MEMORY_TRACKER 0
-#        endif
+#if OGRE_DEBUG_MODE
+#    if OGRE_MEMORY_TRACKER_DEBUG_MODE
+#        define OGRE_MEMORY_TRACKER 1
 #    else
-#        if OGRE_MEMORY_TRACKER_RELEASE_MODE
-#            define OGRE_MEMORY_TRACKER 1
-#        else
-#            define OGRE_MEMORY_TRACKER 0
-#        endif
+#        define OGRE_MEMORY_TRACKER 0
 #    endif
+#else
+#    if OGRE_MEMORY_TRACKER_RELEASE_MODE
+#        define OGRE_MEMORY_TRACKER 1
+#    else
+#        define OGRE_MEMORY_TRACKER 0
+#    endif
+#endif
 
 namespace Ogre
 {
 // Define ogre version
-#    define OGRE_VERSION_MAJOR 2
-#    define OGRE_VERSION_MINOR 4
-#    define OGRE_VERSION_PATCH 0
-#    define OGRE_VERSION_SUFFIX "unstable"
-#    define OGRE_VERSION_NAME "E"
+#define OGRE_VERSION_MAJOR 2
+#define OGRE_VERSION_MINOR 4
+#define OGRE_VERSION_PATCH 0
+#define OGRE_VERSION_SUFFIX "unstable"
+#define OGRE_VERSION_NAME "E"
 
-#    define OGRE_VERSION \
-        ( ( OGRE_VERSION_MAJOR << 16 ) | ( OGRE_VERSION_MINOR << 8 ) | OGRE_VERSION_PATCH )
+#define OGRE_VERSION ( ( OGRE_VERSION_MAJOR << 16 ) | ( OGRE_VERSION_MINOR << 8 ) | OGRE_VERSION_PATCH )
 
-#    define OGRE_UNUSED_VAR( x ) ( (void)x )
+#define OGRE_UNUSED_VAR( x ) ( (void)x )
+
+#if __cplusplus >= 201703L
+#    define OGRE_FALLTHROUGH [[fallthrough]]
+#else
+#    if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#        define OGRE_FALLTHROUGH [[clang::fallthrough]]
+#    elif OGRE_COMPILER == OGRE_COMPILER_GNUC
+#        define OGRE_FALLTHROUGH [[gnu::fallthrough]]
+#    else
+#        define OGRE_FALLTHROUGH ( (void)0 )
+#    endif
+#endif
 
 // define the real number values to be used
 // default to use 'float' unless precompiler option set
-#    if OGRE_DOUBLE_PRECISION == 1
+#if OGRE_DOUBLE_PRECISION == 1
     /** Software floating point type.
     @note Not valid as a pointer to GPU buffers / parameters
     */
     typedef double Real;
     typedef uint64 RealAsUint;
-#    else
+#else
     /** Software floating point type.
     @note Not valid as a pointer to GPU buffers / parameters
     */
     typedef float        Real;
     typedef uint32       RealAsUint;
-#    endif
+#endif
 
     /** In order to avoid finger-aches :)
      */
@@ -130,9 +141,9 @@ namespace Ogre
     class Decal;
     class DefaultWorkQueue;
     class Degree;
-#    ifndef OGRE_DEPRECATED_2_2
+#ifndef OGRE_DEPRECATED_2_2
     struct DepthBuffer;
-#    endif
+#endif
     struct DescriptorSetSampler;
     struct DescriptorSetTexture;
     struct DescriptorSetTexture2;
@@ -204,9 +215,9 @@ namespace Ogre
     class ManualObject;
     class MovableObject;
     class MovablePlane;
-#    ifdef _OGRE_MULTISOURCE_VBO
+#ifdef _OGRE_MULTISOURCE_VBO
     class MultiSourceVertexBufferPool;
-#    endif
+#endif
     class Node;
     class NodeMemoryManager;
     struct ObjectData;
@@ -304,7 +315,7 @@ namespace Ogre
     class CompositorManager2;
     class CompositorWorkspace;
 
-#    ifdef OGRE_DEPRECATED_2_2
+#ifdef OGRE_DEPRECATED_2_2
     class DepthBuffer;
     class HlmsTextureManager;
     class Image;
@@ -322,7 +333,7 @@ namespace Ogre
     class SharedPtr;
     typedef SharedPtr<RenderToVertexBuffer> RenderToVertexBufferSharedPtr;
     typedef SharedPtr<Texture>              TexturePtr;
-#    endif
+#endif
 
     template <typename T>
     class SharedPtr;
@@ -397,34 +408,34 @@ namespace Ogre
 /* Include all the standard header *after* all the configuration
 settings have been made.
 */
-#    include "OgreStdHeaders.h"
+#include "OgreStdHeaders.h"
 
-#    include "OgreMemoryAllocatorConfig.h"
+#include "OgreMemoryAllocatorConfig.h"
 
 namespace Ogre
 {
-#    if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
-#        if OGRE_WCHAR_T_STRINGS
+#if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
+#    if OGRE_WCHAR_T_STRINGS
     typedef std::basic_string<wchar_t, std::char_traits<wchar_t>,
                               STLAllocator<wchar_t, GeneralAllocPolicy>>
         _StringBase;
-#        else
+#    else
     typedef std::basic_string<char, std::char_traits<char>, STLAllocator<char, GeneralAllocPolicy>>
         _StringBase;
-#        endif
+#    endif
 
-#        if OGRE_WCHAR_T_STRINGS
+#    if OGRE_WCHAR_T_STRINGS
     typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>,
                                     STLAllocator<wchar_t, GeneralAllocPolicy>>
         _StringStreamBase;
-#        else
+#    else
     typedef std::basic_stringstream<char, std::char_traits<char>, STLAllocator<char, GeneralAllocPolicy>>
         _StringStreamBase;
-#        endif
+#    endif
 
-#        define StdStringT( T ) std::basic_string<T, std::char_traits<T>, std::allocator<T>>
-#        define CustomMemoryStringT( T ) \
-            std::basic_string<T, std::char_traits<T>, STLAllocator<T, GeneralAllocPolicy>>
+#    define StdStringT( T ) std::basic_string<T, std::char_traits<T>, std::allocator<T>>
+#    define CustomMemoryStringT( T ) \
+        std::basic_string<T, std::char_traits<T>, STLAllocator<T, GeneralAllocPolicy>>
 
     template <typename T>
     bool operator<( const CustomMemoryStringT( T ) & l, const StdStringT( T ) & o )
@@ -518,25 +529,25 @@ namespace Ogre
         return CustomMemoryStringT( T )( l ) += o;
     }
 
-#        undef StdStringT
-#        undef CustomMemoryStringT
+#    undef StdStringT
+#    undef CustomMemoryStringT
 
-#    else
-#        if OGRE_WCHAR_T_STRINGS
+#else
+#    if OGRE_WCHAR_T_STRINGS
     typedef std::wstring _StringBase;
-#        else
+#    else
     typedef std::string _StringBase;
-#        endif
+#    endif
 
-#        if OGRE_WCHAR_T_STRINGS
+#    if OGRE_WCHAR_T_STRINGS
     typedef std::basic_stringstream<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>
         _StringStreamBase;
-#        else
+#    else
     typedef std::basic_stringstream<char, std::char_traits<char>, std::allocator<char>>
         _StringStreamBase;
-#        endif
-
 #    endif
+
+#endif
 
     typedef _StringBase       String;
     typedef _StringStreamBase StringStream;
@@ -544,7 +555,7 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#    if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
+#if OGRE_STRING_USE_CUSTOM_MEMORY_ALLOCATOR
 namespace std
 {
     template <>
@@ -564,7 +575,7 @@ namespace std
         }
     };
 }  // namespace std
-#    endif
+#endif
 
 // Forward declaration of a regular STL. This is a workaround to prevent forward declaring
 // an std::map & co (which is undefined behavior). Use this for rarely used maps/vector/etc that
@@ -593,7 +604,7 @@ namespace Ogre
     class StdUnorderedSet;
 }  // namespace Ogre
 
-#    include "OgreAssert.h"
-#    include "OgreWorkarounds.h"
+#include "OgreAssert.h"
+#include "OgreWorkarounds.h"
 
 #endif  // __OgrePrerequisites_H__

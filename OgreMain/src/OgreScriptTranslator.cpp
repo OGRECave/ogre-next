@@ -3256,7 +3256,9 @@ namespace Ogre{
                                                 break;
                                             }
                                         }
-                                        // fallthrough
+
+                                        OGRE_FALLTHROUGH;
+
                                     case ID_2D:
                                         texType = TextureTypes::Type2D;
                                         break;
