@@ -483,7 +483,7 @@ namespace Ogre
 
                 mConstantsBytesToWrite = std::max<uint32>(
                     mConstantsBytesToWrite,
-                    def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) );
+                    uint32( def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) ) );
             }
         }
 
@@ -555,7 +555,7 @@ namespace Ogre
 
                 mConstantsBytesToWrite = std::max<uint32>(
                     mConstantsBytesToWrite,
-                    def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) );
+                    uint32( def.logicalIndex + def.arraySize * def.elementSize * sizeof( float ) ) );
 
                 if( member.dataType == MTLDataTypeArray )
                 {
@@ -649,13 +649,22 @@ namespace Ogre
         {
             const GpuConstantDefinition &def = *itor;
 
-            void *RESTRICT_ALIAS src;
+            void const *RESTRICT_ALIAS src;
             if( def.isFloat() )
-                src = (void *)&( *( params->getFloatConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void const *)&( *( params->getFloatConstantList().begin() +
+                                          static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
             else if( def.isUnsignedInt() )
-                src = (void *)&( *( params->getUnsignedIntConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void const *)&( *( params->getUnsignedIntConstantList().begin() +
+                                          static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
             else
-                src = (void *)&( *( params->getIntConstantList().begin() + def.physicalIndex ) );
+            {
+                src = (void const *)&( *( params->getIntConstantList().begin() +
+                                          static_cast<ptrdiff_t>( def.physicalIndex ) ) );
+            }
 
             memcpy( &dstData[def.logicalIndex], src, def.elementSize * def.arraySize * sizeof( float ) );
 

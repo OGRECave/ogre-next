@@ -348,7 +348,7 @@ namespace Ogre
             mrtCount = 8u;
         }
 #endif
-        rsc->setNumMultiRenderTargets( std::min<int>( mrtCount, OGRE_MAX_MULTIPLE_RENDER_TARGETS ) );
+        rsc->setNumMultiRenderTargets( std::min<ushort>( mrtCount, OGRE_MAX_MULTIPLE_RENDER_TARGETS ) );
         rsc->setCapability( RSC_MRT_DIFFERENT_BIT_DEPTHS );
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
@@ -1129,10 +1129,10 @@ namespace Ogre
 #endif
             {
                 MTLScissorRect scissorRect;
-                scissorRect.x = mCurrentRenderViewport[0].getScissorActualLeft();
-                scissorRect.y = mCurrentRenderViewport[0].getScissorActualTop();
-                scissorRect.width = mCurrentRenderViewport[0].getScissorActualWidth();
-                scissorRect.height = mCurrentRenderViewport[0].getScissorActualHeight();
+                scissorRect.x = (NSUInteger)mCurrentRenderViewport[0].getScissorActualLeft();
+                scissorRect.y = (NSUInteger)mCurrentRenderViewport[0].getScissorActualTop();
+                scissorRect.width = (NSUInteger)mCurrentRenderViewport[0].getScissorActualWidth();
+                scissorRect.height = (NSUInteger)mCurrentRenderViewport[0].getScissorActualHeight();
                 [mActiveRenderEncoder setScissorRect:scissorRect];
             }
 #if defined( __IPHONE_12_0 ) || \
@@ -1142,10 +1142,11 @@ namespace Ogre
                 MTLScissorRect scissorRect[16];
                 for( size_t i = 0; i < numViewports; ++i )
                 {
-                    scissorRect[i].x = mCurrentRenderViewport[i].getScissorActualLeft();
-                    scissorRect[i].y = mCurrentRenderViewport[i].getScissorActualTop();
-                    scissorRect[i].width = mCurrentRenderViewport[i].getScissorActualWidth();
-                    scissorRect[i].height = mCurrentRenderViewport[i].getScissorActualHeight();
+                    scissorRect[i].x = (NSUInteger)mCurrentRenderViewport[i].getScissorActualLeft();
+                    scissorRect[i].y = (NSUInteger)mCurrentRenderViewport[i].getScissorActualTop();
+                    scissorRect[i].width = (NSUInteger)mCurrentRenderViewport[i].getScissorActualWidth();
+                    scissorRect[i].height =
+                        (NSUInteger)mCurrentRenderViewport[i].getScissorActualHeight();
                 }
                 [mActiveRenderEncoder setScissorRects:scissorRect count:numViewports];
             }
@@ -1570,7 +1571,7 @@ namespace Ogre
             while( itor != endt )
             {
                 size_t accumOffset = 0;
-                const size_t bufferIdx = itor - newPso->vertexElements.begin();
+                const size_t bufferIdx = size_t( itor - newPso->vertexElements.begin() );
                 VertexElement2Vec::const_iterator it = itor->begin();
                 VertexElement2Vec::const_iterator en = itor->end();
 
@@ -1610,13 +1611,13 @@ namespace Ogre
         psd.alphaToCoverageEnabled = newPso->blendblock->mAlphaToCoverageEnabled;
 
         uint8 mrtCount = 0;
-        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+        for( size_t i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
         {
             if( newPso->pass.colourFormat[i] != PFG_NULL )
-                mrtCount = i + 1u;
+                mrtCount = uint8( i + 1u );
         }
 
-        for( int i = 0; i < mrtCount; ++i )
+        for( size_t i = 0; i < mrtCount; ++i )
         {
             HlmsBlendblock const *blendblock = newPso->blendblock;
             psd.colorAttachments[i].pixelFormat =
@@ -1720,7 +1721,7 @@ namespace Ogre
         samplerDescriptor.minFilter = MetalMappings::get( newBlock->mMinFilter );
         samplerDescriptor.magFilter = MetalMappings::get( newBlock->mMagFilter );
         samplerDescriptor.mipFilter = MetalMappings::getMipFilter( newBlock->mMipFilter );
-        samplerDescriptor.maxAnisotropy = newBlock->mMaxAnisotropy;
+        samplerDescriptor.maxAnisotropy = (NSUInteger)newBlock->mMaxAnisotropy;
         samplerDescriptor.sAddressMode = MetalMappings::get( newBlock->mU );
         samplerDescriptor.tAddressMode = MetalMappings::get( newBlock->mV );
         samplerDescriptor.rAddressMode = MetalMappings::get( newBlock->mW );
@@ -1891,7 +1892,7 @@ namespace Ogre
                     MetalTexRegion &texRegion = metalSet->textures.back();
                     texRegion.textures = textures;
                     texRegion.shaderType = shaderType;
-                    texRegion.range.location = itor - texContainer.begin();
+                    texRegion.range.location = NSUInteger( itor - texContainer.begin() );
                     texRegion.range.length = 0;
                     needsNewTexRange = false;
                 }
@@ -1928,7 +1929,7 @@ namespace Ogre
                     bufferRegion.buffers = buffers;
                     bufferRegion.offsets = offsets;
                     bufferRegion.shaderType = shaderType;
-                    bufferRegion.range.location = itor - texContainer.begin();
+                    bufferRegion.range.location = NSUInteger( itor - texContainer.begin() );
                     bufferRegion.range.length = 0;
                     needsNewBufferRange = false;
                 }
@@ -2575,8 +2576,8 @@ namespace Ogre
 
             MetalConstBufferPacked *constBuffer =
                 static_cast<MetalConstBufferPacked *>( mAutoParamsBuffer[mAutoParamsBufferIdx - 1u] );
-            const size_t bindOffset =
-                constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft;
+            const uint32 bindOffset =
+                uint32( constBuffer->getTotalSizeBytes() - mCurrentAutoParamsBufferSpaceLeft );
             switch( gptype )
             {
             case GPT_VERTEX_PROGRAM:

@@ -266,9 +266,8 @@ namespace Ogre
                                                 size_t srcLength )
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
-        size_t errorCode = (size_t)-1;
 
-        if( freeRegionOffset == errorCode )
+        if( freeRegionOffset == std::numeric_limits<size_t>::max() )
         {
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,

@@ -450,8 +450,8 @@ namespace Ogre
         //Find a suitable VBO that can hold the requested size. We prefer those free
         //blocks that have a matching stride (the current offset is a multiple of
         //bytesPerElement) in order to minimize the amount of memory padding.
-        size_t bestVboIdx   = ~0;
-        size_t bestBlockIdx = ~0;
+        size_t bestVboIdx = std::numeric_limits<size_t>::max();
+        ptrdiff_t bestBlockIdx = -1;
         bool foundMatchingStride = false;
 
         while( itor != end && !foundMatchingStride )
@@ -469,8 +469,8 @@ namespace Ogre
 
                 if( sizeBytes + padding <= block.size )
                 {
-                    bestVboIdx      = itor - mVbos[internalType][bufferType].begin();
-                    bestBlockIdx    = blockIt - itor->freeBlocks.begin();
+                    bestVboIdx = static_cast<size_t>( itor - mVbos[internalType][bufferType].begin() );
+                    bestBlockIdx = blockIt - itor->freeBlocks.begin();
 
                     if( newOffset == block.offset )
                         foundMatchingStride = true;
@@ -482,7 +482,7 @@ namespace Ogre
             ++itor;
         }
 
-        if( bestBlockIdx == (size_t)~0 )
+        if( bestBlockIdx == -1 )
         {
             bestVboIdx      = mVbos[internalType][bufferType].size();
             bestBlockIdx    = 0;
@@ -542,7 +542,7 @@ namespace Ogre
         }
 
         Vbo &bestVbo        = mVbos[internalType][bufferType][bestVboIdx];
-        Block &bestBlock    = bestVbo.freeBlocks[bestBlockIdx];
+        Block &bestBlock    = bestVbo.freeBlocks[static_cast<size_t>(bestBlockIdx)];
 
         size_t newOffset = ( (bestBlock.offset + alignment - 1) / alignment ) * alignment;
         size_t padding = newOffset - bestBlock.offset;
@@ -669,11 +669,11 @@ namespace Ogre
             if( itor->offset + itor->size == blockToMerge->offset )
             {
                 itor->size += blockToMerge->size;
-                size_t idx = itor - blocks.begin();
+                ptrdiff_t idx = itor - blocks.begin();
 
                 //When blockToMerge is the last one, its index won't be the same
                 //after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( idx == ptrdiff_t ( blocks.size() - 1u ) )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
@@ -689,7 +689,7 @@ namespace Ogre
 
                 //When blockToMerge is the last one, its index won't be the same
                 //after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( idx == ptrdiff_t ( blocks.size() - 1u ) )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );
@@ -1816,7 +1816,7 @@ namespace Ogre
                                                                          mDevice );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
-        if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
+        if( mNextStagingBufferTimestampCheckpoint == std::numeric_limits<uint64>::max() )
             mNextStagingBufferTimestampCheckpoint = mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
 
         return stagingBuffer;
@@ -1850,7 +1850,7 @@ namespace Ogre
         {
             OgreProfileExhaustive( "D3D11VaoManager::_update zero-ref staging buffers" );
 
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)(~0);
+            mNextStagingBufferTimestampCheckpoint = std::numeric_limits<uint64>::max();
 
             for( size_t i=0; i<2; ++i )
             {

@@ -791,7 +791,7 @@ namespace Ogre
         // Find a suitable VBO that can hold the requested size. We prefer those free
         // blocks that have a matching stride (the current offset is a multiple of
         // bytesPerElement) in order to minimize the amount of memory padding.
-        size_t bestVboIdx   = (size_t)-1;
+        size_t bestVboIdx   = std::numeric_limits<size_t>::max();
         ptrdiff_t bestBlockIdx = -1;
         bool foundMatchingStride = false;
         // clang-format on
@@ -1685,7 +1685,7 @@ namespace Ogre
             vboIdx, bufferOffset, sizeBytes, this, forUpload, vbo.vkBuffer, vbo.dynamicBuffer );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
-        if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
+        if( mNextStagingBufferTimestampCheckpoint == std::numeric_limits<uint64>::max() )
         {
             mNextStagingBufferTimestampCheckpoint =
                 mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
@@ -1790,7 +1790,7 @@ namespace Ogre
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)( ~0 );
+            mNextStagingBufferTimestampCheckpoint = std::numeric_limits<uint64>::max();
 
             for( size_t i = 0; i < 2; ++i )
             {

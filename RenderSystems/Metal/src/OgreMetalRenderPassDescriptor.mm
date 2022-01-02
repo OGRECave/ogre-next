@@ -616,7 +616,8 @@ namespace Ogre
                 LogManager::getSingleton().logMessage(
                     "Dumping callstack at the time rendering was interrupted: ", LML_CRITICAL );
 
-                char **translatedCS = backtrace_symbols( mCallstackBacktrace, mNumCallstackEntries );
+                char **translatedCS =
+                    backtrace_symbols( mCallstackBacktrace, (int)mNumCallstackEntries );
 
                 for( size_t i = 0; i < mNumCallstackEntries; ++i )
                     LogManager::getSingleton().logMessage( translatedCS[i], LML_CRITICAL );

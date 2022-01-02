@@ -171,8 +171,8 @@ namespace Ogre
                     params->find( String( "VaoManager::" ) + c_vboTypes[i] );
                 if( itor != params->end() )
                 {
-                    mDefaultPoolSize[i] =
-                        StringConverter::parseUnsignedInt( itor->second, mDefaultPoolSize[i] );
+                    mDefaultPoolSize[i] = StringConverter::parseUnsignedInt(
+                        itor->second, (unsigned int)mDefaultPoolSize[i] );
                 }
             }
         }
@@ -485,8 +485,8 @@ namespace Ogre
         // Find a suitable VBO that can hold the requested size. We prefer those free
         // blocks that have a matching stride (the current offset is a multiple of
         // bytesPerElement) in order to minimize the amount of memory padding.
-        size_t bestVboIdx = ~0;
-        size_t bestBlockIdx = ~0;
+        size_t bestVboIdx = std::numeric_limits<size_t>::max();
+        ptrdiff_t bestBlockIdx = -1;
         bool foundMatchingStride = false;
 
         while( itor != endt && !foundMatchingStride )
@@ -505,7 +505,7 @@ namespace Ogre
 
                 if( sizeBytes + padding <= block.size )
                 {
-                    bestVboIdx = itor - mVbos[vboFlag].begin();
+                    bestVboIdx = static_cast<size_t>( itor - mVbos[vboFlag].begin() );
                     bestBlockIdx = blockIt - itor->freeBlocks.begin();
 
                     if( newOffset == block.offset )
@@ -518,7 +518,7 @@ namespace Ogre
             ++itor;
         }
 
-        if( bestBlockIdx == (size_t)~0 )
+        if( bestBlockIdx == -1 )
         {
             bestVboIdx = mVbos[vboFlag].size();
             bestBlockIdx = 0;
@@ -563,7 +563,7 @@ namespace Ogre
         }
 
         Vbo &bestVbo = mVbos[vboFlag][bestVboIdx];
-        Block &bestBlock = bestVbo.freeBlocks[bestBlockIdx];
+        Block &bestBlock = bestVbo.freeBlocks[static_cast<size_t>(bestBlockIdx)];
 
         size_t newOffset = ( ( bestBlock.offset + alignment - 1 ) / alignment ) * alignment;
         size_t padding = newOffset - bestBlock.offset;
@@ -623,11 +623,11 @@ namespace Ogre
             if( itor->offset + itor->size == blockToMerge->offset )
             {
                 itor->size += blockToMerge->size;
-                size_t idx = itor - blocks.begin();
+                ptrdiff_t idx = itor - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( idx == ptrdiff_t( blocks.size() - 1u ))
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );
@@ -639,11 +639,11 @@ namespace Ogre
             else if( blockToMerge->offset + blockToMerge->size == itor->offset )
             {
                 blockToMerge->size += itor->size;
-                size_t idx = blockToMerge - blocks.begin();
+                ptrdiff_t idx = blockToMerge - blocks.begin();
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == blocks.size() - 1 )
+                if( idx == ptrdiff_t( blocks.size() - 1u ) )
                     idx = itor - blocks.begin();
 
                 efficientVectorRemove( blocks, itor );
@@ -689,8 +689,9 @@ namespace Ogre
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
 
         VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
-            bufferOffset, numElements, bytesPerElement, ( sizeBytes - requestedSize ) / bytesPerElement,
-            bufferType, initialData, keepAsShadow, this, bufferInterface, vElements );
+            bufferOffset, numElements, bytesPerElement,
+            uint32( ( sizeBytes - requestedSize ) / bytesPerElement ), bufferType, initialData,
+            keepAsShadow, this, bufferInterface, vElements );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -757,9 +758,10 @@ namespace Ogre
         Vbo &vbo = mVbos[vboFlag][vboIdx];
         MetalBufferInterface *bufferInterface =
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
-        IndexBufferPacked *retVal = OGRE_NEW IndexBufferPacked(
-            bufferOffset, numElements, bytesPerElement, ( sizeBytes - requestedSize ) / bytesPerElement,
-            bufferType, initialData, keepAsShadow, this, bufferInterface );
+        IndexBufferPacked *retVal =
+            OGRE_NEW IndexBufferPacked( bufferOffset, numElements, bytesPerElement,
+                                        uint32( ( sizeBytes - requestedSize ) / bytesPerElement ),
+                                        bufferType, initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -804,8 +806,8 @@ namespace Ogre
         MetalBufferInterface *bufferInterface =
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         ConstBufferPacked *retVal = OGRE_NEW MetalConstBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
-            keepAsShadow, this, bufferInterface, mDevice );
+            bufferOffset, requestedSize, 1, uint32( ( sizeBytes - requestedSize ) / 1u ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface, mDevice );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );
@@ -852,8 +854,8 @@ namespace Ogre
         MetalBufferInterface *bufferInterface =
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         TexBufferPacked *retVal = OGRE_NEW MetalTexBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1u, bufferType, initialData,
-            keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
+            bufferOffset, requestedSize, 1, uint32( ( sizeBytes - requestedSize ) / 1u ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );
@@ -902,8 +904,8 @@ namespace Ogre
         MetalBufferInterface *bufferInterface =
             new MetalBufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
         ReadOnlyBufferPacked *retVal = OGRE_NEW MetalReadOnlyBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1u, bufferType, initialData,
-            keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
+            bufferOffset, requestedSize, 1, uint32( ( sizeBytes - requestedSize ) / 1u ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface, pixelFormat, mDevice );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, requestedSize );
@@ -991,8 +993,8 @@ namespace Ogre
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-            bufferOffset, requestedSize, 1, ( sizeBytes - requestedSize ) / 1, bufferType, initialData,
-            keepAsShadow, this, bufferInterface );
+            bufferOffset, requestedSize, 1, uint32( ( sizeBytes - requestedSize ) / 1u ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
         {
@@ -1145,7 +1147,7 @@ namespace Ogre
         {
             vao.vaoName = createVao( vao );
             mVaos.push_back( vao );
-            itor = mVaos.begin() + mVaos.size() - 1;
+            itor = mVaos.begin() + ptrdiff_t( mVaos.size() - 1u );
         }
 
         ++itor->refCount;
@@ -1178,7 +1180,7 @@ namespace Ogre
         const uint32 maskVaoGl = OGRE_RQ_MAKE_MASK( bitsVaoGl );
         const uint32 maskVao = OGRE_RQ_MAKE_MASK( RqBits::MeshBits - bitsVaoGl );
 
-        const uint32 shiftVaoGl = RqBits::MeshBits - bitsVaoGl;
+        const uint32 shiftVaoGl = uint32( RqBits::MeshBits - bitsVaoGl );
 
         uint32 renderQueueId = ( ( vaoName & maskVaoGl ) << shiftVaoGl ) | ( uniqueVaoId & maskVao );
 
@@ -1262,7 +1264,7 @@ namespace Ogre
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)( ~0 );
+            mNextStagingBufferTimestampCheckpoint = std::numeric_limits<uint64>::max();
 
             for( size_t i = 0; i < 2; ++i )
             {

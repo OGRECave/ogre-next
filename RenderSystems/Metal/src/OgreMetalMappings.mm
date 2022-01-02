@@ -129,10 +129,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     MTLColorWriteMask MetalMappings::get( uint8 mask )
     {
-        return ( ( mask & HlmsBlendblock::BlendChannelRed ) << ( 3u - 0u ) ) |
-               ( ( mask & HlmsBlendblock::BlendChannelGreen ) << ( 2u - 1u ) ) |
-               ( ( mask & HlmsBlendblock::BlendChannelBlue ) >> ( 2u - 1u ) ) |
-               ( ( mask & HlmsBlendblock::BlendChannelAlpha ) >> ( 3u - 0u ) );
+        return MTLColorWriteMask( ( ( mask & HlmsBlendblock::BlendChannelRed ) << ( 3u - 0u ) ) |
+                                  ( ( mask & HlmsBlendblock::BlendChannelGreen ) << ( 2u - 1u ) ) |
+                                  ( ( mask & HlmsBlendblock::BlendChannelBlue ) >> ( 2u - 1u ) ) |
+                                  ( ( mask & HlmsBlendblock::BlendChannelAlpha ) >> ( 3u - 0u ) ) );
     }
     //-----------------------------------------------------------------------------------
     MTLStencilOperation MetalMappings::get( StencilOperation op )
@@ -207,7 +207,23 @@ namespace Ogre
 
         case VET_COLOUR_ARGB:
             if( @available( macos 10.13, ios 11.0, * ) )
+            {
                 return MTLVertexFormatUChar4Normalized_BGRA;
+            }
+            else
+            {
+                static int warnCount = 0;
+                if( warnCount < 10 )
+                {
+                    LogManager::getSingleton().logMessage(
+                        "WARNING: VET_COLOUR_ARGB unsupported on this "
+                        "OS/device. Vertex colours will be wrong!!!",
+                        LML_CRITICAL );
+                    ++warnCount;
+                }
+                return MTLVertexFormatUChar4Normalized;
+            }
+
         case VET_COLOUR:
         case VET_COLOUR_ABGR:
             return MTLVertexFormatUChar4Normalized;

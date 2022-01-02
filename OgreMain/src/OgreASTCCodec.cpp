@@ -56,33 +56,33 @@ namespace Ogre
         switch( fmt )
         {
         case PFG_ASTC_RGBA_UNORM_4X4_LDR:
-            return 8.00;
+            return 8.00f;
         case PFG_ASTC_RGBA_UNORM_5X4_LDR:
-            return 6.40;
+            return 6.40f;
         case PFG_ASTC_RGBA_UNORM_5X5_LDR:
-            return 5.12;
+            return 5.12f;
         case PFG_ASTC_RGBA_UNORM_6X5_LDR:
-            return 4.27;
+            return 4.27f;
         case PFG_ASTC_RGBA_UNORM_6X6_LDR:
-            return 3.56;
+            return 3.56f;
         case PFG_ASTC_RGBA_UNORM_8X5_LDR:
-            return 3.20;
+            return 3.20f;
         case PFG_ASTC_RGBA_UNORM_8X6_LDR:
-            return 2.67;
+            return 2.67f;
         case PFG_ASTC_RGBA_UNORM_8X8_LDR:
-            return 2.00;
+            return 2.00f;
         case PFG_ASTC_RGBA_UNORM_10X5_LDR:
-            return 2.56;
+            return 2.56f;
         case PFG_ASTC_RGBA_UNORM_10X6_LDR:
-            return 2.13;
+            return 2.13f;
         case PFG_ASTC_RGBA_UNORM_10X8_LDR:
-            return 1.60;
+            return 1.60f;
         case PFG_ASTC_RGBA_UNORM_10X10_LDR:
-            return 1.28;
+            return 1.28f;
         case PFG_ASTC_RGBA_UNORM_12X10_LDR:
-            return 1.07;
+            return 1.07f;
         case PFG_ASTC_RGBA_UNORM_12X12_LDR:
-            return 0.89;
+            return 0.89f;
 
         default:
             return 0;
@@ -171,6 +171,7 @@ namespace Ogre
         }
     }
 
+#if 0
     size_t ASTCCodec::getMemorySize( uint32 width, uint32 height, uint32 depth, int32 xdim, int32 ydim,
                                      PixelFormatGpu fmt )
     {
@@ -185,6 +186,7 @@ namespace Ogre
         int zblocks = ( depth + zdim - 1 ) / zdim;
         return xblocks * yblocks * zblocks * 16;
     }
+#endif
 
     //---------------------------------------------------------------------
     ASTCCodec *ASTCCodec::msInstance = 0;
@@ -243,9 +245,9 @@ namespace Ogre
         int ydim = header.blockdim_y;
         int zdim = header.blockdim_z;
 
-        int xsize = header.xsize[0] + 256 * header.xsize[1] + 65536 * header.xsize[2];
-        int ysize = header.ysize[0] + 256 * header.ysize[1] + 65536 * header.ysize[2];
-        int zsize = header.zsize[0] + 256 * header.zsize[1] + 65536 * header.zsize[2];
+        uint32 xsize = header.xsize[0] + 256 * header.xsize[1] + 65536 * header.xsize[2];
+        uint32 ysize = header.ysize[0] + 256 * header.ysize[1] + 65536 * header.ysize[2];
+        uint32 zsize = header.zsize[0] + 256 * header.zsize[1] + 65536 * header.zsize[2];
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
         imgData->box.width = xsize;
@@ -314,10 +316,10 @@ namespace Ogre
         const uint32 rowAlignment = 4u;
         // imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
         imgData->box.setCompressedPixelFormat( imgData->format );
-        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
-                                                                      1u, 1u, 1u,          //
-                                                                      imgData->format,     //
-                                                                      rowAlignment );
+        imgData->box.bytesPerRow = (uint32)PixelFormatGpuUtils::getSizeBytes( imgData->box.width,  //
+                                                                              1u, 1u, 1u,          //
+                                                                              imgData->format,     //
+                                                                              rowAlignment );
         imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,   //
                                                                         imgData->box.height,  //
                                                                         1u, 1u,               //

@@ -43,8 +43,8 @@ typedef struct
 {
     pthread_mutex_t mutex;
     pthread_cond_t  cond;
-    int             count;
-    int             tripCount;
+    unsigned int    count;
+    unsigned int    tripCount;
 } pthread_barrier_t;
 #    endif
 #endif

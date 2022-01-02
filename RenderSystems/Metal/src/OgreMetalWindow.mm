@@ -146,7 +146,7 @@ namespace Ogre
     float MetalWindow::getViewPointToPixelScale() const
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        return mMetalLayer.contentsScale;
+        return (float)mMetalLayer.contentsScale;
 #else
         NSScreen *screen = mMetalView.window.screen ?: [NSScreen mainScreen];
         return screen.backingScaleFactor;
@@ -247,10 +247,11 @@ namespace Ogre
     void MetalWindow::windowMovedOrResized( void )
     {
         CGSize sizePt = mMetalLayer.frame.size;
-        if( mRequestedWidth != sizePt.width || mRequestedHeight != sizePt.height )
+        if( mRequestedWidth != (uint32)sizePt.width || mRequestedHeight != (uint32)sizePt.height )
         {
-            mRequestedWidth = sizePt.width;
-            mRequestedHeight = sizePt.height;
+            // Resolution is a float. How...?
+            mRequestedWidth = (uint32)sizePt.width;
+            mRequestedHeight = (uint32)sizePt.height;
 
             setResolutionFromView();
         }

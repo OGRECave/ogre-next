@@ -245,7 +245,7 @@ namespace Ogre
         char *pCharToWrite = (char *)malloc( sizeof( char ) * count );
         for( unsigned int i = 0; i < count; i++ )
         {
-            *(char *)( pCharToWrite + i ) = *(bool *)( pBool + i );
+            *(char *)( pCharToWrite + i ) = *(const bool *)( pBool + i );
         }
 
         writeData( pCharToWrite, sizeof( char ), count );

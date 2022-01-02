@@ -75,8 +75,10 @@ namespace Ogre
         static void startup();
         /// Static method to shutdown and unregister the ASTC codec
         static void   shutdown();
+#if 0
         static size_t getMemorySize( uint32 width, uint32 height, uint32 depth, int32 xdim, int32 ydim,
                                      PixelFormatGpu fmt );
+#endif
 
     private:
         void         getClosestBlockDim2d( float targetBitrate, int *x, int *y ) const;

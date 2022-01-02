@@ -247,7 +247,6 @@ namespace Ogre
         PVRTCTexHeaderV3 header;
         PVRTCMetadata metadata;
         uint32 flags = 0;
-        size_t numFaces = 1;  // Assume one face until we know otherwise
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
 

@@ -39,7 +39,7 @@ namespace Ogre
     D3D11BufferInterface::D3D11BufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,
                                                 D3D11DynamicBuffer *dynamicBuffer ) :
         D3D11BufferInterfaceBase( vboPoolIdx, d3dBuffer ),
-        mUnmapTicket( (size_t)~0 ),
+        mUnmapTicket( std::numeric_limits<size_t>::max() ),
         mDynamicBuffer( dynamicBuffer ),
         mInitialData( 0 )
     {

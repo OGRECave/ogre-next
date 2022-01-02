@@ -11,7 +11,7 @@ namespace Demo
     GameEntityManager::GameEntityManager( Mq::MessageQueueSystem *graphicsSystem,
                                           LogicSystem *logicSystem ) :
         mCurrentId( 0 ),
-        mScheduledForRemovalCurrentSlot( (size_t)-1 ),
+        mScheduledForRemovalCurrentSlot( std::numeric_limits<size_t>::max() ),
         mGraphicsSystem( graphicsSystem ),
         mLogicSystem( logicSystem )
     {
@@ -189,7 +189,7 @@ namespace Demo
             mLogicSystem->queueSendMessage( mGraphicsSystem, Mq::GAME_ENTITY_SCHEDULED_FOR_REMOVAL_SLOT,
                                             mScheduledForRemovalCurrentSlot );
 
-            mScheduledForRemovalCurrentSlot = (size_t)-1;
+            mScheduledForRemovalCurrentSlot = std::numeric_limits<size_t>::max();
         }
     }
 }  // namespace Demo

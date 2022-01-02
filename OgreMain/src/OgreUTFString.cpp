@@ -1640,9 +1640,9 @@ namespace Ogre
         cL -= 0xDC00;
 
         out_uc = static_cast<uint32>(
-            ( cU & 0x03FF ) << 10 );     // grab the 10 upper bits and set them in their proper location
-        out_uc |= ( cL & 0x03FF );       // combine in the lower 10 bits
-        out_uc += 0x10000;               // add back in the value offset
+            ( cU & 0x03FF ) << 10 );  // grab the 10 upper bits and set them in their proper location
+        out_uc |= ( cL & 0x03FF );    // combine in the lower 10 bits
+        out_uc += 0x10000;            // add back in the value offset
 
         return 2;  // this whole operation takes to words, so that's what we'll return
     }
@@ -1828,7 +1828,7 @@ namespace Ogre
                 {  // 2 additional bytes
                     contBytes = 2;
                     if( c == _lead2 )
-                    {                        // possible overlong UTF-8 sequence
+                    {                                       // possible overlong UTF-8 sequence
                         c = (unsigned char)( *( i + 1 ) );  // look ahead to next byte in sequence
                         if( ( c & _lead2 ) == _cont )
                             throw invalid_data( "overlong UTF-8 sequence" );
@@ -1838,7 +1838,7 @@ namespace Ogre
                 {  // 3 additional bytes
                     contBytes = 3;
                     if( c == _lead3 )
-                    {                        // possible overlong UTF-8 sequence
+                    {                                       // possible overlong UTF-8 sequence
                         c = (unsigned char)( *( i + 1 ) );  // look ahead to next byte in sequence
                         if( ( c & _lead3 ) == _cont )
                             throw invalid_data( "overlong UTF-8 sequence" );
@@ -1848,7 +1848,7 @@ namespace Ogre
                 {  // 4 additional bytes
                     contBytes = 4;
                     if( c == _lead4 )
-                    {                        // possible overlong UTF-8 sequence
+                    {                                       // possible overlong UTF-8 sequence
                         c = (unsigned char)( *( i + 1 ) );  // look ahead to next byte in sequence
                         if( ( c & _lead4 ) == _cont )
                             throw invalid_data( "overlong UTF-8 sequence" );
@@ -1858,7 +1858,7 @@ namespace Ogre
                 {  // 5 additional bytes
                     contBytes = 5;
                     if( c == _lead5 )
-                    {                        // possible overlong UTF-8 sequence
+                    {                                       // possible overlong UTF-8 sequence
                         c = (unsigned char)( *( i + 1 ) );  // look ahead to next byte in sequence
                         if( ( c & _lead5 ) == _cont )
                             throw invalid_data( "overlong UTF-8 sequence" );
@@ -1903,12 +1903,13 @@ namespace Ogre
                 break;
             case bt_none:  // under the worse of circumstances, this is all we can do, and hope it works
                            // out
+                OGRE_FALLTHROUGH;
             default:
                 // delete mBuffer.mVoidBuffer;
                 // delete void* is undefined, don't do that
-                assert(
-                    "This should never happen - mVoidBuffer should never contain something if we "
-                    "don't know the type" );
+                assert( false &&
+                        "This should never happen - mVoidBuffer should never contain something if we "
+                        "don't know the type" );
                 break;
             }
             mBuffer.mVoidBuffer = 0;

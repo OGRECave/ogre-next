@@ -42,7 +42,7 @@ namespace Ogre
         mVboPoolIdx( vboPoolIdx ),
         mVboName( vboName ),
         mMappedPtr( 0 ),
-        mUnmapTicket( (size_t)~0 ),
+        mUnmapTicket( std::numeric_limits<size_t>::max() ),
         mDynamicBuffer( dynamicBuffer )
     {
     }

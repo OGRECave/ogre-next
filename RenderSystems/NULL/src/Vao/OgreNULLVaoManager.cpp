@@ -323,7 +323,7 @@ namespace Ogre
         NULLStagingBuffer *stagingBuffer = OGRE_NEW NULLStagingBuffer( 0, sizeBytes, this, forUpload );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
-        if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
+        if( mNextStagingBufferTimestampCheckpoint == std::numeric_limits<uint64>::max() )
             mNextStagingBufferTimestampCheckpoint =
                 mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
 
@@ -346,7 +346,7 @@ namespace Ogre
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
         {
-            mNextStagingBufferTimestampCheckpoint = (unsigned long)( ~0 );
+            mNextStagingBufferTimestampCheckpoint = std::numeric_limits<uint64>::max();
 
             for( size_t i = 0; i < 2; ++i )
             {
