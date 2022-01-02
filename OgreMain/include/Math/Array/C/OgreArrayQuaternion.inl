@@ -253,15 +253,9 @@ namespace Ogre
         y = std::sqrt( std::max( Real(0.0), (1 - m00) + (m11 - m22) ) ) * Real(0.5);
         z = std::sqrt( std::max( Real(0.0), (1 - m00) - (m11 - m22) ) ) * Real(0.5);
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
-		x = _copysign( x, m21 - m12 );
-        y = _copysign( y, m02 - m20 );
-        z = _copysign( z, m10 - m01 );
-#else
-        x = copysign( x, m21 - m12 );
-        y = copysign( y, m02 - m20 );
-        z = copysign( z, m10 - m01 );
-#endif
+        x = std::copysign( x, m21 - m12 );
+        y = std::copysign( y, m02 - m20 );
+        z = std::copysign( z, m10 - m01 );
     }
     //-----------------------------------------------------------------------------------
     inline void ArrayQuaternion::FromAngleAxis( const ArrayRadian& rfAngle, const ArrayVector3& rkAxis )

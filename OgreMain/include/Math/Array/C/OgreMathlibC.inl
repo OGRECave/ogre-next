@@ -31,20 +31,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibC::Modf4( ArrayReal x, ArrayReal &outIntegral )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
-        double _outIntegral;
-        ArrayReal fractpart = modf( x, &_outIntegral ); // truncate towards zero
-        outIntegral = static_cast<ArrayReal>( _outIntegral );
-        return fractpart;
-#else
-#if !OGRE_DOUBLE_PRECISION
-        return modff( x, &outIntegral );
-#else
-        float out;
-        return modff( x, &out );
-        outIntegral = out;
-#endif
-#endif
+        return std::modf( x, &outIntegral );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayReal MathlibC::ACos4( ArrayReal x)
