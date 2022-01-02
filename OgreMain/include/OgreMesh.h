@@ -55,6 +55,17 @@ namespace Ogre
 
         struct MeshLodUsage;
 
+        // MeshSerializerImpl et al must be forward declared because Unity builds may cause OgreMesh.cpp
+        // to be compiled before OgreMeshSerializerImpl.cpp; causing MSVC to think its
+        // Ogre::MeshSerializerImpl instead of Ogre::v1::MeshSerializerImpl
+        class MeshSerializerImpl;
+        class MeshSerializerImpl_v1_10;
+        class MeshSerializerImpl_v1_8;
+        class MeshSerializerImpl_v1_4;
+        class MeshSerializerImpl_v1_3;
+        class MeshSerializerImpl_v1_2;
+        class MeshSerializerImpl_v1_1;
+
         /** Resource holding data about 3D mesh.
         @remarks
             This class holds the data used to represent a discrete
