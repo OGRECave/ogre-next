@@ -89,7 +89,7 @@ namespace Demo
         // clang-format off
         const LightProfileParams lightProfiles[c_numAreaLights] =
         {
-            { 0, Ogre::Math::PI },
+            { 0, (float)Ogre::Math::PI },
             { "x-arrow-soft.ies", 180.0f },
             { "bollard.ies", 18.0f },
             { "star-focused.ies", 700.0f }
