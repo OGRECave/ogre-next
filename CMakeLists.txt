@@ -369,7 +369,7 @@ elseif(EMSCRIPTEN)
   set(OGRE_BUILD_TESTS FALSE CACHE BOOL "Disable tests on Emscripten" FORCE)
   set(OGRE_BUILD_COMPONENT_VOLUME FALSE CACHE BOOL "Disable volume component on Emscripten" FORCE)
   set(OGRE_BUILD_COMPONENT_PAGING FALSE CACHE BOOL "Disable paging component on Emscripten" FORCE)
-  set(OGRE_CONFIG_ALLOCATOR 1 CACHE STRING "Use default allocator on Emscripten" FORCE)
+  set(OGRE_CONFIG_ALLOCATOR 0 CACHE STRING "Use default allocator on Emscripten" FORCE)
   set(OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR FALSE CACHE BOOL "Containers use default allocator on Emscripten" FORCE)
 elseif (APPLE AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS)
 
@@ -479,11 +479,12 @@ set(OGRE_PLUGIN_LIB_PREFIX "" CACHE STRING "Prefix dynamically linked plugins, e
 
 if (WINDOWS_STORE OR WINDOWS_PHONE)
 # WinRT can only use the standard allocator
-set(OGRE_CONFIG_ALLOCATOR 1 CACHE STRING "Forcing Standard Allocator for WinRT" FORCE)
+set(OGRE_CONFIG_ALLOCATOR 0 CACHE STRING "Forcing no Allocator for WinRT" FORCE)
 else ()
-set(OGRE_CONFIG_ALLOCATOR 1 CACHE STRING
+set(OGRE_CONFIG_ALLOCATOR 0 CACHE STRING
 "Specify the memory allocator to use. Possible values:
-  1 - Standard allocator
+  0 - None
+  1 - Standard allocator. Supports additional debugging (see OGRE_CONFIG_MEMTRACK)
   3 - User-provided allocator
   5 - Debug allocator that will assert on most forms of memory corruption and provides deterministic memory addressing (for easier debugging w/ data breakpoints). Not indended for release or deployment. You may want to tweak OGRE_TRACK_POOL_SIZE in OgreMain/src/OgreMemoryTrackAlloc.cpp."
 )
@@ -500,6 +501,9 @@ set( OGRE_DEBUG_LEVEL_RELEASE 0 CACHE STRING
     "Specify debug level for Release, RelWithDebInfo and MinSizeRel builds. See OGRE_MAX_DEBUG_LEVEL_DEBUG" )
 
 cmake_dependent_option(OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR "STL containers in Ogre use the custom allocator" TRUE "" FALSE)
+if( OGRE_CONFIG_ALLOCATOR EQUAL 0 )
+    set(OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR FALSE CACHE BOOL "Forced off when OGRE_CONFIG_ALLOCATOR = 0" FORCE)
+endif()
 option(OGRE_CONFIG_STRING_USE_CUSTOM_ALLOCATOR "Ogre String uses the custom allocator" FALSE)
 option(OGRE_CONFIG_MEMTRACK_DEBUG "Enable Ogre's memory tracker in debug mode" FALSE)
 option(OGRE_CONFIG_MEMTRACK_RELEASE "Enable Ogre's memory tracker in release mode" FALSE)

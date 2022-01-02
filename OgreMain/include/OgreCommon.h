@@ -497,7 +497,11 @@ namespace Ogre
     class HashedVector
     {
     public:
+#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NONE
+        typedef std::vector<T> VectorImpl;
+#else
         typedef std::vector<T, STLAllocator<T, AllocPolicy> > VectorImpl;
+#endif
 
     protected:
         VectorImpl     mList;

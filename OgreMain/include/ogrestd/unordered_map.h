@@ -8,31 +8,38 @@
 
 namespace Ogre
 {
-    template <typename K, typename V, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy> >
+#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
+#    define OGRE_STL_ALIGNMENT_DEF_ARG , typename A = STLAllocator<std::pair<const K, V>, AllocPolicy>
+#    define OGRE_STL_ALIGNMENT_ARG , typename A
+#    define OGRE_STL_ALIGNMENT_A , A
+#else
+#    define OGRE_STL_ALIGNMENT_DEF_ARG
+#    define OGRE_STL_ALIGNMENT_ARG
+#    define OGRE_STL_ALIGNMENT_A
+#endif
+
+    template <typename K, typename V, typename H = ::std::hash<K>,
+              typename E = std::equal_to<K> OGRE_STL_ALIGNMENT_DEF_ARG>
     struct unordered_map
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename ::std::unordered_map<K, V, H, E, A> type;
-#else
-        typedef typename ::std::unordered_map<K, V, H, E>      type;
-#endif
-        typedef typename type::iterator       iterator;
-        typedef typename type::const_iterator const_iterator;
+        typedef typename ::std::unordered_map<K, V, H, E OGRE_STL_ALIGNMENT_A> type;
+        typedef typename type::iterator                                        iterator;
+        typedef typename type::const_iterator                                  const_iterator;
     };
 
-    template <typename K, typename V, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
-              typename A = STLAllocator<std::pair<const K, V>, AllocPolicy> >
+    template <typename K, typename V, typename H = ::std::hash<K>,
+              typename E = std::equal_to<K> OGRE_STL_ALIGNMENT_DEF_ARG>
     struct unordered_multimap
     {
-#if OGRE_CONTAINERS_USE_CUSTOM_MEMORY_ALLOCATOR
-        typedef typename ::std::unordered_multimap<K, V, H, E, A> type;
-#else
-        typedef typename ::std::unordered_multimap<K, V, H, E> type;
-#endif
-        typedef typename type::iterator       iterator;
-        typedef typename type::const_iterator const_iterator;
+        typedef typename ::std::unordered_multimap<K, V, H, E OGRE_STL_ALIGNMENT_A> type;
+        typedef typename type::iterator                                             iterator;
+        typedef typename type::const_iterator                                       const_iterator;
     };
+
+#undef OGRE_STL_ALIGNMENT_A
+#undef OGRE_STL_ALIGNMENT_ARG
+#undef OGRE_STL_ALIGNMENT_DEF_ARG
+
 }  // namespace Ogre
 
 #endif

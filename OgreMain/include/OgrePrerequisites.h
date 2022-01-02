@@ -580,6 +580,22 @@ namespace std
 // are passed by reference & need to be everywhere in headers (thus affecting compilation times)
 namespace Ogre
 {
+#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NONE
+    template <typename T>
+    class StdVector;
+
+    template <typename K, typename V, typename P = std::less<K>>
+    class StdMap;
+
+    template <typename K, typename V, typename P = std::less<K>>
+    class StdMultiMap;
+
+    template <typename T>
+    class StdList;
+
+    template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>>
+    class StdUnorderedSet;
+#else
     template <typename, typename>
     class STLAllocator;
 
@@ -600,6 +616,7 @@ namespace Ogre
     template <typename K, typename H = ::std::hash<K>, typename E = std::equal_to<K>,
               typename A = STLAllocator<K, AllocPolicy>>
     class StdUnorderedSet;
+#endif
 }  // namespace Ogre
 
 #include "OgreAssert.h"

@@ -188,7 +188,22 @@ namespace Ogre
 #include "OgreMemoryAllocatedObject.h"
 #include "OgreMemorySTLAllocator.h"
 
-#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_STD
+#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NONE
+
+#    include "OgreMemoryStdAlloc.h"
+namespace Ogre
+{
+    class OgreAllocatedObj
+    {
+    };
+
+    template <size_t align = 0>
+    class AlignAllocPolicy : public StdAlignedAllocPolicy<align>
+    {
+    };
+}  // namespace Ogre
+
+#elif OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_STD
 
 #    include "OgreMemoryStdAlloc.h"
 namespace Ogre
@@ -245,6 +260,8 @@ namespace Ogre
 
 #if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NONE
 
+#    define OGRE_ALLOC_DEBUG_METADATA
+
 // PAIR 0
 /// Allocate space for one primitive type, external type or non-virtual type with constructor parameters
 #    define OGRE_NEW_T( T, category ) new T
@@ -298,9 +315,16 @@ namespace Ogre
 
 }  // namespace Ogre
 
+#    if OGRE_DEBUG_MODE
+#        define OGRE_ALLOC_DEBUG_METADATA , __FILE__, __LINE__, __FUNCTION__
+#    else
+#        define OGRE_ALLOC_DEBUG_METADATA
+#    endif
+
 // PAIR 0
 /// Allocate space for one primitive type, external type or non-virtual type with constructor parameters
-#    define OGRE_NEW_T( T, category ) new( ::Ogre::AllocPolicy::allocateBytes( sizeof( T ) ) ) T
+#    define OGRE_NEW_T( T, category ) \
+        new( ::Ogre::AllocPolicy::allocateBytes( sizeof( T ) OGRE_ALLOC_DEBUG_METADATA ) ) T
 
 #    define OGRE_DELETE_T( ptr, T, category ) \
         if( ptr ) \
@@ -311,8 +335,9 @@ namespace Ogre
 
 // PAIR 1
 #    define OGRE_NEW_ARRAY_T( T, count, category ) \
-        ::Ogre::constructN( \
-            static_cast<T *>( ::Ogre::AllocPolicy::allocateBytes( sizeof( T ) * ( count ) ) ), count )
+        ::Ogre::constructN( static_cast<T *>( ::Ogre::AllocPolicy::allocateBytes( \
+                                sizeof( T ) * (count)OGRE_ALLOC_DEBUG_METADATA ) ), \
+                            count )
 
 #    define OGRE_DELETE_ARRAY_T( ptr, T, count, category ) \
         if( ptr ) \
@@ -325,7 +350,8 @@ namespace Ogre
         }
 
 // PAIR 2
-#    define OGRE_MALLOC( bytes, category ) ::Ogre::AllocPolicy::allocateBytes( bytes )
+#    define OGRE_MALLOC( bytes, category ) \
+        ::Ogre::AllocPolicy::allocateBytes( bytes OGRE_ALLOC_DEBUG_METADATA )
 
 #    define OGRE_ALLOC_T( T, count, category ) \
         static_cast<T *>( ::Ogre::AllocPolicy::allocateBytes( sizeof( T ) * ( count ) ) )
@@ -336,15 +362,21 @@ namespace Ogre
 
 // PAIR 3
 /// new / delete for classes deriving from AllocatedObject (alignment determined by per-class policy)
-#define OGRE_NEW new
+#if OGRE_DEBUG_MODE && OGRE_MEMORY_ALLOCATOR != OGRE_MEMORY_ALLOCATOR_NONE
+#    define OGRE_NEW new( __FILE__, __LINE__, __FUNCTION__ )
+#else
+#    define OGRE_NEW new
+#endif
 #define OGRE_DELETE delete
 
 // PAIR SIMD
 /// Allocate a block of raw memory aligned to SIMD boundaries, and indicate the category of usage
-#define OGRE_MALLOC_SIMD( bytes, category ) ::Ogre::AlignAllocPolicy<>::allocateBytes( bytes )
+#define OGRE_MALLOC_SIMD( bytes, category ) \
+    ::Ogre::AlignAllocPolicy<>::allocateBytes( bytes OGRE_ALLOC_DEBUG_METADATA )
 
 #define OGRE_ALLOC_T_SIMD( T, count, category ) \
-    static_cast<T *>( ::Ogre::AlignAllocPolicy<>::allocateBytes( sizeof( T ) * ( count ) ) )
+    static_cast<T *>( \
+        ::Ogre::AlignAllocPolicy<>::allocateBytes( sizeof( T ) * (count)OGRE_ALLOC_DEBUG_METADATA ) )
 
 /// Free the memory allocated with either OGRE_MALLOC_SIMD or OGRE_ALLOC_T_SIMD. Category is required to
 /// be restated to ensure the matching policy is used
@@ -353,7 +385,7 @@ namespace Ogre
 // PAIR Aligned
 /// Allocate a block of raw memory aligned to user defined boundaries, and indicate the category of usage
 #define OGRE_MALLOC_ALIGN( bytes, category, align ) \
-    ::Ogre::AlignAllocPolicy<align>::allocateBytes( bytes )
+    ::Ogre::AlignAllocPolicy<align>::allocateBytes( bytes OGRE_ALLOC_DEBUG_METADATA )
 
 /// Free the memory allocated with either OGRE_MALLOC_ALIGN or OGRE_ALLOC_T_ALIGN. Category is required
 /// to be restated to ensure the matching policy is used

@@ -90,6 +90,11 @@ namespace Ogre
         StdAllocPolicy() {}
     };
 
+#endif
+
+#if OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_STD || \
+    OGRE_MEMORY_ALLOCATOR == OGRE_MEMORY_ALLOCATOR_NONE
+
     /**	A "standard" allocation policy for use with AllocatedObject and
         STLAllocator, which aligns memory at a given boundary (which should be
         a power of 2). This is the class that actually does the allocation
