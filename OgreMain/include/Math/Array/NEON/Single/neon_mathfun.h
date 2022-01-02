@@ -33,19 +33,19 @@ typedef float32x4_t v4sf;  // vector of 4 float
 typedef uint32x4_t  v4su;  // vector of 4 uint32
 typedef int32x4_t   v4si;  // vector of 4 uint32
 
-#    define c_inv_mant_mask ~0x7f800000u
-#    define c_cephes_SQRTHF 0.707106781186547524
-#    define c_cephes_log_p0 7.0376836292E-2
-#    define c_cephes_log_p1 -1.1514610310E-1
-#    define c_cephes_log_p2 1.1676998740E-1
-#    define c_cephes_log_p3 -1.2420140846E-1
-#    define c_cephes_log_p4 +1.4249322787E-1
-#    define c_cephes_log_p5 -1.6668057665E-1
-#    define c_cephes_log_p6 +2.0000714765E-1
-#    define c_cephes_log_p7 -2.4999993993E-1
-#    define c_cephes_log_p8 +3.3333331174E-1
-#    define c_cephes_log_q1 -2.12194440e-4
-#    define c_cephes_log_q2 0.693359375
+#    define c_inv_mant_mask ~0x7f800000
+#    define c_cephes_SQRTHF 0.707106781186547524f
+#    define c_cephes_log_p0 7.0376836292E-2f
+#    define c_cephes_log_p1 -1.1514610310E-1f
+#    define c_cephes_log_p2 1.1676998740E-1f
+#    define c_cephes_log_p3 -1.2420140846E-1f
+#    define c_cephes_log_p4 +1.4249322787E-1f
+#    define c_cephes_log_p5 -1.6668057665E-1f
+#    define c_cephes_log_p6 +2.0000714765E-1f
+#    define c_cephes_log_p7 -2.4999993993E-1f
+#    define c_cephes_log_p8 +3.3333331174E-1f
+#    define c_cephes_log_q1 -2.12194440e-4f
+#    define c_cephes_log_q2 0.693359375f
 
 /* natural logarithm computed for 4 simultaneous float
    return NaN for x <= 0
@@ -123,16 +123,16 @@ v4sf log_ps( v4sf x )
 #    define c_exp_hi 88.3762626647949f
 #    define c_exp_lo -88.3762626647949f
 
-#    define c_cephes_LOG2EF 1.44269504088896341
-#    define c_cephes_exp_C1 0.693359375
-#    define c_cephes_exp_C2 -2.12194440e-4
+#    define c_cephes_LOG2EF 1.44269504088896341f
+#    define c_cephes_exp_C1 0.693359375f
+#    define c_cephes_exp_C2 -2.12194440e-4f
 
-#    define c_cephes_exp_p0 1.9875691500E-4
-#    define c_cephes_exp_p1 1.3981999507E-3
-#    define c_cephes_exp_p2 8.3334519073E-3
-#    define c_cephes_exp_p3 4.1665795894E-2
-#    define c_cephes_exp_p4 1.6666665459E-1
-#    define c_cephes_exp_p5 5.0000001201E-1
+#    define c_cephes_exp_p0 1.9875691500E-4f
+#    define c_cephes_exp_p1 1.3981999507E-3f
+#    define c_cephes_exp_p2 8.3334519073E-3f
+#    define c_cephes_exp_p3 4.1665795894E-2f
+#    define c_cephes_exp_p4 1.6666665459E-1f
+#    define c_cephes_exp_p5 5.0000001201E-1f
 
 /* exp() computed for 4 float at once */
 v4sf exp_ps( v4sf x )
@@ -196,16 +196,16 @@ v4sf exp_ps( v4sf x )
     return y;
 }
 
-#    define c_minus_cephes_DP1 -0.78515625
-#    define c_minus_cephes_DP2 -2.4187564849853515625e-4
-#    define c_minus_cephes_DP3 -3.77489497744594108e-8
-#    define c_sincof_p0 -1.9515295891E-4
-#    define c_sincof_p1 8.3321608736E-3
-#    define c_sincof_p2 -1.6666654611E-1
-#    define c_coscof_p0 2.443315711809948E-005
-#    define c_coscof_p1 -1.388731625493765E-003
-#    define c_coscof_p2 4.166664568298827E-002
-#    define c_cephes_FOPI 1.27323954473516  // 4 / M_PI
+#    define c_minus_cephes_DP1 -0.78515625f
+#    define c_minus_cephes_DP2 -2.4187564849853515625e-4f
+#    define c_minus_cephes_DP3 -3.77489497744594108e-8f
+#    define c_sincof_p0 -1.9515295891E-4f
+#    define c_sincof_p1 8.3321608736E-3f
+#    define c_sincof_p2 -1.6666654611E-1f
+#    define c_coscof_p0 2.443315711809948E-005f
+#    define c_coscof_p1 -1.388731625493765E-003f
+#    define c_coscof_p2 4.166664568298827E-002f
+#    define c_cephes_FOPI 1.27323954473516f  // 4 / M_PI
 
 /* evaluation of 4 sines & cosines at once.
 
@@ -239,7 +239,7 @@ void sincos_ps( v4sf x, v4sf *ysin, v4sf *ycos )
     emm2 = vcvtq_u32_f32( y );
     /* j=(j+1) & (~1) (see the cephes sources) */
     emm2 = vaddq_u32( emm2, vdupq_n_u32( 1 ) );
-    emm2 = vandq_u32( emm2, vdupq_n_u32( ~1 ) );
+    emm2 = vandq_u32( emm2, vdupq_n_u32( ~1u ) );
     y = vcvtq_f32_u32( emm2 );
 
     /* get the polynom selection mask

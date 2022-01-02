@@ -298,7 +298,7 @@ namespace Ogre
         @return
             r[i] = a[i] & b;
         */
-        static inline ArrayInt And( ArrayInt a, uint32 b ) { return vandq_s32( a, vdupq_n_s32( b ) ); }
+        static inline ArrayInt And( ArrayInt a, uint32 b ) { return vandq_s32( a, vdupq_n_u32( b ) ); }
 
         /** Test if "a AND b" will result in non-zero, returning 0xffffffff on those cases
         @remarks
@@ -313,20 +313,21 @@ namespace Ogre
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayInt b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32( 0 ) ), vdupq_n_u32( ~0 ) );
+            return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32( 0 ) ), vdupq_n_u32( 0xFFFFFFFF ) );
         }
 #    ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayMaskI b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32( vceqq_u32( vandq_u32( vreinterpretq_u32_s32( a ), b ), vdupq_n_u32( 0 ) ),
-                              vdupq_n_u32( ~0 ) );
+            return veorq_u32(
+                vceqq_u32( vandq_u32( vreinterpretq_u32_s32( a ), b ), vdupq_n_u32( 0xFFFFFFFF ) ),
+                vdupq_n_u32( 0xFFFFFFFF ) );
         }
         static inline ArrayMaskI TestFlags4( ArrayMaskI a, ArrayInt b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
             return veorq_u32( vceqq_u32( vandq_u32( a, vreinterpretq_u32_s32( b ) ), vdupq_n_u32( 0 ) ),
-                              vdupq_n_u32( ~0 ) );
+                              vdupq_n_u32( 0xFFFFFFFF ) );
         }
 #    endif
 
@@ -382,7 +383,7 @@ namespace Ogre
 
         static inline ArrayReal SetAll( Real val ) { return vdupq_n_f32( val ); }
 
-        static inline ArrayInt SetAll( uint32 val ) { return vdupq_n_s32( val ); }
+        static inline ArrayInt SetAll( uint32 val ) { return vdupq_n_u32( val ); }
 
         static inline void Set( ArrayReal &_dst, Real val, size_t index )
         {

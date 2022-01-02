@@ -475,7 +475,7 @@ namespace Ogre
             vceqq_f32( mChunkBase[1], mChunkBase[1] ) ),
             vceqq_f32( mChunkBase[2], mChunkBase[2] ) );
 
-        return vmovemaskq_u32( mask ) ^ 0x0000000f;
+        return int( vmovemaskq_u32( mask ) ^ 0x0000000f );
     }
     //-----------------------------------------------------------------------------------
     inline ArrayVector3 ArrayVector3::primaryAxis() const
