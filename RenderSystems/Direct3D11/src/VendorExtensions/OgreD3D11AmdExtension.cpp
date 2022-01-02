@@ -26,29 +26,26 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "VendorExtensions/OgreD3D11AmdExtension.h"
 
 #if !OGRE_NO_AMD_AGS
 
-#include "OgreLwString.h"
-#include "OgreLogManager.h"
+#    include "OgreLogManager.h"
+#    include "OgreLwString.h"
 
-#include "OgreUTFString.h"
+#    include "OgreUTFString.h"
 
 namespace Ogre
 {
-    D3D11AmdExtension::D3D11AmdExtension() :
-        mAgsContext( 0 )
+    D3D11AmdExtension::D3D11AmdExtension() : mAgsContext( 0 )
     {
-        memset( &mGpuInfo, 0, sizeof(mGpuInfo) );
+        memset( &mGpuInfo, 0, sizeof( mGpuInfo ) );
         AGSReturnCode result = agsInit( &mAgsContext, NULL, &mGpuInfo );
 
         if( result != AGS_SUCCESS )
         {
             char tmpBuffer[256];
-            LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             errorText.a( "Could not initialize AMD AGS extension error: ", result,
                          "\nAMD extensions won't be available." );
             LogManager::getSingleton().logMessage( errorText.c_str(), LML_CRITICAL );
@@ -76,10 +73,10 @@ namespace Ogre
         logManager.logMessage( "AMD AGS extensions initialized" );
 
         char tmpBuffer[1024];
-        LwString infoText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        LwString infoText( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
 
-        infoText.a( "AGS Version: ", gpuInfo.agsVersionMajor, ".",
-                    gpuInfo.agsVersionMinor, ".", gpuInfo.agsVersionPatch );
+        infoText.a( "AGS Version: ", gpuInfo.agsVersionMajor, ".", gpuInfo.agsVersionMinor, ".",
+                    gpuInfo.agsVersionPatch );
         infoText.a( "\nWACK compliant (UWP): ", gpuInfo.isWACKCompliant ? "Yes" : "No" );
         infoText.a( "\nNum devices: ", gpuInfo.numDevices );
         logManager.logMessage( infoText.c_str() );
@@ -122,7 +119,7 @@ namespace Ogre
         dumpAgsInfo( gpuInfo );
 
         bool recommended = false;
-        for( int deviceIdx=0; deviceIdx<gpuInfo.numDevices && !recommended; ++deviceIdx )
+        for( int deviceIdx = 0; deviceIdx < gpuInfo.numDevices && !recommended; ++deviceIdx )
         {
             if( gpuInfo.devices[deviceIdx].vendorId == 0x1002 )
                 recommended |= gpuInfo.devices[deviceIdx].vendorId == 0x1002;
@@ -131,19 +128,19 @@ namespace Ogre
         if( recommended )
         {
             unsigned int minAgsVersion = AGS_MAKE_VERSION( 18, 8, 2 );
-            AGSDriverVersionResult verResult = agsCheckDriverVersion( gpuInfo.radeonSoftwareVersion,
-                                                                      minAgsVersion );
+            AGSDriverVersionResult verResult =
+                agsCheckDriverVersion( gpuInfo.radeonSoftwareVersion, minAgsVersion );
             if( verResult == AGS_SOFTWAREVERSIONCHECK_OLDER )
             {
                 recommended = false;
-                int major = (minAgsVersion & 0xFFC00000) >> 22;
-                int minor = (minAgsVersion & 0x003FF000) >> 12;
-                int patch = (minAgsVersion & 0x00000FFF);
+                int major = ( minAgsVersion & 0xFFC00000 ) >> 22;
+                int minor = ( minAgsVersion & 0x003FF000 ) >> 12;
+                int patch = ( minAgsVersion & 0x00000FFF );
 
                 char tmpBuffer[256];
-                LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
-                errorText.a( "Minimum recommended AMD driver version for AGS is ",
-                             major, ".", minor, ".", patch );
+                LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+                errorText.a( "Minimum recommended AMD driver version for AGS is ", major, ".", minor,
+                             ".", patch );
                 logManager.logMessage( errorText.c_str() );
             }
             else if( verResult == AGS_SOFTWAREVERSIONCHECK_UNDEFINED )
@@ -164,10 +161,9 @@ namespace Ogre
         return recommended;
     }
     //-------------------------------------------------------------------------
-    HRESULT D3D11AmdExtension::createDeviceImpl( const String &appName,
-                                                 IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
-                                                 UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
-                                                 UINT numFeatureLevels,
+    HRESULT D3D11AmdExtension::createDeviceImpl( const String &appName, IDXGIAdapter *adapter,
+                                                 D3D_DRIVER_TYPE driverType, UINT deviceFlags,
+                                                 D3D_FEATURE_LEVEL *pFirstFL, UINT numFeatureLevels,
                                                  D3D_FEATURE_LEVEL *outFeatureLevel,
                                                  ID3D11Device **outDevice )
     {
@@ -191,34 +187,28 @@ namespace Ogre
         {
             if( adapterNotAmd )
             {
-                LogManager::getSingleton().logMessage( "AMD AGS extensions enabled but requested "
-                                                       "Adapter is not from AMD!", LML_CRITICAL );
+                LogManager::getSingleton().logMessage(
+                    "AMD AGS extensions enabled but requested "
+                    "Adapter is not from AMD!",
+                    LML_CRITICAL );
             }
             return D3D11VendorExtension::createDeviceImpl( appName, adapter, driverType, deviceFlags,
                                                            pFirstFL, numFeatureLevels, outFeatureLevel,
                                                            outDevice );
         }
 
-        AGSDX11DeviceCreationParams creationParams =
-        {
-            adapter,
-            driverType,
-            NULL,
-            deviceFlags,
-            pFirstFL,
-            numFeatureLevels,
-            D3D11_SDK_VERSION,
-            NULL
-        };
+        AGSDX11DeviceCreationParams creationParams = { adapter,           driverType, NULL,
+                                                       deviceFlags,       pFirstFL,   numFeatureLevels,
+                                                       D3D11_SDK_VERSION, NULL };
 
         UTFString wText( appName );
         AGSDX11ExtensionParams extensionParams;
-        memset( &extensionParams, 0, sizeof(extensionParams) );
+        memset( &extensionParams, 0, sizeof( extensionParams ) );
         extensionParams.pAppName = wText.asWStr_c_str();
         extensionParams.pEngineName = L"Ogre3D D3D11 Engine";
 
         AGSDX11ReturnedParams returnedParams;
-        memset( &returnedParams, 0, sizeof(returnedParams) );
+        memset( &returnedParams, 0, sizeof( returnedParams ) );
 
         AGSReturnCode result = agsDriverExtensionsDX11_CreateDevice( mAgsContext, &creationParams,
                                                                      &extensionParams, &returnedParams );
@@ -226,11 +216,11 @@ namespace Ogre
         HRESULT hr = -1;
 
         if( result == AGS_DX_FAILURE )
-            hr = E_INVALIDARG; //Tell parent class to try D3D11.0 instead of 11.1
+            hr = E_INVALIDARG;  // Tell parent class to try D3D11.0 instead of 11.1
         else if( result != AGS_SUCCESS )
         {
             char tmpBuffer[256];
-            LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             errorText.a( "Could not initialize AMD AGS extension error: ", result,
                          "\nFalling back to no extension." );
             LogManager::getSingleton().logMessage( errorText.c_str(), LML_CRITICAL );
@@ -246,7 +236,7 @@ namespace Ogre
             *outFeatureLevel = returnedParams.FeatureLevel;
 
             char tmpBuffer[256];
-            LwString infoText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString infoText( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             infoText.a( "D3D11 AMD AGS device created. Extensions supported: ",
                         returnedParams.extensionsSupported );
             LogManager::getSingleton().logMessage( infoText.c_str() );
@@ -263,14 +253,14 @@ namespace Ogre
             return;
 
         FastArray<AGSDX11ReturnedParams>::iterator itor = mReturnedParams.begin();
-        FastArray<AGSDX11ReturnedParams>::iterator end  = mReturnedParams.end();
+        FastArray<AGSDX11ReturnedParams>::iterator end = mReturnedParams.end();
 
         while( itor != end && itor->pDevice != device )
             ++itor;
 
         if( itor == end )
         {
-            //Device wasn't created by us (or corrupted, or double free)
+            // Device wasn't created by us (or corrupted, or double free)
             D3D11VendorExtension::destroyDevice( device );
         }
         else
@@ -280,6 +270,6 @@ namespace Ogre
             efficientVectorRemove( mReturnedParams, itor );
         }
     }
-}
+}  // namespace Ogre
 
 #endif

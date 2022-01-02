@@ -30,26 +30,27 @@ THE SOFTWARE.
 #define _OgreD3D11AsyncTextureTicket_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreAsyncTextureTicket.h"
 #include "OgreTextureBox.h"
 
 namespace Ogre
 {
     /** See AsyncTextureTicket
-    */
+     */
     class _OgreD3D11Export D3D11AsyncTextureTicket final : public AsyncTextureTicket
     {
     protected:
         ComPtr<ID3D11Resource> mStagingTexture;
 
-        uint32          mDownloadFrame;
+        uint32              mDownloadFrame;
         ComPtr<ID3D11Query> mAccurateFence;
-        D3D11VaoManager *mVaoManager;
-        uint32          mMappedSlice;
-        bool            mIsArray2DTexture;
+        D3D11VaoManager *   mVaoManager;
+        uint32              mMappedSlice;
+        bool                mIsArray2DTexture;
 
         TextureBox mapImpl( uint32 slice ) override;
-        void unmapImpl() override;
+        void       unmapImpl() override;
 
         bool canMapMoreThanOneSlice() const override;
 
@@ -61,12 +62,11 @@ namespace Ogre
     public:
         D3D11AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                  TextureTypes::TextureTypes textureType,
-                                 PixelFormatGpu pixelFormatFamily,
-                                 D3D11VaoManager *vaoManager );
+                                 PixelFormatGpu pixelFormatFamily, D3D11VaoManager *vaoManager );
         ~D3D11AsyncTextureTicket() override;
 
         bool queryIsTransferDone() override;
     };
-}
+}  // namespace Ogre
 
 #endif

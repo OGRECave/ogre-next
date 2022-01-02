@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define __D3D11HLSLProgramFactory_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreHighLevelGpuProgramManager.h"
 
 namespace Ogre
@@ -39,17 +40,19 @@ namespace Ogre
     protected:
         static String sLanguageName;
         D3D11Device & mDevice;
+
     public:
-        D3D11HLSLProgramFactory(D3D11Device & device);
+        D3D11HLSLProgramFactory( D3D11Device &device );
         ~D3D11HLSLProgramFactory() override;
         /// Get the name of the language this factory creates programs for
-        const String& getLanguage() const override;
-        HighLevelGpuProgram* create(ResourceManager* creator, 
-            const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader) override;
-        void destroy(HighLevelGpuProgram* prog) override;
+        const String &getLanguage() const override;
 
+        HighLevelGpuProgram *create( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                     const String &group, bool isManual,
+                                     ManualResourceLoader *loader ) override;
+
+        void destroy( HighLevelGpuProgram *prog ) override;
     };
-}
+}  // namespace Ogre
 
 #endif

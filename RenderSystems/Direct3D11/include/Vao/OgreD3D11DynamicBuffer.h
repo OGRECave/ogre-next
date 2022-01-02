@@ -30,8 +30,8 @@ THE SOFTWARE.
 #define _Ogre_D3D11DynamicBuffer_H_
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreD3D11DeviceResource.h"
 
+#include "OgreD3D11DeviceResource.h"
 #include "Vao/OgreBufferPacked.h"
 
 #include "ogrestd/vector.h"
@@ -66,12 +66,12 @@ namespace Ogre
         typedef vector<MappedRange>::type MappedRangeVec;
 
         ComPtr<ID3D11Buffer> mVboName;
-        size_t          mVboSize;
-        void            *mMappedPtr;
+        size_t               mVboSize;
+        void *               mMappedPtr;
 
-        D3D11Device     &mDevice;
+        D3D11Device &mDevice;
 
-        MappedRangeVec mMappedRanges;
+        MappedRangeVec       mMappedRanges;
         vector<size_t>::type mFreeRanges;
 
         size_t addMappedRange( size_t start, size_t count );
@@ -83,16 +83,16 @@ namespace Ogre
         D3D11DynamicBuffer( ID3D11Buffer *vboName, size_t vboSize, D3D11Device &device );
         ~D3D11DynamicBuffer();
 
-        ID3D11Buffer* getVboName() const        { return mVboName.Get(); }
+        ID3D11Buffer *getVboName() const { return mVboName.Get(); }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
-        void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
+        void *RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
 
         /// Unmaps given ticket (got from @see map).
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
     };
-}
+}  // namespace Ogre
 
 #endif

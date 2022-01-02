@@ -45,8 +45,8 @@ namespace Ogre
     public:
         D3D11TextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                               TextureTypes::TextureTypes initialType,
-                               TextureGpuManager *textureManager, Window *window );
+                               TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
+                               Window *window );
         ~D3D11TextureGpuWindow() override;
 
         void _setBackbuffer( ID3D11Texture2D *backbuffer );
@@ -65,7 +65,7 @@ namespace Ogre
         void _setToDisplayDummyTexture() override;
         void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

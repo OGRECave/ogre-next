@@ -32,8 +32,8 @@ THE SOFTWARE.
 
 #include "ogrestd/vector.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     /** Represents a Direct3D rendering resource.
     Provide unified interface to handle various device states.
     This class is intended to be used as protected base.
@@ -41,20 +41,18 @@ namespace Ogre {
     class D3D11DeviceResource
     {
     public:
-
         // Called immediately after the Direct3D device has entered a removed state.
         // This is the place to release device depended resources.
-        virtual void notifyDeviceLost(D3D11Device* device) = 0;
+        virtual void notifyDeviceLost( D3D11Device *device ) = 0;
 
         // Called immediately after the Direct3D device has been reset.
         // This is the place to create device depended resources.
-        virtual void notifyDeviceRestored(D3D11Device* device, unsigned pass) = 0;
+        virtual void notifyDeviceRestored( D3D11Device *device, unsigned pass ) = 0;
 
     protected:
         D3D11DeviceResource();
-        ~D3D11DeviceResource(); // protected and non-virtual
+        ~D3D11DeviceResource();  // protected and non-virtual
     };
-
 
     /** Singleton that is used to propagate device state changed notifications.
     This class is intended to be used as protected base.
@@ -62,22 +60,21 @@ namespace Ogre {
     class D3D11DeviceResourceManager
     {
     public:
+        void notifyResourceCreated( D3D11DeviceResource *deviceResource );
+        void notifyResourceDestroyed( D3D11DeviceResource *deviceResource );
 
-        void notifyResourceCreated(D3D11DeviceResource* deviceResource);
-        void notifyResourceDestroyed(D3D11DeviceResource* deviceResource);
+        void notifyDeviceLost( D3D11Device *device );
+        void notifyDeviceRestored( D3D11Device *device );
 
-        void notifyDeviceLost(D3D11Device* device);
-        void notifyDeviceRestored(D3D11Device* device);
-
-        static D3D11DeviceResourceManager* get();
+        static D3D11DeviceResourceManager *get();
 
     protected:
         D3D11DeviceResourceManager();
-        ~D3D11DeviceResourceManager(); // protected and non-virtual
+        ~D3D11DeviceResourceManager();  // protected and non-virtual
 
     private:
-        vector<D3D11DeviceResource*>::type mResources, mResourcesCopy;
+        vector<D3D11DeviceResource *>::type mResources, mResourcesCopy;
     };
 
-}
+}  // namespace Ogre
 #endif

@@ -28,7 +28,6 @@ THE SOFTWARE.
 #ifndef __D3D11DEVICE_H__
 #define __D3D11DEVICE_H__
 
-
 #include "OgreD3D11Prerequisites.h"
 
 namespace Ogre
@@ -36,59 +35,63 @@ namespace Ogre
     class _OgreD3D11Export D3D11Device
     {
     private:
-        ComPtr<ID3D11DeviceN>           mD3D11Device;
-        ComPtr<ID3D11Device1>           mD3D11Device1;
-        ComPtr<ID3D11DeviceContextN>    mImmediateContext;
-        ComPtr<ID3D11DeviceContext1>    mImmediateContext1;
-        ComPtr<ID3D11ClassLinkage>      mClassLinkage;
-        ComPtr<ID3D11InfoQueue>         mInfoQueue;
-        LARGE_INTEGER                   mDriverVersion;
-        ComPtr<IDXGIFactoryN>           mDXGIFactory;
-        ComPtr<IDXGIFactory2>           mDXGIFactory2;
+        ComPtr<ID3D11DeviceN>        mD3D11Device;
+        ComPtr<ID3D11Device1>        mD3D11Device1;
+        ComPtr<ID3D11DeviceContextN> mImmediateContext;
+        ComPtr<ID3D11DeviceContext1> mImmediateContext1;
+        ComPtr<ID3D11ClassLinkage>   mClassLinkage;
+        ComPtr<ID3D11InfoQueue>      mInfoQueue;
+        LARGE_INTEGER                mDriverVersion;
+        ComPtr<IDXGIFactoryN>        mDXGIFactory;
+        ComPtr<IDXGIFactory2>        mDXGIFactory2;
 #if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         ComPtr<ID3DUserDefinedAnnotation> mPerf;
 #endif
 
-        const D3D11Device& operator=(D3D11Device& device); /* intentionally not implemented */
+        const D3D11Device &operator=( D3D11Device &device ); /* intentionally not implemented */
 
     public:
         D3D11Device();
         ~D3D11Device();
 
         void ReleaseAll();
-        void TransferOwnership(ComPtr<ID3D11Device>& device);
+        void TransferOwnership( ComPtr<ID3D11Device> &device );
         bool IsDeviceLost();
 
-        bool isNull()                                { return !mD3D11Device; }
-        ID3D11DeviceN* get()                         { return mD3D11Device.Get(); }
-        ID3D11DeviceContextN* GetImmediateContext()  { return mImmediateContext.Get(); }
-        ID3D11DeviceContext1* GetImmediateContext1() { return mImmediateContext1.Get(); }
-        ID3D11ClassLinkage* GetClassLinkage()        { return mClassLinkage.Get(); }
-        IDXGIFactoryN* GetDXGIFactory()              { return mDXGIFactory.Get(); }
-        IDXGIFactory2* GetDXGIFactory2()             { return mDXGIFactory2.Get(); }
-        LARGE_INTEGER GetDriverVersion()             { return mDriverVersion; }
+        bool                  isNull() { return !mD3D11Device; }
+        ID3D11DeviceN *       get() { return mD3D11Device.Get(); }
+        ID3D11DeviceContextN *GetImmediateContext() { return mImmediateContext.Get(); }
+        ID3D11DeviceContext1 *GetImmediateContext1() { return mImmediateContext1.Get(); }
+        ID3D11ClassLinkage *  GetClassLinkage() { return mClassLinkage.Get(); }
+        IDXGIFactoryN *       GetDXGIFactory() { return mDXGIFactory.Get(); }
+        IDXGIFactory2 *       GetDXGIFactory2() { return mDXGIFactory2.Get(); }
+
+        LARGE_INTEGER GetDriverVersion() { return mDriverVersion; }
 #if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-        ID3DUserDefinedAnnotation* GetProfiler()     { return mPerf.Get(); }
+        ID3DUserDefinedAnnotation *GetProfiler() { return mPerf.Get(); }
 #endif
-        
-        ID3D11DeviceN* operator->() const
+
+        ID3D11DeviceN *operator->() const
         {
-            assert(mD3D11Device); 
-            if (D3D_NO_EXCEPTION != mExceptionsErrorLevel)
+            assert( mD3D11Device );
+            if( D3D_NO_EXCEPTION != mExceptionsErrorLevel )
             {
                 clearStoredErrorMessages();
             }
             return mD3D11Device.Get();
         }
 
-        void throwIfFailed(HRESULT hr, const char* desc, const char* src);
-        void throwIfFailed(const char* desc, const char* src) { throwIfFailed(NO_ERROR, desc, src); }
+        void throwIfFailed( HRESULT hr, const char *desc, const char *src );
+        void throwIfFailed( const char *desc, const char *src ) { throwIfFailed( NO_ERROR, desc, src ); }
 
-        String getErrorDescription(const HRESULT hr = NO_ERROR) const;
-        void clearStoredErrorMessages() const;
-        bool _getErrorsFromQueue() const;
+        String getErrorDescription( const HRESULT hr = NO_ERROR ) const;
+        void   clearStoredErrorMessages() const;
+        bool   _getErrorsFromQueue() const;
 
-        bool isError() const                         { return (D3D_NO_EXCEPTION == mExceptionsErrorLevel) ? false : _getErrorsFromQueue(); }
+        bool isError() const
+        {
+            return ( D3D_NO_EXCEPTION == mExceptionsErrorLevel ) ? false : _getErrorsFromQueue();
+        }
 
         enum eExceptionsErrorLevel
         {
@@ -101,11 +104,13 @@ namespace Ogre
 
         static eExceptionsErrorLevel mExceptionsErrorLevel;
         static eExceptionsErrorLevel getExceptionsErrorLevel();
-        static void setExceptionsErrorLevel(const eExceptionsErrorLevel exceptionsErrorLevel);
-        static void setExceptionsErrorLevel(const Ogre::String& exceptionsErrorLevel);
+        static void setExceptionsErrorLevel( const eExceptionsErrorLevel exceptionsErrorLevel );
+        static void setExceptionsErrorLevel( const Ogre::String &exceptionsErrorLevel );
 
-        static D3D_FEATURE_LEVEL parseFeatureLevel(const Ogre::String& value, D3D_FEATURE_LEVEL fallback);
-        static D3D_DRIVER_TYPE parseDriverType(const Ogre::String& value, D3D_DRIVER_TYPE fallback = D3D_DRIVER_TYPE_HARDWARE);
+        static D3D_FEATURE_LEVEL parseFeatureLevel( const Ogre::String &value,
+                                                    D3D_FEATURE_LEVEL   fallback );
+        static D3D_DRIVER_TYPE   parseDriverType( const Ogre::String &value,
+                                                  D3D_DRIVER_TYPE fallback = D3D_DRIVER_TYPE_HARDWARE );
     };
-}
+}  // namespace Ogre
 #endif

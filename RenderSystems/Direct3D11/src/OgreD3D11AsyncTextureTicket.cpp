@@ -27,26 +27,24 @@ THE SOFTWARE.
 */
 
 #include "OgreD3D11AsyncTextureTicket.h"
-#include "OgreD3D11TextureGpu.h"
-#include "OgreD3D11Mappings.h"
-#include "OgreD3D11Device.h"
-#include "Vao/OgreD3D11VaoManager.h"
 
+#include "OgreD3D11Device.h"
+#include "OgreD3D11Mappings.h"
+#include "OgreD3D11TextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
+#include "Vao/OgreD3D11VaoManager.h"
 
 #include "OgreLogManager.h"
 
 namespace Ogre
 {
-    D3D11AsyncTextureTicket::D3D11AsyncTextureTicket( uint32 width, uint32 height,
-                                                      uint32 depthOrSlices,
+    D3D11AsyncTextureTicket::D3D11AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                                       TextureTypes::TextureTypes textureType,
                                                       PixelFormatGpu pixelFormatFamily,
                                                       D3D11VaoManager *vaoManager ) :
-        AsyncTextureTicket( width, height, depthOrSlices, textureType,
-                            pixelFormatFamily ),
+        AsyncTextureTicket( width, height, depthOrSlices, textureType, pixelFormatFamily ),
         mDownloadFrame( 0 ),
         mVaoManager( vaoManager ),
         mMappedSlice( 0 ),
@@ -55,26 +53,25 @@ namespace Ogre
         D3D11Device &device = mVaoManager->getDevice();
 
         HRESULT hr;
-        if( mDepthOrSlices > 1u &&
-            mWidth <= D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION &&
+        if( mDepthOrSlices > 1u && mWidth <= D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION &&
             mHeight <= D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION )
         {
             D3D11_TEXTURE3D_DESC desc;
             memset( &desc, 0, sizeof( desc ) );
 
-            desc.Width      = static_cast<UINT>( mWidth );
-            desc.Height     = static_cast<UINT>( mHeight );
-            desc.Depth      = static_cast<UINT>( mDepthOrSlices );
-            desc.MipLevels  = 1u;
-            desc.Format     = D3D11Mappings::getFamily( mPixelFormatFamily );
-            desc.Usage              = D3D11_USAGE_STAGING;
-            desc.BindFlags          = 0;
-            desc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ;
-            desc.MiscFlags          = 0;
+            desc.Width = static_cast<UINT>( mWidth );
+            desc.Height = static_cast<UINT>( mHeight );
+            desc.Depth = static_cast<UINT>( mDepthOrSlices );
+            desc.MipLevels = 1u;
+            desc.Format = D3D11Mappings::getFamily( mPixelFormatFamily );
+            desc.Usage = D3D11_USAGE_STAGING;
+            desc.BindFlags = 0;
+            desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+            desc.MiscFlags = 0;
 
             if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
             {
-                desc.Width  = std::max( desc.Width, 4u );
+                desc.Width = std::max( desc.Width, 4u );
                 desc.Height = std::max( desc.Height, 4u );
             }
 
@@ -87,20 +84,20 @@ namespace Ogre
             D3D11_TEXTURE2D_DESC desc;
             memset( &desc, 0, sizeof( desc ) );
 
-            desc.Width      = static_cast<UINT>( mWidth );
-            desc.Height     = static_cast<UINT>( mHeight );
-            desc.MipLevels  = 1u;
-            desc.ArraySize  = static_cast<UINT>( mDepthOrSlices );
-            desc.Format     = D3D11Mappings::getFamily( mPixelFormatFamily );
-            desc.SampleDesc.Count   = 1u;
-            desc.Usage              = D3D11_USAGE_STAGING;
-            desc.BindFlags          = 0;
-            desc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ;
-            desc.MiscFlags          = 0;
+            desc.Width = static_cast<UINT>( mWidth );
+            desc.Height = static_cast<UINT>( mHeight );
+            desc.MipLevels = 1u;
+            desc.ArraySize = static_cast<UINT>( mDepthOrSlices );
+            desc.Format = D3D11Mappings::getFamily( mPixelFormatFamily );
+            desc.SampleDesc.Count = 1u;
+            desc.Usage = D3D11_USAGE_STAGING;
+            desc.BindFlags = 0;
+            desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+            desc.MiscFlags = 0;
 
             if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
             {
-                desc.Width  = std::max( desc.Width, 4u );
+                desc.Width = std::max( desc.Width, 4u );
                 desc.Height = std::max( desc.Height, 4u );
             }
 
@@ -110,7 +107,7 @@ namespace Ogre
             mIsArray2DTexture = true;
         }
 
-        if( FAILED(hr) || device.isError() )
+        if( FAILED( hr ) || device.isError() )
         {
             String errorDescription = device.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
@@ -142,14 +139,14 @@ namespace Ogre
         else
         {
             srcTextureBox = *srcBox;
-            srcTextureBox.bytesPerRow   = fullSrcTextureBox.bytesPerRow;
+            srcTextureBox.bytesPerRow = fullSrcTextureBox.bytesPerRow;
             srcTextureBox.bytesPerPixel = fullSrcTextureBox.bytesPerPixel;
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
 
         if( textureSrc->hasAutomaticBatching() )
         {
-            fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
+            fullSrcTextureBox.sliceStart = textureSrc->getInternalSliceStart();
             fullSrcTextureBox.numSlices = textureSrc->getTexturePool()->masterTexture->getNumSlices();
 
             srcTextureBox.sliceStart += textureSrc->getInternalSliceStart();
@@ -160,31 +157,31 @@ namespace Ogre
         D3D11_BOX srcBoxD3d;
         D3D11_BOX *srcBoxD3dPtr = &srcBoxD3d;
 
-        srcBoxD3d.left  = srcTextureBox.x;
-        srcBoxD3d.top   = srcTextureBox.y;
+        srcBoxD3d.left = srcTextureBox.x;
+        srcBoxD3d.top = srcTextureBox.y;
         srcBoxD3d.front = srcTextureBox.z;
         srcBoxD3d.right = srcTextureBox.x + srcTextureBox.width;
-        srcBoxD3d.bottom= srcTextureBox.y + srcTextureBox.height;
-        srcBoxD3d.back  = srcTextureBox.z + srcTextureBox.depth;
+        srcBoxD3d.bottom = srcTextureBox.y + srcTextureBox.height;
+        srcBoxD3d.back = srcTextureBox.z + srcTextureBox.depth;
 
         if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
         {
             uint32 blockWidth =
-                    PixelFormatGpuUtils::getCompressedBlockWidth( mPixelFormatFamily, false );
-            uint32 blockHeight=
-                    PixelFormatGpuUtils::getCompressedBlockHeight( mPixelFormatFamily, false );
-            srcBoxD3d.right     = alignToNextMultiple( srcBoxD3d.right, blockWidth );
-            srcBoxD3d.bottom    = alignToNextMultiple( srcBoxD3d.bottom, blockHeight );
+                PixelFormatGpuUtils::getCompressedBlockWidth( mPixelFormatFamily, false );
+            uint32 blockHeight =
+                PixelFormatGpuUtils::getCompressedBlockHeight( mPixelFormatFamily, false );
+            srcBoxD3d.right = alignToNextMultiple( srcBoxD3d.right, blockWidth );
+            srcBoxD3d.bottom = alignToNextMultiple( srcBoxD3d.bottom, blockHeight );
         }
 
         UINT srcSlicePos = srcTextureBox.sliceStart;
 
-        //These are the possibilities:
+        // These are the possibilities:
         //  Volume -> Array
         //  Array  -> Array
         //  Volume -> Volume
         //  Array  -> Volume
-        //If we're an Array, we need to copy 1 slice at a time, no matter what type src is.
+        // If we're an Array, we need to copy 1 slice at a time, no matter what type src is.
         UINT numSlices = srcTextureBox.numSlices;
         if( mIsArray2DTexture )
         {
@@ -205,21 +202,21 @@ namespace Ogre
             srcBoxD3dPtr = 0;
         }
 
-        assert( dynamic_cast<D3D11TextureGpu*>( textureSrc ) );
-        D3D11TextureGpu *srcTextureD3d = static_cast<D3D11TextureGpu*>( textureSrc );
+        assert( dynamic_cast<D3D11TextureGpu *>( textureSrc ) );
+        D3D11TextureGpu *srcTextureD3d = static_cast<D3D11TextureGpu *>( textureSrc );
 
         D3D11Device &device = mVaoManager->getDevice();
         ID3D11DeviceContextN *context = device.GetImmediateContext();
 
-        for( UINT slice=0; slice<numSlices; ++slice )
+        for( UINT slice = 0; slice < numSlices; ++slice )
         {
-            const UINT srcSubResourceIdx = D3D11CalcSubresource( mipLevel, srcSlicePos,
-                                                                 textureSrc->getNumMipmaps() );
+            const UINT srcSubResourceIdx =
+                D3D11CalcSubresource( mipLevel, srcSlicePos, textureSrc->getNumMipmaps() );
             const UINT dstSubResourceIdx = D3D11CalcSubresource( 0, dstSlicePos, 1u );
 
-            context->CopySubresourceRegion( mStagingTexture.Get(), dstSubResourceIdx,
-                                            0, 0, zPos, srcTextureD3d->getFinalTextureName(),
-                                            srcSubResourceIdx, srcBoxD3dPtr );
+            context->CopySubresourceRegion( mStagingTexture.Get(), dstSubResourceIdx, 0, 0, zPos,
+                                            srcTextureD3d->getFinalTextureName(), srcSubResourceIdx,
+                                            srcBoxD3dPtr );
             if( textureType == TextureTypes::Type3D )
             {
                 ++srcBoxD3d.front;
@@ -240,7 +237,8 @@ namespace Ogre
             String errorDescription = device.getErrorDescription();
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Error after calling CopySubresourceRegion\n"
-                         "Error Description:" + errorDescription,
+                         "Error Description:" +
+                             errorDescription,
                          "D3D11StagingTexture::upload" );
         }
 
@@ -278,15 +276,12 @@ namespace Ogre
         context->Unmap( mStagingTexture.Get(), subresourceIdx );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11AsyncTextureTicket::canMapMoreThanOneSlice() const
-    {
-        return !mIsArray2DTexture;
-    }
+    bool D3D11AsyncTextureTicket::canMapMoreThanOneSlice() const { return !mIsArray2DTexture; }
     //-----------------------------------------------------------------------------------
     void D3D11AsyncTextureTicket::waitForDownloadToFinish()
     {
         if( mStatus != Downloading )
-            return; //We're done.
+            return;  // We're done.
 
         if( mAccurateFence )
         {
@@ -306,8 +301,8 @@ namespace Ogre
     {
         if( !AsyncTextureTicket::queryIsTransferDone() )
         {
-            //Early out. The texture is not even finished being ready.
-            //We didn't even start the actual download.
+            // Early out. The texture is not even finished being ready.
+            // We didn't even start the actual download.
             return false;
         }
 
@@ -319,7 +314,7 @@ namespace Ogre
         }
         else if( mAccurateFence )
         {
-            //Ask D3D11 API to return immediately and tells us about the fence
+            // Ask D3D11 API to return immediately and tells us about the fence
             if( mVaoManager->queryIsDone( mAccurateFence.Get() ) )
             {
                 mAccurateFence.Reset();
@@ -333,32 +328,33 @@ namespace Ogre
             {
                 if( mNumInaccurateQueriesWasCalledInIssuingFrame > 3 )
                 {
-                    //Use is not calling vaoManager->update(). Likely it's stuck in an
-                    //infinite loop checking if we're done, but we'll always return false.
-                    //If so, switch to accurate tracking.
-                    mAccurateFence = mVaoManager->createFence() ;
+                    // Use is not calling vaoManager->update(). Likely it's stuck in an
+                    // infinite loop checking if we're done, but we'll always return false.
+                    // If so, switch to accurate tracking.
+                    mAccurateFence = mVaoManager->createFence();
 
                     D3D11Device &device = mVaoManager->getDevice();
                     ID3D11DeviceContextN *context = device.GetImmediateContext();
                     context->Flush();
 
                     LogManager::getSingleton().logMessage(
-                                "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
-                                "often with innacurate tracking in the same frame this transfer "
-                                "was issued. Switching to accurate tracking. If this is an accident, "
-                                "wait until you've rendered a few frames before checking if it's done. "
-                                "If this is on purpose, consider calling AsyncTextureTicket::download()"
-                                " with accurate tracking enabled.", LML_CRITICAL );
+                        "WARNING: Calling AsyncTextureTicket::queryIsTransferDone too "
+                        "often with innacurate tracking in the same frame this transfer "
+                        "was issued. Switching to accurate tracking. If this is an accident, "
+                        "wait until you've rendered a few frames before checking if it's done. "
+                        "If this is on purpose, consider calling AsyncTextureTicket::download()"
+                        " with accurate tracking enabled.",
+                        LML_CRITICAL );
                 }
 
                 ++mNumInaccurateQueriesWasCalledInIssuingFrame;
             }
 
-            //We're downloading but have no fence. That means we don't have accurate tracking.
+            // We're downloading but have no fence. That means we don't have accurate tracking.
             retVal = mVaoManager->isFrameFinished( mDownloadFrame );
             ++mNumInaccurateQueriesWasCalledInIssuingFrame;
         }
 
         return retVal;
     }
-}
+}  // namespace Ogre

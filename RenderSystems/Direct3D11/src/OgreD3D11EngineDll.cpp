@@ -26,6 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11Plugin.h"
+
 #include "OgreRoot.h"
 
 #ifndef OGRE_STATIC_LIB

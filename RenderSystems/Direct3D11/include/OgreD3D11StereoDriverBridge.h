@@ -29,37 +29,40 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-#ifndef __D3D11StereoDriverBridge_H__
-#define __D3D11StereoDriverBridge_H__
+#    ifndef __D3D11StereoDriverBridge_H__
+#        define __D3D11StereoDriverBridge_H__
 
-#include "OgreCommon.h"
-#include "OgreSingleton.h"
-#include "OgreD3D11RenderWindow.h"
+#        include "OgreCommon.h"
+#        include "OgreD3D11RenderWindow.h"
+#        include "OgreSingleton.h"
 
-namespace Ogre {
+namespace Ogre
+{
+    class D3D11StereoDriverImpl;
 
-  class D3D11StereoDriverImpl;
-
-  /** Bridge interface from the render system to the stereo driver. Loads the
-   correct driver and forwards the methods to the stereo driver implementation.*/
-  class _OgreD3D11Export D3D11StereoDriverBridge : public Singleton<D3D11StereoDriverBridge>, public StereoDriverAlloc
-  {
+    /** Bridge interface from the render system to the stereo driver. Loads the
+     correct driver and forwards the methods to the stereo driver implementation.*/
+    class _OgreD3D11Export D3D11StereoDriverBridge : public Singleton<D3D11StereoDriverBridge>,
+                                                     public StereoDriverAlloc
+    {
     public:
-      D3D11StereoDriverBridge(StereoModeType stereoMode);
-      virtual ~D3D11StereoDriverBridge();
-      static D3D11StereoDriverBridge& getSingleton();
-      static D3D11StereoDriverBridge* getSingletonPtr();
-      StereoModeType getStereoMode() const;
-	  bool addRenderWindow(D3D11RenderWindowBase* renderWindow) const;
-      bool removeRenderWindow(const String& renderWindowName) const;
-      bool isStereoEnabled(const String& renderWindowName) const;
-      bool setDrawBuffer(const ColourBufferType colourBuffer) const;
+        D3D11StereoDriverBridge( StereoModeType stereoMode );
+        virtual ~D3D11StereoDriverBridge();
+        static D3D11StereoDriverBridge &getSingleton();
+        static D3D11StereoDriverBridge *getSingletonPtr();
+
+        StereoModeType getStereoMode() const;
+
+        bool addRenderWindow( D3D11RenderWindowBase *renderWindow ) const;
+        bool removeRenderWindow( const String &renderWindowName ) const;
+        bool isStereoEnabled( const String &renderWindowName ) const;
+        bool setDrawBuffer( const ColourBufferType colourBuffer ) const;
 
     protected:
-      bool mIsNvapiInitialized;
-      D3D11StereoDriverImpl* mPimpl;
-      StereoModeType mStereoMode;
-  };
-}
-#endif
+        bool                   mIsNvapiInitialized;
+        D3D11StereoDriverImpl *mPimpl;
+        StereoModeType         mStereoMode;
+    };
+}  // namespace Ogre
+#    endif
 #endif

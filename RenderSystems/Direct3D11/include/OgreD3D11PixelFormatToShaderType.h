@@ -30,6 +30,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #define _OgreD3D11PixelFormatToShaderType_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgrePixelFormatGpu.h"
 
 namespace Ogre

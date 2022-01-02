@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 #include "OgreD3D11VideoMode.h"
 
-namespace Ogre 
+namespace Ogre
 {
     //---------------------------------------------------------------------
     String D3D11VideoMode::getDescription() const
@@ -42,12 +42,11 @@ namespace Ogre
             mModeDesc.Format == DXGI_FORMAT_R32G32B32_TYPELESS ||
             mModeDesc.Format == DXGI_FORMAT_R32G32B32_FLOAT ||
             mModeDesc.Format == DXGI_FORMAT_R32G32B32_UINT ||
-            mModeDesc.Format == DXGI_FORMAT_R32G32B32_SINT 
-            )
+            mModeDesc.Format == DXGI_FORMAT_R32G32B32_SINT )
             colourDepth = 32;
 
         sprintf( tmp, "%d x %d @ %d-bit colour", mModeDesc.Width, mModeDesc.Height, colourDepth );
-        return String(tmp);
+        return String( tmp );
     }
     //---------------------------------------------------------------------
     unsigned int D3D11VideoMode::getColourDepth() const
@@ -60,66 +59,47 @@ namespace Ogre
             mModeDesc.Format == DXGI_FORMAT_R32G32B32_TYPELESS ||
             mModeDesc.Format == DXGI_FORMAT_R32G32B32_FLOAT ||
             mModeDesc.Format == DXGI_FORMAT_R32G32B32_UINT ||
-            mModeDesc.Format == DXGI_FORMAT_R32G32B32_SINT 
-            )
+            mModeDesc.Format == DXGI_FORMAT_R32G32B32_SINT )
             colourDepth = 32;
 
         return colourDepth;
     }
     //---------------------------------------------------------------------
-    unsigned int D3D11VideoMode::getWidth() const
-    {
-        return mModeDesc.Width;
-    }
+    unsigned int D3D11VideoMode::getWidth() const { return mModeDesc.Width; }
     //---------------------------------------------------------------------
-    unsigned int D3D11VideoMode::getHeight() const
-    {
-        return mModeDesc.Height;
-    }
+    unsigned int D3D11VideoMode::getHeight() const { return mModeDesc.Height; }
     //---------------------------------------------------------------------
-    DXGI_FORMAT D3D11VideoMode::getFormat() const
-    {
-        return mModeDesc.Format;
-    }
+    DXGI_FORMAT D3D11VideoMode::getFormat() const { return mModeDesc.Format; }
     //---------------------------------------------------------------------
-    DXGI_RATIONAL D3D11VideoMode::getRefreshRate() const
-    {
-        return mModeDesc.RefreshRate;
-    }
+    DXGI_RATIONAL D3D11VideoMode::getRefreshRate() const { return mModeDesc.RefreshRate; }
     //---------------------------------------------------------------------
-    DXGI_OUTPUT_DESC D3D11VideoMode::getDisplayMode() const
-    {
-        return mDisplayMode;
-    }
+    DXGI_OUTPUT_DESC D3D11VideoMode::getDisplayMode() const { return mDisplayMode; }
     //---------------------------------------------------------------------
-    DXGI_MODE_DESC D3D11VideoMode::getModeDesc() const
-    {
-        return mModeDesc;
-    }
+    DXGI_MODE_DESC D3D11VideoMode::getModeDesc() const { return mModeDesc; }
     //---------------------------------------------------------------------
-    void D3D11VideoMode::increaseRefreshRate( DXGI_RATIONAL rr )
-    {
-        mModeDesc.RefreshRate = rr;
-    }
+    void D3D11VideoMode::increaseRefreshRate( DXGI_RATIONAL rr ) { mModeDesc.RefreshRate = rr; }
     //---------------------------------------------------------------------
-    D3D11VideoMode::D3D11VideoMode( DXGI_OUTPUT_DESC d3ddm,DXGI_MODE_DESC ModeDesc )
+    D3D11VideoMode::D3D11VideoMode( DXGI_OUTPUT_DESC d3ddm, DXGI_MODE_DESC ModeDesc )
     {
-        modeNumber = ++modeCount; mDisplayMode = d3ddm;mModeDesc=ModeDesc;
+        modeNumber = ++modeCount;
+        mDisplayMode = d3ddm;
+        mModeDesc = ModeDesc;
     }
     //---------------------------------------------------------------------
     D3D11VideoMode::D3D11VideoMode( const D3D11VideoMode &ob )
     {
-        modeNumber = ++modeCount; mDisplayMode = ob.mDisplayMode;mModeDesc=ob.mModeDesc;
+        modeNumber = ++modeCount;
+        mDisplayMode = ob.mDisplayMode;
+        mModeDesc = ob.mModeDesc;
     }
     //---------------------------------------------------------------------
     D3D11VideoMode::D3D11VideoMode()
     {
-        modeNumber = ++modeCount; ZeroMemory( &mDisplayMode, sizeof(DXGI_OUTPUT_DESC) );ZeroMemory( &mModeDesc, sizeof(DXGI_MODE_DESC) );
+        modeNumber = ++modeCount;
+        ZeroMemory( &mDisplayMode, sizeof( DXGI_OUTPUT_DESC ) );
+        ZeroMemory( &mModeDesc, sizeof( DXGI_MODE_DESC ) );
     }
     //---------------------------------------------------------------------
-    D3D11VideoMode::~D3D11VideoMode()
-    {
-        modeCount--;
-    }
+    D3D11VideoMode::~D3D11VideoMode() { modeCount--; }
     //---------------------------------------------------------------------
-}
+}  // namespace Ogre

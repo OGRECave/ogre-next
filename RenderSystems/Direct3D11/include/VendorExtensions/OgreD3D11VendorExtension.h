@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgreD3D11VendorExtension_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreRenderSystemCapabilities.h"
 
 #include "OgreHeaderPrefix.h"
@@ -38,11 +39,10 @@ namespace Ogre
     class _OgreD3D11Export D3D11VendorExtension
     {
     protected:
-        virtual HRESULT createDeviceImpl( const String &appName,
-                                          IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
-                                          UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
-                                          UINT numFeatureLevels, D3D_FEATURE_LEVEL *outFeatureLevel,
-                                          ID3D11Device **outDevice );
+        virtual HRESULT createDeviceImpl( const String &appName, IDXGIAdapter *adapter,
+                                          D3D_DRIVER_TYPE driverType, UINT deviceFlags,
+                                          D3D_FEATURE_LEVEL *pFirstFL, UINT numFeatureLevels,
+                                          D3D_FEATURE_LEVEL *outFeatureLevel, ID3D11Device **outDevice );
 
     public:
         D3D11VendorExtension();
@@ -58,19 +58,17 @@ namespace Ogre
             in case there's multiple vendor GPUs in the same machine
         @return
         */
-        static D3D11VendorExtension* initializeExtension( GPUVendor preferredVendor,
+        static D3D11VendorExtension *initializeExtension( GPUVendor     preferredVendor,
                                                           IDXGIAdapter *adapter );
 
-        void createDevice( const String &appName,
-                           IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
-                           UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
-                           UINT numFeatureLevels, D3D_FEATURE_LEVEL *outFeatureLevel,
-                           ID3D11Device **outDevice );
+        void createDevice( const String &appName, IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
+                           UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL, UINT numFeatureLevels,
+                           D3D_FEATURE_LEVEL *outFeatureLevel, ID3D11Device **outDevice );
 
         virtual void destroyDevice( ID3D11Device *device );
     };
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

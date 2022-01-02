@@ -26,83 +26,82 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11HardwareVertexBuffer.h"
-#include "OgreD3D11HardwareBuffer.h"
+
 #include "OgreD3D11Device.h"
+#include "OgreD3D11HardwareBuffer.h"
 
-namespace Ogre {
-namespace v1 {
+namespace Ogre
+{
+    namespace v1
+    {
+        //---------------------------------------------------------------------
+        D3D11HardwareVertexBuffer::D3D11HardwareVertexBuffer( HardwareBufferManagerBase *mgr,
+                                                              size_t vertexSize, size_t numVertices,
+                                                              HardwareBuffer::Usage usage,
+                                                              D3D11Device &device, bool useSystemMemory,
+                                                              bool useShadowBuffer, bool streamOut ) :
+            HardwareVertexBuffer( mgr, vertexSize, numVertices, usage, useSystemMemory,
+                                  false /* see below */ ),
+            mBufferImpl( 0 )
 
-    //---------------------------------------------------------------------
-    D3D11HardwareVertexBuffer::D3D11HardwareVertexBuffer(HardwareBufferManagerBase* mgr, size_t vertexSize, 
-        size_t numVertices, HardwareBuffer::Usage usage, D3D11Device & device, 
-        bool useSystemMemory, bool useShadowBuffer, bool streamOut)
-        : HardwareVertexBuffer(mgr, vertexSize, numVertices, usage, useSystemMemory, false /* see below */),
-          mBufferImpl(0)
-          
-    {
-        // ensure DefaultHardwareVertexBuffer was not created
-        assert(!mShadowBuffer);
-        mUseShadowBuffer = useShadowBuffer;
-
-        // everything is done via internal generalisation
-        mBufferImpl = new D3D11HardwareBuffer(D3D11HardwareBuffer::VERTEX_BUFFER, 
-            mSizeInBytes, mUsage, device, useSystemMemory, useShadowBuffer, streamOut);
-
-    }
-    //---------------------------------------------------------------------
-    D3D11HardwareVertexBuffer::~D3D11HardwareVertexBuffer()
-    {
-        SAFE_DELETE(mBufferImpl);
-    }
-    //---------------------------------------------------------------------
-    void* D3D11HardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options)
-    {
-        return mBufferImpl->lock(offset, length, options);
-    }
-    //---------------------------------------------------------------------
-    void D3D11HardwareVertexBuffer::unlock()
-    {
-        mBufferImpl->unlock();
-    }
-    //---------------------------------------------------------------------
-    void D3D11HardwareVertexBuffer::readData(size_t offset, size_t length, void* pDest)
-    {
-        mBufferImpl->readData(offset, length, pDest);
-    }
-    //---------------------------------------------------------------------
-    void D3D11HardwareVertexBuffer::writeData(size_t offset, size_t length, const void* pSource,
-        bool discardWholeBuffer)
-    {
-        mBufferImpl->writeData(offset, length, pSource, discardWholeBuffer);
-    }
-    //---------------------------------------------------------------------
-    void D3D11HardwareVertexBuffer::copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
-        size_t dstOffset, size_t length, bool discardWholeBuffer)
-    {
-        // check if the other buffer is also a D3D11HardwareVertexBuffer
-        if (srcBuffer.isSystemMemory())
         {
-            // src is not a D3D11HardwareVertexBuffer - use default copy
-            HardwareBuffer::copyData(srcBuffer, srcOffset, dstOffset, length, discardWholeBuffer);
+            // ensure DefaultHardwareVertexBuffer was not created
+            assert( !mShadowBuffer );
+            mUseShadowBuffer = useShadowBuffer;
+
+            // everything is done via internal generalisation
+            mBufferImpl =
+                new D3D11HardwareBuffer( D3D11HardwareBuffer::VERTEX_BUFFER, mSizeInBytes, mUsage,
+                                         device, useSystemMemory, useShadowBuffer, streamOut );
         }
-        else
+        //---------------------------------------------------------------------
+        D3D11HardwareVertexBuffer::~D3D11HardwareVertexBuffer() { SAFE_DELETE( mBufferImpl ); }
+        //---------------------------------------------------------------------
+        void *D3D11HardwareVertexBuffer::lock( size_t offset, size_t length, LockOptions options )
         {
-            // src is a D3D11HardwareVertexBuffer use d3d11 optimized copy
-            D3D11HardwareVertexBuffer& d3dBuf = static_cast<D3D11HardwareVertexBuffer&>(srcBuffer);
+            return mBufferImpl->lock( offset, length, options );
+        }
+        //---------------------------------------------------------------------
+        void D3D11HardwareVertexBuffer::unlock() { mBufferImpl->unlock(); }
+        //---------------------------------------------------------------------
+        void D3D11HardwareVertexBuffer::readData( size_t offset, size_t length, void *pDest )
+        {
+            mBufferImpl->readData( offset, length, pDest );
+        }
+        //---------------------------------------------------------------------
+        void D3D11HardwareVertexBuffer::writeData( size_t offset, size_t length, const void *pSource,
+                                                   bool discardWholeBuffer )
+        {
+            mBufferImpl->writeData( offset, length, pSource, discardWholeBuffer );
+        }
+        //---------------------------------------------------------------------
+        void D3D11HardwareVertexBuffer::copyData( HardwareBuffer &srcBuffer, size_t srcOffset,
+                                                  size_t dstOffset, size_t length,
+                                                  bool discardWholeBuffer )
+        {
+            // check if the other buffer is also a D3D11HardwareVertexBuffer
+            if( srcBuffer.isSystemMemory() )
+            {
+                // src is not a D3D11HardwareVertexBuffer - use default copy
+                HardwareBuffer::copyData( srcBuffer, srcOffset, dstOffset, length, discardWholeBuffer );
+            }
+            else
+            {
+                // src is a D3D11HardwareVertexBuffer use d3d11 optimized copy
+                D3D11HardwareVertexBuffer &d3dBuf =
+                    static_cast<D3D11HardwareVertexBuffer &>( srcBuffer );
 
-			mBufferImpl->copyData(*(d3dBuf.mBufferImpl), srcOffset, dstOffset, length, discardWholeBuffer);
-		}
-	}
-	//---------------------------------------------------------------------
-	bool D3D11HardwareVertexBuffer::isLocked() const
-	{
-		return mBufferImpl->isLocked();
-	}
-	//---------------------------------------------------------------------
-    //---------------------------------------------------------------------
-    ID3D11Buffer * D3D11HardwareVertexBuffer::getD3DVertexBuffer() const
-    {
-        return mBufferImpl->getD3DBuffer();
-    }
-}
-}
+                mBufferImpl->copyData( *( d3dBuf.mBufferImpl ), srcOffset, dstOffset, length,
+                                       discardWholeBuffer );
+            }
+        }
+        //---------------------------------------------------------------------
+        bool D3D11HardwareVertexBuffer::isLocked() const { return mBufferImpl->isLocked(); }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        ID3D11Buffer *D3D11HardwareVertexBuffer::getD3DVertexBuffer() const
+        {
+            return mBufferImpl->getD3DBuffer();
+        }
+    }  // namespace v1
+}  // namespace Ogre

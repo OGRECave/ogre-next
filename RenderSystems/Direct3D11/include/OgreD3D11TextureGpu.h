@@ -30,17 +30,17 @@ THE SOFTWARE.
 #define _OgreD3D11TextureGpu_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreD3D11DeviceResource.h"
-#include "OgreTextureGpu.h"
 #include "OgreDescriptorSetTexture.h"
 #include "OgreDescriptorSetUav.h"
+#include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11TextureGpu : public TextureGpu,
-                                             protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11TextureGpu : public TextureGpu, protected D3D11DeviceResource
     {
     protected:
         /// The general case is that the whole D3D11 texture will be accessed through the SRV.
@@ -71,7 +71,6 @@ namespace Ogre
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
         ComPtr<ID3D11Resource> mFinalTextureName;
 
-
         /// Only used when hasMsaaExplicitResolves() == false.
         ComPtr<ID3D11Resource> mMsaaFramebufferName;
 
@@ -82,13 +81,12 @@ namespace Ogre
         void createInternalResourcesImpl() override;
         void destroyInternalResourcesImpl() override;
 
-        void notifyDeviceLost(D3D11Device* device) override;
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass) override;
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
     public:
-        D3D11TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                         VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                         TextureTypes::TextureTypes initialType,
+        D3D11TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager,
+                         IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                          TextureGpuManager *textureManager );
         ~D3D11TextureGpu() override;
 
@@ -110,29 +108,31 @@ namespace Ogre
         void _autogenerateMipmaps( CopyEncTransitionMode::CopyEncTransitionMode transitionMode =
                                        CopyEncTransitionMode::Auto ) override;
 
-        //The returned pointer has its ref. count incremented! Caller must decrease it!
-        ComPtr<ID3D11ShaderResourceView> createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
+        // The returned pointer has its ref. count incremented! Caller must decrease it!
+        ComPtr<ID3D11ShaderResourceView> createSrv(
+            const DescriptorSetTexture2::TextureSlot &texSlot ) const;
         ComPtr<ID3D11ShaderResourceView> createSrv() const;
-        ID3D11ShaderResourceView* getDefaultDisplaySrv() const  { return mDefaultDisplaySrv.Get(); }
+        ID3D11ShaderResourceView *getDefaultDisplaySrv() const { return mDefaultDisplaySrv.Get(); }
 
-        ComPtr<ID3D11UnorderedAccessView> createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
+        ComPtr<ID3D11UnorderedAccessView> createUav(
+            const DescriptorSetUav::TextureSlot &texSlot ) const;
 
         bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern ) override;
         void getSubsampleLocations( vector<Vector2>::type locations ) override;
 
         void getCustomAttribute( IdString name, void *pData ) override;
 
-        ID3D11Resource* getDisplayTextureName() const   { return mDisplayTextureName; }
-        ID3D11Resource* getFinalTextureName() const     { return mFinalTextureName.Get(); }
-        ID3D11Resource* getMsaaFramebufferName() const  { return mMsaaFramebufferName.Get(); }
+        ID3D11Resource *getDisplayTextureName() const { return mDisplayTextureName; }
+        ID3D11Resource *getFinalTextureName() const { return mFinalTextureName.Get(); }
+        ID3D11Resource *getMsaaFramebufferName() const { return mMsaaFramebufferName.Get(); }
     };
 
     class _OgreD3D11Export D3D11TextureGpuRenderTarget : public D3D11TextureGpu
     {
     protected:
-        uint16          mDepthBufferPoolId;
-        bool            mPreferDepthTexture;
-        PixelFormatGpu  mDesiredDepthBufferFormat;
+        uint16         mDepthBufferPoolId;
+        bool           mPreferDepthTexture;
+        PixelFormatGpu mDesiredDepthBufferFormat;
 #if OGRE_NO_VIEWPORT_ORIENTATIONMODE == 0
         OrientationMode mOrientationMode;
 #endif
@@ -141,12 +141,12 @@ namespace Ogre
         D3D11TextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                      VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                      TextureTypes::TextureTypes initialType,
-                                     TextureGpuManager *textureManager );
+                                     TextureGpuManager *        textureManager );
 
-        void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
-                                              PixelFormatGpu desiredDepthBufferFormat ) override;
-        uint16 getDepthBufferPoolId() const override;
-        bool getPreferDepthTexture() const override;
+        void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                                PixelFormatGpu desiredDepthBufferFormat ) override;
+        uint16         getDepthBufferPoolId() const override;
+        bool           getPreferDepthTexture() const override;
         PixelFormatGpu getDesiredDepthBufferFormat() const override;
 
         void setOrientationMode( OrientationMode orientationMode ) override;
@@ -154,7 +154,7 @@ namespace Ogre
         OrientationMode getOrientationMode() const override;
 #endif
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

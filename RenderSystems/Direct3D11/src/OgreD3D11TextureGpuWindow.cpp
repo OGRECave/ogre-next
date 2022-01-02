@@ -27,27 +27,25 @@ THE SOFTWARE.
 */
 
 #include "OgreD3D11TextureGpuWindow.h"
+
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11TextureGpuManager.h"
-
-#include "OgreTextureGpuListener.h"
+#include "OgreException.h"
 #include "OgreTextureBox.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreVector2.h"
 #include "OgreWindow.h"
-
 #include "Vao/OgreVaoManager.h"
-
-#include "OgreException.h"
 
 namespace Ogre
 {
-    D3D11TextureGpuWindow::D3D11TextureGpuWindow(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            VaoManager *vaoManager, IdString name, uint32 textureFlags,
-            TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager, Window *window ) :
-        D3D11TextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
-                                     textureFlags, initialType, textureManager ),
+    D3D11TextureGpuWindow::D3D11TextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                                  VaoManager *vaoManager, IdString name,
+                                                  uint32 textureFlags,
+                                                  TextureTypes::TextureTypes initialType,
+                                                  TextureGpuManager *textureManager, Window *window ) :
+        D3D11TextureGpuRenderTarget( pageOutStrategy, vaoManager, name, textureFlags, initialType,
+                                     textureManager ),
         mWindow( window )
     {
         mTextureType = TextureTypes::Type2D;
@@ -56,10 +54,7 @@ namespace Ogre
         mDefaultDisplaySrv.Reset();
     }
     //-----------------------------------------------------------------------------------
-    D3D11TextureGpuWindow::~D3D11TextureGpuWindow()
-    {
-        destroyInternalResourcesImpl();
-    }
+    D3D11TextureGpuWindow::~D3D11TextureGpuWindow() { destroyInternalResourcesImpl(); }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::createInternalResourcesImpl()
     {
@@ -88,16 +83,13 @@ namespace Ogre
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::swapBuffers()
-    {
-        mWindow->swapBuffers();
-    }
+    void D3D11TextureGpuWindow::swapBuffers() { mWindow->swapBuffers(); }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "Window" )
         {
-            *static_cast<Window**>(pData) = mWindow;
+            *static_cast<Window **>( pData ) = mWindow;
         }
         else
         {
@@ -105,9 +97,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::_setToDisplayDummyTexture()
-    {
-    }
+    void D3D11TextureGpuWindow::_setToDisplayDummyTexture() {}
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
@@ -143,7 +133,7 @@ namespace Ogre
             assert( mSampleDescription.pattern != MsaaPatterns::Undefined );
 
             float vals[2];
-            for( int i=0; i<mSampleDescription.colorSamples; ++i )
+            for( int i = 0; i < mSampleDescription.colorSamples; ++i )
             {
                 glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
                 locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );
@@ -151,4 +141,4 @@ namespace Ogre
         }
 #endif
     }
-}
+}  // namespace Ogre

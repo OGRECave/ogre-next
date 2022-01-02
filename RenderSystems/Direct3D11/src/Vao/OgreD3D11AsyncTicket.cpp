@@ -26,38 +26,31 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreD3D11Prerequisites.h"
-
 #include "Vao/OgreD3D11AsyncTicket.h"
-#include "Vao/OgreD3D11VaoManager.h"
-
-#include "Vao/OgreStagingBuffer.h"
-#include "OgreException.h"
 
 #include "OgreD3D11Device.h"
+#include "OgreException.h"
+#include "Vao/OgreD3D11VaoManager.h"
+#include "Vao/OgreStagingBuffer.h"
 
 namespace Ogre
 {
-    D3D11AsyncTicket::D3D11AsyncTicket( BufferPacked *creator,
-                                        StagingBuffer *stagingBuffer,
-                                        size_t elementStart,
-                                        size_t elementCount,
-                                        D3D11Device &device ) :
+    D3D11AsyncTicket::D3D11AsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
+                                        size_t elementStart, size_t elementCount, D3D11Device &device ) :
         AsyncTicket( creator, stagingBuffer, elementStart, elementCount ),
         mDevice( device )
     {
-        //Base constructor has already called _asyncDownload. We should now place a fence.
+        // Base constructor has already called _asyncDownload. We should now place a fence.
         mFenceName = D3D11VaoManager::createFence( mDevice );
     }
     //-----------------------------------------------------------------------------------
-    D3D11AsyncTicket::~D3D11AsyncTicket()
-    {
-    }
+    D3D11AsyncTicket::~D3D11AsyncTicket() {}
     //-----------------------------------------------------------------------------------
-    const void* D3D11AsyncTicket::mapImpl()
+    const void *D3D11AsyncTicket::mapImpl()
     {
         if( mFenceName )
-            *mFenceName.GetAddressOf() = D3D11VaoManager::waitFor( mFenceName.Get(), mDevice.GetImmediateContext() );
+            *mFenceName.GetAddressOf() =
+                D3D11VaoManager::waitFor( mFenceName.Get(), mDevice.GetImmediateContext() );
 
         return mStagingBuffer->_mapForRead( mStagingBufferMapOffset,
                                             mElementCount * mCreator->getBytesPerElement() );
@@ -89,4 +82,4 @@ namespace Ogre
 
         return retVal;
     }
-}
+}  // namespace Ogre

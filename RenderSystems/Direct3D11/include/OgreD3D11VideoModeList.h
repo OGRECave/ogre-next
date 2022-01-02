@@ -32,18 +32,19 @@ THE SOFTWARE.
 
 #include "ogrestd/vector.h"
 
-namespace Ogre 
+namespace Ogre
 {
     class _OgreD3D11Export D3D11VideoModeList
     {
         vector<D3D11VideoMode>::type mModeList;
 
     public:
-        D3D11VideoModeList(IDXGIAdapterN* pAdapter);
+        D3D11VideoModeList( IDXGIAdapterN *pAdapter );
 
         size_t count();
-        D3D11VideoMode* item( size_t index );
-        D3D11VideoMode* item( const String &name );
+
+        D3D11VideoMode *item( size_t index );
+        D3D11VideoMode *item( const String &name );
     };
-}
+}  // namespace Ogre
 #endif

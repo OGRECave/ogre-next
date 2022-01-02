@@ -27,10 +27,10 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11DynamicBuffer.h"
-#include "Vao/OgreD3D11StagingBuffer.h"
 
 #include "OgreD3D11Device.h"
 #include "OgreException.h"
+#include "Vao/OgreD3D11StagingBuffer.h"
 
 namespace Ogre
 {
@@ -43,20 +43,13 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    D3D11DynamicBuffer::~D3D11DynamicBuffer()
-    {
-    }
+    D3D11DynamicBuffer::~D3D11DynamicBuffer() {}
     //-----------------------------------------------------------------------------------
-    void D3D11DynamicBuffer::notifyDeviceLost( D3D11Device *device )
-    {
-        mVboName.Reset();
-    }
+    void D3D11DynamicBuffer::notifyDeviceLost( D3D11Device *device ) { mVboName.Reset(); }
     //-----------------------------------------------------------------------------------
-    void D3D11DynamicBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass )
-    {
-    }
+    void D3D11DynamicBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass ) {}
     //-----------------------------------------------------------------------------------
-    size_t D3D11DynamicBuffer::addMappedRange(size_t start, size_t count )
+    size_t D3D11DynamicBuffer::addMappedRange( size_t start, size_t count )
     {
         size_t ticket;
 
@@ -75,7 +68,7 @@ namespace Ogre
         return ticket;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN D3D11DynamicBuffer::map( size_t start, size_t count, size_t &outTicket )
+    void *RESTRICT_ALIAS_RETURN D3D11DynamicBuffer::map( size_t start, size_t count, size_t &outTicket )
     {
         assert( start <= mVboSize && start + count <= mVboSize );
 
@@ -84,19 +77,18 @@ namespace Ogre
             D3D11_MAPPED_SUBRESOURCE mappedSubres;
             HRESULT hr = mDevice.GetImmediateContext()->Map(
                 mVboName.Get(), 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedSubres );
-            if (FAILED(hr) || mDevice.isError())
+            if( FAILED( hr ) || mDevice.isError() )
             {
-                String msg = mDevice.getErrorDescription(hr);
-                OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                    "Error calling Map: " + msg, 
-                    "D3D11DynamicBuffer::map");
+                String msg = mDevice.getErrorDescription( hr );
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Error calling Map: " + msg,
+                                "D3D11DynamicBuffer::map" );
             }
             mMappedPtr = mappedSubres.pData;
         }
 
         outTicket = addMappedRange( start, count );
 
-        return static_cast<uint8*>(mMappedPtr) + start;
+        return static_cast<uint8 *>( mMappedPtr ) + start;
     }
     //-----------------------------------------------------------------------------------
     void D3D11DynamicBuffer::unmap( size_t ticket )
@@ -113,4 +105,4 @@ namespace Ogre
             mMappedPtr = 0;
         }
     }
-}
+}  // namespace Ogre

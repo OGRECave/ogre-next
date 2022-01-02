@@ -27,38 +27,31 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11StagingBuffer.h"
-#include "Vao/OgreD3D11VaoManager.h"
-#include "Vao/OgreD3D11BufferInterface.h"
-#include "OgreD3D11Device.h"
 
+#include "OgreD3D11Device.h"
 #include "OgreStringConverter.h"
+#include "Vao/OgreD3D11BufferInterface.h"
+#include "Vao/OgreD3D11VaoManager.h"
 
 namespace Ogre
 {
     D3D11StagingBuffer::D3D11StagingBuffer( size_t sizeBytes, VaoManager *vaoManager, bool uploadOnly,
                                             ID3D11Buffer *stagingBuffer, D3D11Device &device ) :
-        StagingBuffer( 0 /*No internalBufferStart in D3D11 (should be implemented in D3D12)*/,
-                       sizeBytes, vaoManager, uploadOnly ),
+        StagingBuffer( 0 /*No internalBufferStart in D3D11 (should be implemented in D3D12)*/, sizeBytes,
+                       vaoManager, uploadOnly ),
         mVboName( stagingBuffer ),
         mMappedPtr( 0 ),
         mDevice( device )
     {
     }
     //-----------------------------------------------------------------------------------
-    D3D11StagingBuffer::~D3D11StagingBuffer()
-    {
-    }
+    D3D11StagingBuffer::~D3D11StagingBuffer() {}
     //-----------------------------------------------------------------------------------
-    void D3D11StagingBuffer::notifyDeviceLost( D3D11Device *device )
-    {
-        mVboName.Reset();
-    }
+    void D3D11StagingBuffer::notifyDeviceLost( D3D11Device *device ) { mVboName.Reset(); }
     //-----------------------------------------------------------------------------------
-    void D3D11StagingBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass )
-    {
-    }
+    void D3D11StagingBuffer::notifyDeviceRestored( D3D11Device *device, unsigned pass ) {}
     //-----------------------------------------------------------------------------------
-    void* D3D11StagingBuffer::mapImpl( size_t sizeBytes )
+    void *D3D11StagingBuffer::mapImpl( size_t sizeBytes )
     {
         assert( mUploadOnly );
 
@@ -74,14 +67,13 @@ namespace Ogre
 
         D3D11_MAPPED_SUBRESOURCE mappedSubres;
         HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, mapFlag, 0, &mappedSubres );
-        if (FAILED(hr) || mDevice.isError())
+        if( FAILED( hr ) || mDevice.isError() )
         {
-            String msg = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Error calling Map: " + msg, 
-                "D3D11StagingBuffer::mapImpl");
+            String msg = mDevice.getErrorDescription( hr );
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Error calling Map: " + msg,
+                            "D3D11StagingBuffer::mapImpl" );
         }
-        mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) + mMappingStart;
+        mMappedPtr = reinterpret_cast<uint8 *>( mappedSubres.pData ) + mMappingStart;
 
         return mMappedPtr;
     }
@@ -92,31 +84,31 @@ namespace Ogre
         d3dContext->Unmap( mVboName.Get(), 0 );
         mMappedPtr = 0;
 
-        for( size_t i=0; i<numDestinations; ++i )
+        for( size_t i = 0; i < numDestinations; ++i )
         {
             const Destination &dst = destinations[i];
 
-            D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
-                                                            dst.destination->getBufferInterface() );
+            D3D11BufferInterfaceBase *bufferInterface =
+                static_cast<D3D11BufferInterfaceBase *>( dst.destination->getBufferInterface() );
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
-            UINT dstOffset = static_cast<UINT>( dst.dstOffset +
-                                                dst.destination->_getInternalBufferStart() *
-                                                dst.destination->getBytesPerElement() );
+            UINT dstOffset =
+                static_cast<UINT>( dst.dstOffset + dst.destination->_getInternalBufferStart() *
+                                                       dst.destination->getBytesPerElement() );
 
             D3D11_BOX srcBox;
-            ZeroMemory( &srcBox, sizeof(D3D11_BOX) );
-            srcBox.left     = UINT( mMappingStart + dst.srcOffset );
-            srcBox.right    = UINT( mMappingStart + dst.srcOffset + dst.length );
-            srcBox.back     = 1;
-            srcBox.bottom   = 1;
+            ZeroMemory( &srcBox, sizeof( D3D11_BOX ) );
+            srcBox.left = UINT( mMappingStart + dst.srcOffset );
+            srcBox.right = UINT( mMappingStart + dst.srcOffset + dst.length );
+            srcBox.back = 1;
+            srcBox.bottom = 1;
 
-            d3dContext->CopySubresourceRegion( bufferInterface->getVboName(), 0,
-                                               dstOffset, 0, 0, mVboName.Get(), 0, &srcBox );
+            d3dContext->CopySubresourceRegion( bufferInterface->getVboName(), 0, dstOffset, 0, 0,
+                                               mVboName.Get(), 0, &srcBox );
         }
 
-        //We must wrap exactly to zero so that next map uses DISCARD.
+        // We must wrap exactly to zero so that next map uses DISCARD.
         if( mMappingStart + mMappingCount > mSizeBytes )
             mMappingStart = 0;
     }
@@ -129,8 +121,8 @@ namespace Ogre
 
         StagingStallType retVal = STALL_NONE;
 
-        //We don't really know, it's inaccurate. But don't trust the driver
-        //will be able to run a stall-free discard every time; thus STALL_PARTIAL
+        // We don't really know, it's inaccurate. But don't trust the driver
+        // will be able to run a stall-free discard every time; thus STALL_PARTIAL
         if( mappingStart + sizeBytes > mSizeBytes )
         {
             retVal = STALL_PARTIAL;
@@ -144,62 +136,61 @@ namespace Ogre
     //  DOWNLOADS
     //
     //-----------------------------------------------------------------------------------
-    size_t D3D11StagingBuffer::_asyncDownload( BufferPacked *source, size_t srcOffset,
-                                               size_t srcLength )
+    size_t D3D11StagingBuffer::_asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength )
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
 
         if( freeRegionOffset == -1 )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Cannot download the request amount of " +
-                         StringConverter::toString( srcLength ) + " bytes to this staging buffer. "
-                         "Try another one (we're full of requests that haven't been read by CPU yet)",
-                         "D3D11StagingBuffer::_asyncDownload" );
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Cannot download the request amount of " + StringConverter::toString( srcLength ) +
+                    " bytes to this staging buffer. "
+                    "Try another one (we're full of requests that haven't been read by CPU yet)",
+                "D3D11StagingBuffer::_asyncDownload" );
         }
 
         assert( !mUploadOnly );
-        assert( dynamic_cast<D3D11BufferInterfaceBase*>( source->getBufferInterface() ) );
-        assert( (srcOffset + srcLength) <= source->getTotalSizeBytes() );
+        assert( dynamic_cast<D3D11BufferInterfaceBase *>( source->getBufferInterface() ) );
+        assert( ( srcOffset + srcLength ) <= source->getTotalSizeBytes() );
 
-        D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
-                                                        source->getBufferInterface() );
+        D3D11BufferInterfaceBase *bufferInterface =
+            static_cast<D3D11BufferInterfaceBase *>( source->getBufferInterface() );
 
         D3D11_BOX srcBox;
-        ZeroMemory( &srcBox, sizeof(D3D11_BOX) );
+        ZeroMemory( &srcBox, sizeof( D3D11_BOX ) );
         srcBox.left = UINT( source->_getFinalBufferStart() * source->getBytesPerElement() + srcOffset );
         srcBox.right = UINT( srcBox.left + srcLength );
         srcBox.back = 1;
         srcBox.bottom = 1;
 
         ID3D11DeviceContextN *d3dContext = mDevice.GetImmediateContext();
-        d3dContext->CopySubresourceRegion( mVboName.Get(), 0, (UINT)freeRegionOffset,
-                                           0, 0, bufferInterface->getVboName(),
-                                           0, &srcBox );
+        d3dContext->CopySubresourceRegion( mVboName.Get(), 0, (UINT)freeRegionOffset, 0, 0,
+                                           bufferInterface->getVboName(), 0, &srcBox );
 
         return freeRegionOffset;
     }
     //-----------------------------------------------------------------------------------
-    const void* D3D11StagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
+    const void *D3D11StagingBuffer::_mapForReadImpl( size_t offset, size_t sizeBytes )
     {
         assert( !mUploadOnly );
 
         D3D11_MAPPED_SUBRESOURCE mappedSubres;
-        HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_READ, 0, &mappedSubres );
-        if (FAILED(hr) || mDevice.isError())
+        HRESULT hr =
+            mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, D3D11_MAP_READ, 0, &mappedSubres );
+        if( FAILED( hr ) || mDevice.isError() )
         {
-            String msg = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Error calling Map: " + msg, 
-                "D3D11StagingBuffer::_mapForReadImpl");
+            String msg = mDevice.getErrorDescription( hr );
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Error calling Map: " + msg,
+                            "D3D11StagingBuffer::_mapForReadImpl" );
         }
         mMappingStart = offset;
         mMappingCount = sizeBytes;
-        mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) + mMappingStart;
+        mMappedPtr = reinterpret_cast<uint8 *>( mappedSubres.pData ) + mMappingStart;
 
-        //Put the mapped region back to our records as "available" for subsequent _asyncDownload
+        // Put the mapped region back to our records as "available" for subsequent _asyncDownload
         _cancelDownload( offset, sizeBytes );
 
         return mMappedPtr;
     }
-}
+}  // namespace Ogre

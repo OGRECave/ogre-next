@@ -42,7 +42,7 @@ namespace Ogre
     {
     protected:
         size_t              mUnmapTicket;
-        D3D11DynamicBuffer  *mDynamicBuffer;
+        D3D11DynamicBuffer *mDynamicBuffer;
 
         /// Used to store initial data of BT_IMMUTABLE buffers and delay their
         /// creation as much as possible (so that we can batch them together)
@@ -55,26 +55,29 @@ namespace Ogre
                               D3D11DynamicBuffer *dynamicBuffer );
         ~D3D11BufferInterface() override;
 
-        void _setNullDynamicBuffer() { mDynamicBuffer = 0; }
-        D3D11DynamicBuffer* getDynamicBuffer() const    { return mDynamicBuffer; }
+        void                _setNullDynamicBuffer() { mDynamicBuffer = 0; }
 
-        void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }
+        D3D11DynamicBuffer *getDynamicBuffer() const { return mDynamicBuffer; }
+
+        void _setVboPoolIndex( size_t newVboPool ) { mVboPoolIdx = newVboPool; }
 
         /// Only use this function for the first upload
         void _firstUpload( void *data );
 
-        const void* _getInitialData() const     { return mInitialData; }
-        void _deleteInitialData();
+        const void *_getInitialData() const { return mInitialData; }
+        void        _deleteInitialData();
+
         void _setVboName( size_t vboPoolIdx, ID3D11Buffer *vboName, size_t internalBufferStartBytes );
 
         void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
                                          MappingState prevMappingState,
-                                         bool advanceFrame = true ) override;
-        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
-                    size_t flushSizeElem = 0 ) override;
-        void advanceFrame() override;
-        void regressFrame() override;
+                                         bool         advanceFrame = true ) override;
+
+        void                        unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                                           size_t flushSizeElem = 0 ) override;
+        void                        advanceFrame() override;
+        void                        regressFrame() override;
     };
-}
+}  // namespace Ogre
 
 #endif

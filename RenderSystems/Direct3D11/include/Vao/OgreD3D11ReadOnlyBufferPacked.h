@@ -43,18 +43,18 @@ namespace Ogre
     class _OgreD3D11Export D3D11ReadOnlyBufferPacked final : public ReadOnlyBufferPacked,
                                                              protected D3D11DeviceResource
     {
-        DXGI_FORMAT mInternalFormat;
+        DXGI_FORMAT  mInternalFormat;
         D3D11Device &mDevice;
 
         struct CachedResourceView
         {
             ComPtr<ID3D11ShaderResourceView> mResourceView;
-            uint32 mOffset;
-            uint32 mSize;
+            uint32                           mOffset;
+            uint32                           mSize;
         };
 
         CachedResourceView mCachedResourceViews[16];
-        uint8 mCurrentCacheCursor;
+        uint8              mCurrentCacheCursor;
 
         bool isD3D11Structured() const;
 

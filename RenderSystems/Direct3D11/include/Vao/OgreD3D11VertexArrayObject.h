@@ -38,28 +38,26 @@ namespace Ogre
     struct _OgreD3D11Export D3D11VertexArrayObjectShared
     {
         ComPtr<ID3D11Buffer> mVertexBuffers[16];
-        UINT            mStrides[16];
-        UINT            mOffsets[16];
+        UINT                 mStrides[16];
+        UINT                 mOffsets[16];
         ComPtr<ID3D11Buffer> mIndexBuffer;
-        DXGI_FORMAT     mIndexFormat;
+        DXGI_FORMAT          mIndexFormat;
 
         D3D11VertexArrayObjectShared( const VertexBufferPackedVec &vertexBuffers,
-                                      IndexBufferPacked *indexBuffer,
-                                      OperationType opType,
+                                      IndexBufferPacked *indexBuffer, OperationType opType,
                                       VertexBufferPacked *drawId );
     };
 
     struct _OgreD3D11Export D3D11VertexArrayObject : public VertexArrayObject
     {
-        D3D11VertexArrayObjectShared    *mSharedData;
+        D3D11VertexArrayObjectShared *mSharedData;
 
         D3D11VertexArrayObject( uint32 vaoName, uint32 renderQueueId, uint16 inputLayoutId,
                                 const VertexBufferPackedVec &vertexBuffers,
-                                IndexBufferPacked *indexBuffer,
-                                OperationType opType,
+                                IndexBufferPacked *indexBuffer, OperationType opType,
                                 D3D11VertexArrayObjectShared *sharedData ) :
-            VertexArrayObject( vaoName, renderQueueId, inputLayoutId,
-                               vertexBuffers, indexBuffer, opType ),
+            VertexArrayObject( vaoName, renderQueueId, inputLayoutId, vertexBuffers, indexBuffer,
+                               opType ),
             mSharedData( sharedData )
         {
         }
@@ -67,6 +65,6 @@ namespace Ogre
         void _updateImmutableResource( uint32 vaoName, uint32 renderQueueId,
                                        D3D11VertexArrayObjectShared *sharedData );
     };
-}
+}  // namespace Ogre
 
 #endif

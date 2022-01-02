@@ -26,23 +26,26 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11GpuProgramManager.h"
+
 #include "OgreD3D11Device.h"
 #include "OgreException.h"
 
-namespace Ogre {
-
+namespace Ogre
+{
     class _OgreD3D11Export D3D11UnsupportedGpuProgram : public GpuProgram
     {
     public:
-        D3D11UnsupportedGpuProgram(ResourceManager* creator, const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader)
-            : GpuProgram(creator, name, handle, group, isManual, loader) { }
+        D3D11UnsupportedGpuProgram( ResourceManager *creator, const String &name, ResourceHandle handle,
+                                    const String &group, bool isManual, ManualResourceLoader *loader ) :
+            GpuProgram( creator, name, handle, group, isManual, loader )
+        {
+        }
 
         void throwException()
         {
             String message = "D3D11 dosn't support assembly shaders. Shader name:" + mName + "\n";
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, message,
-                "D3D11UnsupportedGpuProgram::loadFromSource");
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, message,
+                         "D3D11UnsupportedGpuProgram::loadFromSource" );
         }
 
     protected:
@@ -51,45 +54,42 @@ namespace Ogre {
         void unloadImpl() override {}
     };
 
-
     //-----------------------------------------------------------------------------
-    D3D11GpuProgramManager::D3D11GpuProgramManager()
-        :GpuProgramManager()
+    D3D11GpuProgramManager::D3D11GpuProgramManager() : GpuProgramManager()
     {
-        // Superclass sets up members 
+        // Superclass sets up members
 
         // Register with resource group manager
-        ResourceGroupManager::getSingleton()._registerResourceManager(mResourceType, this);
-
+        ResourceGroupManager::getSingleton()._registerResourceManager( mResourceType, this );
     }
     //-----------------------------------------------------------------------------
     D3D11GpuProgramManager::~D3D11GpuProgramManager()
     {
         // Unregister with resource group manager
-        ResourceGroupManager::getSingleton()._unregisterResourceManager(mResourceType);
-
+        ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
     }
     //-----------------------------------------------------------------------------
-    Resource* D3D11GpuProgramManager::createImpl(const String& name, ResourceHandle handle, 
-        const String& group, bool isManual, ManualResourceLoader* loader,
-        const NameValuePairList* params)
+    Resource *D3D11GpuProgramManager::createImpl( const String &name, ResourceHandle handle,
+                                                  const String &group, bool isManual,
+                                                  ManualResourceLoader *loader,
+                                                  const NameValuePairList *params )
     {
         NameValuePairList::const_iterator paramIt;
 
-        if (!params || (paramIt = params->find("type")) == params->end())
+        if( !params || ( paramIt = params->find( "type" ) ) == params->end() )
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, 
-                "You must supply a 'type' parameter",
-                "D3D11GpuProgramManager::createImpl");
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "You must supply a 'type' parameter",
+                         "D3D11GpuProgramManager::createImpl" );
         }
 
-        return new D3D11UnsupportedGpuProgram(this, name, handle, group, isManual, loader);
+        return new D3D11UnsupportedGpuProgram( this, name, handle, group, isManual, loader );
     }
     //-----------------------------------------------------------------------------
-    Resource* D3D11GpuProgramManager::createImpl(const String& name, ResourceHandle handle, 
-        const String& group, bool isManual, ManualResourceLoader* loader,
-        GpuProgramType gptype, const String& syntaxCode)
+    Resource *D3D11GpuProgramManager::createImpl( const String &name, ResourceHandle handle,
+                                                  const String &group, bool isManual,
+                                                  ManualResourceLoader *loader, GpuProgramType gptype,
+                                                  const String &syntaxCode )
     {
-        return new D3D11UnsupportedGpuProgram(this, name, handle, group, isManual, loader);
+        return new D3D11UnsupportedGpuProgram( this, name, handle, group, isManual, loader );
     }
-}
+}  // namespace Ogre

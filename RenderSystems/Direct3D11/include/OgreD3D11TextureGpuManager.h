@@ -30,38 +30,38 @@ THE SOFTWARE.
 #define _OgreD3D11TextureGpuManager_H_
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreTextureGpuManager.h"
 
 #include "OgreTextureGpu.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
     class _OgreD3D11Export D3D11TextureGpuManager final : public TextureGpuManager
     {
     protected:
         /// 4x4 texture for when we have nothing to display.
-        ComPtr<ID3D11Resource>              mBlankTexture[TextureTypes::Type3D + 1u];
-        ComPtr<ID3D11ShaderResourceView>    mDefaultSrv[TextureTypes::Type3D + 1u];
+        ComPtr<ID3D11Resource>           mBlankTexture[TextureTypes::Type3D + 1u];
+        ComPtr<ID3D11ShaderResourceView> mDefaultSrv[TextureTypes::Type3D + 1u];
 
         D3D11Device &mDevice;
 
-        TextureGpu *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                       IdString name, uint32 textureFlags,
-                                       TextureTypes::TextureTypes initialType ) override;
+        TextureGpu *    createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                           IdString name, uint32 textureFlags,
+                                           TextureTypes::TextureTypes initialType ) override;
         StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
                                                   uint32 slices, PixelFormatGpu pixelFormat ) override;
-        void destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
+        void            destroyStagingTextureImpl( StagingTexture *stagingTexture ) override;
 
         AsyncTextureTicket *createAsyncTextureTicketImpl( uint32 width, uint32 height,
-                                                          uint32 depthOrSlices,
+                                                          uint32                     depthOrSlices,
                                                           TextureTypes::TextureTypes textureType,
                                                           PixelFormatGpu pixelFormatFamily ) override;
 
@@ -77,18 +77,18 @@ namespace Ogre
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
             If caller doesnt' delete it, it will leak.
         */
-        TextureGpu* createTextureGpuWindow( bool fromFlipModeSwapchain, Window *window );
-        TextureGpu* createWindowDepthBuffer();
+        TextureGpu *createTextureGpuWindow( bool fromFlipModeSwapchain, Window *window );
+        TextureGpu *createWindowDepthBuffer();
 
-        ID3D11Resource* getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
-        ID3D11ShaderResourceView* getBlankTextureSrv( TextureTypes::TextureTypes textureType ) const;
+        ID3D11Resource *          getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
+        ID3D11ShaderResourceView *getBlankTextureSrv( TextureTypes::TextureTypes textureType ) const;
 
-        D3D11Device& getDevice()        { return mDevice; }
+        D3D11Device &getDevice() { return mDevice; }
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

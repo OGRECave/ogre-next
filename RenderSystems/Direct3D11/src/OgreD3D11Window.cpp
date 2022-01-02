@@ -27,16 +27,15 @@ THE SOFTWARE.
 */
 
 #include "OgreD3D11Window.h"
+
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11RenderSystem.h"
 #include "OgreD3D11TextureGpuManager.h"
 #include "OgreD3D11TextureGpuWindow.h"
-
 #include "OgreDepthBuffer.h"
 #include "OgreOSVersionHelpers.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
-
 #include "Vao/OgreVaoManager.h"
 
 #define TODO_convert_to_MSAA_pattern
@@ -44,9 +43,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    D3D11Window::D3D11Window( const String &title, uint32 width, uint32 height,
-                              bool fullscreenMode, PixelFormatGpu depthStencilFormat,
-                              const NameValuePairList *miscParams,
+    D3D11Window::D3D11Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                              PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
                               D3D11Device &device, D3D11RenderSystem *renderSystem ) :
         Window( title, width, height, fullscreenMode ),
         mDevice( device ),
@@ -63,24 +61,21 @@ namespace Ogre
         {
             NameValuePairList::const_iterator opt;
             // hidden   [parseBool]
-            opt = miscParams->find("hidden");
+            opt = miscParams->find( "hidden" );
             if( opt != miscParams->end() )
-                mHidden = StringConverter::parseBool(opt->second);
+                mHidden = StringConverter::parseBool( opt->second );
             // FSAA
-            opt = miscParams->find("FSAA");
+            opt = miscParams->find( "FSAA" );
             if( opt != miscParams->end() )
-                mRequestedSampleDescription.parseString(opt->second);
+                mRequestedSampleDescription.parseString( opt->second );
             // sRGB?
-            opt = miscParams->find("gamma");
+            opt = miscParams->find( "gamma" );
             if( opt != miscParams->end() )
-                mHwGamma = StringConverter::parseBool(opt->second);
+                mHwGamma = StringConverter::parseBool( opt->second );
         }
     }
     //-----------------------------------------------------------------------------------
-    D3D11Window::~D3D11Window()
-    {
-        mRenderSystem->_notifyWindowDestroyed( this );
-    }
+    D3D11Window::~D3D11Window() { mRenderSystem->_notifyWindowDestroyed( this ); }
     //---------------------------------------------------------------------
     void D3D11Window::destroy()
     {
@@ -97,11 +92,11 @@ namespace Ogre
         mClosed = true;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11Window::getCustomAttribute( IdString name, void* pData )
+    void D3D11Window::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "D3DDEVICE" || name == "RENDERDOC_DEVICE" )
         {
-            ID3D11DeviceN  **device = (ID3D11DeviceN**)pData;
+            ID3D11DeviceN **device = (ID3D11DeviceN **)pData;
             *device = mDevice.get();
         }
         else
@@ -112,33 +107,32 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    D3D11WindowSwapChainBased::D3D11WindowSwapChainBased(
-            const String &title, uint32 width, uint32 height, bool fullscreenMode,
-            PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
-            D3D11Device &device, D3D11RenderSystem *renderSystem ) :
-        D3D11Window( title, width, height, fullscreenMode,
-                     depthStencilFormat, miscParams,
-                     device, renderSystem ),
+    D3D11WindowSwapChainBased::D3D11WindowSwapChainBased( const String &title, uint32 width,
+                                                          uint32 height, bool fullscreenMode,
+                                                          PixelFormatGpu depthStencilFormat,
+                                                          const NameValuePairList *miscParams,
+                                                          D3D11Device &device,
+                                                          D3D11RenderSystem *renderSystem ) :
+        D3D11Window( title, width, height, fullscreenMode, depthStencilFormat, miscParams, device,
+                     renderSystem ),
         mUseFlipMode( false ),
         mPreviousPresentStatsIsValid( false ),
         mVBlankMissCount( 0 )
     {
-        memset( &mPreviousPresentStats, 0, sizeof(mPreviousPresentStats) );
+        memset( &mPreviousPresentStats, 0, sizeof( mPreviousPresentStats ) );
     }
     //-----------------------------------------------------------------------------------
-    D3D11WindowSwapChainBased::~D3D11WindowSwapChainBased()
-    {
-    }
+    D3D11WindowSwapChainBased::~D3D11WindowSwapChainBased() {}
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::notifyDeviceLost(D3D11Device* device)
+    void D3D11WindowSwapChainBased::notifyDeviceLost( D3D11Device *device )
     {
         _destroySizeDependedD3DResources();
         _destroySwapChain();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::notifyDeviceRestored(D3D11Device* device, unsigned pass)
+    void D3D11WindowSwapChainBased::notifyDeviceRestored( D3D11Device *device, unsigned pass )
     {
-        if(pass == 0)
+        if( pass == 0 )
         {
             _createSwapChain();
             _createSizeDependedD3DResources();
@@ -147,13 +141,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     DXGI_FORMAT D3D11WindowSwapChainBased::_getSwapChainFormat()
     {
-        // We prefer to use *_SRGB format for swapchain, so that multisampled swapchain are resolved properly.
-        // Unfortunately, swapchains in flip mode are incompatible with multisampling and with *_SRGB formats,
-        // and special handling is required.
+        // We prefer to use *_SRGB format for swapchain, so that multisampled swapchain are resolved
+        // properly. Unfortunately, swapchains in flip mode are incompatible with multisampling and with
+        // *_SRGB formats, and special handling is required.
         PixelFormatGpu pf = _getRenderFormat();
-        if(mUseFlipMode)
-            pf = PixelFormatGpuUtils::getEquivalentLinear(pf);
-        return D3D11Mappings::get(pf);
+        if( mUseFlipMode )
+            pf = PixelFormatGpuUtils::getEquivalentLinear( pf );
+        return D3D11Mappings::get( pf );
     }
     //-----------------------------------------------------------------------------------
     DXGI_SWAP_CHAIN_FLAG D3D11WindowSwapChainBased::_getSwapChainFlags()
@@ -162,12 +156,14 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 #endif
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( _WIN32_WINNT_WINBLUE ) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-        // We use SetMaximumFrameLatency in WinRT mode, and prefer to call it on swapchain rather than on whole device
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined( _WIN32_WINNT_WINBLUE ) && \
+    _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+        // We use SetMaximumFrameLatency in WinRT mode, and prefer to call it on swapchain rather than on
+        // whole device
         if( IsWindows8Point1OrGreater() )
             flags |= DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT;
 #endif
-        return DXGI_SWAP_CHAIN_FLAG(flags);
+        return DXGI_SWAP_CHAIN_FLAG( flags );
     }
     //-----------------------------------------------------------------------------------
     uint8 D3D11WindowSwapChainBased::_getSwapChainBufferCount() const
@@ -180,7 +176,7 @@ namespace Ogre
         _createSwapChain();
 
         D3D11TextureGpuManager *textureManager =
-                static_cast<D3D11TextureGpuManager*>( textureGpuManager );
+            static_cast<D3D11TextureGpuManager *>( textureGpuManager );
 
         mTexture = textureManager->createTextureGpuWindow( mUseFlipMode, this );
         if( DepthBuffer::DefaultDepthBufferFormat != PFG_NULL )
@@ -196,8 +192,8 @@ namespace Ogre
 
         if( mDepthBuffer )
         {
-            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE,
-                                               false, mDepthBuffer->getPixelFormat() );
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE, false,
+                                               mDepthBuffer->getPixelFormat() );
         }
         else
         {
@@ -217,10 +213,11 @@ namespace Ogre
     void D3D11WindowSwapChainBased::_destroySwapChain()
     {
         // https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#destroying-a-swap-chain
-        // You may not release a swap chain in full-screen mode because doing so may create thread contention
-        // (which will cause DXGI to raise a non-continuable exception). Before releasing a swap chain, first switch to windowed mode
-        if(mFullscreenMode && mSwapChain)
-            mSwapChain->SetFullscreenState(false, NULL);
+        // You may not release a swap chain in full-screen mode because doing so may create thread
+        // contention (which will cause DXGI to raise a non-continuable exception). Before releasing a
+        // swap chain, first switch to windowed mode
+        if( mFullscreenMode && mSwapChain )
+            mSwapChain->SetFullscreenState( false, NULL );
 
         mSwapChain.Reset();
         mSwapChain1.Reset();
@@ -233,22 +230,22 @@ namespace Ogre
 
         HRESULT hr = _createSwapChainImpl();
 
-        if (SUCCEEDED(hr) && mSwapChain1)
-            hr = mSwapChain1.As(&mSwapChain);
+        if( SUCCEEDED( hr ) && mSwapChain1 )
+            hr = mSwapChain1.As( &mSwapChain );
 
-        if (FAILED(hr))
+        if( FAILED( hr ) )
         {
-            const String errorDescription = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Unable to create swap chain\nError Description:" + errorDescription,
-                "D3D11WindowSwapChainBased::_createSwapChain");
+            const String errorDescription = mDevice.getErrorDescription( hr );
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Unable to create swap chain\nError Description:" + errorDescription,
+                            "D3D11WindowSwapChainBased::_createSwapChain" );
         }
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::_destroySizeDependedD3DResources()
     {
         if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         if( mTexture->getResidencyStatus() != GpuResidency::OnStorage )
             mTexture->_transitionTo( GpuResidency::OnStorage, (uint8 *)0 );
         mpBackBuffer.Reset();
@@ -260,30 +257,34 @@ namespace Ogre
         mpBackBuffer.Reset();
         mpBackBufferInterim.Reset();
         // Obtain back buffer from swapchain
-        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (void**)mpBackBuffer.ReleaseAndGetAddressOf() );
+        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ),
+                                            (void **)mpBackBuffer.ReleaseAndGetAddressOf() );
 
         // check if we need workaround for broken back buffer casting in ResolveSubresource
-        // From https://github.com/microsoft/Xbox-ATG-Samples/blob/master/PCSamples/IntroGraphics/SimpleMSAA_PC/Readme.docx
+        // From
+        // https://github.com/microsoft/Xbox-ATG-Samples/blob/master/PCSamples/IntroGraphics/SimpleMSAA_PC/Readme.docx
         // Known issues:
         //     Due to a bug in the Windows 10 validation layer prior to the Windows 10 Fall Creators
         //     Update (16299), a DirectX 11 Resolve with an sRGB format using new "flip - style"
         //     swapchain would fail. This has been fixed in the newer versions of Windows 10.
-        if( SUCCEEDED(hr) && mHwGamma && isMultisample() && mUseFlipMode && !IsWindows10RS3OrGreater() )
+        if( SUCCEEDED( hr ) && mHwGamma && isMultisample() && mUseFlipMode &&
+            !IsWindows10RS3OrGreater() )
         {
             D3D11_TEXTURE2D_DESC desc = { 0 };
-            mpBackBuffer->GetDesc(&desc);
-            desc.Format = D3D11Mappings::get(_getRenderFormat());
-            hr = mDevice->CreateTexture2D(&desc, NULL, mpBackBufferInterim.ReleaseAndGetAddressOf());
+            mpBackBuffer->GetDesc( &desc );
+            desc.Format = D3D11Mappings::get( _getRenderFormat() );
+            hr = mDevice->CreateTexture2D( &desc, NULL, mpBackBufferInterim.ReleaseAndGetAddressOf() );
         }
 
-        if( FAILED(hr) )
+        if( FAILED( hr ) )
         {
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Unable to Get Back Buffer for swap chain",
                             "D3D11WindowSwapChainBased::_createSizeDependedD3DResources" );
         }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 // to avoid DXGI ERROR: GetFullscreenDesc can only be called for HWND based swapchains.
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32  // to avoid DXGI ERROR: GetFullscreenDesc can only be called
+                                          // for HWND based swapchains.
         if( mSwapChain1 )
         {
             DXGI_SWAP_CHAIN_DESC1 desc;
@@ -291,9 +292,9 @@ namespace Ogre
             setFinalResolution( desc.Width, desc.Height );
             DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc;
             mSwapChain1->GetFullscreenDesc( &fsDesc );
-            //Alt-Enter together with SetWindowAssociation() can change this state
-            mRequestedFullscreenMode    = fsDesc.Windowed == 0;
-            mFullscreenMode             = mRequestedFullscreenMode;
+            // Alt-Enter together with SetWindowAssociation() can change this state
+            mRequestedFullscreenMode = fsDesc.Windowed == 0;
+            mFullscreenMode = mRequestedFullscreenMode;
         }
         else
 #endif
@@ -301,20 +302,21 @@ namespace Ogre
             DXGI_SWAP_CHAIN_DESC desc;
             mSwapChain->GetDesc( &desc );
             setFinalResolution( desc.BufferDesc.Width, desc.BufferDesc.Height );
-            //Alt-Enter together with SetWindowAssociation() can change this state
-            mRequestedFullscreenMode    = desc.Windowed == 0;
-            mFullscreenMode             = mRequestedFullscreenMode;
+            // Alt-Enter together with SetWindowAssociation() can change this state
+            mRequestedFullscreenMode = desc.Windowed == 0;
+            mFullscreenMode = mRequestedFullscreenMode;
         }
 
-        assert( dynamic_cast<D3D11TextureGpuWindow*>( mTexture ) );
-        D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
-        texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
+        assert( dynamic_cast<D3D11TextureGpuWindow *>( mTexture ) );
+        D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow *>( mTexture );
+        texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get()
+                                                       : mpBackBuffer.Get() );
 
         mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
         if( mDepthBuffer )
             mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
         if( mDepthBuffer )
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
     }
@@ -323,15 +325,15 @@ namespace Ogre
     {
         mRequestedSampleDescription.parseString( fsaa );
 
-        mRenderSystem->fireDeviceEvent( &mDevice,"WindowBeforeResize", this );
+        mRenderSystem->fireDeviceEvent( &mDevice, "WindowBeforeResize", this );
 
         _destroySizeDependedD3DResources();
 
         if( mUseFlipMode )
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it
-            mSampleDescription =
-                mRenderSystem->validateSampleDescription( mRequestedSampleDescription, _getRenderFormat() );
+            mSampleDescription = mRenderSystem->validateSampleDescription( mRequestedSampleDescription,
+                                                                           _getRenderFormat() );
         }
         else
         {
@@ -360,16 +362,16 @@ namespace Ogre
         // width and height can be zero to autodetect size, therefore do not rely on them
         HRESULT hr = mSwapChain->ResizeBuffers( _getSwapChainBufferCount(), width, height,
                                                 _getSwapChainFormat(), _getSwapChainFlags() );
-        if(hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+        if( hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET )
         {
             mRenderSystem->handleDeviceLost();
-            // Everything is set up now. Do not continue execution of this method. HandleDeviceLost will reenter this method 
-            // and correctly set up the new device.
+            // Everything is set up now. Do not continue execution of this method. HandleDeviceLost will
+            // reenter this method and correctly set up the new device.
             return;
         }
-        else if( FAILED(hr) )
+        else if( FAILED( hr ) )
         {
-            const String errorDescription = mDevice.getErrorDescription(hr);
+            const String errorDescription = mDevice.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Unable to resize swap chain\nError Description:" + errorDescription,
                             "D3D11WindowSwapChainBased::resizeSwapChainBuffers" );
@@ -382,34 +384,32 @@ namespace Ogre
         mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::notifyResolutionChanged()
-    {
-        TODO_notify_listeners;
-    }
+    void D3D11WindowSwapChainBased::notifyResolutionChanged() { TODO_notify_listeners; }
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::swapBuffers()
     {
-        mRenderSystem->fireDeviceEvent( &mDevice,"BeforeDevicePresent",this );
+        mRenderSystem->fireDeviceEvent( &mDevice, "BeforeDevicePresent", this );
 
         if( !mDevice.isNull() )
         {
-            // workaround needed only for mHwGamma && isMultisample() && mUseFlipMode && !IsWindows10RS3OrGreater()
+            // workaround needed only for mHwGamma && isMultisample() && mUseFlipMode &&
+            // !IsWindows10RS3OrGreater()
             if( mpBackBufferInterim && mpBackBuffer )
-                mDevice.GetImmediateContext()->CopyResource( mpBackBuffer.Get(), mpBackBufferInterim.Get() );
+                mDevice.GetImmediateContext()->CopyResource( mpBackBuffer.Get(),
+                                                             mpBackBufferInterim.Get() );
 
             // flip presentation model swap chains have another semantic for first parameter
-            UINT syncInterval = mUseFlipMode ? std::max( 1u, mVSyncInterval ) :
-                                                         (mVSync ? mVSyncInterval : 0);
+            UINT syncInterval =
+                mUseFlipMode ? std::max( 1u, mVSyncInterval ) : ( mVSync ? mVSyncInterval : 0 );
             HRESULT hr = mSwapChain->Present( syncInterval, 0 );
-            if(hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
+            if( hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET )
                 return;
 
-            if( FAILED(hr) )
+            if( FAILED( hr ) )
             {
-                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                                "Error Presenting surfaces",
-                                "D3D11WindowHwnd::swapBuffers");
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Error Presenting surfaces",
+                                "D3D11WindowHwnd::swapBuffers" );
             }
         }
     }
-}
+}  // namespace Ogre

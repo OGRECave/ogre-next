@@ -30,17 +30,17 @@ THE SOFTWARE.
 #define _OgreD3D11Window_H_
 
 #include "OgreD3D11Prerequisites.h"
+
+#include "OgreCommon.h"
 #include "OgreD3D11DeviceResource.h"
 #include "OgreWindow.h"
-#include "OgreCommon.h"
 
 namespace Ogre
 {
-    class _OgreD3D11Export D3D11Window : public Window,
-                                         protected D3D11DeviceResource
+    class _OgreD3D11Export D3D11Window : public Window, protected D3D11DeviceResource
     {
     protected:
-        D3D11Device     &mDevice;
+        D3D11Device &mDevice;
         /// Whether window was not created by Ogre
         bool mIsExternal;
         bool mSizing;
@@ -56,7 +56,7 @@ namespace Ogre
         /// Optional, always holds up-to-date copy data from mpBackBuffer if not NULL
         ComPtr<ID3D11Texture2D> mpBackBufferInterim;
 
-        D3D11RenderSystem       *mRenderSystem;
+        D3D11RenderSystem *mRenderSystem;
 
     protected:
         virtual PixelFormatGpu _getRenderFormat()
@@ -65,9 +65,8 @@ namespace Ogre
         }  // preferred since Win8
 
     public:
-        D3D11Window( const String &title, uint32 width, uint32 height,
-                     bool fullscreenMode, PixelFormatGpu depthStencilFormat,
-                     const NameValuePairList *miscParams,
+        D3D11Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                     PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
                      D3D11Device &device, D3D11RenderSystem *renderSystem );
         ~D3D11Window() override;
         void destroy() override;
@@ -79,7 +78,7 @@ namespace Ogre
         void setHidden( bool hidden ) override { mHidden = hidden; }
         bool isHidden() const override { return mHidden; }
 
-        void getCustomAttribute( IdString name, void* pData ) override;
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 
     class _OgreD3D11Export D3D11WindowSwapChainBased : public D3D11Window
@@ -87,49 +86,52 @@ namespace Ogre
     protected:
         ComPtr<IDXGISwapChain>  mSwapChain;
         ComPtr<IDXGISwapChain1> mSwapChain1;
-        //DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
+        // DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
 
         /// Flag to determine if the swapchain flip model is active.
         /// Not supported before Win8.0, required for WinRT.
         bool mUseFlipMode;
 
         // We save the previous present stats - so we can detect a "vblank miss"
-        DXGI_FRAME_STATISTICS   mPreviousPresentStats;
+        DXGI_FRAME_STATISTICS mPreviousPresentStats;
         // Does mLastPresentStats data is valid (it isn't if when you start or resize the window)
-        bool                    mPreviousPresentStatsIsValid;
+        bool mPreviousPresentStatsIsValid;
         // Number of times we missed the v sync blank
-        uint32                  mVBlankMissCount;
+        uint32 mVBlankMissCount;
 
     protected:
-        DXGI_FORMAT _getSwapChainFormat();
+        DXGI_FORMAT          _getSwapChainFormat();
         DXGI_SWAP_CHAIN_FLAG _getSwapChainFlags();
-        uint8 _getSwapChainBufferCount() const;
-        void _createSwapChain();
+        uint8                _getSwapChainBufferCount() const;
+
+        void            _createSwapChain();
         virtual HRESULT _createSwapChainImpl() = 0;
-        virtual void _destroySwapChain();
+        virtual void    _destroySwapChain();
+
         void _createSizeDependedD3DResources();
         void _destroySizeDependedD3DResources();
+
         void resizeSwapChainBuffers( uint32 width, uint32 height );
         void notifyResolutionChanged();
-        void notifyDeviceLost(D3D11Device* device) override;
-        void notifyDeviceRestored(D3D11Device* device, unsigned pass) override;
+        void notifyDeviceLost( D3D11Device *device ) override;
+        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
 
     public:
-        D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
-                                   bool fullscreenMode, PixelFormatGpu depthStencilFormat,
-                                   const NameValuePairList *miscParams,
-                                   D3D11Device &device, D3D11RenderSystem *renderSystem );
+        D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                                   PixelFormatGpu           depthStencilFormat,
+                                   const NameValuePairList *miscParams, D3D11Device &device,
+                                   D3D11RenderSystem *renderSystem );
         ~D3D11WindowSwapChainBased() override;
 
         void _initialize( TextureGpuManager *textureGpuManager ) override;
         void destroy() override;
 
         /// @copydoc Window::setFsaa
-        void setFsaa(const String& fsaa) override;
+        void setFsaa( const String &fsaa ) override;
 
         void swapBuffers() override;
     };
-}
+}  // namespace Ogre
 
 #include "Windowing/WIN32/OgreD3D11WindowHwnd.h"
 #include "Windowing/WIN32/OgreD3D11WindowWinRT.h"

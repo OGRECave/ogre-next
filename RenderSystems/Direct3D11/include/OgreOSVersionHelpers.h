@@ -29,81 +29,85 @@ THE SOFTWARE.
 #define __OGREOSVERSIONHELPERS_H__
 #include "OgrePrerequisites.h"
 
-namespace Ogre 
+namespace Ogre
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-inline bool IsWindowsVersionOrGreater(WORD wMajorVersion, WORD wMinorVersion, WORD wServicePackMajor, WORD wBuildNumber = 0)
-{
-    OSVERSIONINFOEXW osvi = { sizeof(osvi), 0, 0, 0, 0, {0}, 0, 0 };
-    DWORDLONG        const dwlConditionMask = VerSetConditionMask(
-        VerSetConditionMask(
-        VerSetConditionMask(
-        VerSetConditionMask(
-            0, VER_MAJORVERSION, VER_GREATER_EQUAL),
-               VER_MINORVERSION, VER_GREATER_EQUAL),
-               VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL),
-               VER_BUILDNUMBER, VER_GREATER_EQUAL);
+    inline bool IsWindowsVersionOrGreater( WORD wMajorVersion, WORD wMinorVersion,
+                                           WORD wServicePackMajor, WORD wBuildNumber = 0 )
+    {
+        OSVERSIONINFOEXW osvi = { sizeof( osvi ), 0, 0, 0, 0, { 0 }, 0, 0 };
+        DWORDLONG const  dwlConditionMask =
+            VerSetConditionMask( VerSetConditionMask(          //
+                                     VerSetConditionMask(      //
+                                         VerSetConditionMask(  //
+                                             0, VER_MAJORVERSION, VER_GREATER_EQUAL ),
+                                         VER_MINORVERSION, VER_GREATER_EQUAL ),
+                                     VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL ),
+                                 VER_BUILDNUMBER, VER_GREATER_EQUAL );
 
-    osvi.dwMajorVersion = wMajorVersion;
-    osvi.dwMinorVersion = wMinorVersion;
-    osvi.dwBuildNumber = wBuildNumber;
-    osvi.wServicePackMajor = wServicePackMajor;
+        osvi.dwMajorVersion = wMajorVersion;
+        osvi.dwMinorVersion = wMinorVersion;
+        osvi.dwBuildNumber = wBuildNumber;
+        osvi.wServicePackMajor = wServicePackMajor;
 
-    // Note that this API will lie without OS compatibility manifest embedded into .exe
-    // https://docs.microsoft.com/en-us/windows/win32/sysinfo/targeting-your-application-at-windows-8-1
-    return VerifyVersionInfoW(&osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR | VER_BUILDNUMBER, dwlConditionMask) != FALSE;
-}
+        // Note that this API will lie without OS compatibility manifest embedded into .exe
+        // https://docs.microsoft.com/en-us/windows/win32/sysinfo/targeting-your-application-at-windows-8-1
+        return VerifyVersionInfoW(
+                   &osvi, VER_MAJORVERSION | VER_MINORVERSION | VER_SERVICEPACKMAJOR | VER_BUILDNUMBER,
+                   dwlConditionMask ) != FALSE;
+    }
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-inline bool IsApiContractPresent(unsigned short version)
-{
-#if _WIN32_WINNT < 0x0A00 // _WIN32_WINNT_WIN10
-    return false;
-#else
-    return Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent("Windows.Foundation.UniversalApiContract", version);
-#endif
-}
+    inline bool IsApiContractPresent( unsigned short version )
+    {
+#    if _WIN32_WINNT < 0x0A00  // _WIN32_WINNT_WIN10
+        return false;
+#    else
+        return Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent(
+            "Windows.Foundation.UniversalApiContract", version );
+#    endif
+    }
 #endif
 
-inline bool IsWindows8OrGreater()
-{
+    inline bool IsWindows8OrGreater()
+    {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    return IsWindowsVersionOrGreater(6, 2, 0);
+        return IsWindowsVersionOrGreater( 6, 2, 0 );
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    return true;
+        return true;
 #endif
-}
+    }
 
-inline bool IsWindows8Point1OrGreater()
-{
+    inline bool IsWindows8Point1OrGreater()
+    {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    return IsWindowsVersionOrGreater(6, 3, 0);
+        return IsWindowsVersionOrGreater( 6, 3, 0 );
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    return _WIN32_WINNT >= 0x0603; // _WIN32_WINNT_WINBLUE
+        return _WIN32_WINNT >= 0x0603;  // _WIN32_WINNT_WINBLUE
 #endif
-}
+    }
 
-inline bool IsWindows10OrGreater()
-{
+    inline bool IsWindows10OrGreater()
+    {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    return IsWindowsVersionOrGreater(10, 0, 0);
+        return IsWindowsVersionOrGreater( 10, 0, 0 );
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    return IsApiContractPresent(1);
+        return IsApiContractPresent( 1 );
 #endif
-}
+    }
 
-inline bool IsWindows10RS3OrGreater()
-{
+    inline bool IsWindows10RS3OrGreater()
+    {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    return IsWindowsVersionOrGreater(10, 0, 0, 16299);
+        return IsWindowsVersionOrGreater( 10, 0, 0, 16299 );
 #endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    return IsApiContractPresent(5);
+        return IsApiContractPresent( 5 );
 #endif
-}
+    }
 
-}
-#endif // __OGREOSVERSIONHELPERS_H__
+}  // namespace Ogre
+#endif  // __OGREOSVERSIONHELPERS_H__

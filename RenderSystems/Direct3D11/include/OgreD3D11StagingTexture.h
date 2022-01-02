@@ -30,8 +30,8 @@ THE SOFTWARE.
 #define _OgreD3D11StagingTexture_H_
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreStagingTextureBufferImpl.h"
 
+#include "OgreStagingTextureBufferImpl.h"
 #include "Vao/OgreD3D11DynamicBuffer.h"
 
 #include "OgreHeaderPrefix.h"
@@ -47,13 +47,14 @@ namespace Ogre
         /// Fortunately D3D11 allows us to copy slices of 3D textures into
         /// 2D textures; so we use 3D Staging Textures whenever possible
         /// because they can be mapped like in other APIs.
-        ComPtr<ID3D11Resource> mStagingTexture;
+        ComPtr<ID3D11Resource>      mStagingTexture;
         D3D11_MAPPED_SUBRESOURCEVec mSubresourceData;
         D3D11_MAPPED_SUBRESOURCEVec mLastSubresourceData;
-        uint32 mWidth;
-        uint32 mHeight;
-        uint32 mDepthOrSlices;
-        bool mIsArray2DTexture;
+
+        uint32       mWidth;
+        uint32       mHeight;
+        uint32       mDepthOrSlices;
+        bool         mIsArray2DTexture;
         D3D11Device &mDevice;
 
         struct StagingBox
@@ -64,17 +65,20 @@ namespace Ogre
             uint32 height;
             StagingBox() {}
             StagingBox( uint32 _x, uint32 _y, uint32 _width, uint32 _height ) :
-                x( _x ), y( _y ), width( _width ), height( _height ) {}
+                x( _x ),
+                y( _y ),
+                width( _width ),
+                height( _height )
+            {
+            }
 
             bool contains( uint32 _x, uint32 _y, uint32 _width, uint32 _height ) const
             {
-                return !( _x >= this->x + this->width ||
-                          _y >= this->y + this->height ||
-                          this->x >= _x + _width ||
-                          this->y >= _y + _height );
+                return !( _x >= this->x + this->width || _y >= this->y + this->height ||
+                          this->x >= _x + _width || this->y >= _y + _height );
             }
         };
-        typedef vector<StagingBox>::type StagingBoxVec;
+        typedef vector<StagingBox>::type    StagingBoxVec;
         typedef vector<StagingBoxVec>::type StagingBoxVecVec;
 
         StagingBoxVecVec mFreeBoxes;
@@ -83,10 +87,10 @@ namespace Ogre
 
         bool belongsToUs( const TextureBox &box ) override;
 
-        void shrinkRecords( size_t slice, StagingBoxVec::iterator record,
-                            TextureBox consumedBox );
+        void shrinkRecords( size_t slice, StagingBoxVec::iterator record, TextureBox consumedBox );
         void shrinkMultisliceRecords( size_t slice, StagingBoxVec::iterator record,
                                       const TextureBox &consumedBox );
+
         TextureBox mapMultipleSlices( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                       PixelFormatGpu pixelFormat );
         TextureBox mapRegionImpl( uint32 width, uint32 height, uint32 depth, uint32 slices,
@@ -97,9 +101,9 @@ namespace Ogre
                              uint32 height, uint32 depthOrSlices, D3D11Device &device );
         ~D3D11StagingTexture() override;
 
-        bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
-                             PixelFormatGpu pixelFormat ) const override;
-        bool isSmallerThan( const StagingTexture *other ) const override;
+        bool   supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                               PixelFormatGpu pixelFormat ) const override;
+        bool   isSmallerThan( const StagingTexture *other ) const override;
         size_t _getSizeBytes() override;
 
         void startMapRegion() override;
@@ -109,7 +113,7 @@ namespace Ogre
                      const TextureBox *cpuSrcBox = 0, const TextureBox *dstBox = 0,
                      bool skipSysRamCopy = false ) override;
     };
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

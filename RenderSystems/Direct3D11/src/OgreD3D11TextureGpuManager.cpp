@@ -27,21 +27,19 @@ THE SOFTWARE.
 */
 
 #include "OgreD3D11TextureGpuManager.h"
-#include "OgreD3D11Mappings.h"
-#include "OgreD3D11Device.h"
-#include "OgreD3D11TextureGpu.h"
-#include "OgreD3D11StagingTexture.h"
+
 #include "OgreD3D11AsyncTextureTicket.h"
+#include "OgreD3D11Device.h"
+#include "OgreD3D11Mappings.h"
+#include "OgreD3D11StagingTexture.h"
+#include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11TextureGpuWindow.h"
-
-#include "Vao/OgreD3D11VaoManager.h"
-
+#include "OgreException.h"
 #include "OgreObjCmdBuffer.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureFilters.h"
 #include "OgreVector2.h"
-
-#include "OgreException.h"
+#include "Vao/OgreD3D11VaoManager.h"
 
 namespace Ogre
 {
@@ -67,59 +65,59 @@ namespace Ogre
         D3D11_TEXTURE2D_DESC desc2;
         D3D11_TEXTURE3D_DESC desc3;
 
-        memset( &desc1, 0, sizeof(desc1) );
-        memset( &desc2, 0, sizeof(desc2) );
-        memset( &desc3, 0, sizeof(desc3) );
+        memset( &desc1, 0, sizeof( desc1 ) );
+        memset( &desc2, 0, sizeof( desc2 ) );
+        memset( &desc3, 0, sizeof( desc3 ) );
 
-        desc1.Width     = 4;
+        desc1.Width = 4;
         desc1.MipLevels = 1u;
         desc1.ArraySize = 1u;
-        desc1.Format    = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-        desc1.Usage     = D3D11_USAGE_IMMUTABLE;
+        desc1.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        desc1.Usage = D3D11_USAGE_IMMUTABLE;
         desc1.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
-        desc2.Width     = 4u;
-        desc2.Height    = 4u;
+        desc2.Width = 4u;
+        desc2.Height = 4u;
         desc2.MipLevels = 1u;
         desc2.ArraySize = 1u;
-        desc2.Format    = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        desc2.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
         desc2.SampleDesc.Count = 1u;
-        desc2.Usage     = D3D11_USAGE_IMMUTABLE;
+        desc2.Usage = D3D11_USAGE_IMMUTABLE;
         desc2.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
-        desc3.Width     = 4u;
-        desc3.Height    = 4u;
-        desc3.Depth     = 4u;
+        desc3.Width = 4u;
+        desc3.Height = 4u;
+        desc3.Depth = 4u;
         desc3.MipLevels = 1u;
-        desc3.Format    = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-        desc3.Usage     = D3D11_USAGE_IMMUTABLE;
+        desc3.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        desc3.Usage = D3D11_USAGE_IMMUTABLE;
         desc3.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
-        //Must be large enough to hold the biggest transfer we'll do.
-        uint8 c_whiteData[4*4*6*4];
-        uint8 c_blackData[4*4*6*4];
+        // Must be large enough to hold the biggest transfer we'll do.
+        uint8 c_whiteData[4 * 4 * 6 * 4];
+        uint8 c_blackData[4 * 4 * 6 * 4];
         memset( c_whiteData, 0xff, sizeof( c_whiteData ) );
         memset( c_blackData, 0x00, sizeof( c_blackData ) );
 
         D3D11_SUBRESOURCE_DATA dataWhite;
         D3D11_SUBRESOURCE_DATA dataBlack[6];
 
-        dataWhite.pSysMem           = c_whiteData;
-        dataWhite.SysMemPitch       = 4u * sizeof(uint32);
-        dataWhite.SysMemSlicePitch  = dataWhite.SysMemPitch * 4u;
+        dataWhite.pSysMem = c_whiteData;
+        dataWhite.SysMemPitch = 4u * sizeof( uint32 );
+        dataWhite.SysMemSlicePitch = dataWhite.SysMemPitch * 4u;
 
-        for( size_t i=0; i<6u; ++i )
+        for( size_t i = 0; i < 6u; ++i )
         {
-            dataBlack[i].pSysMem            = c_blackData;
-            dataBlack[i].SysMemPitch        = 4u * sizeof(uint32);
-            dataBlack[i].SysMemSlicePitch   = dataBlack[i].SysMemPitch * 4u;
+            dataBlack[i].pSysMem = c_blackData;
+            dataBlack[i].SysMemPitch = 4u * sizeof( uint32 );
+            dataBlack[i].SysMemSlicePitch = dataBlack[i].SysMemPitch * 4u;
         }
 
         ID3D11Texture1D *tex1D;
         ID3D11Texture2D *tex2D;
         ID3D11Texture3D *tex3D;
 
-        for( int i=1; i<=TextureTypes::Type3D; ++i )
+        for( int i = 1; i <= TextureTypes::Type3D; ++i )
         {
             HRESULT hr = 0;
             switch( i )
@@ -153,7 +151,7 @@ namespace Ogre
                 break;
             }
 
-            if( FAILED(hr) || mDevice.isError() )
+            if( FAILED( hr ) || mDevice.isError() )
             {
                 String errorDescription = mDevice.getErrorDescription( hr );
                 OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
@@ -161,8 +159,9 @@ namespace Ogre
                                 "D3D11TextureGpuManager::D3D11TextureGpuManager" );
             }
 
-            hr = mDevice->CreateShaderResourceView( mBlankTexture[i].Get(), 0, mDefaultSrv[i].GetAddressOf() );
-            if( FAILED(hr) || mDevice.isError() )
+            hr = mDevice->CreateShaderResourceView( mBlankTexture[i].Get(), 0,
+                                                    mDefaultSrv[i].GetAddressOf() );
+            if( FAILED( hr ) || mDevice.isError() )
             {
                 String errorDescription = mDevice.getErrorDescription( hr );
                 OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
@@ -171,8 +170,8 @@ namespace Ogre
             }
         }
 
-        mBlankTexture[TextureTypes::Unknown]    = mBlankTexture[TextureTypes::Type2D];
-        mDefaultSrv[TextureTypes::Unknown]      = mDefaultSrv[TextureTypes::Type2D];
+        mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
+        mDefaultSrv[TextureTypes::Unknown] = mDefaultSrv[TextureTypes::Type2D];
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuManager::_destroyD3DResources()
@@ -183,53 +182,49 @@ namespace Ogre
         destroyAllPools();
         mMutex.unlock();
 
-        for( int i=0; i<=TextureTypes::Type3D; ++i )
+        for( int i = 0; i <= TextureTypes::Type3D; ++i )
         {
             mBlankTexture[i].Reset();
             mDefaultSrv[i].Reset();
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* D3D11TextureGpuManager::createTextureGpuWindow( bool fromFlipModeSwapchain,
+    TextureGpu *D3D11TextureGpuManager::createTextureGpuWindow( bool fromFlipModeSwapchain,
                                                                 Window *window )
     {
-        return OGRE_NEW D3D11TextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
-                                               "RenderWindow",
-                                               TextureFlags::NotTexture|
-                                               TextureFlags::RenderToTexture|
-                                               TextureFlags::RenderWindowSpecific|
-                                               TextureFlags::DiscardableContent|
-                                               (fromFlipModeSwapchain ? 0 : TextureFlags::MsaaExplicitResolve)|
-                                               (fromFlipModeSwapchain ? TextureFlags::Reinterpretable : 0),
-                                               TextureTypes::Type2D, this, window );
+        return OGRE_NEW D3D11TextureGpuWindow(
+            GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow",
+            TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent |
+                ( fromFlipModeSwapchain ? 0 : TextureFlags::MsaaExplicitResolve ) |
+                ( fromFlipModeSwapchain ? TextureFlags::Reinterpretable : 0 ),
+            TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* D3D11TextureGpuManager::createWindowDepthBuffer()
+    TextureGpu *D3D11TextureGpuManager::createWindowDepthBuffer()
     {
-        return OGRE_NEW D3D11TextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
-                                                     "RenderWindow DepthBuffer",
-                                                     TextureFlags::NotTexture|
-                                                     TextureFlags::RenderToTexture|
-                                                     TextureFlags::RenderWindowSpecific|
-                                                     TextureFlags::DiscardableContent,
-                                                     TextureTypes::Type2D, this );
+        return OGRE_NEW D3D11TextureGpuRenderTarget(
+            GpuPageOutStrategy::Discard, mVaoManager, "RenderWindow DepthBuffer",
+            TextureFlags::NotTexture | TextureFlags::RenderToTexture |
+                TextureFlags::RenderWindowSpecific | TextureFlags::DiscardableContent,
+            TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
-    ID3D11Resource* D3D11TextureGpuManager::getBlankTextureD3dName(
-            TextureTypes::TextureTypes textureType ) const
+    ID3D11Resource *D3D11TextureGpuManager::getBlankTextureD3dName(
+        TextureTypes::TextureTypes textureType ) const
     {
         return mBlankTexture[textureType].Get();
     }
     //-----------------------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11TextureGpuManager::getBlankTextureSrv(
-            TextureTypes::TextureTypes textureType ) const
+    ID3D11ShaderResourceView *D3D11TextureGpuManager::getBlankTextureSrv(
+        TextureTypes::TextureTypes textureType ) const
     {
         return mDefaultSrv[textureType].Get();
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* D3D11TextureGpuManager::createTextureImpl(
-            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
+    TextureGpu *D3D11TextureGpuManager::createTextureImpl(
+        GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, IdString name, uint32 textureFlags,
+        TextureTypes::TextureTypes initialType )
     {
         D3D11TextureGpu *retVal = 0;
         if( textureFlags & TextureFlags::RenderToTexture )
@@ -239,35 +234,34 @@ namespace Ogre
         }
         else
         {
-            retVal = OGRE_NEW D3D11TextureGpu( pageOutStrategy, mVaoManager, name,
-                                               textureFlags, initialType, this );
+            retVal = OGRE_NEW D3D11TextureGpu( pageOutStrategy, mVaoManager, name, textureFlags,
+                                               initialType, this );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    StagingTexture* D3D11TextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
+    StagingTexture *D3D11TextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
                                                                       uint32 depth, uint32 slices,
                                                                       PixelFormatGpu pixelFormat )
     {
         D3D11StagingTexture *retVal =
-                OGRE_NEW D3D11StagingTexture( mVaoManager,
-                                              PixelFormatGpuUtils::getFamily( pixelFormat ),
-                                              width, height, std::max( depth, slices ), mDevice );
+            OGRE_NEW D3D11StagingTexture( mVaoManager, PixelFormatGpuUtils::getFamily( pixelFormat ),
+                                          width, height, std::max( depth, slices ), mDevice );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        //Do nothing, caller will delete stagingTexture.
+        // Do nothing, caller will delete stagingTexture.
     }
     //-----------------------------------------------------------------------------------
-    AsyncTextureTicket* D3D11TextureGpuManager::createAsyncTextureTicketImpl(
-            uint32 width, uint32 height, uint32 depthOrSlices,
-            TextureTypes::TextureTypes textureType, PixelFormatGpu pixelFormatFamily )
+    AsyncTextureTicket *D3D11TextureGpuManager::createAsyncTextureTicketImpl(
+        uint32 width, uint32 height, uint32 depthOrSlices, TextureTypes::TextureTypes textureType,
+        PixelFormatGpu pixelFormatFamily )
     {
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mVaoManager );
+        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager *>( mVaoManager );
         return OGRE_NEW D3D11AsyncTextureTicket( width, height, depthOrSlices, textureType,
                                                  pixelFormatFamily, vaoManager );
     }
-}
+}  // namespace Ogre

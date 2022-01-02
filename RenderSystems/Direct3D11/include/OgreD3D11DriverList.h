@@ -29,30 +29,32 @@ THE SOFTWARE.
 #define __D3D11DRIVERLIST_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreSharedPtr.h"
 
 #include "ogrestd/vector.h"
 
-namespace Ogre 
+namespace Ogre
 {
     class _OgreD3D11Export D3D11DriverList
     {
     public:
-        D3D11DriverList(); // does nothing, call refresh() to initialize
+        D3D11DriverList();  // does nothing, call refresh() to initialize
         ~D3D11DriverList();
 
         void refresh();
         void clear();
 
-        size_t count() const; /// does not include hidden drivers like NVPerfHUD
-        D3D11Driver* item( size_t index );
-        D3D11Driver* item( const String &name );
+        size_t       count() const;  /// does not include hidden drivers like NVPerfHUD
+        D3D11Driver *item( size_t index );
+        D3D11Driver *item( const String &name );
 
-        D3D11Driver* findByName( const String &name ); // never fail but can return default driver if requested is not found
+        D3D11Driver *findByName(
+            const String &name );  // never fail but can return default driver if requested is not found
 
     private:
         vector<SharedPtr<D3D11Driver> >::type mDriverList;
-        unsigned mHiddenDriversCount;
+        unsigned                              mHiddenDriversCount;
     };
-}
+}  // namespace Ogre
 #endif

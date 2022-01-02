@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_D3D11VaoManager_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "Vao/OgreVaoManager.h"
 
 namespace Ogre
@@ -43,6 +44,7 @@ namespace Ogre
             SHADER_BUFFER,
             NumInternalBufferTypes
         };
+
     public:
         struct Block
         {
@@ -58,59 +60,60 @@ namespace Ogre
 
             StrideChanger() : offsetAfterPadding( 0 ), paddedBytes( 0 ) {}
             StrideChanger( size_t _offsetAfterPadding, size_t _paddedBytes ) :
-                offsetAfterPadding( _offsetAfterPadding ), paddedBytes( _paddedBytes ) {}
+                offsetAfterPadding( _offsetAfterPadding ),
+                paddedBytes( _paddedBytes )
+            {
+            }
 
-            bool operator () ( const StrideChanger &left, size_t right ) const
+            bool operator()( const StrideChanger &left, size_t right ) const
             {
                 return left.offsetAfterPadding < right;
             }
-            bool operator () ( size_t left, const StrideChanger &right ) const
+            bool operator()( size_t left, const StrideChanger &right ) const
             {
                 return left < right.offsetAfterPadding;
             }
-            bool operator () ( const StrideChanger &left, const StrideChanger &right ) const
+            bool operator()( const StrideChanger &left, const StrideChanger &right ) const
             {
                 return left.offsetAfterPadding < right.offsetAfterPadding;
             }
         };
 
-        typedef vector<Block>::type BlockVec;
+        typedef vector<Block>::type         BlockVec;
         typedef vector<StrideChanger>::type StrideChangerVec;
 
     protected:
         struct Vbo
         {
             ComPtr<ID3D11Buffer> vboName;
-            size_t              sizeBytes;
-            D3D11DynamicBuffer  *dynamicBuffer; //Null for non BT_DYNAMIC_* BOs.
+            size_t               sizeBytes;
+            D3D11DynamicBuffer * dynamicBuffer;  // Null for non BT_DYNAMIC_* BOs.
 
-            BlockVec            freeBlocks;
-            StrideChangerVec    strideChangers;
+            BlockVec         freeBlocks;
+            StrideChangerVec strideChangers;
         };
 
         struct Vao
         {
-            uint32 vaoName;
+            uint32                        vaoName;
             D3D11VertexArrayObjectShared *sharedData;
 
             struct VertexBinding
             {
                 ComPtr<ID3D11Buffer> vertexBufferVbo;
-                VertexElement2Vec   vertexElements;
-                uint32              stride;
-                size_t              offset;
+                VertexElement2Vec    vertexElements;
+                uint32               stride;
+                size_t               offset;
 
-                //OpenGL supports this parameter per attribute, but
-                //we're a bit more conservative and do it per buffer
-                uint32              instancingDivisor;
+                // OpenGL supports this parameter per attribute, but
+                // we're a bit more conservative and do it per buffer
+                uint32 instancingDivisor;
 
-                bool operator == ( const VertexBinding &_r ) const
+                bool operator==( const VertexBinding &_r ) const
                 {
                     return vertexBufferVbo == _r.vertexBufferVbo &&
-                            vertexElements == _r.vertexElements &&
-                            stride == _r.stride &&
-                            offset == _r.offset &&
-                            instancingDivisor == _r.instancingDivisor;
+                           vertexElements == _r.vertexElements && stride == _r.stride &&
+                           offset == _r.offset && instancingDivisor == _r.instancingDivisor;
                 }
             };
 
@@ -118,33 +121,33 @@ namespace Ogre
 
             /// Not used anymore, however it's useful for sorting
             /// purposes in the RenderQueue (using the Vao's ID).
-            OperationType operationType;
-            VertexBindingVec    vertexBuffers;
-            ComPtr<ID3D11Buffer> indexBufferVbo;
+            OperationType                operationType;
+            VertexBindingVec             vertexBuffers;
+            ComPtr<ID3D11Buffer>         indexBufferVbo;
             IndexBufferPacked::IndexType indexType;
-            uint32              refCount;
+            uint32                       refCount;
         };
 
-        typedef vector<Vbo>::type VboVec;
-        typedef vector<Vao>::type VaoVec;
+        typedef vector<Vbo>::type                  VboVec;
+        typedef vector<Vao>::type                  VaoVec;
         typedef vector<ComPtr<ID3D11Query> >::type D3D11SyncVec;
 
-        VboVec  mVbos[NumInternalBufferTypes][BT_DYNAMIC_DEFAULT+1];
-        size_t  mDefaultPoolSize[NumInternalBufferTypes][BT_DYNAMIC_DEFAULT+1];
+        VboVec mVbos[NumInternalBufferTypes][BT_DYNAMIC_DEFAULT + 1];
+        size_t mDefaultPoolSize[NumInternalBufferTypes][BT_DYNAMIC_DEFAULT + 1];
 
         BufferPackedVec mDelayedBuffers[NumInternalBufferTypes];
 
-        VaoVec  mVaos;
-        uint32  mVaoNames;
+        VaoVec mVaos;
+        uint32 mVaoNames;
 
         D3D11Device &mDevice;
 
         D3D11SyncVec mFrameSyncVec;
 
-        VertexBufferPacked  *mDrawId;
+        VertexBufferPacked * mDrawId;
         ComPtr<ID3D11Buffer> mSplicingHelperBuffer;
 
-        D3D11RenderSystem   *mD3D11RenderSystem;
+        D3D11RenderSystem *mD3D11RenderSystem;
 
         /** Asks for allocating buffer space in a VBO (Vertex Buffer Object).
             If the VBO doesn't exist, all VBOs are full or can't fit this request,
@@ -164,8 +167,7 @@ namespace Ogre
             The offset in bytes at which the buffer data should be placed.
         */
         void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
-                          InternalBufferType internalType,
-                          size_t &outVboIdx, size_t &outBufferOffset );
+                          InternalBufferType internalType, size_t &outVboIdx, size_t &outBufferOffset );
 
         /** Deallocates a buffer allocated with @allocateVbo.
         @remarks
@@ -180,30 +182,29 @@ namespace Ogre
         @param bufferType
             The type of buffer that was passed to allocateVbo.
         */
-        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
-                            BufferType bufferType, InternalBufferType internalType );
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes, BufferType bufferType,
+                            InternalBufferType internalType );
 
         void removeBufferFromDelayedQueue( BufferPackedVec &container, BufferPacked *buffer );
 
-        void createImmutableBuffer( InternalBufferType internalType,
-                                    size_t sizeBytes, void *initialData,
+        void createImmutableBuffer( InternalBufferType internalType, size_t sizeBytes, void *initialData,
                                     Vbo &inOutVbo );
 
     public:
         /// @see StagingBuffer::mergeContiguousBlocks
-        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge,
-                                           BlockVec &blocks );
+        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
     protected:
         VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                     BufferType bufferType, void *initialData,
-                                                    bool keepAsShadow,
+                                                    bool                     keepAsShadow,
                                                     const VertexElement2Vec &vertexElements ) override;
 
         void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) override;
 
     public:
         void _forceCreateDelayedImmutableBuffers();
+
     protected:
         void createDelayedImmutableBuffers();
         void reorganizeImmutableVaos();
@@ -222,49 +223,48 @@ namespace Ogre
 
         ConstBufferPacked *createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                   void *initialData, bool keepAsShadow ) override;
-        void destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
+        void               destroyConstBufferImpl( ConstBufferPacked *constBuffer ) override;
 
         TexBufferPacked *createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                               BufferType bufferType, void *initialData,
                                               bool keepAsShadow ) override;
-        void destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
+        void             destroyTexBufferImpl( TexBufferPacked *texBuffer ) override;
 
         ReadOnlyBufferPacked *createReadOnlyBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                         BufferType bufferType, void *initialData,
                                                         bool keepAsShadow ) override;
-        void destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
+        void                  destroyReadOnlyBufferImpl( ReadOnlyBufferPacked *readOnlyBuffer ) override;
 
         UavBufferPacked *createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
                                               uint32 bindFlags, void *initialData,
                                               bool keepAsShadow ) override;
-        void destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
+        void             destroyUavBufferImpl( UavBufferPacked *uavBuffer ) override;
 
         IndirectBufferPacked *createIndirectBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                         void *initialData, bool keepAsShadow ) override;
-        void destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
+        void                  destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
 
         /// Finds the Vao. Calls createVao automatically if not found.
         /// Increases refCount before returning the iterator.
         VaoVec::iterator findVao( const VertexBufferPackedVec &vertexBuffers,
-                                  IndexBufferPacked *indexBuffer,
-                                  OperationType opType );
-        uint32 createVao( const Vao &vaoRef );
-        void releaseVao( VertexArrayObject *vao );
+                                  IndexBufferPacked *indexBuffer, OperationType opType );
+
+        uint32           createVao( const Vao &vaoRef );
+        void             releaseVao( VertexArrayObject *vao );
 
         static uint32 generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId );
         static uint32 extractUniqueVaoIdFromRenderQueueId( uint32 rqId );
 
         VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *indexBuffer,
-                                                        OperationType opType ) override;
+                                                        IndexBufferPacked *          indexBuffer,
+                                                        OperationType                opType ) override;
 
         void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;
 
-        D3D11CompatBufferInterface* createShaderBufferInterface( uint32 bindFlags,
-                                                                 size_t sizeBytes,
+        D3D11CompatBufferInterface *createShaderBufferInterface( uint32 bindFlags, size_t sizeBytes,
                                                                  BufferType bufferType,
-                                                                 void *initialData,
-                                                                 uint32 structureByteStride = 0 );
+                                                                 void *     initialData,
+                                                                 uint32     structureByteStride = 0 );
 
         inline void getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1, size_t poolIdx,
                                     size_t poolCapacity, LwString &text, MemoryStatsEntryVec &outStats,
@@ -286,8 +286,8 @@ namespace Ogre
 
         void cleanupEmptyPools() override;
 
-        D3D11RenderSystem* getD3D11RenderSystem() const             { return mD3D11RenderSystem; }
-        D3D11Device& getDevice() const                              { return mDevice; }
+        D3D11RenderSystem *getD3D11RenderSystem() const { return mD3D11RenderSystem; }
+        D3D11Device &      getDevice() const { return mDevice; }
 
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId( uint32 bindSlotId );
@@ -309,7 +309,7 @@ namespace Ogre
         /// to be of the same size as the structured buffer's stride. Because we allow
         /// more relaxed copies, we create a helper buffer of 2kb (max stride) to splice
         /// buffer copies and workaround this limitation
-        ID3D11Buffer* getSplicingHelperBuffer();
+        ID3D11Buffer *getSplicingHelperBuffer();
 
         /// @see VaoManager::waitForTailFrameToFinish
         uint8 waitForTailFrameToFinish() override;
@@ -321,7 +321,7 @@ namespace Ogre
         bool isFrameFinished( uint32 frameCount ) override;
 
         static ComPtr<ID3D11Query> createFence( D3D11Device &device );
-        ComPtr<ID3D11Query> createFence();
+        ComPtr<ID3D11Query>        createFence();
 
         /** Will stall undefinitely until GPU finishes (signals the sync object).
         @param fenceName
@@ -331,12 +331,12 @@ namespace Ogre
             Null ptr on success. Should throw on failure, but if this function for some
             strange reason doesn't throw, it is programmed to return 'fenceName'
         */
-        static ID3D11Query* waitFor( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
-        ID3D11Query* waitFor( ID3D11Query *fenceName );
+        static ID3D11Query *waitFor( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
+        ID3D11Query *       waitFor( ID3D11Query *fenceName );
 
         static bool queryIsDone( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
-        bool queryIsDone( ID3D11Query *fenceName );
+        bool        queryIsDone( ID3D11Query *fenceName );
     };
-}
+}  // namespace Ogre
 
 #endif

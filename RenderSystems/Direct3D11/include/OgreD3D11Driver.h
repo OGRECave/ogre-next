@@ -29,35 +29,36 @@ THE SOFTWARE.
 #define __D3D11DRIVER_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreSharedPtr.h"
 
 namespace Ogre
 {
-
     class D3D11VideoModeList;
     class D3D11VideoMode;
 
     class _OgreD3D11Export D3D11Driver
     {
     private:
-        ComPtr<IDXGIAdapterN> mDXGIAdapter;
-        DXGI_ADAPTER_DESC1 mAdapterIdentifier;
-        unsigned mSameNameAdapterIndex;
+        ComPtr<IDXGIAdapterN>         mDXGIAdapter;
+        DXGI_ADAPTER_DESC1            mAdapterIdentifier;
+        unsigned                      mSameNameAdapterIndex;
         SharedPtr<D3D11VideoModeList> mVideoModeList;
 
     public:
         // Constructors
-        D3D11Driver();      // Default
-        D3D11Driver( IDXGIAdapterN* pDXGIAdapter, const DXGI_ADAPTER_DESC1& desc, unsigned sameNameIndex);
+        D3D11Driver();  // Default
+        D3D11Driver( IDXGIAdapterN *pDXGIAdapter, const DXGI_ADAPTER_DESC1 &desc,
+                     unsigned sameNameIndex );
         ~D3D11Driver();
 
         // Information accessors
         String DriverDescription() const;
 
         // change the device
-        const DXGI_ADAPTER_DESC1& getAdapterIdentifier() const;
-        IDXGIAdapterN* getDeviceAdapter() const;
-        D3D11VideoModeList* getVideoModeList();
+        const DXGI_ADAPTER_DESC1 &getAdapterIdentifier() const;
+        IDXGIAdapterN *           getDeviceAdapter() const;
+        D3D11VideoModeList *      getVideoModeList();
     };
-}
+}  // namespace Ogre
 #endif

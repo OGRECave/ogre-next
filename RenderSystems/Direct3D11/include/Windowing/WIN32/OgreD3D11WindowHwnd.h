@@ -38,11 +38,11 @@ namespace Ogre
     class D3D11WindowHwnd final : public D3D11WindowSwapChainBased
     {
     protected:
-        HWND    mHwnd;                          // Win32 window handle
-        DWORD   mWindowedWinStyle;              // Windowed mode window style flags.
-        DWORD   mFullscreenWinStyle;            // Fullscreen mode window style flags.
+        HWND  mHwnd;                // Win32 window handle
+        DWORD mWindowedWinStyle;    // Windowed mode window style flags.
+        DWORD mFullscreenWinStyle;  // Fullscreen mode window style flags.
         // the last value of the switching fullscreen counter when we switched
-        int     mLastSwitchingFullscreenCounter;
+        int mLastSwitchingFullscreenCounter;
 
         static bool mClassRegistered;
 
@@ -58,20 +58,18 @@ namespace Ogre
                                                          LPRECT lprcMonitor, LPARAM dwData );
 
         void updateWindowRect();
-        void adjustWindow( uint32 clientWidth, uint32 clientHeight,
-                           uint32 *outDrawableWidth, uint32 *outDrawableHeight );
+        void adjustWindow( uint32 clientWidth, uint32 clientHeight, uint32 *outDrawableWidth,
+                           uint32 *outDrawableHeight );
 
         template <typename T>
-        void setCommonSwapChain( T &sd );
+        void    setCommonSwapChain( T &sd );
         HRESULT _createSwapChainImpl() override;
-
 
         void create( bool fullscreenMode, const NameValuePairList *miscParams );
 
     public:
-        D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
-                         bool fullscreenMode, PixelFormatGpu depthStencilFormat,
-                         const NameValuePairList *miscParams,
+        D3D11WindowHwnd( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                         PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         ~D3D11WindowHwnd() override;
 
@@ -88,9 +86,9 @@ namespace Ogre
         bool isVisible() const override;
         void setHidden( bool hidden ) override;
 
-        void getCustomAttribute( IdString name, void* pData ) override;
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 #endif
-}
+}  // namespace Ogre
 
 #endif

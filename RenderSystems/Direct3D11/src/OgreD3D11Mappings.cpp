@@ -26,19 +26,21 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11Mappings.h"
+
 #include "OgreD3D11RenderSystem.h"
 #include "OgreRoot.h"
 
-namespace Ogre 
+namespace Ogre
 {
     //---------------------------------------------------------------------
-    D3D11_TEXTURE_ADDRESS_MODE D3D11Mappings::get(TextureAddressingMode tam)
+    D3D11_TEXTURE_ADDRESS_MODE D3D11Mappings::get( TextureAddressingMode tam )
     {
-        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        if (rsys->_getFeatureLevel() == D3D_FEATURE_LEVEL_9_1)
+        D3D11RenderSystem *rsys =
+            static_cast<D3D11RenderSystem *>( Root::getSingleton().getRenderSystem() );
+        if( rsys->_getFeatureLevel() == D3D_FEATURE_LEVEL_9_1 )
             return D3D11_TEXTURE_ADDRESS_WRAP;
 
-        //return D3D11_TEXTURE_ADDRESS_WRAP;
+        // return D3D11_TEXTURE_ADDRESS_WRAP;
         switch( tam )
         {
         case TAM_WRAP:
@@ -53,10 +55,11 @@ namespace Ogre
         return D3D11_TEXTURE_ADDRESS_WRAP;
     }
     //---------------------------------------------------------------------
-    D3D11_BLEND D3D11Mappings::get(SceneBlendFactor sbf, bool forAlpha)
+    D3D11_BLEND D3D11Mappings::get( SceneBlendFactor sbf, bool forAlpha )
     {
         switch( sbf )
         {
+            // clang-format off
         case SBF_ONE:                       return D3D11_BLEND_ONE;
         case SBF_ZERO:                      return D3D11_BLEND_ZERO;
         case SBF_DEST_COLOUR:               return forAlpha ? D3D11_BLEND_DEST_ALPHA : D3D11_BLEND_DEST_COLOR;
@@ -67,11 +70,12 @@ namespace Ogre
         case SBF_SOURCE_ALPHA:              return D3D11_BLEND_SRC_ALPHA;
         case SBF_ONE_MINUS_DEST_ALPHA:      return D3D11_BLEND_INV_DEST_ALPHA;
         case SBF_ONE_MINUS_SOURCE_ALPHA:    return D3D11_BLEND_INV_SRC_ALPHA;
+            // clang-format on
         }
         return D3D11_BLEND_ZERO;
     }
     //---------------------------------------------------------------------
-    D3D11_BLEND_OP D3D11Mappings::get(SceneBlendOperation sbo)
+    D3D11_BLEND_OP D3D11Mappings::get( SceneBlendOperation sbo )
     {
         switch( sbo )
         {
@@ -89,7 +93,7 @@ namespace Ogre
         return D3D11_BLEND_OP_ADD;
     }
     //---------------------------------------------------------------------
-    D3D11_COMPARISON_FUNC D3D11Mappings::get(CompareFunction cf)
+    D3D11_COMPARISON_FUNC D3D11Mappings::get( CompareFunction cf )
     {
         switch( cf )
         {
@@ -113,26 +117,27 @@ namespace Ogre
         return D3D11_COMPARISON_ALWAYS;
     }
     //---------------------------------------------------------------------
-    D3D11_CULL_MODE D3D11Mappings::get(CullingMode cm, bool flip)
+    D3D11_CULL_MODE D3D11Mappings::get( CullingMode cm, bool flip )
     {
         switch( cm )
         {
         case CULL_NONE:
             return D3D11_CULL_NONE;
         case CULL_CLOCKWISE:
-			return flip ? D3D11_CULL_FRONT : D3D11_CULL_BACK;
+            return flip ? D3D11_CULL_FRONT : D3D11_CULL_BACK;
         case CULL_ANTICLOCKWISE:
-			return flip ? D3D11_CULL_BACK : D3D11_CULL_FRONT;
+            return flip ? D3D11_CULL_BACK : D3D11_CULL_FRONT;
         }
         return D3D11_CULL_NONE;
     }
     //---------------------------------------------------------------------
-    D3D11_FILL_MODE D3D11Mappings::get(PolygonMode level)
+    D3D11_FILL_MODE D3D11Mappings::get( PolygonMode level )
     {
-        switch(level)
+        switch( level )
         {
         case PM_POINTS:
-            return D3D11_FILL_SOLID; // this will done in a geometry shader like in the FixedFuncEMU sample  and the shader needs solid
+            return D3D11_FILL_SOLID;  // this will done in a geometry shader like in the FixedFuncEMU
+                                      // sample  and the shader needs solid
         case PM_WIREFRAME:
             return D3D11_FILL_WIREFRAME;
         case PM_SOLID:
@@ -141,9 +146,9 @@ namespace Ogre
         return D3D11_FILL_SOLID;
     }
     //---------------------------------------------------------------------
-    D3D11_STENCIL_OP D3D11Mappings::get(StencilOperation op, bool invert)
+    D3D11_STENCIL_OP D3D11Mappings::get( StencilOperation op, bool invert )
     {
-        switch(op)
+        switch( op )
         {
         case SOP_KEEP:
             return D3D11_STENCIL_OP_KEEP;
@@ -152,103 +157,107 @@ namespace Ogre
         case SOP_REPLACE:
             return D3D11_STENCIL_OP_REPLACE;
         case SOP_INCREMENT:
-            return invert? D3D11_STENCIL_OP_DECR_SAT : D3D11_STENCIL_OP_INCR_SAT;
+            return invert ? D3D11_STENCIL_OP_DECR_SAT : D3D11_STENCIL_OP_INCR_SAT;
         case SOP_DECREMENT:
-            return invert? D3D11_STENCIL_OP_INCR_SAT : D3D11_STENCIL_OP_DECR_SAT;
+            return invert ? D3D11_STENCIL_OP_INCR_SAT : D3D11_STENCIL_OP_DECR_SAT;
         case SOP_INCREMENT_WRAP:
-            return invert? D3D11_STENCIL_OP_DECR : D3D11_STENCIL_OP_INCR;
+            return invert ? D3D11_STENCIL_OP_DECR : D3D11_STENCIL_OP_INCR;
         case SOP_DECREMENT_WRAP:
-            return invert? D3D11_STENCIL_OP_INCR : D3D11_STENCIL_OP_DECR;
+            return invert ? D3D11_STENCIL_OP_INCR : D3D11_STENCIL_OP_DECR;
         case SOP_INVERT:
             return D3D11_STENCIL_OP_INVERT;
         }
         return D3D11_STENCIL_OP_KEEP;
     }
     //---------------------------------------------------------------------
-    D3D11_FILTER D3D11Mappings::get(const FilterOptions min, const FilterOptions mag, const FilterOptions mip, const bool comparison)
+    D3D11_FILTER D3D11Mappings::get( const FilterOptions min, const FilterOptions mag,
+                                     const FilterOptions mip, const bool comparison )
     {
-		// anisotropic means trilinear and anisotropic, handle this case early
-		if(min == FO_ANISOTROPIC || mag == FO_ANISOTROPIC || mip == FO_ANISOTROPIC)
-			return comparison ? D3D11_FILTER_COMPARISON_ANISOTROPIC : D3D11_FILTER_ANISOTROPIC;
+        // anisotropic means trilinear and anisotropic, handle this case early
+        if( min == FO_ANISOTROPIC || mag == FO_ANISOTROPIC || mip == FO_ANISOTROPIC )
+            return comparison ? D3D11_FILTER_COMPARISON_ANISOTROPIC : D3D11_FILTER_ANISOTROPIC;
 
-		// FilterOptions::FO_NONE is not supported
-#define MERGE_FOR_SWITCH(_comparison_, _min_ , _mag_, _mip_ ) ((_comparison_ ? 8 : 0) | (_min_ == FO_LINEAR ? 4 : 0) | (_mag_ == FO_LINEAR ? 2 : 0) | (_mip_ == FO_LINEAR ? 1 : 0))
-		switch((MERGE_FOR_SWITCH(comparison, min, mag, mip)))
+            // FilterOptions::FO_NONE is not supported
+#define MERGE_FOR_SWITCH( _comparison_, _min_, _mag_, _mip_ ) \
+    ( ( _comparison_ ? 8 : 0 ) | ( _min_ == FO_LINEAR ? 4 : 0 ) | ( _mag_ == FO_LINEAR ? 2 : 0 ) | \
+      ( _mip_ == FO_LINEAR ? 1 : 0 ) )
+
+        switch( ( MERGE_FOR_SWITCH( comparison, min, mag, mip ) ) )
         {
-		case MERGE_FOR_SWITCH(true, FO_POINT, FO_POINT, FO_POINT):
-			return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
-		case MERGE_FOR_SWITCH(true, FO_POINT, FO_POINT, FO_LINEAR):
-			return D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(true, FO_POINT, FO_LINEAR, FO_POINT):
-			return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
-		case MERGE_FOR_SWITCH(true, FO_POINT, FO_LINEAR, FO_LINEAR):
-			return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(true, FO_LINEAR, FO_POINT, FO_POINT):
-			return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
-		case MERGE_FOR_SWITCH(true, FO_LINEAR, FO_POINT, FO_LINEAR):
-			return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(true, FO_LINEAR, FO_LINEAR, FO_POINT):
-			return D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-		case MERGE_FOR_SWITCH(true, FO_LINEAR, FO_LINEAR, FO_LINEAR):
-			return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(false, FO_POINT, FO_POINT, FO_POINT):
-			return D3D11_FILTER_MIN_MAG_MIP_POINT;
-		case MERGE_FOR_SWITCH(false, FO_POINT, FO_POINT, FO_LINEAR):
-			return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(false, FO_POINT, FO_LINEAR, FO_POINT):
-			return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
-		case MERGE_FOR_SWITCH(false, FO_POINT, FO_LINEAR, FO_LINEAR):
-			return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(false, FO_LINEAR, FO_POINT, FO_POINT):
-			return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-		case MERGE_FOR_SWITCH(false, FO_LINEAR, FO_POINT, FO_LINEAR):
-			return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-		case MERGE_FOR_SWITCH(false, FO_LINEAR, FO_LINEAR, FO_POINT):
-			return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-		case MERGE_FOR_SWITCH(false, FO_LINEAR, FO_LINEAR, FO_LINEAR):
-			return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-        }   
+        case MERGE_FOR_SWITCH( true, FO_POINT, FO_POINT, FO_POINT ):
+            return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+        case MERGE_FOR_SWITCH( true, FO_POINT, FO_POINT, FO_LINEAR ):
+            return D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( true, FO_POINT, FO_LINEAR, FO_POINT ):
+            return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
+        case MERGE_FOR_SWITCH( true, FO_POINT, FO_LINEAR, FO_LINEAR ):
+            return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( true, FO_LINEAR, FO_POINT, FO_POINT ):
+            return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
+        case MERGE_FOR_SWITCH( true, FO_LINEAR, FO_POINT, FO_LINEAR ):
+            return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( true, FO_LINEAR, FO_LINEAR, FO_POINT ):
+            return D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+        case MERGE_FOR_SWITCH( true, FO_LINEAR, FO_LINEAR, FO_LINEAR ):
+            return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( false, FO_POINT, FO_POINT, FO_POINT ):
+            return D3D11_FILTER_MIN_MAG_MIP_POINT;
+        case MERGE_FOR_SWITCH( false, FO_POINT, FO_POINT, FO_LINEAR ):
+            return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( false, FO_POINT, FO_LINEAR, FO_POINT ):
+            return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+        case MERGE_FOR_SWITCH( false, FO_POINT, FO_LINEAR, FO_LINEAR ):
+            return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( false, FO_LINEAR, FO_POINT, FO_POINT ):
+            return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+        case MERGE_FOR_SWITCH( false, FO_LINEAR, FO_POINT, FO_LINEAR ):
+            return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+        case MERGE_FOR_SWITCH( false, FO_LINEAR, FO_LINEAR, FO_POINT ):
+            return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+        case MERGE_FOR_SWITCH( false, FO_LINEAR, FO_LINEAR, FO_LINEAR ):
+            return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        }
 #undef MERGE_FOR_SWITCH
 
-		return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     }
     //---------------------------------------------------------------------
-    D3D11_MAP D3D11Mappings::get(v1::HardwareBuffer::LockOptions options, v1::HardwareBuffer::Usage usage)
+    D3D11_MAP D3D11Mappings::get( v1::HardwareBuffer::LockOptions options,
+                                  v1::HardwareBuffer::Usage usage )
     {
         D3D11_MAP ret = D3D11_MAP_READ_WRITE;
-        if (options == v1::HardwareBuffer::HBL_DISCARD)
+        if( options == v1::HardwareBuffer::HBL_DISCARD )
         {
             // D3D doesn't like discard or no_overwrite on non-dynamic buffers
-            if (usage & v1::HardwareBuffer::HBU_DYNAMIC)
+            if( usage & v1::HardwareBuffer::HBU_DYNAMIC )
                 ret = D3D11_MAP_WRITE_DISCARD;
         }
-        if (options == v1::HardwareBuffer::HBL_READ_ONLY)
+        if( options == v1::HardwareBuffer::HBL_READ_ONLY )
         {
             // D3D debug runtime doesn't like you locking managed buffers readonly
             // when they were created with write-only (even though you CAN read
             // from the software backed version)
-            if (!(usage & v1::HardwareBuffer::HBU_WRITE_ONLY))
+            if( !( usage & v1::HardwareBuffer::HBU_WRITE_ONLY ) )
                 ret = D3D11_MAP_READ;
-
         }
-        if (options == v1::HardwareBuffer::HBL_NO_OVERWRITE)
+        if( options == v1::HardwareBuffer::HBL_NO_OVERWRITE )
         {
             // D3D doesn't like discard or no_overwrite on non-dynamic buffers
-            if (usage & v1::HardwareBuffer::HBU_DYNAMIC)
+            if( usage & v1::HardwareBuffer::HBU_DYNAMIC )
                 ret = D3D11_MAP_WRITE_NO_OVERWRITE;
         }
 
         return ret;
     }
     //---------------------------------------------------------------------
-    DXGI_FORMAT D3D11Mappings::getFormat(v1::HardwareIndexBuffer::IndexType itype)
+    DXGI_FORMAT D3D11Mappings::getFormat( v1::HardwareIndexBuffer::IndexType itype )
     {
         return itype == v1::HardwareIndexBuffer::IT_32BIT ? DXGI_FORMAT_R32_UINT : DXGI_FORMAT_R16_UINT;
     }
     //---------------------------------------------------------------------
-    DXGI_FORMAT D3D11Mappings::get(VertexElementType vType)
+    DXGI_FORMAT D3D11Mappings::get( VertexElementType vType )
     {
-        switch (vType)
+        switch( vType )
         {
         case VET_COLOUR:
         case VET_COLOUR_ABGR:
@@ -311,46 +320,46 @@ namespace Ogre
         return DXGI_FORMAT_R32G32B32_FLOAT;
     }
     //---------------------------------------------------------------------
-    VertexElementSemantic D3D11Mappings::get(LPCSTR sem)
+    VertexElementSemantic D3D11Mappings::get( LPCSTR sem )
     {
         // todo - add to ogre - POSITIONT and PSIZE ("Transformed vertex position" and "Point size")
 
-        if( strcmp(sem, "BLENDINDICES") == 0 )
+        if( strcmp( sem, "BLENDINDICES" ) == 0 )
             return VES_BLEND_INDICES;
-        if( strcmp(sem, "BLENDWEIGHT") == 0 )
+        if( strcmp( sem, "BLENDWEIGHT" ) == 0 )
             return VES_BLEND_WEIGHTS;
-        if( strcmp(sem, "COLOR") == 0 )
+        if( strcmp( sem, "COLOR" ) == 0 )
             return VES_DIFFUSE;
-//      if( strcmp(sem, "COLOR") == 0 )
-//          return VES_SPECULAR;
-        if( strcmp(sem, "NORMAL") == 0 )
+        // if( strcmp(sem, "COLOR") == 0 )
+        //  return VES_SPECULAR;
+        if( strcmp( sem, "NORMAL" ) == 0 )
             return VES_NORMAL;
-        if( strcmp(sem, "POSITION") == 0 )
+        if( strcmp( sem, "POSITION" ) == 0 )
             return VES_POSITION;
-        if( strcmp(sem, "TEXCOORD") == 0 )
+        if( strcmp( sem, "TEXCOORD" ) == 0 )
             return VES_TEXTURE_COORDINATES;
-        if( strcmp(sem, "BINORMAL") == 0 )
+        if( strcmp( sem, "BINORMAL" ) == 0 )
             return VES_BINORMAL;
-        if( strcmp(sem, "TANGENT") == 0 )
+        if( strcmp( sem, "TANGENT" ) == 0 )
             return VES_TANGENT;
 
         // to keep compiler happy
         return VES_POSITION;
     }
     //---------------------------------------------------------------------
-    LPCSTR D3D11Mappings::get(VertexElementSemantic sem)
+    LPCSTR D3D11Mappings::get( VertexElementSemantic sem )
     {
         // todo - add to ogre - POSITIONT and PSIZE ("Transformed vertex position" and "Point size")
-        switch (sem)    
+        switch( sem )
         {
         case VES_BLEND_INDICES:
             return "BLENDINDICES";
         case VES_BLEND_WEIGHTS:
             return "BLENDWEIGHT";
         case VES_DIFFUSE:
-            return "COLOR"; // NB index will differentiate
+            return "COLOR";  // NB index will differentiate
         case VES_SPECULAR:
-            return "COLOR"; // NB index will differentiate
+            return "COLOR";  // NB index will differentiate
         case VES_NORMAL:
             return "NORMAL";
         case VES_POSITION:
@@ -366,45 +375,46 @@ namespace Ogre
         return "";
     }
     //---------------------------------------------------------------------
-    void D3D11Mappings::get(const ColourValue& inColour, float * outColour )
+    void D3D11Mappings::get( const ColourValue &inColour, float *outColour )
     {
         outColour[0] = inColour.r;
         outColour[1] = inColour.g;
         outColour[2] = inColour.b;
-        outColour[3] = inColour.a;  
+        outColour[3] = inColour.a;
     }
     //---------------------------------------------------------------------
-    D3D11_USAGE D3D11Mappings::_getUsage(v1::HardwareBuffer::Usage usage)
+    D3D11_USAGE D3D11Mappings::_getUsage( v1::HardwareBuffer::Usage usage )
     {
-		return _isDynamic(usage) ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+        return _isDynamic( usage ) ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
     }
     //---------------------------------------------------------------------
-    bool D3D11Mappings::_isDynamic(v1::HardwareBuffer::Usage usage)
+    bool D3D11Mappings::_isDynamic( v1::HardwareBuffer::Usage usage )
     {
-        return (usage & v1::HardwareBuffer::HBU_DYNAMIC) != 0;
+        return ( usage & v1::HardwareBuffer::HBU_DYNAMIC ) != 0;
     }
     //---------------------------------------------------------------------
-    UINT D3D11Mappings::_getAccessFlags(v1::HardwareBuffer::Usage usage)
+    UINT D3D11Mappings::_getAccessFlags( v1::HardwareBuffer::Usage usage )
     {
-		return _isDynamic(usage) ? D3D11_CPU_ACCESS_WRITE : 0;
+        return _isDynamic( usage ) ? D3D11_CPU_ACCESS_WRITE : 0;
     }
     //---------------------------------------------------------------------
     UINT D3D11Mappings::get( MsaaPatterns::MsaaPatterns msaaPatterns )
     {
         switch( msaaPatterns )
         {
-        default:
+            // clang-format off
         case MsaaPatterns::Undefined:       return 0;
         case MsaaPatterns::Standard:        return D3D11_STANDARD_MULTISAMPLE_PATTERN;
         case MsaaPatterns::Center:          return D3D11_STANDARD_MULTISAMPLE_PATTERN;
         case MsaaPatterns::CenterZero:      return D3D11_CENTER_MULTISAMPLE_PATTERN;
+            // clang-format on
         }
 
         return 0;
     }
     //---------------------------------------------------------------------
-    D3D11_SRV_DIMENSION D3D11Mappings::get( TextureTypes::TextureTypes type,
-                                            bool cubemapsAs2DArrays, bool forMsaa )
+    D3D11_SRV_DIMENSION D3D11Mappings::get( TextureTypes::TextureTypes type, bool cubemapsAs2DArrays,
+                                            bool forMsaa )
     {
         switch( type )
         {
@@ -419,11 +429,11 @@ namespace Ogre
         case TextureTypes::Type2DArray:
             return forMsaa ? D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY : D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
         case TextureTypes::TypeCube:
-            return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY :
-                                        D3D11_SRV_DIMENSION_TEXTURECUBE;
+            return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY
+                                      : D3D11_SRV_DIMENSION_TEXTURECUBE;
         case TextureTypes::TypeCubeArray:
-            return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY :
-                                        D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+            return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY
+                                      : D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
         case TextureTypes::Type3D:
             return D3D11_SRV_DIMENSION_TEXTURE3D;
         }
@@ -435,6 +445,7 @@ namespace Ogre
     {
         switch( pf )
         {
+            // clang-format off
         case PFG_UNKNOWN:                   return DXGI_FORMAT_UNKNOWN;
         case PFG_NULL:                      return DXGI_FORMAT_UNKNOWN;
         case PFG_RGBA32_FLOAT:              return DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -583,6 +594,7 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            // clang-format on
         default:
             return DXGI_FORMAT_UNKNOWN;
         }
@@ -594,11 +606,13 @@ namespace Ogre
     {
         switch( pf )
         {
+            // clang-format off
         case PFG_D16_UNORM:                 return DXGI_FORMAT_R16_UNORM;
         case PFG_D24_UNORM:                 return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
         case PFG_D24_UNORM_S8_UINT:         return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
         case PFG_D32_FLOAT:                 return DXGI_FORMAT_R32_FLOAT;
         case PFG_D32_FLOAT_S8X24_UINT:      return DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
+            // clang-format on
         default:
             return get( pf );
         }
@@ -718,4 +732,4 @@ namespace Ogre
 
         return get( pf );
     }
-}
+}  // namespace Ogre

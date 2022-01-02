@@ -30,8 +30,8 @@ THE SOFTWARE.
 #define _Ogre_D3D11BufferInterfaceBase_H_
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreD3D11DeviceResource.h"
 
+#include "OgreD3D11DeviceResource.h"
 #include "Vao/OgreBufferInterface.h"
 
 namespace Ogre
@@ -43,9 +43,9 @@ namespace Ogre
                                                       protected D3D11DeviceResource
     {
     protected:
-        size_t          mVboPoolIdx;
+        size_t               mVboPoolIdx;
         ComPtr<ID3D11Buffer> mVboName;
-        void            *mMappedPtr;
+        void *               mMappedPtr;
 
         void splicedCopy( size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes,
                           size_t alignment, ID3D11Buffer *dstBuffer, ID3D11Buffer *srcBuffer,
@@ -58,14 +58,14 @@ namespace Ogre
         D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
         ~D3D11BufferInterfaceBase() override;
 
-        size_t getVboPoolIndex()                { return mVboPoolIdx; }
-        ID3D11Buffer* getVboName() const        { return mVboName.Get(); }
+        size_t        getVboPoolIndex() { return mVboPoolIdx; }
+        ID3D11Buffer *getVboName() const { return mVboName.Get(); }
 
         void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
                      size_t sizeBytes ) override;
 
         void _ensureDelayedImmutableBuffersAreReady() override;
     };
-}
+}  // namespace Ogre
 
 #endif

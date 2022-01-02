@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _Ogre_D3D11StagingBuffer_H_
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreD3D11DeviceResource.h"
 
 #include "Vao/OgreStagingBuffer.h"
@@ -52,9 +53,9 @@ namespace Ogre
         /// mVboName is not deleted by us (the VaoManager does) as we may have
         /// only been assigned a chunk of the buffer, not the whole thing.
         ComPtr<ID3D11Buffer> mVboName;
-        void            *mMappedPtr;
+        void *               mMappedPtr;
 
-        D3D11Device     &mDevice;
+        D3D11Device &mDevice;
 
         //------------------------------------
         // Begin used for uploads
@@ -75,10 +76,10 @@ namespace Ogre
         /// May modify mMappingStart.
         void waitIfNeeded();
 
-        void* mapImpl( size_t sizeBytes ) override;
-        void unmapImpl( const Destination *destinations, size_t numDestinations ) override;
+        void *mapImpl( size_t sizeBytes ) override;
+        void  unmapImpl( const Destination *destinations, size_t numDestinations ) override;
 
-        const void* _mapForReadImpl( size_t offset, size_t sizeBytes ) override;
+        const void *_mapForReadImpl( size_t offset, size_t sizeBytes ) override;
 
         void notifyDeviceLost( D3D11Device *device ) override;
         void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
@@ -92,8 +93,8 @@ namespace Ogre
 
         size_t _asyncDownload( BufferPacked *source, size_t srcOffset, size_t srcLength ) override;
 
-        ID3D11Buffer* getBufferName() const     { return mVboName.Get(); }
+        ID3D11Buffer *getBufferName() const { return mVboName.Get(); }
     };
-}
+}  // namespace Ogre
 
 #endif

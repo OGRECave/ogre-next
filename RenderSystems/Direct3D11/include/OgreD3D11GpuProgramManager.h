@@ -29,27 +29,28 @@ THE SOFTWARE.
 #define __D3D11GpuProgramManager_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreGpuProgramManager.h"
 
-
-namespace Ogre {
-
+namespace Ogre
+{
     class _OgreD3D11Export D3D11GpuProgramManager final : public GpuProgramManager
     {
     protected:
         /// @copydoc ResourceManager::createImpl
-        Resource* createImpl(const String& name, ResourceHandle handle, 
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            const NameValuePairList* createParams) override;
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader,
+                              const NameValuePairList *createParams ) override;
         /// Specialised create method with specific parameters
-        Resource* createImpl(const String& name, ResourceHandle handle, 
-            const String& group, bool isManual, ManualResourceLoader* loader,
-            GpuProgramType gptype, const String& syntaxCode) override;
+        Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
+                              bool isManual, ManualResourceLoader *loader, GpuProgramType gptype,
+                              const String &syntaxCode ) override;
+
     public:
         D3D11GpuProgramManager();
         ~D3D11GpuProgramManager() override;
     };
 
-}
+}  // namespace Ogre
 
 #endif

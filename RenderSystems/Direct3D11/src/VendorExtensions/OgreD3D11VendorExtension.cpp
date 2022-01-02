@@ -28,23 +28,18 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "VendorExtensions/OgreD3D11VendorExtension.h"
-#include "VendorExtensions/OgreD3D11AmdExtension.h"
-
-#include "OgreLwString.h"
 #include "OgreLogManager.h"
+#include "OgreLwString.h"
+#include "VendorExtensions/OgreD3D11AmdExtension.h"
+#include "VendorExtensions/OgreD3D11VendorExtension.h"
 
 namespace Ogre
 {
-    D3D11VendorExtension::D3D11VendorExtension()
-    {
-    }
+    D3D11VendorExtension::D3D11VendorExtension() {}
     //-------------------------------------------------------------------------
-    D3D11VendorExtension::~D3D11VendorExtension()
-    {
-    }
+    D3D11VendorExtension::~D3D11VendorExtension() {}
     //-------------------------------------------------------------------------
-    D3D11VendorExtension* D3D11VendorExtension::initializeExtension( GPUVendor preferredVendor,
+    D3D11VendorExtension *D3D11VendorExtension::initializeExtension( GPUVendor preferredVendor,
                                                                      IDXGIAdapter *adapter )
     {
         D3D11VendorExtension *retVal = 0;
@@ -66,21 +61,20 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    HRESULT D3D11VendorExtension::createDeviceImpl( const String &appName,
-                                                    IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
-                                                    UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
-                                                    UINT numFeatureLevels,
+    HRESULT D3D11VendorExtension::createDeviceImpl( const String &appName, IDXGIAdapter *adapter,
+                                                    D3D_DRIVER_TYPE driverType, UINT deviceFlags,
+                                                    D3D_FEATURE_LEVEL *pFirstFL, UINT numFeatureLevels,
                                                     D3D_FEATURE_LEVEL *outFeatureLevel,
                                                     ID3D11Device **outDevice )
     {
-        HRESULT hr = D3D11CreateDevice( adapter, driverType, NULL, deviceFlags, pFirstFL,
-                                        numFeatureLevels, D3D11_SDK_VERSION, outDevice,
-                                        outFeatureLevel, NULL );
+        HRESULT hr =
+            D3D11CreateDevice( adapter, driverType, NULL, deviceFlags, pFirstFL, numFeatureLevels,
+                               D3D11_SDK_VERSION, outDevice, outFeatureLevel, NULL );
 
         if( FAILED( hr ) )
         {
             char tmpBuffer[256];
-            LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            LwString errorText( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             errorText.a( "Failed to create Direct3D device HRESULT(", (uint32)hr, ")" );
             LogManager::getSingleton().logMessage( errorText.c_str() );
         }
@@ -88,20 +82,21 @@ namespace Ogre
         return hr;
     }
     //-------------------------------------------------------------------------
-    void D3D11VendorExtension::createDevice( const String &appName,
-                                             IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
-                                             UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
-                                             UINT numFeatureLevels, D3D_FEATURE_LEVEL *outFeatureLevel,
+    void D3D11VendorExtension::createDevice( const String &appName, IDXGIAdapter *adapter,
+                                             D3D_DRIVER_TYPE driverType, UINT deviceFlags,
+                                             D3D_FEATURE_LEVEL *pFirstFL, UINT numFeatureLevels,
+                                             D3D_FEATURE_LEVEL *outFeatureLevel,
                                              ID3D11Device **outDevice )
     {
         ID3D11Device *device = NULL;
         HRESULT hr = createDeviceImpl( appName, adapter, driverType, deviceFlags, pFirstFL,
                                        numFeatureLevels, outFeatureLevel, &device );
 
-        if( FAILED( hr ) && 0 != (deviceFlags & D3D11_CREATE_DEVICE_DEBUG) )
+        if( FAILED( hr ) && 0 != ( deviceFlags & D3D11_CREATE_DEVICE_DEBUG ) )
         {
-            LogManager::getSingleton().logMessage( "Failed to create Direct3D11 device with debug "
-                                                   "layer\nRetrying without debug layer." );
+            LogManager::getSingleton().logMessage(
+                "Failed to create Direct3D11 device with debug "
+                "layer\nRetrying without debug layer." );
 
             // create device - second attempt, without debug layer
             const UINT deviceFlagsCopy = deviceFlags & ~D3D11_CREATE_DEVICE_DEBUG;
@@ -112,10 +107,11 @@ namespace Ogre
 #if defined( _WIN32_WINNT_WIN8 )
         if( FAILED( hr ) && *pFirstFL == D3D_FEATURE_LEVEL_11_1 )
         {
-            LogManager::getSingleton().logMessage( "Failed to create Direct3D 11.1 device\n"
-                                                   "Retrying asking for 11.0 device" );
+            LogManager::getSingleton().logMessage(
+                "Failed to create Direct3D 11.1 device\n"
+                "Retrying asking for 11.0 device" );
 
-            pFirstFL= pFirstFL + 1u;
+            pFirstFL = pFirstFL + 1u;
             --numFeatureLevels;
             if( numFeatureLevels == 0u )
             {
@@ -127,14 +123,13 @@ namespace Ogre
 
             // DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1
             // so we need to retry without it
-            hr = createDeviceImpl( appName, adapter, driverType, deviceFlags, pFirstFL,
-                                   numFeatureLevels, outFeatureLevel, &device );
+            hr = createDeviceImpl( appName, adapter, driverType, deviceFlags, pFirstFL, numFeatureLevels,
+                                   outFeatureLevel, &device );
         }
 #endif
         if( FAILED( hr ) )
         {
-            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                            "Failed to create Direct3D11 device",
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Failed to create Direct3D11 device",
                             "D3D11VendorExtension::createDevice" );
         }
 
@@ -146,4 +141,4 @@ namespace Ogre
         if( device )
             device->Release();
     }
-}
+}  // namespace Ogre

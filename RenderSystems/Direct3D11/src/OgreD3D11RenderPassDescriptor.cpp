@@ -28,11 +28,10 @@ THE SOFTWARE.
 
 #include "OgreD3D11RenderPassDescriptor.h"
 
-#include "OgreD3D11TextureGpu.h"
-#include "OgreD3D11RenderSystem.h"
-#include "OgreD3D11Window.h"
 #include "OgreD3D11Mappings.h"
-
+#include "OgreD3D11RenderSystem.h"
+#include "OgreD3D11TextureGpu.h"
+#include "OgreD3D11Window.h"
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -78,9 +77,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::checkRenderWindowStatus()
     {
-        if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
-            (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
-            (mStencil.texture && mStencil.texture->isRenderWindowSpecific()) )
+        if( ( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() ) ||
+            ( mDepth.texture && mDepth.texture->isRenderWindowSpecific() ) ||
+            ( mStencil.texture && mStencil.texture->isRenderWindowSpecific() ) )
         {
             if( mNumColourEntries > 1u )
             {
@@ -89,9 +88,9 @@ namespace Ogre
                              "D3D11RenderPassDescriptor::colourEntriesModified" );
             }
 
-            if( (mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific()) ||
-                (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
-                (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
+            if( ( mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific() ) ||
+                ( mDepth.texture && !mDepth.texture->isRenderWindowSpecific() ) ||
+                ( mStencil.texture && !mStencil.texture->isRenderWindowSpecific() ) )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Cannot mix RenderWindow colour texture with depth or stencil buffer "
@@ -102,7 +101,7 @@ namespace Ogre
             if( !mHasRenderWindow )
             {
                 mHasRenderWindow = true;
-                //Listen for swapchain resizes
+                // Listen for swapchain resizes
                 mRenderSystem->addListener( this );
             }
         }
@@ -150,13 +149,13 @@ namespace Ogre
     {
         if( target.allLayers )
         {
-            inOutRtvDesc.FirstArraySlice    = 0;
-            inOutRtvDesc.ArraySize          = target.texture->getNumSlices();
+            inOutRtvDesc.FirstArraySlice = 0;
+            inOutRtvDesc.ArraySize = target.texture->getNumSlices();
         }
         else
         {
-            inOutRtvDesc.FirstArraySlice    = target.slice;
-            inOutRtvDesc.ArraySize          = 1u;
+            inOutRtvDesc.FirstArraySlice = target.slice;
+            inOutRtvDesc.ArraySize = 1u;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -164,26 +163,27 @@ namespace Ogre
     {
         if( mNumColourEntries < lastNumColourEntries )
         {
-            for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
+            for( size_t i = mNumColourEntries; i < lastNumColourEntries; ++i )
             {
-                //Detach removed colour entries
+                // Detach removed colour entries
                 mColourRtv[i].Reset();
             }
         }
 
-        for( size_t i=0; i<mNumColourEntries; ++i )
+        for( size_t i = 0; i < mNumColourEntries; ++i )
         {
             mColourRtv[i].Reset();
 
             if( mColour[i].texture->getResidencyStatus() != GpuResidency::Resident )
             {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
-                             mColour[i].texture->getNameStr() + "' must be resident!",
-                             "D3D11RenderPassDescriptor::updateColourRtv" );
+                OGRE_EXCEPT(
+                    Exception::ERR_INVALIDPARAMS,
+                    "RenderTexture '" + mColour[i].texture->getNameStr() + "' must be resident!",
+                    "D3D11RenderPassDescriptor::updateColourRtv" );
             }
             if( mHasRenderWindow != mColour[i].texture->isRenderWindowSpecific() )
             {
-                //This is a GL restriction actually, which we mimic for consistency
+                // This is a GL restriction actually, which we mimic for consistency
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Cannot use RenderWindow as MRT with other colour textures",
                              "D3D11RenderPassDescriptor::updateColourRtv" );
@@ -193,7 +193,7 @@ namespace Ogre
                 continue;
 
             D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
-            memset( &viewDesc, 0, sizeof(viewDesc) );
+            memset( &viewDesc, 0, sizeof( viewDesc ) );
             viewDesc.Format = D3D11Mappings::get( mColour[i].texture->getPixelFormat() );
 
             if( mColour[i].texture->isMultisample() )
@@ -239,25 +239,23 @@ namespace Ogre
                     viewDesc.Texture3D.MipSlice = mColour[i].mipLevel;
                     if( mColour[i].allLayers )
                     {
-                        viewDesc.Texture3D.FirstWSlice  = 0;
-                        viewDesc.Texture3D.WSize        = mColour[i].texture->getDepth() >>
-                                                          mColour[i].mipLevel;
+                        viewDesc.Texture3D.FirstWSlice = 0;
+                        viewDesc.Texture3D.WSize = mColour[i].texture->getDepth() >> mColour[i].mipLevel;
                     }
                     else
                     {
-                        viewDesc.Texture3D.FirstWSlice  = mColour[i].slice;
-                        viewDesc.Texture3D.WSize        = 1u;
+                        viewDesc.Texture3D.FirstWSlice = mColour[i].slice;
+                        viewDesc.Texture3D.WSize = 1u;
                     }
                     break;
                 }
             }
 
-            assert( dynamic_cast<D3D11TextureGpu*>( mColour[i].texture ) );
-            D3D11TextureGpu *textureD3d = static_cast<D3D11TextureGpu*>( mColour[i].texture );
+            assert( dynamic_cast<D3D11TextureGpu *>( mColour[i].texture ) );
+            D3D11TextureGpu *textureD3d = static_cast<D3D11TextureGpu *>( mColour[i].texture );
 
             ID3D11Resource *resourceTex = 0;
-            if( mColour[i].texture->isMultisample() &&
-                !mColour[i].texture->hasMsaaExplicitResolves() )
+            if( mColour[i].texture->isMultisample() && !mColour[i].texture->hasMsaaExplicitResolves() )
             {
                 resourceTex = textureD3d->getMsaaFramebufferName();
             }
@@ -269,13 +267,13 @@ namespace Ogre
             HRESULT hr = mDevice->CreateRenderTargetView( resourceTex, &viewDesc,
                                                           mColourRtv[i].ReleaseAndGetAddressOf() );
 
-            if( FAILED(hr) || mDevice.isError() )
+            if( FAILED( hr ) || mDevice.isError() )
             {
-                String errorDescription = mDevice.getErrorDescription(hr);
+                String errorDescription = mDevice.getErrorDescription( hr );
                 OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                                 "Error creating Render Target View for texture '" +
-                                mColour[i].texture->getNameStr() +"'\nError Description:" +
-                                errorDescription,
+                                    mColour[i].texture->getNameStr() +
+                                    "'\nError Description:" + errorDescription,
                                 "D3D11RenderPassDescriptor::updateColourRtv" );
             }
         }
@@ -291,8 +289,8 @@ namespace Ogre
             if( mStencil.texture )
             {
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "Stencil without depth (RenderTexture '" +
-                             mStencil.texture->getNameStr() + "'). This is not supported by D3D11",
+                             "Stencil without depth (RenderTexture '" + mStencil.texture->getNameStr() +
+                                 "'). This is not supported by D3D11",
                              "D3D11RenderPassDescriptor::updateDepthRtv" );
             }
 
@@ -301,13 +299,13 @@ namespace Ogre
 
         if( mDepth.texture->getResidencyStatus() != GpuResidency::Resident )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
-                         mDepth.texture->getNameStr() + "' must be resident!",
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RenderTexture '" + mDepth.texture->getNameStr() + "' must be resident!",
                          "D3D11RenderPassDescriptor::updateDepthRtv" );
         }
 
         D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilDesc;
-        memset( &depthStencilDesc, 0, sizeof(depthStencilDesc) );
+        memset( &depthStencilDesc, 0, sizeof( depthStencilDesc ) );
 
         depthStencilDesc.Format = D3D11Mappings::get( mDepth.texture->getPixelFormat() );
         if( mDepth.texture->isMultisample() )
@@ -320,19 +318,18 @@ namespace Ogre
         if( mStencil.readOnly )
             depthStencilDesc.Flags |= D3D11_DSV_READ_ONLY_STENCIL;
 
-        assert( dynamic_cast<D3D11TextureGpu*>( mDepth.texture ) );
-        D3D11TextureGpu *texture = static_cast<D3D11TextureGpu*>( mDepth.texture );
+        assert( dynamic_cast<D3D11TextureGpu *>( mDepth.texture ) );
+        D3D11TextureGpu *texture = static_cast<D3D11TextureGpu *>( mDepth.texture );
 
         HRESULT hr = mDevice->CreateDepthStencilView( texture->getFinalTextureName(), &depthStencilDesc,
                                                       mDepthStencilRtv.ReleaseAndGetAddressOf() );
-        if( FAILED(hr) )
+        if( FAILED( hr ) )
         {
             mDepthStencilRtv.Reset();
-            String errorDescription = mDevice.getErrorDescription(hr);
+            String errorDescription = mDevice.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Unable to create depth stencil view for texture '" +
-                            mDepth.texture->getNameStr() + "\nError Description:" +
-                            errorDescription,
+                                mDepth.texture->getNameStr() + "\nError Description:" + errorDescription,
                             "D3D11RenderSystem::updateDepthRtv" );
         }
 
@@ -349,7 +346,7 @@ namespace Ogre
         if( entryTypes & RenderPassDescriptor::Colour )
             updateColourRtv( lastNumColourEntries );
 
-        if( entryTypes & (RenderPassDescriptor::Depth|RenderPassDescriptor::Stencil) )
+        if( entryTypes & ( RenderPassDescriptor::Depth | RenderPassDescriptor::Stencil ) )
             updateDepthRtv();
     }
     //-----------------------------------------------------------------------------------
@@ -363,25 +360,25 @@ namespace Ogre
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
 
-        for( size_t i=0; i<mNumColourEntries; ++i )
+        for( size_t i = 0; i < mNumColourEntries; ++i )
         {
-            //this->mColour[i].allLayers doesn't need to be analyzed
-            //because it requires a different FBO.
+            // this->mColour[i].allLayers doesn't need to be analyzed
+            // because it requires a different FBO.
             if( other->mColour[i].loadAction == LoadAction::Clear ||
-                (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers) )
+                ( isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers ) )
             {
                 entriesToFlush |= RenderPassDescriptor::Colour0 << i;
             }
         }
 
         if( other->mDepth.loadAction == LoadAction::Clear ||
-            (isTiler && mDepth.loadAction == LoadAction::ClearOnTilers) )
+            ( isTiler && mDepth.loadAction == LoadAction::ClearOnTilers ) )
         {
             entriesToFlush |= RenderPassDescriptor::Depth;
         }
 
         if( other->mStencil.loadAction == LoadAction::Clear ||
-            (isTiler && mStencil.loadAction == LoadAction::ClearOnTilers) )
+            ( isTiler && mStencil.loadAction == LoadAction::ClearOnTilers ) )
         {
             entriesToFlush |= RenderPassDescriptor::Stencil;
         }
@@ -394,9 +391,8 @@ namespace Ogre
     {
         uint32 entriesToFlush = 0;
 
-        if( !newDesc ||
-            this->mSharedFboItor != newDesc->mSharedFboItor ||
-            this->mInformationOnly || newDesc->mInformationOnly )
+        if( !newDesc || this->mSharedFboItor != newDesc->mSharedFboItor || this->mInformationOnly ||
+            newDesc->mInformationOnly )
         {
             entriesToFlush = RenderPassDescriptor::All;
         }
@@ -416,8 +412,8 @@ namespace Ogre
         if( mInformationOnly )
             return;
 
-        //D3D11.1 doesn't allow ClearViews on stencil, and DiscardView on depth & stencil separately.
-        //That means if the depth buffer has stencil we have to behave like non-tiler.
+        // D3D11.1 doesn't allow ClearViews on stencil, and DiscardView on depth & stencil separately.
+        // That means if the depth buffer has stencil we have to behave like non-tiler.
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         ID3D11DeviceContext1 *context1 = mDevice.GetImmediateContext1();
@@ -427,13 +423,12 @@ namespace Ogre
 
         if( entriesToFlush & RenderPassDescriptor::Colour )
         {
-            for( size_t i=0; i<mNumColourEntries; ++i )
+            for( size_t i = 0; i < mNumColourEntries; ++i )
             {
-                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) &&
-                    mColourRtv[i] )
+                if( entriesToFlush & ( RenderPassDescriptor::Colour0 << i ) && mColourRtv[i] )
                 {
                     if( mColour[i].loadAction == LoadAction::Clear ||
-                        (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers) )
+                        ( isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers ) )
                     {
                         FLOAT clearColour[4];
                         clearColour[0] = mColour[i].clearColour.r;
@@ -452,20 +447,18 @@ namespace Ogre
         }
 
         if( mDepthStencilRtv &&
-            (entriesToFlush & (RenderPassDescriptor::Depth|RenderPassDescriptor::Stencil)) )
+            ( entriesToFlush & ( RenderPassDescriptor::Depth | RenderPassDescriptor::Stencil ) ) )
         {
-            //Cannot discard depth & stencil if we're being asked to keep stencil around
+            // Cannot discard depth & stencil if we're being asked to keep stencil around
             if( mDepth.loadAction == LoadAction::DontCare &&
-                (mStencil.loadAction == LoadAction::DontCare ||
-                 mStencil.loadAction == LoadAction::Clear ||
-                 !mHasStencilFormat) )
+                ( mStencil.loadAction == LoadAction::DontCare ||
+                  mStencil.loadAction == LoadAction::Clear || !mHasStencilFormat ) )
             {
                 if( context1 )
                     context1->DiscardView( mDepthStencilRtv.Get() );
             }
 
-            if( mDepth.loadAction == LoadAction::Clear ||
-                mStencil.loadAction == LoadAction::Clear )
+            if( mDepth.loadAction == LoadAction::Clear || mStencil.loadAction == LoadAction::Clear )
             {
                 UINT flags = 0;
                 if( mDepth.loadAction == LoadAction::Clear )
@@ -478,21 +471,22 @@ namespace Ogre
                     clearDepthValue = mDepth.clearDepth;
                 else
                     clearDepthValue = 1.0f - mDepth.clearDepth;
-                context->ClearDepthStencilView( mDepthStencilRtv.Get(), flags,
-                                                clearDepthValue, mStencil.clearStencil );
+                context->ClearDepthStencilView( mDepthStencilRtv.Get(), flags, clearDepthValue,
+                                                mStencil.clearStencil );
             }
         }
 
         if( !descSetUav )
-            context->OMSetRenderTargets( mNumColourEntries, mColourRtv[0].GetAddressOf(), mDepthStencilRtv.Get() );
+            context->OMSetRenderTargets( mNumColourEntries, mColourRtv[0].GetAddressOf(),
+                                         mDepthStencilRtv.Get() );
         else
         {
             const UINT numUavs = static_cast<UINT>( descSetUav->mUavs.size() );
             ComPtr<ID3D11UnorderedAccessView> *uavList =
-                    reinterpret_cast<ComPtr<ID3D11UnorderedAccessView>*>( descSetUav->mRsData );
-            context->OMSetRenderTargetsAndUnorderedAccessViews( mNumColourEntries, mColourRtv[0].GetAddressOf(),
-                                                                mDepthStencilRtv.Get(), uavStartingSlot,
-                                                                numUavs, uavList[0].GetAddressOf(), 0 );
+                reinterpret_cast<ComPtr<ID3D11UnorderedAccessView> *>( descSetUav->mRsData );
+            context->OMSetRenderTargetsAndUnorderedAccessViews(
+                mNumColourEntries, mColourRtv[0].GetAddressOf(), mDepthStencilRtv.Get(), uavStartingSlot,
+                numUavs, uavList[0].GetAddressOf(), 0 );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -506,39 +500,34 @@ namespace Ogre
 
         if( entriesToFlush & RenderPassDescriptor::Colour )
         {
-            for( size_t i=0; i<mNumColourEntries; ++i )
+            for( size_t i = 0; i < mNumColourEntries; ++i )
             {
-                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) &&
-                    mColourRtv[i] )
+                if( entriesToFlush & ( RenderPassDescriptor::Colour0 << i ) && mColourRtv[i] )
                 {
-                    if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
-                         mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
+                    if( ( mColour[i].storeAction == StoreAction::MultisampleResolve ||
+                          mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve ) &&
                         mColour[i].resolveTexture )
                     {
                         assert( mColour[i].resolveTexture->getResidencyStatus() ==
                                 GpuResidency::Resident );
-                        assert( dynamic_cast<D3D11TextureGpu*>( mColour[i].resolveTexture ) );
+                        assert( dynamic_cast<D3D11TextureGpu *>( mColour[i].resolveTexture ) );
                         D3D11TextureGpu *resolveTexture =
-                                static_cast<D3D11TextureGpu*>( mColour[i].resolveTexture );
-                        D3D11TextureGpu *texture =
-                                static_cast<D3D11TextureGpu*>( mColour[i].texture );
+                            static_cast<D3D11TextureGpu *>( mColour[i].resolveTexture );
+                        D3D11TextureGpu *texture = static_cast<D3D11TextureGpu *>( mColour[i].texture );
 
-                        UINT dstSubResource = D3D11CalcSubresource( mColour[i].resolveMipLevel,
-                                                                    mColour[i].resolveSlice,
-                                                                    resolveTexture->getDepthOrSlices() );
-                        UINT srcSubResource = D3D11CalcSubresource( mColour[i].mipLevel,
-                                                                    mColour[i].slice,
-                                                                    texture->getDepthOrSlices() );
+                        UINT dstSubResource =
+                            D3D11CalcSubresource( mColour[i].resolveMipLevel, mColour[i].resolveSlice,
+                                                  resolveTexture->getDepthOrSlices() );
+                        UINT srcSubResource = D3D11CalcSubresource(
+                            mColour[i].mipLevel, mColour[i].slice, texture->getDepthOrSlices() );
                         DXGI_FORMAT format = D3D11Mappings::get( resolveTexture->getPixelFormat() );
 
-                        ID3D11Resource *srcRes = texture->hasMsaaExplicitResolves() ?
-                                    texture->getFinalTextureName() : texture->getMsaaFramebufferName();
+                        ID3D11Resource *srcRes = texture->hasMsaaExplicitResolves()
+                                                     ? texture->getFinalTextureName()
+                                                     : texture->getMsaaFramebufferName();
 
                         context->ResolveSubresource( resolveTexture->getFinalTextureName(),
-                                                     dstSubResource,
-                                                     srcRes,
-                                                     srcSubResource,
-                                                     format );
+                                                     dstSubResource, srcRes, srcSubResource, format );
                     }
 
                     if( mColour[i].storeAction == StoreAction::DontCare ||
@@ -551,16 +540,15 @@ namespace Ogre
             }
         }
 
-        if( (entriesToFlush & (RenderPassDescriptor::Depth|RenderPassDescriptor::Stencil)) &&
+        if( ( entriesToFlush & ( RenderPassDescriptor::Depth | RenderPassDescriptor::Stencil ) ) &&
             mDepth.storeAction == StoreAction::DontCare &&
-            (mStencil.storeAction == StoreAction::DontCare || !mHasStencilFormat) &&
-            mDepthStencilRtv )
+            ( mStencil.storeAction == StoreAction::DontCare || !mHasStencilFormat ) && mDepthStencilRtv )
         {
             if( context1 )
                 context1->DiscardView( mDepthStencilRtv.Get() );
         }
 
-        //Prevent the runtime from thinking we might be sampling from the render target
+        // Prevent the runtime from thinking we might be sampling from the render target
         context->OMSetRenderTargets( 0, 0, 0 );
     }
     //-----------------------------------------------------------------------------------
@@ -568,7 +556,7 @@ namespace Ogre
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         const size_t numColourEntries = mNumColourEntries;
-        for( size_t i=0; i<numColourEntries; ++i )
+        for( size_t i = 0; i < numColourEntries; ++i )
         {
             if( mColour[i].loadAction == LoadAction::Clear )
             {
@@ -582,8 +570,7 @@ namespace Ogre
         }
 
         if( mDepthStencilRtv &&
-            (mDepth.loadAction == LoadAction::Clear ||
-             mStencil.loadAction == LoadAction::Clear) )
+            ( mDepth.loadAction == LoadAction::Clear || mStencil.loadAction == LoadAction::Clear ) )
         {
             UINT flags = 0;
             if( mDepth.loadAction == LoadAction::Clear )
@@ -596,8 +583,8 @@ namespace Ogre
                 clearDepthValue = mDepth.clearDepth;
             else
                 clearDepthValue = 1.0f - mDepth.clearDepth;
-            context->ClearDepthStencilView( mDepthStencilRtv.Get(), flags,
-                                            clearDepthValue, mStencil.clearStencil );
+            context->ClearDepthStencilView( mDepthStencilRtv.Get(), flags, clearDepthValue,
+                                            mStencil.clearStencil );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -612,12 +599,12 @@ namespace Ogre
                              "D3D11RenderPassDescriptor::getCustomAttribute" );
             }
 
-            ID3D11RenderTargetView **outRtv = (ID3D11RenderTargetView**)pData;
+            ID3D11RenderTargetView **outRtv = (ID3D11RenderTargetView **)pData;
             *outRtv = mColourRtv[extraParam].Get();
         }
         else if( name == "ID3D11DepthStencilView" )
         {
-            ID3D11DepthStencilView **outDsv = (ID3D11DepthStencilView**)pData;
+            ID3D11DepthStencilView **outDsv = (ID3D11DepthStencilView **)pData;
             *outDsv = mDepthStencilRtv.Get();
         }
         else
@@ -639,12 +626,11 @@ namespace Ogre
 
         if( itor == parameters->end() )
         {
-            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
-                         "Window pointer not passed on SwapChain resize",
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Window pointer not passed on SwapChain resize",
                          "D3D11RenderPassDescriptor::eventOccurred" );
         }
 
-        D3D11Window *window = (D3D11Window*)StringConverter::parseSizeT( itor->second );
+        D3D11Window *window = (D3D11Window *)StringConverter::parseSizeT( itor->second );
         if( mNumColourEntries > 0 && mColour[0].texture == window->getTexture() )
         {
             if( eventName == "WindowBeforeResize" )
@@ -662,4 +648,4 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     D3D11FrameBufferDescValue::D3D11FrameBufferDescValue() : refCount( 0 ) {}
-}
+}  // namespace Ogre

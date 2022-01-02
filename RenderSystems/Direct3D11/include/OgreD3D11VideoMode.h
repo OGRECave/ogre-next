@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 
-namespace Ogre 
+namespace Ogre
 {
     static unsigned int modeCount = 0;
 
@@ -38,24 +38,26 @@ namespace Ogre
     {
     private:
         DXGI_OUTPUT_DESC mDisplayMode;
-        DXGI_MODE_DESC mModeDesc;
-        unsigned int modeNumber;
+        DXGI_MODE_DESC   mModeDesc;
+        unsigned int     modeNumber;
 
     public:
         D3D11VideoMode();
         D3D11VideoMode( const D3D11VideoMode &ob );
-        D3D11VideoMode( DXGI_OUTPUT_DESC d3ddm,DXGI_MODE_DESC ModeDesc );
+        D3D11VideoMode( DXGI_OUTPUT_DESC d3ddm, DXGI_MODE_DESC ModeDesc );
         ~D3D11VideoMode();
 
-        unsigned int getWidth() const;
-        unsigned int getHeight() const;
-        DXGI_FORMAT getFormat() const;
-        DXGI_RATIONAL getRefreshRate() const;
-        unsigned int getColourDepth() const;
+        unsigned int     getWidth() const;
+        unsigned int     getHeight() const;
+        DXGI_FORMAT      getFormat() const;
+        DXGI_RATIONAL    getRefreshRate() const;
+        unsigned int     getColourDepth() const;
         DXGI_OUTPUT_DESC getDisplayMode() const;
-        DXGI_MODE_DESC getModeDesc() const;
-        void increaseRefreshRate(DXGI_RATIONAL rr); 
+        DXGI_MODE_DESC   getModeDesc() const;
+
+        void increaseRefreshRate( DXGI_RATIONAL rr );
+
         String getDescription() const;
     };
-}
+}  // namespace Ogre
 #endif

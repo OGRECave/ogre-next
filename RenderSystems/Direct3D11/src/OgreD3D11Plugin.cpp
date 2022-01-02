@@ -26,22 +26,16 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11Plugin.h"
+
 #include "OgreRoot.h"
 
-namespace Ogre 
+namespace Ogre
 {
     const String sPluginName = "D3D11 RenderSystem";
     //---------------------------------------------------------------------
-    D3D11Plugin::D3D11Plugin()
-        : mRenderSystem(0)
-    {
-
-    }
+    D3D11Plugin::D3D11Plugin() : mRenderSystem( 0 ) {}
     //---------------------------------------------------------------------
-    const String& D3D11Plugin::getName() const
-    {
-        return sPluginName;
-    }
+    const String &D3D11Plugin::getName() const { return sPluginName; }
     //---------------------------------------------------------------------
     void D3D11Plugin::install()
     {
@@ -67,5 +61,4 @@ namespace Ogre
         mRenderSystem = 0;
     }
 
-
-}
+}  // namespace Ogre

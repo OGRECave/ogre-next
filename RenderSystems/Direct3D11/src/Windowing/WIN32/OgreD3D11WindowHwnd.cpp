@@ -26,24 +26,24 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreD3D11Window.h"
 #include "OgreD3D11Device.h"
 #include "OgreD3D11Mappings.h"
-#include "OgreD3D11TextureGpuWindow.h"
-#include "OgreD3D11TextureGpuManager.h"
 #include "OgreD3D11RenderSystem.h"
-#include "OgreWindowEventUtilities.h"
+#include "OgreD3D11TextureGpuManager.h"
+#include "OgreD3D11TextureGpuWindow.h"
+#include "OgreD3D11Window.h"
 #include "OgreDepthBuffer.h"
 #include "OgreOSVersionHelpers.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
+#include "OgreWindowEventUtilities.h"
 
 #include "OgreException.h"
 
 #if UNICODE
-    #define OGRE_D3D11_WIN_CLASS_NAME L"OgreD3D11Wnd"
+#    define OGRE_D3D11_WIN_CLASS_NAME L"OgreD3D11Wnd"
 #else
-    #define OGRE_D3D11_WIN_CLASS_NAME "OgreD3D11Wnd"
+#    define OGRE_D3D11_WIN_CLASS_NAME "OgreD3D11Wnd"
 #endif
 
 namespace Ogre
@@ -56,10 +56,10 @@ namespace Ogre
 
     D3D11WindowHwnd::D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
                                       bool fullscreenMode, PixelFormatGpu depthStencilFormat,
-                                      const NameValuePairList *miscParams,
-                                      D3D11Device &device, D3D11RenderSystem *renderSystem ) :
-        D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat,
-                                   miscParams, device, renderSystem ),
+                                      const NameValuePairList *miscParams, D3D11Device &device,
+                                      D3D11RenderSystem *renderSystem ) :
+        D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat, miscParams,
+                                   device, renderSystem ),
         mHwnd( 0 ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 ),
@@ -68,10 +68,7 @@ namespace Ogre
         create( fullscreenMode, miscParams );
     }
     //-----------------------------------------------------------------------------------
-    D3D11WindowHwnd::~D3D11WindowHwnd()
-    {
-        destroy();
-    }
+    D3D11WindowHwnd::~D3D11WindowHwnd() { destroy(); }
     //-----------------------------------------------------------------------------------
     DWORD D3D11WindowHwnd::getWindowStyle( bool fullScreen ) const
     {
@@ -79,14 +76,14 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     BOOL CALLBACK D3D11WindowHwnd::createMonitorsInfoEnumProc(
-            HMONITOR hMonitor,  // handle to display monitor
-            HDC hdcMonitor,     // handle to monitor DC
-            LPRECT lprcMonitor, // monitor intersection rectangle
-            LPARAM dwData       // data
-            )
+        HMONITOR hMonitor,   // handle to display monitor
+        HDC hdcMonitor,      // handle to monitor DC
+        LPRECT lprcMonitor,  // monitor intersection rectangle
+        LPARAM dwData        // data
+    )
     {
-        DisplayMonitorList *pArrMonitors = reinterpret_cast<DisplayMonitorList*>( dwData );
-        pArrMonitors->push_back(hMonitor);
+        DisplayMonitorList *pArrMonitors = reinterpret_cast<DisplayMonitorList *>( dwData );
+        pArrMonitors->push_back( hMonitor );
         return TRUE;
     }
     //-----------------------------------------------------------------------------------
@@ -117,9 +114,9 @@ namespace Ogre
         uint32 height = static_cast<uint32>( rc.bottom - rc.top );
         if( width != getWidth() || height != getHeight() )
         {
-            mRequestedWidth  = static_cast<uint32>( rc.right - rc.left );
+            mRequestedWidth = static_cast<uint32>( rc.right - rc.left );
             mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
-            resizeSwapChainBuffers( mRequestedWidth , mRequestedHeight );
+            resizeSwapChainBuffers( mRequestedWidth, mRequestedHeight );
             notifyResolutionChanged();
         }
     }
@@ -129,9 +126,9 @@ namespace Ogre
     {
         RECT rc;
         SetRect( &rc, 0, 0, clientWidth, clientHeight );
-        AdjustWindowRect( &rc, getWindowStyle(mRequestedFullscreenMode), false );
-        *outDrawableWidth   = rc.right - rc.left;
-        *outDrawableHeight  = rc.bottom - rc.top;
+        AdjustWindowRect( &rc, getWindowStyle( mRequestedFullscreenMode ), false );
+        *outDrawableWidth = rc.right - rc.left;
+        *outDrawableHeight = rc.bottom - rc.top;
     }
     //-----------------------------------------------------------------------------------
     template <typename T>
@@ -139,8 +136,8 @@ namespace Ogre
     {
         if( mUseFlipMode )
         {
-            sd.SampleDesc.Count     = 1u;
-            sd.SampleDesc.Quality   = 0;
+            sd.SampleDesc.Count = 1u;
+            sd.SampleDesc.Quality = 0;
         }
         else
         {
@@ -150,12 +147,13 @@ namespace Ogre
                                         : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
 
-        sd.Flags        = _getSwapChainFlags();
-        sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        sd.Flags = _getSwapChainFlags();
+        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
         sd.BufferCount = _getSwapChainBufferCount();
-        sd.SwapEffect   = !mUseFlipMode ? DXGI_SWAP_EFFECT_DISCARD :
-            IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+        sd.SwapEffect = !mUseFlipMode ? DXGI_SWAP_EFFECT_DISCARD
+                                      : IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD
+                                                               : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
     }
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl()
@@ -170,38 +168,39 @@ namespace Ogre
         {
             // DirectX 11.1 or later
             DXGI_SWAP_CHAIN_DESC1 sd;
-            ZeroMemory( &sd, sizeof(sd) );
-            sd.Width  = mRequestedWidth;
+            ZeroMemory( &sd, sizeof( sd ) );
+            sd.Width = mRequestedWidth;
             sd.Height = mRequestedHeight;
             sd.Format = _getSwapChainFormat();
 
             setCommonSwapChain( sd );
 
             DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc;
-            ZeroMemory( &fsDesc, sizeof(fsDesc) );
-            fsDesc.RefreshRate.Numerator    = mFrequencyNumerator;
-            fsDesc.RefreshRate.Denominator  = mFrequencyDenominator;
-            fsDesc.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
+            ZeroMemory( &fsDesc, sizeof( fsDesc ) );
+            fsDesc.RefreshRate.Numerator = mFrequencyNumerator;
+            fsDesc.RefreshRate.Denominator = mFrequencyDenominator;
+            fsDesc.Windowed = !( mRequestedFullscreenMode && !mAlwaysWindowedMode );
 
-            hr = dxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
-                                                       &fsDesc, 0, mSwapChain1.ReleaseAndGetAddressOf() );
+            hr = dxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd, &fsDesc, 0,
+                                                       mSwapChain1.ReleaseAndGetAddressOf() );
         }
         else
         {
             // DirectX 11.0 systems
             DXGI_SWAP_CHAIN_DESC sd;
-            ZeroMemory( &sd, sizeof(sd) );
+            ZeroMemory( &sd, sizeof( sd ) );
             setCommonSwapChain( sd );
             sd.BufferDesc.Width = mRequestedWidth;
             sd.BufferDesc.Height = mRequestedHeight;
             sd.BufferDesc.Format = _getSwapChainFormat();
-            sd.BufferDesc.RefreshRate.Numerator     = mFrequencyNumerator;
-            sd.BufferDesc.RefreshRate.Denominator   = mFrequencyDenominator;
+            sd.BufferDesc.RefreshRate.Numerator = mFrequencyNumerator;
+            sd.BufferDesc.RefreshRate.Denominator = mFrequencyDenominator;
             sd.OutputWindow = mHwnd;
-            sd.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
+            sd.Windowed = !( mRequestedFullscreenMode && !mAlwaysWindowedMode );
 
             IDXGIFactory1 *dxgiFactory1 = mDevice.GetDXGIFactory();
-            hr = dxgiFactory1->CreateSwapChain( mDevice.get(), &sd, mSwapChain.ReleaseAndGetAddressOf() );
+            hr =
+                dxgiFactory1->CreateSwapChain( mDevice.get(), &sd, mSwapChain.ReleaseAndGetAddressOf() );
         }
 
         return hr;
@@ -214,9 +213,9 @@ namespace Ogre
         HWND parentHwnd = 0;
         HWND externalHandle = 0;
 
-        int left    = INT_MAX; // Defaults to screen center
-        int top     = INT_MAX; // Defaults to screen center
-        int monitorIndex = -1; // Default by detecting the adapter from left / top position
+        int left = INT_MAX;     // Defaults to screen center
+        int top = INT_MAX;      // Defaults to screen center
+        int monitorIndex = -1;  // Default by detecting the adapter from left / top position
 
         String border = "";
         bool outerSize = false;
@@ -226,64 +225,64 @@ namespace Ogre
         {
             NameValuePairList::const_iterator opt;
             // left (x)
-            opt = miscParams->find("left");
+            opt = miscParams->find( "left" );
             if( opt != miscParams->end() )
-                left = StringConverter::parseInt(opt->second);
+                left = StringConverter::parseInt( opt->second );
             // top (y)
-            opt = miscParams->find("top");
+            opt = miscParams->find( "top" );
             if( opt != miscParams->end() )
-                top = StringConverter::parseInt(opt->second);
+                top = StringConverter::parseInt( opt->second );
             // Window title
-            opt = miscParams->find("title");
+            opt = miscParams->find( "title" );
             if( opt != miscParams->end() )
                 mTitle = opt->second;
             // parentWindowHandle       -> parentHwnd
-            opt = miscParams->find("parentWindowHandle");
+            opt = miscParams->find( "parentWindowHandle" );
             if( opt != miscParams->end() )
-                parentHwnd = (HWND)StringConverter::parseSizeT(opt->second);
+                parentHwnd = (HWND)StringConverter::parseSizeT( opt->second );
             // externalWindowHandle     -> externalHandle
-            opt = miscParams->find("externalWindowHandle");
+            opt = miscParams->find( "externalWindowHandle" );
             if( opt != miscParams->end() )
-                externalHandle = (HWND)StringConverter::parseSizeT(opt->second);
+                externalHandle = (HWND)StringConverter::parseSizeT( opt->second );
             // window border style
-            opt = miscParams->find("border");
+            opt = miscParams->find( "border" );
             if( opt != miscParams->end() )
                 border = opt->second;
             // set outer dimensions?
-            opt = miscParams->find("outerDimensions");
+            opt = miscParams->find( "outerDimensions" );
             if( opt != miscParams->end() )
-                outerSize = StringConverter::parseBool(opt->second);
-            opt = miscParams->find("monitorIndex");
+                outerSize = StringConverter::parseBool( opt->second );
+            opt = miscParams->find( "monitorIndex" );
             if( opt != miscParams->end() )
-                monitorIndex = StringConverter::parseInt(opt->second);
+                monitorIndex = StringConverter::parseInt( opt->second );
 
             // vsync    [parseBool]
-            opt = miscParams->find("vsync");
+            opt = miscParams->find( "vsync" );
             if( opt != miscParams->end() )
-                mVSync = StringConverter::parseBool(opt->second);
+                mVSync = StringConverter::parseBool( opt->second );
 
-#if defined(_WIN32_WINNT_WIN8)
+#    if defined( _WIN32_WINNT_WIN8 )
             // useFlipMode    [parseBool]
-            opt = miscParams->find("useFlipMode");
-            if (opt != miscParams->end())
+            opt = miscParams->find( "useFlipMode" );
+            if( opt != miscParams->end() )
             {
-                mUseFlipMode = mVSync && IsWindows8OrGreater() &&
-                                         StringConverter::parseBool(opt->second);
+                mUseFlipMode =
+                    mVSync && IsWindows8OrGreater() && StringConverter::parseBool( opt->second );
             }
-#endif
+#    endif
             // vsyncInterval    [parseUnsignedInt]
-            opt = miscParams->find("vsyncInterval");
+            opt = miscParams->find( "vsyncInterval" );
             if( opt != miscParams->end() )
-                mVSyncInterval = StringConverter::parseUnsignedInt(opt->second);
+                mVSyncInterval = StringConverter::parseUnsignedInt( opt->second );
 
-            opt = miscParams->find("alwaysWindowedMode");
+            opt = miscParams->find( "alwaysWindowedMode" );
             if( opt != miscParams->end() )
-                mAlwaysWindowedMode = StringConverter::parseBool(opt->second);
+                mAlwaysWindowedMode = StringConverter::parseBool( opt->second );
 
             // enable double click messages
-            opt = miscParams->find("enableDoubleClick");
+            opt = miscParams->find( "enableDoubleClick" );
             if( opt != miscParams->end() )
-                enableDoubleClick = StringConverter::parseBool(opt->second);
+                enableDoubleClick = StringConverter::parseBool( opt->second );
         }
 
         mRequestedFullscreenMode = fullscreenMode;
@@ -292,7 +291,7 @@ namespace Ogre
 
         if( !externalHandle )
         {
-            HMONITOR    hMonitor = NULL;
+            HMONITOR hMonitor = NULL;
             MONITORINFO monitorInfo;
 
             // If monitor index found, try to assign the monitor handle based on it.
@@ -313,13 +312,13 @@ namespace Ogre
                 hMonitor = MonitorFromPoint( windowAnchorPoint, MONITOR_DEFAULTTONEAREST );
             }
 
-            memset( &monitorInfo, 0, sizeof(MONITORINFO) );
-            monitorInfo.cbSize = sizeof(MONITORINFO);
+            memset( &monitorInfo, 0, sizeof( MONITORINFO ) );
+            monitorInfo.cbSize = sizeof( MONITORINFO );
             GetMonitorInfo( hMonitor, &monitorInfo );
 
-            //Setup styles
+            // Setup styles
             mFullscreenWinStyle = WS_CLIPCHILDREN | WS_POPUP;
-            mWindowedWinStyle   = WS_CLIPCHILDREN;
+            mWindowedWinStyle = WS_CLIPCHILDREN;
             if( !mHidden )
             {
                 mFullscreenWinStyle |= WS_VISIBLE;
@@ -333,30 +332,30 @@ namespace Ogre
             {
                 if( border == "none" || mBorderless )
                     mWindowedWinStyle |= WS_POPUP;
-                else if (border == "fixed")
+                else if( border == "fixed" )
                 {
-                    mWindowedWinStyle |= WS_OVERLAPPED | WS_BORDER | WS_CAPTION |
-                                         WS_SYSMENU | WS_MINIMIZEBOX;
+                    mWindowedWinStyle |=
+                        WS_OVERLAPPED | WS_BORDER | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
                 }
                 else
                     mWindowedWinStyle |= WS_OVERLAPPEDWINDOW;
             }
 
             uint32 winWidth, winHeight;
-            winWidth    = mRequestedWidth;
-            winHeight   = mRequestedHeight;
+            winWidth = mRequestedWidth;
+            winHeight = mRequestedHeight;
             {
-                //Center window horizontally and/or vertically, on the right monitor.
-                uint32 screenw = monitorInfo.rcWork.right  - monitorInfo.rcWork.left;
+                // Center window horizontally and/or vertically, on the right monitor.
+                uint32 screenw = monitorInfo.rcWork.right - monitorInfo.rcWork.left;
                 uint32 screenh = monitorInfo.rcWork.bottom - monitorInfo.rcWork.top;
-                uint32 outerw = (winWidth < screenw) ? winWidth : screenw;
-                uint32 outerh = (winHeight < screenh) ? winHeight : screenh;
+                uint32 outerw = ( winWidth < screenw ) ? winWidth : screenw;
+                uint32 outerh = ( winHeight < screenh ) ? winHeight : screenh;
                 if( left == INT_MAX )
-                    left = monitorInfo.rcWork.left + (screenw - outerw) / 2;
+                    left = monitorInfo.rcWork.left + ( screenw - outerw ) / 2;
                 else if( monitorIndex != -1 )
                     left += monitorInfo.rcWork.left;
                 if( top == INT_MAX )
-                    top = monitorInfo.rcWork.top + (screenh - outerh) / 2;
+                    top = monitorInfo.rcWork.top + ( screenh - outerh ) / 2;
                 else if( monitorIndex != -1 )
                     top += monitorInfo.rcWork.top;
             }
@@ -373,83 +372,82 @@ namespace Ogre
             else
             {
                 RECT rc;
-                SetRect( &rc, mLeft, mTop, mLeft+mRequestedWidth, mTop+mRequestedHeight );
+                SetRect( &rc, mLeft, mTop, mLeft + mRequestedWidth, mTop + mRequestedHeight );
                 if( !outerSize )
                 {
-                    //User requested "client resolution", we need to grow the rect
-                    //for the window's resolution (which is always bigger).
-                    AdjustWindowRect( &rc, getWindowStyle(fullscreenMode), false );
+                    // User requested "client resolution", we need to grow the rect
+                    // for the window's resolution (which is always bigger).
+                    AdjustWindowRect( &rc, getWindowStyle( fullscreenMode ), false );
                 }
 
-                //Clamp to current monitor's size
+                // Clamp to current monitor's size
                 if( rc.left < monitorInfo.rcWork.left )
                 {
-                    rc.right    += monitorInfo.rcWork.left - rc.left;
-                    rc.left     = monitorInfo.rcWork.left;
+                    rc.right += monitorInfo.rcWork.left - rc.left;
+                    rc.left = monitorInfo.rcWork.left;
                 }
                 if( rc.top < monitorInfo.rcWork.top )
                 {
-                    rc.bottom   += monitorInfo.rcWork.top - rc.top;
-                    rc.top      = monitorInfo.rcWork.top;
+                    rc.bottom += monitorInfo.rcWork.top - rc.top;
+                    rc.top = monitorInfo.rcWork.top;
                 }
                 if( rc.right > monitorInfo.rcWork.right )
                     rc.right = monitorInfo.rcWork.right;
                 if( rc.bottom > monitorInfo.rcWork.bottom )
                     rc.bottom = monitorInfo.rcWork.bottom;
 
-                mLeft           = rc.left;
-                mTop            = rc.top;
+                mLeft = rc.left;
+                mTop = rc.top;
                 mRequestedWidth = rc.right - rc.left;
-                mRequestedHeight= rc.bottom - rc.top;
+                mRequestedHeight = rc.bottom - rc.top;
             }
 
-            //Grab the HINSTANCE by asking the OS what's the hinstance at an address in this process
+            // Grab the HINSTANCE by asking the OS what's the hinstance at an address in this process
             HINSTANCE hInstance = NULL;
             static TCHAR staticVar;
-            GetModuleHandleEx( GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-                               GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, &staticVar, &hInstance );
+            GetModuleHandleEx(
+                GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                &staticVar, &hInstance );
 
             WNDCLASSEX wcex;
-            wcex.cbSize         = sizeof( WNDCLASSEX );
-            wcex.style          = CS_HREDRAW | CS_VREDRAW;
-            wcex.lpfnWndProc    = WindowEventUtilities::_WndProc;
-            wcex.cbClsExtra     = 0;
-            wcex.cbWndExtra     = 0;
-            wcex.hInstance      = hInstance;
-            wcex.hIcon          = LoadIcon( (HINSTANCE)0, ( LPCTSTR )IDI_APPLICATION );
-            wcex.hCursor        = LoadCursor( (HINSTANCE)0, IDC_ARROW );
-            wcex.hbrBackground  = (HBRUSH)GetStockObject(BLACK_BRUSH);
-            wcex.lpszMenuName   = 0;
-            wcex.lpszClassName  = OGRE_D3D11_WIN_CLASS_NAME;
-            wcex.hIconSm        = 0;
+            wcex.cbSize = sizeof( WNDCLASSEX );
+            wcex.style = CS_HREDRAW | CS_VREDRAW;
+            wcex.lpfnWndProc = WindowEventUtilities::_WndProc;
+            wcex.cbClsExtra = 0;
+            wcex.cbWndExtra = 0;
+            wcex.hInstance = hInstance;
+            wcex.hIcon = LoadIcon( (HINSTANCE)0, (LPCTSTR)IDI_APPLICATION );
+            wcex.hCursor = LoadCursor( (HINSTANCE)0, IDC_ARROW );
+            wcex.hbrBackground = (HBRUSH)GetStockObject( BLACK_BRUSH );
+            wcex.lpszMenuName = 0;
+            wcex.lpszClassName = OGRE_D3D11_WIN_CLASS_NAME;
+            wcex.hIconSm = 0;
 
             if( enableDoubleClick )
                 wcex.style |= CS_DBLCLKS;
 
-            if (!mClassRegistered)
+            if( !mClassRegistered )
             {
-                if (!RegisterClassEx(&wcex))
+                if( !RegisterClassEx( &wcex ) )
                 {
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                        "RegisterClassEx failed! Cannot create window",
-                        "D3D11WindowHwnd::create");
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                 "RegisterClassEx failed! Cannot create window",
+                                 "D3D11WindowHwnd::create" );
                 }
                 mClassRegistered = true;
             }
 
             mHwnd = CreateWindowEx( dwStyleEx, OGRE_D3D11_WIN_CLASS_NAME, mTitle.c_str(),
-                                    getWindowStyle(fullscreenMode),
-                                    mLeft, mTop, mRequestedWidth, mRequestedHeight,
-                                    parentHwnd, 0, hInstance, this );
+                                    getWindowStyle( fullscreenMode ), mLeft, mTop, mRequestedWidth,
+                                    mRequestedHeight, parentHwnd, 0, hInstance, this );
 
             if( !mHwnd )
             {
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "CreateWindowEx failed! Cannot create window",
-                             "D3D11WindowHwnd::create" );
+                             "CreateWindowEx failed! Cannot create window", "D3D11WindowHwnd::create" );
             }
 
-            WindowEventUtilities::_addRenderWindow(this);
+            WindowEventUtilities::_addRenderWindow( this );
 
             mIsExternal = false;
         }
@@ -462,7 +460,7 @@ namespace Ogre
         RECT rc;
         // top and left represent outer window coordinates
         GetWindowRect( mHwnd, &rc );
-        mTop  = rc.top;
+        mTop = rc.top;
         mLeft = rc.left;
         // width and height represent interior drawable area
         GetClientRect( mHwnd, &rc );
@@ -473,7 +471,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::_initialize( TextureGpuManager *textureGpuManager )
     {
-        D3D11WindowSwapChainBased::_initialize(textureGpuManager);
+        D3D11WindowSwapChainBased::_initialize( textureGpuManager );
 
         IDXGIFactory1 *dxgiFactory1 = mDevice.GetDXGIFactory();
         dxgiFactory1->MakeWindowAssociation( mHwnd,
@@ -487,7 +485,7 @@ namespace Ogre
 
         if( mHwnd && !mIsExternal )
         {
-            WindowEventUtilities::_removeRenderWindow(this);
+            WindowEventUtilities::_removeRenderWindow( this );
             DestroyWindow( mHwnd );
         }
         mHwnd = 0;
@@ -497,8 +495,7 @@ namespace Ogre
     {
         if( mHwnd && !mRequestedFullscreenMode )
         {
-            SetWindowPos( mHwnd, 0, left, top, 0, 0,
-                          SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+            SetWindowPos( mHwnd, 0, left, top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -520,12 +517,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
                                                    uint32 width, uint32 height,
-                                                   uint32 frequencyNumerator, uint32 frequencyDenominator )
+                                                   uint32 frequencyNumerator,
+                                                   uint32 frequencyDenominator )
     {
-        if( goFullscreen != mRequestedFullscreenMode ||
-            width != mRequestedWidth || height != mRequestedHeight )
+        if( goFullscreen != mRequestedFullscreenMode || width != mRequestedWidth ||
+            height != mRequestedHeight )
         {
-
             if( goFullscreen != mRequestedFullscreenMode )
                 mRenderSystem->addToSwitchingFullscreenCounter();
 
@@ -547,11 +544,11 @@ namespace Ogre
                 else
                     hMonitor = MonitorFromWindow( mHwnd, MONITOR_DEFAULTTONEAREST );
                 MONITORINFO monitorInfo;
-                memset( &monitorInfo, 0, sizeof(MONITORINFO) );
-                monitorInfo.cbSize = sizeof(MONITORINFO);
+                memset( &monitorInfo, 0, sizeof( MONITORINFO ) );
+                monitorInfo.cbSize = sizeof( MONITORINFO );
                 GetMonitorInfo( hMonitor, &monitorInfo );
-                mTop    = monitorInfo.rcMonitor.top;
-                mLeft   = monitorInfo.rcMonitor.left;
+                mTop = monitorInfo.rcMonitor.top;
+                mLeft = monitorInfo.rcMonitor.left;
 
                 // need different ordering here
                 if( oldFullscreen )
@@ -573,13 +570,13 @@ namespace Ogre
                 winWidth = mRequestedWidth;
                 winHeight = mRequestedHeight;
                 adjustWindow( mRequestedWidth, mRequestedHeight, &winWidth, &winHeight );
-                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle(mRequestedFullscreenMode) );
+                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle( mRequestedFullscreenMode ) );
                 SetWindowPos( mHwnd, HWND_NOTOPMOST, 0, 0, winWidth, winHeight,
                               SWP_DRAWFRAME | SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOACTIVATE );
                 updateWindowRect();
             }
 
-            if( (oldFullscreen && goFullscreen) || mIsExternal )
+            if( ( oldFullscreen && goFullscreen ) || mIsExternal )
             {
                 // Notify viewports of resize
                 notifyResolutionChanged();
@@ -589,7 +586,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::windowMovedOrResized()
     {
-        if( !mHwnd || IsIconic(mHwnd) || !mSwapChain )
+        if( !mHwnd || IsIconic( mHwnd ) || !mSwapChain )
             return;
 
         updateWindowRect();
@@ -600,19 +597,19 @@ namespace Ogre
     {
         bool visible = mVisible && !mHidden;
 
-        //Window minimized or fully obscured (we got notified via _setVisible/WM_PAINT messages)
+        // Window minimized or fully obscured (we got notified via _setVisible/WM_PAINT messages)
         if( !visible )
             return visible;
 
         {
             HWND currentWindowHandle = mHwnd;
-            while( (visible = (IsIconic(currentWindowHandle) == false)) &&
-                   (GetWindowLong(currentWindowHandle, GWL_STYLE) & WS_CHILD) != 0)
+            while( ( visible = ( IsIconic( currentWindowHandle ) == false ) ) &&
+                   ( GetWindowLong( currentWindowHandle, GWL_STYLE ) & WS_CHILD ) != 0 )
             {
                 currentWindowHandle = GetParent( currentWindowHandle );
             }
 
-            //Window is minimized
+            // Window is minimized
             if( !visible )
                 return visible;
         }
@@ -675,11 +672,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::getCustomAttribute( IdString name, void* pData )
+    void D3D11WindowHwnd::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "WINDOW" || name == "RENDERDOC_WINDOW" )
         {
-            HWND *pWnd = (HWND*)pData;
+            HWND *pWnd = (HWND *)pData;
             *pWnd = mHwnd;
         }
         else
@@ -688,4 +685,4 @@ namespace Ogre
         }
     }
 #endif
-}
+}  // namespace Ogre

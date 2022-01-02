@@ -27,9 +27,9 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11ConstBufferPacked.h"
-#include "Vao/OgreD3D11CompatBufferInterface.h"
 
 #include "OgreD3D11Device.h"
+#include "Vao/OgreD3D11CompatBufferInterface.h"
 
 namespace Ogre
 {
@@ -39,22 +39,20 @@ namespace Ogre
                                                     VaoManager *vaoManager,
                                                     BufferInterface *bufferInterface,
                                                     D3D11Device &device ) :
-        ConstBufferPacked( 0, numElements, bytesPerElement, numElementsPadding, bufferType,
-                           initialData, keepAsShadow, vaoManager, bufferInterface ),
+        ConstBufferPacked( 0, numElements, bytesPerElement, numElementsPadding, bufferType, initialData,
+                           keepAsShadow, vaoManager, bufferInterface ),
         mDevice( device )
     {
     }
     //-----------------------------------------------------------------------------------
-    D3D11ConstBufferPacked::~D3D11ConstBufferPacked()
-    {
-    }
+    D3D11ConstBufferPacked::~D3D11ConstBufferPacked() {}
     //-----------------------------------------------------------------------------------
     void D3D11ConstBufferPacked::bindBufferVS( uint16 slot )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 
-        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                                                                        mBufferInterface );
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
 
         ID3D11Buffer *d3dBuffer = bufferInterface->getVboName();
         mDevice.GetImmediateContext()->VSSetConstantBuffers( slot, 1, &d3dBuffer );
@@ -62,10 +60,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11ConstBufferPacked::bindBufferPS( uint16 slot )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 
-        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                                                                      mBufferInterface );
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
 
         ID3D11Buffer *d3dBuffer = bufferInterface->getVboName();
         mDevice.GetImmediateContext()->PSSetConstantBuffers( slot, 1, &d3dBuffer );
@@ -73,10 +71,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11ConstBufferPacked::bindBufferGS( uint16 slot )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 
-        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                                                                      mBufferInterface );
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
 
         ID3D11Buffer *d3dBuffer = bufferInterface->getVboName();
         mDevice.GetImmediateContext()->GSSetConstantBuffers( slot, 1, &d3dBuffer );
@@ -84,10 +82,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11ConstBufferPacked::bindBufferHS( uint16 slot )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 
-        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                                                                      mBufferInterface );
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
 
         ID3D11Buffer *d3dBuffer = bufferInterface->getVboName();
         mDevice.GetImmediateContext()->HSSetConstantBuffers( slot, 1, &d3dBuffer );
@@ -95,10 +93,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11ConstBufferPacked::bindBufferDS( uint16 slot )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 
-        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                                                                      mBufferInterface );
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
 
         ID3D11Buffer *d3dBuffer = bufferInterface->getVboName();
         mDevice.GetImmediateContext()->DSSetConstantBuffers( slot, 1, &d3dBuffer );
@@ -106,13 +104,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11ConstBufferPacked::bindBufferCS( uint16 slot )
     {
-        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        assert( dynamic_cast<D3D11CompatBufferInterface *>( mBufferInterface ) );
 
-        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                                                                      mBufferInterface );
+        D3D11CompatBufferInterface *bufferInterface =
+            static_cast<D3D11CompatBufferInterface *>( mBufferInterface );
 
         ID3D11Buffer *d3dBuffer = bufferInterface->getVboName();
         mDevice.GetImmediateContext()->CSSetConstantBuffers( slot, 1, &d3dBuffer );
     }
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

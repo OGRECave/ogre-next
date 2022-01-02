@@ -29,68 +29,68 @@ THE SOFTWARE.
 #define __D3D11HARDWAREBUFFER_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreD3D11DeviceResource.h"
 #include "OgreHardwareBuffer.h"
 
-namespace Ogre { 
-namespace v1 {
-
-    /** Base implementation of a D3D11 buffer, dealing with all the common
-    aspects.
-    */
-    class _OgreD3D11Export D3D11HardwareBuffer final : public HardwareBuffer,
-                                                       protected D3D11DeviceResource
+namespace Ogre
+{
+    namespace v1
     {
-    public:
-        enum BufferType
+        /** Base implementation of a D3D11 buffer, dealing with all the common
+        aspects.
+        */
+        class _OgreD3D11Export D3D11HardwareBuffer final : public HardwareBuffer,
+                                                           protected D3D11DeviceResource
         {
-            VERTEX_BUFFER,
-            INDEX_BUFFER
+        public:
+            enum BufferType
+            {
+                VERTEX_BUFFER,
+                INDEX_BUFFER
+            };
+
+        protected:
+            ComPtr<ID3D11Buffer> mlpD3DBuffer;
+            bool                 mUseTempStagingBuffer;
+            D3D11HardwareBuffer *mpTempStagingBuffer;
+            bool                 mStagingUploadNeeded;
+
+            BufferType        mBufferType;
+            D3D11Device &     mDevice;
+            D3D11_BUFFER_DESC mDesc;
+
+            /** See HardwareBuffer. */
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override;
+            /** See HardwareBuffer. */
+            void unlockImpl() override;
+
+            void notifyDeviceLost( D3D11Device *device ) override;
+            void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
+
+        public:
+            D3D11HardwareBuffer( BufferType btype, size_t sizeBytes, HardwareBuffer::Usage usage,
+                                 D3D11Device &device, bool useSystemMem, bool useShadowBuffer,
+                                 bool streamOut );
+            ~D3D11HardwareBuffer() override;
+            /** See HardwareBuffer. */
+            void readData( size_t offset, size_t length, void *pDest ) override;
+            /** See HardwareBuffer. */
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
+            /** See HardwareBuffer. We perform a hardware copy here. */
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
+            void copyDataImpl( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset,
+                               size_t length, bool discardWholeBuffer = false );
+            /// Updates the real buffer from the shadow buffer, if required
+            void _updateFromShadow() override;
+
+            /// Get the D3D-specific buffer
+            ID3D11Buffer *getD3DBuffer() { return mlpD3DBuffer.Get(); }
         };
-    protected:
-        ComPtr<ID3D11Buffer> mlpD3DBuffer;
-        bool mUseTempStagingBuffer;
-        D3D11HardwareBuffer* mpTempStagingBuffer;
-        bool mStagingUploadNeeded;
-        BufferType mBufferType;
-        D3D11Device & mDevice;
-        D3D11_BUFFER_DESC mDesc;
 
-
-
-        /** See HardwareBuffer. */
-        void* lockImpl(size_t offset, size_t length, LockOptions options) override;
-        /** See HardwareBuffer. */
-        void unlockImpl() override;
-
-        void notifyDeviceLost( D3D11Device *device ) override;
-        void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
-
-    public:
-        D3D11HardwareBuffer(BufferType btype, size_t sizeBytes, HardwareBuffer::Usage usage, 
-            D3D11Device & device, bool useSystemMem, bool useShadowBuffer, bool streamOut);
-        ~D3D11HardwareBuffer() override;
-        /** See HardwareBuffer. */
-        void readData(size_t offset, size_t length, void* pDest) override;
-        /** See HardwareBuffer. */
-        void writeData(size_t offset, size_t length, const void* pSource,
-            bool discardWholeBuffer = false) override;
-        /** See HardwareBuffer. We perform a hardware copy here. */
-        void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
-            size_t dstOffset, size_t length, bool discardWholeBuffer = false) override;
-		void copyDataImpl(HardwareBuffer& srcBuffer, size_t srcOffset,
-            size_t dstOffset, size_t length, bool discardWholeBuffer = false);
-		/// Updates the real buffer from the shadow buffer, if required
-        void _updateFromShadow() override;
-
-        /// Get the D3D-specific buffer
-        ID3D11Buffer* getD3DBuffer() { return mlpD3DBuffer.Get(); }
-    };
-
-}
-}
-
-
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif
-

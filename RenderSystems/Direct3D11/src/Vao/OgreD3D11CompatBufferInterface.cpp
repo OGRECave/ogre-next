@@ -27,14 +27,13 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11CompatBufferInterface.h"
-#include "Vao/OgreD3D11VaoManager.h"
-#include "Vao/OgreD3D11StagingBuffer.h"
-#include "Vao/OgreD3D11DynamicBuffer.h"
-
-#include "Vao/OgreD3D11BufferInterface.h"
 
 #include "OgreD3D11Device.h"
 #include "OgreD3D11RenderSystem.h"
+#include "Vao/OgreD3D11BufferInterface.h"
+#include "Vao/OgreD3D11DynamicBuffer.h"
+#include "Vao/OgreD3D11StagingBuffer.h"
+#include "Vao/OgreD3D11VaoManager.h"
 
 namespace Ogre
 {
@@ -45,11 +44,9 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    D3D11CompatBufferInterface::~D3D11CompatBufferInterface()
-    {
-    }
+    D3D11CompatBufferInterface::~D3D11CompatBufferInterface() {}
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN D3D11CompatBufferInterface::map( size_t elementStart,
+    void *RESTRICT_ALIAS_RETURN D3D11CompatBufferInterface::map( size_t elementStart,
                                                                  size_t elementCount,
                                                                  MappingState prevMappingState,
                                                                  bool bAdvanceFrame )
@@ -57,44 +54,43 @@ namespace Ogre
         assert( elementStart <= mBuffer->mNumElements &&
                 elementStart + elementCount <= mBuffer->mNumElements );
 
-        D3D11RenderSystem *renderSystem = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager )->
-                getD3D11RenderSystem();
+        D3D11RenderSystem *renderSystem =
+            static_cast<D3D11VaoManager *>( mBuffer->mVaoManager )->getD3D11RenderSystem();
 
         D3D11_MAP mapFlag = D3D11_MAP_WRITE_NO_OVERWRITE;
 
         if( renderSystem->_getFeatureLevel() <= D3D_FEATURE_LEVEL_11_0 ||
-            (renderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 &&
-            elementStart <= mBuffer->mLastMappingStart + mBuffer->mLastMappingCount) )
+            ( renderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 &&
+              elementStart <= mBuffer->mLastMappingStart + mBuffer->mLastMappingCount ) )
         {
-            //D3D 11.0 and below doesn't support NO_OVERWRITE
-            //On D3D 11.1, only use discard when wrapping back.
+            // D3D 11.0 and below doesn't support NO_OVERWRITE
+            // On D3D 11.1, only use discard when wrapping back.
             mapFlag = D3D11_MAP_WRITE_DISCARD;
         }
 
         D3D11_MAPPED_SUBRESOURCE mappedSubres;
         HRESULT hr = mDevice.GetImmediateContext()->Map( mVboName.Get(), 0, mapFlag, 0, &mappedSubres );
-        if (FAILED(hr) || mDevice.isError())
+        if( FAILED( hr ) || mDevice.isError() )
         {
-            String msg = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Error calling Map: " + msg, 
-                "D3D11CompatBufferInterface::map");
+            String msg = mDevice.getErrorDescription( hr );
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr, "Error calling Map: " + msg,
+                            "D3D11CompatBufferInterface::map" );
         }
-        mMappedPtr = reinterpret_cast<uint8*>( mappedSubres.pData ) +
-                elementStart * mBuffer->mBytesPerElement;
+        mMappedPtr =
+            reinterpret_cast<uint8 *>( mappedSubres.pData ) + elementStart * mBuffer->mBytesPerElement;
 
-        //Store the last map start so we know when to discard on the next map.
+        // Store the last map start so we know when to discard on the next map.
         mBuffer->mLastMappingStart = elementStart + elementCount;
-        //Store the count for the assert in unmap
+        // Store the count for the assert in unmap
         mBuffer->mLastMappingCount = elementCount;
 
         return mMappedPtr;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11CompatBufferInterface::unmap( UnmapOptions unmapOption,
-                                            size_t flushStartElem, size_t flushSizeElem )
+    void D3D11CompatBufferInterface::unmap( UnmapOptions unmapOption, size_t flushStartElem,
+                                            size_t flushSizeElem )
     {
-        //All arguments aren't really used by D3D11, these asserts are for the other APIs.
+        // All arguments aren't really used by D3D11, these asserts are for the other APIs.
         assert( flushStartElem <= mBuffer->mLastMappingCount &&
                 "Flush starts after the end of the mapped region!" );
         assert( flushStartElem + flushSizeElem <= mBuffer->mLastMappingCount &&
@@ -104,11 +100,7 @@ namespace Ogre
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11CompatBufferInterface::advanceFrame()
-    {
-    }
+    void D3D11CompatBufferInterface::advanceFrame() {}
     //-----------------------------------------------------------------------------------
-    void D3D11CompatBufferInterface::regressFrame()
-    {
-    }
-}
+    void D3D11CompatBufferInterface::regressFrame() {}
+}  // namespace Ogre

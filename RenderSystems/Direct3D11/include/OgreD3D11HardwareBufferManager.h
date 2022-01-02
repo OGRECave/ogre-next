@@ -29,48 +29,50 @@ THE SOFTWARE.
 #define __D3D11HARWAREBUFFERMANAGER_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreHardwareBufferManager.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /** Implementation of HardwareBufferManager for D3D11. */
-    class _OgreD3D11Export D3D11HardwareBufferManagerBase final : public HardwareBufferManagerBase
+namespace Ogre
+{
+    namespace v1
     {
-    protected:
-        D3D11Device & mlpD3DDevice;
-
-    public:
-        D3D11HardwareBufferManagerBase(D3D11Device & device);
-        ~D3D11HardwareBufferManagerBase();
-        /// Creates a vertex buffer
-        HardwareVertexBufferSharedPtr 
-            createVertexBuffer(size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
-        /// Creates a stream output vertex buffer
-        HardwareVertexBufferSharedPtr 
-            createStreamOutputVertexBuffer(size_t vertexSize, size_t numVerts, HardwareBuffer::Usage usage, bool useShadowBuffer = false);
-        /// Create a hardware vertex buffer
-        HardwareIndexBufferSharedPtr 
-            createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, HardwareBuffer::Usage usage, bool useShadowBuffer = false) override;
-    };
-
-    /// D3D11HardwareBufferManagerBase as a Singleton
-    class _OgreD3D11Export D3D11HardwareBufferManager final : public HardwareBufferManager
-    {
-    public:
-        D3D11HardwareBufferManager(D3D11Device & device)
-            : HardwareBufferManager(OGRE_NEW D3D11HardwareBufferManagerBase(device)) 
+        /** Implementation of HardwareBufferManager for D3D11. */
+        class _OgreD3D11Export D3D11HardwareBufferManagerBase final : public HardwareBufferManagerBase
         {
+        protected:
+            D3D11Device &mlpD3DDevice;
 
-        }
-        ~D3D11HardwareBufferManager() override
+        public:
+            D3D11HardwareBufferManagerBase( D3D11Device &device );
+            ~D3D11HardwareBufferManagerBase();
+            /// Creates a vertex buffer
+            HardwareVertexBufferSharedPtr createVertexBuffer( size_t vertexSize, size_t numVerts,
+                                                              HardwareBuffer::Usage usage,
+                                                              bool useShadowBuffer = false ) override;
+            /// Creates a stream output vertex buffer
+            HardwareVertexBufferSharedPtr createStreamOutputVertexBuffer( size_t vertexSize,
+                                                                          size_t numVerts,
+                                                                          HardwareBuffer::Usage usage,
+                                                                          bool useShadowBuffer = false );
+            /// Create a hardware vertex buffer
+            HardwareIndexBufferSharedPtr createIndexBuffer( HardwareIndexBuffer::IndexType itype,
+                                                            size_t                         numIndexes,
+                                                            HardwareBuffer::Usage          usage,
+                                                            bool useShadowBuffer = false ) override;
+        };
+
+        /// D3D11HardwareBufferManagerBase as a Singleton
+        class _OgreD3D11Export D3D11HardwareBufferManager final : public HardwareBufferManager
         {
-            OGRE_DELETE mImpl;
-        }
-    };
+        public:
+            D3D11HardwareBufferManager( D3D11Device &device ) :
+                HardwareBufferManager( OGRE_NEW D3D11HardwareBufferManagerBase( device ) )
+            {
+            }
+            ~D3D11HardwareBufferManager() override { OGRE_DELETE mImpl; }
+        };
 
-}
-}
-
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

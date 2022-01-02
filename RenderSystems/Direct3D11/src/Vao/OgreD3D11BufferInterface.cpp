@@ -27,12 +27,12 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11BufferInterface.h"
-#include "Vao/OgreD3D11VaoManager.h"
-#include "Vao/OgreD3D11StagingBuffer.h"
-#include "Vao/OgreD3D11DynamicBuffer.h"
 
-#include "Vao/OgreD3D11CompatBufferInterface.h"
 #include "OgreD3D11Device.h"
+#include "Vao/OgreD3D11CompatBufferInterface.h"
+#include "Vao/OgreD3D11DynamicBuffer.h"
+#include "Vao/OgreD3D11StagingBuffer.h"
+#include "Vao/OgreD3D11VaoManager.h"
 
 namespace Ogre
 {
@@ -45,28 +45,25 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    D3D11BufferInterface::~D3D11BufferInterface()
-    {
-        _deleteInitialData();
-    }
+    D3D11BufferInterface::~D3D11BufferInterface() { _deleteInitialData(); }
     //-----------------------------------------------------------------------------------
     void D3D11BufferInterface::_firstUpload( void *data )
     {
-        //In D3D11, we upload non-immutable buffers the traditional way.
-        //For immutable buffers, we store the data into CPU memory until the last moment
-        //when the buffer may be need, and only then gets the D3D11 buffer created and
-        //batched together with many other buffers (and mInitialData may be freed then).
+        // In D3D11, we upload non-immutable buffers the traditional way.
+        // For immutable buffers, we store the data into CPU memory until the last moment
+        // when the buffer may be need, and only then gets the D3D11 buffer created and
+        // batched together with many other buffers (and mInitialData may be freed then).
 
         if( mBuffer->mBufferType == BT_IMMUTABLE )
         {
             if( mBuffer->mShadowCopy )
             {
-                //Reference the shadow copy directly.
+                // Reference the shadow copy directly.
                 mInitialData = mBuffer->mShadowCopy;
             }
             else
             {
-                //The initial data pointer may be lost. Copy it to a temporary location.
+                // The initial data pointer may be lost. Copy it to a temporary location.
                 mInitialData = OGRE_MALLOC_SIMD( mBuffer->getTotalSizeBytes(), MEMCATEGORY_GEOMETRY );
                 memcpy( mInitialData, data, mBuffer->getTotalSizeBytes() );
             }
@@ -77,30 +74,29 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN D3D11BufferInterface::map( size_t elementStart, size_t elementCount,
+    void *RESTRICT_ALIAS_RETURN D3D11BufferInterface::map( size_t elementStart, size_t elementCount,
                                                            MappingState prevMappingState,
                                                            bool bAdvanceFrame )
     {
         size_t bytesPerElement = mBuffer->mBytesPerElement;
 
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
+        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager *>( mBuffer->mVaoManager );
 
         vaoManager->waitForTailFrameToFinish();
 
         size_t dynamicCurrentFrame = advanceFrame( bAdvanceFrame );
 
         {
-            //Non-persistent buffers just map the small region they'll need.
+            // Non-persistent buffers just map the small region they'll need.
             size_t offset = mBuffer->mInternalBufferStart + elementStart +
                             mBuffer->mNumElements * dynamicCurrentFrame;
             size_t length = elementCount;
 
-            mMappedPtr = mDynamicBuffer->map( offset * bytesPerElement,
-                                              length * bytesPerElement,
-                                              mUnmapTicket );
+            mMappedPtr =
+                mDynamicBuffer->map( offset * bytesPerElement, length * bytesPerElement, mUnmapTicket );
         }
 
-        //For regular maps, mLastMappingStart is 0. So that we can later flush correctly.
+        // For regular maps, mLastMappingStart is 0. So that we can later flush correctly.
         mBuffer->mLastMappingStart = 0;
         mBuffer->mLastMappingCount = elementCount;
 
@@ -121,16 +117,16 @@ namespace Ogre
                                             size_t internalBufferStartBytes )
     {
         mVboPoolIdx = vboPoolIdx;
-        mVboName    = vboName;
+        mVboName = vboName;
 
-        mBuffer->mInternalBufferStart   = internalBufferStartBytes / mBuffer->mBytesPerElement;
-        mBuffer->mFinalBufferStart      = internalBufferStartBytes / mBuffer->mBytesPerElement;
+        mBuffer->mInternalBufferStart = internalBufferStartBytes / mBuffer->mBytesPerElement;
+        mBuffer->mFinalBufferStart = internalBufferStartBytes / mBuffer->mBytesPerElement;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11BufferInterface::unmap( UnmapOptions unmapOption,
-                                      size_t flushStartElem, size_t flushSizeElem )
+    void D3D11BufferInterface::unmap( UnmapOptions unmapOption, size_t flushStartElem,
+                                      size_t flushSizeElem )
     {
-        //All arguments aren't really used by D3D11, these asserts are for the other APIs.
+        // All arguments aren't really used by D3D11, these asserts are for the other APIs.
         assert( flushStartElem <= mBuffer->mLastMappingCount &&
                 "Flush starts after the end of the mapped region!" );
         assert( flushStartElem + flushSizeElem <= mBuffer->mLastMappingCount &&
@@ -140,23 +136,20 @@ namespace Ogre
         mMappedPtr = 0;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11BufferInterface::advanceFrame()
-    {
-        advanceFrame( true );
-    }
+    void D3D11BufferInterface::advanceFrame() { advanceFrame( true ); }
     //-----------------------------------------------------------------------------------
     size_t D3D11BufferInterface::advanceFrame( bool bAdvanceFrame )
     {
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
+        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->mNumElements;
 
-        dynamicCurrentFrame = (dynamicCurrentFrame + 1) % vaoManager->getDynamicBufferMultiplier();
+        dynamicCurrentFrame = ( dynamicCurrentFrame + 1 ) % vaoManager->getDynamicBufferMultiplier();
 
         if( bAdvanceFrame )
         {
-            mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
-                                            dynamicCurrentFrame * mBuffer->mNumElements;
+            mBuffer->mFinalBufferStart =
+                mBuffer->mInternalBufferStart + dynamicCurrentFrame * mBuffer->mNumElements;
         }
 
         return dynamicCurrentFrame;
@@ -164,14 +157,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11BufferInterface::regressFrame()
     {
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
+        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->mNumElements;
 
-        dynamicCurrentFrame = (dynamicCurrentFrame + vaoManager->getDynamicBufferMultiplier() - 1) %
-                                vaoManager->getDynamicBufferMultiplier();
+        dynamicCurrentFrame = ( dynamicCurrentFrame + vaoManager->getDynamicBufferMultiplier() - 1 ) %
+                              vaoManager->getDynamicBufferMultiplier();
 
-        mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
-                                        dynamicCurrentFrame * mBuffer->mNumElements;
+        mBuffer->mFinalBufferStart =
+            mBuffer->mInternalBufferStart + dynamicCurrentFrame * mBuffer->mNumElements;
     }
-}
+}  // namespace Ogre

@@ -29,42 +29,45 @@ THE SOFTWARE.
 #define __D3D11HARDWAREVERTEXBUFFER_H__
 
 #include "OgreD3D11Prerequisites.h"
+
 #include "OgreHardwareVertexBuffer.h"
 
-namespace Ogre {
-namespace v1 {
-
-    /// Specialisation of HardwareVertexBuffer for D3D11
-    class _OgreD3D11Export D3D11HardwareVertexBuffer final : public HardwareVertexBuffer
+namespace Ogre
+{
+    namespace v1
     {
-    protected:
-        D3D11HardwareBuffer* mBufferImpl;
-        // have to implement these, but do nothing as overridden lock/unlock
-        void* lockImpl(size_t offset, size_t length, LockOptions options) override {return 0;}
-        void unlockImpl() override {}
+        /// Specialisation of HardwareVertexBuffer for D3D11
+        class _OgreD3D11Export D3D11HardwareVertexBuffer final : public HardwareVertexBuffer
+        {
+        protected:
+            D3D11HardwareBuffer *mBufferImpl;
+            // have to implement these, but do nothing as overridden lock/unlock
+            void *lockImpl( size_t offset, size_t length, LockOptions options ) override { return 0; }
+            void  unlockImpl() override {}
 
-    public:
-        D3D11HardwareVertexBuffer(HardwareBufferManagerBase* mgr, size_t vertexSize, size_t numVertices, 
-            HardwareBuffer::Usage usage, D3D11Device & device, bool useSystemMem, bool useShadowBuffer, 
-            bool streamOut);
-        ~D3D11HardwareVertexBuffer() override;
+        public:
+            D3D11HardwareVertexBuffer( HardwareBufferManagerBase *mgr, size_t vertexSize,
+                                       size_t numVertices, HardwareBuffer::Usage usage,
+                                       D3D11Device &device, bool useSystemMem, bool useShadowBuffer,
+                                       bool streamOut );
+            ~D3D11HardwareVertexBuffer() override;
 
-        // override all data-gathering methods
-        void* lock(size_t offset, size_t length, LockOptions options) override;
-        void unlock() override;
-        void readData(size_t offset, size_t length, void* pDest) override;
-        void writeData(size_t offset, size_t length, const void* pSource,
-            bool discardWholeBuffer = false) override;
+            // override all data-gathering methods
+            void *lock( size_t offset, size_t length, LockOptions options ) override;
+            void  unlock() override;
 
-        void copyData(HardwareBuffer& srcBuffer, size_t srcOffset, 
-            size_t dstOffset, size_t length, bool discardWholeBuffer = false) override;
-        bool isLocked() const;
+            void readData( size_t offset, size_t length, void *pDest ) override;
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false ) override;
 
-        /// Get the D3D-specific vertex buffer
-        ID3D11Buffer * getD3DVertexBuffer() const;
-    };
+            void copyData( HardwareBuffer &srcBuffer, size_t srcOffset, size_t dstOffset, size_t length,
+                           bool discardWholeBuffer = false ) override;
+            bool isLocked() const;
 
-}
-}
+            /// Get the D3D-specific vertex buffer
+            ID3D11Buffer *getD3DVertexBuffer() const;
+        };
+
+    }  // namespace v1
+}  // namespace Ogre
 #endif
-

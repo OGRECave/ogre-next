@@ -30,21 +30,22 @@ THE SOFTWARE.
 #define _OgreD3D11RenderPassDescriptor_H_
 
 #include "OgreD3D11Prerequisites.h"
+
+#include "OgreCommon.h"
 #include "OgreD3D11DeviceResource.h"
 #include "OgreRenderPassDescriptor.h"
 #include "OgreRenderSystem.h"
-#include "OgreCommon.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Core
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Resources
-    *  @{
-    */
+     *  @{
+     */
 
     struct D3D11FrameBufferDescValue
     {
@@ -63,15 +64,15 @@ namespace Ogre
                                                              protected D3D11DeviceResource
     {
     protected:
-        ComPtr<ID3D11RenderTargetView>  mColourRtv[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        ComPtr<ID3D11DepthStencilView>  mDepthStencilRtv;
-        bool                    mHasStencilFormat;
-        bool                    mHasRenderWindow;
+        ComPtr<ID3D11RenderTargetView> mColourRtv[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        ComPtr<ID3D11DepthStencilView> mDepthStencilRtv;
+        bool                           mHasStencilFormat;
+        bool                           mHasRenderWindow;
 
         D3D11FrameBufferDescMap::iterator mSharedFboItor;
 
-        D3D11Device         &mDevice;
-        D3D11RenderSystem   *mRenderSystem;
+        D3D11Device &      mDevice;
+        D3D11RenderSystem *mRenderSystem;
 
         void notifyDeviceLost( D3D11Device *device ) override;
         void notifyDeviceRestored( D3D11Device *device, unsigned pass ) override;
@@ -88,8 +89,8 @@ namespace Ogre
         /// as clear will be cleared).
         uint32 checkForClearActions( D3D11RenderPassDescriptor *other ) const;
 
-        template <typename T> static
-        void setSliceToRtvDesc( T &inOutRtvDesc, const RenderPassColourTarget &target );
+        template <typename T>
+        static void setSliceToRtvDesc( T &inOutRtvDesc, const RenderPassColourTarget &target );
 
     public:
         D3D11RenderPassDescriptor( D3D11Device &device, D3D11RenderSystem *renderSystem );
@@ -99,8 +100,8 @@ namespace Ogre
 
         uint32 willSwitchTo( D3D11RenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 
-        void performLoadActions( Viewport *viewport, uint32 entriesToFlush,
-                                 uint32 uavStartingSlot, const DescriptorSetUav *descSetUav );
+        void performLoadActions( Viewport *viewport, uint32 entriesToFlush, uint32 uavStartingSlot,
+                                 const DescriptorSetUav *descSetUav );
         void performStoreActions( uint32 entriesToFlush );
 
         void clearFrameBuffer();
@@ -108,13 +109,12 @@ namespace Ogre
         void getCustomAttribute( IdString name, void *pData, uint32 extraParam ) override;
 
         // RenderSystem::Listener overload
-        void eventOccurred( const String &eventName,
-                                    const NameValuePairList *parameters ) override;
+        void eventOccurred( const String &eventName, const NameValuePairList *parameters ) override;
     };
 
     /** @} */
     /** @} */
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

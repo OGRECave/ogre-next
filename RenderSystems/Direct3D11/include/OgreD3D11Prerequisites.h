@@ -28,66 +28,85 @@ THE SOFTWARE.
 #ifndef __D3D11PREREQUISITES_H__
 #define __D3D11PREREQUISITES_H__
 
-
-
 #include "OgrePrerequisites.h"
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
-#include "WIN32/OgreMinGWSupport.h" // extra defines for MinGW to deal with DX SDK
+#    include "WIN32/OgreMinGWSupport.h"  // extra defines for MinGW to deal with DX SDK
 #endif
-#include "WIN32/OgreComPtr.h"       // too much resource leaks were caused without it by throwing constructors
-
+#include "WIN32/OgreComPtr.h"  // too much resource leaks were caused without it by throwing constructors
 
 // some D3D commonly used macros
-#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
+#define SAFE_DELETE( p ) \
+    { \
+        if( p ) \
+        { \
+            delete( p ); \
+            ( p ) = NULL; \
+        } \
+    }
+#define SAFE_DELETE_ARRAY( p ) \
+    { \
+        if( p ) \
+        { \
+            delete[]( p ); \
+            ( p ) = NULL; \
+        } \
+    }
+#define SAFE_RELEASE( p ) \
+    { \
+        if( p ) \
+        { \
+            ( p )->Release(); \
+            ( p ) = NULL; \
+        } \
+    }
 
-#if defined(_WIN32_WINNT_WIN8) // Win8 SDK required to compile, will work on Windows 8 and Platform Update for Windows 7
-#define OGRE_D3D11_PROFILING OGRE_PROFILING
+#if defined( _WIN32_WINNT_WIN8 )  // Win8 SDK required to compile, will work on Windows 8 and Platform
+                                  // Update for Windows 7
+#    define OGRE_D3D11_PROFILING OGRE_PROFILING
 #endif
 
 #undef NOMINMAX
-#define NOMINMAX // required to stop windows.h screwing up std::min definition
+#define NOMINMAX  // required to stop windows.h screwing up std::min definition
 #if defined( _WIN32_WINNT_WIN8 ) || OGRE_COMPILER != OGRE_COMPILER_MSVC
-    #include <d3d11_1.h>
-    #if !defined(_WIN32_WINNT_WIN10)
-        #define DXGI_SWAP_EFFECT_FLIP_DISCARD ((DXGI_SWAP_EFFECT)(4)) // we want to use it on Win10 even if building with Win8 SDK
-        #define D3D11_RLDO_IGNORE_INTERNAL ((D3D11_RLDO_FLAGS)(4))
-    #endif
+#    include <d3d11_1.h>
+#    if !defined( _WIN32_WINNT_WIN10 )
+#        define DXGI_SWAP_EFFECT_FLIP_DISCARD \
+            ( ( DXGI_SWAP_EFFECT )( 4 ) )  // we want to use it on Win10 even if building with Win8 SDK
+#        define D3D11_RLDO_IGNORE_INTERNAL ( ( D3D11_RLDO_FLAGS )( 4 ) )
+#    endif
 #else
-    #include <d3d11.h>
-    #include "OgreD3D11LegacySDKEmulation.h"
+#    include <d3d11.h>
+#    include "OgreD3D11LegacySDKEmulation.h"
 #endif
 
 #if __OGRE_WINRT_PHONE_80
-#   include <C:\Program Files (x86)\Windows Kits\8.0\Include\um\d3d11shader.h>
+#    include <C:\Program Files (x86)\Windows Kits\8.0\Include\um\d3d11shader.h>
 #else
-#   include <d3d11shader.h>
-#   include <d3dcompiler.h>
+#    include <d3d11shader.h>
+#    include <d3dcompiler.h>
 #endif
- 
 
 namespace Ogre
 {
     // typedefs to work with Direct3D 11 or 11.1 as appropriate
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-    typedef ID3D11Device            ID3D11DeviceN;
-    typedef ID3D11DeviceContext     ID3D11DeviceContextN;
-    typedef ID3D11RasterizerState   ID3D11RasterizerStateN;
-    typedef IDXGIFactory1           IDXGIFactoryN;
-    typedef IDXGIAdapter1           IDXGIAdapterN;
-    typedef IDXGIDevice1            IDXGIDeviceN;
-    typedef IDXGISwapChain          IDXGISwapChainN;
-    typedef DXGI_SWAP_CHAIN_DESC    DXGI_SWAP_CHAIN_DESC_N;
-#elif  OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-    typedef ID3D11Device1           ID3D11DeviceN;
-    typedef ID3D11DeviceContext1    ID3D11DeviceContextN;
-    typedef ID3D11RasterizerState1  ID3D11RasterizerStateN;
-    typedef IDXGIFactory2           IDXGIFactoryN;
-    typedef IDXGIAdapter1           IDXGIAdapterN;          // we don`t need IDXGIAdapter2 functionality
-    typedef IDXGIDevice2            IDXGIDeviceN;
-    typedef IDXGISwapChain1         IDXGISwapChainN;
-    typedef DXGI_SWAP_CHAIN_DESC1   DXGI_SWAP_CHAIN_DESC_N;
+    typedef ID3D11Device          ID3D11DeviceN;
+    typedef ID3D11DeviceContext   ID3D11DeviceContextN;
+    typedef ID3D11RasterizerState ID3D11RasterizerStateN;
+    typedef IDXGIFactory1         IDXGIFactoryN;
+    typedef IDXGIAdapter1         IDXGIAdapterN;
+    typedef IDXGIDevice1          IDXGIDeviceN;
+    typedef IDXGISwapChain        IDXGISwapChainN;
+    typedef DXGI_SWAP_CHAIN_DESC  DXGI_SWAP_CHAIN_DESC_N;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+    typedef ID3D11Device1          ID3D11DeviceN;
+    typedef ID3D11DeviceContext1   ID3D11DeviceContextN;
+    typedef ID3D11RasterizerState1 ID3D11RasterizerStateN;
+    typedef IDXGIFactory2          IDXGIFactoryN;
+    typedef IDXGIAdapter1          IDXGIAdapterN;  // we don`t need IDXGIAdapter2 functionality
+    typedef IDXGIDevice2           IDXGIDeviceN;
+    typedef IDXGISwapChain1        IDXGISwapChainN;
+    typedef DXGI_SWAP_CHAIN_DESC1  DXGI_SWAP_CHAIN_DESC_N;
 #endif
 
     // Predefine classes
@@ -116,7 +135,7 @@ namespace Ogre
     class D3D11TextureManager;
     class D3D11DepthBuffer;
 
-    typedef SharedPtr<D3D11Texture>     D3D11TexturePtr;
+    typedef SharedPtr<D3D11Texture> D3D11TexturePtr;
 #endif
 
     namespace v1
@@ -125,25 +144,26 @@ namespace Ogre
         class D3D11HardwareBufferManager;
         class D3D11HardwareIndexBuffer;
         class D3D11HardwarePixelBuffer;
-    }
+    }  // namespace v1
 
     typedef SharedPtr<D3D11HLSLProgram> D3D11HLSLProgramPtr;
 
     //-------------------------------------------
     // Windows setttings
     //-------------------------------------------
-#if (OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT) && !defined(OGRE_STATIC_LIB)
-#   ifdef OGRED3DENGINEDLL_EXPORTS
-#       define _OgreD3D11Export __declspec(dllexport)
-#   else
-#       if defined( __MINGW32__ )
-#           define _OgreD3D11Export
-#       else
-#           define _OgreD3D11Export __declspec(dllimport)
-#       endif
-#   endif
+#if( OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT ) && \
+    !defined( OGRE_STATIC_LIB )
+#    ifdef OGRED3DENGINEDLL_EXPORTS
+#        define _OgreD3D11Export __declspec( dllexport )
+#    else
+#        if defined( __MINGW32__ )
+#            define _OgreD3D11Export
+#        else
+#            define _OgreD3D11Export __declspec( dllimport )
+#        endif
+#    endif
 #else
-#   define _OgreD3D11Export
+#    define _OgreD3D11Export
 #endif  // OGRE_WIN32
-}
+}  // namespace Ogre
 #endif

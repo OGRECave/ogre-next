@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "VendorExtensions/OgreD3D11VendorExtension.h"
 
 #if !OGRE_NO_AMD_AGS
-    #include <amd_ags.h>
+#    include <amd_ags.h>
 #endif
 
 #include "OgreHeaderPrefix.h"
@@ -42,18 +42,17 @@ namespace Ogre
     class _OgreD3D11Export D3D11AmdExtension : public D3D11VendorExtension
     {
     protected:
-        AGSContext  *mAgsContext;
+        AGSContext *mAgsContext;
         AGSGPUInfo  mGpuInfo;
 
         FastArray<AGSDX11ReturnedParams> mReturnedParams;
 
         static void dumpAgsInfo( const AGSGPUInfo &gpuInfo );
 
-        virtual HRESULT createDeviceImpl( const String &appName,
-                                          IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
-                                          UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
-                                          UINT numFeatureLevels, D3D_FEATURE_LEVEL *outFeatureLevel,
-                                          ID3D11Device **outDevice );
+        virtual HRESULT createDeviceImpl( const String &appName, IDXGIAdapter *adapter,
+                                          D3D_DRIVER_TYPE driverType, UINT deviceFlags,
+                                          D3D_FEATURE_LEVEL *pFirstFL, UINT numFeatureLevels,
+                                          D3D_FEATURE_LEVEL *outFeatureLevel, ID3D11Device **outDevice );
 
     public:
         D3D11AmdExtension();
@@ -70,7 +69,7 @@ namespace Ogre
         static bool recommendsAgs( IDXGIAdapter *adapter ) { return false; }
     };
 #endif
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 
