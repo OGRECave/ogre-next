@@ -1,0 +1,4 @@
+<map id="Ogre::v1::BillboardParticleRenderer::CmdAccurateFacing" name="Ogre::v1::BillboardParticleRenderer::CmdAccurateFacing">
+<area shape="rect" id="node1" title="Command object for accurate facing(see ParamCommand)." alt="" coords="5,80,204,121"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_param_command.html" title="Abstract class which is command object which gets/sets parameters." alt="" coords="28,5,181,32"/>
+</map>

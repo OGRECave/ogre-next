@@ -1,0 +1,5 @@
+<map id="Ogre::ConstBufferPool" name="Ogre::ConstBufferPool">
+<area shape="rect" id="node1" title="Maintains a pool of buffers grouped by hash ID." alt="" coords="53,5,204,32"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_hlms_pbs.html" title="Physically based shading implementation specfically designed for OpenGL 3+, D3D11 and other RenderSys..." alt="" coords="5,80,116,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_hlms_unlit.html" title="Implementation without lighting or skeletal animation specfically designed for OpenGL 3+,..." alt="" coords="141,80,255,107"/>
+</map>

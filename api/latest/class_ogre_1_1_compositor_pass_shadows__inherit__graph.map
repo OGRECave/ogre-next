@@ -1,0 +1,5 @@
+<map id="Ogre::CompositorPassShadows" name="Ogre::CompositorPassShadows">
+<area shape="rect" id="node1" title="CompositorPassShadows This class enables force&#45;updating multiple shadow nodes in batch in its own pas..." alt="" coords="5,155,212,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_compositor_pass.html" title="Abstract class for compositor passes." alt="" coords="33,80,185,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="47,5,171,32"/>
+</map>

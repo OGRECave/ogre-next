@@ -1,0 +1,8 @@
+<map id="Ogre::ParallaxCorrectedCubemapAuto" name="Ogre::ParallaxCorrectedCubemapAuto">
+<area shape="rect" id="node1" title="Per&#45;Pixel reflection probes." alt="" coords="193,169,433,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_parallax_corrected_cubemap_base.html" title=" " alt="" coords="83,95,326,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="5,13,111,39"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_render_system_1_1_listener.html" title="Defines a listener on the custom events that this render system can raise." alt="" coords="134,5,275,47"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_compositor_workspace_listener.html" title=" " alt="" coords="299,5,486,47"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_frame_listener.html" title="A interface class defining a listener which can be used to receive notifications of frame events." alt="" coords="351,95,491,121"/>
+</map>

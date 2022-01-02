@@ -1,0 +1,7 @@
+<map id="Ogre::VectorSet&lt; T, S &gt;" name="Ogre::VectorSet&lt; T, S &gt;">
+<area shape="rect" id="node1" title="VectorSet is basically a helper to use a vector as a small set container." alt="" coords="17,363,177,389"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_small_vector.html" title=" " alt="" coords="29,273,164,315"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_small_vector_impl.html" title="SmallVectorImpl &#45; This class consists of common code factored out of the SmallVector class to reduce ..." alt="" coords="5,199,188,225"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_small_vector_template_base.html" title=" " alt="" coords="6,95,187,151"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_small_vector_template_common.html" title=" " alt="" coords="6,5,187,47"/>
+</map>

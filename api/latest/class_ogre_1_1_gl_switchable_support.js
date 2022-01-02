@@ -1,0 +1,27 @@
+var class_ogre_1_1_gl_switchable_support =
+[
+    [ "GlSwitchableSupport", "class_ogre_1_1_gl_switchable_support.html#ac8ecebc14bdb128f4f94b7db3a1f59ef", null ],
+    [ "~GlSwitchableSupport", "class_ogre_1_1_gl_switchable_support.html#a52b21946be91143340e8355767792285", null ],
+    [ "addConfig", "class_ogre_1_1_gl_switchable_support.html#adf3d5b0d912e9d95fddab3ea05d25d46", null ],
+    [ "checkExtension", "class_ogre_1_1_gl_switchable_support.html#a4f53bfb02b1f21018d2902d466c1208c", null ],
+    [ "createWindow", "class_ogre_1_1_gl_switchable_support.html#a0677b5aab097a5f5efcf26c08d524dba", null ],
+    [ "findSelectedInterfaceIdx", "class_ogre_1_1_gl_switchable_support.html#a2f96f02fe46ba77deca0d14899e437b5", null ],
+    [ "getConfigOptions", "class_ogre_1_1_gl_switchable_support.html#ae99ff002cd9edfae3619504dac70493f", null ],
+    [ "getDisplayMonitorCount", "class_ogre_1_1_gl_switchable_support.html#a00f443e800891f54ac1176072e99e3a5", null ],
+    [ "getGLVendor", "class_ogre_1_1_gl_switchable_support.html#ae56742202566551d343919dcc46f4db8", null ],
+    [ "getGLVersion", "class_ogre_1_1_gl_switchable_support.html#a7da3a67e85b18684378b499e0a93c69c", null ],
+    [ "getNumPriorityConfigOptions", "class_ogre_1_1_gl_switchable_support.html#abf6713a1110096e2791d99504e826126", null ],
+    [ "getPriorityConfigOption", "class_ogre_1_1_gl_switchable_support.html#a76582879652d1ab9fa571b5c10dbedc1", null ],
+    [ "getProcAddress", "class_ogre_1_1_gl_switchable_support.html#a24ea882b5da0cafa3b630e180c8c5341", null ],
+    [ "getShaderCachePath", "class_ogre_1_1_gl_switchable_support.html#ac96c7ea7fad6cb24f019f8ab7da2c7cb", null ],
+    [ "getShaderLibraryPath", "class_ogre_1_1_gl_switchable_support.html#a4c99eb385087bc6462593ae2425494a6", null ],
+    [ "hasMinGLVersion", "class_ogre_1_1_gl_switchable_support.html#a1967867822fc80e81590ac9be066440b", null ],
+    [ "initialiseExtensions", "class_ogre_1_1_gl_switchable_support.html#a8954a5a970c650fa6fd97e73f3428ef6", null ],
+    [ "newWindow", "class_ogre_1_1_gl_switchable_support.html#acd9e19e009c8ed4b8773f7c8fc80d958", null ],
+    [ "setConfigOption", "class_ogre_1_1_gl_switchable_support.html#a47fa13c98e5e46feae6d1e2c8b2ced31", null ],
+    [ "setShaderCachePath", "class_ogre_1_1_gl_switchable_support.html#afc5a8ba353c6479ec2fab128cf736c90", null ],
+    [ "setShaderLibraryPath", "class_ogre_1_1_gl_switchable_support.html#aa59e93bc2da16cb9b03d48c1cc90b444", null ],
+    [ "start", "class_ogre_1_1_gl_switchable_support.html#a74eea3fbd9ea068ff6dd4c7b2a39256c", null ],
+    [ "stop", "class_ogre_1_1_gl_switchable_support.html#abdbadd4a253b4a0dee4333e99919f808", null ],
+    [ "validateConfig", "class_ogre_1_1_gl_switchable_support.html#ae881dcd27bfb2bd3615678020f4fdc5a", null ]
+];

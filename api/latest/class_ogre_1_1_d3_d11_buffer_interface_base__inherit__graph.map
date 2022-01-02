@@ -1,0 +1,7 @@
+<map id="Ogre::D3D11BufferInterfaceBase" name="Ogre::D3D11BufferInterfaceBase">
+<area shape="rect" id="node1" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="103,80,314,107"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_buffer_interface.html" title="For D3D11, most (if not all) buffers, can be treated with the same code." alt="" coords="5,155,185,181"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_compat_buffer_interface.html" title="In D3D11, const buffers can&#39;t be bound by offset." alt="" coords="209,155,435,181"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_buffer_interface.html" title="Most (if not all) buffers, can be treated with the same code." alt="" coords="43,5,185,32"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_d3_d11_device_resource.html" title="Represents a Direct3D rendering resource." alt="" coords="209,5,400,32"/>
+</map>

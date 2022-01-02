@@ -1,0 +1,19 @@
+<map id="Ogre::CbBase" name="Ogre::CbBase">
+<area shape="rect" id="node1" title=" " alt="" coords="5,309,108,336"/>
+<area shape="rect" id="node2" href="$struct_ogre_1_1_cb_draw_call.html" title=" " alt="" coords="187,31,311,57"/>
+<area shape="rect" id="node5" href="$struct_ogre_1_1_cb_indirect_buffer.html" title=" " alt="" coords="175,81,324,108"/>
+<area shape="rect" id="node6" href="$struct_ogre_1_1_cb_low_level_material.html" title=" " alt="" coords="162,132,337,159"/>
+<area shape="rect" id="node7" href="$struct_ogre_1_1_cb_pipeline_state_object.html" title=" " alt="" coords="156,183,343,209"/>
+<area shape="rect" id="node8" href="$struct_ogre_1_1_cb_samplers.html" title=" " alt="" coords="186,233,313,260"/>
+<area shape="rect" id="node9" href="$struct_ogre_1_1_cb_shader_buffer.html" title=" " alt="" coords="176,284,323,311"/>
+<area shape="rect" id="node10" href="$struct_ogre_1_1_cb_texture.html" title=" " alt="" coords="192,335,307,361"/>
+<area shape="rect" id="node11" href="$struct_ogre_1_1_cb_textures.html" title=" " alt="" coords="188,385,311,412"/>
+<area shape="rect" id="node12" href="$struct_ogre_1_1_cb_vao.html" title=" " alt="" coords="202,436,297,463"/>
+<area shape="rect" id="node13" href="$struct_ogre_1_1v1_1_1_cb_draw_call.html" title=" " alt="" coords="177,487,321,513"/>
+<area shape="rect" id="node16" href="$struct_ogre_1_1v1_1_1_cb_render_op.html" title=" " alt="" coords="174,537,325,564"/>
+<area shape="rect" id="node17" href="$struct_ogre_1_1v1_1_1_cb_start_v1_legacy_rendering.html" title=" " alt="" coords="160,589,339,630"/>
+<area shape="rect" id="node3" href="$struct_ogre_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="401,5,570,32"/>
+<area shape="rect" id="node4" href="$struct_ogre_1_1_cb_draw_call_strip.html" title=" " alt="" coords="410,56,561,83"/>
+<area shape="rect" id="node14" href="$struct_ogre_1_1v1_1_1_cb_draw_call_indexed.html" title=" " alt="" coords="391,461,580,488"/>
+<area shape="rect" id="node15" href="$struct_ogre_1_1v1_1_1_cb_draw_call_strip.html" title=" " alt="" coords="400,512,571,539"/>
+</map>

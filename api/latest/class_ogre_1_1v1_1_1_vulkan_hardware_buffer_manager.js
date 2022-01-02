@@ -1,0 +1,38 @@
+var class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager =
+[
+    [ "BufferLicenseType", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eb", [
+      [ "BLT_MANUAL_RELEASE", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31ebaefbef8f3135135145a860b8647faba4c", null ],
+      [ "BLT_AUTOMATIC_RELEASE", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a73af0e384fffafd30ec13438507d31eba2b12eec76abb4c56344b6c6ff1cdb65f", null ]
+    ] ],
+    [ "VulkanHardwareBufferManager", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#af1c8406616ebc9d02c0c3f5620d5f161", null ],
+    [ "~VulkanHardwareBufferManager", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a3b3d0fbf60364e75860bc1a4b486680a", null ],
+    [ "_forceReleaseBufferCopies", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a704f13dfbb251f877235107f05bd7658", null ],
+    [ "_forceReleaseBufferCopies", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#aceaae052b526bb9949439e6e8b0c7807", null ],
+    [ "_freeUnusedBufferCopies", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a75e51104afd032ec36b7174540ccc7bb", null ],
+    [ "_notifyDeviceStalled", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#aa1e778e0e6f68ccabc64690c8e5f95a7", null ],
+    [ "_notifyIndexBufferDestroyed", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#affc9ded1625ecbd07556ba24a15b6429", null ],
+    [ "_notifyVertexBufferDestroyed", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#ab3fc128d148ce3954e184a505199e0d2", null ],
+    [ "_releaseBufferCopies", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a5985f14c02e9045bbb6cc88c99c86d5f", null ],
+    [ "allocateVertexBufferCopy", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a4290b1d29059b40215b0833ce7a54d53", null ],
+    [ "createIndexBuffer", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a4227ab96dd7e88be580a4c73a89e8bae", null ],
+    [ "createVertexBuffer", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a4b8fb4c4d0794a796c846fa41389f117", null ],
+    [ "createVertexBufferBinding", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a6b24559242d55d724b58310db24d68eb", null ],
+    [ "createVertexDeclaration", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a69f191c7c974672474c846fccfb95508", null ],
+    [ "destroyVertexBufferBinding", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a36c38ab3d9eb1fbc6c4e8e14618e7582", null ],
+    [ "destroyVertexDeclaration", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a42dbc0c949a4c097717e48590c02aa2c", null ],
+    [ "getSingleton", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a24fd77dd27bec8df69d57a32827e0943", null ],
+    [ "getSingletonPtr", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a25f30589709c3ce24990965aa4efcfa0", null ],
+    [ "operator delete", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
+    [ "operator delete", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#acb46d4b0a597156d9ba5abc39d127792", null ],
+    [ "operator delete", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a1c727e879a260c37b00ce5505fe8e144", null ],
+    [ "operator delete[]", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
+    [ "operator delete[]", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a595ea4c05da8aa987d3800e65d23355d", null ],
+    [ "operator new", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
+    [ "operator new", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
+    [ "operator new", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#ab78a921e54419be677839cdf15d1f0b8", null ],
+    [ "operator new[]", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#afa2943846ba6a2b5824a12857139cf5e", null ],
+    [ "operator new[]", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+    [ "registerVertexBufferSourceAndCopy", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#af9ee8d3dbb9824f9d496192e36bd9d38", null ],
+    [ "releaseVertexBufferCopy", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a7835f603973c41a9602a5dac80edfa08", null ],
+    [ "touchVertexBufferCopy", "class_ogre_1_1v1_1_1_vulkan_hardware_buffer_manager.html#a587815d85f94e9a7bc50e1c0834a7f10", null ]
+];
