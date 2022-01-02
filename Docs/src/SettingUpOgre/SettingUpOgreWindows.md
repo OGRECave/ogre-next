@@ -5,7 +5,6 @@
 # Requirements {#RequirementsWindows}
     * [CMake 3.x](https://cmake.org/download/)
     * Git
-    * What you do **NOT** need: Boost. Don't waste your time.
     * Visual Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend Visual Studio.
     * [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
       Needed if you use older Visual Studio versions and want the D3D11 plugin. Also comes with useful tools.

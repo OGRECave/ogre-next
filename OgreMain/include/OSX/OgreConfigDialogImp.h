@@ -31,7 +31,6 @@ THE SOFTWARE.
 
 #include "../OgrePrerequisites.h"
 
-#include "../OgreConfigOptionMap.h"
 #include "../OgreRenderSystem.h"
 #include "../OgreRoot.h"
 

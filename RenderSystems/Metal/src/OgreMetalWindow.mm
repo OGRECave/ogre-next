@@ -149,7 +149,7 @@ namespace Ogre
         return (float)mMetalLayer.contentsScale;
 #else
         NSScreen *screen = mMetalView.window.screen ?: [NSScreen mainScreen];
-        return screen.backingScaleFactor;
+        return (float)screen.backingScaleFactor;
 #endif
     }
     //-------------------------------------------------------------------------

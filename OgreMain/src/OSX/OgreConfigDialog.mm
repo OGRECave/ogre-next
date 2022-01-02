@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #import "OgreConfigDialog.h"
 
+#import "OgreConfigOptionMap.h"
 #import "OgreLogManager.h"
 
 using namespace Ogre;
