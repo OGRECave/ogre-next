@@ -457,19 +457,18 @@
 	@end
         
     @property( hlms_static_branch_shadow_map_lights )
+	@property( syntax == glsl || syntax == glsles || syntax == glslvk )
+		@insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)];
+		@foreach( hlms_num_shadow_map_lights, n, 1 ) shadowmap[@n] = hlms_shadowmap@n;
+		@end
+	@else
         @insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)] =
-			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-				@insertpiece( TEXTURE2DSHADOW )[@value(hlms_num_shadow_map_lights)](
-			@else
 			{
+			hlms_shadowmap0
+            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n
             @end
-            @foreach( hlms_num_shadow_map_lights, n ) hlms_shadowmap@n ,
-            @end
-            @property( syntax == glsl || syntax == glsles || syntax == glslvk )
-			);
-			@else
 			};
-			@end
+	@end
             
         float2 shadowmap_uv_min[@value(hlms_num_shadow_map_lights)] =
 			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
@@ -477,7 +476,8 @@
 			@else
 			{
 			@end
-            @foreach( hlms_num_shadow_map_lights, n ) hlms_shadowmap@n_uv_min ,
+			hlms_shadowmap0_uv_min
+            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n_uv_min
             @end
             @property( syntax == glsl || syntax == glsles || syntax == glslvk )
 			);
@@ -490,7 +490,8 @@
 			@else
 			{
 			@end
-            @foreach( hlms_num_shadow_map_lights, n ) hlms_shadowmap@n_uv_max ,
+			hlms_shadowmap0_uv_max
+            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n_uv_max
             @end
             @property( syntax == glsl || syntax == glsles || syntax == glslvk )
 			);
@@ -503,7 +504,8 @@
 			@else
 			{
 			@end
-            @foreach( hlms_num_shadow_map_lights, n ) hlms_shadowmap@n_uv_length ,
+			hlms_shadowmap0_uv_length
+            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n_uv_length
             @end
             @property( syntax == glsl || syntax == glsles || syntax == glslvk )
 			);
@@ -550,8 +552,8 @@
 @property( hlms_static_branch_shadow_map_lights )
     int cur_shadow_map = @value(CurrentShadowMap);
     const int sm_point_lights_num = floatBitsToInt( passBuf.num_shadow_map_point_lights );
-    const int sm_point_lights_offset = @value( hlms_lights_directional_non_caster );
-    for( int n=0; n<sm_point_lights_num; ++n )
+    const int sm_point_lights_offset = @value(hlms_lights_directional_non_caster);
+    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( int n=0; n<sm_point_lights_num; ++n )
     {
         int light_idx = sm_point_lights_offset + n;
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
@@ -588,7 +590,7 @@
 @property( hlms_static_branch_shadow_map_lights )
     const int sm_spot_lights_offset = sm_point_lights_offset + sm_point_lights_num;
     const int sm_spot_lights_num = floatBitsToInt( passBuf.num_shadow_map_spot_lights );
-    for( int n=0; n<sm_spot_lights_num; ++n )
+    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( int n=0; n<sm_spot_lights_num; ++n )
     {
         int light_idx = sm_spot_lights_offset + n;
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
