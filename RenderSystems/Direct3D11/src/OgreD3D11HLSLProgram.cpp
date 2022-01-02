@@ -275,7 +275,7 @@ namespace Ogre
 
 #define READ_START( curlist, memberType ) \
     { \
-        uint16 listSize = curlist.size(); \
+        uint16 listSize = (uint16)curlist.size(); \
         cacheMicrocode->read( &listSize, sizeof( uint16 ) ); \
         if( listSize > 0 ) \
         { \
@@ -823,10 +823,11 @@ namespace Ogre
 #    define GET_SIZE_OF_NAMES( result, list, member ) \
         uint32 result = 0; \
         { \
-            for( unsigned i = 0; i < list.size(); i++ ) \
+            const size_t numList = list.size(); \
+            for( size_t i = 0; i < numList; i++ ) \
             { \
                 if( list[i].member != NULL ) \
-                    result += strlen( list[i].member ); \
+                    result += (uint32)strlen( list[i].member ); \
                 result += sizeof( uint16 ); \
             } \
         }
@@ -962,7 +963,7 @@ namespace Ogre
                                  + memberTypeDescSize
                                  + memberTypeNameSize
 
-                                 + sizeof(uint16) +  mInterfaceSlots.size() * sizeof(UINT)
+                                 + sizeof(uint16) +  int( mInterfaceSlots.size() ) * sizeof(UINT)
                                  ;
                 // clang-format on
 
@@ -972,11 +973,12 @@ namespace Ogre
 
 #    define WRITE_START( curlist, memberType ) \
         { \
-            uint16 listSize = curlist.size(); \
+            uint16 listSize = (uint16)curlist.size(); \
             newMicrocode->write( &listSize, sizeof( uint16 ) ); \
             if( listSize > 0 ) \
             { \
-                for( unsigned i = 0; i < curlist.size(); i++ ) \
+                const size_t numList = curlist.size(); \
+                for( size_t i = 0; i < numList; i++ ) \
                 { \
                     memberType &curItem = curlist[i];
 
@@ -1003,13 +1005,13 @@ namespace Ogre
         { \
             uint16 length = 0; \
             if( curItem.member != NULL ) \
-                length = strlen( curItem.member ); \
+                length = (uint16)strlen( curItem.member ); \
             newMicrocode->write( &length, sizeof( uint16 ) ); \
             if( length != 0 ) \
                 newMicrocode->write( curItem.member, length ); \
         }
 
-                uint32 microCodeSize = mMicroCode.size();
+                uint32 microCodeSize = (uint32)mMicroCode.size();
                 newMicrocode->write( &microCodeSize, sizeof( uint32 ) );
                 newMicrocode->write( &mMicroCode[0], microCodeSize );
 
@@ -1027,7 +1029,8 @@ namespace Ogre
                 WRITE_BYTE( Mask )
                 WRITE_BYTE( ReadWriteMask )
                 WRITE_UINT( Stream )
-                // WRITE_ENUM(MinPrecision, D3D_MIN_PRECISION)  // not needed and doesn't exist in June 2010 SDK
+                // WRITE_ENUM(MinPrecision, D3D_MIN_PRECISION)  // not needed and doesn't exist in June
+                // 2010 SDK
                 WRITE_END
 
                 WRITE_START( mD3d11ShaderOutputParameters, D3D11_SIGNATURE_PARAMETER_DESC )
@@ -1039,7 +1042,8 @@ namespace Ogre
                 WRITE_BYTE( Mask )
                 WRITE_BYTE( ReadWriteMask )
                 WRITE_UINT( Stream )
-                // WRITE_ENUM(MinPrecision, D3D_MIN_PRECISION)  // not needed and doesn't exist in June 2010 SDK
+                // WRITE_ENUM(MinPrecision, D3D_MIN_PRECISION)  // not needed and doesn't exist in June
+                // 2010 SDK
                 WRITE_END
 
                 WRITE_START( mD3d11ShaderVariables, D3D11_SHADER_VARIABLE_DESC )
@@ -1120,7 +1124,7 @@ namespace Ogre
                 WRITE_NAME( Name )
                 WRITE_END
 
-                uint16 mInterfaceSlotsSize = mInterfaceSlots.size();
+                uint16 mInterfaceSlotsSize = (uint16)mInterfaceSlots.size();
                 newMicrocode->write( &mInterfaceSlotsSize, sizeof( uint16 ) );
                 if( mInterfaceSlotsSize > 0 )
                 {
@@ -1344,7 +1348,7 @@ namespace Ogre
         for( unsigned int i = 0; i < mD3d11ShaderVariableSubparts.size(); i++ )
         {
             GpuConstantDefinitionWithName def = mD3d11ShaderVariableSubparts[i];
-            int paramIndex = def.logicalIndex;
+            const size_t paramIndex = def.logicalIndex;
             if( def.isFloat() )
             {
                 def.physicalIndex = mFloatLogicalToPhysical->bufferSize;
@@ -1820,13 +1824,12 @@ namespace Ogre
         mReinterpretingGS = false;
     }
 
-    const D3D11_SIGNATURE_PARAMETER_DESC &D3D11HLSLProgram::getInputParamDesc( unsigned int index ) const
+    const D3D11_SIGNATURE_PARAMETER_DESC &D3D11HLSLProgram::getInputParamDesc( size_t index ) const
     {
         assert( index < mD3d11ShaderInputParameters.size() );
         return mD3d11ShaderInputParameters[index];
     }
-    const D3D11_SIGNATURE_PARAMETER_DESC &D3D11HLSLProgram::getOutputParamDesc(
-        unsigned int index ) const
+    const D3D11_SIGNATURE_PARAMETER_DESC &D3D11HLSLProgram::getOutputParamDesc( size_t index ) const
     {
         assert( index < mD3d11ShaderOutputParameters.size() );
         return mD3d11ShaderOutputParameters[index];
@@ -1857,7 +1860,8 @@ namespace Ogre
                 D3D11_SO_DECLARATION_ENTRY *soDeclarations =
                     new D3D11_SO_DECLARATION_ENTRY[mD3d11ShaderOutputParameters.size()];
                 int totalComp = 0;
-                for( unsigned int i = 0; i < getNumOutputs(); ++i )
+                const size_t numOutputs = getNumOutputs();
+                for( size_t i = 0u; i < numOutputs; ++i )
                 {
                     D3D11_SIGNATURE_PARAMETER_DESC pDesc = getOutputParamDesc( i );
 
@@ -1878,8 +1882,8 @@ namespace Ogre
                 bufferStrides[0] = totalComp * sizeof( float );
                 hr = mDevice->CreateGeometryShaderWithStreamOutput(
                     &mMicroCode[0], mMicroCode.size(), soDeclarations,
-                    mD3d11ShaderOutputParameters.size(), bufferStrides, 1, 0, mDevice.GetClassLinkage(),
-                    mGeometryShader.ReleaseAndGetAddressOf() );
+                    (UINT)mD3d11ShaderOutputParameters.size(), bufferStrides, 1, 0,
+                    mDevice.GetClassLinkage(), mGeometryShader.ReleaseAndGetAddressOf() );
 
                 delete[] soDeclarations;
             }
@@ -2007,18 +2011,19 @@ namespace Ogre
         size_t numShaderInputsFound = 0;
 
         size_t currDesc = 0;
-        size_t uvCount = 0;
-        size_t colourCount = 0;
+        UINT uvCount = 0;
+        UINT colourCount = 0;
 
         D3D11_INPUT_ELEMENT_DESC inputDesc[128];
         ZeroMemory( &inputDesc, sizeof( D3D11_INPUT_ELEMENT_DESC ) * 128 );
 
-        for( size_t i = 0; i < vertexElements.size(); ++i )
+        const size_t numVertexElements = vertexElements.size();
+        for( size_t i = 0u; i < numVertexElements; ++i )
         {
             VertexElement2Vec::const_iterator it = vertexElements[i].begin();
             VertexElement2Vec::const_iterator en = vertexElements[i].end();
 
-            size_t bindAccumOffset = 0;
+            uint32 bindAccumOffset = 0;
 
             while( it != en )
             {
@@ -2034,7 +2039,7 @@ namespace Ogre
                 }
 
                 inputDesc[currDesc].Format = D3D11Mappings::get( it->mType );
-                inputDesc[currDesc].InputSlot = i;
+                inputDesc[currDesc].InputSlot = (UINT)i;
                 inputDesc[currDesc].AlignedByteOffset = bindAccumOffset;
 
                 inputDesc[currDesc].InputSlotClass = it->mInstancingStepRate == 0
@@ -2068,7 +2073,7 @@ namespace Ogre
         inputDesc[currDesc].SemanticName = "DRAWID";
         inputDesc[currDesc].SemanticIndex = 0;
         inputDesc[currDesc].Format = DXGI_FORMAT_R32_UINT;
-        inputDesc[currDesc].InputSlot = vertexElements.size();
+        inputDesc[currDesc].InputSlot = (UINT)vertexElements.size();
         inputDesc[currDesc].AlignedByteOffset = 0;
         inputDesc[currDesc].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
         inputDesc[currDesc].InstanceDataStepRate = 1;
@@ -2120,8 +2125,9 @@ namespace Ogre
 
         if( currDesc > 0u )
         {
-            HRESULT hr = d3dDevice->CreateInputLayout(
-                inputDesc, currDesc, &mMicroCode[0], mMicroCode.size(), d3dInputLayout.GetAddressOf() );
+            HRESULT hr =
+                d3dDevice->CreateInputLayout( inputDesc, (UINT)currDesc, &mMicroCode[0],
+                                              (UINT)mMicroCode.size(), d3dInputLayout.GetAddressOf() );
 
             if( FAILED( hr ) || mDevice.isError() )
             {
@@ -2264,9 +2270,9 @@ namespace Ogre
         return mMicroCode;
     }
     //-----------------------------------------------------------------------------
-    unsigned int D3D11HLSLProgram::getNumInputs() const { return mD3d11ShaderInputParameters.size(); }
+    size_t D3D11HLSLProgram::getNumInputs() const { return mD3d11ShaderInputParameters.size(); }
     //-----------------------------------------------------------------------------
-    unsigned int D3D11HLSLProgram::getNumOutputs() const { return mD3d11ShaderOutputParameters.size(); }
+    size_t D3D11HLSLProgram::getNumOutputs() const { return mD3d11ShaderOutputParameters.size(); }
     //-----------------------------------------------------------------------------
     String D3D11HLSLProgram::getNameForMicrocodeCache()
     {

@@ -367,13 +367,13 @@ namespace Ogre
         void reinterpretGSForStreamOut();
         bool mReinterpretingGS;
 
-        unsigned int getNumInputs() const;
-        unsigned int getNumOutputs() const;
+        size_t getNumInputs() const;
+        size_t getNumOutputs() const;
 
         String getNameForMicrocodeCache();
 
-        const D3D11_SIGNATURE_PARAMETER_DESC &getInputParamDesc( unsigned int index ) const;
-        const D3D11_SIGNATURE_PARAMETER_DESC &getOutputParamDesc( unsigned int index ) const;
+        const D3D11_SIGNATURE_PARAMETER_DESC &getInputParamDesc( size_t index ) const;
+        const D3D11_SIGNATURE_PARAMETER_DESC &getOutputParamDesc( size_t index ) const;
     };
 }  // namespace Ogre
 
