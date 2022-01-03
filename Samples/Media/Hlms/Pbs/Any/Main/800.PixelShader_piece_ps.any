@@ -556,7 +556,7 @@
     int light_idx = @value(hlms_lights_directional_non_caster);
     const int sm_point_lights_num = floatBitsToInt( passBuf.num_shadow_map_point_lights );
     const int sm_point_lights_end = light_idx + sm_point_lights_num;
-    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( ; light_idx<sm_point_lights_end; light_idx++ )
+	for( ; light_idx<sm_point_lights_end; light_idx++ )
     {
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
@@ -592,7 +592,7 @@
 @property( hlms_static_branch_shadow_map_lights )
     const int sm_spot_lights_num = floatBitsToInt( passBuf.num_shadow_map_spot_lights );
     const int sm_spot_lights_end = light_idx + sm_spot_lights_num;
-    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( ; light_idx<sm_spot_lights_end; light_idx++ )
+	for( ; light_idx<sm_spot_lights_end; light_idx++ )
     {
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
