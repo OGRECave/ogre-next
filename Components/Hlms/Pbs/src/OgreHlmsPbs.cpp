@@ -572,7 +572,17 @@ namespace Ogre
             }
         }
 
-        mListener->setupRootLayout( rootLayout, mSetProperties );
+		if (getProperty(HlmsBaseProp::StaticBranchShadowMapLights) > 0)
+		{
+			uint16 numShadowMapTextures = static_cast<uint16>(getProperty(HlmsBaseProp::NumShadowMapTextures));
+			if (numShadowMapTextures > 0)
+			{
+				uint16 shadowMapLocation = static_cast<uint16>(getProperty("texShadowMap0"));
+				rootLayout.addArrayBinding(DescBindingTypes::Texture, RootLayout::ArrayDesc(shadowMapLocation, numShadowMapTextures));
+			}
+		}
+
+		mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache* HlmsPbs::createShaderCacheEntry( uint32 renderableHash,

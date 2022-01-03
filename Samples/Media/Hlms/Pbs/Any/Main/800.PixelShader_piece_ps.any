@@ -458,9 +458,11 @@
         
     @property( hlms_static_branch_shadow_map_lights )
 	@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-		@insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)];
-		@foreach( hlms_num_shadow_map_lights, n, 1 ) shadowmap[@n] = hlms_shadowmap@n;
-		@end
+		int shadowmapIdx[@value(hlms_num_shadow_map_lights)] = int[@value(hlms_num_shadow_map_lights)](
+			@value(hlms_shadowmap0)
+			@foreach( hlms_num_shadow_map_lights, n, 1 ), @value(hlms_shadowmap@n)
+			@end
+		);
 	@else
         @insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)] =
 			{
