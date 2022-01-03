@@ -458,13 +458,13 @@
         
     @property( hlms_static_branch_shadow_map_lights )
 	@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-		int shadowmapIdx[@value(hlms_num_shadow_map_lights)] = int[@value(hlms_num_shadow_map_lights)](
+		const int shadowmapIdx[@value(hlms_num_shadow_map_lights)] = int[@value(hlms_num_shadow_map_lights)](
 			@value(hlms_shadowmap0)
 			@foreach( hlms_num_shadow_map_lights, n, 1 ), @value(hlms_shadowmap@n)
 			@end
 		);
 	@else
-        @insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)] =
+        const @insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)] =
 			{
 			hlms_shadowmap0
             @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n
@@ -472,7 +472,7 @@
 			};
 	@end
             
-        float2 shadowmap_uv_min[@value(hlms_num_shadow_map_lights)] =
+        const float2 shadowmap_uv_min[@value(hlms_num_shadow_map_lights)] =
 			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
 				float2[@value(hlms_num_shadow_map_lights)](
 			@else
@@ -486,7 +486,7 @@
 			@else
 			};
 			@end
-        float2 shadowmap_uv_max[@value(hlms_num_shadow_map_lights)] =
+        const float2 shadowmap_uv_max[@value(hlms_num_shadow_map_lights)] =
 			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
 				float2[@value(hlms_num_shadow_map_lights)](
 			@else
@@ -500,7 +500,7 @@
 			@else
 			};
 			@end
-        float2 shadowmap_uv_length[@value(hlms_num_shadow_map_lights)] =
+        const float2 shadowmap_uv_length[@value(hlms_num_shadow_map_lights)] =
 			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
 				float2[@value(hlms_num_shadow_map_lights)](
 			@else
@@ -553,11 +553,11 @@
 @piece( DoPointLights )
 @property( hlms_static_branch_shadow_map_lights )
     int cur_shadow_map = @value(CurrentShadowMap);
+    int light_idx = @value(hlms_lights_directional_non_caster);
     const int sm_point_lights_num = floatBitsToInt( passBuf.num_shadow_map_point_lights );
-    const int sm_point_lights_offset = @value(hlms_lights_directional_non_caster);
-    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( int n=0; n<sm_point_lights_num; ++n )
+    const int sm_point_lights_end = light_idx + sm_point_lights_num;
+    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( ; light_idx<sm_point_lights_end; light_idx++ )
     {
-        int light_idx = sm_point_lights_offset + n;
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
 		if( fDistance <= light0Buf.lights[light_idx].attenuation.x @insertpiece( andObjLightMaskCmp_light_idx ) )
@@ -590,11 +590,10 @@
 //spotParams[@value(spot_params)].z = falloff
 @piece( DoSpotLights )
 @property( hlms_static_branch_shadow_map_lights )
-    const int sm_spot_lights_offset = sm_point_lights_offset + sm_point_lights_num;
     const int sm_spot_lights_num = floatBitsToInt( passBuf.num_shadow_map_spot_lights );
-    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( int n=0; n<sm_spot_lights_num; ++n )
+    const int sm_spot_lights_end = light_idx + sm_spot_lights_num;
+    @property( syntax == hlsl )[unroll(@value(hlms_lights_spot)-@value(hlms_lights_directional_non_caster))]@end for( ; light_idx<sm_spot_lights_end; light_idx++ )
     {
-        int light_idx = sm_spot_lights_offset + n;
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
 		lightDir *= 1.0 / fDistance;
