@@ -176,8 +176,7 @@
 	/// sampler shadowSampler is declared as constexpr in PixelShader_ps.metal
 	@piece( DeclShadowSamplers )
 		@property( hlms_static_branch_shadow_map_lights )
-			array<@insertpiece( TEXTURE2DSHADOW ), @value(hlms_num_shadow_map_textures)>
-				texShadowMap [[texture(@value(texShadowMap0))]]
+			, array<@insertpiece( TEXTURE2DSHADOW ) , @value(hlms_num_shadow_map_textures)> texShadowMap [[texture(@value(texShadowMap0))]]
 		@else
 			@foreach( hlms_num_shadow_map_textures, n )
 				, @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n [[texture(@value(texShadowMap@n))]]@end
