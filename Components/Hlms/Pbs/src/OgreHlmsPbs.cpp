@@ -1292,11 +1292,18 @@ namespace Ogre
                 texName = "texShadowMap";
                 const size_t baseTexSize = texName.size();
 
+				bool useSMarray = getProperty(HlmsBaseProp::StaticBranchShadowMapLights)>0 && (mShaderProfile == "glsl" || mShaderProfile=="glsles" || mShaderProfile=="glslvk");
+				if(useSMarray)
+					setTextureReg(PixelShader, texName.c_str(), texUnit, numShadowMaps);
+
                 for( int32 i=0; i<numShadowMaps; ++i )
                 {
                     texName.resize( baseTexSize );
                     texName.a( i );   //texShadowMap0
-                    setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+					if (useSMarray)
+						setProperty(texName.c_str(), texUnit++);
+					else
+						setTextureReg( PixelShader, texName.c_str(), texUnit++ );
                 }
             }
             else

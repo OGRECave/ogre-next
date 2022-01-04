@@ -22,7 +22,7 @@
 @end
 
 @foreach( hlms_num_shadow_map_lights, n )
-	@property( hlms_static_branch_shadow_map_lights && syntax == glslvk )
+	@property( hlms_static_branch_shadow_map_lights && ( syntax == glsl || syntax == glsles || syntax == glslvk ) )
 	#define hlms_shadowmap@n texShadowMap[@value( hlms_shadowmap@n )]
 	@else
 	#define hlms_shadowmap@n texShadowMap@value( hlms_shadowmap@n )
@@ -123,7 +123,7 @@
 	@end
 	@piece( DeclShadowSamplers )
 		@property( hlms_static_branch_shadow_map_lights )
-			layout( ogre_t@value(texShadowMap0) ) uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap[@value(hlms_num_shadow_map_textures)];
+			uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap[@value(hlms_num_shadow_map_textures)];
 		@else
 		@foreach( hlms_num_shadow_map_textures, n )
 			uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n;@end

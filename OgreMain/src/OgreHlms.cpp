@@ -2654,7 +2654,7 @@ namespace Ogre
                 setProperty( HlmsBaseProp::NumShadowMapLights, numShadowMapLights );
                 setProperty( HlmsBaseProp::NumShadowMapTextures, contiguousShadowMapTex.size() );
 
-                useStaticBranchShadowMapLights = getMaxShadowMapLights()>0 && numShadowMapLights>numPssmSplits && (mShaderProfile=="metal" || mShaderProfile=="hlsl" || mShaderProfile=="glslvk");
+				useStaticBranchShadowMapLights = getMaxShadowMapLights() > 0 && numShadowMapLights > numPssmSplits;
                 if(useStaticBranchShadowMapLights)
                     setProperty( HlmsBaseProp::StaticBranchShadowMapLights, 1 );
                 mRealShadowMapPointLights = 0u;
