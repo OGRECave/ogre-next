@@ -2689,8 +2689,9 @@ namespace Ogre
                         setProperty( propName.c_str(),
                                      shadowNode->getIndexToContiguousShadowMapTex( shadowMapTexIdx ) );
 
-                        if( shadowTexDef->uvOffset != Vector2::ZERO ||
-                            shadowTexDef->uvLength != Vector2::UNIT_SCALE )
+                        if( ( shadowTexDef->uvOffset != Vector2::ZERO ||
+                              shadowTexDef->uvLength != Vector2::UNIT_SCALE ) ||
+                            useStaticBranchShadowMapLights )
                         {
                             propName.resize( basePropSize );
                             propName.a( "_uvs_fulltex" );
