@@ -456,65 +456,32 @@
 		float spotCosAngle;
 	@end
         
-    @property( hlms_static_branch_shadow_map_lights )
-	@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-		const int shadowmapIdx[@value(hlms_num_shadow_map_lights)] = int[@value(hlms_num_shadow_map_lights)](
-			@value(hlms_shadowmap0)
-			@foreach( hlms_num_shadow_map_lights, n, 1 ), @value(hlms_shadowmap@n)
-			@end
-		);
-	@else
-        const @insertpiece( TEXTURE2DSHADOW ) shadowmap[@value(hlms_num_shadow_map_lights)] =
-			{
-			hlms_shadowmap0
-            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n
-            @end
-			};
-	@end
+	@property( hlms_static_branch_shadow_map_lights )
+		const int shadowmapIdx[@value(hlms_num_shadow_map_lights)] =
+			OGRE_ARRAY_START( int )
+				@value(hlms_shadowmap0)
+				@foreach( hlms_num_shadow_map_lights, n, 1 )
+				, @value(hlms_shadowmap@n)@end
+			OGRE_ARRAY_END;
             
         const float2 shadowmap_uv_min[@value(hlms_num_shadow_map_lights)] =
-			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-				float2[@value(hlms_num_shadow_map_lights)](
-			@else
-			{
-			@end
-			hlms_shadowmap0_uv_min
-            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n_uv_min
-            @end
-            @property( syntax == glsl || syntax == glsles || syntax == glslvk )
-			);
-			@else
-			};
-			@end
+			OGRE_ARRAY_START( float2 )
+					hlms_shadowmap0_uv_min
+					@foreach( hlms_num_shadow_map_lights, n, 1 )
+					, hlms_shadowmap@n_uv_min@end
+			OGRE_ARRAY_END;
         const float2 shadowmap_uv_max[@value(hlms_num_shadow_map_lights)] =
-			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-				float2[@value(hlms_num_shadow_map_lights)](
-			@else
-			{
-			@end
-			hlms_shadowmap0_uv_max
-            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n_uv_max
-            @end
-            @property( syntax == glsl || syntax == glsles || syntax == glslvk )
-			);
-			@else
-			};
-			@end
+			OGRE_ARRAY_START( float2 )
+				hlms_shadowmap0_uv_max
+				@foreach( hlms_num_shadow_map_lights, n, 1 )
+				, hlms_shadowmap@n_uv_max@end
+			OGRE_ARRAY_END;
         const float2 shadowmap_uv_length[@value(hlms_num_shadow_map_lights)] =
-			@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-				float2[@value(hlms_num_shadow_map_lights)](
-			@else
-			{
-			@end
-			hlms_shadowmap0_uv_length
-            @foreach( hlms_num_shadow_map_lights, n, 1 ), hlms_shadowmap@n_uv_length
-            @end
-            @property( syntax == glsl || syntax == glsles || syntax == glslvk )
-			);
-			@else
-			};
-			@end
-            
+			OGRE_ARRAY_START( float2 )
+				hlms_shadowmap0_uv_length
+				@foreach( hlms_num_shadow_map_lights, n, 1 )
+				, hlms_shadowmap@n_uv_length@end
+			OGRE_ARRAY_END;
     @end
     
 	@property( needs_refl_dir )

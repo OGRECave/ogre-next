@@ -22,10 +22,10 @@
 @end
 
 @foreach( hlms_num_shadow_map_lights, n )
-	@property( hlms_static_branch_shadow_map_lights && ( syntax == glsl || syntax == glsles || syntax == glslvk ) )
-	#define hlms_shadowmap@n texShadowMap[@value( hlms_shadowmap@n )]
+	@property( hlms_static_branch_shadow_map_lights )
+		#define hlms_shadowmap@n texShadowMap[@value( hlms_shadowmap@n )]
 	@else
-	#define hlms_shadowmap@n texShadowMap@value( hlms_shadowmap@n )
+		#define hlms_shadowmap@n texShadowMap@value( hlms_shadowmap@n )
 	@end
 	#define hlms_shadowmap@n_uv_min float2( @value( hlms_shadowmap@n_uv_min_x_int ).@value( hlms_shadowmap@n_uv_min_x_fract ), @value( hlms_shadowmap@n_uv_min_y_int ).@value( hlms_shadowmap@n_uv_min_y_fract ) )
 	#define hlms_shadowmap@n_uv_max float2( @value( hlms_shadowmap@n_uv_max_x_int ).@value( hlms_shadowmap@n_uv_max_x_fract ), @value( hlms_shadowmap@n_uv_max_y_int ).@value( hlms_shadowmap@n_uv_max_y_fract ) )
@@ -143,8 +143,8 @@
 		@property( hlms_static_branch_shadow_map_lights )
 			layout( ogre_t@value(texShadowMap0) ) uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap[@value(hlms_num_shadow_map_textures)];
 		@else
-		@foreach( hlms_num_shadow_map_textures, n )
-			layout( ogre_t@value(texShadowMap@n) ) uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n;@end
+			@foreach( hlms_num_shadow_map_textures, n )
+				layout( ogre_t@value(texShadowMap@n) ) uniform @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n;@end
 		@end
 	@end
 @end
@@ -158,8 +158,12 @@
 	@piece( SamplerShadow )@insertpiece( SAMPLERSTATESHADOW ) shadowSampler, @end
 	@piece( DeclShadowSamplers )
 		@insertpiece( SAMPLERSTATESHADOW ) shadowSampler: register(s@value(texShadowMap0));
-		@foreach( hlms_num_shadow_map_textures, n )
-			Texture2D<float> texShadowMap@n				: register(t@value(texShadowMap@n));@end
+		@property( hlms_static_branch_shadow_map_lights )
+			Texture2D<float> texShadowMap[@value(hlms_num_shadow_map_textures)] : register(t@value(texShadowMap0));
+		@else
+			@foreach( hlms_num_shadow_map_textures, n )
+				Texture2D<float> texShadowMap@n				: register(t@value(texShadowMap@n));@end
+		@end
 	@end
 @end
 @property( syntax == metal )
@@ -171,8 +175,13 @@
 	@piece( SamplerShadow )sampler shadowSampler, @end
 	/// sampler shadowSampler is declared as constexpr in PixelShader_ps.metal
 	@piece( DeclShadowSamplers )
-		@foreach( hlms_num_shadow_map_textures, n )
-			, @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n [[texture(@value(texShadowMap@n))]]@end
+		@property( hlms_static_branch_shadow_map_lights )
+			array<@insertpiece( TEXTURE2DSHADOW ), @value(hlms_num_shadow_map_textures)>
+				texShadowMap [[texture(@value(texShadowMap0))]]
+		@else
+			@foreach( hlms_num_shadow_map_textures, n )
+				, @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n [[texture(@value(texShadowMap@n))]]@end
+		@end
 	@end
 @end
 
@@ -540,11 +549,7 @@
 	@piece( DarkenWithShadowFirstLight )* fShadow@end
     
 @property( hlms_static_branch_shadow_map_lights )
-	@property( syntax == glsl || syntax == glsles || syntax == glslvk )
-		@piece( getShadowMap_cur_shadow_map )texShadowMap[shadowmapIdx[cur_shadow_map]]@end
-	@else
-		@piece( getShadowMap_cur_shadow_map )shadowmap[cur_shadow_map]@end
-	@end
+	@piece( getShadowMap_cur_shadow_map )texShadowMap[shadowmapIdx[cur_shadow_map]]@end
 
 	@piece( DarkenWithShadow_cur_shadow_map )
 		* getShadow( @insertpiece( getShadowMap_cur_shadow_map ), @insertpiece( UseSamplerShadow )
