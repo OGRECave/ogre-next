@@ -1875,8 +1875,8 @@ namespace Ogre
             }
             if (isStaticBranchShadowMapLights)
             {
-                //float num_shadow_map_point_lights;
-                //float num_shadow_map_spot_lights;
+                //float numShadowMapPointLights;
+                //float numShadowMapSpotLights;
                 mapSize += 4 + 4;
             }
 
@@ -2336,8 +2336,8 @@ namespace Ogre
             }
             if (isStaticBranchShadowMapLights)
             {
-                //float num_shadow_map_point_lights;
-                //float num_shadow_map_spot_lights;
+                //float numShadowMapPointLights;
+                //float numShadowMapSpotLights;
                 *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = mRealShadowMapPointLights;
                 passBufferPtr++;
                 *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = mRealShadowMapSpotLights;

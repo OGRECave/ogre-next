@@ -554,7 +554,7 @@
 @property( hlms_static_branch_shadow_map_lights )
     int cur_shadow_map = @value(CurrentShadowMap);
     int light_idx = @value(hlms_lights_directional_non_caster);
-    const int sm_point_lights_num = floatBitsToInt( passBuf.num_shadow_map_point_lights );
+	const int sm_point_lights_num = floatBitsToInt( passBuf.numShadowMapPointLights );
     const int sm_point_lights_end = light_idx + sm_point_lights_num;
 	for( ; light_idx<sm_point_lights_end; light_idx++ )
     {
@@ -590,7 +590,7 @@
 //spotParams[@value(spot_params)].z = falloff
 @piece( DoSpotLights )
 @property( hlms_static_branch_shadow_map_lights )
-    const int sm_spot_lights_num = floatBitsToInt( passBuf.num_shadow_map_spot_lights );
+	const int sm_spot_lights_num = floatBitsToInt( passBuf.numShadowMapSpotLights );
     const int sm_spot_lights_end = light_idx + sm_spot_lights_num;
 	for( ; light_idx<sm_spot_lights_end; light_idx++ )
     {
