@@ -72,18 +72,28 @@ namespace Demo
             shadowParam.resolution[0].x = 2048u;
             shadowParam.resolution[0].y = 2048u;
             shadowParam.atlasStart[0].x = 0u;
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             shadowParam.atlasStart[0].y = 0u;
+#else
+            shadowParam.atlasStart[0].y =  2048u + 1024u;
+#endif
 
             shadowParam.supportedLightTypes = 0u;
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
+#endif
             shadowParam.addLightType( Ogre::Light::LT_POINT );
             shadowParam.addLightType( Ogre::Light::LT_SPOTLIGHT );
             shadowParams.push_back( shadowParam );
 
-            //Third light, directional, spot or point
+            // Third light, directional, spot or point
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             shadowParam.atlasStart[0].y = 2048u;
+#else
+            shadowParam.atlasStart[0].y = 2048u + 1024u + 2048u;
+#endif
             shadowParams.push_back( shadowParam );
-            
+
 #ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             //Fourth light
             shadowParam.atlasStart[0].x = 2048u;
