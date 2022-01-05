@@ -521,18 +521,32 @@ namespace Ogre
         void setMaxNonCasterDirectionalLights( uint16 maxLights );
         uint16 getMaxNonCasterDirectionalLights(void) const     { return mNumLightsLimit; }
 
-        /** By default shadow-caster spot and point lights are hardcoded into shaders. This means that if you
-            have 8 spot/point lights and then you add a 9th one, a whole new set of shaders
-            will be created. Even more if you have a combination of 3 spot and 5 point lights and the combination has changed to 4 spot and 4 point lights then you'll get the next set of shaders
+        /** By default shadow-caster spot and point lights are hardcoded into shaders.
+
+            This means that if you have 8 spot/point lights and then you add a 9th one,
+            a whole new set of shaders will be created.
+            Even more if you have a combination of 3 spot and 5 point lights and the combination
+            has changed to 4 spot and 4 point lights then you'll get the next set of shaders
 
             This setting allows you to tremendously reduce the amount of shader permutations
             by forcing Ogre to switching to static branching with an upper limit to the max
             number of shadow-casting spot or point lights.
 
-            @see    setAreaLightForwardSettings
+            See    Hlms::setAreaLightForwardSettings
+        @remarks
+            All point and spot lights must share the same hlms_shadowmap atlas
+
+            This is mostly an D3D11 / HLSL SM 5.0 restriction
+            (https://github.com/OGRECave/ogre-next/pull/255) but it may also help with
+            performance in other APIs.
+
+            If multiple atlas support is needed, using Texture2DArrays may be a good solution,
+            although it is currently untested and may need additional fixes to get it working
+
         @param maxShadowMapLights
-            Maximum number of shadow-caster spot and point lights. 0 to allow unlimited number of lights,
-            at the cost of shader recompilations when spot or point  lights are added or removed or their combination are changed.
+            Maximum number of shadow-caster spot and point lights.
+            0 to allow unlimited number of lights, at the cost of shader recompilations
+            when spot or point  lights are added or removed or their combination are changed.
 
             Default value is 0.
          */

@@ -572,16 +572,6 @@ namespace Ogre
             }
         }
 
-		if (getProperty(HlmsBaseProp::StaticBranchShadowMapLights) > 0)
-		{
-			uint16 numShadowMapTextures = static_cast<uint16>(getProperty(HlmsBaseProp::NumShadowMapTextures));
-			if (numShadowMapTextures > 0)
-			{
-				uint16 shadowMapLocation = static_cast<uint16>(getProperty("texShadowMap0"));
-				rootLayout.addArrayBinding(DescBindingTypes::Texture, RootLayout::ArrayDesc(shadowMapLocation, numShadowMapTextures));
-			}
-		}
-
 		mListener->setupRootLayout( rootLayout, mSetProperties );
     }
     //-----------------------------------------------------------------------------------
@@ -1292,18 +1282,11 @@ namespace Ogre
                 texName = "texShadowMap";
                 const size_t baseTexSize = texName.size();
 
-				bool useSMarray = getProperty(HlmsBaseProp::StaticBranchShadowMapLights)>0 && (mShaderProfile == "glsl" || mShaderProfile=="glsles" || mShaderProfile=="glslvk");
-				if(useSMarray)
-					setTextureReg(PixelShader, texName.c_str(), texUnit, numShadowMaps);
-
                 for( int32 i=0; i<numShadowMaps; ++i )
                 {
                     texName.resize( baseTexSize );
                     texName.a( i );   //texShadowMap0
-					if (useSMarray)
-						setProperty(texName.c_str(), texUnit++);
-					else
-						setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+                    setTextureReg( PixelShader, texName.c_str(), texUnit++ );
                 }
             }
             else
@@ -3646,11 +3629,14 @@ namespace Ogre
         mCurrentPassBuffer  = 0;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setMaxShadowMapLights ( uint16 maxShadowMapLights )
+    void HlmsPbs::setMaxShadowMapLights( uint16 maxShadowMapLights )
     {
-        if(maxShadowMapLights>0)
-            setShadowReceiversInPixelShader(true); //make sure we calculate light positions in pixel shaders
-        Hlms::setMaxShadowMapLights(maxShadowMapLights);
+        if( maxShadowMapLights > 0 )
+        {
+            // Make sure we calculate light positions in pixel shaders
+            setShadowReceiversInPixelShader( true );
+        }
+        Hlms::setMaxShadowMapLights( maxShadowMapLights );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::resetIblSpecMipmap( uint8 numMipmaps )

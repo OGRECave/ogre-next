@@ -276,8 +276,8 @@ namespace Ogre
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
         virtual void frameEnded(void);
 
-        virtual void setMaxShadowMapLights ( uint16 maxShadowMapLights );
-        
+        virtual void setMaxShadowMapLights( uint16 maxShadowMapLights );
+
         /** By default we see the reflection textures' mipmaps and store the largest one we found.
             By calling resetIblSpecMipmap; you can reset this process thus if a reflection texture
             with a large number of mipmaps was removed, these textures can be reevaluated
