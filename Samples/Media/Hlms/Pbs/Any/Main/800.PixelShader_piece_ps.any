@@ -457,13 +457,6 @@
 	@end
         
 	@property( hlms_static_branch_shadow_map_lights )
-		const int shadowmapIdx[@value(hlms_num_shadow_map_lights)] =
-			OGRE_ARRAY_START( int )
-				@value(hlms_shadowmap0)
-				@foreach( hlms_num_shadow_map_lights, n, 1 )
-				, @value(hlms_shadowmap@n)@end
-			OGRE_ARRAY_END;
-            
         const float2 shadowmap_uv_min[@value(hlms_num_shadow_map_lights)] =
 			OGRE_ARRAY_START( float2 )
 					hlms_shadowmap0_uv_min
