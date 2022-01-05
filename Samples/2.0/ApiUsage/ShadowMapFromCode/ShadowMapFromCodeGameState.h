@@ -8,13 +8,19 @@
 
 #include "TutorialGameState.h"
 
+#define USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS 1
+
 namespace Demo
 {
     class ShadowMapFromCodeGameState : public TutorialGameState
     {
         Ogre::SceneNode *mSceneNode[16];
 
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+        Ogre::SceneNode *mLightNodes[5];
+#else
         Ogre::SceneNode *mLightNodes[3];
+#endif
 
         bool mAnimateObjects;
 

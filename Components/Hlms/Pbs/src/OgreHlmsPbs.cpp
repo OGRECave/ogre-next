@@ -1732,6 +1732,8 @@ namespace Ogre
 
         bool isPssmBlend = getProperty( HlmsBaseProp::PssmBlend ) != 0;
         bool isPssmFade = getProperty( HlmsBaseProp::PssmFade ) != 0;
+        bool isStaticBranchShadowMapLights =
+            getProperty( HlmsBaseProp::StaticBranchShadowMapLights ) != 0;
 
         bool isShadowCastingPointLight = false;
 
@@ -1851,6 +1853,12 @@ namespace Ogre
             {
                 // float pssmFadePoint.
                 mapSize += 4;
+            }
+            if( isStaticBranchShadowMapLights )
+            {
+                // float numShadowMapPointLights;
+                // float numShadowMapSpotLights;
+                mapSize += 4 + 4;
             }
 
             mapSize = alignToNextMultiple<size_t>( mapSize, 16 );
@@ -2300,6 +2308,16 @@ namespace Ogre
 
                 // float pssmFadePoint
                 *passBufferPtr++ = *shadowNode->getPssmFade( 0 );
+            }
+            if( isStaticBranchShadowMapLights )
+            {
+                // float numShadowMapPointLights;
+                // float numShadowMapSpotLights;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) = mRealShadowMapPointLights;
+                passBufferPtr++;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) = mRealShadowMapSpotLights;
+                passBufferPtr++;
+                numPssmBlendsAndFade += 2;
             }
 
             passBufferPtr += alignToNextMultiple<size_t>( numPssmSplits + numPssmBlendsAndFade, 4 ) -
@@ -3601,6 +3619,16 @@ namespace Ogre
     {
         HlmsBufferManager::frameEnded();
         mCurrentPassBuffer = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setMaxShadowMapLights( uint16 maxShadowMapLights )
+    {
+        if( maxShadowMapLights > 0 )
+        {
+            // Make sure we calculate light positions in pixel shaders
+            setShadowReceiversInPixelShader( true );
+        }
+        Hlms::setMaxShadowMapLights( maxShadowMapLights );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::resetIblSpecMipmap( uint8 numMipmaps )

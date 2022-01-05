@@ -139,6 +139,34 @@ namespace Demo
 
         mLightNodes[2] = lightNode;
 
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+        light = sceneManager->createLight();
+        lightNode = rootNode->createChildSceneNode();
+        lightNode->attachObject( light );
+        light->setDiffuseColour( 0.8f, 0.0f, 0.0f );  // Red
+        light->setSpecularColour( 0.8f, 0.0f, 0.0f );
+        light->setPowerScale( Ogre::Math::PI );
+        light->setType( Ogre::Light::LT_POINT );
+        lightNode->setPosition( -10.0f, -10.0f, 10.0f );
+        // light->setDirection( Ogre::Vector3( 1, -1, -1 ).normalisedCopy() );
+        light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
+
+        mLightNodes[3] = lightNode;
+
+        light = sceneManager->createLight();
+        lightNode = rootNode->createChildSceneNode();
+        lightNode->attachObject( light );
+        light->setDiffuseColour( 0.0f, 0.8f, 0.0f );  // Green
+        light->setSpecularColour( 0.0f, 0.8f, 0.0f );
+        light->setPowerScale( Ogre::Math::PI );
+        light->setType( Ogre::Light::LT_POINT );
+        lightNode->setPosition( -10.0f, 10.0f, -10.0f );
+        // light->setDirection( Ogre::Vector3( -1, -1, 1 ).normalisedCopy() );
+        light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
+
+        mLightNodes[4] = lightNode;
+#endif
+
         mCameraController = new CameraController( mGraphicsSystem, false );
 
         createShadowMapDebugOverlays();

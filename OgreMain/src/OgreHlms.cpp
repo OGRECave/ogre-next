@@ -132,6 +132,8 @@ namespace Ogre
     const IdString HlmsBaseProp::DualParaboloidMapping = IdString( "hlms_dual_paraboloid_mapping" );
     const IdString HlmsBaseProp::InstancedStereo = IdString( "hlms_instanced_stereo" );
     const IdString HlmsBaseProp::StaticBranchLights = IdString( "hlms_static_branch_lights" );
+    const IdString HlmsBaseProp::StaticBranchShadowMapLights =
+        IdString( "hlms_static_branch_shadow_map_lights" );
     const IdString HlmsBaseProp::NumShadowMapLights = IdString( "hlms_num_shadow_map_lights" );
     const IdString HlmsBaseProp::NumShadowMapTextures = IdString( "hlms_num_shadow_map_textures" );
     const IdString HlmsBaseProp::PssmSplits = IdString( "hlms_pssm_splits" );
@@ -250,6 +252,7 @@ namespace Ogre
         mHlmsManager( 0 ),
         mLightGatheringMode( LightGatherForward ),
         mNumLightsLimit( 0u ),
+        mNumShadowMapLightsLimit( 0u ),
         mNumAreaApproxLightsLimit( 1u ),
         mNumAreaLtcLightsLimit( 1u ),
         mAreaLightsGlobalLightListStart( 0u ),
@@ -1679,6 +1682,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::setMaxNonCasterDirectionalLights( uint16 maxLights ) { mNumLightsLimit = maxLights; }
     //-----------------------------------------------------------------------------------
+    void Hlms::setMaxShadowMapLights( uint16 maxShadowMapLights )
+    {
+        mNumShadowMapLightsLimit = maxShadowMapLights;
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit )
     {
         mNumAreaApproxLightsLimit = areaLightsApproxLimit;
@@ -2600,6 +2608,7 @@ namespace Ogre
         {
             size_t numShadowMapLights = 0u;
             size_t numPssmSplits = 0;
+            bool useStaticBranchShadowMapLights = false;
 
             if( shadowNode )
             {
@@ -2629,6 +2638,13 @@ namespace Ogre
                              static_cast<int32>( numShadowMapLights ) );
                 setProperty( HlmsBaseProp::NumShadowMapTextures,
                              static_cast<int32>( contiguousShadowMapTex.size() ) );
+
+                useStaticBranchShadowMapLights =
+                    getMaxShadowMapLights() > 0u && numShadowMapLights > numPssmSplits;
+                if( useStaticBranchShadowMapLights )
+                    setProperty( HlmsBaseProp::StaticBranchShadowMapLights, 1 );
+                mRealShadowMapPointLights = 0u;
+                mRealShadowMapSpotLights = 0u;
 
                 {
                     const Ogre::CompositorShadowNodeDef *shadowNodeDef = shadowNode->getDefinition();
@@ -2660,8 +2676,9 @@ namespace Ogre
                                      static_cast<int32>( shadowNode->getIndexToContiguousShadowMapTex(
                                          shadowMapTexIdx ) ) );
 
-                        if( shadowTexDef->uvOffset != Vector2::ZERO ||
-                            shadowTexDef->uvLength != Vector2::UNIT_SCALE )
+                        if( ( shadowTexDef->uvOffset != Vector2::ZERO ||
+                              shadowTexDef->uvLength != Vector2::UNIT_SCALE ) ||
+                            useStaticBranchShadowMapLights )
                         {
                             propName.resize( basePropSize );
                             propName.a( "_uvs_fulltex" );
@@ -2708,18 +2725,8 @@ namespace Ogre
                         setProperty( propName.c_str(), shadowTexDef->arrayIdx );
 
                         const Light *light = shadowNode->getLightAssociatedWith( shadowMapTexIdx );
-                        if( light->getType() == Light::LT_DIRECTIONAL )
+                        if( useStaticBranchShadowMapLights )
                         {
-                            propName.resize( basePropSize );
-                            propName.a( "_is_directional_light" );
-                            setProperty( propName.c_str(), 1 );
-                        }
-                        else if( light->getType() == Light::LT_POINT )
-                        {
-                            propName.resize( basePropSize );
-                            propName.a( "_is_point_light" );
-                            setProperty( propName.c_str(), 1 );
-
                             fractPart = modff( (float)shadowTexDef->uvLength.x, &intPart );
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_x_int" );
@@ -2735,12 +2742,58 @@ namespace Ogre
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_y_fract" );
                             setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+
+                            if( light->getType() == Light::LT_DIRECTIONAL )
+                            {
+                                propName.resize( basePropSize );
+                                propName.a( "_is_directional_light" );
+                                setProperty( propName.c_str(), 1 );
+                            }
+                            else if( light->getType() == Light::LT_POINT )
+                            {
+                                ++mRealShadowMapPointLights;
+                            }
+                            else if( light->getType() == Light::LT_SPOTLIGHT )
+                            {
+                                ++mRealShadowMapSpotLights;
+                            }
                         }
-                        else if( light->getType() == Light::LT_SPOTLIGHT )
+                        else
                         {
-                            propName.resize( basePropSize );
-                            propName.a( "_is_spot" );
-                            setProperty( propName.c_str(), 1 );
+                            if( light->getType() == Light::LT_DIRECTIONAL )
+                            {
+                                propName.resize( basePropSize );
+                                propName.a( "_is_directional_light" );
+                                setProperty( propName.c_str(), 1 );
+                            }
+                            else if( light->getType() == Light::LT_POINT )
+                            {
+                                propName.resize( basePropSize );
+                                propName.a( "_is_point_light" );
+                                setProperty( propName.c_str(), 1 );
+
+                                fractPart = modff( (float)shadowTexDef->uvLength.x, &intPart );
+                                propName.resize( basePropSize );
+                                propName.a( "_uv_length_x_int" );
+                                setProperty( propName.c_str(), (int32)intPart );
+                                propName.resize( basePropSize );
+                                propName.a( "_uv_length_x_fract" );
+                                setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+
+                                fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
+                                propName.resize( basePropSize );
+                                propName.a( "_uv_length_y_int" );
+                                setProperty( propName.c_str(), (int32)intPart );
+                                propName.resize( basePropSize );
+                                propName.a( "_uv_length_y_fract" );
+                                setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                            }
+                            else if( light->getType() == Light::LT_SPOTLIGHT )
+                            {
+                                propName.resize( basePropSize );
+                                propName.a( "_is_spot" );
+                                setProperty( propName.c_str(), 1 );
+                            }
                         }
 
                         ++shadowMapTexIdx;
@@ -2926,8 +2979,8 @@ namespace Ogre
                          numLightsPerType[Light::LT_POINT] + numLightsPerType[Light::LT_SPOTLIGHT] );
             setProperty( HlmsBaseProp::LightsSpotParams, numLightsPerType[Light::LT_SPOTLIGHT] );
 
-            if( numLightsPerType[Light::LT_POINT] &&         //
-                !numLightsPerType[Light::LT_DIRECTIONAL] &&  //
+            if( !useStaticBranchShadowMapLights && numLightsPerType[Light::LT_POINT] &&  //
+                !numLightsPerType[Light::LT_DIRECTIONAL] &&                              //
                 !numLightsPerType[Light::LT_SPOTLIGHT] )
             {
                 setProperty( HlmsBaseProp::AllPointLights, 1 );
@@ -3012,18 +3065,26 @@ namespace Ogre
                     }
                 }
 
-                // Deal with rest of non-caster directional lights
-                shadowMapLightIdx += numLightsPerType[Light::LT_DIRECTIONAL] - shadowCasterDirectional;
-
-                // Deal with the rest of the casting lights (point & spot)
-                const int32 numLights = numLightsPerType[Light::LT_SPOTLIGHT];
-                for( int32 i = numLightsPerType[Light::LT_DIRECTIONAL]; i < numLights; ++i )
+                if( useStaticBranchShadowMapLights )
                 {
-                    propName.resize( basePropNameSize );
-                    propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
-                    setProperty( propName.c_str(), shadowMapLightIdx );
-                    ++shadowMapIdx;
-                    ++shadowMapLightIdx;
+                    setProperty( HlmsBaseProp::LightsPoint, 0 );
+                }
+                else
+                {
+                    // Deal with rest of non-caster directional lights
+                    shadowMapLightIdx +=
+                        numLightsPerType[Light::LT_DIRECTIONAL] - shadowCasterDirectional;
+
+                    // Deal with the rest of the casting lights (point & spot)
+                    const int32 numLights = numLightsPerType[Light::LT_SPOTLIGHT];
+                    for( int32 i = numLightsPerType[Light::LT_DIRECTIONAL]; i < numLights; ++i )
+                    {
+                        propName.resize( basePropNameSize );
+                        propName.a( shadowMapIdx, "_light_idx" );  // hlms_shadowmap0_light_idx
+                        setProperty( propName.c_str(), shadowMapLightIdx );
+                        ++shadowMapIdx;
+                        ++shadowMapLightIdx;
+                    }
                 }
             }
         }
