@@ -248,6 +248,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a16a7d3b9914b567e80921763e75db53e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a905909d0752107d11db3fb6d27c2d615"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a905909d0752107d11db3fb6d27c2d615">getShaderSyntax</a> () const</td></tr>
 <tr class="separator:a905909d0752107d11db3fb6d27c2d615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b0e95d9461806e36662e3a0d319a94c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a9b0e95d9461806e36662e3a0d319a94c">getStaticBranchingLights</a> (void) const</td></tr>
+<tr class="separator:a9b0e95d9461806e36662e3a0d319a94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a0ec84d5e6078c5627f40e95d8d8ca3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a7a0ec84d5e6078c5627f40e95d8d8ca3">getTemplateChecksum</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> outHash[2]) const</td></tr>
 <tr class="separator:a7a0ec84d5e6078c5627f40e95d8d8ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a508e017c803859196fc55860b7ddfc0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#gacbb211b021bd3350291861d7232dd02d">HlmsTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a508e017c803859196fc55860b7ddfc0f">getType</a> () const</td></tr>
@@ -308,6 +310,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a144d4a10a6e3a7a1c580d72913ec1cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a144d4a10a6e3a7a1c580d72913ec1cd8">setMaxNonCasterDirectionalLights</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> maxLights)</td></tr>
 <tr class="memdesc:a144d4a10a6e3a7a1c580d72913ec1cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-caster directional lights are hardcoded into shaders.  <a href="class_ogre_1_1_hlms.html#a144d4a10a6e3a7a1c580d72913ec1cd8">More...</a><br /></td></tr>
 <tr class="separator:a144d4a10a6e3a7a1c580d72913ec1cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46fdb3fe8b4889d911d41468dabf4400"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a46fdb3fe8b4889d911d41468dabf4400">setStaticBranchingLights</a> (bool staticBranchingLights)</td></tr>
+<tr class="memdesc:a46fdb3fe8b4889d911d41468dabf4400"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default shadow-caster spot and point lights are hardcoded into shaders.  <a href="class_ogre_1_1_hlms.html#a46fdb3fe8b4889d911d41468dabf4400">More...</a><br /></td></tr>
+<tr class="separator:a46fdb3fe8b4889d911d41468dabf4400"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -2213,6 +2218,32 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a9b0e95d9461806e36662e3a0d319a94c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b0e95d9461806e36662e3a0d319a94c">&#9670;&nbsp;</a></span>getStaticBranchingLights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Hlms::getStaticBranchingLights </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7a0ec84d5e6078c5627f40e95d8d8ca3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a0ec84d5e6078c5627f40e95d8d8ca3">&#9670;&nbsp;</a></span>getTemplateChecksum()</h2>
 
@@ -3180,6 +3211,48 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>Utility helper, mostly useful to <a class="el" href="class_ogre_1_1_hlms_listener.html" title="Listener that can be hooked to an Hlms implementation for extending it with custom code.">HlmsListener</a> implementations. </p>
+
+</div>
+</div>
+<a id="a46fdb3fe8b4889d911d41468dabf4400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46fdb3fe8b4889d911d41468dabf4400">&#9670;&nbsp;</a></span>setStaticBranchingLights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::Hlms::setStaticBranchingLights </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>staticBranchingLights</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>By default shadow-caster spot and point lights are hardcoded into shaders. </p>
+<p>This means that if you have 8 spot/point lights and then you add a 9th one, a whole new set of shaders will be created. Even more if you have a combination of 3 spot and 5 point lights and the combination has changed to 4 spot and 4 point lights then you'll get the next set of shaders</p>
+<p>This setting allows you to tremendously reduce the amount of shader permutations by forcing <a class="el" href="namespace_ogre.html">Ogre</a> to switching to static branching with an upper limit to the max number of shadow-casting spot or point lights.</p>
+<p>See <a class="el" href="class_ogre_1_1_hlms.html#aebca7da0789967e8fde70d95fa74ac0c" title="Area lights use regular Forward.">Hlms::setAreaLightForwardSettings</a> </p><dl class="section remark"><dt>Remarks</dt><dd>All point and spot lights must share the same hlms_shadowmap atlas</dd></dl>
+<p>This is mostly an D3D11 / HLSL SM 5.0 restriction (<a href="https://github.com/OGRECave/ogre-next/pull/255">https://github.com/OGRECave/ogre-next/pull/255</a>) but it may also help with performance in other APIs.</p>
+<p>If multiple atlas support is needed, using Texture2DArrays may be a good solution, although it is currently untested and may need additional fixes to get it working</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maxShadowMapLights</td><td>Maximum number of shadow-caster spot and point lights. 0 to allow unlimited number of lights, at the cost of shader recompilations when spot or point lights are added or removed or their combination are changed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Default value is 0. </p>
+
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_hlms_pbs.html#a963eb65a741f018625e58db16852d2e9">Ogre::HlmsPbs</a>.</p>
 
 </div>
 </div>

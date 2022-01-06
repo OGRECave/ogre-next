@@ -1692,6 +1692,7 @@ var group___resources =
       [ "getShaderCodeCache", "class_ogre_1_1_hlms.html#a349b173738c195012cea3acaa527f15f", null ],
       [ "getShaderProfile", "class_ogre_1_1_hlms.html#a16a7d3b9914b567e80921763e75db53e", null ],
       [ "getShaderSyntax", "class_ogre_1_1_hlms.html#a905909d0752107d11db3fb6d27c2d615", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms.html#a10f828092b41b6224285937a71c69350", null ],
@@ -1717,6 +1718,7 @@ var group___resources =
       [ "setListener", "class_ogre_1_1_hlms.html#a761bbbb8ac57759c2d2529a5d485c8c5", null ],
       [ "setMaxNonCasterDirectionalLights", "class_ogre_1_1_hlms.html#a144d4a10a6e3a7a1c580d72913ec1cd8", null ],
       [ "setProperty", "class_ogre_1_1_hlms.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
+      [ "setStaticBranchingLights", "class_ogre_1_1_hlms.html#a46fdb3fe8b4889d911d41468dabf4400", null ],
       [ "HlmsDiskCache", "class_ogre_1_1_hlms.html#ac9b8cbd74b47ab37c399d390954fb92c", null ]
     ] ],
     [ "HlmsBasePieces", "struct_ogre_1_1_hlms_base_pieces.html", [
@@ -1808,6 +1810,7 @@ var group___resources =
       [ "Skeleton", "struct_ogre_1_1_hlms_base_prop.html#a9c4a36915ecc02dec9501c5c3bed5502", null ],
       [ "SsRefractionsAvailable", "struct_ogre_1_1_hlms_base_prop.html#a3334bb54c4e940796ca27d59a7ab29e4", null ],
       [ "StaticBranchLights", "struct_ogre_1_1_hlms_base_prop.html#a8b28249335711a3f5a100e4f31670f1a", null ],
+      [ "StaticBranchShadowMapLights", "struct_ogre_1_1_hlms_base_prop.html#ac5146ef57b3778041824cddac3ac450c", null ],
       [ "Syntax", "struct_ogre_1_1_hlms_base_prop.html#a2cd566a2316cec4b2e0e9aab58993dca", null ],
       [ "Tangent", "struct_ogre_1_1_hlms_base_prop.html#af10314eb548200c40c30066c638fbe0d", null ],
       [ "Tangent4", "struct_ogre_1_1_hlms_base_prop.html#a6ddfaf8cda44b0cc3a4ca3d6d2179e4a", null ],

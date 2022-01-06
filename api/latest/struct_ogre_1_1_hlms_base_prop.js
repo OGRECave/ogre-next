@@ -85,6 +85,7 @@ var struct_ogre_1_1_hlms_base_prop =
     [ "Skeleton", "struct_ogre_1_1_hlms_base_prop.html#a9c4a36915ecc02dec9501c5c3bed5502", null ],
     [ "SsRefractionsAvailable", "struct_ogre_1_1_hlms_base_prop.html#a3334bb54c4e940796ca27d59a7ab29e4", null ],
     [ "StaticBranchLights", "struct_ogre_1_1_hlms_base_prop.html#a8b28249335711a3f5a100e4f31670f1a", null ],
+    [ "StaticBranchShadowMapLights", "struct_ogre_1_1_hlms_base_prop.html#ac5146ef57b3778041824cddac3ac450c", null ],
     [ "Syntax", "struct_ogre_1_1_hlms_base_prop.html#a2cd566a2316cec4b2e0e9aab58993dca", null ],
     [ "Tangent", "struct_ogre_1_1_hlms_base_prop.html#af10314eb548200c40c30066c638fbe0d", null ],
     [ "Tangent4", "struct_ogre_1_1_hlms_base_prop.html#a6ddfaf8cda44b0cc3a4ca3d6d2179e4a", null ],

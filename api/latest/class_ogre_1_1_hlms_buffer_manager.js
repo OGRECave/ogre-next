@@ -51,6 +51,7 @@ var class_ogre_1_1_hlms_buffer_manager =
     [ "getShaderCodeCache", "class_ogre_1_1_hlms_buffer_manager.html#a349b173738c195012cea3acaa527f15f", null ],
     [ "getShaderProfile", "class_ogre_1_1_hlms_buffer_manager.html#a16a7d3b9914b567e80921763e75db53e", null ],
     [ "getShaderSyntax", "class_ogre_1_1_hlms_buffer_manager.html#a905909d0752107d11db3fb6d27c2d615", null ],
+    [ "getStaticBranchingLights", "class_ogre_1_1_hlms_buffer_manager.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
     [ "getTemplateChecksum", "class_ogre_1_1_hlms_buffer_manager.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
     [ "getType", "class_ogre_1_1_hlms_buffer_manager.html#a508e017c803859196fc55860b7ddfc0f", null ],
     [ "getTypeName", "class_ogre_1_1_hlms_buffer_manager.html#a10f828092b41b6224285937a71c69350", null ],
@@ -76,5 +77,6 @@ var class_ogre_1_1_hlms_buffer_manager =
     [ "setListener", "class_ogre_1_1_hlms_buffer_manager.html#a761bbbb8ac57759c2d2529a5d485c8c5", null ],
     [ "setMaxNonCasterDirectionalLights", "class_ogre_1_1_hlms_buffer_manager.html#a144d4a10a6e3a7a1c580d72913ec1cd8", null ],
     [ "setProperty", "class_ogre_1_1_hlms_buffer_manager.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
+    [ "setStaticBranchingLights", "class_ogre_1_1_hlms_buffer_manager.html#a46fdb3fe8b4889d911d41468dabf4400", null ],
     [ "setTextureBufferDefaultSize", "class_ogre_1_1_hlms_buffer_manager.html#a6dff4f91d5b7833aec870f30ae381ccc", null ]
 ];

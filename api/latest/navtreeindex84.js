@@ -1,5 +1,17 @@
 var NAVTREEINDEX84 =
 {
+"class_ogre_1_1_manual_resource_loader.html#ae04795ab21e4a46709beb6d521a75c53":[5,2,10,69,2],
+"class_ogre_1_1_map_iterator.html":[7,0,0,559],
+"class_ogre_1_1_map_iterator.html#a0fd0df9bbfe0fc16939600b37de81739":[7,0,0,559,10],
+"class_ogre_1_1_map_iterator.html#a22c1c22fab97253a922a190d2ace205e":[7,0,0,559,1],
+"class_ogre_1_1_map_iterator.html#a2bef2d340ae00274856261b3ad3dcdbc":[7,0,0,559,11],
+"class_ogre_1_1_map_iterator.html#a64c1d671b06f5048b9c2b93d51bda810":[7,0,0,559,5],
+"class_ogre_1_1_map_iterator.html#a69f5d04fa24319d698b69da3da118d36":[7,0,0,559,6],
+"class_ogre_1_1_map_iterator.html#a704ce78ef948a2730b4774b4ba0cea69":[7,0,0,559,0],
+"class_ogre_1_1_map_iterator.html#a9853756cc9d465e44272d69643d2c5ed":[7,0,0,559,3],
+"class_ogre_1_1_map_iterator.html#aad79b04aa34d0901590bc5229b196c92":[7,0,0,559,16],
+"class_ogre_1_1_map_iterator.html#aae9d34883001f20e7b977fcf2bbaa38c":[7,0,0,559,15],
+"class_ogre_1_1_map_iterator.html#aaf01f897bea391797dc2bb9fb8374a5f":[7,0,0,559,13],
 "class_ogre_1_1_map_iterator.html#ab2daa0557a06aebd61686b13c865b6c0":[7,0,0,559,9],
 "class_ogre_1_1_map_iterator.html#aba5a8ef400da4e0338f9b257727e9377":[7,0,0,559,2],
 "class_ogre_1_1_map_iterator.html#abd1f3f1f5143828a6296347d5b0b9d04":[7,0,0,559,12],
@@ -237,17 +249,5 @@ var NAVTREEINDEX84 =
 "class_ogre_1_1_material_serializer.html#a4e3913738dc6322b8f07a730a14d8951":[5,2,5,17,24],
 "class_ogre_1_1_material_serializer.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,5,17,15],
 "class_ogre_1_1_material_serializer.html#a7f9ca3f37b24546d3e6c659ec19da2e0":[5,2,5,17,21],
-"class_ogre_1_1_material_serializer.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,5,17,11],
-"class_ogre_1_1_material_serializer.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,5,17,14],
-"class_ogre_1_1_material_serializer.html#a96e9de7a16458947c9d4208a8be2847b":[5,2,5,17,5],
-"class_ogre_1_1_material_serializer.html#a9738a042ee8b40f84feabd61f89d88a3":[5,2,5,17,8],
-"class_ogre_1_1_material_serializer.html#aabdeca87659895ccbcb7756f24818739":[5,2,5,17,22],
-"class_ogre_1_1_material_serializer.html#aad0415f95d43e60cce716cd3cca59739":[5,2,5,17,9],
-"class_ogre_1_1_material_serializer.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,5,17,18],
-"class_ogre_1_1_material_serializer.html#ac4add46c30786c566425b8cd9904f032":[5,2,5,17,25],
-"class_ogre_1_1_material_serializer.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,5,17,16],
-"class_ogre_1_1_material_serializer.html#ac93759585fba1b84ad1183358b636c8b":[5,2,5,17,6],
-"class_ogre_1_1_material_serializer.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,5,17,12],
-"class_ogre_1_1_material_serializer.html#ad7221314131e7f6a76c864fbd3b5d0c7":[5,2,5,17,26],
-"class_ogre_1_1_material_serializer.html#ad933634a0807f52b41c490536345d19b":[5,2,5,17,3]
+"class_ogre_1_1_material_serializer.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,5,17,11]
 };

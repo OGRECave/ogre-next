@@ -79,6 +79,7 @@ var group___material =
       [ "getShaderCodeCache", "class_ogre_1_1_hlms_buffer_manager.html#a349b173738c195012cea3acaa527f15f", null ],
       [ "getShaderProfile", "class_ogre_1_1_hlms_buffer_manager.html#a16a7d3b9914b567e80921763e75db53e", null ],
       [ "getShaderSyntax", "class_ogre_1_1_hlms_buffer_manager.html#a905909d0752107d11db3fb6d27c2d615", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms_buffer_manager.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms_buffer_manager.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms_buffer_manager.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms_buffer_manager.html#a10f828092b41b6224285937a71c69350", null ],
@@ -104,6 +105,7 @@ var group___material =
       [ "setListener", "class_ogre_1_1_hlms_buffer_manager.html#a761bbbb8ac57759c2d2529a5d485c8c5", null ],
       [ "setMaxNonCasterDirectionalLights", "class_ogre_1_1_hlms_buffer_manager.html#a144d4a10a6e3a7a1c580d72913ec1cd8", null ],
       [ "setProperty", "class_ogre_1_1_hlms_buffer_manager.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
+      [ "setStaticBranchingLights", "class_ogre_1_1_hlms_buffer_manager.html#a46fdb3fe8b4889d911d41468dabf4400", null ],
       [ "setTextureBufferDefaultSize", "class_ogre_1_1_hlms_buffer_manager.html#a6dff4f91d5b7833aec870f30ae381ccc", null ]
     ] ],
     [ "HlmsCompute", "class_ogre_1_1_hlms_compute.html", [
@@ -167,6 +169,7 @@ var group___material =
       [ "getShaderCodeCache", "class_ogre_1_1_hlms_compute.html#a349b173738c195012cea3acaa527f15f", null ],
       [ "getShaderProfile", "class_ogre_1_1_hlms_compute.html#a16a7d3b9914b567e80921763e75db53e", null ],
       [ "getShaderSyntax", "class_ogre_1_1_hlms_compute.html#a905909d0752107d11db3fb6d27c2d615", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms_compute.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms_compute.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms_compute.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms_compute.html#a10f828092b41b6224285937a71c69350", null ],
@@ -191,7 +194,8 @@ var group___material =
       [ "setHighQuality", "class_ogre_1_1_hlms_compute.html#a41891adac20124feee29d81237db8197", null ],
       [ "setListener", "class_ogre_1_1_hlms_compute.html#a761bbbb8ac57759c2d2529a5d485c8c5", null ],
       [ "setMaxNonCasterDirectionalLights", "class_ogre_1_1_hlms_compute.html#a144d4a10a6e3a7a1c580d72913ec1cd8", null ],
-      [ "setProperty", "class_ogre_1_1_hlms_compute.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ]
+      [ "setProperty", "class_ogre_1_1_hlms_compute.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
+      [ "setStaticBranchingLights", "class_ogre_1_1_hlms_compute.html#a46fdb3fe8b4889d911d41468dabf4400", null ]
     ] ],
     [ "HlmsComputeJob", "class_ogre_1_1_hlms_compute_job.html", [
       [ "Reason", "class_ogre_1_1_hlms_compute_job.html#afe11bd546cf7315f4526488e7078cc7d", [
@@ -346,6 +350,7 @@ var group___material =
       [ "getShaderCodeCache", "class_ogre_1_1_hlms_low_level.html#a349b173738c195012cea3acaa527f15f", null ],
       [ "getShaderProfile", "class_ogre_1_1_hlms_low_level.html#a16a7d3b9914b567e80921763e75db53e", null ],
       [ "getShaderSyntax", "class_ogre_1_1_hlms_low_level.html#a905909d0752107d11db3fb6d27c2d615", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms_low_level.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms_low_level.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms_low_level.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms_low_level.html#a10f828092b41b6224285937a71c69350", null ],
@@ -370,7 +375,8 @@ var group___material =
       [ "setHighQuality", "class_ogre_1_1_hlms_low_level.html#a41891adac20124feee29d81237db8197", null ],
       [ "setListener", "class_ogre_1_1_hlms_low_level.html#a761bbbb8ac57759c2d2529a5d485c8c5", null ],
       [ "setMaxNonCasterDirectionalLights", "class_ogre_1_1_hlms_low_level.html#a144d4a10a6e3a7a1c580d72913ec1cd8", null ],
-      [ "setProperty", "class_ogre_1_1_hlms_low_level.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ]
+      [ "setProperty", "class_ogre_1_1_hlms_low_level.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
+      [ "setStaticBranchingLights", "class_ogre_1_1_hlms_low_level.html#a46fdb3fe8b4889d911d41468dabf4400", null ]
     ] ],
     [ "HlmsLowLevelDatablock", "class_ogre_1_1_hlms_low_level_datablock.html", [
       [ "HlmsLowLevelDatablock", "class_ogre_1_1_hlms_low_level_datablock.html#a5681e965c22dd19bc29b06c03ea852bf", null ],
@@ -514,6 +520,7 @@ var group___material =
       [ "getShaderSyntax", "class_ogre_1_1_hlms_pbs.html#a905909d0752107d11db3fb6d27c2d615", null ],
       [ "getShadowFilter", "class_ogre_1_1_hlms_pbs.html#a76889b8cf476ab66efbddd560d0baf46", null ],
       [ "getShadowReceiversInPixelShader", "class_ogre_1_1_hlms_pbs.html#a2fcde10eb2aa0cd35e39098572c5ee44", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms_pbs.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms_pbs.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms_pbs.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms_pbs.html#a10f828092b41b6224285937a71c69350", null ],
@@ -560,6 +567,7 @@ var group___material =
       [ "setProperty", "class_ogre_1_1_hlms_pbs.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
       [ "setShadowReceiversInPixelShader", "class_ogre_1_1_hlms_pbs.html#aab5abfeb16e83344c10dea49ff4140c2", null ],
       [ "setShadowSettings", "class_ogre_1_1_hlms_pbs.html#a31c997c72e255fdab6c60f88b253b7ea", null ],
+      [ "setStaticBranchingLights", "class_ogre_1_1_hlms_pbs.html#a963eb65a741f018625e58db16852d2e9", null ],
       [ "setTextureBufferDefaultSize", "class_ogre_1_1_hlms_pbs.html#a6dff4f91d5b7833aec870f30ae381ccc", null ],
       [ "setUseLightBuffers", "class_ogre_1_1_hlms_pbs.html#a0b32c2c3d19d0f12ad23bc22f90811bc", null ],
       [ "setVctFullConeCount", "class_ogre_1_1_hlms_pbs.html#aa5712e150eb17b0c2354f60885420e43", null ],
@@ -632,6 +640,7 @@ var group___material =
       [ "getShaderProfile", "class_ogre_1_1_hlms_unlit.html#a16a7d3b9914b567e80921763e75db53e", null ],
       [ "getShaderSyntax", "class_ogre_1_1_hlms_unlit.html#a905909d0752107d11db3fb6d27c2d615", null ],
       [ "getShadowFilter", "class_ogre_1_1_hlms_unlit.html#a0e0fde349857a4e7f27f51f7e045641a", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms_unlit.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms_unlit.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms_unlit.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms_unlit.html#a10f828092b41b6224285937a71c69350", null ],
@@ -663,6 +672,7 @@ var group___material =
       [ "setOptimizationStrategy", "class_ogre_1_1_hlms_unlit.html#a36408c1dc90fcef6a90b1a7dda52dc78", null ],
       [ "setProperty", "class_ogre_1_1_hlms_unlit.html#a85c00acdba7c9a0bcab3c6a0a48d587f", null ],
       [ "setShadowSettings", "class_ogre_1_1_hlms_unlit.html#a7cbae042f1c24d201432bf8ec1c33ff9", null ],
+      [ "setStaticBranchingLights", "class_ogre_1_1_hlms_unlit.html#a46fdb3fe8b4889d911d41468dabf4400", null ],
       [ "setTextureBufferDefaultSize", "class_ogre_1_1_hlms_unlit.html#a6dff4f91d5b7833aec870f30ae381ccc", null ]
     ] ],
     [ "InstantRadiosity", "class_ogre_1_1_instant_radiosity.html", [
