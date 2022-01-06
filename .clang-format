@@ -28,6 +28,7 @@ UseTab: Never
 AccessModifierOffset: '-4'
 IndentPPDirectives: 'AfterHash'
 BraceWrapping:
+  AfterCaseLabel:  true
   AfterClass:      true
   AfterControlStatement: true
   AfterEnum:       true
