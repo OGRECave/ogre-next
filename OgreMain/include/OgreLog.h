@@ -204,12 +204,12 @@ namespace Ogre
         class _OgreExport Stream
         {
         protected:
-            Log *           mTarget;
+            Log            *mTarget;
             LogMessageLevel mLevel;
             bool            mMaskDebug;
 
             typedef StringStream BaseStream;
-            BaseStream *         mCache;
+            BaseStream          *mCache;
 
         public:
             Stream( Log *target, LogMessageLevel lml, bool maskDebug );

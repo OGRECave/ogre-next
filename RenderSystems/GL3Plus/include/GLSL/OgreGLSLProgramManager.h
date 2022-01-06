@@ -73,14 +73,14 @@ namespace Ogre
         /** Find the data source definition for a given uniform name
             and reference. Return true if found and pair the reference
             with its data source. */
-        bool findUniformDataSource( const String &                  paramName,
+        bool findUniformDataSource( const String                   &paramName,
                                     const GpuConstantDefinitionMap *vertexConstantDefs,
                                     const GpuConstantDefinitionMap *hullConstantDefs,
                                     const GpuConstantDefinitionMap *domainConstantDefs,
                                     const GpuConstantDefinitionMap *geometryConstantDefs,
                                     const GpuConstantDefinitionMap *fragmentConstantDefs,
                                     const GpuConstantDefinitionMap *computeConstantDefs,
-                                    GLUniformReference &            refToUpdate );
+                                    GLUniformReference             &refToUpdate );
 
         /** Parse an individual uniform from a GLSL source file and
             store it in a GpuNamedConstant. */
@@ -108,7 +108,7 @@ namespace Ogre
                                          const GpuConstantDefinitionMap *geometryConstantDefs,
                                          const GpuConstantDefinitionMap *fragmentConstantDefs,
                                          const GpuConstantDefinitionMap *computeConstantDefs,
-                                         GLUniformReferenceList &        uniformList );
+                                         GLUniformReferenceList         &uniformList );
 
         /** Populate a list of uniforms based on GLSL source and store
             them in GpuNamedConstants.

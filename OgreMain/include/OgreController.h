@@ -145,8 +145,8 @@ namespace Ogre
            destroyed with the Controller when it is deleted (they can be shared) so you must delete these
            as appropriate.
         */
-        Controller( const SharedPtr<ControllerValue<T> > &   src,
-                    const SharedPtr<ControllerValue<T> > &   dest,
+        Controller( const SharedPtr<ControllerValue<T> >    &src,
+                    const SharedPtr<ControllerValue<T> >    &dest,
                     const SharedPtr<ControllerFunction<T> > &func ) :
             mSource( src ),
             mDest( dest ),

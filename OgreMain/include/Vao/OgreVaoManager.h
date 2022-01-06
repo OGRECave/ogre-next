@@ -446,7 +446,7 @@ namespace Ogre
             VertexArrayObject that can be rendered.
         */
         VertexArrayObject *createVertexArrayObject( const VertexBufferPackedVec &vertexBuffers,
-                                                    IndexBufferPacked *          indexBuffer,
+                                                    IndexBufferPacked           *indexBuffer,
                                                     OperationType                opType );
 
         /** Destroys the input pointer. After this call, it's no longer valid

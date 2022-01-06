@@ -72,15 +72,15 @@ namespace Ogre
         RawSimdUniquePtr<FrustumRegion, MEMCATEGORY_SCENE_CONTROL> mFrustumRegions;
 
         uint16 *RESTRICT_ALIAS mGridBuffer;
-        Camera *               mCurrentCamera;
+        Camera                *mCurrentCamera;
 
         float mMinDistance;
         float mMaxDistance;
         float mExponentK;
         float mInvExponentK;
 
-        ObjectMemoryManager *  mObjectMemoryManager;
-        NodeMemoryManager *    mNodeMemoryManager;
+        ObjectMemoryManager   *mObjectMemoryManager;
+        NodeMemoryManager     *mNodeMemoryManager;
         vector<Camera *>::type mThreadCameras;
 
         bool                     mDebugWireAabbFrozen;

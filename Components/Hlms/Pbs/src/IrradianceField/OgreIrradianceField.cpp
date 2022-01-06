@@ -291,7 +291,7 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( updateData - updateDataStart ) <=
+        OGRE_ASSERT_LOW( (size_t)( updateData - updateDataStart ) <=
                          ( depthProbeRes * depthProbeRes * numRaysPerPixel * 4u ) );
     }
     //-------------------------------------------------------------------------
@@ -425,7 +425,7 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( updateData - updateDataStart ) <=
+        OGRE_ASSERT_LOW( (size_t)( updateData - updateDataStart ) <=
                          ( probeRes * probeRes * maxTapsPerPixel ) );
     }
     //-------------------------------------------------------------------------

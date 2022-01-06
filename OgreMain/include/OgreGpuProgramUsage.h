@@ -76,7 +76,7 @@ namespace Ogre
     {
     protected:
         GpuProgramType mType;
-        Pass *         mParent;
+        Pass          *mParent;
         /// The program link
         GpuProgramPtr mProgram;
 

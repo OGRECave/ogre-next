@@ -142,7 +142,7 @@ namespace Ogre
     protected:
         /// One per memory type
         MemoryPoolVec          mMemoryPools;
-        size_t const *         mElementsMemSizes;
+        size_t const          *mElementsMemSizes;
         CleanupRoutines const *mInitRoutines;
         CleanupRoutines const *mCleanupRoutines;
         size_t                 mTotalMemoryMultiplier;
@@ -154,7 +154,7 @@ namespace Ogre
         size_t                      mCleanupThreshold;
         typedef std::vector<size_t> SlotsVec;  // TODO: Modify for Ogre
         SlotsVec                    mAvailableSlots;
-        RebaseListener *            mRebaseListener;
+        RebaseListener             *mRebaseListener;
 
         /// The hierarchy depth level. This value is not used by the manager,
         /// just passed to the listeners so they can know to which level it
@@ -361,7 +361,7 @@ namespace Ogre
     class _OgreExport ObjectDataArrayMemoryManager final : public ArrayMemoryManager
     {
         /// Dummy node where to point ObjectData::mParents[i] when they're unused slots.
-        Node *         mDummyNode;
+        Node          *mDummyNode;
         MovableObject *mDummyObject;
 
     protected:

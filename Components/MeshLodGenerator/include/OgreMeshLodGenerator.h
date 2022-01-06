@@ -58,7 +58,7 @@ namespace Ogre
          *
          * @param lodConfig Specification of the requested Lod levels.
          */
-        virtual void generateLodLevels( LodConfig &          lodConfig,
+        virtual void generateLodLevels( LodConfig           &lodConfig,
                                         LodCollapseCostPtr   cost = LodCollapseCostPtr(),
                                         LodDataPtr           data = LodDataPtr(),
                                         LodInputProviderPtr  input = LodInputProviderPtr(),
@@ -100,7 +100,7 @@ namespace Ogre
         void calcLodVertexCount( const LodLevel &lodLevel, size_t uniqueVertexCount,
                                  size_t &outVertexCountLimit, Real &outCollapseCostLimit );
 
-        LodWorkQueueWorker *  mWQWorker;
+        LodWorkQueueWorker   *mWQWorker;
         LodWorkQueueInjector *mWQInjector;
     };
 

@@ -381,7 +381,7 @@ namespace Ogre
         size_t srcLengthPadded = alignToNextMultiple<size_t>( extraOffset + srcLength, 4u );
         size_t freeRegionOffset = getFreeDownloadRegion( srcLengthPadded );
 
-        if( freeRegionOffset == ( size_t )( -1 ) )
+        if( freeRegionOffset == (size_t)( -1 ) )
         {
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,
@@ -453,7 +453,7 @@ namespace Ogre
         size_t srcLengthPadded = alignToNextMultiple<size_t>( extraOffset + srcLength, 4u );
         size_t freeRegionOffset = getFreeDownloadRegion( srcLengthPadded );
 
-        if( freeRegionOffset == ( size_t )( -1 ) )
+        if( freeRegionOffset == (size_t)( -1 ) )
         {
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,

@@ -226,28 +226,28 @@ namespace Ogre
             Format is "00 01 02 10 11 12 20 21 22" where '01' means row 0 column 1 etc.
             Failure to parse returns Matrix3::IDENTITY.
         */
-        static Matrix3 parseMatrix3( const String & val,
+        static Matrix3 parseMatrix3( const String  &val,
                                      const Matrix3 &defaultValue = Matrix3::IDENTITY );
         /** Parses a Matrix4 out of a String.
         @remarks
             Format is "00 01 02 03 10 11 12 13 20 21 22 23 30 31 32 33" where
             '01' means row 0 column 1 etc. Failure to parse returns Matrix4::IDENTITY.
         */
-        static Matrix4 parseMatrix4( const String & val,
+        static Matrix4 parseMatrix4( const String  &val,
                                      const Matrix4 &defaultValue = Matrix4::IDENTITY );
         /** Parses a Quaternion out of a String.
         @remarks
             Format is "w x y z" (i.e. 4x Real values, space delimited).
             Failure to parse returns Quaternion::IDENTITY.
         */
-        static Quaternion parseQuaternion( const String &    val,
+        static Quaternion parseQuaternion( const String     &val,
                                            const Quaternion &defaultValue = Quaternion::IDENTITY );
         /** Parses a ColourValue out of a String.
         @remarks
             Format is "r g b a" (i.e. 4x Real values, space delimited), or "r g b" which implies
             an alpha value of 1.0 (opaque). Failure to parse returns ColourValue::Black.
         */
-        static ColourValue parseColourValue( const String &     val,
+        static ColourValue parseColourValue( const String      &val,
                                              const ColourValue &defaultValue = ColourValue::Black );
 
         /** Parses a StringVector from a string.
@@ -269,7 +269,7 @@ namespace Ogre
         @remarks
             String input format should be "Back", "Back Left", "Back Right", etc.
         */
-        static ColourBufferType parseColourBuffer( const String &   val,
+        static ColourBufferType parseColourBuffer( const String    &val,
                                                    ColourBufferType defaultValue = CBT_BACK );
 
         /** Converts a StereoModeType to a String
@@ -282,7 +282,7 @@ namespace Ogre
         @remarks
             String input format should be "None", "Frame Sequential", etc.
         */
-        static StereoModeType parseStereoMode( const String & val,
+        static StereoModeType parseStereoMode( const String  &val,
                                                StereoModeType defaultValue = SMT_NONE );
 
         //-----------------------------------------------------------------------

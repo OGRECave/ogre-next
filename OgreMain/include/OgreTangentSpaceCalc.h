@@ -188,7 +188,7 @@ namespace Ogre
                           unsigned short sourceTexCoordSet = 0, unsigned short index = 1 );
 
         protected:
-            VertexData *                        mVData;
+            VertexData                         *mVData;
             typedef vector<IndexData *>::type   IndexDataList;
             typedef vector<OperationType>::type OpTypeList;
             IndexDataList                       mIDataList;

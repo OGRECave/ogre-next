@@ -179,7 +179,7 @@ namespace Ogre
             /// Cached bone matrices, including any world transform.
             Matrix4 *mBoneWorldMatrices;
             /// Cached bone matrices in skeleton local space, might shares with other entity instances.
-            Matrix4 *      mBoneMatrices;
+            Matrix4       *mBoneMatrices;
             unsigned short mNumBoneMatrices;
             /// Records the last frame in which animation was updated.
             unsigned long mFrameAnimationLastUpdated;
@@ -283,14 +283,14 @@ namespace Ogre
 
             /** Gets a pointer to a SubEntity, ie a part of an Entity.
              */
-            SubEntity *      getSubEntity( size_t index );
+            SubEntity       *getSubEntity( size_t index );
             const SubEntity *getSubEntity( size_t index ) const;
 
             /** Gets a pointer to a SubEntity by name
             @remarks
                 Names should be initialized during a Mesh creation.
             */
-            SubEntity *      getSubEntity( const String &name );
+            SubEntity       *getSubEntity( const String &name );
             const SubEntity *getSubEntity( const String &name ) const;
 
             /** Retrieves the number of SubEntity objects making up this entity.
@@ -682,7 +682,7 @@ namespace Ogre
         {
         protected:
             MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                               SceneManager *           manager,
+                                               SceneManager            *manager,
                                                const NameValuePairList *params = 0 ) override;
 
         public:

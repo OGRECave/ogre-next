@@ -76,7 +76,7 @@ namespace Ogre
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                          Ogre::String( "expected import target at line " ) +
-                                         Ogre::StringConverter::toString( node->line ),
+                                             Ogre::StringConverter::toString( node->line ),
                                          "ScriptParser::parse" );
                         }
                         ConcreteNodePtr temp( OGRE_NEW ConcreteNode() );
@@ -94,7 +94,7 @@ namespace Ogre
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                          Ogre::String( "expected import source at line " ) +
-                                         Ogre::StringConverter::toString( node->line ),
+                                             Ogre::StringConverter::toString( node->line ),
                                          "ScriptParser::parse" );
                         }
                         temp = ConcreteNodePtr( OGRE_NEW ConcreteNode() );
@@ -135,7 +135,7 @@ namespace Ogre
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                          Ogre::String( "expected variable name at line " ) +
-                                         Ogre::StringConverter::toString( node->line ),
+                                             Ogre::StringConverter::toString( node->line ),
                                          "ScriptParser::parse" );
                         }
                         ConcreteNodePtr temp( OGRE_NEW ConcreteNode() );
@@ -152,7 +152,7 @@ namespace Ogre
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                          Ogre::String( "expected variable value at line " ) +
-                                         Ogre::StringConverter::toString( node->line ),
+                                             Ogre::StringConverter::toString( node->line ),
                                          "ScriptParser::parse" );
                         }
                         temp = ConcreteNodePtr( OGRE_NEW ConcreteNode() );

@@ -83,13 +83,13 @@ namespace Ogre
         typedef vector<std::pair<CHVertexI, CHVertexI> >::type CHEdgeList;
 
         const Real
-                        mEpsilon;  /// Amount of allowed floating point error if 4 vertices are on the same plane.
+            mEpsilon;  /// Amount of allowed floating point error if 4 vertices are on the same plane.
         CHTriangleList  mHull;              /// Contains the current triangles of the convex hull.
         CHTrianglePList mVisibleTriangles;  /// Temporary vector for addVisibleEdges function (prevent
                                             /// allocation every call).
         CHEdgeList mEdges;  /// Temporary vector for the horizon edges, when inserting a new vertex into
                             /// the hull.
-        LodData::VertexList &  mVertexListOrig;    /// Source of input and output of the algorithm.
+        LodData::VertexList   &mVertexListOrig;    /// Source of input and output of the algorithm.
         LodData::TriangleList &mTriangleListOrig;  /// Source of input and output of the algorithm.
 
         OutsideDataList mOutsideData;
@@ -137,7 +137,7 @@ namespace Ogre
         /// is on the same plane.
         Real pointToLineDir( const Vector3 &ptarget, const Vector3 &p0, const Vector3 &p1,
                              const Vector3 &p2, const Vector3 &n );
-        bool isInsideTriangle( const Vector3 &   ptarget,
+        bool isInsideTriangle( const Vector3    &ptarget,
                                const CHTriangle &tri );  /// Whether the vertex is inside the triangle.
                                                          /// We assume that it is on the same plane
         bool isInsideLine( const Vector3 &ptarget, const Vector3 &p0,

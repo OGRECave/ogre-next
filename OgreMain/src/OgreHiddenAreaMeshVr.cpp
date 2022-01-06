@@ -143,7 +143,7 @@ namespace Ogre
 
         const uint32 numUsedVertices = static_cast<uint32>( vertexData - vertexDataStart ) / 4u;
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) <= numVertices * 4u );
+        OGRE_ASSERT_LOW( (size_t)( vertexData - vertexDataStart ) <= numVertices * 4u );
 
         VaoManager *vaoManager = Root::getSingleton().getRenderSystem()->getVaoManager();
         VertexElement2Vec vertexElements;

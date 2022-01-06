@@ -55,7 +55,7 @@ namespace Ogre
 
         // Result of this collapse cost algorithm will be modified, if it is outside.
         LodCollapseCostPtr mCostCalculator;
-        LodOutsideMarker * mOutsideMarker;
+        LodOutsideMarker  *mOutsideMarker;
     };
 
 }  // namespace Ogre

@@ -79,7 +79,7 @@ namespace Ogre
         ExternalTextureSource *getExternalTextureSource( const String &sTexturePlugInType );
 
         /** Called from plugin to register itself */
-        void setExternalTextureSource( const String &         sTexturePlugInType,
+        void setExternalTextureSource( const String          &sTexturePlugInType,
                                        ExternalTextureSource *pTextureSystem );
 
         /** Override standard Singleton retrieval.

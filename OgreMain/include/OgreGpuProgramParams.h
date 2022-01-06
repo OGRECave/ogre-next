@@ -492,7 +492,7 @@ namespace Ogre
             all, you can address the larger arrays in a bulk fashion much more
             easily anyway.
         */
-        void generateConstantDefinitionArrayEntries( const String &               paramName,
+        void generateConstantDefinitionArrayEntries( const String                &paramName,
                                                      const GpuConstantDefinition &baseDef );
 
         /// Indicates whether all array entries will be generated and added to the definitions map
@@ -851,7 +851,7 @@ namespace Ogre
         const String &getName() const { return mSharedParams->getName(); }
 
         GpuSharedParametersPtr getSharedParams() const { return mSharedParams; }
-        GpuProgramParameters * getTargetParams() const { return mParams; }
+        GpuProgramParameters  *getTargetParams() const { return mParams; }
     };
 
     class GpuProgramParameters_AutoConstantEntry;

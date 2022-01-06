@@ -59,12 +59,12 @@ namespace Ogre
         bool IsDeviceLost();
 
         bool                  isNull() { return !mD3D11Device; }
-        ID3D11DeviceN *       get() { return mD3D11Device.Get(); }
+        ID3D11DeviceN        *get() { return mD3D11Device.Get(); }
         ID3D11DeviceContextN *GetImmediateContext() { return mImmediateContext.Get(); }
         ID3D11DeviceContext1 *GetImmediateContext1() { return mImmediateContext1.Get(); }
-        ID3D11ClassLinkage *  GetClassLinkage() { return mClassLinkage.Get(); }
-        IDXGIFactoryN *       GetDXGIFactory() { return mDXGIFactory.Get(); }
-        IDXGIFactory2 *       GetDXGIFactory2() { return mDXGIFactory2.Get(); }
+        ID3D11ClassLinkage   *GetClassLinkage() { return mClassLinkage.Get(); }
+        IDXGIFactoryN        *GetDXGIFactory() { return mDXGIFactory.Get(); }
+        IDXGIFactory2        *GetDXGIFactory2() { return mDXGIFactory2.Get(); }
 
         LARGE_INTEGER GetDriverVersion() { return mDriverVersion; }
 #if OGRE_D3D11_PROFILING || OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM

@@ -69,14 +69,14 @@ namespace Ogre
     {
         IrradianceField *mCreator;
 
-        TextureGpu *         mCubemap;
-        TextureGpu *         mDepthCubemap;
+        TextureGpu          *mCubemap;
+        TextureGpu          *mDepthCubemap;
         CompositorWorkspace *mRenderWorkspace;
         CompositorWorkspace *mConvertToIfdWorkspace;
         CompositorWorkspace *mIfdIntegrationWorkspace;
 
-        HlmsComputeJob *     mConvertToIfdJob;
-        ShaderParams *       mShaderParamsConvertToIfd;
+        HlmsComputeJob      *mConvertToIfdJob;
+        ShaderParams        *mShaderParamsConvertToIfd;
         ShaderParams::Param *mProbeIdxParam;
         ShaderParams::Param *mProjectionABParam;
         ShaderParams::Param *mNumProbesParam;

@@ -103,20 +103,20 @@ namespace Ogre
         static bool getMatrix4( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
                                 Matrix4 *m );
         /// Converts the range of nodes to an array of ints and returns true if successful
-        static bool getInts(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+        static bool getInts( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
                              int *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getFloats(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+        static bool getFloats( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
                                float *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getDoubles(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+        static bool getDoubles( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
                                 double *vals, uint32 count );
         /// Converts the range of nodes to an array of floats and returns true if successful
-        static bool getUInts(AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
+        static bool getUInts( AbstractNodeList::const_iterator i, AbstractNodeList::const_iterator end,
                               uint *vals, uint32 count );
         /// Converts the range of nodes to an array of uint-stored boolean values and returns true if
         /// successful
-        static bool getBooleans(AbstractNodeList::const_iterator i,
+        static bool getBooleans( AbstractNodeList::const_iterator i,
                                  AbstractNodeList::const_iterator end, uint *vals, uint32 count );
         /// Converts the node to a StencilOperation enum and returns true if successful
         static bool getStencilOp( const AbstractNodePtr &node, StencilOperation *op );
@@ -157,7 +157,7 @@ namespace Ogre
     class _OgreExport MaterialTranslator final : public ScriptTranslator
     {
     protected:
-        Material *                     mMaterial;
+        Material                      *mMaterial;
         Ogre::AliasTextureNamePairList mTextureAliases;
 
     public:
@@ -192,7 +192,7 @@ namespace Ogre
         void translateTessellationDomainProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
         void translateComputeProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
         void translateShadowCasterVertexProgramRef( ScriptCompiler *compiler, ObjectAbstractNode *node );
-        void translateShadowCasterFragmentProgramRef( ScriptCompiler *    compiler,
+        void translateShadowCasterFragmentProgramRef( ScriptCompiler     *compiler,
                                                       ObjectAbstractNode *node );
     };
 
@@ -225,9 +225,9 @@ namespace Ogre
         void translateUnifiedGpuProgram( ScriptCompiler *compiler, ObjectAbstractNode *obj );
 
     public:
-        static void translateProgramParameters( ScriptCompiler *              compiler,
+        static void translateProgramParameters( ScriptCompiler               *compiler,
                                                 GpuProgramParametersSharedPtr params,
-                                                ObjectAbstractNode *          obj );
+                                                ObjectAbstractNode           *obj );
     };
 
     class _OgreExport SharedParamsTranslator final : public ScriptTranslator
@@ -376,7 +376,7 @@ namespace Ogre
     protected:
         CompositorPassDef *mPassDef;
         static bool        getStoreAction( const Ogre::AbstractNodePtr &node,
-                                           StoreAction::StoreAction *   result );
+                                           StoreAction::StoreAction    *result );
 
     public:
         CompositorStoreActionTranslator();

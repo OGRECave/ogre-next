@@ -102,7 +102,7 @@ namespace Ogre
         GL3PlusReadOnlyBufferEmulatedPacked( size_t internalBufStartBytes, size_t numElements,
                                              uint32 bytesPerElement, uint32 numElementsPadding,
                                              BufferType bufferType, void *initialData, bool keepAsShadow,
-                                             VaoManager *            vaoManager,
+                                             VaoManager             *vaoManager,
                                              GL3PlusBufferInterface *bufferInterface,
                                              PixelFormatGpu          pf );
         ~GL3PlusReadOnlyBufferEmulatedPacked() override;

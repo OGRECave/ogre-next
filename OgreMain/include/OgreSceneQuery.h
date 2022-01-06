@@ -122,7 +122,7 @@ namespace Ogre
         };
 
     protected:
-        SceneManager *               mParentSceneMgr;
+        SceneManager                *mParentSceneMgr;
         uint32                       mQueryMask;
         set<WorldFragmentType>::type mSupportedWorldFragments;
         WorldFragmentType            mWorldFragmentType;

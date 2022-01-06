@@ -69,7 +69,7 @@ namespace Ogre
         size_t               mInternalBufferStart;  /// In Vertices
         vector<uint32>::type mBytesPerVertexPerSource;
         vector<size_t>::type mSourceOffset;  /// Where each source starts, in vertices
-        VaoManager *         mVaoManager;
+        VaoManager          *mVaoManager;
 
         virtual void destroyVertexBuffersImpl( VertexBufferPackedVec &inOutVertexBuffers ) = 0;
 

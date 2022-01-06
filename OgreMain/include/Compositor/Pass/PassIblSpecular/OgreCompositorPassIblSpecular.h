@@ -59,7 +59,7 @@ namespace Ogre
     protected:
         struct JobWithBarrier
         {
-            HlmsComputeJob *   job;
+            HlmsComputeJob    *job;
             ResourceTransition resourceTransition;
         };
 

@@ -428,7 +428,7 @@ namespace Ogre
             is being run on the background resource loading thread
         */
         virtual ResourcePtr prepare( const String &name, const String &group, bool isManual = false,
-                                     ManualResourceLoader *   loader = 0,
+                                     ManualResourceLoader    *loader = 0,
                                      const NameValuePairList *loadParams = 0,
                                      bool                     backgroundThread = false );
 
@@ -448,7 +448,7 @@ namespace Ogre
             is being run on the background resource loading thread
         */
         virtual ResourcePtr load( const String &name, const String &group, bool isManual = false,
-                                  ManualResourceLoader *   loader = 0,
+                                  ManualResourceLoader    *loader = 0,
                                   const NameValuePairList *loadParams = 0,
                                   bool                     backgroundThread = false );
 

@@ -114,22 +114,22 @@ namespace Ogre
         mutable bool        mLodCameraPositionDirty;
         mutable bool        mLodCameraPositionObjectSpaceDirty;
 
-        const Renderable *          mCurrentRenderable;
-        const Camera *              mCurrentCamera;
-        const LightList *           mCurrentLightList;
-        const Frustum *             mCurrentTextureProjector[OGRE_MAX_SIMULTANEOUS_LIGHTS];
+        const Renderable           *mCurrentRenderable;
+        const Camera               *mCurrentCamera;
+        const LightList            *mCurrentLightList;
+        const Frustum              *mCurrentTextureProjector[OGRE_MAX_SIMULTANEOUS_LIGHTS];
         const RenderPassDescriptor *mCurrentRenderPassDesc;
-        const Viewport *            mCurrentViewport;
-        const SceneManager *        mCurrentSceneManager;
-        const Pass *                mCurrentPass;
-        const HlmsComputeJob *      mCurrentJob;
+        const Viewport             *mCurrentViewport;
+        const SceneManager         *mCurrentSceneManager;
+        const Pass                 *mCurrentPass;
+        const HlmsComputeJob       *mCurrentJob;
         const CompositorShadowNode *mCurrentShadowNode;
         vector<Real>::type          mNullPssmSplitPoint;
         vector<Real>::type          mNullPssmBlendPoint;
 
         ObjectMemoryManager mObjectMemoryManager;
-        NodeMemoryManager * mNodeMemoryManager;
-        SceneNode *         mBlankLightNode;
+        NodeMemoryManager  *mNodeMemoryManager;
+        SceneNode          *mBlankLightNode;
         Light               mBlankLight;
 
     public:
@@ -221,9 +221,9 @@ namespace Ogre
         Real                      getPssmFade( size_t shadowMapIdx ) const;
 
         const RenderPassDescriptor *getCurrentRenderPassDesc() const;
-        const Renderable *          getCurrentRenderable() const;
-        const Pass *                getCurrentPass() const;
-        const HlmsComputeJob *      getCurrentJob() const;
+        const Renderable           *getCurrentRenderable() const;
+        const Pass                 *getCurrentPass() const;
+        const HlmsComputeJob       *getCurrentJob() const;
 
         Vector4 getUavSize( size_t index ) const;
         Vector4 getInverseUavSize( size_t index ) const;
@@ -233,8 +233,8 @@ namespace Ogre
         Vector4 getPackedTextureSize( size_t index ) const;
 
         Real               getShadowExtrusionDistance() const;
-        const Vector4 &    getSceneDepthRange() const;
-        const Vector4 &    getShadowSceneDepthRange( size_t index ) const;
+        const Vector4     &getSceneDepthRange() const;
+        const Vector4     &getShadowSceneDepthRange( size_t index ) const;
         const ColourValue &getShadowColour() const;
 
         Matrix4 getInverseViewProjMatrix() const;
@@ -283,7 +283,7 @@ namespace Ogre
         void    incPassNumber();
 
         void updateLightCustomGpuParameter( const GpuProgramParameters_AutoConstantEntry &constantEntry,
-                                            GpuProgramParameters *                        params ) const;
+                                            GpuProgramParameters                         *params ) const;
 
         const Light &_getBlankLight() const { return mBlankLight; }
     };

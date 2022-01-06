@@ -43,7 +43,7 @@ namespace Ogre
     protected:
         size_t        mVboPoolIdx;
         id<MTLBuffer> mVboName;
-        void *        mMappedPtr;
+        void         *mMappedPtr;
 
         size_t              mUnmapTicket;
         MetalDynamicBuffer *mDynamicBuffer;

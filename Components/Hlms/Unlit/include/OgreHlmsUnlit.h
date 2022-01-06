@@ -97,7 +97,7 @@ namespace Ogre
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
-                                            const HlmsParamVec &  paramVec ) override;
+                                            const HlmsParamVec   &paramVec ) override;
 
         void setTextureProperty( LwString &propertyName, HlmsUnlitDatablock *datablock, uint8 texType );
 
@@ -109,7 +109,7 @@ namespace Ogre
 
         void destroyAllBuffers() override;
 
-        FORCEINLINE uint32 fillBuffersFor( const HlmsCache *       cache,
+        FORCEINLINE uint32 fillBuffersFor( const HlmsCache        *cache,
                                            const QueuedRenderable &queuedRenderable, bool casterPass,
                                            uint32 lastCacheHash, CommandBuffer *commandBuffer,
                                            bool isV1 );
@@ -160,14 +160,14 @@ namespace Ogre
         void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                         HlmsDatablock *datablock, const String &resourceGroup,
                         HlmsJsonListener *listener,
-                        const String &    additionalTextureExtension ) const override;
+                        const String     &additionalTextureExtension ) const override;
         /// @copydoc Hlms::_saveJson
         void _saveJson( const HlmsDatablock *datablock, String &outString, HlmsJsonListener *listener,
                         const String &additionalTextureExtension ) const override;
 
         /// @copydoc Hlms::_collectSamplerblocks
         void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
-                                    const HlmsDatablock *                datablock ) const override;
+                                    const HlmsDatablock                 *datablock ) const override;
 #endif
     };
 

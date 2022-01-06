@@ -67,7 +67,7 @@ namespace Ogre
     template <typename T>
     class FastArray
     {
-        T *    mData;
+        T     *mData;
         size_t mSize;
         size_t mCapacity;
 
@@ -98,7 +98,7 @@ namespace Ogre
     public:
         typedef T value_type;
 
-        typedef T *      iterator;
+        typedef T       *iterator;
         typedef const T *const_iterator;
 
         FastArray() : mData( 0 ), mSize( 0 ), mCapacity( 0 ) {}

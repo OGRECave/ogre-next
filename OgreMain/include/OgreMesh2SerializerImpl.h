@@ -97,7 +97,7 @@ namespace Ogre
             uint8                lodSource;
             bool                 index32Bit;
             uint32               numIndices;
-            void *               indexData;
+            void                *indexData;
             OperationType        operationType;
 
             SubMeshLod();
@@ -128,9 +128,9 @@ namespace Ogre
         virtual void writePoseKeyframe(const VertexPoseKeyFrame* kf);
         virtual void writePoseKeyframePoseRef(const VertexPoseKeyFrame::PoseRef& poseRef);*/
 
-        virtual size_t calcMeshSize( const Mesh *                        pMesh,
+        virtual size_t calcMeshSize( const Mesh                         *pMesh,
                                      const LodLevelVertexBufferTableVec &lodVertexTable );
-        virtual size_t calcSubMeshSize( const SubMesh *                  pSub,
+        virtual size_t calcSubMeshSize( const SubMesh                   *pSub,
                                         const LodLevelVertexBufferTable &lodVertexTable );
         virtual size_t calcSubMeshLodSize( const VertexArrayObject *vao, bool skipVertexBuffer );
         virtual size_t calcGeometrySize( const VertexBufferPackedVec &vertexData );

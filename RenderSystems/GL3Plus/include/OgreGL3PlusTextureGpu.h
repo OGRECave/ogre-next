@@ -152,7 +152,7 @@ namespace Ogre
         GL3PlusTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                        VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                        TextureTypes::TextureTypes initialType,
-                                       TextureGpuManager *        textureManager );
+                                       TextureGpuManager         *textureManager );
         ~GL3PlusTextureGpuRenderTarget() override;
 
         void           _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,

@@ -80,7 +80,7 @@ namespace Ogre
     class _OgreExport StagingTexture : public OgreAllocatedObj
     {
     protected:
-        VaoManager *   mVaoManager;
+        VaoManager    *mVaoManager;
         uint32         mLastFrameUsed;
         PixelFormatGpu mFormatFamily;
 

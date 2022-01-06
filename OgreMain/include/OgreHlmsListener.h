@@ -130,10 +130,10 @@ namespace Ogre
         @param queuedRenderable
             @see Hlms::createShaderCacheEntry
         */
-        virtual void shaderCacheEntryCreated( const String &          shaderProfile,
-                                              const HlmsCache *       hlmsCacheEntry,
-                                              const HlmsCache &       passCache,
-                                              const HlmsPropertyVec & properties,
+        virtual void shaderCacheEntryCreated( const String           &shaderProfile,
+                                              const HlmsCache        *hlmsCacheEntry,
+                                              const HlmsCache        &passCache,
+                                              const HlmsPropertyVec  &properties,
                                               const QueuedRenderable &queuedRenderable )
         {
         }

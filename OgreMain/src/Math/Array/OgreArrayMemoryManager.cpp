@@ -42,7 +42,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     const size_t ArrayMemoryManager::MAX_MEMORY_SLOTS =
-        ( size_t )( -ARRAY_PACKED_REALS ) - 1 - OGRE_PREFETCH_SLOT_DISTANCE;
+        (size_t)( -ARRAY_PACKED_REALS ) - 1 - OGRE_PREFETCH_SLOT_DISTANCE;
 
     ArrayMemoryManager::ArrayMemoryManager( size_t const *elementsMemSize,
                                             const CleanupRoutines *initRoutines,
@@ -63,8 +63,8 @@ namespace Ogre
     {
         // If the assert triggers, their values will overflow to 0 when
         // trying to round to nearest multiple of ARRAY_PACKED_REALS
-        assert( mMaxHardLimit < ( size_t )( -ARRAY_PACKED_REALS ) &&
-                mMaxMemory < ( size_t )( -ARRAY_PACKED_REALS ) );
+        assert( mMaxHardLimit < (size_t)( -ARRAY_PACKED_REALS ) &&
+                mMaxMemory < (size_t)( -ARRAY_PACKED_REALS ) );
         assert( mMaxMemory <= mMaxHardLimit );
 
         mMemoryPools.resize( numElementsSize, 0 );

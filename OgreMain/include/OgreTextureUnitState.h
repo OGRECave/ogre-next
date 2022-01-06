@@ -149,7 +149,7 @@ namespace Ogre
             Real              phase;
             Real              amplitude;
             Controller<Real> *controller;
-            const Frustum *   frustum;
+            const Frustum    *frustum;
         };
 
         /** Texture effects in a multimap paired array.
@@ -191,7 +191,7 @@ namespace Ogre
         @note
             Applies to both fixed-function and programmable pipeline.
         */
-        void setTextureName( const String &             name,
+        void setTextureName( const String              &name,
                              TextureTypes::TextureTypes ttype = TextureTypes::Type2D );
 
         /** Sets this texture layer to use a single texture, given the
@@ -1136,7 +1136,7 @@ namespace Ogre
         // Pointer members (those that can't be copied using memcpy), and MUST
         // preserving even if assign from others
         //
-        Pass *            mParent;
+        Pass             *mParent;
         Controller<Real> *mAnimController;
         //-----------------------------------------------------------------------------
 

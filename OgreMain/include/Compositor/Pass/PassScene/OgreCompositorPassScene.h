@@ -64,16 +64,16 @@ namespace Ogre
 
     protected:
         CompositorShadowNode *mShadowNode;
-        Camera *              mCamera;
-        Camera *              mLodCamera;
-        Camera *              mCullCamera;
+        Camera               *mCamera;
+        Camera               *mLodCamera;
+        Camera               *mCullCamera;
         bool                  mUpdateShadowNode;
 
         TextureGpuVec mPrePassTextures;
-        TextureGpu *  mPrePassDepthTexture;
-        TextureGpu *  mSsrTexture;
-        TextureGpu *  mDepthTextureNoMsaa;
-        TextureGpu *  mRefractionsTexture;
+        TextureGpu   *mPrePassDepthTexture;
+        TextureGpu   *mSsrTexture;
+        TextureGpu   *mDepthTextureNoMsaa;
+        TextureGpu   *mRefractionsTexture;
 
         HlmsManager *mHlmsManager;
 
@@ -99,9 +99,9 @@ namespace Ogre
         void execute( const Camera *lodCamera ) override;
 
         CompositorShadowNode *getShadowNode() const { return mShadowNode; }
-        Camera *              getCamera() const { return mCamera; }
+        Camera               *getCamera() const { return mCamera; }
         void                  _setCustomCamera( Camera *camera ) { mCamera = camera; }
-        Camera *              getCullCamera() const { return mCullCamera; }
+        Camera               *getCullCamera() const { return mCullCamera; }
         void                  _setCustomCullCamera( Camera *camera ) { mCullCamera = camera; }
         void                  _setUpdateShadowNode( bool update ) { mUpdateShadowNode = update; }
 

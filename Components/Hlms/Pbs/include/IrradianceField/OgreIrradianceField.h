@@ -197,27 +197,27 @@ namespace Ogre
         TextureGpu *mDepthVarianceTex;
 
         CompositorWorkspace *mGenerationWorkspace;
-        HlmsComputeJob *     mGenerationJob;
-        HlmsComputeJob *     mDepthIntegrationJob;
-        HlmsComputeJob *     mColourIntegrationJob;
-        HlmsComputeJob *     mDepthMirrorBorderJob;
-        HlmsComputeJob *     mColourMirrorBorderJob;
+        HlmsComputeJob      *mGenerationJob;
+        HlmsComputeJob      *mDepthIntegrationJob;
+        HlmsComputeJob      *mColourIntegrationJob;
+        HlmsComputeJob      *mDepthMirrorBorderJob;
+        HlmsComputeJob      *mColourMirrorBorderJob;
 
         IrradianceFieldGenParams mIfGenParams;
-        ConstBufferPacked *      mIfGenParamsBuffer;
-        TexBufferPacked *        mDirectionsBuffer;
-        TexBufferPacked *        mDepthTapsIntegrationBuffer;
-        TexBufferPacked *        mColourTapsIntegrationBuffer;
-        ConstBufferPacked *      mIfdDepthBorderMirrorParamsBuffer;
-        ConstBufferPacked *      mIfdColourBorderMirrorParamsBuffer;
+        ConstBufferPacked       *mIfGenParamsBuffer;
+        TexBufferPacked         *mDirectionsBuffer;
+        TexBufferPacked         *mDepthTapsIntegrationBuffer;
+        TexBufferPacked         *mColourTapsIntegrationBuffer;
+        ConstBufferPacked       *mIfdDepthBorderMirrorParamsBuffer;
+        ConstBufferPacked       *mIfdColourBorderMirrorParamsBuffer;
 
         IrradianceFieldRaster *mIfRaster;
 
         DebugVisualizationMode mDebugVisualizationMode;
         uint8                  mDebugTessellation;
-        IfdProbeVisualizer *   mDebugIfdProbeVisualizer;
+        IfdProbeVisualizer    *mDebugIfdProbeVisualizer;
 
-        Root *        mRoot;
+        Root         *mRoot;
         SceneManager *mSceneManager;
         bool          mAlreadyWarned;
 
@@ -226,7 +226,7 @@ namespace Ogre
         static TexBufferPacked *setupIntegrationTaps( VaoManager *vaoManager, uint32 probeRes,
                                                       uint32 fullWidth, HlmsComputeJob *integrationJob,
                                                       ConstBufferPacked *ifGenParamsBuffer,
-                                                      uint32 &           outMaxIntegrationTapsPerPixel );
+                                                      uint32            &outMaxIntegrationTapsPerPixel );
         static uint32           countNumIntegrationTaps( uint32 probeRes );
 
         /**
@@ -240,7 +240,7 @@ namespace Ogre
 
         void setupBorderMirrorParams( uint32 borderedRes, uint32 fullWidth,
                                       ConstBufferPacked *ifdBorderMirrorParamsBuffer,
-                                      HlmsComputeJob *   job );
+                                      HlmsComputeJob    *job );
 
         void setTextureToDebugVisualizer();
 

@@ -275,7 +275,7 @@ namespace Ogre
                 "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/Albedo",
                 GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
 
-            texFlags &= ~( uint32 )( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
+            texFlags &= ~(uint32)( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
             mEmissiveVox = mTextureGpuManager->createTexture(
                 "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/Emissive",
@@ -331,7 +331,7 @@ namespace Ogre
             "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/AlbedoALT",
             GpuPageOutStrategy::Discard, texFlags, TextureTypes::Type3D );
 
-        texFlags &= ~( uint32 )( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
+        texFlags &= ~(uint32)( TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps );
 
         mEmissiveVoxAlt = mTextureGpuManager->createTexture(
             "VctImageVoxelizer" + StringConverter::toString( getId() ) + "/EmissiveALT",

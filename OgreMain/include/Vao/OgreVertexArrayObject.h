@@ -87,7 +87,7 @@ namespace Ogre
         uint32                mPrimStart;
         uint32                mPrimCount;
         VertexBufferPackedVec mVertexBuffers;
-        IndexBufferPacked *   mIndexBuffer;
+        IndexBufferPacked    *mIndexBuffer;
 
         VertexBufferPacked *mBaseVertexBuffer;
 
@@ -104,8 +104,8 @@ namespace Ogre
         uint16 getInputLayoutId() const { return mInputLayoutId; }
 
         const VertexBufferPackedVec &getVertexBuffers() const { return mVertexBuffers; }
-        IndexBufferPacked *          getIndexBuffer() const { return mIndexBuffer; }
-        VertexBufferPacked *         getBaseVertexBuffer() const { return mBaseVertexBuffer; }
+        IndexBufferPacked           *getIndexBuffer() const { return mIndexBuffer; }
+        VertexBufferPacked          *getBaseVertexBuffer() const { return mBaseVertexBuffer; }
 
         OperationType getOperationType() const { return mOperationType; }
 
@@ -185,7 +185,7 @@ namespace Ogre
             VertexElementType     type;
             AsyncTicketPtr        asyncTicket;
             /// Data is already offseted. To get the vertex location, perform (data - offset);
-            char const *              data;
+            char const               *data;
             size_t                    offset;
             VertexBufferPacked const *vertexBuffer;
 

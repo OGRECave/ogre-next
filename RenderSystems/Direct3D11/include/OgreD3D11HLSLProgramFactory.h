@@ -39,7 +39,7 @@ namespace Ogre
     {
     protected:
         static String sLanguageName;
-        D3D11Device & mDevice;
+        D3D11Device  &mDevice;
 
     public:
         D3D11HLSLProgramFactory( D3D11Device &device );

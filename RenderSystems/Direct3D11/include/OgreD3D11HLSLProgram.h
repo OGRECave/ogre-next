@@ -336,13 +336,13 @@ namespace Ogre
         const String &getLanguage() const override;
 
         void                  buildConstantDefinitions() const override;
-        ID3D11VertexShader *  getVertexShader() const;
-        ID3D11PixelShader *   getPixelShader() const;
+        ID3D11VertexShader   *getVertexShader() const;
+        ID3D11PixelShader    *getPixelShader() const;
         ID3D11GeometryShader *getGeometryShader() const;
-        ID3D11DomainShader *  getDomainShader() const;
-        ID3D11HullShader *    getHullShader() const;
-        ID3D11ComputeShader * getComputeShader() const;
-        const MicroCode &     getMicroCode() const;
+        ID3D11DomainShader   *getDomainShader() const;
+        ID3D11HullShader     *getHullShader() const;
+        ID3D11ComputeShader  *getComputeShader() const;
+        const MicroCode      &getMicroCode() const;
 
         /// buffers must have a capacity of 2, i.e. ID3D11Buffer *buffers[2];
         void getConstantBuffers( ID3D11Buffer **buffers, UINT &outSlotStart, UINT &outNumBuffers,

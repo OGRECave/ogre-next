@@ -53,7 +53,7 @@ namespace Ogre
 
         D3D11Device &mDevice;
 
-        TextureGpu *    createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        TextureGpu     *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                            IdString name, uint32 textureFlags,
                                            TextureTypes::TextureTypes initialType ) override;
         StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
@@ -80,7 +80,7 @@ namespace Ogre
         TextureGpu *createTextureGpuWindow( bool fromFlipModeSwapchain, Window *window );
         TextureGpu *createWindowDepthBuffer();
 
-        ID3D11Resource *          getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
+        ID3D11Resource           *getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
         ID3D11ShaderResourceView *getBlankTextureSrv( TextureTypes::TextureTypes textureType ) const;
 
         D3D11Device &getDevice() { return mDevice; }

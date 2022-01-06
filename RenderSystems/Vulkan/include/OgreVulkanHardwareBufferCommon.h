@@ -36,57 +36,57 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 namespace Ogre
 {
-namespace v1
-{
-    class _OgreVulkanExport VulkanHardwareBufferCommon
+    namespace v1
     {
-    private:
-        VulkanRawBuffer mBuffer;
-        VulkanDevice *mDevice;
-        VulkanDiscardBuffer *mDiscardBuffer;
-        VaoManager *mVaoManager;
-        StagingBuffer *mStagingBuffer;
-        uint32 mLastFrameUsed;
-        uint32 mLastFrameGpuWrote;
+        class _OgreVulkanExport VulkanHardwareBufferCommon
+        {
+        private:
+            VulkanRawBuffer mBuffer;
+            VulkanDevice *mDevice;
+            VulkanDiscardBuffer *mDiscardBuffer;
+            VaoManager *mVaoManager;
+            StagingBuffer *mStagingBuffer;
+            uint32 mLastFrameUsed;
+            uint32 mLastFrameGpuWrote;
 
-    public:
-        VulkanHardwareBufferCommon( size_t sizeBytes, HardwareBuffer::Usage usage, uint16 alignment,
-                                    VulkanDiscardBufferManager *discardBufferManager,
-                                    VulkanDevice *device );
-        virtual ~VulkanHardwareBufferCommon();
+        public:
+            VulkanHardwareBufferCommon( size_t sizeBytes, HardwareBuffer::Usage usage, uint16 alignment,
+                                        VulkanDiscardBufferManager *discardBufferManager,
+                                        VulkanDevice *device );
+            virtual ~VulkanHardwareBufferCommon();
 
-        void _notifyDeviceStalled();
+            void _notifyDeviceStalled();
 
-        /** Returns the actual API buffer, but first sets mLastFrameUsed as we
-            assume you're calling this function to use the buffer in the GPU.
-        @param outOffset
-            Out. Guaranteed to be written. Used by HBU_DISCARDABLE buffers which
-            need an offset to the internal ring buffer we've allocated.
-        @return
-            The MTLBuffer in question.
-        */
-        VkBuffer getBufferName( size_t &outOffset );
-        VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
+            /** Returns the actual API buffer, but first sets mLastFrameUsed as we
+                assume you're calling this function to use the buffer in the GPU.
+            @param outOffset
+                Out. Guaranteed to be written. Used by HBU_DISCARDABLE buffers which
+                need an offset to the internal ring buffer we've allocated.
+            @return
+                The MTLBuffer in question.
+            */
+            VkBuffer getBufferName( size_t &outOffset );
+            VkBuffer getBufferNameForGpuWrite( size_t &outOffset );
 
-        /// @see HardwareBuffer.
-        void *lockImpl( size_t offset, size_t length, HardwareBuffer::LockOptions options,
-                        bool isLocked );
-        /// @see HardwareBuffer.
-        void unlockImpl( size_t lockStart, size_t lockSize );
+            /// @see HardwareBuffer.
+            void *lockImpl( size_t offset, size_t length, HardwareBuffer::LockOptions options,
+                            bool isLocked );
+            /// @see HardwareBuffer.
+            void unlockImpl( size_t lockStart, size_t lockSize );
 
-        /// @see HardwareBuffer.
-        void readData( size_t offset, size_t length, void *pDest );
+            /// @see HardwareBuffer.
+            void readData( size_t offset, size_t length, void *pDest );
 
-        /// @see HardwareBuffer.
-        void writeData( size_t offset, size_t length, const void *pSource,
-                        bool discardWholeBuffer = false );
-        /// @see HardwareBuffer.
-        void copyData( VulkanHardwareBufferCommon *srcBuffer, size_t srcOffset, size_t dstOffset,
-                       size_t length, bool discardWholeBuffer = false );
+            /// @see HardwareBuffer.
+            void writeData( size_t offset, size_t length, const void *pSource,
+                            bool discardWholeBuffer = false );
+            /// @see HardwareBuffer.
+            void copyData( VulkanHardwareBufferCommon *srcBuffer, size_t srcOffset, size_t dstOffset,
+                           size_t length, bool discardWholeBuffer = false );
 
-        size_t getSizeBytes() const { return mBuffer.mSize; }
-    };
-}
-}
+            size_t getSizeBytes() const { return mBuffer.mSize; }
+        };
+    }  // namespace v1
+}  // namespace Ogre
 
 #endif

@@ -98,7 +98,7 @@ namespace Ogre
         CompositorShadowNodeVec  mShadowNodes;
         CompositorChannelVec     mGlobalTextures;
         CompositorNamedBufferVec mGlobalBuffers;
-        Camera *      mDefaultCamera;  /// Could be null. @See CompositorManager2::addWorkspace
+        Camera       *mDefaultCamera;  /// Could be null. @See CompositorManager2::addWorkspace
         SceneManager *mSceneManager;
         RenderSystem *mRenderSys;
 

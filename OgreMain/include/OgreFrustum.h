@@ -450,7 +450,7 @@ namespace Ogre
         const Plane *getFrustumPlanes() const;
 
         /// Returns the frustum planes, doesn't check if dirty.
-        const Plane *  _getCachedFrustumPlanes() const { return mFrustumPlanes; }
+        const Plane   *_getCachedFrustumPlanes() const { return mFrustumPlanes; }
         const Vector3 *_getCachedWorldSpaceCorners() const { return mWorldSpaceCorners; }
 
         /** Retrieves a specified plane of the frustum (world space).

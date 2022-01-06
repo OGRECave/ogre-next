@@ -545,12 +545,12 @@ namespace Ogre
         initGlslResources( resources );
 
         // Enable SPIR-V and Vulkan rules when parsing GLSL
-        EShMessages messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
+        EShMessages messages = (EShMessages)( EShMsgDefault | EShMsgSpvRules | EShMsgVulkanRules );
         if( mShaderSyntax == HLSL )
         {
             // glslang::EShTargetClientVersion VulkanClientVersion = glslang::EShTargetVulkan_1_0;
             // glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_0;
-            messages = ( EShMessages )( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
+            messages = (EShMessages)( EShMsgDefault | EShMsgSpvRules | EShMsgReadHlsl );
             shader.setEnvInput( glslang::EShSourceHlsl, stage, glslang::EShClientVulkan, 100 );
             // shader.setEnvClient( glslang::EShClientVulkan, VulkanClientVersion );
             // shader.setEnvTarget( glslang::EShTargetSpv, TargetVersion );
@@ -558,7 +558,7 @@ namespace Ogre
         }
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        messages = ( EShMessages )( messages | EShMsgDebugInfo );
+        messages = (EShMessages)( messages | EShMsgDebugInfo );
 #endif
 
         const char *sourceCString = mSource.c_str();

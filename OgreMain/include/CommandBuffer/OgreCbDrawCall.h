@@ -62,7 +62,7 @@ namespace Ogre
     {
         VertexArrayObject *vao;
         uint32             numDraws;
-        void *             indirectBufferOffset;
+        void              *indirectBufferOffset;
         CbDrawCall( uint16 cmdType, VertexArrayObject *_vao, void *_indirectBufferOffset );
     };
 
@@ -88,7 +88,7 @@ namespace Ogre
         struct _OgreExport CbRenderOp : public CbBase
         {
             v1::VertexData *vertexData;
-            v1::IndexData * indexData;
+            v1::IndexData  *indexData;
             uint8           operationType;
             // uint32          numberOfInstances;
             // uint8           renderToVertexBuffer; //Is this used???

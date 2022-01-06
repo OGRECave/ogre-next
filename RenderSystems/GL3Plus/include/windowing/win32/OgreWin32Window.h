@@ -43,7 +43,7 @@ namespace Ogre
         HGLRC           mGlrc;
         uint32          mColourDepth;
         bool            mIsExternal;
-        char *          mDeviceName;
+        char           *mDeviceName;
         bool            mIsExternalGLControl;
         bool            mOwnsGLContext;
         bool            mSizing;
@@ -51,7 +51,7 @@ namespace Ogre
         bool            mHidden;
         bool            mVisible;
         bool            mHwGamma;
-        Win32Context *  mContext;
+        Win32Context   *mContext;
         DWORD           mWindowedWinStyle;    // Windowed mode window style flags.
         DWORD           mFullscreenWinStyle;  // Fullscreen mode window style flags.
 

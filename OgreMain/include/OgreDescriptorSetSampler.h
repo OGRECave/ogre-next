@@ -55,7 +55,7 @@ namespace Ogre
     {
         uint16 mRefCount;
         uint16 mShaderTypeSamplerCount[NumShaderTypes];
-        void * mRsData;  /// Render-System specific data
+        void  *mRsData;  /// Render-System specific data
 
         FastArray<const HlmsSamplerblock *> mSamplers;
 

@@ -122,7 +122,7 @@ namespace Ogre
 
         VoxelizedMeshCache *mMeshCache;
 
-        SceneManager *      mSceneManager;
+        SceneManager       *mSceneManager;
         CompositorManager2 *mCompositorManager;
 
         uint32 mNumBounces;   /// @see VctLighting::update

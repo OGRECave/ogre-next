@@ -102,7 +102,7 @@ namespace Ogre
                 use the default technique for this material
             */
             virtual Technique *handleSchemeNotFound( unsigned short schemeIndex,
-                                                     const String & schemeName,
+                                                     const String  &schemeName,
                                                      Material *originalMaterial, unsigned short lodIndex,
                                                      const Renderable *rend ) = 0;
 
@@ -152,7 +152,7 @@ namespace Ogre
         /// Create a new material
         /// @see ResourceManager::createResource
         MaterialPtr create( const String &name, const String &group, bool isManual = false,
-                            ManualResourceLoader *   loader = 0,
+                            ManualResourceLoader    *loader = 0,
                             const NameValuePairList *createParams = 0 );
 
         /// Get a resource by name
@@ -245,7 +245,7 @@ namespace Ogre
         virtual void removeListener( Listener *l, const Ogre::String &schemeName = BLANKSTRING );
 
         /// Internal method for sorting out missing technique for a scheme
-        virtual Technique *_arbitrateMissingTechniqueForActiveScheme( Material *        mat,
+        virtual Technique *_arbitrateMissingTechniqueForActiveScheme( Material         *mat,
                                                                       unsigned short    lodIndex,
                                                                       const Renderable *rend );
 

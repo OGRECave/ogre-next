@@ -82,7 +82,7 @@ namespace Ogre
         };
 
     protected:
-        HlmsManager *     mHlmsManager;
+        HlmsManager      *mHlmsManager;
         HlmsJsonListener *mListener;
 
     public:
@@ -97,9 +97,9 @@ namespace Ogre
     protected:
         static void loadSampler( const rapidjson::Value &samplers, HlmsSamplerblock &samplerblock );
         static void loadMacroblock( const rapidjson::Value &macroblocksJson,
-                                    HlmsMacroblock &        macroblock );
+                                    HlmsMacroblock         &macroblock );
         static void loadBlendblock( const rapidjson::Value &blendblocksJson,
-                                    HlmsBlendblock &        blendblock );
+                                    HlmsBlendblock         &blendblock );
         static void loadDatablockCommon( const rapidjson::Value &json, const NamedBlocks &blocks,
                                          HlmsDatablock *datablock );
 

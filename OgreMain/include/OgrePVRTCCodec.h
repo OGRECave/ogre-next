@@ -51,7 +51,7 @@ namespace Ogre
 
         static void flipEndian( void *pData, size_t size,
                                 size_t count );  // invokes Bitwise::bswapChunks() if OGRE_ENDIAN_BIG
-        static void flipEndian( void * pData,
+        static void flipEndian( void  *pData,
                                 size_t size );  // invokes Bitwise::bswapBuffer() if OGRE_ENDIAN_BIG
 
         /// Single registered codec instance

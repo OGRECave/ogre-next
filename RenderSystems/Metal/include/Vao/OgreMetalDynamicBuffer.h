@@ -64,7 +64,7 @@ namespace Ogre
 
         id<MTLBuffer> mVboName;
         size_t        mVboSize;
-        void *        mMappedPtr;
+        void         *mMappedPtr;
 
         MappedRangeVec       mMappedRanges;
         vector<size_t>::type mFreeRanges;

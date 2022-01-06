@@ -415,8 +415,8 @@ namespace Ogre
 
                     // There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                     // We need to update them so they don't crash deallocateVbo later.
-                    switchVboPoolIndex( vboIdx, ( size_t )( mVbos[vboIdx].size() - 1u ),
-                                        ( size_t )( itor - mVbos[vboIdx].begin() ) );
+                    switchVboPoolIndex( vboIdx, (size_t)( mVbos[vboIdx].size() - 1u ),
+                                        (size_t)( itor - mVbos[vboIdx].begin() ) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );
                     end = mVbos[vboIdx].end();

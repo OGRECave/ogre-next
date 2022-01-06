@@ -47,7 +47,7 @@ namespace Ogre
         id<MTLBlitCommandEncoder>    mBlitEncoder;
         id<MTLComputeCommandEncoder> mComputeEncoder;
         id<MTLRenderCommandEncoder>  mRenderEncoder;
-        MetalRenderSystem *          mRenderSystem;
+        MetalRenderSystem           *mRenderSystem;
         dispatch_semaphore_t         mStallSemaphore;
 
         MetalDevice( MetalRenderSystem *renderSystem );

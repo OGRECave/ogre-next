@@ -68,7 +68,7 @@ namespace Ogre
         const Radian &operator+() const { return *this; }
         Radian        operator+( const Radian &r ) const { return Radian( mRad + r.mRad ); }
         Radian        operator+( const Degree &d ) const;
-        Radian &      operator+=( const Radian &r )
+        Radian       &operator+=( const Radian &r )
         {
             mRad += r.mRad;
             return *this;
@@ -137,7 +137,7 @@ namespace Ogre
         const Degree &operator+() const { return *this; }
         Degree        operator+( const Degree &d ) const { return Degree( mDeg + d.mDeg ); }
         Degree        operator+( const Radian &r ) const { return Degree( mDeg + r.valueDegrees() ); }
-        Degree &      operator+=( const Degree &d )
+        Degree       &operator+=( const Degree &d )
         {
             mDeg += d.mDeg;
             return *this;

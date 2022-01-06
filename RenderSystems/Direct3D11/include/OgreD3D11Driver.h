@@ -57,8 +57,8 @@ namespace Ogre
 
         // change the device
         const DXGI_ADAPTER_DESC1 &getAdapterIdentifier() const;
-        IDXGIAdapterN *           getDeviceAdapter() const;
-        D3D11VideoModeList *      getVideoModeList();
+        IDXGIAdapterN            *getDeviceAdapter() const;
+        D3D11VideoModeList       *getVideoModeList();
     };
 }  // namespace Ogre
 #endif

@@ -67,7 +67,7 @@ namespace Ogre
 
         ComPtr<ID3D11Buffer> mVboName;
         size_t               mVboSize;
-        void *               mMappedPtr;
+        void                *mMappedPtr;
 
         D3D11Device &mDevice;
 

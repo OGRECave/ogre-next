@@ -65,10 +65,10 @@ namespace Ogre
                                          MappingState prevMappingState,
                                          bool         advanceFrame = true ) override;
 
-        void                        unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
-                                           size_t flushSizeElem = 0 ) override;
-        void                        advanceFrame() override;
-        void                        regressFrame() override;
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
     };
 }  // namespace Ogre
 

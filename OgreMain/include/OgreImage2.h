@@ -383,10 +383,10 @@ namespace Ogre
             False if mipmaps cannot be generated.
         */
         static bool getDownsamplerFunctions( PixelFormatGpu             format,                //
-                                             void **                    imageDownsampler2D,    //
-                                             void **                    imageDownsampler3D,    //
-                                             void **                    imageDownsamplerCube,  //
-                                             void **                    imageBlur2D,           //
+                                             void                     **imageDownsampler2D,    //
+                                             void                     **imageDownsampler3D,    //
+                                             void                     **imageDownsamplerCube,  //
+                                             void                     **imageBlur2D,           //
                                              bool                       gammaCorrected,        //
                                              uint32                     depthOrSlices,         //
                                              TextureTypes::TextureTypes textureType,           //

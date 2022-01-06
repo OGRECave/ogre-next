@@ -83,7 +83,7 @@ namespace Ogre
 
         /** Get the squared depth from camera to the LOD object */
         virtual Real getSquaredDepth( const MovableObject *movableObject,
-                                      const Ogre::Camera * camera ) const = 0;
+                                      const Ogre::Camera  *camera ) const = 0;
 
         void lodUpdateImpl( const size_t numNodes, ObjectData t, const Camera *camera,
                             Real bias ) const override;
@@ -143,7 +143,7 @@ namespace Ogre
 
         /// @copydoc DistanceLodStrategy::getSquaredDepth
         Real getSquaredDepth( const MovableObject *movableObject,
-                              const Ogre::Camera * camera ) const override;
+                              const Ogre::Camera  *camera ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks
@@ -212,7 +212,7 @@ namespace Ogre
 
         /// @copydoc DistanceLodStrategy::getSquaredDepth
         Real getSquaredDepth( const MovableObject *movableObject,
-                              const Ogre::Camera * camera ) const override;
+                              const Ogre::Camera  *camera ) const override;
 
         /** Override standard Singleton retrieval.
         @remarks

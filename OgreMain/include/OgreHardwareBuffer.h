@@ -434,7 +434,7 @@ namespace Ogre
             }
 
             HardwareBuffer *pBuf;
-            void *          pData;
+            void           *pData;
         };
 
         /** @} */

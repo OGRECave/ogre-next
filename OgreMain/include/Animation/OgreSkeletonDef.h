@@ -146,10 +146,10 @@ namespace Ogre
 
         const String &getNameStr() const { return mName; }
 
-        const BoneDataVec &            getBones() const { return mBones; }
+        const BoneDataVec             &getBones() const { return mBones; }
         const SkeletonAnimationDefVec &getAnimationDefs() const { return mAnimationDefs; }
-        const DepthLevelInfoVec &      getDepthLevelInfo() const { return mDepthLevelInfoVec; }
-        const KfTransform *            getBindPose() const { return mBindPose.get(); }
+        const DepthLevelInfoVec       &getDepthLevelInfo() const { return mDepthLevelInfoVec; }
+        const KfTransform             *getBindPose() const { return mBindPose.get(); }
         const RawSimdUniquePtr<ArrayMatrixAf4x3, MEMCATEGORY_ANIMATION> &getReverseBindPose() const
         {
             return mReverseBindPose;

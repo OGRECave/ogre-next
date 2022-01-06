@@ -183,7 +183,7 @@ namespace Ogre
         static const float32x4_ct
             fDeg2Rad;  // Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
         static const float32x4_ct
-                                  fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
+            fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
         static const float32x4_ct FLOAT_MIN;  // FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
         static const float32x4_ct SIGN_MASK;  // 0x80000000, 0x80000000, 0x80000000, 0x80000000
         // INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea
@@ -313,7 +313,8 @@ namespace Ogre
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayInt b )
         {
             // !( (a & b) == 0 ) --> ( (a & b) == 0 ) ^ -1
-            return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32( 0 ) ), vdupq_n_u32( 0xFFFFFFFF ) );
+            return veorq_u32( vceqq_s32( vandq_s32( a, b ), vdupq_n_s32( 0 ) ),
+                              vdupq_n_u32( 0xFFFFFFFF ) );
         }
 #    ifndef _MSC_VER  // everything is __n128 on MSVC, so extra overloads are not allowed
         static inline ArrayMaskI TestFlags4( ArrayInt a, ArrayMaskI b )

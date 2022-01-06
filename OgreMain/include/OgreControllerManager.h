@@ -78,8 +78,8 @@ namespace Ogre
 
         /** Creates a new controller and registers it with the manager.
          */
-        Controller<Real> *createController( const ControllerValueRealPtr &   src,
-                                            const ControllerValueRealPtr &   dest,
+        Controller<Real> *createController( const ControllerValueRealPtr    &src,
+                                            const ControllerValueRealPtr    &dest,
                                             const ControllerFunctionRealPtr &func );
 
         /** Creates a new controller use frame time source and passthrough controller function.
@@ -193,7 +193,7 @@ namespace Ogre
             Scales the output so that instead of lying within 0..1 it lies within 0..1*amplitude for
         exaggerated effects.
         */
-        Controller<Real> *createTextureWaveTransformer( TextureUnitState *                     layer,
+        Controller<Real> *createTextureWaveTransformer( TextureUnitState                      *layer,
                                                         TextureUnitState::TextureTransformType ttype,
                                                         WaveformType waveType, Real base = 0,
                                                         Real frequency = 1, Real phase = 0,

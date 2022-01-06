@@ -48,7 +48,7 @@ namespace Ogre
 
     class _OgreHlmsUnlitExport HlmsJsonUnlit
     {
-        HlmsManager *      mHlmsManager;
+        HlmsManager       *mHlmsManager;
         TextureGpuManager *mTextureManager;
 
         UnlitBlendModes parseBlendMode( const char *value );
@@ -68,7 +68,7 @@ namespace Ogre
                            HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
-        static void collectSamplerblocks( const HlmsDatablock *                datablock,
+        static void collectSamplerblocks( const HlmsDatablock                 *datablock,
                                           set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 

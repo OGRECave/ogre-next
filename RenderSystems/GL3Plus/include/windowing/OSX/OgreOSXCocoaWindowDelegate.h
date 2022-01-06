@@ -34,7 +34,7 @@
 {
 @private
     Ogre::Window *ogreWindow;
-    NSWindow *    window;
+    NSWindow     *window;
 }
 
 - (id)initWithNSWindow:(NSWindow *)nswin ogreWindow:(Ogre::Window *)ogrewin;

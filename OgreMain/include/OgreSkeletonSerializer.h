@@ -122,7 +122,7 @@ namespace Ogre
             void writeAnimation( const Skeleton *pSkel, const Animation *anim, SkeletonVersion ver );
             void writeAnimationTrack( const Skeleton *pSkel, const OldNodeAnimationTrack *track );
             void writeKeyFrame( const Skeleton *pSkel, const TransformKeyFrame *key );
-            void writeSkeletonAnimationLink( const Skeleton *                     pSkel,
+            void writeSkeletonAnimationLink( const Skeleton                      *pSkel,
                                              const LinkedSkeletonAnimationSource &link );
 
             // Internal import methods
@@ -142,7 +142,7 @@ namespace Ogre
             size_t calcAnimationTrackSize( const Skeleton *pSkel, const OldNodeAnimationTrack *pTrack );
             size_t calcKeyFrameSize( const Skeleton *pSkel, const TransformKeyFrame *pKey );
             size_t calcKeyFrameSizeWithoutScale( const Skeleton *pSkel, const TransformKeyFrame *pKey );
-            size_t calcSkeletonAnimationLinkSize( const Skeleton *                     pSkel,
+            size_t calcSkeletonAnimationLinkSize( const Skeleton                      *pSkel,
                                                   const LinkedSkeletonAnimationSource &link );
         };
         /** @} */

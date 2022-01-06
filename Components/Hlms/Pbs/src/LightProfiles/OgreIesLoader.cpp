@@ -306,7 +306,7 @@ namespace Ogre
             else
             {
                 nextAngle.angle = *itAngle;
-                const size_t idx = ( size_t )( itAngle - mAngleData.begin() );
+                const size_t idx = (size_t)( itAngle - mAngleData.begin() );
                 nextAngle.candela = mCandelaValues[idx];
 
                 if( itAngle != mAngleData.begin() )
@@ -314,7 +314,7 @@ namespace Ogre
                     --itAngle;
 
                     prevAngle.angle = *itAngle;
-                    const size_t idx2 = ( size_t )( itAngle - mAngleData.begin() );
+                    const size_t idx2 = (size_t)( itAngle - mAngleData.begin() );
                     prevAngle.candela = mCandelaValues[idx2];
                 }
                 else

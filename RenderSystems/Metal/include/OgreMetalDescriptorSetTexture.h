@@ -53,7 +53,7 @@ namespace Ogre
     struct MetalBufferRegion
     {
         __unsafe_unretained id<MTLBuffer> *buffers;
-        NSUInteger *                       offsets;
+        NSUInteger                        *offsets;
         NSRange                            range;
         ShaderType                         shaderType;
     };

@@ -460,7 +460,7 @@ namespace Ogre
         Vector3 getDerivedRight() const;
 
         /// Same as getDerivedPosition, but doesn't check if dirty.
-        const Vector3 &   _getCachedDerivedPosition() const { return mDerivedPosition; }
+        const Vector3    &_getCachedDerivedPosition() const { return mDerivedPosition; }
         const Quaternion &_getCachedDerivedOrientation() const { return mDerivedOrientation; }
 
         /** Gets the real world orientation of the camera, including any
@@ -479,7 +479,7 @@ namespace Ogre
             rotation inherited from a node attachment. */
         Vector3 getRealRight() const;
 
-        const Vector3 &   _getCachedRealPosition() const { return mRealPosition; }
+        const Vector3    &_getCachedRealPosition() const { return mRealPosition; }
         const Quaternion &_getCachedRealOrientation() const { return mRealOrientation; }
 
         /** Overridden from Frustum/Renderable */
@@ -681,7 +681,7 @@ namespace Ogre
         @remarks
             Forward projection may lead to intersections at infinity.
         */
-        virtual void forwardIntersect( const Plane &          worldPlane,
+        virtual void forwardIntersect( const Plane           &worldPlane,
                                        vector<Vector4>::type *intersect3d ) const;
 
         /// @copydoc Frustum::isVisible(const AxisAlignedBox&, FrustumPlane*) const

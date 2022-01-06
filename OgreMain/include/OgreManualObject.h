@@ -426,7 +426,7 @@ namespace Ogre
             class _OgreExport ManualObjectSection : public Renderable, public OgreAllocatedObj
             {
             protected:
-                ManualObject *      mParent;
+                ManualObject       *mParent;
                 String              mMaterialName;
                 String              mGroupName;
                 mutable MaterialPtr mMaterial;
@@ -539,7 +539,7 @@ namespace Ogre
         {
         protected:
             MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                               SceneManager *           manager,
+                                               SceneManager            *manager,
                                                const NameValuePairList *params = 0 ) override;
 
         public:

@@ -95,14 +95,14 @@ namespace Ogre
         pthread_t mThread;
 #endif
         size_t mThreadIdx;
-        void * mUserParam;
+        void  *mUserParam;
 
     public:
         ThreadHandle( size_t threadIdx, void *userParam );
         ~ThreadHandle();
 
         size_t getThreadIdx() const { return mThreadIdx; }
-        void * getUserParam() const { return mUserParam; }
+        void  *getUserParam() const { return mUserParam; }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
         /// Internal use

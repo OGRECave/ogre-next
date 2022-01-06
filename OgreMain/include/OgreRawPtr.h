@@ -115,7 +115,7 @@ namespace Ogre
             }
         }
 
-        T *RESTRICT_ALIAS_RETURN get() { return mPtr; }
+        T *RESTRICT_ALIAS_RETURN       get() { return mPtr; }
         const T *RESTRICT_ALIAS_RETURN get() const { return mPtr; }
 
         size_t size() const { return mNumElements; }

@@ -145,7 +145,7 @@ namespace Ogre
             void gpuProgramRefEventRaised( MaterialSerializer *ser, SerializeEvent event, bool &skip,
                                            const String &attrib, const GpuProgramPtr &program,
                                            const GpuProgramParametersSharedPtr &params,
-                                           GpuProgramParameters *               defaultParams )
+                                           GpuProgramParameters                *defaultParams )
             {
                 (void)ser;
                 (void)event;
@@ -194,15 +194,15 @@ namespace Ogre
                                  const GpuProgramParametersSharedPtr &params );
         void writeGpuPrograms();
         void writeGPUProgramParameters( const GpuProgramParametersSharedPtr &params,
-                                        GpuProgramParameters *               defaultParams,
+                                        GpuProgramParameters                *defaultParams,
                                         const unsigned short                 level = 4,
                                         const bool                           useMainBuffer = true );
         void writeNamedGpuProgramParameters( const GpuProgramParametersSharedPtr &params,
-                                             GpuProgramParameters *               defaultParams,
+                                             GpuProgramParameters                *defaultParams,
                                              const unsigned short                 level = 4,
                                              const bool                           useMainBuffer = true );
         void writeLowLevelGpuProgramParameters( const GpuProgramParametersSharedPtr &params,
-                                                GpuProgramParameters *               defaultParams,
+                                                GpuProgramParameters                *defaultParams,
                                                 const unsigned short                 level = 4,
                                                 const bool useMainBuffer = true );
         void writeGpuProgramParameter( const String &commandName, const String &identifier,
@@ -227,13 +227,13 @@ namespace Ogre
             EffectMap;
 
         void writeRotationEffect( const TextureUnitState::TextureEffect &effect,
-                                  const TextureUnitState *               pTex );
+                                  const TextureUnitState                *pTex );
         void writeTransformEffect( const TextureUnitState::TextureEffect &effect,
-                                   const TextureUnitState *               pTex );
+                                   const TextureUnitState                *pTex );
         void writeScrollEffect( const TextureUnitState::TextureEffect &effect,
-                                const TextureUnitState *               pTex );
+                                const TextureUnitState                *pTex );
         void writeEnvironmentMapEffect( const TextureUnitState::TextureEffect &effect,
-                                        const TextureUnitState *               pTex );
+                                        const TextureUnitState                *pTex );
 
         String convertFiltering( FilterOptions fo );
 
@@ -256,9 +256,9 @@ namespace Ogre
         @see Listener::gpuProgramRefEventRaised.
         */
         void fireGpuProgramRefEvent( SerializeEvent event, bool &skip, const String &attrib,
-                                     const GpuProgramPtr &                program,
+                                     const GpuProgramPtr                 &program,
                                      const GpuProgramParametersSharedPtr &params,
-                                     GpuProgramParameters *               defaultParams );
+                                     GpuProgramParameters                *defaultParams );
 
         /** Internal methods that invokes registered listeners callback.
         @see Listener::textureUnitStateEventRaised.

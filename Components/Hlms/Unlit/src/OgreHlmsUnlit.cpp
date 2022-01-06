@@ -848,7 +848,7 @@ namespace Ogre
         passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,
                                                       sceneManager, passBufferPtr );
 
-        assert( ( size_t )( passBufferPtr - startupPtr ) * 4u == mapSize );
+        assert( (size_t)( passBufferPtr - startupPtr ) * 4u == mapSize );
 
         passBuffer->unmap( UO_KEEP_PERSISTENT );
 
@@ -920,7 +920,7 @@ namespace Ogre
 
             // layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
-                ( size_t )( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
+                (size_t)( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
                     mCurrentConstBufferSize )
             {
                 *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -961,8 +961,8 @@ namespace Ogre
 
         const Matrix4 &worldMat = queuedRenderable.movableObject->_getParentNodeFullTransform();
 
-        bool exceedsConstBuffer = ( size_t )( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
-                                              4 ) > mCurrentConstBufferSize;
+        bool exceedsConstBuffer = (size_t)( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
+                                            4 ) > mCurrentConstBufferSize;
 
         const size_t minimumTexBufferSize = 16;
         bool exceedsTexBuffer = static_cast<size_t>( currentMappedTexBuffer - mStartMappedTexBuffer ) +

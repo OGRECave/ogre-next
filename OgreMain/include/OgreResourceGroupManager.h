@@ -254,7 +254,8 @@ namespace Ogre
         @see ResourceGroupManager::unloadResourceGroup
         @see ResourceGroupManager::clearResourceGroup
     */
-    class _OgreExport ResourceGroupManager : public Singleton<ResourceGroupManager>, public OgreAllocatedObj
+    class _OgreExport ResourceGroupManager : public Singleton<ResourceGroupManager>,
+                                             public OgreAllocatedObj
     {
     public:
         OGRE_AUTO_MUTEX;  // public to allow external locking
@@ -685,7 +686,7 @@ namespace Ogre
             be loaded. These are specific to the resource type.
         */
         void declareResource( const String &name, const String &resourceType,
-                              const String &           groupName = DEFAULT_RESOURCE_GROUP_NAME,
+                              const String            &groupName = DEFAULT_RESOURCE_GROUP_NAME,
                               const NameValuePairList &loadParameters = NameValuePairList() );
         /** Declares a resource to be a part of a resource group, allowing you
             to load and unload it as part of the group.
@@ -727,7 +728,7 @@ namespace Ogre
             be loaded. These are specific to the resource type.
         */
         void declareResource( const String &name, const String &resourceType, const String &groupName,
-                              ManualResourceLoader *   loader,
+                              ManualResourceLoader    *loader,
                               const NameValuePairList &loadParameters = NameValuePairList() );
         /** Undeclare a resource.
         @remarks
@@ -763,7 +764,7 @@ namespace Ogre
         DataStreamPtr openResource( const String &resourceName,
                                     const String &groupName = DEFAULT_RESOURCE_GROUP_NAME,
                                     bool          searchGroupsIfNotFound = true,
-                                    Resource *    resourceBeingLoaded = 0 );
+                                    Resource     *resourceBeingLoaded = 0 );
 
         Archive *_getArchiveToResource( const String &resourceName,
                                         const String &groupName = DEFAULT_RESOURCE_GROUP_NAME,

@@ -51,7 +51,7 @@ namespace Ogre
     {
     protected:
         bool           mHasBeenMapped;
-        BufferPacked * mCreator;
+        BufferPacked  *mCreator;
         StagingBuffer *mStagingBuffer;
 
         size_t mStagingBufferMapOffset;

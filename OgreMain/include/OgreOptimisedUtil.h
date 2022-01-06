@@ -146,7 +146,7 @@ namespace Ogre
             Must be aligned to SIMD alignment.
         @param numTriangles Number of triangles to calculate face normal.
         */
-        virtual void calculateFaceNormals( const float *                 positions,
+        virtual void calculateFaceNormals( const float                  *positions,
                                            const v1::EdgeData::Triangle *triangles, Vector4 *faceNormals,
                                            size_t numTriangles ) = 0;
 

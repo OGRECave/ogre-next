@@ -72,7 +72,7 @@ namespace Ogre
         unsigned int     line;
         ConcreteNodeType type;
         ConcreteNodeList children;
-        ConcreteNode *   parent;
+        ConcreteNode    *parent;
     };
 
     /** This enum holds the types of the possible abstract nodes */
@@ -97,7 +97,7 @@ namespace Ogre
         String           file;
         unsigned int     line;
         AbstractNodeType type;
-        AbstractNode *   parent;
+        AbstractNode    *parent;
         Any              context;  // A holder for translation context data
     public:
         AbstractNode( AbstractNode *ptr );
@@ -334,8 +334,8 @@ namespace Ogre
         {
         private:
             AbstractNodeListPtr mNodes;
-            AbstractNode *      mCurrent;
-            ScriptCompiler *    mCompiler;
+            AbstractNode       *mCurrent;
+            ScriptCompiler     *mCompiler;
 
         public:
             AbstractTreeBuilder( ScriptCompiler *compiler );
@@ -520,11 +520,11 @@ namespace Ogre
     class _OgreExport PreApplyTextureAliasesScriptCompilerEvent : public ScriptCompilerEvent
     {
     public:
-        Material *                mMaterial;
+        Material                 *mMaterial;
         AliasTextureNamePairList *mAliases;
         static String             eventType;
 
-        PreApplyTextureAliasesScriptCompilerEvent( Material *                material,
+        PreApplyTextureAliasesScriptCompilerEvent( Material                 *material,
                                                    AliasTextureNamePairList *aliases ) :
             ScriptCompilerEvent( eventType ),
             mMaterial( material ),
@@ -618,7 +618,7 @@ namespace Ogre
 
         CreateHighLevelGpuProgramScriptCompilerEvent( const String &file, const String &name,
                                                       const String &resourceGroup, const String &source,
-                                                      const String & language,
+                                                      const String  &language,
                                                       GpuProgramType programType ) :
             ScriptCompilerEvent( eventType ),
             mFile( file ),

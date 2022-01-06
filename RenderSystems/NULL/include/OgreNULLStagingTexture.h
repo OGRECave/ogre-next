@@ -40,10 +40,11 @@ namespace Ogre
     class _OgreNULLExport NULLStagingTexture : public StagingTextureBufferImpl
     {
         uint8 *mDynamicBuffer;
-        void * mMappedPtr;
-        void * mLastMappedPtr;
+        void  *mMappedPtr;
+        void  *mLastMappedPtr;
 
-        bool  belongsToUs( const TextureBox &box ) override;
+        bool belongsToUs( const TextureBox &box ) override;
+
         void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:

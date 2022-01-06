@@ -35,9 +35,9 @@ namespace Ogre
     struct _OgreExport CbLowLevelMaterial : CbBase
     {
         bool                 casterPass;
-        HlmsLowLevel *       hlmsLowLevel;
+        HlmsLowLevel        *hlmsLowLevel;
         MovableObject const *movableObject;
-        Renderable *         renderable;
+        Renderable          *renderable;
 
         CbLowLevelMaterial( bool _casterPass, HlmsLowLevel *_hlmsLowLevel,
                             const MovableObject *_movableObject, Renderable *_renderable );

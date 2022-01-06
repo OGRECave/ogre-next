@@ -68,7 +68,7 @@ namespace Ogre
         int32                         mLastVpHeight;
         GpuProgramParametersSharedPtr mPsParams;
 
-        HlmsComputeJob *   mReconstructJob;
+        HlmsComputeJob    *mReconstructJob;
         ConstBufferPacked *mJobParams;
 
         static void setEyeCenter( Real *outEyeCenter, Vector2 inEyeCenterClipSpace, const Viewport &vp );

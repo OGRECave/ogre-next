@@ -81,7 +81,7 @@ namespace Ogre
         Item *mParentItem;
 
         /// Pointer to the SubMesh defining geometry.
-        SubMesh *     mSubMesh;
+        SubMesh      *mSubMesh;
         unsigned char mMaterialLodIndex;
 
     public:

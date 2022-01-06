@@ -987,7 +987,7 @@ namespace Ogre
         {
             char tmpBuffer[32];
             LwString frameNum( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-            frameNum.a( "Frame ", ( uint32 )( mNextFrame - 1u ) );
+            frameNum.a( "Frame ", (uint32)( mNextFrame - 1u ) );
 
             OgreProfileGpuEnd( frameNum.c_str() );
             OgreProfileEndGroup( frameNum.c_str(), OGREPROF_GENERAL );
@@ -1502,7 +1502,7 @@ namespace Ogre
 #    ifdef __GNUC__
                     __extension__
 #    endif
-                        DLL_STOP_PLUGIN pFunc = ( DLL_STOP_PLUGIN )( *i )->getSymbol( "dllStopPlugin" );
+                        DLL_STOP_PLUGIN pFunc = (DLL_STOP_PLUGIN)( *i )->getSymbol( "dllStopPlugin" );
                     // this must call uninstallPlugin
                     pFunc();
                 }

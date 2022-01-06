@@ -435,7 +435,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void MemoryDataStream::skip( long count )
     {
-        size_t newpos = ( size_t )( ( mPos - mData ) + count );
+        size_t newpos = (size_t)( ( mPos - mData ) + count );
         assert( mData + newpos <= mEnd );
 
         mPos = mData + newpos;

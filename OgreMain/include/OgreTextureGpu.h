@@ -738,7 +738,7 @@ namespace Ogre
 
         TextureBox getEmptyBox( uint8 mipLevel );
         TextureBox _getSysRamCopyAsBox( uint8 mipLevel );
-        uint8 *    _getSysRamCopy( uint8 mipLevel );
+        uint8     *_getSysRamCopy( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         uint32 _getSysRamCopyBytesPerRow( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.

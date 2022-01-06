@@ -115,7 +115,7 @@ namespace Ogre
         bool                           mPoseHalfPrecision;
         bool                           mPoseNormals;
         std::map<Ogre::String, size_t> mPoseIndexMap;
-        TexBufferPacked *              mPoseTexBuffer;
+        TexBufferPacked               *mPoseTexBuffer;
 
     public:
         SubMesh();
@@ -266,9 +266,9 @@ namespace Ogre
             with the original vao.
         */
         static VertexArrayObject *arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents,
-                                                    VertexArrayObject *    vao,
+                                                    VertexArrayObject     *vao,
                                                     SharedVertexBufferMap &sharedBuffers,
-                                                    VaoManager *           vaoManager );
+                                                    VaoManager            *vaoManager );
 
         /** @see dearrangeEfficientToInefficient. Works on an individual VertexArrayObject.
             Delegates work to the generic method @see _dearrangeEfficient which
@@ -286,13 +286,13 @@ namespace Ogre
             with the original vao.
         */
         static VertexArrayObject *dearrangeEfficient( const VertexArrayObject *vao,
-                                                      SharedVertexBufferMap &  sharedBuffers,
-                                                      VaoManager *             vaoManager );
+                                                      SharedVertexBufferMap   &sharedBuffers,
+                                                      VaoManager              *vaoManager );
 
     public:
         struct SourceData
         {
-            char const *   data;
+            char const    *data;
             size_t         bytesPerVertex;
             VertexElement2 element;
 
@@ -362,7 +362,7 @@ namespace Ogre
         */
         static char *_dearrangeEfficient( char const *RESTRICT_ALIAS srcData, size_t numElements,
                                           const VertexElement2Vec &vertexElements,
-                                          VertexElement2Vec *      outVertexElements );
+                                          VertexElement2Vec       *outVertexElements );
 
         static void destroyVaos( VertexArrayObjectArray &vaos, VaoManager *vaoManager,
                                  bool destroyIndexBuffer = true );

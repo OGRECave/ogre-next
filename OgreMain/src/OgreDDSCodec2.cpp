@@ -380,8 +380,8 @@ namespace Ogre
             ddsHeader.flags = ddsHeaderFlags;
             ddsHeader.width = (uint32)imgData->width;
             ddsHeader.height = (uint32)imgData->height;
-            ddsHeader.depth = ( uint32 )( isVolume ? imgData->depth : 0 );
-            ddsHeader.depth = ( uint32 )( isCubeMap ? 6 : ddsHeader.depth );
+            ddsHeader.depth = (uint32)( isVolume ? imgData->depth : 0 );
+            ddsHeader.depth = (uint32)( isCubeMap ? 6 : ddsHeader.depth );
             ddsHeader.mipMapCount = imgData->num_mipmaps + 1;
             ddsHeader.sizeOrPitch = ddsHeaderSizeOrPitch;
             for( uint32 reserved1 = 0; reserved1 < 11; reserved1++ )  // XXX nasty constant 11

@@ -128,7 +128,7 @@ namespace Ogre
          * There is no reason for this object to ever have more than two members.
          */
 
-        T *            pRep;
+        T             *pRep;
         SharedPtrInfo *pInfo;
 
         SharedPtr( T *rep, SharedPtrInfo *info ) : pRep( rep ), pInfo( info ) {}

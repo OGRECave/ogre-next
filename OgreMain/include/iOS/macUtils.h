@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void *      mac_loadDylib( const char *name );
+    void              *mac_loadDylib( const char *name );
     _OgreExport String macCachePath();
     _OgreExport String macBundlePath();
     _OgreExport String macTempFileName();

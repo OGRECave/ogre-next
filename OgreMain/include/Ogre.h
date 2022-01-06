@@ -93,6 +93,7 @@ THE SOFTWARE.
 #include "OgreSceneNode.h"
 #include "OgreShadowCameraSetup.h"
 #include "OgreShadowCameraSetupFocused.h"
+#include "OgreShadowCameraSetupPlaneOptimal.h"
 #include "OgreSimpleRenderable.h"
 #include "OgreSkeleton.h"
 #include "OgreSkeletonSerializer.h"
@@ -106,7 +107,6 @@ THE SOFTWARE.
 #include "OgreVector2.h"
 #include "OgreViewport.h"
 #include "OgreWindowEventUtilities.h"
-#include "OgreShadowCameraSetupPlaneOptimal.h"
 // .... more to come
 
 #endif

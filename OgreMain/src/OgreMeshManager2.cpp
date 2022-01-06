@@ -49,9 +49,7 @@ namespace Ogre
         return ( *msSingleton );
     }
     //-----------------------------------------------------------------------
-    MeshManager::MeshManager() :
-        mVaoManager( 0 ),
-        mBoundsPaddingFactor( Real( 0.01 ) )
+    MeshManager::MeshManager() : mVaoManager( 0 ), mBoundsPaddingFactor( Real( 0.01 ) )
     {
         mLoadOrder = 300.0f;
         mResourceType = "Mesh2";

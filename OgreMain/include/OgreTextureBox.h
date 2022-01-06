@@ -208,7 +208,7 @@ namespace Ogre
             {
                 // Raw copy
                 const void *srcData = src.at( 0, 0, srcZorSlice );
-                void *      dstData = this->at( 0, 0, dstZorSlice );
+                void       *dstData = this->at( 0, 0, dstZorSlice );
                 memcpy( dstData, srcData, bytesPerImage * finalDepthOrSlices );
             }
             else
@@ -223,7 +223,7 @@ namespace Ogre
                         for( size_t _y = 0; _y < finalHeight; ++_y )
                         {
                             const void *srcData = src.at( src.x, _y + src.y, _z + srcZorSlice );
-                            void *      dstData = this->at( this->x, _y + this->y, _z + dstZorSlice );
+                            void       *dstData = this->at( this->x, _y + this->y, _z + dstZorSlice );
                             memcpy( dstData, srcData, finalBytesPerRow );
                         }
                     }
@@ -243,7 +243,7 @@ namespace Ogre
                         for( size_t _y = 0; _y < finalHeight; _y += blockHeight )
                         {
                             const void *srcData = src.at( src.x, _y + src.y, _z + srcZorSlice );
-                            void *      dstData = this->at( this->x, _y + this->y, _z + dstZorSlice );
+                            void       *dstData = this->at( this->x, _y + this->y, _z + dstZorSlice );
                             memcpy( dstData, srcData, finalBytesPerRow );
                         }
                     }

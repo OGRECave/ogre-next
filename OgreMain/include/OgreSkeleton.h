@@ -227,7 +227,7 @@ namespace Ogre
             @param linker Optional pointer to a pointer to the linked skeleton animation
                 where this is coming from.
             */
-            virtual Animation *getAnimation( const String &                        name,
+            virtual Animation *getAnimation( const String                         &name,
                                              const LinkedSkeletonAnimationSource **linker ) const;
 
             /** Returns the named Animation object.
@@ -394,23 +394,23 @@ namespace Ogre
                 must not presented in this skeleton, and will NOT pick up animations
                 in linked skeletons (@see addLinkedSkeletonAnimationSource).
             */
-            virtual void _mergeSkeletonAnimations( const Skeleton *     source,
+            virtual void _mergeSkeletonAnimations( const Skeleton      *source,
                                                    const BoneHandleMap &boneHandleMap,
-                                                   const StringVector & animations = StringVector() );
+                                                   const StringVector  &animations = StringVector() );
 
             /** Build the bone handle map to use with Skeleton::_mergeSkeletonAnimations.
             @remarks
                 Identically bones are determine by handle.
             */
             virtual void _buildMapBoneByHandle( const Skeleton *source,
-                                                BoneHandleMap & boneHandleMap ) const;
+                                                BoneHandleMap  &boneHandleMap ) const;
 
             /** Build the bone handle map to use with Skeleton::_mergeSkeletonAnimations.
             @remarks
                 Identically bones are determine by name.
             */
             virtual void _buildMapBoneByName( const Skeleton *source,
-                                              BoneHandleMap & boneHandleMap ) const;
+                                              BoneHandleMap  &boneHandleMap ) const;
 
         protected:
             SkeletonAnimationBlendMode mBlendState;

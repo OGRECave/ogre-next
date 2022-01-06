@@ -45,7 +45,7 @@ namespace Ogre
     protected:
         size_t               mVboPoolIdx;
         ComPtr<ID3D11Buffer> mVboName;
-        void *               mMappedPtr;
+        void                *mMappedPtr;
 
         void splicedCopy( size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes,
                           size_t alignment, ID3D11Buffer *dstBuffer, ID3D11Buffer *srcBuffer,

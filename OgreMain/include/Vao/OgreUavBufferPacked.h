@@ -45,7 +45,7 @@ namespace Ogre
         uint32                          mBindFlags;  /// @see BufferBindFlags
         vector<TexBufferPacked *>::type mTexBufferViews;
 
-        virtual TexBufferPacked *     getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
+        virtual TexBufferPacked      *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) = 0;
         virtual ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() = 0;
 
     public:

@@ -198,7 +198,7 @@ namespace Ogre
     public:
         struct Library
         {
-            Archive *    dataFolder;
+            Archive     *dataFolder;
             StringVector pieceFiles[NumShaderTypes];
         };
 
@@ -206,7 +206,7 @@ namespace Ogre
 
     protected:
         LibraryVec   mLibrary;
-        Archive *    mDataFolder;
+        Archive     *mDataFolder;
         StringVector mPieceFiles[NumShaderTypes];
         HlmsManager *mHlmsManager;
 
@@ -351,7 +351,7 @@ namespace Ogre
             The index to the cache entry.
         */
         uint32 addRenderableCache( const HlmsPropertyVec &renderableSetProperties,
-                                   const PiecesMap *      pieces );
+                                   const PiecesMap       *pieces );
 
         /// Retrieves a cache entry using the returned value from @addRenderableCache
         const RenderableCache &getRenderableCache( uint32 hash ) const;
@@ -423,7 +423,7 @@ namespace Ogre
         virtual HlmsDatablock *createDatablockImpl( IdString              datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,
-                                                    const HlmsParamVec &  paramVec ) = 0;
+                                                    const HlmsParamVec   &paramVec ) = 0;
 
         virtual HlmsDatablock *createDefaultDatablock();
 
@@ -475,7 +475,7 @@ namespace Ogre
 
         const String &getTypeNameStr() const { return mTypeNameStr; }
         void          _notifyManager( HlmsManager *manager ) { mHlmsManager = manager; }
-        HlmsManager * getHlmsManager() const { return mHlmsManager; }
+        HlmsManager  *getHlmsManager() const { return mHlmsManager; }
         const String &getShaderProfile() const { return mShaderProfile; }
         IdString      getShaderSyntax() const { return mShaderSyntax; }
 
@@ -591,17 +591,17 @@ namespace Ogre
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                                 HlmsDatablock *datablock, const String &resourceGroup,
                                 HlmsJsonListener *listener,
-                                const String &    additionalTextureExtension ) const
+                                const String     &additionalTextureExtension ) const
         {
         }
         virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
                                 HlmsJsonListener *listener,
-                                const String &    additionalTextureExtension ) const
+                                const String     &additionalTextureExtension ) const
         {
         }
 
         virtual void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
-                                            const HlmsDatablock *                datablock ) const
+                                            const HlmsDatablock                 *datablock ) const
         {
         }
 #endif
@@ -628,7 +628,7 @@ namespace Ogre
         */
         virtual void reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders = 0 );
 
-        Archive *         getDataFolder() { return mDataFolder; }
+        Archive          *getDataFolder() { return mDataFolder; }
         const LibraryVec &getPiecesLibrary() const { return mLibrary; }
         ArchiveVec        getPiecesLibraryAsArchiveVec() const;
 
@@ -736,7 +736,7 @@ namespace Ogre
         */
         virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
 
-        virtual void analyzeBarriers( BarrierSolver &          barrierSolver,
+        virtual void analyzeBarriers( BarrierSolver           &barrierSolver,
                                       ResourceTransitionArray &resourceTransitions,
                                       Camera *renderingCamera, const bool bCasterPass );
 
@@ -792,11 +792,11 @@ namespace Ogre
                                        bool casterPass, uint32 lastCacheHash,
                                        uint32 lastTextureHash ) = 0;
 
-        virtual uint32 fillBuffersForV1( const HlmsCache *       cache,
+        virtual uint32 fillBuffersForV1( const HlmsCache        *cache,
                                          const QueuedRenderable &queuedRenderable, bool casterPass,
                                          uint32 lastCacheHash, CommandBuffer *commandBuffer ) = 0;
 
-        virtual uint32 fillBuffersForV2( const HlmsCache *       cache,
+        virtual uint32 fillBuffersForV2( const HlmsCache        *cache,
                                          const QueuedRenderable &queuedRenderable, bool casterPass,
                                          uint32 lastCacheHash, CommandBuffer *commandBuffer ) = 0;
 

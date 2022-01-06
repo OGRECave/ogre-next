@@ -42,10 +42,11 @@ namespace Ogre
     class _OgreMetalExport MetalStagingTexture final : public StagingTextureBufferImpl
     {
         id<MTLBuffer> mVboName;
-        void *        mMappedPtr;
-        MetalDevice * mDevice;
+        void         *mMappedPtr;
+        MetalDevice  *mDevice;
 
-        bool  belongsToUs( const TextureBox &box ) override;
+        bool belongsToUs( const TextureBox &box ) override;
+
         void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
     public:

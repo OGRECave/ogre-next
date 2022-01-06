@@ -57,7 +57,7 @@ namespace Ogre
         CompositorNodeDef *mParentNodeDef;
 
     public:
-        CompositorPassDepthCopyDef( CompositorNodeDef *  parentNodeDef,
+        CompositorPassDepthCopyDef( CompositorNodeDef   *parentNodeDef,
                                     CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_DEPTHCOPY, parentTargetDef ),
             mParentNodeDef( parentNodeDef )

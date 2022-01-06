@@ -52,7 +52,7 @@ namespace Ogre
 
     struct _OgreExport BasicBlock
     {
-        void * mRsData;  /// Render-System specific data
+        void  *mRsData;  /// Render-System specific data
         uint16 mRefCount;
         /// The mId is only valid while mRefCount > 0; which means mRsData
         /// may contain valid data, else it's null.
@@ -291,7 +291,7 @@ namespace Ogre
         /// List of renderables currently using this datablock
         vector<Renderable *>::type mLinkedRenderables;
 
-        Hlms *   mCreator;
+        Hlms    *mCreator;
         IdString mName;
 
         /** Updates the mHlmsHash & mHlmsCasterHash for all linked renderables, which may have
@@ -349,7 +349,7 @@ namespace Ogre
         virtual void calculateHash() {}
 
         IdString getName() const { return mName; }
-        Hlms *   getCreator() const { return mCreator; }
+        Hlms    *getCreator() const { return mCreator; }
 
         /** Sets a new macroblock that matches the same parameter as the input.
             Decreases the reference count of the previously set one.

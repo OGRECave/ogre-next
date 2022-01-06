@@ -102,7 +102,7 @@ namespace Ogre
 
         struct SceneNodeBonePair
         {
-            Bone *     boneChild;
+            Bone      *boneChild;
             SceneNode *sceneNodeParent;
             SceneNodeBonePair( Bone *_boneChild, SceneNode *_sceneNodeParent ) :
                 boneChild( _boneChild ),
@@ -212,7 +212,7 @@ namespace Ogre
         Node *getParentNode() const { return mParentNode; }
 
         void getTransforms( SimpleMatrixAf4x3 *RESTRICT_ALIAS outTransform,
-                            const FastArray<unsigned short> & usedBones ) const;
+                            const FastArray<unsigned short>  &usedBones ) const;
 
         /** Updates the contents of @mBoneStartTransforms. Needed when our
             memory manager performs a cleanup or similar memory change.

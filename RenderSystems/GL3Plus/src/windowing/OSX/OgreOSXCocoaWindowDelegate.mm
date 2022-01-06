@@ -34,7 +34,8 @@ using namespace Ogre;
 
 @implementation CocoaWindowDelegate
 
-- (id)initWithNSWindow:(NSWindow *)nswin ogreWindow:(Window *)ogrewin {
+- (id)initWithNSWindow:(NSWindow *)nswin ogreWindow:(Window *)ogrewin
+{
     if( ( self = [super init] ) )
     {
         window = nswin;
@@ -80,12 +81,14 @@ using namespace Ogre;
     return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     // Stop observing notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)windowDidResize:(NSNotification *)notification {
+- (void)windowDidResize:(NSNotification *)notification
+{
     // Update the Ogre window
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
     WindowEventUtilities::WindowEventListeners::iterator
@@ -98,7 +101,8 @@ using namespace Ogre;
         ( start->second )->windowResized( curWindow );
 }
 
-- (void)windowDidMove:(NSNotification *)notification {
+- (void)windowDidMove:(NSNotification *)notification
+{
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
@@ -110,7 +114,8 @@ using namespace Ogre;
         ( start->second )->windowMoved( curWindow );
 }
 
-- (void)windowWillClose:(NSNotification *)notification {
+- (void)windowWillClose:(NSNotification *)notification
+{
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
@@ -123,7 +128,8 @@ using namespace Ogre;
     }
 }
 
-- (void)windowDidBecomeKey:(NSNotification *)notification {
+- (void)windowDidBecomeKey:(NSNotification *)notification
+{
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
@@ -135,7 +141,8 @@ using namespace Ogre;
         ( start->second )->windowFocusChange( curWindow );
 }
 
-- (void)windowDidResignKey:(NSNotification *)notification {
+- (void)windowDidResignKey:(NSNotification *)notification
+{
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
@@ -151,7 +158,8 @@ using namespace Ogre;
         ( start->second )->windowFocusChange( curWindow );
 }
 
-- (void)windowDidMiniaturize:(NSNotification *)notification {
+- (void)windowDidMiniaturize:(NSNotification *)notification
+{
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator
@@ -164,7 +172,8 @@ using namespace Ogre;
         ( start->second )->windowFocusChange( curWindow );
 }
 
-- (void)windowDidDeminiaturize:(NSNotification *)notification {
+- (void)windowDidDeminiaturize:(NSNotification *)notification
+{
     CocoaWindow *curWindow = static_cast<CocoaWindow *>( ogreWindow );
 
     WindowEventUtilities::WindowEventListeners::iterator

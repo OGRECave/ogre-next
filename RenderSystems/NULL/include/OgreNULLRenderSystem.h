@@ -183,7 +183,7 @@ namespace Ogre
 
         void setClipPlanesImpl( const PlaneList &clipPlanes ) override;
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                     Window *                  primary ) override;
+                                                     Window                   *primary ) override;
     };
 }  // namespace Ogre
 

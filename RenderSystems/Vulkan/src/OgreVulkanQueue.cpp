@@ -167,7 +167,7 @@ namespace Ogre
         fences.clear();
 
         // Reset the recycled fences so they can be used again
-        const uint32 numFencesToReset = ( uint32 )( mAvailableFences.size() - oldNumAvailableFences );
+        const uint32 numFencesToReset = (uint32)( mAvailableFences.size() - oldNumAvailableFences );
         if( numFencesToReset > 0u )
             vkResetFences( mDevice, numFencesToReset, &mAvailableFences[oldNumAvailableFences] );
     }
@@ -393,7 +393,7 @@ namespace Ogre
             OGRE_ASSERT_LOW( itor != mImageMemBarrierPtrs.end() &&
                              "Only this class should set VK_IMAGE_LAYOUT_TRANSFER_*_OPTIMAL" );
 
-            const size_t idx = ( size_t )( itor - mImageMemBarrierPtrs.begin() );
+            const size_t idx = (size_t)( itor - mImageMemBarrierPtrs.begin() );
             VkImageMemoryBarrier &imageMemBarrier = *( mImageMemBarriers.begin() + idx );
             imageMemBarrier.srcAccessMask = accessFlags & c_srcValidAccessFlags;
             imageMemBarrier.oldLayout = newTransferLayout;

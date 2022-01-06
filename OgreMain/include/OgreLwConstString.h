@@ -66,10 +66,10 @@ namespace Ogre
 
     protected:
 #if OGRE_DEBUG_MODE
-        char const *       WarningHeader;
+        char const        *WarningHeader;
         static const char *WarningHeaderConst;
 #endif
-        char * mStrPtr;
+        char  *mStrPtr;
         size_t mSize;
 
         /// Unlike the std lib, mCapacity is ALWAYS going to be mSize < mCapacity
@@ -107,7 +107,7 @@ namespace Ogre
         {
             pos = std::min( pos, mSize );
             const char *result = strstr( mStrPtr + pos, val );
-            return result ? static_cast<size_t>( result - mStrPtr ) : ( size_t )( -1 );
+            return result ? static_cast<size_t>( result - mStrPtr ) : (size_t)( -1 );
         }
 
         size_t find( const LwConstString *val, size_t pos = 0 ) const
@@ -119,14 +119,14 @@ namespace Ogre
         {
             pos = std::min( pos, mSize );
             const char *result = strchr( mStrPtr + pos, c );
-            return result ? static_cast<size_t>( result - mStrPtr ) : ( size_t )( -1 );
+            return result ? static_cast<size_t>( result - mStrPtr ) : (size_t)( -1 );
         }
 
         size_t find_first_of( const char *val, size_t pos = 0 ) const
         {
             pos = std::min( pos, mSize );
             const char *result = strpbrk( mStrPtr + pos, val );
-            return result ? static_cast<size_t>( result - mStrPtr ) : ( size_t )( -1 );
+            return result ? static_cast<size_t>( result - mStrPtr ) : (size_t)( -1 );
         }
 
         size_t find_last_of( char c, size_t pos = static_cast<size_t>( -1 ) ) const

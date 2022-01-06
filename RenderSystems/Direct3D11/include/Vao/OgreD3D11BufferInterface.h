@@ -55,7 +55,7 @@ namespace Ogre
                               D3D11DynamicBuffer *dynamicBuffer );
         ~D3D11BufferInterface() override;
 
-        void                _setNullDynamicBuffer() { mDynamicBuffer = 0; }
+        void _setNullDynamicBuffer() { mDynamicBuffer = 0; }
 
         D3D11DynamicBuffer *getDynamicBuffer() const { return mDynamicBuffer; }
 
@@ -73,10 +73,10 @@ namespace Ogre
                                          MappingState prevMappingState,
                                          bool         advanceFrame = true ) override;
 
-        void                        unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
-                                           size_t flushSizeElem = 0 ) override;
-        void                        advanceFrame() override;
-        void                        regressFrame() override;
+        void unmap( UnmapOptions unmapOption, size_t flushStartElem = 0,
+                    size_t flushSizeElem = 0 ) override;
+        void advanceFrame() override;
+        void regressFrame() override;
     };
 }  // namespace Ogre
 

@@ -148,14 +148,14 @@ namespace Ogre
         RenderSystem *mRenderSystem;
 
         TextureGpuVec        mNullTextureList;
-        v1::Rectangle2D *    mSharedTriangleFS;
-        v1::Rectangle2D *    mSharedQuadFS;
+        v1::Rectangle2D     *mSharedTriangleFS;
+        v1::Rectangle2D     *mSharedQuadFS;
         ObjectMemoryManager *mDummyObjectMemoryManager;
 
         /// For custom passes.
         CompositorPassProvider *mCompositorPassProvider;
 
-        BarrierSolver &         mBarrierSolver;
+        BarrierSolver          &mBarrierSolver;
         ResourceTransitionArray mFinalResourceTransition;
 
         bool mRenderWindowsPresentBarrierDirty;
@@ -355,16 +355,16 @@ namespace Ogre
                                            Camera *defaultCam, IdString definitionName, bool bEnabled,
                                            int position = -1, const UavBufferPackedVec *uavBuffers = 0,
                                            const ResourceStatusMap *initialLayouts = 0,
-                                           const Vector4 &          vpOffsetScale = Vector4::ZERO,
+                                           const Vector4           &vpOffsetScale = Vector4::ZERO,
                                            uint8 vpModifierMask = 0x00, uint8 executionMask = 0xFF );
 
         /// Overload that allows having multiple external input/outputs
-        CompositorWorkspace *addWorkspace( SceneManager *              sceneManager,
+        CompositorWorkspace *addWorkspace( SceneManager               *sceneManager,
                                            const CompositorChannelVec &externalRenderTargets,
                                            Camera *defaultCam, IdString definitionName, bool bEnabled,
                                            int position = -1, const UavBufferPackedVec *uavBuffers = 0,
                                            const ResourceStatusMap *initialLayouts = 0,
-                                           const Vector4 &          vpOffsetScale = Vector4::ZERO,
+                                           const Vector4           &vpOffsetScale = Vector4::ZERO,
                                            uint8 vpModifierMask = 0x00, uint8 executionMask = 0xFF );
 
         /// Removes the given workspace. Pointer is no longer valid after this call
@@ -414,7 +414,7 @@ namespace Ogre
             Name of the shadow node. Leave blank if no shadows.
             Caller is supposed to have set the shadow node correctly
         */
-        void createBasicWorkspaceDef( const String &     workspaceDefName,
+        void createBasicWorkspaceDef( const String      &workspaceDefName,
                                       const ColourValue &backgroundColour,
                                       IdString           shadowNodeName = IdString() );
 

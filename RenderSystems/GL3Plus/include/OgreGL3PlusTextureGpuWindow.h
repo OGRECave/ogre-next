@@ -38,7 +38,7 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusTextureGpuWindow final : public GL3PlusTextureGpuRenderTarget
     {
         GL3PlusContext *mContext;
-        Window *        mWindow;
+        Window         *mWindow;
 
         void createInternalResourcesImpl() override;
         void destroyInternalResourcesImpl() override;
@@ -71,7 +71,7 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusTextureGpuHeadlessWindow final : public GL3PlusTextureGpuRenderTarget
     {
         GL3PlusContext *mContext;
-        Window *        mWindow;
+        Window         *mWindow;
 
     public:
         GL3PlusTextureGpuHeadlessWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,

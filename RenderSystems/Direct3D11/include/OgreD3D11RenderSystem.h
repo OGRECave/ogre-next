@@ -92,14 +92,14 @@ namespace Ogre
         void createDevice();
 
         v1::D3D11HardwareBufferManager *mHardwareBufferManager;
-        D3D11GpuProgramManager *        mGpuProgramManager;
-        D3D11HLSLProgramFactory *       mHLSLProgramFactory;
+        D3D11GpuProgramManager         *mGpuProgramManager;
+        D3D11HLSLProgramFactory        *mHLSLProgramFactory;
 
         /// Internal method for populating the capabilities structure
         RenderSystemCapabilities *createRenderSystemCapabilities() const override;
         /** See RenderSystem definition */
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                     Window *                  primary ) override;
+                                                     Window                   *primary ) override;
 
         void convertVertexShaderCaps( RenderSystemCapabilities *rsc ) const;
         void convertPixelShaderCaps( RenderSystemCapabilities *rsc ) const;
@@ -110,9 +110,9 @@ namespace Ogre
 
         bool checkVertexTextureFormats();
 
-        ID3D11Buffer *    mBoundIndirectBuffer;
-        unsigned char *   mSwIndirectBufferPtr;
-        D3D11HlmsPso *    mPso;
+        ID3D11Buffer     *mBoundIndirectBuffer;
+        unsigned char    *mSwIndirectBufferPtr;
+        D3D11HlmsPso     *mPso;
         D3D11HLSLProgram *mBoundComputeProgram;
         uint32            mMaxBoundUavCS;
 
@@ -122,7 +122,7 @@ namespace Ogre
 
         /// For rendering legacy objects.
         v1::VertexData *mCurrentVertexBuffer;
-        v1::IndexData * mCurrentIndexBuffer;
+        v1::IndexData  *mCurrentIndexBuffer;
 
         TextureUnitState::BindingType mBindingType;
 
@@ -200,7 +200,7 @@ namespace Ogre
         void _setCurrentDeviceFromTexture( TextureGpu *texture ) override {}
 
         D3D11FrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
-        RenderPassDescriptor *   createRenderPassDescriptor() override;
+        RenderPassDescriptor    *createRenderPassDescriptor() override;
         void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
                                         uint8 mipLevel, const Vector4 *viewportSizes,
                                         const Vector4 *scissors, uint32 numViewports,

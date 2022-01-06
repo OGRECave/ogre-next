@@ -101,7 +101,7 @@ namespace Ogre
         static const ArrayReal
             fDeg2Rad;  // Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad, Math::fDeg2Rad
         static const ArrayReal
-                               fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
+            fRad2Deg;  // Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg, Math::fRad2Deg
         static const ArrayReal FLOAT_MIN;  // FLT_MIN, FLT_MIN, FLT_MIN, FLT_MIN
         static const ArrayReal SIGN_MASK;  // 0x80000000, 0x80000000, 0x80000000, 0x80000000
         // INFINITE is taken in Windows, INFINITY by C99 (bloody macros). A joke on Infinite Tea

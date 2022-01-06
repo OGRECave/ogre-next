@@ -74,10 +74,7 @@ namespace Ogre
         return mWindow->getSwapchainImage( idx );
     }
     //-----------------------------------------------------------------------------------
-    size_t VulkanTextureGpuWindow::getWindowNumSurfaces() const
-    {
-        return mWindow->getNumSwapchains();
-    }
+    size_t VulkanTextureGpuWindow::getWindowNumSurfaces() const { return mWindow->getNumSwapchains(); }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::createInternalResourcesImpl()
     {

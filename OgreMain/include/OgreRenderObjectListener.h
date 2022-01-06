@@ -61,7 +61,7 @@ namespace Ogre
         */
         virtual void notifyRenderSingleObject( Renderable *rend, const Pass *pass,
                                                const AutoParamDataSource *source,
-                                               const LightList *          pLightList,
+                                               const LightList           *pLightList,
                                                bool suppressRenderStateChanges ) = 0;
     };
 

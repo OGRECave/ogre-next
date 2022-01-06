@@ -384,9 +384,9 @@ namespace Ogre
 
     protected:
         /// Subclasses can override this to ensure their specialised SceneNode is used.
-        virtual SceneNode *createSceneNodeImpl( SceneNode *        parent,
+        virtual SceneNode *createSceneNodeImpl( SceneNode         *parent,
                                                 NodeMemoryManager *nodeMemoryManager );
-        virtual TagPoint * createTagPointImpl( SceneNode *parent, NodeMemoryManager *nodeMemoryManager );
+        virtual TagPoint  *createTagPointImpl( SceneNode *parent, NodeMemoryManager *nodeMemoryManager );
 
         typedef vector<NodeMemoryManager *>::type   NodeMemoryManagerVec;
         typedef vector<ObjectMemoryManager *>::type ObjectMemoryManagerVec;
@@ -433,10 +433,10 @@ namespace Ogre
 
         PrePassMode   mPrePassMode;
         TextureGpuVec mPrePassTextures;
-        TextureGpu *  mPrePassDepthTexture;
-        TextureGpu *  mSsrTexture;
-        TextureGpu *  mPassDepthTextureNoMsaa;
-        TextureGpu *  mRefractionsTexture;
+        TextureGpu   *mPrePassDepthTexture;
+        TextureGpu   *mSsrTexture;
+        TextureGpu   *mPassDepthTextureNoMsaa;
+        TextureGpu   *mRefractionsTexture;
 
         /// See CompositorPassSceneDef::mUvBakingSet
         uint8   mUvBakingSet;
@@ -503,7 +503,7 @@ namespace Ogre
         /// Current Viewport
         Viewport *mCurrentViewport0;
 
-        CompositorPass *      mCurrentPass;
+        CompositorPass       *mCurrentPass;
         CompositorShadowNode *mCurrentShadowNode;
         bool                  mShadowNodeIsReused;
 
@@ -572,7 +572,7 @@ namespace Ogre
         /// Cached light information, used to tracking light's changes
         struct _OgreExport LightInfo
         {
-            Light * light;  /// Just a pointer for comparison, the light might destroyed for some reason
+            Light  *light;  /// Just a pointer for comparison, the light might destroyed for some reason
             int     type;   /// Use int instead of Light::LightTypes to avoid header file dependence
             Real    range;  /// Sets to zero if directional light
             Vector3 position;   /// Sets to zero if directional light
@@ -674,7 +674,7 @@ namespace Ogre
         /// Internal method for firing when rendering a single object.
         virtual void fireRenderSingleObject( Renderable *rend, const Pass *pass,
                                              const AutoParamDataSource *source,
-                                             const LightList *          pLightList,
+                                             const LightList           *pLightList,
                                              bool                       suppressRenderStateChanges );
 
         /// Internal method for firing the texture shadows updated event
@@ -752,7 +752,7 @@ namespace Ogre
         */
         template <typename T>
         void checkMovableObjectIntegrity( const typename vector<T *>::type &container,
-                                          const T *                         mo ) const;
+                                          const T                          *mo ) const;
 
         /** Culls the scene in a high level fashion (i.e. Octree, Portal, etc.) by taking into account
           all registered cameras. Produces a list of culled Entities & SceneNodes that must follow a very
@@ -783,8 +783,8 @@ namespace Ogre
         // A render context, used to store internal data for pausing/resuming rendering
         struct RenderContext
         {
-            RenderQueue *                      renderQueue;
-            Viewport *                         viewport;
+            RenderQueue                       *renderQueue;
+            Viewport                          *viewport;
             CamerasInProgress                  camerasInProgress;
             RenderSystem::RenderSystemContext *rsContext;
         };
@@ -804,7 +804,7 @@ namespace Ogre
         Real   mShadowTextureOffset;     /// Proportion of texture offset in view direction e.g. 0.4
         Real   mShadowTextureFadeStart;  /// As a proportion e.g. 0.6
         Real   mShadowTextureFadeEnd;    /// As a proportion e.g. 0.9
-        Pass * mShadowTextureCustomCasterPass;
+        Pass  *mShadowTextureCustomCasterPass;
         String mShadowTextureCustomCasterVertexProgram;
         String mShadowTextureCustomCasterFragmentProgram;
         GpuProgramParametersSharedPtr mShadowTextureCustomCasterVPParams;
@@ -840,9 +840,9 @@ namespace Ogre
         UpdateLodRequest              mUpdateLodRequest;
         UpdateTransformRequest        mUpdateTransformRequest;
         ObjectMemoryManagerVec const *mUpdateBoundsRequest;
-        UniformScalableTask *         mUserTask;
+        UniformScalableTask          *mUserTask;
         RequestType                   mRequestType;
-        Barrier *                     mWorkerThreadsBarrier;
+        Barrier                      *mWorkerThreadsBarrier;
         ThreadHandleVec               mWorkerThreads;
 
         /** Contains MovableObjects to be visited and rendered.
@@ -1230,7 +1230,7 @@ namespace Ogre
             @note It is a linear search O(N), retrieves the first node found
             with that name (it's not unique)
         */
-        virtual_l1 SceneNode *getSceneNode( IdType id );
+        virtual_l1 SceneNode       *getSceneNode( IdType id );
         virtual_l1 const SceneNode *getSceneNode( IdType id ) const;
 
         /// Finds all the scene nodes with the name passed as parameter.
@@ -1333,10 +1333,10 @@ namespace Ogre
         void        _setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture );
         PrePassMode getCurrentPrePassMode() const { return mPrePassMode; }
         const TextureGpuVec &getCurrentPrePassTextures() const { return mPrePassTextures; }
-        TextureGpu *         getCurrentPrePassDepthTexture() const { return mPrePassDepthTexture; }
-        TextureGpu *         getCurrentSsrTexture() const { return mSsrTexture; }
-        TextureGpu *         getCurrentPassDepthTextureNoMsaa() const { return mPassDepthTextureNoMsaa; }
-        TextureGpu *         getCurrentRefractionsTexture() const { return mRefractionsTexture; }
+        TextureGpu          *getCurrentPrePassDepthTexture() const { return mPrePassDepthTexture; }
+        TextureGpu          *getCurrentSsrTexture() const { return mSsrTexture; }
+        TextureGpu          *getCurrentPassDepthTextureNoMsaa() const { return mPassDepthTextureNoMsaa; }
+        TextureGpu          *getCurrentRefractionsTexture() const { return mRefractionsTexture; }
 
         NodeMemoryManager &_getNodeMemoryManager( SceneMemoryMgrTypes sceneType )
         {
@@ -1368,8 +1368,8 @@ namespace Ogre
                 mesh will be loaded if it is not already.
         */
         virtual Item *createItem(
-            const String &      meshName,
-            const String &      groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            const String       &meshName,
+            const String       &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
             SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
 
         /** Create an Item (instance of a discrete mesh).
@@ -1402,15 +1402,15 @@ namespace Ogre
                 mesh will be loaded if it is not already.
         */
         virtual v1::Entity *createEntity(
-            const String &      meshName,
-            const String &      groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            const String       &meshName,
+            const String       &groupName = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
             SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
 
         /** Create an Entity (instance of a discrete mesh).
             @param
                 pMesh The pointer to the Mesh it is to be based on.
         */
-        virtual v1::Entity *createEntity( const v1::MeshPtr & pMesh,
+        virtual v1::Entity *createEntity( const v1::MeshPtr  &pMesh,
                                           SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
 
         /** Prefab shapes available without loading a model.
@@ -1676,9 +1676,9 @@ namespace Ogre
          */
         const ColourValue &getAmbientLightUpperHemisphere() const { return mAmbientLight[0]; }
         const ColourValue &getAmbientLightLowerHemisphere() const { return mAmbientLight[1]; }
-        const Vector3 &    getAmbientLightHemisphereDir() const { return mAmbientLightHemisphereDir; }
+        const Vector3     &getAmbientLightHemisphereDir() const { return mAmbientLightHemisphereDir; }
         uint32             getEnvFeatures() const { return mEnvFeatures; }
-        const float *      getSphericalHarmonics() const { return mAmbientSphericalHarmonics; }
+        const float       *getSphericalHarmonics() const { return mAmbientSphericalHarmonics; }
 
         /** Asks the SceneManager to provide a suggested viewpoint from which the scene should be viewed.
             @remarks
@@ -2385,8 +2385,8 @@ namespace Ogre
         @param params Optional name/value pair list to give extra parameters to
         the created object.
         */
-        virtual MovableObject *createMovableObject( const String &           typeName,
-                                                    ObjectMemoryManager *    objectMemMgr,
+        virtual MovableObject *createMovableObject( const String            &typeName,
+                                                    ObjectMemoryManager     *objectMemMgr,
                                                     const NameValuePairList *params = 0 );
         /**
         Returns if this SceneManager contains the specified MovableObject

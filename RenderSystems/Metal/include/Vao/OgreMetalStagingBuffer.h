@@ -48,8 +48,8 @@ namespace Ogre
     {
     protected:
         id<MTLBuffer> mVboName;
-        void *        mMappedPtr;
-        MetalDevice * mDevice;
+        void         *mMappedPtr;
+        MetalDevice  *mDevice;
 
         /** How many bytes between the last fence and our current offset do we need to let
             through before we place another fence?

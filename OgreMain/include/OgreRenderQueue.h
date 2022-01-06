@@ -51,7 +51,7 @@ namespace Ogre
     struct QueuedRenderable
     {
         uint64               hash;
-        Renderable *         renderable;
+        Renderable          *renderable;
         MovableObject const *movableObject;
 
         QueuedRenderable() : hash( 0 ), renderable( 0 ), movableObject( 0 ) {}
@@ -154,18 +154,18 @@ namespace Ogre
 
         RenderQueueGroup mRenderQueues[256];
 
-        HlmsManager * mHlmsManager;
+        HlmsManager  *mHlmsManager;
         SceneManager *mSceneManager;
-        VaoManager *  mVaoManager;
-        Root *        mRoot;
+        VaoManager   *mVaoManager;
+        Root         *mRoot;
 
         bool                  mLastWasCasterPass;
         uint32                mLastVaoName;
         v1::VertexData const *mLastVertexData;
-        v1::IndexData const * mLastIndexData;
+        v1::IndexData const  *mLastIndexData;
         uint32                mLastTextureHash;
 
-        CommandBuffer *         mCommandBuffer;
+        CommandBuffer          *mCommandBuffer;
         IndirectBufferPackedVec mFreeIndirectBuffers;
         IndirectBufferPackedVec mUsedIndirectBuffers;
 

@@ -234,7 +234,7 @@ namespace Ogre
         }
 
         glReadBuffer( ( buffer == FB_FRONT ) ? GL_FRONT : GL_BACK );
-        glReadPixels( (GLint)src.left, ( GLint )( mHeight - src.bottom ), (GLsizei)src.getWidth(),
+        glReadPixels( (GLint)src.left, (GLint)( mHeight - src.bottom ), (GLsizei)src.getWidth(),
                       (GLsizei)src.getHeight(), format, type, dst.getTopLeftFrontPixelPtr() );
 
         glPixelStorei( GL_PACK_ALIGNMENT, 4 );

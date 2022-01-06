@@ -200,7 +200,7 @@ namespace Ogre
         if( uMsg == WM_CREATE )
         {  // Store pointer to Win32Window in user data area
             SetWindowLongPtr( hWnd, GWLP_USERDATA,
-                              ( LONG_PTR )( ( (LPCREATESTRUCT)lParam )->lpCreateParams ) );
+                              (LONG_PTR)( ( (LPCREATESTRUCT)lParam )->lpCreateParams ) );
             return 0;
         }
 

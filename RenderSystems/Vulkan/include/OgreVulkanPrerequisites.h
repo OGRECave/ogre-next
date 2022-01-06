@@ -195,11 +195,11 @@ namespace Ogre
 #        endif
 #    endif
 #elif defined( OGRE_GCC_VISIBILITY )
-#   if !defined( OGRE_STATIC_LIB )
-#       define _OgreVulkanExport __attribute__ ((visibility("default")))
-#   else
-#       define _OgreVulkanExport __attribute__ ((visibility("hidden")))
-#   endif
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreVulkanExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreVulkanExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
 #    define _OgreVulkanExport
 #endif

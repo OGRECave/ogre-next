@@ -492,8 +492,8 @@ namespace Ogre
 
                     // There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                     // We need to update them so they don't crash deallocateVbo later.
-                    switchVboPoolIndex( vboIdx, ( size_t )( mVbos[vboIdx].size() - 1u ),
-                                        ( size_t )( itor - mVbos[vboIdx].begin() ) );
+                    switchVboPoolIndex( vboIdx, (size_t)( mVbos[vboIdx].size() - 1u ),
+                                        (size_t)( itor - mVbos[vboIdx].begin() ) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );
                     endt = mVbos[vboIdx].end();
@@ -1305,7 +1305,7 @@ namespace Ogre
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
         VulkanConstBufferPacked *retVal = OGRE_NEW VulkanConstBufferPacked(
-            bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            bufferOffset, requestedSize, 1u, (uint32)( sizeBytes - requestedSize ), bufferType,
             initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface );
 
         if( initialData )
@@ -1353,7 +1353,7 @@ namespace Ogre
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
         VulkanTexBufferPacked *retVal = OGRE_NEW VulkanTexBufferPacked(
-            bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            bufferOffset, requestedSize, 1u, (uint32)( sizeBytes - requestedSize ), bufferType,
             initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
 
         if( initialData )
@@ -1404,7 +1404,7 @@ namespace Ogre
             new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
 
         VulkanReadOnlyBufferPacked *retVal = OGRE_NEW VulkanReadOnlyBufferPacked(
-            bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            bufferOffset, requestedSize, 1u, (uint32)( sizeBytes - requestedSize ), bufferType,
             initialData, keepAsShadow, mVkRenderSystem, this, bufferInterface, pixelFormat );
 
         if( initialData )
@@ -1496,7 +1496,7 @@ namespace Ogre
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-            bufferOffset, requestedSize, 1, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            bufferOffset, requestedSize, 1, (uint32)( sizeBytes - requestedSize ), bufferType,
             initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )

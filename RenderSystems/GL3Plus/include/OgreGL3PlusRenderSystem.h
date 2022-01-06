@@ -119,11 +119,11 @@ namespace Ogre
         /// For rendering legacy objects.
         GLuint          mGlobalVao;
         v1::VertexData *mCurrentVertexBuffer;
-        v1::IndexData * mCurrentIndexBuffer;
+        v1::IndexData  *mCurrentIndexBuffer;
         GLenum          mCurrentPolygonMode;
 
-        GLSLShaderManager *        mShaderManager;
-        GLSLShaderFactory *        mGLSLShaderFactory;
+        GLSLShaderManager         *mShaderManager;
+        GLSLShaderFactory         *mGLSLShaderFactory;
         v1::HardwareBufferManager *mHardwareBufferManager;
 
         /** These variables are used for caching RenderSystem state.
@@ -170,7 +170,7 @@ namespace Ogre
 
         uint8                 mClipDistances;
         GL3PlusHlmsPso const *mPso;
-        GLSLShader *          mCurrentComputeShader;
+        GLSLShader           *mCurrentComputeShader;
 
         GLuint mNullColourFramebuffer;
 
@@ -183,7 +183,7 @@ namespace Ogre
         static GLenum getBlendOperation( SceneBlendOperation op );
 
         bool activateGLTextureUnit( size_t unit );
-        void bindVertexElementToGpu( const v1::VertexElement &         elem,
+        void bindVertexElementToGpu( const v1::VertexElement          &elem,
                                      v1::HardwareVertexBufferSharedPtr vertexBuffer,
                                      const size_t vertexStart, vector<GLuint>::type &attribsBound,
                                      vector<GLuint>::type &instanceAttribsBound, bool updateVAO );
@@ -238,7 +238,7 @@ namespace Ogre
             RenderSystem
         */
         void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                     Window *                  primary ) override;
+                                                     Window                   *primary ) override;
         /** See
             RenderSystem
         */
@@ -254,11 +254,11 @@ namespace Ogre
 
         /// @copydoc RenderSystem::_createRenderWindows
         bool _createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
-                                   WindowList &                       createdWindows ) override;
+                                   WindowList                        &createdWindows ) override;
 
         void                       _setCurrentDeviceFromTexture( TextureGpu *texture ) override;
         GL3PlusFrameBufferDescMap &_getFrameBufferDescMap() { return mFrameBufferDescMap; }
-        RenderPassDescriptor *     createRenderPassDescriptor() override;
+        RenderPassDescriptor      *createRenderPassDescriptor() override;
         void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
                                         uint8 mipLevel, const Vector4 *viewportSizes,
                                         const Vector4 *scissors, uint32 numViewports,

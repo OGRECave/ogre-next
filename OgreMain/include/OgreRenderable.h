@@ -302,7 +302,7 @@ namespace Ogre
         }
 
         typedef map<size_t, Vector4>::type CustomParameterMap;
-        const CustomParameterMap &         getCustomParameters() const { return mCustomParameters; }
+        const CustomParameterMap          &getCustomParameters() const { return mCustomParameters; }
 
         /** Update a custom GpuProgramParameters constant which is derived from
             information only this Renderable knows.
@@ -330,7 +330,7 @@ namespace Ogre
         */
         virtual void _updateCustomGpuParameter(
             const GpuProgramParameters_AutoConstantEntry &constantEntry,
-            GpuProgramParameters *                        params ) const;
+            GpuProgramParameters                         *params ) const;
 
         /** Sets whether this renderable's chosen detail level can be
             overridden (downgraded) by the camera setting.
@@ -460,7 +460,7 @@ namespace Ogre
         VertexArrayObjectArray mVaoPerLod[NumVertexPass];
         uint32                 mHlmsHash;
         uint32                 mHlmsCasterHash;
-        HlmsDatablock *        mHlmsDatablock;
+        HlmsDatablock         *mHlmsDatablock;
         MaterialPtr            mMaterial;  /// Only valid when using low level materials
         // clang-format off
         public: uint8 mCustomParameter;

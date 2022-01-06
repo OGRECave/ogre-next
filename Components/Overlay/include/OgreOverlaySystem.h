@@ -74,7 +74,7 @@ namespace Ogre
 
         private:
             OverlayManager *mOverlayManager;
-            FontManager *   mFontManager;
+            FontManager    *mFontManager;
 
 #if OGRE_PROFILING
             OverlayProfileSessionListener *mProfileListener;

@@ -167,8 +167,8 @@ namespace Ogre
             @param mgr Optional pointer to the manager to use to create new declarations
                 and buffers etc. If not supplied, the HardwareBufferManager singleton will be used
             */
-            void reorganiseBuffers( VertexDeclaration *        newDeclaration,
-                                    const BufferUsageList &    bufferUsage,
+            void reorganiseBuffers( VertexDeclaration         *newDeclaration,
+                                    const BufferUsageList     &bufferUsage,
                                     HardwareBufferManagerBase *mgr = 0 );
 
             /** Reorganises the data in the vertex buffers according to the
@@ -188,7 +188,7 @@ namespace Ogre
             @param mgr Optional pointer to the manager to use to create new declarations
                 and buffers etc. If not supplied, the HardwareBufferManager singleton will be used
             */
-            void reorganiseBuffers( VertexDeclaration *        newDeclaration,
+            void reorganiseBuffers( VertexDeclaration         *newDeclaration,
                                     HardwareBufferManagerBase *mgr = 0 );
 
             /** Remove any gaps in the vertex buffer bindings.
@@ -243,7 +243,7 @@ namespace Ogre
                 VertexElementSemantic semantic;
                 VertexElementType     type;
                 /// Data is already offseted. To get the vertex location, perform (data - offset);
-                char *                data;
+                char                 *data;
                 size_t                offset;
                 HardwareVertexBuffer *vertexBuffer;
 
@@ -284,7 +284,7 @@ namespace Ogre
             @param requests [in/out]
                 Array filled with the semantic.
             */
-            void lockMultipleElements( ReadRequestsArray &         requests,
+            void lockMultipleElements( ReadRequestsArray          &requests,
                                        HardwareBuffer::LockOptions lockOptions );
             void unlockMultipleElements( ReadRequestsArray &requests );
 
@@ -369,7 +369,7 @@ namespace Ogre
 
         private:
             unsigned int size;
-            uint32 *     cache;
+            uint32      *cache;
 
             unsigned int tail, buffersize;
             unsigned int hit, miss;

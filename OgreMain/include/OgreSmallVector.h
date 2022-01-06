@@ -190,7 +190,7 @@ namespace Ogre
             double      D;
             long double LD;
             long long   L;
-            void *      P;
+            void       *P;
         } FirstEl;
         // Space after 'FirstEl' is clobbered, do not add any instance vars after it.
 
@@ -232,15 +232,15 @@ namespace Ogre
         typedef size_t    size_type;
         typedef ptrdiff_t difference_type;
         typedef T         value_type;
-        typedef T *       iterator;
-        typedef const T * const_iterator;
+        typedef T        *iterator;
+        typedef const T  *const_iterator;
 
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef std::reverse_iterator<iterator>       reverse_iterator;
 
-        typedef T &      reference;
+        typedef T       &reference;
         typedef const T &const_reference;
-        typedef T *      pointer;
+        typedef T       *pointer;
         typedef const T *const_pointer;
 
         // forward iterator creation methods.

@@ -59,8 +59,8 @@ namespace Ogre
     class _OgreMetalExport MetalRenderPassDescriptor final : public RenderPassDescriptor
     {
     protected:
-        MTLRenderPassColorAttachmentDescriptor *  mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        MTLRenderPassDepthAttachmentDescriptor *  mDepthAttachment;
+        MTLRenderPassColorAttachmentDescriptor   *mColourAttachment[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        MTLRenderPassDepthAttachmentDescriptor   *mDepthAttachment;
         MTLRenderPassStencilAttachmentDescriptor *mStencilAttachment;
 
         /// Only used if we need to emulate StoreAndMultisampleResolve
@@ -69,11 +69,11 @@ namespace Ogre
 
         MetalFrameBufferDescMap::iterator mSharedFboItor;
 
-        MetalDevice *      mDevice;
+        MetalDevice       *mDevice;
         MetalRenderSystem *mRenderSystem;
 
 #if OGRE_DEBUG_MODE
-        void * mCallstackBacktrace[32];
+        void  *mCallstackBacktrace[32];
         size_t mNumCallstackEntries;
 #endif
 

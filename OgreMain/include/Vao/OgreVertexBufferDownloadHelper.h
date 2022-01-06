@@ -106,7 +106,7 @@ namespace Ogre
         @param elementCount
             Number of vertices to download. When 0, we download all that remains.
         */
-        void queueDownload( const VertexArrayObject *             vao,
+        void queueDownload( const VertexArrayObject              *vao,
                             const VertexElementSemanticFullArray &semanticsToDownload,
                             size_t elementStart = 0, size_t elementCount = 0 );
 

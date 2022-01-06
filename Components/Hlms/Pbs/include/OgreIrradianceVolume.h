@@ -66,7 +66,7 @@ namespace Ogre
         float                   mIrradianceMaxPower;
         Vector3                 mIrradianceOrigin;
         Vector3                 mIrradianceCellSize;
-        TextureGpu *            mIrradianceVolume;
+        TextureGpu             *mIrradianceVolume;
         HlmsSamplerblock const *mIrradianceSamplerblock;
 
         float *mVolumeData;
@@ -123,7 +123,7 @@ namespace Ogre
         uint32 getNumBlocksY() const { return mNumBlocksY; }
         uint32 getNumBlocksZ() const { return mNumBlocksZ; }
 
-        TextureGpu *            getIrradianceVolumeTexture() const { return mIrradianceVolume; }
+        TextureGpu             *getIrradianceVolumeTexture() const { return mIrradianceVolume; }
         const HlmsSamplerblock *getIrradSamplerblock() const { return mIrradianceSamplerblock; }
     };
 

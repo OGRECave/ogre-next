@@ -281,8 +281,7 @@ namespace Ogre
                               " specifies ", c_rootLayoutVarNames[i], " in range [",
                               mDescBindingRanges[j][i].start );
                     tmpStr.a( ", ", (uint32)mDescBindingRanges[j][i].end, ") but set ",
-                              ( uint32 )( j + 1u ), " is in range [",
-                              mDescBindingRanges[j + 1][i].start );
+                              (uint32)( j + 1u ), " is in range [", mDescBindingRanges[j + 1][i].start );
                     tmpStr.a( ", ", mDescBindingRanges[j + 1][i].end, ")" );
 
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,

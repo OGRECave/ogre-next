@@ -48,7 +48,7 @@ namespace Ogre
         /// mVboName is not deleted by us (the VaoManager does) as we may have
         /// only been assigned a chunk of the buffer, not the whole thing.
         GLuint mVboName;
-        void * mMappedPtr;
+        void  *mMappedPtr;
 
         /** How many bytes between the last fence and our current offset do we need to let
             through before we place another fence?

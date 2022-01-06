@@ -49,7 +49,8 @@ THE SOFTWARE.
 
 @implementation MetalWinListener
 
-- (Ogre::MetalWindow *)getMetalWindow:(NSNotification *)notification {
+- (Ogre::MetalWindow *)getMetalWindow:(NSNotification *)notification
+{
     Ogre::MetalWindow *metalWindow = nullptr;
     NSWindow *cocoaWindow = notification.object;
     NSValue *assoc = objc_getAssociatedObject( cocoaWindow, @selector( windowClosed: ) );
@@ -60,7 +61,8 @@ THE SOFTWARE.
     return metalWindow;
 }
 
-- (void)windowMoved:(NSNotification *)notification {
+- (void)windowMoved:(NSNotification *)notification
+{
     Ogre::MetalWindow *metalWindow = [self getMetalWindow:notification];
     if( metalWindow != nil )
     {
@@ -73,7 +75,8 @@ THE SOFTWARE.
     }
 }
 
-- (void)windowResized:(NSNotification *)notification {
+- (void)windowResized:(NSNotification *)notification
+{
     Ogre::MetalWindow *metalWindow = [self getMetalWindow:notification];
     if( metalWindow != nil )
     {
@@ -86,7 +89,8 @@ THE SOFTWARE.
     }
 }
 
-- (void)windowClosed:(NSNotification *)notification {
+- (void)windowClosed:(NSNotification *)notification
+{
     Ogre::MetalWindow *metalWindow = [self getMetalWindow:notification];
     if( metalWindow != nil )
     {

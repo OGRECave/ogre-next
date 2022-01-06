@@ -586,7 +586,7 @@ namespace Ogre
 
         RequestQueue mIdleRequestQueue;   // Guarded by mIdleMutex
         bool         mIdleThreadRunning;  // Guarded by mIdleMutex
-        Request *    mIdleProcessed;      // Guarded by mProcessMutex
+        Request     *mIdleProcessed;      // Guarded by mProcessMutex
 
         bool processIdleRequests();
     };

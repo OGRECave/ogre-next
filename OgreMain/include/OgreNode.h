@@ -540,8 +540,8 @@ namespace Ogre
             Initial rotation relative to parent
         */
         virtual Node *createChild( SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC,
-                                   const Vector3 &     translate = Vector3::ZERO,
-                                   const Quaternion &  rotate = Quaternion::IDENTITY );
+                                   const Vector3      &translate = Vector3::ZERO,
+                                   const Quaternion   &rotate = Quaternion::IDENTITY );
 
         /** Adds a (precreated) child scene node to this node. If it is attached to another node,
             it must be detached first.
@@ -554,7 +554,7 @@ namespace Ogre
         size_t numChildren() const { return mChildren.size(); }
 
         /** Gets a pointer to a child node. */
-        Node *      getChild( size_t index ) { return mChildren[index]; }
+        Node       *getChild( size_t index ) { return mChildren[index]; }
         const Node *getChild( size_t index ) const { return mChildren[index]; }
 
         /** Retrieves an iterator for efficiently looping through all children of this node.

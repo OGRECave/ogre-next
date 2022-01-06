@@ -174,11 +174,11 @@ namespace Ogre
             class _OgrePrivate VertexBufferLicense
             {
             public:
-                HardwareVertexBuffer *        originalBufferPtr;
+                HardwareVertexBuffer         *originalBufferPtr;
                 BufferLicenseType             licenseType;
                 size_t                        expiredDelay;
                 HardwareVertexBufferSharedPtr buffer;
-                HardwareBufferLicensee *      licensee;
+                HardwareBufferLicensee       *licensee;
                 VertexBufferLicense( HardwareVertexBuffer *orig, BufferLicenseType ltype, size_t delay,
                                      HardwareVertexBufferSharedPtr buf, HardwareBufferLicensee *lic ) :
                     originalBufferPtr( orig ),

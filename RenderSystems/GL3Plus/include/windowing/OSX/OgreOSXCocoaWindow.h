@@ -50,14 +50,14 @@ namespace Ogre
     class _OgreGL3PlusExport CocoaWindow : public Window
     {
     private:
-        NSWindow *           mWindow;
-        NSView *             mView;
-        NSOpenGLContext *    mGLContext;
+        NSWindow            *mWindow;
+        NSView              *mView;
+        NSOpenGLContext     *mGLContext;
         NSOpenGLPixelFormat *mGLPixelFormat;
         // CVDisplayLinkRef mDisplayLink;
         NSPoint              mWindowOriginPt;
         CocoaWindowDelegate *mWindowDelegate;
-        CocoaContext *       mContext;
+        CocoaContext        *mContext;
 
         bool mClosed;
         bool mVisible;

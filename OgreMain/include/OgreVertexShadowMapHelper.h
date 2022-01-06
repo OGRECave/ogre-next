@@ -59,9 +59,9 @@ namespace Ogre
         @param outVao
             Output vao to store the cloned, optimized version.
         */
-        static void optimizeForShadowMapping( VaoManager *                  vaoManager,
+        static void optimizeForShadowMapping( VaoManager                   *vaoManager,
                                               const VertexArrayObjectArray &inVao,
-                                              VertexArrayObjectArray &      outVao );
+                                              VertexArrayObjectArray       &outVao );
 
         /** Copies the contents from srcData into dstData, but shrinking it by removing
             duplicated vertices.
@@ -87,11 +87,11 @@ namespace Ogre
         @returns
             The new vertex count. Will be <= numVertices
         */
-        static uint32 shrinkVertexBuffer( uint8 *               dstData,               //
+        static uint32 shrinkVertexBuffer( uint8                *dstData,               //
                                           const VertexElement2 *vertexElements[3],     //
-                                          FastArray<uint32> &   vertexConversionLut,   //
+                                          FastArray<uint32>    &vertexConversionLut,   //
                                           bool                  hasIndexBuffer,        //
-                                          const uint8 *         srcData[3],            //
+                                          const uint8          *srcData[3],            //
                                           const size_t          srcOffset[3],          //
                                           const size_t          srcBytesPerVertex[3],  //
                                           uint32                numVertices );
@@ -112,9 +112,9 @@ namespace Ogre
             True if found, false if not found.
         */
         static bool findFirstAppearance( const VertexArrayObjectArray &vao,           //
-                                         const VertexBufferPacked *    vertexBuffer,  //
-                                         size_t &                      outVaoIdx,     //
-                                         size_t &                      outVertexBufferIdx );
+                                         const VertexBufferPacked     *vertexBuffer,  //
+                                         size_t                       &outVaoIdx,     //
+                                         size_t                       &outVertexBufferIdx );
     };
 
     namespace v1
@@ -125,7 +125,7 @@ namespace Ogre
             struct Geometry
             {
                 v1::VertexData *vertexData;
-                v1::IndexData * indexData;
+                v1::IndexData  *indexData;
             };
 
             typedef vector<Geometry>::type GeometryVec;
@@ -146,7 +146,7 @@ namespace Ogre
                 Output vao to store the cloned, optimized version.
             */
             static void optimizeForShadowMapping( const VertexShadowMapHelper::GeometryVec &inGeom,
-                                                  VertexShadowMapHelper::GeometryVec &      outGeom );
+                                                  VertexShadowMapHelper::GeometryVec       &outGeom );
 
             static bool findFirstAppearance( const GeometryVec &geom, const VertexData *vertexBuffer,
                                              size_t &outVaoIdx );

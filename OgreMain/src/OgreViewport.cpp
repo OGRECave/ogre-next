@@ -103,8 +103,8 @@ namespace Ogre
             mCoversEntireTarget = true;
             return;
         }
-        Real height = ( Real )( mCurrentTarget->getHeight() >> mCurrentMip );
-        Real width = ( Real )( mCurrentTarget->getWidth() >> mCurrentMip );
+        Real height = (Real)( mCurrentTarget->getHeight() >> mCurrentMip );
+        Real width = (Real)( mCurrentTarget->getWidth() >> mCurrentMip );
 
         assert( mScissorRelLeft >= mRelLeft && mScissorRelTop >= mRelTop &&
                 mScissorRelWidth <= mRelWidth && mScissorRelHeight <= mRelHeight &&

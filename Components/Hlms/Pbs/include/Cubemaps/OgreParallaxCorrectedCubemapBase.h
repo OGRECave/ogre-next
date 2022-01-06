@@ -51,7 +51,7 @@ namespace Ogre
                                                             public CompositorWorkspaceListener
     {
     protected:
-        TextureGpu *            mBindTexture;
+        TextureGpu             *mBindTexture;
         HlmsSamplerblock const *mSamplerblockTrilinear;
 
         CubemapProbeVec mProbes;
@@ -66,11 +66,11 @@ namespace Ogre
     public:
         uint32 mMask;  /// @see CubemapProbe::mMask
     protected:
-        Root *                        mRoot;
-        SceneManager *                mSceneManager;
+        Root                         *mRoot;
+        SceneManager                 *mSceneManager;
         CompositorWorkspaceDef const *mDefaultWorkspaceDef;
 
-        Pass *        mPccCompressorPass;
+        Pass         *mPccCompressorPass;
         CubemapProbe *mProbeRenderInProgress;
 
     public:
@@ -105,7 +105,7 @@ namespace Ogre
         bool getAutomaticMode() const { return mAutomaticMode; }
         bool getUseDpm2DArray() const { return mUseDpm2DArray; }
 
-        TextureGpu *            getBindTexture() const { return mBindTexture; }
+        TextureGpu             *getBindTexture() const { return mBindTexture; }
         const HlmsSamplerblock *getBindTrilinearSamplerblock() { return mSamplerblockTrilinear; }
 
         /// By default the probes will be constructed when the user enters its vecinity.
@@ -117,10 +117,10 @@ namespace Ogre
 
         virtual size_t getConstBufferSize();
 
-        virtual void fillConstBufferData( const Matrix4 &viewMatrix,
+        virtual void fillConstBufferData( const Matrix4        &viewMatrix,
                                           float *RESTRICT_ALIAS passBufferPtr ) const;
         static void  fillConstBufferData( const CubemapProbe &probe, const Matrix4 &viewMatrix,
-                                          const Matrix3 &invViewMat3,
+                                          const Matrix3        &invViewMat3,
                                           float *RESTRICT_ALIAS passBufferPtr );
 
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.

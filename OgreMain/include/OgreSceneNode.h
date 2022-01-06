@@ -211,8 +211,8 @@ namespace Ogre
             rotate Initial rotation relative to parent
         */
         virtual SceneNode *createChildSceneNode( SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC,
-                                                 const Vector3 &     translate = Vector3::ZERO,
-                                                 const Quaternion &  rotate = Quaternion::IDENTITY );
+                                                 const Vector3      &translate = Vector3::ZERO,
+                                                 const Quaternion   &rotate = Quaternion::IDENTITY );
 
         void setListener( Listener *listener ) override;
 

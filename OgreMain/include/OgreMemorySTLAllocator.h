@@ -79,10 +79,10 @@ namespace Ogre
         /// define our types, as per ISO C++
         typedef STLAllocatorBase<T>       Base;
         typedef typename Base::value_type value_type;
-        typedef value_type *              pointer;
-        typedef const value_type *        const_pointer;
-        typedef value_type &              reference;
-        typedef const value_type &        const_reference;
+        typedef value_type               *pointer;
+        typedef const value_type         *const_pointer;
+        typedef value_type               &reference;
+        typedef const value_type         &const_reference;
         typedef std::size_t               size_type;
         typedef std::ptrdiff_t            difference_type;
 

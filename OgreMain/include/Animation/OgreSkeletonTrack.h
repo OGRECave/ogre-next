@@ -96,7 +96,7 @@ namespace Ogre
         void   _setMaxUsedSlot( uint32 slot ) { mUsedSlots = std::max( slot + 1, mUsedSlots ); }
 
         const KeyFrameRigVec &getKeyFrames() const { return mKeyFrameRigs; }
-        KeyFrameRigVec &      _getKeyFrames() { return mKeyFrameRigs; }
+        KeyFrameRigVec       &_getKeyFrames() { return mKeyFrameRigs; }
 
         inline void getKeyFrameRigAt( KeyFrameRigVec::const_iterator &inOutPrevFrame,
                                       KeyFrameRigVec::const_iterator &outNextFrame, Real frame ) const;

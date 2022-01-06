@@ -91,7 +91,7 @@ namespace Ogre
         {
             // Be careful of not writing to these regions or else strict aliasing rule gets broken!!!
             const Real *RESTRICT_ALIAS aliasedReal = reinterpret_cast<const Real *>( mChunkBase );
-            Real *RESTRICT_ALIAS matrix = reinterpret_cast<Real *>( out._m );
+            Real *RESTRICT_ALIAS       matrix = reinterpret_cast<Real *>( out._m );
             for( size_t i = 0; i < 16; i += 4 )
             {
                 matrix[i] = aliasedReal[ARRAY_PACKED_REALS * ( i ) + index];
@@ -113,7 +113,7 @@ namespace Ogre
 
         void setFromMatrix4( const Matrix4 &m, size_t index )
         {
-            Real *RESTRICT_ALIAS aliasedReal = reinterpret_cast<Real *>( mChunkBase );
+            Real *RESTRICT_ALIAS       aliasedReal = reinterpret_cast<Real *>( mChunkBase );
             const Real *RESTRICT_ALIAS matrix = reinterpret_cast<const Real *>( m._m );
             for( size_t i = 0; i < 16; i += 4 )
             {

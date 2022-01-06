@@ -34,13 +34,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	struct _OgreVulkanExport VulkanResourceTransition
+    struct _OgreVulkanExport VulkanResourceTransition
     {
-		VkPipelineStageFlags srcStage;
-		VkPipelineStageFlags dstStage;
+        VkPipelineStageFlags srcStage;
+        VkPipelineStageFlags dstStage;
 
-		VkMemoryBarrier memBarrier;
-		FastArray<VkImageMemoryBarrier> imageBarriers;
+        VkMemoryBarrier memBarrier;
+        FastArray<VkImageMemoryBarrier> imageBarriers;
     };
 }  // namespace Ogre
 

@@ -65,14 +65,14 @@ namespace Ogre
     uint64 Timer::getMillisecondsCPU()
     {
         clock_t newClock = clock();
-        return ( uint64 )( (float)( newClock - zeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) );
+        return (uint64)( (float)( newClock - zeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) );
     }
 
     //-- Common Across All Timers ----------------------------------------------------//
     uint64 Timer::getMicrosecondsCPU()
     {
         clock_t newClock = clock();
-        return ( uint64 )( (float)( newClock - zeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) );
+        return (uint64)( (float)( newClock - zeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) );
     }
 
 }  // namespace Ogre

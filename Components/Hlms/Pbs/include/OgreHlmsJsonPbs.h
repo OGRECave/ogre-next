@@ -48,9 +48,9 @@ namespace Ogre
 
     class _OgreHlmsPbsExport HlmsJsonPbs
     {
-        HlmsManager *      mHlmsManager;
+        HlmsManager       *mHlmsManager;
         TextureGpuManager *mTextureManager;
-        HlmsJsonListener * mListener;
+        HlmsJsonListener  *mListener;
         String             mAdditionalExtension;
 
         static HlmsPbsDatablock::Workflows         parseWorkflow( const char *value );
@@ -98,7 +98,7 @@ namespace Ogre
                            HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
-        static void collectSamplerblocks( const HlmsDatablock *                datablock,
+        static void collectSamplerblocks( const HlmsDatablock                 *datablock,
                                           set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 

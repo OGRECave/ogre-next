@@ -2693,7 +2693,7 @@ namespace Ogre
                         setProperty( propName.c_str(), (int32)intPart );
                         propName.resize( basePropSize );
                         propName.a( "_uv_min_x_fract" );
-                        setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                        setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                         fractPart = modff( (float)shadowTexDef->uvOffset.y, &intPart );
                         propName.resize( basePropSize );
@@ -2701,7 +2701,7 @@ namespace Ogre
                         setProperty( propName.c_str(), (int32)intPart );
                         propName.resize( basePropSize );
                         propName.a( "_uv_min_y_fract" );
-                        setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                        setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                         Vector2 uvMax = shadowTexDef->uvOffset + shadowTexDef->uvLength;
                         fractPart = modff( (float)uvMax.x, &intPart );
@@ -2710,7 +2710,7 @@ namespace Ogre
                         setProperty( propName.c_str(), (int32)intPart );
                         propName.resize( basePropSize );
                         propName.a( "_uv_max_x_fract" );
-                        setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                        setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                         fractPart = modff( (float)uvMax.y, &intPart );
                         propName.resize( basePropSize );
@@ -2718,7 +2718,7 @@ namespace Ogre
                         setProperty( propName.c_str(), (int32)intPart );
                         propName.resize( basePropSize );
                         propName.a( "_uv_max_y_fract" );
-                        setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                        setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                         propName.resize( basePropSize );
                         propName.a( "_array_idx" );
@@ -2733,7 +2733,7 @@ namespace Ogre
                             setProperty( propName.c_str(), (int32)intPart );
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_x_fract" );
-                            setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                            setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                             fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
                             propName.resize( basePropSize );
@@ -2741,7 +2741,7 @@ namespace Ogre
                             setProperty( propName.c_str(), (int32)intPart );
                             propName.resize( basePropSize );
                             propName.a( "_uv_length_y_fract" );
-                            setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                            setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                             if( light->getType() == Light::LT_DIRECTIONAL )
                             {
@@ -2778,7 +2778,7 @@ namespace Ogre
                                 setProperty( propName.c_str(), (int32)intPart );
                                 propName.resize( basePropSize );
                                 propName.a( "_uv_length_x_fract" );
-                                setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                                setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
 
                                 fractPart = modff( (float)shadowTexDef->uvLength.y, &intPart );
                                 propName.resize( basePropSize );
@@ -2786,7 +2786,7 @@ namespace Ogre
                                 setProperty( propName.c_str(), (int32)intPart );
                                 propName.resize( basePropSize );
                                 propName.a( "_uv_length_y_fract" );
-                                setProperty( propName.c_str(), ( int32 )( fractPart * 100000.0f ) );
+                                setProperty( propName.c_str(), (int32)( fractPart * 100000.0f ) );
                             }
                             else if( light->getType() == Light::LT_SPOTLIGHT )
                             {

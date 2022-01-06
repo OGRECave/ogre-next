@@ -66,7 +66,7 @@ namespace Ogre
         Real radius = inMesh->getBoundingSphereRadius();
         for( int i = 2; i < 6; i++ )
         {
-            Real i4 = ( Real )( i * i * i * i );
+            Real i4 = (Real)( i * i * i * i );
             Real i5 = i4 * (Real)i;
             // Distance = pixel count
             // Constant: zoom of the Lod. This could be scaled based on resolution.
@@ -304,7 +304,7 @@ namespace Ogre
         case LodLevel::VRM_PROPORTIONAL:
             outCollapseCostLimit = LodData::NEVER_COLLAPSE_COST;
             outVertexCountLimit =
-                uniqueVertexCount - ( size_t )( (Real)uniqueVertexCount * lodLevel.reductionValue );
+                uniqueVertexCount - (size_t)( (Real)uniqueVertexCount * lodLevel.reductionValue );
             break;
 
         case LodLevel::VRM_CONSTANT:

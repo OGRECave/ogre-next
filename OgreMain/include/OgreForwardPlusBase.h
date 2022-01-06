@@ -76,7 +76,7 @@ namespace Ogre
             /// but that's twice the memory (and less cache friendly).
             /// Only Android really could use ReadOnlyBufferPacked, but if you need to
             /// exceed the 65535 texel limit, it's likely too slow for phones anyway
-            TexBufferPacked *     gridBuffer;
+            TexBufferPacked      *gridBuffer;
             ReadOnlyBufferPacked *globalLightListBuffer;
             CachedGridBuffer() : gridBuffer( 0 ), globalLightListBuffer( 0 ) {}
         };
@@ -96,7 +96,7 @@ namespace Ogre
 
         struct CachedGrid
         {
-            Camera *   camera;
+            Camera    *camera;
             Vector3    lastPos;
             Quaternion lastRot;
             /// Cameras used for reflection have a different view proj matrix
@@ -142,7 +142,7 @@ namespace Ogre
         // to reuse memory, otherwise on stack it keeps constantly reallocating memory
         FastArray<bool> mShadowCastingLightVisibility;
 
-        VaoManager *  mVaoManager;
+        VaoManager   *mVaoManager;
         SceneManager *mSceneManager;
 
         bool mDebugMode;
@@ -211,7 +211,7 @@ namespace Ogre
         */
         virtual void fillConstBufferData( Viewport *viewport, bool bRequiresTextureFlipping,
                                           uint32 renderTargetHeight, IdString shaderSyntax,
-                                          bool   instancedStereo,
+                                          bool                  instancedStereo,
                                           float *RESTRICT_ALIAS passBufferPtr ) const = 0;
 
         virtual void setHlmsPassProperties( Hlms *hlms );

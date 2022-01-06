@@ -239,7 +239,7 @@ namespace Ogre
                     currWidth = std::max( currWidth >> 1u, 1u );
                     paramOutputSize.setManualValue( Vector4( (float)currWidth, (float)currHeight,
                                                              1.0f / currWidth, 1.0f / currHeight ) );
-                    paramDstLodIdx.setManualValue( ( uint32 )( mip + 1u ) );
+                    paramDstLodIdx.setManualValue( (uint32)( mip + 1u ) );
 
                     shaderParams = &blurV2->getShaderParams( "default" );
                     shaderParams->mParams.push_back( paramLodIdx );

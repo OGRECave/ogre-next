@@ -54,7 +54,7 @@ namespace Ogre
     */
     class _OgreExport TrackAllocPolicy
     {
-        static char * MemoryPool;
+        static char  *MemoryPool;
         static size_t CurrentOffset;
         static char   Magic[4];
         static size_t RandomOffset;
@@ -111,7 +111,7 @@ namespace Ogre
 
             // Align...
             uint8 *mem_block =
-                (uint8 *)( ( size_t )( tmp + _alignment - 1 ) & ( size_t )( ~( _alignment - 1 ) ) );
+                (uint8 *)( (size_t)( tmp + _alignment - 1 ) & (size_t)( ~( _alignment - 1 ) ) );
 
             // Special case where malloc have already satisfied the alignment
             // We must add alignment to mem_block to mantain alignment AND
@@ -122,7 +122,7 @@ namespace Ogre
 
             // How far are from the real start of our memory
             // block?
-            *( mem_block - 1 ) = ( uint8 )( mem_block - tmp );
+            *( mem_block - 1 ) = (uint8)( mem_block - tmp );
 
             return (void *)mem_block;
         }

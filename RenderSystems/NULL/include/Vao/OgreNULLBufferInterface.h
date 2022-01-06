@@ -42,7 +42,7 @@ namespace Ogre
     {
     protected:
         size_t mVboPoolIdx;
-        void * mMappedPtr;
+        void  *mMappedPtr;
 
         uint8 *mNullDataPtr;
 

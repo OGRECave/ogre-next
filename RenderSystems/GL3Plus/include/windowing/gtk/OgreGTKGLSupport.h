@@ -63,7 +63,7 @@ namespace Ogre
         void          initialiseExtensions();
         bool          checkMinGLVersion( const String &v ) const;
         bool          checkExtension( const String &ext ) const;
-        void *        getProcAddress( const char *procname ) const;
+        void         *getProcAddress( const char *procname ) const;
 
         Glib::RefPtr<const Gdk::GL::Context> getMainContext() const;
 

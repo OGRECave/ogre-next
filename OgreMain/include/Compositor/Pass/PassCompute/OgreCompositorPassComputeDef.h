@@ -129,7 +129,7 @@ namespace Ogre
         IdString mJobName;
         IdString mCameraName;
 
-        CompositorPassComputeDef( CompositorNodeDef *  parentNodeDef,
+        CompositorPassComputeDef( CompositorNodeDef   *parentNodeDef,
                                   CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_COMPUTE, parentTargetDef ),
             mParentNodeDef( parentNodeDef )
@@ -151,8 +151,8 @@ namespace Ogre
                            ResourceAccess::ResourceAccess access, size_t offset = 0,
                            size_t sizeBytes = 0, bool allowWriteAfterWrite = false );
 
-        const TextureSources & getTextureSources() const { return mTextureSources; }
-        const TextureSources & getUavSources() const { return mUavSources; }
+        const TextureSources  &getTextureSources() const { return mTextureSources; }
+        const TextureSources  &getUavSources() const { return mUavSources; }
         const BufferSourceVec &getBufferSources() const { return mBufferSources; }
     };
 

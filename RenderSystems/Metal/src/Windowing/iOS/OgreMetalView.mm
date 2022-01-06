@@ -34,11 +34,13 @@ THE SOFTWARE.
 {
 }
 
-+ (Class)layerClass {
++ (Class)layerClass
+{
     return [CAMetalLayer class];
 }
 
-- (void)initCommon {
+- (void)initCommon
+{
     self.opaque = YES;
     self.backgroundColor = nil;
     self.scaleToNative = true;
@@ -47,13 +49,15 @@ THE SOFTWARE.
     self.presentationTime = -1.0;
 }
 
-- (void)didMoveToWindow {
+- (void)didMoveToWindow
+{
     if( self.scaleToNative )
         [super setContentScaleFactor:self.window.screen.nativeScale * self.nativeScaleFactor];
     _layerSizeDidUpdate = YES;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
 
     if( self )
@@ -64,7 +68,8 @@ THE SOFTWARE.
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
     self = [super initWithCoder:coder];
 
     if( self )
@@ -74,13 +79,15 @@ THE SOFTWARE.
     return self;
 }
 
-- (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
+- (void)setContentScaleFactor:(CGFloat)contentScaleFactor
+{
     self.scaleToNative = false;
     [super setContentScaleFactor:contentScaleFactor];
     _layerSizeDidUpdate = YES;
 }
 
-- (void)layoutSubviews {
+- (void)layoutSubviews
+{
     [super layoutSubviews];
 
     _layerSizeDidUpdate = YES;

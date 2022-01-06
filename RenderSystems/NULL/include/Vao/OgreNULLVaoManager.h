@@ -175,7 +175,7 @@ namespace Ogre
         void                  destroyIndirectBufferImpl( IndirectBufferPacked *indirectBuffer ) override;
 
         VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *          indexBuffer,
+                                                        IndexBufferPacked           *indexBuffer,
                                                         OperationType                opType ) override;
 
         void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;

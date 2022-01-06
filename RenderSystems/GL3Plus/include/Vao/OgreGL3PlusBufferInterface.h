@@ -43,7 +43,7 @@ namespace Ogre
     protected:
         size_t mVboPoolIdx;
         GLuint mVboName;
-        void * mMappedPtr;
+        void  *mMappedPtr;
 
         size_t                mUnmapTicket;
         GL3PlusDynamicBuffer *mDynamicBuffer;

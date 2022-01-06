@@ -56,7 +56,7 @@ namespace Ogre
         Real          mProbeBlendFactors[OGRE_MAX_CUBE_PROBES];
 
         CubemapProbeVec mManuallyActiveProbes;
-        StagingBuffer * mStagingBuffer;
+        StagingBuffer  *mStagingBuffer;
         size_t          mLastPassNumViewMatrices;
         Matrix4         mCachedLastViewMatrix;
 
@@ -75,22 +75,22 @@ namespace Ogre
     private:
         GpuProgramParametersSharedPtr mBlendCubemapParamsVs[OGRE_MAX_CUBE_PROBES];
         GpuProgramParametersSharedPtr mBlendCubemapParams[OGRE_MAX_CUBE_PROBES];
-        TextureUnitState *            mBlendCubemapTUs[OGRE_MAX_CUBE_PROBES];
+        TextureUnitState             *mBlendCubemapTUs[OGRE_MAX_CUBE_PROBES];
         GpuProgramParametersSharedPtr mCopyCubemapParams[6];
-        TextureUnitState *            mCopyCubemapTUs[6];
+        TextureUnitState             *mCopyCubemapTUs[6];
         CubemapProbe                  mBlankProbe;
         CubemapProbe                  mFinalProbe;
-        Camera *                      mBlendProxyCamera;
-        CompositorWorkspace *         mBlendWorkspace;
-        CompositorWorkspace *         mCopyWorkspace;
-        HlmsSamplerblock const *      mSamplerblockPoint;
+        Camera                       *mBlendProxyCamera;
+        CompositorWorkspace          *mBlendWorkspace;
+        CompositorWorkspace          *mCopyWorkspace;
+        HlmsSamplerblock const       *mSamplerblockPoint;
         float                         mCurrentMip;
         uint32                        mProxyVisibilityMask;
         uint32                        mProxyQueryMask;
         uint8                         mReservedRqId;
         MeshPtr                       mProxyMesh;
-        Item *                        mProxyItems[OGRE_MAX_CUBE_PROBES];
-        SceneNode *                   mProxyNodes[OGRE_MAX_CUBE_PROBES];
+        Item                         *mProxyItems[OGRE_MAX_CUBE_PROBES];
+        SceneNode                    *mProxyNodes[OGRE_MAX_CUBE_PROBES];
 
         struct TempRtt
         {
@@ -199,7 +199,7 @@ namespace Ogre
         size_t        getConstBufferSize() override;
         static size_t getConstBufferSizeStatic();
 
-        void fillConstBufferData( const Matrix4 &viewMatrix,
+        void fillConstBufferData( const Matrix4        &viewMatrix,
                                   float *RESTRICT_ALIAS passBufferPtr ) const override;
 
     protected:
@@ -228,7 +228,7 @@ namespace Ogre
         /// Returns the query mask you told us you reserved for storing our internal objects.
         uint32 getProxyReservedQueryMask() const { return mProxyQueryMask; }
 
-        Item *const *     getProxyItems() const { return mProxyItems; }
+        Item *const      *getProxyItems() const { return mProxyItems; }
         SceneNode *const *getProxySceneNodes() const { return mProxyNodes; }
 
         // Statistics

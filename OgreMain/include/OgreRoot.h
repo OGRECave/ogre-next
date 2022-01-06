@@ -74,7 +74,7 @@ namespace Ogre
 
     protected:
         RenderSystemList mRenderers;
-        RenderSystem *   mActiveRenderer;
+        RenderSystem    *mActiveRenderer;
         String           mVersion;
         String           mAppName;
         String           mConfigFileName;
@@ -83,19 +83,19 @@ namespace Ogre
         bool mFirstTimePostWindowInit;
 
         // Singletons
-        LogManager *                        mLogManager;
-        ControllerManager *                 mControllerManager;
-        SceneManagerEnumerator *            mSceneManagerEnum;
+        LogManager                         *mLogManager;
+        ControllerManager                  *mControllerManager;
+        SceneManagerEnumerator             *mSceneManagerEnum;
         typedef deque<SceneManager *>::type SceneManagerStack;
         SceneManagerStack                   mSceneManagerStack;
-        DynLibManager *                     mDynLibManager;
-        ArchiveManager *                    mArchiveManager;
-        MaterialManager *                   mMaterialManager;
-        v1::MeshManager *                   mMeshManagerV1;
-        MeshManager *                       mMeshManager;
-        ParticleSystemManager *             mParticleManager;
-        v1::OldSkeletonManager *            mOldSkeletonManager;
-        SkeletonManager *                   mSkeletonManager;
+        DynLibManager                      *mDynLibManager;
+        ArchiveManager                     *mArchiveManager;
+        MaterialManager                    *mMaterialManager;
+        v1::MeshManager                    *mMeshManagerV1;
+        MeshManager                        *mMeshManager;
+        ParticleSystemManager              *mParticleManager;
+        v1::OldSkeletonManager             *mOldSkeletonManager;
+        SkeletonManager                    *mSkeletonManager;
 
         ArchiveFactory *mZipArchiveFactory;
         ArchiveFactory *mEmbeddedZipArchiveFactory;
@@ -105,22 +105,22 @@ namespace Ogre
         AndroidLogListener *mAndroidLogger;
 #endif
 
-        ResourceGroupManager *           mResourceGroupManager;
-        ResourceBackgroundQueue *        mResourceBackgroundQueue;
+        ResourceGroupManager            *mResourceGroupManager;
+        ResourceBackgroundQueue         *mResourceBackgroundQueue;
         RenderSystemCapabilitiesManager *mRenderSystemCapabilitiesManager;
-        ScriptCompilerManager *          mCompilerManager;
-        LodStrategyManager *             mLodStrategyManager;
+        ScriptCompilerManager           *mCompilerManager;
+        LodStrategyManager              *mLodStrategyManager;
 
-        FrameStats *                  mFrameStats;
-        Timer *                       mTimer;
-        Window *                      mAutoWindow;
-        Profiler *                    mProfiler;
-        HighLevelGpuProgramManager *  mHighLevelGpuProgramManager;
+        FrameStats                   *mFrameStats;
+        Timer                        *mTimer;
+        Window                       *mAutoWindow;
+        Profiler                     *mProfiler;
+        HighLevelGpuProgramManager   *mHighLevelGpuProgramManager;
         ExternalTextureSourceManager *mExternalTextureSourceManager;
-        HlmsManager *                 mHlmsManager;
-        HlmsLowLevel *                mHlmsLowLevelProxy;
-        HlmsCompute *                 mHlmsCompute;
-        CompositorManager2 *          mCompositorManager2;
+        HlmsManager                  *mHlmsManager;
+        HlmsLowLevel                 *mHlmsLowLevelProxy;
+        HlmsCompute                  *mHlmsCompute;
+        CompositorManager2           *mCompositorManager2;
         unsigned long                 mNextFrame;
         Real                          mFrameSmoothingTime;
         bool                          mRemoveQueueStructuresOnClear;
@@ -709,7 +709,7 @@ namespace Ogre
         /** @copydoc RenderSystem::_createRenderWindows
          */
         bool createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
-                                  WindowList &                       createdWindows );
+                                  WindowList                        &createdWindows );
 
         /** Manually load a Plugin contained in a DLL / DSO.
          @remarks

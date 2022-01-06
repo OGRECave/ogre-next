@@ -90,7 +90,7 @@ namespace Ogre
     private:
         // Allowed video modes
         vector<DEVMODE>::type mDevModes;
-        Win32Window *         mInitialWindow;
+        Win32Window          *mInitialWindow;
         vector<int>::type     mFSAALevels;
         bool                  mHasPixelFormatARB;
         bool                  mHasMultisample;
@@ -113,11 +113,11 @@ namespace Ogre
 
         DisplayMonitorInfoList mMonitorInfoList;
 
-        void           refreshConfig();
-        void           initialiseWGL();
+        void                    refreshConfig();
+        void                    initialiseWGL();
         static LRESULT CALLBACK dummyWndProc( HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp );
-        static BOOL CALLBACK sCreateMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
-                                                          LPRECT lprcMonitor, LPARAM dwData );
+        static BOOL CALLBACK    sCreateMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
+                                                             LPRECT lprcMonitor, LPARAM dwData );
     };
 
     extern PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;

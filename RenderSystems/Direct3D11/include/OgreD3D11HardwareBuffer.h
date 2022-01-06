@@ -57,7 +57,7 @@ namespace Ogre
             bool                 mStagingUploadNeeded;
 
             BufferType        mBufferType;
-            D3D11Device &     mDevice;
+            D3D11Device      &mDevice;
             D3D11_BUFFER_DESC mDesc;
 
             /** See HardwareBuffer. */

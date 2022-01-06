@@ -556,7 +556,7 @@ namespace Ogre
 
                 while( itor != endt )
                 {
-                    const size_t slotIdx = ( size_t )( itor - begin );
+                    const size_t slotIdx = (size_t)( itor - begin );
                     propName.resize( texturePropNameSize );
                     propName.a( static_cast<uint32>( slotIdx ) );  // texture0
                     const size_t texturePropSize = propName.size();

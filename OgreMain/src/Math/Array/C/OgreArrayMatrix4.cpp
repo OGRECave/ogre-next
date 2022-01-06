@@ -32,9 +32,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    // clang-format off
     const ArrayMatrix4 ArrayMatrix4::IDENTITY( ArrayMatrix4::createAllFromMatrix4(
                 Matrix4(    1, 0, 0, 0,
                             0, 1, 0, 0,
                             0, 0, 1, 0,
                             0, 0, 0, 1 ) ) );
-}
+    // clang-format on
+}  // namespace Ogre

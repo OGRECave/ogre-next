@@ -453,8 +453,8 @@ namespace Ogre
 
                     // There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                     // We need to update them so they don't crash deallocateVbo later.
-                    switchVboPoolIndex( vboIdx, ( size_t )( mVbos[vboIdx].size() - 1u ),
-                                        ( size_t )( itor - mVbos[vboIdx].begin() ) );
+                    switchVboPoolIndex( vboIdx, (size_t)( mVbos[vboIdx].size() - 1u ),
+                                        (size_t)( itor - mVbos[vboIdx].begin() ) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );
                     endt = mVbos[vboIdx].end();
@@ -563,7 +563,7 @@ namespace Ogre
         }
 
         Vbo &bestVbo = mVbos[vboFlag][bestVboIdx];
-        Block &bestBlock = bestVbo.freeBlocks[static_cast<size_t>(bestBlockIdx)];
+        Block &bestBlock = bestVbo.freeBlocks[static_cast<size_t>( bestBlockIdx )];
 
         size_t newOffset = ( ( bestBlock.offset + alignment - 1 ) / alignment ) * alignment;
         size_t padding = newOffset - bestBlock.offset;
@@ -627,7 +627,7 @@ namespace Ogre
 
                 // When blockToMerge is the last one, its index won't be the same
                 // after removing the other iterator, they will swap.
-                if( idx == ptrdiff_t( blocks.size() - 1u ))
+                if( idx == ptrdiff_t( blocks.size() - 1u ) )
                     idx = blockToMerge - blocks.begin();
 
                 efficientVectorRemove( blocks, blockToMerge );

@@ -132,7 +132,7 @@ namespace Ogre
         /// of another TagPoint, respecting non-uniform scaling.
         static void updateAllTransformsTagOnTag( const size_t numNodes, Transform t );
 
-        virtual TagPoint *createChildTagPoint( const Vector3 &   vPos = Vector3::ZERO,
+        virtual TagPoint *createChildTagPoint( const Vector3    &vPos = Vector3::ZERO,
                                                const Quaternion &qRot = Quaternion::IDENTITY );
     };
     /** @} */

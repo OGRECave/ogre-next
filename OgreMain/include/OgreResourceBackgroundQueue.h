@@ -131,9 +131,9 @@ namespace Ogre
             String                  resourceType;
             String                  groupName;
             bool                    isManual;
-            ManualResourceLoader *  loader;
-            NameValuePairList *     loadParams;
-            Listener *              listener;
+            ManualResourceLoader   *loader;
+            NameValuePairList      *loadParams;
+            Listener               *listener;
             BackgroundProcessResult result;
 
             _OgreExport friend std::ostream &operator<<( std::ostream &o, const ResourceRequest &r )
@@ -188,7 +188,7 @@ namespace Ogre
             determine if completed if not using listener
         */
         virtual BackgroundProcessTicket initialiseResourceGroup( const String &name,
-                                                                 Listener *    listener = 0 );
+                                                                 Listener     *listener = 0 );
 
         /** Initialise all resource groups which are yet to be initialised in
             the background.
@@ -208,7 +208,7 @@ namespace Ogre
             determine if completed if not using listener
         */
         virtual BackgroundProcessTicket prepareResourceGroup( const String &name,
-                                                              Listener *    listener = 0 );
+                                                              Listener     *listener = 0 );
 
         /** Loads a resource group in the background.
         @see ResourceGroupManager::loadResourceGroup
@@ -245,7 +245,7 @@ namespace Ogre
             determine if completed if not using listener
         */
         virtual BackgroundProcessTicket unloadResourceGroup( const String &name,
-                                                             Listener *    listener = 0 );
+                                                             Listener     *listener = 0 );
 
         /** Prepare a single resource in the background.
         @see ResourceManager::prepare
@@ -264,9 +264,9 @@ namespace Ogre
         */
         virtual BackgroundProcessTicket prepare( const String &resType, const String &name,
                                                  const String &group, bool isManual = false,
-                                                 ManualResourceLoader *   loader = 0,
+                                                 ManualResourceLoader    *loader = 0,
                                                  const NameValuePairList *loadParams = 0,
-                                                 Listener *               listener = 0 );
+                                                 Listener                *listener = 0 );
 
         /** Load a single resource in the background.
         @see ResourceManager::load
@@ -285,9 +285,9 @@ namespace Ogre
         */
         virtual BackgroundProcessTicket load( const String &resType, const String &name,
                                               const String &group, bool isManual = false,
-                                              ManualResourceLoader *   loader = 0,
+                                              ManualResourceLoader    *loader = 0,
                                               const NameValuePairList *loadParams = 0,
-                                              Listener *               listener = 0 );
+                                              Listener                *listener = 0 );
         /** Returns whether a previously queued process has completed or not.
         @remarks
             This method of checking that a background process has completed is
@@ -311,7 +311,7 @@ namespace Ogre
         bool canHandleRequest( const WorkQueue::Request *req, const WorkQueue *srcQ ) override;
         /// Implementation for WorkQueue::RequestHandler
         WorkQueue::Response *handleRequest( const WorkQueue::Request *req,
-                                            const WorkQueue *         srcQ ) override;
+                                            const WorkQueue          *srcQ ) override;
         /// Implementation for WorkQueue::ResponseHandler
         bool canHandleResponse( const WorkQueue::Response *res, const WorkQueue *srcQ ) override;
         /// Implementation for WorkQueue::ResponseHandler

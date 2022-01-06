@@ -56,7 +56,7 @@ namespace Ogre
         NSOpenGLPixelFormat *getPixelFormat();
 
     private:
-        NSOpenGLContext *    mNSGLContext{ NULL };
+        NSOpenGLContext     *mNSGLContext{ NULL };
         NSOpenGLPixelFormat *mNSGLPixelFormat{ NULL };
     };
 }  // namespace Ogre

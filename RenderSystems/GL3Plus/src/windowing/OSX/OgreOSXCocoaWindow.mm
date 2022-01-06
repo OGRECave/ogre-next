@@ -49,15 +49,18 @@ THE SOFTWARE.
 
 @implementation OgreGL3PlusWindow
 
-- (BOOL)canBecomeKeyWindow {
+- (BOOL)canBecomeKeyWindow
+{
     return YES;
 }
 
-- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
     return YES;
 }
 
-- (BOOL)acceptsFirstResponder {
+- (BOOL)acceptsFirstResponder
+{
     return YES;
 }
 
@@ -366,7 +369,7 @@ namespace Ogre
                 attribs[i++] = (NSOpenGLPixelFormatAttribute)8;
 
                 attribs[i++] = NSOpenGLPFADepthSize;
-                attribs[i++] = ( NSOpenGLPixelFormatAttribute )( hasDepthBuffer ? 16 : 0 );
+                attribs[i++] = (NSOpenGLPixelFormatAttribute)( hasDepthBuffer ? 16 : 0 );
 
                 if( fsaa_samples > 0 )
                 {

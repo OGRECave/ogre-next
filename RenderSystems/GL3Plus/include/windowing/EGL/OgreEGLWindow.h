@@ -49,7 +49,7 @@ namespace Ogre
         bool mIsExternalGLControl;
 
         EGLGLSupport *mGLSupport;
-        EGLContext *  mContext;
+        EGLContext   *mContext;
 
         EGLConfig  mEglConfig;
         EGLSurface mEglSurface;

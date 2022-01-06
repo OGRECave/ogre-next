@@ -135,9 +135,9 @@ namespace Ogre
         ResourceTransitionArray mTmpResourceTransitions;
 
         static void debugCheckDivergingTransition( const ResourceTransitionArray &resourceTransitions,
-                                                   const TextureGpu *             texture,
+                                                   const TextureGpu              *texture,
                                                    const ResourceLayout::Layout   newLayout,
-                                                   const RenderSystem *           renderSystem,
+                                                   const RenderSystem            *renderSystem,
                                                    const ResourceLayout::Layout   lastKnownLayout );
 
     public:

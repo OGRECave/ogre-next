@@ -1143,7 +1143,7 @@ namespace Ogre
                     {
                         tangentSrc = &( *itor );
 
-                        assert( ( ( size_t )( itor - srcData.begin() ) >= srcData.size() - 2u ) &&
+                        assert( ( (size_t)( itor - srcData.begin() ) >= srcData.size() - 2u ) &&
                                 ( srcData.back().element.mSemantic == VES_TANGENT ||
                                   srcData.back().element.mSemantic == VES_BINORMAL ) &&
                                 "Tangent element must be at the end of srcData array!" );
@@ -1152,7 +1152,7 @@ namespace Ogre
                     {
                         binormalSrc = &( *itor );
 
-                        assert( ( ( size_t )( itor - srcData.begin() ) >= srcData.size() - 2u ) &&
+                        assert( ( (size_t)( itor - srcData.begin() ) >= srcData.size() - 2u ) &&
                                 ( srcData.back().element.mSemantic == VES_TANGENT ||
                                   srcData.back().element.mSemantic == VES_BINORMAL ) &&
                                 "Binormal element must be at the end of srcData array!" );

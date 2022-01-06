@@ -71,14 +71,14 @@ namespace Ogre
         /// we wouldn't be able to support anisotropic mips for high resolution voxels.
         /// But more importantly, we would waste 1/4th of memory (actually 1/2 of memory
         /// because GPUs like GCN round memory consumption to the next power of 2).
-        TextureGpu *            mLightVoxel[4];
+        TextureGpu             *mLightVoxel[4];
         HlmsSamplerblock const *mSamplerblockTrilinear;
 
         VctVoxelizerSourceBase *mVoxelizer;
         bool                    mVoxelizerTexturesChanged;
         bool                    mVoxelizerListenersRemoved;
 
-        HlmsComputeJob *   mLightInjectionJob;
+        HlmsComputeJob    *mLightInjectionJob;
         ConstBufferPacked *mLightsConstBuffer;
 
         /// Anisotropic mipmap generation consists of 2 main steps:
@@ -88,11 +88,11 @@ namespace Ogre
         ///
         /// Step 2 takes mLightVoxel[i].mip[n] and computes mLightVoxel[i].mip[n+1]
         /// where i is in range [1; 3] and n is the number of mipmaps in those textures.
-        HlmsComputeJob *            mAnisoGeneratorStep0;
+        HlmsComputeJob             *mAnisoGeneratorStep0;
         FastArray<HlmsComputeJob *> mAnisoGeneratorStep1;
 
         HlmsComputeJob *mLightVctBounceInject;
-        TextureGpu *    mLightBounce;
+        TextureGpu     *mLightBounce;
 
         float mBakingMultiplier;
         float mInvBakingMultiplier;
@@ -111,16 +111,16 @@ namespace Ogre
         ShaderParams::Param *mVoxelCellSize;
         ShaderParams::Param *mDirCorrectionRatioThinWallCounter;
         ShaderParams::Param *mInvVoxelResolution;
-        ShaderParams *       mShaderParams;
+        ShaderParams        *mShaderParams;
 
         typedef vector<ShaderParams::Param>::type ParamVec;
         ParamVec                                  mLocalBounceShaderParams;
-        ShaderParams::Param *                     mBounceVoxelCellSize;
-        ShaderParams::Param *                     mBounceInvVoxelResolution;
-        ShaderParams::Param *                     mBounceIterationDampening;
-        ShaderParams::Param *                     mBounceStartBiasInvBiasCascadeMaxLod;
+        ShaderParams::Param                      *mBounceVoxelCellSize;
+        ShaderParams::Param                      *mBounceInvVoxelResolution;
+        ShaderParams::Param                      *mBounceIterationDampening;
+        ShaderParams::Param                      *mBounceStartBiasInvBiasCascadeMaxLod;
         ShaderParams::Param *mBounceFromPreviousProbeToNext;  /// Used when cascades > 1
-        ShaderParams *       mBounceShaderParams;
+        ShaderParams        *mBounceShaderParams;
 
         ResourceTransitionArray mResourceTransitions;
 

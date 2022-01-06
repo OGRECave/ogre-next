@@ -40,7 +40,7 @@ namespace Ogre
     class _OgreNULLExport NULLUavBufferPacked : public UavBufferPacked
     {
     protected:
-        TexBufferPacked *     getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        TexBufferPacked      *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
         ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
     public:

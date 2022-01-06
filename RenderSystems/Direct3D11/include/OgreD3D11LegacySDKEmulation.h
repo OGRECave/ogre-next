@@ -26,8 +26,8 @@ struct ID3D11RasterizerState1;
 struct D3D11_BLEND_DESC1;
 struct D3D11_RASTERIZER_DESC1;
 
-#define DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL ( ( DXGI_SWAP_EFFECT )( 3 ) )
-#define DXGI_SWAP_EFFECT_FLIP_DISCARD ( ( DXGI_SWAP_EFFECT )( 4 ) )
+#define DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL ( (DXGI_SWAP_EFFECT)( 3 ) )
+#define DXGI_SWAP_EFFECT_FLIP_DISCARD ( (DXGI_SWAP_EFFECT)( 4 ) )
 
 #ifndef D3DCOLORVALUE_DEFINED
 typedef struct _D3DCOLORVALUE
@@ -77,8 +77,8 @@ typedef struct DXGI_SWAP_CHAIN_FULLSCREEN_DESC
 typedef struct DXGI_PRESENT_PARAMETERS
 {
     UINT   DirtyRectsCount;
-    RECT * pDirtyRects;
-    RECT * pScrollRect;
+    RECT  *pDirtyRects;
+    RECT  *pScrollRect;
     POINT *pScrollOffset;
 } DXGI_PRESENT_PARAMETERS;
 
@@ -98,7 +98,7 @@ ID3D11Device1 : public ID3D11Device
         UINT ContextFlags, ID3D11DeviceContext1 * *ppDeferredContext ) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE CreateBlendState1( const D3D11_BLEND_DESC1 *pBlendStateDesc,
-                                                         ID3D11BlendState1 **     ppBlendState ) = 0;
+                                                         ID3D11BlendState1      **ppBlendState ) = 0;
 
     virtual HRESULT STDMETHODCALLTYPE CreateRasterizerState1(
         const D3D11_RASTERIZER_DESC1 *pRasterizerDesc, ID3D11RasterizerState1 **ppRasterizerState ) = 0;

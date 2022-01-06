@@ -71,8 +71,8 @@ THE SOFTWARE.
 #    include <d3d11_1.h>
 #    if !defined( _WIN32_WINNT_WIN10 )
 #        define DXGI_SWAP_EFFECT_FLIP_DISCARD \
-            ( ( DXGI_SWAP_EFFECT )( 4 ) )  // we want to use it on Win10 even if building with Win8 SDK
-#        define D3D11_RLDO_IGNORE_INTERNAL ( ( D3D11_RLDO_FLAGS )( 4 ) )
+            ( (DXGI_SWAP_EFFECT)( 4 ) )  // we want to use it on Win10 even if building with Win8 SDK
+#        define D3D11_RLDO_IGNORE_INTERNAL ( (D3D11_RLDO_FLAGS)( 4 ) )
 #    endif
 #else
 #    include <d3d11.h>

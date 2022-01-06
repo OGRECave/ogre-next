@@ -253,11 +253,11 @@ namespace Ogre
             // Overridden members follow
             Real                  getSquaredViewDepth( const Camera *cam ) const;
             const AxisAlignedBox &getBoundingBox() const;
-            const String &        getMovableType() const override;
+            const String         &getMovableType() const override;
             void _updateRenderQueue( RenderQueue *, Camera *camera, const Camera *lodCamera ) override;
             void getRenderOperation( RenderOperation &, bool casterPass ) override;
             virtual bool     preRender( SceneManager *sm, RenderSystem *rsys ) override;
-            void             getWorldTransforms( Matrix4 * ) const override;
+            void             getWorldTransforms( Matrix4             *) const override;
             const LightList &getLights() const override;
 
         protected:
@@ -345,7 +345,7 @@ namespace Ogre
         {
         protected:
             MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                               SceneManager *           manager,
+                                               SceneManager            *manager,
                                                const NameValuePairList *params = 0 ) override;
 
         public:

@@ -30,7 +30,8 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-namespace Ogre {
+namespace Ogre
+{
     // clang-format off
     /** \addtogroup Core
     *  @{
@@ -112,7 +113,6 @@ namespace Ogre {
     /** @} */
     // clang-format on
 
-} // namespace
-
+}  // namespace Ogre
 
 #endif

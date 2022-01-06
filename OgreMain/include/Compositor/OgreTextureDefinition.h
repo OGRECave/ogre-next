@@ -343,9 +343,9 @@ namespace Ogre
 
         const NameToChannelMap &getNameToChannelMap() const { return mNameToChannelMap; }
 
-        RenderTargetViewDef *      addRenderTextureView( IdString name );
+        RenderTargetViewDef       *addRenderTextureView( IdString name );
         const RenderTargetViewDef *getRenderTargetViewDef( IdString name ) const;
-        RenderTargetViewDef *      getRenderTargetViewDefNonConstNoThrow( IdString name );
+        RenderTargetViewDef       *getRenderTargetViewDefNonConstNoThrow( IdString name );
         void                       removeRenderTextureView( IdString name );
         void                       removeAllRenderTextureViews();
 
@@ -403,8 +403,8 @@ namespace Ogre
             The RenderSystem to use
         */
         static void recreateResizableTextures01( const TextureDefinitionVec &textureDefs,
-                                                 CompositorChannelVec &      inOutTexContainer,
-                                                 const TextureGpu *          finalTarget );
+                                                 CompositorChannelVec       &inOutTexContainer,
+                                                 const TextureGpu           *finalTarget );
         /** See recreateResizableTextures01
             Updates involved RenderPassDescriptors.
         @param connectedNodes
@@ -414,9 +414,9 @@ namespace Ogre
             When the pointer is null, we don't iterate through it.
         */
         static void recreateResizableTextures02( const TextureDefinitionVec &textureDefs,
-                                                 CompositorChannelVec &      inOutTexContainer,
-                                                 const CompositorNodeVec &   connectedNodes,
-                                                 const CompositorPassVec *   passes );
+                                                 CompositorChannelVec       &inOutTexContainer,
+                                                 const CompositorNodeVec    &connectedNodes,
+                                                 const CompositorPassVec    *passes );
 
         /////////////////////////////////////////////////////////////////////////////////
         /// Buffers
@@ -486,7 +486,7 @@ namespace Ogre
             similar functionality (when in fact, workspace manages nodes)
         */
         static void createBuffers( const BufferDefinitionVec &bufferDefs,
-                                   CompositorNamedBufferVec & inOutBufContainer,
+                                   CompositorNamedBufferVec  &inOutBufContainer,
                                    const TextureGpu *finalTarget, RenderSystem *renderSys );
 
         static UavBufferPacked *createBuffer( const BufferDefinition &bufferDef,
@@ -499,8 +499,8 @@ namespace Ogre
         /// It is illegal for two buffers to have the same name, so it's invalid that a
         /// e.g. an input and a local texture would share the same name.
         static void destroyBuffers( const BufferDefinitionVec &bufferDefs,
-                                    CompositorNamedBufferVec & inOutBufContainer,
-                                    RenderSystem *             renderSys );
+                                    CompositorNamedBufferVec  &inOutBufContainer,
+                                    RenderSystem              *renderSys );
 
         /** Destroys & recreates only the buffers that depend on the main RT
             (i.e. the RenderWindow) resolution
@@ -520,7 +520,7 @@ namespace Ogre
             When the pointer is null, we don't iterate through it.
         */
         static void recreateResizableBuffers( const BufferDefinitionVec &bufferDefs,
-                                              CompositorNamedBufferVec & inOutBufContainer,
+                                              CompositorNamedBufferVec  &inOutBufContainer,
                                               const TextureGpu *finalTarget, RenderSystem *renderSys,
                                               const CompositorNodeVec &connectedNodes,
                                               const CompositorPassVec *passes );
@@ -582,7 +582,7 @@ namespace Ogre
         @param texName
         @param texDef
         */
-        void setForTextureDefinition( const String &                            texName,
+        void setForTextureDefinition( const String                             &texName,
                                       TextureDefinitionBase::TextureDefinition *texDef );
     };
 

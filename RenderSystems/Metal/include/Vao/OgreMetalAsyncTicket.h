@@ -41,7 +41,7 @@ namespace Ogre
     {
     protected:
         dispatch_semaphore_t mFenceName;
-        MetalDevice *        mDevice;
+        MetalDevice         *mDevice;
 
         const void *mapImpl() override;
 

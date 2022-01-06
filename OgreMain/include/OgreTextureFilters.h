@@ -115,8 +115,8 @@ namespace Ogre
             /// loading the image on the background thread without ping-pong.
             static void simulateFiltersForCacheConsistency( uint32 filters, const Image2 &image,
                                                             const TextureGpuManager *textureGpuManager,
-                                                            uint8 &                  inOutNumMipmaps,
-                                                            PixelFormatGpu &         inOutPixelFormat );
+                                                            uint8                   &inOutNumMipmaps,
+                                                            PixelFormatGpu          &inOutPixelFormat );
         };
         //-----------------------------------------------------------------------------------
         class _OgreExport GenerateSwMipmaps : public FilterBase

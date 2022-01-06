@@ -87,7 +87,7 @@ namespace Ogre
         {
             ComPtr<ID3D11Buffer> vboName;
             size_t               sizeBytes;
-            D3D11DynamicBuffer * dynamicBuffer;  // Null for non BT_DYNAMIC_* BOs.
+            D3D11DynamicBuffer  *dynamicBuffer;  // Null for non BT_DYNAMIC_* BOs.
 
             BlockVec         freeBlocks;
             StrideChangerVec strideChangers;
@@ -144,7 +144,7 @@ namespace Ogre
 
         D3D11SyncVec mFrameSyncVec;
 
-        VertexBufferPacked * mDrawId;
+        VertexBufferPacked  *mDrawId;
         ComPtr<ID3D11Buffer> mSplicingHelperBuffer;
 
         D3D11RenderSystem *mD3D11RenderSystem;
@@ -249,21 +249,21 @@ namespace Ogre
         VaoVec::iterator findVao( const VertexBufferPackedVec &vertexBuffers,
                                   IndexBufferPacked *indexBuffer, OperationType opType );
 
-        uint32           createVao( const Vao &vaoRef );
-        void             releaseVao( VertexArrayObject *vao );
+        uint32 createVao( const Vao &vaoRef );
+        void   releaseVao( VertexArrayObject *vao );
 
         static uint32 generateRenderQueueId( uint32 vaoName, uint32 uniqueVaoId );
         static uint32 extractUniqueVaoIdFromRenderQueueId( uint32 rqId );
 
         VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *          indexBuffer,
+                                                        IndexBufferPacked           *indexBuffer,
                                                         OperationType                opType ) override;
 
         void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;
 
         D3D11CompatBufferInterface *createShaderBufferInterface( uint32 bindFlags, size_t sizeBytes,
                                                                  BufferType bufferType,
-                                                                 void *     initialData,
+                                                                 void      *initialData,
                                                                  uint32     structureByteStride = 0 );
 
         inline void getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1, size_t poolIdx,
@@ -287,7 +287,7 @@ namespace Ogre
         void cleanupEmptyPools() override;
 
         D3D11RenderSystem *getD3D11RenderSystem() const { return mD3D11RenderSystem; }
-        D3D11Device &      getDevice() const { return mDevice; }
+        D3D11Device       &getDevice() const { return mDevice; }
 
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId( uint32 bindSlotId );
@@ -332,7 +332,7 @@ namespace Ogre
             strange reason doesn't throw, it is programmed to return 'fenceName'
         */
         static ID3D11Query *waitFor( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
-        ID3D11Query *       waitFor( ID3D11Query *fenceName );
+        ID3D11Query        *waitFor( ID3D11Query *fenceName );
 
         static bool queryIsDone( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
         bool        queryIsDone( ID3D11Query *fenceName );

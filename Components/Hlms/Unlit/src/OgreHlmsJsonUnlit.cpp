@@ -37,12 +37,12 @@ THE SOFTWARE.
 #    include "OgreStringConverter.h"
 #    include "OgreTextureGpuManager.h"
 
-#    if defined( __GNUC__ ) && !defined(__clang__)
+#    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic push
 #        pragma GCC diagnostic ignored "-Wclass-memaccess"
 #    endif
 #    include "rapidjson/document.h"
-#    if defined( __GNUC__ ) && !defined(__clang__)
+#    if defined( __GNUC__ ) && !defined( __clang__ )
 #        pragma GCC diagnostic pop
 #    endif
 

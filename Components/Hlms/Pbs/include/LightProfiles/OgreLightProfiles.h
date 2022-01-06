@@ -47,9 +47,9 @@ namespace Ogre
     {
         FastArray<IesLoader *>      mIesData;
         map<IdString, size_t>::type mIesNameMap;
-        TextureGpu *                mLightProfilesTexture;
+        TextureGpu                 *mLightProfilesTexture;
 
-        HlmsPbs *          mHlmsPbs;
+        HlmsPbs           *mHlmsPbs;
         TextureGpuManager *mTextureGpuManager;
 
         void destroyTexture();

@@ -139,7 +139,7 @@ namespace Ogre
 
         uint32 mCurrentPassBuffer;  /// Resets to zero every new frame.
 
-        TexBufferPacked *     mGridBuffer;
+        TexBufferPacked      *mGridBuffer;
         ReadOnlyBufferPacked *mGlobalLightListBuffer;
 
         float  mMaxSpecIblMipmap;
@@ -147,26 +147,26 @@ namespace Ogre
         uint32 mTexUnitSlotStart;
 
         TextureGpuVec const *mPrePassTextures;
-        TextureGpu *         mPrePassMsaaDepthTexture;
+        TextureGpu          *mPrePassMsaaDepthTexture;
         /// Used by techniques: SS Reflections, SS Refractions
-        TextureGpu *      mDepthTexture;
-        TextureGpu *      mSsrTexture;
-        TextureGpu *      mDepthTextureNoMsaa;
-        TextureGpu *      mRefractionsTexture;
+        TextureGpu       *mDepthTexture;
+        TextureGpu       *mSsrTexture;
+        TextureGpu       *mDepthTextureNoMsaa;
+        TextureGpu       *mRefractionsTexture;
         IrradianceVolume *mIrradianceVolume;
-        VctLighting *     mVctLighting;
-        IrradianceField * mIrradianceField;
+        VctLighting      *mVctLighting;
+        IrradianceField  *mIrradianceField;
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         // TODO: After texture refactor it should be possible to abstract this,
         // so we don't have to be aware of PlanarReflections class.
-        PlanarReflections *     mPlanarReflections;
+        PlanarReflections      *mPlanarReflections;
         HlmsSamplerblock const *mPlanarReflectionsSamplerblock;
         /// Whether the current active pass can use mPlanarReflections (i.e. we can't
         /// use the reflections if they were built for a different camera angle)
         bool  mHasPlanarReflections;
         uint8 mLastBoundPlanarReflection;
 #endif
-        TextureGpu *            mAreaLightMasks;
+        TextureGpu             *mAreaLightMasks;
         HlmsSamplerblock const *mAreaLightMasksSamplerblock;
         LightArray              mAreaLights;
         bool                    mUsingAreaLightMasks;
@@ -179,7 +179,7 @@ namespace Ogre
         TextureGpu *mLtcMatrixTexture;
 
         bool                    mDecalsDiffuseMergedEmissive;
-        TextureGpu *            mDecalsTextures[3];
+        TextureGpu             *mDecalsTextures[3];
         HlmsSamplerblock const *mDecalsSamplerblock;
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
@@ -221,7 +221,7 @@ namespace Ogre
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
-                                            const HlmsParamVec &  paramVec ) override;
+                                            const HlmsParamVec   &paramVec ) override;
 
         void setDetailMapProperties( HlmsPbsDatablock *datablock, PiecesMap *inOutPieces,
                                      const bool bCasterPass );
@@ -240,7 +240,7 @@ namespace Ogre
 
         void destroyAllBuffers() override;
 
-        FORCEINLINE uint32 fillBuffersFor( const HlmsCache *       cache,
+        FORCEINLINE uint32 fillBuffersFor( const HlmsCache        *cache,
                                            const QueuedRenderable &queuedRenderable, bool casterPass,
                                            uint32 lastCacheHash, CommandBuffer *commandBuffer,
                                            bool isV1 );
@@ -470,14 +470,14 @@ namespace Ogre
         void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                         HlmsDatablock *datablock, const String &resourceGroup,
                         HlmsJsonListener *listener,
-                        const String &    additionalTextureExtension ) const override;
+                        const String     &additionalTextureExtension ) const override;
         /// @copydoc Hlms::_saveJson
         void _saveJson( const HlmsDatablock *datablock, String &outString, HlmsJsonListener *listener,
                         const String &additionalTextureExtension ) const override;
 
         /// @copydoc Hlms::_collectSamplerblocks
         void _collectSamplerblocks( set<const HlmsSamplerblock *>::type &outSamplerblocks,
-                                    const HlmsDatablock *                datablock ) const override;
+                                    const HlmsDatablock                 *datablock ) const override;
 #endif
     };
 

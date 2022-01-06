@@ -150,7 +150,7 @@ namespace Ogre
         union IndexBufferPointer
         {
             unsigned short *pshort;
-            unsigned int *  pint;
+            unsigned int   *pint;
         };
 
         struct IndexBufferInfo

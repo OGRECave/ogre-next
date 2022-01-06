@@ -34,7 +34,7 @@ namespace Ogre
             uint64   usStart;
             uint64   usTaken;
 
-            ProfileSample *            parent;
+            ProfileSample             *parent;
             FastArray<ProfileSample *> children;
         };
 
@@ -45,7 +45,7 @@ namespace Ogre
             bool           mResetRequest;
             ProfileSample *mRoot;
             ProfileSample *mCurrentSample;
-            Timer *        mTimer;
+            Timer         *mTimer;
 
             uint64 mTotalAccumTime;
 

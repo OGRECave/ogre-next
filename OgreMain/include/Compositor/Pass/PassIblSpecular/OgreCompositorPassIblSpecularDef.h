@@ -64,7 +64,7 @@ namespace Ogre
         CompositorNodeDef *mParentNodeDef;
 
     public:
-        CompositorPassIblSpecularDef( CompositorNodeDef *  parentNodeDef,
+        CompositorPassIblSpecularDef( CompositorNodeDef   *parentNodeDef,
                                       CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_IBL_SPECULAR, parentTargetDef ),
             mSamplesPerIteration( 128.0 ),

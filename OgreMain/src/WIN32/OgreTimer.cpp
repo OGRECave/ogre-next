@@ -210,7 +210,7 @@ uint64 Timer::getMicroseconds()
     mLastTime = newTime;
 
     // scale by 1000000 for microseconds
-    uint64 newMicro = ( uint64 )( 1000000 * newTime / mFrequency.QuadPart );
+    uint64 newMicro = (uint64)( 1000000 * newTime / mFrequency.QuadPart );
 
     return newMicro;
 }
@@ -219,12 +219,12 @@ uint64 Timer::getMicroseconds()
 uint64 Timer::getMillisecondsCPU()
 {
     clock_t newClock = clock();
-    return ( uint64 )( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) );
+    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) );
 }
 
 //-------------------------------------------------------------------------
 uint64 Timer::getMicrosecondsCPU()
 {
     clock_t newClock = clock();
-    return ( uint64 )( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) );
+    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) );
 }

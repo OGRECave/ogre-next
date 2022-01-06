@@ -61,8 +61,8 @@ namespace Ogre
         {
             uint32               hash;
             vector<uint32>::type freeSlots;
-            ConstBufferPacked *  materialBuffer;
-            BufferPacked *       extraBuffer;
+            ConstBufferPacked   *materialBuffer;
+            BufferPacked        *extraBuffer;
 
             BufferPool( uint32 _hash, uint32 slotsPerPool, ConstBufferPacked *_materialBuffer,
                         BufferPacked *_extraBuffer );

@@ -254,9 +254,9 @@ namespace Ogre
         */
         static void updateAllBounds( const size_t numNodes, ObjectData t );
 
-        static inline ArrayReal calculateCameraDistance( uint32              _cameraSortMode,
-                                                         const ArrayVector3 &cameraPos,
-                                                         const ArrayVector3 &cameraDir,
+        static inline ArrayReal calculateCameraDistance( uint32                    _cameraSortMode,
+                                                         const ArrayVector3       &cameraPos,
+                                                         const ArrayVector3       &cameraDir,
                                                          ArrayAabb *RESTRICT_ALIAS worldAabb,
                                                          ArrayReal *RESTRICT_ALIAS worldRadius );
 
@@ -618,7 +618,7 @@ namespace Ogre
     protected:
         /// Internal implementation of create method - must be overridden
         virtual MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                                   SceneManager *           manager,
+                                                   SceneManager            *manager,
                                                    const NameValuePairList *params = 0 ) = 0;
 
     public:
@@ -634,7 +634,7 @@ namespace Ogre
             construct the object (defined per subtype). Optional.
         */
         virtual MovableObject *createInstance( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                               SceneManager *           manager,
+                                               SceneManager            *manager,
                                                const NameValuePairList *params = 0 );
         /** Destroy an instance of the object */
         virtual void destroyInstance( MovableObject *obj ) = 0;

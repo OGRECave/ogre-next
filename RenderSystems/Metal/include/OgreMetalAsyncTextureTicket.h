@@ -48,8 +48,8 @@ namespace Ogre
 
         uint32               mDownloadFrame;
         dispatch_semaphore_t mAccurateFence;
-        MetalVaoManager *    mVaoManager;
-        MetalDevice *        mDevice;
+        MetalVaoManager     *mVaoManager;
+        MetalDevice         *mDevice;
 
         TextureBox mapImpl( uint32 slice ) override;
         void       unmapImpl() override;

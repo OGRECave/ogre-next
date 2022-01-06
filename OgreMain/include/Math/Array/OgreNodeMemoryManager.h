@@ -66,7 +66,7 @@ namespace Ogre
             very convenient.
         */
         SceneMemoryMgrTypes mMemoryManagerType;
-        NodeMemoryManager * mTwinMemoryManager;
+        NodeMemoryManager  *mTwinMemoryManager;
 
         /** Makes mMemoryManagers big enough to be able to fulfill mMemoryManagers[newDepth]
         @param newDepth
@@ -84,7 +84,7 @@ namespace Ogre
         SceneNode *_getDummyNode() const { return mDummyNode; }
 
         /// Note the return value can be null
-        NodeMemoryManager * getTwin() const { return mTwinMemoryManager; }
+        NodeMemoryManager  *getTwin() const { return mTwinMemoryManager; }
         SceneMemoryMgrTypes getMemoryManagerType() const { return mMemoryManagerType; }
 
         /** Requests memory for the given transform for the first, initializing values.

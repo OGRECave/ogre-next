@@ -61,13 +61,13 @@ namespace Ogre
         TextureGpu *mNormalVox;
         TextureGpu *mAccumValVox;
 
-        RenderSystem *     mRenderSystem;
-        VaoManager *       mVaoManager;
-        HlmsManager *      mHlmsManager;
+        RenderSystem      *mRenderSystem;
+        VaoManager        *mVaoManager;
+        HlmsManager       *mHlmsManager;
         TextureGpuManager *mTextureGpuManager;
 
         DebugVisualizationMode mDebugVisualizationMode;
-        VoxelVisualizer *      mDebugVoxelVisualizer;
+        VoxelVisualizer       *mDebugVoxelVisualizer;
 
         uint32 mWidth;
         uint32 mHeight;
@@ -83,7 +83,7 @@ namespace Ogre
         virtual ~VctVoxelizerSourceBase();
 
         void setDebugVisualization( VctVoxelizerSourceBase::DebugVisualizationMode mode,
-                                    SceneManager *                                 sceneManager );
+                                    SceneManager                                  *sceneManager );
         VctVoxelizerSourceBase::DebugVisualizationMode getDebugVisualizationMode() const;
 
         Vector3 getVoxelOrigin() const;
@@ -96,8 +96,8 @@ namespace Ogre
         TextureGpu *getEmissiveVox() { return mEmissiveVox; }
 
         TextureGpuManager *getTextureGpuManager();
-        RenderSystem *     getRenderSystem();
-        HlmsManager *      getHlmsManager();
+        RenderSystem      *getRenderSystem();
+        HlmsManager       *getHlmsManager();
     };
 }  // namespace Ogre
 

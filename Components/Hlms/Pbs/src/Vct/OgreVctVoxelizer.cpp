@@ -412,7 +412,7 @@ namespace Ogre
             const size_t numSubMeshes = queuedMesh.submeshes.size();
             for( size_t i = 0u; i < numSubMeshes; ++i )
             {
-                VertexArrayObject *vao = mesh->getSubMesh( ( uint16 )( i ) )->mVao[VpNormal].front();
+                VertexArrayObject *vao = mesh->getSubMesh( (uint16)( i ) )->mVao[VpNormal].front();
                 IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
                 const bool is16bit = indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT;
 
@@ -450,13 +450,13 @@ namespace Ogre
             ++itor;
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[0] - partitionedSubMeshGpu ) ==
+        OGRE_ASSERT_LOW( (size_t)( partitionedSubMeshGpuPtrs[0] - partitionedSubMeshGpu ) ==
                          mNumUncompressedPartSubMeshes16 );
-        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[1] - partitionedSubMeshGpuPtrs[0] ) ==
+        OGRE_ASSERT_LOW( (size_t)( partitionedSubMeshGpuPtrs[1] - partitionedSubMeshGpuPtrs[0] ) ==
                          mNumUncompressedPartSubMeshes32 );
-        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[2] - partitionedSubMeshGpuPtrs[1] ) ==
+        OGRE_ASSERT_LOW( (size_t)( partitionedSubMeshGpuPtrs[2] - partitionedSubMeshGpuPtrs[1] ) ==
                          mNumCompressedPartSubMeshes16 );
-        OGRE_ASSERT_LOW( ( size_t )( partitionedSubMeshGpuPtrs[3] - partitionedSubMeshGpuPtrs[2] ) ==
+        OGRE_ASSERT_LOW( (size_t)( partitionedSubMeshGpuPtrs[3] - partitionedSubMeshGpuPtrs[2] ) ==
                          mNumCompressedPartSubMeshes32 );
 
         mGpuPartitionedSubMeshes =
@@ -767,7 +767,7 @@ namespace Ogre
         }
 
         OGRE_ASSERT_LOW(
-            ( size_t )( mappedBuffers.uncompressedVertexBuffer - uncompressedVertexBufferStart ) <=
+            (size_t)( mappedBuffers.uncompressedVertexBuffer - uncompressedVertexBufferStart ) <=
             mNumVerticesUncompressed * sizeof( float ) * 8u );
 
         if( mNumVerticesUncompressed && !mVertexBufferUncompressed )
@@ -1113,7 +1113,7 @@ namespace Ogre
             ++itor;
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( instanceBuffer - instanceBufferStart ) * sizeof( float ) <=
+        OGRE_ASSERT_LOW( (size_t)( instanceBuffer - instanceBufferStart ) * sizeof( float ) <=
                          mInstanceBuffer->getTotalSizeBytes() );
 
         mTotalNumInstances =

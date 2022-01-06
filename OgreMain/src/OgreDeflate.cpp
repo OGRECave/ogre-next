@@ -121,9 +121,9 @@ namespace Ogre
             mZStream->avail_in =
                 static_cast<uint>( mCompressedStream->read( mTmp, getAvailInForSinglePass() ) );
 
-            int windowBits = ( mStreamType == Deflate )
-                                 ? -MAX_WBITS
-                                 : ( mStreamType == GZip ) ? 16 + MAX_WBITS : MAX_WBITS;
+            int windowBits = ( mStreamType == Deflate ) ? -MAX_WBITS
+                             : ( mStreamType == GZip )  ? 16 + MAX_WBITS
+                                                        : MAX_WBITS;
             if( inflateInit2( mZStream, windowBits ) != Z_OK )
             {
                 mStreamType = Invalid;
@@ -299,9 +299,9 @@ namespace Ogre
         char in[OGRE_DEFLATE_TMP_SIZE];
         char out[OGRE_DEFLATE_TMP_SIZE];
 
-        int windowBits = ( mStreamType == Deflate )
-                             ? -MAX_WBITS
-                             : ( mStreamType == GZip ) ? 16 + MAX_WBITS : MAX_WBITS;
+        int windowBits = ( mStreamType == Deflate ) ? -MAX_WBITS
+                         : ( mStreamType == GZip )  ? 16 + MAX_WBITS
+                                                    : MAX_WBITS;
         if( deflateInit2( mZStream, Z_DEFAULT_COMPRESSION, Z_DEFLATED, windowBits, 8,
                           Z_DEFAULT_STRATEGY ) != Z_OK )
         {
@@ -374,7 +374,7 @@ namespace Ogre
             }
             else if( count < 0 )
             {
-                if( !mReadCache.rewind( ( size_t )( -count ) ) )
+                if( !mReadCache.rewind( (size_t)( -count ) ) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                                  "You can only skip within the cache range in a deflate stream.",

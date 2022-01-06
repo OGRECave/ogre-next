@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    // clang-format off
     const ArrayMatrixAf4x3 ArrayMatrixAf4x3::IDENTITY( ArrayMatrixAf4x3::createAllFromMatrix4(
                 Matrix4(    1, 0, 0, 0,
                             0, 1, 0, 0,
@@ -41,4 +42,5 @@ namespace Ogre
     const SimpleMatrixAf4x3 SimpleMatrixAf4x3::IDENTITY( 1, 0, 0, 0,
                                                          0, 1, 0, 0,
                                                          0, 0, 1, 0 );
-}
+    // clang-format on
+}  // namespace Ogre

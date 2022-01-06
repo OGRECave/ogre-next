@@ -70,7 +70,7 @@ namespace Ogre
         FastArray<size_t> const *mSlotStarts;  // One per parent depth level
         bool                     mLoop;
         bool                     mEnabled;
-        SkeletonInstance *       mOwner;
+        SkeletonInstance        *mOwner;
 
     protected:
         IdString mName;

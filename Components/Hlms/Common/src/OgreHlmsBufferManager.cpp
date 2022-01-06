@@ -158,7 +158,7 @@ namespace Ogre
             {
                 assert( shaderBufferCmd->bufferPacked == texBuffer );
                 shaderBufferCmd->bindSizeBytes =
-                    ( uint32 )( mTexLastOffset - shaderBufferCmd->bindOffset );
+                    (uint32)( mTexLastOffset - shaderBufferCmd->bindOffset );
                 mLastTexBufferCmdOffset = std::numeric_limits<size_t>::max();
             }
         }

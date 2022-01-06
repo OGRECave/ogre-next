@@ -645,7 +645,7 @@ namespace Ogre
         {
             // Find first free texture coord set
             unsigned short texCoord = vertexDeclaration->getNextFreeTextureCoordinate();
-            unsigned short freeCount = ( ushort )( OGRE_MAX_TEXTURE_COORD_SETS - texCoord );
+            unsigned short freeCount = (ushort)( OGRE_MAX_TEXTURE_COORD_SETS - texCoord );
             if( animateNormals )
                 // we need 2x the texture coords, round down
                 freeCount /= 2;

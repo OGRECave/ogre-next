@@ -70,7 +70,7 @@ namespace Ogre
                  --lod )  // intentionally skip lod0, visit in reverse order to improve vertex locality
                           // for high lods
             {
-                v1::IndexData *             lodIndexData = submesh->mLodFaceList[VpNormal][lod - 1];
+                v1::IndexData              *lodIndexData = submesh->mLodFaceList[VpNormal][lod - 1];
                 v1::HardwareBufferLockGuard indexLock(
                     lodIndexData->indexBuffer,
                     lodIndexData->indexStart * lodIndexData->indexBuffer->getIndexSize(),
@@ -111,7 +111,7 @@ namespace Ogre
         unsigned submeshCount = mesh->getNumSubMeshes();
         for( unsigned i = 0; i < submeshCount; i++ )
         {
-            v1::SubMesh *            submesh = mesh->getSubMesh( i );
+            v1::SubMesh             *submesh = mesh->getSubMesh( i );
             const VerticesRemapInfo &remapInfo = remapInfos[submesh->useSharedVertices ? 0 : 1 + i];
 
             if( !submesh->useSharedVertices )
@@ -144,7 +144,7 @@ namespace Ogre
 
         for( unsigned short a = 0; a < mesh->getNumAnimations(); ++a )
         {
-            v1::Animation *                    anim = mesh->getAnimation( a );
+            v1::Animation                     *anim = mesh->getAnimation( a );
             v1::Animation::VertexTrackIterator trackIt = anim->getVertexTrackIterator();
             while( trackIt.hasMoreElements() )
             {

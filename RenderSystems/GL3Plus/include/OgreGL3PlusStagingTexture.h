@@ -43,10 +43,10 @@ namespace Ogre
     {
         GL3PlusDynamicBuffer *mDynamicBuffer;
         size_t                mUnmapTicket;
-        void *                mMappedPtr;
-        void *                mLastMappedPtr;
+        void                 *mMappedPtr;
+        void                 *mLastMappedPtr;
 
-        bool  belongsToUs( const TextureBox &box ) override;
+        bool                        belongsToUs( const TextureBox &box ) override;
         void *RESTRICT_ALIAS_RETURN mapRegionImplRawPtr() override;
 
         void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat, uint8 mipLevel,

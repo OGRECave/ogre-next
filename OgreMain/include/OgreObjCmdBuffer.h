@@ -86,8 +86,8 @@ namespace Ogre
 
         class TransitionToLoaded : public Cmd
         {
-            TextureGpu *               texture;
-            void *                     sysRamCopy;
+            TextureGpu                *texture;
+            void                      *sysRamCopy;
             GpuResidency::GpuResidency targetResidency;
 
         public:
@@ -120,7 +120,7 @@ namespace Ogre
         {
             StagingTexture *stagingTexture;
             TextureBox      box;
-            TextureGpu *    dstTexture;
+            TextureGpu     *dstTexture;
             TextureBox      dstBox;
             uint8           mipLevel;
 
@@ -132,7 +132,7 @@ namespace Ogre
 
         class NotifyDataIsReady : public Cmd
         {
-            TextureGpu *    texture;
+            TextureGpu     *texture;
             FilterBaseArray filters;
 
         public:

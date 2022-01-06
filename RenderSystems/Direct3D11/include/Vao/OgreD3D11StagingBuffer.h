@@ -53,7 +53,7 @@ namespace Ogre
         /// mVboName is not deleted by us (the VaoManager does) as we may have
         /// only been assigned a chunk of the buffer, not the whole thing.
         ComPtr<ID3D11Buffer> mVboName;
-        void *               mMappedPtr;
+        void                *mMappedPtr;
 
         D3D11Device &mDevice;
 

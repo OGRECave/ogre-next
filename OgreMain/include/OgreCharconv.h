@@ -101,7 +101,7 @@ namespace Ogre
 
     /** Scans SEP separated arguments list from the buffer, skipping spaces. */
     template <char SEP = ' ', typename... Args>
-    from_chars_result from_chars_all( const char *first, const char *last, Args &... args )
+    from_chars_result from_chars_all( const char *first, const char *last, Args &...args )
     {
         from_chars_result res = { first, errc() };
         return ( ... && ( ( res.ptr == first || skip_sep( res.ptr, last, SEP ) ) &&

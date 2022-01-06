@@ -83,17 +83,17 @@ namespace Ogre
         typedef map<TextureGpu *, uint16>::type TextureToPoolEntryMap;
 
         uint16                mNumUsedPoolSlices;
-        TextureGpu *          mTexturePool;
-        TextureGpuManager *   mTextureGpuManager;
-        CompositorManager2 *  mCompositorManager;
-        TextureGpu *          mDownsampleTex;
-        Pass *                mDownsampleMatPass2DArray;
-        Pass *                mDownsampleMatPass2D;
-        CompositorWorkspace * mDownsampleWorkspace2DArray;
-        CompositorWorkspace * mDownsampleWorkspace2D;
+        TextureGpu           *mTexturePool;
+        TextureGpuManager    *mTextureGpuManager;
+        CompositorManager2   *mCompositorManager;
+        TextureGpu           *mDownsampleTex;
+        Pass                 *mDownsampleMatPass2DArray;
+        Pass                 *mDownsampleMatPass2D;
+        CompositorWorkspace  *mDownsampleWorkspace2DArray;
+        CompositorWorkspace  *mDownsampleWorkspace2D;
         TextureToPoolEntryMap mTextureToPoolEntry;
 
-        DatablockConversionResult addDatablockToBucket( HlmsDatablock * datablock,
+        DatablockConversionResult addDatablockToBucket( HlmsDatablock  *datablock,
                                                         MaterialBucket &bucket );
 
         uint16 getPoolSliceIdxForTexture( TextureGpu *texture );

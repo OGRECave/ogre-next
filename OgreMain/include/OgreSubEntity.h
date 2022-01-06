@@ -209,7 +209,7 @@ namespace Ogre
             /** Advanced method to get the temp buffer information for software
             morph animation.
             */
-            TempBlendedBufferInfo *      _getVertexAnimTempBufferInfo();
+            TempBlendedBufferInfo       *_getVertexAnimTempBufferInfo();
             const TempBlendedBufferInfo *_getVertexAnimTempBufferInfo() const;
             /// Retrieve the VertexData which should be used for GPU binding
             VertexData *getVertexDataForBinding( bool casterPass );

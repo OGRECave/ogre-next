@@ -91,7 +91,8 @@ namespace Ogre
 
 @implementation OgreConfigWindowDelegate
 
-- (id)init {
+- (id)init
+{
     if( ( self = [super init] ) )
     {
         // This needs to be called in order to use Cocoa from a Carbon app
@@ -225,7 +226,8 @@ namespace Ogre
     return self;
 }
 
-- (void)refreshConfigOptions {
+- (void)refreshConfigOptions
+{
     [mOptionsKeys removeAllObjects];
     [mOptionsValues removeAllObjects];
 
@@ -244,11 +246,13 @@ namespace Ogre
 
 #pragma mark Window and Control delegate methods
 
-- (void)renderSystemChanged:(id)sender {
+- (void)renderSystemChanged:(id)sender
+{
     [self refreshConfigOptions];
 }
 
-- (void)popUpValueChanged:(id)sender {
+- (void)popUpValueChanged:(id)sender
+{
 #pragma unused( sender )
     // Grab a copy of the selected RenderSystem name in String format
     String selectedRenderSystemName = String( [[[mRenderSystemsPopUp selectedItem] title] UTF8String] );
@@ -267,7 +271,8 @@ namespace Ogre
     }
 }
 
-- (BOOL)windowShouldClose:(id)sender {
+- (BOOL)windowShouldClose:(id)sender
+{
 #pragma unused( sender )
     // Hide the window
     [mConfigWindow orderOut:nil];
@@ -277,7 +282,8 @@ namespace Ogre
     return true;
 }
 
-- (void)cancelButtonPressed:(id)sender {
+- (void)cancelButtonPressed:(id)sender
+{
 #pragma unused( sender )
     // Hide the window
     [mConfigWindow orderOut:nil];
@@ -286,7 +292,8 @@ namespace Ogre
     [NSApp terminate:nil];
 }
 
-- (void)okButtonPressed:(id)sender {
+- (void)okButtonPressed:(id)sender
+{
 #pragma unused( sender )
     // Hide the window
     [mConfigWindow orderOut:nil];
@@ -297,19 +304,22 @@ namespace Ogre
 #pragma mark NSTableView delegate and datasource methods
 - (id)tableView:(NSTableView *)aTableView
     objectValueForTableColumn:(NSTableColumn *)aTableColumn
-                          row:(NSInteger)rowIndex {
+                          row:(NSInteger)rowIndex
+{
 #pragma unused( aTableView )
     bool valueColumn = [aTableColumn.identifier isEqualToString:@"optionValue"];
     return valueColumn ? [mOptionsValues objectAtIndex:rowIndex] : [mOptionsKeys objectAtIndex:rowIndex];
 }
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView {
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
+{
 #pragma unused( aTableView )
     return [mOptionsKeys count];
 }
 
 // Intercept the request to select a new row.  Update the popup's values.
-- (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)rowIndex {
+- (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)rowIndex
+{
 #pragma unused( aTableView )
     // Clear out the options popup menu
     [mOptionsPopUp removeAllItems];
@@ -355,43 +365,53 @@ namespace Ogre
 }
 
 #pragma mark Getters and Setters
-- (NSWindow *)getConfigWindow {
+- (NSWindow *)getConfigWindow
+{
     return mConfigWindow;
 }
 
-- (void)setConfigWindow:(NSWindow *)window {
+- (void)setConfigWindow:(NSWindow *)window
+{
     mConfigWindow = window;
 }
 
-- (NSPopUpButton *)getRenderSystemsPopUp {
+- (NSPopUpButton *)getRenderSystemsPopUp
+{
     return mRenderSystemsPopUp;
 }
 
-- (void)setRenderSystemsPopUp:(NSPopUpButton *)button {
+- (void)setRenderSystemsPopUp:(NSPopUpButton *)button
+{
     mRenderSystemsPopUp = button;
 }
 
-- (void)setOgreLogo:(NSImageView *)image {
+- (void)setOgreLogo:(NSImageView *)image
+{
     mOgreLogo = image;
 }
 
-- (NSImageView *)getOgreLogo {
+- (NSImageView *)getOgreLogo
+{
     return mOgreLogo;
 }
 
-- (void)setOptionsTable:(NSTableView *)table {
+- (void)setOptionsTable:(NSTableView *)table
+{
     mOptionsTable = table;
 }
 
-- (NSTableView *)getOptionsTable {
+- (NSTableView *)getOptionsTable
+{
     return mOptionsTable;
 }
 
-- (void)setOptionsPopUp:(NSPopUpButton *)button {
+- (void)setOptionsPopUp:(NSPopUpButton *)button
+{
     mOptionsPopUp = button;
 }
 
-- (NSPopUpButton *)getOptionsPopUp {
+- (NSPopUpButton *)getOptionsPopUp
+{
     return mOptionsPopUp;
 }
 

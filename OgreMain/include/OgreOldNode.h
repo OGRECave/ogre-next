@@ -503,7 +503,7 @@ namespace Ogre
             @param rotate
                 Initial rotation relative to parent
             */
-            virtual OldNode *createChild( const Vector3 &   translate = Vector3::ZERO,
+            virtual OldNode *createChild( const Vector3    &translate = Vector3::ZERO,
                                           const Quaternion &rotate = Quaternion::IDENTITY );
 
             /** Creates a new named OldNode as a child of this OldNode.

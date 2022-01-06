@@ -66,8 +66,8 @@ namespace Ogre
 
     private:
         id<MTLBuffer>             mBuffer;
-        MetalDevice *             mDevice;
-        VaoManager *              mVaoManager;
+        MetalDevice              *mDevice;
+        VaoManager               *mVaoManager;
         MetalVaoManager::BlockVec mFreeBlocks;
 
         UnsafeBlockVec mUnsafeBlocks;
@@ -121,7 +121,7 @@ namespace Ogre
         void destroyDiscardBuffer( MetalDiscardBuffer *discardBuffer );
 
         MetalDevice *getDevice() const { return mDevice; }
-        VaoManager * getVaoManager() const { return mVaoManager; }
+        VaoManager  *getVaoManager() const { return mVaoManager; }
     };
 
     class _OgreMetalExport MetalDiscardBuffer : public OgreAllocatedObj
@@ -137,7 +137,7 @@ namespace Ogre
         uint16 mAlignment;
         uint32 mLastFrameUsed;
 
-        VaoManager *               mVaoManager;
+        VaoManager                *mVaoManager;
         MetalDiscardBufferManager *mOwner;
 
     public:

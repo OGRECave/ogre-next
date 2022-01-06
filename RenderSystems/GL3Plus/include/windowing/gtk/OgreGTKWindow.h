@@ -93,7 +93,7 @@ namespace Ogre
     private:
         // Gtk::Main* kit;
         Gtk::Window *mGtkWindow;
-        OGREWidget * ogre;
+        OGREWidget  *ogre;
     };  // class GTKWindow
 
 };  // namespace Ogre

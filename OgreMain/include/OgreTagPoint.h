@@ -63,7 +63,7 @@ namespace Ogre
             TagPoint( unsigned short handle, Skeleton *creator );
             ~TagPoint() override;
 
-            Entity *       getParentEntity() const;
+            Entity        *getParentEntity() const;
             MovableObject *getChildObject() const;
 
             void setParentEntity( Entity *pEntity );
@@ -105,8 +105,8 @@ namespace Ogre
             const LightList &getLights() const;
 
         private:
-            Entity *        mParentEntity;
-            MovableObject * mChildObject;
+            Entity         *mParentEntity;
+            MovableObject  *mChildObject;
             mutable Matrix4 mFullLocalTransform;
             bool            mInheritParentEntityOrientation;
             bool            mInheritParentEntityScale;

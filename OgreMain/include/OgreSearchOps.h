@@ -39,7 +39,7 @@ THE SOFTWARE.
 /* Our simplified data entry structure */
 struct _finddata_t
 {
-    char *        name;
+    char         *name;
     int           attrib;
     unsigned long size;
 };

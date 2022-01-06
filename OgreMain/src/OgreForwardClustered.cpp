@@ -302,7 +302,7 @@ namespace Ogre
         const size_t frustumStartIdx = slice * ( mWidth / ARRAY_PACKED_REALS ) * mHeight;
 
         Real nearDepthAtSlice = -getDepthAtSlice( (uint32)slice );
-        Real farDepthAtSlice = -getDepthAtSlice( ( uint32 )( slice + 1u ) );
+        Real farDepthAtSlice = -getDepthAtSlice( (uint32)( slice + 1u ) );
 
         if( slice == 0 )
             nearDepthAtSlice = mCurrentCamera->getNearClipDistance();

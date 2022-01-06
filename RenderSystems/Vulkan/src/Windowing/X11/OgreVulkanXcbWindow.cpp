@@ -120,10 +120,7 @@ namespace Ogre
         mConnection = 0;
     }
     //-----------------------------------------------------------------------------------
-    const char *VulkanXcbWindow::getRequiredExtensionName()
-    {
-        return VK_KHR_XCB_SURFACE_EXTENSION_NAME;
-    }
+    const char *VulkanXcbWindow::getRequiredExtensionName() { return VK_KHR_XCB_SURFACE_EXTENSION_NAME; }
     //-----------------------------------------------------------------------------------
     void VulkanXcbWindow::destroy()
     {

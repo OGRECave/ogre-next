@@ -42,7 +42,7 @@ namespace Ogre
     OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
     typedef int pthread_barrierattr_t;
     //-----------------------------------------------------------------------------------
-    int pthread_barrier_init( pthread_barrier_t *barrier, const pthread_barrierattr_t */*attr*/,
+    int pthread_barrier_init( pthread_barrier_t *barrier, const pthread_barrierattr_t * /*attr*/,
                               unsigned int count )
     {
         if( count == 0 )

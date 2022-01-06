@@ -3522,10 +3522,10 @@ namespace Ogre
             mCurrentViewport->getActualDimensions( iLeft, iTop, iWidth, iHeight );
             size_t szLeft, szRight, szTop, szBottom;
 
-            szLeft = ( size_t )( iLeft + ( ( finalRect.left + 1 ) * 0.5 * iWidth ) );
-            szRight = ( size_t )( iLeft + ( ( finalRect.right + 1 ) * 0.5 * iWidth ) );
-            szTop = ( size_t )( iTop + ( ( -finalRect.top + 1 ) * 0.5 * iHeight ) );
-            szBottom = ( size_t )( iTop + ( ( -finalRect.bottom + 1 ) * 0.5 * iHeight ) );
+            szLeft = (size_t)( iLeft + ( ( finalRect.left + 1 ) * 0.5 * iWidth ) );
+            szRight = (size_t)( iLeft + ( ( finalRect.right + 1 ) * 0.5 * iWidth ) );
+            szTop = (size_t)( iTop + ( ( -finalRect.top + 1 ) * 0.5 * iHeight ) );
+            szBottom = (size_t)( iTop + ( ( -finalRect.bottom + 1 ) * 0.5 * iHeight ) );
 
             mDestRenderSystem->setScissorTest( true, szLeft, szTop, szRight, szBottom );
 

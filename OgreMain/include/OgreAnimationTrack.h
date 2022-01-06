@@ -162,7 +162,7 @@ namespace Ogre
             range of this value is:  0.0 <= returnValue < 1.0 .
             */
             virtual Real getKeyFramesAtTime( const TimeIndex &timeIndex, KeyFrame **keyFrame1,
-                                             KeyFrame **     keyFrame2,
+                                             KeyFrame      **keyFrame2,
                                              unsigned short *firstKeyIndex = 0 ) const;
 
             /** Creates a new KeyFrame and adds it to this animation at the given time index.
@@ -233,9 +233,9 @@ namespace Ogre
         protected:
             typedef vector<KeyFrame *>::type KeyFrameList;
             KeyFrameList                     mKeyFrames;
-            Animation *                      mParent;
+            Animation                       *mParent;
             unsigned short                   mHandle;
-            Listener *                       mListener;
+            Listener                        *mListener;
 
             /// Map used to translate global keyframe time lower bound index to local lower bound index
             typedef vector<ushort>::type KeyFrameIndexMap;

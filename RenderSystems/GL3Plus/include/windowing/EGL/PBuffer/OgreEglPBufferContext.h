@@ -36,7 +36,7 @@ namespace Ogre
 {
     class _OgrePrivate EglPBufferContext : public GL3PlusContext
     {
-        EglPBufferSupport *                  mGLSupport;
+        EglPBufferSupport                   *mGLSupport;
         EglPBufferSupport::DeviceData const *mDeviceData;
 
     public:

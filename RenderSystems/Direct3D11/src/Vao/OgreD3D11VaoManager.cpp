@@ -371,10 +371,9 @@ namespace Ogre
                 static_cast<D3D11BufferInterface *>( buffer->getBufferInterface() );
             if( bufferInterface->_getInitialData() == 0 )
             {
-                InternalBufferType idx0 =
-                    ( bufferPackedType == BP_TYPE_VERTEX )
-                        ? VERTEX_BUFFER
-                        : ( bufferPackedType == BP_TYPE_INDEX ) ? INDEX_BUFFER : SHADER_BUFFER;
+                InternalBufferType idx0 = ( bufferPackedType == BP_TYPE_VERTEX )  ? VERTEX_BUFFER
+                                          : ( bufferPackedType == BP_TYPE_INDEX ) ? INDEX_BUFFER
+                                                                                  : SHADER_BUFFER;
 
                 BufferType idx1 = buffer->getBufferType();
                 if( idx1 >= BT_DYNAMIC_DEFAULT )
@@ -410,8 +409,8 @@ namespace Ogre
                         // There's (unrelated) live buffers whose vboIdx will now point out of bounds.
                         // We need to update them so they don't crash deallocateVbo later.
                         switchVboPoolIndex( unsigned( MAKELONG( idx0, idx1 ) ),
-                                            ( size_t )( mVbos[idx0][idx1].size() - 1u ),
-                                            ( size_t )( itor - mVbos[idx0][idx1].begin() ) );
+                                            (size_t)( mVbos[idx0][idx1].size() - 1u ),
+                                            (size_t)( itor - mVbos[idx0][idx1].begin() ) );
 
                         itor = efficientVectorRemove( mVbos[idx0][idx1], itor );
                         end = mVbos[idx0][idx1].end();

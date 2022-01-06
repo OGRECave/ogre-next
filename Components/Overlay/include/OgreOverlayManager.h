@@ -89,8 +89,8 @@ namespace Ogre
             typedef set<String>::type LoadedScripts;
             LoadedScripts             mLoadedScripts;
 
-            SceneNode *         mDummyNode;
-            NodeMemoryManager * mNodeMemoryManager;
+            SceneNode          *mDummyNode;
+            NodeMemoryManager  *mNodeMemoryManager;
             ObjectMemoryManager mOverlayMemoryManager;
 
             ElementMap &getElementMap( bool isTemplate );

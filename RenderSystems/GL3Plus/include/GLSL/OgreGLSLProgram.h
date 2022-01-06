@@ -104,12 +104,12 @@ namespace Ogre
         /// Is a non-standard attribute bound in the linked code?
         bool isAttributeValid( VertexElementSemantic semantic, uint index );
 
-        GLSLShader *                 getVertexShader() const { return mVertexShader; }
-        GLSLShader *                 getHullShader() const { return mHullShader; }
-        GLSLShader *                 getDomainShader() const { return mDomainShader; }
-        GLSLShader *                 getGeometryShader() const { return mGeometryShader; }
-        GLSLShader *                 getFragmentShader() const { return mFragmentShader; }
-        GLSLShader *                 getComputeShader() const { return mComputeShader; }
+        GLSLShader                  *getVertexShader() const { return mVertexShader; }
+        GLSLShader                  *getHullShader() const { return mHullShader; }
+        GLSLShader                  *getDomainShader() const { return mDomainShader; }
+        GLSLShader                  *getGeometryShader() const { return mGeometryShader; }
+        GLSLShader                  *getFragmentShader() const { return mFragmentShader; }
+        GLSLShader                  *getComputeShader() const { return mComputeShader; }
         GL3PlusOldVertexArrayObject *getVertexArrayObject() { return mVertexArrayObject; }
 
         GLint mBaseInstanceLocation;
@@ -169,7 +169,7 @@ namespace Ogre
         SemanticToStringMap                              mSemanticTypeMap;
 
         VertexElementSemantic getAttributeSemanticEnum( String type );
-        const char *          getAttributeSemanticString( VertexElementSemantic semantic );
+        const char           *getAttributeSemanticString( VertexElementSemantic semantic );
 
         void bindFixedAttributes( GLuint programName );
         void setupBaseInstance( GLuint programName );

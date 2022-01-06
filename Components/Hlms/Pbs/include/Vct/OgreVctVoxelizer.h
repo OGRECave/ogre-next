@@ -55,10 +55,10 @@ namespace Ogre
 
     struct VoxelizerBucket
     {
-        HlmsComputeJob *   job;
+        HlmsComputeJob    *job;
         ConstBufferPacked *materialBuffer;
-        UavBufferPacked *  vertexBuffer;
-        UavBufferPacked *  indexBuffer;
+        UavBufferPacked   *vertexBuffer;
+        UavBufferPacked   *indexBuffer;
         bool               needsTexPool;
 
         bool operator<( const VoxelizerBucket &other ) const
@@ -181,13 +181,13 @@ namespace Ogre
         HlmsComputeJob *mAabbWorldSpaceJob;
 
         uint32                mTotalNumInstances;
-        float *               mCpuInstanceBuffer;
-        UavBufferPacked *     mInstanceBuffer;
+        float                *mCpuInstanceBuffer;
+        UavBufferPacked      *mInstanceBuffer;
         ReadOnlyBufferPacked *mInstanceBufferAsTex;
-        UavBufferPacked *     mVertexBufferCompressed;
-        UavBufferPacked *     mVertexBufferUncompressed;
-        UavBufferPacked *     mIndexBuffer16;
-        UavBufferPacked *     mIndexBuffer32;
+        UavBufferPacked      *mVertexBufferCompressed;
+        UavBufferPacked      *mVertexBufferUncompressed;
+        UavBufferPacked      *mIndexBuffer16;
+        UavBufferPacked      *mIndexBuffer32;
         // Aabb Calculator
         uint32           mNumUncompressedPartSubMeshes16;
         uint32           mNumUncompressedPartSubMeshes32;

@@ -239,7 +239,7 @@ namespace Ogre
             void _movePrev();
 
             dstring::iterator mIter;
-            UTFString *       mString;
+            UTFString        *mString;
         };
 
         //#########################################################################
@@ -1097,10 +1097,10 @@ namespace Ogre
         // multi-purpose buffer used everywhere we need a throw-away buffer
         union
         {
-            mutable void *        mVoidBuffer;
-            mutable std::string * mStrBuffer;
+            mutable void         *mVoidBuffer;
+            mutable std::string  *mStrBuffer;
             mutable std::wstring *mWStrBuffer;
-            mutable utf32string * mUTF32StrBuffer;
+            mutable utf32string  *mUTF32StrBuffer;
         } mBuffer;
     };
 

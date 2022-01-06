@@ -518,7 +518,7 @@ namespace Ogre
         descBindingRanges[DescBindingTypes::Sampler].start =
             descBindingRanges[DescBindingTypes::Texture].start;
         descBindingRanges[DescBindingTypes::Sampler].end =
-            ( uint16 )( getProperty( "samplerStateStart" ) );
+            (uint16)( getProperty( "samplerStateStart" ) );
 
         rootLayout.mBaked[1] = true;
         DescBindingRange *bakedRanges = rootLayout.mDescBindingRanges[1];
@@ -2800,13 +2800,13 @@ namespace Ogre
         passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,
                                                       sceneManager, passBufferPtr );
 
-        assert( ( size_t )( passBufferPtr - startupPtr ) * 4u == mapSize );
+        assert( (size_t)( passBufferPtr - startupPtr ) * 4u == mapSize );
 
         if( mUseLightBuffers )
         {
-            assert( ( size_t )( light0BufferPtr - light0startupPtr ) * 4u == mapSizeLight0 );
-            assert( ( size_t )( light1BufferPtr - light1startupPtr ) * 4u == mapSizeLight1 );
-            assert( ( size_t )( light2BufferPtr - light2startupPtr ) * 4u == mapSizeLight2 );
+            assert( (size_t)( light0BufferPtr - light0startupPtr ) * 4u == mapSizeLight0 );
+            assert( (size_t)( light1BufferPtr - light1startupPtr ) * 4u == mapSizeLight1 );
+            assert( (size_t)( light2BufferPtr - light2startupPtr ) * 4u == mapSizeLight2 );
             if( mapSizeLight0 > 0 )
                 light0Buffer->unmap( UO_KEEP_PERSISTENT );
             if( mapSizeLight1 > 0 )
@@ -3122,7 +3122,7 @@ namespace Ogre
 
             // layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
-                ( size_t )( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
+                (size_t)( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
                     mCurrentConstBufferSize )
             {
                 *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -3242,9 +3242,8 @@ namespace Ogre
         }
         else
         {
-            bool exceedsConstBuffer =
-                ( size_t )( ( currentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) >
-                mCurrentConstBufferSize;
+            bool exceedsConstBuffer = (size_t)( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
+                                                4 ) > mCurrentConstBufferSize;
 
             if( hasSkeletonAnimation )
             {
@@ -3459,7 +3458,7 @@ namespace Ogre
             // currentMappedTexBuffer to be 16/32-byte aligned.
             // Non-skeletally animated objects are far more common than skeletal ones,
             // so we do this here instead of doing it before rendering the non-skeletal ones.
-            size_t currentConstOffset = ( size_t )( currentMappedTexBuffer - mStartMappedTexBuffer );
+            size_t currentConstOffset = (size_t)( currentMappedTexBuffer - mStartMappedTexBuffer );
             currentConstOffset =
                 alignToNextMultiple<size_t>( currentConstOffset, 16 + 16 * !casterPass );
             currentConstOffset = std::min( currentConstOffset, mCurrentTexBufferSize );

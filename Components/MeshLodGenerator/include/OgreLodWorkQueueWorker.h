@@ -59,7 +59,7 @@ namespace Ogre
     protected:
         ushort               mChannelID;
         WorkQueue::Response *handleRequest( const WorkQueue::Request *req,
-                                            const WorkQueue *         srcQ ) override;
+                                            const WorkQueue          *srcQ ) override;
     };
 }  // namespace Ogre
 #endif

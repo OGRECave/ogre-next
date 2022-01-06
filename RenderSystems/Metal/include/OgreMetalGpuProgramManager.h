@@ -44,7 +44,7 @@ namespace Ogre
                                                            ResourceHandle handle, const String &group,
                                                            bool isManual, ManualResourceLoader *loader,
                                                            GpuProgramType gptype,
-                                                           const String & syntaxCode );
+                                                           const String  &syntaxCode );
 
     private:
         typedef map<String, CreateGpuProgramCallback>::type ProgramMap;

@@ -98,7 +98,7 @@ namespace Ogre
         struct ShadowMapCamera
         {
             ShadowCameraSetupPtr shadowCameraSetup;
-            Camera *             camera;
+            Camera              *camera;
             /// TextureGpu is at mLocalTextures[idxToLocalTextures]
             uint32 idxToLocalTextures;
             /// Index to mContiguousShadowMapTex[idxToContiguousTex]
@@ -173,7 +173,7 @@ namespace Ogre
             What entry to use. Outputs mShadowMapCastingLights.size() if there are no more
             empty that supports the requested light types.
         */
-        void findNextEmptyShadowCastingLightEntry( uint8   lightTypeMask,
+        void findNextEmptyShadowCastingLightEntry( uint8                  lightTypeMask,
                                                    size_t *RESTRICT_ALIAS inOutStartIdx,
                                                    size_t *RESTRICT_ALIAS outEntryToUse ) const;
 
@@ -417,9 +417,9 @@ namespace Ogre
             See firstRq
         */
         static void createShadowNodeWithSettings(
-            CompositorManager2 *                    compositorManager,                    //
-            const RenderSystemCapabilities *        capabilities,                         //
-            const String &                          shadowNodeName,                       //
+            CompositorManager2                     *compositorManager,                    //
+            const RenderSystemCapabilities         *capabilities,                         //
+            const String                           &shadowNodeName,                       //
             const ShadowNodeHelper::ShadowParamVec &shadowParams,                         //
             bool                                    useEsm,                               //
             uint32                                  pointLightCubemapResolution = 1024u,  //

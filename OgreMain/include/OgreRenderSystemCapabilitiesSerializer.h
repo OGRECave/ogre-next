@@ -128,7 +128,7 @@ namespace Ogre
         };
 
         int           mCurrentLineNumber;
-        String *      mCurrentLine;
+        String       *mCurrentLine;
         DataStreamPtr mCurrentStream;
 
         RenderSystemCapabilities *mCurrentCapabilities;

@@ -70,7 +70,7 @@ namespace Ogre
 
 #if OGRE_DEBUG_MODE
         mutable bool mCachedTransformOutOfDate;
-        Node *       mDebugParentNode;
+        Node        *mDebugParentNode;
         bool         mInitialized;
 #endif
 
@@ -145,7 +145,7 @@ namespace Ogre
         size_t getNumChildren() const { return mChildren.size(); }
 
         /// Gets a pointer to a child node.
-        Bone *      getChild( size_t index ) { return mChildren[index]; }
+        Bone       *getChild( size_t index ) { return mChildren[index]; }
         const Bone *getChild( size_t index ) const { return mChildren[index]; }
 
         /** Retrieves the container for efficiently iterating through all children of this bone.
@@ -164,7 +164,7 @@ namespace Ogre
         size_t getNumTagPoints() const { return mTagPointChildren.size(); }
 
         /// Gets a pointer to a child tag point.
-        TagPoint *      getTagPoint( size_t index ) { return mTagPointChildren[index]; }
+        TagPoint       *getTagPoint( size_t index ) { return mTagPointChildren[index]; }
         const TagPoint *getTagPoint( size_t index ) const { return mTagPointChildren[index]; }
 
         /** Retrieves the container for efficiently iterating through all tag points of this bone.

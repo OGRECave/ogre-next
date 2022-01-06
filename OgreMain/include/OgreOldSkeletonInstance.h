@@ -81,7 +81,7 @@ namespace Ogre
             Animation *createAnimation( const String &name, Real length ) override;
 
             /** Returns the named Animation object. */
-            Animation *getAnimation( const String &                        name,
+            Animation *getAnimation( const String                         &name,
                                      const LinkedSkeletonAnimationSource **linker = 0 ) const override;
 
             /** Removes an Animation from this skeleton.
@@ -91,9 +91,9 @@ namespace Ogre
             void removeAnimation( const String &name ) override;
 
             /** Creates a TagPoint ready to be attached to a bone */
-            TagPoint *createTagPointOnBone( OldBone *         bone,
+            TagPoint *createTagPointOnBone( OldBone          *bone,
                                             const Quaternion &offsetOrientation = Quaternion::IDENTITY,
-                                            const Vector3 &   offsetPosition = Vector3::ZERO );
+                                            const Vector3    &offsetPosition = Vector3::ZERO );
 
             /** Frees a TagPoint that already attached to a bone */
             void freeTagPoint( TagPoint *tagPoint );

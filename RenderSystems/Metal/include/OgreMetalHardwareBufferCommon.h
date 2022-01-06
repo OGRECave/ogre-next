@@ -49,17 +49,17 @@ namespace Ogre
         private:
             id<MTLBuffer>       mBuffer;
             size_t              mSizeBytes;
-            MetalDevice *       mDevice;
+            MetalDevice        *mDevice;
             MetalDiscardBuffer *mDiscardBuffer;
-            VaoManager *        mVaoManager;
-            StagingBuffer *     mStagingBuffer;
+            VaoManager         *mVaoManager;
+            StagingBuffer      *mStagingBuffer;
             uint32              mLastFrameUsed;
             uint32              mLastFrameGpuWrote;
 
         public:
             MetalHardwareBufferCommon( size_t sizeBytes, HardwareBuffer::Usage usage, uint16 alignment,
                                        MetalDiscardBufferManager *discardBufferManager,
-                                       MetalDevice *              device );
+                                       MetalDevice               *device );
             virtual ~MetalHardwareBufferCommon();
 
             void _notifyDeviceStalled();

@@ -337,12 +337,12 @@ namespace Ogre
         pso.initialize();
         pso.computeShader = shader;
         pso.computeParams = shader->createParameters();
-        pso.mThreadsPerGroup[0] = ( uint32 )( getProperty( ComputeProperty::ThreadsPerGroupX ) );
-        pso.mThreadsPerGroup[1] = ( uint32 )( getProperty( ComputeProperty::ThreadsPerGroupY ) );
-        pso.mThreadsPerGroup[2] = ( uint32 )( getProperty( ComputeProperty::ThreadsPerGroupZ ) );
-        pso.mNumThreadGroups[0] = ( uint32 )( getProperty( ComputeProperty::NumThreadGroupsX ) );
-        pso.mNumThreadGroups[1] = ( uint32 )( getProperty( ComputeProperty::NumThreadGroupsY ) );
-        pso.mNumThreadGroups[2] = ( uint32 )( getProperty( ComputeProperty::NumThreadGroupsZ ) );
+        pso.mThreadsPerGroup[0] = (uint32)( getProperty( ComputeProperty::ThreadsPerGroupX ) );
+        pso.mThreadsPerGroup[1] = (uint32)( getProperty( ComputeProperty::ThreadsPerGroupY ) );
+        pso.mThreadsPerGroup[2] = (uint32)( getProperty( ComputeProperty::ThreadsPerGroupZ ) );
+        pso.mNumThreadGroups[0] = (uint32)( getProperty( ComputeProperty::NumThreadGroupsX ) );
+        pso.mNumThreadGroups[1] = (uint32)( getProperty( ComputeProperty::NumThreadGroupsY ) );
+        pso.mNumThreadGroups[2] = (uint32)( getProperty( ComputeProperty::NumThreadGroupsZ ) );
 
         if( pso.mThreadsPerGroup[0] * pso.mThreadsPerGroup[1] * pso.mThreadsPerGroup[2] == 0u ||
             pso.mNumThreadGroups[0] * pso.mNumThreadGroups[1] * pso.mNumThreadGroups[2] == 0u )

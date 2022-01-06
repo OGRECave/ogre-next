@@ -48,7 +48,7 @@ namespace Ogre
     /** HLMS stands for "High Level Material System". */
     class _OgreExport HlmsJsonCompute : public OgreAllocatedObj
     {
-        HlmsManager *      mHlmsManager;
+        HlmsManager       *mHlmsManager;
         TextureGpuManager *mTextureManager;
 
         static uint8                          parseAccess( const char *value );

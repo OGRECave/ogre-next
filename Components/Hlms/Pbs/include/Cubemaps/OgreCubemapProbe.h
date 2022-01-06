@@ -58,14 +58,14 @@ namespace Ogre
         /// The general shape this probe is supposed to represent.
         Aabb mProbeShape;
 
-        TextureGpu *      mTexture;
+        TextureGpu       *mTexture;
         uint16            mCubemapArrayIdx;
         SampleDescription mSampleDescription;
 
         IdString             mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
         CompositorWorkspace *mWorkspace;
-        Camera *             mCamera;
+        Camera              *mCamera;
 
         ParallaxCorrectedCubemapBase *mCreator;
 
@@ -226,11 +226,11 @@ namespace Ogre
         void _updateRender();
 
         const Vector3 &getProbeCameraPos() const { return mProbeCameraPos; }
-        const Aabb &   getArea() const { return mArea; }
+        const Aabb    &getArea() const { return mArea; }
         const Vector3 &getAreaInnerRegion() const { return mAreaInnerRegion; }
         const Matrix3 &getOrientation() const { return mOrientation; }
         const Matrix3 &getInvOrientation() const { return mInvOrientation; }
-        const Aabb &   getProbeShape() const { return mProbeShape; }
+        const Aabb    &getProbeShape() const { return mProbeShape; }
 
         CompositorWorkspace *getWorkspace() const { return mWorkspace; }
 

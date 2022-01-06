@@ -49,7 +49,7 @@ namespace Ogre
         to be used as a workaround.
         But starting Ogre 2.2; CompositorChannel is just a typedef to a single TextureGpu.
     */
-    typedef TextureGpu *                    CompositorChannel;
+    typedef TextureGpu                     *CompositorChannel;
     typedef vector<CompositorChannel>::type CompositorChannelVec;
 
     /** @} */

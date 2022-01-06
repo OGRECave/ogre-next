@@ -63,7 +63,7 @@ namespace Ogre
         size_t mTotalObjects;
 
         /// Dummy node where to point ObjectData::mParents[i] when they're unused slots.
-        SceneNode * mDummyNode;
+        SceneNode  *mDummyNode;
         Transform   mDummyTransformPtrs;
         NullEntity *mDummyObject;
 

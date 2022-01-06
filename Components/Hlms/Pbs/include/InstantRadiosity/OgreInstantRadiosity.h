@@ -61,7 +61,7 @@ namespace Ogre
             /// Don't free the memory in that case!
             union
             {
-                uint8 *RESTRICT_ALIAS indexData;
+                uint8 *RESTRICT_ALIAS       indexData;
                 uint8 const *RESTRICT_ALIAS indexDataConst;
             };
             size_t numVertices;
@@ -95,7 +95,7 @@ namespace Ogre
         };
         struct Vpl
         {
-            Light * light;
+            Light  *light;
             Vector3 diffuse;
             Vector3 position;
             Vector3 normal;
@@ -130,7 +130,7 @@ namespace Ogre
         };
 
         SceneManager *mSceneManager;
-        HlmsManager * mHlmsManager;
+        HlmsManager  *mHlmsManager;
 
     public:
         uint8  mFirstRq;
@@ -278,13 +278,13 @@ namespace Ogre
 
         const MeshData *downloadVao( VertexArrayObject *vao );
         const MeshData *downloadRenderOp( const v1::RenderOperation &renderOp );
-        const Image2 &  downloadTexture( TextureGpu *texture );
+        const Image2   &downloadTexture( TextureGpu *texture );
 
         void testLightVsAllObjects( uint8 lightType, Real lightRange, ObjectData objData,
                                     size_t numNodes, const AreaOfInterest &areaOfInterest,
                                     size_t rayStart, size_t numRays );
         void raycastLightRayVsMesh( Real lightRange, const MeshData meshData, Matrix4 worldMatrix,
-                                    const MaterialData &     material,
+                                    const MaterialData      &material,
                                     const FastArray<size_t> &raysThatHitObj );
 
         Vpl convertToVpl( Vector3 lightColour, Vector3 pointOnTri, const RayHit &hit );

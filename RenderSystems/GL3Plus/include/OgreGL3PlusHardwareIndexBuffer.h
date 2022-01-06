@@ -45,7 +45,7 @@ namespace Ogre
             bool   mLockedToScratch;
             size_t mScratchOffset;
             size_t mScratchSize;
-            void * mScratchPtr;
+            void  *mScratchPtr;
             bool   mScratchUploadOnUnlock;
 
         protected:

@@ -1255,9 +1255,9 @@ namespace Ogre
         int numMultiRenderTargets =
             ( mFeatureLevel > D3D_FEATURE_LEVEL_9_3 ) ? D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT :  // 8
                 ( mFeatureLevel == D3D_FEATURE_LEVEL_9_3 )
-                    ? 4 /*D3D_FL9_3_SIMULTANEOUS_RENDER_TARGET_COUNT*/
-                    :   // 4
-                    1 /*D3D_FL9_1_SIMULTANEOUS_RENDER_TARGET_COUNT*/;  // 1
+                ? 4 /*D3D_FL9_3_SIMULTANEOUS_RENDER_TARGET_COUNT*/
+                :   // 4
+                1 /*D3D_FL9_1_SIMULTANEOUS_RENDER_TARGET_COUNT*/;  // 1
 #else
         int numMultiRenderTargets = D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT;  // 8
 #endif
@@ -2927,29 +2927,25 @@ namespace Ogre
             case OT_LINE_LIST:
                 primType = D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) /
-                    2;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) / 2;
                 break;
 
             case OT_LINE_STRIP:
                 primType = D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) -
-                    1;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) - 1;
                 break;
 
             case OT_TRIANGLE_LIST:
                 primType = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) /
-                    3;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) / 3;
                 break;
 
             case OT_TRIANGLE_STRIP:
                 primType = D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) -
-                    2;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) - 2;
                 break;
             }
         }
@@ -2963,39 +2959,35 @@ namespace Ogre
             case OT_POINT_LIST:
                 primType = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount );
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount );
                 break;
 
             case OT_LINE_LIST:
                 primType = useAdjacency ? D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ
                                         : D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) /
-                    2;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) / 2;
                 break;
 
             case OT_LINE_STRIP:
                 primType = useAdjacency ? D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ
                                         : D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) -
-                    1;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) - 1;
                 break;
 
             case OT_TRIANGLE_LIST:
                 primType = useAdjacency ? D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ
                                         : D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) /
-                    3;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) / 3;
                 break;
 
             case OT_TRIANGLE_STRIP:
                 primType = useAdjacency ? D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ
                                         : D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) -
-                    2;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) - 2;
                 break;
 
             case OT_TRIANGLE_FAN:
@@ -3004,8 +2996,7 @@ namespace Ogre
                              "D3D11RenderSystem::_render" );
                 primType = D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED;  // todo - no TRIANGLE_FAN in DX 11
                 primCount =
-                    ( DWORD )( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) -
-                    2;
+                    (DWORD)( op.useIndexes ? op.indexData->indexCount : op.vertexData->vertexCount ) - 2;
                 break;
             }
         }

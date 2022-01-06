@@ -53,7 +53,7 @@ namespace Ogre
 #else
     typedef String               FileSystemPath;
     inline const FileSystemPath &fileSystemPathFromString( const String &path ) { return path; }
-    inline const String &        fileSystemPathToString( const FileSystemPath &path ) { return path; }
+    inline const String         &fileSystemPathToString( const FileSystemPath &path ) { return path; }
 #endif
 
     /** \addtogroup Core

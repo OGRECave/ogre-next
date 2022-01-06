@@ -350,7 +350,7 @@ namespace Ogre
         // Vulkan has alignment restrictions of 4 bytes for offset and size in copyFromBuffer
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
 
-        if( freeRegionOffset == ( size_t )( -1 ) )
+        if( freeRegionOffset == (size_t)( -1 ) )
         {
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,

@@ -363,7 +363,7 @@ namespace Ogre
             @see
                 BillboardSet::setAutoextend
             */
-            Billboard *createBillboard( const Vector3 &    position,
+            Billboard *createBillboard( const Vector3     &position,
                                         const ColourValue &colour = ColourValue::White );
 
             /** Creates a new billboard and adds it to this set.
@@ -856,7 +856,7 @@ namespace Ogre
         {
         protected:
             MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                               SceneManager *           manager,
+                                               SceneManager            *manager,
                                                const NameValuePairList *params = 0 ) override;
 
         public:

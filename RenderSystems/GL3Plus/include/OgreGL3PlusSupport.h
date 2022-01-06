@@ -62,7 +62,7 @@ namespace Ogre
          */
         virtual String           validateConfig() = 0;
         virtual ConfigOptionMap &getConfigOptions();
-        virtual Window *         createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
+        virtual Window          *createWindow( bool autoCreateWindow, GL3PlusRenderSystem *renderSystem,
                                                const String &windowTitle ) = 0;
 
         /// @copydoc RenderSystem::_createRenderWindow

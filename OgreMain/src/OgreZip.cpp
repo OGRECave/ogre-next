@@ -363,7 +363,7 @@ namespace Ogre
         }
         else if( count < 0 )
         {
-            if( !mCache.rewind( ( size_t )( -count ) ) )
+            if( !mCache.rewind( (size_t)( -count ) ) )
                 zzip_seek( mZzipFile, static_cast<zzip_off_t>( count + was_avail ), SEEK_CUR );
         }
     }
@@ -389,7 +389,7 @@ namespace Ogre
     {
         zzip_off_t pos = zzip_tell( mZzipFile );
         if( pos < 0 )
-            return ( size_t )( -1 );
+            return (size_t)( -1 );
         return static_cast<size_t>( pos ) - mCache.avail();
     }
     //-----------------------------------------------------------------------
@@ -559,10 +559,10 @@ namespace Ogre
         switch( whence )
         {
         case SEEK_CUR:
-            newPos = ( zzip_size_t )( static_cast<int64>( curEmbeddedFileData.curPos ) + offset );
+            newPos = (zzip_size_t)( static_cast<int64>( curEmbeddedFileData.curPos ) + offset );
             break;
         case SEEK_END:
-            newPos = ( zzip_size_t )( static_cast<int64>( curEmbeddedFileData.fileSize ) - offset );
+            newPos = (zzip_size_t)( static_cast<int64>( curEmbeddedFileData.fileSize ) - offset );
             break;
         case SEEK_SET:
             newPos = (zzip_size_t)offset;

@@ -338,8 +338,8 @@ namespace Ogre
         {
             Real vpWidth, vpHeight;
             OverlayManager &oMgr = OverlayManager::getSingleton();
-            vpWidth = ( Real )( oMgr.getViewportWidth() );
-            vpHeight = ( Real )( oMgr.getViewportHeight() );
+            vpWidth = (Real)( oMgr.getViewportWidth() );
+            vpHeight = (Real)( oMgr.getViewportHeight() );
 
             // Check size if pixel-based or relative-aspect-adjusted
             switch( mMetricsMode )
@@ -551,8 +551,8 @@ namespace Ogre
             {
                 Real vpWidth, vpHeight;
                 OverlayManager &oMgr = OverlayManager::getSingleton();
-                vpWidth = ( Real )( oMgr.getViewportWidth() );
-                vpHeight = ( Real )( oMgr.getViewportHeight() );
+                vpWidth = (Real)( oMgr.getViewportWidth() );
+                vpHeight = (Real)( oMgr.getViewportHeight() );
 
                 mPixelScaleX = 1.0f / vpWidth;
                 mPixelScaleY = 1.0f / vpHeight;
@@ -563,8 +563,8 @@ namespace Ogre
             {
                 Real vpWidth, vpHeight;
                 OverlayManager &oMgr = OverlayManager::getSingleton();
-                vpWidth = ( Real )( oMgr.getViewportWidth() );
-                vpHeight = ( Real )( oMgr.getViewportHeight() );
+                vpWidth = (Real)( oMgr.getViewportWidth() );
+                vpHeight = (Real)( oMgr.getViewportHeight() );
 
                 mPixelScaleX = 1.0f / ( 10000.0f * ( vpWidth / vpHeight ) );
                 mPixelScaleY = 1.0f / 10000.0f;
@@ -659,8 +659,8 @@ namespace Ogre
             {
                 Real vpWidth, vpHeight;
                 OverlayManager &oMgr = OverlayManager::getSingleton();
-                vpWidth = ( Real )( oMgr.getViewportWidth() );
-                vpHeight = ( Real )( oMgr.getViewportHeight() );
+                vpWidth = (Real)( oMgr.getViewportWidth() );
+                vpHeight = (Real)( oMgr.getViewportHeight() );
 
                 // cope with temporarily zero dimensions, avoid divide by zero
                 vpWidth = vpWidth == 0.0f ? 1.0f : vpWidth;
@@ -683,8 +683,8 @@ namespace Ogre
             {
                 Real vpWidth, vpHeight;
                 OverlayManager &oMgr = OverlayManager::getSingleton();
-                vpWidth = ( Real )( oMgr.getViewportWidth() );
-                vpHeight = ( Real )( oMgr.getViewportHeight() );
+                vpWidth = (Real)( oMgr.getViewportWidth() );
+                vpHeight = (Real)( oMgr.getViewportHeight() );
 
                 mPixelScaleX = 1.0f / ( 10000.0f * ( vpWidth / vpHeight ) );
                 mPixelScaleY = 1.0f / 10000.0f;

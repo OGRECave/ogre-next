@@ -262,7 +262,7 @@ namespace Ogre
             GeometryList     mGeometryList;
             VertexDataList   mVertexDataList;
             CommonVertexList mVertices;
-            EdgeData *       mEdgeData;
+            EdgeData        *mEdgeData;
             /// Map for identifying common vertices
             typedef map<Vector3, size_t, vectorLess>::type CommonVertexMap;
             CommonVertexMap                                mCommonVertexMap;

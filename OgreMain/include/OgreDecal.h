@@ -162,7 +162,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *           manager,
+                                           SceneManager            *manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:

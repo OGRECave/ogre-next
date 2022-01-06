@@ -45,14 +45,14 @@ THE SOFTWARE.
 @interface OgreConfigWindowDelegate : NSObject
 #    endif
 {
-    NSWindow *     mConfigWindow;
-    NSImageView *  mOgreLogo;
+    NSWindow      *mConfigWindow;
+    NSImageView   *mOgreLogo;
     NSPopUpButton *mRenderSystemsPopUp;
     NSPopUpButton *mOptionsPopUp;
-    NSTableView *  mOptionsTable;
-    NSButton *     mOkButton;
-    NSButton *     mCancelButton;
-    NSTextField *  mOptionLabel;
+    NSTableView   *mOptionsTable;
+    NSButton      *mOkButton;
+    NSButton      *mCancelButton;
+    NSTextField   *mOptionLabel;
 
     NSMutableArray *mOptionsKeys;
     NSMutableArray *mOptionsValues;

@@ -53,7 +53,7 @@ namespace Ogre
 
         MetalDevice *mDevice;
 
-        TextureGpu *    createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        TextureGpu     *createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                            IdString name, uint32 textureFlags,
                                            TextureTypes::TextureTypes initialType ) override;
         StagingTexture *createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,

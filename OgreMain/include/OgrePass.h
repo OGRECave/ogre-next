@@ -71,7 +71,7 @@ namespace Ogre
         static AtomicScalar<uint32> gId;
 
         uint32         mId;
-        Technique *    mParent;
+        Technique     *mParent;
         unsigned short mIndex;  /// Pass index
         String         mName;   /// Optional name for the pass
         //-------------------------------------------------------------------------
@@ -468,7 +468,7 @@ namespace Ogre
             @note
             Applies to both fixed-function and programmable passes.
         */
-        TextureUnitState *createTextureUnitState( const String & textureName,
+        TextureUnitState *createTextureUnitState( const String  &textureName,
                                                   unsigned short texCoordSet = 0 );
         /** Adds the passed in TextureUnitState, to the existing Pass.
         @param

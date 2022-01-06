@@ -484,7 +484,7 @@ namespace Ogre
         */
         inline Vector3 perpendicular() const
         {
-            static const Real fSquareZero = ( Real )( 1e-06 * 1e-06 );
+            static const Real fSquareZero = (Real)( 1e-06 * 1e-06 );
 
             Vector3 perp = this->crossProduct( Vector3::UNIT_X );
 
@@ -696,9 +696,9 @@ namespace Ogre
                     return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
             else  // absx <= absy
                 if( absy > absz )
-                return y > 0 ? Vector3::UNIT_Y : Vector3::NEGATIVE_UNIT_Y;
-            else
-                return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
+                    return y > 0 ? Vector3::UNIT_Y : Vector3::NEGATIVE_UNIT_Y;
+                else
+                    return z > 0 ? Vector3::UNIT_Z : Vector3::NEGATIVE_UNIT_Z;
         }
 
         // special points

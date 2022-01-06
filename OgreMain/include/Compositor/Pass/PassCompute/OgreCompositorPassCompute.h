@@ -84,7 +84,7 @@ namespace Ogre
 
     protected:
         HlmsComputeJob *mComputeJob;
-        Camera *        mCamera;
+        Camera         *mCamera;
 
         void setResourcesToJob();
 

@@ -94,7 +94,7 @@ namespace Ogre
                 hwndDlgItem = GetDlgItem( hDlg, IDC_CBO_RENDERSYSTEM );
 
                 SendMessage( hwndDlgItem, CB_ADDSTRING, 0,
-                             ( LPARAM )(char *)( *pRend )->getName().c_str() );
+                             (LPARAM)(char *)( *pRend )->getName().c_str() );
 
                 if( *pRend == dlg->mSelectedRenderSystem )
                 {

@@ -35,18 +35,21 @@ THE SOFTWARE.
 {
 }
 
-+ (Class)layerClass {
++ (Class)layerClass
+{
     return [CAMetalLayer class];
 }
 
-- (void)initCommon {
+- (void)initCommon
+{
     self.layer = [CAMetalLayer layer];
     self.wantsLayer = YES;
 
     _layerSizeDidUpdate = YES;
 }
 
-- (void)viewDidMoveToWindow {
+- (void)viewDidMoveToWindow
+{
     // if(self.scaleToNative)
     //    [setContentScaleFactor:self.window.screen.backingScaleFactor * self.nativeScaleFactor];
     _layerSizeDidUpdate = YES;
@@ -68,7 +71,8 @@ THE SOFTWARE.
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
     self = [super initWithCoder:coder];
 
     if( self )
@@ -78,7 +82,8 @@ THE SOFTWARE.
     return self;
 }
 
-- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent {
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
     if( self.superview == nil )
     {
         return NO;
@@ -89,23 +94,27 @@ THE SOFTWARE.
     }
 }
 
-- (void)setContentScaleFactor:(CGFloat)contentScaleFactor {
+- (void)setContentScaleFactor:(CGFloat)contentScaleFactor
+{
     self.scaleToNative = false;
     //[super setContentScaleFactor:contentScaleFactor];
     _layerSizeDidUpdate = YES;
 }
 
-- (void)setFrameSize:(NSSize)newSize {
+- (void)setFrameSize:(NSSize)newSize
+{
     [super setFrameSize:newSize];
     _layerSizeDidUpdate = YES;
 }
 
-- (void)setBoundsSize:(NSSize)newSize {
+- (void)setBoundsSize:(NSSize)newSize
+{
     [super setBoundsSize:newSize];
     _layerSizeDidUpdate = YES;
 }
 
-- (void)viewDidChangeBackingProperties {
+- (void)viewDidChangeBackingProperties
+{
     [super viewDidChangeBackingProperties];
     _layerSizeDidUpdate = YES;
 }

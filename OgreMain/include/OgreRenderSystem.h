@@ -88,7 +88,7 @@ namespace Ogre
 
     struct BoundUav
     {
-        GpuTrackedResource *           rttOrBuffer;
+        GpuTrackedResource            *rttOrBuffer;
         ResourceAccess::ResourceAccess boundAccess;
     };
 
@@ -596,7 +596,7 @@ namespace Ogre
         true on success.
         */
         virtual bool _createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
-                                           WindowList &                       createdWindows );
+                                           WindowList                        &createdWindows );
 
         /** Destroys a render window */
         virtual void destroyRenderWindow( Window *window );
@@ -738,8 +738,8 @@ namespace Ogre
         void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
 
         RenderPassDescriptor *getCurrentPassDescriptor() { return mCurrentRenderPassDescriptor; }
-        Viewport &            _getCurrentRenderViewport() { return mCurrentRenderViewport[0]; }
-        Viewport *            getCurrentRenderViewports() { return mCurrentRenderViewport; }
+        Viewport             &_getCurrentRenderViewport() { return mCurrentRenderViewport[0]; }
+        Viewport             *getCurrentRenderViewports() { return mCurrentRenderViewport; }
         uint32                getMaxBoundViewports() { return mMaxBoundViewports; }
 
         /** When the descriptor is set to Load clear, two possible things may happen:
@@ -1292,7 +1292,7 @@ namespace Ogre
             @param parameters A list of parameters that may belong to this event,
             may be null if there are no parameters
             */
-            virtual void eventOccurred( const String &           eventName,
+            virtual void eventOccurred( const String            &eventName,
                                         const NameValuePairList *parameters = 0 ) = 0;
         };
 
@@ -1532,7 +1532,7 @@ namespace Ogre
         typedef set<RenderPassDescriptor *>::type RenderPassDescriptorSet;
 
         RenderPassDescriptorSet mRenderPassDescs;
-        RenderPassDescriptor *  mCurrentRenderPassDescriptor;
+        RenderPassDescriptor   *mCurrentRenderPassDescriptor;
         Viewport                mCurrentRenderViewport[16];
         uint32                  mMaxBoundViewports;
 
@@ -1549,7 +1549,7 @@ namespace Ogre
         GpuProgramParametersSharedPtr mActiveTessellationDomainGpuProgramParameters;
         GpuProgramParametersSharedPtr mActiveComputeGpuProgramParameters;
 
-        VaoManager *       mVaoManager;
+        VaoManager        *mVaoManager;
         TextureGpuManager *mTextureGpuManager;
 
         bool mDebugShaders;
@@ -1631,7 +1631,7 @@ namespace Ogre
 
         /** Initialize the render system from the capabilities*/
         virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
-                                                             Window *                  primary ) = 0;
+                                                             Window                   *primary ) = 0;
 
         DriverVersion mDriverVersion;
         uint16        mNativeShadingLanguageVersion;

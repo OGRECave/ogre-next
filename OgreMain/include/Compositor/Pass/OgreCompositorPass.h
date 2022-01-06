@@ -92,7 +92,7 @@ namespace Ogre
 
         CompositorTextureVec mTextureDependencies;
 
-        BarrierSolver &         mBarrierSolver;
+        BarrierSolver          &mBarrierSolver;
         ResourceTransitionArray mResourceTransitions;
 
         /// MUST be called by derived class.
@@ -108,7 +108,7 @@ namespace Ogre
             a depth buffer in the same depth pool (unless the depth buffer is
             explicit)
         */
-        void setupRenderPassTarget( RenderPassTargetBase *       renderPassTargetAttachment,
+        void setupRenderPassTarget( RenderPassTargetBase        *renderPassTargetAttachment,
                                     const RenderTargetViewEntry &rtvEntry, bool isColourAttachment,
                                     TextureGpu *linkedColourAttachment = 0, uint16 depthBufferId = 0,
                                     bool           preferDepthTexture = false,
@@ -186,7 +186,7 @@ namespace Ogre
         const CompositorNode *getParentNode() const { return mParentNode; }
 
         const ResourceTransitionArray &getResourceTransitions() const { return mResourceTransitions; }
-        ResourceTransitionArray &      _getResourceTransitionsNonConst() { return mResourceTransitions; }
+        ResourceTransitionArray       &_getResourceTransitionsNonConst() { return mResourceTransitions; }
 
         const CompositorTextureVec &getTextureDependencies() const { return mTextureDependencies; }
     };

@@ -87,7 +87,7 @@ namespace Ogre
         typedef FastArray<DescriptorSetTexture2::Slot> DescriptorSetTexSlotArray;
         typedef FastArray<DescriptorSetUav::Slot>      DescriptorSetUavSlotArray;
 
-        Hlms *   mCreator;
+        Hlms    *mCreator;
         IdString mName;
 
         String       mSourceFilename;
@@ -110,8 +110,8 @@ namespace Ogre
         DescriptorSetUavSlotArray           mUavSlots;
 
         DescriptorSetTexture2 const *mTexturesDescSet;
-        DescriptorSetSampler const * mSamplersDescSet;
-        DescriptorSetUav const *     mUavsDescSet;
+        DescriptorSetSampler const  *mSamplersDescSet;
+        DescriptorSetUav const      *mUavsDescSet;
 
         bool            mInformHlmsOfTextureData;
         uint8           mMaxTexUnitReached;
@@ -312,7 +312,7 @@ namespace Ogre
         void   removeUavUnit( uint8 slotIdx );
         size_t getNumUavUnits() const { return mUavSlots.size(); }
 
-        TextureGpu *     getUavTexture( uint8 slotIdx ) const;
+        TextureGpu      *getUavTexture( uint8 slotIdx ) const;
         UavBufferPacked *getUavBuffer( uint8 slotIdx ) const;
 
         /// This value is overriden by setNumTexUnits to be compatible with OpenGL

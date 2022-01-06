@@ -30,11 +30,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    CFBundleRef mac_loadExeBundle( const char *path );
-    void *      mac_getBundleSym( CFBundleRef bundle, const char *name );
-    bool        mac_unloadExeBundle( CFBundleRef bundle );
-    void *      mac_loadDylib( const char *name );
-    void *      mac_loadFramework( String name );
+    CFBundleRef        mac_loadExeBundle( const char *path );
+    void              *mac_getBundleSym( CFBundleRef bundle, const char *name );
+    bool               mac_unloadExeBundle( CFBundleRef bundle );
+    void              *mac_loadDylib( const char *name );
+    void              *mac_loadFramework( String name );
     _OgreExport String macPluginPath();
     _OgreExport String macBundlePath();
     _OgreExport String macFrameworksPath();

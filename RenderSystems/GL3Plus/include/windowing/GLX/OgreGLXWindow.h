@@ -48,7 +48,7 @@ namespace Ogre
 
         GLXGLSupport *mGLSupport;
         ::Window      mWindow;
-        GLXContext *  mContext;
+        GLXContext   *mContext;
 
         void switchFullScreen( bool fullscreen );
 

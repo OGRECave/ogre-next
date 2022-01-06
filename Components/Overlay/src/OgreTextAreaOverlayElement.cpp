@@ -346,7 +346,7 @@ namespace Ogre
             {
                 // Derive parametric version of dimensions
                 Real vpWidth;
-                vpWidth = ( Real )( OverlayManager::getSingleton().getViewportWidth() );
+                vpWidth = (Real)( OverlayManager::getSingleton().getViewportWidth() );
 
                 largestWidth *= vpWidth;
             };
@@ -555,8 +555,8 @@ namespace Ogre
         void TextAreaOverlayElement::setMetricsMode( GuiMetricsMode gmm )
         {
             Real vpWidth, vpHeight;
-            vpWidth = ( Real )( OverlayManager::getSingleton().getViewportWidth() );
-            vpHeight = ( Real )( OverlayManager::getSingleton().getViewportHeight() );
+            vpWidth = (Real)( OverlayManager::getSingleton().getViewportWidth() );
+            vpHeight = (Real)( OverlayManager::getSingleton().getViewportHeight() );
 
             mViewportAspectCoef = vpHeight / vpWidth;
 
@@ -584,8 +584,8 @@ namespace Ogre
         void TextAreaOverlayElement::_update()
         {
             Real vpWidth, vpHeight;
-            vpWidth = ( Real )( OverlayManager::getSingleton().getViewportWidth() );
-            vpHeight = ( Real )( OverlayManager::getSingleton().getViewportHeight() );
+            vpWidth = (Real)( OverlayManager::getSingleton().getViewportWidth() );
+            vpHeight = (Real)( OverlayManager::getSingleton().getViewportHeight() );
 
             mViewportAspectCoef = vpHeight / vpWidth;
 

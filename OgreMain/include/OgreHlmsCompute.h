@@ -112,7 +112,7 @@ namespace Ogre
         typedef map<Hash, GpuProgramPtr>::type CompiledShaderMap;
 
         AutoParamDataSource *mAutoParamDataSource;
-        String const *       mComputeShaderTarget;
+        String const        *mComputeShaderTarget;
 
         /// Caches a compiled shader based on the hash of its source string
         /// We need this in case two HlmsComputeJobs use the same exact
@@ -130,7 +130,7 @@ namespace Ogre
         HlmsDatablock *createDatablockImpl( IdString              datablockName,  //
                                             const HlmsMacroblock *macroblock,     //
                                             const HlmsBlendblock *blendblock,     //
-                                            const HlmsParamVec &  paramVec ) override;
+                                            const HlmsParamVec   &paramVec ) override;
 
         void setupRootLayout( RootLayout &rootLayout ) override;
 
@@ -156,7 +156,7 @@ namespace Ogre
             A new job.
         */
         HlmsComputeJob *createComputeJob( IdString datablockName, const String &refName,
-                                          const String &      sourceFilename,
+                                          const String       &sourceFilename,
                                           const StringVector &includedPieceFiles );
 
         /// Finds an existing Compute Job. If none found, throws an exception.
@@ -215,11 +215,11 @@ namespace Ogre
 
         static const IdString NumTextureSlots;
         static const IdString MaxTextureSlot;
-        static const char *   Texture;
+        static const char    *Texture;
 
         static const IdString NumUavSlots;
         static const IdString MaxUavSlot;
-        static const char *   Uav;
+        static const char    *Uav;
     };
 
     /** @} */

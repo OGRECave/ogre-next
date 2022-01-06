@@ -41,7 +41,7 @@ namespace Ogre
         MetalDevice *mDevice;
 
     protected:
-        TexBufferPacked *     getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
+        TexBufferPacked      *getAsTexBufferImpl( PixelFormatGpu pixelFormat ) override;
         ReadOnlyBufferPacked *getAsReadOnlyBufferImpl() override;
 
     public:

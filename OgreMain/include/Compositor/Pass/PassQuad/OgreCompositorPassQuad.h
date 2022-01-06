@@ -89,10 +89,10 @@ namespace Ogre
 
     protected:
         v1::Rectangle2D *mFsRect;
-        HlmsDatablock *  mDatablock;
+        HlmsDatablock   *mDatablock;
         MaterialPtr      mMaterial;
-        Pass *           mPass;
-        Camera *         mCamera;
+        Pass            *mPass;
+        Camera          *mCamera;
 
         Real mHorizonalTexelOffset;
         Real mVerticalTexelOffset;
@@ -109,7 +109,7 @@ namespace Ogre
 
         /// Don't make this const (useful for compile-time multithreading errors)
         /// Pointer can be null if using HLMS
-        Pass *  getPass() { return mPass; }
+        Pass   *getPass() { return mPass; }
         Camera *getCamera() { return mCamera; }
     };
 

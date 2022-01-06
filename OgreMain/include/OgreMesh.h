@@ -168,8 +168,8 @@ namespace Ogre
             /** Compile bone assignments into blend index and weight buffers. */
             void compileBoneAssignments( const VertexBoneAssignmentList &boneAssignments,
                                          unsigned short                  numBlendWeightsPerVertex,
-                                         IndexMap &                      blendIndexToBoneIndexMap,
-                                         VertexData *                    targetVertexData );
+                                         IndexMap                       &blendIndexToBoneIndexMap,
+                                         VertexData                     *targetVertexData );
 
             String           mLodStrategyName;
             bool             mHasManualLodLevel;
@@ -469,7 +469,7 @@ namespace Ogre
             @return
                 Weak reference to the skeleton - copy this if you want to hold a strong pointer.
             */
-            const SkeletonPtr &   getOldSkeleton() const;
+            const SkeletonPtr    &getOldSkeleton() const;
             const SkeletonDefPtr &getSkeleton() const { return mSkeleton; }
 
             /** Gets the name of any linked Skeleton */
@@ -798,8 +798,8 @@ namespace Ogre
                 which will be populated
             */
             bool suggestTangentVectorBuildParams( VertexElementSemantic targetSemantic,
-                                                  unsigned short &      outSourceCoordSet,
-                                                  unsigned short &      outIndex );
+                                                  unsigned short       &outSourceCoordSet,
+                                                  unsigned short       &outIndex );
 
             /** Builds an edge list for this mesh, which can be used for generating a shadow volume
                 among other things.
@@ -868,7 +868,7 @@ namespace Ogre
                 The index map used to translate blend index to bone index.
             */
             static void prepareMatricesForVertexBlend( const Matrix4 **blendMatrices,
-                                                       const Matrix4 * boneMatrices,
+                                                       const Matrix4  *boneMatrices,
                                                        const IndexMap &indexMap );
 
             /** Performs a software indexed vertex blend, of the kind used for
@@ -894,8 +894,8 @@ namespace Ogre
             @param blendNormals
                 If @c true, normals are blended as well as positions.
             */
-            static void softwareVertexBlend( const VertexData *    sourceVertexData,
-                                             const VertexData *    targetVertexData,
+            static void softwareVertexBlend( const VertexData     *sourceVertexData,
+                                             const VertexData     *targetVertexData,
                                              const Matrix4 *const *blendMatrices, size_t numMatrices,
                                              bool blendNormals );
 
@@ -917,7 +917,7 @@ namespace Ogre
             */
             static void softwareVertexMorph( Real t, const HardwareVertexBufferSharedPtr &b1,
                                              const HardwareVertexBufferSharedPtr &b2,
-                                             VertexData *                         targetVertexData );
+                                             VertexData                          *targetVertexData );
 
             /** Performs a software vertex pose blend, of the kind used for
                 morph animation although it can be used for other purposes.
@@ -941,7 +941,7 @@ namespace Ogre
             static void softwareVertexPoseBlend( Real                              weight,
                                                  const map<size_t, Vector3>::type &vertexOffsetMap,
                                                  const map<size_t, Vector3>::type &normalsMap,
-                                                 VertexData *                      targetVertexData );
+                                                 VertexData                       *targetVertexData );
             /** Gets a reference to the optional name assignments of the SubMeshes. */
             const SubMeshNameMap &getSubMeshNameMap() const { return mSubMeshNameMap; }
 

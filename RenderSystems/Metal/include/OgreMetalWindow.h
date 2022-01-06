@@ -45,9 +45,9 @@ namespace Ogre
         bool mIsExternal;
         bool mHwGamma;
 
-        CAMetalLayer *      mMetalLayer;
+        CAMetalLayer       *mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
-        OgreMetalView *     mMetalView;
+        OgreMetalView      *mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         NSWindow *mWindow;
 #endif

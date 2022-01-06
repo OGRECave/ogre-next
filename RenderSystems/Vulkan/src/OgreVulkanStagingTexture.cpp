@@ -149,7 +149,7 @@ namespace Ogre
         VulkanTextureGpu *dstTextureVulkan = static_cast<VulkanTextureGpu *>( dstTexture );
 
         const size_t distToStart =
-            ( size_t )( static_cast<uint8 *>( srcBox.data ) - static_cast<uint8 *>( mLastMappedPtr ) );
+            (size_t)( static_cast<uint8 *>( srcBox.data ) - static_cast<uint8 *>( mLastMappedPtr ) );
         const VkDeviceSize offsetPtr = mInternalBufferStart + distToStart;
 
         const uint32 destinationSlice =

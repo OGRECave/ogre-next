@@ -42,7 +42,7 @@ namespace Ogre
     {
     protected:
         static String sLanguageName;
-        MetalDevice * mDevice;
+        MetalDevice  *mDevice;
 
     public:
         MetalProgramFactory( MetalDevice *device );

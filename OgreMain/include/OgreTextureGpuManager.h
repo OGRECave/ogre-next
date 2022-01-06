@@ -68,7 +68,7 @@ namespace Ogre
 
     struct _OgreExport TexturePool
     {
-        TextureGpu *         masterTexture;
+        TextureGpu          *masterTexture;
         bool                 manuallyReserved;
         uint16               usedMemory;
         vector<uint16>::type availableSlots;
@@ -303,10 +303,10 @@ namespace Ogre
         struct LoadRequest
         {
             String                   name;
-            Archive *                archive;
+            Archive                 *archive;
             ResourceLoadingListener *loadingListener;
-            Image2 *                 image;
-            TextureGpu *             texture;
+            Image2                  *image;
+            TextureGpu              *texture;
             /// Slice to upload this image to (in case we're uploading a 2D image into an cubemap)
             /// std::numeric_limits<uint32>::max() to disable it.
             uint32 sliceOrDepth;
@@ -424,7 +424,7 @@ namespace Ogre
         */
         struct PartialImage
         {
-            void * sysRamPtr;
+            void  *sysRamPtr;
             uint32 numProcessedDepthOrSlices;
             bool   toSysRam;
 
@@ -437,7 +437,7 @@ namespace Ogre
         struct ThreadData
         {
             LoadRequestVec    loadRequests;
-            ObjCmdBuffer *    objCmdBuffer;
+            ObjCmdBuffer     *objCmdBuffer;
             StagingTextureVec usedStagingTex;
         };
         struct StreamingData
@@ -484,7 +484,7 @@ namespace Ogre
         struct ResidencyTransitionTask
         {
             GpuResidency::GpuResidency targetResidency;
-            Image2 *                   image;
+            Image2                    *image;
             bool                       autoDeleteImage;
             bool                       reuploadOnly;
 
@@ -558,7 +558,7 @@ namespace Ogre
             TextureGpu *texture;
             /// One per mip. Entries with nullptr means the ticket has already been copied and destroyed
             AsyncTextureTicketVec asyncTickets;
-            uint8 *               sysRamPtr;
+            uint8                *sysRamPtr;
             /// When resyncOnly == true, the download is from textures currently Resident that
             /// will remain Resident. Otherwise a Resident -> OnSystemRam transition will occur
             bool resyncOnly;
@@ -567,7 +567,7 @@ namespace Ogre
 
         struct MissedListenerCall
         {
-            TextureGpu *               texture;
+            TextureGpu                *texture;
             TextureGpuListener::Reason reason;
             MissedListenerCall( TextureGpu *_texture, TextureGpuListener::Reason _reason ) :
                 texture( _texture ),
@@ -616,7 +616,7 @@ namespace Ogre
         bool mIgnoreSRgbPreference;
 
     protected:
-        VaoManager *  mVaoManager;
+        VaoManager   *mVaoManager;
         RenderSystem *mRenderSystem;
 
         // Be able to hold up to a 2x2 cubemap RGBA8 for when a
@@ -864,7 +864,7 @@ namespace Ogre
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                    const String &resourceGroup = BLANKSTRING, uint32 filters = 0,
                                    uint32 poolId = 0 );
-        TextureGpu *createTexture( const String &                         name,
+        TextureGpu *createTexture( const String                          &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                    const String &resourceGroup = BLANKSTRING, uint32 filters = 0,
@@ -874,7 +874,7 @@ namespace Ogre
                                              uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                              const String &resourceGroup = BLANKSTRING,
                                              uint32 filters = 0, uint32 poolId = 0 );
-        TextureGpu *createOrRetrieveTexture( const String &                         name,
+        TextureGpu *createOrRetrieveTexture( const String                          &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                              const String &resourceGroup = BLANKSTRING,
@@ -886,7 +886,7 @@ namespace Ogre
                                              CommonTextureTypes::CommonTextureTypes type,
                                              const String &resourceGroup = BLANKSTRING,
                                              uint32        poolId = 0 );
-        TextureGpu *createOrRetrieveTexture( const String &                         name,
+        TextureGpu *createOrRetrieveTexture( const String                          &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              CommonTextureTypes::CommonTextureTypes type,
                                              const String &resourceGroup = BLANKSTRING,
@@ -1217,7 +1217,7 @@ namespace Ogre
                                    void *extraData ) override;
 
         RenderSystem *getRenderSystem() const;
-        VaoManager *  getVaoManager() const;
+        VaoManager   *getVaoManager() const;
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage,

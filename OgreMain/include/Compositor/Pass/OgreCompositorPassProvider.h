@@ -87,7 +87,7 @@ namespace Ogre
         */
         virtual CompositorPassDef *addPassDef( CompositorPassType passType, IdString customId,
                                                CompositorTargetDef *parentTargetDef,
-                                               CompositorNodeDef *  parentNodeDef ) = 0;
+                                               CompositorNodeDef   *parentNodeDef ) = 0;
 
         /** Creates a CompositorPass from a CompositorPassDef for Compositor Pass of type 'custom'
         @remarks    If you have multiple custom pass types then you will need to use dynamic_cast<>()

@@ -61,7 +61,7 @@ namespace Ogre
 
         void setCurrentRenderSystem( RenderSystem *renderSystem );
 
-        typedef void( CommandBufferExecuteFunc )( CommandBuffer *_this,
+        typedef void( CommandBufferExecuteFunc )( CommandBuffer               *_this,
                                                   const CbBase *RESTRICT_ALIAS cmd );
 
         static CommandBufferExecuteFunc execute_setVao;

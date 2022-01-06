@@ -84,7 +84,7 @@ namespace Ogre
         typedef vector<HlmsMacroblock>::type HlmsMacroblockVec;
         typedef vector<HlmsBlendblock>::type HlmsBlendblockVec;
 
-        Hlms *       mRegisteredHlms[HLMS_MAX];
+        Hlms        *mRegisteredHlms[HLMS_MAX];
         bool         mDeleteRegisteredOnExit[HLMS_MAX];
         HlmsCompute *mComputeHlms;
 
@@ -93,7 +93,7 @@ namespace Ogre
         HlmsSamplerblock  mSamplerblocks[OGRE_HLMS_NUM_SAMPLERBLOCKS];
         BlockIdxVec       mActiveBlocks[NUM_BASIC_BLOCKS];
         BlockIdxVec       mFreeBlockIds[NUM_BASIC_BLOCKS];
-        BasicBlock *      mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
+        BasicBlock       *mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
 
         typedef set<DescriptorSetTexture>::type  DescriptorSetTextureSet;
         typedef set<DescriptorSetTexture2>::type DescriptorSetTexture2Set;
@@ -131,7 +131,7 @@ namespace Ogre
     public:
         typedef map<String, String>::type ResourceToTexExtensionMap;
         ResourceToTexExtensionMap         mAdditionalTextureExtensionsPerGroup;
-        HlmsJsonListener *                mJsonListener;
+        HlmsJsonListener                 *mJsonListener;
 
     protected:
 #endif
@@ -229,7 +229,7 @@ namespace Ogre
         /// @See destroyMacroblock
         void destroySamplerblock( const HlmsSamplerblock *Samplerblock );
 
-        const DescriptorSetTexture * getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
+        const DescriptorSetTexture  *getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
         void                         destroyDescriptorSetTexture( const DescriptorSetTexture *descSet );
         const DescriptorSetTexture2 *getDescriptorSetTexture2( const DescriptorSetTexture2 &baseParams );
         void destroyDescriptorSetTexture2( const DescriptorSetTexture2 *descSet );

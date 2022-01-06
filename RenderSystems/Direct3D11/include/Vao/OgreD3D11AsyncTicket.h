@@ -39,7 +39,7 @@ namespace Ogre
     {
     protected:
         ComPtr<ID3D11Query> mFenceName;
-        D3D11Device &       mDevice;
+        D3D11Device        &mDevice;
 
         const void *mapImpl() override;
 

@@ -53,7 +53,7 @@ namespace Ogre
     public:
         typedef T value_type;
 
-        typedef T *      iterator;
+        typedef T       *iterator;
         typedef const T *const_iterator;
 
         StackVector() : mSize( 0 ) {}
@@ -101,7 +101,7 @@ namespace Ogre
 
         size_t   size() const { return mSize; }
         size_t   capacity() const { return Capacity; }
-        T *      data() { return mData; }
+        T       *data() { return mData; }
         const T *data() const { return mData; }
 
         void push_back( const T &val )

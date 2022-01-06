@@ -307,8 +307,8 @@ namespace Ogre
             winHeight = mRequestedHeight;
             {
                 // Center window horizontally and/or vertically, on the right monitor.
-                uint32 screenw = ( uint32 )( monitorInfoEx.rcWork.right - monitorInfoEx.rcWork.left );
-                uint32 screenh = ( uint32 )( monitorInfoEx.rcWork.bottom - monitorInfoEx.rcWork.top );
+                uint32 screenw = (uint32)( monitorInfoEx.rcWork.right - monitorInfoEx.rcWork.left );
+                uint32 screenh = (uint32)( monitorInfoEx.rcWork.bottom - monitorInfoEx.rcWork.top );
                 uint32 outerw = ( winWidth < screenw ) ? winWidth : screenw;
                 uint32 outerh = ( winHeight < screenh ) ? winHeight : screenh;
                 if( left == INT_MAX )

@@ -1982,7 +1982,7 @@ namespace Ogre
         const_iterator i, ie = end();
         for( i = begin(); i != ie; ++i )
         {
-            buffer.push_back( ( wchar_t )( *i ) );
+            buffer.push_back( (wchar_t)( *i ) );
         }
 #    else  // wchar_t fits UTF-32
         unicode_char c;

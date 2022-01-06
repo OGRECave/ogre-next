@@ -131,7 +131,7 @@ namespace Ogre
 
         /** Gets a pointer to a SubItem, ie a part of an Item.
          */
-        SubItem *      getSubItem( size_t index );
+        SubItem       *getSubItem( size_t index );
         const SubItem *getSubItem( size_t index ) const;
 
         /** Retrieves the number of SubItem objects making up this Item.
@@ -271,7 +271,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *           manager,
+                                           SceneManager            *manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:

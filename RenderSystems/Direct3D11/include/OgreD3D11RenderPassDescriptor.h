@@ -71,7 +71,7 @@ namespace Ogre
 
         D3D11FrameBufferDescMap::iterator mSharedFboItor;
 
-        D3D11Device &      mDevice;
+        D3D11Device       &mDevice;
         D3D11RenderSystem *mRenderSystem;
 
         void notifyDeviceLost( D3D11Device *device ) override;

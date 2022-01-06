@@ -139,7 +139,7 @@ namespace Ogre
         void addUavBuffer( uint32 slotIdx, IdString bufferName, ResourceAccess::ResourceAccess access,
                            size_t offset = 0, size_t sizeBytes = 0 );
 
-        const TextureSources & getTextureSources() const { return mTextureSources; }
+        const TextureSources  &getTextureSources() const { return mTextureSources; }
         const BufferSourceVec &getBufferSources() const { return mBufferSources; }
     };
 

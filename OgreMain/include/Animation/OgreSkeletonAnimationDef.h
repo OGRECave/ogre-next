@@ -71,8 +71,8 @@ namespace Ogre
             the SIMD block.
         */
         static void getInterpolatedUnnormalizedKeyFrame( v1::OldNodeAnimationTrack *oldTrack,
-                                                         const v1::TimeIndex &      timeIndex,
-                                                         v1::TransformKeyFrame *    kf );
+                                                         const v1::TimeIndex       &timeIndex,
+                                                         v1::TransformKeyFrame     *kf );
 
         /** Allocates enough memory in mKfTransformMemoryManager, creates all the mTracks
             (one per each entry in timestampsByBlock), and allocates all the keyframes

@@ -227,7 +227,7 @@ namespace Ogre
         };
 
         uint16          mRefCount;
-        void *          mRsData;  /// Render-System specific data
+        void           *mRsData;  /// Render-System specific data
         FastArray<Slot> mUavs;
 
         DescriptorSetUav() : mRefCount( 0 ), mRsData( 0 ) {}

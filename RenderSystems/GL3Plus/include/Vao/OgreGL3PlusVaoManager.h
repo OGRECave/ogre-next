@@ -239,7 +239,7 @@ namespace Ogre
         GLuint createVao( const Vao &vaoRef );
 
         VertexArrayObject *createVertexArrayObjectImpl( const VertexBufferPackedVec &vertexBuffers,
-                                                        IndexBufferPacked *          indexBuffer,
+                                                        IndexBufferPacked           *indexBuffer,
                                                         OperationType                opType ) override;
 
         void destroyVertexArrayObjectImpl( VertexArrayObject *vao ) override;

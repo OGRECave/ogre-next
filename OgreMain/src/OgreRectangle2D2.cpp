@@ -218,7 +218,7 @@ namespace Ogre
             *vertexData++ = radius + posCenter[i].y;
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) == maxElements * 2u );
+        OGRE_ASSERT_LOW( (size_t)( vertexData - vertexDataStart ) == maxElements * 2u );
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements )
@@ -279,7 +279,7 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) ==
+        OGRE_ASSERT_LOW( (size_t)( vertexData - vertexDataStart ) ==
                          maxElements * ( hasNormals() ? 7u : 4u ) );
     }
     //-----------------------------------------------------------------------------------

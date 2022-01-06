@@ -258,9 +258,9 @@ namespace Ogre
             shadow mapping.
         */
         virtual_l1 MeshPtr
-                   convertToMesh( const String &meshName,
-                                  const String &groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                  bool          buildShadowMapBuffers = true );
+        convertToMesh( const String &meshName,
+                       const String &groupName = ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                       bool          buildShadowMapBuffers = true );
 
         /** Gets a pointer to a ManualObjectSection, i.e. a part of a ManualObject.
          */
@@ -297,10 +297,10 @@ namespace Ogre
         class _OgreExport ManualObjectSection : public Renderable, public OgreAllocatedObj
         {
         protected:
-            ManualObject *     mParent;
+            ManualObject      *mParent;
             Aabb               mAabb;
             VertexArrayObject *mVao;
-            VaoManager *       mVaoManager;
+            VaoManager        *mVaoManager;
             OperationType      mOperationType;
             VertexElement2Vec  mVertexElements;
             bool               m32BitIndices;
@@ -358,14 +358,14 @@ namespace Ogre
         float *mTempVertexBuffer;
         size_t mTempVertexBufferSize;
 
-        char * mTempIndexBuffer;
+        char  *mTempIndexBuffer;
         size_t mTempIndexBufferSize;
 
         /// Current buffer we write to
         float *mVertexBuffer;
-        char * mIndexBuffer;
+        char  *mIndexBuffer;
         float *mVertexBufferCursor;
-        char * mIndexBufferCursor;
+        char  *mIndexBufferCursor;
 
         /// Current declaration vertex size
         size_t mDeclSize;
@@ -383,7 +383,7 @@ namespace Ogre
     {
     protected:
         MovableObject *createInstanceImpl( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                           SceneManager *           manager,
+                                           SceneManager            *manager,
                                            const NameValuePairList *params = 0 ) override;
 
     public:

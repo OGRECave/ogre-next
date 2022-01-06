@@ -93,9 +93,9 @@ namespace Ogre
         IndexType minimalIndexType() const { return usedCount < 0xFFFF ? IT_16BIT : IT_32BIT; }
 
         void performIndexDataRemap( v1::HardwareBufferManagerBase *pHWBufferManager,
-                                    v1::IndexData *                indexData ) const;
+                                    v1::IndexData                 *indexData ) const;
         void performVertexDataRemap( v1::HardwareBufferManagerBase *pHWBufferManager,
-                                     v1::VertexData *               vertexData ) const;
+                                     v1::VertexData                *vertexData ) const;
         v1::HardwareVertexBufferSharedPtr getRemappedVertexBuffer(
             v1::HardwareBufferManagerBase *pHWBufferManager, v1::HardwareVertexBufferSharedPtr vb,
             size_t srcStart, size_t srcCount ) const;
@@ -104,7 +104,7 @@ namespace Ogre
         void performBoneAssignmentRemap( v1::SubMesh *dst, v1::Mesh *src ) const;
         void performPoseRemap( v1::Pose *pose ) const;
         void performAnimationTrackRemap( v1::HardwareBufferManagerBase *pHWBufferManager,
-                                         v1::VertexAnimationTrack *     track ) const;
+                                         v1::VertexAnimationTrack      *track ) const;
     };
 
     // Implementation
@@ -117,11 +117,11 @@ namespace Ogre
             return;
 
         size_t                             indexCount = indexData->indexCount;
-        v1::HardwareIndexBuffer *          indexBuffer = indexData->indexBuffer.get();
+        v1::HardwareIndexBuffer           *indexBuffer = indexData->indexBuffer.get();
         v1::HardwareIndexBuffer::IndexType indexType = indexBuffer->getType();
         v1::HardwareIndexBuffer::IndexType newIndexType = minimalIndexType();
         v1::HardwareIndexBufferSharedPtr   newIndexBuffer = pHWBufferManager->createIndexBuffer(
-            newIndexType, indexCount, indexBuffer->getUsage(), indexBuffer->hasShadowBuffer() );
+              newIndexType, indexCount, indexBuffer->getUsage(), indexBuffer->hasShadowBuffer() );
 
         v1::HardwareBufferLockGuard srcLock(
             indexBuffer, indexData->indexStart * indexBuffer->getIndexSize(),
@@ -302,7 +302,7 @@ namespace Ogre
         {
             for( unsigned short i = 0; i < track->getNumKeyFrames(); ++i )
             {
-                v1::VertexMorphKeyFrame *         kf = track->getVertexMorphKeyFrame( i );
+                v1::VertexMorphKeyFrame          *kf = track->getVertexMorphKeyFrame( i );
                 v1::HardwareVertexBufferSharedPtr VB = kf->getVertexBuffer();
                 kf->setVertexBuffer(
                     getRemappedVertexBuffer( pHWBufferManager, VB, 0, VB->getNumVertices() ) );

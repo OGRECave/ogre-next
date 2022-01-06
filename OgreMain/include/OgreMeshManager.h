@@ -77,7 +77,7 @@ namespace Ogre
             /// Create a new mesh
             /// @see ResourceManager::createResource
             MeshPtr create( const String &name, const String &group, bool isManual = false,
-                            ManualResourceLoader *   loader = 0,
+                            ManualResourceLoader    *loader = 0,
                             const NameValuePairList *createParams = 0 );
 
 #if OGRE_COMPILER == OGRE_COMPILER_CLANG
@@ -222,7 +222,7 @@ namespace Ogre
                 const String &name, const String &groupName, const Plane &plane, Real width, Real height,
                 uint32 xsegments = 1, uint32 ysegments = 1, bool normals = true,
                 unsigned short numTexCoordSets = 1, Real uTile = 1.0f, Real vTile = 1.0f,
-                const Vector3 &       upVector = Vector3::UNIT_Y,
+                const Vector3        &upVector = Vector3::UNIT_Y,
                 HardwareBuffer::Usage vertexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 bool vertexShadowBuffer = true, bool indexShadowBuffer = true );
@@ -281,8 +281,8 @@ namespace Ogre
                 const String &name, const String &groupName, const Plane &plane, Real width, Real height,
                 Real curvature, uint32 xsegments = 1, uint32 ysegments = 1, bool normals = true,
                 unsigned short numTexCoordSets = 1, Real uTile = 1.0f, Real vTile = 1.0f,
-                const Vector3 &       upVector = Vector3::UNIT_Y,
-                const Quaternion &    orientation = Quaternion::IDENTITY,
+                const Vector3        &upVector = Vector3::UNIT_Y,
+                const Quaternion     &orientation = Quaternion::IDENTITY,
                 HardwareBuffer::Usage vertexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 bool vertexShadowBuffer = true, bool indexShadowBuffer = true,
@@ -333,7 +333,7 @@ namespace Ogre
                 const String &name, const String &groupName, const Plane &plane, Real width, Real height,
                 Real bow = 0.5f, uint32 xsegments = 1, uint32 ysegments = 1, bool normals = false,
                 unsigned short numTexCoordSets = 1, Real uTile = 1.0f, Real vTile = 1.0f,
-                const Vector3 &       upVector = Vector3::UNIT_Y,
+                const Vector3        &upVector = Vector3::UNIT_Y,
                 HardwareBuffer::Usage vertexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 HardwareBuffer::Usage indexBufferUsage = HardwareBuffer::HBU_STATIC_WRITE_ONLY,
                 bool vertexShadowBuffer = true, bool indexShadowBuffer = true );

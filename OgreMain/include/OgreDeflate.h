@@ -74,7 +74,7 @@ namespace Ogre
         DataStreamPtr mCompressedStream;
         DataStreamPtr mTmpWriteStream;
         String        mTempFileName;
-        z_stream *    mZStream;
+        z_stream     *mZStream;
         size_t        mCurrentPos;
         size_t        mAvailIn;
 

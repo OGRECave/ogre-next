@@ -64,7 +64,7 @@ namespace Ogre
 
         GLuint mVboName;
         GLuint mVboSize;
-        void * mMappedPtr;
+        void  *mMappedPtr;
 
         MappedRangeVec       mMappedRanges;
         vector<size_t>::type mFreeRanges;

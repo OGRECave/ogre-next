@@ -62,7 +62,7 @@ namespace Ogre
     {
         OGRE_SIMD_ALIGNED_DECL( Matrix4, mTempXform[256] );
         AutoParamDataSource *mAutoParamDataSource;
-        SceneManager *       mCurrentSceneManager;
+        SceneManager        *mCurrentSceneManager;
 
         const HlmsCache *createShaderCacheEntry( uint32 renderableHash, const HlmsCache &passCache,
                                                  uint32                  finalHash,
@@ -70,7 +70,7 @@ namespace Ogre
 
         HlmsDatablock *createDatablockImpl( IdString datablockName, const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
-                                            const HlmsParamVec &  paramVec ) override;
+                                            const HlmsParamVec   &paramVec ) override;
 
         void setupRootLayout( RootLayout &rootLayout ) override;
 
