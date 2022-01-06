@@ -339,7 +339,15 @@ namespace Ogre
 
                 // Reverse vInc for double sided
                 v = meshHeight - 1;
+
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4146) // unary minus operator applied to unsigned type, result still unsigned
+#endif
                 vInc = -vInc;
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#pragma warning(pop)
+#endif
             }
         }
 
