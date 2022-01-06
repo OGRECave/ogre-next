@@ -232,7 +232,7 @@ namespace Ogre
             mCapacityActorsSoA = mActors.capacity();
 
             const size_t bytesRequired = sizeof(ArrayActorPlane) *
-                                         alignToNextMultiple( mCapacityActorsSoA, ARRAY_PACKED_REALS ) /
+                                         alignToNextMultiple<size_t>( mCapacityActorsSoA, ARRAY_PACKED_REALS ) /
                                          ARRAY_PACKED_REALS;
             mActorsSoA = reinterpret_cast<ArrayActorPlane*>(
                              OGRE_MALLOC_SIMD( bytesRequired, MEMCATEGORY_SCENE_OBJECTS ) );
