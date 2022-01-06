@@ -3,6 +3,7 @@ BasedOnStyle: Google
 AlignAfterOpenBracket: Align
 #AlignConsecutiveAssignments: 'true'
 AlignEscapedNewlines: DontAlign
+AllowAllConstructorInitializersOnNextLine: false
 AllowShortFunctionsOnASingleLine: InlineOnly
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'

@@ -4,6 +4,7 @@ AlignAfterOpenBracket: Align
 #AlignConsecutiveAssignments: 'true'
 AlignConsecutiveDeclarations: 'Consecutive'
 AlignEscapedNewlines: DontAlign
+AllowAllConstructorInitializersOnNextLine: false
 AllowShortFunctionsOnASingleLine: InlineOnly
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'
