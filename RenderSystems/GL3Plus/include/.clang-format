@@ -2,7 +2,7 @@
 BasedOnStyle: Google
 AlignAfterOpenBracket: Align
 #AlignConsecutiveAssignments: 'true'
-AlignConsecutiveDeclarations: 'true'
+AlignConsecutiveDeclarations: 'Consecutive'
 AlignEscapedNewlines: DontAlign
 AllowShortFunctionsOnASingleLine: InlineOnly
 AllowShortIfStatementsOnASingleLine: 'false'
