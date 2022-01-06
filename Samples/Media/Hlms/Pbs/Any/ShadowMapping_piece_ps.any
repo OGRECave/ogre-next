@@ -26,8 +26,10 @@
 	#define hlms_shadowmap@n_uv_min float2( @value( hlms_shadowmap@n_uv_min_x_int ).@value( hlms_shadowmap@n_uv_min_x_fract ), @value( hlms_shadowmap@n_uv_min_y_int ).@value( hlms_shadowmap@n_uv_min_y_fract ) )
 	#define hlms_shadowmap@n_uv_max float2( @value( hlms_shadowmap@n_uv_max_x_int ).@value( hlms_shadowmap@n_uv_max_x_fract ), @value( hlms_shadowmap@n_uv_max_y_int ).@value( hlms_shadowmap@n_uv_max_y_fract ) )
 	@property( hlms_shadowmap@n_uvs_fulltex )
-		@property( hlms_shadowmap@n_is_point_light )
+		@property( hlms_shadowmap@n_is_point_light || hlms_static_branch_shadow_map_lights )
 			#define hlms_shadowmap@n_uv_length float2( @value( hlms_shadowmap@n_uv_length_x_int ).@value( hlms_shadowmap@n_uv_length_x_fract ), @value( hlms_shadowmap@n_uv_length_y_int ).@value( hlms_shadowmap@n_uv_length_y_fract ) )
+		@end
+		@property( hlms_shadowmap@n_is_point_light )
 			#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max, hlms_shadowmap@n_uv_length
 		@else
 			#define hlms_shadowmap@n_uv_param , hlms_shadowmap@n_uv_min, hlms_shadowmap@n_uv_max
@@ -180,6 +182,15 @@
 			@property( hlms_shadowmap@n_is_spot )
 				#define inPs_posL@n worldPosToSpotLightSpace( inPs.worldPos, passBuf.shadowRcv[@n], @insertpiece( shadowMapNormalOffsetBias@n ) )
 			@end
+		@end
+		@property( hlms_static_branch_shadow_map_lights )
+			@property( !skip_normal_offset_bias_vs )
+				@piece( shadowMapNormalOffsetBias_cur_shadow_map )getNormalOffsetBias( inPs.worldNorm, pixelData.geomNormal, light0Buf.lights[light_idx].spotDirection.xyz, passBuf.shadowRcv[cur_shadow_map].invShadowMapSize.x, passBuf.shadowRcv[cur_shadow_map].shadowDepthRange.y, passBuf.shadowRcv[cur_shadow_map].normalOffsetBias, shadowmap_uv_min[cur_shadow_map], shadowmap_uv_max[cur_shadow_map] )@end
+			@else
+				@piece( shadowMapNormalOffsetBias_cur_shadow_map )float3( 0.0f, 0.0f, 0.0f )@end
+			@end
+
+			#define inPs_posL_cur_shadow_map worldPosToSpotLightSpace( inPs.worldPos, passBuf.shadowRcv[cur_shadow_map], @insertpiece( shadowMapNormalOffsetBias_cur_shadow_map ) )
 		@end
 
 		@foreach( 2, m )
@@ -516,6 +527,29 @@
 @property( receive_shadows )
 	@piece( DarkenWithShadowFirstLight )* fShadow@end
 
+@property( hlms_static_branch_shadow_map_lights )
+
+	// All point and spot lights must share the same hlms_shadowmap atlas
+	// See HlmsPbs::setStaticBranchingLights
+	@piece( DarkenWithShadow_cur_shadow_map )
+		* getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
+					 inPs_posL_cur_shadow_map,
+					 passBuf.shadowRcv[cur_shadow_map].invShadowMapSize
+					 , shadowmap_uv_min[cur_shadow_map], shadowmap_uv_max[cur_shadow_map] )
+	@end
+
+	@piece( DarkenWithShadowPoint_cur_shadow_map )
+		* getShadowPoint( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
+						  pixelData.geomNormal,
+						  passBuf.shadowRcv[cur_shadow_map].normalOffsetBias,
+						  inPs.pos.xyz, light0Buf.lights[light_idx].position.xyz,
+						  passBuf.shadowRcv[cur_shadow_map].invShadowMapSize,
+						  passBuf.shadowRcv[cur_shadow_map].shadowDepthRange.xy
+						  , shadowmap_uv_min[cur_shadow_map], shadowmap_uv_max[cur_shadow_map], shadowmap_uv_length[cur_shadow_map] PASSBUF_ARG )
+	@end
+
+@else
+
 	@piece( DarkenWithShadow )
 		* getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
 					 inPs_posL@value(CurrentShadowMap),
@@ -534,6 +568,9 @@
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].shadowDepthRange.xy
 						  hlms_shadowmap@counter(CurrentShadowMap)_uv_param PASSBUF_ARG )
 	@end
+
+@end
+
 @end ///!receive_shadows
 
 @end

@@ -270,6 +270,8 @@ namespace Ogre
         void postCommandBufferExecution( CommandBuffer *commandBuffer ) override;
         void frameEnded() override;
 
+        void setStaticBranchingLights( bool staticBranchingLights ) override;
+
         /** By default we see the reflection textures' mipmaps and store the largest one we found.
             By calling resetIblSpecMipmap; you can reset this process thus if a reflection texture
             with a large number of mipmaps was removed, these textures can be reevaluated

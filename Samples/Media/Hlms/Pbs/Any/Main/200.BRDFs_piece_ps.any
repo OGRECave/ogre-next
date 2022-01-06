@@ -290,6 +290,9 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
             @piece( ObjLightMaskCmpNonCasterLoopEnd )@add( fineMaskLightIdx, hlms_lights_directional_non_caster )@end
         @end
         @piece( andObjLightMaskCmp )&& ((objLightMask & floatBitsToUint( light0Buf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u)@end
+        @property( hlms_static_branch_shadow_map_lights )
+            @piece( andObjLightMaskCmp_light_idx )&& ((objLightMask & floatBitsToUint( light0Buf.lights[light_idx].position.w )) != 0u)@end
+        @end
         @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & floatBitsToUint( light1Buf.areaApproxLights[i].position.w )) != 0u)@end
         @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & floatBitsToUint( light2Buf.areaLtcLights[i].position.w )) != 0u)@end
     @else
@@ -299,6 +302,9 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
             @piece( ObjLightMaskCmpNonCasterLoopEnd )@add( fineMaskLightIdx, hlms_lights_directional_non_caster )@end
         @end
         @piece( andObjLightMaskCmp )&& ((objLightMask & light0Buf.lights[@counter(fineMaskLightIdx)].lightMask) != 0u)@end
+        @property( hlms_static_branch_shadow_map_lights )
+            @piece( andObjLightMaskCmp_light_idx )&& ((objLightMask & light0Buf.lights[light_idx].lightMask) != 0u)@end
+        @end
         @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & light1Buf.areaApproxLights[i].lightMask) != 0u)@end
         @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & light2Buf.areaLtcLights[i].lightMask) != 0u)@end
     @end

@@ -449,12 +449,34 @@
 		float3 finalColour = passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz;
 	@end
 
-	@property( hlms_lights_point || hlms_lights_spot || hlms_lights_area_approx || hlms_lights_area_ltc )
+	@property( hlms_static_branch_shadow_map_lights || hlms_lights_point || hlms_lights_spot || hlms_lights_area_approx || hlms_lights_area_ltc )
 		float3 lightDir;
 		float fDistance;
 		float3 tmpColour;
 		float spotCosAngle;
 	@end
+
+	@property( hlms_static_branch_shadow_map_lights )
+		const float2 shadowmap_uv_min[@value(hlms_num_shadow_map_lights)] =
+			OGRE_ARRAY_START( float2 )
+					hlms_shadowmap0_uv_min
+					@foreach( hlms_num_shadow_map_lights, n, 1 )
+					, hlms_shadowmap@n_uv_min@end
+			OGRE_ARRAY_END;
+		const float2 shadowmap_uv_max[@value(hlms_num_shadow_map_lights)] =
+			OGRE_ARRAY_START( float2 )
+				hlms_shadowmap0_uv_max
+				@foreach( hlms_num_shadow_map_lights, n, 1 )
+				, hlms_shadowmap@n_uv_max@end
+			OGRE_ARRAY_END;
+		const float2 shadowmap_uv_length[@value(hlms_num_shadow_map_lights)] =
+			OGRE_ARRAY_START( float2 )
+				hlms_shadowmap0_uv_length
+				@foreach( hlms_num_shadow_map_lights, n, 1 )
+				, hlms_shadowmap@n_uv_length@end
+			OGRE_ARRAY_END;
+	@end
+
 	@property( needs_refl_dir )
 		pixelData.reflDir = 2.0 * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal - pixelData.viewDir;
 	@end
@@ -489,6 +511,25 @@
 
 //Point lights
 @piece( DoPointLights )
+@property( hlms_static_branch_shadow_map_lights )
+	int cur_shadow_map = @value(CurrentShadowMap);
+	int light_idx = @value(hlms_lights_directional_non_caster);
+	const int sm_point_lights_num = floatBitsToInt( passBuf.numShadowMapPointLights );
+	const int sm_point_lights_end = light_idx + sm_point_lights_num;
+	for( ; light_idx<sm_point_lights_end; light_idx++ )
+	{
+		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
+		fDistance= length( lightDir );
+		if( fDistance <= light0Buf.lights[light_idx].attenuation.x @insertpiece( andObjLightMaskCmp_light_idx ) )
+		{
+			lightDir *= 1.0 / fDistance;
+			tmpColour = BRDF( lightDir, light0Buf.lights[light_idx].diffuse.xyz, light0Buf.lights[light_idx].specular, pixelData )@insertpiece( DarkenWithShadowPoint_cur_shadow_map );
+			float atten = 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance );
+			finalColour += tmpColour * atten;
+		}
+		cur_shadow_map++;
+	}
+@else
 	@foreach( hlms_lights_point, n, hlms_lights_directional_non_caster )
 		lightDir = light0Buf.lights[@n].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
@@ -501,12 +542,40 @@
 		}
 	@end
 @end
+@end
 
 //Spot lights
 //spotParams[@value(spot_params)].x = 1.0 / cos( InnerAngle ) - cos( OuterAngle )
 //spotParams[@value(spot_params)].y = cos( OuterAngle / 2 )
 //spotParams[@value(spot_params)].z = falloff
 @piece( DoSpotLights )
+@property( hlms_static_branch_shadow_map_lights )
+	const int sm_spot_lights_num = floatBitsToInt( passBuf.numShadowMapSpotLights );
+	const int sm_spot_lights_end = light_idx + sm_spot_lights_num;
+	for( ; light_idx<sm_spot_lights_end; light_idx++ )
+	{
+		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
+		fDistance= length( lightDir );
+		lightDir *= 1.0 / fDistance;
+		spotCosAngle = dot( -lightDir, light0Buf.lights[light_idx].spotDirection.xyz );
+		if( fDistance <= light0Buf.lights[light_idx].attenuation.x && spotCosAngle >= light0Buf.lights[light_idx].spotParams.y @insertpiece( andObjLightMaskCmp_light_idx ) )
+		{
+			float spotAtten = saturate( (spotCosAngle - light0Buf.lights[light_idx].spotParams.y) * light0Buf.lights[light_idx].spotParams.x );
+			spotAtten = pow( spotAtten, light0Buf.lights[light_idx].spotParams.z );
+
+			@property( light_profiles_texture )
+				spotAtten *= getPhotometricAttenuation( spotCosAngle,
+														light0Buf.lights[light_idx].lightTexProfileIdx
+														OGRE_PHOTOMETRIC_ARG );
+			@end
+
+			tmpColour = BRDF( lightDir, light0Buf.lights[light_idx].diffuse.xyz, light0Buf.lights[light_idx].specular, pixelData )@insertpiece( DarkenWithShadow_cur_shadow_map );
+			float atten = 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance );
+			finalColour += tmpColour * (atten * spotAtten);
+		}
+		cur_shadow_map++;
+	}
+@else
 	@foreach( hlms_lights_spot, n, hlms_lights_point )
 		lightDir = light0Buf.lights[@n].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
@@ -537,6 +606,7 @@
 			finalColour += tmpColour * (atten * spotAtten);
 		}
 	@end
+@end
 @end
 
 @piece( DoEmissiveLight )

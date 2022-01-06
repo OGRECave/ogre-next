@@ -6,10 +6,8 @@
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
-#include "OgreCamera.h"
-#include "OgreConfigFile.h"
-#include "OgreRoot.h"
-#include "OgreSceneManager.h"
+#include "OgreHlmsManager.h"
+#include "OgreHlmsPbs.h"
 #include "OgreWindow.h"
 
 // Declares WinMain / main
@@ -63,21 +61,46 @@ namespace Demo
             shadowParams.push_back( shadowParam );
 
             // Second light, directional, spot or point
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+            shadowParam.atlasId = 1;
+#endif
             shadowParam.technique = Ogre::SHADOWMAP_FOCUSED;
             shadowParam.resolution[0].x = 2048u;
             shadowParam.resolution[0].y = 2048u;
             shadowParam.atlasStart[0].x = 0u;
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+            shadowParam.atlasStart[0].y = 0u;
+#else
             shadowParam.atlasStart[0].y = 2048u + 1024u;
+#endif
 
             shadowParam.supportedLightTypes = 0u;
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
             shadowParam.addLightType( Ogre::Light::LT_DIRECTIONAL );
+#endif
             shadowParam.addLightType( Ogre::Light::LT_POINT );
             shadowParam.addLightType( Ogre::Light::LT_SPOTLIGHT );
             shadowParams.push_back( shadowParam );
 
             // Third light, directional, spot or point
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+            shadowParam.atlasStart[0].y = 2048u;
+#else
             shadowParam.atlasStart[0].y = 2048u + 1024u + 2048u;
+#endif
             shadowParams.push_back( shadowParam );
+
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+            // Fourth light
+            shadowParam.atlasStart[0].x = 2048u;
+            shadowParam.atlasStart[0].y = 0u;
+            shadowParams.push_back( shadowParam );
+
+            // Fifth light
+            shadowParam.atlasStart[0].x = 2048u;
+            shadowParam.atlasStart[0].y = 2048u;
+            shadowParams.push_back( shadowParam );
+#endif
 
             Ogre::ShadowNodeHelper::createShadowNodeWithSettings(
                 compositorManager, renderSystem->getCapabilities(), "ShadowMapFromCodeShadowNode",
@@ -115,6 +138,9 @@ namespace Demo
             shadowParams.push_back( shadowParam );
 
             // Second light, directional, spot or point
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+            shadowParam.atlasId = 1;
+#endif
             shadowParam.technique = Ogre::SHADOWMAP_FOCUSED;
             shadowParam.resolution[0].x = 1024u;
             shadowParam.resolution[0].y = 1024u;
@@ -130,6 +156,18 @@ namespace Demo
             // Third light, directional, spot or point
             shadowParam.atlasStart[0].x = 1024u;
             shadowParams.push_back( shadowParam );
+
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+            // Fourth light
+            shadowParam.atlasStart[0].x = 1024u;
+            shadowParam.atlasStart[0].y = 0u;
+            shadowParams.push_back( shadowParam );
+
+            // Fifth light
+            shadowParam.atlasStart[0].x = 1024u;
+            shadowParam.atlasStart[0].y = 1024u;
+            shadowParams.push_back( shadowParam );
+#endif
 
             const Ogre::RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
             Ogre::RenderSystemCapabilities capsCopy = *capabilities;
@@ -180,6 +218,19 @@ namespace Demo
                                                           mCamera, "ShadowMapFromCodeWorkspace", true );
             return mWorkspace;
         }
+
+#ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
+        void registerHlms( void ) override
+        {
+            GraphicsSystem::registerHlms();
+            Ogre::Root *root = getRoot();
+            Ogre::Hlms *hlms = root->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
+            assert( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );
+            Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs *>( hlms );
+            if( pbs )
+                pbs->setStaticBranchingLights( true );
+        }
+#endif
 
     public:
         ShadowMapFromCodeGraphicsSystem( GameState *gameState ) : GraphicsSystem( gameState ) {}

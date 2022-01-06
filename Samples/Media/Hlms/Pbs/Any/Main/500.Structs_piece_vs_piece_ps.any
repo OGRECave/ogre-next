@@ -168,6 +168,10 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float pssmBlendPoints@n;@end @end
 @property( hlms_pssm_fade )
 	float pssmFadePoint;@end
+@property( hlms_static_branch_shadow_map_lights )
+	float numShadowMapPointLights;
+	float numShadowMapSpotLights;
+@end
 
 @property( !use_light_buffers )
 	@property( hlms_lights_spot )Light lights[@value(hlms_lights_spot)];@end
