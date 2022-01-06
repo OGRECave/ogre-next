@@ -228,7 +228,7 @@ namespace Demo
             assert( dynamic_cast<Ogre::HlmsPbs *>( hlms ) );
             Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs *>( hlms );
             if( pbs )
-                pbs->setMaxShadowMapLights( 4u );
+                pbs->setStaticBranchingLights( true );
         }
 #endif
 

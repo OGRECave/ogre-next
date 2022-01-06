@@ -3621,14 +3621,14 @@ namespace Ogre
         mCurrentPassBuffer = 0;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setMaxShadowMapLights( uint16 maxShadowMapLights )
+    void HlmsPbs::setStaticBranchingLights( bool staticBranchingLights )
     {
-        if( maxShadowMapLights > 0 )
+        if( staticBranchingLights )
         {
             // Make sure we calculate light positions in pixel shaders
             setShadowReceiversInPixelShader( true );
         }
-        Hlms::setMaxShadowMapLights( maxShadowMapLights );
+        Hlms::setStaticBranchingLights( staticBranchingLights );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::resetIblSpecMipmap( uint8 numMipmaps )

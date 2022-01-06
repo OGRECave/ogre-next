@@ -530,7 +530,7 @@
 @property( hlms_static_branch_shadow_map_lights )
 
 	// All point and spot lights must share the same hlms_shadowmap atlas
-	// See HlmsPbs::setMaxShadowMapLights
+	// See HlmsPbs::setStaticBranchingLights
 	@piece( DarkenWithShadow_cur_shadow_map )
 		* getShadow( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
 					 inPs_posL_cur_shadow_map,

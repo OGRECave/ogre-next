@@ -211,8 +211,8 @@ namespace Ogre
         HlmsManager *mHlmsManager;
 
         LightGatheringMode mLightGatheringMode;
+        bool               mStaticBranchingLights;
         uint16             mNumLightsLimit;
-        uint16             mNumShadowMapLightsLimit;
         uint16             mNumAreaApproxLightsLimit;
         uint16             mNumAreaLtcLightsLimit;
         uint32             mAreaLightsGlobalLightListStart;
@@ -556,8 +556,8 @@ namespace Ogre
 
             Default value is 0.
          */
-        virtual void setMaxShadowMapLights( uint16 maxShadowMapLights );
-        uint16       getMaxShadowMapLights( void ) const { return mNumShadowMapLightsLimit; }
+        virtual void setStaticBranchingLights( bool staticBranchingLights );
+        bool         getStaticBranchingLights( void ) const { return mStaticBranchingLights; }
 
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit

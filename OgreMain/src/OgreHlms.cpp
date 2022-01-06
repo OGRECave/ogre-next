@@ -251,8 +251,8 @@ namespace Ogre
         mDataFolder( dataFolder ),
         mHlmsManager( 0 ),
         mLightGatheringMode( LightGatherForward ),
+        mStaticBranchingLights( false ),
         mNumLightsLimit( 0u ),
-        mNumShadowMapLightsLimit( 0u ),
         mNumAreaApproxLightsLimit( 1u ),
         mNumAreaLtcLightsLimit( 1u ),
         mAreaLightsGlobalLightListStart( 0u ),
@@ -1682,9 +1682,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::setMaxNonCasterDirectionalLights( uint16 maxLights ) { mNumLightsLimit = maxLights; }
     //-----------------------------------------------------------------------------------
-    void Hlms::setMaxShadowMapLights( uint16 maxShadowMapLights )
+    void Hlms::setStaticBranchingLights( bool staticBranchingLights )
     {
-        mNumShadowMapLightsLimit = maxShadowMapLights;
+        mStaticBranchingLights = staticBranchingLights;
     }
     //-----------------------------------------------------------------------------------
     void Hlms::setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit )
@@ -2640,7 +2640,7 @@ namespace Ogre
                              static_cast<int32>( contiguousShadowMapTex.size() ) );
 
                 useStaticBranchShadowMapLights =
-                    getMaxShadowMapLights() > 0u && numShadowMapLights > numPssmSplits;
+                    mStaticBranchingLights && numShadowMapLights > numPssmSplits;
                 if( useStaticBranchShadowMapLights )
                     setProperty( HlmsBaseProp::StaticBranchShadowMapLights, 1 );
                 mRealShadowMapPointLights = 0u;
