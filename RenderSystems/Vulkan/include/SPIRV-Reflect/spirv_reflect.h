@@ -32,6 +32,11 @@ VERSION HISTORY
 
 #include "./include/spirv/unified1/spirv.h"
 
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+
 #include <stdint.h>
 #include <string.h>
 
@@ -2229,4 +2234,9 @@ inline SpvReflectResult ShaderModule::ChangeOutputVariableLocation(
 
 } // namespace spv_reflect
 #endif // defined(__cplusplus)
+
+#if defined( __GNUC__ )
+#    pragma GCC diagnostic pop
+#endif
+
 #endif // SPIRV_REFLECT_H
