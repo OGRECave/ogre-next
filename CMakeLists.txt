@@ -50,15 +50,15 @@ endif ()
 
 
 project(OGRE-Next)
-# legacy variables from the old name OGRE
-set(OGRE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
-set(OGRE_BINARY_DIR ${CMAKE_BINARY_DIR})
+# capture ogre location, and at the same time hide legacy cache variables
+set(OGRE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(OGRE_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 # Include necessary submodules
 set(CMAKE_MODULE_PATH
-  "${CMAKE_SOURCE_DIR}/CMake"
-  "${CMAKE_SOURCE_DIR}/CMake/Utils"
-  "${CMAKE_SOURCE_DIR}/CMake/Packages"
+  "${OGRE_SOURCE_DIR}/CMake"
+  "${OGRE_SOURCE_DIR}/CMake/Utils"
+  "${OGRE_SOURCE_DIR}/CMake/Packages"
 )
 
 if(ANDROID)
@@ -71,7 +71,7 @@ include(MacroLogFeature)
 include(OgreAddTargets)
 include(OgreConfigTargets)
 include(PreprocessorUtils)
-set(OGRE_TEMPLATES_DIR "${CMAKE_SOURCE_DIR}/CMake/Templates")
+set(OGRE_TEMPLATES_DIR "${OGRE_SOURCE_DIR}/CMake/Templates")
 set(OGRE_WORK_DIR ${OGRE_BINARY_DIR})
 
 
@@ -87,7 +87,7 @@ endif ()
 
 # determine Ogre version numbers
 include(OgreGetVersion)
-ogre_get_version(${CMAKE_SOURCE_DIR}/OgreMain/include/OgrePrerequisites.h)
+ogre_get_version(${OGRE_SOURCE_DIR}/OgreMain/include/OgrePrerequisites.h)
 message(STATUS "Configuring OGRE ${OGRE_VERSION}")
 # Configure version file for use by scripts
 configure_file("${OGRE_TEMPLATES_DIR}/version.txt.in" "${OGRE_BINARY_DIR}/version.txt" @ONLY)
@@ -260,25 +260,25 @@ else()
 endif()
 
 # Add OgreMain include path
-include_directories("${CMAKE_SOURCE_DIR}/OgreMain/include")
+include_directories("${OGRE_SOURCE_DIR}/OgreMain/include")
 include_directories("${OGRE_BINARY_DIR}/include")
 if (APPLE)
   if (OGRE_BUILD_PLATFORM_APPLE_IOS)
-    include_directories("${CMAKE_SOURCE_DIR}/OgreMain/include/iOS")
+    include_directories("${OGRE_SOURCE_DIR}/OgreMain/include/iOS")
 
     # Set static early for proper dependency detection
     set(OGRE_STATIC TRUE)
   else ()
-    include_directories("${CMAKE_SOURCE_DIR}/OgreMain/include/OSX")
+    include_directories("${OGRE_SOURCE_DIR}/OgreMain/include/OSX")
   endif ()
 endif (APPLE)
 
 # Add platform-specific render system Metal include path
 if (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
   if (OGRE_BUILD_PLATFORM_APPLE_IOS)
-    include_directories("${CMAKE_SOURCE_DIR}/RenderSystems/Metal/include/Windowing/iOS")
+    include_directories("${OGRE_SOURCE_DIR}/RenderSystems/Metal/include/Windowing/iOS")
   else ()
-    include_directories("${CMAKE_SOURCE_DIR}/RenderSystems/Metal/include/Windowing/OSX")
+    include_directories("${OGRE_SOURCE_DIR}/RenderSystems/Metal/include/Windowing/OSX")
   endif ()
 endif (APPLE AND OGRE_BUILD_RENDERSYSTEM_METAL)
 
@@ -306,8 +306,6 @@ endif(WIN32 OR APPLE)
 
 # Set up iOS overrides.
 if (OGRE_BUILD_PLATFORM_APPLE_IOS)
-  include_directories("${CMAKE_SOURCE_DIR}/OgreMain/include/iOS")
-
   # Set build variables
   set(XCODE_ATTRIBUTE_SDKROOT iphoneos)
   if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")
