@@ -100,6 +100,8 @@ namespace Ogre
         FastArray<String>::const_iterator itor = mDevices.begin();
         FastArray<String>::const_iterator endt = mDevices.end();
 
+        optDevices.possibleValues.push_back( "(default)" );
+
         while( itor != endt )
             optDevices.possibleValues.push_back( *itor++ );
 
@@ -132,9 +134,10 @@ namespace Ogre
         if( it != mOptions.end() )
         {
             const String deviceName = it->second.currentValue;
-            if( std::find( mDevices.begin(), mDevices.end(), deviceName ) == mDevices.end() )
+            if( deviceName != "(default)" &&
+                std::find( mDevices.begin(), mDevices.end(), deviceName ) == mDevices.end() )
             {
-                setConfigOption( "Device", mDevices.front() );
+                setConfigOption( "Device", "(default)" );
                 return "Requested rendering device could not be found, default will be used instead.";
             }
         }

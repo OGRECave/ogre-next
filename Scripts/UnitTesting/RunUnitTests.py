@@ -110,6 +110,8 @@ def runUnitTest( exeName, jsonName ):
 # Setup ogre.cfg
 if g_api == 'gl':
 	shutil.copyfile( './ogreGL.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
+elif g_api == 'vk':
+	shutil.copyfile( './ogreVk.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
 else:
 	shutil.copyfile( './ogreD3D11.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
 
