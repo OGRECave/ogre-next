@@ -431,6 +431,19 @@ namespace Ogre
 
                 mClearValues[attachmentIdx].color =
                     getClearColour( mColour[i].clearColour, mColour[i].texture->getPixelFormat() );
+                ++attachmentIdx;
+
+                const RenderPassColourTarget &colour = mColour[i];
+                if( !( !colour.texture->getSampleDescription().isMultisample() ||
+                       !colour.resolveTexture ||
+                       ( colour.storeAction != StoreAction::MultisampleResolve &&
+                         colour.storeAction != StoreAction::StoreAndMultisampleResolve ) ) )
+                {
+                    // There is a resolve attachment. Theoretically we shouldn't need
+                    // to set a clear colour here, but we do it just in case.
+                    mClearValues[attachmentIdx].color = mClearValues[attachmentIdx - 1u].color;
+                    ++attachmentIdx;
+                }
             }
 
             if( mDepth.texture )
