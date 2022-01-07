@@ -585,7 +585,7 @@ if( OGRE_ADDRESS_SANITIZER_ASAN )
 		set( CMAKE_CXX_FLAGS
 			"${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address" )
 		set( CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address" )
-	elseif (MSVC)
+	elseif( MSVC )
 		set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS_DEBUG} /fsanitize=address" )
 		set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address" )
 	endif()
