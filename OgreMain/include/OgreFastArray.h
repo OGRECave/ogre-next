@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreSilentMemory.h"
 
+#include <stddef.h>
+
 namespace Ogre
 {
     /** Lightweight implementation of std::vector
