@@ -421,7 +421,36 @@ namespace Ogre
     void VulkanRenderPassDescriptor::setupFbo( VulkanFrameBufferDescValue &fboDesc )
     {
         if( fboDesc.mRenderPass )
-            return;  // Already initialized
+        {
+            // Already initialized. Only set clear values and early return
+            uint32 attachmentIdx = 0u;
+            for( size_t i = 0; i < mNumColourEntries; ++i )
+            {
+                if( mColour[i].texture->getPixelFormat() == PFG_NULL )
+                    continue;
+
+                mClearValues[attachmentIdx].color =
+                    getClearColour( mColour[i].clearColour, mColour[i].texture->getPixelFormat() );
+            }
+
+            if( mDepth.texture )
+            {
+                if( !mRenderSystem->isReverseDepth() )
+                {
+                    mClearValues[attachmentIdx].depthStencil.depth =
+                        static_cast<float>( mDepth.clearDepth );
+                }
+                else
+                {
+                    mClearValues[attachmentIdx].depthStencil.depth =
+                        static_cast<float>( Real( 1.0 ) - mDepth.clearDepth );
+                }
+                mClearValues[attachmentIdx].depthStencil.stencil = mStencil.clearStencil;
+                ++attachmentIdx;
+            }
+
+            return;  // We're done
+        }
 
         if( mDepth.texture && mDepth.texture->getResidencyStatus() != GpuResidency::Resident )
         {
@@ -888,7 +917,7 @@ namespace Ogre
         passBeginInfo.renderArea.offset.y = 0;
         passBeginInfo.renderArea.extent.width = mTargetWidth;
         passBeginInfo.renderArea.extent.height = mTargetHeight;
-        passBeginInfo.clearValueCount = sizeof( mClearValues ) / sizeof( mClearValues[0] );
+        passBeginInfo.clearValueCount = fboDesc.mNumImageViews;
         passBeginInfo.pClearValues = mClearValues;
 
         if( renderingWasInterrupted )
