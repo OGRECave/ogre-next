@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreMetalStagingTexture.h"
 
+#include "OgreException.h"
 #include "OgreMetalDevice.h"
 #include "OgreMetalTextureGpu.h"
 #include "OgreStringConverter.h"
