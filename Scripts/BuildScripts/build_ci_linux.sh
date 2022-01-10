@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "--- Setting Clang as default compiler ---"
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+
 echo "--- Installing System Dependencies ---"
 sudo apt-get install -y ninja-build libxrandr-dev libxaw7-dev libgl1-mesa-dev libglu1-mesa-dev libsdl2-dev
 
