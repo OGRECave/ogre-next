@@ -91,3 +91,18 @@ void myFuntion( int a )
 ```
 
 If you find after merging and applying clang format that there is massive added or removed indentation; start from the top and find the first occurrence of this change and start looking for the missing brace.
+
+
+# Batch Script
+
+The following bash script will run clang-format on all files with the right extensions in the current folder and recursively in its subdirectories
+
+```bash
+FILES=$(find . -name "*.mm" -o -name "*.h" -o -name "*.cpp")
+
+for file in $FILES
+do
+  echo "Formatting \"$file\""
+  clang-format-13 -i "$file"
+done
+```
