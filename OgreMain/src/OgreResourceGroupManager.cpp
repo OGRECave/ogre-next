@@ -1238,8 +1238,7 @@ namespace Ogre
             assert( i != grp->loadResourceOrderMap.end() );
             LoadUnloadResourceSet *loadList = i->second;
 
-            ResourcePtr rawWrapper;
-            rawWrapper.bind( res, Ogre::SPFM_NONE );  // this will ensure it wont free on destruction.
+            ResourcePtr rawWrapper( res, [](Resource*) {} );  // this will ensure it wont free on destruction.
 
             LoadUnloadResourceSet::iterator l = loadList->find( rawWrapper );
             if( l != loadList->end() )

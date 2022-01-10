@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreNULLStagingBuffer.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 #include "Vao/OgreNULLBufferInterface.h"
 #include "Vao/OgreNULLVaoManager.h"

@@ -568,7 +568,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void MetalProgram::createLowLevelImpl()
     {
-        mAssemblerProgram = GpuProgramPtr( this, SPFM_NONE );
+        mAssemblerProgram = GpuProgramPtr( this, []( GpuProgram * ) {} );
         if( !mCompiled )
             compile( true );
     }

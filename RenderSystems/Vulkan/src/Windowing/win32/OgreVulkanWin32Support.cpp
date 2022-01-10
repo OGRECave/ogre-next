@@ -28,6 +28,8 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 #include "Windowing/win32/OgreVulkanWin32Support.h"
 
+#include "OgreException.h"
+
 #include <sstream>
 
 namespace Ogre

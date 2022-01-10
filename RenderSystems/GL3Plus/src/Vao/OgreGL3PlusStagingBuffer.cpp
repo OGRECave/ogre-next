@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "Vao/OgreGL3PlusBufferInterface.h"
 #include "Vao/OgreGL3PlusVaoManager.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 
 namespace Ogre

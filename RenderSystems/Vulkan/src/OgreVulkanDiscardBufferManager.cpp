@@ -28,6 +28,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 #include "OgreVulkanDiscardBufferManager.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanUtils.h"

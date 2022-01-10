@@ -719,7 +719,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void VulkanProgram::createLowLevelImpl()
     {
-        mAssemblerProgram = GpuProgramPtr( this, SPFM_NONE );
+        mAssemblerProgram = GpuProgramPtr( this, []( GpuProgram * ) {} );
         if( !mCompiled )
             compile( true );
     }
