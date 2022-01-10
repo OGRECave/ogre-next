@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgreString.h"
 
+#include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreStringConverter.h"

@@ -51,7 +51,7 @@ namespace Ogre
     using std::dynamic_pointer_cast;
     using std::static_pointer_cast;
 
-    /// @deprecated for backwards compatibility only, rather use shared_ptr directly
+    /// @deprecated for backwards compatibility only, rather use std::shared_ptr directly
     template <class T>
     class SharedPtr : public std::shared_ptr<T>
     {
@@ -59,32 +59,34 @@ namespace Ogre
         SharedPtr( std::nullptr_t ) {}
         SharedPtr() {}
         template <class Y>
-        explicit SharedPtr( Y *ptr ) : shared_ptr<T>( ptr )
+        explicit SharedPtr( Y *ptr ) : std::shared_ptr<T>( ptr )
         {
         }
         template <class Y, class Deleter>
-        SharedPtr( Y *ptr, Deleter d ) : shared_ptr<T>( ptr, d )
+        SharedPtr( Y *ptr, Deleter d ) : std::shared_ptr<T>( ptr, d )
         {
         }
-        SharedPtr( const SharedPtr &r ) : shared_ptr<T>( r ) {}
+        SharedPtr( const SharedPtr &r ) : std::shared_ptr<T>( r ) {}
         template <class Y>
-        SharedPtr( const SharedPtr<Y> &r ) : shared_ptr<T>( r )
+        SharedPtr( const SharedPtr<Y> &r ) : std::shared_ptr<T>( r )
         {
         }
 
-        // implicit conversion from and to shared_ptr
+        // implicit conversion from and to std::shared_ptr
         template <class Y>
-        SharedPtr( const shared_ptr<Y> &r ) : shared_ptr<T>( r )
+        SharedPtr( const std::shared_ptr<Y> &r ) : std::shared_ptr<T>( r )
         {
         }
-                      operator const shared_ptr<T> &() { return static_cast<shared_ptr<T> &>( *this ); }
+
+        operator const std::shared_ptr<T> &() { return static_cast<std::shared_ptr<T> &>( *this ); }
+
         SharedPtr<T> &operator=( const Ogre::SharedPtr<T> &rhs )
         {
-            shared_ptr<T>::operator=( rhs );
+            std::shared_ptr<T>::operator=( rhs );
             return *this;
         }
         // so swig recognizes it should forward the operators
-        T *operator->() const { return shared_ptr<T>::operator->(); }
+        T *operator->() const { return std::shared_ptr<T>::operator->(); }
 
         /// @deprecated use Ogre::static_pointer_cast instead
         template <typename Y>
@@ -99,15 +101,15 @@ namespace Ogre
             return dynamic_pointer_cast<Y>( *this );
         }
         /// @deprecated this api will be dropped. use reset(T*) instead
-        OGRE_DEPRECATED void bind( T *rep ) { shared_ptr<T>::reset( rep ); }
+        OGRE_DEPRECATED void bind( T *rep ) { std::shared_ptr<T>::reset( rep ); }
         /// @deprecated use use_count() instead
-        OGRE_DEPRECATED unsigned int useCount() const { return shared_ptr<T>::use_count(); }
+        OGRE_DEPRECATED unsigned int useCount() const { return std::shared_ptr<T>::use_count(); }
         /// @deprecated use get() instead
-        OGRE_DEPRECATED T *getPointer() const { return shared_ptr<T>::get(); }
+        OGRE_DEPRECATED T *getPointer() const { return std::shared_ptr<T>::get(); }
         /// @deprecated use SharedPtr::operator bool instead
-        OGRE_DEPRECATED bool isNull( void ) const { return !shared_ptr<T>::operator bool(); }
+        OGRE_DEPRECATED bool isNull( void ) const { return !std::shared_ptr<T>::operator bool(); }
         /// @deprecated use reset() instead
-        OGRE_DEPRECATED void setNull() { shared_ptr<T>::reset(); }
+        OGRE_DEPRECATED void setNull() { std::shared_ptr<T>::reset(); }
     };
     /** @} */
     /** @} */
@@ -118,8 +120,11 @@ namespace std
     template <typename T>
     struct hash<Ogre::SharedPtr<T> >
     {
-        size_t operator()( const Ogre::SharedPtr<T>& k ) const noexcept { return hash<T*>()( k.get() ); }
+        size_t operator()( const Ogre::SharedPtr<T> &k ) const noexcept
+        {
+            return hash<T *>()( k.get() );
+        }
     };
-}
+}  // namespace std
 
 #endif
