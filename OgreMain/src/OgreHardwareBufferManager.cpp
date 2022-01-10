@@ -260,7 +260,7 @@ namespace Ogre
                 // Free the temporary buffer that referenced by ourself only.
                 // TODO: Some temporary buffers are bound to vertex buffer bindings
                 // but not checked out, need to sort out method to unbind them.
-                if( icur->second.useCount() <= 1 )
+                if( icur->second.use_count() <= 1 )
                 {
                     ++numFreed;
                     mFreeTempVertexBufferMap.erase( icur );
@@ -378,7 +378,7 @@ namespace Ogre
                 list<HardwareVertexBufferSharedPtr>::type holdForDelayDestroy;
                 for( _Iter it = range.first; it != range.second; ++it )
                 {
-                    if( it->second.useCount() <= 1 )
+                    if( it->second.use_count() <= 1 )
                     {
                         holdForDelayDestroy.push_back( it->second );
                     }

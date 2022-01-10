@@ -275,7 +275,7 @@ namespace Ogre
             // A use count of 3 means that only RGM and RM have references
             // RGM has one (this one) and RM has 2 (by name and by handle)
             if( !unreferencedOnly ||
-                i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
             {
                 Resource *res = i->second.get();
                 if( !reloadableOnly || res->isReloadable() )
@@ -304,7 +304,7 @@ namespace Ogre
             // A use count of 3 means that only RGM and RM have references
             // RGM has one (this one) and RM has 2 (by name and by handle)
             if( !unreferencedOnly ||
-                i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
             {
                 Resource *res = i->second.get();
                 if( !reloadableOnly || res->isReloadable() )
@@ -358,7 +358,7 @@ namespace Ogre
         {
             // A use count of 3 means that only RGM and RM have references
             // RGM has one (this one) and RM has 2 (by name and by handle)
-            if( i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+            if( i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
             {
                 Resource *res = ( i++ )->second.get();
                 if( !reloadableOnly || res->isReloadable() )
@@ -464,7 +464,7 @@ namespace Ogre
             {
                 // A use count of 3 means that only RGM and RM have references
                 // RGM has one (this one) and RM has 2 (by name and by handle)
-                if( i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                if( i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
                 {
                     Resource *res = i->second.get();
                     if( res->isReloadable() )

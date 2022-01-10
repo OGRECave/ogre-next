@@ -413,7 +413,7 @@ namespace Ogre
             {
                 // A use count of 3 means that only RGM and RM have references
                 // RGM has one (this one) and RM has 2 (by name and by handle)
-                if( l->useCount() == RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                if( l->use_count() == RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
                 {
                     Resource *resource = l->get();
                     if( !reloadableOnly || resource->isReloadable() )
