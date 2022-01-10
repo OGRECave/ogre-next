@@ -1476,7 +1476,7 @@ Workspaces</h1>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line">RWStructuredBuffer&lt;Lights&gt; myLights;</div>
-<div class="ttc" id="anamespace_ogre_1_1_scene_flags_html_af3190017d83d94455e645c506aa1681ba9116754b875c4e6c60a159495035eaff"><div class="ttname"><a href="namespace_ogre_1_1_scene_flags.html#af3190017d83d94455e645c506aa1681ba9116754b875c4e6c60a159495035eaff">Ogre::SceneFlags::Lights</a></div><div class="ttdeci">@ Lights</div><div class="ttdef"><b>Definition:</b> OgreSceneFormatBase.h:57</div></div>
+<div class="ttc" id="anamespace_ogre_1_1_scene_flags_html_af3190017d83d94455e645c506aa1681ba9116754b875c4e6c60a159495035eaff"><div class="ttname"><a href="namespace_ogre_1_1_scene_flags.html#af3190017d83d94455e645c506aa1681ba9116754b875c4e6c60a159495035eaff">Ogre::SceneFlags::Lights</a></div><div class="ttdeci">@ Lights</div><div class="ttdef"><b>Definition:</b> OgreSceneFormatBase.h:60</div></div>
 </div><!-- fragment --><p>In this case, numElements = 16 means we can address up to myLights[15]; and bytesPerElement = 36.</p>
 <p>bytesPerElement must account padding according to the HLSL rules (4 x 4 x 3 =&gt;; 4 floats x sizeof(float) x 3).</p>
 <p>Because calculation of bytesPerElement can get really tricky by hand (or may change dynamically at runtime), complex cases are best if the UAV is created in C++, and passed to the Workspace via connect_buffer_external.</p>
