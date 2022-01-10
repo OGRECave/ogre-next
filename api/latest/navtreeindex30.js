@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"class_ogre_1_1_compositor_pass_stencil.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,1,21,20],
 "class_ogre_1_1_compositor_pass_stencil.html#a6f43846a1bb675c3ba19a8d3f41c6510":[5,2,1,21,11],
 "class_ogre_1_1_compositor_pass_stencil.html#a792590a3c8a0fefc9c22fab8ec5bd66a":[5,2,1,21,7],
 "class_ogre_1_1_compositor_pass_stencil.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,21,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "class_ogre_1_1_compositor_pass_uav_def.html#acb4b5b4edffa1281c16b859a9df00b7c":[5,2,1,26,36],
 "class_ogre_1_1_compositor_pass_uav_def.html#acd33b42cc21a1da94a0033d7c6f5cc22":[5,2,1,26,25],
 "class_ogre_1_1_compositor_pass_uav_def.html#ad7fab9725642fc9f33db037e4de914e2":[5,2,1,26,52],
-"class_ogre_1_1_compositor_pass_uav_def.html#adf943c28ea67c3d52d2e02058eeedbc1":[5,2,1,26,35],
-"class_ogre_1_1_compositor_pass_uav_def.html#aecd3ae94eb59058a4f064cf3aff60a95":[5,2,1,26,44]
+"class_ogre_1_1_compositor_pass_uav_def.html#adf943c28ea67c3d52d2e02058eeedbc1":[5,2,1,26,35]
 };

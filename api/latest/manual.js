@@ -278,16 +278,16 @@ var manual =
       [ "Post-processing the command buffer", "commandbuffer.html#CommandBufferPostProcessing", null ]
     ] ],
     [ "Terra System", "_terra_system.html", [
-      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md60", null ],
-      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md61", null ],
-      [ "Terra cells", "_terra_system.html#autotoc_md62", [
-        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md63", null ],
-        [ "Outer layers", "_terra_system.html#autotoc_md64", null ]
+      [ "Vertex-bufferless rendering", "_terra_system.html#autotoc_md61", null ],
+      [ "Vertex Trick in Terra", "_terra_system.html#autotoc_md62", null ],
+      [ "Terra cells", "_terra_system.html#autotoc_md63", [
+        [ "First layer, the 4x4 block", "_terra_system.html#autotoc_md64", null ],
+        [ "Outer layers", "_terra_system.html#autotoc_md65", null ]
       ] ],
-      [ "Skirts", "_terra_system.html#autotoc_md65", null ],
-      [ "Shadows", "_terra_system.html#autotoc_md66", null ],
-      [ "Shading", "_terra_system.html#autotoc_md67", null ],
-      [ "Why is it not a component?", "_terra_system.html#autotoc_md68", null ]
+      [ "Skirts", "_terra_system.html#autotoc_md66", null ],
+      [ "Shadows", "_terra_system.html#autotoc_md67", null ],
+      [ "Shading", "_terra_system.html#autotoc_md68", null ],
+      [ "Why is it not a component?", "_terra_system.html#autotoc_md69", null ]
     ] ],
     [ "Tunning memory consumption and resources", "_tuning_memory_resources.html", [
       [ "Grouping textures by type", "_tuning_memory_resources.html#GroupingTexturesByType", null ],
@@ -344,7 +344,7 @@ var manual =
       [ "Old APIs (i.e. D3D11 and GL)", "_root_layouts.html#RootLayoutsOldAPIs", null ],
       [ "New APIs and Root Layouts", "_root_layouts.html#RootLayoutsNewAPIs", null ],
       [ "Setting up root layouts", "_root_layouts.html#RootLayoutsSettingUp", [
-        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md57", null ]
+        [ "Could you have used e.g. \"const_buffers\" : [0,7] instead of [4,7]?", "_root_layouts.html#autotoc_md58", null ]
       ] ],
       [ "Declaring Root Layouts in shaders", "_root_layouts.html#RootLayoutsDeclaringInShaders", null ],
       [ "Baked sets", "_root_layouts.html#RootLayoutsBakedSets", null ],
@@ -355,13 +355,14 @@ var manual =
         [ "Automatic", "_root_layouts.html#RootLayoutsAoTAuto", null ],
         [ "Making GLSL shaders compatible with both Vulkan and OpenGL", "_root_layouts.html#RootLayoutsGLSLForGLandVK", [
           [ "Example:", "_root_layouts.html#RootLayoutsGLSLForGLandVKExample", [
-            [ "OpenGL", "_root_layouts.html#autotoc_md58", null ],
-            [ "Vulkan", "_root_layouts.html#autotoc_md59", null ]
+            [ "OpenGL", "_root_layouts.html#autotoc_md59", null ],
+            [ "Vulkan", "_root_layouts.html#autotoc_md60", null ]
           ] ]
         ] ]
       ] ]
     ] ],
     [ "Resolving Merge Conflicts in Ogre-Next 2.4", "_resolving_merge_conflicts24.html", [
-      [ "Notes:", "_resolving_merge_conflicts24.html#autotoc_md56", null ]
+      [ "Notes:", "_resolving_merge_conflicts24.html#autotoc_md56", null ],
+      [ "Batch Script", "_resolving_merge_conflicts24.html#autotoc_md57", null ]
     ] ]
 ];

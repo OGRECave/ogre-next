@@ -1,5 +1,6 @@
 var NAVTREEINDEX87 =
 {
+"class_ogre_1_1_mesh_manager.html#a7913c36c02ef03007ff1a1c76ddf7710":[5,2,10,72,18],
 "class_ogre_1_1_mesh_manager.html#a7b4afd007622d165efbcc362e5566922":[5,2,10,72,51],
 "class_ogre_1_1_mesh_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,10,72,38],
 "class_ogre_1_1_mesh_manager.html#a84e25cc5ad09ff7567d1fed7429433a3":[5,2,10,72,53],
@@ -248,6 +249,5 @@ var NAVTREEINDEX87 =
 "class_ogre_1_1_metal_const_buffer_packed.html#ae86f96309a2c8bf47cd4ffe1d66cfb55":[7,0,0,583,9],
 "class_ogre_1_1_metal_const_buffer_packed.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,583,39],
 "class_ogre_1_1_metal_const_buffer_packed.html#afb0a478d5c451c291aaa7b79f29b1193":[7,0,0,583,13],
-"class_ogre_1_1_metal_device_item.html":[7,0,0,586],
-"class_ogre_1_1_metal_device_item.html#a5121d9ac4a48a2ae8e577eaabe81db75":[7,0,0,586,2]
+"class_ogre_1_1_metal_device_item.html":[7,0,0,586]
 };

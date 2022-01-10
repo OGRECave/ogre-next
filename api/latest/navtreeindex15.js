@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a31cb7b9505f0707baee335b0b200a135":[5,2,0,1,0,2],
 "class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a4f77f4de37ff20785d425d00dde7864a":[5,2,0,1,0,3],
 "class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a67875f169fb2deebc7c3590efbe621f1":[5,2,0,1,0,8],
 "class_ogre_1_1_animable_value.html#adccd62bb2b72c602b9c59ca651256d69a6821a401bbbad6d7649104b0978c4216":[5,2,0,1,0,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "class_ogre_1_1_area_emitter_1_1_cmd_depth.html#a86e5593b5fc6ca52ca314f16f59ab5f9":[7,0,0,28,0,1],
 "class_ogre_1_1_area_emitter_1_1_cmd_height.html":[7,0,0,28,1],
 "class_ogre_1_1_area_emitter_1_1_cmd_height.html#a54f48633c5d3b0c464043e906f4d3056":[7,0,0,28,1,1],
-"class_ogre_1_1_area_emitter_1_1_cmd_height.html#aaef4781c6392ae0bcc84a559e464e4bf":[7,0,0,28,1,0],
-"class_ogre_1_1_area_emitter_1_1_cmd_width.html":[7,0,0,28,2]
+"class_ogre_1_1_area_emitter_1_1_cmd_height.html#aaef4781c6392ae0bcc84a559e464e4bf":[7,0,0,28,1,0]
 };

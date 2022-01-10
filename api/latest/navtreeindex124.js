@@ -1,5 +1,6 @@
 var NAVTREEINDEX124 =
 {
+"class_ogre_1_1_shadow_texture_definition.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,50,8],
 "class_ogre_1_1_shadow_texture_definition.html#a9415b07e2e36a433b61767818fa214d8":[5,2,1,50,30],
 "class_ogre_1_1_shadow_texture_definition.html#a9507bb87ab7eb7b43aa7b76617d8c453":[5,2,1,50,17],
 "class_ogre_1_1_shadow_texture_definition.html#a95f59e0cb3cb10ecdb6ef1c2f2ac3779":[5,2,1,50,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX124 =
 "class_ogre_1_1_skeleton_manager.html#a2f635f8a9879a29690654d810844ec8e":[5,2,0,7,0],
 "class_ogre_1_1_skeleton_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,0,7,13],
 "class_ogre_1_1_skeleton_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,0,7,16],
-"class_ogre_1_1_skeleton_manager.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,0,7,11],
-"class_ogre_1_1_skeleton_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,0,7,7]
+"class_ogre_1_1_skeleton_manager.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,0,7,11]
 };
