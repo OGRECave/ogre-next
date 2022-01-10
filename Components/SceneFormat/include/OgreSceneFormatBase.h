@@ -29,23 +29,26 @@ THE SOFTWARE.
 #define _OgreSceneFormatBase_H_
 
 #include "OgreSceneFormatPrerequisites.h"
-#include "OgreLight.h"
+
 #include "OgreHlmsJson.h"
+#include "OgreLight.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Scene
-    *  @{
-    */
+     *  @{
+     */
 
     namespace SceneFlags
     {
         enum SceneFlags
         {
+            // clang-format off
             SceneNodes              = 1u << 0u,
             /// Always export the scene node even if its empty or its only attached
             /// objects are things we're not exporting (e.g. only lights are attached to a
@@ -74,6 +77,7 @@ namespace Ogre
             ParallaxCorrectedCubemap= 1u << 15u,
             AreaLightMasks          = 1u << 16u,
             Decals                  = 1u << 17u,
+            // clang-format on
         };
     }
 
@@ -83,37 +87,42 @@ namespace Ogre
     class HlmsPbs;
 
     /**
-    */
+     */
     class _OgreSceneFormatExport SceneFormatBase
     {
     public:
         enum Version
         {
-            VERSION_0   = 0,
+            VERSION_0 = 0,
             VERSION_1,
             LATEST_VERSION = VERSION_1
         };
+
     protected:
         struct DecalTex
         {
-            TextureGpu  *texture;
+            TextureGpu *texture;
             uint16      xIdx;
-            const char  *texTypeName;
+            const char *texTypeName;
             DecalTex( TextureGpu *_texture, uint16 _xIdx, const char *_texTypeName ) :
-                texture( _texture ), xIdx( _xIdx ), texTypeName( _texTypeName ) {}
+                texture( _texture ),
+                xIdx( _xIdx ),
+                texTypeName( _texTypeName )
+            {
+            }
         };
 
-        Root                    *mRoot;
-        SceneManager            *mSceneManager;
-        SceneFormatListener     *mListener;
+        Root                *mRoot;
+        SceneManager        *mSceneManager;
+        SceneFormatListener *mListener;
 
-        static const char* c_lightTypes[Light::NUM_LIGHT_TYPES+1u];
+        static const char *c_lightTypes[Light::NUM_LIGHT_TYPES + 1u];
 
     public:
         SceneFormatBase( Root *root, SceneManager *sceneManager );
         ~SceneFormatBase();
 
-        HlmsPbs* getPbs() const;
+        HlmsPbs *getPbs() const;
 
         /// Caller must delete the pointer. We won't do it for you.
         void setListener( SceneFormatListener *listener );
@@ -122,20 +131,20 @@ namespace Ogre
     /** Override this listener if you want to filter which objects get exported.
         See DefaultSceneFormatListener
     */
-    class _OgreSceneFormatExport SceneFormatListener :
-            public HlmsJsonListener, public HlmsTextureExportListener
+    class _OgreSceneFormatExport SceneFormatListener : public HlmsJsonListener,
+                                                       public HlmsTextureExportListener
     {
     public:
-        virtual void setSceneFlags( uint32 sceneFlags, SceneFormatBase *parent )    {}
+        virtual void setSceneFlags( uint32 sceneFlags, SceneFormatBase *parent ) {}
 
         // Override any of these and return false if you don't want that particular object to be exported
-        virtual bool exportSceneNode( const SceneNode *sceneNode )  { return true; }
-        virtual bool exportMesh( const Mesh *mesh )                 { return true; }
-        virtual bool exportMesh( const v1::Mesh *mesh )             { return true; }
-        virtual bool exportItem( const Item *item )                 { return true; }
-        virtual bool exportEntity( const v1::Entity *entity )       { return true; }
-        virtual bool exportLight( const Light *light )              { return true; }
-        virtual bool exportDecal( const Decal *decal )              { return true; }
+        virtual bool exportSceneNode( const SceneNode *sceneNode ) { return true; }
+        virtual bool exportMesh( const Mesh *mesh ) { return true; }
+        virtual bool exportMesh( const v1::Mesh *mesh ) { return true; }
+        virtual bool exportItem( const Item *item ) { return true; }
+        virtual bool exportEntity( const v1::Entity *entity ) { return true; }
+        virtual bool exportLight( const Light *light ) { return true; }
+        virtual bool exportDecal( const Decal *decal ) { return true; }
     };
 
     /** Default implementation that prevents a SceneNode from being exported if
@@ -145,8 +154,8 @@ namespace Ogre
     {
         uint32 mSceneFlags;
 
-        ParallaxCorrectedCubemap    *mParallaxCorrectedCubemapManual;
-        ParallaxCorrectedCubemapAuto*mParallaxCorrectedCubemapAuto;
+        ParallaxCorrectedCubemap     *mParallaxCorrectedCubemapManual;
+        ParallaxCorrectedCubemapAuto *mParallaxCorrectedCubemapAuto;
 
         bool hasNoAttachedObjectsOfType( const SceneNode *sceneNode );
 
@@ -161,7 +170,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

@@ -39,21 +39,21 @@ THE SOFTWARE.
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     struct ActiveActorData
     {
         Camera              *reflectionCamera;
         CompositorWorkspace *workspace;
         TextureGpu          *reflectionTexture;
-        bool                isReserved;
+        bool                 isReserved;
     };
 
-    typedef FastArray<Renderable*> RenderableArray;
+    typedef FastArray<Renderable *> RenderableArray;
     /** Planar Reflections can be used with both Unlit and PBS, but they're setup
         differently. Unlit is very fast, but also very basic. It's mostly useful for
         perfect mirrors.
@@ -79,11 +79,11 @@ namespace Ogre
     public:
         struct TrackedRenderable
         {
-            Renderable      *renderable;
-            MovableObject   *movableObject;
-            Vector3         reflNormal;
-            Vector3         renderableCenter;
-            uint32          hlmsHashes[2];
+            Renderable    *renderable;
+            MovableObject *movableObject;
+            Vector3        reflNormal;
+            Vector3        renderableCenter;
+            uint32         hlmsHashes[2];
 
             /**
             @param _renderable
@@ -102,8 +102,10 @@ namespace Ogre
             */
             TrackedRenderable( Renderable *_renderable, MovableObject *_movableObject,
                                const Vector3 &_reflNormal, const Vector3 &_renderableCenter ) :
-                renderable( _renderable ), movableObject( _movableObject ),
-                reflNormal( _reflNormal ), renderableCenter( _renderableCenter )
+                renderable( _renderable ),
+                movableObject( _movableObject ),
+                reflNormal( _reflNormal ),
+                renderableCenter( _renderableCenter )
             {
                 memset( hlmsHashes, 0, sizeof( hlmsHashes ) );
             }
@@ -114,31 +116,31 @@ namespace Ogre
 
         typedef vector<ActiveActorData>::type ActiveActorDataVec;
 
-        typedef vector<PlanarReflectionActor*>::type PlanarReflectionActorVec;
+        typedef vector<PlanarReflectionActor *>::type PlanarReflectionActorVec;
 
-        PlanarReflectionActorVec    mActors;
-        ArrayActorPlane             *mActorsSoA;
-        size_t                      mCapacityActorsSoA;
+        PlanarReflectionActorVec mActors;
+        ArrayActorPlane         *mActorsSoA;
+        size_t                   mCapacityActorsSoA;
 
-        Real                        mLastAspectRatio;
-        Vector3                     mLastCameraPos;
-        Quaternion                  mLastCameraRot;
-        Camera                      *mLastCamera;
-        //Camera                      *mLockCamera;
-        PlanarReflectionActorVec    mActiveActors;
-        ActiveActorDataVec          mActiveActorData;
-        TrackedRenderableArray      mTrackedRenderables;
-        bool                        mUpdatingRenderablesHlms;
-        bool                        mAnyPendingFlushRenderable;
+        Real       mLastAspectRatio;
+        Vector3    mLastCameraPos;
+        Quaternion mLastCameraRot;
+        Camera    *mLastCamera;
+        // Camera                      *mLockCamera;
+        PlanarReflectionActorVec mActiveActors;
+        ActiveActorDataVec       mActiveActorData;
+        TrackedRenderableArray   mTrackedRenderables;
+        bool                     mUpdatingRenderablesHlms;
+        bool                     mAnyPendingFlushRenderable;
 
         uint8               mMaxNumMipmaps;
         uint8               mMaxActiveActors;
         Real                mInvMaxDistance;
         Real                mMaxSqDistance;
-        SceneManager        *mSceneManager;
-        CompositorManager2  *mCompositorManager;
+        SceneManager       *mSceneManager;
+        CompositorManager2 *mCompositorManager;
 
-        PlanarReflectionActor   mDummyActor;
+        PlanarReflectionActor mDummyActor;
 
         void updateFlushedRenderables();
 
@@ -195,8 +197,8 @@ namespace Ogre
             will filter the RTT with a compute filter (usually for higher quality).
         */
         void setMaxActiveActors( uint8 maxActiveActors, IdString workspaceName, bool useAccurateLighting,
-                                 uint32 width, uint32 height, bool withMipmaps, PixelFormatGpu pixelFormat,
-                                 bool mipmapMethodCompute );
+                                 uint32 width, uint32 height, bool withMipmaps,
+                                 PixelFormatGpu pixelFormat, bool mipmapMethodCompute );
 
         /** Adds an actor plane that other objects can use as source for reflections if they're
             close enough to it (and aligned enough to the normal).
@@ -206,8 +208,9 @@ namespace Ogre
         @return
             Pointer to the created actor for further manipulation.
         */
-        PlanarReflectionActor* addActor( const PlanarReflectionActor &actor );
-        void destroyActor( PlanarReflectionActor *actor );
+        PlanarReflectionActor *addActor( const PlanarReflectionActor &actor );
+        void                   destroyActor( PlanarReflectionActor *actor );
+
         void destroyAllActors();
 
         /** Reserves a particular slot (i.e. texture) to be used only with a specifc actor.
@@ -247,7 +250,7 @@ namespace Ogre
         void beginFrame();
         void update( Camera *camera, Real aspectRatio );
 
-        uint8 getMaxActiveActors() const            { return mMaxActiveActors; }
+        uint8 getMaxActiveActors() const { return mMaxActiveActors; }
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
         size_t getConstBufferSize() const;
@@ -258,9 +261,10 @@ namespace Ogre
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
         void fillConstBufferData( TextureGpu *renderTarget, const Camera *camera,
-                                  const Matrix4 &projectionMatrix,
-                                  float * RESTRICT_ALIAS passBufferPtr ) const;
-        TextureGpu* getTexture( uint8 actorIdx ) const;
+                                  const Matrix4        &projectionMatrix,
+                                  float *RESTRICT_ALIAS passBufferPtr ) const;
+
+        TextureGpu *getTexture( uint8 actorIdx ) const;
 
         /// Returns true if the Camera settings (position, orientation, aspect ratio, etc)
         /// match with the reflection we have in cache.
@@ -276,16 +280,18 @@ namespace Ogre
 
         enum CustomParameterBits
         {
+            // clang-format off
             UseActiveActor      = 0x80,
             FlushPending        = 0x60,
             InactiveActor       = 0x40
+            // clang-format on
         };
     };
 
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

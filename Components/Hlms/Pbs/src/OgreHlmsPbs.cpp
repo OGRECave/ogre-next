@@ -1404,8 +1404,8 @@ namespace Ogre
             for( size_t i = 0u; i < maxActiveActors; ++i )
             {
                 barrierSolver.resolveTransition(
-                    resourceTransitions, mPlanarReflections->getTexture( i ), ResourceLayout::Texture,
-                    ResourceAccess::Read, 1u << PixelShader );
+                    resourceTransitions, mPlanarReflections->getTexture( (uint8)i ),
+                    ResourceLayout::Texture, ResourceAccess::Read, 1u << PixelShader );
             }
         }
 #endif
@@ -3488,8 +3488,8 @@ namespace Ogre
             {
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
                 TextureGpu *planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
-                *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( mTexUnitSlotStart - 1u, planarReflTex, mPlanarReflectionsSamplerblock );
+                *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                    uint16( mTexUnitSlotStart - 1u ), planarReflTex, mPlanarReflectionsSamplerblock );
                 mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
             }
 #endif

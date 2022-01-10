@@ -226,7 +226,7 @@ namespace Demo
                     "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     Ogre::SCENE_DYNAMIC );
 
-                size_t idx = i * 4 + j;
+                size_t idx = size_t( i * 4 + j );
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                       ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
