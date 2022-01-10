@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "--- Installing System Dependencies ---"
+sudo apt-get install -y ninja-build libxrandr-dev libxaw7-dev libgl1-mesa-dev libglu1-mesa-dev
+
 echo "--- Fetching prebuilt Dependencies ---"
 wget https://github.com/OGRECave/ogre-next-deps/releases/download/bin-releases/Dependencies_Release_Ubuntu.18.04.LTS.Clang.7z
 
