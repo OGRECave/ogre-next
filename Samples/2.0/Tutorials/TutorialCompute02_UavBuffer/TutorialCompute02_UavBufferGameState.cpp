@@ -44,9 +44,8 @@ namespace Demo
         Ogre::HlmsCompute *hlmsCompute = root->getHlmsManager()->getComputeHlms();
         mComputeJob = hlmsCompute->findComputeJob( "TestJob" );
         mDrawFromUavBufferMat =
-            Ogre::MaterialManager::getSingleton()
-                .load( "DrawFromUavBuffer", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "DrawFromUavBuffer", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         TutorialGameState::createScene01();
     }

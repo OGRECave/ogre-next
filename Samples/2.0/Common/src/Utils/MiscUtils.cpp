@@ -132,9 +132,8 @@ namespace Demo
         GpuProgramParametersSharedPtr oldParams;
         Pass *pass = 0;
 
-        material = MaterialManager::getSingleton()
-                       .load( materialName, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                       .staticCast<Material>();
+        material = std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+            materialName, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         pass = material->getTechnique( 0 )->getPass( 0 );
         // Save old manual & auto params

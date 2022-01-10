@@ -56,7 +56,7 @@ namespace Ogre
     String ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME = "Autodetect";
     // A reference count of 3 means that only RGM and RM have references
     // RGM has one (this one) and RM has 2 (by name and by handle)
-    size_t ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS = 3;
+    long ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS = 3;
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     ResourceGroupManager::ResourceGroupManager() : mLoadingListener( 0 ), mCurrentGroup( 0 )
@@ -1133,7 +1133,7 @@ namespace Ogre
                                 stream->size() <= 1024 * 1024 )
                             {
                                 DataStreamPtr cachedCopy;
-                                cachedCopy.bind(
+                                cachedCopy.reset(
                                     OGRE_NEW MemoryDataStream( stream->getName(), stream ) );
                                 su->parseScript( cachedCopy, grp->name );
                             }

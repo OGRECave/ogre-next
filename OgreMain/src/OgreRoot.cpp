@@ -1334,7 +1334,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_FILE_NOT_FOUND, "'" + filename + "' file not found!",
                              __FUNCTION__ );
             }
-            stream.bind( OGRE_NEW FileStreamDataStream( filename, ifs ) );
+            stream.reset( OGRE_NEW FileStreamDataStream( filename, ifs ) );
         }
         return stream;
     }

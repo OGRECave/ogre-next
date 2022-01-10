@@ -67,9 +67,8 @@ namespace Demo
         for( size_t i = 0; i < sizeof( materialNames ) / sizeof( materialNames[0] ); ++i )
         {
             Ogre::MaterialPtr material =
-                Ogre::MaterialManager::getSingleton()
-                    .load( materialNames[i], Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                    .staticCast<Ogre::Material>();
+                std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                    materialNames[i], Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
             Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 

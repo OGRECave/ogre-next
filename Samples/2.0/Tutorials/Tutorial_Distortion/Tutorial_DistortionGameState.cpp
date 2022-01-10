@@ -316,10 +316,8 @@ namespace Demo
 
             // Receive distortion material and set strenght uniform
             Ogre::MaterialPtr materialDistortion =
-                Ogre::MaterialManager::getSingleton()
-                    .load( "Distortion/Quad",
-                           Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                    .staticCast<Ogre::Material>();
+                std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                    "Distortion/Quad", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
             Ogre::Pass *passDist = materialDistortion->getTechnique( 0 )->getPass( 0 );
             mDistortionPass = passDist;

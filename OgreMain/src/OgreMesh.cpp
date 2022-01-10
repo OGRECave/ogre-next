@@ -687,9 +687,8 @@ namespace Ogre
                     // Load skeleton
                     try
                     {
-                        mOldSkeleton = OldSkeletonManager::getSingleton()
-                                           .load( skelName, mGroup )
-                                           .staticCast<Skeleton>();
+                        mOldSkeleton = std::static_pointer_cast<Skeleton>(
+                            OldSkeletonManager::getSingleton().load( skelName, mGroup ) );
 
                         // TODO: put mOldSkeleton in legacy mode only.
                         mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( mOldSkeleton.get() );
@@ -1231,8 +1230,7 @@ namespace Ogre
         {
 #if !OGRE_NO_MESHLOD
             assert( index < mMeshLodUsageList.size() );
-            if( this->_isManualLodLevel( index ) && index > 0 &&
-                !mMeshLodUsageList[index].manualMesh )
+            if( this->_isManualLodLevel( index ) && index > 0 && !mMeshLodUsageList[index].manualMesh )
             {
                 // Load the mesh now
                 try
