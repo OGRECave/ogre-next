@@ -79,10 +79,6 @@ namespace Ogre
     class MetalVaoManager;
     class MetalWindow;
 
-#ifdef OGRE_DEPRECATED_2_2
-    class MetalDepthBuffer;
-#endif
-
     namespace v1
     {
         class MetalHardwareBufferCommon;
