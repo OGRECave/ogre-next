@@ -1,14 +1,5 @@
 var NAVTREEINDEX87 =
 {
-"class_ogre_1_1_mesh_manager.html#a6599e38a1f398edf12b56fa0627bcae2":[5,2,10,72,16],
-"class_ogre_1_1_mesh_manager.html#a6870dfdab954bc10c92d60c10ea86b3c":[5,2,10,72,27],
-"class_ogre_1_1_mesh_manager.html#a6ce966e769770ce9f90d77eddc2c30a3":[5,2,10,72,59],
-"class_ogre_1_1_mesh_manager.html#a6dcc6f12ebf2c21d2c162e2147efef96":[5,2,10,72,28],
-"class_ogre_1_1_mesh_manager.html#a73a94c11059676dc26516ec33410301a":[5,2,10,72,26],
-"class_ogre_1_1_mesh_manager.html#a78c58e988ab21146ddfda0d053fc5564":[5,2,10,72,58],
-"class_ogre_1_1_mesh_manager.html#a7913c36c02ef03007ff1a1c76ddf7710":[5,2,10,72,18],
-"class_ogre_1_1_mesh_manager.html#a7b4afd007622d165efbcc362e5566922":[5,2,10,72,51],
-"class_ogre_1_1_mesh_manager.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,10,72,38],
 "class_ogre_1_1_mesh_manager.html#a84e25cc5ad09ff7567d1fed7429433a3":[5,2,10,72,53],
 "class_ogre_1_1_mesh_manager.html#a8d26f4a0b59172e9045faa1134ef50a0":[5,2,10,72,13],
 "class_ogre_1_1_mesh_manager.html#a93b40c858020f2bbbcebcd4dc72a6321":[5,2,10,72,68],
@@ -249,5 +240,14 @@ var NAVTREEINDEX87 =
 "class_ogre_1_1_metal_const_buffer_packed.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,583,38],
 "class_ogre_1_1_metal_const_buffer_packed.html#ab9ce07a6d2e0d181085bcdb7c2b49051":[7,0,0,583,27],
 "class_ogre_1_1_metal_const_buffer_packed.html#ac34e677fd05ab5b34b87cc2d1c401330":[7,0,0,583,14],
-"class_ogre_1_1_metal_const_buffer_packed.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,583,36]
+"class_ogre_1_1_metal_const_buffer_packed.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,583,36],
+"class_ogre_1_1_metal_const_buffer_packed.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,583,32],
+"class_ogre_1_1_metal_const_buffer_packed.html#ad1763ab43f35c191bc43f66396f34471":[7,0,0,583,16],
+"class_ogre_1_1_metal_const_buffer_packed.html#ae86f96309a2c8bf47cd4ffe1d66cfb55":[7,0,0,583,9],
+"class_ogre_1_1_metal_const_buffer_packed.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,583,39],
+"class_ogre_1_1_metal_const_buffer_packed.html#afb0a478d5c451c291aaa7b79f29b1193":[7,0,0,583,13],
+"class_ogre_1_1_metal_device_item.html":[7,0,0,586],
+"class_ogre_1_1_metal_device_item.html#a5121d9ac4a48a2ae8e577eaabe81db75":[7,0,0,586,2],
+"class_ogre_1_1_metal_device_item.html#a8e4db63fb6884f976429c70f45390701":[7,0,0,586,0],
+"class_ogre_1_1_metal_device_item.html#aa740709e33cc53889f2216eb728a731f":[7,0,0,586,3]
 };

@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="node1" class="node">
 <title>Node0</title>
-<g id="a_node1"><a xlink:href="struct_ogre_1_1_compositor_pass_def_1_1_uav_dependency.html" target="_top" xlink:title=" ">
+<g id="a_node1"><a xlink:href="struct_ogre_1_1_compositor_pass_def_1_1_viewport_rect.html" target="_top" xlink:title=" ">
 <polygon fill="none" stroke="black" points="0,-0.5 0,-30.5 129,-30.5 129,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">Ogre::CompositorPassDef</text>
-<text text-anchor="middle" x="64.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::UavDependency</text>
+<text text-anchor="middle" x="64.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">::ViewportRect</text>
 </a>
 </g>
 </g>

@@ -1,14 +1,5 @@
 var NAVTREEINDEX70 =
 {
-"class_ogre_1_1_high_level_gpu_program.html#a48901c745f712840d8ff24cd04e50678":[5,2,10,42,98],
-"class_ogre_1_1_high_level_gpu_program.html#a4be37baef81876985aa1071ad5acc6dd":[5,2,10,42,72],
-"class_ogre_1_1_high_level_gpu_program.html#a4d9e213882541eec572871cd2c01262a":[5,2,10,42,38],
-"class_ogre_1_1_high_level_gpu_program.html#a5016aec1762b026997ddd346775879ef":[5,2,10,42,74],
-"class_ogre_1_1_high_level_gpu_program.html#a51dbb6766cdce61e55cd24707ab780d2":[5,2,10,42,57],
-"class_ogre_1_1_high_level_gpu_program.html#a5513ffce404b14cff72846318b018d32":[5,2,10,42,11],
-"class_ogre_1_1_high_level_gpu_program.html#a56813acb2feeded63abaff6f9e8eed41":[5,2,10,42,91],
-"class_ogre_1_1_high_level_gpu_program.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,10,42,67],
-"class_ogre_1_1_high_level_gpu_program.html#a59feed17a53ec3fa4fdb5cd33651ca6d":[5,2,10,42,54],
 "class_ogre_1_1_high_level_gpu_program.html#a617ca03b6240db1e675c4c008dd54b63":[5,2,10,42,31],
 "class_ogre_1_1_high_level_gpu_program.html#a62315645afd22a32a5bc9af1a79d7f38":[5,2,10,42,40],
 "class_ogre_1_1_high_level_gpu_program.html#a633efc296c4dffefe10f7a1e3da26e2d":[5,2,10,42,103],
@@ -249,5 +240,14 @@ var NAVTREEINDEX70 =
 "class_ogre_1_1_hlms_buffer_manager.html#a208e79527ebc2ae3be944b9b3472155f":[5,0,0,3,8],
 "class_ogre_1_1_hlms_buffer_manager.html#a2513b676def18667eb5579abfa50820a":[5,0,0,3,64],
 "class_ogre_1_1_hlms_buffer_manager.html#a25eba7ceb9fbc7603a20984d36ee74c7":[5,0,0,3,38],
-"class_ogre_1_1_hlms_buffer_manager.html#a2d0a1980bba548053bc1752a31447b95":[5,0,0,3,63]
+"class_ogre_1_1_hlms_buffer_manager.html#a2d0a1980bba548053bc1752a31447b95":[5,0,0,3,63],
+"class_ogre_1_1_hlms_buffer_manager.html#a2db23de0342377671bb1a83915a2d1f2":[5,0,0,3,10],
+"class_ogre_1_1_hlms_buffer_manager.html#a335481b26695a97d83885780235ee0e5":[5,0,0,3,18],
+"class_ogre_1_1_hlms_buffer_manager.html#a349b173738c195012cea3acaa527f15f":[5,0,0,3,43],
+"class_ogre_1_1_hlms_buffer_manager.html#a3ee5970f2c0c19635182ba56c516fd70":[5,0,0,3,12],
+"class_ogre_1_1_hlms_buffer_manager.html#a41891adac20124feee29d81237db8197":[5,0,0,3,68],
+"class_ogre_1_1_hlms_buffer_manager.html#a421b197ca3a38da17e2eb1531a645fa2":[5,0,0,3,57],
+"class_ogre_1_1_hlms_buffer_manager.html#a42e458f42a60363648a6b1ce368feb4b":[5,0,0,3,20],
+"class_ogre_1_1_hlms_buffer_manager.html#a46fdb3fe8b4889d911d41468dabf4400":[5,0,0,3,72],
+"class_ogre_1_1_hlms_buffer_manager.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,0,3,60]
 };

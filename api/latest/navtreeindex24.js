@@ -1,14 +1,5 @@
 var NAVTREEINDEX24 =
 {
-"class_ogre_1_1_cocoa_window.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,88,41],
-"class_ogre_1_1_cocoa_window.html#ab7da99b14e8f2308b7d09076148730d8":[7,0,0,88,30],
-"class_ogre_1_1_cocoa_window.html#abebfcda0ec31cf343ddbbacbe65f553c":[7,0,0,88,7],
-"class_ogre_1_1_cocoa_window.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,88,39],
-"class_ogre_1_1_cocoa_window.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,88,35],
-"class_ogre_1_1_cocoa_window.html#acc796ccb2ee2885567e24bc49ab37a44":[7,0,0,88,11],
-"class_ogre_1_1_cocoa_window.html#acf9757a2feacd34d68ee4c14b7dbbfc5":[7,0,0,88,19],
-"class_ogre_1_1_cocoa_window.html#ad03ab73a42ea17f16b745c58e30c3fba":[7,0,0,88,25],
-"class_ogre_1_1_cocoa_window.html#ad18766408a6bd3bf2923d19d29a5daaf":[7,0,0,88,23],
 "class_ogre_1_1_cocoa_window.html#ad31d3601f5dcd10458a0cfc530fff042":[7,0,0,88,54],
 "class_ogre_1_1_cocoa_window.html#ad7135333e5990cd52d760cf47086c5ef":[7,0,0,88,17],
 "class_ogre_1_1_cocoa_window.html#ad83df936a6988c909c5e4c183684d723":[7,0,0,88,16],
@@ -249,5 +240,14 @@ var NAVTREEINDEX24 =
 "class_ogre_1_1_colour_image_affector_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,95,7],
 "class_ogre_1_1_colour_image_affector_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,95,10],
 "class_ogre_1_1_colour_image_affector_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,95,5],
-"class_ogre_1_1_colour_image_affector_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,95,1]
+"class_ogre_1_1_colour_image_affector_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,95,1],
+"class_ogre_1_1_colour_image_affector_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,95,4],
+"class_ogre_1_1_colour_image_affector_factory.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,95,8],
+"class_ogre_1_1_colour_image_affector_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,95,6],
+"class_ogre_1_1_colour_image_affector_factory.html#acb46d4b0a597156d9ba5abc39d127792":[7,0,0,95,2],
+"class_ogre_1_1_colour_image_affector_factory.html#afa2943846ba6a2b5824a12857139cf5e":[7,0,0,95,9],
+"class_ogre_1_1_colour_interpolator_affector.html":[7,0,0,96],
+"class_ogre_1_1_colour_interpolator_affector.html#a01a6e571941916969316ab23c5ee4739":[7,0,0,96,10],
+"class_ogre_1_1_colour_interpolator_affector.html#a055f5f5bbe49e66d40c84c257e78b340":[7,0,0,96,28],
+"class_ogre_1_1_colour_interpolator_affector.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8":[7,0,0,96,5]
 };

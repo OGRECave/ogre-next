@@ -1,14 +1,5 @@
 var NAVTREEINDEX47 =
 {
-"class_ogre_1_1_default_sphere_scene_query.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,11,16,13],
-"class_ogre_1_1_default_sphere_scene_query.html#ad392a7fc0b338e5507540d3183f82cfb":[5,0,1,16,24],
-"class_ogre_1_1_default_sphere_scene_query.html#ad392a7fc0b338e5507540d3183f82cfb":[5,2,11,16,24],
-"class_ogre_1_1_default_sphere_scene_query.html#adfd70f00b13654735336f4360af84995":[5,0,1,16,27],
-"class_ogre_1_1_default_sphere_scene_query.html#adfd70f00b13654735336f4360af84995":[5,2,11,16,27],
-"class_ogre_1_1_default_sphere_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a":[5,0,1,16,26],
-"class_ogre_1_1_default_sphere_scene_query.html#aec3aa0b8b16c41fae990ee78150f8d2a":[5,2,11,16,26],
-"class_ogre_1_1_default_sphere_scene_query.html#af3abfea7c8d18bfb4b3783699e084068":[5,0,1,16,5],
-"class_ogre_1_1_default_sphere_scene_query.html#af3abfea7c8d18bfb4b3783699e084068":[5,2,11,16,5],
 "class_ogre_1_1_default_sphere_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,16,20],
 "class_ogre_1_1_default_sphere_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,11,16,20],
 "class_ogre_1_1_default_texture_gpu_manager_listener.html":[5,2,10,13],
@@ -249,5 +240,14 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_direction_randomiser_affector.html#a1bea65fa2b3c2ac5a9f3be59b46a80e8":[7,0,0,248,6],
 "class_ogre_1_1_direction_randomiser_affector.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,248,18],
 "class_ogre_1_1_direction_randomiser_affector.html#a300271e2e1268be65c65b42023267ead":[7,0,0,248,3],
-"class_ogre_1_1_direction_randomiser_affector.html#a3aa1845781cbd3a9ae19ef79e361cf0c":[7,0,0,248,14]
+"class_ogre_1_1_direction_randomiser_affector.html#a3aa1845781cbd3a9ae19ef79e361cf0c":[7,0,0,248,14],
+"class_ogre_1_1_direction_randomiser_affector.html#a3c600369ab5d6957524125c93915019f":[7,0,0,248,7],
+"class_ogre_1_1_direction_randomiser_affector.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,248,22],
+"class_ogre_1_1_direction_randomiser_affector.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,248,25],
+"class_ogre_1_1_direction_randomiser_affector.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,248,20],
+"class_ogre_1_1_direction_randomiser_affector.html#a5f401d9023e7bb484ff3ff49e70c9510":[7,0,0,248,5],
+"class_ogre_1_1_direction_randomiser_affector.html#a6e3625685f5f840fdb3677a187137ac1":[7,0,0,248,32],
+"class_ogre_1_1_direction_randomiser_affector.html#a70dc5afd6cc88a28e668d1d82e1bdba9":[7,0,0,248,10],
+"class_ogre_1_1_direction_randomiser_affector.html#a7512d598b06398924abbf3909793fb15":[7,0,0,248,30],
+"class_ogre_1_1_direction_randomiser_affector.html#a754e34a827b8990b6e9553579f300d7a":[7,0,0,248,15]
 };

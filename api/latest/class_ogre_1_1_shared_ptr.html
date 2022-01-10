@@ -86,121 +86,102 @@ $(document).ready(function(){initNavTree('class_ogre_1_1_shared_ptr.html',''); i
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="class_ogre_1_1_shared_ptr-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ogre::SharedPtr&lt; T &gt; Class Template Reference<div class="ingroups"><a class="el" href="group___core.html">Core</a> &raquo; <a class="el" href="group___general.html">General</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Reference-counted shared pointer, used for objects where implicit destruction is required.  
- <a href="class_ogre_1_1_shared_ptr.html#details">More...</a></p>
-
 <p><code>#include &lt;OgreSharedPtr.h&gt;</code></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ogre::SharedPtr&lt; T &gt;:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_ogre_1_1_shared_ptr__inherit__graph.svg" width="155" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a45aca30d3c7bf70f625a48b3562e3444"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a45aca30d3c7bf70f625a48b3562e3444">unspecified_bool_type</a>) (<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> ***)</td></tr>
-<tr class="separator:a45aca30d3c7bf70f625a48b3562e3444"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6dc65b8171394624d1bb43fd9d54a8f6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a6dc65b8171394624d1bb43fd9d54a8f6">SharedPtr</a> ()</td></tr>
-<tr class="memdesc:a6dc65b8171394624d1bb43fd9d54a8f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, does not initialise the <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a>.  <a href="class_ogre_1_1_shared_ptr.html#a6dc65b8171394624d1bb43fd9d54a8f6">More...</a><br /></td></tr>
 <tr class="separator:a6dc65b8171394624d1bb43fd9d54a8f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a910badf7e570d9eae009af96e407acb1"><td class="memTemplParams" colspan="2">template&lt;class Y &gt; </td></tr>
+<tr class="memitem:a910badf7e570d9eae009af96e407acb1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a910badf7e570d9eae009af96e407acb1">SharedPtr</a> (const shared_ptr&lt; Y &gt; &amp;r)</td></tr>
+<tr class="separator:a910badf7e570d9eae009af96e407acb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1fae2b13ec9cb470b4616c56cb599d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ab1fae2b13ec9cb470b4616c56cb599d8">SharedPtr</a> (const <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> &amp;r)</td></tr>
 <tr class="separator:ab1fae2b13ec9cb470b4616c56cb599d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9ac8d216452366004f13221074ea906"><td class="memTemplParams" colspan="2">template&lt;class Y &gt; </td></tr>
 <tr class="memitem:ad9ac8d216452366004f13221074ea906"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ad9ac8d216452366004f13221074ea906">SharedPtr</a> (const <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt; &amp;r)</td></tr>
 <tr class="separator:ad9ac8d216452366004f13221074ea906"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9daf742e1f2c363bdcaccff255f2dd2d"><td class="memTemplParams" colspan="2">template&lt;class Y &gt; </td></tr>
-<tr class="memitem:a9daf742e1f2c363bdcaccff255f2dd2d"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a9daf742e1f2c363bdcaccff255f2dd2d">SharedPtr</a> (Y *rep, <a class="el" href="group___general.html#ga3970484e048d1352a7e59b61186b5f2a">SharedPtrFreeMethod</a> inFreeMethod=<a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd">SPFM_DELETE</a>)</td></tr>
-<tr class="memdesc:a9daf742e1f2c363bdcaccff255f2dd2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_ogre_1_1_shared_ptr.html#a9daf742e1f2c363bdcaccff255f2dd2d">More...</a><br /></td></tr>
-<tr class="separator:a9daf742e1f2c363bdcaccff255f2dd2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1e2501a5f7139c6b78d4c8e06a69463"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ad1e2501a5f7139c6b78d4c8e06a69463">~SharedPtr</a> ()</td></tr>
-<tr class="separator:ad1e2501a5f7139c6b78d4c8e06a69463"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8d90e023455dc3299f48722e6068e4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ac8d90e023455dc3299f48722e6068e4a">bind</a> (T *rep, <a class="el" href="group___general.html#ga3970484e048d1352a7e59b61186b5f2a">SharedPtrFreeMethod</a> inFreeMethod=<a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd">SPFM_DELETE</a>)</td></tr>
-<tr class="memdesc:ac8d90e023455dc3299f48722e6068e4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds rep to the <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a>.  <a href="class_ogre_1_1_shared_ptr.html#ac8d90e023455dc3299f48722e6068e4a">More...</a><br /></td></tr>
-<tr class="separator:ac8d90e023455dc3299f48722e6068e4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2a6f405c94b4ec8e3f528f549ef74bf"><td class="memTemplParams" colspan="2">template&lt;typename Y &gt; </td></tr>
-<tr class="memitem:ad2a6f405c94b4ec8e3f528f549ef74bf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ad2a6f405c94b4ec8e3f528f549ef74bf">dynamicCast</a> () const</td></tr>
-<tr class="separator:ad2a6f405c94b4ec8e3f528f549ef74bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac83e8900520b80c831a070262d90a99a"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ac83e8900520b80c831a070262d90a99a">get</a> () const</td></tr>
-<tr class="separator:ac83e8900520b80c831a070262d90a99a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a564789e0743e9be6ccb5505057ed63b6"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a564789e0743e9be6ccb5505057ed63b6">getPointer</a> () const</td></tr>
-<tr class="separator:a564789e0743e9be6ccb5505057ed63b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a5c3bef3f857a24a2fd1b3dded8f3f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a3a5c3bef3f857a24a2fd1b3dded8f3f2">isNull</a> () const</td></tr>
-<tr class="separator:a3a5c3bef3f857a24a2fd1b3dded8f3f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5de511dc537736b5c290588ff0d6db8e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e">operator unspecified_bool_type</a> () const</td></tr>
-<tr class="separator:a5de511dc537736b5c290588ff0d6db8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab783e729443975c785ac7bc4b52a2278"><td class="memItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ab783e729443975c785ac7bc4b52a2278">operator*</a> () const</td></tr>
-<tr class="separator:ab783e729443975c785ac7bc4b52a2278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a813261f2607ae4a407b90c903fd6f030"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a813261f2607ae4a407b90c903fd6f030">SharedPtr</a> (std::nullptr_t)</td></tr>
+<tr class="separator:a813261f2607ae4a407b90c903fd6f030"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a119d4d068679964c64a79b2867dd5009"><td class="memTemplParams" colspan="2">template&lt;class Y &gt; </td></tr>
+<tr class="memitem:a119d4d068679964c64a79b2867dd5009"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a119d4d068679964c64a79b2867dd5009">SharedPtr</a> (Y *ptr)</td></tr>
+<tr class="separator:a119d4d068679964c64a79b2867dd5009"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25fe8dda941c616fde73f664209080e2"><td class="memTemplParams" colspan="2">template&lt;class Y , class Deleter &gt; </td></tr>
+<tr class="memitem:a25fe8dda941c616fde73f664209080e2"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a25fe8dda941c616fde73f664209080e2">SharedPtr</a> (Y *ptr, Deleter d)</td></tr>
+<tr class="separator:a25fe8dda941c616fde73f664209080e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada1634204594ebb5a8c5906547797fad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ada1634204594ebb5a8c5906547797fad">bind</a> (T *rep)</td></tr>
+<tr class="separator:ada1634204594ebb5a8c5906547797fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac87b08300b2fb097661a03d781c46442"><td class="memTemplParams" colspan="2">template&lt;typename Y &gt; </td></tr>
+<tr class="memitem:ac87b08300b2fb097661a03d781c46442"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ac87b08300b2fb097661a03d781c46442">dynamicCast</a> () const</td></tr>
+<tr class="separator:ac87b08300b2fb097661a03d781c46442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4154c0f302c57df22fa6b16f149c6486"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a4154c0f302c57df22fa6b16f149c6486">getPointer</a> () const</td></tr>
+<tr class="separator:a4154c0f302c57df22fa6b16f149c6486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5d8c85be38cfaeaa55d49fa02c995e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ac5d8c85be38cfaeaa55d49fa02c995e5">isNull</a> (void) const</td></tr>
+<tr class="separator:ac5d8c85be38cfaeaa55d49fa02c995e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade280794a40b2d9cb9686c9de5d7aacf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#ade280794a40b2d9cb9686c9de5d7aacf">operator const shared_ptr&lt; T &gt; &amp;</a> ()</td></tr>
+<tr class="separator:ade280794a40b2d9cb9686c9de5d7aacf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52d62f8b23524bac7b345fb12b8cf16e"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a52d62f8b23524bac7b345fb12b8cf16e">operator-&gt;</a> () const</td></tr>
 <tr class="separator:a52d62f8b23524bac7b345fb12b8cf16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ce00b90526a205ae31268a88bc9ed35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a1ce00b90526a205ae31268a88bc9ed35">operator=</a> (const <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> &amp;r)</td></tr>
-<tr class="separator:a1ce00b90526a205ae31268a88bc9ed35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a291dacc84f7f971399a37f725003e9df"><td class="memTemplParams" colspan="2">template&lt;class Y &gt; </td></tr>
-<tr class="memitem:a291dacc84f7f971399a37f725003e9df"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a291dacc84f7f971399a37f725003e9df">operator=</a> (const <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt; &amp;r)</td></tr>
-<tr class="separator:a291dacc84f7f971399a37f725003e9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4298cdeb2099d52ee0072df3f8056ba9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a4298cdeb2099d52ee0072df3f8056ba9">reset</a> ()</td></tr>
-<tr class="separator:a4298cdeb2099d52ee0072df3f8056ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a152e9f01d597734a7c14c639b112dc3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a152e9f01d597734a7c14c639b112dc3f">reset</a> (T *rep)</td></tr>
-<tr class="separator:a152e9f01d597734a7c14c639b112dc3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0102c9ce0678ec964b26e47b8a5310d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a0102c9ce0678ec964b26e47b8a5310d1">setNull</a> ()</td></tr>
-<tr class="separator:a0102c9ce0678ec964b26e47b8a5310d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fe9d89e89df46f06ea5d3173bb554ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a1fe9d89e89df46f06ea5d3173bb554ac">setUseCount</a> (unsigned value)</td></tr>
-<tr class="separator:a1fe9d89e89df46f06ea5d3173bb554ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a058dfd1737dcf94ed8b049718475f816"><td class="memTemplParams" colspan="2">template&lt;typename Y &gt; </td></tr>
-<tr class="memitem:a058dfd1737dcf94ed8b049718475f816"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a058dfd1737dcf94ed8b049718475f816">staticCast</a> () const</td></tr>
-<tr class="separator:a058dfd1737dcf94ed8b049718475f816"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08987cfe83e246fc1e24bbc026c8e161"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a08987cfe83e246fc1e24bbc026c8e161">unique</a> () const</td></tr>
-<tr class="separator:a08987cfe83e246fc1e24bbc026c8e161"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7461c17614870330dfbc034bd2309c56"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a7461c17614870330dfbc034bd2309c56">use_count</a> () const</td></tr>
-<tr class="separator:a7461c17614870330dfbc034bd2309c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d1cf83ba2fc4626c23903678eb5d942"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a9d1cf83ba2fc4626c23903678eb5d942">useCount</a> () const</td></tr>
-<tr class="separator:a9d1cf83ba2fc4626c23903678eb5d942"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a83c06e915ab6ff074b4a1a90a8b4197d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a83c06e915ab6ff074b4a1a90a8b4197d">unspecified_bool</a> (<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> ***)</td></tr>
-<tr class="separator:a83c06e915ab6ff074b4a1a90a8b4197d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:adf66bfb5d9f0f374ec092232e6b43eb3"><td class="memTemplParams" colspan="2">template&lt;typename Y &gt; </td></tr>
-<tr class="memitem:adf66bfb5d9f0f374ec092232e6b43eb3"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#adf66bfb5d9f0f374ec092232e6b43eb3">SharedPtr</a></td></tr>
-<tr class="separator:adf66bfb5d9f0f374ec092232e6b43eb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab34f1dc14c185a7828198226a8e0d71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#aab34f1dc14c185a7828198226a8e0d71">operator=</a> (const <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt; &amp;rhs)</td></tr>
+<tr class="separator:aab34f1dc14c185a7828198226a8e0d71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff5fd534b22373382cc02823ed99f5b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#aff5fd534b22373382cc02823ed99f5b1">setNull</a> ()</td></tr>
+<tr class="separator:aff5fd534b22373382cc02823ed99f5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a209f931f633ee93c524bb19d57d5607f"><td class="memTemplParams" colspan="2">template&lt;typename Y &gt; </td></tr>
+<tr class="memitem:a209f931f633ee93c524bb19d57d5607f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a209f931f633ee93c524bb19d57d5607f">staticCast</a> () const</td></tr>
+<tr class="separator:a209f931f633ee93c524bb19d57d5607f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a400c7fcd1943c439d90f4a6ed45b56ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html#a400c7fcd1943c439d90f4a6ed45b56ca">useCount</a> () const</td></tr>
+<tr class="separator:a400c7fcd1943c439d90f4a6ed45b56ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class T&gt;<br />
 class Ogre::SharedPtr&lt; T &gt;</h3>
 
-<p>Reference-counted shared pointer, used for objects where implicit destruction is required. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>This is a standard shared pointer implementation which uses a reference count to work out when to delete the object. </dd></dl>
-<dl class="section user"><dt></dt><dd>If OGRE_THREAD_SUPPORT is defined to be 1, use of this class is thread-safe. </dd></dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a45aca30d3c7bf70f625a48b3562e3444"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45aca30d3c7bf70f625a48b3562e3444">&#9670;&nbsp;</a></span>unspecified_bool_type</h2>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>for backwards compatibility only, rather use shared_ptr directly </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a813261f2607ae4a407b90c903fd6f030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a813261f2607ae4a407b90c903fd6f030">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[1/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void( * <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::unspecified_bool_type) (<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> ***)</td>
+          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::nullptr_t&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6dc65b8171394624d1bb43fd9d54a8f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6dc65b8171394624d1bb43fd9d54a8f6">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dc65b8171394624d1bb43fd9d54a8f6">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[2/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,13 +205,10 @@ template&lt;class T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor, does not initialise the <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a>. </p>
-<dl class="section remark"><dt>Remarks</dt><dd><b>Dangerous!</b> You have to call <a class="el" href="class_ogre_1_1_shared_ptr.html#ac8d90e023455dc3299f48722e6068e4a" title="Binds rep to the SharedPtr.">bind()</a> before using the <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a>. </dd></dl>
-
 </div>
 </div>
-<a id="a9daf742e1f2c363bdcaccff255f2dd2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9daf742e1f2c363bdcaccff255f2dd2d">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[2/4]</span></h2>
+<a id="a119d4d068679964c64a79b2867dd5009"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a119d4d068679964c64a79b2867dd5009">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[3/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,18 +224,8 @@ template&lt;class Y &gt; </div>
           <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> </td>
           <td>(</td>
           <td class="paramtype">Y *&#160;</td>
-          <td class="paramname"><em>rep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group___general.html#ga3970484e048d1352a7e59b61186b5f2a">SharedPtrFreeMethod</a>&#160;</td>
-          <td class="paramname"><em>inFreeMethod</em> = <code><a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd">SPFM_DELETE</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -267,19 +235,50 @@ template&lt;class Y &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rep</td><td>The pointer to take ownership of </td></tr>
-    <tr><td class="paramname">inFreeMethod</td><td>The mechanism to use to free the pointer </td></tr>
-  </table>
-  </dd>
-</dl>
+</div>
+</div>
+<a id="a25fe8dda941c616fde73f664209080e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25fe8dda941c616fde73f664209080e2">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[4/7]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<div class="memtemplate">
+template&lt;class Y , class Deleter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> </td>
+          <td>(</td>
+          <td class="paramtype">Y *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Deleter&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <a id="ab1fae2b13ec9cb470b4616c56cb599d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1fae2b13ec9cb470b4616c56cb599d8">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1fae2b13ec9cb470b4616c56cb599d8">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[5/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -304,12 +303,10 @@ template&lt;class T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
-
 </div>
 </div>
 <a id="ad9ac8d216452366004f13221074ea906"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad9ac8d216452366004f13221074ea906">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9ac8d216452366004f13221074ea906">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[6/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,25 +333,26 @@ template&lt;class Y &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
-
 </div>
 </div>
-<a id="ad1e2501a5f7139c6b78d4c8e06a69463"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1e2501a5f7139c6b78d4c8e06a69463">&#9670;&nbsp;</a></span>~SharedPtr()</h2>
+<a id="a910badf7e570d9eae009af96e407acb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a910badf7e570d9eae009af96e407acb1">&#9670;&nbsp;</a></span>SharedPtr() <span class="overload">[7/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class T &gt; </div>
+<div class="memtemplate">
+template&lt;class Y &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::~<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::<a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a> </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const shared_ptr&lt; Y &gt; &amp;&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -368,8 +366,8 @@ template&lt;class T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac8d90e023455dc3299f48722e6068e4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8d90e023455dc3299f48722e6068e4a">&#9670;&nbsp;</a></span>bind()</h2>
+<a id="ada1634204594ebb5a8c5906547797fad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada1634204594ebb5a8c5906547797fad">&#9670;&nbsp;</a></span>bind()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -380,21 +378,11 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::bind </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::bind </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>rep</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>rep</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group___general.html#ga3970484e048d1352a7e59b61186b5f2a">SharedPtrFreeMethod</a>&#160;</td>
-          <td class="paramname"><em>inFreeMethod</em> = <code><a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd">SPFM_DELETE</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -403,16 +391,12 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Binds rep to the <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a>. </p>
-<dl class="section remark"><dt>Remarks</dt><dd>Assumes that the <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a> is uninitialised!</dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>The object must not be bound into a <a class="el" href="class_ogre_1_1_shared_ptr.html" title="Reference-counted shared pointer, used for objects where implicit destruction is required.">SharedPtr</a> elsewhere</dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated:</a></b></dt><dd>this api will be dropped. use <a class="el" href="class_ogre_1_1_shared_ptr.html#a152e9f01d597734a7c14c639b112dc3f">reset(T*)</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated:</a></b></dt><dd>this api will be dropped. use reset(T*) instead </dd></dl>
 
 </div>
 </div>
-<a id="ad2a6f405c94b4ec8e3f528f549ef74bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2a6f405c94b4ec8e3f528f549ef74bf">&#9670;&nbsp;</a></span>dynamicCast()</h2>
+<a id="ac87b08300b2fb097661a03d781c46442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87b08300b2fb097661a03d781c46442">&#9670;&nbsp;</a></span>dynamicCast()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -425,7 +409,7 @@ template&lt;typename Y &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt;Y&gt; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::dynamicCast </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt;Y&gt; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::dynamicCast </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -437,14 +421,12 @@ template&lt;typename Y &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated:</a></b></dt><dd>use <a class="el" href="group___general.html#ga38dc64dcead6770c1ca8e5181b293c12">Ogre::dynamic_pointer_cast</a> instead </dd></dl>
-
-<p class="reference">References <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated:</a></b></dt><dd>use Ogre::dynamic_pointer_cast instead </dd></dl>
 
 </div>
 </div>
-<a id="ac83e8900520b80c831a070262d90a99a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac83e8900520b80c831a070262d90a99a">&#9670;&nbsp;</a></span>get()</h2>
+<a id="a4154c0f302c57df22fa6b16f149c6486"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4154c0f302c57df22fa6b16f149c6486">&#9670;&nbsp;</a></span>getPointer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -455,7 +437,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T* <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::get </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> T* <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::getPointer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -467,43 +449,14 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#aa2ea346279b1d604ad83d494be99ba6e">Ogre::v1::HardwareBufferLockGuard::HardwareBufferLockGuard()</a>, <a class="el" href="class_ogre_1_1_gpu_program.html#a59ccb18c9fcdac1e706753ca6d2d4aad">Ogre::GpuProgram::getConstantDefinitions()</a>, <a class="el" href="struct_ogre_1_1v1_1_1_hardware_buffer_lock_guard.html#a1fb3b5b7b29c72fbca64f11ee76c6308">Ogre::v1::HardwareBufferLockGuard::lock()</a>, <a class="el" href="group___general.html#ga000fe08e9240733ce1630abe43839e39">Ogre::operator!=()</a>, <a class="el" href="structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html#a1dd841af2eaba75d79ffc3bf1b84e0a5">std::tr1::hash&lt; Ogre::SharedPtr&lt; T &gt; &gt;::operator()()</a>, <a class="el" href="group___general.html#gae1dbf4506ab2500da5ec4ef0b58cb2e1">Ogre::operator&lt;()</a>, <a class="el" href="group___general.html#ga9e4eed9f10776cc5b07cd81082d73dc8">Ogre::operator==()</a>, <a class="el" href="struct_ogre_1_1_vertices_remap_info.html#a56d6a14ebf2bd2dde0a81f191e7449c7">Ogre::VerticesRemapInfo::performIndexDataRemap()</a>, and <a class="el" href="class_ogre_1_1_lod0_stripifier.html#aa593f9fb11eedbbe253a4d8f210176b5">Ogre::Lod0Stripifier::StripLod0Vertices()</a>.</p>
-
-</div>
-</div>
-<a id="a564789e0743e9be6ccb5505057ed63b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a564789e0743e9be6ccb5505057ed63b6">&#9670;&nbsp;</a></span>getPointer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">T* <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::getPointer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_shared_ptr.html#ac83e8900520b80c831a070262d90a99a">get()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000021">Deprecated:</a></b></dt><dd>use get() instead </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="class_ogre_1_1_high_level_gpu_program.html#a2d9183c2730e888573c6fa22fac3055f">Ogre::HighLevelGpuProgram::_getBindingDelegate()</a>.</p>
 
 </div>
 </div>
-<a id="a3a5c3bef3f857a24a2fd1b3dded8f3f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a5c3bef3f857a24a2fd1b3dded8f3f2">&#9670;&nbsp;</a></span>isNull()</h2>
+<a id="ac5d8c85be38cfaeaa55d49fa02c995e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5d8c85be38cfaeaa55d49fa02c995e5">&#9670;&nbsp;</a></span>isNull()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -514,8 +467,9 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::isNull </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> bool <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::isNull </td>
           <td>(</td>
+          <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
@@ -526,14 +480,14 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e">SharedPtr::operator unspecified_bool_type()</a> instead </dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000022">Deprecated:</a></b></dt><dd>use SharedPtr::operator bool instead </dd></dl>
 
 <p class="reference">Referenced by <a class="el" href="class_ogre_1_1_gpu_program.html#ad32d6024efaa2c26489fcd734533879f">Ogre::GpuProgram::hasDefaultParameters()</a>, <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#af65aea391537800c502dfc1306ffc00b">Ogre::GpuProgramParameters::hasLogicalIndexedParameters()</a>, and <a class="el" href="class_ogre_1_1_gpu_program_parameters.html#a790f2419a84bb60b2eaf04fb10bba726">Ogre::GpuProgramParameters::hasNamedParameters()</a>.</p>
 
 </div>
 </div>
-<a id="a5de511dc537736b5c290588ff0d6db8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5de511dc537736b5c290588ff0d6db8e">&#9670;&nbsp;</a></span>operator unspecified_bool_type()</h2>
+<a id="ade280794a40b2d9cb9686c9de5d7aacf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade280794a40b2d9cb9686c9de5d7aacf">&#9670;&nbsp;</a></span>operator const shared_ptr&lt; T &gt; &amp;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -544,39 +498,10 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::operator <a class="el" href="class_ogre_1_1_shared_ptr.html#a45aca30d3c7bf70f625a48b3562e3444">unspecified_bool_type</a> </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::operator const shared_ptr&lt; T &gt; &amp; </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_shared_ptr.html#a83c06e915ab6ff074b4a1a90a8b4197d">Ogre::SharedPtr&lt; T &gt;::unspecified_bool()</a>.</p>
-
-</div>
-</div>
-<a id="ab783e729443975c785ac7bc4b52a2278"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab783e729443975c785ac7bc4b52a2278">&#9670;&nbsp;</a></span>operator*()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">T&amp; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::operator* </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -615,8 +540,8 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="a1ce00b90526a205ae31268a88bc9ed35"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ce00b90526a205ae31268a88bc9ed35">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+<a id="aab34f1dc14c185a7828198226a8e0d71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab34f1dc14c185a7828198226a8e0d71">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -627,10 +552,10 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&amp; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::operator= </td>
+          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt;T&gt;&amp; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; T &gt; &amp;&#160;</td>
-          <td class="paramname"><em>r</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -641,44 +566,10 @@ template&lt;class T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="namespacestd.html#ac0f5c834836c0f5a4602cff74511d272">std::swap()</a>.</p>
-
 </div>
 </div>
-<a id="a291dacc84f7f971399a37f725003e9df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a291dacc84f7f971399a37f725003e9df">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<div class="memtemplate">
-template&lt;class Y &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&amp; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::operator= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; Y &gt; &amp;&#160;</td>
-          <td class="paramname"><em>r</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="namespacestd.html#ac0f5c834836c0f5a4602cff74511d272">std::swap()</a>.</p>
-
-</div>
-</div>
-<a id="a4298cdeb2099d52ee0072df3f8056ba9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4298cdeb2099d52ee0072df3f8056ba9">&#9670;&nbsp;</a></span>reset() <span class="overload">[1/2]</span></h2>
+<a id="aff5fd534b22373382cc02823ed99f5b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff5fd534b22373382cc02823ed99f5b1">&#9670;&nbsp;</a></span>setNull()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -689,7 +580,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::reset </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::setNull </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -701,104 +592,12 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_shared_ptr.html#a0102c9ce0678ec964b26e47b8a5310d1">Ogre::SharedPtr&lt; T &gt;::setNull()</a>.</p>
-
-</div>
-</div>
-<a id="a152e9f01d597734a7c14c639b112dc3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a152e9f01d597734a7c14c639b112dc3f">&#9670;&nbsp;</a></span>reset() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::reset </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>rep</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_shared_ptr.html#adf66bfb5d9f0f374ec092232e6b43eb3">Ogre::SharedPtr&lt; T &gt;::SharedPtr</a>.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000023">Deprecated:</a></b></dt><dd>use reset() instead </dd></dl>
 
 </div>
 </div>
-<a id="a0102c9ce0678ec964b26e47b8a5310d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0102c9ce0678ec964b26e47b8a5310d1">&#9670;&nbsp;</a></span>setNull()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::setNull </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000023">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_shared_ptr.html#a4298cdeb2099d52ee0072df3f8056ba9">reset()</a> instead </dd></dl>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_shared_ptr.html#a4298cdeb2099d52ee0072df3f8056ba9">Ogre::SharedPtr&lt; T &gt;::reset()</a>.</p>
-
-</div>
-</div>
-<a id="a1fe9d89e89df46f06ea5d3173bb554ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1fe9d89e89df46f06ea5d3173bb554ac">&#9670;&nbsp;</a></span>setUseCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::setUseCount </td>
-          <td>(</td>
-          <td class="paramtype">unsigned&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated:</a></b></dt><dd>this API will be dropped </dd></dl>
-
-<p class="reference">References <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
-
-</div>
-</div>
-<a id="a058dfd1737dcf94ed8b049718475f816"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a058dfd1737dcf94ed8b049718475f816">&#9670;&nbsp;</a></span>staticCast()</h2>
+<a id="a209f931f633ee93c524bb19d57d5607f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a209f931f633ee93c524bb19d57d5607f">&#9670;&nbsp;</a></span>staticCast()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -811,7 +610,7 @@ template&lt;typename Y &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt;Y&gt; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::staticCast </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt;Y&gt; <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::staticCast </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -823,14 +622,12 @@ template&lt;typename Y &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>use <a class="el" href="group___general.html#gaa3bdba6780a0d31de1d5ac0d724feb00">Ogre::static_pointer_cast</a> instead </dd></dl>
-
-<p class="reference">References <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated:</a></b></dt><dd>use Ogre::static_pointer_cast instead </dd></dl>
 
 </div>
 </div>
-<a id="a08987cfe83e246fc1e24bbc026c8e161"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08987cfe83e246fc1e24bbc026c8e161">&#9670;&nbsp;</a></span>unique()</h2>
+<a id="a400c7fcd1943c439d90f4a6ed45b56ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a400c7fcd1943c439d90f4a6ed45b56ca">&#9670;&nbsp;</a></span>useCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -841,7 +638,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::unique </td>
+          <td class="memname"><a class="el" href="_ogre_platform_8h.html#af2652ba9f4945789c869d74d7e67cbcb">OGRE_DEPRECATED</a> unsigned int <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::useCount </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -853,128 +650,7 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_atomic_scalar.html#a1e8c931c1bb2fd6f7bc4555b9e33d38d">Ogre::AtomicScalar&lt; T &gt;::get()</a>, and <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
-
-</div>
-</div>
-<a id="a83c06e915ab6ff074b4a1a90a8b4197d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83c06e915ab6ff074b4a1a90a8b4197d">&#9670;&nbsp;</a></span>unspecified_bool()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::unspecified_bool </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a>&lt; T &gt; ***&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e">Ogre::SharedPtr&lt; T &gt;::operator unspecified_bool_type()</a>.</p>
-
-</div>
-</div>
-<a id="a7461c17614870330dfbc034bd2309c56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7461c17614870330dfbc034bd2309c56">&#9670;&nbsp;</a></span>use_count()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::use_count </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_atomic_scalar.html#a1e8c931c1bb2fd6f7bc4555b9e33d38d">Ogre::AtomicScalar&lt; T &gt;::get()</a>, and <a class="el" href="struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d">Ogre::SharedPtrInfo::useCount</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_shared_ptr.html#a9d1cf83ba2fc4626c23903678eb5d942">Ogre::SharedPtr&lt; T &gt;::useCount()</a>.</p>
-
-</div>
-</div>
-<a id="a9d1cf83ba2fc4626c23903678eb5d942"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d1cf83ba2fc4626c23903678eb5d942">&#9670;&nbsp;</a></span>useCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr</a>&lt; T &gt;::useCount </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated:</a></b></dt><dd>use <a class="el" href="class_ogre_1_1_shared_ptr.html#a7461c17614870330dfbc034bd2309c56">use_count()</a> instead </dd></dl>
-
-<p class="reference">References <a class="el" href="class_ogre_1_1_shared_ptr.html#a7461c17614870330dfbc034bd2309c56">Ogre::SharedPtr&lt; T &gt;::use_count()</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="adf66bfb5d9f0f374ec092232e6b43eb3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf66bfb5d9f0f374ec092232e6b43eb3">&#9670;&nbsp;</a></span>SharedPtr</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
-<div class="memtemplate">
-template&lt;typename Y &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="class_ogre_1_1_shared_ptr.html">SharedPtr</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="class_ogre_1_1_shared_ptr.html#a152e9f01d597734a7c14c639b112dc3f">Ogre::SharedPtr&lt; T &gt;::reset()</a>.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated:</a></b></dt><dd>use use_count() instead </dd></dl>
 
 </div>
 </div>

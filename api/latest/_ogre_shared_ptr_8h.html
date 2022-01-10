@@ -88,31 +88,20 @@ $(document).ready(function(){initNavTree('_ogre_shared_ptr_8h.html',''); initRes
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">OgreSharedPtr.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="_ogre_prerequisites_8h.html">OgrePrerequisites.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_ogre_atomic_scalar_8h.html">OgreAtomicScalar.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr&lt; T &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference-counted shared pointer, used for objects where implicit destruction is required.  <a href="class_ogre_1_1_shared_ptr.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_shared_ptr_info.html">Ogre::SharedPtrInfo</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_s_p_f_m_delete_t.html">Ogre::SPFMDeleteT</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr_info_delete.html">Ogre::SharedPtrInfoDelete&lt; T &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr_info_delete_t.html">Ogre::SharedPtrInfoDeleteT&lt; T &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_shared_ptr_info_free.html">Ogre::SharedPtrInfoFree&lt; T &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_shared_ptr_info_none.html">Ogre::SharedPtrInfoNone</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html">std::tr1::hash&lt; Ogre::SharedPtr&lt; T &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html">std::hash&lt; Ogre::SharedPtr&lt; T &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -121,36 +110,11 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacestd"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestd.html">std</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacestd_1_1tr1"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestd_1_1tr1.html">std::tr1</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:ga3970484e048d1352a7e59b61186b5f2a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#ga3970484e048d1352a7e59b61186b5f2a">Ogre::SharedPtrFreeMethod</a> { <a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd">Ogre::SPFM_DELETE</a>
-, <a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aab7cd87e656cd7fd3b9cd1345d03822d7">Ogre::SPFM_DELETE_T</a>
-, <a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aadfed108573922359d60810b2aaf2d54b">Ogre::SPFM_FREE</a>
-, <a class="el" href="group___general.html#gga3970484e048d1352a7e59b61186b5f2aa4801c0fad597a42263e06c8e83438cd4">Ogre::SPFM_NONE</a>
- }</td></tr>
-<tr class="memdesc:ga3970484e048d1352a7e59b61186b5f2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The method to use to free memory on destruction.  <a href="group___general.html#ga3970484e048d1352a7e59b61186b5f2a">More...</a><br /></td></tr>
-<tr class="separator:ga3970484e048d1352a7e59b61186b5f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ga38dc64dcead6770c1ca8e5181b293c12"><td class="memTemplParams" colspan="2">template&lt;class T , class U &gt; </td></tr>
-<tr class="memitem:ga38dc64dcead6770c1ca8e5181b293c12"><td class="memTemplItemLeft" align="right" valign="top">SharedPtr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga38dc64dcead6770c1ca8e5181b293c12">Ogre::dynamic_pointer_cast</a> (SharedPtr&lt; U &gt; const &amp;r)</td></tr>
-<tr class="separator:ga38dc64dcead6770c1ca8e5181b293c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga000fe08e9240733ce1630abe43839e39"><td class="memTemplParams" colspan="2">template&lt;class T , class U &gt; </td></tr>
-<tr class="memitem:ga000fe08e9240733ce1630abe43839e39"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga000fe08e9240733ce1630abe43839e39">Ogre::operator!=</a> (SharedPtr&lt; T &gt; const &amp;a, SharedPtr&lt; U &gt; const &amp;b)</td></tr>
-<tr class="separator:ga000fe08e9240733ce1630abe43839e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae1dbf4506ab2500da5ec4ef0b58cb2e1"><td class="memTemplParams" colspan="2">template&lt;class T , class U &gt; </td></tr>
-<tr class="memitem:gae1dbf4506ab2500da5ec4ef0b58cb2e1"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#gae1dbf4506ab2500da5ec4ef0b58cb2e1">Ogre::operator&lt;</a> (SharedPtr&lt; T &gt; const &amp;a, SharedPtr&lt; U &gt; const &amp;b)</td></tr>
-<tr class="separator:gae1dbf4506ab2500da5ec4ef0b58cb2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9e4eed9f10776cc5b07cd81082d73dc8"><td class="memTemplParams" colspan="2">template&lt;class T , class U &gt; </td></tr>
-<tr class="memitem:ga9e4eed9f10776cc5b07cd81082d73dc8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#ga9e4eed9f10776cc5b07cd81082d73dc8">Ogre::operator==</a> (SharedPtr&lt; T &gt; const &amp;a, SharedPtr&lt; U &gt; const &amp;b)</td></tr>
-<tr class="separator:ga9e4eed9f10776cc5b07cd81082d73dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa3bdba6780a0d31de1d5ac0d724feb00"><td class="memTemplParams" colspan="2">template&lt;class T , class U &gt; </td></tr>
-<tr class="memitem:gaa3bdba6780a0d31de1d5ac0d724feb00"><td class="memTemplItemLeft" align="right" valign="top">SharedPtr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group___general.html#gaa3bdba6780a0d31de1d5ac0d724feb00">Ogre::static_pointer_cast</a> (SharedPtr&lt; U &gt; const &amp;r)</td></tr>
-<tr class="separator:gaa3bdba6780a0d31de1d5ac0d724feb00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:gaf6f97a6839d09383771cbe638a56f256"><td class="memItemLeft" align="right" valign="top">const SPFMDeleteT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___general.html#gaf6f97a6839d09383771cbe638a56f256">Ogre::SPFM_DELETE_T</a></td></tr>
+<tr class="separator:gaf6f97a6839d09383771cbe638a56f256"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

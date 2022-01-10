@@ -2005,62 +2005,32 @@ var group___general =
       [ "translateSharedParamNamed", "class_ogre_1_1_shared_params_translator.html#a784693b5685a488930c625227a55d6d0", null ]
     ] ],
     [ "SharedPtr", "class_ogre_1_1_shared_ptr.html", [
-      [ "unspecified_bool_type", "class_ogre_1_1_shared_ptr.html#a45aca30d3c7bf70f625a48b3562e3444", null ],
+      [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#a813261f2607ae4a407b90c903fd6f030", null ],
       [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#a6dc65b8171394624d1bb43fd9d54a8f6", null ],
-      [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#a9daf742e1f2c363bdcaccff255f2dd2d", null ],
+      [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#a119d4d068679964c64a79b2867dd5009", null ],
+      [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#a25fe8dda941c616fde73f664209080e2", null ],
       [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#ab1fae2b13ec9cb470b4616c56cb599d8", null ],
       [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#ad9ac8d216452366004f13221074ea906", null ],
-      [ "~SharedPtr", "class_ogre_1_1_shared_ptr.html#ad1e2501a5f7139c6b78d4c8e06a69463", null ],
-      [ "bind", "class_ogre_1_1_shared_ptr.html#ac8d90e023455dc3299f48722e6068e4a", null ],
-      [ "dynamicCast", "class_ogre_1_1_shared_ptr.html#ad2a6f405c94b4ec8e3f528f549ef74bf", null ],
-      [ "get", "class_ogre_1_1_shared_ptr.html#ac83e8900520b80c831a070262d90a99a", null ],
-      [ "getPointer", "class_ogre_1_1_shared_ptr.html#a564789e0743e9be6ccb5505057ed63b6", null ],
-      [ "isNull", "class_ogre_1_1_shared_ptr.html#a3a5c3bef3f857a24a2fd1b3dded8f3f2", null ],
-      [ "operator unspecified_bool_type", "class_ogre_1_1_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e", null ],
-      [ "operator*", "class_ogre_1_1_shared_ptr.html#ab783e729443975c785ac7bc4b52a2278", null ],
+      [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#a910badf7e570d9eae009af96e407acb1", null ],
+      [ "bind", "class_ogre_1_1_shared_ptr.html#ada1634204594ebb5a8c5906547797fad", null ],
+      [ "dynamicCast", "class_ogre_1_1_shared_ptr.html#ac87b08300b2fb097661a03d781c46442", null ],
+      [ "getPointer", "class_ogre_1_1_shared_ptr.html#a4154c0f302c57df22fa6b16f149c6486", null ],
+      [ "isNull", "class_ogre_1_1_shared_ptr.html#ac5d8c85be38cfaeaa55d49fa02c995e5", null ],
+      [ "operator const shared_ptr< T > &", "class_ogre_1_1_shared_ptr.html#ade280794a40b2d9cb9686c9de5d7aacf", null ],
       [ "operator->", "class_ogre_1_1_shared_ptr.html#a52d62f8b23524bac7b345fb12b8cf16e", null ],
-      [ "operator=", "class_ogre_1_1_shared_ptr.html#a1ce00b90526a205ae31268a88bc9ed35", null ],
-      [ "operator=", "class_ogre_1_1_shared_ptr.html#a291dacc84f7f971399a37f725003e9df", null ],
-      [ "reset", "class_ogre_1_1_shared_ptr.html#a4298cdeb2099d52ee0072df3f8056ba9", null ],
-      [ "reset", "class_ogre_1_1_shared_ptr.html#a152e9f01d597734a7c14c639b112dc3f", null ],
-      [ "setNull", "class_ogre_1_1_shared_ptr.html#a0102c9ce0678ec964b26e47b8a5310d1", null ],
-      [ "setUseCount", "class_ogre_1_1_shared_ptr.html#a1fe9d89e89df46f06ea5d3173bb554ac", null ],
-      [ "staticCast", "class_ogre_1_1_shared_ptr.html#a058dfd1737dcf94ed8b049718475f816", null ],
-      [ "unique", "class_ogre_1_1_shared_ptr.html#a08987cfe83e246fc1e24bbc026c8e161", null ],
-      [ "unspecified_bool", "class_ogre_1_1_shared_ptr.html#a83c06e915ab6ff074b4a1a90a8b4197d", null ],
-      [ "use_count", "class_ogre_1_1_shared_ptr.html#a7461c17614870330dfbc034bd2309c56", null ],
-      [ "useCount", "class_ogre_1_1_shared_ptr.html#a9d1cf83ba2fc4626c23903678eb5d942", null ],
-      [ "SharedPtr", "class_ogre_1_1_shared_ptr.html#adf66bfb5d9f0f374ec092232e6b43eb3", null ]
-    ] ],
-    [ "SharedPtrInfo", "struct_ogre_1_1_shared_ptr_info.html", [
-      [ "SharedPtrInfo", "struct_ogre_1_1_shared_ptr_info.html#a2fd6d3e800ed3899fe2e7313581596e2", null ],
-      [ "~SharedPtrInfo", "struct_ogre_1_1_shared_ptr_info.html#a1e028a0a30366e62248aab777798c28b", null ],
-      [ "useCount", "struct_ogre_1_1_shared_ptr_info.html#a18b7520ec0d1a7d2617344a88204cb4d", null ]
-    ] ],
-    [ "SharedPtrInfoDelete", "class_ogre_1_1_shared_ptr_info_delete.html", [
-      [ "SharedPtrInfoDelete", "class_ogre_1_1_shared_ptr_info_delete.html#ad429a2ceb0143b374792d7c03103b25e", null ],
-      [ "~SharedPtrInfoDelete", "class_ogre_1_1_shared_ptr_info_delete.html#af09bf4bd1da896a381e6ffd5ce79347e", null ],
-      [ "useCount", "class_ogre_1_1_shared_ptr_info_delete.html#a18b7520ec0d1a7d2617344a88204cb4d", null ]
-    ] ],
-    [ "SharedPtrInfoDeleteT", "class_ogre_1_1_shared_ptr_info_delete_t.html", [
-      [ "SharedPtrInfoDeleteT", "class_ogre_1_1_shared_ptr_info_delete_t.html#ab6e9fcd9c453466f6c40dd00f577b5c4", null ],
-      [ "~SharedPtrInfoDeleteT", "class_ogre_1_1_shared_ptr_info_delete_t.html#af7b571752b7085e3ceece3fc77555d47", null ],
-      [ "useCount", "class_ogre_1_1_shared_ptr_info_delete_t.html#a18b7520ec0d1a7d2617344a88204cb4d", null ]
-    ] ],
-    [ "SharedPtrInfoFree", "class_ogre_1_1_shared_ptr_info_free.html", [
-      [ "SharedPtrInfoFree", "class_ogre_1_1_shared_ptr_info_free.html#a3d6b36867b9f7b731b681ffa477cf1e8", null ],
-      [ "~SharedPtrInfoFree", "class_ogre_1_1_shared_ptr_info_free.html#a1830d2053d6504eb92f99e2cc58e0240", null ],
-      [ "useCount", "class_ogre_1_1_shared_ptr_info_free.html#a18b7520ec0d1a7d2617344a88204cb4d", null ]
-    ] ],
-    [ "SharedPtrInfoNone", "struct_ogre_1_1_shared_ptr_info_none.html", [
-      [ "~SharedPtrInfoNone", "struct_ogre_1_1_shared_ptr_info_none.html#a575eaf3fe9b51d7da230e858ac636d60", null ],
-      [ "useCount", "struct_ogre_1_1_shared_ptr_info_none.html#a18b7520ec0d1a7d2617344a88204cb4d", null ]
+      [ "operator=", "class_ogre_1_1_shared_ptr.html#aab34f1dc14c185a7828198226a8e0d71", null ],
+      [ "setNull", "class_ogre_1_1_shared_ptr.html#aff5fd534b22373382cc02823ed99f5b1", null ],
+      [ "staticCast", "class_ogre_1_1_shared_ptr.html#a209f931f633ee93c524bb19d57d5607f", null ],
+      [ "useCount", "class_ogre_1_1_shared_ptr.html#a400c7fcd1943c439d90f4a6ed45b56ca", null ]
     ] ],
     [ "Singleton", "class_ogre_1_1_singleton.html", [
       [ "Singleton", "class_ogre_1_1_singleton.html#a8f7665258d41ee04a429fb8b83862e18", null ],
       [ "~Singleton", "class_ogre_1_1_singleton.html#a1add6c73d73ca409b0febfc6775f47ee", null ],
       [ "getSingleton", "class_ogre_1_1_singleton.html#a35a245eddfbdc09276b1c1468a89c4c9", null ],
       [ "getSingletonPtr", "class_ogre_1_1_singleton.html#a3ab5d6b71d37b3e345d3f5ee181a9cad", null ]
+    ] ],
+    [ "SPFMDeleteT", "struct_ogre_1_1_s_p_f_m_delete_t.html", [
+      [ "operator()", "struct_ogre_1_1_s_p_f_m_delete_t.html#a86fde4968ee43dc5f05fee98079c06c1", null ]
     ] ],
     [ "StencilParams", "struct_ogre_1_1_stencil_params.html", [
       [ "StencilParams", "struct_ogre_1_1_stencil_params.html#ad32dd43db9995e1d1e054546d0f07368", null ],
@@ -3072,12 +3042,6 @@ var group___general =
       [ "DomainShader", "group___general.html#gga7049ce296bb4883feab25251d3865035a9169029277f523651135ddbb41db69aa", null ],
       [ "NumShaderTypes", "group___general.html#gga7049ce296bb4883feab25251d3865035a0bf893209b217d59e15abaf48092d132", null ]
     ] ],
-    [ "SharedPtrFreeMethod", "group___general.html#ga3970484e048d1352a7e59b61186b5f2a", [
-      [ "SPFM_DELETE", "group___general.html#gga3970484e048d1352a7e59b61186b5f2aadae32e4e84712917731325c903fa14dd", null ],
-      [ "SPFM_DELETE_T", "group___general.html#gga3970484e048d1352a7e59b61186b5f2aab7cd87e656cd7fd3b9cd1345d03822d7", null ],
-      [ "SPFM_FREE", "group___general.html#gga3970484e048d1352a7e59b61186b5f2aadfed108573922359d60810b2aaf2d54b", null ],
-      [ "SPFM_NONE", "group___general.html#gga3970484e048d1352a7e59b61186b5f2aa4801c0fad597a42263e06c8e83438cd4", null ]
-    ] ],
     [ "SortMode", "group___general.html#ga73dc0089e326fa37f93a30bf67ba7e3a", [
       [ "SM_DIRECTION", "group___general.html#gga73dc0089e326fa37f93a30bf67ba7e3aab8681f59fb8a9ccea7b9b8bd39bdc562", null ],
       [ "SM_DISTANCE", "group___general.html#gga73dc0089e326fa37f93a30bf67ba7e3aad9e5e193b92b711a1c2ea77b4ab7e0e9", null ]
@@ -3127,7 +3091,6 @@ var group___general =
     [ "any_cast", "group___general.html#ga5a44ad7023ea3086c39d923cd37bddf7", null ],
     [ "any_cast", "group___general.html#ga2024a5fb8d0223391b75632d9443a0d2", null ],
     [ "any_cast", "group___general.html#gad6e8e65dbefcbac63f88a28aeccef948", null ],
-    [ "dynamic_pointer_cast", "group___general.html#ga38dc64dcead6770c1ca8e5181b293c12", null ],
     [ "FastHash", "group___general.html#ga2be47c9c5b63cc7860edcec9b22e6f10", null ],
     [ "findCommandLineOpts", "group___general.html#gad78e25bde5597796c07e75d4f857a3cd", null ],
     [ "getAvgFps", "group___general.html#gae435d81f32ecb89467f544ca5b2fe3fd", null ],
@@ -3138,18 +3101,15 @@ var group___general =
     [ "getWorstTime", "group___general.html#ga66b2067eb7f1ba53650c55f00b34de49", null ],
     [ "HashCombine", "group___general.html#gae1e937aed630bd25446cbef3bdd2cc7c", null ],
     [ "operator!=", "group___general.html#ga80a53685c54f25a002db54a9368e02c6", null ],
-    [ "operator!=", "group___general.html#ga000fe08e9240733ce1630abe43839e39", null ],
     [ "operator<", "group___general.html#ga675a4dbbd77978f9498570697c0f6dbf", null ],
-    [ "operator<", "group___general.html#gae1dbf4506ab2500da5ec4ef0b58cb2e1", null ],
     [ "operator<=", "group___general.html#gaaa93ff4a9e74ef8d4570f20ae725bd81", null ],
     [ "operator==", "group___general.html#gadf4d7e1076f4d7831f6671d3efc324ba", null ],
-    [ "operator==", "group___general.html#ga9e4eed9f10776cc5b07cd81082d73dc8", null ],
     [ "operator>", "group___general.html#ga43ecfebca81e0b8ad95201822f8643d7", null ],
     [ "operator>=", "group___general.html#ga3b1a2ed80c33ac23b8894c35d8029160", null ],
     [ "reset", "group___general.html#ga91166fe4ac997f5e98d7118cac7cddb9", null ],
-    [ "static_pointer_cast", "group___general.html#gaa3bdba6780a0d31de1d5ac0d724feb00", null ],
     [ "swap", "group___general.html#ga8f81fcfbc204edbd0f2f52519068fe96", null ],
     [ "BLANKSTRING", "group___general.html#gad842a4b416bd2f3245d2b44826a0aedc", null ],
     [ "c_allGraphicStagesMask", "group___general.html#ga4686e596bb7b105f9d440181c9e9f608", null ],
-    [ "c_computeStageMask", "group___general.html#ga2c85ae8dd7a6ead0501fd670295c3f19", null ]
+    [ "c_computeStageMask", "group___general.html#ga2c85ae8dd7a6ead0501fd670295c3f19", null ],
+    [ "SPFM_DELETE_T", "group___general.html#gaf6f97a6839d09383771cbe638a56f256", null ]
 ];

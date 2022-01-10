@@ -6,7 +6,6 @@ var hierarchy =
     [ "Ogre::AtomicScalar< ResourceHandle >", "class_ogre_1_1_atomic_scalar.html", null ],
     [ "Ogre::AtomicScalar< size_t >", "class_ogre_1_1_atomic_scalar.html", null ],
     [ "Ogre::AtomicScalar< uint32 >", "class_ogre_1_1_atomic_scalar.html", null ],
-    [ "Ogre::AtomicScalar< unsigned >", "class_ogre_1_1_atomic_scalar.html", null ],
     [ "Ogre::cbitsetN< _N, uint32, 5u, 0x1Fu >", "class_ogre_1_1cbitset_n.html", [
       [ "Ogre::cbitset32< _N >", "class_ogre_1_1cbitset32.html", null ]
     ] ],
@@ -172,9 +171,6 @@ var hierarchy =
     ] ],
     [ "HardwareVertexBuffer MANAGED_RESOURCE", null, [
       [ "Ogre::v1::GLES2HardwareVertexBuffer", "class_ogre_1_1v1_1_1_g_l_e_s2_hardware_vertex_buffer.html", null ]
-    ] ],
-    [ "hash", null, [
-      [ "std::tr1::hash< Ogre::SharedPtr< T > >", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", null ]
     ] ],
     [ "Ogre::HashedVector< LightClosest >", "class_ogre_1_1_hashed_vector.html", null ],
     [ "HighLevelGpuProgram MANAGED_RESOURCE", null, [
@@ -1691,13 +1687,6 @@ var hierarchy =
     [ "Ogre::ShadowNodeHelper", "class_ogre_1_1_shadow_node_helper.html", null ],
     [ "Ogre::ShadowNodeHelper::Resolution", "struct_ogre_1_1_shadow_node_helper_1_1_resolution.html", null ],
     [ "Ogre::ShadowNodeHelper::ShadowParam", "struct_ogre_1_1_shadow_node_helper_1_1_shadow_param.html", null ],
-    [ "Ogre::SharedPtr< T >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtrInfo", "struct_ogre_1_1_shared_ptr_info.html", [
-      [ "Ogre::SharedPtrInfoDelete< T >", "class_ogre_1_1_shared_ptr_info_delete.html", null ],
-      [ "Ogre::SharedPtrInfoDeleteT< T >", "class_ogre_1_1_shared_ptr_info_delete_t.html", null ],
-      [ "Ogre::SharedPtrInfoFree< T >", "class_ogre_1_1_shared_ptr_info_free.html", null ],
-      [ "Ogre::SharedPtrInfoNone", "struct_ogre_1_1_shared_ptr_info_none.html", null ]
-    ] ],
     [ "Ogre::SimpleMatrix4", "class_ogre_1_1_simple_matrix4.html", null ],
     [ "Ogre::SimpleMatrixAf4x3", "class_ogre_1_1_simple_matrix_af4x3.html", null ],
     [ "Ogre::SimpleSpline", "class_ogre_1_1_simple_spline.html", null ],
@@ -1723,6 +1712,7 @@ var hierarchy =
         [ "Ogre::SmallVectorTemplateBase< T, true >", "class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html", null ]
       ] ]
     ] ],
+    [ "Ogre::SPFMDeleteT", "struct_ogre_1_1_s_p_f_m_delete_t.html", null ],
     [ "Ogre::Sphere", "class_ogre_1_1_sphere.html", null ],
     [ "Ogre::StackVector< T, Capacity >", "class_ogre_1_1_stack_vector.html", null ],
     [ "Ogre::StagingBuffer::Destination", "struct_ogre_1_1_staging_buffer_1_1_destination.html", null ],
@@ -1979,44 +1969,6 @@ var hierarchy =
       [ "Ogre::SDLWindow", "class_ogre_1_1_s_d_l_window.html", null ]
     ] ],
     [ "Rotation", "class_rotation.html", null ],
-    [ "Ogre::SharedPtr< AbstractNodeList >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< AnimableValue >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< AsyncTicket >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< ControllerFunction< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< ControllerValue< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< DataStream >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Font >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< GpuLogicalBufferStruct >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< GpuNamedConstants >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< GpuProgram >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< GpuProgramParameters >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< GpuSharedParameters >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< HardwareIndexBuffer >", "class_ogre_1_1_shared_ptr.html", [
-      [ "Ogre::v1::HardwareIndexBufferSharedPtr", "class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html", null ]
-    ] ],
-    [ "Ogre::SharedPtr< HardwareVertexBuffer >", "class_ogre_1_1_shared_ptr.html", [
-      [ "Ogre::v1::HardwareVertexBufferSharedPtr", "class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html", null ]
-    ] ],
-    [ "Ogre::SharedPtr< HighLevelGpuProgram >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< LodCollapseCost >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< LodCollapser >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< LodData >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< LodInputProvider >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< LodOutputProvider >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Material >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Mesh >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Ogre::ControllerFunction< T > >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Ogre::ControllerValue< T > >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Ogre::D3D11VideoModeList >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Ogre::Vector3 >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< PoseData >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Resource >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< ShadowCameraSetup >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< Skeleton >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< SkeletonDef >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< ThreadHandle >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< unsigned char >", "class_ogre_1_1_shared_ptr.html", null ],
-    [ "Ogre::SharedPtr< vector< Image >::type >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "SigC::Object", null, [
       [ "Ogre::GTKWindow", "class_ogre_1_1_g_t_k_window.html", null ]
     ] ],
@@ -2149,6 +2101,48 @@ var hierarchy =
         [ "Ogre::RuntimeAssertionException", "class_ogre_1_1_runtime_assertion_exception.html", null ],
         [ "Ogre::UnimplementedException", "class_ogre_1_1_unimplemented_exception.html", null ]
       ] ]
+    ] ],
+    [ "std::hash< Ogre::SharedPtr< T > >", "structstd_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", null ],
+    [ "std::shared_ptr", null, [
+      [ "Ogre::SharedPtr< Ogre::D3D11VideoModeList >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Ogre::ControllerFunction< T > >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< AbstractNodeList >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< LodInputProvider >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< HighLevelGpuProgram >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< DataStream >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< ControllerValue< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< ControllerFunction< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< AnimableValue >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< ThreadHandle >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< HardwareVertexBuffer >", "class_ogre_1_1_shared_ptr.html", [
+        [ "Ogre::v1::HardwareVertexBufferSharedPtr", "class_ogre_1_1v1_1_1_hardware_vertex_buffer_shared_ptr.html", null ]
+      ] ],
+      [ "Ogre::SharedPtr< LodCollapser >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< GpuProgram >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< LodCollapseCost >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< unsigned char >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< GpuSharedParameters >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< GpuNamedConstants >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Material >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Ogre::Vector3 >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Ogre::ControllerValue< T > >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< vector< Image >::type >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< AsyncTicket >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< GpuLogicalBufferStruct >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< ShadowCameraSetup >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< HardwareIndexBuffer >", "class_ogre_1_1_shared_ptr.html", [
+        [ "Ogre::v1::HardwareIndexBufferSharedPtr", "class_ogre_1_1v1_1_1_hardware_index_buffer_shared_ptr.html", null ]
+      ] ],
+      [ "Ogre::SharedPtr< Resource >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Font >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< PoseData >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< LodData >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Mesh >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< GpuProgramParameters >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< Skeleton >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< SkeletonDef >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< LodOutputProvider >", "class_ogre_1_1_shared_ptr.html", null ],
+      [ "Ogre::SharedPtr< T >", "class_ogre_1_1_shared_ptr.html", null ]
     ] ],
     [ "StdAlignedAllocPolicy", null, [
       [ "Ogre::AlignAllocPolicy< align >", "class_ogre_1_1_align_alloc_policy.html", null ]

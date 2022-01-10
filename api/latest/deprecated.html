@@ -116,22 +116,22 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dd><a class="anchor" id="_deprecated000015"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a2ed9a2f3c1decac6286f8af974ce2ffc" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Member <a class="el" href="class_ogre_1_1_renderable.html#a8f18715b01c0851631eb9cccd1a05552">Ogre::Renderable::setUserAny</a>  (const <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> &amp;anything)</dt>
 <dd><a class="anchor" id="_deprecated000014"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#ac6d05bbca44c5c3b44860c36205f9a68" title="Sets any kind of user object on this class instance.">UserObjectBindings::setUserAny</a> via <a class="el" href="class_ogre_1_1_renderable.html#a2ed9a2f3c1decac6286f8af974ce2ffc" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ac8d90e023455dc3299f48722e6068e4a">Ogre::SharedPtr&lt; T &gt;::bind</a>  (T *rep, SharedPtrFreeMethod inFreeMethod=SPFM_DELETE)</dt>
-<dd><a class="anchor" id="_deprecated000018"></a>this api will be dropped. use <a class="el" href="class_ogre_1_1_shared_ptr.html#a152e9f01d597734a7c14c639b112dc3f">reset(T*)</a> instead  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ad2a6f405c94b4ec8e3f528f549ef74bf">Ogre::SharedPtr&lt; T &gt;::dynamicCast</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000017"></a>use <a class="el" href="group___general.html#ga38dc64dcead6770c1ca8e5181b293c12">Ogre::dynamic_pointer_cast</a> instead  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a564789e0743e9be6ccb5505057ed63b6">Ogre::SharedPtr&lt; T &gt;::getPointer</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000021"></a>use <a class="el" href="class_ogre_1_1_shared_ptr.html#ac83e8900520b80c831a070262d90a99a">get()</a> instead  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a3a5c3bef3f857a24a2fd1b3dded8f3f2">Ogre::SharedPtr&lt; T &gt;::isNull</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000022"></a>use <a class="el" href="class_ogre_1_1_shared_ptr.html#a5de511dc537736b5c290588ff0d6db8e">SharedPtr::operator unspecified_bool_type()</a> instead  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a0102c9ce0678ec964b26e47b8a5310d1">Ogre::SharedPtr&lt; T &gt;::setNull</a>  ()</dt>
-<dd><a class="anchor" id="_deprecated000023"></a>use <a class="el" href="class_ogre_1_1_shared_ptr.html#a4298cdeb2099d52ee0072df3f8056ba9">reset()</a> instead  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a1fe9d89e89df46f06ea5d3173bb554ac">Ogre::SharedPtr&lt; T &gt;::setUseCount</a>  (unsigned value)</dt>
-<dd><a class="anchor" id="_deprecated000020"></a>this API will be dropped  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a058dfd1737dcf94ed8b049718475f816">Ogre::SharedPtr&lt; T &gt;::staticCast</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000016"></a>use <a class="el" href="group___general.html#gaa3bdba6780a0d31de1d5ac0d724feb00">Ogre::static_pointer_cast</a> instead  </dd>
-<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a9d1cf83ba2fc4626c23903678eb5d942">Ogre::SharedPtr&lt; T &gt;::useCount</a>  () const</dt>
-<dd><a class="anchor" id="_deprecated000019"></a>use <a class="el" href="class_ogre_1_1_shared_ptr.html#a7461c17614870330dfbc034bd2309c56">use_count()</a> instead  </dd>
+<dt>Class <a class="el" href="class_ogre_1_1_shared_ptr.html">Ogre::SharedPtr&lt; T &gt;</a>  </dt>
+<dd><a class="anchor" id="_deprecated000016"></a>for backwards compatibility only, rather use shared_ptr directly  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ada1634204594ebb5a8c5906547797fad">Ogre::SharedPtr&lt; T &gt;::bind</a>  (T *rep)</dt>
+<dd><a class="anchor" id="_deprecated000019"></a>this api will be dropped. use reset(T*) instead  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ac87b08300b2fb097661a03d781c46442">Ogre::SharedPtr&lt; T &gt;::dynamicCast</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000018"></a>use Ogre::dynamic_pointer_cast instead  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a4154c0f302c57df22fa6b16f149c6486">Ogre::SharedPtr&lt; T &gt;::getPointer</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000021"></a>use get() instead  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#ac5d8c85be38cfaeaa55d49fa02c995e5">Ogre::SharedPtr&lt; T &gt;::isNull</a>  (void) const</dt>
+<dd><a class="anchor" id="_deprecated000022"></a>use SharedPtr::operator bool instead  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#aff5fd534b22373382cc02823ed99f5b1">Ogre::SharedPtr&lt; T &gt;::setNull</a>  ()</dt>
+<dd><a class="anchor" id="_deprecated000023"></a>use reset() instead  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a209f931f633ee93c524bb19d57d5607f">Ogre::SharedPtr&lt; T &gt;::staticCast</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000017"></a>use Ogre::static_pointer_cast instead  </dd>
+<dt>Member <a class="el" href="class_ogre_1_1_shared_ptr.html#a400c7fcd1943c439d90f4a6ed45b56ca">Ogre::SharedPtr&lt; T &gt;::useCount</a>  () const</dt>
+<dd><a class="anchor" id="_deprecated000020"></a>use use_count() instead  </dd>
 <dt>Member <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a8f6a56d8e8c2c30bd92572d75f0ca560">Ogre::v1::OldNode::getUserAny</a>  () const</dt>
 <dd><a class="anchor" id="_deprecated000013"></a>use <a class="el" href="class_ogre_1_1_user_object_bindings.html#adec1cf29d6134cbb881fc7c79b900bcf" title="Retrieves the custom key less user object associated with this class.">UserObjectBindings::getUserAny</a> via <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#a9540436cb4632a1e8ec9dbca8d63bf2c" title="Return an instance of user objects binding associated with this class.">getUserObjectBindings()</a> instead. </dd>
 <dt>Member <a class="el" href="class_ogre_1_1v1_1_1_old_node.html#ab5a70671b6342033c8a3c4a642b42bea">Ogre::v1::OldNode::setUserAny</a>  (const <a class="el" href="class_ogre_1_1_any.html" title="Variant type that can hold Any other type.">Any</a> &amp;anything)</dt>

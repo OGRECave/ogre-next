@@ -1,14 +1,5 @@
 var NAVTREEINDEX117 =
 {
-"class_ogre_1_1_ring_emitter_1_1_cmd_inner_x.html#af116870994510f32c27988a4509d948b":[7,0,0,770,0,0],
-"class_ogre_1_1_ring_emitter_1_1_cmd_inner_y.html":[7,0,0,770,1],
-"class_ogre_1_1_ring_emitter_1_1_cmd_inner_y.html#ab7b8ca734ea152e8a7e83665a4fe7e79":[7,0,0,770,1,1],
-"class_ogre_1_1_ring_emitter_1_1_cmd_inner_y.html#abfc4f4baa0f7dadda0ccca0ded9c0b81":[7,0,0,770,1,0],
-"class_ogre_1_1_ring_emitter_factory.html":[7,0,0,771],
-"class_ogre_1_1_ring_emitter_factory.html#a1c727e879a260c37b00ce5505fe8e144":[7,0,0,771,5],
-"class_ogre_1_1_ring_emitter_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,771,9],
-"class_ogre_1_1_ring_emitter_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,771,12],
-"class_ogre_1_1_ring_emitter_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,771,7],
 "class_ogre_1_1_ring_emitter_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,771,3],
 "class_ogre_1_1_ring_emitter_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,771,6],
 "class_ogre_1_1_ring_emitter_factory.html#a9c29341104d6d5290fc91ec5542eadb6":[7,0,0,771,2],
@@ -249,5 +240,14 @@ var NAVTREEINDEX117 =
 "class_ogre_1_1_runtime_assertion_exception.html#af4d342026b7af34ba64ed365c7300659":[5,2,2,95,6],
 "class_ogre_1_1_runtime_assertion_exception.html#afac7bd5132f02a3a4fe002aa66e3ccda":[5,2,2,95,5],
 "class_ogre_1_1_s_d_l_g_l_support.html":[7,0,0,807],
-"class_ogre_1_1_s_d_l_g_l_support.html#a00f443e800891f54ac1176072e99e3a5":[7,0,0,807,6]
+"class_ogre_1_1_s_d_l_g_l_support.html#a00f443e800891f54ac1176072e99e3a5":[7,0,0,807,6],
+"class_ogre_1_1_s_d_l_g_l_support.html#a1967867822fc80e81590ac9be066440b":[7,0,0,807,14],
+"class_ogre_1_1_s_d_l_g_l_support.html#a1c07a0e93c455b400a566562b481d24e":[7,0,0,807,18],
+"class_ogre_1_1_s_d_l_g_l_support.html#a3cd7f1eef4ea8b8c842054c09540392b":[7,0,0,807,17],
+"class_ogre_1_1_s_d_l_g_l_support.html#a3ed4bd84727e1ca52051882c47c5d214":[7,0,0,807,10],
+"class_ogre_1_1_s_d_l_g_l_support.html#a4c99eb385087bc6462593ae2425494a6":[7,0,0,807,13],
+"class_ogre_1_1_s_d_l_g_l_support.html#a4f53bfb02b1f21018d2902d466c1208c":[7,0,0,807,3],
+"class_ogre_1_1_s_d_l_g_l_support.html#a6d6b79a885f5688e1445bca13c3f83a7":[7,0,0,807,22],
+"class_ogre_1_1_s_d_l_g_l_support.html#a79554cf3dc82f082a1382d1dd2e5b48e":[7,0,0,807,1],
+"class_ogre_1_1_s_d_l_g_l_support.html#a7da3a67e85b18684378b499e0a93c69c":[7,0,0,807,8]
 };

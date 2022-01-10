@@ -1036,11 +1036,6 @@ var annotated_dup =
       [ "ShadowTextureDefinition", "class_ogre_1_1_shadow_texture_definition.html", "class_ogre_1_1_shadow_texture_definition" ],
       [ "SharedParamsTranslator", "class_ogre_1_1_shared_params_translator.html", "class_ogre_1_1_shared_params_translator" ],
       [ "SharedPtr", "class_ogre_1_1_shared_ptr.html", "class_ogre_1_1_shared_ptr" ],
-      [ "SharedPtrInfo", "struct_ogre_1_1_shared_ptr_info.html", "struct_ogre_1_1_shared_ptr_info" ],
-      [ "SharedPtrInfoDelete", "class_ogre_1_1_shared_ptr_info_delete.html", "class_ogre_1_1_shared_ptr_info_delete" ],
-      [ "SharedPtrInfoDeleteT", "class_ogre_1_1_shared_ptr_info_delete_t.html", "class_ogre_1_1_shared_ptr_info_delete_t" ],
-      [ "SharedPtrInfoFree", "class_ogre_1_1_shared_ptr_info_free.html", "class_ogre_1_1_shared_ptr_info_free" ],
-      [ "SharedPtrInfoNone", "struct_ogre_1_1_shared_ptr_info_none.html", "struct_ogre_1_1_shared_ptr_info_none" ],
       [ "SimpleMatrix4", "class_ogre_1_1_simple_matrix4.html", "class_ogre_1_1_simple_matrix4" ],
       [ "SimpleMatrixAf4x3", "class_ogre_1_1_simple_matrix_af4x3.html", "class_ogre_1_1_simple_matrix_af4x3" ],
       [ "SimplePageContentCollection", "class_ogre_1_1_simple_page_content_collection.html", "class_ogre_1_1_simple_page_content_collection" ],
@@ -1061,6 +1056,7 @@ var annotated_dup =
       [ "SmallVectorTemplateBase", "class_ogre_1_1_small_vector_template_base.html", "class_ogre_1_1_small_vector_template_base" ],
       [ "SmallVectorTemplateBase< T, true >", "class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4.html", "class_ogre_1_1_small_vector_template_base_3_01_t_00_01true_01_4" ],
       [ "SmallVectorTemplateCommon", "class_ogre_1_1_small_vector_template_common.html", "class_ogre_1_1_small_vector_template_common" ],
+      [ "SPFMDeleteT", "struct_ogre_1_1_s_p_f_m_delete_t.html", "struct_ogre_1_1_s_p_f_m_delete_t" ],
       [ "Sphere", "class_ogre_1_1_sphere.html", "class_ogre_1_1_sphere" ],
       [ "SphereSceneQuery", "class_ogre_1_1_sphere_scene_query.html", "class_ogre_1_1_sphere_scene_query" ],
       [ "StackVector", "class_ogre_1_1_stack_vector.html", "class_ogre_1_1_stack_vector" ],
@@ -1238,9 +1234,7 @@ var annotated_dup =
       [ "UTF8", "structrapidjson_1_1_u_t_f8.html", null ]
     ] ],
     [ "std", "namespacestd.html", [
-      [ "tr1", "namespacestd_1_1tr1.html", [
-        [ "hash< Ogre::SharedPtr< T > >", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", "structstd_1_1tr1_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4" ]
-      ] ]
+      [ "hash< Ogre::SharedPtr< T > >", "structstd_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4.html", "structstd_1_1hash_3_01_ogre_1_1_shared_ptr_3_01_t_01_4_01_4" ]
     ] ],
     [ "_D3DCOLORVALUE", "struct___d3_d_c_o_l_o_r_v_a_l_u_e.html", "struct___d3_d_c_o_l_o_r_v_a_l_u_e" ],
     [ "_finddata_t", "struct__finddata__t.html", "struct__finddata__t" ],
