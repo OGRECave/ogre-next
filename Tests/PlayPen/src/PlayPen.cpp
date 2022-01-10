@@ -5375,7 +5375,7 @@ extern "C" _OgreSampleExport void dllStopPlugin( void )
 //
 //      MeshPtr mesh = man->convertToMesh("colourtest.mesh");
 //      MeshSerializer ms;
-//      ms.exportMesh(mesh.getPointer(), "colourtest.mesh");
+//      ms.exportMesh(mesh.get(), "colourtest.mesh");
 //
 //      mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(man);
 //      */

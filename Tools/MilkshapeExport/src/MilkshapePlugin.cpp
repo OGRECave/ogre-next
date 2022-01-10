@@ -610,7 +610,7 @@ void MilkshapePlugin::doExportMesh(msModel* pModel)
     Ogre::String msg;
     msg  = "Exporting mesh data to file '" + Ogre::String(szFile) + "'";
     logMgr.logMessage(msg);
-    serializer.exportMesh(ogreMesh.getPointer(), szFile);
+    serializer.exportMesh(ogreMesh.get(), szFile);
     logMgr.logMessage("Export successful");
 
     Ogre::MeshManager::getSingleton().remove(ogreMesh->getHandle());
@@ -757,7 +757,7 @@ Ogre::SkeletonPtr MilkshapePlugin::doExportSkeleton(msModel* pModel, Ogre::MeshP
     Ogre::SkeletonSerializer serializer;
     msg = "Exporting skeleton to " + Ogre::String(szFile);
     logMgr.logMessage(msg);
-    serializer.exportSkeleton(ogreskel.getPointer(), szFile);
+    serializer.exportSkeleton(ogreskel.get(), szFile);
     logMgr.logMessage("Skeleton exported");
 
 

@@ -171,7 +171,7 @@ namespace v1 {
         RenderOperation renderOp;
         size_t targetBufferIndex;
 
-        GLES2HardwareVertexBuffer* vertexBuffer = static_cast<GLES2HardwareVertexBuffer*>(mVertexBuffers[targetBufferIndex].getPointer());
+        GLES2HardwareVertexBuffer* vertexBuffer = static_cast<GLES2HardwareVertexBuffer*>(mVertexBuffers[targetBufferIndex].get());
 /*        if(Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
             GLSLESProgramPipeline* programPipeline =

@@ -474,7 +474,7 @@ namespace Ogre
                 // don't need a low level implementation for attached shader objects
                 // loadHighLevelImpl will only load the source and compile once
                 // so don't worry about calling it several times.
-                GLSLShader *childShader = static_cast<GLSLShader *>( hlProgram.getPointer() );
+                GLSLShader *childShader = static_cast<GLSLShader *>( hlProgram.get() );
                 // Load the source and attach the child shader.
                 childShader->loadHighLevelImpl();
                 // Add to the container.

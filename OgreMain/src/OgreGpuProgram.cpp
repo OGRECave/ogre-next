@@ -193,15 +193,15 @@ namespace Ogre
 
         size_t paramsSize = 0;
         if( !mDefaultParams.isNull() )
-            paramsSize += mDefaultParams.getPointer()->calculateSize();
+            paramsSize += mDefaultParams->calculateSize();
         if( !mFloatLogicalToPhysical.isNull() )
-            paramsSize += mFloatLogicalToPhysical.getPointer()->bufferSize;
+            paramsSize += mFloatLogicalToPhysical->bufferSize;
         if( !mDoubleLogicalToPhysical.isNull() )
-            paramsSize += mDoubleLogicalToPhysical.getPointer()->bufferSize;
+            paramsSize += mDoubleLogicalToPhysical->bufferSize;
         if( !mIntLogicalToPhysical.isNull() )
-            paramsSize += mIntLogicalToPhysical.getPointer()->bufferSize;
+            paramsSize += mIntLogicalToPhysical->bufferSize;
         if( !mUIntLogicalToPhysical.isNull() )
-            paramsSize += mUIntLogicalToPhysical.getPointer()->bufferSize;
+            paramsSize += mUIntLogicalToPhysical->bufferSize;
         if( !mConstantDefs.isNull() )
             paramsSize += mConstantDefs->calculateSize();
 

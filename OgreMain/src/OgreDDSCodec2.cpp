@@ -238,7 +238,7 @@ namespace Ogre
     {
 #if TODO_OGRE_2_2
         // Unwrap codecDataPtr - data is cleaned by calling function
-        DDSCodec2 *imgData = static_cast<DDSCodec2 *>( pData.getPointer() );
+        DDSCodec2 *imgData = static_cast<DDSCodec2 *>( pData.get() );
 
         // Check size for cube map faces
         bool isCubeMap = ( imgData->size == Image::calculateSize( imgData->num_mipmaps, 6,

@@ -143,7 +143,7 @@ namespace Ogre
         params.halfTexCoords = halfTexCoords;
         params.qTangents = qTangents;
         params.halfPose = halfPose;
-        mV1MeshImportParams[pMesh.getPointer()] = params;
+        mV1MeshImportParams[pMesh.get()] = params;
 
         return pMesh;
     }

@@ -745,7 +745,7 @@ bool Lwo2MeshWriter::writeLwo2Mesh(lwObject *nobject, char *ndest)
         
         try
         {
-            meshserializer.exportMesh(ogreMesh.getPointer(), fname);
+            meshserializer.exportMesh(ogreMesh.get(), fname);
         }
         catch (...)
         {

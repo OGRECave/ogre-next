@@ -1401,7 +1401,7 @@ namespace Ogre
             GpuProgramParameters *defaultParams = 0;
             // does the GPU program have default parameters?
             if( program->hasDefaultParameters() )
-                defaultParams = program->getDefaultParameters().getPointer();
+                defaultParams = program->getDefaultParameters().get();
 
             // Fire write begin event.
             fireGpuProgramRefEvent( MSE_WRITE_BEGIN, skipWriting, attrib, program, params,

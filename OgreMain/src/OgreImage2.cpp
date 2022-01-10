@@ -698,7 +698,7 @@ namespace Ogre
         Codec::DecodeResult res = pCodec->decode( stream );
 
         ImageCodec2::ImageData2 *pData =
-            static_cast<ImageCodec2::ImageData2 *>( res.second.getPointer() );
+            static_cast<ImageCodec2::ImageData2 *>( res.second.get() );
 
         mWidth = pData->box.width;
         mHeight = pData->box.height;

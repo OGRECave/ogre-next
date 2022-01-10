@@ -173,7 +173,7 @@ namespace Ogre
             params.indexBufferUsage = indexBufferUsage;
             params.vertexShadowBuffer = vertexShadowBuffer;
             params.indexShadowBuffer = indexShadowBuffer;
-            mMeshBuildParams[pMesh.getPointer()] = params;
+            mMeshBuildParams[pMesh.get()] = params;
 
             // to preserve previous behaviour, load immediately
             pMesh->load();
@@ -210,7 +210,7 @@ namespace Ogre
             params.indexBufferUsage = indexBufferUsage;
             params.vertexShadowBuffer = vertexShadowBuffer;
             params.indexShadowBuffer = indexShadowBuffer;
-            mMeshBuildParams[pMesh.getPointer()] = params;
+            mMeshBuildParams[pMesh.get()] = params;
 
             // to preserve previous behaviour, load immediately
             pMesh->load();
@@ -250,7 +250,7 @@ namespace Ogre
             params.vertexShadowBuffer = vertexShadowBuffer;
             params.indexShadowBuffer = indexShadowBuffer;
             params.ySegmentsToKeep = ySegmentsToKeep;
-            mMeshBuildParams[pMesh.getPointer()] = params;
+            mMeshBuildParams[pMesh.get()] = params;
 
             // to preserve previous behaviour, load immediately
             pMesh->load();

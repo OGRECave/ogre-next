@@ -103,7 +103,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     DataStreamPtr OITDCodec::encode( MemoryDataStreamPtr &input, Codec::CodecDataPtr &pData ) const
     {
-        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.getPointer() );
+        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.get() );
 
         OITDHeader oitdHeader;
         oitdHeader.width = pImgData->box.width;
@@ -153,7 +153,7 @@ namespace Ogre
     void OITDCodec::encodeToFile( MemoryDataStreamPtr &input, const String &outFileName,
                                   Codec::CodecDataPtr &pData ) const
     {
-        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.getPointer() );
+        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.get() );
 
         OITDHeader oitdHeader;
         oitdHeader.width = pImgData->box.width;

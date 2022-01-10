@@ -255,7 +255,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ControllerManager::setTimeFactor( Real tf )
     {
-        static_cast<FrameTimeControllerValue *>( mFrameTimeController.getPointer() )
+        static_cast<FrameTimeControllerValue *>( mFrameTimeController.get() )
             ->setTimeFactor( tf );
     }
     //-----------------------------------------------------------------------
@@ -267,7 +267,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void ControllerManager::setFrameDelay( Real fd )
     {
-        static_cast<FrameTimeControllerValue *>( mFrameTimeController.getPointer() )
+        static_cast<FrameTimeControllerValue *>( mFrameTimeController.get() )
             ->setFrameDelay( fd );
     }
     //-----------------------------------------------------------------------
