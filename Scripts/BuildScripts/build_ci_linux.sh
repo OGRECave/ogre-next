@@ -26,6 +26,7 @@ cmake \
 -DOGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS=1 \
 -DCMAKE_BUILD_TYPE="Debug" \
 -DCMAKE_CXX_STANDARD=11 \
+-DCMAKE_INSTALL_PREFIX="./build/SDK_install/" \
 -G Ninja ../.. || exit $?
 ninja || exit $?
 ninja install || exit $?

@@ -1,0 +1,22 @@
+name: CI
+
+# Controls when the action will run.
+on:
+  push:
+    branches:  'master'
+
+  # Run for all pull requests
+  pull_request:
+    branches: '*'
+    types: [opened]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  BuildLinux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Linux C++11
+        working-directory: ./
+        run: ./Scripts/BuildScripts/build_ci_linux.sh

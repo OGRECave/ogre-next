@@ -20,6 +20,7 @@ differences have diverged long enough.
 
 | Build | Status (github) |
 |-------|-----------------|
+| Linux |[![CI](https://github.com/OGRECave/ogre-next/actions/workflows/linux.build.yml/badge.svg)](https://github.com/OGRECave/ogre-next/actions/workflows/linux.build.yml)|
 | MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=master&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/master)|
 
 ## Supported Backends
