@@ -813,7 +813,7 @@ namespace Ogre
 #if OGRE_NO_ZIP_ARCHIVE == 0
         assert( mOriginalStream && "Must start (un)compressing first!" );
         mStream = mOriginalStream;
-        mOriginalStream.setNull();
+        mOriginalStream.reset();
 #else
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Ogre was not built with Zip file support!",
                      "StreamSerialiser::stopDeflate" );

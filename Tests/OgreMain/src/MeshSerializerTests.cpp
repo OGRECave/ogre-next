@@ -157,15 +157,15 @@ void MeshSerializerTests::tearDown()
     }
     if (mMesh) {
         mMesh->unload();
-        mMesh.setNull();
+        mMesh.reset();
     }
     if (mOrigMesh) {
         mOrigMesh->unload();
-        mOrigMesh.setNull();
+        mOrigMesh.reset();
     }
     if (mSkeleton) {
         mSkeleton->unload();
-        mSkeleton.setNull();
+        mSkeleton.reset();
     }    
     
     OGRE_DELETE MeshManager::getSingletonPtr();

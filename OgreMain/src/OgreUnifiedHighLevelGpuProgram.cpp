@@ -78,10 +78,10 @@ namespace Ogre
     {
         OGRE_LOCK_AUTO_MUTEX;
 
-        mChosenDelegate.setNull();
+        mChosenDelegate.reset();
 
         HighLevelGpuProgramPtr tmpDelegate;
-        tmpDelegate.setNull();
+        tmpDelegate.reset();
         int tmpPriority = -1;
 
         for( StringVector::const_iterator i = mDelegateNames.begin(); i != mDelegateNames.end(); ++i )
@@ -120,7 +120,7 @@ namespace Ogre
         mDelegateNames.push_back( name );
 
         // reset chosen delegate
-        mChosenDelegate.setNull();
+        mChosenDelegate.reset();
     }
     //-----------------------------------------------------------------------
     void UnifiedHighLevelGpuProgram::clearDelegatePrograms()
@@ -128,7 +128,7 @@ namespace Ogre
         OGRE_LOCK_AUTO_MUTEX;
 
         mDelegateNames.clear();
-        mChosenDelegate.setNull();
+        mChosenDelegate.reset();
     }
     //-----------------------------------------------------------------------------
     size_t UnifiedHighLevelGpuProgram::calculateSize() const

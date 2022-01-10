@@ -955,7 +955,7 @@ namespace Ogre
             {
                 mMaterialName = name;
                 mGroupName = groupName;
-                mMaterial.setNull();
+                mMaterial.reset();
             }
         }
         //-----------------------------------------------------------------------------

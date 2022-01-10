@@ -196,7 +196,7 @@ namespace Ogre
             bind->unsetBinding( POSITION_BINDING );
             bind->unsetBinding( TEXCOORD_BINDING );
 
-            mRenderOp2.indexData->indexBuffer.setNull();
+            mRenderOp2.indexData->indexBuffer.reset();
 
             PanelOverlayElement::_releaseManualHardwareResources();
         }

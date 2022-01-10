@@ -400,7 +400,7 @@ namespace Ogre
             if( itor->asyncTicket )
             {
                 itor->asyncTicket->unmap();
-                itor->asyncTicket.setNull();
+                itor->asyncTicket.reset();
             }
 
             ++itor;

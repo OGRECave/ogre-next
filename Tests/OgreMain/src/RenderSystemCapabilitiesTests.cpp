@@ -687,7 +687,7 @@ void RenderSystemCapabilitiesTests::testWriteAndReadComplexCapabilities()
     CPPUNIT_ASSERT_EQUAL(caps.getDriverVersion().release, caps2.getDriverVersion().release);
     CPPUNIT_ASSERT_EQUAL(0, caps2.getDriverVersion().build);
 
-    dataStreamPtr.setNull();
+    dataStreamPtr.reset();
 }
 //--------------------------------------------------------------------------
 

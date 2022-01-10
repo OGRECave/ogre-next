@@ -240,12 +240,12 @@ namespace Ogre
                 "RenderSystem::_hlmsPipelineStateObjectCreated!" );
 
         // Disable previous state
-        mActiveVertexGpuProgramParameters.setNull();
-        mActiveGeometryGpuProgramParameters.setNull();
-        mActiveTessellationHullGpuProgramParameters.setNull();
-        mActiveTessellationDomainGpuProgramParameters.setNull();
-        mActiveFragmentGpuProgramParameters.setNull();
-        mActiveComputeGpuProgramParameters.setNull();
+        mActiveVertexGpuProgramParameters.reset();
+        mActiveGeometryGpuProgramParameters.reset();
+        mActiveTessellationHullGpuProgramParameters.reset();
+        mActiveTessellationDomainGpuProgramParameters.reset();
+        mActiveFragmentGpuProgramParameters.reset();
+        mActiveComputeGpuProgramParameters.reset();
 
         if( mVertexProgramBound && !mClipPlanes.empty() )
             mClipPlanesDirty = true;

@@ -545,7 +545,7 @@ namespace OgreMayaExporter
         // Export skeleton binary
         Ogre::SkeletonSerializer serializer;
         serializer.exportSkeleton(pSkeleton.get(),params.skeletonFilename.asChar());
-        pSkeleton.setNull();
+        pSkeleton.reset();
         // Skeleton successfully exported
         return MS::kSuccess;
     }

@@ -45,8 +45,8 @@ namespace Ogre {
 namespace v1 {
     GLES2RenderToVertexBuffer::GLES2RenderToVertexBuffer() : mFrontBufferIndex(-1)
     {
-        mVertexBuffers[0].setNull();
-        mVertexBuffers[1].setNull();
+        mVertexBuffers[0].reset();
+        mVertexBuffers[1].reset();
 
         // Create query objects
         OGRE_CHECK_GL_ERROR(glGenQueries(1, &mPrimitivesDrawnQuery));
@@ -248,7 +248,7 @@ namespace v1 {
         assert(index == 0 || index == 1);
         if (mVertexBuffers[index])
         {
-            mVertexBuffers[index].setNull();
+            mVertexBuffers[index].reset();
         }
         
         mVertexBuffers[index] = HardwareBufferManager::getSingleton().createVertexBuffer(

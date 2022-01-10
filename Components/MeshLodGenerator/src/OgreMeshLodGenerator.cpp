@@ -118,7 +118,7 @@ namespace Ogre
                 usage.userValue = lodConfig.levels[i].distance;
                 usage.value = lodConfig.strategy->transformUserValue( usage.userValue );
                 usage.edgeData = NULL;
-                usage.manualMesh.setNull();
+                usage.manualMesh.reset();
                 usage.manualName = lodConfig.levels[i].manualMeshName;
                 lodConfig.mesh->_setLodUsage( uint16( ++n ), usage );
             }

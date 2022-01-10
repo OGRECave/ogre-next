@@ -440,7 +440,7 @@ namespace Ogre {
 
     void GLES2Texture::unprepareImpl()
     {
-        mLoadedImages.setNull();
+        mLoadedImages.reset();
     }
 
     void GLES2Texture::loadImpl()
@@ -454,7 +454,7 @@ namespace Ogre {
         // Now the only copy is on the stack and will be cleaned in case of
         // exceptions being thrown from _loadImages
         LoadedImages loadedImages = mLoadedImages;
-        mLoadedImages.setNull();
+        mLoadedImages.reset();
 
         // Call internal _loadImages, not loadImage since that's external and 
         // will determine load status etc again

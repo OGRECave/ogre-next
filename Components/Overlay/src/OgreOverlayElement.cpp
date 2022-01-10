@@ -321,7 +321,7 @@ namespace Ogre
             }
             else
             {
-                mMaterial.setNull();
+                mMaterial.reset();
             }*/
         }
         //---------------------------------------------------------------------

@@ -198,7 +198,7 @@ namespace Ogre {
         // progress report
         ProgressManager::getSingleton().progress();
 
-        mMesh.setNull();
+        mMesh.reset();
 
 
     }

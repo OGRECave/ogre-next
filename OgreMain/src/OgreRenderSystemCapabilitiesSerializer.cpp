@@ -46,7 +46,7 @@ namespace Ogre
     RenderSystemCapabilitiesSerializer::RenderSystemCapabilitiesSerializer() : mCurrentLineNumber(0), mCurrentLine(0),
         mCurrentCapabilities(0)
     {
-        mCurrentStream.setNull();
+        mCurrentStream.reset();
 
         initialiaseDispatchTables();
     }
@@ -197,7 +197,7 @@ namespace Ogre
         // reset parsing data to NULL
         mCurrentLineNumber = 0;
         mCurrentLine = 0;
-        mCurrentStream.setNull();
+        mCurrentStream.reset();
         mCurrentCapabilities = 0;
 
         mCurrentStream = stream;

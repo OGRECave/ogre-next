@@ -91,7 +91,7 @@ namespace Ogre
             lod.userValue = 0;  // User value not used for base LOD level
             lod.value = LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue();
             lod.edgeData = NULL;
-            lod.manualMesh.setNull();
+            lod.manualMesh.reset();
             mMeshLodUsageList.push_back( lod );
             mLodValues.push_back( lod.value );
         }
@@ -273,7 +273,7 @@ namespace Ogre
             mFreshFromDisk = DataStreamPtr( OGRE_NEW MemoryDataStream( mName, mFreshFromDisk ) );
         }
         //-----------------------------------------------------------------------
-        void Mesh::unprepareImpl() { mFreshFromDisk.setNull(); }
+        void Mesh::unprepareImpl() { mFreshFromDisk.reset(); }
         void Mesh::loadImpl()
         {
             OgreProfileExhaustive( "v1::Mesh::loadImpl" );
@@ -284,7 +284,7 @@ namespace Ogre
             // If the only copy is local on the stack, it will be cleaned
             // up reliably in case of exceptions, etc
             DataStreamPtr data( mFreshFromDisk );
-            mFreshFromDisk.setNull();
+            mFreshFromDisk.reset();
 
             if( !data )
             {
@@ -679,8 +679,8 @@ namespace Ogre
                 if( skelName.empty() )
                 {
                     // No skeleton
-                    mOldSkeleton.setNull();
-                    mSkeleton.setNull();
+                    mOldSkeleton.reset();
+                    mSkeleton.reset();
                 }
                 else
                 {
@@ -696,8 +696,8 @@ namespace Ogre
                     }
                     catch( ... )
                     {
-                        mOldSkeleton.setNull();
-                        mSkeleton.setNull();
+                        mOldSkeleton.reset();
+                        mSkeleton.reset();
                         // Log this error
                         String msg = "Unable to load skeleton ";
                         msg += skelName + " for Mesh " + mName + ". This Mesh will not be animated. " +
@@ -1270,7 +1270,7 @@ namespace Ogre
             MeshLodUsage *lod = &( mMeshLodUsageList[index] );
 
             lod->manualName = meshName;
-            lod->manualMesh.setNull();
+            lod->manualMesh.reset();
             OGRE_DELETE lod->edgeData;
             lod->edgeData = 0;
         }

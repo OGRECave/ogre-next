@@ -954,7 +954,7 @@ bool loadMesh( const String &source, v1::MeshPtr &v1MeshPtr, MeshPtr &v2MeshPtr,
             cout << "Failed." << endl;
             if( v1MeshPtr )
                 v1::MeshManager::getSingleton().remove( v1MeshPtr );
-            v1MeshPtr.setNull();
+            v1MeshPtr.reset();
         }
 
         if( !retVal )
@@ -972,7 +972,7 @@ bool loadMesh( const String &source, v1::MeshPtr &v1MeshPtr, MeshPtr &v2MeshPtr,
             catch( Exception & )
             {
                 cout << "Failed." << endl;
-                v2MeshPtr.setNull();
+                v2MeshPtr.reset();
             }
         }
     }

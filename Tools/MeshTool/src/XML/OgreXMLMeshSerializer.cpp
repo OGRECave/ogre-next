@@ -1626,7 +1626,7 @@ namespace v1 {
         }
         const LodStrategy *lodStrategy = LodStrategyManager::getSingleton().getStrategy( mMesh->getLodStrategyName() );
         usage.value = lodStrategy->transformUserValue(usage.userValue);
-        usage.manualMesh.setNull();
+        usage.manualMesh.reset();
         usage.manualName = "";
         usage.edgeData = NULL;
 

@@ -789,7 +789,7 @@ namespace Ogre
         }
         else
         {
-            mShadowCasterMaterial.setNull();
+            mShadowCasterMaterial.reset();
             mShadowCasterMaterialName.clear();
         }
     }

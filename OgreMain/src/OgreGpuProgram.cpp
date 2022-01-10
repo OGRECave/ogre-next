@@ -228,7 +228,7 @@ namespace Ogre
                 // Keep a reference to old ones to copy
                 GpuProgramParametersSharedPtr savedParams = mDefaultParams;
                 // reset params to stop them being referenced in the next create
-                mDefaultParams.setNull();
+                mDefaultParams.reset();
 
                 // Create new params
                 mDefaultParams = createParameters();

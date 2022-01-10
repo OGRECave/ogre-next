@@ -2845,7 +2845,7 @@ namespace Ogre
     void D3D11RenderSystem::_endFrame()
     {
         mBoundComputeProgram = 0;
-        mActiveComputeGpuProgramParameters.setNull();
+        mActiveComputeGpuProgramParameters.reset();
         mComputeProgramBound = false;
     }
     //---------------------------------------------------------------------

@@ -1279,7 +1279,7 @@ namespace OgreMayaExporter
         // Export the binary mesh
         Ogre::MeshSerializer serializer;
         serializer.exportMesh(pMesh.get(),params.meshFilename.asChar());
-        pMesh.setNull();
+        pMesh.reset();
         return MS::kSuccess;
     }
 

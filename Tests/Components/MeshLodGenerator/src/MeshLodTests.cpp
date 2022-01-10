@@ -85,7 +85,7 @@ void MeshLodTests::tearDown()
 {
     if (mMesh) {
         mMesh->unload();
-        mMesh.setNull();
+        mMesh.reset();
     }
     OGRE_DELETE MeshLodGenerator::getSingletonPtr();
     OGRE_DELETE Root::getSingletonPtr();

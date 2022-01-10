@@ -1570,7 +1570,7 @@ namespace Ogre
                                      "Invalid Lod Usage type in " + pMesh->getName(),
                                      "MeshSerializerImpl::readMeshLodInfo" );
                     }
-                    usage.manualMesh.setNull();  // will trigger load later with manual Lod
+                    usage.manualMesh.reset();  // will trigger load later with manual Lod
                     usage.edgeData = NULL;
                 }
             }
@@ -3244,7 +3244,7 @@ namespace Ogre
                                                                  MeshLodUsage &usage, uint8 casterPass )
         {
             usage.manualName = "";
-            usage.manualMesh.setNull();
+            usage.manualMesh.reset();
             pushInnerChunk( stream );
             {
                 // Get one set of detail per SubMesh
@@ -3313,7 +3313,7 @@ namespace Ogre
             }
 
             usage.manualName = readString( stream );
-            usage.manualMesh.setNull();  // will trigger load later
+            usage.manualMesh.reset();  // will trigger load later
             popInnerChunk( stream );
         }
 
@@ -3432,7 +3432,7 @@ namespace Ogre
 
                 // Set default values
                 usage.manualName = "";
-                usage.manualMesh.setNull();
+                usage.manualMesh.reset();
                 usage.edgeData = NULL;
 
                 if( pMesh->hasManualLodLevel() )
@@ -3836,7 +3836,7 @@ namespace Ogre
 
                 // Set default values
                 usage.manualName = "";
-                usage.manualMesh.setNull();
+                usage.manualMesh.reset();
                 usage.edgeData = NULL;
 
                 if( manual )

@@ -460,7 +460,7 @@ namespace Ogre
             if( !normElem )
             {
                 posNormalShareBuffer = false;
-                srcNormalBuffer.setNull();
+                srcNormalBuffer.reset();
             }
             else
             {
@@ -468,7 +468,7 @@ namespace Ogre
                 if( normBindIndex == posBindIndex )
                 {
                     posNormalShareBuffer = true;
-                    srcNormalBuffer.setNull();
+                    srcNormalBuffer.reset();
                 }
                 else
                 {
@@ -533,9 +533,9 @@ namespace Ogre
             assert( buffer == destPositionBuffer.get() || buffer == destNormalBuffer.get() );
 
             if( buffer == destPositionBuffer.get() )
-                destPositionBuffer.setNull();
+                destPositionBuffer.reset();
             if( buffer == destNormalBuffer.get() )
-                destNormalBuffer.setNull();
+                destNormalBuffer.reset();
         }
         //-----------------------------------------------------------------------------
         //-----------------------------------------------------------------------------

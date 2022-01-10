@@ -51,7 +51,7 @@ namespace Demo
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
-    void TutorialCompute02_UavBufferGameState::destroyScene() { mDrawFromUavBufferMat.setNull(); }
+    void TutorialCompute02_UavBufferGameState::destroyScene() { mDrawFromUavBufferMat.reset(); }
     //-----------------------------------------------------------------------------------
     void TutorialCompute02_UavBufferGameState::update( float timeSinceLast )
     {

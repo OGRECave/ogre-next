@@ -288,7 +288,7 @@ namespace Ogre
     {
         // Close temp stream
         mTmpWriteStream->close();
-        mTmpWriteStream.setNull();
+        mTmpWriteStream.reset();
 
         // Copy & compress
         // We do this rather than compress directly because some code seeks

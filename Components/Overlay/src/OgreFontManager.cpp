@@ -122,7 +122,7 @@ namespace Ogre
                     if( line == "}" )
                     {
                         // Finished
-                        pFont.setNull();
+                        pFont.reset();
                         // NB font isn't loaded until required
                     }
                     else

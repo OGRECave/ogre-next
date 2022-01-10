@@ -820,7 +820,7 @@ namespace Ogre
                 mIndexData = 0;
             }
 
-            mMainBuf.setNull();
+            mMainBuf.reset();
             mMainBuffers.clear();
 
             if( mHlmsDatablock && !getMaterial() )
