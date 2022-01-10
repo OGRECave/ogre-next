@@ -157,6 +157,12 @@ cd build/Debug
 ninja OgreDoc
 ```
 
+# Resolving Merge Conflicts in 2.4
+
+Users who run a customized version of Ogre-Next may found rebasing to the latest version a near impossible job due to the sheer amount of minor merge conflicts when upgrading to Ogre-Next 2.4
+
+See [this guide](https://ogrecave.github.io/ogre-next/api/latest/_resolving_merge_conflicts24.html) on how to deal with them more easily.
+
 # Support and Resources
 
  * [Forums](https://forums.ogre3d.org/viewforum.php?f=25)
