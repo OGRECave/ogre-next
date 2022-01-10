@@ -102,7 +102,7 @@ namespace Ogre
             }
             else
             {
-                if( pFont.isNull() )
+                if( !pFont )
                 {
                     // No current font
                     // So first valid data should be font name

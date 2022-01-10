@@ -83,7 +83,7 @@ void MeshLodTests::setUp()
 //--------------------------------------------------------------------------
 void MeshLodTests::tearDown()
 {
-    if (!mMesh.isNull()) {
+    if (mMesh) {
         mMesh->unload();
         mMesh.setNull();
     }

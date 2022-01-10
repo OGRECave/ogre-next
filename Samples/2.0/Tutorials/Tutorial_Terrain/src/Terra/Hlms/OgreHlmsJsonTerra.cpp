@@ -352,7 +352,7 @@ namespace Ogre
         {
             HlmsTextureManager::TextureLocation texLocation;
             texLocation.texture = datablock->getTexture( textureType );
-            if( !texLocation.texture.isNull() )
+            if( texLocation.texture )
             {
                 texLocation.xIdx = datablock->_getTextureIdx( textureType );
                 texLocation.yIdx = 0;
@@ -397,7 +397,7 @@ namespace Ogre
         //        saveTexture( terraDatablock->getDiffuse(), "diffuse", TERRA_DIFFUSE,
         //                     terraDatablock, outString );
 
-        //        if( !terraDatablock->getTexture( TERRA_DETAIL_WEIGHT ).isNull() )
+        //        if( terraDatablock->getTexture( TERRA_DETAIL_WEIGHT ) )
         //            saveTexture( "detail_weight", TERRA_DETAIL_WEIGHT, terraDatablock, outString );
 
         //        for( int i=0; i<4; ++i )
@@ -411,7 +411,7 @@ namespace Ogre
 
         //            if( offset != Vector2::ZERO ||
         //                scale != Vector2::UNIT_SCALE || terraDatablock->getDetailMapWeight( i ) != 1.0f
-        //                || !terraDatablock->getTexture( textureType ).isNull() )
+        //                || terraDatablock->getTexture( textureType ) )
         //            {
         //                char tmpBuffer[64];
         //                LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) )
@@ -436,7 +436,7 @@ namespace Ogre
 
         //            if( offset != Vector2::ZERO || scale != Vector2::UNIT_SCALE ||
         //                terraDatablock->getDetailNormalWeight( i ) != 1.0f ||
-        //                !terraDatablock->getTexture( textureType ).isNull() )
+        //                terraDatablock->getTexture( textureType ) )
         //            {
         //                char tmpBuffer[64];
         //                LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) )
@@ -449,7 +449,7 @@ namespace Ogre
         //            }
         //        }
 
-        //        if( !terraDatablock->getTexture( TERRA_REFLECTION ).isNull() )
+        //        if( terraDatablock->getTexture( TERRA_REFLECTION ) )
         //            saveTexture( "reflection", TERRA_REFLECTION, terraDatablock, outString );
     }
     //-----------------------------------------------------------------------------------

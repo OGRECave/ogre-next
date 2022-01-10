@@ -134,7 +134,7 @@ namespace Ogre
                                            ManualResourceLoader *loader )
         {
             // Don't try to get existing, create should fail if already exists
-            if( !this->getResourceByName( name, groupName ).isNull() )
+            if( this->getResourceByName( name, groupName ) )
             {
                 OGRE_EXCEPT( Ogre::Exception::ERR_DUPLICATE_ITEM,
                              "v1 Mesh with name '" + name + "' already exists.",
@@ -944,7 +944,7 @@ namespace Ogre
             }
 
             MeshPtr pMesh = getByName( name );
-            if( !pMesh.isNull() )
+            if( pMesh )
             {
                 OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "A mesh called " + name + " already exists!",
                              "MeshManager::createBezierPatch" );

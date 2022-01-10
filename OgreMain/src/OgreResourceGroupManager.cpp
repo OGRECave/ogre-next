@@ -657,7 +657,7 @@ namespace Ogre
         {
             DataStreamPtr stream =
                 mLoadingListener->resourceLoading( resourceName, groupName, resourceBeingLoaded );
-            if( !stream.isNull() )
+            if( stream )
                 return stream;
         }
 
@@ -757,7 +757,7 @@ namespace Ogre
         if(mLoadingListener)
         {
             DataStreamPtr stream = mLoadingListener->resourceLoading(resourceName, groupName,
-        resourceBeingLoaded); if(!stream.isNull()) return stream;
+        resourceBeingLoaded); if(stream) return stream;
         }*/
 
         // Try to find in resource index first
@@ -860,7 +860,7 @@ namespace Ogre
             for( StringVector::iterator ni = names->begin(); ni != names->end(); ++ni )
             {
                 DataStreamPtr ptr = arch->open( *ni );
-                if( !ptr.isNull() )
+                if( ptr )
                 {
                     ret->push_back( ptr );
                 }
@@ -1123,7 +1123,7 @@ namespace Ogre
                     {
                         LogManager::getSingleton().logMessage( "Parsing script " + fii->filename );
                         DataStreamPtr stream = fii->archive->open( fii->filename );
-                        if( !stream.isNull() )
+                        if( stream )
                         {
                             if( mLoadingListener )
                                 mLoadingListener->resourceStreamOpened( fii->filename, grp->name, 0,
@@ -1248,7 +1248,7 @@ namespace Ogre
             }
         }
 
-        if( !resPtr.isNull() )
+        if( resPtr )
         {
             // New group
             ResourceGroup *newGrp = getResourceGroup( res->getGroup() );

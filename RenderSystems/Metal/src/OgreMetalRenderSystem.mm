@@ -1539,13 +1539,13 @@ namespace Ogre
         MetalProgram *vertexShader = 0;
         MetalProgram *pixelShader = 0;
 
-        if( !newPso->vertexShader.isNull() )
+        if( newPso->vertexShader )
         {
             vertexShader = static_cast<MetalProgram *>( newPso->vertexShader->_getBindingDelegate() );
             [psd setVertexFunction:vertexShader->getMetalFunction()];
         }
 
-        if( !newPso->pixelShader.isNull() &&
+        if( newPso->pixelShader &&
             newPso->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pixelShader = static_cast<MetalProgram *>( newPso->pixelShader->_getBindingDelegate() );

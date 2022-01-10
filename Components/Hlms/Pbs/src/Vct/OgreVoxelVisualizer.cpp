@@ -101,7 +101,7 @@ namespace Ogre
         MaterialPtr mat = MaterialManager::getSingleton()
                               .getByName( matName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME )
                               .staticCast<Material>();
-        if( mat.isNull() )
+        if( !mat )
         {
             MaterialPtr baseMat = MaterialManager::getSingleton()
                                       .load( matName.substr( 0u, stringNameBaseSize ),

@@ -246,7 +246,7 @@ namespace Ogre
             }
 
             // ShadowCasterMaterial name
-            if( !pTech->getShadowCasterMaterial().isNull() )
+            if( pTech->getShadowCasterMaterial() )
             {
                 writeAttribute( 2, "shadow_caster_material" );
                 writeValue( quoteWord( pTech->getShadowCasterMaterial()->getName() ) );
@@ -1473,7 +1473,7 @@ namespace Ogre
 
         // float params
         GpuLogicalBufferStructPtr floatLogical = params->getFloatLogicalBufferStruct();
-        if( !floatLogical.isNull() )
+        if( floatLogical )
         {
             OGRE_LOCK_MUTEX( floatLogical->mutex );
 
@@ -1500,7 +1500,7 @@ namespace Ogre
 
         // double params
         GpuLogicalBufferStructPtr doubleLogical = params->getDoubleLogicalBufferStruct();
-        if( !doubleLogical.isNull() )
+        if( doubleLogical )
         {
             OGRE_LOCK_MUTEX( doubleLogical->mutex );
 
@@ -1527,7 +1527,7 @@ namespace Ogre
 
         // int params
         GpuLogicalBufferStructPtr intLogical = params->getIntLogicalBufferStruct();
-        if( !intLogical.isNull() )
+        if( intLogical )
         {
             OGRE_LOCK_MUTEX( intLogical->mutex );
 
@@ -1554,7 +1554,7 @@ namespace Ogre
 
         // uint params
         GpuLogicalBufferStructPtr uintLogical = params->getUnsignedIntLogicalBufferStruct();
-        if( !uintLogical.isNull() )
+        if( uintLogical )
         {
             OGRE_LOCK_MUTEX( uintLogical->mutex );
 
@@ -1581,7 +1581,7 @@ namespace Ogre
 
         // // bool params
         // GpuLogicalBufferStructPtr boolLogical = params->getBoolLogicalBufferStruct();
-        // if( !boolLogical.isNull() )
+        // if( boolLogical )
         // {
         //     OGRE_LOCK_MUTEX(boolLogical->mutex);
 

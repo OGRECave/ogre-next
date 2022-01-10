@@ -393,9 +393,9 @@ namespace Ogre
         virtual ResourcePtr getByHandle( ResourceHandle handle );
 
         /// Returns whether the named resource exists in this manager
-        virtual bool resourceExists( const String &name ) { return !getResourceByName( name ).isNull(); }
+        virtual bool resourceExists( const String &name ) { return getResourceByName( name ).get() != nullptr; }
         /// Returns whether a resource with the given handle exists in this manager
-        virtual bool resourceExists( ResourceHandle handle ) { return !getByHandle( handle ).isNull(); }
+        virtual bool resourceExists( ResourceHandle handle ) { return getByHandle( handle ).get() != nullptr; }
 
         /** Notify this manager that a resource which it manages has been
             'touched', i.e. used.

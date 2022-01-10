@@ -510,7 +510,7 @@ namespace Ogre
     {
         // Based on the wiki sample: http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Generating+A+Mesh
 
-        OgreAssert( v1::MeshManager::getSingleton().getByName( meshName ).isNull(),
+        OgreAssert( !v1::MeshManager::getSingleton().getByName( meshName ),
                     "Resource with given name should not exist" );
 
         generateHull();  // calculate mHull triangles.

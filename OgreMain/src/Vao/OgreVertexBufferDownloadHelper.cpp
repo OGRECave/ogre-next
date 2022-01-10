@@ -93,7 +93,7 @@ namespace Ogre
         {
             outDataPtrs[i] = 0;
 
-            if( mDownloadData[i].ticket.isNull() )
+            if( !mDownloadData[i].ticket )
             {
                 for( size_t j = 0; j < i; ++j )
                 {
@@ -116,7 +116,7 @@ namespace Ogre
         const size_t numSemantics = mDownloadData.size();
         for( size_t i = 0; i < numSemantics; ++i )
         {
-            if( !mDownloadData[i].ticket.isNull() )
+            if( mDownloadData[i].ticket )
             {
                 mDownloadData[i].ticket->unmap();
                 mDownloadData[i].ticket.reset();

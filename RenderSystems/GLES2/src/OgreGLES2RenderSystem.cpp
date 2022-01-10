@@ -1245,12 +1245,12 @@ namespace Ogre {
         // Shader stuff
         //
 
-        if( !newBlock->vertexShader.isNull() )
+        if( newBlock->vertexShader )
         {
             pso->vertexShader = static_cast<GLSLESShader*>( newBlock->vertexShader->
                                                           _getBindingDelegate() );
         }
-        if( !newBlock->pixelShader.isNull() )
+        if( newBlock->pixelShader )
         {
             pso->pixelShader = static_cast<GLSLESShader*>( newBlock->pixelShader->
                                                          _getBindingDelegate() );
@@ -1841,7 +1841,7 @@ namespace Ogre {
 
         if(hasMinGLVersion(3, 0) || checkExtension("GL_EXT_instanced_arrays"))
         {
-            if( !globalInstanceVertexBuffer.isNull() && globalVertexDeclaration != NULL )
+            if( globalInstanceVertexBuffer && globalVertexDeclaration )
             {
                 elemEnd = globalVertexDeclaration->getElements().end();
                 for (elemIter = globalVertexDeclaration->getElements().begin(); elemIter != elemEnd; ++elemIter)

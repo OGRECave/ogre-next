@@ -77,7 +77,7 @@ namespace Ogre
 
         ResourcePtr res = getResourceByName( name, group );
         bool created = false;
-        if( res.isNull() )
+        if( !res )
         {
             created = true;
             res = createResource( name, group, isManual, loader, params );
@@ -243,7 +243,7 @@ namespace Ogre
     {
         ResourcePtr res = getResourceByName( name );
 
-        if( !res.isNull() )
+        if( res )
         {
             // Unload resource
             res->unload();
@@ -254,7 +254,7 @@ namespace Ogre
     {
         ResourcePtr res = getByHandle( handle );
 
-        if( !res.isNull() )
+        if( res )
         {
             // Unload resource
             res->unload();
@@ -321,7 +321,7 @@ namespace Ogre
     {
         ResourcePtr res = getResourceByName( name );
 
-        if( !res.isNull() )
+        if( res )
         {
             removeImpl( res );
         }
@@ -331,7 +331,7 @@ namespace Ogre
     {
         ResourcePtr res = getByHandle( handle );
 
-        if( !res.isNull() )
+        if( res )
         {
             removeImpl( res );
         }
@@ -397,7 +397,7 @@ namespace Ogre
         }
 
         // if didn't find it the grouped pool - get it from the global pool
-        if( res.isNull() )
+        if( !res )
         {
             OGRE_LOCK_AUTO_MUTEX;
 

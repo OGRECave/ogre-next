@@ -121,7 +121,7 @@ namespace Ogre
         {
             size_t numVertices = origData->vertexCount;
 
-            if( mBuffer.isNull() )
+            if( !mBuffer )
             {
                 // Create buffer
                 size_t vertexSize = VertexElement::getTypeSize( VET_FLOAT3 );

@@ -466,7 +466,7 @@ namespace Ogre
         // Is the name valid and already loaded?
         // Check with the high level program manager to see if it was loaded.
         HighLevelGpuProgramPtr hlProgram = HighLevelGpuProgramManager::getSingleton().getByName( name );
-        if( !hlProgram.isNull() )
+        if( hlProgram )
         {
             if( hlProgram->getSyntaxCode() == "glsl" )
             {

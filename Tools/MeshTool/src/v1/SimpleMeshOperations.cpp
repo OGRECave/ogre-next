@@ -21,7 +21,7 @@ using namespace Ogre;
 
 void buildEdgeLists( v1::MeshPtr &mesh )
 {
-    if( mesh.isNull() )
+    if( !mesh )
         return;
 
     if (opts.interactive)
@@ -73,7 +73,7 @@ void buildEdgeLists( v1::MeshPtr &mesh )
 
 void generateTangents( v1::MeshPtr &mesh )
 {
-    if( mesh.isNull() )
+    if( !mesh )
     {
         if( opts.generateTangents )
         {
@@ -215,7 +215,7 @@ void recalcBounds( const VertexArrayObject *vao, AxisAlignedBox& aabb, Real& rad
 
 void recalcBounds( v1::MeshPtr &v1Mesh, MeshPtr &v2Mesh )
 {
-    if( !v1Mesh.isNull() )
+    if( v1Mesh )
     {
         AxisAlignedBox aabb;
         Real radius = 0.0f;
@@ -237,7 +237,7 @@ void recalcBounds( v1::MeshPtr &v1Mesh, MeshPtr &v2Mesh )
         v1Mesh->_setBoundingSphereRadius(radius);
     }
 
-    if( !v2Mesh.isNull() )
+    if( v2Mesh )
     {
         AxisAlignedBox aabb;
         Real radius = 0.0f;

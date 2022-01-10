@@ -120,7 +120,7 @@ namespace Ogre
                                        ManualResourceLoader *loader )
     {
         // Don't try to get existing, create should fail if already exists
-        if( !this->getResourceByName( name, groupName ).isNull() )
+        if( this->getResourceByName( name, groupName ) )
         {
             OGRE_EXCEPT( Ogre::Exception::ERR_DUPLICATE_ITEM,
                          "v2 Mesh with name '" + name + "' already exists.",

@@ -1297,7 +1297,7 @@ namespace Ogre
             }
         }
 
-        if( stream.isNull() )
+        if( !stream )
         {
             // save direct in filesystem
             std::fstream *fs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL );

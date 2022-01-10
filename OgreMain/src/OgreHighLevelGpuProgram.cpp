@@ -96,7 +96,7 @@ namespace Ogre
             // create low-level implementation
             createLowLevelImpl();
             // load constructed assembler program (if it exists)
-            if( !mAssemblerProgram.isNull() && mAssemblerProgram.get() != this )
+            if( mAssemblerProgram && mAssemblerProgram.get() != this )
             {
                 mAssemblerProgram->load();
             }
@@ -105,7 +105,7 @@ namespace Ogre
     //---------------------------------------------------------------------------
     void HighLevelGpuProgram::unloadImpl()
     {
-        if( !mAssemblerProgram.isNull() && mAssemblerProgram.get() != this )
+        if( mAssemblerProgram && mAssemblerProgram.get() != this )
         {
             mAssemblerProgram->getCreator()->remove( mAssemblerProgram->getHandle() );
             mAssemblerProgram.setNull();
@@ -139,7 +139,7 @@ namespace Ogre
             }
         }
         // Copy in default parameters if present
-        if( !mDefaultParams.isNull() )
+        if( mDefaultParams )
             params->copyConstantsFrom( *( mDefaultParams.get() ) );
         return params;
     }
@@ -147,7 +147,7 @@ namespace Ogre
     {
         size_t memSize = 0;
         memSize += sizeof( bool );
-        if( !mAssemblerProgram.isNull() && ( mAssemblerProgram.get() != this ) )
+        if( mAssemblerProgram && ( mAssemblerProgram.get() != this ) )
             memSize += mAssemblerProgram->calculateSize();
 
         memSize += GpuProgram::calculateSize();
@@ -164,7 +164,7 @@ namespace Ogre
             {
                 loadHighLevelImpl();
                 mHighLevelLoaded = true;
-                if( !mDefaultParams.isNull() )
+                if( mDefaultParams )
                 {
                     // Keep a reference to old ones to copy
                     GpuProgramParametersSharedPtr savedParams = mDefaultParams;

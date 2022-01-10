@@ -189,7 +189,7 @@ namespace Ogre
         if( !name.empty() )
             material = MaterialManager::getSingleton().getByName( name, groupName );
 
-        if( material.isNull() )
+        if( !material )
         {
             if( !name.empty() )
             {

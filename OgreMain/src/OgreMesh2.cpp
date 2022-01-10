@@ -167,7 +167,7 @@ namespace Ogre
         DataStreamPtr data( mFreshFromDisk );
         mFreshFromDisk.setNull();
 
-        if( data.isNull() )
+        if( !data )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "Data doesn't appear to have been prepared in " + mName, "Mesh::loadImpl()" );
@@ -552,7 +552,7 @@ namespace Ogre
 
         mSkeletonName = mesh->getSkeletonName();
         v1::SkeletonPtr v1Skeleton = mesh->getOldSkeleton();
-        if( !v1Skeleton.isNull() )
+        if( v1Skeleton )
             mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( v1Skeleton.get() );
 
         // So far we only import manual LOD levels. If the mesh had manual LOD levels,

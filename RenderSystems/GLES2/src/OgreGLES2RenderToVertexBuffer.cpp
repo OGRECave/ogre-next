@@ -137,7 +137,7 @@ namespace v1 {
     void GLES2RenderToVertexBuffer::update(SceneManager* sceneMgr)
     {
 //        size_t bufSize = mVertexData->vertexDeclaration->getVertexSize(0) * mMaxVertexCount;
-//        if (mVertexBuffers[0].isNull() || mVertexBuffers[0]->getSizeInBytes() != bufSize)
+//        if (!mVertexBuffers[0] || mVertexBuffers[0]->getSizeInBytes() != bufSize)
 //        {
 //            // Buffers don't match. Need to reallocate.
 //            mResetRequested = true;
@@ -155,7 +155,7 @@ namespace v1 {
 //            targetBufferIndex = 1 - mFrontBufferIndex;
 //        }
 //
-//        if (mVertexBuffers[targetBufferIndex].isNull() ||
+//        if (!mVertexBuffers[targetBufferIndex] ||
 //            mVertexBuffers[targetBufferIndex]->getSizeInBytes() != bufSize)
 //        {
 //            reallocateBuffer(targetBufferIndex);
@@ -246,7 +246,7 @@ namespace v1 {
     void GLES2RenderToVertexBuffer::reallocateBuffer(size_t index)
     {
         assert(index == 0 || index == 1);
-        if (!mVertexBuffers[index].isNull())
+        if (mVertexBuffers[index])
         {
             mVertexBuffers[index].setNull();
         }

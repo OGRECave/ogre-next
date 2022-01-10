@@ -2718,14 +2718,14 @@ namespace Ogre
         VulkanProgram *vertexShader = 0;
         VulkanProgram *pixelShader = 0;
 
-        if( !newPso->vertexShader.isNull() )
+        if( newPso->vertexShader )
         {
             vertexShader = static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
             vertexShader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
             rootLayout = VulkanRootLayout::findBest( rootLayout, vertexShader->getRootLayout() );
         }
 
-        if( !newPso->geometryShader.isNull() )
+        if( newPso->geometryShader )
         {
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->geometryShader->_getBindingDelegate() );
@@ -2733,7 +2733,7 @@ namespace Ogre
             rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
-        if( !newPso->tesselationHullShader.isNull() )
+        if( newPso->tesselationHullShader )
         {
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->tesselationHullShader->_getBindingDelegate() );
@@ -2741,7 +2741,7 @@ namespace Ogre
             rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
-        if( !newPso->tesselationDomainShader.isNull() )
+        if( newPso->tesselationDomainShader )
         {
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->tesselationDomainShader->_getBindingDelegate() );
@@ -2749,7 +2749,7 @@ namespace Ogre
             rootLayout = VulkanRootLayout::findBest( rootLayout, shader->getRootLayout() );
         }
 
-        if( !newPso->pixelShader.isNull() &&
+        if( newPso->pixelShader &&
             newPso->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pixelShader = static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() );
@@ -2812,7 +2812,7 @@ namespace Ogre
         FastArray<VkVertexInputBindingDescription> bindingDescriptions;
         FastArray<VkVertexInputAttributeDescription> attributeDescriptions;
 
-        if( !newPso->vertexShader.isNull() )
+        if( newPso->vertexShader )
         {
             VulkanProgram *shader =
                 static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );

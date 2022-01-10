@@ -240,7 +240,7 @@ namespace v1 {
         subMeshNode->SetAttribute("usesharedvertices", 
             StringConverter::toString(s->useSharedVertices) );
         // bool use32BitIndexes
-        bool use32BitIndexes = (!s->indexData[VpNormal]->indexBuffer.isNull() &&
+        bool use32BitIndexes = (s->indexData[VpNormal]->indexBuffer &&
             s->indexData[VpNormal]->indexBuffer->getType() == HardwareIndexBuffer::IT_32BIT);
         subMeshNode->SetAttribute("use32bitindexes", 
             StringConverter::toString( use32BitIndexes ));

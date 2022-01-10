@@ -88,7 +88,7 @@ namespace Ogre
         else
         {
             mMaterial = MaterialManager::getSingleton().getByName( mDefinition->mMaterialName );
-            if( mMaterial.isNull() )
+            if( !mMaterial )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Cannot find material '" + mDefinition->mMaterialName + "'",
@@ -304,7 +304,7 @@ namespace Ogre
         sceneManager->_setCurrentCompositorPass( this );
 
         // sceneManager->_injectRenderWithPass( mPass, mFsRect, mCamera, false, false );
-        if( !mMaterial.isNull() )
+        if( mMaterial )
             mFsRect->setMaterial( mMaterial );  // Low level material
         else
             mFsRect->setDatablock( mDatablock );  // Hlms material

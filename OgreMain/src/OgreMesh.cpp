@@ -286,7 +286,7 @@ namespace Ogre
             DataStreamPtr data( mFreshFromDisk );
             mFreshFromDisk.setNull();
 
-            if( data.isNull() )
+            if( !data )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Data doesn't appear to have been prepared in " + mName,
@@ -730,7 +730,7 @@ namespace Ogre
         void Mesh::_initAnimationState( AnimationStateSet *animSet )
         {
             // Animation states for skeletal animation
-            if( !mOldSkeleton.isNull() )
+            if( mOldSkeleton )
             {
                 // Delegate to Skeleton
                 mOldSkeleton->_initAnimationState( animSet );
@@ -755,7 +755,7 @@ namespace Ogre
         //---------------------------------------------------------------------
         void Mesh::_refreshAnimationState( AnimationStateSet *animSet )
         {
-            if( !mOldSkeleton.isNull() )
+            if( mOldSkeleton )
             {
                 mOldSkeleton->_refreshAnimationState( animSet );
             }
@@ -1150,7 +1150,7 @@ namespace Ogre
         //---------------------------------------------------------------------
         void Mesh::_computeBoneBoundingRadius()
         {
-            if( mBoneBoundingRadius == Real( 0 ) && !mSkeleton.isNull() )
+            if( mBoneBoundingRadius == Real( 0 ) && mSkeleton )
             {
                 Real radius = Real( 0 );
                 vector<Vector3>::type bonePositions;
@@ -1232,7 +1232,7 @@ namespace Ogre
 #if !OGRE_NO_MESHLOD
             assert( index < mMeshLodUsageList.size() );
             if( this->_isManualLodLevel( index ) && index > 0 &&
-                mMeshLodUsageList[index].manualMesh.isNull() )
+                !mMeshLodUsageList[index].manualMesh )
             {
                 // Load the mesh now
                 try
@@ -1597,7 +1597,7 @@ namespace Ogre
                     ( ( *itor )->vertexData[VpNormal] == 0 ) ||
                     ( ( *itor )->vertexData[VpNormal] != 0 && ( *itor )->vertexData[VpShadow] != 0 );
                 retVal &= ( ( *itor )->indexData[VpNormal] == 0 ||
-                            ( *itor )->indexData[VpNormal]->indexBuffer.isNull() ) ||
+                            !( *itor )->indexData[VpNormal]->indexBuffer ) ||
                           ( ( *itor )->indexData[VpNormal] != 0 && ( *itor )->indexData[VpShadow] != 0 );
 
                 retVal &=
@@ -1963,7 +1963,7 @@ namespace Ogre
                 {
                     // Delegate edge building to manual mesh
                     // It should have already built it's own edge list while loading
-                    if( !usage.manualMesh.isNull() )
+                    if( usage.manualMesh )
                     {
                         usage.edgeData = usage.manualMesh->getEdgeList( 0 );
                     }
@@ -2476,7 +2476,7 @@ namespace Ogre
                         }
                     }
                 }
-                if( !( *si )->indexData[VpNormal]->indexBuffer.isNull() )
+                if( ( *si )->indexData[VpNormal]->indexBuffer )
                 {
                     // Index data
                     ret += ( *si )->indexData[VpNormal]->indexBuffer->getSizeInBytes();

@@ -427,24 +427,24 @@ namespace Ogre
         TempBlendedBufferInfo::~TempBlendedBufferInfo()
         {
             // check that temp buffers have been released
-            if( !destPositionBuffer.isNull() )
+            if( destPositionBuffer )
                 destPositionBuffer->getManager()->releaseVertexBufferCopy( destPositionBuffer );
-            if( !destNormalBuffer.isNull() )
+            if( destNormalBuffer )
                 destNormalBuffer->getManager()->releaseVertexBufferCopy( destNormalBuffer );
         }
         //-----------------------------------------------------------------------------
         void TempBlendedBufferInfo::extractFrom( const VertexData *sourceData )
         {
             // Release old buffer copies first
-            if( !destPositionBuffer.isNull() )
+            if( destPositionBuffer )
             {
                 destPositionBuffer->getManager()->releaseVertexBufferCopy( destPositionBuffer );
-                assert( destPositionBuffer.isNull() );
+                assert( !destPositionBuffer );
             }
-            if( !destNormalBuffer.isNull() )
+            if( destNormalBuffer )
             {
                 destNormalBuffer->getManager()->releaseVertexBufferCopy( destNormalBuffer );
-                assert( destNormalBuffer.isNull() );
+                assert( !destNormalBuffer );
             }
 
             VertexDeclaration *decl = sourceData->vertexDeclaration;
@@ -483,13 +483,12 @@ namespace Ogre
             bindPositions = positions;
             bindNormals = normals;
 
-            if( positions && destPositionBuffer.isNull() )
+            if( positions && !destPositionBuffer )
             {
                 destPositionBuffer = srcPositionBuffer->getManager()->allocateVertexBufferCopy(
                     srcPositionBuffer, HardwareBufferManagerBase::BLT_AUTOMATIC_RELEASE, this );
             }
-            if( normals && !posNormalShareBuffer && !srcNormalBuffer.isNull() &&
-                destNormalBuffer.isNull() )
+            if( normals && !posNormalShareBuffer && srcNormalBuffer && !destNormalBuffer )
             {
                 destNormalBuffer = srcNormalBuffer->getManager()->allocateVertexBufferCopy(
                     srcNormalBuffer, HardwareBufferManagerBase::BLT_AUTOMATIC_RELEASE, this );
@@ -500,7 +499,7 @@ namespace Ogre
         {
             if( positions || ( normals && posNormalShareBuffer ) )
             {
-                if( destPositionBuffer.isNull() )
+                if( !destPositionBuffer )
                     return false;
 
                 destPositionBuffer->getManager()->touchVertexBufferCopy( destPositionBuffer );
@@ -508,7 +507,7 @@ namespace Ogre
 
             if( normals && !posNormalShareBuffer )
             {
-                if( destNormalBuffer.isNull() )
+                if( !destNormalBuffer )
                     return false;
 
                 destNormalBuffer->getManager()->touchVertexBufferCopy( destNormalBuffer );
@@ -521,7 +520,7 @@ namespace Ogre
         {
             this->destPositionBuffer->suppressHardwareUpdate( suppressHardwareUpload );
             targetData->vertexBufferBinding->setBinding( this->posBindIndex, this->destPositionBuffer );
-            if( bindNormals && !posNormalShareBuffer && !destNormalBuffer.isNull() )
+            if( bindNormals && !posNormalShareBuffer && destNormalBuffer )
             {
                 this->destNormalBuffer->suppressHardwareUpdate( suppressHardwareUpload );
                 targetData->vertexBufferBinding->setBinding( this->normBindIndex,

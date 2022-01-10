@@ -599,13 +599,13 @@ namespace Ogre
     void RenderSystemCapabilitiesSerializer::logParseError(const String& error) const
     {
         // log the line with error in it if the current line is available
-        if (mCurrentLine != 0 && !mCurrentStream.isNull())
+        if (mCurrentLine != 0 && mCurrentStream)
         {
             LogManager::getSingleton().logMessage(
                 "Error in .rendercaps " + mCurrentStream->getName() + ":" + StringConverter::toString(mCurrentLineNumber) +
                 " : " + error);
         }
-        else if (!mCurrentStream.isNull())
+        else if (mCurrentStream)
         {
             LogManager::getSingleton().logMessage(
                 "Error in .rendercaps " + mCurrentStream->getName() +

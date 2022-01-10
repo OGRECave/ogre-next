@@ -48,11 +48,8 @@ namespace Demo
 
         const float armsLength = 2.5f;
 
-        const bool bIsHamVrOptEnabled =
-            !Ogre::MeshManager::getSingleton()
-                 .getByName( "HiddenAreaMeshVr.mesh",
-                             Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME )
-                 .isNull();
+        const bool bIsHamVrOptEnabled = (bool)Ogre::MeshManager::getSingleton().getByName(
+            "HiddenAreaMeshVr.mesh", Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
         if( bIsHamVrOptEnabled )
         {
             mHiddenAreaMeshVr = sceneManager->createItem(

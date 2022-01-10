@@ -245,7 +245,7 @@ extern "C" _OgreSampleExport void dllStopPlugin( void )
 //
 //    bool frameStarted(const FrameEvent& evt)
 //    {
-//        if (!vertParams.isNull())
+//        if (vertParams)
 //        {
 //            Matrix4 scaleMat = Matrix4::IDENTITY;
 //            scaleMat[0][0] = 0.5f;

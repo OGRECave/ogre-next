@@ -238,7 +238,7 @@ namespace Ogre
     {
         MaterialPtr defaults = MaterialManager::getSingleton().getDefaultSettings();
 
-        if( !defaults.isNull() )
+        if( defaults )
         {
             // save name & handle
             String savedName = mName;

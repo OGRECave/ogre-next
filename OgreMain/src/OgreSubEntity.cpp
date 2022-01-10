@@ -59,7 +59,7 @@ namespace Ogre
             mIndexEnd = 0;
 
             mHasSkeletonAnimation =
-                !subMeshBasis->parent->getSkeleton().isNull() &&
+                subMeshBasis->parent->getSkeleton() &&
                 subMeshBasis->parent->getSharedVertexDataAnimationType() == VAT_NONE &&
                 subMeshBasis->getVertexAnimationType() == VAT_NONE;
         }

@@ -80,7 +80,7 @@ namespace Ogre
                                               .getByName( name, groupName )
                                               .staticCast<v1::Skeleton>();
 
-            if( oldSkeleton.isNull() )
+            if( !oldSkeleton )
             {
                 oldSkeleton = v1::OldSkeletonManager::getSingleton()
                                   .load( name, groupName )

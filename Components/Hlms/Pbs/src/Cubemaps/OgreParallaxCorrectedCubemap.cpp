@@ -379,10 +379,10 @@ namespace Ogre
     {
         destroyProxyItems();
 
-        if( !mProxyMesh.isNull() )
+        if( mProxyMesh )
         {
             MeshManager::getSingleton().remove( mProxyMesh->getHandle() );
-            mProxyMesh.setNull();
+            mProxyMesh.reset();
         }
     }
     //-----------------------------------------------------------------------------------

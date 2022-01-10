@@ -196,7 +196,7 @@ namespace Ogre
             // Check that a valid material was provided
             MaterialPtr material = MaterialManager::getSingleton().getByName( materialName, groupName );
 
-            if( material.isNull() )
+            if( !material )
             {
                 LogManager::getSingleton().logMessage(
                     "Can't assign material " + materialName + " to the ManualObject " + mName +
@@ -207,7 +207,7 @@ namespace Ogre
 
                 material = MaterialManager::getSingleton().getByName( "BaseWhite" );
 
-                if( material.isNull() )
+                if( !material )
                 {
                     OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                                  "Can't assign default material "
@@ -936,7 +936,7 @@ namespace Ogre
         //-----------------------------------------------------------------------------
         const MaterialPtr &ManualObject::ManualObjectSection::getMaterial() const
         {
-            if( mMaterial.isNull() )
+            if( !mMaterial )
             {
                 // Load from default group. If user wants to use alternate groups,
                 // they can define it and preload

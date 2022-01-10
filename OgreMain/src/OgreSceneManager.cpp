@@ -196,7 +196,7 @@ namespace Ogre
         {
             MaterialPtr matPlainBlack =
                 MaterialManager::getSingleton().getByName( "Ogre/TextureShadowCaster" );
-            if( matPlainBlack.isNull() )
+            if( !matPlainBlack )
             {
                 matPlainBlack = MaterialManager::getSingleton().create(
                     "Ogre/TextureShadowCaster", ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
@@ -3024,7 +3024,7 @@ namespace Ogre
             while( numTrackIt.hasMoreElements() )
             {
                 const AnimableValuePtr &animPtr = numTrackIt.getNext()->getAssociatedAnimable();
-                if( !animPtr.isNull() )
+                if( animPtr )
                     animPtr->resetToBaseValue();
             }
         }
@@ -3317,7 +3317,7 @@ namespace Ogre
     const Pass *SceneManager::deriveShadowCasterPass( const Pass *pass )
     {
         Pass *retPass;
-        if( !pass->getParent()->getShadowCasterMaterial().isNull() )
+        if( pass->getParent()->getShadowCasterMaterial() )
         {
             return pass->getParent()->getShadowCasterMaterial()->getBestTechnique()->getPass( 0 );
         }
@@ -3849,7 +3849,7 @@ namespace Ogre
         else
         {
             MaterialPtr mat = MaterialManager::getSingleton().getByName( name );
-            if( mat.isNull() )
+            if( !mat )
             {
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                              "Cannot locate material called '" + name + "'",

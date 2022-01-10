@@ -349,7 +349,7 @@ namespace Ogre
         {
             GpuProgramPtr shader =
                 GpuProgramManager::getSingleton().getByName( mShaderReflectionPairHint );
-            if( shader.isNull() )
+            if( !shader )
             {
                 mCompileError = true;
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
