@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorNodeDef.h"
 
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 
 namespace Ogre
