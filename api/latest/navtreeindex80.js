@@ -1,5 +1,7 @@
 var NAVTREEINDEX80 =
 {
+"class_ogre_1_1_light.html#a2e562e3231d1ebdbebb009b5d4bc9af4":[5,2,11,23,3],
+"class_ogre_1_1_light.html#a2eb94fea5944cf0d33702a75cfa14a74":[5,0,1,23,46],
 "class_ogre_1_1_light.html#a2eb94fea5944cf0d33702a75cfa14a74":[5,2,11,23,46],
 "class_ogre_1_1_light.html#a2f0dcdbc7fc32d4342881c6f8ebd1f6f":[5,0,1,23,93],
 "class_ogre_1_1_light.html#a2f0dcdbc7fc32d4342881c6f8ebd1f6f":[5,2,11,23,93],
@@ -25,8 +27,8 @@ var NAVTREEINDEX80 =
 "class_ogre_1_1_light.html#a44715489d100f6a6421ea45b0559c83f":[5,2,11,23,64],
 "class_ogre_1_1_light.html#a44d3d648fb20d0facaebca835ee978d3":[5,0,1,23,55],
 "class_ogre_1_1_light.html#a44d3d648fb20d0facaebca835ee978d3":[5,2,11,23,55],
-"class_ogre_1_1_light.html#a45bf986f54434d8e3f35e6bcd3f0269c":[5,2,11,23,43],
 "class_ogre_1_1_light.html#a45bf986f54434d8e3f35e6bcd3f0269c":[5,0,1,23,43],
+"class_ogre_1_1_light.html#a45bf986f54434d8e3f35e6bcd3f0269c":[5,2,11,23,43],
 "class_ogre_1_1_light.html#a4703f13fadcd89b1dd5b32f66151f9d2":[5,0,1,23,41],
 "class_ogre_1_1_light.html#a4703f13fadcd89b1dd5b32f66151f9d2":[5,2,11,23,41],
 "class_ogre_1_1_light.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,23,108],
@@ -59,8 +61,8 @@ var NAVTREEINDEX80 =
 "class_ogre_1_1_light.html#a4f1dea084d1497c6f49e802ade940dbca90fd73505abfc3ebfa47c8571ca55b18":[5,2,11,23,1,7],
 "class_ogre_1_1_light.html#a4f1dea084d1497c6f49e802ade940dbcaf7bed0743d1dfef2117f8c21dd51e91e":[5,0,1,23,1,5],
 "class_ogre_1_1_light.html#a4f1dea084d1497c6f49e802ade940dbcaf7bed0743d1dfef2117f8c21dd51e91e":[5,2,11,23,1,5],
-"class_ogre_1_1_light.html#a50257ee0a457833b37c11dcd71815699":[5,0,1,23,42],
 "class_ogre_1_1_light.html#a50257ee0a457833b37c11dcd71815699":[5,2,11,23,42],
+"class_ogre_1_1_light.html#a50257ee0a457833b37c11dcd71815699":[5,0,1,23,42],
 "class_ogre_1_1_light.html#a504e2192036f75007c51e157315e1548":[5,0,1,23,113],
 "class_ogre_1_1_light.html#a504e2192036f75007c51e157315e1548":[5,2,11,23,113],
 "class_ogre_1_1_light.html#a5456ecd630d55c91b2fd1b19969d29f5":[5,0,1,23,127],
@@ -167,8 +169,8 @@ var NAVTREEINDEX80 =
 "class_ogre_1_1_light.html#a9f0a6fb4a54d70d0735bd0625770c48f":[5,2,11,23,21],
 "class_ogre_1_1_light.html#aa1f9062242992d47bcd8a48dd7c3a47a":[5,0,1,23,15],
 "class_ogre_1_1_light.html#aa1f9062242992d47bcd8a48dd7c3a47a":[5,2,11,23,15],
-"class_ogre_1_1_light.html#aa2bf67d4ae27cdbe44ab73d09c4797b2":[5,2,11,23,30],
 "class_ogre_1_1_light.html#aa2bf67d4ae27cdbe44ab73d09c4797b2":[5,0,1,23,30],
+"class_ogre_1_1_light.html#aa2bf67d4ae27cdbe44ab73d09c4797b2":[5,2,11,23,30],
 "class_ogre_1_1_light.html#aa47b4c48c6f868811bd64cee42097ca3":[5,0,1,23,126],
 "class_ogre_1_1_light.html#aa47b4c48c6f868811bd64cee42097ca3":[5,2,11,23,126],
 "class_ogre_1_1_light.html#aa8ef1d994088e19d62da4b8878e1e6c0":[5,0,1,23,36],
@@ -209,8 +211,8 @@ var NAVTREEINDEX80 =
 "class_ogre_1_1_light.html#ac2904cb122ab8c8d5066abefb29dfa96":[5,2,11,23,122],
 "class_ogre_1_1_light.html#ac4305df204604a027ca27ef77efff295":[5,0,1,23,24],
 "class_ogre_1_1_light.html#ac4305df204604a027ca27ef77efff295":[5,2,11,23,24],
-"class_ogre_1_1_light.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1":[5,0,1,23,29],
 "class_ogre_1_1_light.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1":[5,2,11,23,29],
+"class_ogre_1_1_light.html#ac4b8f3f72f7bf7a6bc20dd0677e125c1":[5,0,1,23,29],
 "class_ogre_1_1_light.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,0,1,23,104],
 "class_ogre_1_1_light.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,11,23,104],
 "class_ogre_1_1_light.html#ac53dd392f9c2fd05f643825e9723af26":[5,0,1,23,81],
@@ -247,7 +249,5 @@ var NAVTREEINDEX80 =
 "class_ogre_1_1_light.html#add737d6564593333aeac457a1a2c0269":[5,2,11,23,155],
 "class_ogre_1_1_light.html#adead68de3305bd67d1617352c14da3c3":[5,0,1,23,124],
 "class_ogre_1_1_light.html#adead68de3305bd67d1617352c14da3c3":[5,2,11,23,124],
-"class_ogre_1_1_light.html#adf841793f9978a635dd0345a6eb7a3e6":[5,0,1,23,115],
-"class_ogre_1_1_light.html#adf841793f9978a635dd0345a6eb7a3e6":[5,2,11,23,115],
-"class_ogre_1_1_light.html#ae3e2e4e50055bf99fd923ffa4f539f7d":[5,0,1,23,162]
+"class_ogre_1_1_light.html#adf841793f9978a635dd0345a6eb7a3e6":[5,0,1,23,115]
 };

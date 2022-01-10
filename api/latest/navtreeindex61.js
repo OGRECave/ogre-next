@@ -1,5 +1,7 @@
 var NAVTREEINDEX61 =
 {
+"class_ogre_1_1_g_l_e_s2_buffer_interface.html#abc183c59ca908d4dc53149add87a0237":[7,0,0,342,13],
+"class_ogre_1_1_g_l_e_s2_buffer_interface.html#abec208a7fe56bc8b78f2069bce42d4d0":[7,0,0,342,9],
 "class_ogre_1_1_g_l_e_s2_buffer_interface.html#af98efee10be4efe65661d8e59a5b6245":[7,0,0,342,6],
 "class_ogre_1_1_g_l_e_s2_const_buffer_packed.html":[7,0,0,343],
 "class_ogre_1_1_g_l_e_s2_const_buffer_packed.html#a024eb2f73c90ee052b3b1b275b0c83ef":[7,0,0,343,21],
@@ -247,7 +249,5 @@ var NAVTREEINDEX61 =
 "class_ogre_1_1_g_l_e_s2_gpu_program_manager.html#afb897c540af244c72da7ed8425159d9e":[7,0,0,353,15],
 "class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html":[7,0,0,354],
 "class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html#a0542d269eb38aa01876e7290100b494e":[7,0,0,354,4],
-"class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html#a28654e4a823e22abb31cc32d4324b99c":[7,0,0,354,1],
-"class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html#a54246fdc493f06d649c5a7076a842c0b":[7,0,0,354,5],
-"class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html#a82834457995eab4ee174ebf118fa1389":[7,0,0,354,2]
+"class_ogre_1_1_g_l_e_s2_hardware_occlusion_query.html#a28654e4a823e22abb31cc32d4324b99c":[7,0,0,354,1]
 };

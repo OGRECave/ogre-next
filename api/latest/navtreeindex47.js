@@ -1,5 +1,7 @@
 var NAVTREEINDEX47 =
 {
+"class_ogre_1_1_default_sphere_scene_query.html#af3abfea7c8d18bfb4b3783699e084068":[5,0,1,16,5],
+"class_ogre_1_1_default_sphere_scene_query.html#af3abfea7c8d18bfb4b3783699e084068":[5,2,11,16,5],
 "class_ogre_1_1_default_sphere_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,0,1,16,20],
 "class_ogre_1_1_default_sphere_scene_query.html#afa2943846ba6a2b5824a12857139cf5e":[5,2,11,16,20],
 "class_ogre_1_1_default_texture_gpu_manager_listener.html":[5,2,10,13],
@@ -247,7 +249,5 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_direction_randomiser_affector.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,248,20],
 "class_ogre_1_1_direction_randomiser_affector.html#a5f401d9023e7bb484ff3ff49e70c9510":[7,0,0,248,5],
 "class_ogre_1_1_direction_randomiser_affector.html#a6e3625685f5f840fdb3677a187137ac1":[7,0,0,248,32],
-"class_ogre_1_1_direction_randomiser_affector.html#a70dc5afd6cc88a28e668d1d82e1bdba9":[7,0,0,248,10],
-"class_ogre_1_1_direction_randomiser_affector.html#a7512d598b06398924abbf3909793fb15":[7,0,0,248,30],
-"class_ogre_1_1_direction_randomiser_affector.html#a754e34a827b8990b6e9553579f300d7a":[7,0,0,248,15]
+"class_ogre_1_1_direction_randomiser_affector.html#a70dc5afd6cc88a28e668d1d82e1bdba9":[7,0,0,248,10]
 };
