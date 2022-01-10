@@ -368,7 +368,7 @@ var searchData=
   ['resolvingmergeconflictsin2_2e4_2emd_10683',['ResolvingMergeConflictsIn2.4.md',['../_resolving_merge_conflicts_in2_84_8md.html',1,'']]],
   ['resource_10684',['Resource',['../class_ogre_1_1_resource.html',1,'Ogre::Resource'],['../class_ogre_1_1_resource.html#a03c52d5285092f0a5d21ad83a0643814',1,'Ogre::Resource::Resource()']]],
   ['resource_10685',['resource',['../struct_ogre_1_1_resource_transition.html#a41266fce2a214bf806753d86587f5b6a',1,'Ogre::ResourceTransition']]],
-  ['resource_5fsystem_5fnum_5freference_5fcounts_10686',['RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS',['../class_ogre_1_1_resource_group_manager.html#a2f859bb7ae7ea232379d238c8fdfd142',1,'Ogre::ResourceGroupManager']]],
+  ['resource_5fsystem_5fnum_5freference_5fcounts_10686',['RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS',['../class_ogre_1_1_resource_group_manager.html#a1b1e4780284f4012f5382330061dca78',1,'Ogre::ResourceGroupManager']]],
   ['resourceaccess_10687',['ResourceAccess',['../namespace_ogre_1_1_resource_access.html#a732c0b8774d76d325e0749d09ce70aad',1,'Ogre::ResourceAccess']]],
   ['resourcebackgroundqueue_10688',['ResourceBackgroundQueue',['../class_ogre_1_1_resource_background_queue.html',1,'Ogre::ResourceBackgroundQueue'],['../class_ogre_1_1_resource_background_queue.html#a74525d1f4e99a24afa3cc0800f0b6ce9',1,'Ogre::ResourceBackgroundQueue::ResourceBackgroundQueue()']]],
   ['resourcecollision_10689',['resourceCollision',['../class_ogre_1_1_resource_loading_listener.html#a62badbb7992a529cdfa35f23b9401141',1,'Ogre::ResourceLoadingListener']]],

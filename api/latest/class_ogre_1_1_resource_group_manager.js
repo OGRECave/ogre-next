@@ -78,5 +78,5 @@ var class_ogre_1_1_resource_group_manager =
     [ "DEFAULT_RESOURCE_GROUP_NAME", "class_ogre_1_1_resource_group_manager.html#a813da407fd91dc1afee86103d3a4f5cc", null ],
     [ "INTERNAL_RESOURCE_GROUP_NAME", "class_ogre_1_1_resource_group_manager.html#a41cf771aba39d52af949d5295e7e18e3", null ],
     [ "OGRE_AUTO_MUTEX", "class_ogre_1_1_resource_group_manager.html#a9bd3977c7aa43e245b522a9f9bd6c279", null ],
-    [ "RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS", "class_ogre_1_1_resource_group_manager.html#a2f859bb7ae7ea232379d238c8fdfd142", null ]
+    [ "RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS", "class_ogre_1_1_resource_group_manager.html#a1b1e4780284f4012f5382330061dca78", null ]
 ];

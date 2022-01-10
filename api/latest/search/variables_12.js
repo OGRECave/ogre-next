@@ -43,7 +43,7 @@ var searchData=
   ['resolvetexture_25747',['resolveTexture',['../struct_ogre_1_1_render_pass_target_base.html#a7f41bdeafb1eb3a2e78ed102e0769626',1,'Ogre::RenderPassTargetBase']]],
   ['resolvetexturename_25748',['resolveTextureName',['../struct_ogre_1_1_render_target_view_entry.html#ab11e004ece90bc212ce95a9af81dd5fb',1,'Ogre::RenderTargetViewEntry']]],
   ['resource_25749',['resource',['../struct_ogre_1_1_resource_transition.html#a41266fce2a214bf806753d86587f5b6a',1,'Ogre::ResourceTransition']]],
-  ['resource_5fsystem_5fnum_5freference_5fcounts_25750',['RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS',['../class_ogre_1_1_resource_group_manager.html#a2f859bb7ae7ea232379d238c8fdfd142',1,'Ogre::ResourceGroupManager']]],
+  ['resource_5fsystem_5fnum_5freference_5fcounts_25750',['RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS',['../class_ogre_1_1_resource_group_manager.html#a1b1e4780284f4012f5382330061dca78',1,'Ogre::ResourceGroupManager']]],
   ['resourcegroup_25751',['resourceGroup',['../struct_ogre_1_1_texture_gpu_manager_1_1_resource_entry.html#ae6479fe6bf6fcaaec2eabbcb166baab9',1,'Ogre::TextureGpuManager::ResourceEntry']]],
   ['resourcename_25752',['resourceName',['../struct_ogre_1_1_resource_group_manager_1_1_resource_declaration.html#ae2e29633ab1798c3f99151618b963d73',1,'Ogre::ResourceGroupManager::ResourceDeclaration']]],
   ['resourcetype_25753',['resourceType',['../struct_ogre_1_1_resource_group_manager_1_1_resource_declaration.html#aae401b65d364881e950953a3a15e2977',1,'Ogre::ResourceGroupManager::ResourceDeclaration']]],
