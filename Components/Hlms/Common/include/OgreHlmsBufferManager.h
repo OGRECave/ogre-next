@@ -28,9 +28,11 @@ THE SOFTWARE.
 #ifndef _OgreHlmsBufferManager_H_
 #define _OgreHlmsBufferManager_H_
 
-#include "OgreHeaderPrefix.h"
-#include "OgreHlms.h"
 #include "OgrePrerequisites.h"
+
+#include "OgreHlms.h"
+
+#include "OgreHeaderPrefix.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 #    if defined( OGRE_STATIC_LIB ) || defined( OGRE_PBS_STATIC_LIB ) || defined( OGRE_UNLIT_STATIC_LIB )
