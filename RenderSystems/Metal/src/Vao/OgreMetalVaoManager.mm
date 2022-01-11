@@ -245,7 +245,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Metal SL Compiler Error while compiling internal c_gpuMemcpyComputeShader:\n" +
@@ -258,7 +258,7 @@ namespace Ogre
             {
                 String errorDesc;
                 if( error )
-                    errorDesc = [error localizedDescription].UTF8String;
+                    errorDesc = error.localizedDescription.UTF8String;
                 LogManager::getSingleton().logMessage(
                     "Metal SL Compiler Warnings in c_gpuMemcpyComputeShader:\n" + errorDesc );
             }
@@ -282,7 +282,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             OGRE_EXCEPT(
                 Exception::ERR_RENDERINGAPI_ERROR,

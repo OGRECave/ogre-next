@@ -223,7 +223,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             LogManager::getSingleton().logMessage( "Metal SL Compiler Error in " + mName + ":\n" +
                                                    errorDesc );
@@ -236,7 +236,7 @@ namespace Ogre
             {
                 String errorDesc;
                 if( error )
-                    errorDesc = [error localizedDescription].UTF8String;
+                    errorDesc = error.localizedDescription.UTF8String;
                 LogManager::getSingleton().logMessage( "Metal SL Compiler Warnings in " + mName + ":\n" +
                                                        errorDesc );
             }
@@ -310,7 +310,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             mCompileError = true;
 
@@ -402,7 +402,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             mCompileError = true;
 
