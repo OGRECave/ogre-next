@@ -28,13 +28,15 @@ THE SOFTWARE.
 #ifndef _OgreHlmsJson_H_
 #define _OgreHlmsJson_H_
 
+#include "OgreHlmsCommon.h"
+
 #if !OGRE_NO_JSON
 
-#    include "OgreHeaderPrefix.h"
-#    include "OgreHlmsCommon.h"
 #    include "OgreHlmsDatablock.h"
 #    include "OgreHlmsSamplerblock.h"
 #    include "OgreLwConstString.h"
+
+#    include "OgreHeaderPrefix.h"
 
 // Forward declaration for |Document|.
 namespace rapidjson

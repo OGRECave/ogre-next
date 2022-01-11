@@ -26,11 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
+#include "OgreHlmsJsonPbs.h"
 
 #if !OGRE_NO_JSON
-
-#    include "OgreHlmsJsonPbs.h"
 
 #    include "OgreHlmsManager.h"
 #    include "OgreTextureFilters.h"
