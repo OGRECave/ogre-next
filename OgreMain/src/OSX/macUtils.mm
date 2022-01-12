@@ -189,11 +189,19 @@ namespace Ogre
 
     String macCachePath()
     {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains( NSCachesDirectory, NSUserDomainMask, YES );
-        NSString *cachesDirectory = [paths objectAtIndex:0];
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
-
-        return [[cachesDirectory stringByAppendingPathComponent:bundleId] fileSystemRepresentation];
+        NSURL* cachesURL = [NSFileManager.defaultManager
+            URLForDirectory: NSCachesDirectory
+            inDomain: NSUserDomainMask
+            appropriateForURL: nil
+            create: YES
+            error: nil ];
+        NSURL* myDirURL = [cachesURL URLByAppendingPathComponent: NSBundle.mainBundle.bundleIdentifier isDirectory: YES];
+        [NSFileManager.defaultManager
+            createDirectoryAtURL: myDirURL
+            withIntermediateDirectories: YES
+            attributes: nil
+            error: nil];
+        return myDirURL.fileSystemRepresentation;
     }
 
     String macTempFileName()
