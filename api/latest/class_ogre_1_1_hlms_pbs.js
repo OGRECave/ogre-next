@@ -93,7 +93,7 @@ var class_ogre_1_1_hlms_pbs =
     [ "getShaderSyntax", "class_ogre_1_1_hlms_pbs.html#a905909d0752107d11db3fb6d27c2d615", null ],
     [ "getShadowFilter", "class_ogre_1_1_hlms_pbs.html#a76889b8cf476ab66efbddd560d0baf46", null ],
     [ "getShadowReceiversInPixelShader", "class_ogre_1_1_hlms_pbs.html#a2fcde10eb2aa0cd35e39098572c5ee44", null ],
-    [ "getStaticBranchingLights", "class_ogre_1_1_hlms_pbs.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
+    [ "getStaticBranchingLights", "class_ogre_1_1_hlms_pbs.html#ade989fe1d9b95aa73a7885211f764041", null ],
     [ "getTemplateChecksum", "class_ogre_1_1_hlms_pbs.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
     [ "getType", "class_ogre_1_1_hlms_pbs.html#a508e017c803859196fc55860b7ddfc0f", null ],
     [ "getTypeName", "class_ogre_1_1_hlms_pbs.html#a10f828092b41b6224285937a71c69350", null ],

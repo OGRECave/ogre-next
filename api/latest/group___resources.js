@@ -1692,7 +1692,7 @@ var group___resources =
       [ "getShaderCodeCache", "class_ogre_1_1_hlms.html#a349b173738c195012cea3acaa527f15f", null ],
       [ "getShaderProfile", "class_ogre_1_1_hlms.html#a16a7d3b9914b567e80921763e75db53e", null ],
       [ "getShaderSyntax", "class_ogre_1_1_hlms.html#a905909d0752107d11db3fb6d27c2d615", null ],
-      [ "getStaticBranchingLights", "class_ogre_1_1_hlms.html#a9b0e95d9461806e36662e3a0d319a94c", null ],
+      [ "getStaticBranchingLights", "class_ogre_1_1_hlms.html#ade989fe1d9b95aa73a7885211f764041", null ],
       [ "getTemplateChecksum", "class_ogre_1_1_hlms.html#a7a0ec84d5e6078c5627f40e95d8d8ca3", null ],
       [ "getType", "class_ogre_1_1_hlms.html#a508e017c803859196fc55860b7ddfc0f", null ],
       [ "getTypeName", "class_ogre_1_1_hlms.html#a10f828092b41b6224285937a71c69350", null ],
