@@ -77,9 +77,9 @@ namespace Ogre
             return __sync_bool_compare_and_swap( &mField, old, nu );
         }
 
-        T operator++( void ) { return BUILTIN_ADD_FETCH( &mField, 1 ); }
+        T operator++() { return BUILTIN_ADD_FETCH( &mField, 1 ); }
 
-        T operator--( void ) { return BUILTIN_ADD_FETCH( &mField, -1 ); }
+        T operator--() { return BUILTIN_ADD_FETCH( &mField, -1 ); }
 
         T operator++( int ) { return BUILTIN_FETCH_ADD( &mField, 1 ); }
 
@@ -222,7 +222,7 @@ namespace Ogre
             }
         }
 
-        T operator++( void )
+        T operator++()
         {
             if( sizeof( T ) == 2 )
             {
@@ -245,7 +245,7 @@ namespace Ogre
             }
         }
 
-        T operator--( void )
+        T operator--()
         {
             if( sizeof( T ) == 2 )
             {
@@ -425,13 +425,13 @@ namespace Ogre
             return true;
         }
 
-        T operator++( void )
+        T operator++()
         {
             OGRE_LOCK_AUTO_MUTEX;
             return ++mField;
         }
 
-        T operator--( void )
+        T operator--()
         {
             OGRE_LOCK_AUTO_MUTEX;
             return --mField;

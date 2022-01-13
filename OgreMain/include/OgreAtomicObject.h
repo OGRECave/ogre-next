@@ -75,7 +75,7 @@ namespace Ogre
             return true;
         }
 
-        T operator++( void )
+        T operator++()
         {
             OGRE_LOCK_AUTO_MUTEX;
             return ++mField;

@@ -107,7 +107,7 @@ namespace Ogre
         /// @deprecated use get() instead
         OGRE_DEPRECATED T *getPointer() const { return std::shared_ptr<T>::get(); }
         /// @deprecated use SharedPtr::operator bool instead
-        OGRE_DEPRECATED bool isNull( void ) const { return !std::shared_ptr<T>::operator bool(); }
+        OGRE_DEPRECATED bool isNull() const { return !std::shared_ptr<T>::operator bool(); }
         /// @deprecated use reset() instead
         OGRE_DEPRECATED void setNull() { std::shared_ptr<T>::reset(); }
     };

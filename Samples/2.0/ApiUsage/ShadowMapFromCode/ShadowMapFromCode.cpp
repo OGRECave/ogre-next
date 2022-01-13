@@ -220,7 +220,7 @@ namespace Demo
         }
 
 #ifdef USE_STATIC_BRANCHING_FOR_SHADOWMAP_LIGHTS
-        void registerHlms( void ) override
+        void registerHlms() override
         {
             GraphicsSystem::registerHlms();
             Ogre::Root *root = getRoot();

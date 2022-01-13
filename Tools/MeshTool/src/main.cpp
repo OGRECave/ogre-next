@@ -64,7 +64,7 @@ THE SOFTWARE.
 using namespace std;
 using namespace Ogre;
 
-void help(void)
+void help()
 {
     // OgreMeshTool <Name> (2.1.0) unstable
     cout << "OgreMeshTool " << OGRE_VERSION_NAME << " "

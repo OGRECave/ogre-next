@@ -117,7 +117,7 @@ namespace Ogre
 
         /// Whether the node should be start as enabled when instantiated
         void setStartEnabled( bool enabled ) { mStartEnabled = enabled; }
-        bool getStartEnabled( void ) const { return mStartEnabled; }
+        bool getStartEnabled() const { return mStartEnabled; }
 
         /// See http://www.research.att.com/~bs/bs_faq2.html#overloadderived
         using TextureDefinitionBase::getTextureSource;
