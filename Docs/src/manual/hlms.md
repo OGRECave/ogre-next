@@ -838,6 +838,7 @@ customized:
 | custom_ps_posExecution       |  Executed after all code from the Pixel Shader has been performed.|
 | custom_ps_uv_modifier_macros |  PBS specific. Allows you to override the macros defined in Samples/Media/Hlms/Pbs/Any/UvModifierMacros_piece_ps.any so you can apply custom transformations to each UV. e.g. `#undef UV_DIFFUSE #define UV_DIFFUSE( x ) ((x) * 2.0)` |
 | custom_ps_functions          | Used to declare functions outside the main body of the shader |
+| custom_ps_pixelData          | Declare additional data in `struct PixelData` from Pixel Shader |
 
 # Run-time rendering {#HlmsRuntimeRendering}
 
