@@ -586,7 +586,9 @@ Customizing an existing implementation</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">custom_ps_uv_modifier_macros   </td><td class="markdownTableBodyNone">PBS specific. Allows you to override the macros defined in Samples/Media/Hlms/Pbs/Any/UvModifierMacros_piece_ps.any so you can apply custom transformations to each UV. e.g. <code>#undef UV_DIFFUSE #define UV_DIFFUSE( x ) ((x) * 2.0)</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">custom_ps_functions   </td><td class="markdownTableBodyNone">Used to declare functions outside the main body of the shader   </td></tr>
+<td class="markdownTableBodyNone">custom_ps_functions   </td><td class="markdownTableBodyNone">Used to declare functions outside the main body of the shader    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">custom_ps_pixelData   </td><td class="markdownTableBodyNone">Declare additional data in <code>struct PixelData</code> from Pixel Shader   </td></tr>
 </table>
 <h1><a class="anchor" id="HlmsRuntimeRendering"></a>
 Run-time rendering</h1>
