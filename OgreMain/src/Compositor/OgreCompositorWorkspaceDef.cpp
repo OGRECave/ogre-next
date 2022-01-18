@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNodeDef.h"
+#include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 

@@ -177,10 +177,9 @@ namespace Demo
         if( arg.keysym.sym == SDLK_SPACE )
         {
             Ogre::MaterialPtr material =
-                Ogre::MaterialManager::getSingleton()
-                    .load( "SSR/ScreenSpaceReflectionsVectors",
-                           Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                    .staticCast<Ogre::Material>();
+                std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                    "SSR/ScreenSpaceReflectionsVectors",
+                    Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
             Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 

@@ -50,22 +50,6 @@ namespace Ogre
 
     class GLSLShader;
 
-#ifdef OGRE_DEPRECATED_2_2
-    class GL3PlusTexture;
-    class GL3PlusTextureManager;
-    class GL3PlusDepthBuffer;
-    class GL3PlusRTTManager;
-    class GL3PlusFBOManager;
-
-    typedef SharedPtr<GL3PlusTexture> GL3PlusTexturePtr;
-
-    namespace v1
-    {
-        class GL3PlusHardwarePixelBuffer;
-        class GL3PlusRenderBuffer;
-    }  // namespace v1
-#endif
-
     typedef SharedPtr<GLSLShader> GLSLShaderPtr;
 }  // namespace Ogre
 

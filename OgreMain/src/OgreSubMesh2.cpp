@@ -596,7 +596,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     IndexBufferPacked *SubMesh::importFromV1( v1::IndexData *indexData )
     {
-        if( !indexData || indexData->indexBuffer.isNull() )
+        if( !indexData || !indexData->indexBuffer )
             return 0;
 
         // Create & copy the index buffer

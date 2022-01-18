@@ -1297,7 +1297,7 @@ namespace Ogre
             }
         }
 
-        if( stream.isNull() )
+        if( !stream )
         {
             // save direct in filesystem
             std::fstream *fs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL );
@@ -1334,7 +1334,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_FILE_NOT_FOUND, "'" + filename + "' file not found!",
                              __FUNCTION__ );
             }
-            stream.bind( OGRE_NEW FileStreamDataStream( filename, ifs ) );
+            stream.reset( OGRE_NEW FileStreamDataStream( filename, ifs ) );
         }
         return stream;
     }

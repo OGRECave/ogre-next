@@ -98,7 +98,6 @@ print( 'Generating scripts for Linux' )
 
 cppVersions = \
 [
-	98,
 	11,
 	0
 ]

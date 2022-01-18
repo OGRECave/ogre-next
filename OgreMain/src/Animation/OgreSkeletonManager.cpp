@@ -76,15 +76,13 @@ namespace Ogre
         if( itor == mSkeletonDefs.end() )
         {
             bool wasNonExistent = false;
-            v1::SkeletonPtr oldSkeleton = v1::OldSkeletonManager::getSingleton()
-                                              .getByName( name, groupName )
-                                              .staticCast<v1::Skeleton>();
+            v1::SkeletonPtr oldSkeleton = std::static_pointer_cast<v1::Skeleton>(
+                v1::OldSkeletonManager::getSingleton().getByName( name, groupName ) );
 
-            if( oldSkeleton.isNull() )
+            if( !oldSkeleton )
             {
-                oldSkeleton = v1::OldSkeletonManager::getSingleton()
-                                  .load( name, groupName )
-                                  .staticCast<v1::Skeleton>();
+                oldSkeleton = std::static_pointer_cast<v1::Skeleton>(
+                    v1::OldSkeletonManager::getSingleton().load( name, groupName ) );
                 wasNonExistent = true;
             }
 

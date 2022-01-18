@@ -573,7 +573,7 @@ namespace Ogre
 
             // layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
-                ( size_t )( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
+                (size_t)( ( mCurrentMappedConstBuffer - mStartMappedConstBuffer ) + 4 ) <=
                     mCurrentConstBufferSize )
             {
                 *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -633,8 +633,8 @@ namespace Ogre
         //---------------------------------------------------------------------------
         // We need to correct currentMappedConstBuffer to point to the right texture buffer's
         // offset, which may not be in sync if the previous draw had skeletal animation.
-        bool exceedsConstBuffer = ( size_t )( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
-                                              12 ) > mCurrentConstBufferSize;
+        bool exceedsConstBuffer = (size_t)( ( currentMappedConstBuffer - mStartMappedConstBuffer ) +
+                                            12 ) > mCurrentConstBufferSize;
 
         if( exceedsConstBuffer )
             currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
@@ -656,8 +656,8 @@ namespace Ogre
             {
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
                 TextureGpu *planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
-                *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( mTexUnitSlotStart - 1u, planarReflTex, mPlanarReflectionsSamplerblock );
+                *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                    uint16( mTexUnitSlotStart - 1u ), planarReflTex, mPlanarReflectionsSamplerblock );
                 mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
             }
 #endif

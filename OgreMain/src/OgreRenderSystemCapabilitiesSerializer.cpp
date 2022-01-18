@@ -46,7 +46,7 @@ namespace Ogre
     RenderSystemCapabilitiesSerializer::RenderSystemCapabilitiesSerializer() : mCurrentLineNumber(0), mCurrentLine(0),
         mCurrentCapabilities(0)
     {
-        mCurrentStream.setNull();
+        mCurrentStream.reset();
 
         initialiaseDispatchTables();
     }
@@ -197,7 +197,7 @@ namespace Ogre
         // reset parsing data to NULL
         mCurrentLineNumber = 0;
         mCurrentLine = 0;
-        mCurrentStream.setNull();
+        mCurrentStream.reset();
         mCurrentCapabilities = 0;
 
         mCurrentStream = stream;
@@ -599,13 +599,13 @@ namespace Ogre
     void RenderSystemCapabilitiesSerializer::logParseError(const String& error) const
     {
         // log the line with error in it if the current line is available
-        if (mCurrentLine != 0 && !mCurrentStream.isNull())
+        if (mCurrentLine != 0 && mCurrentStream)
         {
             LogManager::getSingleton().logMessage(
                 "Error in .rendercaps " + mCurrentStream->getName() + ":" + StringConverter::toString(mCurrentLineNumber) +
                 " : " + error);
         }
-        else if (!mCurrentStream.isNull())
+        else if (mCurrentStream)
         {
             LogManager::getSingleton().logMessage(
                 "Error in .rendercaps " + mCurrentStream->getName() +

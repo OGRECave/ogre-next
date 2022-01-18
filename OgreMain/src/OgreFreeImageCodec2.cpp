@@ -158,7 +158,7 @@ namespace Ogre
     {
         FIBITMAP *ret = 0;
 
-        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.getPointer() );
+        ImageData2 *pImgData = static_cast<ImageData2 *>( pData.get() );
 
         // We need to determine the closest format supported by FreeImage.
         // Components order of 24bit and 32bit FI_BITMAPs is affected by #define FREEIMAGE_COLORORDER,

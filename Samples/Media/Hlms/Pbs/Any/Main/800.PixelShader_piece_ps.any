@@ -76,6 +76,8 @@
 		@else
 			float4 diffuse; //We only use the .w component, Alpha
 		@end
+
+		@insertpiece( custom_ps_pixelData )
 	};
 
 	#define SampleDetailWeightMap( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )

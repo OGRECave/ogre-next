@@ -223,7 +223,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             LogManager::getSingleton().logMessage( "Metal SL Compiler Error in " + mName + ":\n" +
                                                    errorDesc );
@@ -236,7 +236,7 @@ namespace Ogre
             {
                 String errorDesc;
                 if( error )
-                    errorDesc = [error localizedDescription].UTF8String;
+                    errorDesc = error.localizedDescription.UTF8String;
                 LogManager::getSingleton().logMessage( "Metal SL Compiler Warnings in " + mName + ":\n" +
                                                        errorDesc );
             }
@@ -310,7 +310,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             mCompileError = true;
 
@@ -349,7 +349,7 @@ namespace Ogre
         {
             GpuProgramPtr shader =
                 GpuProgramManager::getSingleton().getByName( mShaderReflectionPairHint );
-            if( shader.isNull() )
+            if( !shader )
             {
                 mCompileError = true;
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
@@ -402,7 +402,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             mCompileError = true;
 
@@ -568,7 +568,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void MetalProgram::createLowLevelImpl()
     {
-        mAssemblerProgram = GpuProgramPtr( this, SPFM_NONE );
+        mAssemblerProgram = GpuProgramPtr( this, []( GpuProgram * ) {} );
         if( !mCompiled )
             compile( true );
     }
@@ -578,7 +578,7 @@ namespace Ogre
         // We didn't create mAssemblerProgram through a manager, so override this
         // implementation so that we don't try to remove it from one. Since getCreator()
         // is used, it might target a different matching handle!
-        mAssemblerProgram.setNull();
+        mAssemblerProgram.reset();
 
         unloadHighLevel();
     }

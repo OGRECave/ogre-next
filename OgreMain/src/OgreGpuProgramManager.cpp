@@ -55,7 +55,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     GpuProgramPtr GpuProgramManager::getByName( const String &name, bool preferHighLevelPrograms )
     {
-        return getResourceByName( name, preferHighLevelPrograms ).staticCast<GpuProgram>();
+        return std::static_pointer_cast<GpuProgram>(
+            getResourceByName( name, preferHighLevelPrograms ) );
     }
     //---------------------------------------------------------------------------
     GpuProgramManager::GpuProgramManager()
@@ -83,7 +84,7 @@ namespace Ogre
         {
             OGRE_LOCK_AUTO_MUTEX;
             prg = getByName( name );
-            if( prg.isNull() )
+            if( !prg )
             {
                 prg = createProgram( name, groupName, filename, gptype, syntaxCode );
             }
@@ -100,7 +101,7 @@ namespace Ogre
         {
             OGRE_LOCK_AUTO_MUTEX;
             prg = getByName( name );
-            if( prg.isNull() )
+            if( !prg )
             {
                 prg = createProgramFromString( name, groupName, code, gptype, syntaxCode );
             }
@@ -127,7 +128,8 @@ namespace Ogre
                                                     const String &filename, GpuProgramType gptype,
                                                     const String &syntaxCode )
     {
-        GpuProgramPtr prg = create( name, groupName, gptype, syntaxCode ).staticCast<GpuProgram>();
+        GpuProgramPtr prg =
+            std::static_pointer_cast<GpuProgram>( create( name, groupName, gptype, syntaxCode ) );
         // Set all prarmeters (create does not set, just determines factory)
         prg->setType( gptype );
         prg->setSyntaxCode( syntaxCode );
@@ -140,7 +142,8 @@ namespace Ogre
                                                               const String &code, GpuProgramType gptype,
                                                               const String &syntaxCode )
     {
-        GpuProgramPtr prg = create( name, groupName, gptype, syntaxCode ).staticCast<GpuProgram>();
+        GpuProgramPtr prg =
+            std::static_pointer_cast<GpuProgram>( create( name, groupName, gptype, syntaxCode ) );
         // Set all prarmeters (create does not set, just determines factory)
         prg->setType( gptype );
         prg->setSyntaxCode( syntaxCode );
@@ -173,7 +176,7 @@ namespace Ogre
         if( preferHighLevelPrograms )
         {
             ret = HighLevelGpuProgramManager::getSingleton().getResourceByName( name );
-            if( !ret.isNull() )
+            if( ret )
                 return ret;
         }
         return ResourceManager::getResourceByName( name );

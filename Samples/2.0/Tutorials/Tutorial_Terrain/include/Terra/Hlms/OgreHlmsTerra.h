@@ -28,12 +28,13 @@ THE SOFTWARE.
 #ifndef _OgreHlmsTerra_H_
 #define _OgreHlmsTerra_H_
 
+#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
+
 #include "OgreHlmsPbs.h"
 
 #include "OgreConstBufferPool.h"
 #include "OgreHlmsBufferManager.h"
 #include "OgreMatrix4.h"
-#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
 
 #include "OgreHeaderPrefix.h"
 

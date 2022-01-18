@@ -31,33 +31,33 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-#   if defined( OGRE_STATIC_LIB )
-#       define _OgreSceneFormatExport
-#   else
-#       if defined( OgreSceneFormat_EXPORTS )
-#           define _OgreSceneFormatExport __declspec( dllexport )
-#       else
-#           if defined( __MINGW32__ )
-#               define _OgreSceneFormatExport
-#           else
-#               define _OgreSceneFormatExport __declspec( dllimport )
-#           endif
-#       endif
-#   endif
-#elif defined ( OGRE_GCC_VISIBILITY )
-#   if !defined( OGRE_STATIC_LIB )
-#       define _OgreSceneFormatExport __attribute__ ((visibility("default")))
-#   else
-#       define _OgreSceneFormatExport __attribute__ ((visibility("hidden")))
-#   endif
+#    if defined( OGRE_STATIC_LIB )
+#        define _OgreSceneFormatExport
+#    else
+#        if defined( OgreSceneFormat_EXPORTS )
+#            define _OgreSceneFormatExport __declspec( dllexport )
+#        else
+#            if defined( __MINGW32__ )
+#                define _OgreSceneFormatExport
+#            else
+#                define _OgreSceneFormatExport __declspec( dllimport )
+#            endif
+#        endif
+#    endif
+#elif defined( OGRE_GCC_VISIBILITY )
+#    if !defined( OGRE_STATIC_LIB )
+#        define _OgreSceneFormatExport __attribute__( ( visibility( "default" ) ) )
+#    else
+#        define _OgreSceneFormatExport __attribute__( ( visibility( "hidden" ) ) )
+#    endif
 #else
-#   define _OgreSceneFormatExport
-#endif 
+#    define _OgreSceneFormatExport
+#endif
 
 namespace Ogre
 {
     class SceneFormatExporter;
     class SceneFormatImporter;
-}
+}  // namespace Ogre
 
 #endif

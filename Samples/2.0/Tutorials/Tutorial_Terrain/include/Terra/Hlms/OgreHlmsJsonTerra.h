@@ -26,15 +26,17 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef _OgreHlmsJsonTerra_H_
+#define _OgreHlmsJsonTerra_H_
+
+#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
+
+#include "OgreHlmsJson.h"
+
 #if !OGRE_NO_JSON
-#    ifndef _OgreHlmsJsonTerra_H_
-#        define _OgreHlmsJsonTerra_H_
+#    include "Terra/Hlms/OgreHlmsTerraDatablock.h"
 
-#        include "OgreHlmsJson.h"
-#        include "Terra/Hlms/OgreHlmsTerraDatablock.h"
-#        include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
-
-#        include "OgreHeaderPrefix.h"
+#    include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -47,7 +49,7 @@ namespace Ogre
 
     class HlmsJsonTerra
     {
-        HlmsManager *      mHlmsManager;
+        HlmsManager       *mHlmsManager;
         TextureGpuManager *mTextureManager;
 
         static TerraBrdf::TerraBrdf parseBrdf( const char *value );
@@ -82,7 +84,7 @@ namespace Ogre
                            HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
-        static void collectSamplerblocks( const HlmsDatablock *                datablock,
+        static void collectSamplerblocks( const HlmsDatablock                 *datablock,
                                           set<const HlmsSamplerblock *>::type &outSamplerblocks );
     };
 
@@ -91,8 +93,8 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#        include "OgreHeaderSuffix.h"
+#    include "OgreHeaderSuffix.h"
 
-#    endif
+#endif
 
 #endif

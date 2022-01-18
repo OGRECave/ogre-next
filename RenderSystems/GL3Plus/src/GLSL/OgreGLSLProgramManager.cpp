@@ -681,7 +681,7 @@ namespace Ogre
                     // currPos = openBracePos + 1;
                     // blockSharedParams =
                     // GpuProgramManager::getSingleton().getSharedParameters(externalName);
-                    // if(blockSharedParams.isNull())
+                    // if(!blockSharedParams)
                     //     blockSharedParams =
                     //     GpuProgramManager::getSingleton().createSharedParameters(externalName);
                     // do
@@ -804,7 +804,7 @@ namespace Ogre
                 }
 
                 // Special handling for shared parameters
-                if( sharedParams.isNull() )
+                if( !sharedParams )
                 {
                     // Complete def and add
                     // increment physical buffer location

@@ -118,7 +118,7 @@ namespace Ogre
                 mHlmsDatablock->_unlinkRenderable( this );
 
             if( !datablock || datablock->getCreator()->getType() != HLMS_LOW_LEVEL )
-                mMaterial.setNull();
+                mMaterial.reset();
 
             mHlmsDatablock = datablock;
             try
@@ -164,7 +164,7 @@ namespace Ogre
         if( mHlmsDatablock )
             mHlmsDatablock->_unlinkRenderable( this );
 
-        mMaterial.setNull();
+        mMaterial.reset();
 
         mHlmsDatablock = 0;
         mHlmsHash = 0;
@@ -189,7 +189,7 @@ namespace Ogre
         if( !name.empty() )
             material = MaterialManager::getSingleton().getByName( name, groupName );
 
-        if( material.isNull() )
+        if( !material )
         {
             if( !name.empty() )
             {

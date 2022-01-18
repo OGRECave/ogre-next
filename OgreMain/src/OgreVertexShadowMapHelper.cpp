@@ -136,7 +136,7 @@ namespace Ogre
                 // Pack all the maps together
                 for( size_t i = 0; i < 3; ++i )
                 {
-                    if( tickets[i].isNull() )
+                    if( !tickets[i] )
                     {
                         for( size_t j = 0; j < i; ++j )
                         {
@@ -173,7 +173,7 @@ namespace Ogre
 
                 for( size_t i = 0; i < 3; ++i )
                 {
-                    if( !tickets[i].isNull() )
+                    if( tickets[i] )
                         tickets[i]->unmap();
                 }
 
@@ -588,7 +588,7 @@ namespace Ogre
 
                 v1::IndexData *shadowIndexData = 0;
 
-                if( geom.indexData && !geom.indexData->indexBuffer.isNull() )
+                if( geom.indexData && geom.indexData->indexBuffer )
                 {
                     shadowIndexData = OGRE_NEW v1::IndexData();
                     shadowIndexData->indexCount = geom.indexData->indexCount;

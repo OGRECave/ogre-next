@@ -2185,9 +2185,9 @@ namespace Ogre
                 "D3D11RenderSystem::_hlmsPipelineStateObjectCreated" );
         }
 
-        const bool useTesselation = !block->tesselationDomainShader.isNull();
+        const bool useTesselation = (bool)block->tesselationDomainShader;
         const bool useAdjacency =
-            !block->geometryShader.isNull() && block->geometryShader->isAdjacencyInfoRequired();
+            block->geometryShader && block->geometryShader->isAdjacencyInfoRequired();
 
         switch( block->operationType )
         {
@@ -2239,35 +2239,35 @@ namespace Ogre
         }
 
         // No subroutines for now
-        if( !block->vertexShader.isNull() )
+        if( block->vertexShader )
         {
             pso->vertexShader =
                 static_cast<D3D11HLSLProgram *>( block->vertexShader->_getBindingDelegate() );
         }
-        if( !block->geometryShader.isNull() )
+        if( block->geometryShader )
         {
             pso->geometryShader =
                 static_cast<D3D11HLSLProgram *>( block->geometryShader->_getBindingDelegate() );
         }
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
         {
-            if( !block->tesselationHullShader.isNull() )
+            if( block->tesselationHullShader )
             {
                 pso->hullShader = static_cast<D3D11HLSLProgram *>(
                     block->tesselationHullShader->_getBindingDelegate() );
             }
-            if( !block->tesselationDomainShader.isNull() )
+            if( block->tesselationDomainShader )
             {
                 pso->domainShader = static_cast<D3D11HLSLProgram *>(
                     block->tesselationDomainShader->_getBindingDelegate() );
             }
 
             // Check consistency of tessellation shaders
-            if( block->tesselationHullShader.isNull() != block->tesselationDomainShader.isNull() )
+            if( (bool)block->tesselationHullShader != (bool)block->tesselationDomainShader )
             {
                 delete pso;
                 pso = 0;
-                if( block->tesselationHullShader.isNull() )
+                if( !block->tesselationHullShader )
                 {
                     OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                                  "Attempted to use tessellation, but domain shader is missing",
@@ -2281,7 +2281,7 @@ namespace Ogre
                 }
             }
         }
-        if( !block->pixelShader.isNull() &&
+        if( block->pixelShader &&
             block->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pso->pixelShader =
@@ -2845,7 +2845,7 @@ namespace Ogre
     void D3D11RenderSystem::_endFrame()
     {
         mBoundComputeProgram = 0;
-        mActiveComputeGpuProgramParameters.setNull();
+        mActiveComputeGpuProgramParameters.reset();
         mComputeProgramBound = false;
     }
     //---------------------------------------------------------------------

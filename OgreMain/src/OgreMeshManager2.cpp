@@ -64,7 +64,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     MeshPtr MeshManager::getByName( const String &name, const String &groupName )
     {
-        return getResourceByName( name, groupName ).staticCast<Mesh>();
+        return std::static_pointer_cast<Mesh>( getResourceByName( name, groupName ) );
     }
     //-----------------------------------------------------------------------
     void MeshManager::_initialise() {}
@@ -78,7 +78,7 @@ namespace Ogre
     {
         ResourceCreateOrRetrieveResult res =
             ResourceManager::createOrRetrieve( name, group, isManual, loader, params );
-        MeshPtr pMesh = res.first.staticCast<Mesh>();
+        MeshPtr pMesh = std::static_pointer_cast<Mesh>( res.first );
         // Was it created?
         if( res.second )
         {
@@ -92,9 +92,10 @@ namespace Ogre
                                   BufferType vertexBufferType, BufferType indexBufferType,
                                   bool vertexBufferShadowed, bool indexBufferShadowed )
     {
-        MeshPtr pMesh = createOrRetrieve( filename, groupName, false, 0, 0, vertexBufferType,
-                                          indexBufferType, vertexBufferShadowed, indexBufferShadowed )
-                            .first.staticCast<Mesh>();
+        MeshPtr pMesh = std::static_pointer_cast<Mesh>(
+            createOrRetrieve( filename, groupName, false, 0, 0, vertexBufferType, indexBufferType,
+                              vertexBufferShadowed, indexBufferShadowed )
+                .first );
         pMesh->prepare();
         return pMesh;
     }
@@ -103,9 +104,10 @@ namespace Ogre
                                BufferType vertexBufferType, BufferType indexBufferType,
                                bool vertexBufferShadowed, bool indexBufferShadowed )
     {
-        MeshPtr pMesh = createOrRetrieve( filename, groupName, false, 0, 0, vertexBufferType,
-                                          indexBufferType, vertexBufferShadowed, indexBufferShadowed )
-                            .first.staticCast<Mesh>();
+        MeshPtr pMesh = std::static_pointer_cast<Mesh>(
+            createOrRetrieve( filename, groupName, false, 0, 0, vertexBufferType, indexBufferType,
+                              vertexBufferShadowed, indexBufferShadowed )
+                .first );
         pMesh->load();
         return pMesh;
     }
@@ -113,14 +115,15 @@ namespace Ogre
     MeshPtr MeshManager::create( const String &name, const String &group, bool isManual,
                                  ManualResourceLoader *loader, const NameValuePairList *createParams )
     {
-        return createResource( name, group, isManual, loader, createParams ).staticCast<Mesh>();
+        return std::static_pointer_cast<Mesh>(
+            createResource( name, group, isManual, loader, createParams ) );
     }
     //-----------------------------------------------------------------------
     MeshPtr MeshManager::createManual( const String &name, const String &groupName,
                                        ManualResourceLoader *loader )
     {
         // Don't try to get existing, create should fail if already exists
-        if( !this->getResourceByName( name, groupName ).isNull() )
+        if( this->getResourceByName( name, groupName ) )
         {
             OGRE_EXCEPT( Ogre::Exception::ERR_DUPLICATE_ITEM,
                          "v2 Mesh with name '" + name + "' already exists.",
@@ -143,7 +146,7 @@ namespace Ogre
         params.halfTexCoords = halfTexCoords;
         params.qTangents = qTangents;
         params.halfPose = halfPose;
-        mV1MeshImportParams[pMesh.getPointer()] = params;
+        mV1MeshImportParams[pMesh.get()] = params;
 
         return pMesh;
     }

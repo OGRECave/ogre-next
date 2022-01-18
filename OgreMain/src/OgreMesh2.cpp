@@ -153,7 +153,7 @@ namespace Ogre
         mFreshFromDisk = DataStreamPtr( OGRE_NEW MemoryDataStream( mName, mFreshFromDisk ) );
     }
     //-----------------------------------------------------------------------
-    void Mesh::unprepareImpl() { mFreshFromDisk.setNull(); }
+    void Mesh::unprepareImpl() { mFreshFromDisk.reset(); }
     //-----------------------------------------------------------------------
     void Mesh::loadImpl()
     {
@@ -165,9 +165,9 @@ namespace Ogre
         // If the only copy is local on the stack, it will be cleaned
         // up reliably in case of exceptions, etc
         DataStreamPtr data( mFreshFromDisk );
-        mFreshFromDisk.setNull();
+        mFreshFromDisk.reset();
 
-        if( data.isNull() )
+        if( !data )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "Data doesn't appear to have been prepared in " + mName, "Mesh::loadImpl()" );
@@ -323,7 +323,7 @@ namespace Ogre
             if( skelName.empty() )
             {
                 // No skeleton
-                mSkeleton.setNull();
+                mSkeleton.reset();
             }
             else
             {
@@ -334,7 +334,7 @@ namespace Ogre
                 }
                 catch( ... )
                 {
-                    mSkeleton.setNull();
+                    mSkeleton.reset();
                     // Log this error
                     String msg = "Unable to load skeleton ";
                     msg += skelName + " for Mesh " + mName + ". This Mesh will not be animated. " +
@@ -552,7 +552,7 @@ namespace Ogre
 
         mSkeletonName = mesh->getSkeletonName();
         v1::SkeletonPtr v1Skeleton = mesh->getOldSkeleton();
-        if( !v1Skeleton.isNull() )
+        if( v1Skeleton )
             mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( v1Skeleton.get() );
 
         // So far we only import manual LOD levels. If the mesh had manual LOD levels,

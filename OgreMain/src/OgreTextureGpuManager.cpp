@@ -2631,7 +2631,7 @@ namespace Ogre
             {
                 try
                 {
-                    if( !data.isNull() )
+                    if( data )
                         img->load( data );
                 }
                 catch( Exception &e )
@@ -2646,7 +2646,7 @@ namespace Ogre
                     data.reset();
                 }
 
-                if( data.isNull() )
+                if( !data )
                 {
                     PixelFormatGpu fallbackFormat = PFG_RGBA8_UNORM_SRGB;
 

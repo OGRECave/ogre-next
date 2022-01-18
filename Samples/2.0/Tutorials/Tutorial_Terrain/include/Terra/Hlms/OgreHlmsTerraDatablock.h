@@ -28,11 +28,12 @@ THE SOFTWARE.
 #ifndef _OgreHlmsTerraDatablock_H_
 #define _OgreHlmsTerraDatablock_H_
 
+#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
+
 #include "OgreHlmsDatablock.h"
 
 #include "OgreConstBufferPool.h"
 #include "OgreVector4.h"
-#include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
 
 #define _OgreHlmsTextureBaseClassExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsTerraBaseTextureDatablock

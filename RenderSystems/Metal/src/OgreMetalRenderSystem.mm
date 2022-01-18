@@ -263,6 +263,8 @@ namespace Ogre
         RenderSystemCapabilities *rsc = new RenderSystemCapabilities();
         rsc->setRenderSystemName( getName() );
 
+        rsc->setDeviceName(mActiveDevice->mDevice.name.UTF8String);
+
         rsc->setCapability( RSC_HWSTENCIL );
         rsc->setStencilBufferBitDepth( 8 );
         rsc->setNumTextureUnits( 16 );
@@ -1359,7 +1361,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Failed to create pipeline state for compute, error " + errorDesc,
@@ -1539,13 +1541,13 @@ namespace Ogre
         MetalProgram *vertexShader = 0;
         MetalProgram *pixelShader = 0;
 
-        if( !newPso->vertexShader.isNull() )
+        if( newPso->vertexShader )
         {
             vertexShader = static_cast<MetalProgram *>( newPso->vertexShader->_getBindingDelegate() );
             [psd setVertexFunction:vertexShader->getMetalFunction()];
         }
 
-        if( !newPso->pixelShader.isNull() &&
+        if( newPso->pixelShader &&
             newPso->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pixelShader = static_cast<MetalProgram *>( newPso->pixelShader->_getBindingDelegate() );
@@ -1673,7 +1675,7 @@ namespace Ogre
         {
             String errorDesc;
             if( error )
-                errorDesc = [error localizedDescription].UTF8String;
+                errorDesc = error.localizedDescription.UTF8String;
 
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Failed to created pipeline state for rendering, error " + errorDesc,

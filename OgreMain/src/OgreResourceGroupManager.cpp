@@ -56,7 +56,7 @@ namespace Ogre
     String ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME = "Autodetect";
     // A reference count of 3 means that only RGM and RM have references
     // RGM has one (this one) and RM has 2 (by name and by handle)
-    size_t ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS = 3;
+    long ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS = 3;
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     ResourceGroupManager::ResourceGroupManager() : mLoadingListener( 0 ), mCurrentGroup( 0 )
@@ -413,7 +413,7 @@ namespace Ogre
             {
                 // A use count of 3 means that only RGM and RM have references
                 // RGM has one (this one) and RM has 2 (by name and by handle)
-                if( l->useCount() == RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                if( l->use_count() == RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
                 {
                     Resource *resource = l->get();
                     if( !reloadableOnly || resource->isReloadable() )
@@ -657,7 +657,7 @@ namespace Ogre
         {
             DataStreamPtr stream =
                 mLoadingListener->resourceLoading( resourceName, groupName, resourceBeingLoaded );
-            if( !stream.isNull() )
+            if( stream )
                 return stream;
         }
 
@@ -757,7 +757,7 @@ namespace Ogre
         if(mLoadingListener)
         {
             DataStreamPtr stream = mLoadingListener->resourceLoading(resourceName, groupName,
-        resourceBeingLoaded); if(!stream.isNull()) return stream;
+        resourceBeingLoaded); if(stream) return stream;
         }*/
 
         // Try to find in resource index first
@@ -860,7 +860,7 @@ namespace Ogre
             for( StringVector::iterator ni = names->begin(); ni != names->end(); ++ni )
             {
                 DataStreamPtr ptr = arch->open( *ni );
-                if( !ptr.isNull() )
+                if( ptr )
                 {
                     ret->push_back( ptr );
                 }
@@ -1123,7 +1123,7 @@ namespace Ogre
                     {
                         LogManager::getSingleton().logMessage( "Parsing script " + fii->filename );
                         DataStreamPtr stream = fii->archive->open( fii->filename );
-                        if( !stream.isNull() )
+                        if( stream )
                         {
                             if( mLoadingListener )
                                 mLoadingListener->resourceStreamOpened( fii->filename, grp->name, 0,
@@ -1133,7 +1133,7 @@ namespace Ogre
                                 stream->size() <= 1024 * 1024 )
                             {
                                 DataStreamPtr cachedCopy;
-                                cachedCopy.bind(
+                                cachedCopy.reset(
                                     OGRE_NEW MemoryDataStream( stream->getName(), stream ) );
                                 su->parseScript( cachedCopy, grp->name );
                             }
@@ -1238,8 +1238,7 @@ namespace Ogre
             assert( i != grp->loadResourceOrderMap.end() );
             LoadUnloadResourceSet *loadList = i->second;
 
-            ResourcePtr rawWrapper;
-            rawWrapper.bind( res, Ogre::SPFM_NONE );  // this will ensure it wont free on destruction.
+            ResourcePtr rawWrapper( res, [](Resource*) {} );  // this will ensure it wont free on destruction.
 
             LoadUnloadResourceSet::iterator l = loadList->find( rawWrapper );
             if( l != loadList->end() )
@@ -1249,7 +1248,7 @@ namespace Ogre
             }
         }
 
-        if( !resPtr.isNull() )
+        if( resPtr )
         {
             // New group
             ResourceGroup *newGrp = getResourceGroup( res->getGroup() );

@@ -26,31 +26,29 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgreSceneFormatBase.h"
 
-#include "OgreSceneNode.h"
-#include "OgreItem.h"
 #include "OgreEntity.h"
+#include "OgreItem.h"
 #include "OgreLight.h"
+#include "OgreSceneNode.h"
 
-#include "OgreHlmsPbs.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemapAuto.h"
+#include "OgreHlmsPbs.h"
 
 namespace Ogre
 {
-    const char* SceneFormatBase::c_lightTypes[Light::NUM_LIGHT_TYPES+1u] =
-    {
-        "directional",
-        "point",
-        "spotlight",
-        "vpl",
-        "area_approx",
-        "area_ltc",
-        "NUM_LIGHT_TYPES"
-    };
+    const char *SceneFormatBase::c_lightTypes[Light::NUM_LIGHT_TYPES + 1u] =  //
+        {                                                                     //
+            "directional",                                                    //
+            "point",                                                          //
+            "spotlight",                                                      //
+            "vpl",                                                            //
+            "area_approx",                                                    //
+            "area_ltc",                                                       //
+            "NUM_LIGHT_TYPES"
+        };
 
     static DefaultSceneFormatListener sDefaultSceneFormatListener;
 
@@ -61,15 +59,13 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    SceneFormatBase::~SceneFormatBase()
-    {
-    }
+    SceneFormatBase::~SceneFormatBase() {}
     //-----------------------------------------------------------------------------------
-    HlmsPbs* SceneFormatBase::getPbs() const
+    HlmsPbs *SceneFormatBase::getPbs() const
     {
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
         Hlms *hlms = hlmsManager->getHlms( "pbs" );
-        return dynamic_cast<HlmsPbs*>( hlms );
+        return dynamic_cast<HlmsPbs *>( hlms );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatBase::setListener( SceneFormatListener *listener )
@@ -99,13 +95,13 @@ namespace Ogre
             ParallaxCorrectedCubemapBase *pccBase = hlmsPbs->getParallaxCorrectedCubemap();
             if( pccBase && !pccBase->getAutomaticMode() )
             {
-                OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemap*>( pccBase ) );
-                mParallaxCorrectedCubemapManual = static_cast<ParallaxCorrectedCubemap*>( pccBase );
+                OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemap *>( pccBase ) );
+                mParallaxCorrectedCubemapManual = static_cast<ParallaxCorrectedCubemap *>( pccBase );
             }
             else if( pccBase && pccBase->getAutomaticMode() )
             {
-                OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemapAuto*>( pccBase ) );
-                mParallaxCorrectedCubemapAuto = static_cast<ParallaxCorrectedCubemapAuto*>( pccBase );
+                OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemapAuto *>( pccBase ) );
+                mParallaxCorrectedCubemapAuto = static_cast<ParallaxCorrectedCubemapAuto *>( pccBase );
             }
         }
     }
@@ -118,23 +114,23 @@ namespace Ogre
 
         while( objItor.hasMoreElements() && hasNoValidAttachedObject )
         {
-            MovableObject *movableObject =  objItor.getNext();
+            MovableObject *movableObject = objItor.getNext();
 
             if( mSceneFlags & SceneFlags::Items )
             {
-                Item *asItem = dynamic_cast<Item*>( movableObject );
+                Item *asItem = dynamic_cast<Item *>( movableObject );
                 if( asItem )
                     hasNoValidAttachedObject = false;
             }
             if( mSceneFlags & SceneFlags::Entities )
             {
-                v1::Entity *asEntity = dynamic_cast<v1::Entity*>( movableObject );
+                v1::Entity *asEntity = dynamic_cast<v1::Entity *>( movableObject );
                 if( asEntity )
                     hasNoValidAttachedObject = false;
             }
             if( mSceneFlags & SceneFlags::Lights )
             {
-                Light *asLight = dynamic_cast<Light*>( movableObject );
+                Light *asLight = dynamic_cast<Light *>( movableObject );
                 if( asLight )
                     hasNoValidAttachedObject = false;
             }
@@ -144,7 +140,7 @@ namespace Ogre
         while( nodeItor.hasMoreElements() && hasNoValidAttachedObject )
         {
             Node *node = nodeItor.getNext();
-            SceneNode *childNode = dynamic_cast<SceneNode*>( node );
+            SceneNode *childNode = dynamic_cast<SceneNode *>( node );
 
             if( childNode )
                 hasNoAttachedObjectsOfType( childNode );
@@ -159,15 +155,15 @@ namespace Ogre
             return true;
 
         const uint32 allObjsMask = SceneFlags::Items | SceneFlags::Entities | SceneFlags::Lights;
-        if( !(mSceneFlags & allObjsMask) )
-            return false; //Nothing is being exported, this node has no need (early out)
+        if( !( mSceneFlags & allObjsMask ) )
+            return false;  // Nothing is being exported, this node has no need (early out)
 
         if( mParallaxCorrectedCubemapManual )
         {
-            SceneNode * const *proxySceneNodes = mParallaxCorrectedCubemapManual->getProxySceneNodes();
+            SceneNode *const *proxySceneNodes = mParallaxCorrectedCubemapManual->getProxySceneNodes();
             if( proxySceneNodes )
             {
-                for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
+                for( size_t i = 0; i < OGRE_MAX_CUBE_PROBES; ++i )
                 {
                     if( proxySceneNodes[i] == sceneNode )
                         return false;
@@ -178,18 +174,18 @@ namespace Ogre
         {
             const CubemapProbeVec &probes = mParallaxCorrectedCubemapAuto->getProbes();
             CubemapProbeVec::const_iterator itor = probes.begin();
-            CubemapProbeVec::const_iterator end  = probes.end();
+            CubemapProbeVec::const_iterator end = probes.end();
 
             while( itor != end )
             {
-                if( sceneNode == (*itor)->getInternalCubemapProbeSceneNode() )
+                if( sceneNode == ( *itor )->getInternalCubemapProbeSceneNode() )
                     return false;
                 ++itor;
             }
         }
 
-        if( (mSceneFlags & allObjsMask) == allObjsMask )
-            return true; //Everything is being exported. No need to keep digging (early out)
+        if( ( mSceneFlags & allObjsMask ) == allObjsMask )
+            return true;  // Everything is being exported. No need to keep digging (early out)
 
         return hasNoAttachedObjectsOfType( sceneNode );
     }
@@ -198,10 +194,10 @@ namespace Ogre
     {
         if( mParallaxCorrectedCubemapManual )
         {
-            Item * const *proxyItems = mParallaxCorrectedCubemapManual->getProxyItems();
+            Item *const *proxyItems = mParallaxCorrectedCubemapManual->getProxyItems();
             if( proxyItems )
             {
-                for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
+                for( size_t i = 0; i < OGRE_MAX_CUBE_PROBES; ++i )
                 {
                     if( proxyItems[i] == item )
                         return false;
@@ -211,4 +207,4 @@ namespace Ogre
 
         return true;
     }
-}
+}  // namespace Ogre

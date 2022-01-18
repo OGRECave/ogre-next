@@ -108,10 +108,9 @@ namespace Ogre
             {
                 materialName.resize( matNameSize );
                 materialName.a( (uint32)i );
-                MaterialPtr material = MaterialManager::getSingleton()
-                                           .load( materialName.c_str(),
-                                                  ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                                           .staticCast<Material>();
+                MaterialPtr material =
+                    std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+                        materialName.c_str(), ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
                 Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 
                 mBlendCubemapParamsVs[i] = pass->getVertexProgramParameters();
@@ -128,10 +127,9 @@ namespace Ogre
             {
                 materialName.resize( matNameSize );
                 materialName.a( cSuffixes[i] );
-                MaterialPtr material = MaterialManager::getSingleton()
-                                           .load( materialName.c_str(),
-                                                  ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                                           .staticCast<Material>();
+                MaterialPtr material =
+                    std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+                        materialName.c_str(), ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
                 Pass *pass = material->getTechnique( 0 )->getPass( 0 );
 
                 mCopyCubemapParams[i] = pass->getFragmentProgramParameters();
@@ -379,10 +377,10 @@ namespace Ogre
     {
         destroyProxyItems();
 
-        if( !mProxyMesh.isNull() )
+        if( mProxyMesh )
         {
             MeshManager::getSingleton().remove( mProxyMesh->getHandle() );
-            mProxyMesh.setNull();
+            mProxyMesh.reset();
         }
     }
     //-----------------------------------------------------------------------------------

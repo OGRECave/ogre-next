@@ -429,7 +429,7 @@ namespace Ogre
         // category
         StringVectorPtr ret( OGRE_NEW_T( StringVector, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
 
-        findFiles( "*", recursive, dirs, ret.getPointer(), 0 );
+        findFiles( "*", recursive, dirs, ret.get(), 0 );
 
         return ret;
     }
@@ -440,7 +440,7 @@ namespace Ogre
         // category
         FileInfoListPtr ret( OGRE_NEW_T( FileInfoList, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
 
-        findFiles( "*", recursive, dirs, 0, ret.getPointer() );
+        findFiles( "*", recursive, dirs, 0, ret.get() );
 
         return ret;
     }
@@ -451,7 +451,7 @@ namespace Ogre
         // category
         StringVectorPtr ret( OGRE_NEW_T( StringVector, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
 
-        findFiles( pattern, recursive, dirs, ret.getPointer(), 0 );
+        findFiles( pattern, recursive, dirs, ret.get(), 0 );
 
         return ret;
     }
@@ -462,7 +462,7 @@ namespace Ogre
         // category
         FileInfoListPtr ret( OGRE_NEW_T( FileInfoList, MEMCATEGORY_GENERAL )(), SPFM_DELETE_T );
 
-        findFiles( pattern, recursive, dirs, 0, ret.getPointer() );
+        findFiles( pattern, recursive, dirs, 0, ret.get() );
 
         return ret;
     }

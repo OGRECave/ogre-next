@@ -50,28 +50,30 @@ namespace Ogre
     {
     protected:
         InstantRadiosity *mInstantRadiosity;
-        String mCurrentExportFolder;
+        String            mCurrentExportFolder;
 
         typedef map<Node *, uint32>::type NodeToIdxMap;
+
         NodeToIdxMap mNodeToIdxMap;
 
-        typedef set<const Mesh *>::type MeshSet;
+        typedef set<const Mesh *>::type     MeshSet;
         typedef set<const v1::Mesh *>::type MeshV1Set;
-        MeshSet mExportedMeshes;
+
+        MeshSet   mExportedMeshes;
         MeshV1Set mExportedMeshesV1;
 
-        bool mUseBinaryFloatingPoint;
+        bool  mUseBinaryFloatingPoint;
         uint8 mCurrentBinFloat;
         uint8 mCurrentBinDouble;
-        char mFloatBinTmpString[24][64];
-        char mDoubleBinTmpString[4][384];
+        char  mFloatBinTmpString[24][64];
+        char  mDoubleBinTmpString[4][384];
 
-        String mDecalsTexNames[3];
+        String      mDecalsTexNames[3];
         TextureGpu *mDecalsTex[3];
-        bool mDecalsTexManaged[3];
+        bool        mDecalsTexManaged[3];
 
         static const char *toQuotedStr( bool value );
-        static void toQuotedStr( LwString &jsonStr, Light::LightTypes lightType );
+        static void        toQuotedStr( LwString &jsonStr, Light::LightTypes lightType );
 
         static uint32 encodeFloatBin( float value );
         static uint64 encodeDoubleBin( double value );
@@ -86,6 +88,7 @@ namespace Ogre
         /// Warning: not thread safe. Returned pointer gets modified with next call
         const char *encodeDouble( double value );
         inline void rewindFloatBinStringPool( uint8 rewindAmount );
+
         void encodeVector( LwString &jsonStr, const Vector2 &value );
         void encodeVector( LwString &jsonStr, const Vector3 &value );
         void encodeVector( LwString &jsonStr, const Vector4 &value );
@@ -155,7 +158,7 @@ namespace Ogre
             Note that excluding scene nodes can cause issues later during import.
         */
         void exportScene( String &outJson,
-                          uint32 exportFlags = static_cast<uint32>( ~SceneFlags::TexturesOriginal ) );
+                          uint32  exportFlags = static_cast<uint32>( ~SceneFlags::TexturesOriginal ) );
 
         void exportSceneToFile( const String &folderPath, uint32 exportFlags = static_cast<uint32>(
                                                               ~SceneFlags::TexturesOriginal ) );

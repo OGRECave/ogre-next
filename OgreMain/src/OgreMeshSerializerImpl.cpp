@@ -268,7 +268,7 @@ namespace Ogre
 
                 // bool indexes32Bit
                 bool idx32bit =
-                    ( !s->indexData[i]->indexBuffer.isNull() &&
+                    ( s->indexData[i]->indexBuffer &&
                       s->indexData[i]->indexBuffer->getType() == HardwareIndexBuffer::IT_32BIT );
                 writeBools( &idx32bit, 1 );
 
@@ -610,7 +610,7 @@ namespace Ogre
                 size += sizeof( bool );
 
                 bool idx32bit =
-                    ( !pSub->indexData[i]->indexBuffer.isNull() &&
+                    ( pSub->indexData[i]->indexBuffer &&
                       pSub->indexData[i]->indexBuffer->getType() == HardwareIndexBuffer::IT_32BIT );
                 // unsigned int* / unsigned short* faceVertexIndices
                 if( idx32bit )
@@ -1273,7 +1273,7 @@ namespace Ogre
         {
             const IndexData *indexData = submesh->mLodFaceList[casterPass][lodNum - 1];
             HardwareIndexBufferSharedPtr ibuf = indexData->indexBuffer;
-            assert( !ibuf.isNull() );
+            assert( ibuf );
             unsigned int bufferIndex = std::numeric_limits<unsigned int>::max();
             for( ushort i = 1; i < lodNum; i++ )
             {
@@ -1385,7 +1385,7 @@ namespace Ogre
 
             const IndexData *indexData = submesh->mLodFaceList[casterPass][lodNum - 1];
             HardwareIndexBufferSharedPtr ibuf = indexData->indexBuffer;
-            assert( !ibuf.isNull() );
+            assert( ibuf );
             unsigned int bufferIndex = std::numeric_limits<unsigned int>::max();
             for( ushort i = 1; i < lodNum; i++ )
             {
@@ -1406,9 +1406,7 @@ namespace Ogre
             {
                 size += sizeof( bool );          // bool indexes32Bit
                 size += sizeof( unsigned int );  // unsigned int ibuf->getNumIndexes()
-                size += ibuf.isNull() ? 0
-                                      : static_cast<unsigned long>( ibuf->getIndexSize() *
-                                                                    ibuf->getNumIndexes() );  // faces
+                size += ibuf ? ibuf->getIndexSize() * ibuf->getNumIndexes() : 0;  // faces
             }
             return size;
         }
@@ -1572,7 +1570,7 @@ namespace Ogre
                                      "Invalid Lod Usage type in " + pMesh->getName(),
                                      "MeshSerializerImpl::readMeshLodInfo" );
                     }
-                    usage.manualMesh.setNull();  // will trigger load later with manual Lod
+                    usage.manualMesh.reset();  // will trigger load later with manual Lod
                     usage.edgeData = NULL;
                 }
             }
@@ -1628,7 +1626,7 @@ namespace Ogre
                 {
                     // copy buffer pointer
                     indexData->indexBuffer = sm->mLodFaceList[casterPass][bufferIndex - 1]->indexBuffer;
-                    assert( !indexData->indexBuffer.isNull() );
+                    assert( indexData->indexBuffer );
                 }
                 else
                 {
@@ -3088,7 +3086,7 @@ namespace Ogre
             size_t size = MSTREAM_OVERHEAD_SIZE;  // M_MESH_LOD_GENERATED
             size += sizeof( unsigned int );       // unsigned int indexData->indexCount;
             size += sizeof( bool );               // bool indexes32Bit
-            size += ibuf.isNull() ? 0 : ibuf->getIndexSize() * indexData->indexCount;  // faces
+            size += ibuf ? ibuf->getIndexSize() * indexData->indexCount : 0;  // faces
             return size;
         }
 #if !OGRE_NO_MESHLOD
@@ -3160,7 +3158,7 @@ namespace Ogre
                 // Lock index buffer to write
                 HardwareIndexBufferSharedPtr ibuf = indexData->indexBuffer;
 
-                bool idx32 = (!ibuf.isNull() && ibuf->getType() == HardwareIndexBuffer::IT_32BIT);
+                bool idx32 = (ibuf && ibuf->getType() == HardwareIndexBuffer::IT_32BIT);
 
                 writeChunkHeader(M_MESH_LOD_GENERATED, calcLodUsageGeneratedSubmeshSize(sm, lodNum));
                 unsigned int idxCount = static_cast<unsigned int>(indexData->indexCount);
@@ -3207,7 +3205,7 @@ namespace Ogre
         {
             const IndexData *indexData = submesh->mLodFaceList[VpNormal][lodNum - 1];
             HardwareIndexBufferSharedPtr ibuf = indexData->indexBuffer;
-            assert( !ibuf.isNull() );
+            assert( ibuf );
 
             writeChunkHeader( M_MESH_LOD_GENERATED,
                               calcLodUsageGeneratedSubmeshSize( submesh, lodNum, casterPass ) );
@@ -3246,7 +3244,7 @@ namespace Ogre
                                                                  MeshLodUsage &usage, uint8 casterPass )
         {
             usage.manualName = "";
-            usage.manualMesh.setNull();
+            usage.manualMesh.reset();
             pushInnerChunk( stream );
             {
                 // Get one set of detail per SubMesh
@@ -3315,7 +3313,7 @@ namespace Ogre
             }
 
             usage.manualName = readString( stream );
-            usage.manualMesh.setNull();  // will trigger load later
+            usage.manualMesh.reset();  // will trigger load later
             popInnerChunk( stream );
         }
 
@@ -3434,7 +3432,7 @@ namespace Ogre
 
                 // Set default values
                 usage.manualName = "";
-                usage.manualMesh.setNull();
+                usage.manualMesh.reset();
                 usage.edgeData = NULL;
 
                 if( pMesh->hasManualLodLevel() )
@@ -3838,7 +3836,7 @@ namespace Ogre
 
                 // Set default values
                 usage.manualName = "";
-                usage.manualMesh.setNull();
+                usage.manualMesh.reset();
                 usage.edgeData = NULL;
 
                 if( manual )

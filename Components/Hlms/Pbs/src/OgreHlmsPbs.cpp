@@ -596,7 +596,7 @@ namespace Ogre
         mRenderSystem->_setPipelineStateObject( &retVal->pso );
 
         mRenderSystem->bindGpuProgramParameters( GPT_VERTEX_PROGRAM, vsParams, GPV_ALL );
-        if( !retVal->pso.pixelShader.isNull() )
+        if( retVal->pso.pixelShader )
         {
             GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
             mRenderSystem->bindGpuProgramParameters( GPT_FRAGMENT_PROGRAM, psParams, GPV_ALL );
@@ -917,8 +917,8 @@ namespace Ogre
 
         setProperty( PbsProperty::NormalMap, !datablockNormalMaps.empty() );
 
-        /*setProperty( HlmsBaseProp::, !datablock->getTexture( PBSM_DETAIL0 ).isNull() );
-        setProperty( HlmsBaseProp::DiffuseMap, !datablock->getTexture( PBSM_DETAIL1 ).isNull() );*/
+        /*setProperty( HlmsBaseProp::, (bool)datablock->getTexture( PBSM_DETAIL0 ) );
+        setProperty( HlmsBaseProp::DiffuseMap, (bool)datablock->getTexture( PBSM_DETAIL1 ) );*/
         bool normalMapCanBeSupported =
             ( getProperty( HlmsBaseProp::Normal ) && getProperty( HlmsBaseProp::Tangent ) ) ||
             getProperty( HlmsBaseProp::QTangent );
@@ -1404,8 +1404,8 @@ namespace Ogre
             for( size_t i = 0u; i < maxActiveActors; ++i )
             {
                 barrierSolver.resolveTransition(
-                    resourceTransitions, mPlanarReflections->getTexture( i ), ResourceLayout::Texture,
-                    ResourceAccess::Read, 1u << PixelShader );
+                    resourceTransitions, mPlanarReflections->getTexture( (uint8)i ),
+                    ResourceLayout::Texture, ResourceAccess::Read, 1u << PixelShader );
             }
         }
 #endif
@@ -3488,8 +3488,8 @@ namespace Ogre
             {
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
                 TextureGpu *planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
-                *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( mTexUnitSlotStart - 1u, planarReflTex, mPlanarReflectionsSamplerblock );
+                *commandBuffer->addCommand<CbTexture>() = CbTexture(
+                    uint16( mTexUnitSlotStart - 1u ), planarReflTex, mPlanarReflectionsSamplerblock );
                 mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
             }
 #endif

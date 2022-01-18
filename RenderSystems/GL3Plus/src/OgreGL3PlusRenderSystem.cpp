@@ -1735,27 +1735,27 @@ namespace Ogre
         // Shader stuff
         //
 
-        if( !newBlock->vertexShader.isNull() )
+        if( newBlock->vertexShader )
         {
             pso->vertexShader =
                 static_cast<GLSLShader *>( newBlock->vertexShader->_getBindingDelegate() );
         }
-        if( !newBlock->geometryShader.isNull() )
+        if( newBlock->geometryShader )
         {
             pso->geometryShader =
                 static_cast<GLSLShader *>( newBlock->geometryShader->_getBindingDelegate() );
         }
-        if( !newBlock->tesselationHullShader.isNull() )
+        if( newBlock->tesselationHullShader )
         {
             pso->hullShader =
                 static_cast<GLSLShader *>( newBlock->tesselationHullShader->_getBindingDelegate() );
         }
-        if( !newBlock->tesselationDomainShader.isNull() )
+        if( newBlock->tesselationDomainShader )
         {
             pso->domainShader =
                 static_cast<GLSLShader *>( newBlock->tesselationDomainShader->_getBindingDelegate() );
         }
-        if( !newBlock->pixelShader.isNull() &&
+        if( newBlock->pixelShader &&
             newBlock->blendblock->mBlendChannelMask != HlmsBlendblock::BlendChannelForceDisabled )
         {
             pso->pixelShader = static_cast<GLSLShader *>( newBlock->pixelShader->_getBindingDelegate() );
@@ -2593,7 +2593,7 @@ namespace Ogre
                                     mRenderInstanceAttribsBound, updateVAO );
         }
 
-        if( !globalInstanceVertexBuffer.isNull() && globalVertexDeclaration != NULL )
+        if( globalInstanceVertexBuffer && globalVertexDeclaration )
         {
             elemEnd = globalVertexDeclaration->getElements().end();
             for( elemIter = globalVertexDeclaration->getElements().begin(); elemIter != elemEnd;

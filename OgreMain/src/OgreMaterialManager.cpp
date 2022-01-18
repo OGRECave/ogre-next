@@ -71,7 +71,7 @@ namespace Ogre
     //-----------------------------------------------------------------------
     MaterialManager::~MaterialManager()
     {
-        mDefaultSettings.setNull();
+        mDefaultSettings.reset();
         // Resources cleared by superclass
         // Unregister with resource group manager
         ResourceGroupManager::getSingleton()._unregisterResourceManager( mResourceType );
@@ -94,12 +94,13 @@ namespace Ogre
                                          ManualResourceLoader *loader,
                                          const NameValuePairList *createParams )
     {
-        return createResource( name, group, isManual, loader, createParams ).staticCast<Material>();
+        return std::static_pointer_cast<Material>(
+            createResource( name, group, isManual, loader, createParams ) );
     }
     //-----------------------------------------------------------------------
     MaterialPtr MaterialManager::getByName( const String &name, const String &groupName )
     {
-        return getResourceByName( name, groupName ).staticCast<Material>();
+        return std::static_pointer_cast<Material>( getResourceByName( name, groupName ) );
     }
     //-----------------------------------------------------------------------
     void MaterialManager::initialise()

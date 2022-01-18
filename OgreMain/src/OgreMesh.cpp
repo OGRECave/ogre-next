@@ -91,7 +91,7 @@ namespace Ogre
             lod.userValue = 0;  // User value not used for base LOD level
             lod.value = LodStrategyManager::getSingleton().getDefaultStrategy()->getBaseValue();
             lod.edgeData = NULL;
-            lod.manualMesh.setNull();
+            lod.manualMesh.reset();
             mMeshLodUsageList.push_back( lod );
             mLodValues.push_back( lod.value );
         }
@@ -273,7 +273,7 @@ namespace Ogre
             mFreshFromDisk = DataStreamPtr( OGRE_NEW MemoryDataStream( mName, mFreshFromDisk ) );
         }
         //-----------------------------------------------------------------------
-        void Mesh::unprepareImpl() { mFreshFromDisk.setNull(); }
+        void Mesh::unprepareImpl() { mFreshFromDisk.reset(); }
         void Mesh::loadImpl()
         {
             OgreProfileExhaustive( "v1::Mesh::loadImpl" );
@@ -284,9 +284,9 @@ namespace Ogre
             // If the only copy is local on the stack, it will be cleaned
             // up reliably in case of exceptions, etc
             DataStreamPtr data( mFreshFromDisk );
-            mFreshFromDisk.setNull();
+            mFreshFromDisk.reset();
 
-            if( data.isNull() )
+            if( !data )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                              "Data doesn't appear to have been prepared in " + mName,
@@ -679,25 +679,24 @@ namespace Ogre
                 if( skelName.empty() )
                 {
                     // No skeleton
-                    mOldSkeleton.setNull();
-                    mSkeleton.setNull();
+                    mOldSkeleton.reset();
+                    mSkeleton.reset();
                 }
                 else
                 {
                     // Load skeleton
                     try
                     {
-                        mOldSkeleton = OldSkeletonManager::getSingleton()
-                                           .load( skelName, mGroup )
-                                           .staticCast<Skeleton>();
+                        mOldSkeleton = std::static_pointer_cast<Skeleton>(
+                            OldSkeletonManager::getSingleton().load( skelName, mGroup ) );
 
                         // TODO: put mOldSkeleton in legacy mode only.
                         mSkeleton = SkeletonManager::getSingleton().getSkeletonDef( mOldSkeleton.get() );
                     }
                     catch( ... )
                     {
-                        mOldSkeleton.setNull();
-                        mSkeleton.setNull();
+                        mOldSkeleton.reset();
+                        mSkeleton.reset();
                         // Log this error
                         String msg = "Unable to load skeleton ";
                         msg += skelName + " for Mesh " + mName + ". This Mesh will not be animated. " +
@@ -730,7 +729,7 @@ namespace Ogre
         void Mesh::_initAnimationState( AnimationStateSet *animSet )
         {
             // Animation states for skeletal animation
-            if( !mOldSkeleton.isNull() )
+            if( mOldSkeleton )
             {
                 // Delegate to Skeleton
                 mOldSkeleton->_initAnimationState( animSet );
@@ -755,7 +754,7 @@ namespace Ogre
         //---------------------------------------------------------------------
         void Mesh::_refreshAnimationState( AnimationStateSet *animSet )
         {
-            if( !mOldSkeleton.isNull() )
+            if( mOldSkeleton )
             {
                 mOldSkeleton->_refreshAnimationState( animSet );
             }
@@ -1150,7 +1149,7 @@ namespace Ogre
         //---------------------------------------------------------------------
         void Mesh::_computeBoneBoundingRadius()
         {
-            if( mBoneBoundingRadius == Real( 0 ) && !mSkeleton.isNull() )
+            if( mBoneBoundingRadius == Real( 0 ) && mSkeleton )
             {
                 Real radius = Real( 0 );
                 vector<Vector3>::type bonePositions;
@@ -1231,8 +1230,7 @@ namespace Ogre
         {
 #if !OGRE_NO_MESHLOD
             assert( index < mMeshLodUsageList.size() );
-            if( this->_isManualLodLevel( index ) && index > 0 &&
-                mMeshLodUsageList[index].manualMesh.isNull() )
+            if( this->_isManualLodLevel( index ) && index > 0 && !mMeshLodUsageList[index].manualMesh )
             {
                 // Load the mesh now
                 try
@@ -1270,7 +1268,7 @@ namespace Ogre
             MeshLodUsage *lod = &( mMeshLodUsageList[index] );
 
             lod->manualName = meshName;
-            lod->manualMesh.setNull();
+            lod->manualMesh.reset();
             OGRE_DELETE lod->edgeData;
             lod->edgeData = 0;
         }
@@ -1597,7 +1595,7 @@ namespace Ogre
                     ( ( *itor )->vertexData[VpNormal] == 0 ) ||
                     ( ( *itor )->vertexData[VpNormal] != 0 && ( *itor )->vertexData[VpShadow] != 0 );
                 retVal &= ( ( *itor )->indexData[VpNormal] == 0 ||
-                            ( *itor )->indexData[VpNormal]->indexBuffer.isNull() ) ||
+                            !( *itor )->indexData[VpNormal]->indexBuffer ) ||
                           ( ( *itor )->indexData[VpNormal] != 0 && ( *itor )->indexData[VpShadow] != 0 );
 
                 retVal &=
@@ -1963,7 +1961,7 @@ namespace Ogre
                 {
                     // Delegate edge building to manual mesh
                     // It should have already built it's own edge list while loading
-                    if( !usage.manualMesh.isNull() )
+                    if( usage.manualMesh )
                     {
                         usage.edgeData = usage.manualMesh->getEdgeList( 0 );
                     }
@@ -2476,7 +2474,7 @@ namespace Ogre
                         }
                     }
                 }
-                if( !( *si )->indexData[VpNormal]->indexBuffer.isNull() )
+                if( ( *si )->indexData[VpNormal]->indexBuffer )
                 {
                     // Index data
                     ret += ( *si )->indexData[VpNormal]->indexBuffer->getSizeInBytes();

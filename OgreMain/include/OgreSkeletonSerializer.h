@@ -69,7 +69,7 @@ namespace Ogre
             <LI>Call the exportSkeleton method</LI>
             </OL>
         */
-        class _OgreExport SkeletonSerializer final : public Serializer
+        class _OgreExport SkeletonSerializer : public Serializer
         {
         public:
             SkeletonSerializer();

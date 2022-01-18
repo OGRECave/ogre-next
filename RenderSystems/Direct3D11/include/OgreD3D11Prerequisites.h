@@ -130,14 +130,6 @@ namespace Ogre
     struct D3D11VertexArrayObjectShared;
     class D3D11Window;
 
-#ifdef OGRE_DEPRECATED_2_2
-    class D3D11Texture;
-    class D3D11TextureManager;
-    class D3D11DepthBuffer;
-
-    typedef SharedPtr<D3D11Texture> D3D11TexturePtr;
-#endif
-
     namespace v1
     {
         class D3D11HardwareBuffer;

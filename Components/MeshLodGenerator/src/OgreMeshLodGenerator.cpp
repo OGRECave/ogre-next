@@ -118,7 +118,7 @@ namespace Ogre
                 usage.userValue = lodConfig.levels[i].distance;
                 usage.value = lodConfig.strategy->transformUserValue( usage.userValue );
                 usage.edgeData = NULL;
-                usage.manualMesh.setNull();
+                usage.manualMesh.reset();
                 usage.manualName = lodConfig.levels[i].manualMeshName;
                 lodConfig.mesh->_setLodUsage( uint16( ++n ), usage );
             }
@@ -140,7 +140,7 @@ namespace Ogre
                                                LodDataPtr &data, LodInputProviderPtr &input,
                                                LodOutputProviderPtr &output, LodCollapserPtr &collapser )
     {
-        if( cost.isNull() )
+        if( !cost )
         {
             cost = LodCollapseCostPtr( new LodCollapseCostCurvature );
             if( lodConfig.advanced.outsideWeight != 0 )
@@ -154,21 +154,21 @@ namespace Ogre
                     new LodCollapseCostProfiler( lodConfig.advanced.profile, cost ) );
             }
         }
-        if( data.isNull() )
+        if( !data )
         {
             data = LodDataPtr( new LodData() );
         }
-        if( collapser.isNull() )
+        if( !collapser )
         {
             collapser = LodCollapserPtr( new LodCollapser() );
         }
         if( lodConfig.advanced.useBackgroundQueue )
         {
-            if( input.isNull() )
+            if( !input )
             {
                 input = LodInputProviderPtr( new LodInputProviderBuffer( lodConfig.mesh ) );
             }
-            if( output.isNull() )
+            if( !output )
             {
                 if( lodConfig.advanced.useCompression )
                 {
@@ -183,11 +183,11 @@ namespace Ogre
         }
         else
         {
-            if( input.isNull() )
+            if( !input )
             {
                 input = LodInputProviderPtr( new LodInputProviderMesh( lodConfig.mesh ) );
             }
-            if( output.isNull() )
+            if( !output )
             {
                 if( lodConfig.advanced.useCompression )
                 {

@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11StagingBuffer.h"
 
 #include "OgreD3D11Device.h"
+#include "OgreException.h"
 #include "OgreStringConverter.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11VaoManager.h"

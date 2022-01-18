@@ -26,16 +26,17 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef _OgreHlmsJsonPbs_H_
+#define _OgreHlmsJsonPbs_H_
+
+#include "OgreHlmsPbsPrerequisites.h"
+
 #if !OGRE_NO_JSON
-#    ifndef _OgreHlmsJsonPbs_H_
-#        define _OgreHlmsJsonPbs_H_
 
-#        include "OgreHlmsPbsPrerequisites.h"
+#    include "OgreHlmsJson.h"
+#    include "OgreHlmsPbsDatablock.h"
 
-#        include "OgreHlmsJson.h"
-#        include "OgreHlmsPbsDatablock.h"
-
-#        include "OgreHeaderPrefix.h"
+#    include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -107,8 +108,8 @@ namespace Ogre
 
 }  // namespace Ogre
 
-#        include "OgreHeaderSuffix.h"
+#    include "OgreHeaderSuffix.h"
 
-#    endif
+#endif
 
 #endif

@@ -29,22 +29,24 @@ THE SOFTWARE.
 #define _OgrePlanarReflectionActor_H_
 
 #include "OgrePlanarReflectionsPrerequisites.h"
+
+#include "Math/Array/OgreArrayConfig.h"
+#include "Math/Array/OgreArrayQuaternion.h"
+#include "Math/Array/OgreArrayVector3.h"
 #include "OgreIdString.h"
 #include "OgrePlane.h"
 #include "OgreVector2.h"
-#include "Math/Array/OgreArrayConfig.h"
-#include "Math/Array/OgreArrayVector3.h"
-#include "Math/Array/OgreArrayQuaternion.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     /** \addtogroup Component
-    *  @{
-    */
+     *  @{
+     */
     /** \addtogroup Material
-    *  @{
-    */
+     *  @{
+     */
 
     struct ActiveActorData;
 
@@ -66,22 +68,23 @@ namespace Ogre
         /// 2 = -Y plane (south)
         /// 3 = +X plane (east)
         /// 4 = -X plane (west)
-        ArrayReal       planeNegD[5];
-        ArrayVector3    center;
-        ArrayReal       xyHalfSize[2];
+        ArrayReal    planeNegD[5];
+        ArrayVector3 center;
+        ArrayReal    xyHalfSize[2];
     };
 
     class _OgrePlanarReflectionsExport PlanarReflectionActor
     {
         friend class PlanarReflections;
-    protected:
-        Plane       mPlane;
-        Vector3     mCenter;
-        Vector2     mHalfSize;
-        Quaternion  mOrientation;
 
-        bool        mHasReservation;
-        uint8       mCurrentBoundSlot;
+    protected:
+        Plane      mPlane;
+        Vector3    mCenter;
+        Vector2    mHalfSize;
+        Quaternion mOrientation;
+
+        bool  mHasReservation;
+        uint8 mCurrentBoundSlot;
         /** Ogre tries to activate visible planar reflections, sorting those
             that are closest to the camera, as long as they have equal priority.
             However distance to camera may not be convenient in all cases (such as when you
@@ -99,26 +102,39 @@ namespace Ogre
             A priority of 0 means always activate first.
             A priority of 255 means activate last.
         */
-        public: uint8   mActivationPriority;
+    public:
+        uint8 mActivationPriority;
+
     protected:
-        uint8           mIndex;
+        uint8            mIndex;
         ArrayActorPlane *mActorPlane;
 
         void updateArrayActorPlane();
 
     public:
         PlanarReflectionActor() :
-            mCenter( Vector3::ZERO ), mHalfSize( Vector2::UNIT_SCALE ),
-            mOrientation( Quaternion::IDENTITY ), mHasReservation( false ),
-            mCurrentBoundSlot( 0xFF ), mActivationPriority( 127 ), mIndex( 0 ), mActorPlane( 0 )
+            mCenter( Vector3::ZERO ),
+            mHalfSize( Vector2::UNIT_SCALE ),
+            mOrientation( Quaternion::IDENTITY ),
+            mHasReservation( false ),
+            mCurrentBoundSlot( 0xFF ),
+            mActivationPriority( 127 ),
+            mIndex( 0 ),
+            mActorPlane( 0 )
         {
         }
 
         PlanarReflectionActor( const Vector3 &center, const Vector2 &halfSize,
                                const Quaternion orientation ) :
-            mPlane( orientation.zAxis(), center ), mCenter( center ),
-            mHalfSize( halfSize ), mOrientation( orientation ), mHasReservation( false ),
-            mCurrentBoundSlot( 0xFF ), mActivationPriority( 127 ), mIndex( 0 ), mActorPlane( 0 )
+            mPlane( orientation.zAxis(), center ),
+            mCenter( center ),
+            mHalfSize( halfSize ),
+            mOrientation( orientation ),
+            mHasReservation( false ),
+            mCurrentBoundSlot( 0xFF ),
+            mActivationPriority( 127 ),
+            mIndex( 0 ),
+            mActorPlane( 0 )
         {
         }
 
@@ -133,11 +149,11 @@ namespace Ogre
         */
         void setPlane( const Vector3 &center, const Vector2 &halfSize, const Quaternion &orientation );
 
-        const Vector3& getCenter() const;
-        const Vector2& getHalfSize() const;
-        const Quaternion& getOrientation() const;
-        const Vector3& getNormal() const;
-        const Plane& getPlane() const;
+        const Vector3    &getCenter() const;
+        const Vector2    &getHalfSize() const;
+        const Quaternion &getOrientation() const;
+        const Vector3    &getNormal() const;
+        const Plane      &getPlane() const;
         /// See PlanarReflections::reserve
         bool hasReservation() const;
         /// This value may have some meaning even if there is no reservation.
@@ -149,7 +165,7 @@ namespace Ogre
     /** @} */
     /** @} */
 
-}
+}  // namespace Ogre
 
 #include "OgreHeaderSuffix.h"
 

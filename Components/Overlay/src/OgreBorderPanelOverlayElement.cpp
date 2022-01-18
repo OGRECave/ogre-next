@@ -196,7 +196,7 @@ namespace Ogre
             bind->unsetBinding( POSITION_BINDING );
             bind->unsetBinding( TEXCOORD_BINDING );
 
-            mRenderOp2.indexData->indexBuffer.setNull();
+            mRenderOp2.indexData->indexBuffer.reset();
 
             PanelOverlayElement::_releaseManualHardwareResources();
         }
@@ -528,7 +528,7 @@ namespace Ogre
         {
             mBorderMaterialName = name;
             /*mBorderMaterial = MaterialManager::getSingleton().getByName(name);
-            if (mBorderMaterial.isNull())
+            if (!mBorderMaterial)
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Could not find material " + name,
                     "BorderPanelOverlayElement::setBorderMaterialName" );
             mBorderMaterial->load();

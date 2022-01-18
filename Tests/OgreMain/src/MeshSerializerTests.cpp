@@ -155,17 +155,17 @@ void MeshSerializerTests::tearDown()
     if (!mSkeletonFullPath.empty()) {
         copyFile(mSkeletonFullPath + ".bak", mSkeletonFullPath);
     }
-    if (!mMesh.isNull()) {
+    if (mMesh) {
         mMesh->unload();
-        mMesh.setNull();
+        mMesh.reset();
     }
-    if (!mOrigMesh.isNull()) {
+    if (mOrigMesh) {
         mOrigMesh->unload();
-        mOrigMesh.setNull();
+        mOrigMesh.reset();
     }
-    if (!mSkeleton.isNull()) {
+    if (mSkeleton) {
         mSkeleton->unload();
-        mSkeleton.setNull();
+        mSkeleton.reset();
     }    
     
     OGRE_DELETE MeshManager::getSingletonPtr();
@@ -200,7 +200,7 @@ void MeshSerializerTests::testSkeleton_Version_1_8()
 {
     UnitTestSuite::getSingletonPtr()->startTestMethod(__FUNCTION__);
 
-    if (!mSkeleton.isNull()) {
+    if (mSkeleton) {
         SkeletonSerializer skeletonSerializer;
         skeletonSerializer.exportSkeleton(mSkeleton.get(), mSkeletonFullPath, SKELETON_VERSION_1_8);
         mSkeleton->reload();
@@ -211,7 +211,7 @@ void MeshSerializerTests::testSkeleton_Version_1_0()
 {
     UnitTestSuite::getSingletonPtr()->startTestMethod(__FUNCTION__);
 
-    if (!mSkeleton.isNull()) {
+    if (mSkeleton) {
         SkeletonSerializer skeletonSerializer;
         skeletonSerializer.exportSkeleton(mSkeleton.get(), mSkeletonFullPath, SKELETON_VERSION_1_0);
         mSkeleton->reload();
@@ -558,7 +558,7 @@ void MeshSerializerTests::assertIndexDataClone(IndexData* a, IndexData* b, MeshV
         CPPUNIT_ASSERT(a->indexCount == b->indexCount);
         // CPPUNIT_ASSERT(a->indexStart == b->indexStart);
         CPPUNIT_ASSERT((a->indexBuffer.get() == NULL) == (b->indexBuffer.get() == NULL));
-        if (!a->indexBuffer.isNull()) {
+        if (a->indexBuffer) {
             CPPUNIT_ASSERT(a->indexBuffer->getManager() == b->indexBuffer->getManager());
             // CPPUNIT_ASSERT(a->indexBuffer->getNumIndexes() == b->indexBuffer->getNumIndexes());
             CPPUNIT_ASSERT(a->indexBuffer->getIndexSize() == b->indexBuffer->getIndexSize());

@@ -22,18 +22,16 @@ namespace Demo
         mRsDepthRange( 1.0f )
     {
         Ogre::MaterialPtr material =
-            Ogre::MaterialManager::getSingleton()
-                .load( "SSR/ScreenSpaceReflectionsVectors",
-                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "SSR/ScreenSpaceReflectionsVectors",
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
         mPsParams[0] = pass->getFragmentProgramParameters();
 
-        material = Ogre::MaterialManager::getSingleton()
-                       .load( "SSR/ScreenSpaceReflectionsCombine",
-                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                       .staticCast<Ogre::Material>();
+        material = std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+            "SSR/ScreenSpaceReflectionsCombine",
+            Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
         pass = material->getTechnique( 0 )->getPass( 0 );
         mPsParams[1] = pass->getFragmentProgramParameters();
 
@@ -117,10 +115,9 @@ namespace Demo
         Ogre::GpuProgramParametersSharedPtr oldParams;
         Ogre::Pass *pass = 0;
 
-        material = Ogre::MaterialManager::getSingleton()
-                       .load( "SSR/ScreenSpaceReflectionsVectors",
-                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                       .staticCast<Ogre::Material>();
+        material = std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+            "SSR/ScreenSpaceReflectionsVectors",
+            Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         pass = material->getTechnique( 0 )->getPass( 0 );
         // Save old manual & auto params
@@ -132,10 +129,9 @@ namespace Demo
         // Restore manual & auto params to the newly compiled shader
         pass->getFragmentProgramParameters()->copyConstantsFrom( *oldParams );
 
-        material = Ogre::MaterialManager::getSingleton()
-                       .load( "SSR/ScreenSpaceReflectionsCombine",
-                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                       .staticCast<Ogre::Material>();
+        material = std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+            "SSR/ScreenSpaceReflectionsCombine",
+            Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
         pass = material->getTechnique( 0 )->getPass( 0 );
         // Save old manual & auto params
         oldParams = pass->getFragmentProgramParameters();
@@ -195,10 +191,9 @@ namespace Demo
         reprojectionMaxDistanceError *= (float)equivalentMetersInCurrentUnit;
 
         Ogre::MaterialPtr material =
-            Ogre::MaterialManager::getSingleton()
-                .load( "SSR/ScreenSpaceReflectionsVectors",
-                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "SSR/ScreenSpaceReflectionsVectors",
+                Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
         Ogre::GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();

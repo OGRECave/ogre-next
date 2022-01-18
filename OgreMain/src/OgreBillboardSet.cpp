@@ -773,7 +773,7 @@ namespace Ogre
                 }
             }
 
-            if( mHlmsDatablock && getMaterial().isNull() )
+            if( mHlmsDatablock && !getMaterial() )
             {
                 // Needed to force Hlms to recalculate the hash (vertex attributes may have changed)
                 mHlmsDatablock->_unlinkRenderable( this );
@@ -820,10 +820,10 @@ namespace Ogre
                 mIndexData = 0;
             }
 
-            mMainBuf.setNull();
+            mMainBuf.reset();
             mMainBuffers.clear();
 
-            if( mHlmsDatablock && getMaterial().isNull() )
+            if( mHlmsDatablock && !getMaterial() )
             {
                 _setHlmsHashes( 0u, 0u );
                 mHlmsDatablock->_unlinkRenderable( this );

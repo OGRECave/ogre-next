@@ -51,7 +51,7 @@ namespace Ogre
         {
             mMatName = matName;
             mMaterial = MaterialManager::getSingleton().getByName( mMatName );
-            if( mMaterial.isNull() )
+            if( !mMaterial )
                 OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Could not find material " + mMatName,
                              "SimpleRenderable::setMaterial" );
 

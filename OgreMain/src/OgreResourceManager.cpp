@@ -77,7 +77,7 @@ namespace Ogre
 
         ResourcePtr res = getResourceByName( name, group );
         bool created = false;
-        if( res.isNull() )
+        if( !res )
         {
             created = true;
             res = createResource( name, group, isManual, loader, params );
@@ -243,7 +243,7 @@ namespace Ogre
     {
         ResourcePtr res = getResourceByName( name );
 
-        if( !res.isNull() )
+        if( res )
         {
             // Unload resource
             res->unload();
@@ -254,7 +254,7 @@ namespace Ogre
     {
         ResourcePtr res = getByHandle( handle );
 
-        if( !res.isNull() )
+        if( res )
         {
             // Unload resource
             res->unload();
@@ -275,7 +275,7 @@ namespace Ogre
             // A use count of 3 means that only RGM and RM have references
             // RGM has one (this one) and RM has 2 (by name and by handle)
             if( !unreferencedOnly ||
-                i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
             {
                 Resource *res = i->second.get();
                 if( !reloadableOnly || res->isReloadable() )
@@ -304,7 +304,7 @@ namespace Ogre
             // A use count of 3 means that only RGM and RM have references
             // RGM has one (this one) and RM has 2 (by name and by handle)
             if( !unreferencedOnly ||
-                i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
             {
                 Resource *res = i->second.get();
                 if( !reloadableOnly || res->isReloadable() )
@@ -321,7 +321,7 @@ namespace Ogre
     {
         ResourcePtr res = getResourceByName( name );
 
-        if( !res.isNull() )
+        if( res )
         {
             removeImpl( res );
         }
@@ -331,7 +331,7 @@ namespace Ogre
     {
         ResourcePtr res = getByHandle( handle );
 
-        if( !res.isNull() )
+        if( res )
         {
             removeImpl( res );
         }
@@ -358,7 +358,7 @@ namespace Ogre
         {
             // A use count of 3 means that only RGM and RM have references
             // RGM has one (this one) and RM has 2 (by name and by handle)
-            if( i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+            if( i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
             {
                 Resource *res = ( i++ )->second.get();
                 if( !reloadableOnly || res->isReloadable() )
@@ -397,7 +397,7 @@ namespace Ogre
         }
 
         // if didn't find it the grouped pool - get it from the global pool
-        if( res.isNull() )
+        if( !res )
         {
             OGRE_LOCK_AUTO_MUTEX;
 
@@ -464,7 +464,7 @@ namespace Ogre
             {
                 // A use count of 3 means that only RGM and RM have references
                 // RGM has one (this one) and RM has 2 (by name and by handle)
-                if( i->second.useCount() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
+                if( i->second.use_count() == ResourceGroupManager::RESOURCE_SYSTEM_NUM_REFERENCE_COUNTS )
                 {
                     Resource *res = i->second.get();
                     if( res->isReloadable() )

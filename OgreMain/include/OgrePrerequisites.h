@@ -141,9 +141,7 @@ namespace Ogre
     class Decal;
     class DefaultWorkQueue;
     class Degree;
-#ifndef OGRE_DEPRECATED_2_2
     struct DepthBuffer;
-#endif
     struct DescriptorSetSampler;
     struct DescriptorSetTexture;
     struct DescriptorSetTexture2;
@@ -314,26 +312,6 @@ namespace Ogre
     class WorkQueue;
     class CompositorManager2;
     class CompositorWorkspace;
-
-#ifdef OGRE_DEPRECATED_2_2
-    class DepthBuffer;
-    class HlmsTextureManager;
-    class Image;
-    class PixelBox;
-    class RenderTarget;
-    class RenderTargetListener;
-    class RenderTexture;
-    class RenderToVertexBuffer;
-    class RenderWindow;
-    class MultiRenderTarget;
-    class Texture;
-    class TextureManager;
-
-    template <typename T>
-    class SharedPtr;
-    typedef SharedPtr<RenderToVertexBuffer> RenderToVertexBufferSharedPtr;
-    typedef SharedPtr<Texture>              TexturePtr;
-#endif
 
     template <typename T>
     class SharedPtr;

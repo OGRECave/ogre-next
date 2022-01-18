@@ -54,7 +54,7 @@ namespace Ogre
                 return;
 
             mVertexOffsetMap[index] = offset;
-            mBuffer.setNull();
+            mBuffer.reset();
         }
         //---------------------------------------------------------------------
         void Pose::addVertex( size_t index, const Vector3 &offset, const Vector3 &normal )
@@ -71,7 +71,7 @@ namespace Ogre
 
             mVertexOffsetMap[index] = offset;
             mNormalsMap[index] = normal;
-            mBuffer.setNull();
+            mBuffer.reset();
         }
         //---------------------------------------------------------------------
         void Pose::removeVertex( size_t index )
@@ -80,7 +80,7 @@ namespace Ogre
             if( i != mVertexOffsetMap.end() )
             {
                 mVertexOffsetMap.erase( i );
-                mBuffer.setNull();
+                mBuffer.reset();
             }
             NormalsMap::iterator j = mNormalsMap.find( index );
             if( j != mNormalsMap.end() )
@@ -93,7 +93,7 @@ namespace Ogre
         {
             mVertexOffsetMap.clear();
             mNormalsMap.clear();
-            mBuffer.setNull();
+            mBuffer.reset();
         }
         //---------------------------------------------------------------------
         Pose::ConstVertexOffsetIterator Pose::getVertexOffsetIterator() const
@@ -121,7 +121,7 @@ namespace Ogre
         {
             size_t numVertices = origData->vertexCount;
 
-            if( mBuffer.isNull() )
+            if( !mBuffer )
             {
                 // Create buffer
                 size_t vertexSize = VertexElement::getTypeSize( VET_FLOAT3 );

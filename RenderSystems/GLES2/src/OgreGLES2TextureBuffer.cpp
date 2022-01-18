@@ -569,7 +569,7 @@ namespace v1 {
     //-----------------------------------------------------------------------------  
     void GLES2TextureBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox)
     {
-        GLES2TextureBuffer *srct = static_cast<GLES2TextureBuffer *>(src.getPointer());
+        GLES2TextureBuffer *srct = static_cast<GLES2TextureBuffer *>(src.get());
         // TODO: Check for FBO support first
         // Destination texture must be 2D or Cube
         // Source texture must be 2D

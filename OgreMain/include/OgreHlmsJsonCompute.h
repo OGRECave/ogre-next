@@ -28,9 +28,9 @@ THE SOFTWARE.
 #ifndef _OgreHlmsJsonCompute_H_
 #define _OgreHlmsJsonCompute_H_
 
-#if !OGRE_NO_JSON
+#include "OgreHlmsJson.h"
 
-#    include "OgreHlmsJson.h"
+#if !OGRE_NO_JSON
 #    include "OgreResourceTransition.h"
 
 #    include "OgreHeaderPrefix.h"

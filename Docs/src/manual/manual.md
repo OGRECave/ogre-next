@@ -21,3 +21,4 @@ painful and traumatic as possible.
 - @subpage BehavorStagingTextureD3D11
 - @subpage Ogre23Changes
 - @subpage RootLayouts
+- @subpage ResolvingMergeConflicts24

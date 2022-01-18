@@ -26,8 +26,6 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgreSceneFormatExporter.h"
 
 #include "Compositor/OgreCompositorWorkspaceDef.h"

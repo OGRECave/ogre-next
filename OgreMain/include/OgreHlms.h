@@ -557,7 +557,7 @@ namespace Ogre
             Default value is 0.
          */
         virtual void setStaticBranchingLights( bool staticBranchingLights );
-        bool         getStaticBranchingLights( void ) const { return mStaticBranchingLights; }
+        bool         getStaticBranchingLights() const { return mStaticBranchingLights; }
 
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit

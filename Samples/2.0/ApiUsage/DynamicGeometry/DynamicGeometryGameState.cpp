@@ -262,10 +262,10 @@ namespace Demo
 
         // If we don't do this, the smart pointers will try to
         // delete memory after Ogre has shutdown (and crash)
-        mStaticMesh.setNull();
-        mPartialMesh.setNull();
+        mStaticMesh.reset();
+        mPartialMesh.reset();
         for( size_t i = 0; i < 2; ++i )
-            mDynamicMesh[i].setNull();
+            mDynamicMesh[i].reset();
     }
     //-----------------------------------------------------------------------------------
     void DynamicGeometryGameState::updateDynamicBuffer01( float *cubeVertices,

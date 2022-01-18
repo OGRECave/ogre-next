@@ -26,14 +26,13 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgrePlanarReflectionActor.h"
+
 #include "Math/Array/OgreArrayQuaternion.h"
 
 namespace Ogre
 {
-	void PlanarReflectionActor::updateArrayActorPlane()
+    void PlanarReflectionActor::updateArrayActorPlane()
     {
         mActorPlane->planeNormals.setFromQuaternion( mOrientation, mIndex );
 
@@ -41,11 +40,11 @@ namespace Ogre
         Plane p;
         p.redefine( -mOrientation.yAxis(), mCenter + mOrientation.yAxis() * mHalfSize.y );
         Mathlib::Set( mActorPlane->planeNegD[1], -p.d, mIndex );
-        p.redefine(  mOrientation.yAxis(), mCenter - mOrientation.yAxis() * mHalfSize.y );
+        p.redefine( mOrientation.yAxis(), mCenter - mOrientation.yAxis() * mHalfSize.y );
         Mathlib::Set( mActorPlane->planeNegD[2], -p.d, mIndex );
         p.redefine( -mOrientation.xAxis(), mCenter + mOrientation.xAxis() * mHalfSize.x );
         Mathlib::Set( mActorPlane->planeNegD[3], -p.d, mIndex );
-        p.redefine(  mOrientation.xAxis(), mCenter - mOrientation.xAxis() * mHalfSize.x );
+        p.redefine( mOrientation.xAxis(), mCenter - mOrientation.xAxis() * mHalfSize.x );
         Mathlib::Set( mActorPlane->planeNegD[4], -p.d, mIndex );
 
         mActorPlane->center.setFromVector3( mCenter, mIndex );
@@ -64,50 +63,29 @@ namespace Ogre
         updateArrayActorPlane();
     }
     //-----------------------------------------------------------------------------------
-    const Vector3& PlanarReflectionActor::getCenter() const
-    {
-        return mCenter;
-    }
+    const Vector3 &PlanarReflectionActor::getCenter() const { return mCenter; }
     //-----------------------------------------------------------------------------------
-    const Vector2& PlanarReflectionActor::getHalfSize() const
-    {
-        return mHalfSize;
-    }
+    const Vector2 &PlanarReflectionActor::getHalfSize() const { return mHalfSize; }
     //-----------------------------------------------------------------------------------
-    const Quaternion& PlanarReflectionActor::getOrientation() const
-    {
-        return mOrientation;
-    }
+    const Quaternion &PlanarReflectionActor::getOrientation() const { return mOrientation; }
     //-----------------------------------------------------------------------------------
-    const Vector3& PlanarReflectionActor::getNormal() const
-    {
-        return mPlane.normal;
-    }
+    const Vector3 &PlanarReflectionActor::getNormal() const { return mPlane.normal; }
     //-----------------------------------------------------------------------------------
-    const Plane& PlanarReflectionActor::getPlane() const
-    {
-        return mPlane;
-    }
+    const Plane &PlanarReflectionActor::getPlane() const { return mPlane; }
     //-----------------------------------------------------------------------------------
-    bool PlanarReflectionActor::hasReservation() const
-    {
-        return mHasReservation;
-    }
+    bool PlanarReflectionActor::hasReservation() const { return mHasReservation; }
     //-----------------------------------------------------------------------------------
-    uint8 PlanarReflectionActor::getCurrentBoundSlot() const
-    {
-        return mCurrentBoundSlot;
-    }
+    uint8 PlanarReflectionActor::getCurrentBoundSlot() const { return mCurrentBoundSlot; }
     //-----------------------------------------------------------------------------------
     Real PlanarReflectionActor::getSquaredDistanceTo( const Vector3 &pos ) const
     {
         Vector3 projectedPos = pos - mPlane.normal * mPlane.getDistance( pos );
 
-        Vector3 localPos = mOrientation.Inverse() * (projectedPos - mCenter);
+        Vector3 localPos = mOrientation.Inverse() * ( projectedPos - mCenter );
         localPos.makeFloor( Vector3( mHalfSize.x, mHalfSize.y, 0.0f ) );
         localPos.makeCeil( -Vector3( mHalfSize.x, mHalfSize.y, 0.0f ) );
 
         Vector3 clampedProjPos = mCenter + mOrientation * localPos;
         return clampedProjPos.squaredDistance( pos );
     }
-}
+}  // namespace Ogre

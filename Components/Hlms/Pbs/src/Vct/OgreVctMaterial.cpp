@@ -75,14 +75,12 @@ namespace Ogre
         mDownsampleWorkspace2D( 0 )
     {
         MaterialPtr mat;
-        mat = MaterialManager::getSingleton()
-                  .load( "Ogre/Copy/4xFP32_2DArray", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME )
-                  .staticCast<Material>();
+        mat = std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+            "Ogre/Copy/4xFP32_2DArray", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) );
         mDownsampleMatPass2DArray = mat->getTechnique( 0 )->getPass( 0 );
 
-        mat = MaterialManager::getSingleton()
-                  .load( "Ogre/Copy/4xFP32", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME )
-                  .staticCast<Material>();
+        mat = std::static_pointer_cast<Material>( MaterialManager::getSingleton().load(
+            "Ogre/Copy/4xFP32", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ) );
         mDownsampleMatPass2D = mat->getTechnique( 0 )->getPass( 0 );
     }
     //-------------------------------------------------------------------------

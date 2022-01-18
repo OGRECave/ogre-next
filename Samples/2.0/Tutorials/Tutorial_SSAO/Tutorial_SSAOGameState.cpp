@@ -280,9 +280,8 @@ namespace Demo
         //---------------------------------------------------------------------------------
         // Get GpuProgramParametersSharedPtr to set uniforms that we need
         Ogre::MaterialPtr material =
-            Ogre::MaterialManager::getSingleton()
-                .load( "SSAO/HS", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "SSAO/HS", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *pass = material->getTechnique( 0 )->getPass( 0 );
         mSSAOPass = pass;
@@ -313,18 +312,16 @@ namespace Demo
 
         // Set blur shader uniforms
         Ogre::MaterialPtr materialBlurH =
-            Ogre::MaterialManager::getSingleton()
-                .load( "SSAO/BlurH", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "SSAO/BlurH", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *passBlurH = materialBlurH->getTechnique( 0 )->getPass( 0 );
         Ogre::GpuProgramParametersSharedPtr psParamsBlurH = passBlurH->getFragmentProgramParameters();
         psParamsBlurH->setNamedConstant( "projectionParams", projectionAB );
 
         Ogre::MaterialPtr materialBlurV =
-            Ogre::MaterialManager::getSingleton()
-                .load( "SSAO/BlurV", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "SSAO/BlurV", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *passBlurV = materialBlurV->getTechnique( 0 )->getPass( 0 );
         Ogre::GpuProgramParametersSharedPtr psParamsBlurV = passBlurV->getFragmentProgramParameters();
@@ -332,9 +329,8 @@ namespace Demo
 
         // Set apply shader uniforms
         Ogre::MaterialPtr materialApply =
-            Ogre::MaterialManager::getSingleton()
-                .load( "SSAO/Apply", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME )
-                .staticCast<Ogre::Material>();
+            std::static_pointer_cast<Ogre::Material>( Ogre::MaterialManager::getSingleton().load(
+                "SSAO/Apply", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME ) );
 
         Ogre::Pass *passApply = materialApply->getTechnique( 0 )->getPass( 0 );
         mApplyPass = passApply;

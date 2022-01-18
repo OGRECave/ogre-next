@@ -154,7 +154,7 @@ namespace Ogre
                 return;
 
             // Is mesh skeletally animated?
-            if( mMesh->hasSkeleton() && !mMesh->getOldSkeleton().isNull() )
+            if( mMesh->hasSkeleton() && mMesh->getOldSkeleton() )
             {
                 mSkeletonInstance = OGRE_NEW OldSkeletonInstance( mMesh->getOldSkeleton() );
                 mSkeletonInstance->load();
@@ -1416,7 +1416,7 @@ namespace Ogre
 
                 const MaterialPtr &m = sub.getMaterial();
 
-                if( m.isNull() )
+                if( !m )
                 {
                     mVertexProgramInUse = true;
                     if( hasSkeleton() )
@@ -1828,7 +1828,7 @@ namespace Ogre
                                                               groupName );
                 }
             }
-            if( pMesh.isNull() )
+            if( !pMesh )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "'mesh' parameter required when constructing an Entity.",

@@ -365,13 +365,11 @@ namespace Ogre
 
         while( itor != endt )
         {
-            assert( ( !itor->asyncTicket.isNull() ||
-                      seenBuffers.find( itor->vertexBuffer ) != seenBuffers.end() ||
-                      ( itor->data && itor->vertexBuffer->getShadowCopy() &&
-                        itor->asyncTicket.isNull() ) ) &&
+            assert( ( itor->asyncTicket || seenBuffers.find( itor->vertexBuffer ) != seenBuffers.end() ||
+                      ( itor->data && itor->vertexBuffer->getShadowCopy() && !itor->asyncTicket ) ) &&
                     "These tickets are invalid or already been unmapped, or you're mapping twice" );
 
-            if( !itor->asyncTicket.isNull() )
+            if( itor->asyncTicket )
             {
                 itor->data = reinterpret_cast<const char *>( itor->asyncTicket->map() );
                 itor->data += itor->offset;
@@ -399,10 +397,10 @@ namespace Ogre
         while( itor != endt )
         {
             itor->data = 0;
-            if( !itor->asyncTicket.isNull() )
+            if( itor->asyncTicket )
             {
                 itor->asyncTicket->unmap();
-                itor->asyncTicket.setNull();
+                itor->asyncTicket.reset();
             }
 
             ++itor;

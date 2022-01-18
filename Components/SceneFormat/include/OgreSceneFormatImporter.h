@@ -68,12 +68,12 @@ namespace Ogre
     class _OgreSceneFormatExport SceneFormatImporter : public SceneFormatBase
     {
     protected:
-        String mFilename;
-        InstantRadiosity *mInstantRadiosity;
-        IrradianceVolume *mIrradianceVolume;
+        String                    mFilename;
+        InstantRadiosity         *mInstantRadiosity;
+        IrradianceVolume         *mIrradianceVolume;
         ParallaxCorrectedCubemap *mParallaxCorrectedCubemap;
-        Matrix4 mSceneComponentTransform;
-        String mDefaultPccWorkspaceName;
+        Matrix4                   mSceneComponentTransform;
+        String                    mDefaultPccWorkspaceName;
 
         bool mUseBinaryFloatingPoint;
         bool mUsingOitd;
@@ -81,7 +81,7 @@ namespace Ogre
         LightArray mVplLights;
 
         typedef map<uint32, SceneNode *>::type IndexToSceneNodeMap;
-        IndexToSceneNodeMap mCreatedSceneNodes;
+        IndexToSceneNodeMap                    mCreatedSceneNodes;
 
         SceneNode *mRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
         SceneNode *mParentlessRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
@@ -90,24 +90,27 @@ namespace Ogre
         void destroyParallaxCorrectedCubemap();
 
         static inline Light::LightTypes parseLightType( const char *value );
-        inline bool isFloat( const rapidjson::Value &jsonValue ) const;
-        inline bool isDouble( const rapidjson::Value &jsonValue ) const;
-        inline float decodeFloat( const rapidjson::Value &jsonValue );
-        inline double decodeDouble( const rapidjson::Value &jsonValue );
-        inline Vector2 decodeVector2Array( const rapidjson::Value &jsonArray );
-        inline Vector3 decodeVector3Array( const rapidjson::Value &jsonArray );
-        inline Vector4 decodeVector4Array( const rapidjson::Value &jsonArray );
-        inline Quaternion decodeQuaternionArray( const rapidjson::Value &jsonArray );
+
+        inline bool        isFloat( const rapidjson::Value &jsonValue ) const;
+        inline bool        isDouble( const rapidjson::Value &jsonValue ) const;
+        inline float       decodeFloat( const rapidjson::Value &jsonValue );
+        inline double      decodeDouble( const rapidjson::Value &jsonValue );
+        inline Vector2     decodeVector2Array( const rapidjson::Value &jsonArray );
+        inline Vector3     decodeVector3Array( const rapidjson::Value &jsonArray );
+        inline Vector4     decodeVector4Array( const rapidjson::Value &jsonArray );
+        inline Quaternion  decodeQuaternionArray( const rapidjson::Value &jsonArray );
         inline ColourValue decodeColourValueArray( const rapidjson::Value &jsonArray );
-        inline Aabb decodeAabbArray( const rapidjson::Value &jsonArray, const Aabb &defaultValue );
+
+        inline Aabb    decodeAabbArray( const rapidjson::Value &jsonArray, const Aabb &defaultValue );
         inline Matrix3 decodeMatrix3Array( const rapidjson::Value &jsonArray );
 
-        void importNode( const rapidjson::Value &nodeValue, Node *node );
+        void       importNode( const rapidjson::Value &nodeValue, Node *node );
         SceneNode *importSceneNode( const rapidjson::Value &sceneNodeValue, uint32 nodeIdx,
                                     const rapidjson::Value &sceneNodesJson );
+
         void importSceneNodes( const rapidjson::Value &json );
         void importMovableObject( const rapidjson::Value &movableObjectValue,
-                                  MovableObject *movableObject );
+                                  MovableObject          *movableObject );
         void importRenderable( const rapidjson::Value &renderableValue, Renderable *renderable );
         void importSubItem( const rapidjson::Value &subItemValue, SubItem *subItem );
         void importSubEntity( const rapidjson::Value &subEntityValue, v1::SubEntity *subEntity );

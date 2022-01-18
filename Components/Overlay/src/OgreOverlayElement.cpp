@@ -311,7 +311,7 @@ namespace Ogre
             /*if (matName != BLANKSTRING)
             {
                 mMaterial = MaterialManager::getSingleton().getByName(matName);
-                if (mMaterial.isNull())
+                if (!mMaterial)
                     OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "Could not find material " + matName,
                         "OverlayElement::setMaterialName" );
                 mMaterial->load();
@@ -321,7 +321,7 @@ namespace Ogre
             }
             else
             {
-                mMaterial.setNull();
+                mMaterial.reset();
             }*/
         }
         //---------------------------------------------------------------------

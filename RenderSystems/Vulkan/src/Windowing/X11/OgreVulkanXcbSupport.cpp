@@ -28,6 +28,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 #include "Windowing/X11/OgreVulkanXcbSupport.h"
 
+#include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreString.h"
 

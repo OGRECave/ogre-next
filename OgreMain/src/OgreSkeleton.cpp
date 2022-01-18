@@ -90,9 +90,8 @@ namespace Ogre
             for( i = mLinkedSkeletonAnimSourceList.begin(); i != mLinkedSkeletonAnimSourceList.end();
                  ++i )
             {
-                i->pSkeleton = OldSkeletonManager::getSingleton()
-                                   .load( i->skeletonName, mGroup )
-                                   .staticCast<Skeleton>();
+                i->pSkeleton = std::static_pointer_cast<Skeleton>(
+                    OldSkeletonManager::getSingleton().load( i->skeletonName, mGroup ) );
             }
         }
         //---------------------------------------------------------------------
@@ -338,7 +337,7 @@ namespace Ogre
                 for( it = mLinkedSkeletonAnimSourceList.begin();
                      it != mLinkedSkeletonAnimSourceList.end() && !ret; ++it )
                 {
-                    if( !it->pSkeleton.isNull() )
+                    if( it->pSkeleton )
                     {
                         ret = it->pSkeleton->_getAnimationImpl( name );
                         if( ret && linker )
@@ -392,7 +391,7 @@ namespace Ogre
             for( li = mLinkedSkeletonAnimSourceList.begin(); li != mLinkedSkeletonAnimSourceList.end();
                  ++li )
             {
-                if( !li->pSkeleton.isNull() )
+                if( li->pSkeleton )
                 {
                     li->pSkeleton->_refreshAnimationState( animSet );
                 }
@@ -427,7 +426,7 @@ namespace Ogre
             for( li = mLinkedSkeletonAnimSourceList.begin(); li != mLinkedSkeletonAnimSourceList.end();
                  ++li )
             {
-                if( !li->pSkeleton.isNull() )
+                if( li->pSkeleton )
                 {
                     li->pSkeleton->_refreshAnimationState( animSet );
                 }
@@ -686,8 +685,8 @@ namespace Ogre
             if( isLoaded() )
             {
                 // Load immediately
-                SkeletonPtr skelPtr =
-                    OldSkeletonManager::getSingleton().load( skelName, mGroup ).staticCast<Skeleton>();
+                SkeletonPtr skelPtr = std::static_pointer_cast<Skeleton>(
+                    OldSkeletonManager::getSingleton().load( skelName, mGroup ) );
                 mLinkedSkeletonAnimSourceList.push_back(
                     LinkedSkeletonAnimationSource( skelName, scale, skelPtr ) );
             }

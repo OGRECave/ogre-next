@@ -26,43 +26,44 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgrePlanarReflections.h"
-#include "OgreSceneManager.h"
-#include "OgreCamera.h"
+
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Math/Array/OgreBooleanMask.h"
-#include "OgreHlmsDatablock.h"
+#include "OgreCamera.h"
 #include "OgreHlms.h"
-#include "OgreTextureGpuManager.h"
-#include "OgrePixelFormatGpuUtils.h"
+#include "OgreHlmsDatablock.h"
 #include "OgreLogManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreSceneManager.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {
+    // clang-format off
     static const Ogre::Matrix4 PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE(
             0.5,    0,    0,  0.5,
             0,   -0.5,    0,  0.5,
             0,      0,    1,    0,
             0,      0,    0,    1 );
+    // clang-format on
 
     PlanarReflections::PlanarReflections( SceneManager *sceneManager,
-                                          CompositorManager2 *compositorManager,
-                                          Real maxDistance, Camera *lockCamera ) :
+                                          CompositorManager2 *compositorManager, Real maxDistance,
+                                          Camera *lockCamera ) :
         mActorsSoA( 0 ),
         mCapacityActorsSoA( 0 ),
         mLastAspectRatio( 0 ),
         mLastCameraPos( Vector3::ZERO ),
         mLastCameraRot( Quaternion::IDENTITY ),
         mLastCamera( 0 ),
-        //mLockCamera( lockCamera ),
+        // mLockCamera( lockCamera ),
         mUpdatingRenderablesHlms( false ),
         mAnyPendingFlushRenderable( false ),
         mMaxNumMipmaps( 0u ),
         mMaxActiveActors( 0u ),
-        mInvMaxDistance( Real(1.0) / maxDistance ),
+        mInvMaxDistance( Real( 1.0 ) / maxDistance ),
         mMaxSqDistance( maxDistance * maxDistance ),
         mSceneManager( sceneManager ),
         mCompositorManager( compositorManager ),
@@ -81,10 +82,10 @@ namespace Ogre
         }
 
         TextureGpuManager *textureGpuManager =
-                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
         ActiveActorDataVec::const_iterator itor = mActiveActorData.begin();
-        ActiveActorDataVec::const_iterator end  = mActiveActorData.end();
+        ActiveActorDataVec::const_iterator end = mActiveActorData.end();
 
         while( itor != end )
         {
@@ -100,7 +101,7 @@ namespace Ogre
     void PlanarReflections::setMaxDistance( Real maxDistance )
     {
         mMaxSqDistance = maxDistance * maxDistance;
-        mInvMaxDistance = Real(1.0) / maxDistance;
+        mInvMaxDistance = Real( 1.0 ) / maxDistance;
     }
     //-----------------------------------------------------------------------------------
     void PlanarReflections::setMaxActiveActors( uint8 maxActiveActors, IdString workspaceName,
@@ -111,11 +112,11 @@ namespace Ogre
         if( maxActiveActors < mMaxActiveActors )
         {
             TextureGpuManager *textureGpuManager =
-                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
-            //Shrinking
+            // Shrinking
             ActiveActorDataVec::const_iterator itor = mActiveActorData.begin() + maxActiveActors;
-            ActiveActorDataVec::const_iterator end  = mActiveActorData.end();
+            ActiveActorDataVec::const_iterator end = mActiveActorData.end();
 
             while( itor != end )
             {
@@ -124,13 +125,12 @@ namespace Ogre
                 textureGpuManager->destroyTexture( itor->reflectionTexture );
                 if( itor->isReserved )
                 {
-                    const size_t slotIdx = itor - mActiveActorData.begin();
+                    const size_t slotIdx = size_t( itor - mActiveActorData.begin() );
                     PlanarReflectionActorVec::iterator itActor = mActors.begin();
                     PlanarReflectionActorVec::iterator enActor = mActors.end();
 
-                    while( itActor != enActor &&
-                           (!(*itActor)->hasReservation() ||
-                            (*itActor)->mCurrentBoundSlot != slotIdx) )
+                    while( itActor != enActor && ( !( *itActor )->hasReservation() ||
+                                                   ( *itActor )->mCurrentBoundSlot != slotIdx ) )
                     {
                         ++itActor;
                     }
@@ -139,8 +139,8 @@ namespace Ogre
                             "Slot was reserved but we couldn't find "
                             "any Actor that had that reservation" );
 
-                    (*itActor)->mHasReservation     = false;
-                    (*itActor)->mCurrentBoundSlot   = 0xFF;
+                    ( *itActor )->mHasReservation = false;
+                    ( *itActor )->mCurrentBoundSlot = 0xFF;
                 }
 
                 ++itor;
@@ -165,57 +165,55 @@ namespace Ogre
 
         if( oldValue < mMaxActiveActors )
         {
-            //Enlarging
+            // Enlarging
             mActiveActorData.reserve( mMaxActiveActors );
             const size_t numNewActiveActors = mMaxActiveActors - oldValue;
-            for( size_t i=0; i<numNewActiveActors; ++i )
+            for( size_t i = 0; i < numNewActiveActors; ++i )
             {
                 ActiveActorData actorData;
                 const size_t uniqueId = Id::generateNewId<PlanarReflections>();
                 String cameraName = "PlanarReflectionActor #" + StringConverter::toString( uniqueId );
-                actorData.reflectionCamera = mSceneManager->createCamera( cameraName, useAccurateLighting );
+                actorData.reflectionCamera =
+                    mSceneManager->createCamera( cameraName, useAccurateLighting );
                 actorData.reflectionCamera->setAutoAspectRatio( false );
 
                 uint32 textureFlags = TextureFlags::RenderToTexture;
-                textureFlags |= (withMipmaps && mipmapMethodCompute) ? TextureFlags::Uav :
-                                                                       TextureFlags::AllowAutomipmaps;
-                uint32 numMips = !withMipmaps ? 1u :
-                                                PixelFormatGpuUtils::getMaxMipmapCount( width,
-                                                                                        height, 1u );
-                numMips = numMips - std::min( 4u, numMips - 1u ); //Mips below 16x16 are problematic.
+                textureFlags |= ( withMipmaps && mipmapMethodCompute ) ? TextureFlags::Uav
+                                                                       : TextureFlags::AllowAutomipmaps;
+                uint32 numMips =
+                    !withMipmaps ? 1u : PixelFormatGpuUtils::getMaxMipmapCount( width, height, 1u );
+                numMips = numMips - std::min( 4u, numMips - 1u );  // Mips below 16x16 are problematic.
 
-                //Always use HW Gamma, except when using compute mipmaps, which has issues.
-                const bool hwGamma = !(withMipmaps && mipmapMethodCompute);
+                // Always use HW Gamma, except when using compute mipmaps, which has issues.
+                const bool hwGamma = !( withMipmaps && mipmapMethodCompute );
                 if( hwGamma )
                     pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
                 else
                     pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
 
                 TextureGpuManager *textureGpuManager =
-                            mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-                actorData.reflectionTexture =
-                        textureGpuManager->createTexture(
-                            "PlanarReflections #" + StringConverter::toString( uniqueId ),
-                            GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Type2D );
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                actorData.reflectionTexture = textureGpuManager->createTexture(
+                    "PlanarReflections #" + StringConverter::toString( uniqueId ),
+                    GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Type2D );
                 actorData.reflectionTexture->setResolution( width, height );
                 actorData.reflectionTexture->setPixelFormat( pixelFormat );
                 actorData.reflectionTexture->setNumMipmaps( static_cast<uint8>( numMips ) );
-                actorData.reflectionTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+                actorData.reflectionTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
                 mMaxNumMipmaps = std::max( mMaxNumMipmaps, static_cast<uint8>( numMips ) );
 
                 CompositorChannelVec channels;
                 channels.push_back( actorData.reflectionTexture );
-                actorData.workspace = mCompositorManager->addWorkspace( mSceneManager, channels,
-                                                                        actorData.reflectionCamera,
-                                                                        workspaceName, false, 0 );
+                actorData.workspace = mCompositorManager->addWorkspace(
+                    mSceneManager, channels, actorData.reflectionCamera, workspaceName, false, 0 );
                 actorData.isReserved = false;
                 mActiveActorData.push_back( actorData );
             }
         }
     }
     //-----------------------------------------------------------------------------------
-    PlanarReflectionActor* PlanarReflections::addActor( const PlanarReflectionActor &actorRef )
+    PlanarReflectionActor *PlanarReflections::addActor( const PlanarReflectionActor &actorRef )
     {
         PlanarReflectionActor *actor = new PlanarReflectionActor( actorRef );
         mActors.push_back( actor );
@@ -231,31 +229,32 @@ namespace Ogre
 
             mCapacityActorsSoA = mActors.capacity();
 
-            const size_t bytesRequired = sizeof(ArrayActorPlane) *
-                                         alignToNextMultiple<size_t>( mCapacityActorsSoA, ARRAY_PACKED_REALS ) /
-                                         ARRAY_PACKED_REALS;
-            mActorsSoA = reinterpret_cast<ArrayActorPlane*>(
-                             OGRE_MALLOC_SIMD( bytesRequired, MEMCATEGORY_SCENE_OBJECTS ) );
+            const size_t bytesRequired =
+                sizeof( ArrayActorPlane ) *
+                alignToNextMultiple<size_t>( mCapacityActorsSoA, ARRAY_PACKED_REALS ) /
+                ARRAY_PACKED_REALS;
+            mActorsSoA = reinterpret_cast<ArrayActorPlane *>(
+                OGRE_MALLOC_SIMD( bytesRequired, MEMCATEGORY_SCENE_OBJECTS ) );
 
             mActors.pop_back();
 
             PlanarReflectionActorVec::const_iterator itor = mActors.begin();
-            PlanarReflectionActorVec::const_iterator end  = mActors.end();
+            PlanarReflectionActorVec::const_iterator end = mActors.end();
 
             while( itor != end )
             {
-                const size_t i = itor - mActors.begin();
-                (*itor)->mIndex         = i % ARRAY_PACKED_REALS;
-                (*itor)->mActorPlane    = mActorsSoA + (i / ARRAY_PACKED_REALS);
-                (*itor)->updateArrayActorPlane();
+                const size_t i = size_t( itor - mActors.begin() );
+                ( *itor )->mIndex = i % ARRAY_PACKED_REALS;
+                ( *itor )->mActorPlane = mActorsSoA + ( i / ARRAY_PACKED_REALS );
+                ( *itor )->updateArrayActorPlane();
                 ++itor;
             }
 
             mActors.push_back( actor );
         }
 
-        actor->mIndex       = (mActors.size() - 1u) % ARRAY_PACKED_REALS;
-        actor->mActorPlane  = mActorsSoA + ( (mActors.size() - 1u) / ARRAY_PACKED_REALS );
+        actor->mIndex = ( mActors.size() - 1u ) % ARRAY_PACKED_REALS;
+        actor->mActorPlane = mActorsSoA + ( ( mActors.size() - 1u ) / ARRAY_PACKED_REALS );
 
         actor->updateArrayActorPlane();
 
@@ -270,7 +269,8 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "Actor was not created by this PlanarReflections class "
-                         "or was already destroyed!", "PlanarReflections::destroyActor" );
+                         "or was already destroyed!",
+                         "PlanarReflections::destroyActor" );
         }
 
         if( actor->hasReservation() )
@@ -284,10 +284,10 @@ namespace Ogre
         efficientVectorRemove( mActors, itor );
     }
     //-----------------------------------------------------------------------------------
-	void PlanarReflections::destroyAllActors()
+    void PlanarReflections::destroyAllActors()
     {
         PlanarReflectionActorVec::iterator itor = mActors.begin();
-        PlanarReflectionActorVec::iterator end  = mActors.end();
+        PlanarReflectionActorVec::iterator end = mActors.end();
 
         while( itor != end )
             delete *itor++;
@@ -312,8 +312,8 @@ namespace Ogre
         assert( !actor->hasReservation() && "Actor already has a reservation!" );
 
         mActiveActorData[activeActorSlot].isReserved = true;
-        actor->mHasReservation      = true;
-        actor->mCurrentBoundSlot    = activeActorSlot;
+        actor->mHasReservation = true;
+        actor->mCurrentBoundSlot = activeActorSlot;
     }
     //-----------------------------------------------------------------------------------
     void PlanarReflections::releaseReservation( PlanarReflectionActor *actor )
@@ -325,16 +325,16 @@ namespace Ogre
                 "Slot wasn't reserved! Does the actor belong to this PlanarReflections?" );
 
         mActiveActorData[actor->mCurrentBoundSlot].isReserved = false;
-        actor->mHasReservation      = false;
-        actor->mCurrentBoundSlot    = 0xFF;
+        actor->mHasReservation = false;
+        actor->mCurrentBoundSlot = 0xFF;
     }
     //-----------------------------------------------------------------------------------
-	void PlanarReflections::updateFlushedRenderables()
+    void PlanarReflections::updateFlushedRenderables()
     {
         mUpdatingRenderablesHlms = true;
 
         TrackedRenderableArray::iterator itor = mTrackedRenderables.begin();
-        TrackedRenderableArray::iterator end  = mTrackedRenderables.end();
+        TrackedRenderableArray::iterator end = mTrackedRenderables.end();
 
         while( itor != end )
         {
@@ -358,15 +358,15 @@ namespace Ogre
                     trackedRenderable.hlmsHashes[1] = trackedRenderable.hlmsHashes[0];
 
                     const String *datablockNamePtr = datablock->getNameStr();
-                    String datablockName = datablockNamePtr ? *datablockNamePtr :
-                                                              datablock->getName().getFriendlyText();
+                    String datablockName =
+                        datablockNamePtr ? *datablockNamePtr : datablock->getName().getFriendlyText();
 
                     LogManager::getSingleton().logMessage( e.getFullDescription() );
                     LogManager::getSingleton().logMessage(
-                                "Couldn't apply planar reflections change to datablock '" +
-                                datablockName + "' for this renderable. Disabling reflections. "
-                                "Check previous log messages to see if there's more information.",
-                                LML_CRITICAL );
+                        "Couldn't apply planar reflections change to datablock '" + datablockName +
+                            "' for this renderable. Disabling reflections. "
+                            "Check previous log messages to see if there's more information.",
+                        LML_CRITICAL );
                 }
             }
 
@@ -387,7 +387,7 @@ namespace Ogre
     void PlanarReflections::removeRenderable( Renderable *renderable )
     {
         TrackedRenderableArray::iterator itor = mTrackedRenderables.begin();
-        TrackedRenderableArray::iterator end  = mTrackedRenderables.end();
+        TrackedRenderableArray::iterator end = mTrackedRenderables.end();
 
         while( itor != end && itor->renderable != renderable )
             ++itor;
@@ -398,8 +398,8 @@ namespace Ogre
         {
             if( !hasFlushPending( itor->renderable ) )
             {
-                //Restore the Hlms setting. If a flush is pending, then it's already up to date,
-                //and our TrackedRenderable::hlmsHashes[0] could be out of date.
+                // Restore the Hlms setting. If a flush is pending, then it's already up to date,
+                // and our TrackedRenderable::hlmsHashes[0] could be out of date.
                 itor->renderable->_setHlmsHashes( itor->hlmsHashes[0],
                                                   itor->renderable->getHlmsCasterHash() );
             }
@@ -417,7 +417,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-	void PlanarReflections::beginFrame()
+    void PlanarReflections::beginFrame()
     {
         mLastCamera = 0;
         mLastAspectRatio = 0;
@@ -429,10 +429,9 @@ namespace Ogre
     {
         Vector3 point;
 
-        OrderPlanarReflectionActorsByDistanceToPoint( const Vector3 &p ) :
-            point( p ) {}
+        OrderPlanarReflectionActorsByDistanceToPoint( const Vector3 &p ) : point( p ) {}
 
-        bool operator () ( const PlanarReflectionActor *_l, const PlanarReflectionActor *_r ) const
+        bool operator()( const PlanarReflectionActor *_l, const PlanarReflectionActor *_r ) const
         {
             if( _l->mActivationPriority == _r->mActivationPriority )
                 return _l->getSquaredDistanceTo( point ) < _r->getSquaredDistanceTo( point );
@@ -474,20 +473,20 @@ namespace Ogre
 
         struct ArrayPlane
         {
-            ArrayVector3    normal;
-            ArrayReal       negD;
+            ArrayVector3 normal;
+            ArrayReal negD;
         };
 
-        //Cull actors against their master cameras (under SSE2, we cull 4 actors at the same time).
-        //The culling algorithm is very similar to what is done in OgreForwardClustered.cpp which
-        //is also described in
-        //www.yosoygames.com.ar/wp/2016/12/frustum-vs-pyramid-intersection-also-frustum-vs-frustum/
-        //However the difference is that it's like doing frustum vs frustum test; but the Actor
-        //is a frustum with 0 height (thus flattened, hence... a plane) and we also have the
-        //guarantee that the opposing sides normals are the same but negated; thus:
-        //  rightPlane->normal = -leftPlane->normal
-        //  farPlane->normal = -nearPlane->normal
-        //Which is something a regular frustum won't guarantee. This saves us space storage.
+        // Cull actors against their master cameras (under SSE2, we cull 4 actors at the same time).
+        // The culling algorithm is very similar to what is done in OgreForwardClustered.cpp which
+        // is also described in
+        // www.yosoygames.com.ar/wp/2016/12/frustum-vs-pyramid-intersection-also-frustum-vs-frustum/
+        // However the difference is that it's like doing frustum vs frustum test; but the Actor
+        // is a frustum with 0 height (thus flattened, hence... a plane) and we also have the
+        // guarantee that the opposing sides normals are the same but negated; thus:
+        //   rightPlane->normal = -leftPlane->normal
+        //   farPlane->normal = -nearPlane->normal
+        // Which is something a regular frustum won't guarantee. This saves us space storage.
         const size_t numActors = mActors.size();
 
         Camera *prevCameras[ARRAY_PACKED_REALS];
@@ -496,28 +495,28 @@ namespace Ogre
         ArrayPlane frustums[6];
         ArrayVector3 worldSpaceCorners[8];
 
-        ArrayActorPlane * RESTRICT_ALIAS actorsPlanes = mActorsSoA;
+        ArrayActorPlane *RESTRICT_ALIAS actorsPlanes = mActorsSoA;
 
         {
             const Vector3 *corners = camera->getWorldSpaceCorners();
-            for( int i=0; i<8; ++i )
+            for( int i = 0; i < 8; ++i )
                 worldSpaceCorners[i].setAll( corners[i] );
 
             const Plane *planes = camera->getFrustumPlanes();
-            for( int i=0; i<6; ++i )
+            for( int i = 0; i < 6; ++i )
             {
                 frustums[i].normal.setAll( planes[i].normal );
                 frustums[i].negD = Mathlib::SetAll( -planes[i].d );
             }
         }
 
-        for( size_t i=0; i<numActors; i += ARRAY_PACKED_REALS )
+        for( size_t i = 0; i < numActors; i += ARRAY_PACKED_REALS )
         {
             ArrayMaskR mask;
             mask = BooleanMask4::getAllSetMask();
 
-            //Test all 4 quad vertices against each of the 6 frustum planes.
-            for( int k=0; k<6; ++k )
+            // Test all 4 quad vertices against each of the 6 frustum planes.
+            for( int k = 0; k < 6; ++k )
             {
                 ArrayMaskR vertexMask = ARRAY_MASK_ZERO;
                 ArrayReal dotResult;
@@ -527,126 +526,116 @@ namespace Ogre
                 tangentDir = actorsPlanes->planeNormals.yAxis() * actorsPlanes->xyHalfSize[1];
                 vertexPoint = actorsPlanes->center + tangentDir;
                 dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
-                vertexMask = Mathlib::Or( vertexMask,
-                                          Mathlib::CompareGreater( dotResult,
-                                                                   ARRAY_REAL_ZERO ) );
+                vertexMask =
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
 
                 vertexPoint = actorsPlanes->center - tangentDir;
                 dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
-                vertexMask = Mathlib::Or( vertexMask,
-                                          Mathlib::CompareGreater( dotResult,
-                                                                   ARRAY_REAL_ZERO ) );
+                vertexMask =
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
 
                 tangentDir = actorsPlanes->planeNormals.xAxis() * actorsPlanes->xyHalfSize[0];
                 vertexPoint = actorsPlanes->center + tangentDir;
                 dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
-                vertexMask = Mathlib::Or( vertexMask,
-                                          Mathlib::CompareGreater( dotResult,
-                                                                   ARRAY_REAL_ZERO ) );
+                vertexMask =
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
 
                 vertexPoint = actorsPlanes->center - tangentDir;
                 dotResult = frustums[k].normal.dotProduct( vertexPoint ) - frustums[k].negD;
-                vertexMask = Mathlib::Or( vertexMask,
-                                          Mathlib::CompareGreater( dotResult,
-                                                                   ARRAY_REAL_ZERO ) );
+                vertexMask =
+                    Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
 
                 mask = Mathlib::And( mask, vertexMask );
             }
 
             if( BooleanMask4::getScalarMask( mask ) != 0 )
             {
-                //Test all 8 frustum corners against each of the 6 planes (5+1).
+                // Test all 8 frustum corners against each of the 6 planes (5+1).
                 ArrayVector3 actorPlaneNormal;
                 ArrayReal actorPlaneNegD;
                 ArrayReal dotResult;
                 ArrayMaskR vertexMask;
 
-                //Main plane (positive side)
+                // Main plane (positive side)
                 actorPlaneNormal = actorsPlanes->planeNormals.zAxis();
                 actorPlaneNegD = actorsPlanes->planeNegD[0];
                 vertexMask = ARRAY_MASK_ZERO;
-                //Only test against the vertices from the near frustum. If they're all
-                //in the negative side of this plane, then this plane is looking
-                //away from the camera
-                //for( int l=0; l<8; ++l )
-                for( int l=0; l<4; ++l )
+                // Only test against the vertices from the near frustum. If they're all
+                // in the negative side of this plane, then this plane is looking
+                // away from the camera
+                // for( int l=0; l<8; ++l )
+                for( int l = 0; l < 4; ++l )
                 {
                     dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
-                    vertexMask = Mathlib::Or( vertexMask,
-                                              Mathlib::CompareGreater( dotResult,
-                                                                       ARRAY_REAL_ZERO ) );
+                    vertexMask =
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
-                //Main plane (negative side)
+                // Main plane (negative side)
                 actorPlaneNormal = -actorPlaneNormal;
                 actorPlaneNegD = -actorsPlanes->planeNegD[0];
                 vertexMask = ARRAY_MASK_ZERO;
-                for( int l=0; l<8; ++l )
+                for( int l = 0; l < 8; ++l )
                 {
                     dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
-                    vertexMask = Mathlib::Or( vertexMask,
-                                              Mathlib::CompareGreater( dotResult,
-                                                                       ARRAY_REAL_ZERO ) );
+                    vertexMask =
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
-                //North plane
+                // North plane
                 actorPlaneNormal = actorsPlanes->planeNormals.yAxis();
                 actorPlaneNegD = actorsPlanes->planeNegD[1];
                 vertexMask = ARRAY_MASK_ZERO;
-                for( int l=0; l<8; ++l )
+                for( int l = 0; l < 8; ++l )
                 {
                     dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
-                    vertexMask = Mathlib::Or( vertexMask,
-                                              Mathlib::CompareGreater( dotResult,
-                                                                       ARRAY_REAL_ZERO ) );
+                    vertexMask =
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
-                //South plane
+                // South plane
                 actorPlaneNormal = -actorPlaneNormal;
                 actorPlaneNegD = actorsPlanes->planeNegD[2];
                 vertexMask = ARRAY_MASK_ZERO;
-                for( int l=0; l<8; ++l )
+                for( int l = 0; l < 8; ++l )
                 {
                     dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
-                    vertexMask = Mathlib::Or( vertexMask,
-                                              Mathlib::CompareGreater( dotResult,
-                                                                       ARRAY_REAL_ZERO ) );
+                    vertexMask =
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
-                //East plane
+                // East plane
                 actorPlaneNormal = actorsPlanes->planeNormals.xAxis();
                 actorPlaneNegD = actorsPlanes->planeNegD[3];
                 vertexMask = ARRAY_MASK_ZERO;
-                for( int l=0; l<8; ++l )
+                for( int l = 0; l < 8; ++l )
                 {
                     dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
-                    vertexMask = Mathlib::Or( vertexMask,
-                                              Mathlib::CompareGreater( dotResult,
-                                                                       ARRAY_REAL_ZERO ) );
+                    vertexMask =
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
 
-                //West plane
+                // West plane
                 actorPlaneNormal = -actorPlaneNormal;
                 actorPlaneNegD = actorsPlanes->planeNegD[4];
                 vertexMask = ARRAY_MASK_ZERO;
-                for( int l=0; l<8; ++l )
+                for( int l = 0; l < 8; ++l )
                 {
                     dotResult = actorPlaneNormal.dotProduct( worldSpaceCorners[l] ) - actorPlaneNegD;
-                    vertexMask = Mathlib::Or( vertexMask,
-                                              Mathlib::CompareGreater( dotResult,
-                                                                       ARRAY_REAL_ZERO ) );
+                    vertexMask =
+                        Mathlib::Or( vertexMask, Mathlib::CompareGreater( dotResult, ARRAY_REAL_ZERO ) );
                 }
                 mask = Mathlib::And( mask, vertexMask );
             }
 
             const uint32 scalarMask = BooleanMask4::getScalarMask( mask );
 
-            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            for( size_t j = 0; j < ARRAY_PACKED_REALS; ++j )
             {
                 if( i + j < mActors.size() )
                 {
@@ -673,7 +662,7 @@ namespace Ogre
         {
             uint8 nextFreeActorData = 0;
             PlanarReflectionActorVec::iterator itor = mActiveActors.begin();
-            PlanarReflectionActorVec::iterator end  = mActiveActors.end();
+            PlanarReflectionActorVec::iterator end = mActiveActors.end();
 
             while( itor != end )
             {
@@ -681,7 +670,7 @@ namespace Ogre
                 ActiveActorData *actorData = 0;
                 if( actor->hasReservation() )
                 {
-                    //Actor is bound to a specifc slot
+                    // Actor is bound to a specifc slot
                     const size_t idx = actor->mCurrentBoundSlot;
                     assert( idx < mActiveActorData.size() );
                     assert( mActiveActorData[idx].isReserved &&
@@ -699,7 +688,7 @@ namespace Ogre
                     if( nextFreeActorData < mActiveActorData.size() )
                     {
                         actorData = &mActiveActorData[nextFreeActorData];
-                        //Grab whatever non-reserved slot we can get.
+                        // Grab whatever non-reserved slot we can get.
                         actor->mCurrentBoundSlot = nextFreeActorData;
                         ++nextFreeActorData;
                     }
@@ -720,23 +709,23 @@ namespace Ogre
                     if( camera->getFrustumExtentsManuallySet() )
                     {
                         Ogre::Vector4 frustumExtents;
-                        camera->getFrustumExtents( frustumExtents.x, frustumExtents.y,
-                                                   frustumExtents.z, frustumExtents.w );
+                        camera->getFrustumExtents( frustumExtents.x, frustumExtents.y, frustumExtents.z,
+                                                   frustumExtents.w );
                         actorData->reflectionCamera->setFrustumExtents(
-                                    frustumExtents.x, frustumExtents.y,
-                                    frustumExtents.z, frustumExtents.w, Ogre::FET_PROJ_PLANE_POS );
+                            frustumExtents.x, frustumExtents.y, frustumExtents.z, frustumExtents.w,
+                            Ogre::FET_PROJ_PLANE_POS );
                     }
 
                     ++itor;
                 }
                 else
                 {
-                    //If we're here we don't have a reservation and there are no
-                    //more free slots for us to grab. We can't activate this actor.
-                    const size_t idx = itor - mActiveActors.begin();
+                    // If we're here we don't have a reservation and there are no
+                    // more free slots for us to grab. We can't activate this actor.
+                    const ptrdiff_t idx = itor - mActiveActors.begin();
                     mActiveActors.erase( itor );
                     itor = mActiveActors.begin() + idx;
-                    end  = mActiveActors.end();
+                    end = mActiveActors.end();
                 }
             }
         }
@@ -754,7 +743,7 @@ namespace Ogre
                 Vector3 reflNormal = rotMat3x3 * itTracked->reflNormal;
                 const Vector3 rendCenter = fullTransform * itTracked->renderableCenter;
 
-                //Undo any scale
+                // Undo any scale
                 reflNormal.normalise();
 
                 uint8 bestActorIdx = mMaxActiveActors;
@@ -762,7 +751,7 @@ namespace Ogre
                 Real bestSqDistance = std::numeric_limits<Real>::max();
 
                 PlanarReflectionActorVec::const_iterator itor = mActiveActors.begin();
-                PlanarReflectionActorVec::const_iterator end  = mActiveActors.end();
+                PlanarReflectionActorVec::const_iterator end = mActiveActors.end();
 
                 while( itor != end )
                 {
@@ -772,13 +761,13 @@ namespace Ogre
                     const Real cos20 = 0.939692621f;
 
                     if( cosAngle >= cos20 &&
-                        (cosAngle >= bestCosAngle ||
-                        Math::Abs(cosAngle - bestCosAngle) < Real( 0.060307379f )) )
+                        ( cosAngle >= bestCosAngle ||
+                          Math::Abs( cosAngle - bestCosAngle ) < Real( 0.060307379f ) ) )
                     {
                         Real sqDistance = actor->getSquaredDistanceTo( rendCenter );
                         if( sqDistance < mMaxSqDistance && sqDistance <= bestSqDistance )
                         {
-                            bestActorIdx = (*itor)->mCurrentBoundSlot;
+                            bestActorIdx = ( *itor )->mCurrentBoundSlot;
                             bestSqDistance = sqDistance;
                         }
                     }
@@ -788,7 +777,7 @@ namespace Ogre
 
                 if( bestActorIdx < mMaxActiveActors )
                 {
-                    itTracked->renderable->mCustomParameter = (UseActiveActor | bestActorIdx);
+                    itTracked->renderable->mCustomParameter = ( UseActiveActor | bestActorIdx );
                     itTracked->renderable->_setHlmsHashes( itTracked->hlmsHashes[1],
                                                            itTracked->renderable->getHlmsCasterHash() );
                 }
@@ -803,35 +792,35 @@ namespace Ogre
             ++itTracked;
         }
 
-        //Now force mActiveActors & mActiveActorData to match, that means:
-        //  mActiveActors[idx]->getCurrentBoundSlot() == idx.
+        // Now force mActiveActors & mActiveActorData to match, that means:
+        //   mActiveActors[idx]->getCurrentBoundSlot() == idx.
 
-        //mActiveActors may not be sorted due to reserved slots (i.e. mActiveActors[5]
-        //may have had the reservation on mActiveActorData[0]
+        // mActiveActors may not be sorted due to reserved slots (i.e. mActiveActors[5]
+        // may have had the reservation on mActiveActorData[0]
         std::sort( mActiveActors.begin(), mActiveActors.end(),
                    OrderPlanarReflectionActorsByBindingSlot );
 
-        //Now fill in the gaps. Due to the reservation system, it's possible we have
-        //  0, 1, 3, 4
-        //because slot 2 is reserved and actor was not activated. If this is the case, fill
-        //in a dummy (note that dummies will have dummy->mCurrentBoundSlot = 0xFF because
-        //we only reuse the same dummy pointer for all missing slots). Afterwards it will read:
-        //  0, 1, 255(dummy), 3, 4
-        //which for all purposes we need, it's the same as:
-        //  0, 1, 2, 3, 4
+        // Now fill in the gaps. Due to the reservation system, it's possible we have
+        //   0, 1, 3, 4
+        // because slot 2 is reserved and actor was not activated. If this is the case, fill
+        // in a dummy (note that dummies will have dummy->mCurrentBoundSlot = 0xFF because
+        // we only reuse the same dummy pointer for all missing slots). Afterwards it will read:
+        //   0, 1, 255(dummy), 3, 4
+        // which for all purposes we need, it's the same as:
+        //   0, 1, 2, 3, 4
         size_t lastIdx = std::numeric_limits<size_t>::max();
         PlanarReflectionActorVec::iterator itActor = mActiveActors.begin();
         PlanarReflectionActorVec::iterator enActor = mActiveActors.end();
         while( itActor != enActor )
         {
-            if( lastIdx + 1u != (*itActor)->mCurrentBoundSlot )
+            if( lastIdx + 1u != ( *itActor )->mCurrentBoundSlot )
             {
-                const size_t diff = (*itActor)->mCurrentBoundSlot - (lastIdx + 1u);
-                const size_t newIdx = itActor - mActiveActors.begin() + diff;
+                const size_t diff = ( *itActor )->mCurrentBoundSlot - ( lastIdx + 1u );
+                const ptrdiff_t newIdx = itActor - mActiveActors.begin() + ptrdiff_t( diff );
                 mActiveActors.insert( itActor, diff, &mDummyActor );
                 itActor = mActiveActors.begin() + newIdx;
                 enActor = mActiveActors.end();
-                lastIdx += diff;
+                lastIdx += size_t( diff );
             }
 
             ++lastIdx;
@@ -840,7 +829,7 @@ namespace Ogre
 
         {
             ActiveActorDataVec::const_iterator itor = mActiveActorData.begin();
-            ActiveActorDataVec::const_iterator end  = mActiveActorData.end();
+            ActiveActorDataVec::const_iterator end = mActiveActorData.end();
 
             while( itor != end )
             {
@@ -858,28 +847,28 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t PlanarReflections::getConstBufferSize() const
     {
-        return (4u * mMaxActiveActors + 4u * 4u + 4u) * sizeof(float);
+        return ( 4u * mMaxActiveActors + 4u * 4u + 4u ) * sizeof( float );
     }
     //-----------------------------------------------------------------------------------
     void PlanarReflections::fillConstBufferData( TextureGpu *renderTarget, const Camera *camera,
                                                  const Matrix4 &projectionMatrix,
-                                                 float * RESTRICT_ALIAS passBufferPtr ) const
+                                                 float *RESTRICT_ALIAS passBufferPtr ) const
     {
         const Matrix4 viewMatrix = camera->getViewMatrix( true );
         Matrix3 viewMat3x3;
         viewMatrix.extract3x3Matrix( viewMat3x3 );
 
         PlanarReflectionActorVec::const_iterator itor = mActiveActors.begin();
-        PlanarReflectionActorVec::const_iterator end  = mActiveActors.end();
+        PlanarReflectionActorVec::const_iterator end = mActiveActors.end();
 
         while( itor != end )
         {
-            const Plane &plane = (*itor)->mPlane;
+            const Plane &plane = ( *itor )->mPlane;
 
-            //We need to send the plane data for PBS (which will
-            //be processed in pixel shader)in view space.
-            const Vector3 viewSpacePointInPlane = viewMatrix * (plane.normal * -plane.d);
-            const Vector3 viewSpaceNormal       = viewMat3x3 * plane.normal;
+            // We need to send the plane data for PBS (which will
+            // be processed in pixel shader)in view space.
+            const Vector3 viewSpacePointInPlane = viewMatrix * ( plane.normal * -plane.d );
+            const Vector3 viewSpaceNormal = viewMat3x3 * plane.normal;
 
             Plane planeVS( viewSpaceNormal, viewSpacePointInPlane );
 
@@ -891,11 +880,11 @@ namespace Ogre
             ++itor;
         }
 
-        memset( passBufferPtr, 0, (mMaxActiveActors - mActiveActors.size()) * 4u * sizeof(float) );
-        passBufferPtr += (mMaxActiveActors - mActiveActors.size()) * 4u;
+        memset( passBufferPtr, 0, ( mMaxActiveActors - mActiveActors.size() ) * 4u * sizeof( float ) );
+        passBufferPtr += ( mMaxActiveActors - mActiveActors.size() ) * 4u;
 
         Matrix4 reflProjMat = PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE * projectionMatrix;
-        for( size_t i=0; i<16; ++i )
+        for( size_t i = 0; i < 16; ++i )
             *passBufferPtr++ = (float)reflProjMat[0][i];
 
         *passBufferPtr++ = static_cast<float>( mInvMaxDistance );
@@ -904,7 +893,7 @@ namespace Ogre
         *passBufferPtr++ = 1.0f;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* PlanarReflections::getTexture( uint8 actorIdx ) const
+    TextureGpu *PlanarReflections::getTexture( uint8 actorIdx ) const
     {
         if( actorIdx >= mActiveActorData.size() )
             return 0;
@@ -913,22 +902,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool PlanarReflections::cameraMatches( const Camera *camera )
     {
-        return  !camera->isReflected() &&
-                mLastAspectRatio == camera->getAspectRatio() &&
-                mLastCameraPos == camera->getDerivedPosition() &&
-                mLastCameraRot == camera->getDerivedOrientation();
+        return !camera->isReflected() && mLastAspectRatio == camera->getAspectRatio() &&
+               mLastCameraPos == camera->getDerivedPosition() &&
+               mLastCameraRot == camera->getDerivedOrientation();
     }
     //-----------------------------------------------------------------------------------
-    bool PlanarReflections::_isUpdatingRenderablesHlms() const
-    {
-        return mUpdatingRenderablesHlms;
-    }
+    bool PlanarReflections::_isUpdatingRenderablesHlms() const { return mUpdatingRenderablesHlms; }
     //-----------------------------------------------------------------------------------
     bool PlanarReflections::hasPlanarReflections( const Renderable *renderable ) const
     {
-        return  renderable->mCustomParameter & UseActiveActor ||
-                renderable->mCustomParameter == FlushPending ||
-                renderable->mCustomParameter == InactiveActor;
+        return renderable->mCustomParameter & UseActiveActor ||
+               renderable->mCustomParameter == FlushPending ||
+               renderable->mCustomParameter == InactiveActor;
     }
     //-----------------------------------------------------------------------------------
     bool PlanarReflections::hasFlushPending( const Renderable *renderable ) const
@@ -938,6 +923,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool PlanarReflections::hasActiveActor( const Renderable *renderable ) const
     {
-        return (renderable->mCustomParameter & UseActiveActor) != 0;
+        return ( renderable->mCustomParameter & UseActiveActor ) != 0;
     }
-}
+}  // namespace Ogre

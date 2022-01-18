@@ -133,7 +133,7 @@ namespace Ogre
         */
         GpuProgramParametersSharedPtr createParameters() override;
         /** @copydoc GpuProgram::_getBindingDelegate */
-        GpuProgram *_getBindingDelegate() override { return mAssemblerProgram.getPointer(); }
+        GpuProgram *_getBindingDelegate() override { return mAssemblerProgram.get(); }
 
         /** Whether we should parse the source code looking for include files and
             embedding the file. Disabled by default to avoid slowing down when

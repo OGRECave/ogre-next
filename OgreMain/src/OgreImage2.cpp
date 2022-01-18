@@ -698,7 +698,7 @@ namespace Ogre
         Codec::DecodeResult res = pCodec->decode( stream );
 
         ImageCodec2::ImageData2 *pData =
-            static_cast<ImageCodec2::ImageData2 *>( res.second.getPointer() );
+            static_cast<ImageCodec2::ImageData2 *>( res.second.get() );
 
         mWidth = pData->box.width;
         mHeight = pData->box.height;
@@ -1241,7 +1241,7 @@ namespace Ogre
                 temp.bytesPerRow =
                     (uint32)PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
                 temp.bytesPerImage = temp.bytesPerRow * temp.height;
-                buf.bind( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
+                buf.reset( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
                 temp.data = buf->getPtr();
             }
             // super-optimized: no conversion
@@ -1310,7 +1310,7 @@ namespace Ogre
                     temp.bytesPerRow =
                         (uint32)PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
                     temp.bytesPerImage = temp.bytesPerRow * temp.height;
-                    buf.bind( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
+                    buf.reset( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
                     temp.data = buf->getPtr();
                 }
                 // super-optimized: byte-oriented math, no conversion

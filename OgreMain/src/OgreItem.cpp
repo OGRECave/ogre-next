@@ -101,7 +101,7 @@ namespace Ogre
             return;
 
         // Is mesh skeletally animated?
-        if( mMesh->hasSkeleton() && !mMesh->getSkeleton().isNull() && mManager )
+        if( mMesh->hasSkeleton() && mMesh->getSkeleton() && mManager )
         {
             const SkeletonDef *skeletonDef = mMesh->getSkeleton().get();
             mSkeletonInstance = mManager->createSkeletonInstance( skeletonDef );
@@ -363,7 +363,7 @@ namespace Ogre
                 pMesh = MeshManager::getSingleton().load( ni->second, groupName );
             }
         }
-        if( pMesh.isNull() )
+        if( !pMesh )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "'mesh' parameter required when constructing an Item.",

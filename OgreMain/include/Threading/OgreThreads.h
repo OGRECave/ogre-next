@@ -132,7 +132,7 @@ namespace Ogre
     typedef pthread_key_t TlsHandle;
 #endif
 
-#define OGRE_TLS_INVALID_HANDLE static_cast<TlsHandle>( 0xFFFFFFFF )
+#define OGRE_TLS_INVALID_HANDLE static_cast<Ogre::TlsHandle>( 0xFFFFFFFF )
 
     class _OgreExport Threads
     {

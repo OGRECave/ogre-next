@@ -578,7 +578,7 @@ namespace Ogre
             ( *i )->_load();
         }
 
-        if( !mShadowCasterMaterial.isNull() )
+        if( mShadowCasterMaterial )
         {
             mShadowCasterMaterial->load();
         }
@@ -587,7 +587,7 @@ namespace Ogre
             // in case we could not get material as it wasn't yet parsed/existent at that time.
             mShadowCasterMaterial =
                 MaterialManager::getSingleton().getByName( mShadowCasterMaterialName );
-            if( !mShadowCasterMaterial.isNull() )
+            if( mShadowCasterMaterial )
                 mShadowCasterMaterial->load();
         }
     }
@@ -782,15 +782,15 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void Technique::setShadowCasterMaterial( Ogre::MaterialPtr val )
     {
-        if( val.isNull() )
-        {
-            mShadowCasterMaterial.setNull();
-            mShadowCasterMaterialName.clear();
-        }
-        else
+        if( val )
         {
             mShadowCasterMaterial = val;
             mShadowCasterMaterialName = val->getName();
+        }
+        else
+        {
+            mShadowCasterMaterial.reset();
+            mShadowCasterMaterialName.clear();
         }
     }
     //-----------------------------------------------------------------------
