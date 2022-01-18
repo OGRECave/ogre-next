@@ -912,8 +912,6 @@ namespace Ogre
         static const IdString LightsAreaApprox;
         static const IdString LightsAreaLtc;
         static const IdString LightsAreaTexMask;
-        static const IdString LightsAttenuation;
-        static const IdString LightsSpotParams;
         static const IdString LightsAreaTexColour;
         static const IdString AllPointLights;
 
