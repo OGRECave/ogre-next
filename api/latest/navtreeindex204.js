@@ -1,7 +1,5 @@
 var NAVTREEINDEX204 =
 {
-"struct_ogre_1_1_pbs_property.html#a89f065107a8a2e2a48ef63892c243492":[5,0,0,15,2],
-"struct_ogre_1_1_pbs_property.html#a8a2287f563678877042f98547728546d":[5,0,0,15,84],
 "struct_ogre_1_1_pbs_property.html#a8bd9da53a61ea015df94abb3ee41bc47":[5,0,0,15,66],
 "struct_ogre_1_1_pbs_property.html#a8c7e50d9f8e435a4f15f1ecfbc5acb53":[5,0,0,15,94],
 "struct_ogre_1_1_pbs_property.html#a8efd3fe96365b28ca6b483f7d879ffaf":[5,0,0,15,4],
@@ -105,8 +103,8 @@ var NAVTREEINDEX204 =
 "struct_ogre_1_1_raster_params.html#ae83ecd7e7cb5b6b6d77d488bfb85b68f":[7,0,0,733,4],
 "struct_ogre_1_1_raster_params.html#aee5f67885ec946b99fff90e63f4ed9a9":[7,0,0,733,2],
 "struct_ogre_1_1_raster_params.html#af15eab4c45ebba958b6860627e6ff847":[7,0,0,733,0],
-"struct_ogre_1_1_ray_scene_query_result_entry.html":[5,2,11,35],
 "struct_ogre_1_1_ray_scene_query_result_entry.html":[5,0,1,35],
+"struct_ogre_1_1_ray_scene_query_result_entry.html":[5,2,11,35],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,0,1,35,0],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a17af5a6b49fcd71ca726daf1dd67af98":[5,2,11,35,0],
 "struct_ogre_1_1_ray_scene_query_result_entry.html#a58ba184768924a39ab195dcf96472f65":[5,2,11,35,2],
@@ -249,5 +247,7 @@ var NAVTREEINDEX204 =
 "struct_ogre_1_1_sample_description.html#a1cd17a1cc5540aef499a95c324945455":[5,2,2,96,13],
 "struct_ogre_1_1_sample_description.html#a25a080d68e4da7e5b1901a4a83eca489":[5,2,2,96,1],
 "struct_ogre_1_1_sample_description.html#a39a62fc76ed2d6dd1f9c55807b430ef8":[5,2,2,96,19],
-"struct_ogre_1_1_sample_description.html#a4e0a82854d8636c8e9b1160e5474beb1":[5,2,2,96,9]
+"struct_ogre_1_1_sample_description.html#a4e0a82854d8636c8e9b1160e5474beb1":[5,2,2,96,9],
+"struct_ogre_1_1_sample_description.html#a55a7e9c63fc5f61d2e921f7059064c9d":[5,2,2,96,8],
+"struct_ogre_1_1_sample_description.html#a7f4c13140e1c725c8c92511330874840":[5,2,2,96,11]
 };
