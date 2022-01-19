@@ -121,8 +121,6 @@ namespace Ogre
     const IdString HlmsBaseProp::LightsAreaApprox = IdString( "hlms_lights_area_approx" );
     const IdString HlmsBaseProp::LightsAreaLtc = IdString( "hlms_lights_area_ltc" );
     const IdString HlmsBaseProp::LightsAreaTexMask = IdString( "hlms_lights_area_tex_mask" );
-    const IdString HlmsBaseProp::LightsAttenuation = IdString( "hlms_lights_attenuation" );
-    const IdString HlmsBaseProp::LightsSpotParams = IdString( "hlms_lights_spotparams" );
     const IdString HlmsBaseProp::LightsAreaTexColour = IdString( "hlms_lights_area_tex_colour" );
     const IdString HlmsBaseProp::AllPointLights = IdString( "hlms_all_point_lights" );
 
@@ -2975,10 +2973,6 @@ namespace Ogre
                 }
             }
 
-            setProperty( HlmsBaseProp::LightsAttenuation,
-                         numLightsPerType[Light::LT_POINT] + numLightsPerType[Light::LT_SPOTLIGHT] );
-            setProperty( HlmsBaseProp::LightsSpotParams, numLightsPerType[Light::LT_SPOTLIGHT] );
-
             if( !useStaticBranchShadowMapLights && numLightsPerType[Light::LT_POINT] &&  //
                 !numLightsPerType[Light::LT_DIRECTIONAL] &&                              //
                 !numLightsPerType[Light::LT_SPOTLIGHT] )
@@ -3110,8 +3104,6 @@ namespace Ogre
             setProperty( HlmsBaseProp::NumShadowMapLights, 0 );
             setProperty( HlmsBaseProp::NumShadowMapTextures, 0 );
             setProperty( HlmsBaseProp::PssmSplits, 0 );
-            setProperty( HlmsBaseProp::LightsAttenuation, 0 );
-            setProperty( HlmsBaseProp::LightsSpotParams, 0 );
             setProperty( HlmsBaseProp::LightsDirectional, 0 );
             setProperty( HlmsBaseProp::LightsDirNonCaster, 0 );
             setProperty( HlmsBaseProp::LightsPoint, 0 );
