@@ -2975,12 +2975,9 @@ namespace Ogre
                 }
             }
 
-            if(mShaderProfile=="glsl")
-            {//these properties are used in glsl only
-                setProperty( HlmsBaseProp::LightsAttenuation, numLightsPerType[Light::LT_POINT] +
-                                                              numLightsPerType[Light::LT_SPOTLIGHT] );
-                setProperty( HlmsBaseProp::LightsSpotParams,  useStaticBranchShadowMapLights ? numLightsPerType[Light::LT_POINT] + numLightsPerType[Light::LT_SPOTLIGHT] : numLightsPerType[Light::LT_SPOTLIGHT] );
-            }
+            setProperty( HlmsBaseProp::LightsAttenuation,
+                         numLightsPerType[Light::LT_POINT] + numLightsPerType[Light::LT_SPOTLIGHT] );
+            setProperty( HlmsBaseProp::LightsSpotParams, numLightsPerType[Light::LT_SPOTLIGHT] );
 
             if( !useStaticBranchShadowMapLights && numLightsPerType[Light::LT_POINT] &&  //
                 !numLightsPerType[Light::LT_DIRECTIONAL] &&                              //
