@@ -40,22 +40,22 @@
 @end
 
 @property( syntax == glsl || syntax == glsles )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? half( 1.0 ) : half( texture( tex, vec3( uv, depth ) ) ))
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? _h( 1.0 ) : half_c( texture( tex, vec3( uv, depth ) ) ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) textureLod( tex, uv, 0 ).x
 @end
 
 @property( syntax == glslvk )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? half( 1.0 ) : half( texture( sampler2DShadow( tex, sampler ), vec3( uv, depth ) ) ) )
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? _h( 1.0 ) : half_c( texture( sampler2DShadow( tex, sampler ), vec3( uv, depth ) ) ) )
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) textureLod( sampler2D( tex, sampler ), uv, 0 ).x
 @end
 
 @property( syntax == hlsl )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? half( 1.0 ) : half( tex.SampleCmpLevelZero( sampler, uv.xy, depth ).x ))
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? _h( 1.0 ) : half_c( tex.SampleCmpLevelZero( sampler, uv.xy, depth ).x ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.SampleLevel( sampler, uv, 0 ).x
 @end
 
 @property( syntax == metal )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? half( 1.0 ) : tex.sample_compare( sampler, float2( uv.xy ), depth ))
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? _h( 1.0 ) : tex.sample_compare( sampler, float2( uv.xy ), depth ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.sample( sampler, float2( uv.xy ), level(0) ).x
 @end
 @end
@@ -468,9 +468,9 @@
 											  hlms_shadowmap@value(CurrentShadowMap)_uv_param );
 					fShadow = lerp(
 						fShadow, fShadowBlend,
-						half( ( inPs.depth - passBuf.pssmBlendPoints@value( CurrentShadowMapBlend ) ) /
-							  ( passBuf.pssmSplitPoints@value( CurrentShadowMapBlend ) -
-								passBuf.pssmBlendPoints@counter( CurrentShadowMapBlend ) ) ) );
+						half_c( ( inPs.depth - passBuf.pssmBlendPoints@value( CurrentShadowMapBlend ) ) /
+								( passBuf.pssmSplitPoints@value( CurrentShadowMapBlend ) -
+								  passBuf.pssmBlendPoints@counter( CurrentShadowMapBlend ) ) ) );
 				}
 			@end
 			@property( debug_pssm_splits )
@@ -493,17 +493,17 @@
 											  hlms_shadowmap@value(CurrentShadowMap)_uv_param );
 					fShadow = lerp(
 						fShadow, fShadowBlend,
-						half( ( inPs.depth - passBuf.pssmBlendPoints@value( CurrentShadowMapBlend ) ) /
-							  ( passBuf.pssmSplitPoints@value( CurrentShadowMapBlend ) -
-								passBuf.pssmBlendPoints@counter( CurrentShadowMapBlend ) ) ) );
+						half_c( ( inPs.depth - passBuf.pssmBlendPoints@value( CurrentShadowMapBlend ) ) /
+								( passBuf.pssmSplitPoints@value( CurrentShadowMapBlend ) -
+								  passBuf.pssmBlendPoints@counter( CurrentShadowMapBlend ) ) ) );
 				}
 			@end @property( hlms_pssm_fade && @n == hlms_pssm_splits_minus_one )
 				if( inPs.depth > passBuf.pssmFadePoint )
 				{
 					fShadow = lerp( fShadow, _h( 1.0 ),
-									half( ( inPs.depth - passBuf.pssmFadePoint ) /
-										  ( passBuf.pssmSplitPoints@value( hlms_pssm_splits_minus_one ) -
-											passBuf.pssmFadePoint ) ) );
+									half_c( ( inPs.depth - passBuf.pssmFadePoint ) /
+											( passBuf.pssmSplitPoints@value( hlms_pssm_splits_minus_one ) -
+											  passBuf.pssmFadePoint ) ) );
 				}
 			@end
 			@property( debug_pssm_splits )

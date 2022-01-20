@@ -171,7 +171,7 @@ namespace Ogre
         HlmsManager *mHlmsManager;
         String       mShaderProfile;
         uint16       mNativeShadingLangVer;
-        bool         mWillUseLowQuality;
+        uint8        mPrecisionMode;
         bool         mFastShaderBuildHack;
         uint16       mDebugStrSize;
 

@@ -62,7 +62,7 @@ namespace Ogre
         mShaderProfile.clear();
 
         mNativeShadingLangVer = 0u;
-        mWillUseLowQuality = true;
+        mPrecisionMode = Hlms::PrecisionFull32;
         mFastShaderBuildHack = true;
     }
     //-----------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ namespace Ogre
         mCache.type = hlms->getType();
         mShaderProfile = hlms->getShaderProfile();
         mNativeShadingLangVer = hlms->getRenderSystem()->getNativeShadingLanguageVersion();
-        mWillUseLowQuality = hlms->willUseLowQuality();
+        mPrecisionMode = hlms->getSupportedPrecisionMode();
         mFastShaderBuildHack = hlms->getFastShaderBuildHack();
         hlms->getTemplateChecksum( mCache.templateHash );
 
@@ -176,13 +176,13 @@ namespace Ogre
                 "'. This increases loading times." );
         }
 
-        if( !mTemplatesOutOfDate && mWillUseLowQuality != hlms->willUseLowQuality() )
+        if( !mTemplatesOutOfDate && mPrecisionMode != hlms->getSupportedPrecisionMode() )
         {
             mTemplatesOutOfDate = true;
             LogManager::getSingleton().logMessage(
-                "INFO: mWillUseLowQuality has changed from '" +
-                StringConverter::toString( mWillUseLowQuality ) + "' to the current value '" +
-                StringConverter::toString( hlms->willUseLowQuality() ) +
+                "INFO: mPrecisionMode has changed from '" +
+                StringConverter::toString( mPrecisionMode ) + "' to the current value '" +
+                StringConverter::toString( hlms->getSupportedPrecisionMode() ) +
                 "'. This increases loading times." );
         }
 
@@ -355,7 +355,7 @@ namespace Ogre
         save( dataStream, mShaderProfile );
 
         write<uint16>( dataStream, mNativeShadingLangVer );
-        write<bool>( dataStream, mWillUseLowQuality );
+        write<uint8>( dataStream, mPrecisionMode );
         write<bool>( dataStream, mFastShaderBuildHack );
 
         {
@@ -563,7 +563,7 @@ namespace Ogre
         load( dataStream, mShaderProfile );
 
         read<uint16>( dataStream, mNativeShadingLangVer );
-        read<bool>( dataStream, mWillUseLowQuality );
+        read<uint8>( dataStream, mPrecisionMode );
         read<bool>( dataStream, mFastShaderBuildHack );
 
         {
