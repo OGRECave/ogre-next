@@ -327,7 +327,10 @@ namespace Ogre
         createInfo.queueCreateInfoCount = static_cast<uint32>( queueCreateInfo.size() );
         createInfo.pQueueCreateInfos = &queueCreateInfo[0];
 
-        createInfo.pEnabledFeatures = &mDeviceFeatures;
+        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+            createInfo.pEnabledFeatures = nullptr;
+        else
+            createInfo.pEnabledFeatures = &mDeviceFeatures;
 
         {
             mDeviceExtensions.clear();
