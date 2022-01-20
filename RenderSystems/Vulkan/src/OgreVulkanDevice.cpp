@@ -347,6 +347,8 @@ namespace Ogre
         }
 
         // Declared at this scope because they must be alive for createInfo.pNext
+        VkPhysicalDeviceFeatures2 deviceFeatures2;
+        makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
         VkPhysicalDevice16BitStorageFeatures _16BitStorageFeatures;
         makeVkStruct( _16BitStorageFeatures, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
         VkPhysicalDeviceShaderFloat16Int8Features shaderFloat16Int8Features;
@@ -359,9 +361,6 @@ namespace Ogre
             PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
                 (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
                     mInstance, "vkGetPhysicalDeviceFeatures2KHR" );
-
-            VkPhysicalDeviceFeatures2 deviceFeatures2;
-            makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
 
             void **lastNext = &deviceFeatures2.pNext;
 
@@ -377,7 +376,7 @@ namespace Ogre
             }
 
             // Send the same chain to vkCreateDevice
-            createInfo.pNext = deviceFeatures2.pNext;
+            createInfo.pNext = &deviceFeatures2;
 
             GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
 
