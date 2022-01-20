@@ -11,9 +11,13 @@
 
 @insertpiece( CustomGlslExtensions )
 
+@property( !hlms_high_quality && syntax == glslvk )
+	#extension GL_EXT_shader_explicit_arithmetic_types_float16: require
+@end
+
 @property( GL_ARB_shading_language_420pack )
-    #extension GL_ARB_shading_language_420pack: require
-    #define layout_constbuffer(x) layout( std140, x )
+	#extension GL_ARB_shading_language_420pack: require
+	#define layout_constbuffer(x) layout( std140, x )
 @else
 	#define layout_constbuffer(x) layout( std140 )
 @end
@@ -66,8 +70,45 @@
 #define toFloat3x3( x ) mat3( x )
 #define buildFloat3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
+@property( hlms_high_quality )
+	#define _h(x) (x)
+
+	#define half float
+	#define half2 vec2
+	#define half3 vec3
+	#define half4 vec4
+	#define half2x2 mat2
+	#define half3x3 mat3
+	#define half4x4 mat4
+
+	#define toHalf3x3( x ) mat3( x )
+	#define buildHalf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
+
+	#define f16texture2D texture2D
+	#define f16texture2DArray texture2DArray
+	#define f16sampler2DArray sampler2DArray
+
+	#define saturate(x) clamp( (x), 0.0, 1.0 )
+@else
+	#define _h(x) float16_t(x)
+
+	// TODO: Do the same with ushort
+	#define half float16_t
+	#define half2 f16vec2
+	#define half3 f16vec3
+	#define half4 f16vec4
+	#define half2x2 f16mat2x2
+	#define half3x3 f16mat3x3
+	#define half4x4 f16mat4x4
+
+	#define toHalf3x3( x ) f16mat3x3( x )
+	#define buildHalf3x3( row0, row1, row2 ) f16mat3x3( row0, row1, row2 )
+
+	float saturate( float x ) { return clamp( x, 0.0, 1.0 ); }
+	half saturate( half x ) { return clamp( x, half( 0.0 ), half( 1.0 ) ); }
+@end
+
 #define mul( x, y ) ((x) * (y))
-#define saturate(x) clamp( (x), 0.0, 1.0 )
 #define lerp mix
 #define rsqrt inversesqrt
 #define INLINE
@@ -131,6 +172,11 @@
 	#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod )
 	#define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), ddx, ddy )
 
+	#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) half4( texture( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ) ) )
+	#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) half4( textureLod( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) half4( textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) half4( textureGrad( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), ddx, ddy ) )
+
 	float4 OGRE_Sample( texture2D t, sampler s, float2 uv ) { return texture( sampler2D( t, s ), uv ); }
 	float4 OGRE_Sample( texture3D t, sampler s, float3 uv ) { return texture( sampler3D( t, s ), uv ); }
 	float4 OGRE_Sample( textureCube t, sampler s, float3 uv ) { return texture( samplerCube( t, s ), uv ); }
@@ -142,6 +188,18 @@
 	float4 OGRE_SampleGrad( texture2D t, sampler s, float2 uv, float2 myDdx, float2 myDdy ) { return textureGrad( sampler2D( t, s ), uv, myDdx, myDdy ); }
 	float4 OGRE_SampleGrad( texture3D t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return textureGrad( sampler3D( t, s ), uv, myDdx, myDdy ); }
 	float4 OGRE_SampleGrad( textureCube t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return textureGrad( samplerCube( t, s ), uv, myDdx, myDdy ); }
+
+	half4 OGRE_SampleF16( texture2D t, sampler s, float2 uv ) { return half4( texture( sampler2D( t, s ), uv ) ); }
+	half4 OGRE_SampleF16( texture3D t, sampler s, float3 uv ) { return half4( texture( sampler3D( t, s ), uv ) ); }
+	half4 OGRE_SampleF16( textureCube t, sampler s, float3 uv ) { return half4( texture( samplerCube( t, s ), uv ) ); }
+
+	half4 OGRE_SampleLevelF16( texture2D t, sampler s, float2 uv, float lod ) { return half4( textureLod( sampler2D( t, s ), uv, lod ) ); }
+	half4 OGRE_SampleLevelF16( texture3D t, sampler s, float3 uv, float lod ) { return half4( textureLod( sampler3D( t, s ), uv, lod ) ); }
+	half4 OGRE_SampleLevelF16( textureCube t, sampler s, float3 uv, float lod ) { return half4( textureLod( samplerCube( t, s ), uv, lod ) ); }
+
+	half4 OGRE_SampleGradF16( texture2D t, sampler s, float2 uv, float2 myDdx, float2 myDdy ) { return half4( textureGrad( sampler2D( t, s ), uv, myDdx, myDdy ) ); }
+	half4 OGRE_SampleGradF16( texture3D t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return half4( textureGrad( sampler3D( t, s ), uv, myDdx, myDdy ) ); }
+	half4 OGRE_SampleGradF16( textureCube t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return half4( textureGrad( samplerCube( t, s ), uv, myDdx, myDdy ) ); }
 @end
 #define OGRE_ddx( val ) dFdx( val )
 #define OGRE_ddy( val ) dFdy( val )
@@ -206,24 +264,24 @@
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )
 @piece( SetCompatibilityLayer )
 	@property( !GL_ARB_texture_buffer_range )
-        #define samplerBuffer sampler2D
-        #define isamplerBuffer isampler2D
-        #define usamplerBuffer usampler2D
-        vec4 bufferFetch( in sampler2D sampl, in int pixelIdx )
-        {
-            ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
-            return texelFetch( sampl, pos, 0 );
-        }
-        ivec4 bufferFetch(in isampler2D sampl, in int pixelIdx)
-        {
-            ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
-            return texelFetch( sampl, pos, 0 );
-        }
-        uvec4 bufferFetch( in usampler2D sampl, in int pixelIdx )
-        {
-            ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
-            return texelFetch( sampl, pos, 0 );
-        }
+		#define samplerBuffer sampler2D
+		#define isamplerBuffer isampler2D
+		#define usamplerBuffer usampler2D
+		vec4 bufferFetch( in sampler2D sampl, in int pixelIdx )
+		{
+			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
+			return texelFetch( sampl, pos, 0 );
+		}
+		ivec4 bufferFetch(in isampler2D sampl, in int pixelIdx)
+		{
+			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
+			return texelFetch( sampl, pos, 0 );
+		}
+		uvec4 bufferFetch( in usampler2D sampl, in int pixelIdx )
+		{
+			ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
+			return texelFetch( sampl, pos, 0 );
+		}
 	@end
 @end
 @end

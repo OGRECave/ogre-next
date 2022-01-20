@@ -49,8 +49,10 @@
 
 @property( ambient_hemisphere || vct_ambient_hemisphere )
 	@piece( DoAmbientHeader )
-		float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
-		float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
+		half ambientWD =
+			dot( half3( passBuf.ambientHemisphereDir.xyz ), pixelData.normal ) * _h( 0.5 ) + _h( 0.5 );
+		half ambientWS =
+			dot( half3( passBuf.ambientHemisphereDir.xyz ), pixelData.reflDir ) * _h( 0.5 ) + _h( 0.5 );
 	@end
 @end
 
@@ -75,8 +77,10 @@
 			if( vctSpecular.w == 0 )
 			{
 		@end
-				pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-				pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+				pixelData.envColourS += lerp( half3( passBuf.ambientLowerHemi.xyz ),
+											  half3( passBuf.ambientUpperHemi.xyz ), ambientWD );
+				pixelData.envColourD += lerp( half3( passBuf.ambientLowerHemi.xyz ),
+											  half3( passBuf.ambientUpperHemi.xyz ), ambientWS );
 		@property( vct_num_probes )
 			}
 		@end

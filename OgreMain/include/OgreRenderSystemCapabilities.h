@@ -232,6 +232,10 @@ namespace Ogre
         RSC_TEXTURE_COMPRESSION_ASTC = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 11),
         RSC_STORE_AND_MULTISAMPLE_RESOLVE = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 12),
         RSC_DEPTH_CLAMP = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 13),
+        /// Shaders support float16_t / half datatype as:
+        ///		- Math (i.e. a + b)
+        ///		- In/Out blocks (i.e. to pass data between shader stages)
+        RSC_SHADER_FLOAT16 = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 14),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

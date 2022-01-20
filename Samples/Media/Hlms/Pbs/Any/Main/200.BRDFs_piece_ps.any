@@ -6,10 +6,10 @@
 //	getDiffuseFresnel	= 1.0 - F0 + pow( 1.0 - NdotL, 5.0 ) * F0
 //	getSpecularFresnelWithRoughness = F0 + pow( 1.0 - VdotH, 5.0 ) * (max(roughness, (1.0 - F0)) - F0)
 //	getDiffuseFresnelWithRoughness = max(roughness, (1.0 - F0) - F0 + pow( 1.0 - NdotL, 5.0 ) * F0
-@piece( getSpecularFresnel )pixelData.F0 + pow( 1.0 - VdotH, 5.0 ) * (1.0 - pixelData.F0)@end
-@piece( getDiffuseFresnel )1.0 - pixelData.F0 + pow( 1.0 - NdotL, 5.0 ) * pixelData.F0@end
-@piece( getSpecularFresnelWithRoughness )pixelData.F0 + pow( 1.0 - pixelData.NdotV, 5.0 ) * (max( make_float_fresnel( 1.0 - pixelData.roughness ), pixelData.F0 ) - pixelData.F0)@end
-@piece( getDiffuseFresnelWithRoughness )max( make_float_fresnel( 1.0 - pixelData.roughness ), pixelData.F0 ) - pixelData.F0 + pow( 1.0 - NdotL, 5.0 ) * pixelData.F0@end
+@piece( getSpecularFresnel )pixelData.F0 + pow( _h( 1.0 ) - VdotH, _h( 5.0 ) ) * (_h( 1.0 ) - pixelData.F0)@end
+@piece( getDiffuseFresnel )1.0 - pixelData.F0 + pow( _h( 1.0 ) - NdotL, 5.0 ) * pixelData.F0@end
+@piece( getSpecularFresnelWithRoughness )pixelData.F0 + pow( _h( 1.0 ) - pixelData.NdotV, _h( 5.0 ) ) * (max( make_float_fresnel( _h( 1.0 ) - pixelData.roughness ), pixelData.F0 ) - pixelData.F0)@end
+@piece( getDiffuseFresnelWithRoughness )max( make_float_fresnel( _h( 1.0 ) - pixelData.roughness ), pixelData.F0 ) - pixelData.F0 + pow( _h( 1.0 ) - NdotL, _h( 5.0 ) ) * pixelData.F0@end
 
 @property( !fresnel_scalar )
 	@piece( getMaxFresnelS )fresnelS@end
@@ -22,7 +22,7 @@
 //Blinn-Phong
 INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
 {
-    float3 halfWay = normalize( lightDir + pixelData.viewDir );
+	float3 halfWay = normalize( lightDir + pixelData.viewDir );
     float NdotL = saturate( dot( pixelData.normal, lightDir ) );			//Diffuse (Lambert)
     float NdotH = clamp( dot( pixelData.normal, halfWay ), 0.001, 1.0 );	//Specular
 	@property( !legacy_math_brdf )
@@ -121,32 +121,32 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 @property( BRDF_Default )
 @piece( DeclareBRDF )
 //Default BRDF
-INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
+INLINE half3 BRDF( half3 lightDir, half3 lightDiffuse, half3 lightSpecular, PixelData pixelData )
 {
-    float3 halfWay = normalize( lightDir + pixelData.viewDir );
-    float NdotL = saturate( dot( pixelData.normal, lightDir ) );
-    float NdotH = saturate( dot( pixelData.normal, halfWay ) );
-    float VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
+	half3 halfWay = normalize( lightDir + pixelData.viewDir );
+	half NdotL = saturate( dot( pixelData.normal, lightDir ) );
+	half NdotH = saturate( dot( pixelData.normal, halfWay ) );
+	half VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
 
-    float sqR = pixelData.roughness * pixelData.roughness;
+	half sqR = pixelData.roughness * pixelData.roughness;
 
 	//Roughness/Distribution/NDF term (GGX)
 	//Formula:
 	//	Where alpha = roughness
 	//	R = alpha^2 / [ PI * [ ( NdotH^2 * (alpha^2 - 1) ) + 1 ]^2 ]
-	float f = ( NdotH * sqR - NdotH ) * NdotH + 1.0;
-	float R = sqR / (f * f); // f is guaranteed to not be 0 because we clamped pixelData.roughness
+	half f = ( NdotH * sqR - NdotH ) * NdotH + _h( 1.0 );
+	half R = sqR / (f * f); // f is guaranteed to not be 0 because we clamped pixelData.roughness
 
 	//Geometric/Visibility term (Smith GGX Height-Correlated)
 @property( GGX_height_correlated )
-    float Lambda_GGXV = NdotL * sqrt( (-pixelData.NdotV * sqR + pixelData.NdotV) * pixelData.NdotV + sqR );
-    float Lambda_GGXL = pixelData.NdotV * sqrt( (-NdotL * sqR + NdotL) * NdotL + sqR );
+	half Lambda_GGXV = NdotL * sqrt( (-pixelData.NdotV * sqR + pixelData.NdotV) * pixelData.NdotV + sqR );
+	half Lambda_GGXL = pixelData.NdotV * sqrt( (-NdotL * sqR + NdotL) * NdotL + sqR );
 
-	float G = 0.5 / (( Lambda_GGXV + Lambda_GGXL + 1e-6f ) * 3.141592654);
+	half G = _h( 0.5 ) / (( Lambda_GGXV + Lambda_GGXL + _h( 1e-6f ) ) * _h( 3.141592654 ));
 @else
-	float gL = NdotL * (1-sqR) + sqR;
-    float gV = pixelData.NdotV * (1-sqR) + sqR;
-	float G = 1.0 / (( gL * gV + 1e-4f ) * 4 * 3.141592654);
+	half gL = NdotL * ( _h( 1 ) - sqR ) + sqR;
+	half gV = pixelData.NdotV * ( _h( 1 ) - sqR ) + sqR;
+	half G = 1.0 / (( gL * gV + _h( 1e-4f ) ) * _h( 4 * 3.141592654 ) );
 @end
 
 	//Formula:
@@ -154,38 +154,38 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
     float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
 
 	//We should divide Rs by PI, but it was done inside G for performance
-    float3 Rs = ( fresnelS * (R * G) ) * pixelData.specular.xyz;
+	half3 Rs = ( fresnelS * (R * G) ) * pixelData.specular.xyz;
 
 	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
 	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)
-    float energyBias	= pixelData.perceptualRoughness * 0.5;
-    float energyFactor	= lerp( 1.0, 1.0 / 1.51, pixelData.perceptualRoughness );
-    float fd90			= energyBias + 2.0 * VdotH * VdotH * pixelData.perceptualRoughness;
-	float lightScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - NdotL, 5.0 );
-    float viewScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - pixelData.NdotV, 5.0 );
+	half energyBias	= pixelData.perceptualRoughness * _h( 0.5 );
+	half energyFactor	= lerp( _h( 1.0 ), _h( 1.0 / 1.51 ), pixelData.perceptualRoughness );
+	half fd90			= energyBias + _h( 2.0 ) * VdotH * VdotH * pixelData.perceptualRoughness;
+	half lightScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - NdotL, _h( 5.0 ) );
+	half viewScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - pixelData.NdotV, _h( 5.0 ) );
 
     @property( fresnel_separate_diffuse )
         float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
     @else
-        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+		half fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
     @end
 
 	//We should divide Rd by PI, but it is already included in kD
-    float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz;
+	half3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz;
 
 	@property( clear_coat )
-		float3 color = Rd + Rs;
+		half3 color = Rd + Rs;
 
-		float Fcc;
-		float clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, VdotH, Fcc);
-		float attenuation = 1.0 - Fcc;
+		half Fcc;
+		half clearCoat = clearCoatLobe(pixelData, halfWay, NdotH, VdotH, Fcc);
+		half attenuation = _h( 1.0 ) - Fcc;
 
 		@property( normal_map )
 			color *= attenuation * NdotL;
 
 			// If the material has a normal map, we want to use the geometric normal
 			// instead to avoid applying the normal map details to the clear coat layer
-			float clearCoatNoL = saturate(dot(pixelData.geomNormal, lightDir));
+			half clearCoatNoL = saturate(dot(pixelData.geomNormal, lightDir));
 			color += clearCoat * clearCoatNoL;
 
 			return color * lightSpecular;
@@ -196,7 +196,7 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 			return color * lightSpecular * NdotL;
 		@end
 	@else
-	return NdotL * (Rs * lightSpecular + Rd * lightDiffuse);
+		return NdotL * (Rs * lightSpecular + Rd * lightDiffuse);
 	@end
 }
 @end
@@ -239,22 +239,22 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 
 	@property( ltc_texture_available )
 		#define brdfLUT ltcMatrix
-		float2 envBRDF = OGRE_SampleArray2D( brdfLUT, ltcSampler,
-											 float2( pixelData.NdotV,
-													 1.0 - pixelData.perceptualRoughness ), 2 ).xy;
+		half2 envBRDF = OGRE_SampleArray2DF16( brdfLUT, ltcSampler,
+											   float2( pixelData.NdotV,
+													   1.0 - pixelData.perceptualRoughness ), 2 ).xy;
 	@else
-		float2 envBRDF = float2( 1.0f, 0.0f );
+		half2 envBRDF = half2( 1.0f, 0.0f );
 	@end
 
 	@property( fresnel_separate_diffuse )
-		float NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
+		half NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
 		float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
 	@else
-		float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+		half fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
 	@end
 
-	float3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * fresnelD;
-	float3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( fresnelS * envBRDF.x + envBRDF.y );
+	half3 Rd = pixelData.envColourD * pixelData.diffuse.xyz * fresnelD;
+	half3 Rs = pixelData.envColourS * pixelData.specular.xyz * ( fresnelS * envBRDF.x + envBRDF.y );
 
 	@property( clear_coat )
 		@property( normal_map )

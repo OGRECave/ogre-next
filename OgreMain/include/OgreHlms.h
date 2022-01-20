@@ -498,6 +498,17 @@ namespace Ogre
         void setHighQuality( bool highQuality );
         bool getHighQuality() const { return mHighQuality; }
 
+        /// Whether low quality is used depends on two things:
+        ///
+        /// 1. setHighQuality is set to false
+        /// 2. GPU support
+        ///
+        /// This function returns true only if if both conditions are met
+        bool willUseLowQuality() const;
+
+        /// Returns true if shaders are being compiled with Fast Shader Build Hack (D3D11 only)
+        bool getFastShaderBuildHack() const;
+
         /** Non-caster directional lights are hardcoded into shaders. This means that if you
             have 6 directional lights and then you add a 7th one, a whole new set of shaders
             will be created.

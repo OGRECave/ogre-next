@@ -7,7 +7,7 @@
 			uniform sampler2DArray ltcMatrix;
 		@end
         @property( syntax == glslvk )
-            layout( ogre_t@value(ltcMatrix) ) uniform texture2DArray ltcMatrix;
+			layout( ogre_t@value(ltcMatrix) ) uniform texture2DArray ltcMatrix;
             layout( ogre_s@value(ltcMatrix) ) uniform sampler ltcSampler;
         @end
 		@property( syntax == hlsl )

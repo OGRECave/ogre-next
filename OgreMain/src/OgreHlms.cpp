@@ -1678,6 +1678,14 @@ namespace Ogre
         mHighQuality = highQuality;
     }
     //-----------------------------------------------------------------------------------
+    bool Hlms::willUseLowQuality() const
+    {
+        const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
+        return !mHighQuality && capabilities->hasCapability( RSC_SHADER_FLOAT16 );
+    }
+    //-----------------------------------------------------------------------------------
+    bool Hlms::getFastShaderBuildHack() const { return mFastShaderBuildHack; }
+    //-----------------------------------------------------------------------------------
     void Hlms::setMaxNonCasterDirectionalLights( uint16 maxLights ) { mNumLightsLimit = maxLights; }
     //-----------------------------------------------------------------------------------
     void Hlms::setStaticBranchingLights( bool staticBranchingLights )
@@ -2190,7 +2198,7 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
                 setProperty( HlmsBaseProp::macOS, 1 );
 #endif
-                setProperty( HlmsBaseProp::HighQuality, mHighQuality );
+                setProperty( HlmsBaseProp::HighQuality, !willUseLowQuality() );
 
                 if( mFastShaderBuildHack )
                     setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );

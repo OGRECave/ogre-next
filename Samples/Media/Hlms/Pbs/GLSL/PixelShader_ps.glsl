@@ -50,7 +50,7 @@ layout(std140) uniform;
 		@end
 	@end
 	vulkan_layout( ogre_t@value(refractionMap) )	uniform texture2D	refractionMap;
-	vulkan( layout( ogre_s@value(refractionMap) )	uniform sampler		refractionMapSampler );
+	vulkan( layout( ogre_s@value(refractionMap) )	uniform sampler			refractionMapSampler );
 @end
 
 @insertpiece( DeclPlanarReflTextures )
@@ -83,7 +83,7 @@ vulkan_layout( location = 0 ) in block
 @end
 @property( irradiance_volumes )
 	vulkan_layout( ogre_t@value(irradianceVolume) )	uniform texture3D	irradianceVolume;
-	vulkan( layout( ogre_s@value(irradianceVolume) )uniform sampler		irradianceVolumeSampler );
+	vulkan( layout( ogre_s@value(irradianceVolume) )uniform sampler			irradianceVolumeSampler );
 @end
 
 @foreach( num_textures, n )

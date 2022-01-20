@@ -405,10 +405,10 @@ struct Material
 	@property( !hlms_shadowcaster )
 		@property( hlms_normal || hlms_qtangent )
 			INTERPOLANT( float3 pos, @counter(texcoord) );
-			INTERPOLANT( float3 normal, @counter(texcoord) );
+			INTERPOLANT( half3 normal, @counter(texcoord) );
 			@property( normal_map )
-				INTERPOLANT( float3 tangent, @counter(texcoord) );
-				@property( hlms_qtangent || hlms_tangent4 )FLAT_INTERPOLANT( float biNormalReflection, @counter(texcoord) );@end
+				INTERPOLANT( half3 tangent, @counter(texcoord) );
+				@property( hlms_qtangent || hlms_tangent4 )FLAT_INTERPOLANT( half biNormalReflection, @counter(texcoord) );@end
 			@end
 		@end
 		@foreach( hlms_uv_count, n )
@@ -424,7 +424,7 @@ struct Material
 			@property( hlms_num_shadow_map_lights && !hlms_all_point_lights )
 				INTERPOLANT( float3 worldPos, @counter(texcoord) );
 				@property( hlms_normal || hlms_qtangent )
-					INTERPOLANT( float3 worldNorm, @counter(texcoord) );
+					INTERPOLANT( half3 worldNorm, @counter(texcoord) );
 				@end
 			@end
 		@end
