@@ -404,7 +404,7 @@
 	@property( detail_maps_normal )
 	   @foreach( 4, n )
 		   @property( normal_weight_detail@n )
-			   @piece( detail@n_nm_weight_mul ) * material.normalWeights.@insertpiece( detail_swizzle@n )@end
+			   @piece( detail@n_nm_weight_mul ) * half_c( material.normalWeights.@insertpiece( detail_swizzle@n ) )@end
 		   @end
 	   @end
 	@end
