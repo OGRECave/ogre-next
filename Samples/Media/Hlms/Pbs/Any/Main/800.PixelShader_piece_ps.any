@@ -1,5 +1,5 @@
-@piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
-@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * passBuf.envMapNumMipmaps @end
+@piece( envSpecularRoughness ) pixelData.perceptualRoughness * half_c( passBuf.envMapNumMipmaps ) @end
+@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * half_c( passBuf.envMapNumMipmaps ) @end
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
@@ -138,8 +138,8 @@
 	@property( obb_restraint_approx || obb_restraint_ltc )
 		/// Returns value in range [-inf; 1]
 		/// Values <= 0 means 'pos' is outside the obb
-		float getObbRestraintFade( @property( syntax == metal )constant@end  float4 obbRestraint[3],
-								   float3 pos, float3 obbFadeFactors )
+		half getObbRestraintFade( @property( syntax == metal )constant@end  float4 obbRestraint[3],
+								  float3 pos, float3 obbFadeFactors )
 		{
 			float3 obbDistToBounds;
 			obbDistToBounds.x = dot( obbRestraint[0].xyzw, float4( pos.xyz, 1.0 ) );
@@ -149,7 +149,7 @@
 			obbDistToBounds = abs( obbDistToBounds );
 
 			float3 obbFade = (1.0 - obbDistToBounds) * obbFadeFactors;
-			return min( min3( obbFade.x, obbFade.y, obbFade.z ), 1.0 );
+			return min( half_c( min3( obbFade.x, obbFade.y, obbFade.z ) ), _h( 1.0 ) );
 		}
 	@end
 
@@ -498,7 +498,7 @@
 		@insertpiece( ObjLightMaskCmp )
 			finalColour += BRDF( half3_c( light0Buf.lights[@n].position.xyz ),
 								 half3_c( light0Buf.lights[@n].diffuse.xyz ),
-								 half3_c( light0Buf.lights[@n].specular, pixelData ) )@insertpiece( DarkenWithShadow );@end
+								 half3_c( light0Buf.lights[@n].specular ), pixelData )@insertpiece( DarkenWithShadow );@end
 
 	@property( !hlms_static_branch_lights )
 		@foreach( hlms_lights_directional_non_caster, n, hlms_lights_directional )
@@ -576,7 +576,7 @@
 		if( fDistance <= light0Buf.lights[light_idx].attenuation.x && spotCosAngle >= light0Buf.lights[light_idx].spotParams.y @insertpiece( andObjLightMaskCmp_light_idx ) )
 		{
 			half spotAtten = saturate( (spotCosAngle - half_c( light0Buf.lights[light_idx].spotParams.y )) * half_c( light0Buf.lights[light_idx].spotParams.x ) );
-			spotAtten = pow( spotAtten, light0Buf.lights[light_idx].spotParams.z );
+			spotAtten = pow( spotAtten, half_c( light0Buf.lights[light_idx].spotParams.z ) );
 
 			@property( light_profiles_texture )
 				spotAtten *= getPhotometricAttenuation( spotCosAngle,
@@ -632,10 +632,10 @@
 	@property( emissive_map || emissive_constant )
 		///Emissive is not part of PixelData because emissive can just be accumulated to finalColour
 		@property( emissive_map )
-			float3 emissiveCol = SampleEmissive( textureMaps@value( emissive_map_idx ),
-												 samplerState@value(emissive_map_sampler),
-												 UV_EMISSIVE( inPs.uv@value(uv_emissive).xy ),
-												 texIndex_emissiveMapIdx ).xyz;
+			half3 emissiveCol = SampleEmissive( textureMaps@value( emissive_map_idx ),
+												samplerState@value(emissive_map_sampler),
+												UV_EMISSIVE( inPs.uv@value(uv_emissive).xy ),
+												texIndex_emissiveMapIdx ).xyz;
 			@property( emissive_constant )
 				emissiveCol *= half3_c( material.emissive.xyz );
 			@end
@@ -650,15 +650,15 @@
 @end
 
 @piece( CubemapManualPcc )
-	float3 posInProbSpace = toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) );
-	float probeFade = getProbeFade( posInProbSpace, @insertpiece( pccProbeSource ) );
+	half3 posInProbSpace = half3_c( toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) ) );
+	half probeFade = getProbeFade( posInProbSpace, @insertpiece( pccProbeSource ) );
 @property( vct_num_probes )
-	if( probeFade > 0 && (pixelData.roughness < 1.0f || vctSpecular.w == 0) )
+	if( probeFade > _h( 0 ) && (pixelData.roughness < _h( 1.0f ) || vctSpecular.w == 0) )
 @else
-	if( probeFade > 0 )
+	if( probeFade > _h( 0 ) )
 @end
 	{
-		probeFade = saturate( probeFade * 200.0 );
+		probeFade = saturate( probeFade * _h( 200.0 ) );
 		@property( vct_num_probes )
 			float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 			float3 reflDirLS = reflDirLS_dist.xyz;
@@ -666,23 +666,23 @@
 			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
 		@end
 		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
-		float4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-									  reflDirLS, @insertpiece( envSpecularRoughness ) );
+		half4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+									 reflDirLS, @insertpiece( envSpecularRoughness ) );
 		@property( envmap_scale )
-			envS.xyz *= passBuf.ambientUpperHemi.w;
+			envS.xyz *= half3_c( passBuf.ambientUpperHemi.w );
 		@end
 		@property( cubemaps_as_diffuse_gi )
-			float3 envD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-										  nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
+			half3 envD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+										 nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 			envD.xyz *= probeFade;
 		@end
 
 		envS.xyz *= probeFade;
 
 		@property( clear_coat )
-			float3 clearCoatEnvS = SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-												   reflDirLS,
-												   @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
+			half3 clearCoatEnvS = SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+												  reflDirLS,
+												  @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 			clearCoatEnvS *= probeFade;
 		@end
 
@@ -697,7 +697,7 @@
 
 			pixelData.envColourS = lerp( envS.xyz, pixelData.envColourS, vctLerp );
 			@property( cubemaps_as_diffuse_gi )
-				pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : envD;
+				pixelData.envColourD += vctSpecular.w > 0 ? half3_c( 0, 0, 0 ) : envD;
 			@end
 
 			@property( clear_coat )
@@ -718,17 +718,17 @@
 
 @piece( CubemapGlobal )
 	pixelData.envColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-											mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+											mul( pixelData.reflDir, half3x3_c( passBuf.invViewMatCubemap ) ),
 											@insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@property( cubemaps_as_diffuse_gi )
 		pixelData.envColourD += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-												mul( pixelData.normal, passBuf.invViewMatCubemap ),
+												mul( pixelData.normal, half3x3_c( passBuf.invViewMatCubemap ) ),
 												11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 
 	@property( clear_coat )
 		pixelData.clearCoatEnvColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-														 mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+														 mul( pixelData.reflDir, half3x3_c( passBuf.invViewMatCubemap ) ),
 														 @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 @end

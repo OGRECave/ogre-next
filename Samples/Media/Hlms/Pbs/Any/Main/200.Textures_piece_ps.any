@@ -22,7 +22,7 @@
 @end
 
 @property( envmap_scale )
-	@piece( ApplyEnvMapScale )* passBuf.ambientUpperHemi.w@end
+	@piece( ApplyEnvMapScale )* half_c( passBuf.ambientUpperHemi.w )@end
 @end
 
 @property( use_envprobe_map )

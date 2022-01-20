@@ -122,7 +122,14 @@
 	#define buildHalf3x3( row0, row1, row2 ) f16mat3x3( row0, row1, row2 )
 
 	float saturate( float x ) { return clamp( x, 0.0, 1.0 ); }
+	vec2 saturate( vec2 x ) { return clamp( x, vec2( 0.0 ), vec2( 1.0 ) ); }
+	vec3 saturate( vec3 x ) { return clamp( x, vec3( 0.0 ), vec3( 1.0 ) ); }
+	vec4 saturate( vec4 x ) { return clamp( x, vec4( 0.0 ), vec4( 1.0 ) ); }
+
 	half saturate( half x ) { return clamp( x, half( 0.0 ), half( 1.0 ) ); }
+	half2 saturate( half2 x ) { return clamp( x, half2( 0.0 ), half2( 1.0 ) ); }
+	half3 saturate( half3 x ) { return clamp( x, half3( 0.0 ), half3( 1.0 ) ); }
+	half4 saturate( half4 x ) { return clamp( x, half4( 0.0 ), half4( 1.0 ) ); }
 @end
 @property( precision_mode == relaxed )
 	precision highp int; // Silence warning about default is highp
@@ -150,7 +157,10 @@
 	#define toHalf3x3( x ) mat3( x )
 	#define buildHalf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
-	float saturate( mediump float x ) { return clamp( x, 0.0, 1.0 ); }
+	mediump float saturate( mediump float x ) { return clamp( x, 0.0, 1.0 ); }
+	mediump vec2 saturate( mediump vec2 x ) { return clamp( x, vec2( 0.0 ), vec2( 1.0 ) ); }
+	mediump vec3 saturate( mediump vec3 x ) { return clamp( x, vec3( 0.0 ), vec3( 1.0 ) ); }
+	mediump vec4 saturate( mediump vec4 x ) { return clamp( x, vec4( 0.0 ), vec4( 1.0 ) ); }
 @end
 
 #define mul( x, y ) ((x) * (y))
@@ -212,6 +222,8 @@
 	#define textureCube samplerCube
 	#define textureCubeArray samplerCubeArray
 @else
+	#define OGRE_Load2DF16( tex, iuv, lod ) half4_c( texelFetch( tex, ivec2( iuv ), lod ) )
+
 	#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ) )
 	#define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), lod )
 	#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod )
