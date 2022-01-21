@@ -12,6 +12,7 @@
 @insertpiece( CustomGlslExtensions )
 
 @property( precision_mode == half16 && syntax == glslvk )
+	#extension GL_EXT_shader_16bit_storage: require
 	#extension GL_EXT_shader_explicit_arithmetic_types_float16: require
 @end
 

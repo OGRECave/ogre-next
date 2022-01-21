@@ -15,6 +15,53 @@
 #define toFloat3x3( x ) ((float3x3)(x))
 #define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
 
+// See CrossPlatformSettings_piece_all.glsl for an explanation
+@property( precision_mode == full32 )
+	#define _h(x) (x)
+
+	#define half float
+	#define half2 float2
+	#define half3 float3
+	#define half4 float4
+	#define half2x2 float2x2
+	#define half3x3 float3x3
+	#define half4x4 float4x4
+
+	#define half_c float
+	#define half2_c float2
+	#define half3_c float3
+	#define half4_c float4
+	#define half2x2_c float2x2
+	#define half3x3_c float3x3
+	#define half4x4_c float4x4
+
+	#define toHalf3x3( x ) ((float3x3)( x ))
+	#define buildHalf3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
+@end
+@property( precision_mode == relaxed )
+	#define _h(x) min16float((x))
+
+	#define half min16float
+	#define half2 min16float2
+	#define half3 min16float3
+	#define half4 min16float4
+	#define half2x2 min16float2x2
+	#define half3x3 min16float3x3
+	#define half4x4 min16float4x4
+
+	// For casting to half
+	#define half_c min16float
+	#define half2_c min16float2
+	#define half3_c min16float3
+	#define half4_c min16float4
+	#define half2x2_c min16float2x2
+	#define half3x3_c min16float3x3
+	#define half4x4_c min16float4x4
+
+	#define toHalf3x3( x ) ((min16float3x3)( x ))
+	#define buildHalf3x3( row0, row1, row2 ) transpose( min16float3x3( row0, row1, row2 ) )
+@end
+
 #define min3( a, b, c ) min( a, min( b, c ) )
 #define max3( a, b, c ) max( a, max( b, c ) )
 
@@ -77,6 +124,15 @@
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.Load( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.Load( int4( iuv, lod ) )
+
+#define OGRE_Load2DF16( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
+#define OGRE_SampleF16( tex, sampler, uv ) tex.Sample( sampler, uv )
+#define OGRE_SampleLevelF16( tex, sampler, uv, lod ) tex.SampleLevel( sampler, uv, lod )
+#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) tex.Sample( sampler, float3( uv, arrayIdx ) )
+#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) tex.SampleLevel( sampler, float3( uv, arrayIdx ), lod )
+#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) tex.SampleLevel( sampler, float4( uv, arrayIdx ), lod )
+#define OGRE_SampleGradF16( tex, sampler, uv, ddx, ddy ) tex.SampleGrad( sampler, uv, ddx, ddy )
+#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) tex.SampleGrad( sampler, float3( uv, arrayIdx ), ddx, ddy )
 
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
