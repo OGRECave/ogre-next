@@ -70,6 +70,32 @@
 #define toFloat3x3( x ) mat3( x )
 #define buildFloat3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
+// Let's explain this madness:
+//
+// When precision_mode == full32 half is float. Nothing weird
+//
+// When precision_mode == half16, half and half_c map both to float16_t. It's similar to full32
+// but literals need to be prefixed with _h()
+// Thus we can have:
+//		float16_t a = 1.0f;						// Error
+//		float16_t b = _h( 1.0f );				// OK!
+//		float16_t c = float16_t( someFloat );	// OK!
+// But when precision_mode == relaxed; we have the following problem:
+//		mediump float a = 1.0f;							// Error
+//		mediump float b = _h( 1.0f );					// OK!
+//		mediump float c = mediump float( someFloat );	// Invalid syntax!
+//
+// That's where 'half_c' comes into play. The "_c" means cast or construct. Hence we do instead:
+//		half c = half( someFloat );		// Will turn into invalid syntax on relaxed!
+//		half c = half_c( someFloat );	// OK!
+//
+// Therefore datatypes are declared with half. And casts and constructors are with half_c:
+//		half b = _h( 1.0f );
+//		half b = half_c( someFloat );
+//		half c = half3_c( 1.0f, 2.0f, 3.0f );
+//
+// Using this convention ensures that code will compile in all 3 precision modes.
+// Breaking this convention means one or more of the modes (except full32) will not compile.
 @property( precision_mode == full32 )
 	#define _h(x) (x)
 
