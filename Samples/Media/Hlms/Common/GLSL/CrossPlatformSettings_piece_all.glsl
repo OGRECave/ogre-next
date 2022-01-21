@@ -247,6 +247,15 @@
 	#define texture3D sampler3D
 	#define textureCube samplerCube
 	#define textureCubeArray samplerCubeArray
+
+	#define OGRE_Load2DF16( tex, iuv, lod ) half4_c( texelFetch( tex, ivec2( iuv ), lod ) )
+	#define OGRE_SampleF16( tex, sampler, uv ) half4_c( texture( tex, uv ) )
+	#define OGRE_SampleLevelF16( tex, sampler, uv, lod ) half4_c( textureLod( tex, uv, lod ) )
+	#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) half4_c( texture( tex, vec3( uv, arrayIdx ) ) )
+	#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) half4_c( textureLod( tex, vec3( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) half4_c( textureLod( tex, vec4( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleGradF16( tex, sampler, uv, ddx, ddy ) half4_c( textureGrad( tex, uv, ddx, ddy ) )
+	#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) half4_c( textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy ) )
 @else
 	#define OGRE_Load2DF16( tex, iuv, lod ) half4_c( texelFetch( tex, ivec2( iuv ), lod ) )
 
