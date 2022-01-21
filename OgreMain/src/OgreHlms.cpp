@@ -271,7 +271,7 @@ namespace Ogre
         mDebugOutput( false ),
 #endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
-        mDebugOutputProperties( false ),
+        mDebugOutputProperties( true ),
 #else
         mDebugOutputProperties( false ),
 #endif
