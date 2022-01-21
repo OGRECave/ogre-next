@@ -234,24 +234,21 @@
 	// Define inputNormal and inputTangent using inVs_normal, inVs_tangent, inVs_qtangent
 	@property( hlms_qtangent )
 		//Decode qTangent to TBN with reflection
-		half3 inputNormal	= xAxis( normalize( inVs_qtangent ) );
+		const half4 qTangent = normalize( inVs_qtangent );
+		half3 inputNormal = xAxis( qTangent );
 		@property( normal_map )
-			half3 inputTangent	= yAxis( inVs_qtangent );
+			half3 inputTangent = yAxis( qTangent );
 			outVs.biNormalReflection = sign( inVs_qtangent.w ); //We ensure in C++ qtangent.w is never 0
 		@end
 	@else
-		@property( hlms_normal && hlms_pose && hlms_pose_normals )
-			half3 inputNormal = inVs_normal; // We need inputNormal as lvalue for PoseTransform
-		@else
-			#define inputNormal inVs_normal
+		@property( hlms_normal )
+			half3 inputNormal = half3_c( inVs_normal ); // We need inputNormal as lvalue for PoseTransform
 		@end
-		@property( hlms_tangent4 )
-			#define inputTangent inVs_tangent.xyz
-			@property( normal_map )
-				outVs.biNormalReflection = sign( inVs_tangent.w );
+		@property( normal_map )
+			half3 inputTangent = half3_c( inVs_tangent.xyz );
+			@property( hlms_tangent4 )
+				outVs.biNormalReflection = sign( half( inVs_tangent.w ) );
 			@end
-		@else
-			#define inputTangent inVs_tangent
 		@end
 	@end
 

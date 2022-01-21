@@ -16,13 +16,13 @@ layout(std140) uniform;
 
 vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 
-@property( hlms_normal )vulkan_layout( OGRE_NORMAL ) in half3 normal;@end
+@property( hlms_normal )vulkan_layout( OGRE_NORMAL ) in float3 normal;@end
 @property( hlms_qtangent )vulkan_layout( OGRE_NORMAL ) in half4 qtangent;@end
 
 @property( normal_map && !hlms_qtangent )
-	@property( hlms_tangent4 )vulkan_layout( OGRE_TANGENT ) in half4 tangent;@end
-	@property( !hlms_tangent4 )vulkan_layout( OGRE_TANGENT ) in half3 tangent;@end
-	@property( hlms_binormal )vulkan_layout( OGRE_BIRNORMAL ) in half3 binormal;@end
+	@property( hlms_tangent4 )vulkan_layout( OGRE_TANGENT ) in float4 tangent;@end
+	@property( !hlms_tangent4 )vulkan_layout( OGRE_TANGENT ) in float3 tangent;@end
+	@property( hlms_binormal )vulkan_layout( OGRE_BIRNORMAL ) in float3 binormal;@end
 @end
 
 @property( hlms_skeleton )
