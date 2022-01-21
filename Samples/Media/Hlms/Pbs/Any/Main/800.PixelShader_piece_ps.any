@@ -438,9 +438,9 @@
 			pixelData.viewDir	= half3_c( normalize( -inPs.pos ) );
 		@else
 			if( gl_FragCoord.x > passBuf.rightEyePixelStartX )
-				pixelData.viewDir += half3_c( -inPs.pos + passBuf.leftToRightView.xyz );
+				pixelData.viewDir = half3_c( normalize( -inPs.pos + passBuf.leftToRightView.xyz ) );
 			else
-				pixelData.viewDir += half3_c( -inPs.pos );
+				pixelData.viewDir = half3_c( normalize( -inPs.pos ) );
 		@end
 		pixelData.NdotV		= saturate( dot( pixelData.normal, pixelData.viewDir ) );
 	@end
