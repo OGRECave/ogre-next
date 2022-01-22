@@ -138,6 +138,7 @@ namespace Ogre
         mHidden( false ),
         mIsExternal( false ),
         mHwGamma( true ),
+        mManualRelease( false ),
         mMetalLayer( 0 ),
         mCurrentDrawable( 0 ),
         mDevice( ownerDevice )
@@ -221,7 +222,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalWindow::swapBuffers( void )
+    void MetalWindow::swapBuffers()
     {
         if( !mDevice->mFrameAborted )
         {
@@ -245,7 +246,9 @@ namespace Ogre
                                                          atTime:presentationTime];
             }
         }
-        mCurrentDrawable = 0;
+
+        if( !mManualRelease )
+            mCurrentDrawable = 0;
     }
     //-------------------------------------------------------------------------
     void MetalWindow::windowMovedOrResized( void )
@@ -259,6 +262,34 @@ namespace Ogre
 
             setResolutionFromView();
         }
+    }
+    //-------------------------------------------------------------------------
+    void MetalWindow::setManualSwapRelease( bool bManualRelease ) { mManualRelease = bManualRelease; }
+    //-------------------------------------------------------------------------
+    bool MetalWindow::isManualSwapRelease() const { return mManualRelease; }
+    //-------------------------------------------------------------------------
+    void MetalWindow::performManualRelease()
+    {
+        OGRE_ASSERT_LOW( mManualRelease );
+
+        if( mManualRelease )
+        {
+            mCurrentDrawable = 0;
+
+            OGRE_ASSERT_HIGH( dynamic_cast<MetalTextureGpuWindow *>( mTexture ) );
+            MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow *>( mTexture );
+            texWindow->_setBackbuffer( 0 );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalWindow::setWantsToDownload( bool bWantsToDownload )
+    {
+        mMetalLayer.framebufferOnly = bWantsToDownload ? NO : YES;
+    }
+    //-------------------------------------------------------------------------
+    bool MetalWindow::canDownloadData() const
+    {
+        return mCurrentDrawable != 0 && !mMetalLayer.framebufferOnly;
     }
     //-------------------------------------------------------------------------
     bool MetalWindow::nextDrawable( void )

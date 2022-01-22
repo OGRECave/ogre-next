@@ -78,9 +78,13 @@ namespace Ogre
     void MetalTextureGpuWindow::swapBuffers()
     {
         mWindow->swapBuffers();
-        // Release strong references
-        mFinalTextureName = 0;
-        mDisplayTextureName = 0;
+
+        if( !mWindow->isManualSwapRelease() )
+        {
+            // Release strong references
+            mFinalTextureName = 0;
+            mDisplayTextureName = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpuWindow::getCustomAttribute( IdString name, void *pData )

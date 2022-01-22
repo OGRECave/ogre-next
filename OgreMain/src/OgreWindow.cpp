@@ -106,6 +106,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Window::setBorderless( bool borderless ) { mBorderless = borderless; }
     //-----------------------------------------------------------------------------------
+    void Window::setManualSwapRelease( bool ) {}
+    //-----------------------------------------------------------------------------------
+    void Window::performManualRelease() {}
+    //-----------------------------------------------------------------------------------
+    void Window::setWantsToDownload( bool ) {}
+    //-----------------------------------------------------------------------------------
+    bool Window::canDownloadData() const { return true; }
+    //-----------------------------------------------------------------------------------
     bool Window::getBorderless() const { return mBorderless; }
     //-----------------------------------------------------------------------------------
     uint32 Window::getWidth() const { return mTexture->getWidth(); }

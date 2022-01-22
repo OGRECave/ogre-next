@@ -166,6 +166,66 @@ namespace Ogre
         virtual void setBorderless( bool borderless );
         bool         getBorderless() const;
 
+        /** Metal doesn't want us to hold on to a drawable after presenting
+
+            If you want to take a screenshot capture of the window this is a
+            problem because we no longer have a pointer of the backbuffer to
+            download from.
+
+            You can either take your screenshot before swapBuffers() gets called,
+            or, if you intend to take a screenshot, do the following:
+
+            @code
+                window->setWantsToDownload( true );
+                window->setManualSwapRelease( true );
+                mRoot->renderOneFrame();
+
+                if( window->canDownloadData() )
+                {
+                    Ogre::Image2 img;
+                    Ogre::TextureGpu *texture = window->getTexture();
+                    img.convertFromTexture( texture, 0u, texture->getNumMipmaps() - 1u );
+                }
+
+                window->performManualRelease();
+                window->setManualSwapRelease( false );
+            @endcode
+
+            Technically you can do setManualSwapRelease( true ) and leave it like that,
+            but then you MUST call performManualRelease and that's bug prone.
+
+        @remarks
+            Incorrect usage of this functionality may result in crashes or leaks
+
+            Alternatively you can avoid setManualSwapRelease by taking pictures
+            before calling Window::swapBuffers.
+
+            To do that use FrameListener::frameRenderingQueued listener,
+            *but* you still have to call setWantsToDownload( true ) and
+            check canDownloadData returns true.
+        */
+        virtual void setManualSwapRelease( bool bManualRelease );
+
+        /// Returns the value set by setManualSwapRelease when supported
+        virtual bool isManualSwapRelease() const { return false; }
+
+        /// See Window::setManualSwapRelease
+        virtual void performManualRelease();
+
+        /// On Metal you must call this function and set it to true in order
+        /// to take pictures.
+        ///
+        /// If you no longer need that functionality,
+        /// set it to false to improve performance
+        virtual void setWantsToDownload( bool bWantsToDownload );
+
+        /// Returns true if you can download to CPU (i.e. transfer it via AsyncTextureTicket)
+        /// If it returns false, attempting to do so could result in a crash
+        ///
+        /// See Window::setWantsToDownload
+        /// See Window::setManualSwapRelease
+        virtual bool canDownloadData() const;
+
         uint32 getWidth() const;
         uint32 getHeight() const;
 
