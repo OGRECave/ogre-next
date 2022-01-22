@@ -62,8 +62,8 @@ vertex PS_INPUT main_metal
 		@end
 	@end
 	@property( hlms_vertex_id )
-		, uint vertexId [[vertex_id]]
-		, uint baseVertex [[base_vertex]]
+		, uint inVs_vertexId [[vertex_id]]
+		, uint baseVertexID [[base_vertex]]
 	@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
