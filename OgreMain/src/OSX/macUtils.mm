@@ -187,20 +187,22 @@ namespace Ogre
         return String( logURL.absoluteURL.path.UTF8String ) + "/";
     }
 
-    String macCachePath()
+    String macCachePath( bool bAutoCreate )
     {
-        NSURL* cachesURL = [NSFileManager.defaultManager
-            URLForDirectory: NSCachesDirectory
-            inDomain: NSUserDomainMask
-            appropriateForURL: nil
-            create: YES
-            error: nil ];
-        NSURL* myDirURL = [cachesURL URLByAppendingPathComponent: NSBundle.mainBundle.bundleIdentifier isDirectory: YES];
-        [NSFileManager.defaultManager
-            createDirectoryAtURL: myDirURL
-            withIntermediateDirectories: YES
-            attributes: nil
-            error: nil];
+        NSURL *cachesURL = [NSFileManager.defaultManager URLForDirectory:NSCachesDirectory
+                                                                inDomain:NSUserDomainMask
+                                                       appropriateForURL:nil
+                                                                  create:YES
+                                                                   error:nil];
+        NSURL *myDirURL = [cachesURL URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier
+                                                     isDirectory:YES];
+        if( bAutoCreate )
+        {
+            [NSFileManager.defaultManager createDirectoryAtURL:myDirURL
+                                   withIntermediateDirectories:YES
+                                                    attributes:nil
+                                                         error:nil];
+        }
         return myDirURL.fileSystemRepresentation;
     }
 
