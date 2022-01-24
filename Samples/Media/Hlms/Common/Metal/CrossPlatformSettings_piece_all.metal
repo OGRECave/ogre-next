@@ -31,6 +31,32 @@ inline float3x3 toMat3x3( float3x4 m )
 #define toFloat3x3( x ) toMat3x3( x )
 #define buildFloat3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
 
+// See CrossPlatformSettings_piece_all.glsl for an explanation
+@property( precision_mode == full32 )
+	// In Metal 'half' is an actual datatype. It should be OK to override it
+	// as long as we do it before including metal_stdlib
+	#define _h(x) (x)
+
+	#define half float
+	#define half2 float2
+	#define half3 float3
+	#define half4 float4
+	#define half2x2 float2x2
+	#define half3x3 float3x3
+	#define half4x4 float4x4
+
+	#define half_c float
+	#define half2_c float2
+	#define half3_c float3
+	#define half4_c float4
+	#define half2x2_c float2x2
+	#define half3x3_c float3x3
+	#define half4x4_c float4x4
+
+	#define toHalf3x3( x ) toMat3x3( x )
+	#define buildHalf3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
+@end
+
 #define min3( a, b, c ) min( a, min( b, c ) )
 #define max3( a, b, c ) max( a, max( b, c ) )
 
@@ -100,6 +126,15 @@ inline float3x3 toMat3x3( float3x4 m )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )
+
+#define OGRE_Load2DF16( tex, iuv, lod ) tex.read( iuv, lod )
+#define OGRE_SampleF16( tex, sampler, uv ) tex.sample( sampler, uv )
+#define OGRE_SampleLevelF16( tex, sampler, uv, lod ) tex.sample( sampler, uv, level( lod ) )
+#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) tex.sample( sampler, float2( uv ), arrayIdx )
+#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) tex.sample( sampler, float2( uv ), ushort( arrayIdx ), level( lod ) )
+#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) tex.sample( sampler, float3( uv ), ushort( arrayIdx ), level( lod ) )
+#define OGRE_SampleGradF16( tex, sampler, uv, ddx, ddy ) tex.sample( sampler, uv, gradient2d( ddx, ddy ) )
+#define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) tex.sample( sampler, uv, ushort( arrayIdx ), gradient2d( ddx, ddy ) )
 
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]
