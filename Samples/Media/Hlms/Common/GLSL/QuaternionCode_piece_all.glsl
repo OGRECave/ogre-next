@@ -45,7 +45,7 @@
 			float fTyz = fTz * qQuat.y;
 			float fTzz = fTz * qQuat.z;
 
-			return midf3_c( fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx );
+			return vec3( fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx );
 		}
 	@end
 	@property( precision_mode != full32 )

@@ -10,15 +10,15 @@ layout(std140) uniform;
 @property( !hlms_render_depth_only )
 	@property( !hlms_shadowcaster )
 		@property( !hlms_prepass )
-			layout(location = @counter(rtv_target), index = 0) out vec4 outColour;
+			layout(location = @counter(rtv_target), index = 0) out midf4 outColour;
 		@end
 		@property( hlms_gen_normals_gbuffer )
 			#define outPs_normals outNormals
-			layout(location = @counter(rtv_target)) out vec4 outNormals;
+			layout(location = @counter(rtv_target)) out midf4 outNormals;
 		@end
 		@property( hlms_prepass )
 			#define outPs_shadowRoughness outShadowRoughness
-			layout(location = @counter(rtv_target)) out vec2 outShadowRoughness;
+			layout(location = @counter(rtv_target)) out midf2 outShadowRoughness;
 		@end
 	@else
 		layout(location = @counter(rtv_target), index = 0) out float outColour;

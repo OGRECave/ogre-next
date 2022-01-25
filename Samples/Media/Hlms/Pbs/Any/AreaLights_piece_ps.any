@@ -20,7 +20,7 @@
 			SamplerState areaLightMasksSampler		: register(s@value(areaLightMasks));
 		@end
 		@property( syntax == metal )
-			, texture2d_array<float> areaLightMasks	[[texture(@value(areaLightMasks))]]
+			, texture2d_array<midf> areaLightMasks	[[texture(@value(areaLightMasks))]]
 			, sampler areaLightMasksSampler			[[sampler(@value(areaLightMasks))]]
 		@end
 	@end
@@ -102,8 +102,8 @@
 			lightDir = closestPoint.xyz - inPs.pos;
 			fDistance= length( lightDir );
 
-			float3 toShapeLight = reflect( -pixelData.viewDir, pixelData.normal );
-			float denom = dot( toShapeLight, -light1Buf.areaApproxLights[i].direction.xyz );
+			midf3 toShapeLight = reflect( -pixelData.viewDir, pixelData.normal );
+			midf denom = dot( toShapeLight, midf3_c( -light1Buf.areaApproxLights[i].direction.xyz ) );
 			@property( !hlms_lights_area_tex_mask || !hlms_lights_area_tex_colour )
 				midf specCol = _h( 0 );
 			@else
@@ -112,10 +112,10 @@
 			if( denom > 1e-6f || light1Buf.areaApproxLights[i].doubleSided.x != 0.0f )
 			{
 				float3 p0l0 = light1Buf.areaApproxLights[i].position.xyz - inPs.pos;
-				float t = dot( p0l0, -light1Buf.areaApproxLights[i].direction.xyz ) / denom;
+				float t = dot( p0l0, -light1Buf.areaApproxLights[i].direction.xyz ) / float( denom );
 				if( t >= 0 )
 				{
-					float3 posInShape = inPs.pos.xyz + toShapeLight.xyz * t - light1Buf.areaApproxLights[i].position.xyz;
+					float3 posInShape = inPs.pos.xyz + float3( toShapeLight.xyz ) * t - light1Buf.areaApproxLights[i].position.xyz;
 					float2 reflClipSpace;
 					reflClipSpace.x = dot( light1Buf.areaApproxLights[i].tangent.xyz, posInShape );
 					reflClipSpace.y = dot( areaLightBitangent, posInShape );

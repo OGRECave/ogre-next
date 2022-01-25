@@ -264,14 +264,14 @@
 
 			int gBufSubsample = int( findLSB( sampleMask ) );
 
-			pixelData.normal = normalize( OGRE_Load2DMS( gBuf_normals, iFragCoord, gBufSubsample ).xyz * 2.0 - 1.0 );
-			float2 shadowRoughness = OGRE_Load2DMS( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
+			pixelData.normal = normalize( OGRE_Load2DMSF16( gBuf_normals, iFragCoord, gBufSubsample ).xyz * _h( 2.0 ) - _h( 1.0 ) );
+			midf2 shadowRoughness = OGRE_Load2DMSF16( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
 		@else
-			pixelData.normal = normalize( OGRE_Load2D( gBuf_normals, iFragCoord, 0 ).xyz * 2.0 - 1.0 );
-			float2 shadowRoughness = OGRE_Load2D( gBuf_shadowRoughness, iFragCoord, 0 ).xy;
+			pixelData.normal = normalize( OGRE_Load2DF16( gBuf_normals, iFragCoord, 0 ).xyz * _h( 2.0 ) - _h( 1.0 ) );
+			midf2 shadowRoughness = OGRE_Load2DF16( gBuf_shadowRoughness, iFragCoord, 0 ).xy;
 		@end
 
-		float fShadow = shadowRoughness.x;
+		midf fShadow = shadowRoughness.x;
 
 		@property( roughness_map )
 			pixelData.roughness = shadowRoughness.y * 0.98 + 0.02;
@@ -376,27 +376,27 @@
 
 			@property( hlms_alphablend )
 				@property( use_texture_alpha )
-					outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
+					outPs_colour0.w	= _h( material.F0.w ) * pixelData.diffuse.w;
 				@else
-					outPs_colour0.w	= material.F0.w;
+					outPs_colour0.w	= _h( material.F0.w );
 				@end
 			@else
-				outPs_colour0.w		= 1.0;
+				outPs_colour0.w		= _h( 1.0 );
 			@end
 
 			@property( debug_pssm_splits )
-				outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
+				outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, _h( 0.2f ) );
 			@end
 
-            @property( hlms_gen_normals_gbuffer )
-                outPs_normals = float4( pixelData.normal * 0.5 + 0.5, 1.0 );
+			@property( hlms_gen_normals_gbuffer )
+				outPs_normals = midf4_c( pixelData.normal * _h( 0.5 ) + _h( 0.5 ), 1.0 );
             @end
 		@else
-			outPs_normals			= float4( pixelData.normal * 0.5 + 0.5, 1.0 );
+			outPs_normals = midf4_c( pixelData.normal * _h( 0.5 ) + _h( 0.5 ), 1.0 );
 			@property( hlms_pssm_splits )
-				outPs_shadowRoughness	= float2( fShadow, (pixelData.roughness - 0.02) * 1.02040816 );
+				outPs_shadowRoughness	= midf2_c( fShadow, (pixelData.roughness - 0.02) * 1.02040816 );
 			@end @property( !hlms_pssm_splits )
-				outPs_shadowRoughness	= float2( 1.0, (pixelData.roughness - 0.02) * 1.02040816 );
+				outPs_shadowRoughness	= midf2_c( 1.0, (pixelData.roughness - 0.02) * 1.02040816 );
 			@end
 		@end
 	@end

@@ -11,11 +11,28 @@ struct float1
 
 inline float3x3 toMat3x3( float4x4 m )
 {
-    return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+	return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
 }
 inline float3x3 toMat3x3( float3x4 m )
 {
 	return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+}
+
+inline half3x3 toMatHalf3x3( half4x4 m )
+{
+	return half3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+}
+inline half3x3 toMatHalf3x3( half3x4 m )
+{
+	return half3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+}
+inline half3x3 toMatHalf3x3( float4x4 m )
+{
+	return half3x3( half3( m[0].xyz ), half3(  m[1].xyz ), half3(  m[2].xyz ) );
+}
+inline half3x3 toMatHalf3x3( float3x4 m )
+{
+	return half3x3( half3( m[0].xyz ), half3(  m[1].xyz ), half3(  m[2].xyz ) );
 }
 
 #define ogre_float4x3 float3x4
@@ -59,7 +76,7 @@ inline float3x3 toMat3x3( float3x4 m )
 @property( precision_mode == midf16 )
 	// In Metal 'half' is an actual datatype. It should be OK to override it
 	// as long as we do it before including metal_stdlib
-	#define _h(x) (x)
+	#define _h(x) half(x)
 
 	#define midf half
 	#define midf2 half2
@@ -77,8 +94,8 @@ inline float3x3 toMat3x3( float3x4 m )
 	#define midf3x3_c half3x3
 	#define midf4x4_c half4x4
 
-	#define toMidf3x3( x ) toMat3x3( x )
-	#define buildMidf3x3( row0, row1, row2 ) half3x3( row0, row1, row2 )
+	#define toMidf3x3( x ) toMatHalf3x3( x )
+	#define buildMidf3x3( row0, row1, row2 ) half3x3( half3( row0 ), half3( row1 ), half3( row2 ) )
 @end
 
 #define min3( a, b, c ) min( a, min( b, c ) )
@@ -152,6 +169,7 @@ inline float3x3 toMat3x3( float3x4 m )
 #define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )
 
 #define OGRE_Load2DF16( tex, iuv, lod ) tex.read( iuv, lod )
+#define OGRE_Load2DMSF16( tex, iuv, subsample ) tex.read( iuv, subsample )
 #define OGRE_SampleF16( tex, sampler, uv ) tex.sample( sampler, uv )
 #define OGRE_SampleLevelF16( tex, sampler, uv, lod ) tex.sample( sampler, uv, level( lod ) )
 #define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) tex.sample( sampler, float2( uv ), arrayIdx )

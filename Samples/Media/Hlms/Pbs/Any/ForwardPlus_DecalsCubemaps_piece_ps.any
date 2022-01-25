@@ -192,12 +192,12 @@
 			probeFade *= midf_c( probePriority );
 
 			@property( vct_num_probes )
-				float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, probe );
-				float3 reflDirLS = reflDirLS_dist.xyz;
+				midf4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, probe );
+				midf3 reflDirLS = reflDirLS_dist.xyz;
 			@else
-				float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe ).xyz;
+				midf3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe ).xyz;
 			@end
-			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe ).xyz;
+			midf3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe ).xyz;
 
 			midf4 pccSingleEnvS;
 
@@ -207,7 +207,7 @@
 
 			@property( !hlms_cubemaps_use_dpm )
 				pccSingleEnvS = OGRE_SampleArrayCubeLevelF16(
-					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
+					texEnvProbeMap, samplerState@value(envMapRegSampler), float3( reflDirLS ),
 					probeCubemapIdx, @insertpiece( envSpecularRoughness ) );
 				@property( cubemaps_as_diffuse_gi )
 					pccEnvD += OGRE_SampleArrayCubeLevelF16(
@@ -218,7 +218,7 @@
 
 				@property( clear_coat )
 					clearCoatPccSingleEnvS = OGRE_SampleArrayCubeLevel( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-																		reflDirLS,
+																		float3( reflDirLS ),
 																		probeCubemapIdx,
 																		@insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 					clearCoatPccSingleEnvS *= probeFade;

@@ -25,7 +25,7 @@
 	// refractNormal must be in view space, and we ignore .z component
 	midf2 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal,
 										  refractF0, pixelData.NdotV ).xy;
-	float2 refractUv = screenPosUv.xy + refractNormal2d.xy *
+	float2 refractUv = screenPosUv.xy + float2( refractNormal2d.xy ) *
 					   float2( material.refractionStrength,
 							   material.refractionStrength * passBuf.aspectRatio ) /
 					   ( (-inPs.pos.z + 1.0) * (-inPs.pos.z + 1.0) );

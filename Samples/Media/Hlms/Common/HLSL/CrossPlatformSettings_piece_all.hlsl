@@ -126,6 +126,7 @@
 #define OGRE_Load3D( tex, iuv, lod ) tex.Load( int4( iuv, lod ) )
 
 #define OGRE_Load2DF16( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
+#define OGRE_Load2DMSF16( tex, iuv, subsample ) tex.Load( iuv, subsample )
 #define OGRE_SampleF16( tex, sampler, uv ) tex.Sample( sampler, uv )
 #define OGRE_SampleLevelF16( tex, sampler, uv, lod ) tex.SampleLevel( sampler, uv, lod )
 #define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) tex.Sample( sampler, float3( uv, arrayIdx ) )

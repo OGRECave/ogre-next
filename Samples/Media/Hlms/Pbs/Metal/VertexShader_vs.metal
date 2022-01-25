@@ -9,7 +9,7 @@ struct VS_INPUT
 {
 	float4 position [[attribute(VES_POSITION)]];
 @property( hlms_normal )	float3 normal [[attribute(VES_NORMAL)]];@end
-@property( hlms_qtangent )	float4 qtangent [[attribute(VES_NORMAL)]];@end
+@property( hlms_qtangent )	midf4 qtangent [[attribute(VES_NORMAL)]];@end
 
 @property( normal_map && !hlms_qtangent )
 	@property( hlms_tangent4 )float4 tangent	[[attribute(VES_TANGENT)]];@end

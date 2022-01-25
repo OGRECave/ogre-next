@@ -9,9 +9,9 @@ in vec4 gl_FragCoord;
 @end
 
 @property( !hlms_shadowcaster )
-layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
+layout(location = FRAG_COLOR, index = 0) out midf4 outColour;
 @end @property( hlms_shadowcaster )
-layout(location = FRAG_COLOR, index = 0) out float outColour;
+layout(location = FRAG_COLOR, index = 0) out midf outColour;
 @end
 
 // START UNIFORM DECLARATION
