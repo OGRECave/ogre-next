@@ -13,9 +13,9 @@
 		@end
 		@property( syntax == hlsl )
 			@property( !hlms_lights_area_tex_colour )
-				Texture2DArray<half> areaLightMasks	: register(t@value(areaLightMasks));
+				Texture2DArray<midf> areaLightMasks	: register(t@value(areaLightMasks));
 			@else
-				Texture2DArray<half3> areaLightMasks: register(t@value(areaLightMasks));
+				Texture2DArray<midf3> areaLightMasks: register(t@value(areaLightMasks));
 			@end
 			SamplerState areaLightMasksSampler		: register(s@value(areaLightMasks));
 		@end
@@ -43,7 +43,7 @@
 		fDistance = length( lightDir );
 
 		@property( obb_restraint_approx )
-			half obbRestraintFade = getObbRestraintFade( light1Buf.areaApproxLights[i].obbRestraint, inPs.pos,
+			midf obbRestraintFade = getObbRestraintFade( light1Buf.areaApproxLights[i].obbRestraint, inPs.pos,
 														 light1Buf.areaApproxLights[i].obbFadeFactorApprox.xyz );
 			@piece( obbRestraintTestApprox )&& obbRestraintFade > _h( 0.0 )@end
 		@end
@@ -73,12 +73,12 @@
 			lightUVForTex = clamp( lightUVForTex.xy, -0.5f, 0.5f );
 	//		float booster = 1.0f - smoothstep( 0.2f, 1.9f, max( abs( lightUV.x ), abs( lightUV.y ) ) );
 	//		booster = 1.0f + booster * 2.25f;
-			half booster = lerp( _h( 1.0f ), _h( 4.0f ), pixelData.roughness );
+			midf booster = lerp( _h( 1.0f ), _h( 4.0f ), pixelData.roughness );
 
 		@property( !hlms_lights_area_tex_colour || !hlms_lights_area_tex_mask )
-			half diffuseMask = _h( 1.0f );
+			midf diffuseMask = _h( 1.0f );
 		@else
-			half3 diffuseMask = half3_c( 1.0f, 1.0f, 1.0f );
+			midf3 diffuseMask = midf3_c( 1.0f, 1.0f, 1.0f );
 		@end
 		@property( hlms_lights_area_tex_mask )
 			if( i < floatBitsToInt( light1Buf.numAreaApproxLightsWithMask ) )
@@ -105,9 +105,9 @@
 			float3 toShapeLight = reflect( -pixelData.viewDir, pixelData.normal );
 			float denom = dot( toShapeLight, -light1Buf.areaApproxLights[i].direction.xyz );
 			@property( !hlms_lights_area_tex_mask || !hlms_lights_area_tex_colour )
-				half specCol = _h( 0 );
+				midf specCol = _h( 0 );
 			@else
-				half3 specCol = half3_c( 0, 0, 0 );
+				midf3 specCol = midf3_c( 0, 0, 0 );
 			@end
 			if( denom > 1e-6f || light1Buf.areaApproxLights[i].doubleSided.x != 0.0f )
 			{
@@ -129,9 +129,9 @@
 					specVal = pow( specVal, areaPower ) * min( areaPower * areaPower, 1.0f );
 
 					@property( !hlms_lights_area_tex_mask || !hlms_lights_area_tex_colour )
-						specCol = half_c( specVal );
+						specCol = midf_c( specVal );
 					@else
-						specCol = half3_c( specVal, specVal, specVal );
+						specCol = midf3_c( specVal, specVal, specVal );
 					@end
 
 					@property( hlms_lights_area_tex_mask )
@@ -151,13 +151,13 @@
 			//float fAreaW = dot( lightDir, -light1Buf.areaApproxLights[i].direction.xyz ) * 0.5f + 0.5f;
 			//lightDir = (-light1Buf.areaApproxLights[i].direction.xyz + lightDir) * 0.50f;
 			//lightDir = lerp( lightDir2, lightDir, fAreaW );
-			half globalDot = half_c( saturate( dot( -lightDir, light1Buf.areaApproxLights[i].direction.xyz ) ) );
+			midf globalDot = midf_c( saturate( dot( -lightDir, light1Buf.areaApproxLights[i].direction.xyz ) ) );
 			globalDot = light1Buf.areaApproxLights[i].doubleSided.x != 0.0f ? _h( 1.0f ) : globalDot;
-			tmpColour = BRDF_AreaLightApprox( half3_c( lightDir ),
-											  half3_c( light1Buf.areaApproxLights[i].diffuse.xyz ) * diffuseMask,
-											  half3_c( light1Buf.areaApproxLights[i].specular.xyz ) * specCol,
+			tmpColour = BRDF_AreaLightApprox( midf3_c( lightDir ),
+											  midf3_c( light1Buf.areaApproxLights[i].diffuse.xyz ) * diffuseMask,
+											  midf3_c( light1Buf.areaApproxLights[i].specular.xyz ) * specCol,
 											  pixelData ) * ( globalDot * globalDot ) * booster;
-			half atten = half_c( 1.0 / (0.5 + (light1Buf.areaApproxLights[i].attenuation.y + light1Buf.areaApproxLights[i].attenuation.z * fDistance) * fDistance ) );
+			midf atten = midf_c( 1.0 / (0.5 + (light1Buf.areaApproxLights[i].attenuation.y + light1Buf.areaApproxLights[i].attenuation.z * fDistance) * fDistance ) );
 
 			@property( obb_restraint_approx )
 				atten *= obbRestraintFade;
@@ -173,38 +173,38 @@
 @end
 
 @piece( DeclareBRDF_AreaLightApprox )
-INLINE half3 BRDF_AreaLightApprox
+INLINE midf3 BRDF_AreaLightApprox
 (
-	half3 lightDir, half3 lightDiffuse, half3 lightSpecular, PixelData pixelData
+	midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData
 )
 {
-	half3 halfWay= normalize( lightDir + pixelData.viewDir );
-	half NdotL = saturate( dot( pixelData.normal, lightDir ) );
-	half VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
+	midf3 halfWay= normalize( lightDir + pixelData.viewDir );
+	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );
+	midf VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
 
 	//Formula:
 	//	fresnelS = lerp( (1 - V*H)^5, 1, F0 )
 	float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
 
 	//We should divide Rs by PI, but it was done inside G for performance
-	half3 Rs = fresnelS * pixelData.specular.xyz * lightSpecular;
+	midf3 Rs = fresnelS * pixelData.specular.xyz * lightSpecular;
 
 	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
 	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)
-	half energyBias	= pixelData.roughness * _h( 0.5 );
-	half energyFactor	= lerp( _h( 1.0 ), _h( 1.0 / 1.51 ), pixelData.roughness );
-	half fd90			= energyBias + _h( 2.0 ) * VdotH * VdotH * pixelData.roughness;
-	half lightScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - NdotL, _h( 5.0 ) );
-	half viewScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - pixelData.NdotV, _h( 5.0 ) );
+	midf energyBias	= pixelData.roughness * _h( 0.5 );
+	midf energyFactor	= lerp( _h( 1.0 ), _h( 1.0 / 1.51 ), pixelData.roughness );
+	midf fd90			= energyBias + _h( 2.0 ) * VdotH * VdotH * pixelData.roughness;
+	midf lightScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - NdotL, _h( 5.0 ) );
+	midf viewScatter	= _h( 1.0 ) + (fd90 - _h( 1.0 )) * pow( _h( 1.0 ) - pixelData.NdotV, _h( 5.0 ) );
 
 @property( fresnel_separate_diffuse )
 	float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
 @else
-	half fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
+	midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
 @end
 
 	//We should divide Rd by PI, but it is already included in kD
-	half3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
+	midf3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
 
 	return NdotL * (Rs + Rd);
 }

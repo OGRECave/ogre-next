@@ -43,31 +43,31 @@ Adapted to Ogre by Matias N. Goldberg
 #define LUT_SCALE ((LUT_SIZE - 1.0)/LUT_SIZE)
 #define LUT_BIAS  (0.5/LUT_SIZE)
 
-INLINE half3 IntegrateEdgeVec( half3 v1, half3 v2 )
+INLINE midf3 IntegrateEdgeVec( midf3 v1, midf3 v2 )
 {
-	half x = dot(v1, v2);
-	half y = abs(x);
+	midf x = dot(v1, v2);
+	midf y = abs(x);
 
-	half a = _h( 0.8543985 ) + ( _h( 0.4965155 ) + _h( 0.0145206 ) * y ) * y;
-	half b = _h( 3.4175940 ) + ( _h( 4.1616724 ) + y ) * y;
-	half v = a / b;
+	midf a = _h( 0.8543985 ) + ( _h( 0.4965155 ) + _h( 0.0145206 ) * y ) * y;
+	midf b = _h( 3.4175940 ) + ( _h( 4.1616724 ) + y ) * y;
+	midf v = a / b;
 
-	half theta_sintheta =
+	midf theta_sintheta =
 		( x > _h( 0.0 ) ) ? v : _h( 0.5 ) * rsqrt( max( _h( 1.0 ) - x * x, _h( 1e-7 ) ) ) - v;
 
 	return cross( v1, v2 ) * theta_sintheta;
 }
 
-INLINE half IntegrateEdge( half3 v1, half3 v2 )
+INLINE midf IntegrateEdge( midf3 v1, midf3 v2 )
 {
 	return IntegrateEdgeVec( v1, v2 ).z;
 }
 
 @property( syntax == metal )
-INLINE void ClipQuadToHorizon( thread half3 L[5], thread int &n )
+INLINE void ClipQuadToHorizon( thread midf3 L[5], thread int &n )
 @end
 @property( syntax != metal )
-INLINE void ClipQuadToHorizon( inout half3 L[5], out int n )
+INLINE void ClipQuadToHorizon( inout midf3 L[5], out int n )
 @end
 {
 	// detect clipping config
@@ -179,35 +179,35 @@ INLINE void ClipQuadToHorizon( inout half3 L[5], out int n )
 		L[4] = L[0];
 }
 
-INLINE half LTC_Evaluate( half3 N, half3 V, float3 P, half3x3 Minv,
+INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, midf3x3 Minv,
 						  @property( syntax == metal )constant@end  float4 points[4],
 						  bool twoSided )
 {
 	// construct orthonormal basis around N
-	half3 T1, T2;
+	midf3 T1, T2;
 	T1 = normalize( V - N*dot(V, N) );
 	T2 = cross(N, T1);
 
 	// rotate area light in (T1, T2, N) basis
-	Minv = mul( Minv, transpose( buildHalf3x3( T1, T2, N ) ) );
+	Minv = mul( Minv, transpose( buildMidf3x3( T1, T2, N ) ) );
 
 	// polygon (allocate 5 vertices for clipping)
-	half3 L[5];
-	L[0] = mul( Minv, half3_c( points[0].xyz - P ) );
-	L[1] = mul( Minv, half3_c( points[1].xyz - P ) );
-	L[2] = mul( Minv, half3_c( points[2].xyz - P ) );
-	L[3] = mul( Minv, half3_c( points[3].xyz - P ) );
+	midf3 L[5];
+	L[0] = mul( Minv, midf3_c( points[0].xyz - P ) );
+	L[1] = mul( Minv, midf3_c( points[1].xyz - P ) );
+	L[2] = mul( Minv, midf3_c( points[2].xyz - P ) );
+	L[3] = mul( Minv, midf3_c( points[3].xyz - P ) );
 	//Initialize L[4]. Some HLSL compiler versions complains this is uninitialized even though
 	//it shouldn't complain.
 	//See https://forums.ogre3d.org/viewtopic.php?f=25&t=94804#p544184
-	L[4] = half3_c( 0, 1, 0 );
+	L[4] = midf3_c( 0, 1, 0 );
 
 	// integrate
-	half sum = _h( 0.0 );
+	midf sum = _h( 0.0 );
 
 	@property( hlms_lights_ltc_clipless )
-		half3 dir = half3_c( points[0].xyz - P );
-		half3 lightNormal = half3_c( cross( points[1].xyz - points[0].xyz, points[3].xyz - points[0].xyz ) );
+		midf3 dir = midf3_c( points[0].xyz - P );
+		midf3 lightNormal = midf3_c( cross( points[1].xyz - points[0].xyz, points[3].xyz - points[0].xyz ) );
 		bool behind = (dot(dir, lightNormal) < _h( 0.0 ));
 
 		L[0] = normalize(L[0]);
@@ -215,15 +215,15 @@ INLINE half LTC_Evaluate( half3 N, half3 V, float3 P, half3x3 Minv,
 		L[2] = normalize(L[2]);
 		L[3] = normalize(L[3]);
 
-		half3 vsum = half3_c(0.0);
+		midf3 vsum = midf3_c(0.0);
 
 		vsum += IntegrateEdgeVec(L[0], L[1]);
 		vsum += IntegrateEdgeVec(L[1], L[2]);
 		vsum += IntegrateEdgeVec(L[2], L[3]);
 		vsum += IntegrateEdgeVec(L[3], L[0]);
 
-		half len = length(vsum);
-		half z = vsum.z/len;
+		midf len = length(vsum);
+		midf z = vsum.z/len;
 
 		if (behind)
 			z = -z;
@@ -231,7 +231,7 @@ INLINE half LTC_Evaluate( half3 N, half3 V, float3 P, half3x3 Minv,
 		float2 uv = float2(z*0.5 + 0.5, len);
 		uv = uv * LUT_SCALE + LUT_BIAS;
 
-		half scale = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, uv, 1, 0 ).w;
+		midf scale = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, uv, 1, 0 ).w;
 
 		sum = len*scale;
 
@@ -292,24 +292,24 @@ for( int i=0; i<floatBitsToInt( light2Buf.numAreaLtcLights ); ++i )
 		float2 ltcUV = float2( pixelData.roughness, sqrt(1.0 - pixelData.NdotV) );
 		ltcUV = ltcUV * LUT_SCALE + LUT_BIAS;
 
-		half4 ltc0 = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, ltcUV, 0, 0 );
-		half4 ltc1 = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, ltcUV, 1, 0 );
+		midf4 ltc0 = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, ltcUV, 0, 0 );
+		midf4 ltc1 = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, ltcUV, 1, 0 );
 
-		half3x3 Minv = buildHalf3x3(
-			half3_c(ltc0.x, 0, ltc0.y),
-			half3_c(  0,  1,    0),
-			half3_c(ltc0.z, 0, ltc0.w)
+		midf3x3 Minv = buildMidf3x3(
+			midf3_c(ltc0.x, 0, ltc0.y),
+			midf3_c(  0,  1,    0),
+			midf3_c(ltc0.z, 0, ltc0.w)
 		);
 
 		bool doubleSidedLtc = light2Buf.areaLtcLights[i].specular.w != 0.0f;
 
 		@property( !fresnel_scalar )
-			half ltcSpecular = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
+			midf ltcSpecular = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
 											 light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 			// BRDF shadowing and Fresnel
 			ltcSpecular *= pixelData.F0 * ltc1.x + ( _h( 1.0 ) - pixelData.F0) * ltc1.y;
 		@else
-			half3 ltcSpecular;
+			midf3 ltcSpecular;
 			ltcSpecular.x = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
 										  light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 			ltcSpecular.yz = ltcSpecular.xx;
@@ -317,8 +317,8 @@ for( int i=0; i<floatBitsToInt( light2Buf.numAreaLtcLights ); ++i )
 			ltcSpecular.xyz *= pixelData.F0.xyz * ltc1.x + (_h( 1.0 ) - pixelData.F0.xyz) * ltc1.y;
 		@end
 
-		half ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
-										buildHalf3x3( half3_c( 1, 0, 0 ), half3_c( 0, 1, 0 ), half3_c( 0, 0, 1 ) ),
+		midf ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
+										buildMidf3x3( midf3_c( 1, 0, 0 ), midf3_c( 0, 1, 0 ), midf3_c( 0, 0, 1 ) ),
 										light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 
 		@property( obb_restraint_ltc )
@@ -326,8 +326,8 @@ for( int i=0; i<floatBitsToInt( light2Buf.numAreaLtcLights ); ++i )
 			ltcSpecular	*= obbRestraintFade;
 		@end
 
-		finalColour += half3_c( light2Buf.areaLtcLights[i].diffuse.xyz ) * ltcDiffuse * pixelData.diffuse.xyz;
-		finalColour += half3_c( light2Buf.areaLtcLights[i].specular.xyz ) * ltcSpecular * pixelData.specular.xyz;
+		finalColour += midf3_c( light2Buf.areaLtcLights[i].diffuse.xyz ) * ltcDiffuse * pixelData.diffuse.xyz;
+		finalColour += midf3_c( light2Buf.areaLtcLights[i].specular.xyz ) * ltcSpecular * pixelData.specular.xyz;
 	}
 }
 @end

@@ -93,20 +93,20 @@ INLINE float4 localCorrect( float3 reflDir, float3 posLS, CubemapProbe probe )
 /// 1 means being at the center of the probe.
 /// 0 means being at the edge of the probe
 /// <0 means position is outside the probe.
-@property( syntax == metal )inline @end half getProbeFade( half3 posLS, CubemapProbe probe )
+@property( syntax == metal )inline @end midf getProbeFade( midf3 posLS, CubemapProbe probe )
 {
-	half3 vDiff = ( half3_c( probe.halfSize.xyz ) - abs( posLS.xyz ) ) / half3_c( probe.halfSize.xyz );
+	midf3 vDiff = ( midf3_c( probe.halfSize.xyz ) - abs( posLS.xyz ) ) / midf3_c( probe.halfSize.xyz );
 	return min( min( vDiff.x, vDiff.y ), vDiff.z );
 }
 
-INLINE half getProbeNDF( half3 posLS, half3 probeToAreaCenterOffsetLS,
-						 half3 innerRange, half3 outerRange )
+INLINE midf getProbeNDF( midf3 posLS, midf3 probeToAreaCenterOffsetLS,
+						 midf3 innerRange, midf3 outerRange )
 {
-	half3 areaPosLS = posLS.xyz - probeToAreaCenterOffsetLS.xyz;
-	//half3 areaPosLS = posLS.xyz - half3_c( 0, 0, -5 );
-	half3 dist = abs( areaPosLS.xyz );
+	midf3 areaPosLS = posLS.xyz - probeToAreaCenterOffsetLS.xyz;
+	//midf3 areaPosLS = posLS.xyz - midf3_c( 0, 0, -5 );
+	midf3 dist = abs( areaPosLS.xyz );
 	//1e-6f avoids division by zero.
-	half3 ndf = (dist - innerRange) / (outerRange - innerRange + _h( 1e-6f ));
+	midf3 ndf = (dist - innerRange) / (outerRange - innerRange + _h( 1e-6f ));
 
 	return max3( ndf.x, ndf.y, ndf.z );
 }

@@ -15,18 +15,18 @@
 		}
 	@end
 	@property( precision_mode != full32 )
-		half3 xAxis( half4 qQuat )
+		midf3 xAxis( midf4 qQuat )
 		{
-			half fTy  = _h( 2.0 ) * qQuat.y;
-			half fTz  = _h( 2.0 ) * qQuat.z;
-			half fTwy = fTy * qQuat.w;
-			half fTwz = fTz * qQuat.w;
-			half fTxy = fTy * qQuat.x;
-			half fTxz = fTz * qQuat.x;
-			half fTyy = fTy * qQuat.y;
-			half fTzz = fTz * qQuat.z;
+			midf fTy  = _h( 2.0 ) * qQuat.y;
+			midf fTz  = _h( 2.0 ) * qQuat.z;
+			midf fTwy = fTy * qQuat.w;
+			midf fTwz = fTz * qQuat.w;
+			midf fTxy = fTy * qQuat.x;
+			midf fTxz = fTz * qQuat.x;
+			midf fTyy = fTy * qQuat.y;
+			midf fTzz = fTz * qQuat.z;
 
-			return half3_c( _h( 1.0 )-(fTyy+fTzz), fTxy+fTwz, fTxz-fTwy );
+			return midf3_c( _h( 1.0 )-(fTyy+fTzz), fTxy+fTwz, fTxz-fTwy );
 		}
 	@end
 @end
@@ -45,23 +45,23 @@
 			float fTyz = fTz * qQuat.y;
 			float fTzz = fTz * qQuat.z;
 
-			return half3_c( fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx );
+			return midf3_c( fTxy-fTwz, 1.0-(fTxx+fTzz), fTyz+fTwx );
 		}
 	@end
 	@property( precision_mode != full32 )
-		half3 yAxis( half4 qQuat )
+		midf3 yAxis( midf4 qQuat )
 		{
-			half fTx  = _h( 2.0 ) * qQuat.x;
-			half fTy  = _h( 2.0 ) * qQuat.y;
-			half fTz  = _h( 2.0 ) * qQuat.z;
-			half fTwx = fTx * qQuat.w;
-			half fTwz = fTz * qQuat.w;
-			half fTxx = fTx * qQuat.x;
-			half fTxy = fTy * qQuat.x;
-			half fTyz = fTz * qQuat.y;
-			half fTzz = fTz * qQuat.z;
+			midf fTx  = _h( 2.0 ) * qQuat.x;
+			midf fTy  = _h( 2.0 ) * qQuat.y;
+			midf fTz  = _h( 2.0 ) * qQuat.z;
+			midf fTwx = fTx * qQuat.w;
+			midf fTwz = fTz * qQuat.w;
+			midf fTxx = fTx * qQuat.x;
+			midf fTxy = fTy * qQuat.x;
+			midf fTyz = fTz * qQuat.y;
+			midf fTzz = fTz * qQuat.z;
 
-			return half3_c( fTxy-fTwz, _h( 1.0 )-(fTxx+fTzz), fTyz+fTwx );
+			return midf3_c( fTxy-fTwz, _h( 1.0 )-(fTxx+fTzz), fTyz+fTwx );
 		}
 	@end
 @end
@@ -84,19 +84,19 @@
 		}
 	@end
 	@property( precision_mode != full32 )
-		half3 zAxis( half4 qQuat )
+		midf3 zAxis( midf4 qQuat )
 		{
-			half fTx  = _h( 2.0 ) * qQuat.x;
-			half fTy  = _h( 2.0 ) * qQuat.y;
-			half fTz  = _h( 2.0 ) * qQuat.z;
-			half fTwx = fTx * qQuat.w;
-			half fTwy = fTy * qQuat.w;
-			half fTxx = fTx * qQuat.x;
-			half fTxz = fTz * qQuat.x;
-			half fTyy = fTy * qQuat.y;
-			half fTyz = fTz * qQuat.y;
+			midf fTx  = _h( 2.0 ) * qQuat.x;
+			midf fTy  = _h( 2.0 ) * qQuat.y;
+			midf fTz  = _h( 2.0 ) * qQuat.z;
+			midf fTwx = fTx * qQuat.w;
+			midf fTwy = fTy * qQuat.w;
+			midf fTxx = fTx * qQuat.x;
+			midf fTxz = fTz * qQuat.x;
+			midf fTyy = fTy * qQuat.y;
+			midf fTyz = fTz * qQuat.y;
 
-			return half3_c( fTxz+fTwy, fTyz-fTwx, _h( 1.0 )-(fTxx+fTyy) );
+			return midf3_c( fTxz+fTwy, fTyz-fTwx, _h( 1.0 )-(fTxx+fTyy) );
 		}
 	@end
 @end

@@ -11,7 +11,7 @@
 
 @insertpiece( CustomGlslExtensions )
 
-@property( precision_mode == half16 && syntax == glslvk )
+@property( precision_mode == midf16 && syntax == glslvk )
 	#extension GL_EXT_shader_16bit_storage: require
 	#extension GL_EXT_shader_explicit_arithmetic_types_float16: require
 @end
@@ -73,51 +73,56 @@
 
 // Let's explain this madness:
 //
-// When precision_mode == full32 half is float. Nothing weird
+// We use the keyword "midf" because "midf" is already taken on Metal.
 //
-// When precision_mode == half16, half and half_c map both to float16_t. It's similar to full32
+// When precision_mode == full32 midf is float. Nothing weird
+//
+// When precision_mode == midf16, midf and midf_c map both to float16_t. It's similar to full32
 // but literals need to be prefixed with _h()
-// Thus we can have:
+//
+// Thus, what happens if we resolve some of the macros, we end up with:
 //		float16_t a = 1.0f;						// Error
 //		float16_t b = _h( 1.0f );				// OK!
 //		float16_t c = float16_t( someFloat );	// OK!
+//
 // But when precision_mode == relaxed; we have the following problem:
 //		mediump float a = 1.0f;							// Error
 //		mediump float b = _h( 1.0f );					// OK!
 //		mediump float c = mediump float( someFloat );	// Invalid syntax!
 //
-// That's where 'half_c' comes into play. The "_c" means cast or construct. Hence we do instead:
-//		half c = half( someFloat );		// Will turn into invalid syntax on relaxed!
-//		half c = half_c( someFloat );	// OK!
+// That's where 'midf_c' comes into play. The "_c" means cast or construct. Hence we do instead:
+//		midf c = midf( someFloat );		// Will turn into invalid syntax on relaxed!
+//		midf c = midf_c( someFloat );	// OK!
 //
-// Therefore datatypes are declared with half. And casts and constructors are with half_c:
-//		half b = _h( 1.0f );
-//		half b = half_c( someFloat );
-//		half c = half3_c( 1.0f, 2.0f, 3.0f );
+// Therefore datatypes are declared with midf. And casts and constructors are with midf_c
+// Proper usage is as follows:
+//		midf b = _h( 1.0f );
+//		midf b = midf_c( someFloat );
+//		midf c = midf3_c( 1.0f, 2.0f, 3.0f );
 //
-// Using this convention ensures that code will compile in all 3 precision modes.
+// Using this convention ensures that code will compile with all 3 precision modes.
 // Breaking this convention means one or more of the modes (except full32) will not compile.
 @property( precision_mode == full32 )
 	#define _h(x) (x)
 
-	#define half float
-	#define half2 vec2
-	#define half3 vec3
-	#define half4 vec4
-	#define half2x2 mat2
-	#define half3x3 mat3
-	#define half4x4 mat4
+	#define midf float
+	#define midf2 vec2
+	#define midf3 vec3
+	#define midf4 vec4
+	#define midf2x2 mat2
+	#define midf3x3 mat3
+	#define midf4x4 mat4
 
-	#define half_c float
-	#define half2_c vec2
-	#define half3_c vec3
-	#define half4_c vec4
-	#define half2x2_c mat2
-	#define half3x3_c mat3
-	#define half4x4_c mat4
+	#define midf_c float
+	#define midf2_c vec2
+	#define midf3_c vec3
+	#define midf4_c vec4
+	#define midf2x2_c mat2
+	#define midf3x3_c mat3
+	#define midf4x4_c mat4
 
-	#define toHalf3x3( x ) mat3( x )
-	#define buildHalf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
+	#define toMidf3x3( x ) mat3( x )
+	#define buildMidf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
 	#define f16texture2D texture2D
 	#define f16texture2DArray texture2DArray
@@ -125,38 +130,38 @@
 
 	#define saturate(x) clamp( (x), 0.0, 1.0 )
 @end
-@property( precision_mode == half16 )
+@property( precision_mode == midf16 )
 	#define _h(x) float16_t(x)
 
 	// TODO: Do the same with ushort
-	#define half float16_t
-	#define half2 f16vec2
-	#define half3 f16vec3
-	#define half4 f16vec4
-	#define half2x2 f16mat2x2
-	#define half3x3 f16mat3x3
-	#define half4x4 f16mat4x4
+	#define midf float16_t
+	#define midf2 f16vec2
+	#define midf3 f16vec3
+	#define midf4 f16vec4
+	#define midf2x2 f16mat2x2
+	#define midf3x3 f16mat3x3
+	#define midf4x4 f16mat4x4
 
-	#define half_c float16_t
-	#define half2_c f16vec2
-	#define half3_c f16vec3
-	#define half4_c f16vec4
-	#define half2x2_c f16mat2x2
-	#define half3x3_c f16mat3x3
-	#define half4x4_c f16mat4x4
+	#define midf_c float16_t
+	#define midf2_c f16vec2
+	#define midf3_c f16vec3
+	#define midf4_c f16vec4
+	#define midf2x2_c f16mat2x2
+	#define midf3x3_c f16mat3x3
+	#define midf4x4_c f16mat4x4
 
-	#define toHalf3x3( x ) f16mat3x3( x )
-	#define buildHalf3x3( row0, row1, row2 ) f16mat3x3( row0, row1, row2 )
+	#define toMidf3x3( x ) f16mat3x3( x )
+	#define buildMidf3x3( row0, row1, row2 ) f16mat3x3( row0, row1, row2 )
 
 	float saturate( float x ) { return clamp( x, 0.0, 1.0 ); }
 	vec2 saturate( vec2 x ) { return clamp( x, vec2( 0.0 ), vec2( 1.0 ) ); }
 	vec3 saturate( vec3 x ) { return clamp( x, vec3( 0.0 ), vec3( 1.0 ) ); }
 	vec4 saturate( vec4 x ) { return clamp( x, vec4( 0.0 ), vec4( 1.0 ) ); }
 
-	half saturate( half x ) { return clamp( x, half( 0.0 ), half( 1.0 ) ); }
-	half2 saturate( half2 x ) { return clamp( x, half2( 0.0 ), half2( 1.0 ) ); }
-	half3 saturate( half3 x ) { return clamp( x, half3( 0.0 ), half3( 1.0 ) ); }
-	half4 saturate( half4 x ) { return clamp( x, half4( 0.0 ), half4( 1.0 ) ); }
+	midf saturate( midf x ) { return clamp( x, midf( 0.0 ), midf( 1.0 ) ); }
+	midf2 saturate( midf2 x ) { return clamp( x, midf2( 0.0 ), midf2( 1.0 ) ); }
+	midf3 saturate( midf3 x ) { return clamp( x, midf3( 0.0 ), midf3( 1.0 ) ); }
+	midf4 saturate( midf4 x ) { return clamp( x, midf4( 0.0 ), midf4( 1.0 ) ); }
 @end
 @property( precision_mode == relaxed )
 	precision highp int; // Silence warning about default is highp
@@ -164,25 +169,25 @@
 
 	#define _h(x) (x)
 
-	#define half mediump float
-	#define half2 mediump vec2
-	#define half3 mediump vec3
-	#define half4 mediump vec4
-	#define half2x2 mediump mat2
-	#define half3x3 mediump mat3
-	#define half4x4 mediump mat4
+	#define midf mediump float
+	#define midf2 mediump vec2
+	#define midf3 mediump vec3
+	#define midf4 mediump vec4
+	#define midf2x2 mediump mat2
+	#define midf3x3 mediump mat3
+	#define midf4x4 mediump mat4
 
-	// For casting to half
-	#define half_c float
-	#define half2_c vec2
-	#define half3_c vec3
-	#define half4_c vec4
-	#define half2x2_c mat2
-	#define half3x3_c mat3
-	#define half4x4_c mat4
+	// For casting to midf
+	#define midf_c float
+	#define midf2_c vec2
+	#define midf3_c vec3
+	#define midf4_c vec4
+	#define midf2x2_c mat2
+	#define midf3x3_c mat3
+	#define midf4x4_c mat4
 
-	#define toHalf3x3( x ) mat3( x )
-	#define buildHalf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
+	#define toMidf3x3( x ) mat3( x )
+	#define buildMidf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
 	mediump float saturate( mediump float x ) { return clamp( x, 0.0, 1.0 ); }
 	mediump vec2 saturate( mediump vec2 x ) { return clamp( x, vec2( 0.0 ), vec2( 1.0 ) ); }
@@ -249,26 +254,26 @@
 	#define textureCube samplerCube
 	#define textureCubeArray samplerCubeArray
 
-	#define OGRE_Load2DF16( tex, iuv, lod ) half4_c( texelFetch( tex, ivec2( iuv ), lod ) )
-	#define OGRE_SampleF16( tex, sampler, uv ) half4_c( texture( tex, uv ) )
-	#define OGRE_SampleLevelF16( tex, sampler, uv, lod ) half4_c( textureLod( tex, uv, lod ) )
-	#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) half4_c( texture( tex, vec3( uv, arrayIdx ) ) )
-	#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) half4_c( textureLod( tex, vec3( uv, arrayIdx ), lod ) )
-	#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) half4_c( textureLod( tex, vec4( uv, arrayIdx ), lod ) )
-	#define OGRE_SampleGradF16( tex, sampler, uv, ddx, ddy ) half4_c( textureGrad( tex, uv, ddx, ddy ) )
-	#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) half4_c( textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy ) )
+	#define OGRE_Load2DF16( tex, iuv, lod ) midf4_c( texelFetch( tex, ivec2( iuv ), lod ) )
+	#define OGRE_SampleF16( tex, sampler, uv ) midf4_c( texture( tex, uv ) )
+	#define OGRE_SampleLevelF16( tex, sampler, uv, lod ) midf4_c( textureLod( tex, uv, lod ) )
+	#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) midf4_c( texture( tex, vec3( uv, arrayIdx ) ) )
+	#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) midf4_c( textureLod( tex, vec3( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) midf4_c( textureLod( tex, vec4( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleGradF16( tex, sampler, uv, ddx, ddy ) midf4_c( textureGrad( tex, uv, ddx, ddy ) )
+	#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) midf4_c( textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy ) )
 @else
-	#define OGRE_Load2DF16( tex, iuv, lod ) half4_c( texelFetch( tex, ivec2( iuv ), lod ) )
+	#define OGRE_Load2DF16( tex, iuv, lod ) midf4_c( texelFetch( tex, ivec2( iuv ), lod ) )
 
 	#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ) )
 	#define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), lod )
 	#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod )
 	#define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), ddx, ddy )
 
-	#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) half4_c( texture( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ) ) )
-	#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) half4_c( textureLod( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), lod ) )
-	#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) half4_c( textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod ) )
-	#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) half4_c( textureGrad( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), ddx, ddy ) )
+	#define OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) midf4_c( texture( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ) ) )
+	#define OGRE_SampleArray2DLevelF16( tex, sampler, uv, arrayIdx, lod ) midf4_c( textureLod( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleArrayCubeLevelF16( tex, sampler, uv, arrayIdx, lod ) midf4_c( textureLod( samplerCubeArray( tex, sampler ), vec4( uv, arrayIdx ), lod ) )
+	#define OGRE_SampleArray2DGradF16( tex, sampler, uv, arrayIdx, ddx, ddy ) midf4_c( textureGrad( sampler2DArray( tex, sampler ), vec3( uv, arrayIdx ), ddx, ddy ) )
 
 	float4 OGRE_Sample( texture2D t, sampler s, float2 uv ) { return texture( sampler2D( t, s ), uv ); }
 	float4 OGRE_Sample( texture3D t, sampler s, float3 uv ) { return texture( sampler3D( t, s ), uv ); }
@@ -282,17 +287,17 @@
 	float4 OGRE_SampleGrad( texture3D t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return textureGrad( sampler3D( t, s ), uv, myDdx, myDdy ); }
 	float4 OGRE_SampleGrad( textureCube t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return textureGrad( samplerCube( t, s ), uv, myDdx, myDdy ); }
 
-	half4 OGRE_SampleF16( texture2D t, sampler s, float2 uv ) { return half4_c( texture( sampler2D( t, s ), uv ) ); }
-	half4 OGRE_SampleF16( texture3D t, sampler s, float3 uv ) { return half4_c( texture( sampler3D( t, s ), uv ) ); }
-	half4 OGRE_SampleF16( textureCube t, sampler s, float3 uv ) { return half4_c( texture( samplerCube( t, s ), uv ) ); }
+	midf4 OGRE_SampleF16( texture2D t, sampler s, float2 uv ) { return midf4_c( texture( sampler2D( t, s ), uv ) ); }
+	midf4 OGRE_SampleF16( texture3D t, sampler s, float3 uv ) { return midf4_c( texture( sampler3D( t, s ), uv ) ); }
+	midf4 OGRE_SampleF16( textureCube t, sampler s, float3 uv ) { return midf4_c( texture( samplerCube( t, s ), uv ) ); }
 
-	half4 OGRE_SampleLevelF16( texture2D t, sampler s, float2 uv, float lod ) { return half4_c( textureLod( sampler2D( t, s ), uv, lod ) ); }
-	half4 OGRE_SampleLevelF16( texture3D t, sampler s, float3 uv, float lod ) { return half4_c( textureLod( sampler3D( t, s ), uv, lod ) ); }
-	half4 OGRE_SampleLevelF16( textureCube t, sampler s, float3 uv, float lod ) { return half4_c( textureLod( samplerCube( t, s ), uv, lod ) ); }
+	midf4 OGRE_SampleLevelF16( texture2D t, sampler s, float2 uv, float lod ) { return midf4_c( textureLod( sampler2D( t, s ), uv, lod ) ); }
+	midf4 OGRE_SampleLevelF16( texture3D t, sampler s, float3 uv, float lod ) { return midf4_c( textureLod( sampler3D( t, s ), uv, lod ) ); }
+	midf4 OGRE_SampleLevelF16( textureCube t, sampler s, float3 uv, float lod ) { return midf4_c( textureLod( samplerCube( t, s ), uv, lod ) ); }
 
-	half4 OGRE_SampleGradF16( texture2D t, sampler s, float2 uv, float2 myDdx, float2 myDdy ) { return half4_c( textureGrad( sampler2D( t, s ), uv, myDdx, myDdy ) ); }
-	half4 OGRE_SampleGradF16( texture3D t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return half4_c( textureGrad( sampler3D( t, s ), uv, myDdx, myDdy ) ); }
-	half4 OGRE_SampleGradF16( textureCube t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return half4_c( textureGrad( samplerCube( t, s ), uv, myDdx, myDdy ) ); }
+	midf4 OGRE_SampleGradF16( texture2D t, sampler s, float2 uv, float2 myDdx, float2 myDdy ) { return midf4_c( textureGrad( sampler2D( t, s ), uv, myDdx, myDdy ) ); }
+	midf4 OGRE_SampleGradF16( texture3D t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return midf4_c( textureGrad( sampler3D( t, s ), uv, myDdx, myDdy ) ); }
+	midf4 OGRE_SampleGradF16( textureCube t, sampler s, float3 uv, float3 myDdx, float3 myDdy ) { return midf4_c( textureGrad( samplerCube( t, s ), uv, myDdx, myDdy ) ); }
 @end
 #define OGRE_ddx( val ) dFdx( val )
 #define OGRE_ddy( val ) dFdy( val )

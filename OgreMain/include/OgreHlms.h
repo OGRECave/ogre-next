@@ -87,20 +87,27 @@ namespace Ogre
 
         enum PrecisionMode
         {
-            /// half datatype maps to float (i.e. 32-bit)
+            /// midf datatype maps to float (i.e. 32-bit)
             /// This setting is always supported
             PrecisionFull32,
 
-            /// half datatype maps to float16_t (i.e. forced 16-bit)
+            /// midf datatype maps to float16_t (i.e. forced 16-bit)
             ///
-            /// This setting depends on GPU support (see RSC_SHADER_FLOAT16)
-            /// If unsupported, we fallback to PrecisionRelaxed
-            PrecisionHalf16,
+            /// It forces the driver to produce 16-bit code, even if unoptimal
+            /// Great for testing quality downgrades caused by 16-bit support
+            ///
+            /// - This depends on RSC_SHADER_FLOAT16.
+            /// - If unsupported, we fallback to PrecisionRelaxed (RSC_SHADER_RELAXED_FLOAT)
+            /// - If unsupported, we then fallback to PrecisionFull32
+            PrecisionMidf16,
 
-            /// half datatype maps to mediump float / min16float
+            /// midf datatype maps to mediump float / min16float
             ///
-            /// This setting is almost always supported; but we may
-            /// fallback to PrecisionFull32 on buggy drivers
+            /// The driver is allowed to work in either 16-bit or 32-bit code
+            ///
+            /// - This depends on RSC_SHADER_RELAXED_FLOAT.
+            /// - If unsupported, we fallback to PrecisionMidf16 (RSC_SHADER_FLOAT16)
+            /// - If unsupported, we then fallback to PrecisionFull32
             PrecisionRelaxed
         };
 
@@ -1017,7 +1024,7 @@ namespace Ogre
         static const IdString GLVersion;
         static const IdString PrecisionMode;
         static const IdString Full32;
-        static const IdString Half16;
+        static const IdString Midf16;
         static const IdString Relaxed;
         static const IdString FastShaderBuildHack;
         static const IdString TexGather;

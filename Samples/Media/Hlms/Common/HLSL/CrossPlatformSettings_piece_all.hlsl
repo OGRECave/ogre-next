@@ -19,47 +19,47 @@
 @property( precision_mode == full32 )
 	#define _h(x) (x)
 
-	#define half float
-	#define half2 float2
-	#define half3 float3
-	#define half4 float4
-	#define half2x2 float2x2
-	#define half3x3 float3x3
-	#define half4x4 float4x4
+	#define midf float
+	#define midf2 float2
+	#define midf3 float3
+	#define midf4 float4
+	#define midf2x2 float2x2
+	#define midf3x3 float3x3
+	#define midf4x4 float4x4
 
-	#define half_c float
-	#define half2_c float2
-	#define half3_c float3
-	#define half4_c float4
-	#define half2x2_c float2x2
-	#define half3x3_c float3x3
-	#define half4x4_c float4x4
+	#define midf_c float
+	#define midf2_c float2
+	#define midf3_c float3
+	#define midf4_c float4
+	#define midf2x2_c float2x2
+	#define midf3x3_c float3x3
+	#define midf4x4_c float4x4
 
-	#define toHalf3x3( x ) ((float3x3)( x ))
-	#define buildHalf3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
+	#define toMidf3x3( x ) ((float3x3)( x ))
+	#define buildMidf3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
 @end
 @property( precision_mode == relaxed )
 	#define _h(x) min16float((x))
 
-	#define half min16float
-	#define half2 min16float2
-	#define half3 min16float3
-	#define half4 min16float4
-	#define half2x2 min16float2x2
-	#define half3x3 min16float3x3
-	#define half4x4 min16float4x4
+	#define midf min16float
+	#define midf2 min16float2
+	#define midf3 min16float3
+	#define midf4 min16float4
+	#define midf2x2 min16float2x2
+	#define midf3x3 min16float3x3
+	#define midf4x4 min16float4x4
 
-	// For casting to half
-	#define half_c min16float
-	#define half2_c min16float2
-	#define half3_c min16float3
-	#define half4_c min16float4
-	#define half2x2_c min16float2x2
-	#define half3x3_c min16float3x3
-	#define half4x4_c min16float4x4
+	// For casting to midf
+	#define midf_c min16float
+	#define midf2_c min16float2
+	#define midf3_c min16float3
+	#define midf4_c min16float4
+	#define midf2x2_c min16float2x2
+	#define midf3x3_c min16float3x3
+	#define midf4x4_c min16float4x4
 
-	#define toHalf3x3( x ) ((min16float3x3)( x ))
-	#define buildHalf3x3( row0, row1, row2 ) transpose( min16float3x3( row0, row1, row2 ) )
+	#define toMidf3x3( x ) ((min16float3x3)( x ))
+	#define buildMidf3x3( row0, row1, row2 ) transpose( min16float3x3( row0, row1, row2 ) )
 @end
 
 #define min3( a, b, c ) min( a, min( b, c ) )

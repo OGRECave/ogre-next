@@ -205,7 +205,7 @@ namespace Ogre
     const IdString HlmsBaseProp::macOS          = IdString( "macOS" );
     const IdString HlmsBaseProp::PrecisionMode  = IdString( "precision_mode" );
     const IdString HlmsBaseProp::Full32         = IdString( "full32" );
-    const IdString HlmsBaseProp::Half16         = IdString( "half16" );
+    const IdString HlmsBaseProp::Midf16         = IdString( "midf16" );
     const IdString HlmsBaseProp::Relaxed        = IdString( "relaxed" );
     const IdString HlmsBaseProp::FastShaderBuildHack= IdString( "fast_shader_build_hack" );
     const IdString HlmsBaseProp::TexGather      = IdString( "hlms_tex_gather" );
@@ -1691,13 +1691,32 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Hlms::PrecisionMode Hlms::getSupportedPrecisionMode() const
     {
-        if( mPrecisionMode == PrecisionHalf16 )
+        switch( mPrecisionMode )
+        {
+        case PrecisionFull32:
+            return PrecisionFull32;
+
+        case PrecisionMidf16:
         {
             const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
             if( capabilities->hasCapability( RSC_SHADER_FLOAT16 ) )
-                return PrecisionHalf16;
-            else
+                return PrecisionMidf16;
+            else if( capabilities->hasCapability( RSC_SHADER_RELAXED_FLOAT ) )
                 return PrecisionRelaxed;
+            else
+                return PrecisionFull32;
+        }
+
+        case PrecisionRelaxed:
+        {
+            const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
+            if( capabilities->hasCapability( RSC_SHADER_RELAXED_FLOAT ) )
+                return PrecisionRelaxed;
+            else if( capabilities->hasCapability( RSC_SHADER_FLOAT16 ) )
+                return PrecisionMidf16;
+            else
+                return PrecisionFull32;
+        }
         }
 
         return static_cast<PrecisionMode>( mPrecisionMode );
@@ -1709,8 +1728,8 @@ namespace Ogre
         {
         case PrecisionFull32:
             return static_cast<int32>( HlmsBaseProp::Full32.mHash );
-        case PrecisionHalf16:
-            return static_cast<int32>( HlmsBaseProp::Half16.mHash );
+        case PrecisionMidf16:
+            return static_cast<int32>( HlmsBaseProp::Midf16.mHash );
         case PrecisionRelaxed:
             return static_cast<int32>( HlmsBaseProp::Relaxed.mHash );
         }
@@ -2231,7 +2250,7 @@ namespace Ogre
                 setProperty( HlmsBaseProp::macOS, 1 );
 #endif
                 setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.mHash ) );
-                setProperty( HlmsBaseProp::Half16, static_cast<int32>( HlmsBaseProp::Half16.mHash ) );
+                setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.mHash ) );
                 setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.mHash ) );
                 setProperty( HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
 

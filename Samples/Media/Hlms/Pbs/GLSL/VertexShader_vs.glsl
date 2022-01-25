@@ -17,7 +17,7 @@ layout(std140) uniform;
 vulkan_layout( OGRE_POSITION ) in vec4 vertex;
 
 @property( hlms_normal )vulkan_layout( OGRE_NORMAL ) in float3 normal;@end
-@property( hlms_qtangent )vulkan_layout( OGRE_NORMAL ) in half4 qtangent;@end
+@property( hlms_qtangent )vulkan_layout( OGRE_NORMAL ) in midf4 qtangent;@end
 
 @property( normal_map && !hlms_qtangent )
 	@property( hlms_tangent4 )vulkan_layout( OGRE_TANGENT ) in float4 tangent;@end

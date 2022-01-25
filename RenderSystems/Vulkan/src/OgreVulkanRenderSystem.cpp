@@ -505,6 +505,8 @@ namespace Ogre
         if( mActiveDevice->hasDeviceExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
             rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
 
+        rsc->setCapability( RSC_SHADER_RELAXED_FLOAT );
+
         if( mDevice->mDeviceExtraFeatures.shaderFloat16 &&
             mDevice->mDeviceExtraFeatures.storageInputOutput16 )
         {
