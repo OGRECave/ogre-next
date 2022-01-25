@@ -275,7 +275,7 @@ namespace Ogre
 #else
         mDebugOutputProperties( false ),
 #endif
-        mPrecisionMode( PrecisionRelaxed ),
+        mPrecisionMode( PrecisionFull32 ),
         mFastShaderBuildHack( false ),
         mDefaultDatablock( 0 ),
         mType( type ),

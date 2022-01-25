@@ -20,45 +20,45 @@
 @property( BRDF_BlinnPhong )
 @piece( DeclareBRDF )
 //Blinn-Phong
-INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
+INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData )
 {
-	float3 halfWay = normalize( lightDir + pixelData.viewDir );
-    float NdotL = saturate( dot( pixelData.normal, lightDir ) );			//Diffuse (Lambert)
-    float NdotH = clamp( dot( pixelData.normal, halfWay ), 0.001, 1.0 );	//Specular
+	midf3 halfWay = normalize( lightDir + pixelData.viewDir );
+	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );						//Diffuse (Lambert)
+	midf NdotH = clamp( dot( pixelData.normal, halfWay ), _h( 0.001 ), _h( 1.0 ) );	//Specular
 	@property( !legacy_math_brdf )
-        float VdotH = clamp( dot( pixelData.viewDir, halfWay ), 0.001, 1.0 ); //Fresnel
+		midf VdotH = clamp( dot( pixelData.viewDir, halfWay ), _h( 0.001 ), _h( 1.0 ) ); //Fresnel
 
 		//Fresnel term (Schlick's approximation)
         float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
 		@property( fresnel_separate_diffuse )
             float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
         @else
-			float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+			midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
 		@end
 	@end
 
 	@property( !roughness_is_shininess )
-        float shininess = exp2( 10.0 * (1.0 - pixelData.roughness) + 1.0 ) * 0.25;
+		midf shininess = exp2( _h( 10.0 ) * (_h( 1.0 ) - pixelData.roughness) + _h( 1.0 ) ) * _h( 0.25 );
     @else
-        float shininess = pixelData.roughness;
+		midf shininess = pixelData.roughness;
 	@end
-	float blinnPhong = pow( NdotH, shininess );
+	midf blinnPhong = pow( NdotH, shininess );
 
 	@property( !legacy_math_brdf )
 		//Normalize Blinn-Phong using (n + 8) / (8 * pi)
 		//Note this factor is an approximation. The real normalization is
 		//*much* more expensive. See:
 		//http://www.rorydriscoll.com/2009/01/25/energy-conservation-in-games/
-		blinnPhong *= (shininess + 8.0) / (8.0 * 3.141592654);
+		blinnPhong *= ( shininess + _h( 8.0 ) ) / _h( 8.0 * 3.141592654 );
 
 		//Avoid very small denominators, they go to NaN or cause aliasing artifacts
 		//Note: For blinn-phong we use larger denominators otherwise specular blows out of proportion
-        float_fresnel Rs = ( fresnelS * blinnPhong ) / max( 4.0 * pixelData.NdotV * NdotL, 0.75 );
+		float_fresnel Rs = ( fresnelS * blinnPhong ) / max( _h( 4.0 ) * pixelData.NdotV * NdotL, _h( 0.75 ) );
 		//Make diffuse look closer to Default.
-        fresnelD *= lerp( 1.0, 1.0 / 1.51, pixelData.roughness );
+		fresnelD *= lerp( _h( 1.0 ), _h( 1.0 / 1.51 ), pixelData.roughness );
     @else
-		float Rs = blinnPhong;
-		float fresnelD = 1.0;
+		midf Rs = blinnPhong;
+		midf fresnelD = _h( 1.0 );
 	@end
 
     return NdotL * (pixelData.specular.xyz * lightSpecular * Rs +
@@ -70,33 +70,33 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
 @property( BRDF_CookTorrance )
 @piece( DeclareBRDF )
 //Cook-Torrance
-INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
+INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, PixelData pixelData )
 {
-    float3 halfWay = normalize( lightDir + pixelData.viewDir );
-    float NdotL = saturate( dot( pixelData.normal, lightDir ) );
-    float NdotH = clamp( dot( pixelData.normal, halfWay ), 0.001, 1.0 );
-    float VdotH = clamp( dot( pixelData.viewDir, halfWay ), 0.001, 1.0 );
+	midf3 halfWay = normalize( lightDir + pixelData.viewDir );
+	midf NdotL = saturate( dot( pixelData.normal, lightDir ) );
+	midf NdotH = clamp( dot( pixelData.normal, halfWay ), _h( 0.001 ), _h( 1.0 ) );
+	midf VdotH = clamp( dot( pixelData.viewDir, halfWay ), _h( 0.001 ), _h( 1.0 ) );
 
-    float sqR = pixelData.roughness * pixelData.roughness;
+	midf sqR = pixelData.roughness * pixelData.roughness;
 
 	//Roughness/Distribution/NDF term (Beckmann distribution)
 	//Formula:
 	//	Where alpha = NdotH and m = roughness
 	//	R = [ 1 / (m^2 x cos(alpha)^4 ] x [ e^( -tan(alpha)^2 / m^2 ) ]
 	//	R = [ 1 / (m^2 x cos(alpha)^4 ] x [ e^( ( cos(alpha)^2 - 1 )  /  (m^2 cos(alpha)^2 ) ]
-	float NdotH_sq = NdotH * NdotH;
-	float roughness_a = 1.0 / ( 3.141592654 * sqR * NdotH_sq * NdotH_sq );//( 1 / (m^2 x cos(alpha)^4 )
-	float roughness_b = NdotH_sq - 1.0;	//( cos(alpha)^2 - 1 )
-	float roughness_c = sqR * NdotH_sq;		//( m^2 cos(alpha)^2 )
+	midf NdotH_sq = NdotH * NdotH;
+	midf roughness_a = _h( 1.0 ) / ( _h( 3.141592654 ) * sqR * NdotH_sq * NdotH_sq );//( 1 / (m^2 x cos(alpha)^4 )
+	midf roughness_b = NdotH_sq - _h( 1.0 );	//( cos(alpha)^2 - 1 )
+	midf roughness_c = sqR * NdotH_sq;			//( m^2 cos(alpha)^2 )
 
 	//Avoid Inf * 0 = NaN; we need Inf * 0 = 0
-	float R = min( roughness_a, 65504.0 ) * exp( roughness_b / roughness_c );
+	midf R = min( roughness_a, _h( 65504.0 ) ) * exp( roughness_b / roughness_c );
 
 	//Geometric/Visibility term (Cook Torrance)
-	float shared_geo = 2.0 * NdotH / VdotH;
-    float geo_b	= shared_geo * pixelData.NdotV;
-	float geo_c	= shared_geo * NdotL;
-	float G	 	= min( 1.0, min( geo_b, geo_c ) );
+	midf shared_geo = _h( 2.0 ) * NdotH / VdotH;
+	midf geo_b	= shared_geo * pixelData.NdotV;
+	midf geo_c	= shared_geo * NdotL;
+	midf G	 	= min( _h( 1.0 ), min( geo_b, geo_c ) );
 
 	//Fresnel term (Schlick's approximation)
 	//Formula:
@@ -106,11 +106,11 @@ INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, 
     @property( fresnel_separate_diffuse )
         float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
     @else
-        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+		midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
     @end
 
 	//Avoid very small denominators, they go to NaN or cause aliasing artifacts
-    float_fresnel Rs = ( fresnelS * (R * G)  ) / max( 4.0 * pixelData.NdotV * NdotL, 0.01 );
+	float_fresnel Rs = ( fresnelS * (R * G)  ) / max( _h( 4.0 ) * pixelData.NdotV * NdotL, _h( 0.01 ) );
 
     return NdotL * (pixelData.specular.xyz * lightSpecular * Rs +
                     pixelData.diffuse.xyz * lightDiffuse * fresnelD);
