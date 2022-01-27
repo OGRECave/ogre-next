@@ -37,6 +37,8 @@
 
 	#define toMidf3x3( x ) ((float3x3)( x ))
 	#define buildMidf3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
+
+	#define ensureValidRangeF16(x)
 @end
 @property( precision_mode == relaxed )
 	#define _h(x) min16float((x))
@@ -60,6 +62,8 @@
 
 	#define toMidf3x3( x ) ((min16float3x3)( x ))
 	#define buildMidf3x3( row0, row1, row2 ) transpose( min16float3x3( row0, row1, row2 ) )
+
+	#define ensureValidRangeF16(x) x = min(x, min16float(65504.0))
 @end
 
 #define min3( a, b, c ) min( a, min( b, c ) )

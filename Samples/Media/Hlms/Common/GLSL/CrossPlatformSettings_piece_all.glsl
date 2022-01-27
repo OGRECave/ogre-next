@@ -124,9 +124,7 @@
 	#define toMidf3x3( x ) mat3( x )
 	#define buildMidf3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
 
-	#define f16texture2D texture2D
-	#define f16texture2DArray texture2DArray
-	#define f16sampler2DArray sampler2DArray
+	#define ensureValidRangeF16(x)
 
 	#define saturate(x) clamp( (x), 0.0, 1.0 )
 @end
@@ -152,6 +150,8 @@
 
 	#define toMidf3x3( x ) f16mat3x3( x )
 	#define buildMidf3x3( row0, row1, row2 ) f16mat3x3( row0, row1, row2 )
+
+	#define ensureValidRangeF16(x) x = min(x, _h( 65504.0 ))
 
 	float saturate( float x ) { return clamp( x, 0.0, 1.0 ); }
 	vec2 saturate( vec2 x ) { return clamp( x, vec2( 0.0 ), vec2( 1.0 ) ); }

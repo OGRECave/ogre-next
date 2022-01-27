@@ -84,16 +84,31 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 	//	Where alpha = NdotH and m = roughness
 	//	R = [ 1 / (m^2 x cos(alpha)^4 ] x [ e^( -tan(alpha)^2 / m^2 ) ]
 	//	R = [ 1 / (m^2 x cos(alpha)^4 ] x [ e^( ( cos(alpha)^2 - 1 )  /  (m^2 cos(alpha)^2 ) ]
+@property( precision_mode == full32 )
 	midf NdotH_sq = NdotH * NdotH;
-	midf roughness_a = _h( 1.0 ) / ( _h( 3.141592654 ) * sqR * NdotH_sq * NdotH_sq );//( 1 / (m^2 x cos(alpha)^4 )
 	midf roughness_b = NdotH_sq - _h( 1.0 );	//( cos(alpha)^2 - 1 )
+@else
+	// Use Lagrange's identity to compute 1 - NdotH_sq with mediump
+	//      ||a x b||^2 = ||a||^2 ||b||^2 - (a . b)^2
+	// since N and H are unit vectors: ||N x H||^2 = 1.0 - NoH^2
+	//
+	// See https://github.com/google/filament/blob/f40b08d826c69df9fca2711841f1a9ecb77386e8/shaders/src/brdf.fs#L55
+	// for details
+	midf3 NcrossH = cross( pixelData.normal, halfWay );
+	midf roughness_b = -dot( NcrossH, NcrossH );//( cos(alpha)^2 - 1 )
+	midf NdotH_sq = roughness_b + _h( 1.0 );
+@end
+	midf roughness_a = _h( 1.0 ) / ( _h( 3.141592654 ) * sqR * NdotH_sq * NdotH_sq );//( 1 / (m^2 x cos(alpha)^4 )
 	midf roughness_c = sqR * NdotH_sq;			//( m^2 cos(alpha)^2 )
 
 	//Avoid Inf * 0 = NaN; we need Inf * 0 = 0
 	midf R = min( roughness_a, _h( 65504.0 ) ) * exp( roughness_b / roughness_c );
 
+	ensureValidRangeF16( R );
+
 	//Geometric/Visibility term (Cook Torrance)
 	midf shared_geo = _h( 2.0 ) * NdotH / VdotH;
+	ensureValidRangeF16( shared_geo );
 	midf geo_b	= shared_geo * pixelData.NdotV;
 	midf geo_c	= shared_geo * NdotL;
 	midf G	 	= min( _h( 1.0 ), min( geo_b, geo_c ) );
@@ -102,18 +117,18 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 	//Formula:
 	//	fresnelS = lerp( (1 - V*H)^5, 1, F0 )
 	//	fresnelD = lerp( (1 - N*L)^5, 1, 1 - F0 ) [See s2010_course_note_practical_implementation_at_triace.pdf]
-    float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
-    @property( fresnel_separate_diffuse )
-        float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
-    @else
+	float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
+	@property( fresnel_separate_diffuse )
+		float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
+	@else
 		midf fresnelD = _h( 1.0f ) - @insertpiece( getMaxFresnelS );
-    @end
+	@end
 
 	//Avoid very small denominators, they go to NaN or cause aliasing artifacts
 	float_fresnel Rs = ( fresnelS * (R * G)  ) / max( _h( 4.0 ) * pixelData.NdotV * NdotL, _h( 0.01 ) );
 
-    return NdotL * (pixelData.specular.xyz * lightSpecular * Rs +
-                    pixelData.diffuse.xyz * lightDiffuse * fresnelD);
+	return NdotL * (pixelData.specular.xyz * lightSpecular * Rs +
+					pixelData.diffuse.xyz * lightDiffuse * fresnelD);
 }
 @end
 @end
@@ -130,13 +145,6 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 
 	midf sqR = pixelData.roughness * pixelData.roughness;
 
-	//Roughness/Distribution/NDF term (GGX)
-	//Formula:
-	//	Where alpha = roughness
-	//	R = alpha^2 / [ PI * [ ( NdotH^2 * (alpha^2 - 1) ) + 1 ]^2 ]
-	midf f = ( NdotH * sqR - NdotH ) * NdotH + _h( 1.0 );
-	midf R = sqR / (f * f); // f is guaranteed to not be 0 because we clamped pixelData.roughness
-
 	//Geometric/Visibility term (Smith GGX Height-Correlated)
 @property( GGX_height_correlated )
 	midf Lambda_GGXV = NdotL * sqrt( (-pixelData.NdotV * sqR + pixelData.NdotV) * pixelData.NdotV + sqR );
@@ -146,7 +154,31 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 @else
 	midf gL = NdotL * ( _h( 1 ) - sqR ) + sqR;
 	midf gV = pixelData.NdotV * ( _h( 1 ) - sqR ) + sqR;
-	midf G = 1.0 / (( gL * gV + _h( 1e-4f ) ) * _h( 4 * 3.141592654 ) );
+	midf G = _h( 1.0 ) / (( gL * gV + _h( 1e-4f ) ) * _h( 4 * 3.141592654 ) );
+@end
+
+@property( precision_mode == full32 )
+	//Roughness/Distribution/NDF term (GGX)
+	//Formula:
+	//	Where alpha = roughness
+	//	R = alpha^2 / [ PI * [ ( NdotH^2 * (alpha^2 - 1) ) + 1 ]^2 ]
+	const midf f = ( NdotH * sqR - NdotH ) * NdotH + _h( 1.0 );
+	midf R = sqR / (f * f); // f is guaranteed to not be 0 because we clamped pixelData.roughness
+
+	const midf RG = R * G;
+@else
+	// Lagrange identity
+	const midf3 NcrossH = cross( pixelData.normal, halfWay );
+	const midf roughness_b = dot( NcrossH, NcrossH ); // 1.0 - NdotH * NdotH
+
+	// We need to do 10000 / (100 * 100) because otherwise it flushes to 0, loosing a lot of info
+	const midf f = (-roughness_b * sqR + sqR + roughness_b) * _h( 100.0 ) ;
+	midf R = sqR * _h( 10000.0 ) / (f * f);
+
+	// Avoid INF and NaNs
+	R = min( R, _h( 128.0 ) );
+	G = min( G, _h( 128.0 ) );
+	const midf RG = R * G;
 @end
 
 	//Formula:
@@ -154,7 +186,7 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
     float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
 
 	//We should divide Rs by PI, but it was done inside G for performance
-	midf3 Rs = ( fresnelS * (R * G) ) * pixelData.specular.xyz;
+	midf3 Rs = ( fresnelS * RG ) * pixelData.specular.xyz;
 
 	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
 	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)

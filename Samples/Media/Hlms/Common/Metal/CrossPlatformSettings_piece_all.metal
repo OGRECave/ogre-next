@@ -72,6 +72,8 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 
 	#define toMidf3x3( x ) toMat3x3( x )
 	#define buildMidf3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
+
+	#define ensureValidRangeF16(x)
 @end
 @property( precision_mode == midf16 )
 	// In Metal 'half' is an actual datatype. It should be OK to override it
@@ -96,6 +98,8 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 
 	#define toMidf3x3( x ) toMatHalf3x3( x )
 	#define buildMidf3x3( row0, row1, row2 ) half3x3( half3( row0 ), half3( row1 ), half3( row2 ) )
+
+	#define ensureValidRangeF16(x) x = min(x, 65504.0h)
 @end
 
 #define min3( a, b, c ) min( a, min( b, c ) )
