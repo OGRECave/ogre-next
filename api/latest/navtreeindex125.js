@@ -1,6 +1,5 @@
 var NAVTREEINDEX125 =
 {
-"class_ogre_1_1_skeleton_instance.html":[5,2,0,6],
 "class_ogre_1_1_skeleton_instance.html#a1383326fabe10563584607d884b2c5d9":[5,2,0,6,12],
 "class_ogre_1_1_skeleton_instance.html#a1433fa101b771575adc8f1f3d6a46e67":[5,2,0,6,23],
 "class_ogre_1_1_skeleton_instance.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,0,6,29],
@@ -249,5 +248,6 @@ var NAVTREEINDEX125 =
 "class_ogre_1_1_small_vector_impl.html#ab4fb906b0b1c29080f7e14222a7a2677":[7,0,0,832,1],
 "class_ogre_1_1_small_vector_impl.html#ac4fe13f2e29aab3f4e26f597fa0f82fa":[7,0,0,832,33],
 "class_ogre_1_1_small_vector_impl.html#acd7dfa3b3e065207cd1d9923c0d81745":[7,0,0,832,7],
-"class_ogre_1_1_small_vector_impl.html#ad1c6b259854f9fa396fa1eee2e10b2b6":[7,0,0,832,0]
+"class_ogre_1_1_small_vector_impl.html#ad1c6b259854f9fa396fa1eee2e10b2b6":[7,0,0,832,0],
+"class_ogre_1_1_small_vector_impl.html#ad476fe9d6fa0faecffb16338b6a972e5":[7,0,0,832,25]
 };

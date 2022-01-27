@@ -1,6 +1,5 @@
 var NAVTREEINDEX209 =
 {
-"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[7,0,0,291,1],
 "struct_ogre_1_1float4.html#a455f96a54be42ed640cfbd6fe873f197":[7,0,0,291,4],
 "struct_ogre_1_1float4.html#a4e18ae6fc1a9b1313e30b8946d92b2dd":[7,0,0,291,0],
 "struct_ogre_1_1float4.html#a63fbf33d63d84ac150110140cfe2edaf":[7,0,0,291,3],

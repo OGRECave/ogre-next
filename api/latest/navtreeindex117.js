@@ -1,6 +1,5 @@
 var NAVTREEINDEX117 =
 {
-"class_ogre_1_1_ring_emitter.html#aa4df69c38e5bd02eea6cd9439f9da04a":[7,0,0,770,113],
 "class_ogre_1_1_ring_emitter.html#aa62a28db3e5a10108fff11989a1eb417":[7,0,0,770,29],
 "class_ogre_1_1_ring_emitter.html#aa78e8003ac5126d192aa8557c4a5264b":[7,0,0,770,22],
 "class_ogre_1_1_ring_emitter.html#aa7b39cbcb1006b1ec78a613165ccf57b":[7,0,0,770,47],
@@ -249,5 +248,6 @@ var NAVTREEINDEX117 =
 "class_ogre_1_1_rotational_spline.html#a94645c3887ad1b0872bcea3897fae613":[5,2,6,25,9],
 "class_ogre_1_1_rotational_spline.html#ac8596d691089c7be12d2879dc5595cea":[5,2,6,25,0],
 "class_ogre_1_1_rotational_spline.html#ad385d4ab9121dfc4936b7a45fad2698c":[5,2,6,25,3],
-"class_ogre_1_1_rotational_spline.html#ae7c15794bdabda0d02fb2ce52b3e1ea9":[5,2,6,25,1]
+"class_ogre_1_1_rotational_spline.html#ae7c15794bdabda0d02fb2ce52b3e1ea9":[5,2,6,25,1],
+"class_ogre_1_1_rq_bits.html":[5,2,9,12]
 };

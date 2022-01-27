@@ -1,6 +1,5 @@
 var NAVTREEINDEX208 =
 {
-"struct_ogre_1_1_view_point.html#a3c5ae8fe5c3adce148bfebd3ed9b8e56":[5,2,11,68,1],
 "struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,2,11,68,0],
 "struct_ogre_1_1_view_point.html#a6a25f94ff18e79c7bf0e275f60494d89":[5,0,1,68,0],
 "struct_ogre_1_1_volume_1_1_chunk_parameters.html":[7,0,0,3,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX208 =
 "struct_ogre_1_1float2.html#acc1f836dc566a17404141826fa187759":[7,0,0,290,1],
 "struct_ogre_1_1float2.html#adc33b0e8a1fdd1551c0de5cd3f6576f4":[7,0,0,290,3],
 "struct_ogre_1_1float2.html#aea83a5eb65db2157b55e3df390d4b8de":[7,0,0,290,0],
-"struct_ogre_1_1float4.html":[7,0,0,291]
+"struct_ogre_1_1float4.html":[7,0,0,291],
+"struct_ogre_1_1float4.html#a342fc304f58a4a2b379c3a91dc0ae04d":[7,0,0,291,1]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX178 =
 {
-"class_ogre_1_1v1_1_1_tangent_space_calc.html#ac22657e60e6409d4be16c4cdb4363090":[5,2,6,32,4],
 "class_ogre_1_1v1_1_1_tangent_space_calc.html#afd0845af097947cf9faada47e656ae34":[5,2,6,32,8],
 "class_ogre_1_1v1_1_1_temp_blended_buffer_info.html":[5,2,9,28],
 "class_ogre_1_1v1_1_1_temp_blended_buffer_info.html#a01fa18a6685779b0381c126e14bd6cac":[5,2,9,28,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX178 =
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a17f83278691bea5e763b860b57b6303f":[5,2,0,29,5],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,0,29,28],
 "class_ogre_1_1v1_1_1_vertex_animation_track.html#a2b1fba2af6572d6be2dd1c4134a926b6":[5,2,0,29,36],
-"class_ogre_1_1v1_1_1_vertex_animation_track.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,0,29,32]
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a421b197ca3a38da17e2eb1531a645fa2":[5,2,0,29,32],
+"class_ogre_1_1v1_1_1_vertex_animation_track.html#a42446ee948b5191053603d518b995bee":[5,2,0,29,17]
 };

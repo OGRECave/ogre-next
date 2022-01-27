@@ -1,6 +1,5 @@
 var NAVTREEINDEX40 =
 {
-"class_ogre_1_1_d3_d11_texture_gpu_manager.html#ad47a9ac90ec48fa4943bca0743325626":[5,2,10,11,43],
 "class_ogre_1_1_d3_d11_texture_gpu_manager.html#ae4cace3a36dcc63cb0ba5662f2c29b8a":[5,2,10,11,21],
 "class_ogre_1_1_d3_d11_texture_gpu_manager.html#ae547a8bdc63d269971a2024de2b8c6dd":[5,2,10,11,42],
 "class_ogre_1_1_d3_d11_texture_gpu_manager.html#ae56bf3ef457708c156860a1b58f02025":[5,2,10,11,23],
@@ -249,5 +248,6 @@ var NAVTREEINDEX40 =
 "class_ogre_1_1_d3_d11_texture_gpu_window.html#ad046ba9fe6192934b95b513239949044":[7,0,0,212,85],
 "class_ogre_1_1_d3_d11_texture_gpu_window.html#ad057c332e4f98b0c9fdf81edb01a5509":[7,0,0,212,8],
 "class_ogre_1_1_d3_d11_texture_gpu_window.html#ad5484c1525a406ce02774a0d26f7ac41":[7,0,0,212,82],
-"class_ogre_1_1_d3_d11_texture_gpu_window.html#ad623ee0c97e95e276074d3cfd64c374c":[7,0,0,212,2]
+"class_ogre_1_1_d3_d11_texture_gpu_window.html#ad623ee0c97e95e276074d3cfd64c374c":[7,0,0,212,2],
+"class_ogre_1_1_d3_d11_texture_gpu_window.html#ad65fb98f0b6a575bf54c72bce4491b20":[7,0,0,212,62]
 };

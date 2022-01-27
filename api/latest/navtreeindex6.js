@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"_ogre_image_downsampler_8h.html#gaa4cbbd0ef55f0d65397623b31683bf99":[8,0,427,85],
 "_ogre_image_downsampler_8h.html#gaa5d771a90588462df3d7e5fd7b417769":[8,0,427,107],
 "_ogre_image_downsampler_8h.html#gaa6552c509ee77179f78d8d6957fae50f":[8,0,427,82],
 "_ogre_image_downsampler_8h.html#gaa78be8b681e12e39195a311577b2a0a5":[8,0,427,48],
@@ -249,5 +248,6 @@ var NAVTREEINDEX6 =
 "_ogre_metal_hardware_buffer_manager_8h.html":[8,0,517],
 "_ogre_metal_hardware_index_buffer_8h.html":[8,0,518],
 "_ogre_metal_hardware_vertex_buffer_8h.html":[8,0,519],
-"_ogre_metal_hlms_pso_8h.html":[8,0,520]
+"_ogre_metal_hlms_pso_8h.html":[8,0,520],
+"_ogre_metal_mappings_8h.html":[8,0,521]
 };

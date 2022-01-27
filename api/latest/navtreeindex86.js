@@ -1,6 +1,5 @@
 var NAVTREEINDEX86 =
 {
-"class_ogre_1_1_matrix3.html#a799bda89a5b5e774aaeb6ba5197e61ba":[5,2,6,15,39],
 "class_ogre_1_1_matrix3.html#a8043454ea50049c6849d60ead7dbd7a7":[5,2,6,15,26],
 "class_ogre_1_1_matrix3.html#a8308f99c3c13e067f016a45f26f15389":[5,2,6,15,12],
 "class_ogre_1_1_matrix3.html#a94b0b7264cc1572fff22f491ac6cc664":[5,2,6,15,10],
@@ -249,5 +248,6 @@ var NAVTREEINDEX86 =
 "class_ogre_1_1_mesh_lod_generator.html#a3cdd91b72ba29ee177e3c8714f6f07a4":[7,0,0,572,8],
 "class_ogre_1_1_mesh_lod_generator.html#a433212c3162f9f3d5ddd01f7c9fd6578":[7,0,0,572,6],
 "class_ogre_1_1_mesh_lod_generator.html#a6709d1b9e68715c1ae5740befebe3470":[7,0,0,572,0],
-"class_ogre_1_1_mesh_lod_generator.html#a7ecbb1aa6a5b42342af4f21fc40acc05":[7,0,0,572,11]
+"class_ogre_1_1_mesh_lod_generator.html#a7ecbb1aa6a5b42342af4f21fc40acc05":[7,0,0,572,11],
+"class_ogre_1_1_mesh_lod_generator.html#a8592deced84fda25792d7df26f4af878":[7,0,0,572,5]
 };

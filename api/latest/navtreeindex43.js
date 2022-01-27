@@ -1,6 +1,5 @@
 var NAVTREEINDEX43 =
 {
-"class_ogre_1_1_decal_factory.html#a908d575f513dea3fecb36e4e60e88ca7":[7,0,0,225,3],
 "class_ogre_1_1_decal_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[7,0,0,225,8],
 "class_ogre_1_1_decal_factory.html#ab78a921e54419be677839cdf15d1f0b8":[7,0,0,225,12],
 "class_ogre_1_1_decal_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[7,0,0,225,10],
@@ -249,5 +248,6 @@ var NAVTREEINDEX43 =
 "class_ogre_1_1_default_ray_scene_query.html#a4be37baef81876985aa1071ad5acc6dd":[5,0,1,11,22],
 "class_ogre_1_1_default_ray_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,11,11,17],
 "class_ogre_1_1_default_ray_scene_query.html#a595ea4c05da8aa987d3800e65d23355d":[5,0,1,11,17],
-"class_ogre_1_1_default_ray_scene_query.html#a5a96085659aec2c0df9c271f4372a74a":[5,2,11,11,26]
+"class_ogre_1_1_default_ray_scene_query.html#a5a96085659aec2c0df9c271f4372a74a":[5,2,11,11,26],
+"class_ogre_1_1_default_ray_scene_query.html#a5a96085659aec2c0df9c271f4372a74a":[5,0,1,11,26]
 };

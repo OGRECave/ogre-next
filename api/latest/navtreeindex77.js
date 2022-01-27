@@ -1,6 +1,5 @@
 var NAVTREEINDEX77 =
 {
-"class_ogre_1_1_indirect_buffer_packed.html#a2994a7eb6d99a32bb91c6fa3c6487f60":[7,0,0,468,1],
 "class_ogre_1_1_indirect_buffer_packed.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,468,29],
 "class_ogre_1_1_indirect_buffer_packed.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,468,32],
 "class_ogre_1_1_indirect_buffer_packed.html#a5103334929d2d6f7b7f0d060755b6b93":[7,0,0,468,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX77 =
 "class_ogre_1_1_intersection_scene_query.html#aa11f71d4b66bbb56df0b2025412f7f1f":[5,2,11,18,9],
 "class_ogre_1_1_intersection_scene_query.html#aa4302f9623d93f620cde40ebc8c18e3c":[5,0,1,18,5],
 "class_ogre_1_1_intersection_scene_query.html#aa4302f9623d93f620cde40ebc8c18e3c":[5,2,11,18,5],
-"class_ogre_1_1_intersection_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,18,17]
+"class_ogre_1_1_intersection_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,0,1,18,17],
+"class_ogre_1_1_intersection_scene_query.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,11,18,17]
 };

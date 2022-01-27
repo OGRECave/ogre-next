@@ -1,6 +1,5 @@
 var NAVTREEINDEX106 =
 {
-"class_ogre_1_1_particle_system.html#a5a29e8ca5c6777b0fe2f72bde6d0555c":[5,2,1,41,126],
 "class_ogre_1_1_particle_system.html#a5b0982f88226f7793a9b289d33e4621f":[5,2,1,41,15],
 "class_ogre_1_1_particle_system.html#a5bf80407c5eaa6de896cc7937d4114b3":[5,2,1,41,24],
 "class_ogre_1_1_particle_system.html#a6467bbef19b4767b363370f5961070b4":[5,2,1,41,56],
@@ -249,5 +248,6 @@ var NAVTREEINDEX106 =
 "class_ogre_1_1_particle_system_renderer_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,1,45,4],
 "class_ogre_1_1_particle_system_renderer_factory.html#a93e6a86dde5483c053ca0f2a85bbfd6c":[5,2,1,45,7],
 "class_ogre_1_1_particle_system_renderer_factory.html#ab78a921e54419be677839cdf15d1f0b8":[5,2,1,45,11],
-"class_ogre_1_1_particle_system_renderer_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,45,9]
+"class_ogre_1_1_particle_system_renderer_factory.html#ac4bdf968b7b9af8a5239a27da73d5711":[5,2,1,45,9],
+"class_ogre_1_1_particle_system_renderer_factory.html#acb46d4b0a597156d9ba5abc39d127792":[5,2,1,45,5]
 };

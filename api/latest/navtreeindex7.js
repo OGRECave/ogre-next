@@ -1,6 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"_ogre_metal_mappings_8h.html":[8,0,521],
 "_ogre_metal_multi_source_vertex_buffer_pool_8h.html":[8,0,522],
 "_ogre_metal_pixel_format_to_shader_type_8h.html":[8,0,523],
 "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540":[8,0,523,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX7 =
 "_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18a65ad028726f54f7c562e8aa36140470c":[8,0,630,0,3],
 "_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18a666f37a65e9c5f4bda57668cafce70a8":[8,0,630,0,35],
 "_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18a6996853f74d7cda6c34b84797ab74542":[8,0,630,0,82],
-"_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18a69a092d61ec973eba22223f81fc589e1":[8,0,630,0,152]
+"_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18a69a092d61ec973eba22223f81fc589e1":[8,0,630,0,152],
+"_ogre_pixel_format_gpu_8h.html#gga71f09fe41a1db41186262f1aa5814a18a6bd493fcc42897e271058be74671b1ee":[8,0,630,0,124]
 };
