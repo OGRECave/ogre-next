@@ -5,11 +5,11 @@
 	@foreach( diffuse_map, n )
 		#define DiffuseSampler@n samplerState@value(diffuse_map@n_sampler)
 		@property( diffuse_map@n_array )
-			#define SampleDiffuse@n( tex, sampler, uv, d ) OGRE_SampleArray2D( tex, sampler, uv, d )
+			#define SampleDiffuse@n( tex, sampler, uv, d ) OGRE_SampleArray2DF16( tex, sampler, uv, d )
 			#define DiffuseTexture@n textureMapsArray@value(diffuse_map@n_idx)
 			@piece( diffuseIdx@n ), diffuseIdx@n@end
 		@else
-			#define SampleDiffuse@n( tex, sampler, uv ) OGRE_Sample( tex, sampler, uv )
+			#define SampleDiffuse@n( tex, sampler, uv ) OGRE_SampleF16( tex, sampler, uv )
 			#define DiffuseTexture@n textureMaps@value(diffuse_map@n_idx)
 		@end
 
@@ -54,7 +54,7 @@
 @end
 
 @piece( DefaultBodyPS )
-	float4 diffuseCol = float4( 1.0f, 1.0f, 1.0f, 1.0f );
+	midf4 diffuseCol = midf4_c( 1.0f, 1.0f, 1.0f, 1.0f );
 
 	@property( diffuse_map || alpha_test || diffuse )
 		@insertpiece( LoadMaterial )
@@ -86,8 +86,8 @@
 	// Load each additional layer and blend it
 	@foreach( diffuse_map, n, 1 )
 		@property( diffuse_map@n )
-			float4 topImage@n = SampleDiffuse@n( DiffuseTexture@n, DiffuseSampler@n,
-												 DiffuseUV@n @insertpiece( diffuseIdx@n ) ).@insertpiece(diffuse_map@n_tex_swizzle);
+			midf4 topImage@n = SampleDiffuse@n( DiffuseTexture@n, DiffuseSampler@n,
+												DiffuseUV@n @insertpiece( diffuseIdx@n ) ).@insertpiece(diffuse_map@n_tex_swizzle);
 			@insertpiece( blend_mode_idx@n )
 		@end
 	@end
@@ -97,7 +97,7 @@
 		diffuseCol *= inPs.colour;
 	@else
 		@property( diffuse )
-			diffuseCol *= material.diffuse;
+			diffuseCol *= midf4_c( material.diffuse );
 		@end
 	@end
 

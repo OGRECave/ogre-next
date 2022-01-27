@@ -29,7 +29,6 @@ g_unitTests = \
 	['Sample_Postprocessing', 'Sample_Postprocessing.json'],
 	['Sample_Refractions', 'Sample_Refractions.json'],
 	['Sample_SceneFormat', 'Sample_SceneFormat.json'],
-	['Sample_SceneFormat', 'Sample_SceneFormat.json'],
 	['Sample_ScreenSpaceReflections', 'Sample_ScreenSpaceReflections.json'],
 	['Sample_ShadowMapDebugging', 'Sample_ShadowMapDebugging.json'],
 	['Sample_ShadowMapFromCode', 'Sample_ShadowMapFromCode.json'],
@@ -102,9 +101,13 @@ def runUnitTest( exeName, jsonName ):
 	if g_system == 'darwin':
 		shutil.copyfile( './ogreMetal.cfg', os.path.join( exeFullpath + '.app/Contents/Resources', 'ogre.cfg' ) )
 		exeFullpath += '.app/Contents/MacOS/' + exeName
+	elif g_system == 'linux' and g_api == 'd3d11':
+		exeFullpath += '.exe'
 
 	args = [exeFullpath, '--ut_playback=' + jsonFullpath, '--ut_output=' + outputFolder]
 
+	if g_system == 'linux' and g_api == 'd3d11':
+		args = ['wine'] + args[:]
 	#if g_system == 'darwin':
 	#	args = ['open', '-W', '-n', '-a' ] + [args[0]] + ['--args'] + args[1:]
 
@@ -124,6 +127,11 @@ if g_system != 'darwin':
 		shutil.copyfile( './ogreGL.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
 	elif g_api == 'vk':
 		shutil.copyfile( './ogreVk.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
+		# Remove samples that don't work w/ Vulkan
+		g_unitTests[:] = [unitTest for unitTest in g_unitTests \
+			if unitTest[0] != 'Sample_ScreenSpaceReflections' and \
+				unitTest[0] != 'Sample_TutorialUav01_Setup' and \
+				unitTest[0] != 'Sample_TutorialUav02_Setup']
 	else:
 		shutil.copyfile( './ogreD3D11.cfg', os.path.join( g_exeFolder, 'ogre.cfg' ) )
 else:

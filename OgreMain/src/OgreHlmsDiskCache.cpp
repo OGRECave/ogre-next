@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreLogManager.h"
 #include "OgreProfiler.h"
+#include "OgreRenderSystem.h"
 #include "OgreStringConverter.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
@@ -41,7 +42,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const uint16 c_hlmsDiskCacheVersion = 2u;
+    static const uint16 c_hlmsDiskCacheVersion = 3u;
 
     HlmsDiskCache::HlmsDiskCache( HlmsManager *hlmsManager ) :
         mTemplatesOutOfDate( false ),
@@ -59,6 +60,10 @@ namespace Ogre
         mCache.sourceCode.clear();
         mCache.pso.clear();
         mShaderProfile.clear();
+
+        mNativeShadingLangVer = 0u;
+        mPrecisionMode = Hlms::PrecisionFull32;
+        mFastShaderBuildHack = true;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
@@ -95,6 +100,9 @@ namespace Ogre
 
         mCache.type = hlms->getType();
         mShaderProfile = hlms->getShaderProfile();
+        mNativeShadingLangVer = hlms->getRenderSystem()->getNativeShadingLanguageVersion();
+        mPrecisionMode = hlms->getSupportedPrecisionMode();
+        mFastShaderBuildHack = hlms->getFastShaderBuildHack();
         hlms->getTemplateChecksum( mCache.templateHash );
 
         {
@@ -154,6 +162,37 @@ namespace Ogre
             LogManager::getSingleton().logMessage(
                 "INFO: The cached Hlms is for shader profile in '" + mShaderProfile +
                 "' but it does not match the current one '" + hlms->getShaderProfile() +
+                "'. This increases loading times." );
+        }
+
+        if( !mTemplatesOutOfDate &&
+            mNativeShadingLangVer != hlms->getRenderSystem()->getNativeShadingLanguageVersion() )
+        {
+            mTemplatesOutOfDate = true;
+            LogManager::getSingleton().logMessage(
+                "INFO: mNativeShadingLangVer has changed from '" +
+                StringConverter::toString( mNativeShadingLangVer ) + "' to the current value '" +
+                StringConverter::toString( hlms->getRenderSystem()->getNativeShadingLanguageVersion() ) +
+                "'. This increases loading times." );
+        }
+
+        if( !mTemplatesOutOfDate && mPrecisionMode != hlms->getSupportedPrecisionMode() )
+        {
+            mTemplatesOutOfDate = true;
+            LogManager::getSingleton().logMessage(
+                "INFO: mPrecisionMode has changed from '" +
+                StringConverter::toString( mPrecisionMode ) + "' to the current value '" +
+                StringConverter::toString( hlms->getSupportedPrecisionMode() ) +
+                "'. This increases loading times." );
+        }
+
+        if( !mTemplatesOutOfDate && mFastShaderBuildHack != hlms->getFastShaderBuildHack() )
+        {
+            mTemplatesOutOfDate = true;
+            LogManager::getSingleton().logMessage(
+                "INFO: mFastShaderBuildHack has changed from '" +
+                StringConverter::toString( mFastShaderBuildHack ) + "' to the current value '" +
+                StringConverter::toString( hlms->getFastShaderBuildHack() ) +
                 "'. This increases loading times." );
         }
 
@@ -241,6 +280,12 @@ namespace Ogre
     {
         dataStream->write( &value, sizeof( value ) );
     }
+    template <>
+    void write<bool>( DataStreamPtr &dataStream, const bool &value )
+    {
+        const uint8 valueAsU8 = value ? 1u : 0u;
+        dataStream->write( &valueAsU8, sizeof( valueAsU8 ) );
+    }
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::save( DataStreamPtr &dataStream, const IdString &hashedString )
     {
@@ -308,6 +353,10 @@ namespace Ogre
         write( dataStream, mCache.templateHash );
         write( dataStream, mCache.type );
         save( dataStream, mShaderProfile );
+
+        write<uint16>( dataStream, mNativeShadingLangVer );
+        write<uint8>( dataStream, mPrecisionMode );
+        write<bool>( dataStream, mFastShaderBuildHack );
 
         {
             // Save shaders
@@ -401,6 +450,20 @@ namespace Ogre
         T value;
         dataStream->read( &value, sizeof( value ) );
         return value;
+    }
+    template <>
+    void read<bool>( DataStreamPtr &dataStream, bool &value )
+    {
+        uint8 valueU8;
+        dataStream->read( &valueU8, sizeof( valueU8 ) );
+        value = valueU8 != 0u;
+    }
+    template <>
+    bool read<bool>( DataStreamPtr &dataStream )
+    {
+        uint8 value;
+        dataStream->read( &value, sizeof( value ) );
+        return value != 0u;
     }
     //-----------------------------------------------------------------------------------
     void HlmsDiskCache::load( DataStreamPtr &dataStream, IdString &hashedString )
@@ -498,6 +561,10 @@ namespace Ogre
         read( dataStream, mCache.templateHash );
         read( dataStream, mCache.type );
         load( dataStream, mShaderProfile );
+
+        read<uint16>( dataStream, mNativeShadingLangVer );
+        read<uint8>( dataStream, mPrecisionMode );
+        read<bool>( dataStream, mFastShaderBuildHack );
 
         {
             // Load shaders

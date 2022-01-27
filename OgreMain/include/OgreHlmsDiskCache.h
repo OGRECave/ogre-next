@@ -170,6 +170,9 @@ namespace Ogre
         Cache        mCache;
         HlmsManager *mHlmsManager;
         String       mShaderProfile;
+        uint16       mNativeShadingLangVer;
+        uint8        mPrecisionMode;
+        bool         mFastShaderBuildHack;
         uint16       mDebugStrSize;
 
         void save( DataStreamPtr &dataStream, const IdString &hashedString );

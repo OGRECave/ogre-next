@@ -31,6 +31,8 @@ THE SOFTWARE.
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <dlfcn.h>
+
+#import "OgreLogManager.h"
 #import "OgreString.h"
 
 namespace Ogre
@@ -194,8 +196,20 @@ namespace Ogre
                                                        appropriateForURL:nil
                                                                   create:YES
                                                                    error:nil];
-        NSURL *myDirURL = [cachesURL URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier
-                                                     isDirectory:YES];
+		NSURL *myDirURL = cachesURL;
+
+		if( NSBundle.mainBundle.bundleIdentifier )
+		{
+			// May be nullptr if bundle is not correctly set (e.g. samples)
+			myDirURL = [cachesURL URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier
+												  isDirectory:YES];
+		}
+		else
+		{
+			LogManager::getSingleton().logMessage( "WARNING: NS Bundle Identifier not set!",
+												   LML_CRITICAL );
+		}
+
         if( bAutoCreate )
         {
             [NSFileManager.defaultManager createDirectoryAtURL:myDirURL

@@ -28,7 +28,7 @@ in block
 @property( !hlms_render_depth_only )
 	@property( !hlms_shadowcaster )
 		@property( !hlms_prepass )
-			layout(location = @counter(rtv_target), index = 0) out vec4 outColour;
+			layout(location = @counter(rtv_target), index = 0) out midf4 outColour;
 		@end
 		@property( hlms_gen_normals_gbuffer )
 			#define outPs_normals outNormals

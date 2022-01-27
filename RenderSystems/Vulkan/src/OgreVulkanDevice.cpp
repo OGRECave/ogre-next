@@ -43,6 +43,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    static FastArray<IdString> msInstanceExtensions;
+
     VulkanDevice::VulkanDevice( VkInstance instance, uint32 deviceIdx,
                                 VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
@@ -134,6 +136,24 @@ namespace Ogre
         createInfo.pNext = &debugCb;
 #endif
 
+        {
+            msInstanceExtensions.clear();
+            msInstanceExtensions.reserve( extensions.size() );
+
+            FastArray<const char *>::const_iterator itor = extensions.begin();
+            FastArray<const char *>::const_iterator endt = extensions.end();
+
+            while( itor != endt )
+            {
+                LogManager::getSingleton().logMessage( "Requesting Instance Extension: " +
+                                                       String( *itor ) );
+                msInstanceExtensions.push_back( *itor );
+                ++itor;
+            }
+
+            std::sort( msInstanceExtensions.begin(), msInstanceExtensions.end() );
+        }
+
         VkInstance instance;
         VkResult result = vkCreateInstance( &createInfo, 0, &instance );
         checkVkResult( result, "vkCreateInstance" );
@@ -178,6 +198,9 @@ namespace Ogre
         mPhysicalDevice = pd[deviceIdx];
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mDeviceMemoryProperties );
+
+        // mDeviceExtraFeatures gets initialized later, once we analyzed all the extensions
+        memset( &mDeviceExtraFeatures, 0, sizeof( mDeviceExtraFeatures ) );
         vkGetPhysicalDeviceFeatures( mPhysicalDevice, &mDeviceFeatures );
 
         mSupportedStages = 0xFFFFFFFF;
@@ -304,7 +327,10 @@ namespace Ogre
         createInfo.queueCreateInfoCount = static_cast<uint32>( queueCreateInfo.size() );
         createInfo.pQueueCreateInfos = &queueCreateInfo[0];
 
-        createInfo.pEnabledFeatures = &mDeviceFeatures;
+        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+            createInfo.pEnabledFeatures = nullptr;
+        else
+            createInfo.pEnabledFeatures = &mDeviceFeatures;
 
         {
             mDeviceExtensions.clear();
@@ -323,6 +349,45 @@ namespace Ogre
             std::sort( mDeviceExtensions.begin(), mDeviceExtensions.end() );
         }
 
+        // Declared at this scope because they must be alive for createInfo.pNext
+        VkPhysicalDeviceFeatures2 deviceFeatures2;
+        makeVkStruct( deviceFeatures2, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2 );
+        VkPhysicalDevice16BitStorageFeatures _16BitStorageFeatures;
+        makeVkStruct( _16BitStorageFeatures, VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES );
+        VkPhysicalDeviceShaderFloat16Int8Features shaderFloat16Int8Features;
+        makeVkStruct( shaderFloat16Int8Features,
+                      VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES );
+
+        // Initialize mDeviceExtraFeatures
+        if( hasInstanceExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME ) )
+        {
+            PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR =
+                (PFN_vkGetPhysicalDeviceFeatures2KHR)vkGetInstanceProcAddr(
+                    mInstance, "vkGetPhysicalDeviceFeatures2KHR" );
+
+            void **lastNext = &deviceFeatures2.pNext;
+
+            if( this->hasDeviceExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME ) )
+            {
+                *lastNext = &_16BitStorageFeatures;
+                lastNext = &_16BitStorageFeatures.pNext;
+            }
+            if( this->hasDeviceExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME ) )
+            {
+                *lastNext = &shaderFloat16Int8Features;
+                lastNext = &shaderFloat16Int8Features.pNext;
+            }
+
+            // Send the same chain to vkCreateDevice
+            createInfo.pNext = &deviceFeatures2;
+
+            GetPhysicalDeviceFeatures2KHR( mPhysicalDevice, &deviceFeatures2 );
+
+            mDeviceExtraFeatures.storageInputOutput16 = _16BitStorageFeatures.storageInputOutput16;
+            mDeviceExtraFeatures.shaderFloat16 = shaderFloat16Int8Features.shaderFloat16;
+            mDeviceExtraFeatures.shaderInt8 = shaderFloat16Int8Features.shaderInt8;
+        }
+
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
         checkVkResult( result, "vkCreateDevice" );
 
@@ -334,6 +399,13 @@ namespace Ogre
         FastArray<IdString>::const_iterator itor =
             std::lower_bound( mDeviceExtensions.begin(), mDeviceExtensions.end(), extension );
         return itor != mDeviceExtensions.end() && *itor == extension;
+    }
+    //-------------------------------------------------------------------------
+    bool VulkanDevice::hasInstanceExtension( const IdString extension )
+    {
+        FastArray<IdString>::const_iterator itor =
+            std::lower_bound( msInstanceExtensions.begin(), msInstanceExtensions.end(), extension );
+        return itor != msInstanceExtensions.end() && *itor == extension;
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::initQueues()

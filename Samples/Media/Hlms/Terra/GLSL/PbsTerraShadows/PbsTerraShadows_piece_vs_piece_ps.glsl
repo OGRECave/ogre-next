@@ -1,7 +1,7 @@
 @property( !hlms_shadowcaster && terra_enabled )
 
 @piece( custom_VStoPS )
-    float terrainShadow;
+	midf terrainShadow;
 @end
 
 /// Extra per-pass global data we need for applying our
@@ -33,7 +33,7 @@
 									   passBuf.terraOrigin.xz, 0 ).xyz;
 	float terraHeightWeight = terraWorldPos.y * passBuf.invTerraBounds.y + passBuf.terraOrigin.y;
     terraHeightWeight = (terraHeightWeight - terraShadowData.y) * terraShadowData.z * 1023.0;
-    outVs.terrainShadow = mix( terraShadowData.x, 1.0, clamp( terraHeightWeight, 0.0, 1.0 ) );
+	outVs.terrainShadow = mix( midf_c( terraShadowData.x ), _h( 1.0 ), midf_c( saturate( terraHeightWeight ) ) );
 @end
 
 @property( hlms_lights_directional && hlms_num_shadow_map_lights )
