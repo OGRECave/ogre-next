@@ -43,31 +43,30 @@ Adapted to Ogre by Matias N. Goldberg
 #define LUT_SCALE ((LUT_SIZE - 1.0)/LUT_SIZE)
 #define LUT_BIAS  (0.5/LUT_SIZE)
 
-INLINE midf3 IntegrateEdgeVec( midf3 v1, midf3 v2 )
+INLINE float3 IntegrateEdgeVec( float3 v1, float3 v2 )
 {
-	midf x = dot(v1, v2);
-	midf y = abs(x);
+	float x = dot(v1, v2);
+	float y = abs(x);
 
-	midf a = _h( 0.8543985 ) + ( _h( 0.4965155 ) + _h( 0.0145206 ) * y ) * y;
-	midf b = _h( 3.4175940 ) + ( _h( 4.1616724 ) + y ) * y;
-	midf v = a / b;
+	float a = 0.8543985 + ( 0.4965155 + 0.0145206 * y ) * y;
+	float b = 3.4175940 + ( 4.1616724 + y ) * y;
+	float v = a / b;
 
-	midf theta_sintheta =
-		( x > _h( 0.0 ) ) ? v : _h( 0.5 ) * rsqrt( max( _h( 1.0 ) - x * x, _h( 1e-7 ) ) ) - v;
+	float theta_sintheta = ( x > 0.0 ) ? v : 0.5 * rsqrt( max( 1.0 - x * x, 1e-7 ) ) - v;
 
 	return cross( v1, v2 ) * theta_sintheta;
 }
 
-INLINE midf IntegrateEdge( midf3 v1, midf3 v2 )
+INLINE float IntegrateEdge( float3 v1, float3 v2 )
 {
 	return IntegrateEdgeVec( v1, v2 ).z;
 }
 
 @property( syntax == metal )
-INLINE void ClipQuadToHorizon( thread midf3 L[5], thread int &n )
+INLINE void ClipQuadToHorizon( thread float3 L[5], thread int &n )
 @end
 @property( syntax != metal )
-INLINE void ClipQuadToHorizon( inout midf3 L[5], out int n )
+INLINE void ClipQuadToHorizon( inout float3 L[5], out int n )
 @end
 {
 	// detect clipping config
@@ -179,7 +178,7 @@ INLINE void ClipQuadToHorizon( inout midf3 L[5], out int n )
 		L[4] = L[0];
 }
 
-INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, midf3x3 Minv,
+INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, float3x3 Minv,
 						  @property( syntax == metal )constant@end  float4 points[4],
 						  bool twoSided )
 {
@@ -189,21 +188,21 @@ INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, midf3x3 Minv,
 	T2 = cross(N, T1);
 
 	// rotate area light in (T1, T2, N) basis
-	Minv = mul( Minv, transpose( buildMidf3x3( T1, T2, N ) ) );
+	Minv = mul( Minv, transpose( buildFloat3x3( T1, T2, N ) ) );
 
 	// polygon (allocate 5 vertices for clipping)
-	midf3 L[5];
-	L[0] = mul( Minv, midf3_c( points[0].xyz - P ) );
-	L[1] = mul( Minv, midf3_c( points[1].xyz - P ) );
-	L[2] = mul( Minv, midf3_c( points[2].xyz - P ) );
-	L[3] = mul( Minv, midf3_c( points[3].xyz - P ) );
+	float3 L[5];
+	L[0] = mul( Minv, points[0].xyz - P );
+	L[1] = mul( Minv, points[1].xyz - P );
+	L[2] = mul( Minv, points[2].xyz - P );
+	L[3] = mul( Minv, points[3].xyz - P );
 	//Initialize L[4]. Some HLSL compiler versions complains this is uninitialized even though
 	//it shouldn't complain.
 	//See https://forums.ogre3d.org/viewtopic.php?f=25&t=94804#p544184
-	L[4] = midf3_c( 0, 1, 0 );
+	L[4] = float3( 0, 1, 0 );
 
 	// integrate
-	midf sum = _h( 0.0 );
+	float sum = 0.0;
 
 	@property( hlms_lights_ltc_clipless )
 		midf3 dir = midf3_c( points[0].xyz - P );
@@ -215,15 +214,15 @@ INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, midf3x3 Minv,
 		L[2] = normalize(L[2]);
 		L[3] = normalize(L[3]);
 
-		midf3 vsum = midf3_c(0.0);
+		float3 vsum = midf3_c(0.0);
 
 		vsum += IntegrateEdgeVec(L[0], L[1]);
 		vsum += IntegrateEdgeVec(L[1], L[2]);
 		vsum += IntegrateEdgeVec(L[2], L[3]);
 		vsum += IntegrateEdgeVec(L[3], L[0]);
 
-		midf len = length(vsum);
-		midf z = vsum.z/len;
+		float len = length(vsum);
+		float z = vsum.z/len;
 
 		if (behind)
 			z = -z;
@@ -231,14 +230,13 @@ INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, midf3x3 Minv,
 		float2 uv = float2(z*0.5 + 0.5, len);
 		uv = uv * LUT_SCALE + LUT_BIAS;
 
-		midf scale = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, uv, 1, 0 ).w;
+		float scale = float( OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, uv, 1, 0 ).w );
 
-		sum = len*scale;
+		sum = len * scale;
 
 		if( behind && !twoSided )
-			sum = _h( 0.0 );
-	@end
-	@property( !hlms_lights_ltc_clipless )
+			sum = 0.0;
+	@else
 		int n;
 		ClipQuadToHorizon( L, n );
 
@@ -260,10 +258,10 @@ INLINE midf LTC_Evaluate( midf3 N, midf3 V, float3 P, midf3x3 Minv,
 		if( n == 5 )
 			sum += IntegrateEdge( L[4], L[0] );
 
-		sum = twoSided ? abs(sum) : max(_h( 0.0 ), sum);
+		sum = twoSided ? abs(sum) : max( 0.0f, sum );
 	@end
 
-	return sum;
+	return midf( sum );
 }
 @end
 @end
@@ -295,10 +293,10 @@ for( int i=0; i<floatBitsToInt( light2Buf.numAreaLtcLights ); ++i )
 		midf4 ltc0 = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, ltcUV, 0, 0 );
 		midf4 ltc1 = OGRE_SampleArray2DLevelF16( ltcMatrix, ltcSampler, ltcUV, 1, 0 );
 
-		midf3x3 Minv = buildMidf3x3(
-			midf3_c(ltc0.x, 0, ltc0.y),
-			midf3_c(  0,  1,    0),
-			midf3_c(ltc0.z, 0, ltc0.w)
+		float3x3 Minv = buildFloat3x3(
+			float3(ltc0.x, 0, ltc0.y),
+			float3(  0,  1,    0),
+			float3(ltc0.z, 0, ltc0.w)
 		);
 
 		bool doubleSidedLtc = light2Buf.areaLtcLights[i].specular.w != 0.0f;
@@ -318,7 +316,7 @@ for( int i=0; i<floatBitsToInt( light2Buf.numAreaLtcLights ); ++i )
 		@end
 
 		midf ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
-										buildMidf3x3( midf3_c( 1, 0, 0 ), midf3_c( 0, 1, 0 ), midf3_c( 0, 0, 1 ) ),
+										buildFloat3x3( float3( 1, 0, 0 ), float3( 0, 1, 0 ), float3( 0, 0, 1 ) ),
 										light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 
 		@property( obb_restraint_ltc )

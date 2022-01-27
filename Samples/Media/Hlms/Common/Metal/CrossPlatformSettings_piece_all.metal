@@ -46,7 +46,7 @@ inline half3x3 toMatHalf3x3( float3x4 m )
 #define wshort3 ushort3
 
 #define toFloat3x3( x ) toMat3x3( x )
-#define buildFloat3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
+#define buildFloat3x3( row0, row1, row2 ) float3x3( float3( row0 ), float3( row1 ), float3( row2 ) )
 
 // See CrossPlatformSettings_piece_all.glsl for an explanation
 @property( precision_mode == full32 )
