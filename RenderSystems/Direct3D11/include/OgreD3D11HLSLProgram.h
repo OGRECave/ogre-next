@@ -151,19 +151,11 @@ namespace Ogre
         // that cg adds to the hlsl 4 output. This is to solve the issue that
         // in some cases cg changes the name of the var to a new name.
         void fixVariableNameFromCg( const ShaderVarWithPosInBuf &newVar );
-        // ShaderVars mShaderVars;
 
         struct BufferInfo
         {
-            static _StringHash   mHash;
-            unsigned int         mIdx;
-            String               mName;
             ComPtr<ID3D11Buffer> mConstBuffer;
-            mutable ShaderVars   mShaderVars;
-
-            BufferInfo() : mIdx( 0 ), mName( "" ) {}
-            BufferInfo( unsigned int index, const String &name ) : mIdx( index ), mName( name ) {}
-            BufferInfo( const BufferInfo &info ) = default;
+            ShaderVars           mShaderVars;
         };
 
         // Map to store interface slot position.
