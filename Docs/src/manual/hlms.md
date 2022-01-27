@@ -1429,16 +1429,50 @@ mSceneManager->setShadowDirectionalLightExtrusionDistance( 500.0f );
 mSceneManager->setShadowFarDistance( 500.0f );
 ```
 
-3.  Try toggling `HlmsManager::setShadowMappingUseBackFaces`
-4.  The default shadow bias for every material is 0.01f. Perhaps this is
+3.  The default shadow bias for every material is 0.01f. Perhaps this is
     too much/little for you? Adjust it via
     `HlmsDatablock::mShadowConstantBias`.
-5.  Use `PF_FLOAT32_R` for rendering shadow maps until you get it to
+4.  Use `PF_FLOAT32_R` for rendering shadow maps until you get it to
     look correct. Then you can start worrying about lowering precision
     to get better performance.
-6.  Checkout the `Sample_ShadowMapDebugging` sample on how to debug
+5.  Checkout the `Sample_ShadowMapDebugging` sample on how to debug
     shadows. Those techniques may give you useful hints about what's
     going on.
 
 [^12]: GL3+ and GLES3: extension ARB\_sampler\_objects. D3D11:
     ID3D11SamplerState
+
+# Precision / Quality
+
+Ogre 2.4 added `Hlms::setPrecisionMode` with the following options:
+
+ - `PrecisionFull32`
+     - `midf` datatype maps to float (i.e. 32-bit)
+     - This setting is always supported
+ - `PrecisionMidf16`
+     - `midf` datatype maps to float16_t (i.e. forced 16-bit)
+     - It forces the driver to produce 16-bit code, even if unoptimal
+     - Great for testing quality downgrades caused by 16-bit support
+     - This depends on `RSC_SHADER_FLOAT16`
+     - If unsupported, we fallback to `PrecisionRelaxed`
+     - If unsupported, we then fallback to `PrecisionFull32`
+ - `PrecisionRelaxed`
+     - `midf` datatype maps to mediump float / min16float
+     - The driver is allowed to work in either 16-bit or 32-bit code
+     - This depends on `RSC_SHADER_RELAXED_FLOAT`
+     - If unsupported, we fallback to `PrecisionMidf16`
+     - If unsupported, we then fallback to `PrecisionFull32`
+
+We use the keyword "midf" because "half" is already taken on Metal.
+
+The default is `PrecisionFull32` which always works and ensures no quality problems.
+
+`PrecisionMidf16` & `PrecisionRelaxed` may need more testing but may help with either performance or battery usage in mobile at the cost of quality which may be unnoticeable on most cases.
+
+`PrecisionRelaxed` is supported by D3D11 however it's force-disabled because of fxc bugs.
+
+Only Vulkan and Metal can currently take advantage of these settings and is likely to stay that way.
+
+Support is very new: we've encountered various bugs (in drivers, in [spirv-reflect](https://github.com/KhronosGroup/SPIRV-Reflect/issues/134), in [fxc](https://twitter.com/matiasgoldberg/status/1485758709473189888), in [RenderDoc](https://github.com/baldurk/renderdoc/issues/2466)) **so users are advised to test this option thoroughly before deploying it to end users.**
+
+Metal is likely the API with best half 16-bit support at the moment.
