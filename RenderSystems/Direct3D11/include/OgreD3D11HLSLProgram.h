@@ -153,11 +153,6 @@ namespace Ogre
         void fixVariableNameFromCg( const ShaderVarWithPosInBuf &newVar );
         // ShaderVars mShaderVars;
 
-        // HACK: Multi-index emulation container to store constant buffer information by index and name
-        // at same time using tips from
-        // http://www.boost.org/doc/libs/1_35_0/libs/multi_index/doc/performance.html and
-        // http://cnx.org/content/m35767/1.2/
-#define INVALID_IDX (unsigned int)-1
         struct BufferInfo
         {
             static _StringHash   mHash;
@@ -166,54 +161,10 @@ namespace Ogre
             ComPtr<ID3D11Buffer> mConstBuffer;
             mutable ShaderVars   mShaderVars;
 
-            // Default constructor
             BufferInfo() : mIdx( 0 ), mName( "" ) {}
             BufferInfo( unsigned int index, const String &name ) : mIdx( index ), mName( name ) {}
-
-            // Copy constructor
-            BufferInfo( const BufferInfo &info ) :
-                mIdx( info.mIdx ),
-                mName( info.mName ),
-                mShaderVars( info.mShaderVars )
-            {
-            }
-
-            // Constructors and operators used for search
-            BufferInfo( unsigned int index ) : mIdx( index ), mName( "" ) {}
-            BufferInfo( const String &name ) : mIdx( INVALID_IDX ), mName( name ) {}
-
-            bool operator==( const BufferInfo &other ) const
-            {
-                return mName == other.mName && mIdx == other.mIdx;
-            }
-            bool operator<( const BufferInfo &other ) const
-            {
-                if( mIdx == INVALID_IDX || other.mIdx == INVALID_IDX )
-                {
-                    return mName < other.mName;
-                }
-                else if( mName == "" || other.mName == "" )
-                {
-                    return mIdx < other.mIdx;
-                }
-                else
-                {
-                    if( mName == other.mName )
-                    {
-                        return mIdx < other.mIdx;
-                    }
-                    else
-                    {
-                        return mName < other.mName;
-                    }
-                }
-            }
+            BufferInfo( const BufferInfo &info ) = default;
         };
-
-        // Make sure that objects have index and name, or some search will fail
-        //        typedef std::set<BufferInfo> BufferInfoMap;
-        //        typedef std::set<BufferInfo>::iterator BufferInfoIterator;
-        //        BufferInfoMap mBufferInfoMap;
 
         // Map to store interface slot position.
         // Number of interface slots is size of this map.
