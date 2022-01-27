@@ -1,5 +1,7 @@
 var NAVTREEINDEX42 =
 {
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a52bc71ac35dce1239301acb06d4fcd28":[7,0,0,221,56],
+"class_ogre_1_1_d3_d11_window_swap_chain_based.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,221,37],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a5d39c20103e51bd756ebc97956b3c98d":[7,0,0,221,45],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a613826611a878a89cbc942d7dd403a2a":[7,0,0,221,30],
 "class_ogre_1_1_d3_d11_window_swap_chain_based.html#a65cd2a895c25f5cfe11073042d38ab5d":[7,0,0,221,29],
@@ -247,7 +249,5 @@ var NAVTREEINDEX42 =
 "class_ogre_1_1_decal_factory.html#a3f7a9ba3a559219aed08b7da8eef1d4e":[7,0,0,225,1],
 "class_ogre_1_1_decal_factory.html#a421b197ca3a38da17e2eb1531a645fa2":[7,0,0,225,11],
 "class_ogre_1_1_decal_factory.html#a4be37baef81876985aa1071ad5acc6dd":[7,0,0,225,14],
-"class_ogre_1_1_decal_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,225,9],
-"class_ogre_1_1_decal_factory.html#a8357fe4fb4849772b94baa4bf47c7ded":[7,0,0,225,5],
-"class_ogre_1_1_decal_factory.html#a908d575f513dea3fecb36e4e60e88ca7":[7,0,0,225,3]
+"class_ogre_1_1_decal_factory.html#a595ea4c05da8aa987d3800e65d23355d":[7,0,0,225,9]
 };

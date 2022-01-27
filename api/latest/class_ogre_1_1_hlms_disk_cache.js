@@ -32,7 +32,10 @@ var class_ogre_1_1_hlms_disk_cache =
     [ "saveTo", "class_ogre_1_1_hlms_disk_cache.html#af1d44465001a7a0b3be0f54876102f3a", null ],
     [ "mCache", "class_ogre_1_1_hlms_disk_cache.html#a3875a13af0c3350f4562d7bfb2d056b6", null ],
     [ "mDebugStrSize", "class_ogre_1_1_hlms_disk_cache.html#a144801bc91e9022292acf66d6cd6b69a", null ],
+    [ "mFastShaderBuildHack", "class_ogre_1_1_hlms_disk_cache.html#a28944e776c049cc800f1b3e81b7836f8", null ],
     [ "mHlmsManager", "class_ogre_1_1_hlms_disk_cache.html#a948439477408cc9c683b29bcfd90b4d5", null ],
+    [ "mNativeShadingLangVer", "class_ogre_1_1_hlms_disk_cache.html#ac477c81e0c86326bc68de32d8addff66", null ],
+    [ "mPrecisionMode", "class_ogre_1_1_hlms_disk_cache.html#afb192f525a54a5e6627b6252477e510e", null ],
     [ "mShaderProfile", "class_ogre_1_1_hlms_disk_cache.html#afe1921074b715b4c1e9a0ac133f280b8", null ],
     [ "mTemplatesOutOfDate", "class_ogre_1_1_hlms_disk_cache.html#a1a9934607a131bb6ee08adc1e6175ba5", null ]
 ];

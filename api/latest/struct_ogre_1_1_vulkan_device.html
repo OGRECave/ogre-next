@@ -100,6 +100,8 @@ $(document).ready(function(){initNavTree('struct_ogre_1_1_vulkan_device.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html">ExtraVkFeatures</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device_1_1_selected_queue.html">SelectedQueue</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -137,6 +139,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a456458f51a1947894637a78bcccd5aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55ecf3d331abc31e467ca32ce386490a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a55ecf3d331abc31e467ca32ce386490a">destroyQueues</a> (<a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="class_ogre_1_1_vulkan_queue.html">VulkanQueue</a> &gt; &amp;queueArray)</td></tr>
 <tr class="separator:a55ecf3d331abc31e467ca32ce386490a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad297c3cb0e91a9bcbe4a1232901dad94"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#ad297c3cb0e91a9bcbe4a1232901dad94">hasInstanceExtension</a> (const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> extension)</td></tr>
+<tr class="separator:ad297c3cb0e91a9bcbe4a1232901dad94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -148,6 +152,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a88a1db69a47feac6a3ed8aff46e758cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_fast_array.html">FastArray</a>&lt; <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a88a1db69a47feac6a3ed8aff46e758cc">mDeviceExtensions</a></td></tr>
 <tr class="memdesc:a88a1db69a47feac6a3ed8aff46e758cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extensions requested when created. Sorted.  <a href="struct_ogre_1_1_vulkan_device.html#a88a1db69a47feac6a3ed8aff46e758cc">More...</a><br /></td></tr>
 <tr class="separator:a88a1db69a47feac6a3ed8aff46e758cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65f8a4ee1a653f4d599caeda0fd18e8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html">ExtraVkFeatures</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a65f8a4ee1a653f4d599caeda0fd18e8d">mDeviceExtraFeatures</a></td></tr>
+<tr class="separator:a65f8a4ee1a653f4d599caeda0fd18e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ef4793068b7a83eda78aee406f4decf"><td class="memItemLeft" align="right" valign="top">VkPhysicalDeviceFeatures&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#a7ef4793068b7a83eda78aee406f4decf">mDeviceFeatures</a></td></tr>
 <tr class="separator:a7ef4793068b7a83eda78aee406f4decf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae174a7cb061e258cb27230f8114b7ee3"><td class="memItemLeft" align="right" valign="top">VkPhysicalDeviceMemoryProperties&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ogre_1_1_vulkan_device.html#ae174a7cb061e258cb27230f8114b7ee3">mDeviceMemoryProperties</a></td></tr>
@@ -504,6 +510,32 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad297c3cb0e91a9bcbe4a1232901dad94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad297c3cb0e91a9bcbe4a1232901dad94">&#9670;&nbsp;</a></span>hasInstanceExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool Ogre::VulkanDevice::hasInstanceExtension </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>&#160;</td>
+          <td class="paramname"><em>extension</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0369aa624f9b0d76521077b89699f49f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0369aa624f9b0d76521077b89699f49f">&#9670;&nbsp;</a></span>initQueues()</h2>
 
@@ -584,6 +616,20 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Extensions requested when created. Sorted. </p>
+
+</div>
+</div>
+<a id="a65f8a4ee1a653f4d599caeda0fd18e8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65f8a4ee1a653f4d599caeda0fd18e8d">&#9670;&nbsp;</a></span>mDeviceExtraFeatures</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html">ExtraVkFeatures</a> Ogre::VulkanDevice::mDeviceExtraFeatures</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

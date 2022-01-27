@@ -1304,6 +1304,8 @@ var group___render_system =
       [ "RSC_TEXTURE_COMPRESSION_ASTC", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7ac29028b670542d2cf3762ce21d81c467", null ],
       [ "RSC_STORE_AND_MULTISAMPLE_RESOLVE", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aec6de082b73a8d76a9e5c7522bf99c86", null ],
       [ "RSC_DEPTH_CLAMP", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a64759547ec85f2df1f72b26bda41aec4", null ],
+      [ "RSC_SHADER_RELAXED_FLOAT", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a204835847a1b5fb0337102ac8b67e7fb", null ],
+      [ "RSC_SHADER_FLOAT16", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8ee3be154c023a6dc1c520c8df46dbd9", null ],
       [ "RSC_PERSTAGECONSTANT", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a4a6cb9244a2fd89591cfeb06960336e1", null ],
       [ "RSC_TYPED_UAV_LOADS", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a214a991679d3c352a841dd3e1327ec8f", null ],
       [ "RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b", null ],

@@ -1,5 +1,6 @@
 var struct_ogre_1_1_vulkan_device =
 [
+    [ "ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features" ],
     [ "SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", "struct_ogre_1_1_vulkan_device_1_1_selected_queue" ],
     [ "VulkanDevice", "struct_ogre_1_1_vulkan_device.html#a99a35ff646d43bb6b35d192074e877e6", null ],
     [ "~VulkanDevice", "struct_ogre_1_1_vulkan_device.html#af497fbe8f23d8a1def3ba2a111db3214", null ],
@@ -13,11 +14,13 @@ var struct_ogre_1_1_vulkan_device =
     [ "findGraphicsQueue", "struct_ogre_1_1_vulkan_device.html#ab3d60c37eccfa0bf7963344e3ef8e5db", null ],
     [ "findTransferQueue", "struct_ogre_1_1_vulkan_device.html#a97871fbfe49781ce5e18e1d2e833f523", null ],
     [ "hasDeviceExtension", "struct_ogre_1_1_vulkan_device.html#a9fbbb869e1ee3059a20fd44e46b8688a", null ],
+    [ "hasInstanceExtension", "struct_ogre_1_1_vulkan_device.html#ad297c3cb0e91a9bcbe4a1232901dad94", null ],
     [ "initQueues", "struct_ogre_1_1_vulkan_device.html#a0369aa624f9b0d76521077b89699f49f", null ],
     [ "stall", "struct_ogre_1_1_vulkan_device.html#a9052e6d3cb9531fcea410cdce25e16f9", null ],
     [ "mComputeQueues", "struct_ogre_1_1_vulkan_device.html#ab4c87165ec889ff2051fbc33ba364043", null ],
     [ "mDevice", "struct_ogre_1_1_vulkan_device.html#a60257e86a9b5d30dfdd46a614d5db43a", null ],
     [ "mDeviceExtensions", "struct_ogre_1_1_vulkan_device.html#a88a1db69a47feac6a3ed8aff46e758cc", null ],
+    [ "mDeviceExtraFeatures", "struct_ogre_1_1_vulkan_device.html#a65f8a4ee1a653f4d599caeda0fd18e8d", null ],
     [ "mDeviceFeatures", "struct_ogre_1_1_vulkan_device.html#a7ef4793068b7a83eda78aee406f4decf", null ],
     [ "mDeviceMemoryProperties", "struct_ogre_1_1_vulkan_device.html#ae174a7cb061e258cb27230f8114b7ee3", null ],
     [ "mDeviceProperties", "struct_ogre_1_1_vulkan_device.html#a5aa808400dbddb71ba3da47b93d276dc", null ],

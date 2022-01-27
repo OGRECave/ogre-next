@@ -90,23 +90,23 @@ $(document).ready(function(){initNavTree('_setting_up_ogre_mac_o_s.html',''); in
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md70">Install cmake</a></li>
-<li class="level1"><a href="#autotoc_md71">Install dependencies</a><ul><li class="level2"><a href="#autotoc_md72">Install SDL2 using brew</a></li>
+<ul><li class="level1"><a href="#autotoc_md71">Install cmake</a></li>
+<li class="level1"><a href="#autotoc_md72">Install dependencies</a><ul><li class="level2"><a href="#autotoc_md73">Install SDL2 using brew</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md73">Build Ogre</a></li>
-<li class="level1"><a href="#autotoc_md74">Build offline version of the docs</a></li>
+<li class="level1"><a href="#autotoc_md74">Build Ogre</a></li>
+<li class="level1"><a href="#autotoc_md75">Build offline version of the docs</a></li>
 </ul>
 </div>
 <div class="textblock"><p><a class="anchor" id="md_Docs_src_SettingUpOgre_SettingUpOgre_macOS"></a></p>
-<h1><a class="anchor" id="autotoc_md70"></a>
+<h1><a class="anchor" id="autotoc_md71"></a>
 Install cmake</h1>
 <p>If you do not already have <code>cmake</code>, install it with <code>brew</code> or whatever your favorite way is: </p><div class="fragment"><div class="line">brew install cmake</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md75"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md76"></a>
 Automatic download &amp; build scripts</h1>
 <p>We provide easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder Download build_ogre_scripts for the branch you need from:</p>
 <p><a href="https://www.ogre3d.org/download/sdk/sdk-ogre-next">https://www.ogre3d.org/download/sdk/sdk-ogre-next</a></p>
-<h1><a class="anchor" id="autotoc_md71"></a>
+<h1><a class="anchor" id="autotoc_md72"></a>
 Install dependencies</h1>
 <p>Clone dependencies from <a href="https://github.com/OGRECave/ogre-next-deps">ogre-next-deps</a> and build the <code>ALL</code> target and then the <code>INSTALL</code> target:</p>
 <div class="fragment"><div class="line">git clone --recurse-submodules --shallow-submodules https://github.com/OGRECave/ogre-next-deps</div>
@@ -119,11 +119,11 @@ Install dependencies</h1>
 <div class="line">cmake --build . --target ALL --config Release</div>
 <div class="line">cmake --build . --target install --config Release</div>
 </div><!-- fragment --><p>This will generate Dependencies under <code>ogre-next-deps/build/ogrenext</code>. You will have to copy (or symlink) that folder into the OgreRepo and rename it to dependencies so that they the folder <code>ogre-next-deps/build/ogrenext</code> is now <code>OgreSrcRepo/Dependencies</code></p>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md73"></a>
 Install SDL2 using brew</h2>
 <p>SDL2 is not built by ogre-next-deps in macOS, use brew instead:</p>
 <div class="fragment"><div class="line">brew install sdl2</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md73"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md74"></a>
 Build Ogre</h1>
 <blockquote class="doxtable">
 <p><b>Note:</b> XCode generator is supported</p>
@@ -164,7 +164,7 @@ Build Ogre</h1>
 </div><!-- fragment --><p>The <code>-j2</code> tells make how many jobs will run concurrently. E.g. if you have 4 cores, use 4 instead of 2.</p>
 <p>If everything went well, you should have an sdk located in the <code>$PWD/sdk</code> directory.</p>
 <p>Open and edit <code>$PWD/sdk/plugins_tools_d.cfg</code> and <code>$PWD/sdk/plugins_tools.cfg</code> and the value of <code>PluginFolder</code> to $PWD/sdk/lib<code>and prefix all the</code>Plugin<code>values with</code>lib<code>(because we set the</code>$OGRE_PLUGIN_LIB_PREFIX` when building)</p>
-<h1><a class="anchor" id="autotoc_md74"></a>
+<h1><a class="anchor" id="autotoc_md75"></a>
 Build offline version of the docs</h1>
 <p>From the same working directory run: </p><div class="fragment"><div class="line">brew install doxygen</div>
 <div class="line">brew install Graphviz</div>

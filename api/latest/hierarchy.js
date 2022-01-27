@@ -1872,6 +1872,7 @@ var hierarchy =
     [ "Ogre::VulkanDescriptorSetTexture2", "struct_ogre_1_1_vulkan_descriptor_set_texture2.html", null ],
     [ "Ogre::VulkanDescriptorSetUav", "struct_ogre_1_1_vulkan_descriptor_set_uav.html", null ],
     [ "Ogre::VulkanDevice", "struct_ogre_1_1_vulkan_device.html", null ],
+    [ "Ogre::VulkanDevice::ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", null ],
     [ "Ogre::VulkanDevice::SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", null ],
     [ "Ogre::VulkanDynamicBuffer", "class_ogre_1_1_vulkan_dynamic_buffer.html", null ],
     [ "Ogre::VulkanFlushOnlyDescValue", "struct_ogre_1_1_vulkan_flush_only_desc_value.html", null ],

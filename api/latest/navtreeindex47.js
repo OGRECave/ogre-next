@@ -1,5 +1,7 @@
 var NAVTREEINDEX47 =
 {
+"class_ogre_1_1_default_sphere_scene_query.html#a9842b4155b787db211dc0c67c42716c2":[5,0,1,16,10],
+"class_ogre_1_1_default_sphere_scene_query.html#a9842b4155b787db211dc0c67c42716c2":[5,2,11,16,10],
 "class_ogre_1_1_default_sphere_scene_query.html#a9a851da02c7d6677649aca5fc0d06ddd":[5,0,1,16,1],
 "class_ogre_1_1_default_sphere_scene_query.html#a9a851da02c7d6677649aca5fc0d06ddd":[5,2,11,16,1],
 "class_ogre_1_1_default_sphere_scene_query.html#aa11f71d4b66bbb56df0b2025412f7f1f":[5,0,1,16,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX47 =
 "class_ogre_1_1_degree.html#a7bc078c3f3df2ec10ac2d058d29e6e7d":[5,2,6,11,22],
 "class_ogre_1_1_degree.html#a830559610ea7662565d6ea1107952e51":[5,2,6,11,13],
 "class_ogre_1_1_degree.html#a88066c650a6e3e2033a9d74820569063":[5,2,6,11,20],
-"class_ogre_1_1_degree.html#a8aed655684943ae384e45378b65da36a":[5,2,6,11,7],
-"class_ogre_1_1_degree.html#a8ccdef2435d0a205feb54763d8be5fc9":[5,2,6,11,3],
-"class_ogre_1_1_degree.html#aa8919fdf01749e0e692842be2a7c4a8e":[5,2,6,11,0]
+"class_ogre_1_1_degree.html#a8aed655684943ae384e45378b65da36a":[5,2,6,11,7]
 };

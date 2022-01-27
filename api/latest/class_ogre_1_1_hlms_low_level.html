@@ -120,6 +120,11 @@ Public Types</h2></td></tr>
 , <a class="el" href="class_ogre_1_1_hlms.html#a6e629e7a87a40040e12d2bfb4ff80d58aa53123a5601281132955a27422df66bc">LightGatherNone</a>
  }</td></tr>
 <tr class="separator:a6e629e7a87a40040e12d2bfb4ff80d58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0365b8787bb8b348fb7b715c056954f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a> { <a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954fa796424c11f74d0fae5691990af64f4fb">PrecisionFull32</a>
+, <a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954faf7e50da9f4dde4015fcb939953caafa5">PrecisionMidf16</a>
+, <a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954fa6406fc71b451777b3a7fc3932a86ac23">PrecisionRelaxed</a>
+ }</td></tr>
+<tr class="separator:aa0365b8787bb8b348fb7b715c056954f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -195,11 +200,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab362f30ca2781be8e26c1b682b5f3cb8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_datablock.html">HlmsDatablock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ab362f30ca2781be8e26c1b682b5f3cb8">getDefaultDatablock</a> () const</td></tr>
 <tr class="memdesc:ab362f30ca2781be8e26c1b682b5f3cb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Datablock to use when another datablock failed or none was specified.  <a href="class_ogre_1_1_hlms.html#ab362f30ca2781be8e26c1b682b5f3cb8">More...</a><br /></td></tr>
 <tr class="separator:ab362f30ca2781be8e26c1b682b5f3cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a124fd6d17116915b6c407d8743b436cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a124fd6d17116915b6c407d8743b436cb">getFastShaderBuildHack</a> () const</td></tr>
+<tr class="memdesc:a124fd6d17116915b6c407d8743b436cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if shaders are being compiled with Fast Shader Build Hack (D3D11 only)  <a href="class_ogre_1_1_hlms.html#a124fd6d17116915b6c407d8743b436cb">More...</a><br /></td></tr>
+<tr class="separator:a124fd6d17116915b6c407d8743b436cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad004bde573064ae48aba462dfcaa536e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e">getFilenameAndResourceGroup</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> name, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **outFilename, <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> const **outResourceGroup) const</td></tr>
 <tr class="memdesc:ad004bde573064ae48aba462dfcaa536e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filaname &amp; resource group a datablock was created from, and is associated with its hashed name (this was passed as in @createDatablock).  <a href="class_ogre_1_1_hlms.html#ad004bde573064ae48aba462dfcaa536e">More...</a><br /></td></tr>
 <tr class="separator:ad004bde573064ae48aba462dfcaa536e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd3e3769c56549f47e4544c263840020"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#acd3e3769c56549f47e4544c263840020">getHighQuality</a> () const</td></tr>
-<tr class="separator:acd3e3769c56549f47e4544c263840020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa46aee70eef1c4f54899d0684cb1bb0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_manager.html">HlmsManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#aa46aee70eef1c4f54899d0684cb1bb0d">getHlmsManager</a> () const</td></tr>
 <tr class="separator:aa46aee70eef1c4f54899d0684cb1bb0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9a2d1a97fa99771f11ccd42a50dea91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms_listener.html">HlmsListener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ae9a2d1a97fa99771f11ccd42a50dea91">getListener</a> () const</td></tr>
@@ -217,6 +223,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac608d7209cceef560c7b1b7e21cfefa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14556592a9642bdea61b6a2298aaf53b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#gac56fd5a93b0000f2487e2ca968784df3">ArchiveVec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a14556592a9642bdea61b6a2298aaf53b">getPiecesLibraryAsArchiveVec</a> () const</td></tr>
 <tr class="separator:a14556592a9642bdea61b6a2298aaf53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31405ce224d30e5eff4900ba02f6fecd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a31405ce224d30e5eff4900ba02f6fecd">getPrecisionMode</a> () const</td></tr>
+<tr class="memdesc:a31405ce224d30e5eff4900ba02f6fecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns requested precision mode (i.e.  <a href="class_ogre_1_1_hlms.html#a31405ce224d30e5eff4900ba02f6fecd">More...</a><br /></td></tr>
+<tr class="separator:a31405ce224d30e5eff4900ba02f6fecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5616a11e653b07871f31aedf8b797d67"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_render_system.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a5616a11e653b07871f31aedf8b797d67">getRenderSystem</a> () const</td></tr>
 <tr class="separator:a5616a11e653b07871f31aedf8b797d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a349b173738c195012cea3acaa527f15f"><td class="memItemLeft" align="right" valign="top">const ShaderCodeCacheVec &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a349b173738c195012cea3acaa527f15f">getShaderCodeCache</a> () const</td></tr>
@@ -227,6 +236,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a905909d0752107d11db3fb6d27c2d615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade989fe1d9b95aa73a7885211f764041"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#ade989fe1d9b95aa73a7885211f764041">getStaticBranchingLights</a> () const</td></tr>
 <tr class="separator:ade989fe1d9b95aa73a7885211f764041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14d03f2b9bb51c0eb4d3583c20a2ec27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a14d03f2b9bb51c0eb4d3583c20a2ec27">getSupportedPrecisionMode</a> () const</td></tr>
+<tr class="memdesc:a14d03f2b9bb51c0eb4d3583c20a2ec27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some GPUs don't support all precision modes.  <a href="class_ogre_1_1_hlms.html#a14d03f2b9bb51c0eb4d3583c20a2ec27">More...</a><br /></td></tr>
+<tr class="separator:a14d03f2b9bb51c0eb4d3583c20a2ec27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a0ec84d5e6078c5627f40e95d8d8ca3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a7a0ec84d5e6078c5627f40e95d8d8ca3">getTemplateChecksum</a> (<a class="el" href="namespace_ogre.html#a00f119d555e251922c695ec569ccfd95">uint64</a> outHash[2]) const</td></tr>
 <tr class="separator:a7a0ec84d5e6078c5627f40e95d8d8ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a508e017c803859196fc55860b7ddfc0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___resources.html#gacbb211b021bd3350291861d7232dd02d">HlmsTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a508e017c803859196fc55860b7ddfc0f">getType</a> () const</td></tr>
@@ -278,15 +290,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a5bd6a05326ef3082d1d88fa5c3ec8c61">setDebugOutputPath</a> (bool enableDebugOutput, bool outputProperties, const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;path=<a class="el" href="group___general.html#gad842a4b416bd2f3245d2b44826a0aedc">BLANKSTRING</a>)</td></tr>
 <tr class="memdesc:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call to output the automatically generated shaders (which are usually made from templates) on the given folder for inspection, analyzing, debugging, etc.  <a href="class_ogre_1_1_hlms.html#a5bd6a05326ef3082d1d88fa5c3ec8c61">More...</a><br /></td></tr>
 <tr class="separator:a5bd6a05326ef3082d1d88fa5c3ec8c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41891adac20124feee29d81237db8197"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a41891adac20124feee29d81237db8197">setHighQuality</a> (bool highQuality)</td></tr>
-<tr class="memdesc:a41891adac20124feee29d81237db8197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the quality of the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a>.  <a href="class_ogre_1_1_hlms.html#a41891adac20124feee29d81237db8197">More...</a><br /></td></tr>
-<tr class="separator:a41891adac20124feee29d81237db8197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a761bbbb8ac57759c2d2529a5d485c8c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a761bbbb8ac57759c2d2529a5d485c8c5">setListener</a> (<a class="el" href="class_ogre_1_1_hlms_listener.html">HlmsListener</a> *listener)</td></tr>
 <tr class="memdesc:a761bbbb8ac57759c2d2529a5d485c8c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a listener to extend an existing <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a> implementation's with custom code, without having to rewrite it or modify the source code directly.  <a href="class_ogre_1_1_hlms.html#a761bbbb8ac57759c2d2529a5d485c8c5">More...</a><br /></td></tr>
 <tr class="separator:a761bbbb8ac57759c2d2529a5d485c8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a144d4a10a6e3a7a1c580d72913ec1cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a144d4a10a6e3a7a1c580d72913ec1cd8">setMaxNonCasterDirectionalLights</a> (<a class="el" href="namespace_ogre.html#a64f3c3e34647277a00b67ae0dfa1a528">uint16</a> maxLights)</td></tr>
 <tr class="memdesc:a144d4a10a6e3a7a1c580d72913ec1cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-caster directional lights are hardcoded into shaders.  <a href="class_ogre_1_1_hlms.html#a144d4a10a6e3a7a1c580d72913ec1cd8">More...</a><br /></td></tr>
 <tr class="separator:a144d4a10a6e3a7a1c580d72913ec1cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd7b3dc16d494d83e9608cdb68f4512d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#afd7b3dc16d494d83e9608cdb68f4512d">setPrecisionMode</a> (<a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a> precisionMode)</td></tr>
+<tr class="memdesc:afd7b3dc16d494d83e9608cdb68f4512d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the precision mode of <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a>.  <a href="class_ogre_1_1_hlms.html#afd7b3dc16d494d83e9608cdb68f4512d">More...</a><br /></td></tr>
+<tr class="separator:afd7b3dc16d494d83e9608cdb68f4512d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46fdb3fe8b4889d911d41468dabf4400"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms.html#a46fdb3fe8b4889d911d41468dabf4400">setStaticBranchingLights</a> (bool staticBranchingLights)</td></tr>
 <tr class="memdesc:a46fdb3fe8b4889d911d41468dabf4400"><td class="mdescLeft">&#160;</td><td class="mdescRight">By default shadow-caster spot and point lights are hardcoded into shaders.  <a href="class_ogre_1_1_hlms.html#a46fdb3fe8b4889d911d41468dabf4400">More...</a><br /></td></tr>
 <tr class="separator:a46fdb3fe8b4889d911d41468dabf4400"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -376,6 +388,48 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="a6e629e7a87a40040e12d2bfb4ff80d58a792d2cdce23b4018b9c149540ebb1a93"></a>LightGatherForwardPlus&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a6e629e7a87a40040e12d2bfb4ff80d58a1aba1d888e0aa8e695416e9ad2af44b9"></a>LightGatherDeferred&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a6e629e7a87a40040e12d2bfb4ff80d58aa53123a5601281132955a27422df66bc"></a>LightGatherNone&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="aa0365b8787bb8b348fb7b715c056954f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0365b8787bb8b348fb7b715c056954f">&#9670;&nbsp;</a></span>PrecisionMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">Ogre::Hlms::PrecisionMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954fa796424c11f74d0fae5691990af64f4fb"></a>PrecisionFull32&#160;</td><td class="fielddoc"><p>midf datatype maps to float (i.e. </p>
+<p>32-bit) This setting is always supported </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954faf7e50da9f4dde4015fcb939953caafa5"></a>PrecisionMidf16&#160;</td><td class="fielddoc"><p>midf datatype maps to float16_t (i.e. </p>
+<p>forced 16-bit) </p><pre class="fragment">        It forces the driver to produce 16-bit code, even if unoptimal
+        Great for testing quality downgrades caused by 16-bit support
+
+        - This depends on RSC_SHADER_FLOAT16.
+        - If unsupported, we fallback to PrecisionRelaxed (RSC_SHADER_RELAXED_FLOAT)
+        - If unsupported, we then fallback to PrecisionFull32 
+</pre> </td></tr>
+<tr><td class="fieldname"><a id="aa0365b8787bb8b348fb7b715c056954fa6406fc71b451777b3a7fc3932a86ac23"></a>PrecisionRelaxed&#160;</td><td class="fielddoc"><p>midf datatype maps to mediump float / min16float </p>
+<pre class="fragment">        The driver is allowed to work in either 16-bit or 32-bit code
+
+        - This depends on RSC_SHADER_RELAXED_FLOAT.
+        - If unsupported, we fallback to PrecisionMidf16 (RSC_SHADER_FLOAT16)
+        - If unsupported, we then fallback to PrecisionFull32 
+</pre> </td></tr>
 </table>
 
 </div>
@@ -1574,6 +1628,33 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a124fd6d17116915b6c407d8743b436cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a124fd6d17116915b6c407d8743b436cb">&#9670;&nbsp;</a></span>getFastShaderBuildHack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ogre::Hlms::getFastShaderBuildHack </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if shaders are being compiled with Fast Shader Build Hack (D3D11 only) </p>
+
+</div>
+</div>
 <a id="ad004bde573064ae48aba462dfcaa536e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad004bde573064ae48aba462dfcaa536e">&#9670;&nbsp;</a></span>getFilenameAndResourceGroup()</h2>
 
@@ -1616,31 +1697,6 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Returns the filaname &amp; resource group a datablock was created from, and is associated with its hashed name (this was passed as in @createDatablock). </p>
 <p>Returns null ptr if not found. Note that it may also be a valid pointer but contain an empty string. The reason this String doesn't live in <a class="el" href="class_ogre_1_1_hlms_datablock.html" title="An hlms datablock contains individual information about a specific material.">HlmsDatablock</a> is to prevent cache trashing (datablocks are hot iterated every frame, and the filename &amp; resource groups are rarely ever used) Usage: String const *filename; String const *resourceGroup; datablock-&gt;getFilenameAndResourceGroup( &amp;filename, &amp;resourceGroup ); if( filename &amp;&amp; resourceGroup &amp;&amp; !filename-&gt;empty() &amp;&amp; !resourceGroup-&gt;empty() ) { //Valid filename &amp; resource group. } </p>
-
-</div>
-</div>
-<a id="acd3e3769c56549f47e4544c263840020"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acd3e3769c56549f47e4544c263840020">&#9670;&nbsp;</a></span>getHighQuality()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::Hlms::getHighQuality </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -1863,6 +1919,34 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a31405ce224d30e5eff4900ba02f6fecd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31405ce224d30e5eff4900ba02f6fecd">&#9670;&nbsp;</a></span>getPrecisionMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a> Ogre::Hlms::getPrecisionMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns requested precision mode (i.e. </p>
+<p>value passed to setPrecisionMode) See getSupportedPrecisionMode </p>
+
+</div>
+</div>
 <a id="ac3cbb0af420992ea18745ae2093ca78a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac3cbb0af420992ea18745ae2093ca78a">&#9670;&nbsp;</a></span>getProperty()</h2>
 
@@ -2029,6 +2113,34 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a14d03f2b9bb51c0eb4d3583c20a2ec27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14d03f2b9bb51c0eb4d3583c20a2ec27">&#9670;&nbsp;</a></span>getSupportedPrecisionMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a> Ogre::Hlms::getSupportedPrecisionMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Some GPUs don't support all precision modes. </p>
+<p>Therefore this will returns the actually used precision mode after checking HW support </p>
 
 </div>
 </div>
@@ -2852,36 +2964,6 @@ template&lt;class Alloc &gt; </div>
 
 </div>
 </div>
-<a id="a41891adac20124feee29d81237db8197"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41891adac20124feee29d81237db8197">&#9670;&nbsp;</a></span>setHighQuality()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::Hlms::setHighQuality </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>highQuality</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the quality of the <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a>. </p>
-<p>This function is most relevant for mobile and almost or completely ignored by Desktop. The default value is false. </p><dl class="section user"><dt></dt><dd>On mobile, high quality will use "highp" quality precision qualifier for all its variables and functions. When not in HQ, mobile users may see aliasing artifacts, gradients; but the performance impact can be quite high. Some GPU drivers might even refuse to execute the shader as they cannot handle it. </dd></dl>
-<dl class="section user"><dt></dt><dd>Unless you absolutely require high quality rendering on Mobile devices and/or to get it to look as closely as possible as it looks in a Desktop device, the recommended option is to have this off. </dd></dl>
-
-</div>
-</div>
 <a id="a761bbbb8ac57759c2d2529a5d485c8c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a761bbbb8ac57759c2d2529a5d485c8c5">&#9670;&nbsp;</a></span>setListener()</h2>
 
@@ -2955,6 +3037,35 @@ template&lt;class Alloc &gt; </div>
 <p>Default value is 0.</p>
 <p>Note: There is little to no performance impact for setting this value higher than you need. e.g. If you set maxLights = 4, but you only have 2 non-caster dir. lights on scene, you'll pay the price of 2 lights (but the RAM price of 4).</p>
 <p>Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass) </p>
+
+</div>
+</div>
+<a id="afd7b3dc16d494d83e9608cdb68f4512d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd7b3dc16d494d83e9608cdb68f4512d">&#9670;&nbsp;</a></span>setPrecisionMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::Hlms::setPrecisionMode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ogre_1_1_hlms.html#aa0365b8787bb8b348fb7b715c056954f">PrecisionMode</a>&#160;</td>
+          <td class="paramname"><em>precisionMode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the precision mode of <a class="el" href="class_ogre_1_1_hlms.html" title="HLMS stands for &quot;High Level Material System&quot;.">Hlms</a>. </p>
+<p>See PrecisionMode Note: This call may invalidate the shader cache! Call as early as possible. </p>
 
 </div>
 </div>
