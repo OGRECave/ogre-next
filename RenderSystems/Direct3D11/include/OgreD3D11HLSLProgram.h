@@ -178,28 +178,9 @@ namespace Ogre
             {
             }
 
-            // Copy operator
-            BufferInfo &operator=( const BufferInfo &info )
-            {
-                this->mIdx = info.mIdx;
-                this->mName = info.mName;
-                mShaderVars = info.mShaderVars;
-                return *this;
-            }
-
             // Constructors and operators used for search
             BufferInfo( unsigned int index ) : mIdx( index ), mName( "" ) {}
             BufferInfo( const String &name ) : mIdx( INVALID_IDX ), mName( name ) {}
-            BufferInfo &operator=( unsigned int index )
-            {
-                this->mIdx = index;
-                return *this;
-            }
-            BufferInfo &operator=( const String &name )
-            {
-                this->mName = name;
-                return *this;
-            }
 
             bool operator==( const BufferInfo &other ) const
             {
