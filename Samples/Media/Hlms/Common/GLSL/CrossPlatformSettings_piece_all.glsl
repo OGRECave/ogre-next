@@ -73,7 +73,7 @@
 
 // Let's explain this madness:
 //
-// We use the keyword "midf" because "midf" is already taken on Metal.
+// We use the keyword "midf" because "half" is already taken on Metal.
 //
 // When precision_mode == full32 midf is float. Nothing weird
 //
