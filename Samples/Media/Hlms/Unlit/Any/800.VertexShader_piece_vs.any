@@ -84,7 +84,7 @@
 			@property( diffuse )
 				@insertpiece( LoadMaterial )
 				@insertpiece( custom_vs_posMaterialLoad )
-				outVs.colour *= material.diffuse;
+				outVs.colour *= midf4_c( material.diffuse );
 			@end
 		@end
 
