@@ -203,7 +203,10 @@ namespace Ogre
     const IdString HlmsBaseProp::GLES           = IdString( "GLES" );
     const IdString HlmsBaseProp::iOS            = IdString( "iOS" );
     const IdString HlmsBaseProp::macOS          = IdString( "macOS" );
-    const IdString HlmsBaseProp::HighQuality    = IdString( "hlms_high_quality" );
+    const IdString HlmsBaseProp::PrecisionMode  = IdString( "precision_mode" );
+    const IdString HlmsBaseProp::Full32         = IdString( "full32" );
+    const IdString HlmsBaseProp::Midf16         = IdString( "midf16" );
+    const IdString HlmsBaseProp::Relaxed        = IdString( "relaxed" );
     const IdString HlmsBaseProp::FastShaderBuildHack= IdString( "fast_shader_build_hack" );
     const IdString HlmsBaseProp::TexGather      = IdString( "hlms_tex_gather" );
     const IdString HlmsBaseProp::DisableStage   = IdString( "hlms_disable_stage" );
@@ -272,7 +275,7 @@ namespace Ogre
 #else
         mDebugOutputProperties( false ),
 #endif
-        mHighQuality( false ),
+        mPrecisionMode( PrecisionFull32 ),
         mFastShaderBuildHack( false ),
         mDefaultDatablock( 0 ),
         mType( type ),
@@ -1672,11 +1675,67 @@ namespace Ogre
                                 HlmsParamVec(), false );
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::setHighQuality( bool highQuality )
+    void Hlms::setPrecisionMode( PrecisionMode precisionMode )
     {
-        clearShaderCache();
-        mHighQuality = highQuality;
+        if( mPrecisionMode != precisionMode )
+        {
+            clearShaderCache();
+            mPrecisionMode = precisionMode;
+        }
     }
+    //-----------------------------------------------------------------------------------
+    Hlms::PrecisionMode Hlms::getPrecisionMode() const
+    {
+        return static_cast<PrecisionMode>( mPrecisionMode );
+    }
+    //-----------------------------------------------------------------------------------
+    Hlms::PrecisionMode Hlms::getSupportedPrecisionMode() const
+    {
+        switch( mPrecisionMode )
+        {
+        case PrecisionFull32:
+            return PrecisionFull32;
+
+        case PrecisionMidf16:
+        {
+            const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
+            if( capabilities->hasCapability( RSC_SHADER_FLOAT16 ) )
+                return PrecisionMidf16;
+            else if( capabilities->hasCapability( RSC_SHADER_RELAXED_FLOAT ) )
+                return PrecisionRelaxed;
+            else
+                return PrecisionFull32;
+        }
+
+        case PrecisionRelaxed:
+        {
+            const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
+            if( capabilities->hasCapability( RSC_SHADER_RELAXED_FLOAT ) )
+                return PrecisionRelaxed;
+            else if( capabilities->hasCapability( RSC_SHADER_FLOAT16 ) )
+                return PrecisionMidf16;
+            else
+                return PrecisionFull32;
+        }
+        }
+
+        return static_cast<PrecisionMode>( mPrecisionMode );
+    }
+    //-----------------------------------------------------------------------------------
+    int32 Hlms::getSupportedPrecisionModeHash() const
+    {
+        switch( getSupportedPrecisionMode() )
+        {
+        case PrecisionFull32:
+            return static_cast<int32>( HlmsBaseProp::Full32.mHash );
+        case PrecisionMidf16:
+            return static_cast<int32>( HlmsBaseProp::Midf16.mHash );
+        case PrecisionRelaxed:
+            return static_cast<int32>( HlmsBaseProp::Relaxed.mHash );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool Hlms::getFastShaderBuildHack() const { return mFastShaderBuildHack; }
     //-----------------------------------------------------------------------------------
     void Hlms::setMaxNonCasterDirectionalLights( uint16 maxLights ) { mNumLightsLimit = maxLights; }
     //-----------------------------------------------------------------------------------
@@ -2190,7 +2249,10 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
                 setProperty( HlmsBaseProp::macOS, 1 );
 #endif
-                setProperty( HlmsBaseProp::HighQuality, mHighQuality );
+                setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.mHash ) );
+                setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.mHash ) );
+                setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.mHash ) );
+                setProperty( HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
 
                 if( mFastShaderBuildHack )
                     setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );

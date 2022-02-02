@@ -38,7 +38,7 @@ namespace Ogre
     _OgreExport String macPluginPath();
     _OgreExport String macBundlePath();
     _OgreExport String macFrameworksPath();
-    _OgreExport String macCachePath();
+    _OgreExport String macCachePath( bool bAutoCreate = true );
     _OgreExport String macTempFileName();
     _OgreExport String macResourcesPath();
     _OgreExport String macLogPath();

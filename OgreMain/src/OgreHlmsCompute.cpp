@@ -207,7 +207,10 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
         setProperty( HlmsBaseProp::macOS, 1 );
 #endif
-        setProperty( HlmsBaseProp::HighQuality, mHighQuality );
+        setProperty( HlmsBaseProp::Full32, static_cast<int32>( HlmsBaseProp::Full32.mHash ) );
+        setProperty( HlmsBaseProp::Midf16, static_cast<int32>( HlmsBaseProp::Midf16.mHash ) );
+        setProperty( HlmsBaseProp::Relaxed, static_cast<int32>( HlmsBaseProp::Relaxed.mHash ) );
+        setProperty( HlmsBaseProp::PrecisionMode, getSupportedPrecisionModeHash() );
 
         if( mFastShaderBuildHack )
             setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );

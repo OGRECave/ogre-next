@@ -10,15 +10,15 @@ layout(std140) uniform;
 @property( !hlms_render_depth_only )
 	@property( !hlms_shadowcaster )
 		@property( !hlms_prepass )
-			layout(location = @counter(rtv_target), index = 0) out vec4 outColour;
+			layout(location = @counter(rtv_target), index = 0) out midf4 outColour;
 		@end
 		@property( hlms_gen_normals_gbuffer )
 			#define outPs_normals outNormals
-			layout(location = @counter(rtv_target)) out vec4 outNormals;
+			layout(location = @counter(rtv_target)) out midf4 outNormals;
 		@end
 		@property( hlms_prepass )
 			#define outPs_shadowRoughness outShadowRoughness
-			layout(location = @counter(rtv_target)) out vec2 outShadowRoughness;
+			layout(location = @counter(rtv_target)) out midf2 outShadowRoughness;
 		@end
 	@else
 		layout(location = @counter(rtv_target), index = 0) out float outColour;
@@ -50,7 +50,7 @@ layout(std140) uniform;
 		@end
 	@end
 	vulkan_layout( ogre_t@value(refractionMap) )	uniform texture2D	refractionMap;
-	vulkan( layout( ogre_s@value(refractionMap) )	uniform sampler		refractionMapSampler );
+	vulkan( layout( ogre_s@value(refractionMap) )	uniform sampler			refractionMapSampler );
 @end
 
 @insertpiece( DeclPlanarReflTextures )
@@ -83,7 +83,7 @@ vulkan_layout( location = 0 ) in block
 @end
 @property( irradiance_volumes )
 	vulkan_layout( ogre_t@value(irradianceVolume) )	uniform texture3D	irradianceVolume;
-	vulkan( layout( ogre_s@value(irradianceVolume) )uniform sampler		irradianceVolumeSampler );
+	vulkan( layout( ogre_s@value(irradianceVolume) )uniform sampler			irradianceVolumeSampler );
 @end
 
 @foreach( num_textures, n )

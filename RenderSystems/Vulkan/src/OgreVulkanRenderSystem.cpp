@@ -505,6 +505,14 @@ namespace Ogre
         if( mActiveDevice->hasDeviceExtension( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME ) )
             rsc->setCapability( RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER );
 
+        rsc->setCapability( RSC_SHADER_RELAXED_FLOAT );
+
+        if( mDevice->mDeviceExtraFeatures.shaderFloat16 &&
+            mDevice->mDeviceExtraFeatures.storageInputOutput16 )
+        {
+            rsc->setCapability( RSC_SHADER_FLOAT16 );
+        }
+
         if( mActiveDevice->mDeviceFeatures.depthClamp )
             rsc->setCapability( RSC_DEPTH_CLAMP );
 
@@ -796,6 +804,12 @@ namespace Ogre
             if( extensionName == VK_EXT_DEBUG_UTILS_EXTENSION_NAME )
                 reqInstanceExtensions.push_back( VK_EXT_DEBUG_UTILS_EXTENSION_NAME );
 #endif
+
+            if( extensionName == VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME )
+            {
+                reqInstanceExtensions.push_back(
+                    VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+            }
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -985,10 +999,24 @@ namespace Ogre
                         deviceExtensions.push_back( VK_KHR_MAINTENANCE2_EXTENSION_NAME );
                         bCanRestrictImageViewUsage = true;
                     }
+                    else if( extensionName == VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME )
+                    {
+                        deviceExtensions.push_back(
+                            VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
+                    }
                     else if( extensionName == VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_EXT_SHADER_SUBGROUP_VOTE_EXTENSION_NAME );
                     else if( extensionName == VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME )
                         deviceExtensions.push_back( VK_EXT_SHADER_VIEWPORT_INDEX_LAYER_EXTENSION_NAME );
+                    else if( extensionName == VK_KHR_STORAGE_BUFFER_STORAGE_CLASS_EXTENSION_NAME )
+                    {
+                        // Required by VK_KHR_16bit_storage
+                        deviceExtensions.push_back( VK_KHR_STORAGE_BUFFER_STORAGE_CLASS_EXTENSION_NAME );
+                    }
+                    else if( extensionName == VK_KHR_16BIT_STORAGE_EXTENSION_NAME )
+                        deviceExtensions.push_back( VK_KHR_16BIT_STORAGE_EXTENSION_NAME );
+                    else if( extensionName == VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME )
+                        deviceExtensions.push_back( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME );
                 }
             }
 

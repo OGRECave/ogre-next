@@ -275,6 +275,7 @@ namespace Ogre
         rsc->setCapability( RSC_DOT3 );
         rsc->setCapability( RSC_CUBEMAPPING );
         rsc->setCapability( RSC_TEXTURE_COMPRESSION );
+        rsc->setCapability( RSC_SHADER_FLOAT16 );
 #if TARGET_OS_TV
         rsc->setCapability( RSC_TEXTURE_COMPRESSION_ASTC );
 #endif

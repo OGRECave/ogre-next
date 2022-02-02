@@ -121,11 +121,11 @@
 		float4 posAndType = readOnlyFetch( f3dLightList, int(idx) );
 
 	@property( !hlms_forwardplus_fine_light_mask )
-		float3 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz;
+		midf3 lightDiffuse	= midf3_c( readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz );
 	@else
 		float4 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyzw;
 	@end
-		float3 lightSpecular= readOnlyFetch( f3dLightList, int(idx + 2u) ).xyz;
+		midf3 lightSpecular	= midf3_c( readOnlyFetch( f3dLightList, int(idx + 2u) ).xyz );
 		float4 attenuation	= readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 	@property( light_profiles_texture )
 		float4 spotDirection= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyzw;
@@ -137,19 +137,20 @@
 		if( fDistance <= attenuation.x @insertpiece( andObjLightMaskFwdPlusCmp ) )
 		{
 			lightDir *= 1.0 / fDistance;
-			float atten = 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance );
+			midf atten = midf_c( 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance ) );
 			@property( hlms_forward_fade_attenuation_range )
-				atten *= max( (attenuation.x - fDistance) * attenuation.w, 0.0f );
+				atten *= midf_c( max( (attenuation.x - fDistance) * attenuation.w, 0.0f ) );
 			@end
 
 			@property( light_profiles_texture )
-				float spotCosAngle = dot( -lightDir, spotDirection.xyz );
+				midf spotCosAngle = dot( midf3_c( -lightDir ), midf3_c( spotDirection.xyz ) );
 				atten *= getPhotometricAttenuation( spotCosAngle, spotDirection.w
 													OGRE_PHOTOMETRIC_ARG );
 			@end
 
 			//Point light
-			float3 tmpColour = BRDF( lightDir, lightDiffuse.xyz, lightSpecular, pixelData );
+			midf3 tmpColour =
+				BRDF( midf3_c( lightDir ), midf3_c( lightDiffuse.xyz ), lightSpecular, pixelData );
 			finalColour += tmpColour * atten;
 		}
 	}
@@ -168,18 +169,18 @@
 		float4 posAndType = readOnlyFetch( f3dLightList, int(idx) );
 
 	@property( !hlms_forwardplus_fine_light_mask )
-		float3 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz;
+		midf3 lightDiffuse	= midf3_c( readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz );
 	@else
 		float4 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyzw;
 	@end
-		float3 lightSpecular	= readOnlyFetch( f3dLightList, int(idx + 2u) ).xyz;
+		midf3 lightSpecular		= midf3_c( readOnlyFetch( f3dLightList, int(idx + 2u) ).xyz );
 		float4 attenuation      = readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 	@property( !light_profiles_texture )
 		float3 spotDirection	= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyz;
 	@else
 		float4 spotDirection	= readOnlyFetch( f3dLightList, int(idx + 4u) ).xyzw;
 	@end
-		float3 spotParams		= readOnlyFetch( f3dLightList, int(idx + 5u) ).xyz;
+		midf3 spotParams		= midf3_c( readOnlyFetch( f3dLightList, int(idx + 5u) ).xyz );
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
 		float fDistance	= length( lightDir );
@@ -187,9 +188,9 @@
 		if( fDistance <= attenuation.x @insertpiece( andObjLightMaskFwdPlusCmp ) )
 		{
 			lightDir *= 1.0 / fDistance;
-			float atten = 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance );
+			midf atten = midf_c( 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance ) );
 			@property( hlms_forward_fade_attenuation_range )
-				atten *= max( (attenuation.x - fDistance) * attenuation.w, 0.0f );
+				atten *= midf_c( max( (attenuation.x - fDistance) * attenuation.w, 0.0f ) );
 			@end
 
 			//spotParams.x = 1.0 / cos( InnerAngle ) - cos( OuterAngle )
@@ -197,9 +198,9 @@
 			//spotParams.z = falloff
 
 			//Spot light
-			float spotCosAngle = dot( -lightDir, spotDirection.xyz );
+			midf spotCosAngle = dot( midf3_c( -lightDir ), midf3_c( spotDirection.xyz ) );
 
-			float spotAtten = saturate( (spotCosAngle - spotParams.y) * spotParams.x );
+			midf spotAtten = saturate( (spotCosAngle - spotParams.y) * spotParams.x );
 			spotAtten = pow( spotAtten, spotParams.z );
 			atten *= spotAtten;
 
@@ -210,7 +211,8 @@
 
 			if( spotCosAngle >= spotParams.y )
 			{
-				float3 tmpColour = BRDF( lightDir, lightDiffuse.xyz, lightSpecular, pixelData );
+				midf3 tmpColour =
+					BRDF( midf3_c( lightDir ), midf3_c( lightDiffuse.xyz ), lightSpecular, pixelData );
 				finalColour += tmpColour * atten;
 			}
 		}
@@ -230,7 +232,7 @@
 		//Get the light
 		float4 posAndType = readOnlyFetch( f3dLightList, int(idx) );
 
-		float3 lightDiffuse	= readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz;
+		midf3 lightDiffuse	= midf3_c( readOnlyFetch( f3dLightList, int(idx + 1u) ).xyz );
 		float4 attenuation	= readOnlyFetch( f3dLightList, int(idx + 3u) ).xyzw;
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
@@ -239,35 +241,35 @@
 		if( fDistance <= attenuation.x )
 		{
 			//lightDir *= 1.0 / fDistance;
-			float atten = 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance );
+			midf atten = midf_c( 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance ) );
 			@property( hlms_forward_fade_attenuation_range )
-				atten *= max( (attenuation.x - fDistance) * attenuation.w, 0.0f );
+				atten *= midf_c( max( (attenuation.x - fDistance) * attenuation.w, 0.0f ) );
 			@end
 
 			//float3 lightDir2	= posAndType.xyz - inPs.pos;
 			//lightDir2 *= 1.0 / max( 1, fDistance );
 			//lightDir2 *= 1.0 / fDistance;
 
-			finalColour += BRDF_IR( lightDir, lightDiffuse, pixelData ) * atten;
+			finalColour += BRDF_IR( midf3_c( lightDir ), lightDiffuse, pixelData ) * atten;
 		}
 	}
 @end
 
 	@property( hlms_forwardplus_debug )
 		@property( hlms_forwardplus == forward3d )
-			float occupancy = (totalNumLightsInGrid / passBuf.f3dGridHWW[0].w);
+			midf occupancy = midf_c(totalNumLightsInGrid / passBuf.f3dGridHWW[0].w);
 		@else
-			float occupancy = (totalNumLightsInGrid / float( @value( fwd_clustered_lights_per_cell ) ));
+			midf occupancy = midf_c(totalNumLightsInGrid / float( @value( fwd_clustered_lights_per_cell ) ));
 		@end
-		float3 occupCol = float3( 0.0, 0.0, 0.0 );
-		if( occupancy < 1.0 / 3.0 )
+		midf3 occupCol = midf3_c( 0.0, 0.0, 0.0 );
+		if( occupancy < _h( 1.0 / 3.0 ) )
 			occupCol.z = occupancy;
-		else if( occupancy < 2.0 / 3.0 )
+		else if( occupancy < _h( 2.0 / 3.0 ) )
 			occupCol.y = occupancy;
 		else
 			occupCol.x = occupancy;
 
-		finalColour.xyz = lerp( finalColour.xyz, occupCol.xyz, 0.55f ) * 2;
+		finalColour.xyz = lerp( finalColour.xyz, occupCol.xyz, _h( 0.55f ) ) * _h( 2 );
 	@end
 @end
 @end

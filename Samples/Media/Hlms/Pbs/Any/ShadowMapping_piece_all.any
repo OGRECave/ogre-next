@@ -5,7 +5,7 @@
 	@piece( DeclNormalOffsetBiasFunc )
 		@foreach( 2, m )
 			// Perform normal offset bias. See https://github.com/OGRECave/ogre-next/issues/100
-			INLINE float3 getNormalOffsetBias( float3 worldNormal, float3 viewSpaceNormal,
+			INLINE float3 getNormalOffsetBias( midf3 worldNormal, midf3 viewSpaceNormal,
 											   float3 lightDir, float shadowMapTexSize,
 											   float depthRange, float normalOffsetBias
 			@property( @m == 0 )
@@ -14,13 +14,13 @@
 											   , float2 minUV, float2 maxUV )
 			@end
 			{
-				float tmpNdotL = saturate( dot( lightDir.xyz, viewSpaceNormal.xyz ) );
+				float tmpNdotL = saturate( dot( lightDir.xyz, float3( viewSpaceNormal.xyz ) ) );
 
 				@property( @m == 1 )
 					shadowMapTexSize /= maxUV.x - minUV.x;
 				@end
 
-				return ( ( 1.0f - tmpNdotL ) * normalOffsetBias * worldNormal.xyz * shadowMapTexSize );
+				return ( ( 1.0f - tmpNdotL ) * normalOffsetBias * float3( worldNormal.xyz ) * shadowMapTexSize );
 			}
 		@end
 	@end

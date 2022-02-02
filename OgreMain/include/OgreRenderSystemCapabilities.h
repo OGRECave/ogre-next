@@ -232,6 +232,32 @@ namespace Ogre
         RSC_TEXTURE_COMPRESSION_ASTC = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 11),
         RSC_STORE_AND_MULTISAMPLE_RESOLVE = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 12),
         RSC_DEPTH_CLAMP = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 13),
+        /// Shaders supports mediump (aka relaxed precision) and is not masked
+        /// out due to known bugs
+        ///
+        /// OpenGL: Disabled, even if supported
+        ///
+        /// D3D11: Masked out due to fxc bugs.
+        /// See https://shader-playground.timjones.io/3110a80dff6acfbdd8384a64f2fa495d
+        /// and  https://gist.github.com/darksylinc/655495dae603c4e544dd475ae3537621
+        ///
+        /// Vulkan: Supported. May be masked out if driver is buggy
+        ///
+        /// Metal: Unsupported. Use RSC_SHADER_FLOAT16 instead
+        RSC_SHADER_RELAXED_FLOAT = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 14),
+        /// Shaders support float16_t / half datatype as:
+        ///
+        ///		- Math (i.e. a + b)
+        ///		- In/Out blocks (i.e. to pass data between shader stages)
+        ///
+        /// OpenGL: Disabled, even if supported
+        ///
+        /// D3D11: Unsupported (needs SM 6.2 / DXC / DX12)
+        ///
+        /// Vulkan: Supported. Depends on HW GPU support.
+        ///
+        /// Metal: Always supported.
+        RSC_SHADER_FLOAT16 = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 15),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

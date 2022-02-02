@@ -7,7 +7,7 @@
 			uniform sampler2DArray ltcMatrix;
 		@end
         @property( syntax == glslvk )
-            layout( ogre_t@value(ltcMatrix) ) uniform texture2DArray ltcMatrix;
+			layout( ogre_t@value(ltcMatrix) ) uniform texture2DArray ltcMatrix;
             layout( ogre_s@value(ltcMatrix) ) uniform sampler ltcSampler;
         @end
 		@property( syntax == hlsl )
@@ -15,14 +15,14 @@
 			SamplerState ltcSampler				: register(s@value(ltcMatrix));
 		@end
 		@property( syntax == metal )
-			, texture2d_array<float> ltcMatrix	[[texture(@value(ltcMatrix))]]
+			, texture2d_array<midf> ltcMatrix	[[texture(@value(ltcMatrix))]]
 			, sampler ltcSampler				[[sampler(@value(ltcMatrix))]]
 		@end
 	@end
 @end
 
 @property( envmap_scale )
-	@piece( ApplyEnvMapScale )* passBuf.ambientUpperHemi.w@end
+	@piece( ApplyEnvMapScale )* midf_c( passBuf.ambientUpperHemi.w )@end
 @end
 
 @property( use_envprobe_map )

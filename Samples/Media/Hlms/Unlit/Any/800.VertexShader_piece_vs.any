@@ -80,11 +80,11 @@
 
 	@property( !hlms_shadowcaster || alpha_test )
 		@property( hlms_colour )
-			outVs.colour = inVs_colour;
+			outVs.colour = midf4_c( inVs_colour );
 			@property( diffuse )
 				@insertpiece( LoadMaterial )
 				@insertpiece( custom_vs_posMaterialLoad )
-				outVs.colour *= material.diffuse;
+				outVs.colour *= midf4_c( material.diffuse );
 			@end
 		@end
 

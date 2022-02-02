@@ -103,12 +103,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsPbsDatablock::TransparencyModes HlmsJsonPbs::parseTransparencyMode( const char *value )
     {
-        if( !strcmp( value, "None" ) )
-            return HlmsPbsDatablock::None;
-        if( !strcmp( value, "Transparent" ) )
-            return HlmsPbsDatablock::Transparent;
-        if( !strcmp( value, "Fade" ) )
-            return HlmsPbsDatablock::Fade;
+        for( size_t i = 0; i < sizeof( c_transparencyModes ) / sizeof( c_transparencyModes[0] ); ++i )
+        {
+            if( !strcmp( value, c_transparencyModes[i] ) )
+                return static_cast<HlmsPbsDatablock::TransparencyModes>( i );
+        }
 
         return HlmsPbsDatablock::None;
     }

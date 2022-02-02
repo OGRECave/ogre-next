@@ -1369,6 +1369,11 @@ static SpvReflectResult ParseDecorations(SpvReflectPrvParser* p_parser)
     CHECKED_READU32(p_parser, p_node->word_offset + 1, target_id);
     SpvReflectPrvNode* p_target_node = FindNode(p_parser, target_id);
     if (IsNull(p_target_node)) {
+      if (p_node->op == (uint32_t)SpvOpDecorate && decoration == SpvDecorationRelaxedPrecision) {
+        // Many OPs can be decorated that we don't care about. Ignore those
+        // See https://github.com/KhronosGroup/SPIRV-Reflect/issues/134
+        continue;
+      }
       return SPV_REFLECT_RESULT_ERROR_SPIRV_INVALID_ID_REFERENCE;
     }
     // Get decorations

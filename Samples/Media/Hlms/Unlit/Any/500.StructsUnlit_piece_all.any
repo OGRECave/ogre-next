@@ -99,7 +99,7 @@
 			@end
 		@end
 		@property( hlms_colour )
-			INTERPOLANT( float4 colour, @counter(texcoord) );
+			INTERPOLANT( midf4 colour, @counter(texcoord) );
 		@end
 		@foreach( out_uv_half_count, n )
 			INTERPOLANT( float@value( out_uv_half_count@n ) uv@n, @counter(texcoord) );@end

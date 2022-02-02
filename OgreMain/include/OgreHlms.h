@@ -85,6 +85,32 @@ namespace Ogre
     public:
         friend class HlmsDiskCache;
 
+        enum PrecisionMode
+        {
+            /// midf datatype maps to float (i.e. 32-bit)
+            /// This setting is always supported
+            PrecisionFull32,
+
+            /// midf datatype maps to float16_t (i.e. forced 16-bit)
+            ///
+            /// It forces the driver to produce 16-bit code, even if unoptimal
+            /// Great for testing quality downgrades caused by 16-bit support
+            ///
+            /// - This depends on RSC_SHADER_FLOAT16.
+            /// - If unsupported, we fallback to PrecisionRelaxed (RSC_SHADER_RELAXED_FLOAT)
+            /// - If unsupported, we then fallback to PrecisionFull32
+            PrecisionMidf16,
+
+            /// midf datatype maps to mediump float / min16float
+            ///
+            /// The driver is allowed to work in either 16-bit or 32-bit code
+            ///
+            /// - This depends on RSC_SHADER_RELAXED_FLOAT.
+            /// - If unsupported, we fallback to PrecisionMidf16 (RSC_SHADER_FLOAT16)
+            /// - If unsupported, we then fallback to PrecisionFull32
+            PrecisionRelaxed
+        };
+
         enum LightGatheringMode
         {
             LightGatherForward,
@@ -238,7 +264,7 @@ namespace Ogre
         String        mOutputPath;
         bool          mDebugOutput;
         bool          mDebugOutputProperties;
-        bool          mHighQuality;
+        uint8         mPrecisionMode;  /// See PrecisionMode
         bool          mFastShaderBuildHack;
 
         /// The default datablock occupies the name IdString(); which is not the same as IdString("")
@@ -461,6 +487,10 @@ namespace Ogre
         /// make the changes effective.
         void applyTextureRegisters( const HlmsCache *psoEntry );
 
+        /// Returns the hash of the property Full32/Half16/Relaxed.
+        /// See Hlms::getSupportedPrecisionMode
+        int32 getSupportedPrecisionModeHash() const;
+
     public:
         /**
         @param libraryFolders
@@ -481,22 +511,22 @@ namespace Ogre
 
         void getTemplateChecksum( uint64 outHash[2] ) const;
 
-        /** Sets the quality of the Hlms. This function is most relevant for mobile and
-            almost or completely ignored by Desktop.
-            The default value is false.
-        @par
-            On mobile, high quality will use "highp" quality precision qualifier for
-            all its variables and functions.
-            When not in HQ, mobile users may see aliasing artifacts, gradients; but
-            the performance impact can be quite high. Some GPU drivers might even
-            refuse to execute the shader as they cannot handle it.
-        @par
-            Unless you absolutely require high quality rendering on Mobile devices
-            and/or to get it to look as closely as possible as it looks in a Desktop
-            device, the recommended option is to have this off.
-        */
-        void setHighQuality( bool highQuality );
-        bool getHighQuality() const { return mHighQuality; }
+        /// Sets the precision mode of Hlms. See PrecisionMode
+        /// Note: This call may invalidate the shader cache!
+        /// Call as early as possible.
+        void setPrecisionMode( PrecisionMode precisionMode );
+
+        /// Returns requested precision mode (i.e. value passed to setPrecisionMode)
+        /// See getSupportedPrecisionMode
+        PrecisionMode getPrecisionMode() const;
+
+        /// Some GPUs don't support all precision modes. Therefore this
+        /// will returns the actually used precision mode after checking
+        /// HW support
+        PrecisionMode getSupportedPrecisionMode() const;
+
+        /// Returns true if shaders are being compiled with Fast Shader Build Hack (D3D11 only)
+        bool getFastShaderBuildHack() const;
 
         /** Non-caster directional lights are hardcoded into shaders. This means that if you
             have 6 directional lights and then you add a 7th one, a whole new set of shaders
@@ -992,7 +1022,10 @@ namespace Ogre
         static const IdString iOS;
         static const IdString macOS;
         static const IdString GLVersion;
-        static const IdString HighQuality;
+        static const IdString PrecisionMode;
+        static const IdString Full32;
+        static const IdString Midf16;
+        static const IdString Relaxed;
         static const IdString FastShaderBuildHack;
         static const IdString TexGather;
         static const IdString DisableStage;

@@ -44,6 +44,7 @@ namespace Ogre
         bool mHidden;
         bool mIsExternal;
         bool mHwGamma;
+        bool mManualRelease;
 
         CAMetalLayer       *mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
@@ -59,30 +60,36 @@ namespace Ogre
     public:
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                      const NameValuePairList *miscParams, MetalDevice *ownerDevice );
-        virtual ~MetalWindow();
+        ~MetalWindow() override;
 
-        virtual float getViewPointToPixelScale() const;
+        float getViewPointToPixelScale() const override;
 
-        virtual void swapBuffers();
-        virtual void windowMovedOrResized();
+        void swapBuffers() override;
+        void windowMovedOrResized() override;
 
-        virtual bool nextDrawable();
+        void setManualSwapRelease( bool bManualRelease ) override;
+        bool isManualSwapRelease() const override;
+        void performManualRelease() override;
+        void setWantsToDownload( bool bWantsToDownload ) override;
+        bool canDownloadData() const override;
+
+        bool nextDrawable();
 
         virtual void create( bool fullScreen, const NameValuePairList *miscParams );
-        virtual void destroy();
+        void         destroy() override;
 
-        void _initialize( TextureGpuManager *textureGpuManager );
+        void _initialize( TextureGpuManager *textureGpuManager ) override;
 
-        virtual void reposition( int32 left, int32 top );
-        virtual void requestResolution( uint32 width, uint32 height );
+        void reposition( int32 left, int32 top ) override;
+        void requestResolution( uint32 width, uint32 height ) override;
 
-        virtual bool isClosed() const;
-        virtual void _setVisible( bool visible );
-        virtual bool isVisible() const;
-        virtual void setHidden( bool hidden );
-        virtual bool isHidden() const;
+        bool isClosed() const override;
+        void _setVisible( bool visible ) override;
+        bool isVisible() const override;
+        void setHidden( bool hidden ) override;
+        bool isHidden() const override;
 
-        virtual void getCustomAttribute( IdString name, void *pData );
+        void getCustomAttribute( IdString name, void *pData ) override;
     };
 }  // namespace Ogre
 

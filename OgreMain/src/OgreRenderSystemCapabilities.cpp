@@ -321,6 +321,9 @@ namespace Ogre {
             " * Hardware Atomic Counters: "
             + StringConverter::toString(hasCapability(RSC_ATOMIC_COUNTERS), true));
 
+        pLog->logMessage( " * Shader 16-bit floating point (half): " +
+                          StringConverter::toString( hasCapability( RSC_SHADER_FLOAT16 ), true ) );
+
         if( hasCapability( RSC_COMPUTE_PROGRAM ) )
         {
             pLog->logMessage(

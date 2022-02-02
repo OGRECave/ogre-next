@@ -1,5 +1,5 @@
-@piece( envSpecularRoughness ) pixelData.perceptualRoughness * passBuf.envMapNumMipmaps @end
-@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * passBuf.envMapNumMipmaps @end
+@piece( envSpecularRoughness ) pixelData.perceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) @end
+@piece( envSpecularRoughnessClearCoat ) pixelData.clearCoatPerceptualRoughness * midf_c( passBuf.envMapNumMipmaps ) @end
 
 @piece( DefaultHeaderPS )
 	// START UNIFORM DECLARATION
@@ -14,11 +14,11 @@
 	// END UNIFORM DECLARATION
 
 	@property( !fresnel_scalar )
-		#define float_fresnel float
-		#define make_float_fresnel( x ) x
+		#define float_fresnel midf
+		#define make_float_fresnel( x ) midf_c( x )
 	@else
-		#define float_fresnel float3
-		#define make_float_fresnel( x ) float3( x, x, x )
+		#define float_fresnel midf3
+		#define make_float_fresnel( x ) midf3_c( x, x, x )
 	@end
 
 	@insertpiece( DeclReverseDepthMacros )
@@ -38,66 +38,70 @@
 	struct PixelData
 	{
 		@property( !hlms_shadowcaster )
-			float3 normal;
+			midf3 normal;
 			@property( normal_map )
-				float3 geomNormal;
+				midf3 geomNormal;
 			@else
 				#define geomNormal normal
 			@end
-			float4	diffuse;
-			float3	specular;
+			midf4	diffuse;
+			midf3	specular;
 
 			@property( clear_coat )
-				float clearCoat;
-				float clearCoatPerceptualRoughness;
-				float clearCoatRoughness;
+				midf clearCoat;
+				midf clearCoatPerceptualRoughness;
+				midf clearCoatRoughness;
 			@end
 
-			float	perceptualRoughness;
-			float	roughness;
+			midf	perceptualRoughness;
+			midf	roughness;
 			float_fresnel	F0;
 
 			@property( needs_view_dir )
-				float3	viewDir;
-				float	NdotV;
+				midf3	viewDir;
+				midf	NdotV;
 			@end
 
 			@property( needs_refl_dir )
-				float3 reflDir;
+				midf3 reflDir;
 				@property( needs_env_brdf )
-					float3 envColourS;
-					float3 envColourD;
+					midf3 envColourS;
+					midf3 envColourD;
 
 					@property( clear_coat )
-						float3 clearCoatEnvColourS;
+						midf3 clearCoatEnvColourS;
 					@end
 				@end
 			@end
 		@else
-			float4 diffuse; //We only use the .w component, Alpha
+			midf4 diffuse; //We only use the .w component, Alpha
 		@end
 
 		@insertpiece( custom_ps_pixelData )
 	};
 
-	#define SampleDetailWeightMap( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleDetailWeightMap( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )
 	@foreach( detail_maps_diffuse, n )
-		@property( detail_map@n )#define SampleDetailCol@n( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )@end
+		@property( detail_map@n )#define SampleDetailCol@n( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )@end
 	@end
 	@property( diffuse_map )
-		#define SampleDiffuse( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) @property( diffuse_map_grayscale ).rrra@end
+		#define SampleDiffuse( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) @property( diffuse_map_grayscale ).rrra@end
 	@end
 	@property( specular_map )
-		#define SampleSpecular( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+		#define SampleSpecular( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )
 	@end
 	@property( roughness_map )
-		#define SampleRoughness( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+		#define SampleRoughness( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx )
 	@end
 	@property( emissive_map )
-		#define SampleEmissive( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) @property( emissive_map_grayscale ).rrr@end
+		#define SampleEmissive( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2DF16( tex, sampler, uv, arrayIdx ) @property( emissive_map_grayscale ).rrr@end
 	@end
 	@property( use_envprobe_map )
-        #define SampleEnvProbe( tex, sampler, uv, lod ) OGRE_SampleLevel( tex, sampler, uv, lod )
+		@property( syntax == metal )
+			#define SampleEnvProbe( tex, sampler, uv, lod ) OGRE_SampleLevelF16( tex, sampler, float3( uv ), lod )
+		@else
+			#define SampleEnvProbe( tex, sampler, uv, lod ) OGRE_SampleLevelF16( tex, sampler, uv, lod )
+		@end
 	@end
 
 	@property( hlms_lights_spot_textured )
@@ -109,37 +113,37 @@
 	@end
 
 	@property( normal_map_tex || detail_maps_normal )
-		INLINE float3 reconstructZfromTSNormal( float2 tsNormal2 )
+		INLINE midf3 reconstructZfromTSNormal( midf2 tsNormal2 )
 		{
-			float3 tsNormal;
+			midf3 tsNormal;
 			tsNormal.xy = tsNormal2.xy;
-			tsNormal.z	= sqrt( max( 0.0f, 1.0f - tsNormal.x * tsNormal.x - tsNormal.y * tsNormal.y ) );
+			tsNormal.z	= sqrt( max( _h(0.0f), _h(1.0f) - tsNormal.x * tsNormal.x - tsNormal.y * tsNormal.y ) );
 			return tsNormal.xyz;
 		}
 
 		@property( normal_sampling_format == normal_rg_snorm )
 			//Normal texture must be in UV8/RG8_SNORM or BC5S format!
-			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy )
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2DF16( normalMap, samplerState, uv, normalIdx ).xy )
 		@end
 		@property( normal_sampling_format == normal_rg_unorm )
 			//Normal texture must be in RG8_UNORM or similar format!
-			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy * 2.0 - 1.0 )
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2DF16( normalMap, samplerState, uv, normalIdx ).xy * 2.0 - 1.0 )
 		@end
 		@property( normal_sampling_format == normal_bc3_unorm )
 			//Normal texture must be in BC3 or similar format!
-			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).yw * 2.0 - 1.0 )
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2DF16( normalMap, samplerState, uv, normalIdx ).yw * 2.0 - 1.0 )
 		@end
 		@property( normal_sampling_format == normal_la )
 			//Normal texture must be in LA format!
-			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xw * 2.0 - 1.0 )
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2DF16( normalMap, samplerState, uv, normalIdx ).xw * 2.0 - 1.0 )
 		@end
 	@end
 
 	@property( obb_restraint_approx || obb_restraint_ltc )
 		/// Returns value in range [-inf; 1]
 		/// Values <= 0 means 'pos' is outside the obb
-		float getObbRestraintFade( @property( syntax == metal )constant@end  float4 obbRestraint[3],
-								   float3 pos, float3 obbFadeFactors )
+		midf getObbRestraintFade( @property( syntax == metal )constant@end  float4 obbRestraint[3],
+								  float3 pos, float3 obbFadeFactors )
 		{
 			float3 obbDistToBounds;
 			obbDistToBounds.x = dot( obbRestraint[0].xyzw, float4( pos.xyz, 1.0 ) );
@@ -149,7 +153,7 @@
 			obbDistToBounds = abs( obbDistToBounds );
 
 			float3 obbFade = (1.0 - obbDistToBounds) * obbFadeFactors;
-			return min( min3( obbFade.x, obbFade.y, obbFade.z ), 1.0 );
+			return min( midf_c( min3( obbFade.x, obbFade.y, obbFade.z ) ), _h( 1.0 ) );
 		}
 	@end
 
@@ -231,16 +235,16 @@
 	@property( detail_maps_diffuse || detail_maps_normal )
 		//Prepare weight map for the detail maps.
 		@property( detail_weight_map )
-			float4 detailWeights = SampleDetailWeightMap( textureMaps@value(detail_weight_map_idx),
+			midf4 detailWeights = SampleDetailWeightMap( textureMaps@value(detail_weight_map_idx),
 														  samplerState@value(detail_weight_map_sampler),
 														  UV_DETAIL_WEIGHT( inPs.uv@value(uv_detail_weight).xy ),
 														  texIndex_weightMapIdx );
-			@property( detail_weights )detailWeights *= material.cDetailWeights;@end
+			@property( detail_weights )detailWeights *= midf4_c( material.cDetailWeights );@end
 		@else
 			@property( detail_weights )
-				float4 detailWeights = material.cDetailWeights;
+				midf4 detailWeights = midf4_c( material.cDetailWeights );
 			@else
-				float4 detailWeights = float4( 1.0, 1.0, 1.0, 1.0 );
+				midf4 detailWeights = midf4_c( 1.0, 1.0, 1.0, 1.0 );
 			@end
 		@end
 	@end
@@ -250,7 +254,7 @@
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 	@foreach( detail_maps_diffuse, n )
 		@property( detail_map@n )
-			float4 detailCol@n = SampleDetailCol@n( textureMaps@value(detail_map@n_idx),
+			midf4 detailCol@n = SampleDetailCol@n( textureMaps@value(detail_map@n_idx),
 													samplerState@value(detail_map@n_sampler),
                                                     UV_DETAIL@n( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n ) ),
                                                     texIndex_detailMapIdx@n );
@@ -269,7 +273,7 @@
 										   texIndex_diffuseIdx );
 	@else
 		/// If there are no diffuse maps, we must initialize it to some value.
-		pixelData.diffuse.xyzw = material.bgDiffuse.xyzw;
+		pixelData.diffuse.xyzw = midf4_c( material.bgDiffuse.xyzw );
 	@end
 
 	/// Blend the detail diffuse maps with the main diffuse.
@@ -277,7 +281,7 @@
 		@insertpiece( blend_mode_idx@n ) @add( t, 1 ) @end
 
 	/// Apply the material's diffuse over the textures
-	pixelData.diffuse.xyz *= material.kD.xyz;
+	pixelData.diffuse.xyz *= midf3_c( material.kD.xyz );
 	@property( transparent_mode || hlms_screen_space_refractions )
 		pixelData.diffuse.xyz *= (pixelData.diffuse.w * pixelData.diffuse.w);
 	@end
@@ -290,9 +294,9 @@
 
 @piece( SampleSpecularMap )
 	/// SPECUlAR MAP
-	pixelData.specular.xyz = material.kS.xyz;
+	pixelData.specular.xyz = midf3_c( material.kS.xyz );
 	@property( !metallic_workflow )
-		pixelData.F0 = material.F0.@insertpiece( FresnelSwizzle );
+		pixelData.F0 = make_float_fresnel( material.F0.@insertpiece( FresnelSwizzle ) );
 		@property( specular_map && !fresnel_workflow )
 			pixelData.specular.xyz *= SampleSpecular( textureMaps@value( specular_map_idx ),
 													  samplerState@value(specular_map_sampler),
@@ -306,17 +310,17 @@
 											texIndex_specularIdx ).@insertpiece( FresnelSwizzle );
 		@end
 	@else
-		float metalness = material.F0.x;
+		midf metalness = midf_c( material.F0.x );
 		@property( specular_map )
 			metalness *= SampleSpecular( textureMaps@value( specular_map_idx ),
 										 samplerState@value(specular_map_sampler),
 										 UV_SPECULAR( inPs.uv@value(uv_specular).xy ),
 										 texIndex_specularIdx ).x;
 		@end
-		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * 3.14159f, metalness );
+		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * _h( 3.14159f ), metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
 		@property( hlms_alphablend || hlms_screen_space_refractions )
-			pixelData.F0 *= material.F0.w; ///Should this be done for non-metallic as well???
+			pixelData.F0 *= midf_c( material.F0.w ); ///Should this be done for non-metallic as well???
 		@end
 	@end
 	@property( transparent_mode || hlms_screen_space_refractions )
@@ -326,7 +330,7 @@
 
 @piece( SampleRoughnessMap )
 	/// ROUGHNESS MAP
-	pixelData.perceptualRoughness = material.kS.w;
+	pixelData.perceptualRoughness = midf_c( material.kS.w );
 	@property( roughness_map )
 		pixelData.perceptualRoughness *=
 			SampleRoughness( textureMaps@value( roughness_map_idx ),
@@ -345,9 +349,9 @@
 @end
 
 	@property( perceptual_roughness )
-		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, 0.001f );
+		pixelData.roughness = max( pixelData.perceptualRoughness * pixelData.perceptualRoughness, _h( 0.001f ) );
 	@else
-		pixelData.roughness = max( pixelData.perceptualRoughness, 0.001f );
+		pixelData.roughness = max( pixelData.perceptualRoughness, _h( 0.001f ) );
 	@end
 @end
 
@@ -365,15 +369,15 @@
 	@else
 		//Normal mapping.
 		pixelData.geomNormal = normalize( inPs.normal ) @insertpiece( two_sided_flip_normal );
-		float3 vTangent		= normalize( inPs.tangent );
+		midf3 vTangent		= normalize( inPs.tangent );
 
 		@property( hlms_qtangent || hlms_tangent4 )
 			@piece( tbnApplyReflection ) * inPs.biNormalReflection@end
 		@end
 
 		//Get the TBN matrix
-		float3 vBinormal	= normalize( cross( pixelData.geomNormal, vTangent )@insertpiece( tbnApplyReflection ) );
-		float3x3 TBN		= buildFloat3x3( vTangent, vBinormal, pixelData.geomNormal );
+		midf3 vBinormal	= normalize( cross( pixelData.geomNormal, vTangent )@insertpiece( tbnApplyReflection ) );
+		midf3x3 TBN		= buildMidf3x3( vTangent, vBinormal, pixelData.geomNormal );
 
 		@property( normal_map_tex )
 			pixelData.normal = getTSNormal( textureMaps@value( normal_map_tex_idx ),
@@ -381,11 +385,11 @@
 											UV_NORMAL( inPs.uv@value(uv_normal).xy ),
 											texIndex_normalIdx );
 		@else
-			pixelData.normal = float3( 0.0, 0.0, 1.0 );
+			pixelData.normal = midf3_c( 0.0, 0.0, 1.0 );
 		@end
 		@property( normal_weight_tex )
 			// Apply the weight to the main normal map
-			pixelData.normal = lerp( float3( 0.0, 0.0, 1.0 ), pixelData.normal, normalMapWeight );
+			pixelData.normal = lerp( midf3_c( 0.0, 0.0, 1.0 ), pixelData.normal, normalMapWeight );
 		@end
 	@end
 @end
@@ -404,7 +408,7 @@
 	@property( detail_maps_normal )
 	   @foreach( 4, n )
 		   @property( normal_weight_detail@n )
-			   @piece( detail@n_nm_weight_mul ) * material.normalWeights.@insertpiece( detail_swizzle@n )@end
+			   @piece( detail@n_nm_weight_mul ) * midf_c( material.normalWeights.@insertpiece( detail_swizzle@n ) )@end
 		   @end
 	   @end
 	@end
@@ -435,27 +439,27 @@
 	//Everything's in Camera space
 	@property( needs_view_dir )
 		@property( !hlms_instanced_stereo )
-			pixelData.viewDir	= normalize( -inPs.pos );
+			pixelData.viewDir	= midf3_c( normalize( -inPs.pos ) );
 		@else
-			pixelData.viewDir = -inPs.pos;
 			if( gl_FragCoord.x > passBuf.rightEyePixelStartX )
-				pixelData.viewDir += passBuf.leftToRightView.xyz;
-			pixelData.viewDir = normalize( pixelData.viewDir );
+				pixelData.viewDir = midf3_c( normalize( -inPs.pos + passBuf.leftToRightView.xyz ) );
+			else
+				pixelData.viewDir = midf3_c( normalize( -inPs.pos ) );
 		@end
 		pixelData.NdotV		= saturate( dot( pixelData.normal, pixelData.viewDir ) );
 	@end
 
 	@property( !ambient_fixed || vct_num_probes )
-		float3 finalColour = float3(0, 0, 0);
+		midf3 finalColour = midf3_c(0, 0, 0);
 	@else
-		float3 finalColour = passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz;
+		midf3 finalColour = midf3_c( passBuf.ambientUpperHemi.xyz ) * pixelData.diffuse.xyz;
 	@end
 
 	@property( hlms_static_branch_shadow_map_lights || hlms_lights_point || hlms_lights_spot || hlms_lights_area_approx || hlms_lights_area_ltc )
 		float3 lightDir;
 		float fDistance;
-		float3 tmpColour;
-		float spotCosAngle;
+		midf3 tmpColour;
+		midf spotCosAngle;
 	@end
 
 	@property( hlms_static_branch_shadow_map_lights )
@@ -480,7 +484,8 @@
 	@end
 
 	@property( needs_refl_dir )
-		pixelData.reflDir = 2.0 * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal - pixelData.viewDir;
+		pixelData.reflDir = _h( 2.0 ) * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal -
+							pixelData.viewDir;
 	@end
 
 	@insertpiece( DoAmbientHeader )
@@ -489,22 +494,30 @@
 @piece( DoDirectionalLights )
 	@property( hlms_lights_directional )
 		@insertpiece( ObjLightMaskCmp )
-			finalColour += BRDF( light0Buf.lights[0].position.xyz, light0Buf.lights[0].diffuse.xyz, light0Buf.lights[0].specular, pixelData ) @insertpiece( DarkenWithShadowFirstLight );
+			finalColour += BRDF( midf3_c( light0Buf.lights[0].position.xyz ),
+								 midf3_c( light0Buf.lights[0].diffuse.xyz ),
+								 midf3_c( light0Buf.lights[0].specular ), pixelData ) @insertpiece( DarkenWithShadowFirstLight );
 	@end
 	@foreach( hlms_lights_directional, n, 1 )
 		@insertpiece( ObjLightMaskCmp )
-			finalColour += BRDF( light0Buf.lights[@n].position.xyz, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );@end
+			finalColour += BRDF( midf3_c( light0Buf.lights[@n].position.xyz ),
+								 midf3_c( light0Buf.lights[@n].diffuse.xyz ),
+								 midf3_c( light0Buf.lights[@n].specular ), pixelData )@insertpiece( DarkenWithShadow );@end
 
 	@property( !hlms_static_branch_lights )
 		@foreach( hlms_lights_directional_non_caster, n, hlms_lights_directional )
 			@insertpiece( ObjLightMaskCmp )
-				finalColour += BRDF( light0Buf.lights[@n].position.xyz, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData );@end
+				finalColour += BRDF( midf3_c( light0Buf.lights[@n].position.xyz ),
+									 midf3_c( light0Buf.lights[@n].diffuse.xyz ),
+									 midf3_c( light0Buf.lights[@n].specular ), pixelData );@end
 	@else
 		for( int n=0; n<floatBitsToInt( light0Buf.numNonCasterDirectionalLights ); ++n )
 		{
 			int i = @value( hlms_lights_directional ) + n;
 			@insertpiece( ObjLightMaskCmpNonCasterLoop )
-				finalColour += BRDF( light0Buf.lights[i].position.xyz, light0Buf.lights[i].diffuse.xyz, light0Buf.lights[i].specular, pixelData );
+				finalColour += BRDF( midf3_c( light0Buf.lights[i].position.xyz ),
+									 midf3_c( light0Buf.lights[i].diffuse.xyz ),
+									 midf3_c( light0Buf.lights[i].specular ), pixelData );
 		}
 		/// Increase fineMaskLightIdx to keep it working with spot/point lights
 		@insertpiece( ObjLightMaskCmpNonCasterLoopEnd )
@@ -525,8 +538,10 @@
 		if( fDistance <= light0Buf.lights[light_idx].attenuation.x @insertpiece( andObjLightMaskCmp_light_idx ) )
 		{
 			lightDir *= 1.0 / fDistance;
-			tmpColour = BRDF( lightDir, light0Buf.lights[light_idx].diffuse.xyz, light0Buf.lights[light_idx].specular, pixelData )@insertpiece( DarkenWithShadowPoint_cur_shadow_map );
-			float atten = 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[light_idx].diffuse.xyz ),
+							  midf3_c( light0Buf.lights[light_idx].specular ),
+							  pixelData )@insertpiece( DarkenWithShadowPoint_cur_shadow_map );
+			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * atten;
 		}
 		cur_shadow_map++;
@@ -538,8 +553,10 @@
 		if( fDistance <= light0Buf.lights[@n].attenuation.x @insertpiece( andObjLightMaskCmp ) )
 		{
 			lightDir *= 1.0 / fDistance;
-			tmpColour = BRDF( lightDir, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadowPoint );
-			float atten = 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[@n].diffuse.xyz ),
+							  midf3_c( light0Buf.lights[@n].specular ),
+							  pixelData )@insertpiece( DarkenWithShadowPoint );
+			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * atten;
 		}
 	@end
@@ -559,11 +576,11 @@
 		lightDir = light0Buf.lights[light_idx].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
 		lightDir *= 1.0 / fDistance;
-		spotCosAngle = dot( -lightDir, light0Buf.lights[light_idx].spotDirection.xyz );
+		spotCosAngle = dot( midf3_c( -lightDir ), midf3_c( light0Buf.lights[light_idx].spotDirection.xyz ) );
 		if( fDistance <= light0Buf.lights[light_idx].attenuation.x && spotCosAngle >= light0Buf.lights[light_idx].spotParams.y @insertpiece( andObjLightMaskCmp_light_idx ) )
 		{
-			float spotAtten = saturate( (spotCosAngle - light0Buf.lights[light_idx].spotParams.y) * light0Buf.lights[light_idx].spotParams.x );
-			spotAtten = pow( spotAtten, light0Buf.lights[light_idx].spotParams.z );
+			midf spotAtten = saturate( (spotCosAngle - midf_c( light0Buf.lights[light_idx].spotParams.y )) * midf_c( light0Buf.lights[light_idx].spotParams.x ) );
+			spotAtten = pow( spotAtten, midf_c( light0Buf.lights[light_idx].spotParams.z ) );
 
 			@property( light_profiles_texture )
 				spotAtten *= getPhotometricAttenuation( spotCosAngle,
@@ -571,8 +588,10 @@
 														OGRE_PHOTOMETRIC_ARG );
 			@end
 
-			tmpColour = BRDF( lightDir, light0Buf.lights[light_idx].diffuse.xyz, light0Buf.lights[light_idx].specular, pixelData )@insertpiece( DarkenWithShadow_cur_shadow_map );
-			float atten = 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[light_idx].diffuse.xyz ),
+							  midf3_c( light0Buf.lights[light_idx].specular ),
+							  pixelData )@insertpiece( DarkenWithShadow_cur_shadow_map );
+			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[light_idx].attenuation.y + light0Buf.lights[light_idx].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * (atten * spotAtten);
 		}
 		cur_shadow_map++;
@@ -583,18 +602,18 @@
 		fDistance= length( lightDir );
 		lightDir *= 1.0 / fDistance;
 		@property( !hlms_lights_spot_textured )
-			spotCosAngle = dot( -lightDir, light0Buf.lights[@n].spotDirection.xyz );
+			spotCosAngle = dot( midf3_c( -lightDir ), midf3_c( light0Buf.lights[@n].spotDirection.xyz ) );
 		@else
-			spotCosAngle = dot( -lightDir, zAxis( light0Buf.lights[@n].spotQuaternion ) );
+			spotCosAngle = dot( midf3_c( -lightDir ), zAxis( midf4_c( light0Buf.lights[@n].spotQuaternion ) ) );
 		@end
 		if( fDistance <= light0Buf.lights[@n].attenuation.x && spotCosAngle >= light0Buf.lights[@n].spotParams.y @insertpiece( andObjLightMaskCmp ) )
 		{
 			@property( hlms_lights_spot_textured )
 				float3 posInLightSpace = qmul( spotQuaternion[@value(spot_params)], inPs.pos );
-				float spotAtten = texture( texSpotLight, normalize( posInLightSpace ).xy ).x; //TODO
+				midf spotAtten = texture( texSpotLight, normalize( posInLightSpace ).xy ).x; //TODO
 			@else
-				float spotAtten = saturate( (spotCosAngle - light0Buf.lights[@n].spotParams.y) * light0Buf.lights[@n].spotParams.x );
-				spotAtten = pow( spotAtten, light0Buf.lights[@n].spotParams.z );
+				midf spotAtten = saturate( (spotCosAngle - midf_c( light0Buf.lights[@n].spotParams.y )) * midf_c( light0Buf.lights[@n].spotParams.x ) );
+				spotAtten = pow( spotAtten, midf_c( light0Buf.lights[@n].spotParams.z ) );
 			@end
 
 			@property( light_profiles_texture )
@@ -603,8 +622,10 @@
 														OGRE_PHOTOMETRIC_ARG );
 			@end
 
-			tmpColour = BRDF( lightDir, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );
-			float atten = 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( midf3_c( lightDir ), midf3_c( light0Buf.lights[@n].diffuse.xyz ),
+							  midf3_c( light0Buf.lights[@n].specular ),
+							  pixelData )@insertpiece( DarkenWithShadow );
+			midf atten = midf_c( 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance ) );
 			finalColour += tmpColour * (atten * spotAtten);
 		}
 	@end
@@ -615,57 +636,57 @@
 	@property( emissive_map || emissive_constant )
 		///Emissive is not part of PixelData because emissive can just be accumulated to finalColour
 		@property( emissive_map )
-			float3 emissiveCol = SampleEmissive( textureMaps@value( emissive_map_idx ),
-												 samplerState@value(emissive_map_sampler),
-												 UV_EMISSIVE( inPs.uv@value(uv_emissive).xy ),
-												 texIndex_emissiveMapIdx ).xyz;
+			midf3 emissiveCol = SampleEmissive( textureMaps@value( emissive_map_idx ),
+												samplerState@value(emissive_map_sampler),
+												UV_EMISSIVE( inPs.uv@value(uv_emissive).xy ),
+												texIndex_emissiveMapIdx ).xyz;
 			@property( emissive_constant )
-				emissiveCol *= material.emissive.xyz;
+				emissiveCol *= midf3_c( material.emissive.xyz );
 			@end
 			@property( emissive_as_lightmap )
 				emissiveCol *= pixelData.diffuse.xyz;
 			@end
 			finalColour += emissiveCol;
 		@else
-			finalColour += material.emissive.xyz;
+			finalColour += midf3_c( material.emissive.xyz );
 		@end
 	@end
 @end
 
 @piece( CubemapManualPcc )
-	float3 posInProbSpace = toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) );
-	float probeFade = getProbeFade( posInProbSpace, @insertpiece( pccProbeSource ) );
+	midf3 posInProbSpace = midf3_c( toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) ) );
+	midf probeFade = getProbeFade( posInProbSpace, @insertpiece( pccProbeSource ) );
 @property( vct_num_probes )
-	if( probeFade > 0 && (pixelData.roughness < 1.0f || vctSpecular.w == 0) )
+	if( probeFade > _h( 0 ) && (pixelData.roughness < _h( 1.0f ) || vctSpecular.w == 0) )
 @else
-	if( probeFade > 0 )
+	if( probeFade > _h( 0 ) )
 @end
 	{
-		probeFade = saturate( probeFade * 200.0 );
+		probeFade = saturate( probeFade * _h( 200.0 ) );
 		@property( vct_num_probes )
-			float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
-			float3 reflDirLS = reflDirLS_dist.xyz;
+			midf4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
+			midf3 reflDirLS = reflDirLS_dist.xyz;
 		@else
-			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
+			midf3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
 		@end
-		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
-		float4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-									  reflDirLS, @insertpiece( envSpecularRoughness ) );
+		midf3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
+		midf4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+									 reflDirLS, @insertpiece( envSpecularRoughness ) );
 		@property( envmap_scale )
-			envS.xyz *= passBuf.ambientUpperHemi.w;
+			envS.xyz *= midf3_c( passBuf.ambientUpperHemi.w );
 		@end
 		@property( cubemaps_as_diffuse_gi )
-			float3 envD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-										  nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
+			midf3 envD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+										 nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 			envD.xyz *= probeFade;
 		@end
 
 		envS.xyz *= probeFade;
 
 		@property( clear_coat )
-			float3 clearCoatEnvS = SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-												   reflDirLS,
-												   @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
+			midf3 clearCoatEnvS = SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
+												  reflDirLS,
+												  @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 			clearCoatEnvS *= probeFade;
 		@end
 
@@ -680,7 +701,7 @@
 
 			pixelData.envColourS = lerp( envS.xyz, pixelData.envColourS, vctLerp );
 			@property( cubemaps_as_diffuse_gi )
-				pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : envD;
+				pixelData.envColourD += vctSpecular.w > 0 ? midf3_c( 0, 0, 0 ) : envD;
 			@end
 
 			@property( clear_coat )
@@ -701,17 +722,17 @@
 
 @piece( CubemapGlobal )
 	pixelData.envColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-											mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+											mul( pixelData.reflDir, midf3x3_c( passBuf.invViewMatCubemap ) ),
 											@insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@property( cubemaps_as_diffuse_gi )
 		pixelData.envColourD += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-												mul( pixelData.normal, passBuf.invViewMatCubemap ),
+												mul( pixelData.normal, midf3x3_c( passBuf.invViewMatCubemap ) ),
 												11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 
 	@property( clear_coat )
 		pixelData.clearCoatEnvColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value( envMapRegSampler ),
-														 mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+														 mul( pixelData.reflDir, midf3x3_c( passBuf.invViewMatCubemap ) ),
 														 @insertpiece( envSpecularRoughnessClearCoat ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 @end
@@ -804,17 +825,17 @@
 
 				int gBufSubsample = int( findLSB( sampleMask ) );
 
-				pixelData.normal = normalize( OGRE_Load2DMS( gBuf_normals, iFragCoord, gBufSubsample ).xyz * 2.0 - 1.0 );
-				float2 shadowRoughness = OGRE_Load2DMS( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
+				pixelData.normal = normalize( OGRE_Load2DMSF16( gBuf_normals, iFragCoord, gBufSubsample ).xyz * _h( 2.0 ) - _h( 1.0 ) );
+				midf2 shadowRoughness = OGRE_Load2DMSF16( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
 			@else
-				pixelData.normal = normalize( OGRE_Load2D( gBuf_normals, iFragCoord, 0 ).xyz * 2.0 - 1.0 );
-				float2 shadowRoughness = OGRE_Load2D( gBuf_shadowRoughness, iFragCoord, 0 ).xy;
+				pixelData.normal = normalize( OGRE_Load2DF16( gBuf_normals, iFragCoord, 0 ).xyz * _h( 2.0 ) - _h( 1.0 ) );
+				midf2 shadowRoughness = OGRE_Load2DF16( gBuf_shadowRoughness, iFragCoord, 0 ).xy;
 			@end
 
-			float fShadow = shadowRoughness.x;
+			midf fShadow = shadowRoughness.x;
 
 			@property( roughness_map )
-				pixelData.roughness = shadowRoughness.y * 0.98 + 0.02;
+				pixelData.roughness = shadowRoughness.y * _h( 0.98 ) + _h( 0.02 );
 			@end
 		@end
 
@@ -836,11 +857,11 @@
 			@insertpiece( forward3dLighting )
 
 			@property( needs_env_brdf )
-				pixelData.envColourS = float3( 0, 0, 0 );
-				pixelData.envColourD = float3( 0, 0, 0 );
+				pixelData.envColourS = midf3_c( 0, 0, 0 );
+				pixelData.envColourD = midf3_c( 0, 0, 0 );
 
 				@property( clear_coat )
-					pixelData.clearCoatEnvColourS = float3( 0, 0, 0 );
+					pixelData.clearCoatEnvColourS = midf3_c( 0, 0, 0 );
 				@end
 			@end
 
@@ -895,32 +916,32 @@
 
 				@property( hlms_alphablend || hlms_alpha_to_coverage )
 					@property( use_texture_alpha )
-						outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
+						outPs_colour0.w	= midf_c( material.F0.w ) * pixelData.diffuse.w;
 					@else
-						outPs_colour0.w	= material.F0.w;
+						outPs_colour0.w	= midf_c( material.F0.w );
 					@end
 				@else
-					outPs_colour0.w		= 1.0;
+					outPs_colour0.w		= _h( 1.0 );
 				@end
 
 				@property( debug_pssm_splits )
-					outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
+					outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, _h( 0.2f ) );
 				@end				
 				@property( hlms_gen_normals_gbuffer )
-					outPs_normals = float4( pixelData.normal * 0.5 + 0.5, 1.0 );
+					outPs_normals = midf4_c( pixelData.normal * _h( 0.5 ) + _h( 0.5 ), 1.0 );
 				@end
 			@else
-				outPs_colour0 = float4( 1.0, 1.0, 1.0, 1.0 );
+				outPs_colour0 = midf4_c( 1.0, 1.0, 1.0, 1.0 );
 				@property( hlms_gen_normals_gbuffer )
-					outPs_normals = float4( 0.5, 0.5, 1.0, 1.0 );
+					outPs_normals = midf4_c( 0.5, 0.5, 1.0, 1.0 );
 				@end
 			@end
 		@else
-			outPs_normals			= float4( pixelData.normal * 0.5 + 0.5, 1.0 );
+			outPs_normals = midf4_c( pixelData.normal * _h( 0.5 ) + _h( 0.5 ), 1.0 );
 			@property( hlms_pssm_splits )
-				outPs_shadowRoughness	= float2( fShadow, (pixelData.roughness - 0.02) * 1.02040816 );
+				outPs_shadowRoughness	= midf2_c( fShadow, (pixelData.roughness - 0.02) * 1.02040816 );
 			@end @property( !hlms_pssm_splits )
-				outPs_shadowRoughness	= float2( 1.0, (pixelData.roughness - 0.02) * 1.02040816 );
+				outPs_shadowRoughness	= midf2_c( 1.0, (pixelData.roughness - 0.02) * 1.02040816 );
 			@end
 		@end
 	@end

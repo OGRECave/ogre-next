@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>
 
+#include "OgreLogManager.h"
 #include "OgreString.h"
 #include "macUtils.h"
 
@@ -66,13 +67,35 @@ namespace Ogre
         return String( [documentsDirectory fileSystemRepresentation] );
     }
 
-    String macCachePath()
+    String macCachePath( bool bAutoCreate )
     {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains( NSCachesDirectory, NSUserDomainMask, YES );
-        NSString *cachesDirectory = [paths objectAtIndex:0];
-        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
+        NSURL *cachesURL = [NSFileManager.defaultManager URLForDirectory:NSCachesDirectory
+                                                                inDomain:NSUserDomainMask
+                                                       appropriateForURL:nil
+                                                                  create:YES
+                                                                   error:nil];
+        NSURL *myDirURL = cachesURL;
 
-        return [[cachesDirectory stringByAppendingPathComponent:bundleId] fileSystemRepresentation];
+        if( NSBundle.mainBundle.bundleIdentifier )
+        {
+            // May be nullptr if bundle is not correctly set (e.g. samples)
+            myDirURL = [cachesURL URLByAppendingPathComponent:NSBundle.mainBundle.bundleIdentifier
+                                                  isDirectory:YES];
+        }
+        else
+        {
+            LogManager::getSingleton().logMessage( "WARNING: NS Bundle Identifier not set!",
+                                                   LML_CRITICAL );
+        }
+
+        if( bAutoCreate )
+        {
+            [NSFileManager.defaultManager createDirectoryAtURL:myDirURL
+                                   withIntermediateDirectories:YES
+                                                    attributes:nil
+                                                         error:nil];
+        }
+        return myDirURL.fileSystemRepresentation;
     }
 
     String macTempFileName()

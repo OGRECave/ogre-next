@@ -584,6 +584,9 @@ namespace Demo
             inputHandler->_overrideKeyboardListener( this );
             inputHandler->_overrideMouseListener( this );
 
+            renderWindow->setWantsToDownload( true );
+            renderWindow->setManualSwapRelease( true );
+
             const size_t numFrames = mNumFrames;
             MainEntryPoints::Frametime = mFrametime;
 
@@ -669,7 +672,7 @@ namespace Demo
                     {
                         const Ogre::String frameIdxStr( Ogre::StringConverter::toString( frameIdx ) +
                                                         "_" );
-                        if( frameActivity->screenshotRenderWindow )
+                        if( frameActivity->screenshotRenderWindow && renderWindow->canDownloadData() )
                         {
                             Ogre::Image2 img;
                             Ogre::TextureGpu *texture;
@@ -709,6 +712,8 @@ namespace Demo
                     }
                     ++frameActivity;
                 }
+
+                renderWindow->performManualRelease();
             }
 
             graphicsSystem->destroyScene();
