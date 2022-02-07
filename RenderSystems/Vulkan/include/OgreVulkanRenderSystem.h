@@ -302,6 +302,8 @@ namespace Ogre
         virtual void beginGPUSampleProfile( const String &name, uint32 *hashCache );
         virtual void endGPUSampleProfile( const String &name );
 
+        virtual void endGpuDebuggerFrameCapture( Window *window );
+
         virtual bool hasAnisotropicMipMapFilter() const { return true; }
 
         virtual void setClipPlanesImpl( const PlaneList &clipPlanes );
