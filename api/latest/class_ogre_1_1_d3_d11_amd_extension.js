@@ -4,6 +4,6 @@ var class_ogre_1_1_d3_d11_amd_extension =
     [ "~D3D11AmdExtension", "class_ogre_1_1_d3_d11_amd_extension.html#a34ae67bf4af9a0ad91a5c281214e4652", null ],
     [ "createDevice", "class_ogre_1_1_d3_d11_amd_extension.html#aeea63b2eb5c2cfff3b52db22342f24f5", null ],
     [ "destroyDevice", "class_ogre_1_1_d3_d11_amd_extension.html#a5b402afabf2ac657bfcd971d153bd7a1", null ],
-    [ "initializeExtension", "class_ogre_1_1_d3_d11_amd_extension.html#ae1d5639c06374bca665ea42b051623af", null ],
+    [ "initializeExtension", "class_ogre_1_1_d3_d11_amd_extension.html#a0e6132a6163af9072eb2c6fd711485e9", null ],
     [ "recommendsAgs", "class_ogre_1_1_d3_d11_amd_extension.html#a2e17694ddf674cc20d47e30b5c8c0088", null ]
 ];

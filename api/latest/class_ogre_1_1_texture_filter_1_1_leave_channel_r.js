@@ -10,10 +10,10 @@ var class_ogre_1_1_texture_filter_1_1_leave_channel_r =
     [ "operator delete", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete[]", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
     [ "operator delete[]", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
-    [ "operator new", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
-    [ "operator new", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-    [ "operator new[]", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-    [ "operator new[]", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+    [ "operator new", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#ad1f1a983f9e2dfddee802c47bb0b1ca9", null ],
+    [ "operator new", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#ab422c67a2c8844f410fe822a357cba3b", null ],
+    [ "operator new", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
+    [ "operator new[]", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#adce32528577d71b228692df906ecd17c", null ],
+    [ "operator new[]", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
     [ "simulateFiltersForCacheConsistency", "class_ogre_1_1_texture_filter_1_1_leave_channel_r.html#a037eeaf32c0d8df71ba2f8ea4f4cbc75", null ]
 ];

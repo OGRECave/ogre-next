@@ -8,7 +8,7 @@ var struct_ogre_1_1_irradiance_field_settings =
     [ "getIrradProbeFullResolution", "struct_ogre_1_1_irradiance_field_settings.html#ab7bfe67c1073974636773e2c88388838", null ],
     [ "getNumProbes3f", "struct_ogre_1_1_irradiance_field_settings.html#a513ca58a53f04de8dae548f3c22d0f6d", null ],
     [ "getNumRaysPerIrradiancePixel", "struct_ogre_1_1_irradiance_field_settings.html#a664c3c0430ef4fbe2a877b98bd97fe80", null ],
-    [ "getSubsamples", "struct_ogre_1_1_irradiance_field_settings.html#a96bba43666968716ef5159036fc5b4e5", null ],
+    [ "getSubsamples", "struct_ogre_1_1_irradiance_field_settings.html#a799db3cdaf90c96bdf8affae8f963d66", null ],
     [ "getTotalNumProbes", "struct_ogre_1_1_irradiance_field_settings.html#a639eb5d004a0739a76a38f5a82f91641", null ],
     [ "isRaster", "struct_ogre_1_1_irradiance_field_settings.html#a3f0445be193f7e44196dee0e229315f3", null ],
     [ "testValidity", "struct_ogre_1_1_irradiance_field_settings.html#a5c721b7766775f1908111fb51461b64a", null ],

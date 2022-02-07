@@ -20,7 +20,7 @@ var class_ogre_1_1_grid2_d_page_strategy_data =
     [ "getLoadRadiusInCells", "class_ogre_1_1_grid2_d_page_strategy_data.html#a73e0335ca55e8798854a7ee37bdc8b1c", null ],
     [ "getMidPointGridSpace", "class_ogre_1_1_grid2_d_page_strategy_data.html#a26735f9ed9499d93a6c82346b7e284e7", null ],
     [ "getMode", "class_ogre_1_1_grid2_d_page_strategy_data.html#aadbc1c9ed29dc3fbf1954de5c29d1331", null ],
-    [ "getOrigin", "class_ogre_1_1_grid2_d_page_strategy_data.html#a7acd1f54228e8cd83913ebe8e99d09a0", null ],
+    [ "getOrigin", "class_ogre_1_1_grid2_d_page_strategy_data.html#ae8ecdcd4c8b1fe0bd10e114892375ece", null ],
     [ "load", "class_ogre_1_1_grid2_d_page_strategy_data.html#a9426a938e8b6cc35581484c2f5d4a3d6", null ],
     [ "save", "class_ogre_1_1_grid2_d_page_strategy_data.html#a11b924119c2adf18228bebb85e9c9d78", null ],
     [ "setCellRange", "class_ogre_1_1_grid2_d_page_strategy_data.html#af9383aed6dc9c82576ae39f4b3ee99f8", null ],

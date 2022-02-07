@@ -1,9 +1,9 @@
 var class_ogre_1_1_config_file =
 [
     [ "SectionIterator", "class_ogre_1_1_config_file.html#aa0167bf5f0a33e109d2de01a6a14f2f0", null ],
-    [ "SettingsBySection", "class_ogre_1_1_config_file.html#a1f52ed6a7bb70bb5e424f453e8791aad", null ],
+    [ "SettingsBySection", "class_ogre_1_1_config_file.html#a42170ea1bba5c3f5591c7fe87746e479", null ],
     [ "SettingsIterator", "class_ogre_1_1_config_file.html#adf764e20ebcf5c52d0ea887b1468a283", null ],
-    [ "SettingsMultiMap", "class_ogre_1_1_config_file.html#ac6682c7a1a92d2304f208eede43f009c", null ],
+    [ "SettingsMultiMap", "class_ogre_1_1_config_file.html#a1f7ee36885fdf936056ff773500cdff6", null ],
     [ "ConfigFile", "class_ogre_1_1_config_file.html#ae9cea1fe4ad70279841635eb892ba514", null ],
     [ "~ConfigFile", "class_ogre_1_1_config_file.html#aeb74fca345254b1701f509d3b0e77694", null ],
     [ "clear", "class_ogre_1_1_config_file.html#a26a785bacd44b6a50e99880ad09b56fe", null ],
@@ -21,9 +21,9 @@ var class_ogre_1_1_config_file =
     [ "operator delete", "class_ogre_1_1_config_file.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete[]", "class_ogre_1_1_config_file.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
     [ "operator delete[]", "class_ogre_1_1_config_file.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1_config_file.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
-    [ "operator new", "class_ogre_1_1_config_file.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
-    [ "operator new", "class_ogre_1_1_config_file.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-    [ "operator new[]", "class_ogre_1_1_config_file.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-    [ "operator new[]", "class_ogre_1_1_config_file.html#a4be37baef81876985aa1071ad5acc6dd", null ]
+    [ "operator new", "class_ogre_1_1_config_file.html#ad1f1a983f9e2dfddee802c47bb0b1ca9", null ],
+    [ "operator new", "class_ogre_1_1_config_file.html#ab422c67a2c8844f410fe822a357cba3b", null ],
+    [ "operator new", "class_ogre_1_1_config_file.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
+    [ "operator new[]", "class_ogre_1_1_config_file.html#adce32528577d71b228692df906ecd17c", null ],
+    [ "operator new[]", "class_ogre_1_1_config_file.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ]
 ];

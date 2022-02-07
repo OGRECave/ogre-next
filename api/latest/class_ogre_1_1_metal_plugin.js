@@ -1,7 +1,7 @@
 var class_ogre_1_1_metal_plugin =
 [
     [ "MetalPlugin", "class_ogre_1_1_metal_plugin.html#a6c7e655606a460a6a297013255b7c547", null ],
-    [ "getName", "class_ogre_1_1_metal_plugin.html#a91d416d1889ce4e0a096f14d2586075f", null ],
+    [ "getName", "class_ogre_1_1_metal_plugin.html#a3fc4c061c0e1d7ad5de3484c874e6e62", null ],
     [ "initialise", "class_ogre_1_1_metal_plugin.html#a7dc9f8f6c1485669129a93c73959616e", null ],
     [ "install", "class_ogre_1_1_metal_plugin.html#a6bf48b9e1b12c872a19b409c20ce64e8", null ],
     [ "operator delete", "class_ogre_1_1_metal_plugin.html#a8357fe4fb4849772b94baa4bf47c7ded", null ],
@@ -9,11 +9,11 @@ var class_ogre_1_1_metal_plugin =
     [ "operator delete", "class_ogre_1_1_metal_plugin.html#a1c727e879a260c37b00ce5505fe8e144", null ],
     [ "operator delete[]", "class_ogre_1_1_metal_plugin.html#a93e6a86dde5483c053ca0f2a85bbfd6c", null ],
     [ "operator delete[]", "class_ogre_1_1_metal_plugin.html#a595ea4c05da8aa987d3800e65d23355d", null ],
-    [ "operator new", "class_ogre_1_1_metal_plugin.html#ac4bdf968b7b9af8a5239a27da73d5711", null ],
-    [ "operator new", "class_ogre_1_1_metal_plugin.html#a421b197ca3a38da17e2eb1531a645fa2", null ],
-    [ "operator new", "class_ogre_1_1_metal_plugin.html#ab78a921e54419be677839cdf15d1f0b8", null ],
-    [ "operator new[]", "class_ogre_1_1_metal_plugin.html#afa2943846ba6a2b5824a12857139cf5e", null ],
-    [ "operator new[]", "class_ogre_1_1_metal_plugin.html#a4be37baef81876985aa1071ad5acc6dd", null ],
+    [ "operator new", "class_ogre_1_1_metal_plugin.html#ad1f1a983f9e2dfddee802c47bb0b1ca9", null ],
+    [ "operator new", "class_ogre_1_1_metal_plugin.html#ab422c67a2c8844f410fe822a357cba3b", null ],
+    [ "operator new", "class_ogre_1_1_metal_plugin.html#a63fc6bdc2eb6aeac24898a77ec5e2023", null ],
+    [ "operator new[]", "class_ogre_1_1_metal_plugin.html#adce32528577d71b228692df906ecd17c", null ],
+    [ "operator new[]", "class_ogre_1_1_metal_plugin.html#aed1464ac3de21ff20db8f9f1f8608dc7", null ],
     [ "shutdown", "class_ogre_1_1_metal_plugin.html#a59d9309cbfafc3c24b6ccbfc4d23eeb3", null ],
     [ "uninstall", "class_ogre_1_1_metal_plugin.html#a20382384ee477b54ee4e2e42ce2452bf", null ]
 ];

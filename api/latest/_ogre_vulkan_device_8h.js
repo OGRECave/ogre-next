@@ -1,7 +1,7 @@
 var _ogre_vulkan_device_8h =
 [
-    [ "VulkanDevice", "struct_ogre_1_1_vulkan_device.html", "struct_ogre_1_1_vulkan_device" ],
-    [ "ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features" ],
-    [ "SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", "struct_ogre_1_1_vulkan_device_1_1_selected_queue" ],
+    [ "Ogre::VulkanDevice", "struct_ogre_1_1_vulkan_device.html", "struct_ogre_1_1_vulkan_device" ],
+    [ "Ogre::VulkanDevice::ExtraVkFeatures", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features.html", "struct_ogre_1_1_vulkan_device_1_1_extra_vk_features" ],
+    [ "Ogre::VulkanDevice::SelectedQueue", "struct_ogre_1_1_vulkan_device_1_1_selected_queue.html", "struct_ogre_1_1_vulkan_device_1_1_selected_queue" ],
     [ "c_srcValidAccessFlags", "_ogre_vulkan_device_8h.html#ae25fc08466018112ebbfaa616e88b38a", null ]
 ];

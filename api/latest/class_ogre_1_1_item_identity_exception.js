@@ -15,11 +15,11 @@ var class_ogre_1_1_item_identity_exception =
     ] ],
     [ "ItemIdentityException", "class_ogre_1_1_item_identity_exception.html#ae98c4a38b709e81ef21722be30db5060", null ],
     [ "~ItemIdentityException", "class_ogre_1_1_item_identity_exception.html#a3dd5835ee39e5dd7c85c516cea8e5747", null ],
-    [ "getDescription", "class_ogre_1_1_item_identity_exception.html#a1fc455594cb69d86e408346d98fe3fa3", null ],
-    [ "getFile", "class_ogre_1_1_item_identity_exception.html#a70505a2dab963bc420f04048a3690ef2", null ],
-    [ "getFullDescription", "class_ogre_1_1_item_identity_exception.html#afac7bd5132f02a3a4fe002aa66e3ccda", null ],
+    [ "getDescription", "class_ogre_1_1_item_identity_exception.html#a91dda308ce9e14136c0d5024ffbaa046", null ],
+    [ "getFile", "class_ogre_1_1_item_identity_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
+    [ "getFullDescription", "class_ogre_1_1_item_identity_exception.html#a3fb57acf63ecb75c54969b198b6aedb9", null ],
     [ "getLine", "class_ogre_1_1_item_identity_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
     [ "getNumber", "class_ogre_1_1_item_identity_exception.html#a62aacd23a5db8b338e680dc414bb3136", null ],
-    [ "getSource", "class_ogre_1_1_item_identity_exception.html#ac3c2e6a43d2b1030eaf3ee8a34247737", null ],
-    [ "what", "class_ogre_1_1_item_identity_exception.html#a089b6784a0457072f26d9ff79a1843ca", null ]
+    [ "getSource", "class_ogre_1_1_item_identity_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
+    [ "what", "class_ogre_1_1_item_identity_exception.html#acbe69e666d3a027c6b753a0cb29c8e18", null ]
 ];

@@ -7,6 +7,6 @@ var class_ogre_1_1_scene_format_base =
     ] ],
     [ "SceneFormatBase", "class_ogre_1_1_scene_format_base.html#afc03cce295391518a62f7b43706d9206", null ],
     [ "~SceneFormatBase", "class_ogre_1_1_scene_format_base.html#a3afd9f8e28e53d1d269f8b3814575756", null ],
-    [ "getPbs", "class_ogre_1_1_scene_format_base.html#ae4777b8b449d61b03e4547f495781cde", null ],
+    [ "getPbs", "class_ogre_1_1_scene_format_base.html#ad9ce3bd575be5636ab0927c862b3a766", null ],
     [ "setListener", "class_ogre_1_1_scene_format_base.html#aab928add268f22f38acadf2c78b748b7", null ]
 ];

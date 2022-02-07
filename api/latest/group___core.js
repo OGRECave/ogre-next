@@ -12,7 +12,7 @@ var group___core =
     [ "RenderSystem", "group___render_system.html", "group___render_system" ],
     [ "Resources", "group___resources.html", "group___resources" ],
     [ "Scene", "group___scene.html", "group___scene" ],
-    [ "bitset64", "class_ogre_1_1bitset64.html", [
+    [ "Ogre::bitset64", "class_ogre_1_1bitset64.html", [
       [ "bitset64", "class_ogre_1_1bitset64.html#a3219582f6805dd53132a2f10390b661e", null ],
       [ "capacity", "class_ogre_1_1bitset64.html#a5acf9895a1a012e30c4652e82617bd6c", null ],
       [ "clear", "class_ogre_1_1bitset64.html#a840de71d945557a566ea6b8644015059", null ],
@@ -28,7 +28,7 @@ var group___core =
       [ "test", "class_ogre_1_1bitset64.html#aabcb68ad12baf9330d32d488140a4659", null ],
       [ "unset", "class_ogre_1_1bitset64.html#a7a469e6a52312e4b05c194499047b426", null ]
     ] ],
-    [ "cbitset32", "class_ogre_1_1cbitset32.html", [
+    [ "Ogre::cbitset32< _N >", "class_ogre_1_1cbitset32.html", [
       [ "capacity", "class_ogre_1_1cbitset32.html#a3211343d5cccaa55728ea32b1fbbdf44", null ],
       [ "clear", "class_ogre_1_1cbitset32.html#a3da545373d154cb5378dd35a99e8dcda", null ],
       [ "empty", "class_ogre_1_1cbitset32.html#af2292ffa619ad198f634277c5459fe82", null ],
@@ -40,7 +40,7 @@ var group___core =
       [ "test", "class_ogre_1_1cbitset32.html#aecc90c0051d68e85eb58d3547c58946a", null ],
       [ "unset", "class_ogre_1_1cbitset32.html#aacc46d524dac9b815e151dd39394df1b", null ]
     ] ],
-    [ "cbitset64", "class_ogre_1_1cbitset64.html", [
+    [ "Ogre::cbitset64< _N >", "class_ogre_1_1cbitset64.html", [
       [ "capacity", "class_ogre_1_1cbitset64.html#a3211343d5cccaa55728ea32b1fbbdf44", null ],
       [ "clear", "class_ogre_1_1cbitset64.html#a3da545373d154cb5378dd35a99e8dcda", null ],
       [ "empty", "class_ogre_1_1cbitset64.html#af2292ffa619ad198f634277c5459fe82", null ],
@@ -54,7 +54,7 @@ var group___core =
       [ "test", "class_ogre_1_1cbitset64.html#aecc90c0051d68e85eb58d3547c58946a", null ],
       [ "unset", "class_ogre_1_1cbitset64.html#aacc46d524dac9b815e151dd39394df1b", null ]
     ] ],
-    [ "cbitsetN", "class_ogre_1_1cbitset_n.html", [
+    [ "Ogre::cbitsetN< _N, _internalDataType, _bits, _mask >", "class_ogre_1_1cbitset_n.html", [
       [ "cbitsetN", "class_ogre_1_1cbitset_n.html#a697bfd602e3904596422036ac68ed3da", null ],
       [ "capacity", "class_ogre_1_1cbitset_n.html#a3211343d5cccaa55728ea32b1fbbdf44", null ],
       [ "clear", "class_ogre_1_1cbitset_n.html#a3da545373d154cb5378dd35a99e8dcda", null ],

@@ -41,7 +41,7 @@ var class_ogre_1_1_small_vector =
     [ "max_size", "class_ogre_1_1_small_vector.html#a9815c7884278cf8ae793f559d5da6d5f", null ],
     [ "operator!=", "class_ogre_1_1_small_vector.html#a392fb5f8f5fc3603478b621b8d3972b0", null ],
     [ "operator<", "class_ogre_1_1_small_vector.html#a5958110a680cbacf2fa7de13c596505f", null ],
-    [ "operator=", "class_ogre_1_1_small_vector.html#af620a42e14368ea645a4248ba3c7c10d", null ],
+    [ "operator=", "class_ogre_1_1_small_vector.html#a1ddbda6070d0d513d43de087c90e76d3", null ],
     [ "operator==", "class_ogre_1_1_small_vector.html#ad6cc5210b8f4976e3117a69c264c054b", null ],
     [ "operator[]", "class_ogre_1_1_small_vector.html#ab3bb5e3be2e6a4f8b68b61c1c16028e4", null ],
     [ "operator[]", "class_ogre_1_1_small_vector.html#aa5c7ed10e04b28acc1fecd075879a3e3", null ],

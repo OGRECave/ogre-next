@@ -22,14 +22,6 @@ var _gi_methods =
     [ "What technique should I choose?", "_gi_methods.html#GiWhatTechniqueChoose", null ],
     [ "Image Voxel Cone Tracing", "_image_voxel_cone_tracing.html", [
       [ "Step 1: Image Voxelizer", "_image_voxel_cone_tracing.html#IVCT_Step1", [
-        [ "Pros", "_gi_methods.html#autotoc_md13", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md14", null ],
-        [ "Pros", "_gi_methods.html#autotoc_md15", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md16", null ],
-        [ "Pros", "_gi_methods.html#autotoc_md17", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md18", null ],
-        [ "Pros", "_gi_methods.html#autotoc_md19", null ],
-        [ "Cons", "_gi_methods.html#autotoc_md20", null ],
         [ "Downside", "_image_voxel_cone_tracing.html#IVCT_Step1_Downside", [
           [ "Non-researched solutions:", "_image_voxel_cone_tracing.html#autotoc_md22", null ]
         ] ],
