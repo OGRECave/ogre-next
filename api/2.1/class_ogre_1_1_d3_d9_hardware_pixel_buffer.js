@@ -11,9 +11,9 @@ var class_ogre_1_1_d3_d9_hardware_pixel_buffer =
     [ "blitFromMemory", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#abb6f9c69b9cf47425a48de93d2f2c1f7", null ],
     [ "blitToMemory", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a41213783503edf53ae62eb1cf0003aef", null ],
     [ "destroyBufferResources", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a03af114b7c8c5523959b81e8201ea08d", null ],
-    [ "getFSAASurface", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a039ec0281513ccbdace3155798d484b4", null ],
-    [ "getRenderTarget", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a296d62219c5779489c6a707c9131bc84", null ],
-    [ "getSurface", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a73a3349f2eafb6accc7f5fd33bd90a0a", null ],
+    [ "getFSAASurface", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a968edc2ffcbf45286dd64ca841294c13", null ],
+    [ "getRenderTarget", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#ae1f2dc631a0cb31f9125bb657800aa5e", null ],
+    [ "getSurface", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#a8d16bed21dcd7698886c90db4357ecba", null ],
     [ "lockDeviceAccess", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#aaa3b402158015eb4e91c53c5c0c0326c", null ],
     [ "releaseSurfaces", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#ab5153b6892ecc27c4b7e7aa81fbb674e", null ],
     [ "unlockDeviceAccess", "class_ogre_1_1_d3_d9_hardware_pixel_buffer.html#ac9e1e4727246461675003a184ae03ccb", null ]

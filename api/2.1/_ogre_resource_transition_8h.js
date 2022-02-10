@@ -1,7 +1,7 @@
 var _ogre_resource_transition_8h =
 [
-    [ "ResourceAccessMap", "_ogre_resource_transition_8h.html#gaf3069e13b1cf5ad9102ad2c90eefcb04", null ],
-    [ "ResourceLayoutMap", "_ogre_resource_transition_8h.html#ga3fd32f5ef28aea13747ce05849f54fa1", null ],
+    [ "ResourceAccessMap", "_ogre_resource_transition_8h.html#ga7b65449c39dd27759441ca6fb2359de7", null ],
+    [ "ResourceLayoutMap", "_ogre_resource_transition_8h.html#ga53935caf69396714b31a26ce86d3f2c5", null ],
     [ "Layout", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7", [
       [ "Undefined", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7af006a165c772ccf3c8d40a7a1dfaf676", null ],
       [ "Texture", "_ogre_resource_transition_8h.html#a7ce11be54143fb01a34d6b7529ba3dc7a01ccc277359df8c0a2cfdbd943341cf0", null ],
@@ -39,5 +39,5 @@ var _ogre_resource_transition_8h =
       [ "DepthStencil", "_ogre_resource_transition_8h.html#a8ab842b42625de9295532fa172bc26e3ad04f97043b7dfb8d561756632fc725be", null ],
       [ "All", "_ogre_resource_transition_8h.html#a8ab842b42625de9295532fa172bc26e3a4a691002079b6881ca0b9ad57255e1b3", null ]
     ] ],
-    [ "toString", "_ogre_resource_transition_8h.html#a1feaa6e1253297279f75eedaae089d09", null ]
+    [ "toString", "_ogre_resource_transition_8h.html#a10a15b9080ab4c743d74ff0fc52c4a3a", null ]
 ];

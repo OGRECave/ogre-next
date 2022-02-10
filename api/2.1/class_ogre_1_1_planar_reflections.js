@@ -10,7 +10,7 @@ var class_ogre_1_1_planar_reflections =
     [ "~PlanarReflections", "class_ogre_1_1_planar_reflections.html#a263fc6936942eb8fd5162a5c6d3566dd", null ],
     [ "_isUpdatingRenderablesHlms", "class_ogre_1_1_planar_reflections.html#aa9c304509b595687e7af5ae0d513973a", null ],
     [ "_notifyRenderableFlushedHlmsDatablock", "class_ogre_1_1_planar_reflections.html#ab3c42759975878d5744bfd2bebc313a4", null ],
-    [ "addActor", "class_ogre_1_1_planar_reflections.html#a1b49c2ddb719400d72433e919f328fd2", null ],
+    [ "addActor", "class_ogre_1_1_planar_reflections.html#ad67ceb649027af939376cbd4f3b62f9f", null ],
     [ "addRenderable", "class_ogre_1_1_planar_reflections.html#a50aeb6eec3120373b6d5316909128235", null ],
     [ "beginFrame", "class_ogre_1_1_planar_reflections.html#ae4592b5013e603bd0343181395bfcc81", null ],
     [ "cameraMatches", "class_ogre_1_1_planar_reflections.html#a08baa1e192558155350dc4cae0779c39", null ],

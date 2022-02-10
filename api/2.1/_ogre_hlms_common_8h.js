@@ -2,9 +2,9 @@ var _ogre_hlms_common_8h =
 [
     [ "OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH", "group___resources.html#ga52fcd602046b0d321eaf2a2c759325b9", null ],
     [ "HlmsCacheVec", "_ogre_hlms_common_8h.html#ga5c8436916a9551e984a980637867d2aa", null ],
-    [ "HlmsParamVec", "_ogre_hlms_common_8h.html#ga6d617bee2c421c34f52f036c5e8a7fcc", null ],
+    [ "HlmsParamVec", "_ogre_hlms_common_8h.html#ga26539e1c24ff9cadeb6f54139ad7dc54", null ],
     [ "HlmsPropertyVec", "_ogre_hlms_common_8h.html#ga1d333e3b1280899cce855c563f200938", null ],
-    [ "PiecesMap", "_ogre_hlms_common_8h.html#ga7308171d42bf5b86adda94adc5d30f03", null ],
+    [ "PiecesMap", "_ogre_hlms_common_8h.html#ga8d0386169199086cbe23f19967f934af", null ],
     [ "HlmsTypes", "_ogre_hlms_common_8h.html#gacbb211b021bd3350291861d7232dd02d", [
       [ "HLMS_LOW_LEVEL", "_ogre_hlms_common_8h.html#ggacbb211b021bd3350291861d7232dd02dac29ce6995e66d47058d5d484684b3955", null ],
       [ "HLMS_PBS", "_ogre_hlms_common_8h.html#ggacbb211b021bd3350291861d7232dd02da13e2e3a750ce584ece805f3ab1ee8e1c", null ],

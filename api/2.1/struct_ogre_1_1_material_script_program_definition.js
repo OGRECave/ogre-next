@@ -1,6 +1,6 @@
 var struct_ogre_1_1_material_script_program_definition =
 [
-    [ "customParameters", "struct_ogre_1_1_material_script_program_definition.html#ab9154054c102527e0eb595216ddd6c86", null ],
+    [ "customParameters", "struct_ogre_1_1_material_script_program_definition.html#abf09687c02c29949b5d8dcc57cd5d700", null ],
     [ "language", "struct_ogre_1_1_material_script_program_definition.html#a634973d853b04b2cf2af2133d504b257", null ],
     [ "name", "struct_ogre_1_1_material_script_program_definition.html#ad766f0b063f8753dbfdbb04b1e05d2a1", null ],
     [ "progType", "struct_ogre_1_1_material_script_program_definition.html#a71d6628fda7a428d149f7f53dcbf86dc", null ],

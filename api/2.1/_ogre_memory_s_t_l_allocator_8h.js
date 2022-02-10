@@ -1,6 +1,6 @@
 var _ogre_memory_s_t_l_allocator_8h =
 [
-    [ "rebind", "struct_ogre_1_1_s_t_l_allocator_1_1rebind.html", "struct_ogre_1_1_s_t_l_allocator_1_1rebind" ],
+    [ "Ogre::STLAllocator< T, AllocPolicy >::rebind< U >", "struct_ogre_1_1_s_t_l_allocator_1_1rebind.html", "struct_ogre_1_1_s_t_l_allocator_1_1rebind" ],
     [ "operator!=", "_ogre_memory_s_t_l_allocator_8h.html#ga0cec9339a4ab3eaf48c767087cd7f400", null ],
     [ "operator!=", "_ogre_memory_s_t_l_allocator_8h.html#ga34a9308dc656f694883718bf8fa4f1c2", null ],
     [ "operator==", "_ogre_memory_s_t_l_allocator_8h.html#gaa34a630f2287087875d360c454a0fb48", null ],

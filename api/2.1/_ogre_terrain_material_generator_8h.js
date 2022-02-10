@@ -1,6 +1,6 @@
 var _ogre_terrain_material_generator_8h =
 [
-    [ "Profile", "class_ogre_1_1_terrain_material_generator_1_1_profile.html", "class_ogre_1_1_terrain_material_generator_1_1_profile" ],
+    [ "Ogre::TerrainMaterialGenerator::Profile", "class_ogre_1_1_terrain_material_generator_1_1_profile.html", "class_ogre_1_1_terrain_material_generator_1_1_profile" ],
     [ "TerrainLayerSamplerElementList", "_ogre_terrain_material_generator_8h.html#gaed5c69e4a57dade51d33e835d0702660", null ],
     [ "TerrainLayerSamplerList", "_ogre_terrain_material_generator_8h.html#gadf90591c883d93190405f52ca11ef600", null ],
     [ "TerrainMaterialGeneratorPtr", "_ogre_terrain_material_generator_8h.html#ga152d33cadca984511f2c0459562c7b0b", null ],

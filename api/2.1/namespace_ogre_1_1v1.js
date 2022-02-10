@@ -181,7 +181,7 @@ var namespace_ogre_1_1v1 =
     [ "VertexShadowMapHelper", "class_ogre_1_1v1_1_1_vertex_shadow_map_helper.html", "class_ogre_1_1v1_1_1_vertex_shadow_map_helper" ],
     [ "WireBoundingBox", "class_ogre_1_1v1_1_1_wire_bounding_box.html", "class_ogre_1_1v1_1_1_wire_bounding_box" ],
     [ "AnimationStateIterator", "group___animation.html#ga6c8619d12ac269631ef4f400ea2e2ba3", null ],
-    [ "AnimationStateMap", "group___animation.html#gaad46f086762ed2a6c7f62093f3428366", null ],
+    [ "AnimationStateMap", "group___animation.html#gacfbe4392c7e72f5d9c545904b446c74a", null ],
     [ "BufferUsageList", "group___render_system.html#gac447334468fd281ee1a3548172f5d349", null ],
     [ "ConstAnimationStateIterator", "group___animation.html#gaa6056ead4e5a305f169e0e1af92a419b", null ],
     [ "ConstEnabledAnimationStateIterator", "group___animation.html#gac64a5390e8e276ddaf90ab630b0b4ef7", null ],

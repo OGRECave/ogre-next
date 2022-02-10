@@ -1,6 +1,6 @@
 var _ogre_scene_query_8h =
 [
-    [ "WorldFragment", "struct_ogre_1_1_scene_query_1_1_world_fragment.html", "struct_ogre_1_1_scene_query_1_1_world_fragment" ],
+    [ "Ogre::SceneQuery::WorldFragment", "struct_ogre_1_1_scene_query_1_1_world_fragment.html", "struct_ogre_1_1_scene_query_1_1_world_fragment" ],
     [ "RaySceneQueryResult", "_ogre_scene_query_8h.html#ga1d0db569747448aeff27f36ecd717686", null ],
     [ "SceneQueryMovableIntersectionList", "_ogre_scene_query_8h.html#gaddcc5a6779ee6a6bb82aeb5f42239a52", null ],
     [ "SceneQueryMovableObjectPair", "_ogre_scene_query_8h.html#gaa1ca4f17a1e8bb7381446ae6235869d8", null ],

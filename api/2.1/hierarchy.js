@@ -48,7 +48,7 @@ var hierarchy =
     [ "Ogre::deque< Request * >", "struct_ogre_1_1deque.html", null ],
     [ "Ogre::deque< Response * >", "struct_ogre_1_1deque.html", null ],
     [ "Ogre::deque< SceneManager * >", "struct_ogre_1_1deque.html", null ],
-    [ "Ogre::deque< unsigned long >", "struct_ogre_1_1deque.html", null ],
+    [ "Ogre::deque< unsignedlong >", "struct_ogre_1_1deque.html", null ],
     [ "Display", "class_display.html", null ],
     [ "Ogre::FactoryObj< Archive >", "class_ogre_1_1_factory_obj.html", [
       [ "Ogre::ArchiveFactory", "class_ogre_1_1_archive_factory.html", [
@@ -142,6 +142,26 @@ var hierarchy =
     [ "Ogre::IteratorWrapper< T, IteratorType, T::value_type >", "class_ogre_1_1_iterator_wrapper.html", [
       [ "Ogre::VectorIteratorWrapper< T, IteratorType >", "class_ogre_1_1_vector_iterator_wrapper.html", null ]
     ] ],
+    [ "Ogre::IteratorWrapper< T, T::const_iterator, T::mapped_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::MapIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
+        [ "Ogre::ConstMapIterator< T >", "class_ogre_1_1_const_map_iterator.html", null ]
+      ] ]
+    ] ],
+    [ "Ogre::IteratorWrapper< T, T::const_iterator, T::value_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::VectorIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
+        [ "Ogre::ConstVectorIterator< T >", "class_ogre_1_1_const_vector_iterator.html", null ]
+      ] ]
+    ] ],
+    [ "Ogre::IteratorWrapper< T, T::iterator, T::mapped_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::MapIteratorWrapper< T, T::iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
+        [ "Ogre::MapIterator< T >", "class_ogre_1_1_map_iterator.html", null ]
+      ] ]
+    ] ],
+    [ "Ogre::IteratorWrapper< T, T::iterator, T::value_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::VectorIteratorWrapper< T, T::iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
+        [ "Ogre::VectorIterator< T >", "class_ogre_1_1_vector_iterator.html", null ]
+      ] ]
+    ] ],
     [ "Ogre::list< AbstractNodePtr >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< AnimationState * >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< AntiPortal * >", "struct_ogre_1_1list.html", null ],
@@ -170,6 +190,7 @@ var hierarchy =
     [ "Ogre::list< Portal * >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< ResourceDeclaration >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< ResourceLocation * >", "struct_ogre_1_1list.html", null ],
+    [ "Ogre::list< ResourcePtr >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< SceneManagerFactory * >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< SceneQuery::WorldFragment * >", "struct_ogre_1_1list.html", null ],
     [ "Ogre::list< SceneQueryMovableObjectPair >", "struct_ogre_1_1list.html", null ],
@@ -181,11 +202,11 @@ var hierarchy =
     [ "Ogre::map< CGstate, CgGlobalStateListener * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< CGstate, CgSamplerStateListener * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< CodePoint, GlyphInfo >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< const MovableObject *, list< BspNode * >::type >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< const Node *, size_t >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< constMovableObject *, list< BspNode * >::type >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< constNode *, size_t >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< D3D9RenderWindow *, RenderWindowResources * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< FunctionInvocation, String >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< GpuConstantType, const char * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< GpuConstantType, constchar * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< GpuResource *, ResourceAccess::ResourceAccess >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< GpuResource *, ResourceLayout::Layout >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< GpuSharedParametersPtr, v1::HardwareUniformBufferSharedPtr >", "struct_ogre_1_1map.html", null ],
@@ -211,19 +232,19 @@ var hierarchy =
     [ "Ogre::map< IdString, String >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< IdString, uint32 >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< int, PatchSurface * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< Light const *, LightClippingInfo >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< Lightconst *, LightClippingInfo >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Material *, vector< StaticFaceGroup * >::type, materialLess >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< MatGroupPair, SGMaterial *, MatGroupPair_less >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Node *, uint32 >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Ogre::IdString, Ogre::ShaderParams >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Ogre::IdString, size_t >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< Ogre::LwConstString, const Ogre::HlmsBlendblock * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< Ogre::LwConstString, const Ogre::HlmsMacroblock * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< Ogre::LwConstString, const Ogre::HlmsSamplerblock * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< Ogre::LwConstString, constHlmsBlendblock * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< Ogre::LwConstString, constHlmsMacroblock * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< Ogre::LwConstString, constHlmsSamplerblock * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Ogre::RTShader::Function *, String * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< PageID, Page * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< Parameter::Content, const char * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< Parameter::Semantic, const char * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< Parameter::Content, constchar * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< Parameter::Semantic, constchar * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< RBFormat, RBRef >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Real, LoadUnloadResourceSet * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Resource *, MeshBuildParams >", "struct_ogre_1_1map.html", null ],
@@ -302,7 +323,7 @@ var hierarchy =
     [ "Ogre::map< String, SubRenderStateFactory * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< String, TextureAtlasTablePtr >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< String, uint16 >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< String, unsigned short >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< String, unsignedshort >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< String, v1::Animation * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< String, v1::StaticGeometry * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< String, VertexElementSemantic >", "struct_ogre_1_1map.html", null ],
@@ -323,12 +344,12 @@ var hierarchy =
     [ "Ogre::map< uint32, uint32 >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< uint64, GLSLESLinkProgram * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< uint64, GLSLESProgramPipeline * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< unsigned short, bool >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< unsigned short, HardwareVertexBufferSharedPtr >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< unsigned short, LodTechniques * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< unsigned short, NumericAnimationTrack * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< unsigned short, OldNodeAnimationTrack * >", "struct_ogre_1_1map.html", null ],
-    [ "Ogre::map< unsigned short, VertexAnimationTrack * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< unsignedshort, bool >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< unsignedshort, HardwareVertexBufferSharedPtr >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< unsignedshort, LodTechniques * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< unsignedshort, NumericAnimationTrack * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< unsignedshort, OldNodeAnimationTrack * >", "struct_ogre_1_1map.html", null ],
+    [ "Ogre::map< unsignedshort, VertexAnimationTrack * >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< v1::RenderOperation, MeshData, OrderRenderOperation >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Vector3, size_t, vectorLess >", "struct_ogre_1_1map.html", null ],
     [ "Ogre::map< Vector3, Vector4 >", "struct_ogre_1_1map.html", null ],
@@ -368,15 +389,15 @@ var hierarchy =
         [ "Ogre::ScaleControllerFunction", "class_ogre_1_1_scale_controller_function.html", null ],
         [ "Ogre::WaveformControllerFunction", "class_ogre_1_1_waveform_controller_function.html", null ]
       ] ],
-      [ "Ogre::ControllerValue< Ogre::Real >", "class_ogre_1_1_controller_value.html", [
-        [ "Ogre::TextureAnimationControllerValue", "class_ogre_1_1_texture_animation_controller_value.html", null ]
-      ] ],
       [ "Ogre::ControllerValue< Real >", "class_ogre_1_1_controller_value.html", [
         [ "Ogre::FloatGpuParameterControllerValue", "class_ogre_1_1_float_gpu_parameter_controller_value.html", null ],
         [ "Ogre::FrameTimeControllerValue", "class_ogre_1_1_frame_time_controller_value.html", null ],
         [ "Ogre::TexCoordModifierControllerValue", "class_ogre_1_1_tex_coord_modifier_controller_value.html", null ],
         [ "Ogre::TextureFrameControllerValue", "class_ogre_1_1_texture_frame_controller_value.html", null ],
         [ "Ogre::v1::AnimationStateControllerValue", "class_ogre_1_1v1_1_1_animation_state_controller_value.html", null ]
+      ] ],
+      [ "Ogre::ControllerValue< Ogre::Real >", "class_ogre_1_1_controller_value.html", [
+        [ "Ogre::TextureAnimationControllerValue", "class_ogre_1_1_texture_animation_controller_value.html", null ]
       ] ],
       [ "Ogre::AbstractNode", "class_ogre_1_1_abstract_node.html", [
         [ "Ogre::AtomAbstractNode", "class_ogre_1_1_atom_abstract_node.html", null ],
@@ -1642,20 +1663,7 @@ var hierarchy =
       [ "Ogre::MapRange< T >", "struct_ogre_1_1_map_range.html", null ],
       [ "Ogre::VectorRange< T >", "struct_ogre_1_1_vector_range.html", null ]
     ] ],
-    [ "Ogre::IteratorWrapper< T, IteratorType, ValType >", "class_ogre_1_1_iterator_wrapper.html", [
-      [ "Ogre::MapIteratorWrapper< T, T::iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
-        [ "Ogre::MapIterator< T >", "class_ogre_1_1_map_iterator.html", null ]
-      ] ],
-      [ "Ogre::MapIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
-        [ "Ogre::ConstMapIterator< T >", "class_ogre_1_1_const_map_iterator.html", null ]
-      ] ],
-      [ "Ogre::VectorIteratorWrapper< T, T::iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
-        [ "Ogre::VectorIterator< T >", "class_ogre_1_1_vector_iterator.html", null ]
-      ] ],
-      [ "Ogre::VectorIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
-        [ "Ogre::ConstVectorIterator< T >", "class_ogre_1_1_const_vector_iterator.html", null ]
-      ] ]
-    ] ],
+    [ "Ogre::IteratorWrapper< T, IteratorType, ValType >", "class_ogre_1_1_iterator_wrapper.html", null ],
     [ "Ogre::KeyFrameRig", "struct_ogre_1_1_key_frame_rig.html", null ],
     [ "Ogre::KfTransform", "struct_ogre_1_1_kf_transform.html", null ],
     [ "Ogre::LayerBlendModeEx", "class_ogre_1_1_layer_blend_mode_ex.html", null ],
@@ -2075,6 +2083,32 @@ var hierarchy =
     [ "Ogre::SkeletonDef::BoneData", "struct_ogre_1_1_skeleton_def_1_1_bone_data.html", null ],
     [ "Ogre::SkeletonDef::DepthLevelInfo", "struct_ogre_1_1_skeleton_def_1_1_depth_level_info.html", null ],
     [ "Ogre::SmallVectorBase", "class_ogre_1_1_small_vector_base.html", [
+      [ "Ogre::SmallVectorTemplateCommon< Edge >", "class_ogre_1_1_small_vector_template_common.html", [
+        [ "Ogre::SmallVectorTemplateBase< Edge, isPodLike< Edge >::value >", "class_ogre_1_1_small_vector_template_base.html", [
+          [ "Ogre::SmallVectorImpl< Edge >", "class_ogre_1_1_small_vector_impl.html", [
+            [ "Ogre::SmallVector< Edge, S >", "class_ogre_1_1_small_vector.html", [
+              [ "Ogre::VectorSet< Edge, 8 >", "struct_ogre_1_1_vector_set.html", null ]
+            ] ],
+            [ "Ogre::SmallVector< Edge, S >", "class_ogre_1_1_small_vector.html", null ]
+          ] ],
+          [ "Ogre::SmallVectorImpl< Edge >", "class_ogre_1_1_small_vector_impl.html", null ]
+        ] ],
+        [ "Ogre::SmallVectorTemplateBase< Edge, isPodLike< Edge >::value >", "class_ogre_1_1_small_vector_template_base.html", null ]
+      ] ],
+      [ "Ogre::SmallVectorTemplateCommon< Triangle * >", "class_ogre_1_1_small_vector_template_common.html", [
+        [ "Ogre::SmallVectorTemplateBase< Triangle *, isPodLike< Triangle * >::value >", "class_ogre_1_1_small_vector_template_base.html", [
+          [ "Ogre::SmallVectorImpl< Triangle * >", "class_ogre_1_1_small_vector_impl.html", [
+            [ "Ogre::SmallVector< Triangle *, S >", "class_ogre_1_1_small_vector.html", [
+              [ "Ogre::VectorSet< Triangle *, 7 >", "struct_ogre_1_1_vector_set.html", null ]
+            ] ],
+            [ "Ogre::SmallVector< Triangle *, S >", "class_ogre_1_1_small_vector.html", null ]
+          ] ],
+          [ "Ogre::SmallVectorImpl< Triangle * >", "class_ogre_1_1_small_vector_impl.html", null ]
+        ] ],
+        [ "Ogre::SmallVectorTemplateBase< Triangle *, isPodLike< Triangle * >::value >", "class_ogre_1_1_small_vector_template_base.html", null ]
+      ] ],
+      [ "Ogre::SmallVectorTemplateCommon< Edge >", "class_ogre_1_1_small_vector_template_common.html", null ],
+      [ "Ogre::SmallVectorTemplateCommon< Triangle * >", "class_ogre_1_1_small_vector_template_common.html", null ],
       [ "Ogre::SmallVectorTemplateCommon< T >", "class_ogre_1_1_small_vector_template_common.html", [
         [ "Ogre::SmallVectorTemplateBase< T, isPodLike< T >::value >", "class_ogre_1_1_small_vector_template_base.html", [
           [ "Ogre::SmallVectorImpl< T >", "class_ogre_1_1_small_vector_impl.html", [
@@ -2082,10 +2116,7 @@ var hierarchy =
               [ "Ogre::VectorSet< T, S >", "struct_ogre_1_1_vector_set.html", null ]
             ] ],
             [ "Ogre::SmallVector< T, S >", "class_ogre_1_1_small_vector.html", null ],
-            [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", [
-              [ "Ogre::VectorSet< Triangle *, 7 >", "struct_ogre_1_1_vector_set.html", null ],
-              [ "Ogre::VectorSet< Edge, 8 >", "struct_ogre_1_1_vector_set.html", null ]
-            ] ],
+            [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", null ],
             [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", null ],
             [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ],
             [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ]
@@ -2271,9 +2302,9 @@ var hierarchy =
     [ "Ogre::RawSimdUniquePtr< Ogre::KfTransform, MEMCATEGORY_ANIMATION >", "class_ogre_1_1_raw_simd_unique_ptr.html", null ],
     [ "Rotation", "class_rotation.html", null ],
     [ "Ogre::set< BackgroundProcessTicket >", "struct_ogre_1_1set.html", null ],
-    [ "Ogre::set< const Mesh * >", "struct_ogre_1_1set.html", null ],
-    [ "Ogre::set< const MovableObject * >", "struct_ogre_1_1set.html", null ],
-    [ "Ogre::set< const v1::Mesh * >", "struct_ogre_1_1set.html", null ],
+    [ "Ogre::set< constMesh * >", "struct_ogre_1_1set.html", null ],
+    [ "Ogre::set< constMovableObject * >", "struct_ogre_1_1set.html", null ],
+    [ "Ogre::set< constv1::Mesh * >", "struct_ogre_1_1set.html", null ],
     [ "Ogre::set< Controller< Real > * >", "struct_ogre_1_1set.html", null ],
     [ "Ogre::set< D3D9Resource * >", "struct_ogre_1_1set.html", null ],
     [ "Ogre::set< HardwareCounterBuffer * >", "struct_ogre_1_1set.html", null ],
@@ -2333,7 +2364,9 @@ var hierarchy =
     [ "Ogre::SharedPtr< Material >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< MemoryDataStream >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Mesh >", "class_ogre_1_1_shared_ptr.html", null ],
+    [ "Ogre::SharedPtr< Ogre::ControllerFunction< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::ControllerFunction< T > >", "class_ogre_1_1_shared_ptr.html", null ],
+    [ "Ogre::SharedPtr< Ogre::ControllerValue< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::ControllerValue< T > >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::D3D11VideoModeList >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::RTShader::DualQuaternionSkinning >", "class_ogre_1_1_shared_ptr.html", null ],
@@ -2569,7 +2602,7 @@ var hierarchy =
     [ "Ogre::unordered_map< String, ResourcePtr >", "struct_ogre_1_1unordered__map.html", null ],
     [ "Ogre::unordered_map< String, uint32 >", "struct_ogre_1_1unordered__map.html", null ],
     [ "Ogre::unordered_map< String, ushort >", "struct_ogre_1_1unordered__map.html", null ],
-    [ "Ogre::unordered_map< unsigned int, String >", "struct_ogre_1_1unordered__map.html", null ],
+    [ "Ogre::unordered_map< unsignedint, String >", "struct_ogre_1_1unordered__map.html", null ],
     [ "Ogre::unordered_multimap< LodData::Vertex *, ProfiledEdge >", "struct_ogre_1_1unordered__multimap.html", null ],
     [ "Ogre::unordered_set< BufferPacked * >", "struct_ogre_1_1unordered__set.html", null ],
     [ "Ogre::unordered_set< Vertex *, VertexHash, VertexEqual >", "struct_ogre_1_1unordered__set.html", null ],
@@ -2617,11 +2650,11 @@ var hierarchy =
     [ "Ogre::vector< CompositorWorkspaceListener * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< ComputePsoCache >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< ComputeTextureSource >", "struct_ogre_1_1vector.html", null ],
-    [ "Ogre::vector< const SceneManagerMetaData * >", "struct_ogre_1_1vector.html", null ],
-    [ "Ogre::vector< const VertexData * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< ConstBufferPacked * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< ConstBufferPoolUser * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< ConstBufferSlot >", "struct_ogre_1_1vector.html", null ],
+    [ "Ogre::vector< constSceneManagerMetaData * >", "struct_ogre_1_1vector.html", null ],
+    [ "Ogre::vector< constVertexData * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< CopyDataEntry >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< CubemapProbe * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< D3D11_SHADER_BUFFER_DESC >", "struct_ogre_1_1vector.html", null ],
@@ -2672,6 +2705,7 @@ var hierarchy =
     [ "Ogre::vector< HlmsProperty >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< ID3D11Query * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< IdString >", "struct_ogre_1_1vector.html", null ],
+    [ "Ogre::vector< Image >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< IndexBufferInfo >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< IndexData * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< IndirectBufferPacked * >", "struct_ogre_1_1vector.html", null ],
@@ -2697,6 +2731,7 @@ var hierarchy =
     [ "Ogre::vector< ManualObjectSection * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< MappedRange >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< MemberTypeName >", "struct_ogre_1_1vector.html", null ],
+    [ "Ogre::vector< MemoryDataStreamPtr >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< MergeCombination >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< MeshLodUsage >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< MeshVersionData * >", "struct_ogre_1_1vector.html", null ],
@@ -2843,8 +2878,8 @@ var hierarchy =
     [ "Ogre::vector< TriangleCache >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< UavBufferPacked * >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< UavDependency >", "struct_ogre_1_1vector.html", null ],
-    [ "Ogre::vector< uint >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< UINT >", "struct_ogre_1_1vector.html", null ],
+    [ "Ogre::vector< uint >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< uint16 >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< uint32 >", "struct_ogre_1_1vector.html", null ],
     [ "Ogre::vector< uint8 * >", "struct_ogre_1_1vector.html", null ],

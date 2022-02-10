@@ -87,7 +87,7 @@ var namespace_ogre_1_1_r_t_shader =
     [ "SubRenderStateSet", "group___r_t_shader.html#ga80ca8b84f487bd915b32ae12159a0131", null ],
     [ "SubRenderStateSetConstIterator", "group___r_t_shader.html#ga00d3d84afe3e5e75ca3fe1050c2fd29a", null ],
     [ "SubRenderStateSetIterator", "group___r_t_shader.html#gab67a8756fb7f065af7052ef1fb14b1ec", null ],
-    [ "TextureAtlasMap", "group___r_t_shader.html#gadfe4d7bda58bdf16081da900296e2c13", null ],
+    [ "TextureAtlasMap", "group___r_t_shader.html#gace07ad00c364636d2d757891eeda54b3", null ],
     [ "TextureAtlasTable", "group___r_t_shader.html#gaa2ed0a67d16da59414a8a154e77d9ddd", null ],
     [ "TextureAtlasTablePtr", "group___r_t_shader.html#gae2dbb18ab17e09a77a17429beac98115", null ],
     [ "UniformParameterConstIterator", "group___r_t_shader.html#ga61c1e13c93441a655f82c770929f006c", null ],

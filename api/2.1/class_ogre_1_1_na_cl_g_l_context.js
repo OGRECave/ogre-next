@@ -2,7 +2,7 @@ var class_ogre_1_1_na_cl_g_l_context =
 [
     [ "NaClGLContext", "class_ogre_1_1_na_cl_g_l_context.html#a68ccefeb14598a84c161c50e2c06d1b3", null ],
     [ "~NaClGLContext", "class_ogre_1_1_na_cl_g_l_context.html#a50420bdc29fb327fec8ca2664f71513c", null ],
-    [ "clone", "class_ogre_1_1_na_cl_g_l_context.html#ae7040bfd4129eaf583a743567e2ee71e", null ],
+    [ "clone", "class_ogre_1_1_na_cl_g_l_context.html#a6fe7e552ac1d5471ef7d448b35911a77", null ],
     [ "endCurrent", "class_ogre_1_1_na_cl_g_l_context.html#a3144034e084134315eed495c48a65c51", null ],
     [ "getInitialized", "class_ogre_1_1_na_cl_g_l_context.html#abd71a4bfddbdf111e429e9ff825af985", null ],
     [ "Graphics3DContextLost", "class_ogre_1_1_na_cl_g_l_context.html#a18d82f930258538f256237e57a6d283d", null ],

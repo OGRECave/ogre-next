@@ -1,10 +1,10 @@
 var _ogre_scene_manager_8h =
 [
-    [ "Listener", "class_ogre_1_1_scene_manager_1_1_listener.html", "class_ogre_1_1_scene_manager_1_1_listener" ],
-    [ "RenderContext", "struct_ogre_1_1_scene_manager_1_1_render_context.html", "struct_ogre_1_1_scene_manager_1_1_render_context" ],
-    [ "SkyBoxGenParameters", "struct_ogre_1_1_scene_manager_1_1_sky_box_gen_parameters.html", "struct_ogre_1_1_scene_manager_1_1_sky_box_gen_parameters" ],
-    [ "SkyDomeGenParameters", "struct_ogre_1_1_scene_manager_1_1_sky_dome_gen_parameters.html", "struct_ogre_1_1_scene_manager_1_1_sky_dome_gen_parameters" ],
-    [ "SkyPlaneGenParameters", "struct_ogre_1_1_scene_manager_1_1_sky_plane_gen_parameters.html", "struct_ogre_1_1_scene_manager_1_1_sky_plane_gen_parameters" ],
+    [ "Ogre::SceneManager::Listener", "class_ogre_1_1_scene_manager_1_1_listener.html", "class_ogre_1_1_scene_manager_1_1_listener" ],
+    [ "Ogre::SceneManager::RenderContext", "struct_ogre_1_1_scene_manager_1_1_render_context.html", "struct_ogre_1_1_scene_manager_1_1_render_context" ],
+    [ "Ogre::SceneManager::SkyBoxGenParameters", "struct_ogre_1_1_scene_manager_1_1_sky_box_gen_parameters.html", "struct_ogre_1_1_scene_manager_1_1_sky_box_gen_parameters" ],
+    [ "Ogre::SceneManager::SkyDomeGenParameters", "struct_ogre_1_1_scene_manager_1_1_sky_dome_gen_parameters.html", "struct_ogre_1_1_scene_manager_1_1_sky_dome_gen_parameters" ],
+    [ "Ogre::SceneManager::SkyPlaneGenParameters", "struct_ogre_1_1_scene_manager_1_1_sky_plane_gen_parameters.html", "struct_ogre_1_1_scene_manager_1_1_sky_plane_gen_parameters" ],
     [ "SceneTypeMask", "_ogre_scene_manager_8h.html#gaa4b6dbd7bf722582a21fcc25d25f73ed", null ],
     [ "VisibleObjectsPerRq", "_ogre_scene_manager_8h.html#ga06d6e53236b998db135989521a8ad3ba", null ],
     [ "VisibleObjectsPerThreadArray", "_ogre_scene_manager_8h.html#ga21ffab3c275854b773dcd9efeba9152c", null ],
