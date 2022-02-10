@@ -3,7 +3,7 @@ var class_ogre_1_1_d3_d9_hardware_vertex_buffer =
     [ "D3D9HardwareVertexBuffer", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#adc3363518402f1f8a19b9de27ac55399", null ],
     [ "~D3D9HardwareVertexBuffer", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a847e20a417bd264656755d9f48159aee", null ],
     [ "createBuffer", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a09609c7721569ea48da56508cc73a28a", null ],
-    [ "getD3D9VertexBuffer", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a85bef70f88241265aba97a1b2fa43741", null ],
+    [ "getD3D9VertexBuffer", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a5b6e4e0d73b79b829dd2aefe1e8571ba", null ],
     [ "lockDeviceAccess", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#aa97afae987b0c0f16c3e232a7317fad5", null ],
     [ "notifyOnDeviceCreate", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a5d8a47914f14a9cdbb82a0cdc376d089", null ],
     [ "notifyOnDeviceDestroy", "class_ogre_1_1_d3_d9_hardware_vertex_buffer.html#a6186505fded3423ad279e8a9671481d6", null ],

@@ -1,7 +1,7 @@
 var _ogre_memory_allocator_config_8h =
 [
-    [ "CategorisedAlignAllocPolicy", "class_ogre_1_1_categorised_align_alloc_policy.html", null ],
-    [ "CategorisedAllocPolicy", "class_ogre_1_1_categorised_alloc_policy.html", null ],
+    [ "Ogre::CategorisedAlignAllocPolicy< Cat, align >", "class_ogre_1_1_categorised_align_alloc_policy.html", null ],
+    [ "Ogre::CategorisedAllocPolicy< Cat >", "class_ogre_1_1_categorised_alloc_policy.html", null ],
     [ "OGRE_ALLOC_T", "group___memory.html#ga3211e4a6a806aa789b38dce2432ef472", null ],
     [ "OGRE_ALLOC_T_ALIGN", "group___memory.html#gafc79c14937612b02ac50631c08666b26", null ],
     [ "OGRE_ALLOC_T_SIMD", "group___memory.html#ga728b719dd1425d46a78fe87d6f9ea6a5", null ],
@@ -109,6 +109,6 @@ var _ogre_memory_allocator_config_8h =
       [ "MEMCATEGORY_RENDERSYS", "_ogre_memory_allocator_config_8h.html#gga830fab51be174d6f2849857cb1abb36aa29274489311d683a88676dbb1c779788", null ],
       [ "MEMCATEGORY_COUNT", "_ogre_memory_allocator_config_8h.html#gga830fab51be174d6f2849857cb1abb36aa4ff2b9446477e2ea4170b09d8aaa1b67", null ]
     ] ],
-    [ "constructN", "_ogre_memory_allocator_config_8h.html#gae542663b49eb68a74336d84e11ba0b9c", null ],
+    [ "constructN", "_ogre_memory_allocator_config_8h.html#ga0b9086ad544aba73e4dc0d8cbb41b93a", null ],
     [ "deletePtr", "_ogre_memory_allocator_config_8h.html#af78076f7c0517bfdac61219333d3ff8e", null ]
 ];

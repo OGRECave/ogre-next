@@ -1,6 +1,6 @@
 var _ogre_array_memory_manager_8h =
 [
-    [ "RebaseListener", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener" ],
+    [ "Ogre::ArrayMemoryManager::RebaseListener", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener.html", "class_ogre_1_1_array_memory_manager_1_1_rebase_listener" ],
     [ "CleanupRoutines", "_ogre_array_memory_manager_8h.html#ga4670b4da69fc17f183690626fd3bf47f", null ],
     [ "MemoryPoolVec", "_ogre_array_memory_manager_8h.html#a43278e35ec4d27a6f37928aa78eded36", null ],
     [ "cleanerArrayAabb", "_ogre_array_memory_manager_8h.html#ga585d805d0bd700286f91158e4e82ec52", null ],

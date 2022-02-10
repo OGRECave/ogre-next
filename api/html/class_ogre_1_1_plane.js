@@ -23,7 +23,7 @@ var class_ogre_1_1_plane =
     [ "projectVector", "class_ogre_1_1_plane.html#a513a2379245911d5ed1993d5f25c4bef", null ],
     [ "redefine", "class_ogre_1_1_plane.html#a74dab1f3fb059277cd477aa683b238f7", null ],
     [ "redefine", "class_ogre_1_1_plane.html#a3edb29b896bac43b3a199460123e94b2", null ],
-    [ "operator<<", "class_ogre_1_1_plane.html#a3a3cc401219af46e986952c5f6bc7959", null ],
+    [ "operator<<", "class_ogre_1_1_plane.html#a8850a558978d7edb9b272111435dd940", null ],
     [ "d", "class_ogre_1_1_plane.html#a8e7de1712320968bee111002bc2938b8", null ],
     [ "normal", "class_ogre_1_1_plane.html#a3f97462d3822f6add8c070048f6c2d92", null ]
 ];

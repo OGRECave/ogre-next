@@ -123,14 +123,6 @@ var manual =
         [ "ShaderBased", "instancing.html#InstancingTechniquesShaderBased", null ],
         [ "VTF (Software)", "instancing.html#InstancingTechniquesVTFSoftware", null ],
         [ "HW VTF", "instancing.html#InstancingTechniquesHWVTF", [
-          [ "Pros", "_gi_methods.html#autotoc_md9", null ],
-          [ "Cons", "_gi_methods.html#autotoc_md10", null ],
-          [ "Pros", "_gi_methods.html#autotoc_md11", null ],
-          [ "Cons", "_gi_methods.html#autotoc_md12", null ],
-          [ "Pros", "_gi_methods.html#autotoc_md13", null ],
-          [ "Cons", "_gi_methods.html#autotoc_md14", null ],
-          [ "Pros", "_gi_methods.html#autotoc_md15", null ],
-          [ "Cons", "_gi_methods.html#autotoc_md16", null ],
           [ "HW VTF LUT", "instancing.html#InstancingTechniquesHW", null ]
         ] ],
         [ "HW Basic", "instancing.html#InstancingTechniquesHWBasic", null ]

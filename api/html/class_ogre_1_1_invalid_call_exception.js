@@ -15,11 +15,11 @@ var class_ogre_1_1_invalid_call_exception =
     ] ],
     [ "InvalidCallException", "class_ogre_1_1_invalid_call_exception.html#a49d7f567dc5242ac1cdcc057e6273ad0", null ],
     [ "~InvalidCallException", "class_ogre_1_1_invalid_call_exception.html#abdd81d1d657cecf82f54a3556ba298cc", null ],
-    [ "getDescription", "class_ogre_1_1_invalid_call_exception.html#a08d436f2af44566f7f40f4467f1d82ff", null ],
-    [ "getFile", "class_ogre_1_1_invalid_call_exception.html#a70505a2dab963bc420f04048a3690ef2", null ],
-    [ "getFullDescription", "class_ogre_1_1_invalid_call_exception.html#af6e85a048732d785797152da81a2706c", null ],
+    [ "getDescription", "class_ogre_1_1_invalid_call_exception.html#aad2aff2549ab9bc595cfcb838911b0fd", null ],
+    [ "getFile", "class_ogre_1_1_invalid_call_exception.html#af2063f81db920beeecebf781ee6b2b03", null ],
+    [ "getFullDescription", "class_ogre_1_1_invalid_call_exception.html#a2bde174f5a413f1f6eee38ab06389c4e", null ],
     [ "getLine", "class_ogre_1_1_invalid_call_exception.html#af4d342026b7af34ba64ed365c7300659", null ],
     [ "getNumber", "class_ogre_1_1_invalid_call_exception.html#ab4518b52083342bc207ef3b677114e38", null ],
-    [ "getSource", "class_ogre_1_1_invalid_call_exception.html#ac3c2e6a43d2b1030eaf3ee8a34247737", null ],
-    [ "what", "class_ogre_1_1_invalid_call_exception.html#a5323fd0394409fc11d86ac60491ea3e8", null ]
+    [ "getSource", "class_ogre_1_1_invalid_call_exception.html#ac275e4f8b432897c55535144c55566cc", null ],
+    [ "what", "class_ogre_1_1_invalid_call_exception.html#a46395691f8826d1d5f3e70a183f321c8", null ]
 ];

@@ -6,8 +6,8 @@ var class_ogre_1_1_buffer_interface =
     [ "_notifyBuffer", "class_ogre_1_1_buffer_interface.html#a1b7b1f47a858a1b14ac3c7b0e8bb9007", null ],
     [ "advanceFrame", "class_ogre_1_1_buffer_interface.html#a9aa08dd97817557a50b35022f85b3bf4", null ],
     [ "copyTo", "class_ogre_1_1_buffer_interface.html#af98efee10be4efe65661d8e59a5b6245", null ],
-    [ "getBufferPacked", "class_ogre_1_1_buffer_interface.html#a082d141dfd21868dbf9d213967144ec4", null ],
-    [ "map", "class_ogre_1_1_buffer_interface.html#a030edbbac727ebda928d4e738da70fa7", null ],
+    [ "getBufferPacked", "class_ogre_1_1_buffer_interface.html#a554723beebfb5970a9436454f26bb604", null ],
+    [ "map", "class_ogre_1_1_buffer_interface.html#a3f8b83fd3ebe39ef941faf27ac7cf69e", null ],
     [ "regressFrame", "class_ogre_1_1_buffer_interface.html#abe8167dd5874239d7bbcf008892b3a15", null ],
     [ "unmap", "class_ogre_1_1_buffer_interface.html#a524e5ebca877a232bb8f7c83d871460d", null ],
     [ "upload", "class_ogre_1_1_buffer_interface.html#abc183c59ca908d4dc53149add87a0237", null ]

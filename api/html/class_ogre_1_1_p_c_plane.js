@@ -12,7 +12,7 @@ var class_ogre_1_1_p_c_plane =
     [ "PCPlane", "class_ogre_1_1_p_c_plane.html#a060064e403c405d075786f043bcd37e8", null ],
     [ "~PCPlane", "class_ogre_1_1_p_c_plane.html#a6f42638ed66e7661b8b911861fc67b64", null ],
     [ "getDistance", "class_ogre_1_1_p_c_plane.html#aa397a61879a2c4ffdc6c237820fae177", null ],
-    [ "getPortal", "class_ogre_1_1_p_c_plane.html#a1f019fbfffb03059e03c369b956f1bed", null ],
+    [ "getPortal", "class_ogre_1_1_p_c_plane.html#a6c3b96183263285bbb9fcc239b411467", null ],
     [ "getSide", "class_ogre_1_1_p_c_plane.html#a115540f9bb7a88c0f22dcbc0ca087a68", null ],
     [ "getSide", "class_ogre_1_1_p_c_plane.html#a1f4b68ae4354cd7b0cc63374497461cb", null ],
     [ "getSide", "class_ogre_1_1_p_c_plane.html#a519225d752a20f3459d2f0cc20346468", null ],

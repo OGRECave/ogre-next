@@ -1,6 +1,6 @@
 var _ogre_metal_pixel_format_to_shader_type_8h =
 [
-    [ "MetalPixelFormatToShaderType", "class_ogre_1_1_metal_pixel_format_to_shader_type.html", "class_ogre_1_1_metal_pixel_format_to_shader_type" ],
+    [ "Ogre::MetalPixelFormatToShaderType", "class_ogre_1_1_metal_pixel_format_to_shader_type.html", "class_ogre_1_1_metal_pixel_format_to_shader_type" ],
     [ "PixelFormatDataTypes", "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540", [
       [ "UnormFloat", "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540a7cb368b496a1caa153d6b249675924be", null ],
       [ "UnormFloat2", "_ogre_metal_pixel_format_to_shader_type_8h.html#a320bd6a6b273a3abe76add6b64ff8540afff822e7878f67a860efb6c21984db26", null ],

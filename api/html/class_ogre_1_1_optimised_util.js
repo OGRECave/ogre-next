@@ -6,7 +6,7 @@ var class_ogre_1_1_optimised_util =
     [ "calculateLightFacing", "class_ogre_1_1_optimised_util.html#a9270e6273fcf190d039030bd5de1df2f", null ],
     [ "concatenateAffineMatrices", "class_ogre_1_1_optimised_util.html#a45b0aaad519e4cace9ca37124f4e646d", null ],
     [ "extrudeVertices", "class_ogre_1_1_optimised_util.html#a5b411cfc1b916483d75df4f4f9c86252", null ],
-    [ "getImplementation", "class_ogre_1_1_optimised_util.html#aec3039ddfa064375bb4065a4415a8eda", null ],
+    [ "getImplementation", "class_ogre_1_1_optimised_util.html#a6ccca012f8a3041746c0694c8ed595b2", null ],
     [ "softwareVertexMorph", "class_ogre_1_1_optimised_util.html#a431efac44c070695de7011243b13b7af", null ],
     [ "softwareVertexSkinning", "class_ogre_1_1_optimised_util.html#a69ac35f1a13aa95e2352d0fbbbb204b9", null ]
 ];

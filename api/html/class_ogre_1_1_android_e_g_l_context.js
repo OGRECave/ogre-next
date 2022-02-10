@@ -4,7 +4,7 @@ var class_ogre_1_1_android_e_g_l_context =
     [ "~AndroidEGLContext", "class_ogre_1_1_android_e_g_l_context.html#a72100630f6f905882efe0c172b7617dc", null ],
     [ "_createInternalResources", "class_ogre_1_1_android_e_g_l_context.html#aa7b87d8031a667931b402d8f96346da8", null ],
     [ "_destroyInternalResources", "class_ogre_1_1_android_e_g_l_context.html#a0f2b47f53f419897c04ccf676ace35e5", null ],
-    [ "clone", "class_ogre_1_1_android_e_g_l_context.html#aadb21a379e2aaed53b1854b2ed0461a1", null ],
+    [ "clone", "class_ogre_1_1_android_e_g_l_context.html#a50dbaace067890a718d0b2f272a7036a", null ],
     [ "endCurrent", "class_ogre_1_1_android_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6", null ],
     [ "endCurrent", "class_ogre_1_1_android_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6", null ],
     [ "getDrawable", "class_ogre_1_1_android_e_g_l_context.html#a1773206dd73cb2d134a18f0c90db2335", null ],

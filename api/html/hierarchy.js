@@ -175,6 +175,26 @@ var hierarchy =
     [ "Ogre::IteratorWrapper< T, IteratorType, T::value_type >", "class_ogre_1_1_iterator_wrapper.html", [
       [ "Ogre::VectorIteratorWrapper< T, IteratorType >", "class_ogre_1_1_vector_iterator_wrapper.html", null ]
     ] ],
+    [ "Ogre::IteratorWrapper< T, T::const_iterator, T::mapped_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::MapIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
+        [ "Ogre::ConstMapIterator< T >", "class_ogre_1_1_const_map_iterator.html", null ]
+      ] ]
+    ] ],
+    [ "Ogre::IteratorWrapper< T, T::const_iterator, T::value_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::VectorIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
+        [ "Ogre::ConstVectorIterator< T >", "class_ogre_1_1_const_vector_iterator.html", null ]
+      ] ]
+    ] ],
+    [ "Ogre::IteratorWrapper< T, T::iterator, T::mapped_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::MapIteratorWrapper< T, T::iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
+        [ "Ogre::MapIterator< T >", "class_ogre_1_1_map_iterator.html", null ]
+      ] ]
+    ] ],
+    [ "Ogre::IteratorWrapper< T, T::iterator, T::value_type >", "class_ogre_1_1_iterator_wrapper.html", [
+      [ "Ogre::VectorIteratorWrapper< T, T::iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
+        [ "Ogre::VectorIterator< T >", "class_ogre_1_1_vector_iterator.html", null ]
+      ] ]
+    ] ],
     [ "NotPointerAtom", "class_not_pointer_atom.html", null ],
     [ "NSObject", null, [
       [ "CocoaWindowDelegate", "interface_cocoa_window_delegate.html", null ]
@@ -201,15 +221,15 @@ var hierarchy =
         [ "Ogre::ScaleControllerFunction", "class_ogre_1_1_scale_controller_function.html", null ],
         [ "Ogre::WaveformControllerFunction", "class_ogre_1_1_waveform_controller_function.html", null ]
       ] ],
-      [ "Ogre::ControllerValue< Ogre::Real >", "class_ogre_1_1_controller_value.html", [
-        [ "Ogre::TextureAnimationControllerValue", "class_ogre_1_1_texture_animation_controller_value.html", null ]
-      ] ],
       [ "Ogre::ControllerValue< Real >", "class_ogre_1_1_controller_value.html", [
         [ "Ogre::FloatGpuParameterControllerValue", "class_ogre_1_1_float_gpu_parameter_controller_value.html", null ],
         [ "Ogre::FrameTimeControllerValue", "class_ogre_1_1_frame_time_controller_value.html", null ],
         [ "Ogre::TexCoordModifierControllerValue", "class_ogre_1_1_tex_coord_modifier_controller_value.html", null ],
         [ "Ogre::TextureFrameControllerValue", "class_ogre_1_1_texture_frame_controller_value.html", null ],
         [ "Ogre::v1::AnimationStateControllerValue", "class_ogre_1_1v1_1_1_animation_state_controller_value.html", null ]
+      ] ],
+      [ "Ogre::ControllerValue< Ogre::Real >", "class_ogre_1_1_controller_value.html", [
+        [ "Ogre::TextureAnimationControllerValue", "class_ogre_1_1_texture_animation_controller_value.html", null ]
       ] ],
       [ "Ogre::AbstractNode", "class_ogre_1_1_abstract_node.html", [
         [ "Ogre::AtomAbstractNode", "class_ogre_1_1_atom_abstract_node.html", null ],
@@ -1585,20 +1605,7 @@ var hierarchy =
       [ "Ogre::MapRange< T >", "struct_ogre_1_1_map_range.html", null ],
       [ "Ogre::VectorRange< T >", "struct_ogre_1_1_vector_range.html", null ]
     ] ],
-    [ "Ogre::IteratorWrapper< T, IteratorType, ValType >", "class_ogre_1_1_iterator_wrapper.html", [
-      [ "Ogre::MapIteratorWrapper< T, T::iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
-        [ "Ogre::MapIterator< T >", "class_ogre_1_1_map_iterator.html", null ]
-      ] ],
-      [ "Ogre::MapIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_map_iterator_wrapper.html", [
-        [ "Ogre::ConstMapIterator< T >", "class_ogre_1_1_const_map_iterator.html", null ]
-      ] ],
-      [ "Ogre::VectorIteratorWrapper< T, T::iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
-        [ "Ogre::VectorIterator< T >", "class_ogre_1_1_vector_iterator.html", null ]
-      ] ],
-      [ "Ogre::VectorIteratorWrapper< T, T::const_iterator >", "class_ogre_1_1_vector_iterator_wrapper.html", [
-        [ "Ogre::ConstVectorIterator< T >", "class_ogre_1_1_const_vector_iterator.html", null ]
-      ] ]
-    ] ],
+    [ "Ogre::IteratorWrapper< T, IteratorType, ValType >", "class_ogre_1_1_iterator_wrapper.html", null ],
     [ "Ogre::KeyFrameRig", "struct_ogre_1_1_key_frame_rig.html", null ],
     [ "Ogre::KfTransform", "struct_ogre_1_1_kf_transform.html", null ],
     [ "Ogre::LayerBlendModeEx", "class_ogre_1_1_layer_blend_mode_ex.html", null ],
@@ -2031,6 +2038,32 @@ var hierarchy =
     [ "Ogre::SkeletonDef::BoneData", "struct_ogre_1_1_skeleton_def_1_1_bone_data.html", null ],
     [ "Ogre::SkeletonDef::DepthLevelInfo", "struct_ogre_1_1_skeleton_def_1_1_depth_level_info.html", null ],
     [ "Ogre::SmallVectorBase", "class_ogre_1_1_small_vector_base.html", [
+      [ "Ogre::SmallVectorTemplateCommon< Edge >", "class_ogre_1_1_small_vector_template_common.html", [
+        [ "Ogre::SmallVectorTemplateBase< Edge, isPodLike< Edge >::value >", "class_ogre_1_1_small_vector_template_base.html", [
+          [ "Ogre::SmallVectorImpl< Edge >", "class_ogre_1_1_small_vector_impl.html", [
+            [ "Ogre::SmallVector< Edge, S >", "class_ogre_1_1_small_vector.html", [
+              [ "Ogre::VectorSet< Edge, 8 >", "struct_ogre_1_1_vector_set.html", null ]
+            ] ],
+            [ "Ogre::SmallVector< Edge, S >", "class_ogre_1_1_small_vector.html", null ]
+          ] ],
+          [ "Ogre::SmallVectorImpl< Edge >", "class_ogre_1_1_small_vector_impl.html", null ]
+        ] ],
+        [ "Ogre::SmallVectorTemplateBase< Edge, isPodLike< Edge >::value >", "class_ogre_1_1_small_vector_template_base.html", null ]
+      ] ],
+      [ "Ogre::SmallVectorTemplateCommon< Triangle * >", "class_ogre_1_1_small_vector_template_common.html", [
+        [ "Ogre::SmallVectorTemplateBase< Triangle *, isPodLike< Triangle * >::value >", "class_ogre_1_1_small_vector_template_base.html", [
+          [ "Ogre::SmallVectorImpl< Triangle * >", "class_ogre_1_1_small_vector_impl.html", [
+            [ "Ogre::SmallVector< Triangle *, S >", "class_ogre_1_1_small_vector.html", [
+              [ "Ogre::VectorSet< Triangle *, 7 >", "struct_ogre_1_1_vector_set.html", null ]
+            ] ],
+            [ "Ogre::SmallVector< Triangle *, S >", "class_ogre_1_1_small_vector.html", null ]
+          ] ],
+          [ "Ogre::SmallVectorImpl< Triangle * >", "class_ogre_1_1_small_vector_impl.html", null ]
+        ] ],
+        [ "Ogre::SmallVectorTemplateBase< Triangle *, isPodLike< Triangle * >::value >", "class_ogre_1_1_small_vector_template_base.html", null ]
+      ] ],
+      [ "Ogre::SmallVectorTemplateCommon< Edge >", "class_ogre_1_1_small_vector_template_common.html", null ],
+      [ "Ogre::SmallVectorTemplateCommon< Triangle * >", "class_ogre_1_1_small_vector_template_common.html", null ],
       [ "Ogre::SmallVectorTemplateCommon< T >", "class_ogre_1_1_small_vector_template_common.html", [
         [ "Ogre::SmallVectorTemplateBase< T, isPodLike< T >::value >", "class_ogre_1_1_small_vector_template_base.html", [
           [ "Ogre::SmallVectorImpl< T >", "class_ogre_1_1_small_vector_impl.html", [
@@ -2038,10 +2071,7 @@ var hierarchy =
               [ "Ogre::VectorSet< T, S >", "struct_ogre_1_1_vector_set.html", null ]
             ] ],
             [ "Ogre::SmallVector< T, S >", "class_ogre_1_1_small_vector.html", null ],
-            [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", [
-              [ "Ogre::VectorSet< Triangle *, 7 >", "struct_ogre_1_1_vector_set.html", null ],
-              [ "Ogre::VectorSet< Edge, 8 >", "struct_ogre_1_1_vector_set.html", null ]
-            ] ],
+            [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", null ],
             [ "Ogre::SmallVector< T, N >", "class_ogre_1_1_small_vector.html", null ],
             [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ],
             [ "Ogre::SmallVector< T, 0 >", "class_ogre_1_1_small_vector_3_01_t_00_010_01_4.html", null ]
@@ -2292,7 +2322,9 @@ var hierarchy =
     [ "Ogre::SharedPtr< Material >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< MemoryDataStream >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Mesh >", "class_ogre_1_1_shared_ptr.html", null ],
+    [ "Ogre::SharedPtr< Ogre::ControllerFunction< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::ControllerFunction< T > >", "class_ogre_1_1_shared_ptr.html", null ],
+    [ "Ogre::SharedPtr< Ogre::ControllerValue< Real > >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::ControllerValue< T > >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::D3D11VideoModeList >", "class_ogre_1_1_shared_ptr.html", null ],
     [ "Ogre::SharedPtr< Ogre::RTShader::DualQuaternionSkinning >", "class_ogre_1_1_shared_ptr.html", null ],

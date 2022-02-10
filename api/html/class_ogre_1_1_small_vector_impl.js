@@ -79,7 +79,7 @@ var class_ogre_1_1_small_vector_impl =
     [ "operator<", "class_ogre_1_1_small_vector_impl.html#a5958110a680cbacf2fa7de13c596505f", null ],
     [ "operator<", "class_ogre_1_1_small_vector_impl.html#a5958110a680cbacf2fa7de13c596505f", null ],
     [ "operator=", "class_ogre_1_1_small_vector_impl.html#a6345a59d49e50f8dcc839e586789e232", null ],
-    [ "operator=", "class_ogre_1_1_small_vector_impl.html#abab574a51b47e03adde301a7e770bbe1", null ],
+    [ "operator=", "class_ogre_1_1_small_vector_impl.html#a73aa66792422db707ec6b513563ff178", null ],
     [ "operator==", "class_ogre_1_1_small_vector_impl.html#ad6cc5210b8f4976e3117a69c264c054b", null ],
     [ "operator==", "class_ogre_1_1_small_vector_impl.html#ad6cc5210b8f4976e3117a69c264c054b", null ],
     [ "operator[]", "class_ogre_1_1_small_vector_impl.html#ab3bb5e3be2e6a4f8b68b61c1c16028e4", null ],

@@ -1,7 +1,7 @@
 var _ogre_buffer_packed_8h =
 [
-    [ "BufferPacked", "class_ogre_1_1_buffer_packed.html", "class_ogre_1_1_buffer_packed" ],
-    [ "FreeOnDestructor", "struct_ogre_1_1_free_on_destructor.html", "struct_ogre_1_1_free_on_destructor" ],
+    [ "Ogre::BufferPacked", "class_ogre_1_1_buffer_packed.html", "class_ogre_1_1_buffer_packed" ],
+    [ "Ogre::FreeOnDestructor", "struct_ogre_1_1_free_on_destructor.html", "struct_ogre_1_1_free_on_destructor" ],
     [ "BufferPackedSet", "_ogre_buffer_packed_8h.html#a355b07b9eeef2de4c046cdcad12adba5", null ],
     [ "BufferPackedVec", "_ogre_buffer_packed_8h.html#ac083efa6244374796727cf81edc8cee6", null ],
     [ "BufferBindFlags", "_ogre_buffer_packed_8h.html#af7e92c9a326b9cb618defcbc96e2feac", [

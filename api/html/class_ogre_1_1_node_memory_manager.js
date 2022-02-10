@@ -2,7 +2,7 @@ var class_ogre_1_1_node_memory_manager =
 [
     [ "NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html#a9e9d52de89e6efa2e55b5f61cb294452", null ],
     [ "~NodeMemoryManager", "class_ogre_1_1_node_memory_manager.html#ac9c59bce25d96c7768bf3629e6f1ed30", null ],
-    [ "_getDummyNode", "class_ogre_1_1_node_memory_manager.html#a5642c42abaf41ea4b35492a61ac06f20", null ],
+    [ "_getDummyNode", "class_ogre_1_1_node_memory_manager.html#a2159d1fa8dd6e9a6b85d19cb67693785", null ],
     [ "_setTwin", "class_ogre_1_1_node_memory_manager.html#a57055b26b6143047324615ab6bd3dae5", null ],
     [ "applyRebase", "class_ogre_1_1_node_memory_manager.html#a26f857eb9a9d9a6dc9219e6bc3286d81", null ],
     [ "buildDiffList", "class_ogre_1_1_node_memory_manager.html#af744a89c4b441d790945cd5bf36691b0", null ],
@@ -10,7 +10,7 @@ var class_ogre_1_1_node_memory_manager =
     [ "getFirstNode", "class_ogre_1_1_node_memory_manager.html#afdfc8edff9c1cdee4a3a0aa87386a737", null ],
     [ "getMemoryManagerType", "class_ogre_1_1_node_memory_manager.html#a553b5879adf0c61bd251deeba8500ff9", null ],
     [ "getNumDepths", "class_ogre_1_1_node_memory_manager.html#a08a80e0d43c9243fd3f0541e84d95c02", null ],
-    [ "getTwin", "class_ogre_1_1_node_memory_manager.html#a2c8e220a8af88ad84c0c1b02c062a111", null ],
+    [ "getTwin", "class_ogre_1_1_node_memory_manager.html#a1a0ee246bef7df095b9a881259b5170b", null ],
     [ "migrateTo", "class_ogre_1_1_node_memory_manager.html#a2e70fdeca2ff47f8b08861ae24af762f", null ],
     [ "migrateTo", "class_ogre_1_1_node_memory_manager.html#a5e020556390ffe4f5402d3600211389d", null ],
     [ "migrateToAndAttach", "class_ogre_1_1_node_memory_manager.html#a4829385f3716fde5e5d535d47f9b4880", null ],

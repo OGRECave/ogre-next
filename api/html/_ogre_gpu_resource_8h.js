@@ -1,6 +1,6 @@
 var _ogre_gpu_resource_8h =
 [
-    [ "GpuResource", "class_ogre_1_1_gpu_resource.html", "class_ogre_1_1_gpu_resource" ],
+    [ "Ogre::GpuResource", "class_ogre_1_1_gpu_resource.html", "class_ogre_1_1_gpu_resource" ],
     [ "GpuPageOutStrategy", "_ogre_gpu_resource_8h.html#a4d2162c156be30917f38f15e2327ce65", [
       [ "SaveToSystemRam", "_ogre_gpu_resource_8h.html#a4d2162c156be30917f38f15e2327ce65ab808dbb463bfe5239a47a06dc4d5ec98", null ],
       [ "Discard", "_ogre_gpu_resource_8h.html#a4d2162c156be30917f38f15e2327ce65a28135d9485a60bfa1a598cba471d6891", null ],

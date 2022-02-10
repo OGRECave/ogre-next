@@ -9,7 +9,7 @@ var class_ogre_1_1_p_c_z_frustum =
     [ "~PCZFrustum", "class_ogre_1_1_p_c_z_frustum.html#aa2f491448874e2c406d7c6eea2acb87e", null ],
     [ "addPortalCullingPlanes", "class_ogre_1_1_p_c_z_frustum.html#addbc896267412ef5876bdf7dc842abee", null ],
     [ "getProjectionType", "class_ogre_1_1_p_c_z_frustum.html#a1287ee86eabacb01d8af392c15015435", null ],
-    [ "getUnusedCullingPlane", "class_ogre_1_1_p_c_z_frustum.html#af1f3c50c9dea831ba8be932d1e50485d", null ],
+    [ "getUnusedCullingPlane", "class_ogre_1_1_p_c_z_frustum.html#a55821bc94a9416e2e1728ea4dbaea9d6", null ],
     [ "getVisibility", "class_ogre_1_1_p_c_z_frustum.html#a80703cbea15bbe558c6ef9bec77cb592", null ],
     [ "isFullyVisible", "class_ogre_1_1_p_c_z_frustum.html#a766c4d803c77d409eafcd54ea98837c7", null ],
     [ "isFullyVisible", "class_ogre_1_1_p_c_z_frustum.html#a64bb361f08dd87c869c0db1a6e1f0171", null ],

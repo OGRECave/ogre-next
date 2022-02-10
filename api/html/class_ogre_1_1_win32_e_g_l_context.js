@@ -4,7 +4,7 @@ var class_ogre_1_1_win32_e_g_l_context =
     [ "~Win32EGLContext", "class_ogre_1_1_win32_e_g_l_context.html#ab3c52ee07a08ce5f9c352baafd8b1dac", null ],
     [ "_createInternalResources", "class_ogre_1_1_win32_e_g_l_context.html#aa7b87d8031a667931b402d8f96346da8", null ],
     [ "_destroyInternalResources", "class_ogre_1_1_win32_e_g_l_context.html#a0f2b47f53f419897c04ccf676ace35e5", null ],
-    [ "clone", "class_ogre_1_1_win32_e_g_l_context.html#a443b34f75507e1ed0e2ef52498ad7981", null ],
+    [ "clone", "class_ogre_1_1_win32_e_g_l_context.html#ad99e2c0a1f2e9a5cd1d8133550f889ef", null ],
     [ "endCurrent", "class_ogre_1_1_win32_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6", null ],
     [ "endCurrent", "class_ogre_1_1_win32_e_g_l_context.html#a08612fd3eea707121938bb0197e454c6", null ],
     [ "getDrawable", "class_ogre_1_1_win32_e_g_l_context.html#a1773206dd73cb2d134a18f0c90db2335", null ],
