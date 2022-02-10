@@ -47,3 +47,7 @@ endif ()
 if (OGRE_BUILD_COMPONENT_OVERLAY)
 	add_subdirectory(Overlay)
 endif ()
+
+if (OGRE_BUILD_COMPONENT_PYTHON)
+    add_subdirectory(Python)
+endif()
