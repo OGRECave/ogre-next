@@ -201,8 +201,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a841f10a656bbd24ed92b87f616e33f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9f7904a44ab902755cd06ab73fe4c77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#ab9f7904a44ab902755cd06ab73fe4c77">dumpStats</a> () const</td></tr>
 <tr class="separator:ab9f7904a44ab902755cd06ab73fe4c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a400906a91ef0c5b7b61329de7872c91e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e">executeTask</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, <a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a> reason, const ScheduledTasks &amp;task)</td></tr>
-<tr class="separator:a400906a91ef0c5b7b61329de7872c91e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25ea160f5cd58eb1569743dee3bff9cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc">exportTextureMetadataCache</a> (<a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;outJson)</td></tr>
 <tr class="separator:a25ea160f5cd58eb1569743dee3bff9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf7dedc19c2251a15643a3e240225abd"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#abf7dedc19c2251a15643a3e240225abd">findAliasNameStr</a> (<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> idName) const</td></tr>
@@ -304,12 +302,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1427f0b635a4186cd6083a9bab879fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1188e251546ab3391ef646d60f2317d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8">shutdown</a> ()</td></tr>
 <tr class="separator:a1188e251546ab3391ef646d60f2317d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0beb6964d2f52e28e852666257a30514"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514">taskLoadToSysRamOrResident</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const ScheduledTasks &amp;task)</td></tr>
-<tr class="memdesc:a0beb6964d2f52e28e852666257a30514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements TaskTypeResidencyTransition when doing any of the following transitions: OnStorage -&gt; Resident OnStorage -&gt; OnSystemRam OnSystemRam -&gt; Resident.  <a href="class_ogre_1_1_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514">More...</a><br /></td></tr>
-<tr class="separator:a0beb6964d2f52e28e852666257a30514"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a379578bf252f5fcf0c5168f0a88c2130"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130">taskToUnloadOrDestroy</a> (<a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *texture, const ScheduledTasks &amp;task)</td></tr>
-<tr class="memdesc:a379578bf252f5fcf0c5168f0a88c2130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements TaskTypeResidencyTransition when doing any of the following transitions: Resident -&gt; OnStorage Resident -&gt; OnSystemRam OnSystemRam -&gt; OnStorage.  <a href="class_ogre_1_1_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130">More...</a><br /></td></tr>
-<tr class="separator:a379578bf252f5fcf0c5168f0a88c2130"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34ac834c93bbe00900232169bd8b3b53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu_manager.html#a34ac834c93bbe00900232169bd8b3b53">waitForStreamingCompletion</a> ()</td></tr>
 <tr class="memdesc:a34ac834c93bbe00900232169bd8b3b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks main thread until all pending textures are fully loaded.  <a href="class_ogre_1_1_texture_gpu_manager.html#a34ac834c93bbe00900232169bd8b3b53">More...</a><br /></td></tr>
 <tr class="separator:a34ac834c93bbe00900232169bd8b3b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1618,48 +1610,6 @@ Public Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a400906a91ef0c5b7b61329de7872c91e" name="a400906a91ef0c5b7b61329de7872c91e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a400906a91ef0c5b7b61329de7872c91e">&#9670;&nbsp;</a></span>executeTask()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Ogre::TextureGpuManager::executeTask </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
-          <td class="paramname"><em>texture</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu_listener.html#afe11bd546cf7315f4526488e7078cc7d">TextureGpuListener::Reason</a>&#160;</td>
-          <td class="paramname"><em>reason</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ScheduledTasks &amp;&#160;</td>
-          <td class="paramname"><em>task</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -3218,83 +3168,6 @@ template&lt;class Alloc &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0beb6964d2f52e28e852666257a30514" name="a0beb6964d2f52e28e852666257a30514"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0beb6964d2f52e28e852666257a30514">&#9670;&nbsp;</a></span>taskLoadToSysRamOrResident()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::TextureGpuManager::taskLoadToSysRamOrResident </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
-          <td class="paramname"><em>texture</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ScheduledTasks &amp;&#160;</td>
-          <td class="paramname"><em>task</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements TaskTypeResidencyTransition when doing any of the following transitions: OnStorage -&gt; Resident OnStorage -&gt; OnSystemRam OnSystemRam -&gt; Resident. </p>
-
-</div>
-</div>
-<a id="a379578bf252f5fcf0c5168f0a88c2130" name="a379578bf252f5fcf0c5168f0a88c2130"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a379578bf252f5fcf0c5168f0a88c2130">&#9670;&nbsp;</a></span>taskToUnloadOrDestroy()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::TextureGpuManager::taskToUnloadOrDestroy </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_texture_gpu.html">TextureGpu</a> *&#160;</td>
-          <td class="paramname"><em>texture</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const ScheduledTasks &amp;&#160;</td>
-          <td class="paramname"><em>task</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements TaskTypeResidencyTransition when doing any of the following transitions: Resident -&gt; OnStorage Resident -&gt; OnSystemRam OnSystemRam -&gt; OnStorage. </p>
-<p >Also implements TaskTypeDestroyTexture </p>
 
 </div>
 </div>

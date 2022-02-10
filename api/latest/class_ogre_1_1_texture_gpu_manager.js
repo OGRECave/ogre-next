@@ -48,7 +48,6 @@ var class_ogre_1_1_texture_gpu_manager =
     [ "destroyTexture", "class_ogre_1_1_texture_gpu_manager.html#a7dc898578da3113affb78ed60f209b71", null ],
     [ "dumpMemoryUsage", "class_ogre_1_1_texture_gpu_manager.html#a841f10a656bbd24ed92b87f616e33f74", null ],
     [ "dumpStats", "class_ogre_1_1_texture_gpu_manager.html#ab9f7904a44ab902755cd06ab73fe4c77", null ],
-    [ "executeTask", "class_ogre_1_1_texture_gpu_manager.html#a400906a91ef0c5b7b61329de7872c91e", null ],
     [ "exportTextureMetadataCache", "class_ogre_1_1_texture_gpu_manager.html#a25ea160f5cd58eb1569743dee3bff9cc", null ],
     [ "findAliasNameStr", "class_ogre_1_1_texture_gpu_manager.html#abf7dedc19c2251a15643a3e240225abd", null ],
     [ "findResourceGroupStr", "class_ogre_1_1_texture_gpu_manager.html#abf7a7a36c00587fb8298f4100606c627", null ],
@@ -90,8 +89,6 @@ var class_ogre_1_1_texture_gpu_manager =
     [ "setWorkerThreadMinimumBudget", "class_ogre_1_1_texture_gpu_manager.html#a40cd14ba1ba374c0bf5d0774a79b1290", null ],
     [ "shouldStayLoaded", "class_ogre_1_1_texture_gpu_manager.html#a1427f0b635a4186cd6083a9bab879fa2", null ],
     [ "shutdown", "class_ogre_1_1_texture_gpu_manager.html#a1188e251546ab3391ef646d60f2317d8", null ],
-    [ "taskLoadToSysRamOrResident", "class_ogre_1_1_texture_gpu_manager.html#a0beb6964d2f52e28e852666257a30514", null ],
-    [ "taskToUnloadOrDestroy", "class_ogre_1_1_texture_gpu_manager.html#a379578bf252f5fcf0c5168f0a88c2130", null ],
     [ "waitForStreamingCompletion", "class_ogre_1_1_texture_gpu_manager.html#a34ac834c93bbe00900232169bd8b3b53", null ],
     [ "mIgnoreSRgbPreference", "class_ogre_1_1_texture_gpu_manager.html#a1146a2b41f0f3f5d3b0b1bab1e74248d", null ]
 ];
