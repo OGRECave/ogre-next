@@ -1,11 +1,5 @@
 var NAVTREEINDEX265 =
 {
-"struct_ogre_1_1_vct_cascade_setting.html#a8f406fa8d63afdfb14826e962a8480d2":[6,0,0,927,12],
-"struct_ogre_1_1_vct_cascade_setting.html#a8f406fa8d63afdfb14826e962a8480d2":[7,0,0,900,12],
-"struct_ogre_1_1_vct_cascade_setting.html#a98a8511ad2b1ce0566b4d1801951ea75":[7,0,0,900,7],
-"struct_ogre_1_1_vct_cascade_setting.html#a98a8511ad2b1ce0566b4d1801951ea75":[6,0,0,927,7],
-"struct_ogre_1_1_vct_cascade_setting.html#ab49852e0c3b523fd866572cc834b787e":[7,0,0,900,1],
-"struct_ogre_1_1_vct_cascade_setting.html#ab49852e0c3b523fd866572cc834b787e":[6,0,0,927,1],
 "struct_ogre_1_1_vct_cascade_setting.html#aeb922f802bfb3fe614c47a45e6386aa6":[7,0,0,900,10],
 "struct_ogre_1_1_vct_cascade_setting.html#aeb922f802bfb3fe614c47a45e6386aa6":[6,0,0,927,10],
 "struct_ogre_1_1_vct_cascade_setting.html#afbfc7af951a572da7eccff17d63c6a5f":[7,0,0,900,2],
@@ -249,5 +243,11 @@ var NAVTREEINDEX265 =
 "struct_ogre_1_1_vertex_bone_assignment.html#a28656362101fb4efed98e40b5b78aa79":[5,2,0,33,0],
 "struct_ogre_1_1_vertex_bone_assignment.html#a9329a872bd7a4e3adff08eb95d6bc584":[5,2,0,33,6],
 "struct_ogre_1_1_vertex_bone_assignment.html#aa3928595e373d5b072b2927cac841d71":[5,2,0,33,5],
-"struct_ogre_1_1_vertex_bone_assignment.html#ac6643ba097ca1fee74868d58a225c97d":[5,2,0,33,1]
+"struct_ogre_1_1_vertex_bone_assignment.html#ac6643ba097ca1fee74868d58a225c97d":[5,2,0,33,1],
+"struct_ogre_1_1_vertex_bone_assignment.html#ad215fe224f5f58517d48b1806f87781d":[5,2,0,33,4],
+"struct_ogre_1_1_vertex_bone_assignment.html#ae1f8ff06c0f8054734517b2559b8f92b":[5,2,0,33,7],
+"struct_ogre_1_1_vertex_bone_assignment.html#ae97b16cce1bed8a29d5db5caca212cf2":[5,2,0,33,3],
+"struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html":[5,2,10,147,0],
+"struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a1d51421c164cf6347b648bbccabb90a3":[5,2,10,147,0,3],
+"struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a28368a9a3eaf378914460eaea964a3e9":[5,2,10,147,0,5]
 };

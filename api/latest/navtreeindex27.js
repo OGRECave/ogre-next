@@ -1,7 +1,5 @@
 var NAVTREEINDEX27 =
 {
-"class_ogre_1_1_compositor_pass_compute.html#ae40f4defcc8f4847f8b80c70992efc09":[5,2,1,7,5],
-"class_ogre_1_1_compositor_pass_compute.html#ae74108e45b903d62124868f9c121b08a":[5,2,1,7,8],
 "class_ogre_1_1_compositor_pass_compute.html#aed1464ac3de21ff20db8f9f1f8608dc7":[5,2,1,7,26],
 "class_ogre_1_1_compositor_pass_compute.html#af0d628f807e0bcb2ef5c2782e6245ac3":[5,2,1,7,3],
 "class_ogre_1_1_compositor_pass_compute.html#af3987c75805bab6531c49e40001586b5":[5,2,1,7,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX27 =
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#aa4e21e3c81d93761312c1d6b94cf353f":[5,2,1,13,30],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#aa78f703dc8c8b28cf575ac419653dc40":[5,2,1,13,52],
 "class_ogre_1_1_compositor_pass_ibl_specular_def.html#aa9377ca6479c21df519128eb6142b169":[5,2,1,13,28],
-"class_ogre_1_1_compositor_pass_ibl_specular_def.html#aa9def33c89448b89c2d920d96ff55f28":[5,2,1,13,40]
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#aa9def33c89448b89c2d920d96ff55f28":[5,2,1,13,40],
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#aacdeaffb7cacec5f264de2be66410c67":[5,2,1,13,33],
+"class_ogre_1_1_compositor_pass_ibl_specular_def.html#ab270a145417bc6b9c95224ffc2b11c2e":[5,2,1,13,29]
 };

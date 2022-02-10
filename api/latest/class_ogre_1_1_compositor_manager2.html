@@ -149,9 +149,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad407d79c31cae9c4b2693ec904808f10"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_ogre_1_1_compositor_workspace_def.html">CompositorWorkspaceDef</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_manager2.html#ad407d79c31cae9c4b2693ec904808f10">addWorkspaceDefinition</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;name)</td></tr>
 <tr class="memdesc:ad407d79c31cae9c4b2693ec904808f10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a new workspace definition.  <a href="class_ogre_1_1_compositor_manager2.html#ad407d79c31cae9c4b2693ec904808f10">More...</a><br /></td></tr>
 <tr class="separator:ad407d79c31cae9c4b2693ec904808f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2570335ea7df7e197a88334d65468c01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01">connectOutput</a> (<a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a> *finalNode, size_t inputChannel)</td></tr>
-<tr class="memdesc:a2570335ea7df7e197a88334d65468c01"><td class="mdescLeft">&#160;</td><td class="mdescRight">The final rendering is done by passing the RenderWindow to one of the input channels.  <a href="class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01">More...</a><br /></td></tr>
-<tr class="separator:a2570335ea7df7e197a88334d65468c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a261d69d7a799f9e4f3516c86f9859c90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90">createBasicWorkspaceDef</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;workspaceDefName, const <a class="el" href="class_ogre_1_1_colour_value.html">ColourValue</a> &amp;backgroundColour, <a class="el" href="struct_ogre_1_1_id_string.html">IdString</a> shadowNodeName=<a class="el" href="struct_ogre_1_1_id_string.html">IdString</a>())</td></tr>
 <tr class="memdesc:a261d69d7a799f9e4f3516c86f9859c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility helper to create a basic workspace to get you out of the rush.  <a href="class_ogre_1_1_compositor_manager2.html#a261d69d7a799f9e4f3516c86f9859c90">More...</a><br /></td></tr>
 <tr class="separator:a261d69d7a799f9e4f3516c86f9859c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -673,7 +670,7 @@ for( int i=0; i&lt;4; ++i )
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd>CompositorWorkspaceDef::connectOutput) In theory if none of your nodes use width &amp; height relative to final RT &amp; you don't use <a class="el" href="class_ogre_1_1_compositor_manager2.html#a2570335ea7df7e197a88334d65468c01" title="The final rendering is done by passing the RenderWindow to one of the input channels.">connectOutput</a>, this pointer could be null. Although it's not recommended nor explicitly supported. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd>CompositorWorkspaceDef::connectOutput) In theory if none of your nodes use width &amp; height relative to final RT &amp; you don't use connectOutput, this pointer could be null. Although it's not recommended nor explicitly supported. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">defaultCam</td><td>Default camera to use when a camera name wasn't specified explicitly in a pass definition (i.e. PASS_SCENE passes). This pointer can be null if you promise to use all explicit camera names in your passes (and those cameras have already been created) </td></tr>
@@ -714,37 +711,6 @@ for( int i=0; i&lt;4; ++i )
 
 <p>Returns a new workspace definition. </p>
 <p >The name must be unique, throws otherwise. </p><dl class="section remark"><dt>Remarks</dt><dd>Setting workspace def's connections must be done <em>after</em> all node definitions have been created </dd></dl>
-
-</div>
-</div>
-<a id="a2570335ea7df7e197a88334d65468c01" name="a2570335ea7df7e197a88334d65468c01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2570335ea7df7e197a88334d65468c01">&#9670;&nbsp;</a></span>connectOutput()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Ogre::CompositorManager2::connectOutput </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_ogre_1_1_compositor_node.html">CompositorNode</a> *&#160;</td>
-          <td class="paramname"><em>finalNode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>inputChannel</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>The final rendering is done by passing the RenderWindow to one of the input channels. </p>
-<p >This functions does exactly that. </p>
 
 </div>
 </div>

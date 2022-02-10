@@ -1,11 +1,5 @@
 var NAVTREEINDEX267 =
 {
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a0711ac6951d06e235f4ca69afb1d6231":[7,0,0,946,3],
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a0711ac6951d06e235f4ca69afb1d6231":[6,0,0,973,3],
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a24d1a4eeb572102093a3047d58d45a1c":[7,0,0,946,4],
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a24d1a4eeb572102093a3047d58d45a1c":[6,0,0,973,4],
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a6246f857bd1fa849883ccd57413d34f3":[7,0,0,946,2],
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a6246f857bd1fa849883ccd57413d34f3":[6,0,0,973,2],
 "struct_ogre_1_1_vulkan_descriptor_set_texture2.html#aa6314c67b00703cc9ab9e31d52eb398f":[6,0,0,973,1],
 "struct_ogre_1_1_vulkan_descriptor_set_texture2.html#aa6314c67b00703cc9ab9e31d52eb398f":[7,0,0,946,1],
 "struct_ogre_1_1_vulkan_descriptor_set_texture2.html#ae4b414b26f26a512ea8493115bdf131d":[6,0,0,973,0],
@@ -249,5 +243,11 @@ var NAVTREEINDEX267 =
 "struct_ogre_1_1_work_queue_1_1_response.html":[5,2,2,129,2],
 "struct_ogre_1_1_work_queue_1_1_response.html#a04980c518c8e22f1f669e6b543a10e20":[5,2,2,129,2,17],
 "struct_ogre_1_1_work_queue_1_1_response.html#a0517450e39ac575d11a1c28d0c319e3c":[5,2,2,129,2,4],
-"struct_ogre_1_1_work_queue_1_1_response.html#a069919ee58c46826f4d0dc11ad802d16":[5,2,2,129,2,5]
+"struct_ogre_1_1_work_queue_1_1_response.html#a069919ee58c46826f4d0dc11ad802d16":[5,2,2,129,2,5],
+"struct_ogre_1_1_work_queue_1_1_response.html#a1c727e879a260c37b00ce5505fe8e144":[5,2,2,129,2,8],
+"struct_ogre_1_1_work_queue_1_1_response.html#a29ac9eeab02d77b028ec3a3dd8f7964c":[5,2,2,129,2,2],
+"struct_ogre_1_1_work_queue_1_1_response.html#a595ea4c05da8aa987d3800e65d23355d":[5,2,2,129,2,10],
+"struct_ogre_1_1_work_queue_1_1_response.html#a63fc6bdc2eb6aeac24898a77ec5e2023":[5,2,2,129,2,13],
+"struct_ogre_1_1_work_queue_1_1_response.html#a684441758baf2168db5a4aab31d8d7d4":[5,2,2,129,2,1],
+"struct_ogre_1_1_work_queue_1_1_response.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,2,129,2,6]
 };

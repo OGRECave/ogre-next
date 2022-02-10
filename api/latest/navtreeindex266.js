@@ -1,11 +1,5 @@
 var NAVTREEINDEX266 =
 {
-"struct_ogre_1_1_vertex_bone_assignment.html#ad215fe224f5f58517d48b1806f87781d":[5,2,0,33,4],
-"struct_ogre_1_1_vertex_bone_assignment.html#ae1f8ff06c0f8054734517b2559b8f92b":[5,2,0,33,7],
-"struct_ogre_1_1_vertex_bone_assignment.html#ae97b16cce1bed8a29d5db5caca212cf2":[5,2,0,33,3],
-"struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html":[5,2,10,147,0],
-"struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a1d51421c164cf6347b648bbccabb90a3":[5,2,10,147,0,3],
-"struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a28368a9a3eaf378914460eaea964a3e9":[5,2,10,147,0,5],
 "struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a381be2684adb8d9718c1344d16300ccd":[5,2,10,147,0,1],
 "struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a3ddae421641439a50e0eaf2e82347e24":[5,2,10,147,0,4],
 "struct_ogre_1_1_vertex_buffer_download_helper_1_1_download_data.html#a905d53689f7c550d52cbdc533c3c895a":[5,2,10,147,0,2],
@@ -249,5 +243,11 @@ var NAVTREEINDEX266 =
 "struct_ogre_1_1_vulkan_descriptor_set_texture.html#ae2f45d798032c887d157273ac88460cb":[7,0,0,945,1],
 "struct_ogre_1_1_vulkan_descriptor_set_texture.html#ae2f45d798032c887d157273ac88460cb":[6,0,0,972,1],
 "struct_ogre_1_1_vulkan_descriptor_set_texture2.html":[6,0,0,973],
-"struct_ogre_1_1_vulkan_descriptor_set_texture2.html":[7,0,0,946]
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html":[7,0,0,946],
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a0711ac6951d06e235f4ca69afb1d6231":[7,0,0,946,3],
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a0711ac6951d06e235f4ca69afb1d6231":[6,0,0,973,3],
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a24d1a4eeb572102093a3047d58d45a1c":[7,0,0,946,4],
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a24d1a4eeb572102093a3047d58d45a1c":[6,0,0,973,4],
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a6246f857bd1fa849883ccd57413d34f3":[7,0,0,946,2],
+"struct_ogre_1_1_vulkan_descriptor_set_texture2.html#a6246f857bd1fa849883ccd57413d34f3":[6,0,0,973,2]
 };

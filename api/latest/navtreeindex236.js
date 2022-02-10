@@ -1,11 +1,5 @@
 var NAVTREEINDEX236 =
 {
-"class_ogre_1_1v1_1_1_tag_point.html#a8334ca4383642fd2cbff8113b6677615":[5,2,0,27,76],
-"class_ogre_1_1v1_1_1_tag_point.html#a8357fe4fb4849772b94baa4bf47c7ded":[5,2,0,27,55],
-"class_ogre_1_1v1_1_1_tag_point.html#a86da6be120d70c5dd8f911e6944e5a9a":[5,2,0,27,17],
-"class_ogre_1_1v1_1_1_tag_point.html#a86f9fbb85ffb6429686a891203d2b938":[5,2,0,27,67],
-"class_ogre_1_1v1_1_1_tag_point.html#a878a033f30f2b449d2f0c91d63be77ff":[5,2,0,27,82],
-"class_ogre_1_1v1_1_1_tag_point.html#a8a8b155711ca7b517f2cbb4c9815cd3d":[5,2,0,27,32],
 "class_ogre_1_1v1_1_1_tag_point.html#a8bd2c823a6976c1596f57a942ea676e6":[5,2,0,27,35],
 "class_ogre_1_1v1_1_1_tag_point.html#a917ba7367e44259d9f66d4eade789f5f":[5,2,0,27,4],
 "class_ogre_1_1v1_1_1_tag_point.html#a935e7f647ce044078b97eb811ff837ca":[5,2,0,27,27],
@@ -249,5 +243,11 @@ var NAVTREEINDEX236 =
 "class_ogre_1_1v1_1_1_text_area_overlay_element.html#aee48fdf58b0797e32fc4449fba7d8309":[5,2,8,13,156],
 "class_ogre_1_1v1_1_1_text_area_overlay_element.html#af85238872bb197dea36acf21a578ecec":[5,2,8,13,95],
 "class_ogre_1_1v1_1_1_text_area_overlay_element.html#afad2d855edfa7af895e08a5cef69abde":[5,2,8,13,157],
-"class_ogre_1_1v1_1_1_text_area_overlay_element.html#afcbf4cb36d5911a9d40a40c57e94f23b":[5,2,8,13,120]
+"class_ogre_1_1v1_1_1_text_area_overlay_element.html#afcbf4cb36d5911a9d40a40c57e94f23b":[5,2,8,13,120],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html":[5,2,8,13,0],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#a81484657affb7843974880fb627d3b2a":[5,2,8,13,0,1],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_alignment.html#aaa09055d52170be84f5ca9ef463937a1":[5,2,8,13,0,0],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html":[5,2,8,13,1],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html#a470c5295e8f58e73d532ce881ee65760":[5,2,8,13,1,0],
+"class_ogre_1_1v1_1_1_text_area_overlay_element_1_1_cmd_caption.html#adb24f17b725db3c763358de67117e120":[5,2,8,13,1,1]
 };

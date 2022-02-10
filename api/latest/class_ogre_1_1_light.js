@@ -105,7 +105,6 @@ var class_ogre_1_1_light =
     [ "getSpotlightTanHalfAngle", "class_ogre_1_1_light.html#a2d7c2d62244754d6a5a86f848509e35b", null ],
     [ "getTexture", "class_ogre_1_1_light.html#a54517189c4d967edbd89beb2d7ac9803", null ],
     [ "getType", "class_ogre_1_1_light.html#ab428dbb558a53b761a3a526836e6a55b", null ],
-    [ "getTypeFlags", "class_ogre_1_1_light.html#ab3b60ad0355991be4e800914db8f84c5", null ],
     [ "getUserObjectBindings", "class_ogre_1_1_light.html#aa6ae8d976be50b007ba1e87732a6397d", null ],
     [ "getUserObjectBindings", "class_ogre_1_1_light.html#a27eb8980ee187b42ea619c582eaebf73", null ],
     [ "getVisibilityFlags", "class_ogre_1_1_light.html#ad215e51b8a9f62f5524ae895ed902fd2", null ],

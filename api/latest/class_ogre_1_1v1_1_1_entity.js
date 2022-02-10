@@ -88,7 +88,6 @@ var class_ogre_1_1v1_1_1_entity =
     [ "getSubEntity", "class_ogre_1_1v1_1_1_entity.html#a8ed48f9b88ea637e0da6252ab2f6f582", null ],
     [ "getSubEntity", "class_ogre_1_1v1_1_1_entity.html#acbf1ced1a50c2410a69e0e00c7427a2b", null ],
     [ "getSubEntity", "class_ogre_1_1v1_1_1_entity.html#a9054b457dd7e115f829e881aa7adf2c2", null ],
-    [ "getTypeFlags", "class_ogre_1_1v1_1_1_entity.html#a1790f3dd4536007974508028bbd27209", null ],
     [ "getUpdateBoundingBoxFromSkeleton", "class_ogre_1_1v1_1_1_entity.html#ad708c7bba567b315d8a6d3f2e3d9e4d3", null ],
     [ "getUserObjectBindings", "class_ogre_1_1v1_1_1_entity.html#aa6ae8d976be50b007ba1e87732a6397d", null ],
     [ "getUserObjectBindings", "class_ogre_1_1v1_1_1_entity.html#a27eb8980ee187b42ea619c582eaebf73", null ],
