@@ -587,8 +587,6 @@ namespace Ogre
                 morph animation.
             */
             TempBlendedBufferInfo *_getVertexAnimTempBufferInfo();
-            /// Override to return specific type flag.
-            uint32 getTypeFlags() const;
             /// Retrieve the VertexData which should be used for GPU binding.
             VertexData *getVertexDataForBinding( bool casterPass );
 

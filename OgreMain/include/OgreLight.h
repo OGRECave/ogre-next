@@ -413,8 +413,6 @@ namespace Ogre
         */
         Vector4 getAs4DVector() const;
 
-        /// Override to return specific type flag
-        uint32 getTypeFlags() const;
 
         /// @copydoc AnimableObject::createAnimableValue
         AnimableValuePtr createAnimableValue( const String &valueName ) override;
