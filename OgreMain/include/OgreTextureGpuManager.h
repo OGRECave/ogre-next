@@ -1192,6 +1192,7 @@ namespace Ogre
         /// This function CAN be called from any thread
         const String *findResourceGroupStr( IdString idName ) const;
 
+    protected:
         /// Implements TaskTypeResidencyTransition when doing any of the following transitions:
         ///     OnStorage   -> Resident
         ///     OnStorage   -> OnSystemRam
@@ -1206,8 +1207,6 @@ namespace Ogre
         void taskToUnloadOrDestroy( TextureGpu *texture, const ScheduledTasks &task );
         bool executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
                           const ScheduledTasks &task );
-
-    protected:
         void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                    bool ignoreDelay );
 
