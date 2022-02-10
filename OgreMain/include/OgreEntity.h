@@ -635,8 +635,7 @@ namespace v1 {
             morph animation.
         */
         TempBlendedBufferInfo* _getVertexAnimTempBufferInfo(void);
-        /// Override to return specific type flag.
-        uint32 getTypeFlags(void) const;
+
         /// Retrieve the VertexData which should be used for GPU binding.
         VertexData* getVertexDataForBinding( bool casterPass );
 

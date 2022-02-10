@@ -393,9 +393,6 @@ namespace Ogre {
         */
         Vector4 getAs4DVector(void) const;
 
-        /// Override to return specific type flag
-        uint32 getTypeFlags(void) const;
-
         /// @copydoc AnimableObject::createAnimableValue
         AnimableValuePtr createAnimableValue(const String& valueName);
 
@@ -523,20 +520,6 @@ namespace Ogre {
         virtual void _updateCustomGpuParameter(uint16 paramIndex, 
             const GpuProgramParameters::AutoConstantEntry& constantEntry, 
             GpuProgramParameters* params) const;
-                
-        /** Check whether a sphere is included in the lighted area of the light 
-        @note 
-            The function trades accuracy for efficiency. As a result you may get
-            false-positives (The function should not return any false-negatives).
-        */
-        bool isInLightRange(const Ogre::Sphere& sphere) const;
-        
-        /** Check whether a bounding box is included in the lighted area of the light
-        @note 
-            The function trades accuracy for efficiency. As a result you may get
-            false-positives (The function should not return any false-negatives).
-        */
-        bool isInLightRange(const Ogre::AxisAlignedBox& container) const;
 
         /** Sets a textured for types of light that support it. At the time of
             writing only LT_AREA_APPROX supports it.
