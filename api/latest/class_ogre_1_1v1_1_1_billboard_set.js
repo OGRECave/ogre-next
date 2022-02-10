@@ -30,7 +30,6 @@ var class_ogre_1_1v1_1_1_billboard_set =
     [ "addVisibilityFlags", "class_ogre_1_1v1_1_1_billboard_set.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "beginBillboards", "class_ogre_1_1v1_1_1_billboard_set.html#a431e63e612715a156b413517ae21b213", null ],
     [ "buildLightList", "class_ogre_1_1v1_1_1_billboard_set.html#ac4305df204604a027ca27ef77efff295", null ],
-    [ "calculateCameraDistance", "class_ogre_1_1v1_1_1_billboard_set.html#a64bd61f33ae8a2d4e824ce7e23308d98", null ],
     [ "calculateCastersBox", "class_ogre_1_1v1_1_1_billboard_set.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "clear", "class_ogre_1_1v1_1_1_billboard_set.html#af8104c6f235a31a42799a5b1473b560d", null ],
     [ "createAnimableValue", "class_ogre_1_1v1_1_1_billboard_set.html#ab2cfac9af1b0d71c780ec969166b3585", null ],

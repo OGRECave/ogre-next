@@ -18,7 +18,6 @@ var class_ogre_1_1_item =
     [ "addQueryFlags", "class_ogre_1_1_item.html#a98fe88f82f86eafa19308074495db809", null ],
     [ "addVisibilityFlags", "class_ogre_1_1_item.html#a6b823b52684730302908ecfd1a8e6d54", null ],
     [ "buildLightList", "class_ogre_1_1_item.html#ac4305df204604a027ca27ef77efff295", null ],
-    [ "calculateCameraDistance", "class_ogre_1_1_item.html#a64bd61f33ae8a2d4e824ce7e23308d98", null ],
     [ "calculateCastersBox", "class_ogre_1_1_item.html#ab86b755f38ec01b52ed6a512d9d31ef9", null ],
     [ "clone", "class_ogre_1_1_item.html#ae176f0c985cec02acfdac64b2f5399af", null ],
     [ "createAnimableValue", "class_ogre_1_1_item.html#ab2cfac9af1b0d71c780ec969166b3585", null ],
