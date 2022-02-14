@@ -371,10 +371,17 @@ namespace Ogre
             if( shader->hasCompileError() )
             {
                 mCompileError = true;
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Shader reflection hint '" + mShaderReflectionPairHint +
-                                 "' for pixel shader '" + mName + "' had a compiler error.",
-                             "MetalProgram::analyzeRenderParameters" );
+
+                // Cannot be an exception because this failure can be GPU-specific;
+                // which will cause an app to crash only on specific devices
+                // Only always-repeatable errors should be exceptions in this routine
+                //
+                // See https://github.com/OGRECave/ogre-next/issues/251
+                LogManager::getSingleton().logMessage(
+                    "Shader reflection hint '" + mShaderReflectionPairHint + "' for pixel shader '" +
+                        mName + "' had a compiler error.",
+                    LML_CRITICAL );
+                return;
             }
 
             assert( dynamic_cast<MetalProgram *>( shader->_getBindingDelegate() ) );
@@ -406,9 +413,14 @@ namespace Ogre
 
             mCompileError = true;
 
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Failed to create pipeline state for reflection, error " + errorDesc,
-                         "MetalProgram::analyzeRenderParameters" );
+            // Cannot be an exception because this failure can be GPU-specific;
+            // which will cause an app to crash only on specific devices.
+            // Only always-repeatable errors should be exceptions in this routine
+            //
+            // See https://github.com/OGRECave/ogre-next/issues/251
+            LogManager::getSingleton().logMessage(
+                "Failed to create pipeline state for reflection for " + mName + ", error " + errorDesc,
+                LML_CRITICAL );
         }
         else
         {
