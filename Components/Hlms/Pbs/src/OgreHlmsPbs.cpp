@@ -3147,6 +3147,9 @@ namespace Ogre
             // layout(binding = 1) uniform MaterialBuf {} materialArray
             const ConstBufferPool::BufferPool *newPool = datablock->getAssignedPool();
             *commandBuffer->addCommand<CbShaderBuffer>() =
+                CbShaderBuffer( VertexShader, 1, newPool->materialBuffer, 0,
+                                (uint32)newPool->materialBuffer->getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() =
                 CbShaderBuffer( PixelShader, 1, newPool->materialBuffer, 0,
                                 (uint32)newPool->materialBuffer->getTotalSizeBytes() );
             CubemapProbe *manualProbe = datablock->getCubemapProbe();

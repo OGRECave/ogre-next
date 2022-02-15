@@ -171,11 +171,6 @@ namespace Ogre
         void _releaseManualHardwareResources();
         void _restoreManualHardwareResources();
 
-        /** The final rendering is done by passing the RenderWindow to one of the input
-            channels. This functions does exactly that.
-        */
-        void connectOutput( CompositorNode *finalNode, size_t inputChannel );
-
         /// Returns true if a node definition with the given name exists
         bool hasNodeDefinition( IdString nodeDefName ) const;
 

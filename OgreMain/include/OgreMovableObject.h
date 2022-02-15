@@ -254,12 +254,14 @@ namespace Ogre
         */
         static void updateAllBounds( const size_t numNodes, ObjectData t );
 
+    private:
         static inline ArrayReal calculateCameraDistance( uint32                    _cameraSortMode,
                                                          const ArrayVector3       &cameraPos,
                                                          const ArrayVector3       &cameraDir,
                                                          ArrayAabb *RESTRICT_ALIAS worldAabb,
                                                          ArrayReal *RESTRICT_ALIAS worldRadius );
 
+    public:
         /** @See SceneManager::cullFrustum
         @remarks
             We don't pass by reference on purpose (avoid implicit aliasing)

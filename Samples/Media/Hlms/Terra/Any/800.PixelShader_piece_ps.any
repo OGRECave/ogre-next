@@ -344,21 +344,21 @@
 													  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
 						pixelData.envColourD += lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
 													  midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
-					@property( vct_num_probes )
+				@property( vct_num_probes )
 					}
 				@end
-				@else
-					pixelData.envColourS = lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-												 midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
-					pixelData.envColourD = lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
-												 midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
-				@end
+			@else
+				pixelData.envColourS = lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
+											 midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWD );
+				pixelData.envColourD = lerp( midf3_c( passBuf.ambientLowerHemi.xyz ),
+											 midf3_c( passBuf.ambientUpperHemi.xyz ), ambientWS );
 			@end
-			@property( ambient_fixed && vct_num_probes )
-				//Only use ambient lighting if object is outside any VCT probe
-				finalColour += vctSpecular.w == 0 ? midf3_c( 0, 0, 0 ) :
-													(midf3_c( passBuf.ambientUpperHemi.xyz ) * pixelData.diffuse.xyz);
-			@end
+		@end
+		@property( ambient_fixed && vct_num_probes )
+			//Only use ambient lighting if object is outside any VCT probe
+			finalColour += vctSpecular.w == 0 ? midf3_c( 0, 0, 0 ) :
+												(midf3_c( passBuf.ambientUpperHemi.xyz ) * pixelData.diffuse.xyz);
+		@end
 
 		@property( needs_env_brdf )
 			@insertpiece( BRDF_EnvMap )
