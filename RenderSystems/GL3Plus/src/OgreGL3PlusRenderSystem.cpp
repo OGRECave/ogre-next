@@ -998,7 +998,7 @@ namespace Ogre {
                 }
             }
             glViewportArrayv( 0u, numViewports, reinterpret_cast<GLfloat*>( xywhVp ) );
-            glScissorArrayv( 0u, numViewports, reinterpret_cast<GLint*>( xywhVp ) );
+            glScissorArrayv( 0u, numViewports, reinterpret_cast<GLint*>( xywhSc ) );
         }
         /*else
         {
