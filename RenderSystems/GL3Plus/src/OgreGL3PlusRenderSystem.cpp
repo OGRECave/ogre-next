@@ -980,8 +980,8 @@ namespace Ogre
                     xywhSc[i][1] = GLint( anyTarget->getHeight() ) - xywhSc[i][3] - xywhSc[i][1];
                 }
             }
-            glViewportArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLfloat *>( xywhVp ) );
-            glScissorArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLint *>( xywhVp ) );
+            glViewportArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLfloat*>( xywhVp ) );
+            glScissorArrayv( 0u, (GLsizei)numViewports, reinterpret_cast<GLint*>( xywhSc ) );
         }
         /*else
         {
@@ -3406,8 +3406,12 @@ namespace Ogre
             mPso->vertexShader->bindParameters( params, mask );
             break;
         case GPT_FRAGMENT_PROGRAM:
-            mActiveFragmentGpuProgramParameters = params;
-            mPso->pixelShader->bindParameters( params, mask );
+            // PixelShader can be nullptr if blend channel is BlendChannelForceDisabled
+            if( mPso->pixelShader )
+            {
+                mActiveFragmentGpuProgramParameters = params;
+                mPso->pixelShader->bindParameters( params, mask );
+            }
             break;
         case GPT_GEOMETRY_PROGRAM:
             mActiveGeometryGpuProgramParameters = params;
@@ -3436,7 +3440,9 @@ namespace Ogre
             mPso->vertexShader->bindPassIterationParameters( mActiveVertexGpuProgramParameters );
             break;
         case GPT_FRAGMENT_PROGRAM:
-            mPso->pixelShader->bindPassIterationParameters( mActiveFragmentGpuProgramParameters );
+            // PixelShader can be nullptr if blend channel is BlendChannelForceDisabled
+            if( mPso->pixelShader )
+                mPso->pixelShader->bindPassIterationParameters( mActiveFragmentGpuProgramParameters );
             break;
         case GPT_GEOMETRY_PROGRAM:
             mPso->geometryShader->bindPassIterationParameters( mActiveGeometryGpuProgramParameters );
