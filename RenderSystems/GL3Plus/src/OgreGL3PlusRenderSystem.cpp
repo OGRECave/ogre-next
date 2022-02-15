@@ -3505,8 +3505,12 @@ namespace Ogre {
             mPso->vertexShader->bindSharedParameters(params, mask);
             break;
         case GPT_FRAGMENT_PROGRAM:
-            mActiveFragmentGpuProgramParameters = params;
-            mPso->pixelShader->bindSharedParameters(params, mask);
+            // PixelShader can be nullptr if blend channel is BlendChannelForceDisabled
+            if( mPso->pixelShader )
+            {
+                mActiveFragmentGpuProgramParameters = params;
+                mPso->pixelShader->bindSharedParameters( params, mask );
+            }
             break;
         case GPT_GEOMETRY_PROGRAM:
             mActiveGeometryGpuProgramParameters = params;
@@ -3537,8 +3541,12 @@ namespace Ogre {
             mPso->vertexShader->bindParameters(params, mask);
             break;
         case GPT_FRAGMENT_PROGRAM:
-            mActiveFragmentGpuProgramParameters = params;
-            mPso->pixelShader->bindParameters(params, mask);
+            // PixelShader can be nullptr if blend channel is BlendChannelForceDisabled
+            if( mPso->pixelShader )
+            {
+                mActiveFragmentGpuProgramParameters = params;
+                mPso->pixelShader->bindParameters( params, mask );
+            }
             break;
         case GPT_GEOMETRY_PROGRAM:
             mActiveGeometryGpuProgramParameters = params;
@@ -3574,7 +3582,9 @@ namespace Ogre {
             mPso->vertexShader->bindPassIterationParameters(mActiveVertexGpuProgramParameters);
             break;
         case GPT_FRAGMENT_PROGRAM:
-            mPso->pixelShader->bindPassIterationParameters(mActiveFragmentGpuProgramParameters);
+            // PixelShader can be nullptr if blend channel is BlendChannelForceDisabled
+            if( mPso->pixelShader )
+                mPso->pixelShader->bindPassIterationParameters( mActiveFragmentGpuProgramParameters );
             break;
         case GPT_GEOMETRY_PROGRAM:
             mPso->geometryShader->bindPassIterationParameters(mActiveGeometryGpuProgramParameters);
