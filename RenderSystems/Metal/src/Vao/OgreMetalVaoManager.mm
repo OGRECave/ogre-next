@@ -133,12 +133,17 @@ namespace Ogre
         mDevice( device ),
         mDrawId( 0 )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && TARGET_OS_SIMULATOR == 0
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         // On iOS alignment must match "the maximum accessed object" type. e.g.
         // if it's all float, then alignment = 4. if it's a float2, then alignment = 8.
         // The max. object is float4, so alignment = 16
+#if TARGET_OS_SIMULATOR == 0
         mConstBufferAlignment = 16;
         mTexBufferAlignment = 16;
+#else
+        mConstBufferAlignment = 256;
+        mTexBufferAlignment = 256;
+#endif
 
         // Keep pools of 16MB for static buffers
         mDefaultPoolSize[CPU_INACCESSIBLE] = 16 * 1024 * 1024;
