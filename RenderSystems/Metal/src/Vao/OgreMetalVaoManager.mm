@@ -133,7 +133,7 @@ namespace Ogre
         mDevice( device ),
         mDrawId( 0 )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && TARGET_OS_SIMULATOR == 0
         // On iOS alignment must match "the maximum accessed object" type. e.g.
         // if it's all float, then alignment = 4. if it's a float2, then alignment = 8.
         // The max. object is float4, so alignment = 16
@@ -190,11 +190,24 @@ namespace Ogre
         mSupportsPersistentMapping = true;
 
         const uint32 maxNumInstances = 4096u * 2u;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && TARGET_OS_SIMULATOR == 0
         uint32 *drawIdPtr = static_cast<uint32 *>(
             OGRE_MALLOC_SIMD( maxNumInstances * sizeof( uint32 ), MEMCATEGORY_GEOMETRY ) );
         for( uint32 i = 0; i < maxNumInstances; ++i )
             drawIdPtr[i] = i;
+        mDrawId =
+            createConstBuffer( maxNumInstances * sizeof( uint32 ), BT_IMMUTABLE, drawIdPtr, false );
+        OGRE_FREE_SIMD( drawIdPtr, MEMCATEGORY_GEOMETRY );
+        drawIdPtr = 0;
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS && TARGET_OS_SIMULATOR == 1
+        uint32 *drawIdPtr = static_cast<uint32 *>(
+            OGRE_MALLOC_SIMD( maxNumInstances * 256u, MEMCATEGORY_GEOMETRY ) );
+        for( uint32 i = 0; i < maxNumInstances; ++i )
+        {
+            drawIdPtr[64u * i] = i;
+            for( uint32 j = 1; j < 64u; ++j )
+                drawIdPtr[64u * i + j] = 0xD256D256;
+        }
         mDrawId =
             createConstBuffer( maxNumInstances * sizeof( uint32 ), BT_IMMUTABLE, drawIdPtr, false );
         OGRE_FREE_SIMD( drawIdPtr, MEMCATEGORY_GEOMETRY );
