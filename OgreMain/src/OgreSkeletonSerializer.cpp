@@ -554,7 +554,7 @@ namespace Ogre
                     }
                 }
 
-                while( streamID == SKELETON_ANIMATION_TRACK && !stream->eof() )
+                while( !stream->eof() && streamID == SKELETON_ANIMATION_TRACK )
                 {
                     readAnimationTrack( stream, pAnim, pSkel );
 
@@ -591,7 +591,7 @@ namespace Ogre
             {
                 pushInnerChunk( stream );
                 unsigned short streamID = readChunk( stream );
-                while( streamID == SKELETON_ANIMATION_TRACK_KEYFRAME && !stream->eof() )
+                while( !stream->eof() && streamID == SKELETON_ANIMATION_TRACK_KEYFRAME )
                 {
                     readKeyFrame( stream, pTrack, pSkel );
 
