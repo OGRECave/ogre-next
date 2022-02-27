@@ -114,6 +114,7 @@ namespace Ogre
         uint32 finalRes = static_cast<uint32>( roundf( width * actualLength / referenceLength ) );
         finalRes = getNextPowerOf2( finalRes );
         finalRes = std::min( finalRes, maxWidth );
+        finalRes = std::max( finalRes, 1u );
         return finalRes;
     }
     /// Returns true if the Item has at least 1 submesh with emissive materials
