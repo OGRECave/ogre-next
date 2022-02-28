@@ -337,6 +337,8 @@ namespace Ogre
                         }
                     }
                 }
+
+                objData.advancePack();
             }
         }
 
