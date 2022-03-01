@@ -437,6 +437,7 @@ cmake_dependent_option(OGRE_CONFIG_UNIX_NO_X11 "Avoid X11 dependencies as much a
 cmake_dependent_option(OGRE_GLSUPPORT_USE_GLX "Use GLX (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;UNIX;NOT APPLE;NOT OGRE_CONFIG_UNIX_NO_X11" FALSE)
 cmake_dependent_option(OGRE_GLSUPPORT_USE_WGL "Use WGL (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;WIN32" FALSE)
 cmake_dependent_option(OGRE_GLSUPPORT_USE_COCOA "Use Cocoa (Default / Native window). If more than one GLSUPPORT is enabled, interface can be selected at runtime" TRUE "OGRE_BUILD_RENDERSYSTEM_GL3PLUS;APPLE" FALSE)
+set( OGRE_GLSUPPORT_NUM_INTERFACES 0 )
 if( OGRE_GLSUPPORT_USE_GLX OR OGRE_GLSUPPORT_USE_WGL OR OGRE_GLSUPPORT_USE_COCOA )
 	math( EXPR OGRE_GLSUPPORT_NUM_INTERFACES "${OGRE_GLSUPPORT_NUM_INTERFACES} + 1" )
 endif()
