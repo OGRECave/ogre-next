@@ -181,6 +181,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">operator new[]</a> (size_t sz, const char *file, int line, const char *func)</td></tr>
 <tr class="memdesc:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">array operator new, with debug line info  <a href="class_ogre_1_1_allocated_object.html#aed1464ac3de21ff20db8f9f1f8608dc7">More...</a><br /></td></tr>
 <tr class="separator:aed1464ac3de21ff20db8f9f1f8608dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bdfaaee402c04a5db850af5382af2c3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">preload</a> ()</td></tr>
+<tr class="memdesc:a2bdfaaee402c04a5db850af5382af2c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need.  <a href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">More...</a><br /></td></tr>
+<tr class="separator:a2bdfaaee402c04a5db850af5382af2c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f0826a189eec659051ce6513eafaa57"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a3f0826a189eec659051ce6513eafaa57">saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener)</td></tr>
 <tr class="separator:a3f0826a189eec659051ce6513eafaa57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c5bc6488a0f67fa0838f41352172b4d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_hlms_datablock.html#a4c5bc6488a0f67fa0838f41352172b4d">setAlphaTest</a> (<a class="el" href="group___general.html#ga0212b4eb264f207d84c1df9425208c7a">CompareFunction</a> compareFunction, bool shadowCasterOnly=false, bool useAlphaFromTextures=true)</td></tr>
@@ -1182,6 +1185,37 @@ template&lt;class Alloc &gt; </div>
 </div><div class="memdoc">
 
 <p>array operator new, with debug line info </p>
+
+</div>
+</div>
+<a id="a2bdfaaee402c04a5db850af5382af2c3" name="a2bdfaaee402c04a5db850af5382af2c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bdfaaee402c04a5db850af5382af2c3">&#9670;&nbsp;</a></span>preload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ogre::HlmsDatablock::preload </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need. </p>
+<p >Useful to cut loading times by anticipating what the user will do.</p>
+<p >Do not call this function aggressively (e.g. for lots of material every frame) </p>
+
+<p>Reimplemented in <a class="el" href="group___resources.html#ga33c79f56b0993d1921c87c18040211da">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS</a>.</p>
 
 </div>
 </div>

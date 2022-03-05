@@ -723,6 +723,9 @@ Functions</h2></td></tr>
 <tr class="separator:ga1e2990ce935b8c9d1c892227f416d461"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad7efc30646f8ceddb7949a0fc17ad380"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gad7efc30646f8ceddb7949a0fc17ad380">Ogre::OrderPropertyByIdString</a> (const <a class="el" href="struct_ogre_1_1_hlms_property.html">HlmsProperty</a> &amp;_left, const <a class="el" href="struct_ogre_1_1_hlms_property.html">HlmsProperty</a> &amp;_right)</td></tr>
 <tr class="separator:gad7efc30646f8ceddb7949a0fc17ad380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga33c79f56b0993d1921c87c18040211da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga33c79f56b0993d1921c87c18040211da">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::preload</a> () override</td></tr>
+<tr class="memdesc:ga33c79f56b0993d1921c87c18040211da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need.  <a href="group___resources.html#ga33c79f56b0993d1921c87c18040211da">More...</a><br /></td></tr>
+<tr class="separator:ga33c79f56b0993d1921c87c18040211da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa174345a2019a718cfcd2aa274abe595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#gaa174345a2019a718cfcd2aa274abe595">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures</a> (const <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &amp;folderPath, set&lt; <a class="el" href="namespace_ogre.html#af73bbdc8bed8a3e6fcd56bb8fa188c45">String</a> &gt;::type &amp;savedTextures, bool saveOitd, bool saveOriginal, <a class="el" href="class_ogre_1_1_hlms_texture_export_listener.html">HlmsTextureExportListener</a> *listener) override</td></tr>
 <tr class="separator:gaa174345a2019a718cfcd2aa274abe595"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga91e2326f0550a4e8b59f08a321d28cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___resources.html#ga91e2326f0550a4e8b59f08a321d28cf5">Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::setSamplerblock</a> (<a class="el" href="namespace_ogre.html#a9212e2b4c7d29d6fae3a004ac7ad137e">uint8</a> texType, const <a class="el" href="struct_ogre_1_1_hlms_samplerblock.html">HlmsSamplerblock</a> &amp;params)</td></tr>
@@ -1763,6 +1766,37 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="reference">References <a class="el" href="struct_ogre_1_1_hlms_property.html#a4b151398f7322b75f2ce6dd125c3c964">Ogre::HlmsProperty::keyName</a>.</p>
+
+</div>
+</div>
+<a id="ga33c79f56b0993d1921c87c18040211da" name="ga33c79f56b0993d1921c87c18040211da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga33c79f56b0993d1921c87c18040211da">&#9670;&nbsp;</a></span>preload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ogre::OGRE_HLMS_TEXTURE_BASE_CLASS::preload </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells datablock to start loading all of its textures (if not loaded already) and any other resource it may need. </p>
+<p >Useful to cut loading times by anticipating what the user will do.</p>
+<p >Do not call this function aggressively (e.g. for lots of material every frame) </p>
+
+<p>Reimplemented from <a class="el" href="class_ogre_1_1_hlms_datablock.html#a2bdfaaee402c04a5db850af5382af2c3">Ogre::HlmsDatablock</a>.</p>
 
 </div>
 </div>

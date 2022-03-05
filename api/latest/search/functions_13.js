@@ -80,13 +80,12 @@ var searchData=
   ['transpose_77',['transpose',['../class_ogre_1_1_matrix4.html#a7aec55bb8ec5fc9f18d548ea14dd2847',1,'Ogre::Matrix4']]],
   ['transpose_78',['Transpose',['../class_ogre_1_1_matrix3.html#aec1cee52b2574f50b4e98ead1266308b',1,'Ogre::Matrix3']]],
   ['trect_79',['TRect',['../struct_ogre_1_1_t_rect.html#aaf94532ce0aaa722ff067be346fa15b1',1,'Ogre::TRect::TRect(TRect const &amp;o)'],['../struct_ogre_1_1_t_rect.html#a91f3cea3b1851f9b4b9004df78822678',1,'Ogre::TRect::TRect()'],['../struct_ogre_1_1_t_rect.html#a79e390fbd62e5a819207d6aee0789ab5',1,'Ogre::TRect::TRect(T const &amp;l, T const &amp;t, T const &amp;r, T const &amp;b)']]],
-  ['triangle_80',['triangle',['../class_ogre_1_1v1_1_1_manual_object.html#a49079aa03457a9f3aeb41502e786d185',1,'Ogre::v1::ManualObject']]],
-  ['triangle_81',['Triangle',['../struct_ogre_1_1v1_1_1_edge_data_1_1_triangle.html#a812213195721b354ab85221e7f4bb5bb',1,'Ogre::v1::EdgeData::Triangle']]],
-  ['triangle_82',['triangle',['../class_ogre_1_1_manual_object.html#af9062482fcabf0dfeb4c55e6f9de4f7d',1,'Ogre::ManualObject']]],
-  ['trianglechanged_83',['triangleChanged',['../class_ogre_1_1_lod_output_provider_compressed_mesh.html#ae163955b91b3da5da34926607c889eff',1,'Ogre::LodOutputProviderCompressedMesh::triangleChanged()'],['../class_ogre_1_1_lod_output_provider.html#a46c70b8500cfdf6563662db9fc60ffa4',1,'Ogre::LodOutputProvider::triangleChanged(LodData *data, LodData::Triangle *tri)']]],
-  ['triangleremoved_84',['triangleRemoved',['../class_ogre_1_1_lod_output_provider.html#afd7fbf85dab8b295e1ec15b30b4837e9',1,'Ogre::LodOutputProvider::triangleRemoved()'],['../class_ogre_1_1_lod_output_provider_compressed_mesh.html#a0f713ba6be9466d908b7421b2440345a',1,'Ogre::LodOutputProviderCompressedMesh::triangleRemoved()']]],
-  ['trim_85',['trim',['../class_ogre_1_1_string_util.html#ae36e8b6e19fef623f59d56772ed1dd7e',1,'Ogre::StringUtil']]],
-  ['trylock_86',['tryLock',['../class_ogre_1_1_lightweight_mutex.html#acf6cc18c5986611ddc1a1f1b9afa9186',1,'Ogre::LightweightMutex']]],
-  ['type_87',['type',['../class_ogre_1_1_any.html#ab0c58b9a5837415a9a463406fd87364f',1,'Ogre::Any']]],
-  ['type4_88',['type4',['../struct_ogre_1_1type4.html#a6d8e25249cf87872f2cff76854981ba4',1,'Ogre::type4::type4()'],['../struct_ogre_1_1type4.html#a56555542a27c5839a605413be354a2c3',1,'Ogre::type4::type4(const Vector4 &amp;val)'],['../struct_ogre_1_1type4.html#a71f8cd480a69ba457923d35d9d8b26c1',1,'Ogre::type4::type4(const Vector2 &amp;valXY, const Vector2 &amp;valZW)']]]
+  ['triangle_80',['Triangle',['../struct_ogre_1_1v1_1_1_edge_data_1_1_triangle.html#a812213195721b354ab85221e7f4bb5bb',1,'Ogre::v1::EdgeData::Triangle']]],
+  ['triangle_81',['triangle',['../class_ogre_1_1_manual_object.html#af9062482fcabf0dfeb4c55e6f9de4f7d',1,'Ogre::ManualObject::triangle()'],['../class_ogre_1_1v1_1_1_manual_object.html#a49079aa03457a9f3aeb41502e786d185',1,'Ogre::v1::ManualObject::triangle()']]],
+  ['trianglechanged_82',['triangleChanged',['../class_ogre_1_1_lod_output_provider_compressed_mesh.html#ae163955b91b3da5da34926607c889eff',1,'Ogre::LodOutputProviderCompressedMesh::triangleChanged()'],['../class_ogre_1_1_lod_output_provider.html#a46c70b8500cfdf6563662db9fc60ffa4',1,'Ogre::LodOutputProvider::triangleChanged(LodData *data, LodData::Triangle *tri)']]],
+  ['triangleremoved_83',['triangleRemoved',['../class_ogre_1_1_lod_output_provider.html#afd7fbf85dab8b295e1ec15b30b4837e9',1,'Ogre::LodOutputProvider::triangleRemoved()'],['../class_ogre_1_1_lod_output_provider_compressed_mesh.html#a0f713ba6be9466d908b7421b2440345a',1,'Ogre::LodOutputProviderCompressedMesh::triangleRemoved()']]],
+  ['trim_84',['trim',['../class_ogre_1_1_string_util.html#ae36e8b6e19fef623f59d56772ed1dd7e',1,'Ogre::StringUtil']]],
+  ['trylock_85',['tryLock',['../class_ogre_1_1_lightweight_mutex.html#acf6cc18c5986611ddc1a1f1b9afa9186',1,'Ogre::LightweightMutex']]],
+  ['type_86',['type',['../class_ogre_1_1_any.html#ab0c58b9a5837415a9a463406fd87364f',1,'Ogre::Any']]],
+  ['type4_87',['type4',['../struct_ogre_1_1type4.html#a6d8e25249cf87872f2cff76854981ba4',1,'Ogre::type4::type4()'],['../struct_ogre_1_1type4.html#a56555542a27c5839a605413be354a2c3',1,'Ogre::type4::type4(const Vector4 &amp;val)'],['../struct_ogre_1_1type4.html#a71f8cd480a69ba457923d35d9d8b26c1',1,'Ogre::type4::type4(const Vector2 &amp;valXY, const Vector2 &amp;valZW)']]]
 ];

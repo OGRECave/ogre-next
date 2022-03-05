@@ -1,5 +1,8 @@
 var NAVTREEINDEX249 =
 {
+"hlms.html#HlmsPreprocessor":[1,9,4],
+"hlms.html#HlmsPreprocessorSyntax":[1,9,4,0],
+"hlms.html#HlmsPreprocessorSyntaxCounter":[1,9,4,0,2],
 "hlms.html#HlmsPreprocessorSyntaxForeach":[1,9,4,0,1],
 "hlms.html#HlmsPreprocessorSyntaxInsertpiece":[1,9,4,0,6],
 "hlms.html#HlmsPreprocessorSyntaxPiece":[1,9,4,0,5],
@@ -246,8 +249,5 @@ var NAVTREEINDEX249 =
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a54cdcd400702cdc25b995007b2b93353":[6,0,0,1239,20],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a5ae9b878278ad35c0407cb79217c637d":[6,0,0,1239,26],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a654d06ee35d74d89cf61189da3eb5924":[6,0,0,1239,29],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a6e954eb30376078d260398d662cb6c5e":[6,0,0,1239,31],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a7fff222e5c474c250050764a18dae866":[6,0,0,1239,11],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a83fb65735570cd52de6212753b9f3f7a":[6,0,0,1239,41],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a8739673aa6ac8d08aa15165b9ff995c7":[6,0,0,1239,21]
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a6e954eb30376078d260398d662cb6c5e":[6,0,0,1239,31]
 };
