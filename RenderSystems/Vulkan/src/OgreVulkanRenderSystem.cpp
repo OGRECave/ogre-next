@@ -1711,10 +1711,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VertexElementType VulkanRenderSystem::getColourVertexElementType( void ) const
-    {
-        return VET_COLOUR_ARGB;
-    }
+    VertexElementType VulkanRenderSystem::getColourVertexElementType() const { return VET_COLOUR_ABGR; }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_dispatch( const HlmsComputePso &pso )
     {
