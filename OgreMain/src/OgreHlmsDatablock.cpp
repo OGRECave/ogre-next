@@ -502,6 +502,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsDatablock::preload() {}
+    //-----------------------------------------------------------------------------------
     bool HlmsDatablock::hasCustomShadowMacroblock(void) const
     {
         const HlmsMacroblock *macroblock0 = mMacroblock[0];

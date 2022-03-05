@@ -105,6 +105,8 @@ namespace Ogre
                                       const HlmsParamVec &params );
         virtual ~OGRE_HLMS_TEXTURE_BASE_CLASS();
 
+        virtual void preload();
+
         virtual void saveTextures( const String &folderPath, set<String>::type &savedTextures,
                                    bool saveOitd, bool saveOriginal,
                                    HlmsTextureExportListener *listener );
