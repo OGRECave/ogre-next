@@ -71,8 +71,6 @@ namespace Ogre
 
         void getCustomAttribute( IdString name, void *pData ) override;
 
-        bool isOpenGLRenderWindow() const override;
-
         void _setToDisplayDummyTexture() override;
         void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice ) override;
     };
