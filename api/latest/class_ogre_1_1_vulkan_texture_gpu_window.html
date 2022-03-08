@@ -326,9 +326,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4ebc3bec47d599f4d0f7a9cde67bd4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5484c1525a406ce02774a0d26f7ac41"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#ad5484c1525a406ce02774a0d26f7ac41">isMultisample</a> () const</td></tr>
 <tr class="separator:ad5484c1525a406ce02774a0d26f7ac41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad384b509b555beb2f92ed058a44fb195"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_vulkan_texture_gpu_window.html#ad384b509b555beb2f92ed058a44fb195">isOpenGLRenderWindow</a> () const override</td></tr>
-<tr class="memdesc:ad384b509b555beb2f92ed058a44fb195"><td class="mdescLeft">&#160;</td><td class="mdescRight">OpenGL RenderWindows are a bit specific:  <a href="class_ogre_1_1_vulkan_texture_gpu_window.html#ad384b509b555beb2f92ed058a44fb195">More...</a><br /></td></tr>
-<tr class="separator:ad384b509b555beb2f92ed058a44fb195"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2efdb62aa1600025965301318308a55"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#aa2efdb62aa1600025965301318308a55">isOpenGLRenderWindow</a> () const</td></tr>
+<tr class="memdesc:aa2efdb62aa1600025965301318308a55"><td class="mdescLeft">&#160;</td><td class="mdescRight">OpenGL RenderWindows are a bit specific:  <a href="class_ogre_1_1_texture_gpu.html#aa2efdb62aa1600025965301318308a55">More...</a><br /></td></tr>
+<tr class="separator:aa2efdb62aa1600025965301318308a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeee1147f96cbc850aafbe11b4842258"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#aaeee1147f96cbc850aafbe11b4842258">isPoolOwner</a> () const</td></tr>
 <tr class="separator:aaeee1147f96cbc850aafbe11b4842258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad046ba9fe6192934b95b513239949044"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ogre_1_1_texture_gpu.html#ad046ba9fe6192934b95b513239949044">isReinterpretable</a> () const</td></tr>
@@ -3273,8 +3273,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad384b509b555beb2f92ed058a44fb195" name="ad384b509b555beb2f92ed058a44fb195"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad384b509b555beb2f92ed058a44fb195">&#9670;&nbsp;</a></span>isOpenGLRenderWindow()</h2>
+<a id="aa2efdb62aa1600025965301318308a55" name="aa2efdb62aa1600025965301318308a55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2efdb62aa1600025965301318308a55">&#9670;&nbsp;</a></span>isOpenGLRenderWindow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3283,7 +3283,7 @@ Static Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Ogre::VulkanTextureGpuWindow::isOpenGLRenderWindow </td>
+          <td class="memname">virtual bool Ogre::TextureGpu::isOpenGLRenderWindow </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -3291,7 +3291,7 @@ Static Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3303,7 +3303,7 @@ Static Public Attributes</h2></td></tr>
 <li>Headless windows return false since internally they're FBOs. However isRenderWindowSpecific will return true </li>
 </ul>
 
-<p>Reimplemented from <a class="el" href="class_ogre_1_1_texture_gpu.html#aa2efdb62aa1600025965301318308a55">Ogre::TextureGpu</a>.</p>
+<p>Reimplemented in <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_window.html#a915309dc7083ecf9441276c86c2467ea">Ogre::GL3PlusTextureGpuWindow</a>, and <a class="el" href="class_ogre_1_1_g_l3_plus_texture_gpu_headless_window.html#ae0c1e1ae91679dbbfea2563316cb8bdf">Ogre::GL3PlusTextureGpuHeadlessWindow</a>.</p>
 
 </div>
 </div>
