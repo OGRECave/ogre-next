@@ -98,6 +98,11 @@ namespace Ogre
         datablockImpl->scheduleConstBufferUpdate( hasDirtyTextures, hasDirtySamplers );
     }
     //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::preload()
+    {
+        loadAllTextures();
+    }
+    //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,
                                                      set<String>::type &savedTextures,
                                                      bool saveOitd, bool saveOriginal,

@@ -475,12 +475,16 @@ namespace Ogre
                 descBindingRanges[DescBindingTypes::ConstBuffer].end = 3u;
         }
 
-        descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
-
         if( mSetupWorldMatBuf )
+        {
             descBindingRanges[DescBindingTypes::ReadOnlyBuffer].start = 0u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 1u;
+        }
         else
-            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].start = 1u;
+        {
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].start = 0u;
+            descBindingRanges[DescBindingTypes::ReadOnlyBuffer].end = 0u;
+        }
 
         // if( getProperty( HlmsBaseProp::Pose ) )
         // descBindingRanges[DescBindingTypes::TexBuffer].end = 4u;

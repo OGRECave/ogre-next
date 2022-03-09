@@ -1733,6 +1733,9 @@ namespace Ogre
         case PrecisionRelaxed:
             return static_cast<int32>( HlmsBaseProp::Relaxed.mHash );
         }
+
+        // Silence MSVC warning
+        return static_cast<int32>( HlmsBaseProp::Full32.mHash );
     }
     //-----------------------------------------------------------------------------------
     bool Hlms::getFastShaderBuildHack() const { return mFastShaderBuildHack; }

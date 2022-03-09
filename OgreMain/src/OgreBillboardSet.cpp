@@ -865,7 +865,22 @@ namespace Ogre
             }
 
             if( mBuffersCreated )
+            {
+                // HACK
+                // We should always call setDatablock, but we can't due to how Billboards
+                // currently work.
                 Renderable::setDatablock( datablock );
+            }
+            else
+            {
+                // HACK
+                // If we're here datablock will later be assigned too late (i.e. inside render)
+                // and if the textures haven't changed to Resident yet, calculateHashFor
+                // will delay hash assignment but it's too late to delay, causing bugs.
+                // Thus we force the datablock to preload now (calculateHashFor would normally
+                // do this too when it calls loadAllTextures anyway).
+                datablock->preload();
+            }
         }
         //-----------------------------------------------------------------------
         void BillboardSet::_setNullDatablock()

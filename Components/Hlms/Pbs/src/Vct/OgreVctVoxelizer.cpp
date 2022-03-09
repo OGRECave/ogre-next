@@ -1401,9 +1401,9 @@ namespace Ogre
                 if( itNumInstances != itBucket->second.numInstancesAfterCulling.end() )
                 {
                     const VoxelizerBucket &bucket = itBucket->first;
-                    bucket.job->setNumThreadGroups( octant.width / threadsPerGroup[0],
-                                                    octant.height / threadsPerGroup[1],
-                                                    octant.depth / threadsPerGroup[2] );
+                    bucket.job->setNumThreadGroups( std::max( 1u, octant.width / threadsPerGroup[0] ),
+                                                    std::max( 1u, octant.height / threadsPerGroup[1] ),
+                                                    std::max( 1u, octant.depth / threadsPerGroup[2] ) );
 
                     bucket.job->setConstBuffer( 0, bucket.materialBuffer );
 

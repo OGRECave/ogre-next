@@ -209,6 +209,7 @@ endif()
 
 if( OGRE_BUILD_TESTS )
 	add_subdirectory(Tests/ArrayTextures)
+	add_subdirectory(Tests/BillboardTest)
 	add_subdirectory(Tests/MemoryCleanup)
 	add_subdirectory(Tests/NearFarProjection)
 	add_subdirectory(Tests/Readback)

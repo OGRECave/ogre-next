@@ -111,8 +111,6 @@ namespace Ogre
             *static_cast<Window **>( pData ) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    bool VulkanTextureGpuWindow::isOpenGLRenderWindow() const { return true; }
-    //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::_setToDisplayDummyTexture() {}
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )

@@ -463,6 +463,14 @@ namespace Ogre
 
         const vector<Renderable *>::type &getLinkedRenderables() const { return mLinkedRenderables; }
 
+        /// Tells datablock to start loading all of its textures (if not loaded already)
+        /// and any other resource it may need.
+        ///
+        /// Useful to cut loading times by anticipating what the user will do.
+        ///
+        /// Do not call this function aggressively (e.g. for lots of material every frame)
+        virtual void preload();
+
         virtual bool hasCustomShadowMacroblock() const;
 
         /// Returns the closest match for a diffuse colour,
