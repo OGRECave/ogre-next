@@ -67,6 +67,8 @@ namespace Ogre
                    0.001f;
         }
 
+        uint64 getLastTimeRawMicroseconds() const { return mLastTime; }
+
         float getAvgTime() const
         {
             if( !mFramesSampled )

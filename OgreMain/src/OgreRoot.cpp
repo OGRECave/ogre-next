@@ -1138,9 +1138,9 @@ namespace Ogre
             sceneManager->clearFrameData();
         }
 
-        now = mTimer->getMicroseconds();
-        mFrameStats->addSample( now );
-        now /= 1000;  // Convert to milliseconds.
+        mFrameStats->addSample( mFrameStats->getLastTimeRawMicroseconds() +
+                                static_cast<uint64>( timeSinceLastFrame * 100000.0f ) );
+        now = mTimer->getMilliseconds();
         evt.timeSinceLastEvent = calculateEventTime( now, FETT_ANY );
 
         return _fireFrameEnded( evt );
