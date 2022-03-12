@@ -11,6 +11,7 @@
 #include "OgreMeshManager2.h"
 #include "OgreSceneManager.h"
 #include "OgreSubMesh2.h"
+#include "OgreRenderSystemCapabilities.h"
 
 #include "OgreRoot.h"
 #include "Vao/OgreVaoManager.h"
@@ -19,6 +20,8 @@
 #include "OgreCamera.h"
 
 using namespace Demo;
+
+#define USE_UMA_SHARED_BUFFERS 1
 
 namespace Demo
 {
@@ -68,6 +71,14 @@ namespace Demo
 
         try
         {
+#ifdef USE_UMA_SHARED_BUFFERS
+            const Ogre::RenderSystemCapabilities *caps = renderSystem->getCapabilities();
+            if(caps && caps->hasCapability(Ogre::RSC_UMA))
+            {
+                indexBuffer = vaoManager->createIndexBuffer( Ogre::IndexBufferPacked::IT_16BIT, 3 * 2 * 6,
+                                                         Ogre::BT_DEFAULT_SHARED, cubeIndices, true );
+            }else
+#endif
             indexBuffer = vaoManager->createIndexBuffer( Ogre::IndexBufferPacked::IT_16BIT, 3 * 2 * 6,
                                                          Ogre::BT_IMMUTABLE, cubeIndices, true );
         }
@@ -116,6 +127,16 @@ namespace Demo
         Ogre::VertexBufferPacked *vertexBuffer = 0;
         try
         {
+#ifdef USE_UMA_SHARED_BUFFERS
+            const Ogre::RenderSystemCapabilities *caps = renderSystem->getCapabilities();
+            if(caps && caps->hasCapability(Ogre::RSC_UMA))
+            {
+                // Create the actual vertex buffer.
+                vertexBuffer = vaoManager->createVertexBuffer(
+                    vertexElements, 8, Ogre::BT_DEFAULT_SHARED, cubeVertices,
+                    true );
+            }else
+#endif
             // Create the actual vertex buffer.
             vertexBuffer = vaoManager->createVertexBuffer(
                 vertexElements, 8, partialMesh ? Ogre::BT_DEFAULT : Ogre::BT_IMMUTABLE, cubeVertices,
