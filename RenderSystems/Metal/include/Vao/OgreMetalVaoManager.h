@@ -44,6 +44,7 @@ namespace Ogre
         enum VboFlag
         {
             CPU_INACCESSIBLE,
+            CPU_ACCESSIBLE_SHARED,
             CPU_ACCESSIBLE_DEFAULT,
             CPU_ACCESSIBLE_PERSISTENT,
             CPU_ACCESSIBLE_PERSISTENT_COHERENT,

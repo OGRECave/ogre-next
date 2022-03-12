@@ -299,6 +299,7 @@ namespace Ogre
         RSC_VAO              = OGRE_CAPS_VALUE(CAPS_CATEGORY_GL, 10),
 
         // ***** Metal Specific Caps *****
+        RSC_UMA             = OGRE_CAPS_VALUE(CAPS_CATEGORY_METAL, 0),
         // clang-format on
     };
 

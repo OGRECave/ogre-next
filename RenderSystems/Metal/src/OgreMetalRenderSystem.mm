@@ -336,6 +336,9 @@ namespace Ogre
         rsc->setComputeProgramConstantFloatCount( 16384 );
         rsc->setComputeProgramConstantBoolCount( 16384 );
         rsc->setComputeProgramConstantIntCount( 16384 );
+        
+        if(mActiveDevice->mDevice.hasUnifiedMemory)
+            rsc->setCapability( RSC_UMA );
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         uint8 mrtCount = 8u;

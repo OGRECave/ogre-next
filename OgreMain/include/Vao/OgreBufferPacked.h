@@ -47,6 +47,13 @@ namespace Ogre
             i.e. live video capture)
         */
         BT_DEFAULT,
+        
+        /** Read and write access from GPU/CPU.
+        @remarks
+            Ogre won't use any staging buffers to upload and download contents.
+            It's useful on UMA. It's fast on UMA and slow on other archs
+        */
+        BT_DEFAULT_SHARED,
 
         /// Read access from GPU. Write access for CPU.
         /// i.e. Particles, dynamic textures. Dynamic buffers don't put a

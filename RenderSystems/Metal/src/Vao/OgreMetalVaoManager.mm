@@ -91,6 +91,7 @@ namespace Ogre
 
     static const char *c_vboTypes[] = {
         "CPU_INACCESSIBLE",
+        "CPU_ACCESSIBLE_SHARED",
         "CPU_ACCESSIBLE_DEFAULT",
         "CPU_ACCESSIBLE_PERSISTENT",
         "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
@@ -148,6 +149,8 @@ namespace Ogre
         // Keep pools of 16MB for static buffers
         mDefaultPoolSize[CPU_INACCESSIBLE] = 16 * 1024 * 1024;
 
+        mDefaultPoolSize[CPU_ACCESSIBLE_SHARED] = 16 * 1024 * 1024;
+        
         // Keep pools of 4MB each for dynamic buffers
         for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
@@ -162,6 +165,8 @@ namespace Ogre
         // Keep pools of 32MB for static buffers
         mDefaultPoolSize[CPU_INACCESSIBLE] = 32 * 1024 * 1024;
 
+        mDefaultPoolSize[CPU_ACCESSIBLE_SHARED] = 32 * 1024 * 1024;
+        
         // Keep pools of 4MB each for dynamic buffers
         for( size_t i = CPU_ACCESSIBLE_DEFAULT; i <= CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
@@ -554,6 +559,8 @@ namespace Ogre
 
             if( vboFlag == CPU_INACCESSIBLE )
                 resourceOptions = MTLResourceStorageModePrivate;
+            if( vboFlag == CPU_ACCESSIBLE_SHARED )
+                resourceOptions = MTLResourceStorageModeShared;
             else
                 resourceOptions = MTLResourceCPUCacheModeWriteCombined;
 
@@ -1503,6 +1510,6 @@ namespace Ogre
     MetalVaoManager::VboFlag MetalVaoManager::bufferTypeToVboFlag( BufferType bufferType )
     {
         return static_cast<VboFlag>(
-            std::max( 0, ( bufferType - BT_DYNAMIC_DEFAULT ) + CPU_ACCESSIBLE_DEFAULT ) );
+            std::max( 0, ( bufferType - BT_DEFAULT_SHARED ) + CPU_ACCESSIBLE_SHARED ) );
     }
 }
