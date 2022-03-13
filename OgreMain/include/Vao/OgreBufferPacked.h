@@ -47,6 +47,42 @@ namespace Ogre
             i.e. live video capture)
         */
         BT_DEFAULT,
+        
+        /** Read and write access from GPU/CPU.
+        @remarks
+            This functionality was written for UMA (Unified Memory Architecture),
+            like the iPhone and most Android phones; and a few desktop iGPUs.
+
+            Its main implementation purpose is to be able to access vertex & index
+            buffers from meshes (which are either BT_IMMUTABLE or BT_DEFAULT and never
+            modified again after the first upload).
+
+            The main advantage of this buffer type is that apps can read the (vertex/index)
+            data from CPU without neither waiting nor needing a shadow copy
+            (which wastes precious RAM on mobile).
+
+            There is no synchronization going on thus if you write to a BT_DEFAULT_SHARED
+            buffer from GPU (e.g. BufferPacked::copyTo) you're going to have to manually
+            wait for that transfer (using VaoManager::waitForSpecificFrameToFinish).
+
+            And if you're reading from GPU from that buffer (e.g. rendering),
+            you're also going to have to manually wait for those reads
+            (using VaoManager::waitForSpecificFrameToFinish) before writing to this
+            buffer.
+
+            Ogre won't use any staging buffers to upload and download contents.
+            It's fast on UMA and slow on other archs.
+
+            Theretically better synchronization could be implemented on top of this
+            buffer type to be multi-purpose, but it would complicate things.
+
+            Basically it's the perfect replacement for BT_IMMUTABLE if you want
+            stall-free access to GPU data from within the CPU without consuming
+            extra RAM.
+
+            See Capabilities::RSC_UMA to check support.
+        */
+        BT_DEFAULT_SHARED,
 
         /// Read access from GPU. Write access for CPU.
         /// i.e. Particles, dynamic textures. Dynamic buffers don't put a

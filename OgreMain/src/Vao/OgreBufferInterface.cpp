@@ -39,7 +39,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void BufferInterface::upload( const void *data, size_t elementStart, size_t elementCount )
     {
-        if( mBuffer->mBufferType >= BT_DYNAMIC_DEFAULT )
+        if( mBuffer->mBufferType >= BT_DEFAULT_SHARED )
         {
             assert( mBuffer->mMappingState == MS_UNMAPPED );
             void *dstData = this->map( elementStart, elementCount, mBuffer->mMappingState );
