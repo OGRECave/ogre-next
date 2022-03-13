@@ -1,5 +1,6 @@
 var NAVTREEINDEX249 =
 {
+"hlms.html#HlmsCreationOfShadersCustomizing":[1,9,5,4],
 "hlms.html#HlmsCreationOfShadersDisablingStage":[1,9,5,3],
 "hlms.html#HlmsCreationOfShadersHotReloading":[1,9,5,2],
 "hlms.html#HlmsPreprocessor":[1,9,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX249 =
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a43f7f8ccd6ecf653bd3573ec8c2114e5":[6,0,0,1239,39],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a464139a1080b831143c015fb3b7b8aca":[6,0,0,1239,23],
 "namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a48cb7d33ea97e43f06a5c0f5e1f481c8":[6,0,0,1239,30],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a4e1ae5f830888fa98d05b853031d7220":[6,0,0,1239,28],
-"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a54cdcd400702cdc25b995007b2b93353":[6,0,0,1239,20]
+"namespace_ogre.html#a769d41c00dac951b9c2162c6c1a73573a4e1ae5f830888fa98d05b853031d7220":[6,0,0,1239,28]
 };
