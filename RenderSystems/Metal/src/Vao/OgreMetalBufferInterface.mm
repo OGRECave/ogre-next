@@ -141,7 +141,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t MetalBufferInterface::advanceFrame( bool bAdvanceFrame )
     {
-        if(mBuffer->mBufferType==BT_DEFAULT_SHARED)
+        if( mBuffer->mBufferType == BT_DEFAULT_SHARED )
         {
             if( bAdvanceFrame )
             {
@@ -149,7 +149,7 @@ namespace Ogre
             }
             return 0;
         }
-        
+
         MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->_getInternalNumElements();
@@ -167,12 +167,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalBufferInterface::regressFrame()
     {
-        if(mBuffer->mBufferType==BT_DEFAULT_SHARED)
+        if( mBuffer->mBufferType == BT_DEFAULT_SHARED )
         {
             mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart;
             return;
         }
-        
+
         MetalVaoManager *vaoManager = static_cast<MetalVaoManager *>( mBuffer->mVaoManager );
         size_t dynamicCurrentFrame = mBuffer->mFinalBufferStart - mBuffer->mInternalBufferStart;
         dynamicCurrentFrame /= mBuffer->_getInternalNumElements();

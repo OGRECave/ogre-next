@@ -559,7 +559,7 @@ namespace Ogre
 
             if( vboFlag == CPU_INACCESSIBLE )
                 resourceOptions = MTLResourceStorageModePrivate;
-            if( vboFlag == CPU_ACCESSIBLE_SHARED )
+            else if( vboFlag == CPU_ACCESSIBLE_SHARED )
                 resourceOptions = MTLResourceStorageModeShared;
             else
                 resourceOptions = MTLResourceCPUCacheModeWriteCombined;
