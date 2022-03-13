@@ -26,6 +26,7 @@ var _ogre_buffer_packed_8h =
     [ "BufferType", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9", [
       [ "BT_IMMUTABLE", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719", null ],
       [ "BT_DEFAULT", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9aa08ceed67b36cee74ed5b98f3864ab6d", null ],
+      [ "BT_DEFAULT_SHARED", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1", null ],
       [ "BT_DYNAMIC_DEFAULT", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9a3c263c60e96eb7ef68ad8886e70c8969", null ],
       [ "BT_DYNAMIC_PERSISTENT", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9a169d359155879c68b8462d3cb0be8a4a", null ],
       [ "BT_DYNAMIC_PERSISTENT_COHERENT", "_ogre_buffer_packed_8h.html#a579e6aa73b3f580b1227a5c80991dbc9aecb23d7992b7bdaf3c01af0759cf527c", null ]

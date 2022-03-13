@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"_ogre_vulkan_global_binding_table_8h.html#a8ea612cd4e3340a99b41fcdbef0c65c5a422388fa0796545b2dc10c283b3cbec1":[8,0,4,5,0,8,6,3],
 "_ogre_vulkan_global_binding_table_8h.html#a8ea612cd4e3340a99b41fcdbef0c65c5a435c10bf902278dbc2b5acb5aaee9e49":[8,0,4,5,0,8,6,2],
 "_ogre_vulkan_global_binding_table_8h.html#a8ea612cd4e3340a99b41fcdbef0c65c5abbee09a118ad180f057750d1eaeeca61":[8,0,4,5,0,8,6,4],
 "_ogre_vulkan_global_binding_table_8h.html#a8ea612cd4e3340a99b41fcdbef0c65c5af124b9cca787c6efc8f186f8322e4993":[8,0,4,5,0,8,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "_samples.html#tutorial02":[1,0,34],
 "_samples.html#tutorial03":[1,0,35],
 "_samples.html#tutorial04":[1,0,36],
-"_samples.html#tutorial05":[1,0,37],
-"_samples.html#tutorial06":[1,0,38]
+"_samples.html#tutorial05":[1,0,37]
 };

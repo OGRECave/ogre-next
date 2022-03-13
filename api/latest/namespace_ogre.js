@@ -1573,6 +1573,7 @@ var namespace_ogre =
     [ "BufferType", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9", [
       [ "BT_IMMUTABLE", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9adb62fa4394e5ed5eb8d45742e6b28719", null ],
       [ "BT_DEFAULT", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9aa08ceed67b36cee74ed5b98f3864ab6d", null ],
+      [ "BT_DEFAULT_SHARED", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9ab90d85a967d1647087d9e525778e9bc1", null ],
       [ "BT_DYNAMIC_DEFAULT", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9a3c263c60e96eb7ef68ad8886e70c8969", null ],
       [ "BT_DYNAMIC_PERSISTENT", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9a169d359155879c68b8462d3cb0be8a4a", null ],
       [ "BT_DYNAMIC_PERSISTENT_COHERENT", "namespace_ogre.html#a579e6aa73b3f580b1227a5c80991dbc9aecb23d7992b7bdaf3c01af0759cf527c", null ]
@@ -1649,6 +1650,7 @@ var namespace_ogre =
       [ "RSC_DEPTH_CLAMP", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a64759547ec85f2df1f72b26bda41aec4", null ],
       [ "RSC_SHADER_RELAXED_FLOAT", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a204835847a1b5fb0337102ac8b67e7fb", null ],
       [ "RSC_SHADER_FLOAT16", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8ee3be154c023a6dc1c520c8df46dbd9", null ],
+      [ "RSC_UMA", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aab001d90db104675638a8d3089160650", null ],
       [ "RSC_PERSTAGECONSTANT", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a4a6cb9244a2fd89591cfeb06960336e1", null ],
       [ "RSC_TYPED_UAV_LOADS", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a214a991679d3c352a841dd3e1327ec8f", null ],
       [ "RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b", null ],

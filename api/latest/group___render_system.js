@@ -1306,6 +1306,7 @@ var group___render_system =
       [ "Ogre::RSC_DEPTH_CLAMP", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a64759547ec85f2df1f72b26bda41aec4", null ],
       [ "Ogre::RSC_SHADER_RELAXED_FLOAT", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a204835847a1b5fb0337102ac8b67e7fb", null ],
       [ "Ogre::RSC_SHADER_FLOAT16", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a8ee3be154c023a6dc1c520c8df46dbd9", null ],
+      [ "Ogre::RSC_UMA", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7aab001d90db104675638a8d3089160650", null ],
       [ "Ogre::RSC_PERSTAGECONSTANT", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a4a6cb9244a2fd89591cfeb06960336e1", null ],
       [ "Ogre::RSC_TYPED_UAV_LOADS", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a214a991679d3c352a841dd3e1327ec8f", null ],
       [ "Ogre::RSC_VP_AND_RT_ARRAY_INDEX_FROM_ANY_SHADER", "group___render_system.html#gga3d2965b7f378ebdcfe8a4a6cf74c3de7a970fb5179e9ac00273f41a2209b61f3b", null ],

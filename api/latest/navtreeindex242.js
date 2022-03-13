@@ -1,5 +1,6 @@
 var NAVTREEINDEX242 =
 {
+"functions_vars_b.html":[7,3,2,2],
 "functions_vars_c.html":[7,3,2,3],
 "functions_vars_d.html":[7,3,2,4],
 "functions_vars_e.html":[7,3,2,5],
@@ -34,8 +35,8 @@ var NAVTREEINDEX242 =
 "globals_a.html":[8,1,0,1],
 "globals_c.html":[8,1,0,2],
 "globals_d.html":[8,1,0,3],
-"globals_defs.html":[8,1,5,0],
 "globals_defs.html":[8,1,5],
+"globals_defs.html":[8,1,5,0],
 "globals_defs_a.html":[8,1,5,1],
 "globals_defs_c.html":[8,1,5,2],
 "globals_defs_d.html":[8,1,5,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX242 =
 "group___general.html#gae435d81f32ecb89467f544ca5b2fe3fd":[5,2,2,205],
 "group___general.html#gae6612ea0b05ddf514b5478a6c0c0cb09":[5,2,2,136],
 "group___general.html#gae6b84ceebcdcc285f37bf9fba216697d":[5,2,2,164],
-"group___general.html#gae8bb1cb809660de802d1d592ba4adb61":[5,2,2,192],
-"group___general.html#gaebed1ceefe1a5fb28f59ea894031680f":[5,2,2,141]
+"group___general.html#gae8bb1cb809660de802d1d592ba4adb61":[5,2,2,192]
 };
