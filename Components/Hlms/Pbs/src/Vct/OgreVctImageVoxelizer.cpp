@@ -499,8 +499,7 @@ namespace Ogre
             const Aabb localAabb = item->getLocalAabb();  // Must be local, not world
 
             Matrix4 worldToUvw;
-
-            worldToUvw.makeInverseTransform( itemPos + localAabb.getMinimum() * itemScale,
+            worldToUvw.makeInverseTransform( itemPos + itemRot * ( localAabb.getMinimum() * itemScale ),
                                              itemScale * localAabb.getSize(), itemRot );
 
             if( lastMesh != item->getMesh().get() )
