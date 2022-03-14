@@ -57,19 +57,22 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const char *c_vboTypes[3][3] = { {
+    static const char *c_vboTypes[3][4] = { {
                                                 "VERTEX_IMMUTABLE",
                                                 "VERTEX_DEFAULT",
+                                                "VERTEX_DEFAULT_SHARED",
                                                 "VERTEX_DYNAMIC",
                                             },
                                             {
                                                 "INDEX_IMMUTABLE",
                                                 "INDEX_DEFAULT",
+                                                "INDEX_DEFAULT_SHARED",
                                                 "INDEX_DYNAMIC",
                                             },
                                             {
                                                 "SHADER_IMMUTABLE",
                                                 "SHADER_DEFAULT",
+                                                "SHADER_DEFAULT_SHARED",
                                                 "SHADER_DYNAMIC",
                                             } };
 
@@ -89,6 +92,10 @@ namespace Ogre
         mDefaultPoolSize[VERTEX_BUFFER][BT_DEFAULT] = 32 * 1024 * 1024;
         mDefaultPoolSize[INDEX_BUFFER][BT_DEFAULT] = 16 * 1024 * 1024;
         mDefaultPoolSize[SHADER_BUFFER][BT_DEFAULT] = 16 * 1024 * 1024;
+
+        mDefaultPoolSize[VERTEX_BUFFER][BT_DEFAULT_SHARED] = 32 * 1024 * 1024;
+        mDefaultPoolSize[INDEX_BUFFER][BT_DEFAULT_SHARED] = 16 * 1024 * 1024;
+        mDefaultPoolSize[SHADER_BUFFER][BT_DEFAULT_SHARED] = 16 * 1024 * 1024;
 
         mDefaultPoolSize[VERTEX_BUFFER][BT_DYNAMIC_DEFAULT] = 16 * 1024 * 1024;
         mDefaultPoolSize[INDEX_BUFFER][BT_DYNAMIC_DEFAULT] = 16 * 1024 * 1024;
