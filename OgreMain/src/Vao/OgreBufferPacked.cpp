@@ -149,10 +149,10 @@ namespace Ogre
     void *RESTRICT_ALIAS_RETURN BufferPacked::map( size_t elementStart, size_t elementCount,
                                                    bool bAdvanceFrame )
     {
-        if( mBufferType < BT_DYNAMIC_DEFAULT )
+        if( mBufferType < BT_DEFAULT_SHARED )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Only dynamic buffers can be mapped! Use upload instead.",
+                         "Only dynamic or shared buffers can be mapped! Use upload instead.",
                          "BufferPacked::map" );
         }
 
@@ -172,6 +172,7 @@ namespace Ogre
         }
 
 #if OGRE_DEBUG_MODE
+        if( mBufferType != BT_DEFAULT_SHARED )
         {
             uint32 currentFrame = mVaoManager->getFrameCount();
             if( mLastFrameMappedAndAdvanced == currentFrame )
