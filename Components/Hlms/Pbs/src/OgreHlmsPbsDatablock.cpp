@@ -789,8 +789,6 @@ namespace Ogre
         if( mTwoSided &&
             ( mMacroblock[0]->mCullMode != CULL_NONE || mMacroblock[1]->mCullMode != CULL_NONE ) )
         {
-            // Since we may have ignored what HlmsManager::setShadowMappingUseBackFaces
-            // says, we need to treat them as custom.
             return true;
         }
 
