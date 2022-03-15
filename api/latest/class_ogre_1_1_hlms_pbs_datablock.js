@@ -76,7 +76,7 @@ var class_ogre_1_1_hlms_pbs_datablock =
     [ "setTexture", "class_ogre_1_1_hlms_pbs_datablock.html#a4c5eb8d3bea9b3b472c6f9b3c26e4499", null ],
     [ "setTextureUvSource", "class_ogre_1_1_hlms_pbs_datablock.html#a4609637e2b0bcadbabe6c465568acf98", null ],
     [ "setTransparency", "class_ogre_1_1_hlms_pbs_datablock.html#aa4db8245afb76983564ced5898621d1a", null ],
-    [ "setTwoSidedLighting", "class_ogre_1_1_hlms_pbs_datablock.html#aa76cc1f6ae4b994a7504430f10e2609c", null ],
+    [ "setTwoSidedLighting", "class_ogre_1_1_hlms_pbs_datablock.html#a460860d6eefb42c10461026b6f754df6", null ],
     [ "setUseDiffuseMapAsGrayscale", "class_ogre_1_1_hlms_pbs_datablock.html#a8fa1ee1b4ce88c8ff4e5c1f1df1ae10f", null ],
     [ "setUseEmissiveAsLightmap", "class_ogre_1_1_hlms_pbs_datablock.html#a6ca529cd32fe95efa8aee7f8cd3c2126", null ],
     [ "setUserValue", "class_ogre_1_1_hlms_pbs_datablock.html#ac4dad687a9d4badb5cd6be9a15ef3f92", null ],

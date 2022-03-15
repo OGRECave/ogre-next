@@ -868,7 +868,7 @@ var searchData=
   ['settruetyperesolution_865',['setTrueTypeResolution',['../class_ogre_1_1_font.html#abfa4659b19ef3052676ccf8a64181e6f',1,'Ogre::Font']]],
   ['settruetypesize_866',['setTrueTypeSize',['../class_ogre_1_1_font.html#a242776c92b41e51d0dbce17ba9fec747',1,'Ogre::Font']]],
   ['settrylockmutexfailurelimit_867',['setTrylockMutexFailureLimit',['../class_ogre_1_1_texture_gpu_manager.html#a763c9420839cf914f7a5c1901c53539b',1,'Ogre::TextureGpuManager']]],
-  ['settwosidedlighting_868',['setTwoSidedLighting',['../class_ogre_1_1_hlms_pbs_datablock.html#aa76cc1f6ae4b994a7504430f10e2609c',1,'Ogre::HlmsPbsDatablock']]],
+  ['settwosidedlighting_868',['setTwoSidedLighting',['../class_ogre_1_1_hlms_pbs_datablock.html#a460860d6eefb42c10461026b6f754df6',1,'Ogre::HlmsPbsDatablock']]],
   ['settype_869',['setType',['../class_ogre_1_1_font.html#ab89abe298177153acda383de2d7823ca',1,'Ogre::Font::setType()'],['../class_ogre_1_1_gpu_program.html#a9792acbeda4a5806ae1ec5c7d4da60b7',1,'Ogre::GpuProgram::setType()'],['../class_ogre_1_1_light.html#a6019f7fa89624e35316ba444e519d8f8',1,'Ogre::Light::setType()']]],
   ['setuav_870',['setUav',['../class_ogre_1_1_compositor_pass_uav_def.html#acd33b42cc21a1da94a0033d7c6f5cc22',1,'Ogre::CompositorPassUavDef']]],
   ['setuavstartingslot_871',['setUavStartingSlot',['../class_ogre_1_1_render_system.html#a2d0de2f7b75ffb2d4048534ebe90bb73',1,'Ogre::RenderSystem']]],
