@@ -784,17 +784,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::getTwoSidedLighting() const { return mTwoSided; }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::hasCustomShadowMacroblock() const
-    {
-        if( mTwoSided &&
-            ( mMacroblock[0]->mCullMode != CULL_NONE || mMacroblock[1]->mCullMode != CULL_NONE ) )
-        {
-            return true;
-        }
-
-        return HlmsDatablock::hasCustomShadowMacroblock();
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly,
                                          bool useAlphaFromTextures )
     {

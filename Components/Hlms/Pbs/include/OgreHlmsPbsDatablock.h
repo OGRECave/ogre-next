@@ -567,8 +567,6 @@ namespace Ogre
                                   CullingMode oneSidedShadowCast = CULL_NONE );
         bool getTwoSidedLighting() const;
 
-        bool hasCustomShadowMacroblock() const override;
-
         void setAlphaTest( CompareFunction compareFunction, bool shadowCasterOnly = false,
                            bool useAlphaFromTextures = true ) override;
 
