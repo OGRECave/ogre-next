@@ -1,6 +1,5 @@
 var NAVTREEINDEX268 =
 {
-"struct_ogre_1_1float4x3.html#a539f47415df46f9a6de3fa7e813d6cc7":[6,0,0,319,3],
 "struct_ogre_1_1float4x4.html":[6,0,0,320],
 "struct_ogre_1_1float4x4.html":[7,0,0,293],
 "struct_ogre_1_1float4x4.html#ab6429d68fd814d25b379f21b822e3551":[6,0,0,320,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX268 =
 "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html#a47dcb28c4075b4f52878ca96e0b73069":[7,0,0,2,138,0,1],
 "struct_ogre_1_1v1_1_1_vertex_shadow_map_helper_1_1_geometry.html#a47dcb28c4075b4f52878ca96e0b73069":[6,0,0,27,138,0,1],
 "struct_strange_data.html":[7,0,18],
-"struct_strange_data.html#a0d380dd48a400f8109aafd7579816e7f":[7,0,18,1]
+"struct_strange_data.html#a0d380dd48a400f8109aafd7579816e7f":[7,0,18,1],
+"struct_strange_data.html#a14033a251fcccd728854c183b0e2523d":[7,0,18,2]
 };

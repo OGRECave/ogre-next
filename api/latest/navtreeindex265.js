@@ -1,6 +1,5 @@
 var NAVTREEINDEX265 =
 {
-"struct_ogre_1_1_vector_set.html#a47551a30a8aa43cc51650f69e7eb35bf":[7,0,0,911,51],
 "struct_ogre_1_1_vector_set.html#a4b86aea9ff25e7749483c2431e02db41":[6,0,0,938,10],
 "struct_ogre_1_1_vector_set.html#a4b86aea9ff25e7749483c2431e02db41":[7,0,0,911,10],
 "struct_ogre_1_1_vector_set.html#a4b9389769eb5d2244297e13bea92205f":[6,0,0,938,12],
@@ -249,5 +248,6 @@ var NAVTREEINDEX265 =
 "struct_ogre_1_1_vertices_remap_info.html#a77d02985596069bf1f559b0d34647674":[7,0,0,919,3],
 "struct_ogre_1_1_vertices_remap_info.html#a80871ca8a57f58fd72172f0173a0a332":[6,0,0,946,12],
 "struct_ogre_1_1_vertices_remap_info.html#a80871ca8a57f58fd72172f0173a0a332":[7,0,0,919,12],
-"struct_ogre_1_1_vertices_remap_info.html#a98e2f0ffd318cd552513256068f9fd91":[7,0,0,919,6]
+"struct_ogre_1_1_vertices_remap_info.html#a98e2f0ffd318cd552513256068f9fd91":[7,0,0,919,6],
+"struct_ogre_1_1_vertices_remap_info.html#a98e2f0ffd318cd552513256068f9fd91":[6,0,0,946,6]
 };

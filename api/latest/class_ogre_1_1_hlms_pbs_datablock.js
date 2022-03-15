@@ -46,7 +46,6 @@ var class_ogre_1_1_hlms_pbs_datablock =
     [ "getUseEmissiveAsLightmap", "class_ogre_1_1_hlms_pbs_datablock.html#ac0318ca6e71d6160e416f17d54f1481c", null ],
     [ "getUserValue", "class_ogre_1_1_hlms_pbs_datablock.html#abcd0278f17ed622f5fb3fe9f931ade70", null ],
     [ "getWorkflow", "class_ogre_1_1_hlms_pbs_datablock.html#a551d7327ae4dc77b9be2932ae1b00ea1", null ],
-    [ "hasCustomShadowMacroblock", "class_ogre_1_1_hlms_pbs_datablock.html#a064ed57ddf87320906b8ee7e6ef29f30", null ],
     [ "hasEmissiveConstant", "class_ogre_1_1_hlms_pbs_datablock.html#ab247d816ed757c4feb3ea0e31c41bc1f", null ],
     [ "hasSeparateFresnel", "class_ogre_1_1_hlms_pbs_datablock.html#a8ab5d0d4b31c5d2890db869ab5279e62", null ],
     [ "importUnity", "class_ogre_1_1_hlms_pbs_datablock.html#ad8b3c1f10ae5b13c0cb0b35b36f5bf70", null ],

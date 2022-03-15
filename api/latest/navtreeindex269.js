@@ -1,6 +1,5 @@
 var NAVTREEINDEX269 =
 {
-"struct_strange_data.html#a14033a251fcccd728854c183b0e2523d":[7,0,18,2],
 "struct_strange_data.html#aba8174a434e7d7d072355f0da6064cd0":[7,0,18,0],
 "struct_x_client_message_event.html":[7,0,20],
 "struct_x_client_message_event.html#a06c61635d61e002df1231f60c3c681d2":[7,0,20,5],
