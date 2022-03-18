@@ -57,7 +57,7 @@ namespace Ogre
     */
     class _OgreExport AutoParamDataSource : public AllocatedObject<AlignAllocPolicy<>>
     {
-       protected:
+	protected:
         const Light &getLight( size_t index ) const;
         OGRE_SIMD_ALIGNED_DECL( mutable Matrix4, mWorldMatrix[256] );
         mutable size_t mWorldMatrixCount;
