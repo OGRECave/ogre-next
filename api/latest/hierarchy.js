@@ -2,6 +2,20 @@ var hierarchy =
 [
     [ "_D3DCOLORVALUE", "struct___d3_d_c_o_l_o_r_v_a_l_u_e.html", null ],
     [ "_finddata_t", "struct__finddata__t.html", null ],
+    [ "Ogre::AllocatedObject< AlignAllocPolicy<> >", "class_ogre_1_1_allocated_object.html", [
+      [ "Ogre::AutoParamDataSource", "class_ogre_1_1_auto_param_data_source.html", null ],
+      [ "Ogre::Hlms", "class_ogre_1_1_hlms.html", [
+        [ "Ogre::HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html", [
+          [ "Ogre::HlmsPbs", "class_ogre_1_1_hlms_pbs.html", null ],
+          [ "Ogre::HlmsUnlit", "class_ogre_1_1_hlms_unlit.html", null ]
+        ] ],
+        [ "Ogre::HlmsCompute", "class_ogre_1_1_hlms_compute.html", null ],
+        [ "Ogre::HlmsLowLevel", "class_ogre_1_1_hlms_low_level.html", null ]
+      ] ],
+      [ "Ogre::SceneManager", "class_ogre_1_1_scene_manager.html", [
+        [ "Ogre::DefaultSceneManager", "class_ogre_1_1_default_scene_manager.html", null ]
+      ] ]
+    ] ],
     [ "Ogre::AtomicScalar< LoadingState >", "class_ogre_1_1_atomic_scalar.html", null ],
     [ "Ogre::AtomicScalar< ResourceHandle >", "class_ogre_1_1_atomic_scalar.html", null ],
     [ "Ogre::AtomicScalar< size_t >", "class_ogre_1_1_atomic_scalar.html", null ],
@@ -281,7 +295,6 @@ var hierarchy =
         [ "Ogre::NULLAsyncTicket", "class_ogre_1_1_n_u_l_l_async_ticket.html", null ],
         [ "Ogre::VulkanAsyncTicket", "class_ogre_1_1_vulkan_async_ticket.html", null ]
       ] ],
-      [ "Ogre::AutoParamDataSource", "class_ogre_1_1_auto_param_data_source.html", null ],
       [ "Ogre::Bone", "class_ogre_1_1_bone.html", null ],
       [ "Ogre::BufferPacked", "class_ogre_1_1_buffer_packed.html", [
         [ "Ogre::ConstBufferPacked", "class_ogre_1_1_const_buffer_packed.html", [
@@ -450,14 +463,6 @@ var hierarchy =
         [ "Ogre::MetalProgramFactory", "class_ogre_1_1_metal_program_factory.html", null ],
         [ "Ogre::UnifiedHighLevelGpuProgramFactory", "class_ogre_1_1_unified_high_level_gpu_program_factory.html", null ],
         [ "Ogre::VulkanProgramFactory", "class_ogre_1_1_vulkan_program_factory.html", null ]
-      ] ],
-      [ "Ogre::Hlms", "class_ogre_1_1_hlms.html", [
-        [ "Ogre::HlmsBufferManager", "class_ogre_1_1_hlms_buffer_manager.html", [
-          [ "Ogre::HlmsPbs", "class_ogre_1_1_hlms_pbs.html", null ],
-          [ "Ogre::HlmsUnlit", "class_ogre_1_1_hlms_unlit.html", null ]
-        ] ],
-        [ "Ogre::HlmsCompute", "class_ogre_1_1_hlms_compute.html", null ],
-        [ "Ogre::HlmsLowLevel", "class_ogre_1_1_hlms_low_level.html", null ]
       ] ],
       [ "Ogre::HlmsComputeJob", "class_ogre_1_1_hlms_compute_job.html", null ],
       [ "Ogre::HlmsDatablock", "class_ogre_1_1_hlms_datablock.html", [
@@ -661,9 +666,6 @@ var hierarchy =
       ] ],
       [ "Ogre::ResourceManager::ResourcePool", "class_ogre_1_1_resource_manager_1_1_resource_pool.html", null ],
       [ "Ogre::Root", "class_ogre_1_1_root.html", null ],
-      [ "Ogre::SceneManager", "class_ogre_1_1_scene_manager.html", [
-        [ "Ogre::DefaultSceneManager", "class_ogre_1_1_default_scene_manager.html", null ]
-      ] ],
       [ "Ogre::SceneManagerEnumerator", "class_ogre_1_1_scene_manager_enumerator.html", null ],
       [ "Ogre::SceneManagerFactory", "class_ogre_1_1_scene_manager_factory.html", [
         [ "Ogre::DefaultSceneManagerFactory", "class_ogre_1_1_default_scene_manager_factory.html", null ]

@@ -1,6 +1,6 @@
 <map id="Ogre::DefaultSceneManager" name="Ogre::DefaultSceneManager">
-<area shape="rect" id="node1" title="Default scene manager." alt="" coords="45,155,229,181"/>
-<area shape="rect" id="node2" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="65,80,208,107"/>
-<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,5,129,32"/>
-<area shape="rect" id="node4" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="153,5,259,32"/>
+<area shape="rect" id="node1" title="Default scene manager." alt="" coords="66,169,250,196"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_scene_manager.html" title="Manages the organisation and rendering of a &#39;scene&#39; i.e." alt="" coords="87,95,229,121"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title=" " alt="" coords="5,5,159,47"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_id_object.html" title=" " alt="" coords="183,13,288,39"/>
 </map>
