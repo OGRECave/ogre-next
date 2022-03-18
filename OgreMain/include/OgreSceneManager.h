@@ -231,7 +231,7 @@ namespace Ogre
         dependent on the Camera, which will always call back the SceneManager
         which created it to render the scene.
      */
-    class _OgreExport SceneManager : public OgreAllocatedObj, public IdObject
+    class _OgreExport SceneManager : public AllocatedObject<AlignAllocPolicy<>>, public IdObject
     {
     public:
         /// Default query mask for entities @see SceneQuery

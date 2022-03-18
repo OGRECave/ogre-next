@@ -55,32 +55,9 @@ namespace Ogre
         matrices when they are requested more than once when the underlying information has
         not altered.
     */
-    class _OgreExport AutoParamDataSource : public OgreAllocatedObj
+    class _OgreExport AutoParamDataSource : public AllocatedObject<AlignAllocPolicy<>>
     {
-    public:
-        void* operator new(size_t size) {
-            void *ptr = nullptr;
-            #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-            ptr = _aligned_malloc( size, OGRE_SIMD_ALIGNMENT );
-            #else
-            // size must be an integral multiple of alignment
-            size = ( ( size + OGRE_SIMD_ALIGNMENT - 1 ) / OGRE_SIMD_ALIGNMENT ) * OGRE_SIMD_ALIGNMENT;
-            result = aligned_alloc( OGRE_SIMD_ALIGNMENT, size );
-            #endif
-            if (ptr == nullptr)
-            {
-                throw std::bad_alloc();
-            }
-            return ptr;
-        }
-        void operator delete(void* ptr) {
-            #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-            _aligned_free( ptr );
-            #else
-            free( ptr );
-            #endif
-        }
-      protected:
+       protected:
         const Light &getLight( size_t index ) const;
         OGRE_SIMD_ALIGNED_DECL( mutable Matrix4, mWorldMatrix[256] );
         mutable size_t mWorldMatrixCount;
