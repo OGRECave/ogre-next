@@ -195,7 +195,7 @@ void GTKGLSupport::end_context()
 
 void GTKGLSupport::initialiseExtensions()
 {
-    // XXX anythign to actually do here?
+    // XXX anything to actually do here?
 }
 
 bool GTKGLSupport::checkMinGLVersion( const String &v ) const

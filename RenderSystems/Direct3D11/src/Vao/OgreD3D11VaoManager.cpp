@@ -186,7 +186,7 @@ namespace Ogre
                 assert( mVbos[i][j].empty() );
 
         // 4096u is a sensible default because most Hlms implementations need 16 bytes per
-        // instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
+        // instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposely clamps
         // its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
         // 4096 instances.
         // However due to instanced stereo, we need twice that
@@ -808,7 +808,7 @@ namespace Ogre
                 "PERFORMANCE WARNING D3D11: Calling createAsyncTicket when there are "
                 "pending immutable buffers to be created. This will force Ogre to "
                 "create them immediately; which diminish our ability to batch meshes "
-                "toghether & could affect performance during rendering.\n"
+                "together & could affect performance during rendering.\n"
                 "You should call createAsyncTicket after all immutable meshes have "
                 "been loaded to ensure they get batched together. If you're already "
                 "doing this, you can ignore this warning.\n"

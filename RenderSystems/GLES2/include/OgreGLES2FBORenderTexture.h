@@ -114,7 +114,7 @@ namespace Ogre {
         */
         GLuint getTemporaryFBO(size_t i);
         
-        /** Detects all supported fbo's and recreates the tempory fbo */
+        /** Detects all supported fbo's and recreates the temporary fbo */
         void _reload();
         
     private:

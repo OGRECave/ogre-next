@@ -43,7 +43,7 @@ namespace Ogre
 
         void throwException()
         {
-            String message = "D3D11 dosn't support assembly shaders. Shader name:" + mName + "\n";
+            String message = "D3D11 doesn't support assembly shaders. Shader name:" + mName + "\n";
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, message,
                          "D3D11UnsupportedGpuProgram::loadFromSource" );
         }
