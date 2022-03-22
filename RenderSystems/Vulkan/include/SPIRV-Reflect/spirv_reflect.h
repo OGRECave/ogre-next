@@ -109,7 +109,7 @@ typedef uint32_t SpvReflectTypeFlags;
 NOTE: HLSL row_major and column_major decorations are reversed
       in SPIR-V. Meaning that matrices declrations with row_major
       will get reflected as column_major and vice versa. The
-      row and column decorations get appied during the compilation.
+      row and column decorations get applied during the compilation.
       SPIRV-Reflect reads the data as is and does not make any
       attempt to correct it to match what's in the source.
 
@@ -428,7 +428,7 @@ typedef struct SpvReflectEntryPoint {
     uint32_t                        z;
   } local_size;
   uint32_t                          invocations; // valid for geometry
-  uint32_t                          output_vertices; // valid for geometry, tesselation
+  uint32_t                          output_vertices; // valid for geometry, tessellation
 } SpvReflectEntryPoint;
 
 /*! @struct SpvReflectShaderModule
@@ -869,7 +869,7 @@ SpvReflectResult spvReflectEnumerateEntryPointPushConstantBlocks(
                          If no match can be found, or if an unrelated error
                          occurs, the return value will be NULL. Detailed
                          error results are written to *pResult.
-@note                    If the module contains multiple desriptor bindings
+@note                    If the module contains multiple descriptor bindings
                          with the same set and binding numbers, there are
                          no guarantees about which binding will be returned.
 
@@ -901,7 +901,7 @@ const SpvReflectDescriptorBinding* spvReflectGetDescriptorBinding(
                          If no match can be found, or if an unrelated error
                          occurs, the return value will be NULL. Detailed
                          error results are written to *pResult.
-@note                    If the entry point contains multiple desriptor bindings
+@note                    If the entry point contains multiple descriptor bindings
                          with the same set and binding numbers, there are
                          no guarantees about which binding will be returned.
 

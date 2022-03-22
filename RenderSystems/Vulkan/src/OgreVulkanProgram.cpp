@@ -146,7 +146,7 @@ namespace Ogre
     //---------------------------------------------------------------------------
     VulkanProgram::~VulkanProgram()
     {
-        // Have to call this here reather than in Resource destructor
+        // Have to call this here rather than in Resource destructor
         // since calling virtual methods in base destructors causes crash
         if( isLoaded() )
         {

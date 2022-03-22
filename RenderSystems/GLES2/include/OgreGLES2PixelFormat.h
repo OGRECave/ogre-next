@@ -87,7 +87,7 @@ namespace Ogre {
             static PixelFormat getClosestOGREFormat(GLenum fmt, GLenum dataType);
 
             /** Returns the maximum number of Mipmaps that can be generated until we reach
-                the mininum format possible. This does not count the base level.
+                the minimum format possible. This does not count the base level.
                 @param width
                     The width of the area
                 @param height

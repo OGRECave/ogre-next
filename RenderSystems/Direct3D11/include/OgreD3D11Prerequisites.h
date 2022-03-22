@@ -141,7 +141,7 @@ namespace Ogre
     typedef SharedPtr<D3D11HLSLProgram> D3D11HLSLProgramPtr;
 
     //-------------------------------------------
-    // Windows setttings
+    // Windows settings
     //-------------------------------------------
 #if( OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT ) && \
     !defined( OGRE_STATIC_LIB )

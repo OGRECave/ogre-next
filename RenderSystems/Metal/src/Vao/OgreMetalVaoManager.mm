@@ -291,7 +291,7 @@ namespace Ogre
         if( !unalignedCopyFunc )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Error retriving entry point from internal 'ogre_gpu_memcpy'",
+                         "Error retrieving entry point from internal 'ogre_gpu_memcpy'",
                          "MetalVaoManager::MetalVaoManager" );
         }
 

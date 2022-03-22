@@ -72,7 +72,7 @@ namespace Ogre
 
         /** Creates a special MetalTextureGpuWindow pointer, to be used by Ogre::Window.
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
-            If caller doesnt' delete it, it will leak.
+            If caller doesn't delete it, it will leak.
         */
         TextureGpu *createTextureGpuWindow( MetalWindow *window );
         TextureGpu *createWindowDepthBuffer();

@@ -61,7 +61,7 @@ namespace Ogre
         TexBufferPacked *retVal = OGRE_NEW MetalTexBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
             (void *)0, false, (VaoManager *)0, bufferInterface, pixelFormat, mDevice );
-        // We were overriden by the BufferPacked we just created. Restore this back!
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;
@@ -76,7 +76,7 @@ namespace Ogre
         ReadOnlyBufferPacked *retVal = OGRE_NEW MetalReadOnlyBufferPacked(
             mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0, mBufferType,
             (void *)0, false, (VaoManager *)0, bufferInterface, PFG_NULL, mDevice );
-        // We were overriden by the BufferPacked we just created. Restore this back!
+        // We were overridden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 
         return retVal;

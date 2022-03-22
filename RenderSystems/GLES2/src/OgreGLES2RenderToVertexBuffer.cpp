@@ -277,7 +277,7 @@ namespace v1 {
         //TODO : Implement more?
         default:
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                "Unsupported vertex element sematic in render to vertex buffer", 
+                "Unsupported vertex element semantic in render to vertex buffer", 
                 "OgreGLES2RenderToVertexBuffer::getSemanticVaryingName");
         }
     }

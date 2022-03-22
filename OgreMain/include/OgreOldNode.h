@@ -489,7 +489,7 @@ namespace Ogre
             virtual void rotate( const Vector3 &axis, const Radian &angle,
                                  TransformSpace relativeTo = TS_LOCAL );
 
-            /** Rotate the OldNode around an aritrary axis using a Quarternion.
+            /** Rotate the OldNode around an arbitrary axis using a Quarternion.
              */
             virtual void rotate( const Quaternion &q, TransformSpace relativeTo = TS_LOCAL );
 

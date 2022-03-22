@@ -37,7 +37,7 @@ namespace Ogre
         programs via the Open GL program pipeline.
 
         Separable programs consist of shader objects which have been
-        individually linked. This allows for invidual shaders in a
+        individually linked. This allows for individual shaders in a
         program pipeline to be swapped without recompiling the program
         object, as would be necessary with monolithic programs. This
         is especially useful in the common case of only entities which
