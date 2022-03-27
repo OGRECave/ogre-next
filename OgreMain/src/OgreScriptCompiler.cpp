@@ -1393,10 +1393,6 @@ namespace Ogre
 
         mIds["hlms"] = ID_HLMS;
 
-#ifdef RTSHADER_SYSTEM_BUILD_CORE_SHADERS
-        mIds["rtshader_system"] = ID_RT_SHADER_SYSTEM;
-#endif
-
         mIds["subroutine"] = ID_SUBROUTINE;
 
         mLargestRegisteredWordId = ID_END_BUILTIN_IDS;

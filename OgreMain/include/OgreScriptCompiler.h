@@ -1098,9 +1098,6 @@ namespace Ogre
 
         ID_HLMS,
 
-#ifdef RTSHADER_SYSTEM_BUILD_CORE_SHADERS
-        ID_RT_SHADER_SYSTEM,
-#endif
         /// Suport for shader model 5.0
         // More program IDs
         ID_TESSELLATION_HULL_PROGRAM,

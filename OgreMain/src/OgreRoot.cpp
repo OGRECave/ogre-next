@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonManager.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreAbiUtils.h"
 #include "OgreArchiveManager.h"
 #include "OgreBillboardChain.h"
 #include "OgreBillboardSet.h"
@@ -130,8 +131,8 @@ namespace Ogre
     typedef void ( *DLL_STOP_PLUGIN )();
 
     //-----------------------------------------------------------------------
-    Root::Root( const String &pluginFileName, const String &configFileName, const String &logFileName,
-                const String &appName ) :
+    Root::Root( const AbiCookie *abiCookie, const String &pluginFileName, const String &configFileName,
+                const String &logFileName, const String &appName ) :
         mAppName( appName ),
         mQueuedEnd( false ),
         mLogManager( 0 ),
@@ -149,6 +150,7 @@ namespace Ogre
         mIsBlendIndicesGpuRedundant( true ),
         mIsBlendWeightsGpuRedundant( true )
     {
+
         // superclass will do singleton checking
         String msg;
 
@@ -166,6 +168,9 @@ namespace Ogre
             mLogManager = OGRE_NEW LogManager();
             mLogManager->createLog( logFileName, true, true );
         }
+
+        if( abiCookie )
+            testAbiCookie( *abiCookie );
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
         mAndroidLogger = OGRE_NEW AndroidLogListener();
@@ -1700,5 +1705,4 @@ namespace Ogre
                 mWorkQueue->startup();
         }
     }
-
 }  // namespace Ogre

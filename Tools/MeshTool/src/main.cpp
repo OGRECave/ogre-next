@@ -1182,7 +1182,7 @@ int main(int numargs, char** args)
         logManager->createLog( "OgreMeshTool.log", true, true );
         LogManager::getSingleton().getDefaultLog()->setLogDetail( LL_LOW );
         setWorkingDirectory();
-        root = OGRE_NEW Root( pluginsPath, "", "OgreMeshTool.log" ) ;
+        root = OGRE_NEW Ogre::Root( nullptr, pluginsPath, "", "OgreMeshTool.log" ) ;
         restoreWorkingDir();
 
 #ifdef OGRE_STATIC_LIB

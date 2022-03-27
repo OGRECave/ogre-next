@@ -127,6 +127,10 @@ THE SOFTWARE.
 
 #endif
 
+#if OGRE_COMPILER == OGRE_COMPILER_GNUC || OGRE_COMPILER == OGRE_COMPILER_CLANG
+#    define OGRE_GCC_VISIBILITY
+#endif
+
 /* See if we can use __forceinline or if we need to use __inline instead */
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #    if OGRE_COMP_VER >= 1200

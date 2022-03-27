@@ -2113,6 +2113,7 @@ namespace Ogre
         case BT_DYNAMIC_PERSISTENT:
             vboFlag = CPU_WRITE_PERSISTENT;
             break;
+        case BT_DEFAULT_SHARED:
         case BT_DYNAMIC_PERSISTENT_COHERENT:
             vboFlag = CPU_WRITE_PERSISTENT_COHERENT;
             break;
