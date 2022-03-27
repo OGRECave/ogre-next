@@ -54,6 +54,9 @@ namespace Ogre
         /// @copydoc Plugin::uninstall
         void uninstall() override;
 
+        /// @copydoc Plugin::getAbiCookie
+        void getAbiCookie( AbiCookie &outAbiCookie ) override;
+
     protected:
         GL3PlusRenderSystem *mRenderSystem;
     };

@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreParticleFXPlugin.h"
 
+#include "OgreAbiUtils.h"
 #include "OgreParticleSystemManager.h"
 #include "OgreRoot.h"
 
@@ -112,7 +113,6 @@ namespace Ogre
         pAffFact = OGRE_NEW ColourImageAffectorFactory();
         ParticleSystemManager::getSingleton().addAffectorFactory( pAffFact );
         mAffectorFactories.push_back( pAffFact );
-
         // ColourInterpolatorAffector
         pAffFact = OGRE_NEW ColourInterpolatorAffectorFactory();
         ParticleSystemManager::getSingleton().addAffectorFactory( pAffFact );
@@ -164,6 +164,11 @@ namespace Ogre
         {
             OGRE_DELETE( *ai );
         }
+    }
+    //---------------------------------------------------------------------
+    void ParticleFXPlugin::getAbiCookie( AbiCookie &outAbiCookie )
+    {
+        outAbiCookie = generateAbiCookie();
     }
 
 }  // namespace Ogre

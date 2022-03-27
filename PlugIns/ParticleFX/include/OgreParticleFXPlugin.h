@@ -55,6 +55,9 @@ namespace Ogre
         /// @copydoc Plugin::uninstall
         void uninstall() override;
 
+        /// @copydoc Plugin::getAbiCookie
+        void getAbiCookie( AbiCookie &outAbiCookie ) override;
+
     protected:
         vector<ParticleEmitterFactory *>::type  mEmitterFactories;
         vector<ParticleAffectorFactory *>::type mAffectorFactories;

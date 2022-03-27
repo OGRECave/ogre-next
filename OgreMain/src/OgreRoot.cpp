@@ -150,7 +150,6 @@ namespace Ogre
         mIsBlendIndicesGpuRedundant( true ),
         mIsBlendWeightsGpuRedundant( true )
     {
-
         // superclass will do singleton checking
         String msg;
 
@@ -1416,16 +1415,26 @@ namespace Ogre
     {
         LogManager::getSingleton().logMessage( "Installing plugin: " + plugin->getName() );
 
-        mPlugins.push_back( plugin );
-        plugin->install();
+        AbiCookie abiCookie;
+        plugin->getAbiCookie( abiCookie );
 
-        // if rendersystem is already initialised, call rendersystem init too
-        if( mIsInitialised )
+        if( testAbiCookie( abiCookie, false ) )
         {
-            plugin->initialise();
-        }
+            mPlugins.push_back( plugin );
+            plugin->install();
 
-        LogManager::getSingleton().logMessage( "Plugin successfully installed" );
+            // if rendersystem is already initialised, call rendersystem init too
+            if( mIsInitialised )
+            {
+                plugin->initialise();
+            }
+
+            LogManager::getSingleton().logMessage( "Plugin successfully installed" );
+        }
+        else
+        {
+            LogManager::getSingleton().logMessage( "Plugin failed ABI test" );
+        }
     }
     //---------------------------------------------------------------------
     void Root::uninstallPlugin( Plugin *plugin )
