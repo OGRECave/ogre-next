@@ -491,6 +491,12 @@ set(OGRE_CONFIG_ALLOCATOR 0 CACHE STRING
 )
 endif ()
 
+set( OGRE_EMBED_DEBUG_MODE auto CACHE STRING
+	"Specify whether OGRE_DEBUG_MODE should be embedded into OgreBuildSettings.h
+	auto - Use 'never' for multi-config generators like MSVC & XCode. Use 'always' for Make & Ninja generators
+	never - Compile headers will determine whether it's a debug build based on macros like _DEBUG, DEBUG & NDEBUG
+	always - OGRE_DEBUG_MODE is embedded into OgreBuildSettings.h, its value is based on CMAKE_BUILD_TYPE"
+)
 set( OGRE_DEBUG_LEVEL_DEBUG 3 CACHE STRING
     "Specify debug level for debug builds:
     0 - None. Disabled. No checks done at all.
