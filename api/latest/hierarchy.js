@@ -243,6 +243,7 @@ var hierarchy =
     ] ],
     [ "Ogre::_ConfigOption", "struct_ogre_1_1___config_option.html", null ],
     [ "Ogre::Aabb", "struct_ogre_1_1_aabb.html", null ],
+    [ "Ogre::AbiCookie", "struct_ogre_1_1_abi_cookie.html", null ],
     [ "Ogre::ActiveActorData", "struct_ogre_1_1_active_actor_data.html", null ],
     [ "Ogre::AlignedMemory", "class_ogre_1_1_aligned_memory.html", null ],
     [ "Ogre::AllocatedObject< Alloc >", "class_ogre_1_1_allocated_object.html", [

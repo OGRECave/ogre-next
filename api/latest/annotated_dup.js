@@ -226,6 +226,7 @@ var annotated_dup =
       ] ],
       [ "_ConfigOption", "struct_ogre_1_1___config_option.html", "struct_ogre_1_1___config_option" ],
       [ "Aabb", "struct_ogre_1_1_aabb.html", "struct_ogre_1_1_aabb" ],
+      [ "AbiCookie", "struct_ogre_1_1_abi_cookie.html", "struct_ogre_1_1_abi_cookie" ],
       [ "AbsolutePixelCountLodStrategy", "class_ogre_1_1_absolute_pixel_count_lod_strategy.html", "class_ogre_1_1_absolute_pixel_count_lod_strategy" ],
       [ "AbstractNode", "class_ogre_1_1_abstract_node.html", "class_ogre_1_1_abstract_node" ],
       [ "ActiveActorData", "struct_ogre_1_1_active_actor_data.html", "struct_ogre_1_1_active_actor_data" ],

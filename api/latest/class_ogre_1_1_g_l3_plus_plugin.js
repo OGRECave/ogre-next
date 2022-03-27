@@ -1,6 +1,7 @@
 var class_ogre_1_1_g_l3_plus_plugin =
 [
     [ "GL3PlusPlugin", "class_ogre_1_1_g_l3_plus_plugin.html#a285d0186236b457df69d13d79d1ece3b", null ],
+    [ "getAbiCookie", "class_ogre_1_1_g_l3_plus_plugin.html#aef56a901203204adee6a18db145b70f0", null ],
     [ "getName", "class_ogre_1_1_g_l3_plus_plugin.html#a322cc7c107f935831b61d009401b78c9", null ],
     [ "initialise", "class_ogre_1_1_g_l3_plus_plugin.html#a4eec4d105b721345502275b4ff73c013", null ],
     [ "install", "class_ogre_1_1_g_l3_plus_plugin.html#ac8c88aa6f4b770e6585007a20af5eb47", null ],

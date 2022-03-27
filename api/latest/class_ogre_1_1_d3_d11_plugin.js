@@ -1,6 +1,7 @@
 var class_ogre_1_1_d3_d11_plugin =
 [
     [ "D3D11Plugin", "class_ogre_1_1_d3_d11_plugin.html#a4b5e726a7e96e7298d8d347b13c0caaf", null ],
+    [ "getAbiCookie", "class_ogre_1_1_d3_d11_plugin.html#a6610d3f6e56ef80d0d2da96e4f49bc41", null ],
     [ "getName", "class_ogre_1_1_d3_d11_plugin.html#aaadb773ffea9ce7c348cf34cd1282c32", null ],
     [ "initialise", "class_ogre_1_1_d3_d11_plugin.html#aa7d21fe00c22f86aba419faee41f2902", null ],
     [ "install", "class_ogre_1_1_d3_d11_plugin.html#acab5ecd37c24bff905c4ce66d9c1f100", null ],

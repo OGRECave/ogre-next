@@ -15,6 +15,7 @@ var dir_9ba68fabe7d45cd05996335e8214ea54 =
     [ "Vao", "dir_915f5e2f7b6c1845cb870011199325d4.html", "dir_915f5e2f7b6c1845cb870011199325d4" ],
     [ "WIN32", "dir_1c779f42a2ea96714ae1b39af1d220c1.html", "dir_1c779f42a2ea96714ae1b39af1d220c1" ],
     [ "Ogre.h", "_ogre_8h.html", null ],
+    [ "OgreAbiUtils.h", "_ogre_abi_utils_8h.html", "_ogre_abi_utils_8h" ],
     [ "OgreAlignedAllocator.h", "_ogre_aligned_allocator_8h.html", null ],
     [ "OgreAnimable.h", "_ogre_animable_8h.html", null ],
     [ "OgreAnimation.h", "_ogre_animation_8h.html", null ],

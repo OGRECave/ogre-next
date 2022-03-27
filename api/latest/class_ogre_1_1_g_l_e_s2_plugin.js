@@ -1,6 +1,7 @@
 var class_ogre_1_1_g_l_e_s2_plugin =
 [
     [ "GLES2Plugin", "class_ogre_1_1_g_l_e_s2_plugin.html#a6fd35960105ff9ee7f92bc9bcb948530", null ],
+    [ "getAbiCookie", "class_ogre_1_1_g_l_e_s2_plugin.html#a8fb72138bd53f612e608b18aa3d9dbc4", null ],
     [ "getName", "class_ogre_1_1_g_l_e_s2_plugin.html#aa18c4d2d734d7380dc52e3d6a769891d", null ],
     [ "initialise", "class_ogre_1_1_g_l_e_s2_plugin.html#abc32f9504be080a8d866bc5b24a95851", null ],
     [ "install", "class_ogre_1_1_g_l_e_s2_plugin.html#a11a9f8b3a25c275d1d35b2a9db5f0ac6", null ],

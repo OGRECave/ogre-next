@@ -1,6 +1,7 @@
 var class_ogre_1_1_metal_plugin =
 [
     [ "MetalPlugin", "class_ogre_1_1_metal_plugin.html#a6c7e655606a460a6a297013255b7c547", null ],
+    [ "getAbiCookie", "class_ogre_1_1_metal_plugin.html#acec87b69e205339714536eb33e77b4eb", null ],
     [ "getName", "class_ogre_1_1_metal_plugin.html#a3fc4c061c0e1d7ad5de3484c874e6e62", null ],
     [ "initialise", "class_ogre_1_1_metal_plugin.html#a7dc9f8f6c1485669129a93c73959616e", null ],
     [ "install", "class_ogre_1_1_metal_plugin.html#a6bf48b9e1b12c872a19b409c20ce64e8", null ],
