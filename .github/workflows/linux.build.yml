@@ -20,3 +20,12 @@ jobs:
       - name: Run Linux C++11
         working-directory: ./
         run: ./Scripts/BuildScripts/build_ci_linux.sh
+      - name: ABI Checker Report Generation
+        if: ${{ (github.ref != 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'pull_request' && github.base_ref != 'refs/heads/master') }}
+        run: ./Scripts/BuildScripts/abi_checker.sh 2 $GITHUB_BASE_REF
+      - name: ABI Checker Upload
+        uses: actions/upload-artifact@v2
+        if: ${{ (github.ref != 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'pull_request' && github.base_ref != 'refs/heads/master') }}
+        with:
+          name: abi-checker-reports
+          path: ./build/Debug/lib/compat_reports
