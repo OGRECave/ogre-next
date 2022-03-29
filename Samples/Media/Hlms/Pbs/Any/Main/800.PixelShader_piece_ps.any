@@ -320,7 +320,7 @@
 										 UV_SPECULAR( inPs.uv@value(uv_specular).xy ),
 										 texIndex_specularIdx ).x;
 		@end
-		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * _h( 3.14159f ), metalness );
+		pixelData.F0 = lerp( make_float_fresnel( 0.04f ), pixelData.diffuse.xyz * _h( 3.14159f ), metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
 		@property( hlms_alphablend || hlms_screen_space_refractions )
 			pixelData.F0 *= midf_c( material.F0.w ); ///Should this be done for non-metallic as well???
