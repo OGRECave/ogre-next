@@ -152,8 +152,9 @@ INLINE midf3 BRDF( midf3 lightDir, midf3 lightDiffuse, midf3 lightSpecular, Pixe
 
 	midf G = _h( 0.5 ) / (( Lambda_GGXV + Lambda_GGXL + _h( 1e-6f ) ) * _h( 3.141592654 ));
 @else
-	midf gL = NdotL * ( _h( 1 ) - sqR ) + sqR;
-	midf gV = pixelData.NdotV * ( _h( 1 ) - sqR ) + sqR;
+	midf k = ( pixelData.perceptualRoughness + _h( 1 ) ) * ( pixelData.perceptualRoughness + _h( 1 ) ) * _h( 0.125 );
+	midf gL = NdotL * ( _h( 1 ) - k ) + k;
+	midf gV = pixelData.NdotV * ( _h( 1 ) - k ) + k;
 	midf G = _h( 1.0 ) / (( gL * gV + _h( 1e-4f ) ) * _h( 4 * 3.141592654 ) );
 @end
 
