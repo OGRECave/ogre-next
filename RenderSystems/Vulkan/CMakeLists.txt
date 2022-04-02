@@ -33,7 +33,7 @@ include_directories(
 include_directories( ${Vulkan_INCLUDE_DIRS} )
 
 ogre_add_library(RenderSystem_Vulkan ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(RenderSystem_Vulkan OgreMain ${Vulkan_LIBRARIES})
+target_link_libraries(RenderSystem_Vulkan ${OGRE_NEXT}Main ${Vulkan_LIBRARIES})
 
 if( UNIX AND NOT ANDROID )
 	target_link_libraries(RenderSystem_Vulkan xcb-randr X11-xcb)

@@ -60,6 +60,37 @@ endmacro()
 
 #----------------------------------------------------------------------------------------
 
+# Outputs TRUE into RESULT_VARIABLE if Ogre was build as OgreNextMain.dll instead of OgreMain.dll
+macro( isOgreNext RESULT_VARIABLE )
+	if( WIN32 )
+		if( EXISTS "${OGRE_BINARIES}/bin/Debug/OgreNextMain_d.dll" OR
+			EXISTS "${OGRE_BINARIES}/bin/Release/OgreNextMain.dll" OR
+			EXISTS "${OGRE_BINARIES}/bin/RelWithDebInfo/OgreNextMain.dll" OR
+			EXISTS "${OGRE_BINARIES}/bin/MinSizeRel/OgreNextMain.dll" OR
+			EXISTS "${OGRE_BINARIES}/lib/Debug/OgreNextMainStatic_d.lib" OR
+			EXISTS "${OGRE_BINARIES}/lib/Release/OgreNextMainStatic.lib" OR
+			EXISTS "${OGRE_BINARIES}/lib/RelWithDebInfo/OgreNextMainStatic.lib" OR
+			EXISTS "${OGRE_BINARIES}/lib/MinSizeRel/OgreNextMainStatic.lib")
+			set( ${RESULT_VARIABLE} TRUE )
+		else()
+			set( ${RESULT_VARIABLE} FALSE )
+		endif()
+	else()
+		set( DEBUG_SUFFIX "" )
+		if( ${CMAKE_BUILD_TYPE} STREQUAL "Debug" )
+			set( DEBUG_SUFFIX "_d" )
+		endif()
+		if( EXISTS "${OGRE_BINARIES}/lib/libOgreNextMain${DEBUG_SUFFIX}.so" OR
+			EXISTS "${OGRE_BINARIES}/lib/libOgreNextMainStatic${DEBUG_SUFFIX}.a")
+			set( ${RESULT_VARIABLE} TRUE )
+		else()
+			set( ${RESULT_VARIABLE} FALSE )
+		endif()
+	endif()
+endmacro()
+
+#----------------------------------------------------------------------------------------
+
 # Generates Plugins.cfg file out of user-editable Plugins.cfg.in file. Will automatically disable those plugins
 # that were not built
 # Copies all relevant DLLs: RenderSystem files, OgreOverlay, Hlms PBS & Unlit.
@@ -94,14 +125,14 @@ macro( setupPluginFileFromTemplate BUILD_TYPE OGRE_USE_SCENE_FORMAT OGRE_USE_PLA
 
 		# Lists of DLLs to copy
 		set( OGRE_DLLS
-				OgreMain
-				OgreOverlay
-				OgreHlmsPbs
-				OgreHlmsUnlit
+				${OGRE_NEXT}Main
+				${OGRE_NEXT}Overlay
+				${OGRE_NEXT}HlmsPbs
+				${OGRE_NEXT}HlmsUnlit
 			)
 
 		if( ${OGRE_USE_SCENE_FORMAT} )
-			set( OGRE_DLLS ${OGRE_DLLS} OgreSceneFormat )
+			set( OGRE_DLLS ${OGRE_DLLS} ${OGRE_NEXT}SceneFormat )
 		endif()
 
 		# Deal with OS and Ogre naming shenanigans:
@@ -199,6 +230,14 @@ else()
 	link_directories( "${OGRE_BINARIES}/lib" )
 endif()
 
+isOgreNext( OGRE_USE_NEW_NAME )
+message( STATUS ${OGRE_USE_NEW_NAME} )
+if( ${OGRE_USE_NEW_NAME} )
+	set( OGRE_NEXT "OgreNext" )
+else()
+	set( OGRE_NEXT "Ogre" )
+endif()
+
 # Ogre config
 include_directories( "${OGRE_SOURCE}/OgreMain/include" )
 
@@ -229,6 +268,8 @@ else()
 	message( STATUS "Detected DLL build of Ogre" )
 	unset( OGRE_STATIC )
 endif()
+findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_GL3PLUS )
+findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_D3D11 )
 findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_METAL )
 findOgreBuildSetting( ${OGRE_BUILD_SETTINGS_STR} OGRE_BUILD_RENDERSYSTEM_VULKAN )
 unset( OGRE_BUILD_SETTINGS_STR )
@@ -250,34 +291,42 @@ if( NOT IOS )
 	endif()
 endif()
 
-set( OGRE_LIBRARIES
-	debug OgreMain${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
-	debug OgreOverlay${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
-	debug OgreHlmsUnlit${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
-	debug OgreHlmsPbs${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
-
-	optimized OgreMain${OGRE_STATIC}
-	optimized OgreOverlay${OGRE_STATIC}
-	optimized OgreHlmsUnlit${OGRE_STATIC}
-	optimized OgreHlmsPbs${OGRE_STATIC}
-	${OGRE_DEPENDENCY_LIBS}
-	)
-
 if( ${OGRE_USE_SCENE_FORMAT} )
 	set( OGRE_LIBRARIES ${OGRE_LIBRARIES}
-		debug OgreSceneFormat${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
-		optimized OgreSceneFormat${OGRE_STATIC}
+		debug ${OGRE_NEXT}SceneFormat${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+		optimized ${OGRE_NEXT}SceneFormat${OGRE_STATIC}
 		)
 endif()
 
 if( ${OGRE_USE_PLANAR_REFLECTIONS} )
 	set( OGRE_LIBRARIES ${OGRE_LIBRARIES}
-		debug OgrePlanarReflections${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
-		optimized OgrePlanarReflections${OGRE_STATIC}
+		debug ${OGRE_NEXT}PlanarReflections${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+		optimized ${OGRE_NEXT}PlanarReflections${OGRE_STATIC}
 		)
 endif()
 
 if( OGRE_STATIC )
+	if( OGRE_BUILD_RENDERSYSTEM_D3D11 )
+		message( STATUS "Detected D3D11 RenderSystem. Linking against it." )
+		set( OGRE_LIBRARIES
+			${OGRE_LIBRARIES}
+			debug RenderSystem_Direct3D11${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+			optimized RenderSystem_Direct3D11${OGRE_STATIC} )
+		include_directories( "${OGRE_SOURCE}/RenderSystems/Direct3D11/include" )
+	endif()
+	if( OGRE_BUILD_RENDERSYSTEM_GL3PLUS )
+		message( STATUS "Detected GL3+ RenderSystem. Linking against it." )
+		set( OGRE_LIBRARIES
+			${OGRE_LIBRARIES}
+			debug RenderSystem_GL3Plus${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+			optimized RenderSystem_GL3Plus${OGRE_STATIC} )
+		include_directories( "${OGRE_SOURCE}/RenderSystems/GL3Plus/include"
+			"${OGRE_SOURCE}/RenderSystems/GL3Plus/include/GLSL")
+
+		if( UNIX )
+			set( OGRE_DEPENDENCY_LIBS ${OGRE_DEPENDENCY_LIBS} Xt Xrandr X11 GL )
+		endif()
+	endif()
 	if( OGRE_BUILD_RENDERSYSTEM_METAL )
 		message( STATUS "Detected Metal RenderSystem. Linking against it." )
 		set( OGRE_LIBRARIES
@@ -293,8 +342,26 @@ if( OGRE_STATIC )
 			debug RenderSystem_Vulkan${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
 			optimized RenderSystem_Vulkan${OGRE_STATIC} )
 		include_directories( "${OGRE_SOURCE}/RenderSystems/Vulkan/include" )
+
+		set( OGRE_DEPENDENCY_LIBS ${OGRE_DEPENDENCY_LIBS} xcb X11-xcb xcb-randr )
 	endif()
 endif()
+
+set( OGRE_LIBRARIES
+	${OGRE_LIBRARIES}
+
+	debug ${OGRE_NEXT}Overlay${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+	debug ${OGRE_NEXT}HlmsUnlit${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+	debug ${OGRE_NEXT}HlmsPbs${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+	debug ${OGRE_NEXT}Main${OGRE_STATIC}${OGRE_DEBUG_SUFFIX}
+
+	optimized ${OGRE_NEXT}Overlay${OGRE_STATIC}
+	optimized ${OGRE_NEXT}HlmsUnlit${OGRE_STATIC}
+	optimized ${OGRE_NEXT}HlmsPbs${OGRE_STATIC}
+	optimized ${OGRE_NEXT}Main${OGRE_STATIC}
+
+	${OGRE_DEPENDENCY_LIBS}
+	)
 
 set( OGRE_LIBRARIES_OUT ${OGRE_LIBRARIES} )
 
@@ -368,6 +435,15 @@ macro( addStaticDependencies OGRE_SOURCE, OGRE_BINARIES, OGRE_BUILD_SETTINGS_STR
 		set( TMP_DEPENDENCY_LIBS ${TMP_DEPENDENCY_LIBS}
 			debug ${ZZIPNAME}${OGRE_DEP_DEBUG_SUFFIX}
 			optimized ${ZZIPNAME} )
+	endif()
+
+	message( STATUS "Static lib needs freetype due to Overlays. Linking against it." )
+	set( TMP_DEPENDENCY_LIBS ${TMP_DEPENDENCY_LIBS}
+		debug freetype${OGRE_DEP_DEBUG_SUFFIX}
+		optimized freetype )
+
+	if( UNIX )
+		set( TMP_DEPENDENCY_LIBS ${TMP_DEPENDENCY_LIBS} dl Xt Xrandr X11 xcb Xaw )
 	endif()
 
 	set( OGRE_DEPENDENCY_LIBS ${TMP_DEPENDENCY_LIBS} )

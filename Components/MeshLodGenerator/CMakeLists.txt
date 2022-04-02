@@ -11,7 +11,7 @@
 # MeshLodGenerator optional component
 ############################################################
 
-PROJECT(OgreMeshLodGenerator)
+PROJECT(${OGRE_NEXT}MeshLodGenerator)
 
 # define header and source files for the library
 file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -25,16 +25,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${OGRE_SOURCE_DIR}/OgreMain/include)
 
 # setup target
-ogre_add_library(OgreMeshLodGenerator ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
-set_target_properties(OgreMeshLodGenerator PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
-target_link_libraries(OgreMeshLodGenerator OgreMain)
+ogre_add_library(${OGRE_NEXT}MeshLodGenerator ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
+set_target_properties(${OGRE_NEXT}MeshLodGenerator PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+target_link_libraries(${OGRE_NEXT}MeshLodGenerator ${OGRE_NEXT}Main)
 if (OGRE_CONFIG_THREADS)
-  target_link_libraries(OgreMeshLodGenerator ${OGRE_THREAD_LIBRARIES})
+  target_link_libraries(${OGRE_NEXT}MeshLodGenerator ${OGRE_THREAD_LIBRARIES})
 endif ()
 
 # install 
-ogre_config_framework(OgreMeshLodGenerator)
-ogre_config_component(OgreMeshLodGenerator)
+ogre_config_framework(${OGRE_NEXT}MeshLodGenerator)
+ogre_config_component(${OGRE_NEXT}MeshLodGenerator)
 
 install(FILES ${HEADER_FILES}
   DESTINATION include/OGRE/MeshLodGenerator

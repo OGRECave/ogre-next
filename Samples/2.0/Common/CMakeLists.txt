@@ -55,4 +55,4 @@ add_library(${OGRE_SAMPLES_COMMON_LIBRARY} STATIC ${SOURCE_FILES} ${HEADER_FILES
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${SDL2_LIBRARY} OgreHlmsPbs OgreHlmsUnlit)
+target_link_libraries(${OGRE_SAMPLES_COMMON_LIBRARY} ${SDL2_LIBRARY} ${OGRE_NEXT}HlmsPbs ${OGRE_NEXT}HlmsUnlit)
