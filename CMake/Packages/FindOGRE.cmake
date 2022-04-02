@@ -260,12 +260,10 @@ endif ()
 # look for required Ogre dependencies in case of static build and/or threading
 if (OGRE_STATIC)
   set(OGRE_DEPS_FOUND TRUE)
-  find_package(Cg QUIET)
   find_package(DirectX QUIET)
   find_package(FreeImage QUIET)
   find_package(Freetype QUIET)
   find_package(OpenGL QUIET)
-  find_package(OpenGLES QUIET)
   find_package(OpenGLES2 QUIET)
   find_package(ZLIB QUIET)
   find_package(ZZip QUIET)
@@ -414,8 +412,6 @@ ogre_find_component(Paging OgrePaging.h "")
 ogre_find_component(Terrain OgreTerrain.h "")
 # look for Property component
 ogre_find_component(Property OgreProperty.h "")
-# look for RTShaderSystem component
-ogre_find_component(RTShaderSystem OgreRTShaderSystem.h "")
 # look for Volume component
 ogre_find_component(Volume OgreVolumePrerequisites.h "")
 # look for Overlay component
@@ -423,11 +419,7 @@ ogre_find_component(Overlay OgreOverlaySystem.h "")
 #look for HlmsPbs component
 ogre_find_component(HlmsPbs OgreHlmsPbs.h Hlms/Pbs/)
 #look for HlmsPbsMobile component
-ogre_find_component(HlmsPbsMobile OgreHlmsPbsMobile.h Hlms/PbsMobile/)
-#look for HlmsPbsMobile component
 ogre_find_component(HlmsUnlit OgreHlmsUnlit.h Hlms/Unlit)
-#look for HlmsUnlit component
-ogre_find_component(HlmsUnlitMobile OgreHlmsUnlitMobile.h Hlms/UnlitMobile)
 
 #########################################################
 # Find Ogre plugins
@@ -512,60 +504,32 @@ macro(ogre_find_plugin PLUGIN HEADER)
   endif ()
 endmacro(ogre_find_plugin)
 
-ogre_find_plugin(Plugin_CgProgramManager OgreCgProgram.h PlugIns/CgProgramManager/include)
 ogre_find_plugin(Plugin_ParticleFX OgreParticleFXPrerequisites.h PlugIns/ParticleFX/include)
 ogre_find_plugin(RenderSystem_GL OgreGLRenderSystem.h RenderSystems/GL/include)
 ogre_find_plugin(RenderSystem_GL3Plus OgreGL3PlusRenderSystem.h RenderSystems/GL3Plus/include)
-ogre_find_plugin(RenderSystem_GLES OgreGLESRenderSystem.h RenderSystems/GLES/include)
 ogre_find_plugin(RenderSystem_GLES2 OgreGLES2RenderSystem.h RenderSystems/GLES2/include)
-ogre_find_plugin(RenderSystem_Direct3D9 OgreD3D9RenderSystem.h RenderSystems/Direct3D9/include)
 ogre_find_plugin(RenderSystem_Direct3D11 OgreD3D11RenderSystem.h RenderSystems/Direct3D11/include)
         
 if (OGRE_STATIC)
   # check if dependencies for plugins are met
-  if (NOT DirectX_FOUND)
-    set(OGRE_RenderSystem_Direct3D9_FOUND FALSE)
-  endif ()
   if (NOT DirectX_D3D11_FOUND)
     set(OGRE_RenderSystem_Direct3D11_FOUND FALSE)
   endif ()
   if (NOT OPENGL_FOUND)
-    set(OGRE_RenderSystem_GL_FOUND FALSE)
-  endif ()
-  if (NOT OPENGL_FOUND)
     set(OGRE_RenderSystem_GL3Plus_FOUND FALSE)
-  endif ()
-  if (NOT OPENGLES_FOUND)
-    set(OGRE_RenderSystem_GLES_FOUND FALSE)
   endif ()
   if (NOT OPENGLES2_FOUND)
     set(OGRE_RenderSystem_GLES2_FOUND FALSE)
   endif ()
-  if (NOT Cg_FOUND)
-    set(OGRE_Plugin_CgProgramManager_FOUND FALSE)
-  endif ()
-  
-  set(OGRE_RenderSystem_Direct3D9_LIBRARIES ${OGRE_RenderSystem_Direct3D9_LIBRARIES}
-    ${DirectX_LIBRARIES}
-  )
 
   set(OGRE_RenderSystem_Direct3D11_LIBRARIES ${OGRE_RenderSystem_Direct3D11_LIBRARIES}
     ${DirectX_D3D11_LIBRARIES}
   )
-  set(OGRE_RenderSystem_GL_LIBRARIES ${OGRE_RenderSystem_GL_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-  )
   set(OGRE_RenderSystem_GL3Plus_LIBRARIES ${OGRE_RenderSystem_GL3Plus_LIBRARIES}
     ${OPENGL_LIBRARIES}
   )
-  set(OGRE_RenderSystem_GLES_LIBRARIES ${OGRE_RenderSystem_GLES_LIBRARIES}
-    ${OPENGLES_LIBRARIES}
-  )
   set(OGRE_RenderSystem_GLES2_LIBRARIES ${OGRE_RenderSystem_GLES2_LIBRARIES}
     ${OPENGLES2_LIBRARIES}
-  )
-  set(OGRE_Plugin_CgProgramManager_LIBRARIES ${OGRE_Plugin_CgProgramManager_LIBRARIES}
-    ${Cg_LIBRARIES}
   )
 endif ()
 
