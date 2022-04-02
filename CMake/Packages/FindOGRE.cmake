@@ -25,11 +25,11 @@
 #
 # Additionally this script searches for the following optional
 # parts of the Ogre package:
-#  Plugin_CgProgramManager, Plugin_ParticleFX, 
-#  RenderSystem_GL, RenderSystem_GL3Plus,
-#  RenderSystem_GLES, RenderSystem_GLES2,
-#  RenderSystem_Direct3D9, RenderSystem_Direct3D11
-#  Paging, Terrain, Volume, Overlay
+#  Plugin_ParticleFX,
+#  RenderSystem_GL3Plus,
+#  RenderSystem_GLES2,
+#  RenderSystem_Direct3D11
+#  Paging, Volume, Overlay
 #
 # For each of these components, the following variables are defined:
 #
@@ -69,9 +69,9 @@ else ()
 endif ()
 
 if(APPLE AND NOT OGRE_STATIC)
-	set(OGRE_LIBRARY_NAMES "Ogre${OGRE_LIB_SUFFIX}")
+    set(OGRE_LIBRARY_NAMES "OgreNext${OGRE_LIB_SUFFIX}" "Ogre${OGRE_LIB_SUFFIX}")
 else()
-    set(OGRE_LIBRARY_NAMES "OgreMain${OGRE_LIB_SUFFIX}")
+    set(OGRE_LIBRARY_NAMES "OgreNextMain${OGRE_LIB_SUFFIX}" "OgreMain${OGRE_LIB_SUFFIX}")
 endif()
 get_debug_names(OGRE_LIBRARY_NAMES)
           
@@ -79,11 +79,21 @@ get_debug_names(OGRE_LIBRARY_NAMES)
 # OS specific guesses
 if (WIN32)
   set(OGRE_PREFIX_GUESSES
+    ${ENV_PROGRAMFILES}/OGRE-Next
+    C:/OgreNextSDK
     ${ENV_PROGRAMFILES}/OGRE
     C:/OgreSDK
   )
 elseif (UNIX)
   set(OGRE_PREFIX_GUESSES
+    /opt/ogre-next
+    /opt/OGRE-Next
+    /usr/lib${LIB_SUFFIX}/ogre-next
+    /usr/lib${LIB_SUFFIX}/OGRE-Next
+    /usr/local/lib${LIB_SUFFIX}/ogre-next
+    /usr/local/lib${LIB_SUFFIX}/OGRE-Next
+    $ENV{HOME}/ogre-next
+    $ENV{HOME}/OGRE-Next
     /opt/ogre
     /opt/OGRE
     /usr/lib${LIB_SUFFIX}/ogre
@@ -146,9 +156,9 @@ else()
 endif ()
 
 # redo search if any of the environmental hints changed
-set(OGRE_COMPONENTS Paging Terrain Volume Overlay 
-  Plugin_CgProgramManager Plugin_ParticleFX
-  RenderSystem_Direct3D11 RenderSystem_Direct3D9 RenderSystem_GL RenderSystem_GL3Plus RenderSystem_GLES RenderSystem_GLES2)
+set(OGRE_COMPONENTS Paging Volume Overlay
+  Plugin_ParticleFX
+  RenderSystem_Direct3D11 RenderSystem_GL3Plus RenderSystem_GLES2)
 set(OGRE_RESET_VARS 
   OGRE_CONFIG_INCLUDE_DIR OGRE_INCLUDE_DIR 
   OGRE_FRAMEWORK_INCLUDES OGRE_FRAMEWORK_PATH OGRE_LIBRARY_FWK OGRE_LIBRARY_REL OGRE_LIBRARY_DBG
@@ -361,9 +371,9 @@ set(OGRE_LIBRARY_DIRS ${OGRE_LIBRARY_DIR_REL} ${OGRE_LIBRARY_DIR_DBG})
 # find binaries
 if (NOT OGRE_STATIC)
 	if (WIN32)
-		find_file(OGRE_BINARY_REL NAMES "OgreMain.dll" HINTS ${OGRE_BIN_SEARCH_PATH}
+        find_file(OGRE_BINARY_REL NAMES "OgreNextMain.dll" "OgreMain.dll" HINTS ${OGRE_BIN_SEARCH_PATH}
           PATH_SUFFIXES "" Release RelWithDebInfo MinSizeRel)
-		find_file(OGRE_BINARY_DBG NAMES "OgreMain_d.dll" HINTS ${OGRE_BIN_SEARCH_PATH}
+        find_file(OGRE_BINARY_DBG NAMES "OgreNextMain_d.dll" "OgreMain_d.dll" HINTS ${OGRE_BIN_SEARCH_PATH}
           PATH_SUFFIXES "" Debug )
 	endif()
 	mark_as_advanced(OGRE_BINARY_REL OGRE_BINARY_DBG)
@@ -389,7 +399,7 @@ macro(ogre_find_component COMPONENT HEADER PATH_HINTS)
   set(OGRE_${COMPONENT}_FIND_QUIETLY ${OGRE_FIND_QUIETLY})
   findpkg_begin(OGRE_${COMPONENT})
   find_path(OGRE_${COMPONENT}_INCLUDE_DIR NAMES ${HEADER} HINTS ${OGRE_INCLUDE_DIRS} ${OGRE_PREFIX_SOURCE} PATH_SUFFIXES ${PATH_HINTS} ${COMPONENT} OGRE/${COMPONENT} )
-  set(OGRE_${COMPONENT}_LIBRARY_NAMES "Ogre${COMPONENT}${OGRE_LIB_SUFFIX}")
+  set(OGRE_${COMPONENT}_LIBRARY_NAMES "OgreNext${COMPONENT}${OGRE_LIB_SUFFIX}" "Ogre${COMPONENT}${OGRE_LIB_SUFFIX}")
   get_debug_names(OGRE_${COMPONENT}_LIBRARY_NAMES)
   find_library(OGRE_${COMPONENT}_LIBRARY_REL NAMES ${OGRE_${COMPONENT}_LIBRARY_NAMES} HINTS ${OGRE_LIBRARY_DIR_REL} ${OGRE_FRAMEWORK_PATH} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
   find_library(OGRE_${COMPONENT}_LIBRARY_DBG NAMES ${OGRE_${COMPONENT}_LIBRARY_NAMES_DBG} HINTS ${OGRE_LIBRARY_DIR_DBG} ${OGRE_FRAMEWORK_PATH} PATH_SUFFIXES "" "Debug")
@@ -399,8 +409,8 @@ macro(ogre_find_component COMPONENT HEADER PATH_HINTS)
     # find binaries
     if (NOT OGRE_STATIC)
 	  if (WIN32)
-	    find_file(OGRE_${COMPONENT}_BINARY_REL NAMES "Ogre${COMPONENT}.dll" HINTS ${OGRE_COMPONENT_SEARCH_PATH_REL} PATH_SUFFIXES "" bin bin/Release bin/RelWithDebInfo bin/MinSizeRel Release)
-	    find_file(OGRE_${COMPONENT}_BINARY_DBG NAMES "Ogre${COMPONENT}_d.dll" HINTS ${OGRE_COMPONENT_SEARCH_PATH_DBG} PATH_SUFFIXES "" bin bin/Debug Debug)
+	    find_file(OGRE_${COMPONENT}_BINARY_REL NAMES "OgreNext${COMPONENT}.dll" "Ogre${COMPONENT}.dll" HINTS ${OGRE_COMPONENT_SEARCH_PATH_REL} PATH_SUFFIXES "" bin bin/Release bin/RelWithDebInfo bin/MinSizeRel Release)
+	    find_file(OGRE_${COMPONENT}_BINARY_DBG NAMES "OgreNext${COMPONENT}_d.dll" "Ogre${COMPONENT}_d.dll" HINTS ${OGRE_COMPONENT_SEARCH_PATH_DBG} PATH_SUFFIXES "" bin bin/Debug Debug)
 	  endif()
 	  mark_as_advanced(OGRE_${COMPONENT}_BINARY_REL OGRE_${COMPONENT}_BINARY_DBG)
     endif()
@@ -514,7 +524,6 @@ endmacro(ogre_find_plugin)
 
 ogre_find_plugin(Plugin_CgProgramManager OgreCgProgram.h PlugIns/CgProgramManager/include)
 ogre_find_plugin(Plugin_ParticleFX OgreParticleFXPrerequisites.h PlugIns/ParticleFX/include)
-ogre_find_plugin(RenderSystem_GL OgreGLRenderSystem.h RenderSystems/GL/include)
 ogre_find_plugin(RenderSystem_GL3Plus OgreGL3PlusRenderSystem.h RenderSystems/GL3Plus/include)
 ogre_find_plugin(RenderSystem_GLES OgreGLESRenderSystem.h RenderSystems/GLES/include)
 ogre_find_plugin(RenderSystem_GLES2 OgreGLES2RenderSystem.h RenderSystems/GLES2/include)

@@ -8,7 +8,7 @@
 #-------------------------------------------------------------------
 
 
-PROJECT(OgreSceneFormat)
+PROJECT(${OGRE_NEXT}SceneFormat)
 
 file(
 	GLOB HEADER_FILES
@@ -26,12 +26,12 @@ ogre_add_component_include_dir(Hlms/Pbs)
 
 add_definitions( -DOgreSceneFormat_EXPORTS )
 
-ogre_add_library(OgreSceneFormat ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
-set_target_properties(OgreSceneFormat PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
-target_link_libraries(OgreSceneFormat OgreMain OgreHlmsPbs)
+ogre_add_library(${OGRE_NEXT}SceneFormat ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
+set_target_properties(${OGRE_NEXT}SceneFormat PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+target_link_libraries(${OGRE_NEXT}SceneFormat ${OGRE_NEXT}Main ${OGRE_NEXT}HlmsPbs)
 
-ogre_config_framework(OgreSceneFormat)
-ogre_config_component(OgreSceneFormat)
+ogre_config_framework(${OGRE_NEXT}SceneFormat)
+ogre_config_component(${OGRE_NEXT}SceneFormat)
 
 install(FILES ${HEADER_FILES}
   DESTINATION include/OGRE/SceneFormat
