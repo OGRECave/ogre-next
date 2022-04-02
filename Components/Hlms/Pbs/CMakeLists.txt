@@ -40,6 +40,8 @@ if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
 	ogre_add_component_include_dir( PlanarReflections )
 endif()
 
+add_definitions( -DOgreHlmsPbs_EXPORTS )
+
 ogre_add_library(${OGRE_NEXT}HlmsPbs ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
 set_target_properties(${OGRE_NEXT}HlmsPbs PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
 target_link_libraries(${OGRE_NEXT}HlmsPbs ${OGRE_NEXT}Main)
